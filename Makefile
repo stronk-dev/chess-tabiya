@@ -1094,6 +1094,24 @@ bot-source-authority-check:
 evidence-binding-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts
 
+.PHONY: theory-binding-execution-check
+theory-binding-execution-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts packages/runtime/src/module-query.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts
+
+.PHONY: hint-empty-response-check
+hint-empty-response-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/hint-distance.test.ts apps/server/src/hint-service.test.ts
+
+.PHONY: theory-binding-metadata-update theory-binding-metadata-check
+theory-binding-metadata-update:
+	$(MAKE) semantic-validation-update
+	$(MAKE) capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/theory-binding-metadata.js --log-level=warning
+	node apps/server/dist/theory-binding-metadata.js --theory-bindings --apply-metadata
+theory-binding-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/theory-binding-metadata.js --log-level=warning
+	node apps/server/dist/theory-binding-metadata.js --theory-bindings
+
 .PHONY: opponent-cancellation-check
 opponent-cancellation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/opponent-cancellation.test.ts apps/server/src/human-split-boundary.test.ts apps/server/src/opponent-selector.test.ts apps/server/src/provider-health.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/provider-tablebase.test.ts

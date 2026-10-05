@@ -1,5 +1,25 @@
 # Codex queue — rewritten in full 2026-08-16
 
+## 2026-10-05 Theory binding execution checkpoint
+
+D3388 closes: all four actual module.theory_breadcrumb bindings compile before provider
+acquisition, with literal optional-source omission preserving local/authored theory. Complete
+consumer refusal, exact population identity, disclosure and post-I/O authority survive the
+authenticated HTTP controls. This is scoped provider-exchange-and-execution §2 adoption,
+not global availability or full RFC completion.
+
+D3389 closes: exact honest-empty wire assertions replace a random-ID chess-text regex;
+deterministic extra-field negatives preserve no-move disclosure. Focused gates pass 161 and
+24 tests respectively. Full exact-index software passes 3012 tests/327 files plus seven
+isolated performance tests; content passes 223 tests and all 104 requirements; rebuilt
+browser CI passes 111 journeys, one optional skip and zero retries. Receipt:
+`planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md`.
+
+Continue literal policy adoption at other actual consumers, then complete manifest
+execution/digest, exact occurrence resolution and authenticated availability. Whole-source
+persistence, zero-consumer retirement and D3363/D3370/D3373/D3376 remain separate holds.
+Routine metadata maintenance is not a decision point; the full 1.0 goal stays active.
+
 ## 2026-10-05 cancellation and disclosure checkpoint
 
 D3385/D3386/D3387 close: human-split rechecks grant, disclosure and captured subject

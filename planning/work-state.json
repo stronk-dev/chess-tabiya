@@ -27882,6 +27882,24 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3388",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f08b032d8ccf5fc8053a8c8e4824d98a6a035513e20f8d005001f11b57418ed4",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3389",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b4b3df18dbe2854a4b1a2680654157b4fbed21ea791e2d7bf8746f59dc315270",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,5 +1,7 @@
 # RFC: Guided-hint disclosure distance
 
+- **Verification checkpoint 2026-10-05:** D3389 replaces a random request-ID substring scan with the exact closed honest-empty response. A deterministic parser control accepts move-like opaque hex IDs and rejects extra move/prose/PV/delivery fields. The focused gate passes 24 tests and full exact-index software passes 3012 tests/327 files. No disclosure, ceiling, source or timing behavior changes; all existing open obligations remain. Receipt: `planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md`.
+
 - **Status:** implementing — Checkpoint A landed 2026-09-24 at the owner's direction (implement
   directly, no review rounds). The registry, sealed horizon, per-rung disclosures, module amendment,
   REST/service/client/seat path, rated common-boundary guard and D1638–D1643 repairs are implemented

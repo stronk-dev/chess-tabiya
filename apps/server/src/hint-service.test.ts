@@ -161,8 +161,9 @@ describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
     const { post, ask, settle } = await session(origin, INITIAL_FEN);
     expect((await post("/runs/hint-run/reveal", {})).status).toBe(200);
     const result = await settle(await ask("pattern", "support"));
-    expect(result).toMatchObject({ state: "honest_empty", rung: "pattern", reason: "no_admitted_occurrence" });
-    expect(JSON.stringify(result)).not.toMatch(/a2a3|a3/u);
+    // Request IDs are opaque hex, so they can legitimately contain move-like substrings.
+    // The exact response image excludes every move, prose, PV or delivery field.
+    expect(result).toEqual({ state: "honest_empty", requestId: expect.stringMatching(/^[a-f0-9]{32}$/u), rung: "pattern", reason: "no_admitted_occurrence" });
   });
 });
 

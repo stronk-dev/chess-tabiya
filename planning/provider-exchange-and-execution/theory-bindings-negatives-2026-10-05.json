@@ -1,0 +1,13 @@
+{
+  "baseline": "7fa7c926",
+  "command": "make evidence-binding-execution-check",
+  "beforeProductionRepair": {
+    "testFiles": 3,
+    "passed": 52,
+    "failed": 1,
+    "control": "compiles the complete production Theory consumer with optional source policies",
+    "reason": "BINDING_SOURCE_ABSENCE: adapter.module.theory_breadcrumb.4@1 needs a literal closed source-absence declaration"
+  },
+  "firstExactIndexSoftware": {"target":"verify-software","sources":{"mode":"git-index","head":"7fa7c92676c39a2bd2b1a1fe03cc8dc135a81119","tree":"9640e628f282e6d91b1686fac64ff1547e250b7a","includesUnstagedChanges":false},"result":"failed","exitCode":2,"error":null,"testsPassed":3009,"testsFailed":2,"findings":["Seven uncommitted successors were generated before semantic-validation refresh; the new Make target now enforces canonical generation order.","D3389: no-move regex matched a3 inside opaque requestId ed35676f42e826e6c96e1358a8a054a3; exact closed wire assertions and deterministic parser negatives replace it."]},
+  "scope": "Predecessor production Theory binding admission and retained failed full-software reading; not a whole-manifest or release verdict"
+}

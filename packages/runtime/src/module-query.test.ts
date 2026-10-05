@@ -164,6 +164,18 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     expect(theory.empty).toEqual({ kind: "stated_absence", sentence: "Nothing is written about this position." });
   });
 
+  it.each(["not_configured", "provider_unavailable", "identity_mismatch"] as const)("keeps matched local theory when optional Explorer evidence is %s", explorerUnavailable => {
+    const run = packRun("r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", ["b1c3"]);
+    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp",
+      request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb"] },
+      sources: { explorerUnavailable, shapes: [{ id: "maroczy-bind", trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }] },
+    });
+    const theory = packetOf(page, "theory_breadcrumb")!;
+    expect(theory.unavailable).toContainEqual({ projection: "derived.explorer.population_summary@1", reason: explorerUnavailable });
+    expect(theory.empty).toBeNull();
+    expect(assertDelivered(theory, assistance).join(" ")).toMatch(/maroczy/iu);
+  });
+
   it("compare coach needs a second attempt, then renders the other attempt's recorded facts", () => {
     let run = packRun(ITALIAN, ["e1g1", "e8g8"]);
     const root = run.nodes.find((node) => node.parentId === null)!.id;

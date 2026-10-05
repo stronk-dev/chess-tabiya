@@ -797,10 +797,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Continue actual source migrations and literal binding-policy adoption, then whole-manifest execution/digest, exact occurrence resolution and authenticated availability. D3385/D3386/D3387 now enforce async Inspector authority and independent caller cancellation without provider-health damage. D3363 retains the distinct Maia candidate-page contract; D3370 requires sampled Maia result authority; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
+        "nextAction": "Continue literal binding-policy adoption at actual consumers, then whole-manifest execution/digest, exact occurrence resolution and authenticated availability. D3388 now preflights all four Theory bindings with optional-source omission; D3389 repairs the random-ID false positive without weakening hint disclosure. D3363 retains the distinct Maia candidate-page contract; D3370 requires sampled Maia result authority; D3373 requires durable terminating-selection/MultiPV Stockfish; D3376 requires shared opening schema/source authority. Whole-source persistence and zero-consumer retirement remain open. Complete Support/Review/bot/longitudinal joins and independent semantic validation before content expansion.",
         "latestCheckpoint": {
           "at": "2026-10-05",
-          "summary": "D3385/D3386/D3387 close asynchronous human-split read/disclosure/subject leaks, independently detachable opponent-selection waiters and abort-bounded provider-health execution. Revoked or moved subjects refuse; last-waiter abort stops stages/retries, abandoned completions cannot fill cache or erase newer work, and late success cannot heal health. Genuine timeout/backoff and Explorer typed caller expiry remain intact. Focused HTTP/source controls pass 222 tests; exact-index software passes 3004 tests/327 files, seven isolated performance tests and all downstream contracts at 311734f950cd53bb0ef0ea4d40445669e0c4c2f4. Final content passes 223 tests and all 104 requirements; rebuilt browser CI passes 111 journeys, one optional skip and zero retries. Canonical metadata preserves 925 predecessor declarations, 278 factory outcomes and authored content; 927 declarations resolve. Only these three defects close: zero untriaged/1678 live. Full provider execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no capability or milestone promotion.",
+          "summary": "D3388 closes the authenticated Theory path's partial-consumer compilation: all four actual bindings preflight with literal optional-source omission before I/O, preserving local/authored Theory through unavailable online evidence. Actual policy/latency fault injections refuse before acquisition; exact source identity and post-I/O authority remain intact. D3389 replaces a random-ID chess-text regex with exact closed honest-empty wire assertions and deterministic extra-content refusals. Focused gates pass 161 and 24 tests; full exact-index software passes 3012 tests/327 files plus seven isolated performance tests and downstream contracts at eb45ed0507655ad9d93d361b3398a7a8322a7b40. Content passes 223 tests and all 104 requirements; rebuilt browser CI passes 111 journeys, one optional skip and zero retries. Canonical preservation retains 927 predecessors, all 278 factory outcomes and authored content; 934 declarations resolve. Only D3388/D3389 close: zero untriaged/1678 live. Complete provider execution/resolution/availability, persistence, retirement and D3363/D3370/D3373/D3376 remain open; no RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-foundation-ux/integration-2026-09-30.md",
@@ -878,7 +878,12 @@
             "planning/provider-exchange-and-execution/opponent-cancellation-2026-10-05.md",
             "planning/provider-exchange-and-execution/opponent-cancellation-software-2026-10-05.json",
             "planning/provider-exchange-and-execution/opponent-cancellation-metadata-2026-10-05.json",
-            "planning/provider-exchange-and-execution/opponent-cancellation-negatives-2026-10-05.json"
+            "planning/provider-exchange-and-execution/opponent-cancellation-negatives-2026-10-05.json",
+            "rfc/hint-distance.md",
+            "planning/provider-exchange-and-execution/theory-bindings-2026-10-05.md",
+            "planning/provider-exchange-and-execution/theory-bindings-metadata-2026-10-05.json",
+            "planning/provider-exchange-and-execution/theory-bindings-negatives-2026-10-05.json",
+            "planning/provider-exchange-and-execution/theory-bindings-software-2026-10-05.json"
           ],
           "anchors": [
             {
@@ -924,7 +929,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:d3d9956d499f70111f7ed66ee81b9fc6a0163ccf62963a3f4a5ae9fa8b3150f3"
+              "digest": "sha256:4a20022570f3a6900736b20d63eb8d395665526ea5b9acd8d7eb852288560df5"
             },
             {
               "kind": "work_state",
@@ -1135,6 +1140,21 @@
               "kind": "work_state",
               "id": "D3387",
               "digest": "sha256:1d2ad7c43ba04a24e2ff41ee3643b08675b5f08f8493efbe252a806b6b60d48f"
+            },
+            {
+              "kind": "rfc",
+              "id": "hint-distance.md",
+              "digest": "sha256:0c2e67e7788c3df5c9b53c256a0e5dd15226817ba1d4754c008cfde0e35252f8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3388",
+              "digest": "sha256:f08b032d8ccf5fc8053a8c8e4824d98a6a035513e20f8d005001f11b57418ed4"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3389",
+              "digest": "sha256:b4b3df18dbe2854a4b1a2680654157b4fbed21ea791e2d7bf8746f59dc315270"
             }
           ]
         },
@@ -1186,7 +1206,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:d013e4061946d674be49b44cf60eacb4bcffae1d197ce322be0246da0425fbc4"
+              "digest": "sha256:0c2e67e7788c3df5c9b53c256a0e5dd15226817ba1d4754c008cfde0e35252f8"
             },
             {
               "kind": "rfc",
@@ -1644,7 +1664,7 @@
             {
               "kind": "rfc",
               "id": "provider-exchange-and-execution.md",
-              "digest": "sha256:d3d9956d499f70111f7ed66ee81b9fc6a0163ccf62963a3f4a5ae9fa8b3150f3"
+              "digest": "sha256:4a20022570f3a6900736b20d63eb8d395665526ea5b9acd8d7eb852288560df5"
             },
             {
               "kind": "work_state",

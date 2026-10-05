@@ -45,7 +45,7 @@ import {
   postcommitNudgePacket,
   queryModules,
   assertProviderDelivery,
-  compileProjectionExecution,
+  compileEvidenceConsumerExecution,
   deriveExplorerPopulationSummary,
   deriveMaiaRunMoveOccurrence,
   ModuleQueryError,
@@ -2886,6 +2886,13 @@ export class RunService {
     // It does not persist novelty, history or credit and is never returned to the browser.
     const preview = this.queryModules(runId, principal, assistance, request);
     if (!preview.packets.some((packet) => packet.module === "theory_breadcrumb")) return preview;
+    // Compile the complete consumer, including transitive source-absence and latency policies.
+    // A separately valid provider projection cannot bypass another invalid Theory binding.
+    const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 1 });
+    const populationBinding = execution.bindings.find(row => row.binding.projection.id === "derived.explorer.population_summary" && row.binding.projection.version === 1);
+    if (populationBinding === undefined || populationBinding.sourceAbsence?.necessity !== "optional" || populationBinding.sourceAbsence.whenNoPath !== "omit_optional_item"
+      || populationBinding.paths.length !== 1 || populationBinding.paths[0]!.sourceRequirements.length !== 1
+      || populationBinding.paths[0]!.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Theory population binding has another source or absence policy");
     const { stored } = requireRead(this.#storage, runId, principal);
     const node = stored.run.nodes.find((candidate) => candidate.id === preview.subjectNodeId)!;
     const pack = isPackSession(stored.run) ? this.#requiredRegisteredPack(stored.run) : undefined;
@@ -2894,8 +2901,6 @@ export class RunService {
     const captured = Object.freeze({ ...population, fen: node.fen, ratings: Object.freeze([...population.ratings]), speeds: Object.freeze([...population.speeds]) });
     let explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = { explorerUnavailable: "not_configured" };
     if (corpus?.page !== undefined) {
-      const execution = compileProjectionExecution(EVIDENCE_MANIFEST, { id: "derived.explorer.population_summary", version: 1 });
-      if (execution.paths.length !== 1 || execution.paths[0]!.sourceRequirements.length !== 1 || execution.paths[0]!.sourceRequirements[0]?.providerOperation !== "lichess_explorer.position_page@1") throw new TypeError("Theory population summary has another source operation");
       let acquired: ExplorerPageAcquisition | undefined;
       try {
         // Call on the supplied receiver. Modern failure never falls back to bare statistics.

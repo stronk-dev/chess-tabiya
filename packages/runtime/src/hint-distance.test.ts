@@ -322,6 +322,14 @@ describe("criteria 10–11 — ceiling versus availability, and per-decision pro
 });
 
 describe("evidence-presentation Checkpoint B — the module.guided_hint seat adapters", () => {
+  it("keeps move-like opaque IDs distinct from forbidden honest-empty chess content", () => {
+    const empty = { state: "honest_empty", requestId: `${"0".repeat(28)}a2a3`, rung: "pattern", reason: "no_admitted_occurrence" } as const;
+    expect(parseHintResponse(empty)).toEqual(empty);
+    for (const extra of [{ move: "a2a3" }, { sentence: "Play a3" }, { pv: ["a2a3"] }, { delivery: { move: "a2a3" } }]) {
+      expect(() => parseHintResponse({ ...empty, ...extra })).toThrow();
+    }
+  });
+
   it("every family x rung disclosure presents through its exact adapter with the canonical sentence and only its rung's marks", () => {
     for (const family of HINT_FAMILIES) {
       const horizon = selected(HINT_FAMILY_POSITIVES[family]);

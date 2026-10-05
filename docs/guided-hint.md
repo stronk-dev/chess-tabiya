@@ -94,8 +94,12 @@ starts (`#refuseRatedAssistance`).
   tripwires, perspective and sign safety, D1640 forgeries, byte images, the F1 widening negatives,
   the voice check, receipts and ladder progression.
 - `apps/server/src/hint-service.test.ts` covers the ladder, policy refusals, stale/cancel/404, the
-  honest-empty case, source-unavailable, voice fallback, and the shared search and packet service,
+  exact closed honest-empty response, source-unavailable, voice fallback, and the shared search and packet service,
   all through `createApplication`.
 - `apps/web/src/lib/guided-hint.test.ts` covers the wire and the seat.
 - The browser journey in `tests/browser/drill.spec.ts` runs Guide me → Hint → A little more
   up to the ceiling, then resets on commit.
+
+The empty-response controls treat request IDs as opaque identifiers, even when their hex
+digits resemble a move. Extra move, sentence, PV or delivery fields remain refused by the
+closed response parser; a substring scan of the ID is not a disclosure test.

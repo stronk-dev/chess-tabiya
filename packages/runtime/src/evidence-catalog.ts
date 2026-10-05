@@ -1355,6 +1355,10 @@ function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
     latency: live ? { mode: "sync", maxMs: 50 } : DEFAULT_LATENCY,
     budget: { maxFacts: ceilings.maxFacts, maxForms: ceilings.forms.length },
     providerOff: "honest_empty",
+    // Theory is a collection of independently usable facts, not an Explorer requirement.
+    // Missing recorded claims or online population facts omit only their own binding;
+    // local opening/shape theory remains available (module-registration provider_optional).
+    ...(id === "theory_breadcrumb" ? { sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } as const } : {}),
   };
 }
 

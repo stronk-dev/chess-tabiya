@@ -28,6 +28,39 @@ function satisfied(compiled: ReturnType<typeof compile>, ids: readonly string[])
 }
 
 describe("binding execution and source absence", () => {
+  it("compiles the complete production Theory consumer with optional source policies", () => {
+    const theory = compile(MANIFEST, ref("module.theory_breadcrumb"));
+    expect(theory.bindings.map(row => `${row.binding.projection.id}@${row.binding.projection.version}`).sort()).toEqual([
+      "derived.explorer.population_summary@1", "pack.authored.claim@1",
+      "theory.opening.current_endpoint@1", "theory.shapes.firing@1",
+    ]);
+    for (const row of theory.bindings) expect(row.sourceAbsence).toEqual(OPTIONAL);
+    const unavailable = aggregate(theory, satisfied(theory, []));
+    expect(unavailable.state).toBe("available");
+    expect(unavailable.missingRequiredBindings).toEqual([]);
+    expect(unavailable.omittedOptionalBindings.map(adapter => theory.bindings.find(row => row.binding.adapter.id === adapter.id)!.binding.projection.id).sort()).toEqual([
+      "derived.explorer.population_summary", "pack.authored.claim",
+    ]);
+    // A successful page does not create a recorded authored claim. Local theory remains usable.
+    const provider = theory.bindings.find(row => row.binding.projection.id === "derived.explorer.population_summary")!;
+    const success = aggregate(theory, satisfied(theory, [provider.binding.adapter.id]));
+    expect(success.state).toBe("available");
+    expect(success.omittedOptionalBindings).toHaveLength(1);
+    expect(provider.paths[0]!.sourceRequirements[0]!.providerOperation).toBe("lichess_explorer.position_page@1");
+  });
+
+  it("refuses a missing or crossed Theory provider policy even alongside local theory", () => {
+    const bindings = MANIFEST.bindings.map(row => {
+      if (row.consumer.id !== "module.theory_breadcrumb" || row.projection.id !== "derived.explorer.population_summary") return row;
+      const { sourceAbsence: _policy, ...withoutPolicy } = row;
+      return withoutPolicy;
+    });
+    expect(() => compile({ ...MANIFEST, bindings }, ref("module.theory_breadcrumb"))).toThrow(/BINDING_SOURCE_ABSENCE/u);
+    const crossed = bindings.map(row => row.consumer.id === "module.theory_breadcrumb" && row.projection.id === "derived.explorer.population_summary"
+      ? { ...row, sourceAbsence: { necessity: "optional", whenNoPath: "operation_unavailable" } as unknown as BindingSourceAbsence } : row);
+    expect(() => compile({ ...MANIFEST, bindings: crossed }, ref("module.theory_breadcrumb"))).toThrow(/BINDING_SOURCE_ABSENCE/u);
+  });
+
   it.each([OPTIONAL, EMPTY, UNAVAILABLE])("compiles each literal absence arm: $whenNoPath", policy => {
     const result = compile(fixture([binding("fixture.a", source, policy)]), consumer);
     expect(result.bindings[0]!.sourceAbsence).toEqual(policy);

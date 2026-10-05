@@ -1,6 +1,7 @@
 import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
 import { compileAssistanceRequest, createRun, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
+import * as runtime from "@chess-tabiya/runtime";
 import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequestOptions, type CorpusSource } from "./corpus.js";
 import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
@@ -431,7 +432,7 @@ describe("learner Explorer shared exchange", () => {
     expect(stats).not.toHaveBeenCalled();
   });
 
-  it.each(["success", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", "changed", "revoked", "disconnect"])("admits supplied Theory pages at authenticated application composition (%s)", { timeout: 30_000 }, async arm => {
+  it.each(["success", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", "changed", "revoked", "disconnect", "missing_binding_policy", "non_executable_binding"])("admits supplied Theory pages at authenticated application composition (%s)", { timeout: 30_000 }, async arm => {
     const { source, remote } = await harness();
     const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
     const delayed = ["changed", "revoked", "disconnect"].includes(arm);
@@ -474,6 +475,19 @@ describe("learner Explorer shared exchange", () => {
     }
     const supplied = new SuppliedSource();
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    const originalCompile = runtime.compileEvidenceConsumerExecution;
+    const compileConsumer = vi.spyOn(runtime, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
+      if (consumer.id !== "module.theory_breadcrumb" || !["missing_binding_policy", "non_executable_binding"].includes(arm)) return originalCompile(manifest, consumer);
+      // Fault injection at the compiled contract, not source evidence. A valid single
+      // projection must not conceal an absent policy or a non-executable binding.
+      const bindings = manifest.bindings.map(binding => {
+        if (binding.consumer.id !== consumer.id || binding.projection.id !== "derived.explorer.population_summary") return binding;
+        if (arm === "non_executable_binding") return { ...binding, latency: { mode: "sync" as const, maxMs: 50 } };
+        const { sourceAbsence: _policy, ...missingPolicy } = binding;
+        return missingPolicy;
+      });
+      return originalCompile({ ...manifest, bindings }, consumer);
+    });
     try {
       await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
@@ -509,7 +523,17 @@ describe("learner Explorer shared exchange", () => {
       expect((await ask("quiet")).status).toBe(200);
       expect((await ask("theory_only", [])).status).toBe(200);
       expect(supplied.calls).toBe(0);
+      expect(compileConsumer).not.toHaveBeenCalled();
       const pending = ask("theory_only");
+      if (["missing_binding_policy", "non_executable_binding"].includes(arm)) {
+        const refusal = await pending;
+        expect(refusal.status).toBe(500);
+        expect(supplied.calls).toBe(0);
+        expect(stats).not.toHaveBeenCalled();
+        expect(compileConsumer).toHaveBeenCalledOnce();
+        expect(await refusal.text()).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|\d+ games/u);
+        return;
+      }
       if (delayed) {
         await Promise.race([didStart, pending.then(async response => { throw new Error(`Expected source acquisition, got ${response.status}: ${await response.clone().text()}`); })]);
         if (arm === "disconnect") {
@@ -533,6 +557,10 @@ describe("learner Explorer shared exchange", () => {
         release();
       }
       const response = await pending;
+      expect(compileConsumer).toHaveBeenCalledOnce();
+      const [manifest, consumer] = compileConsumer.mock.calls[0]!;
+      expect(consumer).toEqual({ id: "module.theory_breadcrumb", version: 1 });
+      expect(manifest.bindings.filter(binding => binding.consumer.id === consumer.id)).toHaveLength(4);
       if (arm === "changed" || arm === "revoked") {
         expect(response.status, await response.clone().text()).toBe(arm === "changed" ? 400 : 404);
         const failure = await response.text();
@@ -556,7 +584,7 @@ describe("learner Explorer shared exchange", () => {
       expect(JSON.stringify(page)).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|canonicalUci|providerSan|"a7a6"/u);
       expect(supplied.calls).toBe(arm === "legacy" ? 0 : 1);
       expect(stats).not.toHaveBeenCalled();
-    } finally { release(); await application.close(); }
+    } finally { compileConsumer.mockRestore(); release(); await application.close(); }
   });
 
   it.each([0, 37, 100])("binds the real theory query to a move-free %i-game population without a sample floor", async (total) => {

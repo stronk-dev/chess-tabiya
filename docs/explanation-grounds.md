@@ -297,3 +297,19 @@ Three-way theory verdicts are derived from the pack and run, delivered only on
 the existing per-occurrence reveal surface, and never added to the public pack
 projection. For `mode: line`, even the authored spine is withheld before play;
 other modes continue to receive their projected spine.
+
+## Optional Theory source execution
+
+The authenticated Theory query compiles all four `module.theory_breadcrumb@1` bindings
+before online acquisition. Each binding declares optional-source omission. Missing recorded
+claims or Explorer population facts therefore omit their own input; they do not make matched
+local shape or opening theory unavailable. If no usable fact exists, the module still states
+honest absence. An invalid source-absence declaration or non-executable binding is a contract
+failure, not an ordinary provider absence, and prevents acquisition.
+
+Explorer results still require their sealed whole source and exact requested position,
+population and window. Quiet, unrequested and withheld queries perform no source work.
+Authorization, disclosure and decision identity are checked again after acquisition; raw
+candidate moves never enter the Theory receipt. This consumer-level preflight does not claim
+complete source resolution, whole-manifest execution, durable provider persistence or global
+request-specific availability.
