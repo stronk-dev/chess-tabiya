@@ -34,6 +34,7 @@ import {
 } from "@chess-tabiya/runtime";
 import type { ComponentProps } from "svelte";
 import { mount, tick, unmount } from "svelte";
+import { SvelteMap } from "svelte/reactivity";
 import { botRosterFixture } from "./bot-roster.test-support.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -71,6 +72,7 @@ import type {
 } from "./keyboard.js";
 import { latestCheckpoint } from "./screen-model.js";
 import { workflowPreferenceKey } from "./assistance-preference.js";
+import type { RunStateSnapshot } from "./run-state.js";
 
 const assistanceKey = (context: string): string => `tabiya.assistance.v1.${context}`;
 const workflowKey = (context: string): string => `tabiya.workflow.v1.${context}`;
@@ -1771,7 +1773,7 @@ describe("Layer 3 screens", () => {
     await tick();
 
     expect(onAnalyzeMissing).toHaveBeenCalledWith([run.activeCursor.nodeId]);
-    expect(module.textContent).toContain("Preparing calculation…");
+    await vi.waitFor(() => expect(module.textContent).not.toContain("Preparing calculation…")); // No admitted job was published by this callback fixture.
     expect(module.textContent).toContain("Inspect recorded calculation");
     await unmount(component);
   });
@@ -1803,6 +1805,42 @@ describe("Layer 3 screens", () => {
     await vi.waitFor(() => expect(module.querySelector("[role='alert']")?.textContent).toBe("The calculation did not start. Try again."));
     expect(request.disabled).toBe(false);
     expect(onAnalyzeMissing).toHaveBeenCalledTimes(2);
+    await unmount(component);
+  });
+
+  it("releases Preparing only after the admitted calculation completes, not from an old or unrelated engine reading", async () => {
+    const run = branchedRun();
+    const nodeId = run.activeCursor.nodeId;
+    const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
+    const onAnalyzeMissing = vi.fn(async () => {
+      snapshots.set("current", { ...snapshots.get("current")!, pendingEvidence: 1, analysisJobs: [{ batchId: "batch", id: "manual-job", nodeId, kind: "bestline" }] });
+      return true;
+    });
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      onAssistanceQuery: testAssistanceAuthority,
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture" }) } as Capabilities,
+      get snapshot() { return snapshots.get("current")!; },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onAnalyzeMissing, registerKeyboardRegion,
+    } });
+    await tick();
+    const module = document.querySelector<HTMLElement>(".analysis-request")!;
+    const request = [...module.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Calculate this position")!;
+    request.click();
+    await vi.waitFor(() => expect(request.textContent).toContain("Preparing calculation"));
+    expect(request.disabled).toBe(true); // This node already carries an unrelated engine evaluation.
+    const unrelated = attachEvidence(run, nodeId, ["engine:other-job"], { kind: "eval", source: "engine_validated", values: { centipawns: 10 } }, at).run;
+    snapshots.set("current", { ...snapshots.get("current")!, run: unrelated });
+    await tick();
+    expect(request.disabled).toBe(true);
+    const completed = attachEvidence(unrelated, nodeId, ["engine:manual-job"], { kind: "bestline", source: "engine_validated", values: { movesUci: ["e3d2"] } }, at).run;
+    snapshots.set("current", { ...snapshots.get("current")!, run: completed, pendingEvidence: 0, analysisJobs: [] });
+    await vi.waitFor(() => expect(request.disabled).toBe(false));
+    expect(request.textContent).toBe("Calculate this position");
+    expect(module.textContent).toContain("A recorded calculation is available for this position.");
+    expect(onAnalyzeMissing).toHaveBeenCalledTimes(1);
     await unmount(component);
   });
 

@@ -2,8 +2,10 @@
 
 Queued engine and tablebase evidence is durable. Admission, lease, retry, settlement, staged
 results and consumption are rows in the application database, so an admitted analysis survives a
-restart, a provider outage becomes a visible terminal outcome instead of a lost promise, and
-applying a result is replay-safe. Contract: `rfc/evidence-job-durability.md`.
+restart, a provider outage has a durable terminal outcome instead of a lost promise, and
+applying a result is replay-safe. Public exact-batch terminal status remains missing (D3426);
+durable settlement is not yet a learner-visible completion receipt.
+Contract: `rfc/evidence-job-durability.md`.
 
 ## Storage (migration 27)
 
@@ -32,6 +34,16 @@ is `IDEMPOTENCY_CONFLICT` and writes nothing. Internal producers derive their pl
 key is absent. Enrichment batches commit in the same transaction as the run mutation that created
 their nodes; rewind cancels the pruned nodes' admitted, running, retrying and staged jobs in the
 rewind's own commit and keeps terminal rows as audit history.
+
+## Calculation client
+
+The ordinary calculation client validates the existing HTTP `202` receipt's complete ordered
+batch/job/position/kind join before tracking it. Explicit pending jobs survive unrelated mutations
+and automatic result application; only their own engine `bestline` attachment at the declared node
+consumes them. Support remains pending while those exact jobs await delivery and releases its
+control on completion. This client state is not a durable job-status API: settled-unavailable and
+cancelled rows still have no public exact-batch status receipt, and root-only outstanding analysis
+cannot yet be reconstructed after reload (D3426). No empty page or timeout is treated as a result.
 
 ## Worker
 

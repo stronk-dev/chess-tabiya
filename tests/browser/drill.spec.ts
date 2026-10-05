@@ -592,6 +592,45 @@ test("Just Play explicitly reveals evidence and the next move closes the window"
   await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
 });
 
+test("Support calculation follows its admitted job through polling and becomes usable again after each exact result", async ({ page }) => {
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  await showSupport(page);
+  let holdResults = true;
+  await page.route(/\/runs\/[^/]+\/evidence\?sinceSeq=\d+$/u, async route => {
+    if (!holdResults) { await route.continue(); return; }
+    // A real admitted-but-not-yet-delivered interval. Do not advance the cursor or fake failure.
+    const sinceSeq = Number(new URL(route.request().url()).searchParams.get("sinceSeq"));
+    await route.fulfill({ status: 200, contentType: "application/json", json: { results: [], nextSeq: sinceSeq } });
+  });
+  const region = page.locator(".analysis-request");
+  const receipts: { batchId: string; jobs: { id: string; nodeId: string; kind: string }[] }[] = [];
+  for (let requestNo = 0; requestNo < 2; requestNo += 1) {
+    holdResults = true;
+    const response = page.waitForResponse(response => response.request().method() === "POST" && response.url().endsWith("/analysis"));
+    await region.getByRole("button", { name: "Calculate this position", exact: true }).click();
+    const admitted = await response;
+    expect(admitted.status()).toBe(202);
+    receipts.push(await admitted.json());
+    await expect(region.getByRole("button", { name: "Preparing calculation…", exact: true })).toBeDisabled();
+    await expect(region).toContainText("The calculation is being prepared for this position.");
+    // On the second request an old calculation already exists; it must not discharge the new job.
+    if (requestNo === 1) await expect(region).toContainText("A recorded calculation is available for this position.");
+    holdResults = false;
+    await expect(region.getByRole("button", { name: "Calculate this position", exact: true })).toBeEnabled({ timeout: 10_000 });
+    await expect(region).toContainText("A recorded calculation is available for this position.");
+  }
+  expect(receipts[0]!.batchId).not.toBe(receipts[1]!.batchId);
+  expect(receipts[0]!.jobs[0]!.id).not.toBe(receipts[1]!.jobs[0]!.id);
+  const runId = page.url().split("/").at(-1)!;
+  const history = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: { type: string; data: { nodeId?: string; evidenceRefs?: string[] } }[] };
+  for (const receipt of receipts) for (const job of receipt.jobs) {
+    expect(job.kind).toBe("bestline");
+    expect(history.events.filter(event => event.type === "evidence.attached" && event.data.nodeId === job.nodeId && event.data.evidenceRefs?.includes(`engine:${job.id}`))).toHaveLength(1);
+  }
+});
+
 test("Guide me: a learner-requested hint climbs one rung per press to the proposed ceiling and resets on commit (rfc/hint-distance.md)", async ({ page }) => {
   // The labelled mock engine searches the alphabetically first legal move: Na4-b2 double-attacks both rooks.
   await page.getByRole("button", { name: "Start from a FEN" }).click();

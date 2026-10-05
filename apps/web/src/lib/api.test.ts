@@ -240,7 +240,7 @@ describe("DrillApi", () => {
       }
       if (url.endsWith("/group-reply")) return json({ selection, reusedFromNodeId: null });
       if (url.endsWith("/prediction")) return json({ selection, run, emitted: [] });
-      if (url.endsWith("/analysis")) return json({ jobs: [{ id: "analysis-one" }] }, { status: 202 });
+      if (url.endsWith("/analysis")) return json({ batchId: "analysis-batch", jobs: [{ id: "analysis-one", nodeId: run.nodes[0]!.id, kind: "bestline" }] }, { status: 202 });
       if (url.endsWith("/schedule")) return json({
         schedule: { id: "schedule-one", sessionKind: "pack", packId: run.packId, kind: "blocked", variant: null, dueAt: "2026-08-12T20:00:00.000Z", sourceRunId: run.id },
         result: { run, emitted: [] },

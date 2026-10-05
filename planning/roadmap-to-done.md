@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 calculation checkpoint: [[D3424]]/[[D3425]] connect exact 202 admission receipts and
+mutation-stable pending jobs to the Support control. Only the admitted job's own node/kind result
+completes it, so an old calculation cannot unblock a fresh request. Controlled predecessor,
+mounted, authenticated HTTP/SQLite and built-browser evidence closes these two defects. [[D3426]]
+keeps authenticated terminal-batch status, retry and reload identity open; the complete recovery
+journey and source/RFC/milestone obligations are not promoted. Receipt:
+`planning/evidence-job-durability/calculation-client-2026-10-06.md`.
+
 2026-10-05 Review enrichment checkpoint: [[D3422]]/[[D3423]] repair the existing §4.1
 reservation/completion contract. Discovery holds exact slots before yielding, all branches share
 the per-run bound, evicted/invalidated work is fenced, and scalar shared completion wakes every

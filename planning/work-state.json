@@ -28206,6 +28206,33 @@
       "uxItems": [],
       "evidence": "apps/server/src/review-map.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3424",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2cecc88d8e9c82a7c05f8afbacd911e3dbc15e82881b0aa42b79d31ae41964f1",
+      "uxItems": [],
+      "evidence": "apps/server/src/analysis-client.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3425",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c59ac3635196947e1239fd993876300f08e85c2cc9237ceeeebb7dd06e07fd49",
+      "uxItems": [],
+      "evidence": "apps/server/src/analysis-client.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3426",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:872e5389e63ebe2ac01a03af71354361af49ad408b46e71d2ab7c5d96a1292fa",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     }
   ]
 }

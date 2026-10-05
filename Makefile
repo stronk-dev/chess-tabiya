@@ -1188,7 +1188,14 @@ provider-scheduler-lifetime-check: provider-scheduler-contract-check
 return-frequency-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
 
-.PHONY: inspector-corpus-client-check inspector-corpus-check
+.PHONY: analysis-client-check analysis-browser-check inspector-corpus-client-check inspector-corpus-check
+analysis-client-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/analysis-client.test.ts apps/web/src/lib/analysis-response.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
+	$(MAKE) typecheck
+
+analysis-browser-check:
+	./node_modules/.bin/playwright test --grep "Support calculation follows its admitted job"
+
 inspector-corpus-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-protocol.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/screens.test.ts
 

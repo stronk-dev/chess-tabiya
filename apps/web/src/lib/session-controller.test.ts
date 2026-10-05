@@ -27,6 +27,7 @@ import {
 import { describe, expect, it, vi } from "vitest";
 
 import type {
+  AnalysisAdmission,
   Capabilities,
   CreateRunRequest,
   DrillClientApi,
@@ -304,8 +305,8 @@ class FakeApi implements DrillClientApi {
     this.groupReplyCalls += 1;
     return { selection: await this.selectMove(request), reusedFromNodeId: null };
   }
-  async analysis(_runId: string, nodeIds: readonly string[]): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
-    return { jobs: nodeIds.map((_, index) => ({ id: `analysis-${index + 1}` })) };
+  async analysis(_runId: string, nodeIds: readonly string[]): Promise<AnalysisAdmission> {
+    return { batchId: "analysis-batch", jobs: nodeIds.map((nodeId, index) => ({ id: `analysis-${index + 1}`, nodeId, kind: "bestline" })) };
   }
 
   async duplicateRun(sourceRunId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun> {
@@ -991,7 +992,7 @@ describe("DrillSessionController", () => {
     await environment.controller.continueCheckpoint();
     await environment.controller.fork("second look", "test intent");
     const branches = environment.controller.state.runState!.run.branches;
-    const analysis = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    const analysis = deferred<AnalysisAdmission>();
     vi.spyOn(api, "analysis").mockReturnValueOnce(analysis.promise);
     const selection = vi.spyOn(api, "selectMove");
     selection.mockClear();
@@ -1003,7 +1004,7 @@ describe("DrillSessionController", () => {
     expect(await environment.controller.switchBranch(branches[1]!.forkNodeId, branches[0]!.id)).toBe(false);
     expect(selection).not.toHaveBeenCalled();
 
-    analysis.resolve({ jobs: [{ id: "analysis-1" }] });
+    analysis.resolve({ batchId: "analysis-batch", jobs: [{ id: "analysis-1", nodeId: environment.controller.state.runState!.run.activeCursor.nodeId, kind: "bestline" }] });
     expect(await analyzing).toBe(true);
   });
 
@@ -1012,17 +1013,17 @@ describe("DrillSessionController", () => {
     const environment = controller(api);
     await environment.controller.startPack(pack.id);
     const nodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
-    const first = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    const first = deferred<AnalysisAdmission>();
     const analysis = vi.spyOn(api, "analysis").mockReturnValueOnce(first.promise);
 
     const pending = environment.controller.analyzeMissingEvidence([nodeId]);
     expect(environment.controller.state.busy).toBe(true);
     expect(await environment.controller.analyzeMissingEvidence([nodeId])).toBe(false);
     expect(analysis).toHaveBeenCalledTimes(1);
-    first.resolve({ jobs: [{ id: "analysis-1" }] });
+    first.resolve({ batchId: "analysis-batch", jobs: [{ id: "analysis-1", nodeId, kind: "bestline" }] });
     expect(await pending).toBe(true);
 
-    analysis.mockResolvedValueOnce({ jobs: [] });
+    analysis.mockResolvedValueOnce({ batchId: "analysis-batch", jobs: [] });
     expect(await environment.controller.analyzeMissingEvidence([nodeId])).toBe(false);
     expect(environment.controller.state.busy).toBe(false);
     expect(environment.controller.state.error).toBeDefined();
@@ -1034,7 +1035,7 @@ describe("DrillSessionController", () => {
     const environment = controller(api);
     await environment.controller.startPack(pack.id);
     const oldNodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
-    const analysis = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    const analysis = deferred<AnalysisAdmission>();
     vi.spyOn(api, "analysis").mockReturnValueOnce(analysis.promise);
     const analyzing = environment.controller.analyzeMissingEvidence([oldNodeId]);
 
@@ -1050,7 +1051,7 @@ describe("DrillSessionController", () => {
     await environment.controller.resume(replacement.id);
     expect(environment.controller.state.runState?.run.id).toBe(replacement.id);
 
-    analysis.resolve({ jobs: [{ id: "stale-analysis" }] });
+    analysis.resolve({ batchId: "analysis-batch", jobs: [{ id: "stale-analysis", nodeId: oldNodeId, kind: "bestline" }] });
     expect(await analyzing).toBe(false);
     expect(environment.controller.state).toMatchObject({
       busy: false,
@@ -1079,7 +1080,7 @@ describe("DrillSessionController", () => {
     const environment = controller(api);
     await environment.controller.startPack(pack.id);
     const nodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
-    const first = deferred<{ readonly jobs: readonly { readonly id: string }[] }>();
+    const first = deferred<AnalysisAdmission>();
     vi.spyOn(api, "analysis").mockReturnValueOnce(first.promise);
     const move = vi.spyOn(api, "move");
     const fork = vi.spyOn(api, "fork");
@@ -1109,7 +1110,7 @@ describe("DrillSessionController", () => {
     expect(reasoning).not.toHaveBeenCalled();
     expect(environment.controller.state.busy).toBe(true);
 
-    first.resolve({ jobs: [{ id: "analysis-1" }] });
+    first.resolve({ batchId: "analysis-batch", jobs: [{ id: "analysis-1", nodeId, kind: "bestline" }] });
     expect(await pending).toBe(true);
     expect(environment.controller.state.busy).toBe(false);
   });

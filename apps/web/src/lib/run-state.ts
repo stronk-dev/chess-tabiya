@@ -27,6 +27,7 @@ import {
   type BotOpponentPlyResponse,
 } from "./api.js";
 import { WriterSession } from "./writer-session.js";
+import { analysisRequestNodes, parseAnalysisAdmission, type PendingAnalysisJob } from "./analysis-response.js";
 
 export interface PollScheduler {
   setInterval(task: () => void | Promise<void>, intervalMs: number): unknown;
@@ -46,13 +47,15 @@ export interface RunStateSnapshot {
   readonly run: DrillRun;
   readonly access: "writer" | "read_only";
   readonly pendingEvidence: number;
+  /** Only exact admitted jobs not yet attached; no inferred terminal failure or provider state. */
+  readonly analysisJobs?: readonly PendingAnalysisJob[];
   readonly withheld: boolean;
   readonly lastError?: ApiError;
 }
 
 type Subscriber = (snapshot: RunStateSnapshot) => void;
 
-function pendingEvidence(events: readonly DrillRunEvent[]): number {
+function pendingEvidenceNodes(events: readonly DrillRunEvent[]): Set<string> {
   const parentByNode = new Map<string, string | null>();
   const pendingNodeIds = new Set<string>();
   for (const event of events) {
@@ -81,7 +84,7 @@ function pendingEvidence(events: readonly DrillRunEvent[]): number {
       }
     }
   }
-  return pendingNodeIds.size;
+  return pendingNodeIds;
 }
 
 function appendProjected(
@@ -110,6 +113,7 @@ export class RunStateStore {
   #evidencePoll: unknown;
   #evidencePollInFlight: Promise<void> | undefined;
   #analysisInFlight = false;
+  readonly #analysisJobs = new Map<string, PendingAnalysisJob>();
   #started = false;
 
   constructor(
@@ -129,7 +133,7 @@ export class RunStateStore {
     this.#snapshot = Object.freeze({
       run,
       access: session.readOnly ? "read_only" : "writer",
-      pendingEvidence: pendingEvidence(run.events),
+      pendingEvidence: pendingEvidenceNodes(run.events).size,
       withheld: false,
     });
   }
@@ -298,18 +302,23 @@ export class RunStateStore {
   }
 
   async analysis(nodeIds: readonly string[]) {
+    const requested = analysisRequestNodes(nodeIds);
     if (this.#snapshot.access === "read_only") {
       throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
     }
     while (this.#evidencePollInFlight !== undefined) await this.#evidencePollInFlight;
+    if (this.snapshot.access === "read_only") {
+      throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
+    }
+    if (requested.some(nodeId => !this.#snapshot.run.nodes.some(node => node.id === nodeId))) {
+      throw new TypeError("Analysis position is not part of this run");
+    }
+    if (this.#analysisInFlight) throw new Error("An analysis admission is already pending");
     this.#analysisInFlight = true;
     try {
-      const result = await this.#api.analysis(this.#session.runId, nodeIds, this.#session.writerId);
-      this.#snapshot = Object.freeze({
-        ...this.#snapshot,
-        pendingEvidence: this.#snapshot.pendingEvidence + nodeIds.length,
-      });
-      this.#emit();
+      const result = parseAnalysisAdmission(await this.#api.analysis(this.#session.runId, requested, this.#session.writerId), requested);
+      for (const job of result.jobs) this.#analysisJobs.set(job.id, Object.freeze({ ...job, batchId: result.batchId }));
+      this.#setRun(this.#snapshot.run);
       return result;
     } finally {
       this.#analysisInFlight = false;
@@ -441,10 +450,22 @@ export class RunStateStore {
   }
 
   #setRun(run: DrillRun): void {
+    for (const event of run.events) {
+      if (event.type !== "evidence.attached" || event.data.payload.kind !== "bestline"
+        || event.data.payload.source !== "engine_validated") continue;
+      for (const reference of event.data.evidenceRefs) {
+        if (!reference.startsWith("engine:")) continue;
+        const id = reference.slice("engine:".length);
+        if (this.#analysisJobs.get(id)?.nodeId === event.data.nodeId) this.#analysisJobs.delete(id);
+      }
+    }
+    const pending = pendingEvidenceNodes(run.events);
+    for (const job of this.#analysisJobs.values()) pending.add(job.nodeId);
     this.#snapshot = Object.freeze({
       run,
       access: this.#session.readOnly ? "read_only" : "writer",
-      pendingEvidence: pendingEvidence(run.events),
+      pendingEvidence: pending.size,
+      analysisJobs: Object.freeze([...this.#analysisJobs.values()]),
       withheld: this.#snapshot.withheld,
       ...(this.#snapshot.lastError === undefined
         ? {}

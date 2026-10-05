@@ -68,6 +68,8 @@ import {
   type StyleCardPage,
 } from "./profile-response.js";
 import { parseEvidencePage } from "./evidence-page-response.js";
+import { analysisRequestNodes, parseAnalysisAdmission, type AnalysisAdmission } from "./analysis-response.js";
+export type { AnalysisAdmission } from "./analysis-response.js";
 import { EVIDENCE_KIND_LABELS } from "./labels/evidence-kind.js";
 import { parsePostcommitNudge, type PostcommitNudge } from "./nudge-response.js";
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
@@ -1067,7 +1069,7 @@ export interface RunApi {
   recordReasoning(runId: string, input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: ReasoningTranscript; readonly skipped?: true }, writerId: string): Promise<MutationResult & { readonly reasoning: ReasoningPage }>;
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
   groupReply(runId: string, groupId: string, writerId: string, request: SelectMoveRequest): Promise<GroupReplyResult>;
-  analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }>;
+  analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<AnalysisAdmission>;
   scheduleReturn?(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult>;
   simulate?(runId: string, writerId: string): Promise<SimulationResult>;
   enterSimulation?(runId: string, simulationId: string, branchIndex: number, writerId: string): Promise<MutationResult>;
@@ -1726,11 +1728,13 @@ export class DrillApi implements DrillClientApi {
    * Durable analysis admission (rfc/evidence-job-durability.md §2): one idempotency key per
    * request, so a transport retry of the same call replays the stored batch instead of duplicating.
    */
-  async analysis(runId: string, nodeIds: readonly string[], writerId: string, idempotencyKey: string = globalThis.crypto.randomUUID()): Promise<{ readonly batchId: string; readonly jobs: readonly { readonly id: string }[] }> {
+  async analysis(runId: string, nodeIds: readonly string[], writerId: string, idempotencyKey: string = globalThis.crypto.randomUUID()): Promise<AnalysisAdmission> {
+    const requested = analysisRequestNodes(nodeIds);
     const response = await this.#response(`/runs/${encoded(runId)}/analysis`, {
-      method: "POST", writerId, body: { nodeIds, kind: "bestline", multiPv: 1, movetime: 100 }, headers: { "idempotency-key": idempotencyKey },
+      method: "POST", writerId, body: { nodeIds: requested, kind: "bestline", multiPv: 1, movetime: 100 }, headers: { "idempotency-key": idempotencyKey },
     });
-    return (await response.json()) as { readonly batchId: string; readonly jobs: readonly { readonly id: string }[] };
+    if (response.status !== 202) throw new TypeError("Analysis was not durably admitted");
+    return parseAnalysisAdmission(await response.json(), requested);
   }
 
   scheduleReturn(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult> {

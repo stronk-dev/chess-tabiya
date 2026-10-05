@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3424]]/[[D3425]] close the existing explicit-calculation admission and successful-completion
+path: full 202 batch/job/node/kind parsing, literal request preservation, mutation-stable pending
+jobs and exact result consumption reach the Support control. Controlled predecessor behaviors
+produce 22 failing permanent assertions; restored code passes 150 focused tests with clean types,
+authenticated production HTTP/SQLite and the built browser's two-calculation journey. Full local
+closeout is logged before commit; metadata maintenance is automatic.
+
+[[D3426]] is **BLOCKED CONTRACT**, evidence-foundation: durable settled_unavailable/cancelled rows
+have no public exact-batch status. Author repair must own authenticated status, replay/retry,
+redaction and reload identity before the complete calculation recovery journey can close.
+Empty successful-sequence pages and local timers must never stand in for terminal status.
+Continue the other existing foundation execution/resolution/source contracts below; no whole
+RFC, capability or milestone is promoted by this successful-completion repair.
+
 [[D3422]]/[[D3423]] implement the complete Review enrichment reservation/completion repair under
 review-evidence-compiler §4.1: exact slots reserve before discovery, all branches share the run
 bound, eviction/cancellation fence ownership and subscribers observe scalar completion. Only

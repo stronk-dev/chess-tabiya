@@ -163,6 +163,20 @@ window, another in-flight action, and an already-requested calculation each disa
 a visible reason. Once engine evidence is recorded, Support reports availability and links to the
 advanced inspector; it does not print raw provider output into the play surface.
 
+The calculation request now retains the existing exact `202` admission receipt: batch id and
+ordered job ids, position ids and kinds. Malformed, crossed or non-admission responses never
+increment pending work. The run store keeps those admitted jobs across moves and other evidence
+updates; only a `bestline` attachment for the exact job and node removes it. The Support button
+follows that pending identity instead of a sticky local flag, so an old evaluation cannot finish
+a new calculation and the control becomes usable again after its own result arrives.
+
+The public evidence page still contains successful sequences only. Terminal provider absence,
+cancellation and reconstruction of root-only analysis after reload require the D3426 authenticated
+batch-status contract; empty pages and local timers never manufacture those outcomes. These remain
+open recovery obligations, not completed by the successful calculation path. Run
+`make analysis-client-check analysis-browser-check` for receipt, store, mounted and real HTTP/browser
+controls.
+
 Device-local assistance preferences are live inputs, not mount-time configuration. The drill
 derives its active profile from the current workflow context, reloads when that context changes,
 and listens for browser `storage` events so a Settings change from another tab updates an already

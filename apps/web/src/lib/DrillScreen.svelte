@@ -471,6 +471,8 @@
   // stay in the layout with their reason; they never disappear when a provider drops.
   let corpusNotice = $derived(operationNotice(capabilities, "evidence.explorer_query"));
   let voiceNotice = $derived(operationNotice(capabilities, "render.voice"));
+  let calculationPreparing = $derived(analysisRequestedNodeId === currentNode.id
+    || snapshot.analysisJobs?.some(job => job.nodeId === currentNode.id) === true);
   let analysisUnavailableReason = $derived.by(() => {
     if (!canWrite) return "This read-only view cannot request a new calculation.";
     if (onAnalyzeMissing === undefined || !operationConfigured(capabilities, "evidence.stockfish_analysis")) {
@@ -482,27 +484,30 @@
         : "This rehearsal opens calculated evidence at its next feedback point.";
     }
     if (busy) return "Another run action is still finishing.";
-    if (analysisRequestedNodeId === currentNode.id) return "The calculation is being prepared for this position.";
+    if (calculationPreparing) return "The calculation is being prepared for this position.";
     return undefined;
   });
 
   async function requestCurrentAnalysis(): Promise<void> {
     if (analysisUnavailableReason !== undefined || onAnalyzeMissing === undefined) return;
     const nodeId = currentNode.id;
+    const runId = run.id;
     const request = ++analysisRequest;
     analysisRequestedNodeId = nodeId;
     analysisRequestError = undefined;
     try {
       const accepted = await onAnalyzeMissing([nodeId]);
-      if (request !== analysisRequest) return;
+      if (request !== analysisRequest || run.id !== runId) return;
       if (accepted === false) {
         if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
         analysisRequestError = { nodeId, text: "The calculation did not start. Try again." };
       }
     } catch {
-      if (request !== analysisRequest) return;
+      if (request !== analysisRequest || run.id !== runId) return;
       if (analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
       analysisRequestError = { nodeId, text: "The calculation is unavailable right now. Try again." };
+    } finally {
+      if (request === analysisRequest && analysisRequestedNodeId === nodeId) analysisRequestedNodeId = undefined;
     }
   }
 
@@ -2243,7 +2248,7 @@
                 >
                   {#snippet children(describedBy)}
                     <button type="button" disabled={analysisUnavailableReason !== undefined} aria-describedby={describedBy} onclick={() => void requestCurrentAnalysis()}>
-                      {analysisRequestedNodeId === currentNode.id ? "Preparing calculation…" : "Calculate this position"}
+                      {calculationPreparing ? "Preparing calculation…" : "Calculate this position"}
                     </button>
                   {/snippet}
                 </HonestControl>

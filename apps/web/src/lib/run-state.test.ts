@@ -14,6 +14,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   ApiError,
+  type AnalysisAdmission,
   type CreateRunRequest,
   type EventsPage,
   type EvidencePage,
@@ -133,7 +134,7 @@ class FakeApi implements RunApi {
 
   async createGroup(): Promise<never> { throw new Error("not used"); }
   async groupReply(): Promise<never> { throw new Error("not used"); }
-  async analysis(): Promise<{ readonly jobs: readonly { readonly id: string }[] }> { throw new Error("not used"); }
+  async analysis(): Promise<AnalysisAdmission> { throw new Error("not used"); }
 
   async rewind(
     _runId: string,
@@ -287,7 +288,7 @@ describe("RunStateStore", () => {
       await applyGate;
       return applyEvidence(runId, resultSeq, writerId);
     });
-    const analysis = vi.spyOn(api, "analysis").mockResolvedValue({ jobs: [{ id: "manual-job" }] });
+    const analysis = vi.spyOn(api, "analysis").mockResolvedValue({ batchId: "manual-batch", jobs: [{ id: "manual-job", nodeId: store.snapshot.run.activeCursor.nodeId, kind: "bestline" }] });
 
     const poll = store.pollEvidence();
     await applyStarted;
@@ -313,6 +314,48 @@ describe("RunStateStore", () => {
 
     expect(store.snapshot.pendingEvidence).toBe(1);
     expect(scheduler.timers.size).toBe(0);
+  });
+
+  it("retains an admitted root calculation across moves and unrelated evidence, then consumes only its exact job/node result", async () => {
+    const api = new FakeApi();
+    api.serverRun = reachCheckpoint(api.serverRun, "reveal", at).run;
+    const scheduler = new FakeScheduler();
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
+    store.start();
+    const root = store.snapshot.run.activeCursor.nodeId;
+    vi.spyOn(api, "analysis").mockResolvedValue({ batchId: "batch", jobs: [{ id: "manual-job", nodeId: root, kind: "bestline" }] });
+    await store.analysis([root]);
+    await store.move({ uci: "e2e4" });
+    expect(store.snapshot.pendingEvidence).toBe(2);
+    await store.pollEvidence(); // The automatic child evaluation is not the requested root line.
+    expect(store.snapshot.pendingEvidence).toBe(1);
+    expect([...scheduler.timers.values()].map(timer => timer.interval)).toContain(1_000);
+    for (const [nodeId, kind] of [[store.snapshot.run.activeCursor.nodeId, "bestline"], [root, "eval"]] as const) {
+      vi.spyOn(api, "applyEvidence").mockImplementation(async () => {
+        const result = attachEvidence(api.serverRun, nodeId, ["engine:manual-job"], { kind, source: "engine_validated", values: { movesUci: [], centipawns: 0 } }, at);
+        api.serverRun = result.run;
+        return result;
+      });
+      await store.pollEvidence();
+      expect(store.snapshot.pendingEvidence).toBe(1); // Crossed node or kind is not completion.
+    }
+    vi.spyOn(api, "applyEvidence").mockImplementation(async () => {
+      const result = attachEvidence(api.serverRun, root, ["engine:manual-job"], { kind: "bestline", source: "engine_validated", values: { lines: [] } }, at);
+      api.serverRun = result.run;
+      return result;
+    });
+    await store.pollEvidence();
+    expect(store.snapshot.pendingEvidence).toBe(0);
+    expect(scheduler.timers.size).toBe(0);
+  });
+
+  it("refuses a crossed admission before adding pending work", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const root = store.snapshot.run.activeCursor.nodeId;
+    vi.spyOn(api, "analysis").mockResolvedValue({ batchId: "batch", jobs: [{ id: "manual-job", nodeId: "another", kind: "bestline" }] });
+    await expect(store.analysis([root])).rejects.toThrow();
+    expect(store.snapshot.pendingEvidence).toBe(0);
   });
 
   it("does not keep polling jobs that the server cancels on rewind", () => {
