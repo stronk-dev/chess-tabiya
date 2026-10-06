@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3496]]: the Guided Hint shipping poll delay is 100 ms rather than
+350 ms, retaining a 70-second pending window with elapsed-time/count bounds.
+Four no-override readiness controls fail on the predecessor; 25 mounted/wire
+and 78 service/lifetime/client cases pass with clean types. Slow round trips
+count toward the deadline and teardown preserves exact identity without a late
+poll/render. Browser ladder/retry journeys and all 112 composition cells pass.
+Receipt: `planning/provider-exchange-and-execution/hint-client-cadence-2026-10-06.md`.
+This is the existing production hint path, not D3262's five-approach search.
+Next: D7's real-engine/transport/browser latency receipt and D3262's controlled
+cold/warm/offline cost before production-profile selection; neither is closed.
+
 Completed [[D3495]]: scope/focus/source-budget qualification retains all 193
 candidates / 182 cells / 53 settings / 116 pairs and 212 actual hard-control
 receipts. Four controls carry 14 labelled candidates; main cells retain unknown

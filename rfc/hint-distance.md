@@ -1,5 +1,12 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-06 client-cadence checkpoint:** D3496 replaces the shipping 350 ms poll delay with
+  100 ms and retains the original 70-second pending window, now bounded by elapsed time as well
+  as request count. Four no-override ready-result controls fail against the predecessor; default
+  lifetime, slow transport and teardown controls preserve exact operation cleanup and no automatic
+  retry. `make guided-hint-client-check` runs the mounted controls. This is not the §10 integrated
+  real-engine/transport/browser measurement; D7 and the complete RFC remain open.
+
 - **2026-10-06 maximum-load checkpoint:** D3438/D3441 add receipt-bound one/zero fact badges
   and retain an answer across identical run snapshots; genuinely changed decision heads still
   retire it. D3439 makes the held staged cue displace the hint card without re-requesting or

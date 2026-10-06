@@ -31,7 +31,7 @@
     band?: boolean;
   }
 
-  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 350, expanded = true, onToggle, band = false }: Props = $props();
+  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 100, expanded = true, onToggle, band = false }: Props = $props();
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -113,11 +113,18 @@
         retryRequestId = undefined;
       }
       let current = await client.request(body);
-      for (let attempt = 0; current.state === "pending" && attempt < 200; attempt += 1) {
+      // §10: a ready result must not sit behind the old 350 ms cadence. Keep the
+      // original 200 × 350 ms pending window, separately from polling frequency.
+      // Bound elapsed time as well as count, including slow network round trips.
+      const pendingWindowMs = 70_000;
+      const cadence = Number.isFinite(pollIntervalMs) && pollIntervalMs > 0 ? pollIntervalMs : 100;
+      const deadline = Date.now() + pendingWindowMs;
+      const maxPolls = Math.ceil(pendingWindowMs / cadence);
+      for (let attempt = 0; current.state === "pending" && attempt < maxPolls && Date.now() < deadline; attempt += 1) {
         if (mine !== generation) return;
         activeRequestId = current.requestId;
         response = current;
-        await wait(pollIntervalMs);
+        await wait(Math.min(cadence, Math.max(0, deadline - Date.now())));
         if (mine !== generation) return;
         try {
           current = await client.poll(current.requestId);

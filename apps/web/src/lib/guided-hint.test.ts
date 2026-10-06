@@ -83,6 +83,88 @@ describe("DrillApi Guided Hint wire", () => {
 });
 
 describe("GuidedHintSeat", () => {
+  it.each([0, 99, 101, 351])("the shipping cadence renders a result ready at %i ms within the next 100 ms", async readyAt => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    const client: GuidedHintClient = {
+      async request(body) { return { state: "pending", requestId, rung: body.rung }; },
+      async poll() { return Date.now() >= readyAt ? { state: "available", delivery: receipt(run, "pattern") } : { state: "pending", requestId, rung: "pattern" }; },
+      async cancel(id) { return { state: "cancelled", requestId: id, rung: "pattern" }; },
+    };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
+    await settle();
+    vi.useFakeTimers(); vi.setSystemTime(0);
+    try {
+      document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+      await vi.advanceTimersByTimeAsync(readyAt + 100); await tick();
+      expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
+    } finally { await unmount(component); vi.useRealTimers(); }
+  });
+
+  it("the shipping cadence preserves 70 seconds of pending time and stops without a retry", async () => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    const request = vi.fn<GuidedHintClient["request"]>(async body => ({ state: "pending", requestId, rung: body.rung }));
+    const poll = vi.fn<GuidedHintClient["poll"]>(async () => ({ state: "pending", requestId, rung: "pattern" }));
+    const cancel = vi.fn<GuidedHintClient["cancel"]>(async id => ({ state: "cancelled", requestId: id, rung: "pattern" }));
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client: { request, poll, cancel }, assistanceRequest } });
+    await settle();
+    vi.useFakeTimers();
+    try {
+      const button = document.querySelector<HTMLButtonElement>(".hint-actions button")!;
+      button.click();
+      await vi.advanceTimersByTimeAsync(69_999); await tick();
+      expect(button.disabled).toBe(true);
+      expect(document.querySelector(".hint-message")?.textContent).toContain("Looking for a hint");
+      await vi.advanceTimersByTimeAsync(1); await tick();
+      expect(button.disabled).toBe(false);
+      expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
+      expect(poll).toHaveBeenCalledTimes(700);
+      expect(request).toHaveBeenCalledTimes(1);
+      expect(cancel).not.toHaveBeenCalled();
+    } finally { await unmount(component); vi.useRealTimers(); }
+    expect(cancel).toHaveBeenCalledWith(requestId);
+  });
+
+  it("slow poll round trips count towards the pending deadline rather than multiplying the lifetime", async () => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    const poll = vi.fn<GuidedHintClient["poll"]>(async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return { state: "pending", requestId, rung: "pattern" };
+    });
+    const client: GuidedHintClient = {
+      async request(body) { return { state: "pending", requestId, rung: body.rung }; }, poll,
+      async cancel(id) { return { state: "cancelled", requestId: id, rung: "pattern" }; },
+    };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
+    await settle(); vi.useFakeTimers();
+    try {
+      document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+      await vi.advanceTimersByTimeAsync(70_200); await tick();
+      expect(poll).toHaveBeenCalledTimes(117);
+      expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
+      await vi.advanceTimersByTimeAsync(70_000);
+      expect(poll).toHaveBeenCalledTimes(117);
+    } finally { await unmount(component); vi.useRealTimers(); }
+  });
+
+  it("teardown during the shipping poll wait cancels the exact request and never polls or renders", async () => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    const poll = vi.fn<GuidedHintClient["poll"]>(async () => ({ state: "available", delivery: receipt(run, "pattern") }));
+    const cancel = vi.fn<GuidedHintClient["cancel"]>(async id => ({ state: "cancelled", requestId: id, rung: "pattern" }));
+    const client: GuidedHintClient = { async request(body) { return { state: "pending", requestId, rung: body.rung }; }, poll, cancel };
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
+    await settle(); vi.useFakeTimers();
+    let removed = false;
+    try {
+      document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+      await vi.advanceTimersByTimeAsync(99); await tick();
+      await unmount(component); removed = true;
+      await vi.advanceTimersByTimeAsync(200);
+      expect(cancel).toHaveBeenCalledWith(requestId);
+      expect(poll).not.toHaveBeenCalled();
+      expect(document.querySelector(".hint-sentence")).toBeNull();
+    } finally { if (!removed) await unmount(component); vi.useRealTimers(); }
+  });
+
   it.each(["retry", "teardown"] as const)("poll exhaustion retains exact cleanup identity for %s", async action => {
     const run = revealedRun(), requestId = "e".repeat(32);
     const trace: string[] = [], bodies: HintRequestBody[] = [];
@@ -92,15 +174,15 @@ describe("GuidedHintSeat", () => {
       poll,
       async cancel(id) { trace.push(`DELETE:${id}`); return { state: "cancelled", requestId: id, rung: "pattern" }; },
     };
-    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest, pollIntervalMs: 1 } });
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
     await settle();
     const button = () => document.querySelector<HTMLButtonElement>(".hint-actions button")!;
     let removed = false;
     vi.useFakeTimers();
     try {
       button().click();
-      await vi.advanceTimersByTimeAsync(201); await tick();
-      expect(poll).toHaveBeenCalledTimes(200);
+      await vi.advanceTimersByTimeAsync(70_001); await tick();
+      expect(poll).toHaveBeenCalledTimes(700);
       expect(button().disabled).toBe(false);
       expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
       expect(trace).toEqual(["POST"]); // The cap must not autonomously cancel/retry or advance.

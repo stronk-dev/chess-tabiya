@@ -1350,7 +1350,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:c28b6547fcca174331adb55e133b1b8f2dc4f6e5f1224b968a274cee4b81aa5b"
+              "digest": "sha256:c52de9461fdf8a99fb7cf25cdf78d68800f04de5f8f838cab5d0271040173a2e"
             },
             {
               "kind": "work_state",
@@ -1581,7 +1581,7 @@
         "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3474/D3475 legacy distribution/tier boundaries, D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3474/D3475 repair the legacy Inspector distribution and focused test-tier omission under the existing engine-request contract. Two real selector/REST/closed-parser predecessor controls fail, and the replacement preserves literal probabilities, actual sampled selection, retry/cache behavior and non-commit semantics. The client parser remains strict. Focused replacement passes 102 tests with clean types; the governance-only literal tier-command guard passes six permanent controls. Full staged software passes 3329 tests/343 files plus seven isolated performance tests/four files and downstream contracts at tree 793757c2d3a42ee05deaf099214a58762a093801. Full content passes 227 tests/23 files; 145 browser journeys pass with zero retries and the existing optional Maia skip, including all 112 retained matrix states and the packaged default. Both defects close on path evidence; zero untriaged of 1687 live and zero doing. Final staged process/governance checks pass. D3363/D3309 source migrations, full A4/D1834, phone/ceilings, owner-use and full RFC/milestone/release remain open. Earlier checkpoints remain linked; routine metadata/hash maintenance is automatic and the full 1.0 goal stays active.",
+          "summary": "D3496 repairs shipping Guided Hint polling from 350 to 100 ms without cutting the original 70-second pending window. Elapsed network time and a finite poll cap bound pending work; exact-id cleanup and no autonomous retry remain. Four no-override readiness controls fail on the predecessor. Replacement passes 25 mounted/wire and 78 service/lifetime/client cases with clean types, including slow transport and wait-time teardown. Full verify-software terminates zero with 3336 tests/343 files, seven isolated performance tests/four files and all downstream contracts; content passes 227/23; browser terminates zero with 144 passes, one optional Maia skip, zero retries and 112/112 composition cells. Governance passes; final exact-index governance and normal hooks precede commit. D3496 is evidence-backed done, with zero untriaged and only D3262 doing. This is not hint-distance D7 integrated real-engine/transport/browser latency, D3262 five-approach cost or full-RFC/milestone/release completion. Prior Inspector/composition checkpoints remain linked. Routine metadata/hash maintenance is automatic and full 1.0 stays active.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/human-model-window-2026-10-06.md",
@@ -1688,13 +1688,14 @@
             "planning/play-composition/inspector-subject-native-2026-10-06.json",
             "planning/play-composition/inspector-subject-software-2026-10-06.json",
             "planning/play-composition/inspector-subject-matrix-2026-10-06.json",
-            "planning/play-composition/inspector-subject-inventory-2026-10-06.json"
+            "planning/play-composition/inspector-subject-inventory-2026-10-06.json",
+            "planning/provider-exchange-and-execution/hint-client-cadence-2026-10-06.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:c28b6547fcca174331adb55e133b1b8f2dc4f6e5f1224b968a274cee4b81aa5b"
+              "digest": "sha256:c52de9461fdf8a99fb7cf25cdf78d68800f04de5f8f838cab5d0271040173a2e"
             },
             {
               "kind": "rfc",
@@ -1970,6 +1971,11 @@
               "kind": "work_state",
               "id": "D3475",
               "digest": "sha256:b235377eac75b7fabdef6a6e5e504eb5ff1738f2a597c433f7d43d01bdbffc18"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3496",
+              "digest": "sha256:bf8b67297b3c2bd87b8dd084b9c29063128bbe98c97e8752f13451e4613e429a"
             }
           ]
         },

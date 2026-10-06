@@ -114,7 +114,10 @@ or update provider health. The optional voice keeps its two-second deadline and 
 deterministic fallback; shutdown drains hint operations before closing provider health.
 
 Retention pressure discards unused cached horizons before live subscribed searches. The client
-stops after 200 polls with a local “taking longer than expected” message, keeping the actual
+polls at most once per 100 ms while pending. The pending window remains 70 seconds (formerly
+200 × 350 ms), with both an elapsed-time deadline and a 700-poll cap. Network round trips count
+toward that deadline; an already in-flight transport can still finish after it. The client then
+shows a local “taking longer than expected” message, keeping the actual
 operation identity for explicit retry, decision reset or teardown. Poll transport failures keep
 that identity too. These local errors are not fabricated server responses or chess evidence;
 retry cancels the known operation before re-posting the same decision and rung.
@@ -131,6 +134,10 @@ starts (`#refuseRatedAssistance`).
 
 ## Tests
 
+- `make guided-hint-client-check` covers the shipping cadence without the former 1 ms test
+  override: ready results at four offsets render on the next 100 ms poll, the full 70-second
+  pending window is preserved, slow round trips count toward it, and teardown during the wait
+  cancels without a late poll/render. Fake-clock controls are not real-engine/browser latency.
 - `make guided-hint-lifetime-check` covers exact-decision caches, discovery recovery, subscriber
   lifetimes, eviction, stale/cancel/shutdown, ignored aborts and mounted retry controls. Its real
   authenticated HTTP tests exercise application → health → external voice → outbound fetch,
