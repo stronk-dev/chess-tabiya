@@ -28783,6 +28783,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-actual-contrast.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3488",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:008cbdab21465a32c16523ca8315f636e82c9548588f849992d923740dca1c88",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-actual-proof.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -155,6 +155,26 @@ for a dedicated counterfactual/refutation/coverage boundary before rendering a
 preventive explanation, not a verdict that semantic search or coaching cannot
 work. It does not settle a production width, model policy or strategic cause.
 
+[V] The actual preparation/defence quantifier receipt retains all 193 offered
+candidates / 6,176 preparation / 194,664 defence edges and all 182 target cells /
+29 settings. Partial counterexamples can refute an individual preparation; root
+refutation needs one for every legal preparation. Depth12/top8 refutes five roots
+at the bound but proves none of eight known surviving roots. Three refuted roots
+still allow existential target reach, so a universal-strategy refutation cannot
+be rendered as prevention. All 107 immediately preserved cells retain explicit
+non-applicability to reintroduction rather than borrowing the short-circuited
+baseline's false universal. Seven JS/four independent Python controls, nine
+source/eleven output corruptions and deterministic replay pass. Full population,
+literal source ceiling, opportunity versus execution, legality, terminal
+non-vacuity and typed omissions remain. Scope, hashes, source joins and commands:
+`planning/semantic-consequence-search/d3262-coherent-actual-proof.md`.
+
+[M] Implication: a counterexample can support a specific defensive explanation
+without complete sibling coverage, but the known surviving preparations require
+target-aware continuation/coverage beyond the current selected engine/model
+lines. This is not a production profile choice or permission to overstate the
+source authority; the full recursive semantic and joint-policy experiment remains.
+
 [P] Outstanding: recursively target-preserving traversal, the five-arm
 proof/refutation/abstention, joint coverage stop rules, phase/focus stratification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability

@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3488]]: all 193 candidates / 6,176 preparation / 194,664 defence
+edges and 182 named cells / 29 settings have independently checked actual-path
+quantifier receipts. Depth12/top8 refutes five roots at this bound, but proves none
+of eight known surviving roots; three refuted roots still allow existential target
+reach. Seven JS/four Python tests, nine source/eleven output corruptions and
+deterministic replay pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-actual-proof.md`.
+
 Completed [[D3487]]: the actual four-ply model/engine/reserve contrast retains all
 116 frozen pairs / 29 settings / 3,364 paired outcomes and 17 unpaired targets.
 Depth12/top8 observes 36 directions, 26 on exact ties; none is certified as
@@ -8,8 +16,9 @@ output corruption refusals and deterministic replay pass. Receipt:
 `planning/semantic-consequence-search/d3262-coherent-actual-contrast.md`.
 
 Current next action (2026-10-06): [[D3262]] remains doing under evidence-foundation.
-The actual target contrast is now complete; retain every omitted branch and typed
-abstention while completing the common proof/refutation/coverage-stop-rule/cost and
+The actual target contrast and bounded preparation/defence quantifier joins are
+complete; retain every omitted branch and typed abstention while completing the
+full five-arm proof/refutation/coverage-stop-rule/cost and
 recursively target-preserving selection experiment before choosing production
 defaults. Do not substitute the earlier common exact learner evaluator or claim
 engine causality from a visited event. D3478/D3485/D3486 are closed bounded

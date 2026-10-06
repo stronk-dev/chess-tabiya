@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 actual quantifier checkpoint: D3488 independently checks all 193
+offered candidates / 6,176 preparation / 194,664 defence edges and all 182 named
+cells / 29 settings. Depth12/top8 refutes five roots at this bound and proves
+none of eight known surviving roots; three refuted roots still permit existential
+target reach. Seven JS/four Python controls, nine source/eleven output corruptions
+and deterministic replay pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-actual-proof.md`.
+D3262 remains doing on recursive semantic selection and full five-arm
+proof/refutation/contrast/joint-policy stopping/controlled cost. Source ceilings
+remain unchanged; no RFC, capability, milestone or production consumer promotion.
+
 2026-10-06 actual contrast checkpoint: D3487 joins all 116 frozen source/alternative
 pairs / 29 settings / 3,364 paired outcomes, preserving 17 unpaired targets.
 Depth12/top8 observes 36 directions, 26 on exact ties; no partial arm certifies

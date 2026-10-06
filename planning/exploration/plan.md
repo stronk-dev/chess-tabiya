@@ -37,6 +37,17 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3488: the complete actual-path quantifier receipt independently
+replays all 193 offered candidates / 6,176 preparation / 194,664 defence edges
+and all 182 named cells / 29 settings. Depth12/top8 supplies five all-preparation
+refutations at this bound, but no proof of the eight known surviving roots.
+Three refuted roots still allow existential target reach; quantifier refutation
+is not impossibility. Seven JS/four Python controls, nine source/eleven output
+corruptions and deterministic replay pass. D3262 stays doing on recursive
+semantic selection, full five-arm proof/contrast/policy-stop-rule/controlled cost,
+phase/focus and production profile, with no gate/RFC/capability promotion.
+Receipt: `planning/semantic-consequence-search/d3262-coherent-actual-proof.md`.
+
 2026-10-06 D3487: all 116 actual-path source/alternative pairs / 29 settings now
 retain opportunity versus execution, literal model masses/residuals and every
 unpaired/unsupported case. Depth12/top8 observes 36 directions, 26 on exact ties;

@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3487 joins the complete checked actual four-ply engine, configured-model and frozen-first-reply-reserve target outcomes to all 116 source/alternative pairs / 29 settings / 3,364 paired outcomes, preserving 17 unpaired targets, all offered-candidate controls, literal input/model masses and each arm's omissions. Depth12/top8 observes 36 opportunity directions, 26 on exact same-reach pairs; the top-eight-event reserve matches it, while all-legal event scheduling observes 40 with 31 on ties. Model0.90 observes 52 with 46 on ties. No partial arm certifies directional prevention or executed absence; direct/visited positive existence does not supply an engine reason. Six JS/four independent Python tests, nine actual-source/ten actual-output corruption refusals, full independent contrast reconstruction and byte-identical replay pass. Artifact SHA-256 d710ef726b446e212ae6818cde6d8131d4c6614621e68f03f3fa4b5a5a24724e; captured provider/target inputs remain unchanged. The actual contrast is complete, not a stale next job. D3262 remains doing on the full common proof/refutation, joint-coverage stop rules, recursive semantic preservation, phase/focus stratification, controlled cost and all production/source/A4/1.0 obligations. No capability/RFC/milestone promotion; routine metadata maintenance is automatic.",
+          "summary": "D3488 independently joins all 193 offered candidates / 6,176 legal preparation / 194,664 legal defence edges and all 182 named target cells / 29 settings to actual selected provider histories. Availability, execution, individual-preparation refutation and all-preparation root refutation remain distinct; missing branches abstain and terminals never create vacuous universals. Depth12/top8 refutes five of 75 applicable roots at this bound, proves none of eight known surviving roots and leaves 70 unknown; all 107 immediately preserved cells remain explicit non-applicable reintroduction cases. Three refuted roots still permit existential target reach, so refutation cannot be rendered as impossibility, prevention or engine causality. Seven JS/four independent Python tests, nine source/eleven output corruption refusals, complete python-chess graph/board/quantifier reconstruction and byte-identical replay pass. Artifact SHA-256 103f77ec585cc76fe27990567de2d334a3b98ccd42584087e370d1f317c4fdde; captured provider/target inputs and prior contrasts remain unchanged. D3488 closes bounded research only. D3262 remains doing on the full five-arm proof/refutation/contrast, recursive semantic preservation, joint-policy stopping, phase/focus and controlled cost, with all production/source/A4/1.0 obligations open. No capability/RFC/milestone promotion; routine metadata maintenance is automatic.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1041,7 +1041,13 @@
             "tools/d3262-search-calibration/coherent-actual-contrast.mjs",
             "tools/d3262-search-calibration/coherent-actual-contrast.test.mjs",
             "tools/d3262-search-calibration/coherent-actual-contrast-check.py",
-            "tools/d3262-search-calibration/coherent-actual-contrast-check.test.py"
+            "tools/d3262-search-calibration/coherent-actual-contrast-check.test.py",
+            "planning/semantic-consequence-search/d3262-coherent-actual-proof.md",
+            "planning/semantic-consequence-search/d3262-coherent-actual-proof.json.gz",
+            "tools/d3262-search-calibration/coherent-actual-proof.mjs",
+            "tools/d3262-search-calibration/coherent-actual-proof.test.mjs",
+            "tools/d3262-search-calibration/coherent-actual-proof-check.py",
+            "tools/d3262-search-calibration/coherent-actual-proof-check.test.py"
           ],
           "anchors": [
             {
@@ -1473,6 +1479,11 @@
               "kind": "work_state",
               "id": "D3487",
               "digest": "sha256:72be6ef29b17bd6a6f9ffe12dcd03d56bcd941f5a641a8f62bde66b40814f902"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3488",
+              "digest": "sha256:008cbdab21465a32c16523ca8315f636e82c9548588f849992d923740dca1c88"
             }
           ]
         },

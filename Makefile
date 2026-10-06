@@ -688,6 +688,23 @@ semantic-search-actual-contrast-independent-test:
 semantic-search-actual-contrast-independent: semantic-search-actual-contrast-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-actual-contrast-check.py --negative-controls
 
+.PHONY: semantic-search-actual-proof-test semantic-search-actual-proof-update semantic-search-actual-proof-check
+semantic-search-actual-proof-test:
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-actual-proof.test.mjs
+
+semantic-search-actual-proof-update: semantic-search-actual-proof-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-actual-proof.mjs --write
+
+semantic-search-actual-proof-check: semantic-search-actual-proof-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-actual-proof.mjs
+
+.PHONY: semantic-search-actual-proof-independent-test semantic-search-actual-proof-independent
+semantic-search-actual-proof-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-actual-proof-check.test.py
+
+semantic-search-actual-proof-independent: semantic-search-actual-proof-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-actual-proof-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write
