@@ -4,6 +4,13 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Semantic search cost checkpoint — 2026-10-07
+
+| Item | Owning lane / prerequisite | Required exit |
+|---|---|---|
+| [[D3504]] | **DONE: independent complete engine/exact scheduling replay**; evidence-foundation, disposable D3262 research | Sixteen boundary controls and all 3,474 new cases / 240,861 target observations pass independent replay, with real provider-free negative controls. Exact query coalescing, geometry, source failure and shared node-budget stops are reconstructed; source-free availability is not played fourth-ply execution. Receipt: `planning/semantic-consequence-search/d3262-cost-live-plain-2026-10-07.md`. |
+| [[D3262]] | **DOING: eight complete setting populations captured**, evidence-foundation; draft semantic-consequence-search criterion 23 / D1 | All five primary search families now have a complete live population, but only 9,264/61,374 case identities are measured. Finish the remaining 45 settings, fresh-source outcome sensitivity, source/model memory, complete consumer scope and actual browser/profile qualification. Preserve every no-target/offline/partial row and original source/timing bytes; no production search or profile authorization follows from this checkpoint. Same receipt. |
+
 This is the queue the thematic roadmap was missing. A phase completes on evidence and closeout,
 not because its code was started. Within a phase, independent jobs may run in parallel; across a
 dependency edge, they may not.

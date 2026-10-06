@@ -839,8 +839,11 @@ semantic-search-cost-batch: semantic-search-cost-test
 semantic-search-cost-check: semantic-search-cost-build
 	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --check --out "$(OUT)"
 
-.PHONY: semantic-search-cost-independent
-semantic-search-cost-independent:
+.PHONY: semantic-search-cost-independent semantic-search-cost-independent-test
+semantic-search-cost-independent-test:
+	docker run --rm --network none --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-independent.test.py
+
+semantic-search-cost-independent: semantic-search-cost-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-independent.py "$(OUT)" --negative-controls
 
 .PHONY: semantic-search-cost-pack semantic-search-cost-packed-check

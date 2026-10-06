@@ -26780,7 +26780,7 @@
       "id": "D3262",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:f665b7ee5420f8f7d31db392cbf5d0ddf322b68af7b4653f2adf409d07f44142",
+      "sourceDigest": "sha256:7bb3d57bb6b5bae159d7d94784137fea4706ba6be4b9673c422136905241a6a8",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
@@ -28925,6 +28925,15 @@
       "sourceDigest": "sha256:625ba3641a4f1392f4be9adb66e4a73e650280b98fde94e3fdcac41ddeadf000",
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3504",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:56d820e10d3302b43da8a45012f212fa8c3b97c6ffca84559da98673eff38f44",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-cost-live-plain-2026-10-07.md",
       "evidenceKind": "path"
     }
   ]

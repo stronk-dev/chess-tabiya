@@ -19,6 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 engine/exact live-cost continuation: three more complete setting
+populations retain 3,474 cases / 240,861 independently replayed target observations.
+The complete schedule is checked, not merely the legality of retained examples;
+D3504 closes this research-instrument gap with sixteen permanent boundary tests.
+All five primary search families now have a complete live population, while the
+total remains only **9,264 / 61,374**, eight of 53 settings. The remaining 45
+settings, fresh-source sensitivity, source memory, consumer scope and actual
+browser/profile evidence keep D3262 doing and the search RFC draft. Provider-free
+third-ply availability is not invented fourth-ply execution or an engine reason.
+Receipt: `planning/semantic-consequence-search/d3262-cost-live-plain-2026-10-07.md`.
+Routine metadata and tracker maintenance remain automatic; no milestone or
+capability promotion follows from these research captures.
+
 2026-10-07 configured-policy traversal checkpoint: both actual ordered-history
 Maia prefixes now execute across all three layers, with conditional products,
 joint residuals, terminal absorption and unknown partial coverage. Both complete

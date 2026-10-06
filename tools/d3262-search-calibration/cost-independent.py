@@ -211,6 +211,114 @@ def first_events(root, candidate, definition):
         legalReplies=len(list(board.legal_moves)), eventReplies=events)
 
 
+def forcing_expands(board, move, definition, trigger):
+    """Declared square geometry, not legality/profit of a tactical capture."""
+    name = definition["target"]["target"]["square"] if definition["family"] == "material" else definition["target"]["square"]
+    square = chess.parse_square(name)
+    side = board.turn
+    def attackers(position):
+        if definition["family"] == "material":
+            piece, declared = position.piece_at(square), definition["target"]["target"]
+            if piece is None or piece.color != (declared["color"] == "white") or chess.piece_name(piece.piece_type) != declared["role"]:
+                return set()
+        return set(position.attackers(side, square))
+    before = attackers(board)
+    capture = board.is_capture(move)
+    after = board.copy(stack=False)
+    after.push(move)
+    return capture or after.is_check() or bool(attackers(after) - before) and (
+        trigger == "square_control" or definition["family"] == "material")
+
+
+def verify_plain_population(row, raw, root, definitions, target_ids):
+    """Rebuild the complete scheduled engine/exact frontier, including stops.
+
+    Consume queries in literal call order: an omitted query cannot be replaced
+    by a lookup of some other legal receipt. Exact arms observe third-ply
+    availability only; they do not execute a fictional fourth move.
+    """
+    setting = row["setting"]
+    if not setting.startswith(("engine:", "forcing:", "complete:")):
+        return
+    result, sources = raw["result"], raw["dependencies"]
+    require(type(result["nodeCap"]) is int and result["nodeCap"] > 0, "invalid traversal cap")
+    engine = setting.startswith("engine:")
+    if engine:
+        _, budget, width_text = setting.split(":")
+        require(budget in ["depth8", "depth12", "movetime100"] and width_text in ["top2", "top4", "top8"], "undeclared engine profile")
+        width = int(width_text[3:])
+    else:
+        require(setting in ["forcing:square_control", "forcing:enemy_piece", "complete:four-ply"], "undeclared exact profile")
+    cursor, visited, exhausted = 0, 0, False
+    expected, seen_sources = [], {}
+    def query(board):
+        nonlocal cursor
+        fen = board.fen(en_passant="legal")
+        # The operation coalesces identical operands across targets/transpositions,
+        # including failed dependencies. Its ledger records first admission only.
+        if fen in seen_sources:
+            return seen_sources[fen]
+        require(cursor < len(sources), "missing scheduled engine query")
+        source = sources[cursor]
+        cursor += 1
+        q = source["operands"]
+        require(q["provider"] == "stockfish" and q["fen"] == fen
+                and q["budget"] == budget and q["multiPv"] == 8, "crossed scheduled engine query")
+        receipt = source["receipt"]
+        chosen = [] if receipt is None else [x["moveUci"] for x in receipt["result"]["entries"][:width]]
+        seen_sources[fen] = chosen
+        return chosen
+    def visit(tid, history):
+        nonlocal visited, exhausted
+        visited += 1
+        if visited > result["nodeCap"]:
+            exhausted = True
+            return False
+        expected.append((tid, history))
+        return True
+    candidate = board_at(root, [row["candidateUci"]])
+    if target_ids and terminal(candidate) is None:
+        first = query(candidate) if engine else None
+        for tid in target_ids:
+            for move in sorted(candidate.legal_moves, key=lambda m: m.uci()):
+                if first is not None and move.uci() not in first:
+                    continue
+                second = [row["candidateUci"], move.uci()]
+                if not visit(tid, second):
+                    break
+                if row["horizon"] == 2:
+                    continue
+                if setting.startswith("forcing:") and not forcing_expands(candidate, move, definitions[tid], setting.split(":")[1]):
+                    continue
+                after = board_at(root, second)
+                if terminal(after) is not None:
+                    continue
+                defences = query(after) if engine else sorted(m.uci() for m in after.legal_moves)
+                for defence in defences:
+                    third = second + [defence]
+                    if not visit(tid, third):
+                        break
+                    if not engine:
+                        continue
+                    next_board = board_at(root, third)
+                    if terminal(next_board) is not None:
+                        continue
+                    for leaf in query(next_board):
+                        if not visit(tid, third + [leaf]):
+                            break
+                    if exhausted:
+                        break
+                if exhausted:
+                    break
+            if exhausted:
+                break
+    require(cursor == len(sources), "foreign/unvisited engine query or source-free dependency")
+    require(result["visited"] == visited, "false visited count or budget stop")
+    require([(x["targetId"], x["history"]) for x in result["observations"]] == expected,
+            "incomplete or reordered scheduled engine/exact population")
+    require(result["providerPv"] is None, "plain traversal borrowed a provider-line result")
+
+
 def verify_semantic_population(row, raw, root, definitions, target_ids):
     result = raw["result"]
     if not row["setting"].startswith(("semantic:", "recursive:")):
@@ -373,6 +481,7 @@ def verify_record(record, roots, definitions, cells, source_digest):
         require(result["providerPv"] == entry, "PV detached from literal provider entry")
         require(len(result["observations"]) == len(target_ids)
                 and all(x["history"] == entry["pv"][:row["horizon"]] for x in result["observations"]), "wrong source-selected PV population")
+    verify_plain_population(row, raw, root, definitions, target_ids)
     verify_semantic_population(row, raw, root, definitions, target_ids)
     verify_model_population(row, raw, root, target_ids)
     return len(result["observations"])
@@ -438,7 +547,10 @@ def main():
     require([x["raw"]["cell"] for x in records] == metadata["cases"], "filtered/reordered declared batch")
     corruption_count = 0
     if "--negative-controls" in sys.argv:
-        positive = next(r for r in records if r["raw"]["dependencies"] and r["raw"]["dependencies"][0]["receipt"] is not None)
+        positive = next((r for r in records if r["raw"]["dependencies"] and r["raw"]["dependencies"][0]["receipt"] is not None), None)
+        if positive is None:
+            positive = next((r for r in records if r["raw"]["result"]["observations"]), None)
+        require(positive is not None, "negative controls require an actual observed positive")
         for field, value in [("retainedBytes", -1), ("rawCaptureDigest", "sha256:wrong"), ("kind", "honest_empty")]:
             changed = copy.deepcopy(positive); changed["row"][field] = value
             try:
@@ -461,19 +573,21 @@ def main():
             record["row"]["retainedBytes"] = len(literal)
         corruptions = []
         changed = copy.deepcopy(positive)
-        changed["raw"]["result"]["projections"][0]["rawQuantifier"]["availability"] = "exists_preparation_surviving_all_defences"
+        quantifier = changed["raw"]["result"]["projections"][0]["rawQuantifier"]
+        quantifier["availability"] = "every_preparation_refuted_at_bound" if quantifier["availability"] == "exists_preparation_surviving_all_defences" else "exists_preparation_surviving_all_defences"
         corruptions.append(changed)
         changed = copy.deepcopy(positive)
         changed["raw"]["result"]["observations"][0]["history"] = [changed["row"]["candidateUci"], "a1a8"]
         corruptions.append(changed)
-        changed = copy.deepcopy(positive)
-        result = changed["raw"]["dependencies"][0]["receipt"]["result"]
-        if changed["row"]["setting"].startswith("maia:"):
-            result["rawFullLegal"][0]["mass"] += 0.01
-        else:
-            result["entries"][0]["score"]["value"] += 1
-        changed["row"]["providerQueries"][0]["receiptDigest"] = digest(compact(changed["raw"]["dependencies"][0]["receipt"]))
-        corruptions.append(changed)
+        if positive["raw"]["dependencies"]:
+            changed = copy.deepcopy(positive)
+            result = changed["raw"]["dependencies"][0]["receipt"]["result"]
+            if changed["row"]["setting"].startswith("maia:"):
+                result["rawFullLegal"][0]["mass"] += 0.01
+            else:
+                result["entries"][0]["score"]["value"] += 1
+            changed["row"]["providerQueries"][0]["receiptDigest"] = digest(compact(changed["raw"]["dependencies"][0]["receipt"]))
+            corruptions.append(changed)
         for changed in corruptions:
             reseal(changed)
             try:
