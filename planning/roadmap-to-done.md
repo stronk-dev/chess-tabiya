@@ -19,6 +19,21 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 horizon/policy checkpoint: D3494 closes the actual common two-ply
+projection and frozen joint-stop audit, retaining all 193 candidates / 182 cells /
+53 settings / 116 pairs and 1,158 model/horizon receipts. Independent replay
+covers 6,068 observations; 84 exact current-option contrasts do not establish
+later prevention. Local 0.80 clears joint coverage on 193/139/79 candidates at
+two/three/four plies, 0.90 on 191/153/108. Exhausted frontiers remain partial,
+with literal products, absorption, residuals and conservative precision intervals.
+Six JS/four Python controls, nine input/fifteen output corruptions and deterministic
+reconstruction pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-horizon-policy.md`.
+D3262 remains active on production profile, focus/usefulness and controlled
+cold/warm/provider-offline end-to-end cost; a new joint-budget selector requires
+separate preregistration. No RFC/capability/milestone promotion. Routine tracking
+is automatic and every production/source/A4/full-1.0 obligation remains.
+
 2026-10-06 common four-ply five-approach checkpoint: D3493 joins all 193 candidates
 / 182 cells / 116 pairs across 34 actual settings and 19 separate diagnostics.
 Both forcing sensitivities prove all eight bounded surviving preparations;

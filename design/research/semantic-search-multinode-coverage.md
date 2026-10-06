@@ -256,8 +256,26 @@ complete forcing branches can establish a positive preparation without proving
 absence on every unexpanded branch. No production default or engine reason
 follows before cost/usefulness and scope qualification.
 
-[P] Outstanding: common two-ply comparison, joint coverage stop rules,
-phase/focus stratification and controlled
+[V] D3494 supplies the common actual two-ply projection (6,068 independently
+replayed observations / 182 cells / 53 settings / 116 pairs) and all 1,158
+candidate/model/horizon joint-stop receipts. The 107 immediate opportunities
+and 84 exact current-option contrasts do not establish later prevention or an
+engine reason. Local 0.80 prefixes clear joint coverage on 193/139/79 candidates
+at two/three/four plies; 0.90 clears 191/153/108. Literal products, absorbing
+mass, residuals, omissions and conservative float32 intervals remain. Exhausted
+frontiers and numerical/source boundaries abstain rather than renormalizing or
+relabelling thresholds. Six JS/four Python controls, nine input/fifteen output
+corruptions and deterministic reconstruction pass. Source:
+`planning/semantic-consequence-search/d3262-coherent-horizon-policy.md`.
+
+[M] Implication: the fixed node-local cap cannot serve as a general joint-coverage
+stop rule. A source-declared production profile must either retain measured
+partial coverage/abstention or test a separately preregistered joint-budget
+strategy. This does not authorize higher caps, changed distributions or claiming
+the actual learner follows the configured policy on both colors.
+
+[P] Outstanding: source-declared production-profile selection,
+phase/focus/usefulness qualification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.
 Source: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`

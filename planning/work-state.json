@@ -28837,6 +28837,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3494",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:684b45c8674f1de5b961944156e470627042a9bce34da3c5285e42f1c91d7d20",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-horizon-policy.md",
+      "evidenceKind": "path"
     }
   ]
 }

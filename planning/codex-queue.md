@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3494]]: common actual two-ply projection on 193 candidates / 182 cells
+/ 53 settings / 116 pairs and joint-policy stop audit across 1,158 horizon receipts.
+Independent replay covers 6,068 board/identity/action observations. Current options
+give 84 exact contrasts, not future prevention; selected execution stays distinct.
+0.80 joint coverage satisfies 193/139/79 candidates at two/three/four plies, and
+0.90 satisfies 191/153/108. Failures retain partial coverage/residuals, float32
+intervals/absorption and exact omissions. Six JS/four Python controls, nine input/
+fifteen output corruptions and deterministic reconstruction pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-horizon-policy.md`.
+Next: qualify focus/usefulness and measure controlled cold/warm/provider-offline
+end-to-end cost before production-profile selection. If a joint-coverage selector
+is needed, preregister its actual strategy before fresh source/outcome measurements;
+do not silently widen caps or count local thresholds as joint. D3262 stays active.
+
 Completed common four-ply comparison [[D3493]]: all five approach families join
 on 193 candidates / 182 cells / 116 pairs across 34 actual and 19 diagnostic
 settings. Both forcing sensitivities reach 51/58 and prove all eight survivors;
@@ -9,8 +23,8 @@ universal under its line ceiling. No actual directional contrast certifies.
 Six JS/four Python controls, nine input/twelve output corruptions, independent
 common join/PV replay and deterministic reconstruction pass. Receipt:
 `planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md`.
-Next: common two-ply projection, joint-policy coverage/stopping and controlled
-cold/warm/provider-offline end-to-end cost before profile selection. All 182
+Its two-ply projection/frozen joint-stop audit is now complete in D3494 above;
+controlled cold/warm/provider-offline end-to-end cost still precedes selection. All 182
 focus values are null; retain that missingness while completing focus validation,
 never infer tactical/quiet labels from target family. D3262 stays active on the
 entire experiment and production obligations.

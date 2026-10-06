@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3493 closes the common actual four-ply five-approach join under plural target-opportunity@2: 193 candidates / 182 cells / 116 pairs across 34 actual settings and 19 separate diagnostics, with four controls / 17 unpaired targets. Both forcing sensitivities reach 51/58 and prove all eight bounded surviving preparations; engine depth12/top8 reaches/executes 40/38, recursive 48/48, both prove zero. PV depth12 reaches nine/executes two and withholds one coincidentally closed raw universal under its line ceiling. No actual directional contrast certifies; bounded oracle alone certifies 13. Literal model mass, legal omissions, phase/focus, fourteen no-target candidates and all-null focus remain. Six JS/four Python controls, nine input/twelve output corruption refusals, independent common algebra/PV replay and deterministic reconstruction pass. Artifact SHA-256 c6660605e24c13b631f39f2003f1219406baadb02b03614eac9260c6a81c15bf. Earlier/original196 inputs/results remain unchanged. D3262 remains doing on common two-ply, joint-policy stopping, phase/focus, controlled cold/warm/offline end-to-end cost and production-profile selection, plus every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; metadata maintenance is automatic.",
+          "summary": "D3494 closes the common actual two-ply projection and frozen joint-policy stop audit under v2: all 193 candidates / 182 cells / 53 settings / 116 pairs, four controls / 17 unpaired targets / fourteen no-target candidates retained. Independent replay covers 6,068 observations and 1,158 model/horizon receipts. There are 107 immediate opportunities and 84 exact current-option contrasts, not later prevention or engine causality. Local 0.80 prefixes clear joint coverage on 193/139/79 candidates at two/three/four plies; 0.90 on 191/153/108. Exhausted caps remain partial, with literal conditional products, absorbing mass, omissions/residuals and conservative float32 coverage/execution intervals. Six JS/four Python controls, nine input/fifteen output corruption refusals, complete independent model/board/identity/stop reconstruction and deterministic replay pass. Artifact SHA-256 172bfccf3a8c84e12a985d27529bec4131a2e3e56b366bb410097f80e442ec8a. Earlier/original196 sources/results, thresholds, distributions and selectors stay unchanged. D3262 remains doing on source-declared production profile, focus/usefulness and controlled cold/warm/provider-offline end-to-end cost; any new joint-budget selector needs separate preregistration. Every production/source/A4/full-1.0 obligation remains; no RFC/capability/milestone promotion. Tracking maintenance is automatic.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1068,6 +1068,12 @@
             "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.json.gz",
             "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md",
             "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.json.gz",
+            "planning/semantic-consequence-search/d3262-coherent-horizon-policy.md",
+            "planning/semantic-consequence-search/d3262-coherent-horizon-policy.json.gz",
+            "tools/d3262-search-calibration/coherent-horizon-policy.mjs",
+            "tools/d3262-search-calibration/coherent-horizon-policy.test.mjs",
+            "tools/d3262-search-calibration/coherent-horizon-policy-check.py",
+            "tools/d3262-search-calibration/coherent-horizon-policy-check.test.py",
             "tools/d3262-search-calibration/coherent-five-approach-comparison.mjs",
             "tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs",
             "tools/d3262-search-calibration/coherent-five-approach-check.py",
@@ -1539,6 +1545,11 @@
               "kind": "work_state",
               "id": "D3493",
               "digest": "sha256:7f5660dc556e6ea7b07dc99c7f623b63c786077475bdcc4128e1ffe314777c51"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3494",
+              "digest": "sha256:684b45c8674f1de5b961944156e470627042a9bce34da3c5285e42f1c91d7d20"
             }
           ]
         },

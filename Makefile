@@ -823,6 +823,22 @@ semantic-search-five-approach-independent-test:
 semantic-search-five-approach-independent: semantic-search-five-approach-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-five-approach-check.py --negative-controls
 
+.PHONY: semantic-search-horizon-policy-test semantic-search-horizon-policy-update semantic-search-horizon-policy-check semantic-search-horizon-policy-independent-test semantic-search-horizon-policy-independent
+semantic-search-horizon-policy-test: semantic-search-target-v2-build
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-horizon-policy.test.mjs
+
+semantic-search-horizon-policy-update: semantic-search-horizon-policy-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-horizon-policy.mjs --write
+
+semantic-search-horizon-policy-check: semantic-search-horizon-policy-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-horizon-policy.mjs
+
+semantic-search-horizon-policy-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-horizon-policy-check.test.py
+
+semantic-search-horizon-policy-independent: semantic-search-horizon-policy-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-horizon-policy-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

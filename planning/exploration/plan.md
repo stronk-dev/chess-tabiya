@@ -37,6 +37,18 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3494: common actual two-ply projection and frozen joint-policy stop
+audit pass on all 193 candidates / 182 cells / 53 settings / 116 pairs. Independent
+replay covers 6,068 observations and all 1,158 model/horizon receipts: local 0.80
+clears joint coverage on 193/139/79 candidates at two/three/four plies, 0.90 on
+191/153/108. All residuals, absorption and conservative float32 intervals remain.
+The 84 exact current-option contrasts are not later prevention. Six JS/four Python
+controls, nine input/fifteen output corruptions and deterministic reconstruction
+pass. D3262 remains doing on profile/focus/usefulness and controlled end-to-end
+cost. A new joint-budget strategy requires separate preregistration, not a cap
+change after measuring. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-horizon-policy.md`.
+
 2026-10-06 D3493: common actual four-ply five-approach join passes on all 193
 candidates / 182 cells / 116 pairs, 34 actual settings plus 19 separate diagnostics.
 Both forcing sensitivities prove all eight bounded surviving preparations;
