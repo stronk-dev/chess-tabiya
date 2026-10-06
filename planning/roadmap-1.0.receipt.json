@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1adda0f02a090281daac43bb0b65374066b97d9e059c88162af478d71d90b502",
+    "roadmap": "sha256:b5675cd3f9cecab9b25c8eea13faabdd18b2cc05cd8fc249a080a69abdf2df6f",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:768c3aef5c2a43f9d25a25582ccdfe000833500eabccc45cfd838425fd09a31f",
-    "rfcRegister": "sha256:67c1fefe4432da9e195e87863877230b28cf69ba0cd2a547ad39d295fd3e8422",
+    "workState": "sha256:9887c74d12fe71eb39d681129e1d0c9190fc551f212c4fe4df468958b9bee019",
+    "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 0,
       "blocked": 1059,
-      "done": 1372,
+      "done": 1374,
       "refused": 161
     },
     "workItems": {
@@ -773,12 +773,18 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. D3471 Support seats, D3470 Inspector request admission and D3468 ancestry are complete, not queued again. D3469 needs an inspected-decision context contract before branch-specific committed labels can ship. Review D3309 structural operand authority before any lossy renderer swap; D3363 source migration, D3436 phone reconciliation and D1639 ceilings retain their named contracts. No whole RFC or milestone closure.",
+      "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3471 repairs shared ordinary-seat admission against the current recorded decision, finalized help and complete request operands. Pending/completed pages retire on navigation, branch, preview, help and access changes; destruction also retires staged generations. Sealed square/candidate/generation/decision replays refuse, and stale empty staged checks cannot auto-commit. Seventeen predecessor failures become 19 passing lifecycle controls; 151 complete client tests, clean types and two genuine native help/branch-replay journeys pass. Complete sequential gates pass: 3297 software tests/343 files, seven isolated performance tests/four files, 225 content tests/23 files and 144 browser journeys (79 smoke, five content, 59 matrix, one packaged), zero retries and one existing optional Maia skip. All 112 composition cells and 337 retained files survive packaging. D3471 closes on path evidence in planning/play-composition/support-seat-lifecycle-2026-10-06.md; zero untriaged/1687 live and zero doing. Existing no-retroactivity, explicit requests and selection remain; no new source, permission, schema or full A4/D1834/phone/ceiling/owner-use/RFC/milestone promotion. Prior checkpoints remain in linked receipts and append-only logs.",
+        "summary": "D3472/D3473 repair explicit human-model/narration/speech lifetimes against current decision, displayed subject, compiled help/access and close/destroy epochs, before branding, prose consumption or audio creation. Owned provider/browser playback releases once. Quiet retains its existing disclosed explicit Inspector request. Final calibration produces 27 predecessor failures/four passes; replacement passes all 31 controls, 182 client tests, clean types and two native journeys. Complete corrected sequential gates pass: 3328 software tests/343 files, seven isolated performance tests/four files, 225 content tests/23 files and 145 browser journeys (80 smoke, five content, 59 matrix, one packaged), zero retries and one existing optional Maia skip. All 112 cells/337 retained files survive packaging. Initial disabled-door regression is corrected without weakening the unchanged reveal test; preliminary software/failed browser records remain. D3472/D3473 close on path evidence; zero untriaged/1687 live and zero doing. No source receipt, D3363/D3309/A4/D1834/phone/ceiling/owner-use/RFC/milestone promotion. Prior checkpoints remain linked; routine metadata maintenance is automatic and the full 1.0 goal stays active.",
         "impact": "advanced",
         "evidence": [
+          "planning/play-composition/inspector-explicit-lifecycle-browser-before-quiet-repair-2026-10-06.json",
+          "planning/play-composition/inspector-explicit-lifecycle-software-before-quiet-repair-2026-10-06.json",
+          "planning/play-composition/inspector-explicit-lifecycle-browser-2026-10-06.json",
+          "planning/play-composition/inspector-explicit-lifecycle-software-2026-10-06.json",
+          "planning/play-composition/inspector-explicit-lifecycle-native-2026-10-06.json",
+          "planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md",
           "planning/play-composition/support-seat-lifecycle-2026-10-06.md",
           "planning/play-composition/support-seat-lifecycle-native-2026-10-06.json",
           "planning/play-composition/support-seat-lifecycle-software-2026-10-06.json",
@@ -902,7 +908,7 @@
           {
             "kind": "rfc",
             "id": "evidence-presentation.md",
-            "digest": "sha256:c7c9d7c0f0ca3af8062e01b299a02b1d05b90a44676d110d03cb4809d4c1d1a8"
+            "digest": "sha256:60390e33f6d19cb011f65417b2d47a249ed56566b3394d8c7838dd4885b8ce8a"
           },
           {
             "kind": "work_state",
@@ -992,7 +998,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:e49d5179bce7066e20da9a30f609c91047388c3c8792eeadc76cc8dee0123120"
+            "digest": "sha256:3cac78da2df12928afbfdee4867186593a012535231938caaa241be0f818538a"
           },
           {
             "kind": "work_state",
@@ -1137,7 +1143,17 @@
           {
             "kind": "work_state",
             "id": "D3471",
-            "digest": "sha256:b99183dd47578fbd795554fddf62179663d60673ac321654ec36bcffa8de6bbd"
+            "digest": "sha256:31b629b70228fc456f84ec9bf71cc21cf0f199f0945bd51331315bea52d72024"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3472",
+            "digest": "sha256:a60a348060fea1df66815e896d53e57c82064ad6543d5de8213418766de16e12"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3473",
+            "digest": "sha256:a9698c1fd9db9581020f3cc98648dd17e2d7bde0a5ae8e370e4c5d7d3e5888cf"
           }
         ]
       },

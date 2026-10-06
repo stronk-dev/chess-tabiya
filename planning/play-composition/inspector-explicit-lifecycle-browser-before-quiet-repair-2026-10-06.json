@@ -1,0 +1,37 @@
+{
+  "command": "make test-browser-ci",
+  "stoppedAt": "test-browser-smoke",
+  "result": "failed",
+  "sourceTree": "3e5b0f609cfbc470b7f9d4d5cde5ba6d33fa59cd",
+  "reportDigest": "sha256:192f292795076d1d63e2165454c85b51b5f27d67e29363866d3b1723323959b1",
+  "stats": {
+    "startTime": "2026-10-06T08:48:24.886Z",
+    "duration": 152980.16400000002,
+    "expected": 79,
+    "skipped": 1,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "failures": [
+    {
+      "title": "Just Play explicitly reveals evidence and the next move closes the window",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "errors": [
+            {
+              "location": {
+                "file": "/Users/stronk/repos/chess-drills/tests/browser/drill.spec.ts",
+                "column": 77,
+                "line": 660
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Load model candidates' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Load model candidates' })\u001b[22m\n\n\n  658 |   await expect(page.getByText(\"Support is available for this position until you commit your next move.\")).toBeVisible();\n  659 |   await page.getByRole(\"button\", { name: \"Inspector\" }).click();\n> 660 |   await expect(page.getByRole(\"button\", { name: \"Load model candidates\" })).toBeVisible();\n      |                                                                             ^\n  661 |   await page.getByRole(\"button\", { name: \"Return to play\" }).click();\n  662 |   const runId = page.url().split(\"/\").at(-1)!;\n  663 |   const opened = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: { type: string }[] };\n    at /Users/stronk/repos/chess-drills/tests/browser/drill.spec.ts:660:77"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

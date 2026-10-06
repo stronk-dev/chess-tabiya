@@ -28634,9 +28634,27 @@
       "id": "D3471",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:b99183dd47578fbd795554fddf62179663d60673ac321654ec36bcffa8de6bbd",
+      "sourceDigest": "sha256:31b629b70228fc456f84ec9bf71cc21cf0f199f0945bd51331315bea52d72024",
       "uxItems": [],
       "evidence": "planning/play-composition/support-seat-lifecycle-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3472",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a60a348060fea1df66815e896d53e57c82064ad6543d5de8213418766de16e12",
+      "uxItems": [],
+      "evidence": "planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3473",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a9698c1fd9db9581020f3cc98648dd17e2d7bde0a5ae8e370e4c5d7d3e5888cf",
+      "uxItems": [],
+      "evidence": "planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md",
       "evidenceKind": "path"
     }
   ]

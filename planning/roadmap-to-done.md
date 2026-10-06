@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 explicit Inspector lifetime checkpoint: D3472/D3473 retires human-model,
+narration and speech on current decision/subject/help/access and close/destroy epochs,
+before evidence consumption or audio creation. Owned playback releases once. All 31
+controls, 182 complete client tests, clean types and two native journeys pass.
+Complete replacement gates pass: 3328 software/225 content tests, 145 browser
+journeys and all 112 retained states, zero retries. D3472/D3473 close on path evidence.
+Quiet's disclosed explicit Inspector door remains unchanged; no test is weakened.
+Receipt: `planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md`.
+No source receipt, full A4/D1834/RFC/milestone or 1.0 completion is inferred.
+
 2026-10-06 ordinary Support admission checkpoint: [[D3471]] applies current-decision/
 compiled-help and exact-request fencing to all pending/completed seats, including
 navigation, branch, settings and destruction. Sealed square/candidate/generation

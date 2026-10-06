@@ -1,0 +1,33 @@
+{
+  "command": "make test-browser-ci",
+  "result": "passed",
+  "tiers": {
+    "smoke": {
+      "passed": 80,
+      "optionalMaiaSkipped": 1
+    },
+    "content": {
+      "passed": 5
+    },
+    "matrix": {
+      "passed": 59
+    },
+    "packaged": {
+      "passed": 1
+    }
+  },
+  "passed": 145,
+  "testRetries": 0,
+  "retained": {
+    "receiptDigest": "sha256:c8c98069cb7a0f824644344a0e837271d8da731c8cfe3f7d9f9382d589735af6",
+    "reportDigest": "sha256:1519d3a6abe0f5707475b810d3b3dbc566961a7b17161a4b137f36a3414ae820",
+    "reportPath": "test-results/composition/1519d3a6abe0f5707475b810d3b3dbc566961a7b17161a4b137f36a3414ae820/browser-results.json",
+    "requiredCells": 112,
+    "provenCells": 112,
+    "verifiedFiles": 337,
+    "inventoryDigest": "sha256:7623bf29c9057403e816928413dbf7ad44666888ce6e0007872449c30416acb1",
+    "ordinaryTextNodes": 14549,
+    "inspectorTextNodes": 378,
+    "changedFiles": 0
+  }
+}

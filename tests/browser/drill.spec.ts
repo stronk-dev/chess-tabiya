@@ -10,6 +10,7 @@ import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 import type { ModuleQueryPage } from "@chess-tabiya/runtime";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
+import type { HumanSplitPage } from "../../apps/web/src/lib/api.js";
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
 
@@ -2863,6 +2864,58 @@ test("Support seats refuse a genuinely sealed older-decision replay after same-p
   expect(next.decision.digest).not.toBe(first.decision.digest);
   await assertThreatPacket(page, next.packets.find(p => p.module === "threat_radar")!);
   await testInfo.attach("support-seat-decision-replay", { body: JSON.stringify({ first, next }), contentType: "application/json" });
+});
+
+test("explicit Inspector human-model retires real completed and delayed pages across help changes and closure", async ({ page }, testInfo) => {
+  await openFullInspectorRun(page);
+  await page.getByRole("checkbox", { name: "Human move split on request", exact: true }).check();
+  const panel = page.getByRole("region", { name: "Human-model evidence", exact: true });
+  const responseMatches = (r: { url(): string }) => r.url().includes("/human-split?");
+  const assertPage = async (model: HumanSplitPage) => {
+    expect(model.engine.name).toBe("Deterministic mock opponent"); // A transport journey, never real-model quality evidence.
+    const candidates = model.candidates.filter(candidate => candidate.offWindow !== true);
+    expect(candidates.length).toBeGreaterThan(0);
+    await expect(panel.locator(".guidance-sentence")).not.toBeEmpty();
+    for (const candidate of candidates) {
+      await expect(panel.locator(".guidance-sentence")).toContainText(candidate.mass === undefined ? "frequency unavailable" : `${Math.round(candidate.mass * 100)}%`);
+      await expect(panel.locator(".guidance-sentence")).not.toContainText(candidate.moveUci);
+    }
+    await expect(panel.getByRole("alert")).toHaveCount(0);
+  };
+  const firstResponse = page.waitForResponse(responseMatches);
+  await panel.getByRole("button", { name: "Load model candidates", exact: true }).click();
+  const first = await (await firstResponse).json() as HumanSplitPage;
+  await assertPage(first);
+  await page.getByRole("combobox", { name: "Arrows", exact: true }).selectOption("off");
+  await expect(panel.locator(".guidance-sentence")).toHaveCount(0);
+  let held = false, release: (() => void) | undefined;
+  let oldResponse: APIResponse | undefined;
+  let requests = 0;
+  page.on("request", request => { if (responseMatches(request)) ++requests; });
+  await page.route("**/runs/*/human-split?*", async route => {
+    if (!held) {
+      held = true; oldResponse = await route.fetch();
+      await new Promise<void>(resolve => { release = resolve; });
+      await route.fulfill({ response: oldResponse });
+    } else await route.continue();
+  });
+  await panel.getByRole("button", { name: "Load model candidates", exact: true }).click();
+  await expect.poll(() => release !== undefined).toBe(true);
+  await expect(panel.getByRole("status")).toContainText("Loading");
+  await page.getByRole("button", { name: "Return to play", exact: true }).click();
+  await page.locator(".inspector-entry").click();
+  await expect(panel.getByRole("status")).toHaveCount(0);
+  const oldDelivery = page.waitForResponse(responseMatches); release!(); await oldDelivery;
+  await expect(panel.locator(".guidance-sentence")).toHaveCount(0);
+  expect(requests).toBe(1); // Reopening is not an unsolicited provider query.
+  const retryResponse = page.waitForResponse(responseMatches);
+  await panel.getByRole("button", { name: "Load model candidates", exact: true }).click();
+  const next = await (await retryResponse).json() as HumanSplitPage;
+  expect(next.nodeId).toBe(first.nodeId); await assertPage(next);
+  expect(requests).toBe(2);
+  await testInfo.attach("explicit-inspector-human-model-lifetime", { body: JSON.stringify({ first, delayed: await oldResponse!.json(), next }), contentType: "application/json" });
+  await page.getByRole("button", { name: "Return to play", exact: true }).click();
+  expect((await inspectCompositionVocabulary(page, "explicit-human-model-closed")).leaks).toEqual([]);
 });
 
 test("full Inspector recompiles its real packet after same-position Advanced settings change", async ({ page }, testInfo) => {

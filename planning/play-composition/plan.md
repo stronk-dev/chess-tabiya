@@ -117,6 +117,15 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
+Explicit Inspector D3472/D3473 binds human-model/narration/speech to current
+decision, displayed subject, help/access and reading/marker lifetime, retiring
+close/destroy/ABA output before evidence consumption or audio creation. Owned
+playback releases once. All 31 controls (27 predecessor failures), 182 client tests,
+clean types and two native browser journeys pass. Complete replacement
+gates pass: 3328 software/225 content tests and 145 browser journeys, zero retries;
+receipt `inspector-explicit-lifecycle-2026-10-06.md`. The Quiet/reveal raw door is preserved. This is
+not D3363 source migration, full A4/D1834 or a new receipt authority.
+
 Shared seat admission D3471 binds every pending/completed ordinary seat to the
 current recorded decision and compiled help, retires navigation/branch/recompile/
 destruction and rejects mismatched staged candidates/generations. On-request doors

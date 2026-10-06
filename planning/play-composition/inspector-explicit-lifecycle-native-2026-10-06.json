@@ -1,0 +1,26 @@
+{
+  "command": "make inspector-explicit-lifecycle-browser-check",
+  "reportDigest": "sha256:0b6dc7b63bfdbc7fb2518207993cf31e8aadcaa919160af3d84f88eb199b5866",
+  "stats": {
+    "startTime": "2026-10-06T08:51:57.461Z",
+    "duration": 11489.46,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "specs": [
+    {
+      "title": "Just Play explicitly reveals evidence and the next move closes the window",
+      "status": "expected",
+      "result": "passed",
+      "retry": 0
+    },
+    {
+      "title": "explicit Inspector human-model retires real completed and delayed pages across help changes and closure",
+      "status": "expected",
+      "result": "passed",
+      "retry": 0
+    }
+  ]
+}

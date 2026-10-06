@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed D3472/D3473: explicit human-model/narration/speech replies retire on current
+decision/subject/help/access and close/destroy epochs before consumption or audio;
+owned playback releases once. Quiet retains its existing disclosed explicit Inspector
+door. All 31 controls, 182 client tests, two native journeys and complete replacement
+software/content/browser gates pass (3328/225 tests, 145 journeys, zero retries).
+Receipt: `planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md`.
+D3471 duplicate disposition is normalized, not reopened. Do not re-queue this work.
+Continue the existing A4 fifteen-family source/destination positives and D1834;
+D3363/D3309 source migrations, phone/ceilings and owner-use remain separate contracts.
+Routine metadata/hash maintenance is automatic, never a question or pause.
+
 Completed D3471: ordinary Support seats admit only the exact recorded decision,
 compiled help and query operands. Navigation/branch/recompile/destruction retire
 pending and completed pages; stale empty staged checks cannot auto-commit. Nineteen

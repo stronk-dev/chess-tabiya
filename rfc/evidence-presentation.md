@@ -17,6 +17,15 @@
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
+- **Implementation checkpoint 2026-10-06, explicit Inspector lifetime:** D3472/D3473
+  fences pending/completed human-model/narration/speech across current decision,
+  subject, help/access and close/destroy epochs; no consumption/audio follows a
+  retired request. Owned playback cleanup is idempotent. Permanent controls and
+  two native journeys pass; full replacement gates pass (3328 software/225 content
+  tests, 145 browser journeys/all 112 retained states, zero retries). The existing
+  Quiet/reveal raw door is preserved. This does not
+  add legacy source receipts or close D3363/D3309/current-consumer migrations.
+  Receipt: `planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md`.
 - **Implementation checkpoint 2026-10-06, human-model attribution:** D3464 repairs the existing
   distribution adapter's requested-as-applied band and its player-rating wording. The source,
   projection, consumer, operands and receipt versions remain unchanged; only explicitly honored

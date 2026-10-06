@@ -283,6 +283,20 @@ renderings and speech requests retain the requested `reading` or `marker` scope,
 rendering is shown only while its exact requested reading or recorded-moment subject
 remains selected in that scope.
 
+Explicit Inspector human-model, narration and speech requests also retain their
+recorded decision and current compiled help/access lifetime. Navigation, a new
+decision at the same position, help changes, closure and destruction retire pending
+and completed results; returning to the same node never revives an old request.
+Identical snapshots preserve the result, and retry remains explicit. Retired
+responses are discarded before evidence consumption or audio creation. Provider
+playback has one idempotent stop/URL-release path; browser speech is cancelled only
+while this screen tracks an active utterance, and an obsolete utterance cannot clear
+its replacement. Browser synthesis has a global cancellation API, not per-utterance cancellation.
+This lifetime fence does not add a source receipt to the legacy human-model page.
+The raw model request in Inspector remains an explicit, disclosure-permitted action
+even under Quiet. Turning off the ordinary channel retires its old page; it does not
+remove Inspector's separately permission-gated request door.
+
 The imported-game Story follows the imported workflow's voice preference. An available external
 provider does not itself expose narration: the learner must have selected persona voice for that
 workflow, while the authored default keeps recorded evidence and deterministic rendering only.

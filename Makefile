@@ -164,6 +164,14 @@ inspector-lifecycle-check:
 support-seat-lifecycle-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "Support seat request lifecycle"
 
+.PHONY: inspector-explicit-lifecycle-check
+inspector-explicit-lifecycle-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "explicit Inspector request lifecycle"
+
+.PHONY: inspector-explicit-lifecycle-browser-check
+inspector-explicit-lifecycle-browser-check:
+	./node_modules/.bin/playwright test --grep "explicit Inspector human-model|Just Play explicitly reveals evidence"
+
 .PHONY: support-seat-lifecycle-browser-check
 support-seat-lifecycle-browser-check:
 	./node_modules/.bin/playwright test --grep "Support seats (retire|refuse)"

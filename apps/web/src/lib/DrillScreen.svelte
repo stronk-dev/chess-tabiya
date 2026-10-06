@@ -306,6 +306,7 @@
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
+  let humanSplitPageSubject: string | undefined = $state();
   let corpusPage: CorpusPage | undefined = $state();
   let corpusPageSubject: string | undefined = $state();
   let humanSplitBusyNodeId: string | undefined = $state();
@@ -316,13 +317,16 @@
   let corpusRequest = 0;
   let voicePage: VoicePage | undefined = $state();
   let voiceNodeId: string | undefined = $state();
+  let voicePageSubject: string | undefined = $state();
   let voiceBusy: { readonly nodeId: string; readonly scope: VoicePage["scope"] } | undefined = $state();
   let voiceError: { readonly nodeId: string; readonly scope: VoicePage["scope"]; readonly text: string } | undefined = $state();
   let voiceRequest = 0;
   let speechBusyNodeId: string | undefined = $state();
   let speechError: { readonly nodeId: string; readonly text: string } | undefined = $state();
   let speechRequest = 0;
-  let spokenAudio: { readonly nodeId: string; readonly audio: HTMLAudioElement; readonly url: string } | undefined;
+  let spokenAudio: { readonly nodeId: string; readonly release: () => void } | undefined;
+  let browserUtterance: SpeechSynthesisUtterance | undefined;
+  let inspectorRequestsAlive = true;
   let forkLabel = $state("");
   let forkIntent = $state("");
   let forkBusy = $state(false);
@@ -855,13 +859,6 @@
     [...historyFrom(run, displayedNode.id)].reverse().find((node) => node.actor === "user"),
   );
   let corpusQueryNodeId = $derived(corpusDecision?.parentId ?? displayedNode.id);
-  $effect(() => {
-    if (spokenAudio !== undefined && spokenAudio.nodeId !== displayedNode.id) {
-      spokenAudio.audio.pause();
-      URL.revokeObjectURL(spokenAudio.url);
-      spokenAudio = undefined;
-    }
-  });
   let displayedMarkKey = $derived(markScope === "position" ? displayedNode.transposeKey : `${run.activeCursor.branchId}:${displayedNode.id}`);
   let displayedMarks = $derived(ownMarks.filter((mark) => mark.scope === markScope && mark.scopeKey === displayedMarkKey).map((mark) => ({ orig:mark.orig as import("@lichess-org/chessground/types").Key,...(mark.dest===undefined?{}:{dest:mark.dest as import("@lichess-org/chessground/types").Key}),brush:mark.brush })));
   let rawStructure = $derived(structuralReading(displayedNode.fen));
@@ -1135,6 +1132,46 @@
     ...(hintMarks.rung === "move" ? [{ orig: hintKey(hintMarks.arrow.from), dest: hintKey(hintMarks.arrow.to), brush: "green" }] : []),
   ]);
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
+  // Node equality does not revive an explicit Inspector request after leaving its subject.
+  let inspectorRequestAuthority = $derived(JSON.stringify([
+    fullInspectorDecisionDigest, displayedNode.id, compiledAssistance?.finalDigest,
+    assistanceQueryState, viewerRole, seatedInContest, reviewing, inspectorOpen,
+  ]));
+  let voiceSubject = $derived(JSON.stringify([inspectorRequestAuthority, openPivotalNodeId ?? null]));
+  let previousInspectorAuthority: string | undefined;
+  let previousVoiceSubject: string | undefined;
+  function stopOwnedSpeech(): void {
+    const held = spokenAudio;
+    spokenAudio = undefined;
+    held?.release();
+    if (browserUtterance !== undefined) {
+      browserUtterance = undefined;
+      globalThis.speechSynthesis?.cancel();
+    }
+  }
+  $effect(() => {
+    const authority = inspectorRequestAuthority;
+    if (authority === previousInspectorAuthority) return;
+    previousInspectorAuthority = authority;
+    untrack(() => {
+      ++humanSplitRequest;
+      humanSplit = undefined; humanSplitPageSubject = undefined;
+      humanSplitBusyNodeId = undefined; humanSplitError = undefined;
+      ++speechRequest;
+      speechBusyNodeId = undefined; speechError = undefined;
+      stopOwnedSpeech();
+    });
+  });
+  $effect(() => {
+    const subject = voiceSubject;
+    if (subject === previousVoiceSubject) return;
+    previousVoiceSubject = subject;
+    untrack(() => {
+      ++voiceRequest;
+      voicePage = undefined; voicePageSubject = undefined; voiceNodeId = undefined;
+      voiceBusy = undefined; voiceError = undefined;
+    });
+  });
   // A pre-move node may be shared by distinct previews and branches. Counts are
   // ephemeral: neither an answer, error nor spinner may outlive its inspected
   // subject/disclosure. The epoch also rejects leave-and-return (ABA) settlements.
@@ -1259,26 +1296,31 @@
   });
 
   async function requestHumanSplit(): Promise<void> {
-    if (onHumanSplit === undefined) return;
+    // Inspector is an explicit surface: its raw request door follows the disclosure
+    // ceiling, not whether ordinary play currently shows the human-model channel.
+    if (!inspectorRequestsAlive || !inspectorOpen || onHumanSplit === undefined || assistancePermission.humanSplit !== "free") return;
     const nodeId = displayedNode.id;
+    const subject = inspectorRequestAuthority;
     const request = ++humanSplitRequest;
+    const current = () => inspectorRequestsAlive && request === humanSplitRequest && inspectorRequestAuthority === subject;
     humanSplitBusyNodeId = nodeId;
     humanSplitError = undefined;
     if (humanSplit?.nodeId === nodeId) humanSplit = undefined;
     try {
       const page = await onHumanSplit(nodeId);
-      if (request !== humanSplitRequest || displayedNode.id !== nodeId) return;
+      if (!current()) return;
       if (page.nodeId !== nodeId) {
         humanSplitError = { nodeId, text: "Those move choices no longer match this position. Load them again." };
         return;
       }
       humanSplit = humanSplitEvidence(page);
+      humanSplitPageSubject = subject;
     } catch {
-      if (request === humanSplitRequest && displayedNode.id === nodeId) {
+      if (current()) {
         humanSplitError = { nodeId, text: "Human move choices are unavailable right now. Try again." };
       }
     } finally {
-      if (request === humanSplitRequest) humanSplitBusyNodeId = undefined;
+      if (current()) humanSplitBusyNodeId = undefined;
     }
   }
 
@@ -1322,10 +1364,12 @@
   }
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
-    if (onVoice === undefined) return;
+    if (!inspectorRequestsAlive || !inspectorOpen || onVoice === undefined || assistance.voice !== "persona") return;
     const nodeId = scope === "marker" ? openPivotalNodeId : displayedNode.id;
     if (nodeId === undefined) return;
     const request = ++voiceRequest;
+    const subject = voiceSubject;
+    const current = () => inspectorRequestsAlive && request === voiceRequest && voiceSubject === subject;
     voicePage = undefined;
     voiceNodeId = undefined;
     voiceBusy = { nodeId, scope };
@@ -1333,66 +1377,78 @@
     try {
       const page = await onVoice(nodeId, scope);
       const currentNodeId = scope === "marker" ? openPivotalNodeId : displayedNode.id;
-      if (request !== voiceRequest || currentNodeId !== nodeId) return;
+      if (!current() || currentNodeId !== nodeId) return;
       if (page.scope !== scope) {
         voiceError = { nodeId, scope, text: "That explanation no longer matches this view. Try again." };
         return;
       }
       voicePage = page;
       voiceNodeId = nodeId;
+      voicePageSubject = subject;
     } catch {
       const currentNodeId = scope === "marker" ? openPivotalNodeId : displayedNode.id;
-      if (request === voiceRequest && currentNodeId === nodeId) {
+      if (current() && currentNodeId === nodeId) {
         voiceError = { nodeId, scope, text: "This explanation is unavailable right now. Try again." };
       }
     } finally {
-      if (request === voiceRequest) voiceBusy = undefined;
+      if (current()) voiceBusy = undefined;
     }
   }
 
   async function speakSentences(sentences: readonly string[], scope: VoicePage["scope"] = "reading"): Promise<void> {
-    if (sentences.length === 0 || assistance.spoken === "off") return;
+    if (!inspectorRequestsAlive || !inspectorOpen || sentences.length === 0 || assistance.spoken === "off") return;
     if (assistance.spoken === "provider" && onSpeech !== undefined) {
       const nodeId = displayedNode.id;
       const request = ++speechRequest;
+      const subject = inspectorRequestAuthority;
+      const current = () => inspectorRequestsAlive && request === speechRequest && inspectorRequestAuthority === subject;
       speechBusyNodeId = nodeId;
       speechError = undefined;
-      if (spokenAudio !== undefined) {
-        spokenAudio.audio.pause();
-        URL.revokeObjectURL(spokenAudio.url);
-        spokenAudio = undefined;
-      }
+      stopOwnedSpeech();
       try {
         const blob = await onSpeech(nodeId, scope);
-        if (request !== speechRequest || displayedNode.id !== nodeId) return;
+        if (!current()) return;
         const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-        spokenAudio = { nodeId, audio, url };
-        audio.addEventListener("ended", () => {
+        let audio: HTMLAudioElement;
+        try { audio = new Audio(url); }
+        catch { URL.revokeObjectURL(url); throw new Error("speech playback unavailable"); }
+        let released = false;
+        const owned = { nodeId, release: () => {
+          if (released) return;
+          released = true;
+          if (spokenAudio === owned) spokenAudio = undefined;
+          audio.pause();
           URL.revokeObjectURL(url);
-          if (spokenAudio?.audio === audio) spokenAudio = undefined;
-        }, { once: true });
+        } };
+        spokenAudio = owned;
+        audio.addEventListener("ended", owned.release, { once: true });
+        audio.addEventListener("error", owned.release, { once: true });
         try {
           await audio.play();
         } catch {
-          URL.revokeObjectURL(url);
-          if (spokenAudio?.audio === audio) spokenAudio = undefined;
+          owned.release();
           throw new Error("speech playback failed");
         }
       } catch {
-        if (request === speechRequest && displayedNode.id === nodeId) {
+        if (current()) {
           speechError = { nodeId, text: "Spoken guidance is unavailable right now. Try again." };
         }
       } finally {
-        if (request === speechRequest) speechBusyNodeId = undefined;
+        if (current()) speechBusyNodeId = undefined;
       }
       return;
     }
     if (assistance.spoken !== "browser" || !speechAvailable) return;
     try {
       globalThis.speechSynthesis.cancel();
-      globalThis.speechSynthesis.speak(new SpeechSynthesisUtterance(sentences.join(" ")));
+      const utterance = new SpeechSynthesisUtterance(sentences.join(" "));
+      browserUtterance = utterance;
+      const release = () => { if (browserUtterance === utterance) browserUtterance = undefined; };
+      utterance.onend = release;
+      utterance.onerror = release;
+      globalThis.speechSynthesis.speak(utterance);
     } catch {
+      browserUtterance = undefined;
       speechError = { nodeId: displayedNode.id, text: "Spoken guidance is unavailable right now. Try again." };
     }
   }
@@ -2004,6 +2060,8 @@
     }
   });
   onDestroy(() => {
+    inspectorRequestsAlive = false;
+    ++humanSplitRequest; ++voiceRequest; ++speechRequest;
     globalThis.removeEventListener("resize", measureViewport);
     globalThis.removeEventListener("storage", refreshAssistancePreference);
     unregisterKeyboard?.();
@@ -2024,10 +2082,7 @@
     stagedGeneration += 1;
     analysisRequest += 1;
     groupAnalysisRequest += 1;
-    if (spokenAudio !== undefined) {
-      spokenAudio.audio.pause();
-      URL.revokeObjectURL(spokenAudio.url);
-    }
+    stopOwnedSpeech();
   });
 
   let loadedAssistanceProfile: AssistanceProfile | undefined;
@@ -2704,7 +2759,7 @@
           {#if assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" disabled={humanSplitBusyNodeId === displayedNode.id} onclick={() => void requestHumanSplit()}>{humanSplitBusyNodeId === displayedNode.id ? "Loading move choices…" : "Load model candidates"}</button>{/if}
           {#if humanSplitBusyNodeId === displayedNode.id}<p role="status">Loading human move choices for this position…</p>{/if}
           {#if humanSplitError?.nodeId === displayedNode.id}<p role="alert">{humanSplitError.text}</p>{/if}
-          {#if humanSplit?.nodeId === displayedNode.id}
+          {#if humanSplit?.nodeId === displayedNode.id && humanSplitPageSubject === inspectorRequestAuthority}
             <p class="honest">{humanModelBandSentence(humanSplit)}</p>
             <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
             <p class="guidance-sentence">{humanCandidateSentences(humanSplit).join(" · ")}</p>
@@ -2731,8 +2786,8 @@
             {#if assistance.voice === "persona" && !voiceNotice.notConfigured && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
             {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
             {#if voiceError?.nodeId === openPivotalNodeId && voiceError.scope === "marker"}<p role="alert">{voiceError.text}</p>{/if}
-            {#if voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker" && voicePage.recordedReadingsPresent}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
-            {#if voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker"}<p class="guidance-sentence">{voicePage.text}</p>{/if}
+            {#if voicePageSubject === voiceSubject && voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker" && voicePage.recordedReadingsPresent}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            {#if voicePageSubject === voiceSubject && voiceNodeId === openPivotalNodeId && voicePage?.scope === "marker"}<p class="guidance-sentence">{voicePage.text}</p>{/if}
           {/if}
         </section>
         <section aria-label="Current-position evidence rendering" data-evidence-consumer="inspector.current_position_voice">
@@ -2745,7 +2800,7 @@
           {/if}
           {#if voiceBusy?.nodeId === displayedNode.id && voiceBusy.scope === "reading"}<p role="status">Preparing an explanation of this position…</p>{/if}
           {#if voiceError?.nodeId === displayedNode.id && voiceError.scope === "reading"}<p role="alert">{voiceError.text}</p>{/if}
-          {#if voiceNodeId === displayedNode.id && voicePage?.scope === "reading"}
+          {#if voicePageSubject === voiceSubject && voiceNodeId === displayedNode.id && voicePage?.scope === "reading"}
             {#if voicePage.recordedReadingsPresent}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
             <p class="guidance-sentence">{voicePage.text}</p>
           {/if}

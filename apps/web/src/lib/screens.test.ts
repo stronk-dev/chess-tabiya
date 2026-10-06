@@ -62,6 +62,7 @@ vi.mock("@lichess-org/chessground", () => ({
 import CompareView from "./CompareView.svelte";
 import CheckpointSheet from "./CheckpointSheet.svelte";
 import DrillScreen from "./DrillScreen.svelte";
+import * as inspectorEvidence from "./inspector-evidence.js";
 import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import WhyBanner from "./WhyBanner.svelte";
@@ -1658,6 +1659,224 @@ describe("Layer 3 screens", () => {
       expect(evidence).not.toContain("e1e2");
     });
     await unmount(component);
+  });
+
+  describe("explicit Inspector request lifecycle", () => {
+    const reading = '[aria-label="Current-position evidence rendering"]';
+    const human = '[aria-label="Human-model evidence"]';
+    const spoken = '[aria-label="Current-position endgame evidence"]';
+    const response = (nodeId: string) => ({ nodeId, engine: { id: "maia", name: "Maia", version: "3", seedHonored: false, eloHonored: false }, targetElo: 1500, candidates: [{ moveUci: "e1e2", mass: .4, rank: 1 }] });
+    async function setup(channel: "human" | "voice" | "speech", spokenMode: "provider" | "browser" = "provider") {
+      const initial = createRun({ id: "explicit-inspector-lifecycle", session: { kind: "position", start: { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 } }, sessionDigest: `sha256:${"b".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      const run = revealFeedback(initial, at).run;
+      const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
+      let resolve!: (value: unknown) => void;
+      let reject!: (reason: Error) => void;
+      const pending = new Promise<unknown>((yes, no) => { resolve = yes; reject = no; });
+      const scopeRead = vi.fn(() => "reading" as const);
+      const consumeHuman = vi.spyOn(inspectorEvidence, "humanSplitEvidence");
+      const voice = { text: "Explicit transport fixture, not a chess assertion.", source: "provider" as const, get scope() { return scopeRead(); }, recordedReadingsPresent: false };
+      const callback = vi.fn().mockReturnValueOnce(pending).mockImplementation(async (nodeId: string) => channel === "human" ? response(nodeId) : channel === "voice" ? voice : new Blob(["audio transport fixture"], { type: "audio/wav" }));
+      const play = vi.fn(async (): Promise<void> => undefined), pause = vi.fn(), addEventListener = vi.fn();
+      const audio = vi.fn(function () { return { play, pause, addEventListener }; });
+      vi.stubGlobal("Audio", audio);
+      const createUrl = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:explicit-inspector-fixture");
+      const revokeUrl = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+      const speak = vi.fn(), cancel = vi.fn();
+      if (spokenMode === "browser") {
+        vi.stubGlobal("speechSynthesis", { speak, cancel, getVoices: () => [{ lang: "en" }] });
+        vi.stubGlobal("SpeechSynthesisUtterance", class { constructor(readonly text: string) {} onend?: () => void; onerror?: () => void; });
+      }
+      const assistanceStorage = { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "persona", spoken: spokenMode, boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() };
+      const component = mount(DrillScreen, { target: target(), props: {
+        get snapshot() { return snapshots.get("current")!; }, assistanceStorage, onAssistanceQuery: testAssistanceAuthority,
+        capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-voice": "available", "external-tts": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities,
+        ...(channel === "human" ? { onHumanSplit: callback } : {}), ...(channel === "voice" ? { onVoice: callback } : {}), ...(channel === "speech" ? { onSpeech: callback } : {}),
+        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+      await tick();
+      document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
+      await tick();
+      const selector = channel === "human" ? human : channel === "voice" ? reading : spoken;
+      const click = () => document.querySelector<HTMLButtonElement>(`${selector} button`)!.click();
+      const settle = async (failure = false) => { failure ? reject(new Error("private obsolete provider detail")) : resolve(channel === "human" ? response(run.activeCursor.nodeId) : channel === "voice" ? voice : new Blob(["audio transport fixture"], { type: "audio/wav" })); await pending.catch(() => {}); await tick(); };
+      const publish = async (next: DrillRun) => { snapshots.set("current", { run: next, access: "writer", pendingEvidence: 0, withheld: false }); await tick(); };
+      const advance = () => appendEvents(run, [{ type: "feedback.generated", at, data: { nodeId: run.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]);
+      return { component, run, publish, advance, click, settle, callback, selector, scopeRead, consumeHuman, audio, play, pause, addEventListener, createUrl, revokeUrl, speak, cancel };
+    }
+
+    it.each(["human", "voice", "speech"] as const)("%s retains an identical snapshot and admits its explicit response", async channel => {
+      const state = await setup(channel);
+      state.click();
+      await state.publish(structuredClone(state.run));
+      await state.settle();
+      expect(state.callback).toHaveBeenCalledTimes(1);
+      if (channel === "human") expect(document.querySelector(state.selector)?.textContent).toContain("Ke2 40%");
+      if (channel === "voice") expect(document.querySelector(state.selector)?.textContent).toContain("Explicit transport fixture");
+      if (channel === "speech") expect(state.play).toHaveBeenCalledOnce();
+      await unmount(state.component);
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s retires a pending response across a real leave-and-return", async channel => {
+      const state = await setup(channel);
+      state.click();
+      await state.publish(commitMove(state.run, "b2b3").run);
+      await state.publish(state.run);
+      await state.settle();
+      expect(document.querySelector(state.selector)?.textContent).not.toContain(channel === "human" ? "Ke2 40%" : "Explicit transport fixture");
+      expect(state.scopeRead).not.toHaveBeenCalled();
+      expect(state.consumeHuman).not.toHaveBeenCalled();
+      expect(state.audio).not.toHaveBeenCalled();
+      expect(document.querySelector(`${state.selector} [role="status"]`)).toBeNull();
+      state.click();
+      await vi.waitFor(() => expect(state.callback).toHaveBeenCalledTimes(2));
+      if (channel === "human") await vi.waitFor(() => expect(document.querySelector(state.selector)?.textContent).toContain("Ke2 40%"));
+      if (channel === "voice") await vi.waitFor(() => expect(document.querySelector(state.selector)?.textContent).toContain("Explicit transport fixture"));
+      if (channel === "speech") await vi.waitFor(() => expect(state.play).toHaveBeenCalledOnce());
+      await unmount(state.component);
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s retires completed and pending state when the recorded decision changes at the same position", async channel => {
+      const state = await setup(channel);
+      state.click();
+      await state.settle();
+      await state.publish(state.advance());
+      expect(document.querySelector(state.selector)?.textContent).not.toContain(channel === "human" ? "Ke2 40%" : "Explicit transport fixture");
+      if (channel === "speech") { expect(state.pause).toHaveBeenCalledOnce(); expect(state.revokeUrl).toHaveBeenCalledOnce(); }
+      expect(state.callback).toHaveBeenCalledTimes(1);
+      await unmount(state.component);
+      if (channel === "speech") expect(state.revokeUrl).toHaveBeenCalledOnce();
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s clears retired errors and pending state after same-node decision replacement", async channel => {
+      const state = await setup(channel);
+      state.click();
+      await state.publish(state.advance());
+      await state.settle(true);
+      expect(document.querySelector(`${state.selector} [role="alert"]`)).toBeNull();
+      expect(document.querySelector(`${state.selector} [role="status"]`)).toBeNull();
+      expect(state.audio).not.toHaveBeenCalled();
+      await unmount(state.component);
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s retires success before consuming it after screen destruction", async channel => {
+      const state = await setup(channel);
+      state.click();
+      await unmount(state.component);
+      await state.settle();
+      expect(state.scopeRead).not.toHaveBeenCalled();
+      expect(state.consumeHuman).not.toHaveBeenCalled();
+      expect(state.createUrl).not.toHaveBeenCalled();
+      expect(state.audio).not.toHaveBeenCalled();
+      expect(state.play).not.toHaveBeenCalled();
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s closes its explicit request door before a late response", async channel => {
+      const state = await setup(channel);
+      state.click();
+      [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Return to play")!.click();
+      await tick();
+      await state.settle();
+      expect(state.consumeHuman).not.toHaveBeenCalled();
+      expect(state.scopeRead).not.toHaveBeenCalled();
+      expect(state.createUrl).not.toHaveBeenCalled();
+      expect(state.audio).not.toHaveBeenCalled();
+      document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
+      await tick();
+      expect(document.querySelector(`${state.selector} [role="status"]`)).toBeNull();
+      expect(state.callback).toHaveBeenCalledTimes(1);
+      await unmount(state.component);
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s preserves a new reply when an obsolete request rejects", async channel => {
+      const state = await setup(channel);
+      state.click();
+      await state.publish(state.advance());
+      state.click();
+      await vi.waitFor(() => expect(state.callback).toHaveBeenCalledTimes(2));
+      await state.settle(true);
+      expect(document.querySelector(`${state.selector} [role="alert"]`)).toBeNull();
+      if (channel === "human") expect(document.querySelector(state.selector)?.textContent).toContain("Ke2 40%");
+      if (channel === "voice") expect(document.querySelector(state.selector)?.textContent).toContain("Explicit transport fixture");
+      if (channel === "speech") expect(state.play).toHaveBeenCalledOnce();
+      await unmount(state.component);
+    });
+
+    it.each(["human", "voice", "speech"] as const)("%s retires pending delivery when its Advanced channel is disabled", async channel => {
+      const state = await setup(channel);
+      state.click();
+      const fields = document.querySelector('[aria-label="Advanced support controls"]')!;
+      const label = [...fields.querySelectorAll("label")].find(label => label.textContent?.includes(channel === "human" ? "Human move split on request" : channel === "voice" ? "External voice" : "Spoken guidance"))!;
+      if (channel === "speech") {
+        const select = label.querySelector("select")!; select.value = "off"; select.dispatchEvent(new Event("change", { bubbles: true }));
+      } else label.querySelector<HTMLInputElement>("input")!.click();
+      await assistanceSettled(); await tick();
+      await state.settle();
+      expect(state.consumeHuman).not.toHaveBeenCalled();
+      expect(state.scopeRead).not.toHaveBeenCalled();
+      expect(state.createUrl).not.toHaveBeenCalled();
+      expect(state.audio).not.toHaveBeenCalled();
+      expect(state.callback).toHaveBeenCalledTimes(1);
+      if (channel === "human") {
+        // Changing the preference retires the old page, but an explicit raw
+        // Inspector request remains legal while its disclosure ceiling is free.
+        expect(document.querySelector(`${state.selector} button`)).not.toBeNull();
+        state.click(); await vi.waitFor(() => expect(state.callback).toHaveBeenCalledTimes(2));
+        await vi.waitFor(() => expect(document.querySelector(state.selector)?.textContent).toContain("Ke2 40%"));
+      }
+      await unmount(state.component);
+    });
+
+    it("speech releases an admitted object URL when the Audio constructor fails", async () => {
+      const state = await setup("speech");
+      state.audio.mockImplementationOnce(function () { throw new Error("private constructor error"); });
+      state.click(); await state.settle();
+      expect(state.createUrl).toHaveBeenCalledOnce(); expect(state.revokeUrl).toHaveBeenCalledOnce();
+      expect(document.querySelector(`${state.selector} [role="alert"]`)?.textContent).toContain("Spoken guidance is unavailable");
+      await unmount(state.component); expect(state.revokeUrl).toHaveBeenCalledOnce();
+    });
+
+    it("speech releases once across navigation, a late play rejection, ended and destruction", async () => {
+      const state = await setup("speech");
+      const playback = deferred<void>(); state.play.mockReturnValueOnce(playback.promise);
+      state.click(); await state.settle();
+      await vi.waitFor(() => expect(state.play).toHaveBeenCalledOnce());
+      const ended = state.addEventListener.mock.calls.find(call => call[0] === "ended")![1] as () => void;
+      await state.publish(state.advance());
+      expect(state.pause).toHaveBeenCalledOnce(); expect(state.revokeUrl).toHaveBeenCalledOnce();
+      playback.reject(new Error("private obsolete playback error")); await playback.promise.catch(() => {}); await tick();
+      ended(); await unmount(state.component);
+      expect(state.pause).toHaveBeenCalledOnce(); expect(state.revokeUrl).toHaveBeenCalledOnce();
+      expect(document.querySelector(`${state.selector} [role="alert"]`)).toBeNull();
+    });
+
+    it.each(["ended", "error"])("speech releases owned playback once on %s", async kind => {
+      const state = await setup("speech"); state.click(); await state.settle();
+      const release = state.addEventListener.mock.calls.find(call => call[0] === kind)![1] as () => void;
+      release(); release(); await unmount(state.component);
+      expect(state.pause).toHaveBeenCalledOnce(); expect(state.revokeUrl).toHaveBeenCalledOnce();
+    });
+
+    it("browser speech retires its own utterance after a decision change and destruction", async () => {
+      const state = await setup("speech", "browser"); state.click(); await tick();
+      expect(state.speak).toHaveBeenCalledOnce(); state.cancel.mockClear();
+      await state.publish(state.advance()); expect(state.cancel).toHaveBeenCalledOnce();
+      await unmount(state.component); expect(state.cancel).toHaveBeenCalledOnce();
+      expect(state.callback).not.toHaveBeenCalled();
+    });
+
+    it("browser speech destruction does not cancel a voice this screen never started", async () => {
+      const state = await setup("speech", "browser");
+      await unmount(state.component); expect(state.cancel).not.toHaveBeenCalled();
+    });
+
+    it("browser speech ignores an old utterance ending after a replacement starts", async () => {
+      const state = await setup("speech", "browser"); state.click(); await tick();
+      const first = state.speak.mock.calls[0]![0] as SpeechSynthesisUtterance;
+      state.click(); await tick(); expect(state.speak).toHaveBeenCalledTimes(2);
+      first.onend?.(new Event("end") as SpeechSynthesisEvent);
+      state.cancel.mockClear(); await unmount(state.component); expect(state.cancel).toHaveBeenCalledOnce();
+    });
   });
 
   describe("Support seat request lifecycle", () => {
