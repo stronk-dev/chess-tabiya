@@ -37,6 +37,17 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3492: the special-move research oracle is corrected under the separate
+target-opportunity@2 convention, with actual captured-square identity and plural
+positive promotion/execution witnesses. All 339,764 states / 1,519,144 all-stage
+snapshot occurrences and the complete legal baseline are independently checked;
+zero current actions/outcomes change, with 58 reintroductions/eight survivors.
+Six JS/two audit/five Python controls, nine input/12 output corruptions and
+deterministic replay pass. Old/original196 results remain unchanged. D3262 stays
+doing on full five-arm proof/coverage/phase/cost and production-profile selection;
+no gate/RFC/capability promotion. Receipt:
+`planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md`.
+
 2026-10-06 D3491: all actual recursive named target/contrast/quantifier joins pass
 independent reconstruction: 166,137 observations / 182 cells / 18 settings and
 116 pairs, with ten input/13 output corruptions refused. Depth12/top8/top8 reaches

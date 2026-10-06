@@ -28822,11 +28822,12 @@
     },
     {
       "id": "D3492",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:942add61a5b76aac41c5b2507da0790d8c35118c9f65a0233d2187740edf1a6b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:75fffbf032ac0d2ea84264c6d874e179eb833e7aa24c875c6cbaf0543ae8d4f2",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md",
+      "evidenceKind": "path"
     }
   ]
 }

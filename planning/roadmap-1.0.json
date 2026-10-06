@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3491 completes the actual recursive target/contrast/quantifier measurement over all 166,137 named observations / 193 candidates / 182 cells / 18 settings / 116 pairs, retaining 17 unpaired targets and four controls. Depth12/top8/top8 reaches and executes 48 of 58 known reintroductions, versus ordinary traversal's 40 reached / 38 executed; it still proves none of eight known surviving roots and certifies no directional prevention. Five JS and three Python controls, ten input and thirteen output corruption refusals, complete independent legal-board/identity/quantifier replay and byte-identical reconstruction pass. Artifact SHA-256 c692b1c16efce9491d560f9d6b7453200b925d1bf63810700c3e77d7f5fcd55a. Frozen scheduling, captured sources and historical populations/results remain unchanged. D3492 owns the discovered shared-oracle en-passant/promotion gap: audit every stage and repair with a separately versioned plural-witness predicate before profile promotion. Zero final special-move events does not clear earlier opportunities. D3262 remains doing on full five-arm comparison, joint-policy stopping, phase/focus, controlled cold/warm/offline cost and every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; routine metadata/hash updates are automatic.",
+          "summary": "D3492 closes the research-oracle en-passant/promotion gap with separate target-opportunity@2: match actual captured squares and retain every positive promotion/execution choice. Complete all-stage audit retains 339,764 distinct states / 1,519,144 snapshot occurrences, all 193 offered candidates / 182 named cells and four controls. The independently recomputed legal baseline and actual model/engine/first-reply-reserve/recursive outcomes have zero changed actions/outcomes; 58 reintroductions and eight surviving cells remain. Typecheck, six JS/two audit/five Python controls, nine input and twelve output corruption refusals, independent legal/local-exchange convention replay and byte-identical reconstruction pass. Artifact SHA-256 95295ad43ef1e41ade4eb4405aaf9302490bf5533837b74148ecba5e065bd144. Historical/original196 sources, frozen selectors and earlier artifacts remain unchanged; future calibration uses plural v2 witnesses, not the known-gap scalar observer. D3262 remains doing on full five-arm proof/refutation/abstention, joint-policy stopping, phase/focus, controlled cold/warm/offline cost and every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; routine metadata/hash updates are automatic.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1063,7 +1063,15 @@
             "tools/d3262-search-calibration/coherent-recursive-evaluation.mjs",
             "tools/d3262-search-calibration/coherent-recursive-evaluation.test.mjs",
             "tools/d3262-search-calibration/coherent-recursive-evaluation-check.py",
-            "tools/d3262-search-calibration/coherent-recursive-evaluation-check.test.py"
+            "tools/d3262-search-calibration/coherent-recursive-evaluation-check.test.py",
+            "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md",
+            "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.json.gz",
+            "tools/d3262-search-calibration/target-opportunity-v2.ts",
+            "tools/d3262-search-calibration/target-opportunity-v2.test.mjs",
+            "tools/d3262-search-calibration/target-opportunity-audit.mjs",
+            "tools/d3262-search-calibration/target-opportunity-audit.test.mjs",
+            "tools/d3262-search-calibration/target-opportunity-audit-check.py",
+            "tools/d3262-search-calibration/target-opportunity-audit-check.test.py"
           ],
           "anchors": [
             {
@@ -1515,6 +1523,11 @@
               "kind": "work_state",
               "id": "D3491",
               "digest": "sha256:7fb913e2242d3095b1bdaf2435cacbfc743aca2ce5d52956b26490d9c532859b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3492",
+              "digest": "sha256:75fffbf032ac0d2ea84264c6d874e179eb833e7aa24c875c6cbaf0543ae8d4f2"
             }
           ]
         },

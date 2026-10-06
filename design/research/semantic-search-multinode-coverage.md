@@ -224,7 +224,19 @@ useful explanation nor closes a universal defence set. The next safe action is
 oracle-scope correction and full proof/coverage/cost research, not promoting these
 counts to production default or engine causality.
 
-[P] Outstanding: shared-oracle affected-population/versioned repair, the five-arm
+[V] D3492 supplies a separately versioned target-opportunity@2 predicate and
+bounded baseline, matching actual captured squares and retaining every positive
+promotion/execution choice. All 339,764 distinct states / 1,519,144 all-stage
+snapshot occurrences across the complete legal baseline and actual model/engine/
+first-reply-reserve/recursive inputs are checked. Zero current outcomes/actions
+change; the independently reconstructed 182-cell baseline still has 58
+reintroductions and eight surviving preparations. Six JS/two audit/five Python
+controls, nine input/12 output corruptions and deterministic replay pass. Python
+independently re-infers the literal local-exchange convention, not strategic
+truth or an engine reason. Original196 and all old artifacts remain unchanged.
+Source: `planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md`.
+
+[P] Outstanding: the five-arm
 proof/refutation/abstention, joint coverage stop rules, phase/focus stratification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.

@@ -783,6 +783,29 @@ semantic-search-recursive-evaluation-independent-test:
 semantic-search-recursive-evaluation-independent: semantic-search-recursive-evaluation-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-evaluation-check.py --negative-controls
 
+.PHONY: semantic-search-target-v2-build semantic-search-target-v2-test
+semantic-search-target-v2-build: semantic-search-recursive-build
+	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/target-opportunity-v2.ts
+	./node_modules/.bin/esbuild tools/d3262-search-calibration/target-opportunity-v2.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/target-opportunity-v2.mjs --log-level=warning
+
+semantic-search-target-v2-test: semantic-search-target-v2-build
+	$(CI_NODE) --test tools/d3262-search-calibration/target-opportunity-v2.test.mjs
+
+.PHONY: semantic-search-target-v2-audit-update semantic-search-target-v2-audit-check
+semantic-search-target-v2-audit-update: semantic-search-target-v2-test
+	$(CI_NODE) tools/d3262-search-calibration/target-opportunity-audit.mjs --write
+
+semantic-search-target-v2-audit-check: semantic-search-target-v2-test
+	$(CI_NODE) --test tools/d3262-search-calibration/target-opportunity-audit.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/target-opportunity-audit.mjs
+
+.PHONY: semantic-search-target-v2-independent-test semantic-search-target-v2-independent
+semantic-search-target-v2-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/target-opportunity-audit-check.test.py
+
+semantic-search-target-v2-independent: semantic-search-target-v2-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/target-opportunity-audit-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

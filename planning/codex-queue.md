@@ -8,11 +8,15 @@ certifies. Independent board/identity/legal graph/algebra replay, five JS/three
 Python controls, ten input/13 output corruptions and deterministic checks pass.
 Receipt: `planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md`.
 
-Next oracle boundary [[D3492]]: the shared research predicate misses EP and
-promotion capture opportunities. Preserve the historical baseline and results;
-audit all stages and version any correction separately, including plural legal
-promotion witnesses/execution. Zero such final target events does not clear
-immediate/earlier opportunities or future packs.
+Completed oracle boundary [[D3492]]: target-opportunity@2 fixes EP captured-square
+identity and plural positive promotion/execution witnesses. All 339,764 states /
+1,519,144 all-stage snapshot occurrences and the complete legal baseline are
+audited: zero changed outcomes; 58 reintroductions/eight survivors remain.
+Independent legal/local-exchange reconstruction, six JS/two audit/five Python
+controls, nine input/12 output corruptions and deterministic replay pass. Old
+artifacts stay unchanged. Future calibration uses v2 rather than the known-gap
+scalar observer. Receipt:
+`planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md`.
 
 Completed [[D3489]]/[[D3490]]: the preregistered recursive relation frame passes
 independent identity/geometry/rank replay; all 418 missing positions / 958 actual
@@ -40,8 +44,9 @@ output corruption refusals and deterministic replay pass. Receipt:
 Current next action (2026-10-06): [[D3262]] remains doing under evidence-foundation.
 The older actual target contrast and bounded preparation/defence quantifier joins
 are complete. Recursive scheduling and actual fourth-ply sources now also exist;
-Their actual target/contrast/quantifier joins now pass. D3492 owns the next
-shared-oracle all-stage audit/versioned repair. Retain every omitted branch
+Their actual target/contrast/quantifier joins now pass. D3492's all-stage audit
+and separately versioned repair now pass. Use its plural v2 target contract;
+retain every omitted branch
 and typed abstention while completing the full five-arm proof/refutation/
 coverage-stop-rule/cost experiment before choosing production
 defaults. Do not substitute the earlier common exact learner evaluator or claim

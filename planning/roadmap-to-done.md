@@ -19,6 +19,18 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 special-move oracle checkpoint: D3492 fixes EP captured-square identity
+and plural positive promotion/execution choices in target-opportunity@2. All
+339,764 distinct states / 1,519,144 all-stage snapshot occurrences are audited;
+zero current actions/outcomes change, and the independently recomputed 182-cell
+baseline retains 58 reintroductions/eight survivors. Six JS/two audit/five Python
+controls, nine input/12 output corruptions and deterministic replay pass. Receipt:
+`planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md`.
+Historical/original196 results stay unchanged. D3262 remains active on the full
+five-arm profile, joint-policy stopping, phase/focus, controlled cold/warm/offline
+cost and all production/source/A4/1.0 obligations. No milestone/capability
+promotion; routine metadata/hash closeout is automatic.
+
 2026-10-06 recursive outcome checkpoint: D3491 joins all 166,137 actual named
 observations / 182 cells / 18 settings and 116 pairs, independently replaying
 boards, identities, legal graphs, contrast and quantifiers. Depth12/top8/top8
