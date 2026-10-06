@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 A4 vocabulary checkpoint: [[D3465]] binds a rendered-text boundary to every real
+composition cell and retains its non-vacuous same-result record with PNG/geometry evidence.
+Inline markup and accessible equivalent prose cannot conceal raw UCI/evaluation/producer text;
+explicit Inspector dialogs remain its legal home. Artifact negatives and the actual authenticated
+Inspector receipt/component/close journey and complete software/content/browser replacement gates
+pass; all 112 retained triples survive packaging. Receipt:
+`planning/play-composition/vocabulary-boundary-2026-10-06.md`. All fifteen positive destinations,
+held source migrations, full A4/RFC/owner-use and 1.0 remain open.
+
 2026-10-06 composition checkpoint: [[D3432]]–[[D3434]] close Guided Hint's unbound expansion/paint,
 the narrow-phone unreachable preset radios, and incomplete/unretained screenshot artifacts. The
 real seven-viewport hint journey preserves the exact decision/rung, request counts and board box.

@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed D3465 supplies A4's permanent rendered vocabulary sweep and same-result retained
+records across all 112 real states. Inline and accessible text, Inspector exceptions, native
+details and artifact negatives are calibrated; the authenticated Inspector positive checks
+actual server receipts against mounted component sentences and family states. Complete software,
+content and browser gates pass, including all 112 retained triples after packaging and 47 artifact
+controls. Receipt: `planning/play-composition/vocabulary-boundary-2026-10-06.md`. This is the
+vocabulary arm, not all fifteen destinations, D3363/D3309 migrations or full A4/RFC completion.
+Continue those remaining foundation obligations; do not re-queue this finished boundary.
+
 Completed D3464 repairs actual-band attribution and non-rating wording in the registered
 human-model distribution. Nine permanent predecessor controls fail; the focused replacement
 passes 38 tests and clean types. Full replacement software/content/browser gates pass;

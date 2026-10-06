@@ -1,0 +1,29 @@
+{
+  "scope": "after complete browser CI including packaged tier; exact retained current-run records, not full A4 acceptance",
+  "reportDigest": "sha256:71e6edf991f054ba281dfbbcad6bb4e8e1d607d89359002b646c01ab27d46250",
+  "stats": {
+    "startTime": "2026-10-06T05:32:09.865Z",
+    "duration": 277062.74,
+    "expected": 59,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checkedFiles": 337,
+  "requiredCells": 112,
+  "provenCells": 112,
+  "ordinaryTextNodes": 14549,
+  "inspectorTextNodes": 378,
+  "allowedInspectorExamples": 0,
+  "controlBounds": 1593,
+  "textBounds": 9183,
+  "actualInspectorPositive": {
+    "title": "@matrix A4 Inspector carries actual admitted local evidence and returns it to its explicit home",
+    "status": "passed",
+    "retry": 0,
+    "receiptDigest": "sha256:26ba28aecf118deacdd73f7f178cd4e34f1ac98d57a1c8a4c06fe6213512cd90",
+    "presentationDigest": "sha256:71d3aa2e1e72340ab92ff5b94fdb357ad449d532181910d24db52dac9d7545b7",
+    "items": 11
+  },
+  "retainedRecordsUnchanged": true
+}

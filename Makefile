@@ -132,6 +132,14 @@ play-composition-conformance-check:
 play-composition-board-controls-check:
 	./node_modules/.bin/playwright test --grep "@matrix (board controls|normal Tab traversal)"
 
+.PHONY: play-composition-vocabulary-check play-composition-inspector-check
+play-composition-inspector-check:
+	./node_modules/.bin/playwright test --grep "@matrix A4 Inspector"
+
+play-composition-vocabulary-check:
+	./node_modules/.bin/playwright test --grep "@matrix (A4 vocabulary|A4 Inspector|play composition keeps|module seats render|maximum-load modules|final Guided Hint|post-commit guard|terminal outcome|promotion picker|rewind, fork)"
+	node tools/play-composition-matrix.mjs
+
 play-composition-client-check:
 	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/Chessboard.test.ts apps/web/src/lib/CreateSeedChooser.test.ts apps/web/src/lib/BoardNotation.test.ts
 

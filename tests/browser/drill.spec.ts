@@ -6,6 +6,7 @@ import { expect, test, type Locator, type Page, type TestInfo } from "@playwrigh
 
 import { chooseBot, chooseRawRung } from "./play-helpers.js";
 import { inspectComposition, type CompositionConformance } from "./composition-conformance.js";
+import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 import type { ModuleQueryPage } from "@chess-tabiya/runtime";
 
@@ -177,6 +178,10 @@ async function attachCompositionCell(
   state: string,
 ): Promise<void> {
   const name = `play-composition-${viewport.width}x${viewport.height}-${state}`;
+  const vocabulary = await inspectCompositionVocabulary(page, name);
+  expect(vocabulary.ordinaryTextNodes, `${name}: empty vocabulary census`).toBeGreaterThan(0);
+  expect(vocabulary.leaks, `${name}: ${JSON.stringify(vocabulary.leaks)}`).toEqual([]);
+  await testInfo.attach(`composition-vocabulary-${name}`, { body: Buffer.from(JSON.stringify(vocabulary)), contentType: "application/json" });
   const conformance = await inspectComposition(page, name);
   await testInfo.attach(`composition-conformance-${name}`, { body: Buffer.from(JSON.stringify(conformance)), contentType: "application/json" });
   const path = testInfo.outputPath(`${name}.png`);
@@ -2444,6 +2449,53 @@ test("selected-square support clears with the visible selection and displayed po
 // state-6 journey uses the real hint-distance request/poll protocol at the permitted final rung.
 // The Scholar's-mate trap is a Just Play position the learner (Black) plays under Support.
 const SCHOLAR_TRAP = "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3";
+
+test("@matrix A4 Inspector carries actual admitted local evidence and returns it to its explicit home", async ({ page }, testInfo) => {
+  await page.getByLabel("Your side").selectOption("black");
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill(SCHOLAR_TRAP);
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await choosePreset(page, /Guide me/u);
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  await openAdvancedSupport(page);
+  const full = page.getByRole("checkbox", { name: "Full inspector", exact: true });
+  await expect(full).toBeEnabled();
+  const response = page.waitForResponse(r => r.url().endsWith("/modules/query") && r.request().postDataJSON().query.requested?.includes("full_inspector"));
+  await full.check();
+  const raw = await (await response).json() as { page: ModuleQueryPage };
+  const packet = raw.page.packets.find(p => p.module === "full_inspector");
+  expect(packet).toBeDefined();
+  expect(packet!.receipt.protocol).toBe("presentation.receipt@1");
+  const items = packet!.receipt.items;
+  expect(items.length).toBeGreaterThan(0);
+  const inspector = page.locator(".full-inspector");
+  const mounted = inspector.locator("[data-presented]");
+  await expect(mounted).toHaveCount(items.length);
+  // Observe the real HTTP wire and the client's strict parser/renderer together. Never
+  // import the full server runtime into the browser driver or manufacture a sealed item.
+  expect(items.filter(item => item.component.id === "fact_statement").length).toBeGreaterThan(0);
+  for (const [index, item] of items.entries()) {
+    await expect(mounted.nth(index)).toHaveAttribute("data-presented", item.component.id);
+    await expect(mounted.nth(index)).not.toBeEmpty();
+    if (item.component.id === "fact_statement") await expect(mounted.nth(index)).toHaveText(item.component.operand.renderedText);
+    if (item.component.id === "square_set") await expect(mounted.nth(index)).toContainText(item.component.operand.caption.renderedText);
+  }
+  expect(packet!.empty?.kind).toBe("family_partitioned");
+  if (packet!.empty?.kind === "family_partitioned") expect(packet!.empty.families.find(f => f.family === "local_rules")?.kind).toBe("available");
+  await testInfo.attach("actual-inspector-receipt", { body: JSON.stringify(packet!.receipt), contentType: "application/json" });
+  await expect(inspector.locator("[data-family-state]")).toHaveCount(8);
+  const before = await inspectCompositionVocabulary(page, "actual-inspector-positive");
+  expect(before.inspectorTextNodes).toBeGreaterThan(0);
+  expect(before.leaks).toEqual([]);
+  await page.getByRole("button", { name: "Return to play" }).click();
+  await expect(page.locator(".inspector-surface")).toHaveCount(0);
+  const after = await inspectCompositionVocabulary(page, "actual-inspector-closed");
+  expect(after.inspectorTextNodes).toBe(0);
+  expect(after.leaks).toEqual([]);
+});
 
 test("@matrix final Guided Hint shares one expanded seat and preserves the board and rung", async ({ page }, testInfo) => {
   test.setTimeout(180_000);

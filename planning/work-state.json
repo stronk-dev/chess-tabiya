@@ -28574,6 +28574,15 @@
       "uxItems": [],
       "evidence": "planning/platform-alignment/evidence-presentation/human-model-attribution-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3465",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9e72d3177a4aaf1bf7fcf73af48bac20d9e26f284132dd6c5bd751b6d5c6e7ab",
+      "uxItems": [],
+      "evidence": "planning/play-composition/vocabulary-boundary-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

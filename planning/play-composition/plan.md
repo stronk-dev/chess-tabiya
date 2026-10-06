@@ -150,6 +150,15 @@ overlay/modality contract reconciliation; complete A3/A4/Inspector/ceiling/owner
 
 ## Explicit non-goals of this checkpoint
 
+Completed A4 vocabulary wave: D3465 adds a rendered-text sweep to every real cell and an independent
+same-result, non-vacuous vocabulary record retained with its PNG/geometry evidence. Calibration
+tests inline markup, accessible equivalents, native details and consumer-tag non-exemption;
+the actual server→Inspector→close journey verifies admitted component sentences and all eight
+family states. Complete software/content/browser gates pass and all 112 retained triples survive
+the packaged tier. Do not re-queue this finished boundary. Full positive coverage of the fifteen
+leak destinations and held source migration
+contracts remain separate obligations. Receipt: `vocabulary-boundary-2026-10-06.md`.
+
 - No preset semantics or assistance-default decisions (Phase 5).
 - No new chess evidence, selection, grading or authored content.
 - No campaign, Review-map, Story-ranking, theme or animation-preference implementation.

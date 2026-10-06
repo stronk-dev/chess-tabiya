@@ -21,7 +21,8 @@ function fixture(t) {
     const path = `test-results/playwright/${name}.png`;
     writeFileSync(join(root, path), bytes);
     const conformance = { version: 1, cell: name, viewport: { width, height }, controls: 1, boxes: 1, keyboardProjections: 0, inertControls: 0, scrollers: [], issues: [] };
-    return [{ name, contentType: "image/png", path }, { name: `composition-conformance-${name}`, contentType: "application/json", body: Buffer.from(JSON.stringify(conformance)).toString("base64") }];
+    const vocabulary = { version: 1, cell: name, viewport: { width, height }, ordinaryTextNodes: 1, inspectorTextNodes: name.endsWith("10-inspector-open") ? 1 : 0, leaks: [], inspectorExamples: [] };
+    return [{ name, contentType: "image/png", path }, { name: `composition-conformance-${name}`, contentType: "application/json", body: Buffer.from(JSON.stringify(conformance)).toString("base64") }, { name: `composition-vocabulary-${name}`, contentType: "application/json", body: Buffer.from(JSON.stringify(vocabulary)).toString("base64") }];
   });
   // Playwright omits suites on leaf suites; nested suites remain recursively checked.
   const report = { errors: [], stats: { unexpected: 0 }, suites: [{ specs: [{ ok: true, tests: [{ projectName: "desktop-chromium", expectedStatus: "passed", results: [{ status: "passed", retry: 0, attachments }] }] }] }] };
@@ -36,6 +37,7 @@ test("publishes exactly 112 distinct cells, with byte-bound PNGs surviving later
   rmSync(join(root, "test-results/playwright"), { recursive: true });
   for (const cell of receipt.cells) assert.ok(readFileSync(join(root, cell.path)).length >= 45);
   for (const cell of receipt.cells) assert.equal(JSON.parse(readFileSync(join(root, cell.conformance.path), "utf8")).cell, cell.name);
+  for (const cell of receipt.cells) assert.equal(JSON.parse(readFileSync(join(root, cell.vocabulary.path), "utf8")).cell, cell.name);
   assert.deepEqual(JSON.parse(readFileSync(join(root, "test-results/composition/receipt.json"), "utf8")), receipt);
 });
 
@@ -61,6 +63,36 @@ for (const mutation of ["missing", "duplicate", "foreign", "wrong_type", "two_au
     attachment.body = Buffer.from(mutation === "malformed" ? "not json" : JSON.stringify(data)).toString("base64");
     if (mutation === "different_result") {
       attachments.splice(1, 1);
+      report.suites[0].specs.push({ ok: true, tests: [{ projectName: "desktop-chromium", expectedStatus: "passed", results: [{ ...result, attachments: [attachment] }] }] });
+    }
+    assert.throws(() => publishCompositionEvidence(root, Buffer.from(JSON.stringify(report))));
+    assert.ok(readFileSync(join(root, "test-results/composition/receipt.json")).equals(prior));
+  });
+}
+
+for (const mutation of ["missing", "duplicate", "foreign", "wrong_type", "two_authorities", "wrong_cell", "wrong_viewport", "leak", "vacuous", "no_inspector", "negative_count", "false_inspector", "malformed", "different_result"]) {
+  test(`refuses ${mutation} vocabulary paired with otherwise successful PNGs`, t => {
+    const { root, report, attachments, result } = fixture(t);
+    publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
+    const prior = readFileSync(join(root, "test-results/composition/receipt.json"));
+    const attachment = mutation === "no_inspector" ? attachments.find(a => a.name.startsWith("composition-vocabulary-") && a.name.endsWith("10-inspector-open")) : attachments[2];
+    const at = attachments.indexOf(attachment);
+    const data = JSON.parse(Buffer.from(attachment.body, "base64"));
+    if (mutation === "missing") attachments.splice(at, 1);
+    if (mutation === "duplicate") attachments.push({ ...attachment });
+    if (mutation === "foreign") attachment.name += "-invented";
+    if (mutation === "wrong_type") attachment.contentType = "text/plain";
+    if (mutation === "two_authorities") attachment.path = attachments[0].path;
+    if (mutation === "wrong_cell") data.cell = CELL_NAMES[1];
+    if (mutation === "wrong_viewport") data.viewport.width++;
+    if (mutation === "leak") data.leaks.push({ kind: "uci", text: "e2e4", element: "p", inspector: false });
+    if (mutation === "vacuous") data.ordinaryTextNodes = 0;
+    if (mutation === "no_inspector") data.inspectorTextNodes = 0;
+    if (mutation === "negative_count") data.inspectorTextNodes = -1;
+    if (mutation === "false_inspector") data.inspectorExamples.push({ kind: "uci", text: "e2e4", element: "p", inspector: false });
+    attachment.body = Buffer.from(mutation === "malformed" ? "not json" : JSON.stringify(data)).toString("base64");
+    if (mutation === "different_result") {
+      attachments.splice(at, 1);
       report.suites[0].specs.push({ ok: true, tests: [{ projectName: "desktop-chromium", expectedStatus: "passed", results: [{ ...result, attachments: [attachment] }] }] });
     }
     assert.throws(() => publishCompositionEvidence(root, Buffer.from(JSON.stringify(report))));

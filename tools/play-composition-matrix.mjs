@@ -20,6 +20,7 @@ export function collectCompositionEvidence(report, { root, read = readFileSync, 
   const allowed = new Set(CELL_NAMES);
   const cells = new Map();
   const conformances = new Map();
+  const vocabularies = new Map();
   const evidenceRoot = realpath(resolve(root, "test-results/playwright"));
   function visit(suites) {
     for (const suite of suites) {
@@ -27,14 +28,24 @@ export function collectCompositionEvidence(report, { root, read = readFileSync, 
       for (const spec of suite.specs) for (const test of spec.tests ?? []) for (const result of test.results ?? []) for (const attachment of result.attachments ?? []) {
         if (typeof attachment.name !== "string") continue;
         const isConformance = attachment.name.startsWith("composition-conformance-play-composition-");
-        if (!isConformance && !attachment.name.startsWith("play-composition-")) continue;
-        const name = isConformance ? attachment.name.slice("composition-conformance-".length) : attachment.name;
+        const isVocabulary = attachment.name.startsWith("composition-vocabulary-play-composition-");
+        if (!isConformance && !isVocabulary && !attachment.name.startsWith("play-composition-")) continue;
+        const name = isConformance ? attachment.name.slice("composition-conformance-".length) : isVocabulary ? attachment.name.slice("composition-vocabulary-".length) : attachment.name;
         if (!allowed.has(name)) throw new Error(`COMPOSITION_FOREIGN_CELL: ${name}`);
-        const population = isConformance ? conformances : cells;
+        const population = isConformance ? conformances : isVocabulary ? vocabularies : cells;
         if (population.has(name)) throw new Error(`COMPOSITION_DUPLICATE_CELL: ${name}`);
         if (spec.ok !== true || test.expectedStatus !== "passed" || test.projectName !== "desktop-chromium" || test.results.length !== 1 || result.status !== "passed" || result.retry !== 0) throw new Error(`COMPOSITION_RESULT_NOT_PROVEN: ${name}`);
         const viewport = name.slice("play-composition-".length).split("-")[0];
         const [width, height] = viewport.split("x").map(Number);
+        if (isVocabulary) {
+          if (attachment.contentType !== "application/json" || typeof attachment.body !== "string" || attachment.path !== undefined) throw new Error(`COMPOSITION_VOCABULARY_ATTACHMENT_INVALID: ${name}`);
+          const bytes = Buffer.from(attachment.body, "base64");
+          const data = JSON.parse(bytes.toString("utf8"));
+          const count = value => Number.isSafeInteger(value) && value >= 0;
+          if (data?.version !== 1 || data.cell !== name || data.viewport?.width !== width || data.viewport?.height !== height || !count(data.ordinaryTextNodes) || data.ordinaryTextNodes === 0 || !count(data.inspectorTextNodes) || (name.endsWith("10-inspector-open") && data.inspectorTextNodes === 0) || !Array.isArray(data.leaks) || data.leaks.length !== 0 || !Array.isArray(data.inspectorExamples) || data.inspectorExamples.some(f => !f || !["uci", "evaluation", "producer"].includes(f.kind) || f.inspector !== true || typeof f.text !== "string" || !f.text.trim() || typeof f.element !== "string" || !f.element.trim())) throw new Error(`COMPOSITION_VOCABULARY_NOT_PROVEN: ${name}`);
+          vocabularies.set(name, { result, bytes, digest: hash(bytes), data });
+          continue;
+        }
         if (isConformance) {
           if (attachment.contentType !== "application/json" || typeof attachment.body !== "string" || attachment.path !== undefined) throw new Error(`COMPOSITION_CONFORMANCE_ATTACHMENT_INVALID: ${name}`);
           const bytes = Buffer.from(attachment.body, "base64");
@@ -60,11 +71,15 @@ export function collectCompositionEvidence(report, { root, read = readFileSync, 
   if (missing.length > 0) throw new Error(`COMPOSITION_MISSING_CELLS: ${missing.join(", ")}`);
   const missingConformance = CELL_NAMES.filter(name => !conformances.has(name));
   if (missingConformance.length > 0) throw new Error(`COMPOSITION_MISSING_CONFORMANCE: ${missingConformance.join(", ")}`);
+  const missingVocabulary = CELL_NAMES.filter(name => !vocabularies.has(name));
+  if (missingVocabulary.length > 0) throw new Error(`COMPOSITION_MISSING_VOCABULARY: ${missingVocabulary.join(", ")}`);
   return CELL_NAMES.map(name => {
     const { result, ...cell } = cells.get(name);
     const conformance = conformances.get(name);
     if (result !== conformance.result) throw new Error(`COMPOSITION_CONFORMANCE_DIFFERENT_RESULT: ${name}`);
-    return { ...cell, conformance: { bytes: conformance.bytes, digest: conformance.digest, controls: conformance.data.controls, boxes: conformance.data.boxes } };
+    const vocabulary = vocabularies.get(name);
+    if (result !== vocabulary.result) throw new Error(`COMPOSITION_VOCABULARY_DIFFERENT_RESULT: ${name}`);
+    return { ...cell, conformance: { bytes: conformance.bytes, digest: conformance.digest, controls: conformance.data.controls, boxes: conformance.data.boxes }, vocabulary: { bytes: vocabulary.bytes, digest: vocabulary.digest, ordinaryTextNodes: vocabulary.data.ordinaryTextNodes, inspectorTextNodes: vocabulary.data.inspectorTextNodes } };
   });
 }
 
@@ -75,7 +90,7 @@ export function publishCompositionEvidence(root, reportBytes) {
   // tiers cannot erase a passing matrix. Validate/read everything before publishing any new receipt.
   const generation = `test-results/composition/${reportDigest.slice(7)}`;
   mkdirSync(resolve(root, generation), { recursive: true });
-  const records = cells.map(({ bytes, conformance, ...cell }) => {
+  const records = cells.map(({ bytes, conformance, vocabulary, ...cell }) => {
     const path = `${generation}/${cell.name}.png`;
     const target = resolve(root, path);
     if (existsSync(target) && hash(readFileSync(target)) !== cell.digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
@@ -84,7 +99,11 @@ export function publishCompositionEvidence(root, reportBytes) {
     const conformanceTarget = resolve(root, conformancePath);
     if (existsSync(conformanceTarget) && hash(readFileSync(conformanceTarget)) !== conformance.digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
     writeFileSync(conformanceTarget, conformance.bytes);
-    return { ...cell, path, conformance: { path: conformancePath, digest: conformance.digest, controls: conformance.controls, boxes: conformance.boxes } };
+    const vocabularyPath = `${generation}/${cell.name}.vocabulary.json`;
+    const vocabularyTarget = resolve(root, vocabularyPath);
+    if (existsSync(vocabularyTarget) && hash(readFileSync(vocabularyTarget)) !== vocabulary.digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
+    writeFileSync(vocabularyTarget, vocabulary.bytes);
+    return { ...cell, path, conformance: { path: conformancePath, digest: conformance.digest, controls: conformance.controls, boxes: conformance.boxes }, vocabulary: { path: vocabularyPath, digest: vocabulary.digest, ordinaryTextNodes: vocabulary.ordinaryTextNodes, inspectorTextNodes: vocabulary.inspectorTextNodes } };
   });
   writeFileSync(resolve(root, generation, "browser-results.json"), reportBytes);
   const receipt = { version: 1, reportDigest, requiredCells: 112, provenCells: records.length, cells: records };

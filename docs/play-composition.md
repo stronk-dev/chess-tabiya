@@ -107,6 +107,19 @@ transport, and comparison navigation speaks in positions rather than runtime ply
 
 ## Verification
 
+Every captured composition cell also checks A4's rendered vocabulary boundary. Inline markup
+cannot split a forbidden UCI token, signed decimal/mate evaluation or named producer phrase.
+Accessible equivalent text and offscreen scroll content are included; concealed native details
+are inspected when opened. An evidence-consumer attribute alone never grants an exemption.
+Only the explicit run/comparison Inspector dialogs retain those raw forms.
+`make play-composition-vocabulary-check` runs the calibration and real journeys. Each PNG joins
+its own successful unretried vocabulary and geometry records; missing, vacuous, crossed or
+leaking records cannot publish a replacement receipt. All three records survive later browser
+tiers. This proves the vocabulary arm, not all fifteen positive destinations or held source
+migrations. The real Inspector journey separately checks the actual server receipt against its
+mounted component sentences and eight family states, then closes the surface without spilling
+that material into play.
+
 The browser suite asserts the exact board rectangle at the seven accepted projections:
 1440×900, 1366×768, 1280×720, 768×1024, 430×932, 390×844 and 360×680. It remeasures after opening
 text entry, Inspector, objective overlays and the phone companion sheet. It separately verifies

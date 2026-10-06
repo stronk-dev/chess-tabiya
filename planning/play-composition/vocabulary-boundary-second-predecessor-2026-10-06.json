@@ -1,0 +1,22 @@
+{
+  "scope": "intermediate complete browser run, not replacement proof; smoke 68 passed / one optional skipped, content 5 passed, matrix 58 passed / one driver-import failure, packaged tier not run",
+  "reportDigest": "sha256:abdca8f3b7bb8a59261cfd898531aae4004b6e687428bbb6373fa06bb8cd74e5",
+  "stats": {
+    "startTime": "2026-10-06T05:23:22.706Z",
+    "duration": 267639.984,
+    "expected": 58,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "failures": [
+    {
+      "title": "@matrix A4 Inspector carries actual admitted local evidence and returns it to its explicit home",
+      "file": "drill.spec.ts",
+      "line": 2453,
+      "status": "failed",
+      "retry": 0,
+      "error": "TypeError: Module \"file:///Users/stronk/repos/chess-drills/schemas/drill_run.schema.json\" needs an import attribute of \"type: json\""
+    }
+  ]
+}
