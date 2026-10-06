@@ -2865,7 +2865,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract
+verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
 
 verify-governance: register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
@@ -3327,6 +3327,22 @@ guided-hint-lifetime-check:
 .PHONY: guided-hint-client-check
 guided-hint-client-check:
 	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts apps/web/src/lib/guided-hint.test.ts
+
+# D3497: isolated production-boundary measurement; not a CI/default-on latency gate.
+HINT_LATENCY_OUTPUT ?= .cache/verification/hint-latency-http-$(shell date -u +%Y%m%dT%H%M%SZ).json
+HINT_LATENCY_RECEIPT ?= planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.json
+.PHONY: guided-hint-latency-build guided-hint-latency-smoke guided-hint-latency guided-hint-latency-check guided-hint-latency-receipt-check
+guided-hint-latency-check:
+	$(CI_NODE) --test tools/d3497-hint-latency/receipt.test.mjs
+	$(CI_NODE) tools/d3497-hint-latency/predecessor-check.mjs
+guided-hint-latency-receipt-check: guided-hint-latency-check
+	$(CI_NODE) tools/d3497-hint-latency/verify.mjs "$(HINT_LATENCY_RECEIPT)"
+guided-hint-latency-build: build
+	./node_modules/.bin/esbuild tools/d3497-hint-latency/capture.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/d3497-hint-latency/dist/capture.mjs --log-level=warning
+guided-hint-latency-smoke: guided-hint-latency-build
+	$(CI_NODE) tools/d3497-hint-latency/dist/capture.mjs 1 "$(HINT_LATENCY_OUTPUT)"
+guided-hint-latency: guided-hint-latency-check guided-hint-latency-build
+	$(CI_NODE) tools/d3497-hint-latency/dist/capture.mjs 20 "$(HINT_LATENCY_OUTPUT)"
 
 .PHONY: guided-hint-execution-metadata-update guided-hint-execution-metadata-check
 guided-hint-execution-metadata-update:

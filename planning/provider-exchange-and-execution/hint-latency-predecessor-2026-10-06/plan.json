@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "workItem": "D3497",
+  "authority": "rfc/hint-distance.md §10 / D7",
+  "scope": "existing production Guided Hint, not semantic-consequence search",
+  "samplesPerCell": 20,
+  "bounds": { "honestPendingP95Ms": 1500, "dependenciesToRenderedRungP95Ms": 150 },
+  "positions": [
+    { "id": "initial", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "purpose": "opening/no occurrence control, outcome must be measured" },
+    { "id": "carlsbad", "fen": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10", "purpose": "real complex middlegame packet cost, not plan attribution" },
+    { "id": "surviving-fork", "fen": "r3k3/8/4N3/8/8/8/8/7K w - - 0 1", "purpose": "small exact tactical control, hint outcome must be measured" },
+    { "id": "mate", "fen": "7k/6pp/5KQ1/8/8/8/8/8 w - - 0 1", "purpose": "small mate control, not general endgame coverage" }
+  ],
+  "arms": ["cold", "warm", "source_off", "voice_absent", "voice_timeout", "voice_refused"],
+  "rungs": ["pattern", "square", "piece", "distance", "move"],
+  "cold": "fresh application, empty Hint horizons and candidate LRU; production engine startup is separately timed; OS executable cache is not cold",
+  "warm": "different run, identical FEN and requested source, same application; verify actual retained provider delivery and packet hits rather than assume warmth",
+  "sourceOff": "real engine mode with an explicitly nonexistent Stockfish executable; no mock fallback",
+  "sourceOffModules": { "fen": "r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", "move": "b1c3", "timing": "post_commit", "purpose": "separate real committed structure/theory query, including literal honest absence; HTTP 200 alone is not rendered evidence" },
+  "voice": "controlled absent or local fixture transport; real Stockfish and the production health/service path; not a live paid LLM",
+  "voiceAbsence": "production availability disables persona before HintService; expect not_requested, not an invented provider fallback. Timeout/refusal fixtures remain actual fallback paths",
+  "mandatoryDependencies": "latest actual source-result or candidate-packet completion, excluding optional voice; warm retained-horizon rows start at request entry and are labelled separately",
+  "receiptRules": [
+    "No dropping failed, empty, refused or unavailable rows from a timing population",
+    "No bypassing the fifth-rung policy refusal; it is not a rendered move receipt",
+    "HTTP completion is not browser paint; retain the missing browser axis explicitly",
+    "Native engine memory and appliance peak are not inferred from Node process RSS",
+    "Capture/check success validates measurement structure, never default-on latency or D7 discharge",
+    "Smoke samples remain separate from the twenty-sample receipt"
+  ]
+}

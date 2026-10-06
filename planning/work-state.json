@@ -28864,6 +28864,32 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/hint-client-cadence-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3497",
+      "state": "doing",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:012eca55d1143ca3ff562eca07cf1dd54bfaf53c261a574106b6bb1a08448197",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-06"
+    },
+    {
+      "id": "D3498",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:689c4200bdc0e93871c86804e1f8243a78d09c0e203750ad0495d443c9194aa1",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3499",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4c35eb0a956d31fc17a0469b19069c1f4a3b550a46a3290a119439d142fd9cf7",
+      "uxItems": [],
+      "evidence": "tools/play-composition-matrix.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,5 +1,15 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-06 HTTP-latency checkpoint:** D3497 repeats 880 real Node-24/Stockfish
+  responses / 44 cells / twenty samples plus sixty voice baselines and preserves the rejected
+  module-control predecessor. Source/packet cache identities and independent Guide me
+  structure/theory delivery with Stockfish off pass. POST p95 max is 20.4 ms; optional voice
+  delays resolved evidence-to-HTTP p95 2,102.1 ms, exceeding §10 before paint. D3498 owns a
+  contract-preserving lifecycle repair; the proposal does not approve a new protocol.
+  HTTP is not browser paint, and all move-rung requests are policy-refused rather than rendered.
+  D3497/D7 and the complete RFC remain open. Receipt:
+  `planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`.
+
 - **2026-10-06 client-cadence checkpoint:** D3496 replaces the shipping 350 ms poll delay with
   100 ms and retains the original 70-second pending window, now bounded by elapsed time as well
   as request count. Four no-override ready-result controls fail against the predecessor; default

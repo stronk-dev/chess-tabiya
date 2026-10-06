@@ -19,6 +19,18 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 Hint latency checkpoint: D3497 preserves the rejected full module-control
+predecessor and repeats 880 real Node-24/Stockfish HTTP responses / 44 cells /
+twenty samples, plus sixty voice baselines. Actual retained source/packet identities
+and source-off Guide me structure/theory receipts pass. Maximum POST p95 is 20.4 ms;
+optional voice delays already-resolved evidence-to-HTTP p95 2,102.1 ms, above the
+rendering budget before browser paint. D3498 owns a contract-preserving lifecycle
+repair. D3497/D7 remain open for actual browser and complete permitted-rung evidence;
+all move-rung responses remain refusals, not rendered answers. Receipt:
+`planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`.
+This is not D3262 five-approach cost/profile or full-1.0 completion. Routine
+metadata/hash maintenance proceeds automatically, with no decision or pause.
+
 2026-10-06 qualification checkpoint: D3495 closes scope/focus/source-budget
 qualification on the complete 193-candidate / 182-cell / 53-setting / 116-pair
 frame and 212 hard-control receipts. Four labelled controls carry 14 candidates;

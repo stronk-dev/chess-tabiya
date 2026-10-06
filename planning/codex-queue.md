@@ -1,5 +1,27 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Measured HTTP checkpoint [[D3497]]: the real Node-24/Stockfish production Hint latency instrument
+retains cold/warm identities, complete empty/refused/offline outcomes and paired
+optional-voice baselines. The first complete 880-row / 44-cell / twenty-sample
+population is preserved rejected: Support's named-pattern field remains off even
+when a module is included. V2 repeats every cell with the ordinary Guide me
+control for independent post-commit structure/theory, and its complete 880-row
+population plus sixty voice baselines passes structural replay. Maximum POST
+p95 is 20.4 ms; optional voice still delays resolved evidence-to-HTTP p95
+2,102.1 ms. Receipt: `planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`.
+Thirty-one fast checker
+controls and the unchanged failed predecessor enter the ordinary software gate;
+machine-specific timing capture does not. No HTTP-only or fifth-rung refusal
+can close D7's browser/rendered-journey requirements.
+
+[[D3498]] is the next concrete Hint defect: optional voice's two-second timeout
+holds already-resolved deterministic evidence, above the 150 ms rendering budget.
+Use `planning/provider-exchange-and-execution/hint-voice-latency-repair-proposal.md`
+for a proper lifecycle amendment where required; do not hide the delay by
+reclassifying dependencies, mutating sealed receipts or shrinking the provider
+deadline. Routine metadata/hash updates remain automatic. D3262 five-approach
+cost/profile and the full 1.0 goal stay active and separate from this instrument.
+
 Completed [[D3496]]: the Guided Hint shipping poll delay is 100 ms rather than
 350 ms, retaining a 70-second pending window with elapsed-time/count bounds.
 Four no-override readiness controls fail on the predecessor; 25 mounted/wire

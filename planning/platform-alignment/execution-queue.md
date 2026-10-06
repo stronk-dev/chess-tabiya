@@ -8,6 +8,13 @@ This is the queue the thematic roadmap was missing. A phase completes on evidenc
 not because its code was started. Within a phase, independent jobs may run in parallel; across a
 dependency edge, they may not.
 
+## Guided Hint latency checkpoint — 2026-10-06
+
+| Item | Owning lane / prerequisite | Required exit |
+|---|---|---|
+| [[D3497]] | **DOING: HTTP portion measured, actual browser/permitted-rung evidence remains**; evidence-foundation; implementing hint-distance §10/D7 | Corrected 880 responses / 44 cells / twenty samples plus sixty voice baselines pass structural replay; rejected predecessor stays unchanged. Actual source/packet cache joins and source-off Guide me structure/theory delivery pass. Maximum POST p95 20.4 ms; optional voice delays dependencies-to-HTTP p95 2,102.1 ms, already above the rendering budget. Shipping paint is not measured, and move-rung refusals are not rendered answers. Receipt: `planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`. No D7 or semantic-search cost closeout. |
+| [[D3498]] | **NEXT: contract-preserving optional-voice repair**; evidence-foundation; D3497 full measurement then accepted lifecycle amendment where required | Deterministic evidence must not wait behind optional prose. Preserve exact sealed identity, redaction, fallback truth, cancellation and provider deadline; do not invent early timeout or mutable receipt semantics. `planning/provider-exchange-and-execution/hint-voice-latency-repair-proposal.md` names the author/review boundary and complete production exit. |
+
 ## Bot calibration checkpoint — 2026-10-06
 
 | Item | Owning lane / prerequisite | Required exit |

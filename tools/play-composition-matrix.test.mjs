@@ -6,6 +6,13 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { CELL_NAMES, VIEWPORTS, collectCompositionEvidence, publishCompositionEvidence } from "./play-composition-matrix.mjs";
 
+function assertSoftwareMatrixPrerequisite(make) {
+  const rule = make.match(/^verify-software:([^\n]*)$/mu);
+  assert.ok(rule, "verify-software must declare its prerequisites");
+  assert.ok(rule[1].trim().split(/\s+/u).includes("play-composition-matrix-contract"),
+    "verify-software must execute play-composition-matrix-contract");
+}
+
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), "tabiya-composition-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -154,10 +161,24 @@ test("the accepted closed population and normal CI commands carry the retained m
   assert.deepEqual([...acceptanceViewports.matchAll(/\b(\d{3,4})×(\d{3,4})\b/gu)].map(match => `${match[1]}x${match[2]}`), VIEWPORTS);
   const make = readFileSync(join(root, "Makefile"), "utf8");
   assert.match(make, /test-browser-matrix: play-composition-matrix-contract\n\t\.\/node_modules\/\.bin\/playwright test --grep "@matrix"\n\tnode tools\/play-composition-matrix\.mjs/u);
-  assert.match(make, /^verify-software: .*play-composition-matrix-contract$/mu);
+  assertSoftwareMatrixPrerequisite(make);
   assert.match(readFileSync(join(root, "playwright.config.ts"), "utf8"), /\["json", \{ outputFile: "test-results\/browser-results\.json" \}\]/u);
   const workflow = readFileSync(join(root, ".github/workflows/browser.yml"), "utf8");
   assert.match(workflow, /run: make test-browser-matrix/u);
   assert.match(workflow, /if: always\(\)/u);
   assert.match(workflow, /^\s+test-results\/$/mu);
+});
+
+test("software matrix prerequisite is required as an exact token, not as the last check", () => {
+  for (const prerequisites of [
+    "play-composition-matrix-contract",
+    "play-composition-matrix-contract guided-hint-latency-check",
+    "typecheck play-composition-matrix-contract guided-hint-latency-check",
+  ]) assertSoftwareMatrixPrerequisite(`verify-software: ${prerequisites}\n`);
+  for (const make of [
+    "verify-software: typecheck guided-hint-latency-check\n",
+    "verify-software: not-play-composition-matrix-contract\n",
+    "verify-software: play-composition-matrix-contract-skip\n",
+    "other-target: play-composition-matrix-contract\n",
+  ]) assert.throws(() => assertSoftwareMatrixPrerequisite(make));
 });

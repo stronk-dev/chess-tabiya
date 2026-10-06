@@ -1350,7 +1350,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:c52de9461fdf8a99fb7cf25cdf78d68800f04de5f8f838cab5d0271040173a2e"
+              "digest": "sha256:62cbc2034f9531ae02838eea9679d4511f31714ec7cd3b0c28b95dff5109f07c"
             },
             {
               "kind": "work_state",
@@ -1578,10 +1578,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3474/D3475 legacy distribution/tier boundaries, D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
+        "nextAction": "D3497 HTTP population is measured, not a complete Hint latency discharge. Complete actual shipping browser paint and permitted-rung evidence; D3498 requires a contract-preserving optional-voice lifecycle repair where the closed protocol must change. Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations; D3469, D3309, D3363, D3436 and D1639 retain their named contracts. Do not requeue completed Inspector/cadence repairs or promote source, permissions, full RFC or milestone.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3496 repairs shipping Guided Hint polling from 350 to 100 ms without cutting the original 70-second pending window. Elapsed network time and a finite poll cap bound pending work; exact-id cleanup and no autonomous retry remain. Four no-override readiness controls fail on the predecessor. Replacement passes 25 mounted/wire and 78 service/lifetime/client cases with clean types, including slow transport and wait-time teardown. Full verify-software terminates zero with 3336 tests/343 files, seven isolated performance tests/four files and all downstream contracts; content passes 227/23; browser terminates zero with 144 passes, one optional Maia skip, zero retries and 112/112 composition cells. Governance passes; final exact-index governance and normal hooks precede commit. D3496 is evidence-backed done, with zero untriaged and only D3262 doing. This is not hint-distance D7 integrated real-engine/transport/browser latency, D3262 five-approach cost or full-RFC/milestone/release completion. Prior Inspector/composition checkpoints remain linked. Routine metadata/hash maintenance is automatic and full 1.0 stays active.",
+          "summary": "D3497 repeats the complete real Node-24/Stockfish production Hint HTTP population: 880 responses/44 cells/twenty samples plus sixty paired voice baselines. The rejected full predecessor and exact instrument images stay immutable and permanently refused. Actual cold/warm source and packet identities, source-off Guide me structure/theory component delivery and deterministic voice sentence equality pass. Maximum POST p95 is 20.4 ms, but optional voice holds resolved evidence-to-HTTP p95 2102.1 ms, exceeding the rendering budget before paint; D3498 owns a contract-preserving lifecycle repair. Thirty-one fast checker controls and the preserved predecessor join ordinary software CI; machine-specific latency is not a CI/default-on gate. D3497 stays doing for actual shipping browser/permitted-rung evidence; all move-rung requests remain refusals, not a rendered fifth rung. D7/full RFC, D3262 five-approach cost/profile and full 1.0 remain open. Zero untriaged; routine metadata/hash updates are automatic. Prior board/cadence/composition checkpoints remain linked.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/human-model-window-2026-10-06.md",
@@ -1689,13 +1689,16 @@
             "planning/play-composition/inspector-subject-software-2026-10-06.json",
             "planning/play-composition/inspector-subject-matrix-2026-10-06.json",
             "planning/play-composition/inspector-subject-inventory-2026-10-06.json",
-            "planning/provider-exchange-and-execution/hint-client-cadence-2026-10-06.md"
+            "planning/provider-exchange-and-execution/hint-client-cadence-2026-10-06.md",
+            "planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md",
+            "planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.json",
+            "planning/provider-exchange-and-execution/hint-voice-latency-repair-proposal.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:c52de9461fdf8a99fb7cf25cdf78d68800f04de5f8f838cab5d0271040173a2e"
+              "digest": "sha256:62cbc2034f9531ae02838eea9679d4511f31714ec7cd3b0c28b95dff5109f07c"
             },
             {
               "kind": "rfc",
@@ -1976,6 +1979,16 @@
               "kind": "work_state",
               "id": "D3496",
               "digest": "sha256:bf8b67297b3c2bd87b8dd084b9c29063128bbe98c97e8752f13451e4613e429a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3497",
+              "digest": "sha256:012eca55d1143ca3ff562eca07cf1dd54bfaf53c261a574106b6bb1a08448197"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3498",
+              "digest": "sha256:689c4200bdc0e93871c86804e1f8243a78d09c0e203750ad0495d443c9194aa1"
             }
           ]
         },
