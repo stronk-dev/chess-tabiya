@@ -30,6 +30,7 @@ import {
 import { LONGITUDINAL_ADMITTED_IDENTITIES, OBSERVATION_DERIVATION_REV, identityKey, type AdmittedIdentity } from "./longitudinal-registry.js";
 import { LongitudinalSnapshotError, type LongitudinalSourceImageV4 } from "./longitudinal-source.js";
 import { rootKey } from "./progress.js";
+import { collectSemanticMemberships, createSemanticMembershipReader } from "./longitudinal-membership-cache.js";
 
 export interface LongitudinalEdge { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }
 
@@ -42,6 +43,8 @@ export const RUNTIME_POPULATION_DEPENDENCIES: PopulationDependencies = Object.fr
   alternatives: legalAlternativeEdges,
   events: localSemanticEvents,
 });
+
+const runtimeMemberships = createSemanticMembershipReader(RUNTIME_POPULATION_DEPENDENCIES.events);
 
 import { normativeDecisions } from "./longitudinal-decisions.js";
 export { normativeDecisions, type NormativeDecision } from "./longitudinal-decisions.js";
@@ -97,15 +100,13 @@ export function decisionPopulation(
   const edges = [committed, ...alternatives];
   const exhibited: Set<string>[] = [];
   for (const edge of edges) {
-    let events: ReturnType<PopulationDependencies["events"]>;
-    try {
-      events = dependencies.events(edge.beforeFen, edge.moveUci, edge.afterFen);
-    } catch {
-      events = undefined;
-    }
-    if (events === undefined) return Object.freeze({ kind: "unavailable", reason: "population_incomplete" });
+    const signatures = dependencies === RUNTIME_POPULATION_DEPENDENCIES
+      ? runtimeMemberships(edge)
+      : collectSemanticMemberships(edge, dependencies.events);
+    if (signatures === undefined) return Object.freeze({ kind: "unavailable", reason: "population_incomplete" });
     // Multiple operands with one projection/sign on an edge deduplicate to one Boolean membership.
-    exhibited.push(new Set(events.filter((event) => event.projection.version === 1).map((event) => `${event.projection.id}\0${event.sign}`)));
+    // Sets belong to this decision, never to the retained immutable membership array.
+    exhibited.push(new Set(signatures));
   }
   const memberships = new Map<string, { readonly opportunity: boolean; readonly occurred: boolean; readonly share: number }>();
   for (const identity of identities) {

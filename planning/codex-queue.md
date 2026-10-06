@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3431]] removes repeated semantic collection across growing longitudinal prefixes using
+bounded exact-edge membership reuse, without narrowing the source closure or changing revision 1.
+Full source replay, legal-population enumeration, ownership/refs/denominators and lease/drain
+checkpoints remain live. Normal `make longitudinal-projector-check` controls real sealed collectors,
+byte identity, injected absence, immutable retention and FIFO bounds. Cold unseen-game cost in
+[[D3300]] and whole longitudinal/profile/style/skills/RFC completion stay open. Receipt:
+`planning/longitudinal-store/prefix-reuse-2026-10-06.md`; full verification is logged before commit.
+
 [[D3428]] repairs the actual full-suite cold concept-registry closure timeout: shared baseline
 project/receipt construction runs in bounded setup, all six consumer assertions and independently
 compiled counterfeit/type-error controls remain. `make concept-closure-check` passes 12 tests.

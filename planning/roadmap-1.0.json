@@ -1650,8 +1650,8 @@
         ],
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-10-05",
-          "summary": "D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
+          "at": "2026-10-06",
+          "summary": "D3431 removes repeated collector work across growing longitudinal prefixes through bounded exact-edge immutable membership reuse. Complete real-collector outputs remain byte-identical; all legal alternatives, source replay, ownership and per-decision lease/drain checkpoints remain. One predecessor failure becomes 24 focused passes with clean types. Full exact-index software passes 3225 tests/340 files plus seven performance tests; all packaging/source/capability/history checks, content and governance pass. The cold unseen-game cost, full longitudinal/profile/style/skills and milestone remain open. D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -1671,7 +1671,11 @@
             "apps/server/src/review-map.test.ts",
             "docs/review-evidence.md",
             "rfc/review-evidence-compiler.md",
-            "planning/review/reservation-completion-2026-10-05.md"
+            "planning/review/reservation-completion-2026-10-05.md",
+            "planning/longitudinal-store/prefix-reuse-2026-10-06.md",
+            "apps/server/src/longitudinal-projector-cache.test.ts",
+            "apps/server/src/longitudinal-membership-cache.test.ts",
+            "planning/longitudinal-store/prefix-reuse-software-2026-10-06.json"
           ],
           "anchors": [
             {
@@ -1687,7 +1691,7 @@
             {
               "kind": "rfc",
               "id": "longitudinal-store.md",
-              "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+              "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
             },
             {
               "kind": "work_state",
@@ -1718,6 +1722,11 @@
               "kind": "rfc",
               "id": "review-evidence-compiler.md",
               "digest": "sha256:5efaf3f84ef03c1b984dae8c564227bf0f3ae7e0f3b855e135d47efad48cbe3d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3431",
+              "digest": "sha256:44e0185e353ce6d4ff1b3aebfc678d9f3e2dbe73adda47455151e10a18f64a36"
             }
           ]
         },
@@ -2024,7 +2033,7 @@
             {
               "kind": "rfc",
               "id": "longitudinal-store.md",
-              "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+              "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
             },
             {
               "kind": "work_state",

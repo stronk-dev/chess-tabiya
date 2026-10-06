@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2aadaee67092ca502ec7d107817dfd7eb9fec2d98b2c0051eceac5c6c46bcf3e",
+    "roadmap": "sha256:586802cbb99958e296f35dbda7d8390033c312ab029fb4aba005a5f490712fb1",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:4857eadb3eb0798b5ce053cf93eae2508f799a799c81e69c1fac4924f424cd28",
-    "rfcRegister": "sha256:41d576ce67892132f9e899d8408d53e5c883c3781612a38252879ca6a6a4164a",
+    "workState": "sha256:8ab2007b4ad1bbe3e842e8d71c702d47ab56023c63003901ae24f60b7736bdf1",
+    "rfcRegister": "sha256:59eedb28cb1d029a93b9ed0c5ffc7e653f942a2fc1a8ada6dd6d6e3855193b44",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 0,
       "blocked": 1058,
-      "done": 1334,
+      "done": 1335,
       "refused": 160
     },
     "workItems": {
@@ -1039,8 +1039,8 @@
       ],
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-10-05",
-        "summary": "D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
+        "at": "2026-10-06",
+        "summary": "D3431 removes repeated collector work across growing longitudinal prefixes through bounded exact-edge immutable membership reuse. Complete real-collector outputs remain byte-identical; all legal alternatives, source replay, ownership and per-decision lease/drain checkpoints remain. One predecessor failure becomes 24 focused passes with clean types. Full exact-index software passes 3225 tests/340 files plus seven performance tests; all packaging/source/capability/history checks, content and governance pass. The cold unseen-game cost, full longitudinal/profile/style/skills and milestone remain open. D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1060,7 +1060,11 @@
           "apps/server/src/review-map.test.ts",
           "docs/review-evidence.md",
           "rfc/review-evidence-compiler.md",
-          "planning/review/reservation-completion-2026-10-05.md"
+          "planning/review/reservation-completion-2026-10-05.md",
+          "planning/longitudinal-store/prefix-reuse-2026-10-06.md",
+          "apps/server/src/longitudinal-projector-cache.test.ts",
+          "apps/server/src/longitudinal-membership-cache.test.ts",
+          "planning/longitudinal-store/prefix-reuse-software-2026-10-06.json"
         ],
         "anchors": [
           {
@@ -1076,7 +1080,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
           },
           {
             "kind": "work_state",
@@ -1107,6 +1111,11 @@
             "kind": "rfc",
             "id": "review-evidence-compiler.md",
             "digest": "sha256:5efaf3f84ef03c1b984dae8c564227bf0f3ae7e0f3b855e135d47efad48cbe3d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3431",
+            "digest": "sha256:44e0185e353ce6d4ff1b3aebfc678d9f3e2dbe73adda47455151e10a18f64a36"
           }
         ]
       },
@@ -1413,7 +1422,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:78c772715a620347b0a83f32a8bbcb683ee0ac650c8460b520978dea34cb5a01"
+            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
           },
           {
             "kind": "work_state",

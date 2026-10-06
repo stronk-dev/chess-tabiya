@@ -70,6 +70,15 @@ A 78-ply imported game projects in about 5 s on a heavily loaded development hos
 32 s before D3300); the per-edge cost is dominated by sealing ~200 evidence values per legal
 candidate. Output bytes are unchanged at `OBSERVATION_DERIVATION_REV = 1`
 (`planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md`).
+Growing prefixes now reuse complete local v1 projection/sign memberships for exact
+before-FEN/move/after-FEN tuples. The worker retains at most 4,096 immutable entries, FIFO;
+clock fields remain part of identity, failures are recollected, and injected collectors stay
+uncached. Every projection still replays its source, enumerates every legal alternative and
+recomputes ownership, decision refs, denominators and publication rows. Lease/drain checkpoints
+still run after every decision, including retained edges. This speeds repeated prefixes, not cold
+unseen games, and changes neither the evidence authority nor derivation revision.
+`make longitudinal-projector-check` exercises real sealed collectors, byte-identical growing
+prefixes, changed ownership, unchanged checkpoints, absence, immutability and bounded eviction.
 The test-only `createInMemoryTestApplication` has no worker and reports `disabled_test`.
 
 ## Reading

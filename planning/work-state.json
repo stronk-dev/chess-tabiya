@@ -28269,6 +28269,15 @@
       "uxItems": [],
       "evidence": "planning/bot-roster/calibration-score-domains-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3431",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:44e0185e353ce6d4ff1b3aebfc678d9f3e2dbe73adda47455151e10a18f64a36",
+      "uxItems": [],
+      "evidence": "planning/longitudinal-store/prefix-reuse-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

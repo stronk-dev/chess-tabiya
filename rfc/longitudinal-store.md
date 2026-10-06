@@ -40,6 +40,14 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/longitudinal-store/` (implementation receipt `implementation-2026-09-24.md`)
 
+Implementation checkpoint 2026-10-06 ([[D3431]]): repeated prefixes reuse only complete local
+v1 projection/sign memberships, keyed by both complete FENs and canonical move, in a bounded
+4,096-entry worker-local FIFO. No sealed evidence is invented or narrowed; failed/injected
+collection remains uncached. Source replay, ownership, full legal populations, row algebra and
+every synchronous checkpoint remain unchanged. Real-collector prefix/rebuild output is
+byte-identical at derivation revision 1. Cold-game cost and the full RFC discharges remain open;
+receipt: `planning/longitudinal-store/prefix-reuse-2026-10-06.md`.
+
 ```tabiya-claims
 none
 ```
