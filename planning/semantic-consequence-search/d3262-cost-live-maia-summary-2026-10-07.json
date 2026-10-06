@@ -1,0 +1,5122 @@
+{
+  "question": "D3262",
+  "authority": "partial_candidate_population_cost_not_browser_or_profile_decision",
+  "inputs": {
+    "d3262-cost-live-maia-prefix080-initial-2026-10-06.json.gz": "sha256:aa5ad50dc6179ff58d25590d9ca46e40680af28de28f1aaf7b38a2f2709b1e68",
+    "d3262-cost-live-maia-prefix080-population-2026-10-06.json.gz": "sha256:bbf3ccf3ad6018d24be04e64da0e4271a9289ee0334e73cedc704242fe02d80a",
+    "d3262-cost-live-maia-prefix090-initial-2026-10-07.json.gz": "sha256:74d1baec01e4a97fd068b13dd2d13065c8a5cc0bf2cc453d5ca91ca68e866264",
+    "d3262-cost-live-maia-prefix090-population-2026-10-07.json.gz": "sha256:e459edce70b8ad245f0d5a3cdd50227d409fa63511f6c515a0e03bfd6766286c"
+  },
+  "admittedRows": 2316,
+  "expectedCases": 61374,
+  "complete": false,
+  "pairedWarmCases": 772,
+  "evidence": "structural_admission_only",
+  "interactiveGate": "not_measured",
+  "productionProfileSelected": false,
+  "retainedCandidates": 193,
+  "rows": [
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 254.25195799999983,
+        "p95": 334.06124999996973,
+        "max": 371.3711670000339
+      },
+      "sourceMs": {
+        "p50": 250.8208340000001,
+        "p95": 330.0710830000462,
+        "max": 368.5133330000099
+      },
+      "collectionMs": {
+        "p50": 2.392248999909498,
+        "p95": 8.032706999918446,
+        "max": 27.766500999999607
+      },
+      "compileMs": {
+        "p50": 0.715834000000541,
+        "p95": 1.7895830000052229,
+        "max": 2.4490419999929145
+      },
+      "retainedBytes": {
+        "p50": 59409,
+        "p95": 63896,
+        "max": 73391
+      },
+      "sampledParentRssBytes": {
+        "p50": 366067544,
+        "p95": 391102392,
+        "max": 704062240
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 2.779415999999401,
+        "p95": 5.115791000018362,
+        "max": 5.810707999999977
+      },
+      "sourceMs": {
+        "p50": 0.40595899999607354,
+        "p95": 0.854457999999795,
+        "max": 0.9384579999896232
+      },
+      "collectionMs": {
+        "p50": 2.1374160000123084,
+        "p95": 3.8910820000455715,
+        "max": 4.751166999980342
+      },
+      "compileMs": {
+        "p50": 0.6120420000515878,
+        "p95": 1.1088330000056885,
+        "max": 1.6355409999960102
+      },
+      "retainedBytes": {
+        "p50": 59405,
+        "p95": 63893,
+        "max": 73391
+      },
+      "sampledParentRssBytes": {
+        "p50": 355975600,
+        "p95": 391102392,
+        "max": 704258872
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.7681660000234842,
+        "p95": 1.5626670000001468,
+        "max": 1.70458299999882
+      },
+      "sourceMs": {
+        "p50": 0.0001660000125411898,
+        "p95": 0.0005419999997684499,
+        "max": 0.0019169999868609011
+      },
+      "collectionMs": {
+        "p50": 0.7000850000185892,
+        "p95": 1.4760409999980766,
+        "max": 1.578791000007186
+      },
+      "compileMs": {
+        "p50": 0.20529199999964476,
+        "p95": 0.47695899999234825,
+        "max": 1.0227909999957774
+      },
+      "retainedBytes": {
+        "p50": 3005,
+        "p95": 3827,
+        "max": 4032
+      },
+      "sampledParentRssBytes": {
+        "p50": 355975600,
+        "p95": 391102392,
+        "max": 704308024
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 1875.6107499999998,
+        "p95": 4398.137208,
+        "max": 4897.31708399998
+      },
+      "sourceMs": {
+        "p50": 1843.731124,
+        "p95": 4323.972458000004,
+        "max": 4814.989003000082
+      },
+      "collectionMs": {
+        "p50": 23.033333000028506,
+        "p95": 69.00125800044043,
+        "max": 79.11220299993875
+      },
+      "compileMs": {
+        "p50": 0.7740409999969415,
+        "p95": 2.0993749999906868,
+        "max": 2.530790999997407
+      },
+      "retainedBytes": {
+        "p50": 365628,
+        "p95": 839434,
+        "max": 998661
+      },
+      "sampledParentRssBytes": {
+        "p50": 357286368,
+        "p95": 392478696,
+        "max": 707322728
+      },
+      "queryCount": 322,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 17.27725000004284,
+        "p95": 42.15583299996797,
+        "max": 61.363458000007086
+      },
+      "sourceMs": {
+        "p50": 3.9263329999521375,
+        "p95": 6.725334999995539,
+        "max": 7.951290000230074
+      },
+      "collectionMs": {
+        "p50": 13.018626000033692,
+        "p95": 31.876700000604615,
+        "max": 51.16095800010953
+      },
+      "compileMs": {
+        "p50": 0.4981659999466501,
+        "p95": 1.1246669999673031,
+        "max": 1.5914169999887235
+      },
+      "retainedBytes": {
+        "p50": 365604,
+        "p95": 839378,
+        "max": 998601
+      },
+      "sampledParentRssBytes": {
+        "p50": 353234672,
+        "p95": 374206264,
+        "max": 594518912
+      },
+      "queryCount": 322,
+      "cacheHits": 322
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.5966250000055879,
+        "p95": 0.9047499999869615,
+        "max": 1.164375000000291
+      },
+      "sourceMs": {
+        "p50": 0.00016599999980826396,
+        "p95": 0.000291000003926456,
+        "max": 0.0004170000001977314
+      },
+      "collectionMs": {
+        "p50": 0.5277910000295378,
+        "p95": 0.7822919999889564,
+        "max": 1.0822080000070855
+      },
+      "compileMs": {
+        "p50": 0.16212499999983265,
+        "p95": 0.2969169999996666,
+        "max": 0.7237919999970472
+      },
+      "retainedBytes": {
+        "p50": 3009,
+        "p95": 3834,
+        "max": 4037
+      },
+      "sampledParentRssBytes": {
+        "p50": 349979128,
+        "p95": 371720048,
+        "max": 595010504
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 243.8489159999881,
+        "p95": 347.73083400004543,
+        "max": 418.1927080000023
+      },
+      "sourceMs": {
+        "p50": 240.4742089999927,
+        "p95": 342.5821660000365,
+        "max": 412.31583300000057
+      },
+      "collectionMs": {
+        "p50": 2.6965829999826383,
+        "p95": 5.668249000096694,
+        "max": 7.247957000043243
+      },
+      "compileMs": {
+        "p50": 0.7854999999981374,
+        "p95": 1.7718750000058208,
+        "max": 2.3770829999702983
+      },
+      "retainedBytes": {
+        "p50": 60965,
+        "p95": 65016,
+        "max": 68601
+      },
+      "sampledParentRssBytes": {
+        "p50": 368197416,
+        "p95": 389824200,
+        "max": 394752976
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 3.560708999997587,
+        "p95": 5.62783400004264,
+        "max": 7.835915999952704
+      },
+      "sourceMs": {
+        "p50": 0.5877909999981057,
+        "p95": 0.9028330000001006,
+        "max": 0.9423749999841675
+      },
+      "collectionMs": {
+        "p50": 2.430833000020357,
+        "p95": 4.162540000281297,
+        "max": 5.458041000063531
+      },
+      "compileMs": {
+        "p50": 0.7069999999948777,
+        "p95": 1.1024580000084825,
+        "max": 2.6694579999893904
+      },
+      "retainedBytes": {
+        "p50": 60961,
+        "p95": 65012,
+        "max": 68597
+      },
+      "sampledParentRssBytes": {
+        "p50": 363184824,
+        "p95": 387054152,
+        "max": 391132160
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.7840839999989839,
+        "p95": 1.3557910000090487,
+        "max": 1.7000420000003942
+      },
+      "sourceMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.0004159999662078917,
+        "max": 0.0010420000035082921
+      },
+      "collectionMs": {
+        "p50": 0.7028340000542812,
+        "p95": 1.2306669999961741,
+        "max": 1.5804169999992155
+      },
+      "compileMs": {
+        "p50": 0.20837499998742715,
+        "p95": 0.42766699999629054,
+        "max": 0.6002919999882579
+      },
+      "retainedBytes": {
+        "p50": 3029,
+        "p95": 3157,
+        "max": 3238
+      },
+      "sampledParentRssBytes": {
+        "p50": 362363320,
+        "p95": 387054152,
+        "max": 391132160
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 1978.665875000006,
+        "p95": 4287.0790000000125,
+        "max": 5607.969166000024
+      },
+      "sourceMs": {
+        "p50": 1933.4664170000178,
+        "p95": 4244.168207999974,
+        "max": 5504.7243309998885
+      },
+      "collectionMs": {
+        "p50": 26.485252000013134,
+        "p95": 70.42232600023272,
+        "max": 91.90976099995896
+      },
+      "compileMs": {
+        "p50": 1.0286250000062864,
+        "p95": 2.3082500000018626,
+        "max": 2.7765000000363216
+      },
+      "retainedBytes": {
+        "p50": 427146,
+        "p95": 923143,
+        "max": 1056267
+      },
+      "sampledParentRssBytes": {
+        "p50": 363674088,
+        "p95": 388643472,
+        "max": 392524872
+      },
+      "queryCount": 411,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 21.693040999991354,
+        "p95": 44.57875000000058,
+        "max": 50.74650000000838
+      },
+      "sourceMs": {
+        "p50": 4.067083999980241,
+        "p95": 8.276001000020187,
+        "max": 9.706874999974389
+      },
+      "collectionMs": {
+        "p50": 15.870372999925166,
+        "p95": 33.57475699996576,
+        "max": 39.304253000358585
+      },
+      "compileMs": {
+        "p50": 0.5392909999936819,
+        "p95": 1.0724589999881573,
+        "max": 1.422415999986697
+      },
+      "retainedBytes": {
+        "p50": 427118,
+        "p95": 923079,
+        "max": 1056194
+      },
+      "sampledParentRssBytes": {
+        "p50": 359333648,
+        "p95": 372850232,
+        "max": 376651368
+      },
+      "queryCount": 411,
+      "cacheHits": 411
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.6161670000292361,
+        "p95": 0.9372919999877922,
+        "max": 1.1273749999963911
+      },
+      "sourceMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.0004579999949783087,
+        "max": 0.0005000000237487257
+      },
+      "collectionMs": {
+        "p50": 0.5492069999745581,
+        "p95": 0.8460419999901205,
+        "max": 1.031498999989708
+      },
+      "compileMs": {
+        "p50": 0.1715830000466667,
+        "p95": 0.2700840000034077,
+        "max": 0.3347080000094138
+      },
+      "retainedBytes": {
+        "p50": 3033,
+        "p95": 3161,
+        "max": 3242
+      },
+      "sampledParentRssBytes": {
+        "p50": 360201568,
+        "p95": 374371904,
+        "max": 377290368
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 238.16408299998147,
+        "p95": 314.5869170000078,
+        "max": 336.50424999999814
+      },
+      "sourceMs": {
+        "p50": 231.08487500000047,
+        "p95": 312.00800000003073,
+        "max": 328.8070829999924
+      },
+      "collectionMs": {
+        "p50": 2.178167000063695,
+        "p95": 11.274667000136105,
+        "max": 15.60603799999808
+      },
+      "compileMs": {
+        "p50": 0.7756670000380836,
+        "p95": 2.8565830000152346,
+        "max": 3.137125000008382
+      },
+      "retainedBytes": {
+        "p50": 62414,
+        "p95": 79729,
+        "max": 82922
+      },
+      "sampledParentRssBytes": {
+        "p50": 365756872,
+        "p95": 390134728,
+        "max": 401407472
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 2.9119579999824055,
+        "p95": 10.097542000003159,
+        "max": 11.668000000005122
+      },
+      "sourceMs": {
+        "p50": 0.42149999999674037,
+        "p95": 0.9259580000070855,
+        "max": 2.0126670000026934
+      },
+      "collectionMs": {
+        "p50": 2.0587919999379665,
+        "p95": 7.9819640000059735,
+        "max": 9.886458999855677
+      },
+      "compileMs": {
+        "p50": 0.5820000000021537,
+        "p95": 2.0551249999552965,
+        "max": 3.4214999999967404
+      },
+      "retainedBytes": {
+        "p50": 62410,
+        "p95": 79722,
+        "max": 82919
+      },
+      "sampledParentRssBytes": {
+        "p50": 360921000,
+        "p95": 377891848,
+        "max": 401407472
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6151250000111759,
+        "p95": 1.1047919999982696,
+        "max": 1.138875000004191
+      },
+      "sourceMs": {
+        "p50": 0.00012499999138526618,
+        "p95": 0.00029200001154094934,
+        "max": 0.00041599999531172216
+      },
+      "collectionMs": {
+        "p50": 0.5561669999733567,
+        "p95": 0.9924600000085775,
+        "max": 1.0414160000218544
+      },
+      "compileMs": {
+        "p50": 0.18112500000279397,
+        "p95": 0.37245899997651577,
+        "max": 0.39241700002457947
+      },
+      "retainedBytes": {
+        "p50": 3055,
+        "p95": 3583,
+        "max": 3585
+      },
+      "sampledParentRssBytes": {
+        "p50": 356742912,
+        "p95": 377024792,
+        "max": 401407472
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 2080.303041999985,
+        "p95": 5862.912500000006,
+        "max": 7067.043083000026
+      },
+      "sourceMs": {
+        "p50": 2069.5192519999982,
+        "p95": 5717.460416999966,
+        "max": 6937.680290999968
+      },
+      "collectionMs": {
+        "p50": 22.803919000085443,
+        "p95": 92.16974600002504,
+        "max": 133.29879000002984
+      },
+      "compileMs": {
+        "p50": 0.8444160000071861,
+        "p95": 3.1716249999881256,
+        "max": 3.7591250000114087
+      },
+      "retainedBytes": {
+        "p50": 439573,
+        "p95": 1130428,
+        "max": 1297495
+      },
+      "sampledParentRssBytes": {
+        "p50": 358711872,
+        "p95": 378384736,
+        "max": 402718240
+      },
+      "queryCount": 346,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 20.513208000018494,
+        "p95": 61.20062499999767,
+        "max": 66.52195800002664
+      },
+      "sourceMs": {
+        "p50": 3.9630419999884907,
+        "p95": 8.809084000007715,
+        "max": 10.48016700008884
+      },
+      "collectionMs": {
+        "p50": 15.339787000033539,
+        "p95": 47.40453300010995,
+        "max": 53.57076100021368
+      },
+      "compileMs": {
+        "p50": 0.5861660000227857,
+        "p95": 1.423041000001831,
+        "max": 1.8140829999756534
+      },
+      "retainedBytes": {
+        "p50": 439545,
+        "p95": 1130352,
+        "max": 1297408
+      },
+      "sampledParentRssBytes": {
+        "p50": 356432312,
+        "p95": 369028128,
+        "max": 374996488
+      },
+      "queryCount": 346,
+      "cacheHits": 346
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6513329999870621,
+        "p95": 0.828458000003593,
+        "max": 1.2570000000414439
+      },
+      "sourceMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.00033300003269687295,
+        "max": 0.0005410000012489036
+      },
+      "collectionMs": {
+        "p50": 0.5877499999478459,
+        "p95": 0.7631259999761824,
+        "max": 1.0888319999794476
+      },
+      "compileMs": {
+        "p50": 0.20591600000625476,
+        "p95": 0.2818330000154674,
+        "max": 0.5170839999918826
+      },
+      "retainedBytes": {
+        "p50": 3059,
+        "p95": 3588,
+        "max": 3589
+      },
+      "sampledParentRssBytes": {
+        "p50": 356989704,
+        "p95": 370752072,
+        "max": 375520824
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 246.60800000000745,
+        "p95": 368.94754100000137,
+        "max": 375.40070900000865
+      },
+      "sourceMs": {
+        "p50": 245.15870900001028,
+        "p95": 367.5643329999875,
+        "max": 374.076166999992
+      },
+      "collectionMs": {
+        "p50": 1.2989180000004126,
+        "p95": 5.0587920001125894,
+        "max": 5.995961999928113
+      },
+      "compileMs": {
+        "p50": 0.3943330000038259,
+        "p95": 1.603417000034824,
+        "max": 1.603833000001032
+      },
+      "retainedBytes": {
+        "p50": 52534,
+        "p95": 60301,
+        "max": 60789
+      },
+      "sampledParentRssBytes": {
+        "p50": 365918576,
+        "p95": 387350504,
+        "max": 397984152
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 1.9089590000221506,
+        "p95": 4.894417000003159,
+        "max": 4.937084000033792
+      },
+      "sourceMs": {
+        "p50": 0.3669579999987036,
+        "p95": 0.97241699998267,
+        "max": 1.0825000000186265
+      },
+      "collectionMs": {
+        "p50": 1.2344580000062706,
+        "p95": 3.7398749999701977,
+        "max": 3.834538000111934
+      },
+      "compileMs": {
+        "p50": 0.3729159999929834,
+        "p95": 1.6566250000032596,
+        "max": 1.8039589999825694
+      },
+      "retainedBytes": {
+        "p50": 52530,
+        "p95": 60295,
+        "max": 60785
+      },
+      "sampledParentRssBytes": {
+        "p50": 365557960,
+        "p95": 387350504,
+        "max": 397984152
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.43545799999265,
+        "p95": 0.7854579999693669,
+        "max": 0.8204590000095777
+      },
+      "sourceMs": {
+        "p50": 0.0001250000059371814,
+        "p95": 0.0003330000035930425,
+        "max": 0.0004579999949783087
+      },
+      "collectionMs": {
+        "p50": 0.38229300000239164,
+        "p95": 0.6608759999508038,
+        "max": 0.7148329999181442
+      },
+      "compileMs": {
+        "p50": 0.1499160000239499,
+        "p95": 0.30620900000212714,
+        "max": 0.31583300000056624
+      },
+      "retainedBytes": {
+        "p50": 2618,
+        "p95": 2883,
+        "max": 2926
+      },
+      "sampledParentRssBytes": {
+        "p50": 365557960,
+        "p95": 387350504,
+        "max": 397984152
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 1596.479166000001,
+        "p95": 4781.588999999978,
+        "max": 6578.390582999971
+      },
+      "sourceMs": {
+        "p50": 1578.9522920000309,
+        "p95": 4689.105125000118,
+        "max": 6486.448791999952
+      },
+      "collectionMs": {
+        "p50": 11.947538000007626,
+        "p95": 80.90904099965701,
+        "max": 82.7502829998266
+      },
+      "compileMs": {
+        "p50": 0.5352500000008149,
+        "p95": 1.6438339999876916,
+        "max": 2.0352919999859296
+      },
+      "retainedBytes": {
+        "p50": 266660,
+        "p95": 883917,
+        "max": 1090294
+      },
+      "sampledParentRssBytes": {
+        "p50": 366770424,
+        "p95": 388694040,
+        "max": 399213024
+      },
+      "queryCount": 257,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 11.131500000017695,
+        "p95": 38.683374999964144,
+        "max": 44.61891600000672
+      },
+      "sourceMs": {
+        "p50": 2.6143339999835007,
+        "p95": 7.53950199985411,
+        "max": 7.641918999841437
+      },
+      "collectionMs": {
+        "p50": 6.7145049999817275,
+        "p95": 27.90690700011328,
+        "max": 34.2950819999096
+      },
+      "compileMs": {
+        "p50": 0.3241249999846332,
+        "p95": 0.7360000000044238,
+        "max": 1.0264999999926658
+      },
+      "retainedBytes": {
+        "p50": 266640,
+        "p95": 883859,
+        "max": 1090211
+      },
+      "sampledParentRssBytes": {
+        "p50": 356908288,
+        "p95": 372815352,
+        "max": 374407576
+      },
+      "queryCount": 257,
+      "cacheHits": 257
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.42579100000148173,
+        "p95": 0.6340829999971902,
+        "max": 0.7029169999877922
+      },
+      "sourceMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.000375000003259629,
+        "max": 0.003459000028669834
+      },
+      "collectionMs": {
+        "p50": 0.3477920000004815,
+        "p95": 0.5550399999920046,
+        "max": 0.6407489999837708
+      },
+      "compileMs": {
+        "p50": 0.14341699999931734,
+        "p95": 0.22595799999544397,
+        "max": 0.25333300000056624
+      },
+      "retainedBytes": {
+        "p50": 2622,
+        "p95": 2886,
+        "max": 2928
+      },
+      "sampledParentRssBytes": {
+        "p50": 357040008,
+        "p95": 372228624,
+        "max": 373323280
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3105830000131391,
+        "p95": 0.3830420000012964,
+        "max": 0.3830420000012964
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.288626000052318,
+        "p95": 0.35537400003522635,
+        "max": 0.35537400003522635
+      },
+      "compileMs": {
+        "p50": 0.000375000003259629,
+        "p95": 0.0022909999825060368,
+        "max": 0.0022909999825060368
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 824,
+        "max": 824
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3494170000194572,
+        "p95": 0.35320800001500174,
+        "max": 0.35320800001500174
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3313749999506399,
+        "p95": 0.3407069999957457,
+        "max": 0.3407069999957457
+      },
+      "compileMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.00024999998277053237,
+        "max": 0.00024999998277053237
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 824,
+        "max": 824
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.26104200002737343,
+        "p95": 0.3305420000106096,
+        "max": 0.3305420000106096
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2525000000023283,
+        "p95": 0.32066799997119233,
+        "max": 0.32066799997119233
+      },
+      "compileMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 829,
+        "p95": 836,
+        "max": 836
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.27245899999979883,
+        "p95": 0.33170899999095127,
+        "max": 0.33170899999095127
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.26333300000987947,
+        "p95": 0.3213339999783784,
+        "max": 0.3213339999783784
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 824,
+        "max": 824
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.24562499998137355,
+        "p95": 0.3257920000469312,
+        "max": 0.3257920000469312
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.23920900002121925,
+        "p95": 0.31716699997195974,
+        "max": 0.31716699997195974
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 824,
+        "max": 824
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.2484169999952428,
+        "p95": 0.32262499997159466,
+        "max": 0.32262499997159466
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.24204099999042228,
+        "p95": 0.31424999999580905,
+        "max": 0.31424999999580905
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.00008299999171867967,
+        "max": 0.00008299999171867967
+      },
+      "retainedBytes": {
+        "p50": 828,
+        "p95": 833,
+        "max": 833
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.4157499999855645,
+        "p95": 0.47425000002840534,
+        "max": 0.47425000002840534
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.40804100001696497,
+        "p95": 0.464583000051789,
+        "max": 0.464583000051789
+      },
+      "compileMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.397374999942258,
+        "p95": 0.425249999971129,
+        "max": 0.425249999971129
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.39024999999674037,
+        "p95": 0.416458000021521,
+        "max": 0.416458000021521
+      },
+      "compileMs": {
+        "p50": 0.000042000028770416975,
+        "p95": 0.00008299999171867967,
+        "max": 0.00008299999171867967
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.39883299998473376,
+        "p95": 0.42249999998603016,
+        "max": 0.42249999998603016
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.39212599996244535,
+        "p95": 0.4117919999989681,
+        "max": 0.4117919999989681
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 935,
+        "p95": 937,
+        "max": 937
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.39000000001396984,
+        "p95": 0.4220830000122078,
+        "max": 0.4220830000122078
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3793340000556782,
+        "p95": 0.4133760000113398,
+        "max": 0.4133760000113398
+      },
+      "compileMs": {
+        "p50": 0.000042000028770416975,
+        "p95": 0.00008300004992634058,
+        "max": 0.00008300004992634058
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.42104099999414757,
+        "p95": 0.7372500000055879,
+        "max": 0.7372500000055879
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.4105419999687001,
+        "p95": 0.7311670000781305,
+        "max": 0.7311670000781305
+      },
+      "compileMs": {
+        "p50": 0.000042000028770416975,
+        "p95": 0.00008299999171867967,
+        "max": 0.00008299999171867967
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.4183750000083819,
+        "p95": 0.49370799999451265,
+        "max": 0.49370799999451265
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.41108300001360476,
+        "p95": 0.46995800000149757,
+        "max": 0.46995800000149757
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.000291000003926456,
+        "max": 0.000291000003926456
+      },
+      "retainedBytes": {
+        "p50": 935,
+        "p95": 936,
+        "max": 936
+      },
+      "sampledParentRssBytes": {
+        "p50": 365904496,
+        "p95": 365904496,
+        "max": 365904496
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0681660000118427,
+        "p95": 0.21508300001733005,
+        "max": 0.21508300001733005
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06229299999540672,
+        "p95": 0.2026670000050217,
+        "max": 0.2026670000050217
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00016599998343735933,
+        "max": 0.00016599998343735933
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 359694768,
+        "p95": 359694768,
+        "max": 359694768
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06516699999338016,
+        "p95": 0.1627089999965392,
+        "max": 0.1627089999965392
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05950000003213063,
+        "p95": 0.15583300002617761,
+        "max": 0.15583300002617761
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 359694768,
+        "p95": 359694768,
+        "max": 359694768
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06437499995809048,
+        "p95": 0.15108400001190603,
+        "max": 0.15108400001190603
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05883300001733005,
+        "p95": 0.14458300004480407,
+        "max": 0.14458300004480407
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 685,
+        "p95": 813,
+        "max": 813
+      },
+      "sampledParentRssBytes": {
+        "p50": 359694768,
+        "p95": 359694768,
+        "max": 359694768
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06508400000166148,
+        "p95": 0.21633300004759803,
+        "max": 0.21633300004759803
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05887500004610047,
+        "p95": 0.19808300002478063,
+        "max": 0.19808300002478063
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.0002080000122077763,
+        "max": 0.0002080000122077763
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 359694768,
+        "p95": 359694768,
+        "max": 359694768
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06449999997857958,
+        "p95": 0.16204199998173863,
+        "max": 0.16204199998173863
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.058625000005122274,
+        "p95": 0.15174999996088445,
+        "max": 0.15174999996088445
+      },
+      "compileMs": {
+        "p50": 0.000042000028770416975,
+        "p95": 0.00012499996228143573,
+        "max": 0.00012499996228143573
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 359694768,
+        "p95": 359694768,
+        "max": 359694768
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.80",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06391600001370534,
+        "p95": 0.14850000001024455,
+        "max": 0.14850000001024455
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05841699993470684,
+        "p95": 0.14237499999580905,
+        "max": 0.14237499999580905
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 685,
+        "p95": 813,
+        "max": 813
+      },
+      "sampledParentRssBytes": {
+        "p50": 359694768,
+        "p95": 359694768,
+        "max": 359694768
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 236.41612499999997,
+        "p95": 337.82291700004134,
+        "max": 357.1098750000019
+      },
+      "sourceMs": {
+        "p50": 233.84637500000008,
+        "p95": 331.4380420000525,
+        "max": 349.5997500000012
+      },
+      "collectionMs": {
+        "p50": 2.5042499999981374,
+        "p95": 11.997996999969473,
+        "max": 27.612708999999768
+      },
+      "compileMs": {
+        "p50": 0.7398329999996349,
+        "p95": 2.7581250000000637,
+        "max": 3.3378340000053868
+      },
+      "retainedBytes": {
+        "p50": 59878,
+        "p95": 66089,
+        "max": 76186
+      },
+      "sampledParentRssBytes": {
+        "p50": 375651968,
+        "p95": 419955408,
+        "max": 701997856
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 3.338417000020854,
+        "p95": 7.6048749999608845,
+        "max": 9.017791999998735
+      },
+      "sourceMs": {
+        "p50": 0.5039579999865964,
+        "p95": 0.9033330000002024,
+        "max": 0.9695829999982379
+      },
+      "collectionMs": {
+        "p50": 2.2880410000798292,
+        "p95": 5.8193330001086,
+        "max": 7.493334000057075
+      },
+      "compileMs": {
+        "p50": 0.5998750000144355,
+        "p95": 1.9493749999674037,
+        "max": 2.5124999999825377
+      },
+      "retainedBytes": {
+        "p50": 59873,
+        "p95": 66086,
+        "max": 76182
+      },
+      "sampledParentRssBytes": {
+        "p50": 367017744,
+        "p95": 402702504,
+        "max": 702210848
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.6661249999888241,
+        "p95": 1.5645409999997355,
+        "max": 2.261624999984633
+      },
+      "sourceMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.0004999999946448952,
+        "max": 0.000707999977748841
+      },
+      "collectionMs": {
+        "p50": 0.604207000011229,
+        "p95": 1.3962909999972908,
+        "max": 2.152832999941893
+      },
+      "compileMs": {
+        "p50": 0.17179100000066683,
+        "p95": 0.38133299999753945,
+        "max": 0.5330830000020796
+      },
+      "retainedBytes": {
+        "p50": 3005,
+        "p95": 3827,
+        "max": 4033
+      },
+      "sampledParentRssBytes": {
+        "p50": 367017744,
+        "p95": 402702504,
+        "max": 702227232
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 2293.128708,
+        "p95": 7175.607291000022,
+        "max": 7791.621125000005
+      },
+      "sourceMs": {
+        "p50": 2262.0887509999975,
+        "p95": 7001.417085000023,
+        "max": 7584.717166999995
+      },
+      "collectionMs": {
+        "p50": 33.74783700000262,
+        "p95": 180.3764980000633,
+        "max": 221.60016099995119
+      },
+      "compileMs": {
+        "p50": 0.9722090000286698,
+        "p95": 3.031124999979511,
+        "max": 4.365292000002228
+      },
+      "retainedBytes": {
+        "p50": 477390,
+        "p95": 1345334,
+        "max": 1561913
+      },
+      "sampledParentRssBytes": {
+        "p50": 368377664,
+        "p95": 404291800,
+        "max": 703816576
+      },
+      "queryCount": 484,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 25.031166000000667,
+        "p95": 78.96495900000446,
+        "max": 97.59799999999814
+      },
+      "sourceMs": {
+        "p50": 3.9172489998163655,
+        "p95": 9.830540000344627,
+        "max": 10.471665999910329
+      },
+      "collectionMs": {
+        "p50": 19.84957599999325,
+        "p95": 64.12608300003922,
+        "max": 83.30058999953326
+      },
+      "compileMs": {
+        "p50": 0.5003750000032596,
+        "p95": 1.1174579999642447,
+        "max": 1.8376249999855645
+      },
+      "retainedBytes": {
+        "p50": 477361,
+        "p95": 1345246,
+        "max": 1561821
+      },
+      "sampledParentRssBytes": {
+        "p50": 363774120,
+        "p95": 374547856,
+        "max": 428397120
+      },
+      "queryCount": 484,
+      "cacheHits": 484
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.5706250000512227,
+        "p95": 0.945333999930881,
+        "max": 1.1019999999989523
+      },
+      "sourceMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.0003749999996216502,
+        "max": 0.0004999999655410647
+      },
+      "collectionMs": {
+        "p50": 0.48754199990071356,
+        "p95": 0.808707999996841,
+        "max": 0.9846269999834476
+      },
+      "compileMs": {
+        "p50": 0.14504099998157471,
+        "p95": 0.28058299999975134,
+        "max": 0.41795899999851827
+      },
+      "retainedBytes": {
+        "p50": 3009,
+        "p95": 3836,
+        "max": 4036
+      },
+      "sampledParentRssBytes": {
+        "p50": 364380352,
+        "p95": 375585448,
+        "max": 429822648
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 233.1583329999121,
+        "p95": 339.219000000041,
+        "max": 360.0639589999337
+      },
+      "sourceMs": {
+        "p50": 226.78737500001444,
+        "p95": 335.4043749999837,
+        "max": 346.7584999999963
+      },
+      "collectionMs": {
+        "p50": 2.431083000032231,
+        "p95": 9.107292999920901,
+        "max": 12.203165999846533
+      },
+      "compileMs": {
+        "p50": 0.7963340000715107,
+        "p95": 1.8489579999586567,
+        "max": 2.421582999988459
+      },
+      "retainedBytes": {
+        "p50": 61744,
+        "p95": 65893,
+        "max": 71516
+      },
+      "sampledParentRssBytes": {
+        "p50": 382514272,
+        "p95": 404046688,
+        "max": 423424568
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 3.195750000013504,
+        "p95": 6.958083000034094,
+        "max": 7.335291000024881
+      },
+      "sourceMs": {
+        "p50": 0.4615000000339933,
+        "p95": 0.9272500000006403,
+        "max": 1.077208000002429
+      },
+      "collectionMs": {
+        "p50": 2.235164999961853,
+        "p95": 5.4590029998798855,
+        "max": 5.6782490001642145
+      },
+      "compileMs": {
+        "p50": 0.6189160000067204,
+        "p95": 1.3319589999737218,
+        "max": 1.6411250000237487
+      },
+      "retainedBytes": {
+        "p50": 61740,
+        "p95": 65890,
+        "max": 71514
+      },
+      "sampledParentRssBytes": {
+        "p50": 365671400,
+        "p95": 393609120,
+        "max": 408451824
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.6153749999939464,
+        "p95": 1.2649590000219177,
+        "max": 1.444208000029903
+      },
+      "sourceMs": {
+        "p50": 0.00012499999138526618,
+        "p95": 0.0003749999996216502,
+        "max": 0.0005000000237487257
+      },
+      "collectionMs": {
+        "p50": 0.5506679999925836,
+        "p95": 1.1166659999871626,
+        "max": 1.3052489999681711
+      },
+      "compileMs": {
+        "p50": 0.18283300002804026,
+        "p95": 0.4638750000158325,
+        "max": 0.9095000000088476
+      },
+      "retainedBytes": {
+        "p50": 3030,
+        "p95": 3159,
+        "max": 3238
+      },
+      "sampledParentRssBytes": {
+        "p50": 365493648,
+        "p95": 389808992,
+        "max": 390922480
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 2693.850208000047,
+        "p95": 6394.733875000005,
+        "max": 7680.383833000014
+      },
+      "sourceMs": {
+        "p50": 2660.3977919999743,
+        "p95": 6314.807377000048,
+        "max": 7603.693288999988
+      },
+      "collectionMs": {
+        "p50": 29.920293999661226,
+        "p95": 98.72387299977709,
+        "max": 162.69092199980514
+      },
+      "compileMs": {
+        "p50": 0.8643340000417084,
+        "p95": 2.4877910000504926,
+        "max": 2.6507500000298023
+      },
+      "retainedBytes": {
+        "p50": 540065,
+        "p95": 1366843,
+        "max": 1705427
+      },
+      "sampledParentRssBytes": {
+        "p50": 366948848,
+        "p95": 391054224,
+        "max": 393167592
+      },
+      "queryCount": 547,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 28.856666000094265,
+        "p95": 70.26591700001154,
+        "max": 81.90308299998287
+      },
+      "sourceMs": {
+        "p50": 4.674250000003667,
+        "p95": 11.174375000002328,
+        "max": 12.021332999953302
+      },
+      "collectionMs": {
+        "p50": 22.306164999929024,
+        "p95": 54.72920400003204,
+        "max": 65.2432140003366
+      },
+      "compileMs": {
+        "p50": 0.5684999999939464,
+        "p95": 1.0417920000036247,
+        "max": 1.8613750000367872
+      },
+      "retainedBytes": {
+        "p50": 540029,
+        "p95": 1366755,
+        "max": 1705316
+      },
+      "sampledParentRssBytes": {
+        "p50": 358088296,
+        "p95": 375849248,
+        "max": 384156704
+      },
+      "queryCount": 547,
+      "cacheHits": 547
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.5685420000227168,
+        "p95": 0.779458999983035,
+        "max": 0.9122090000309981
+      },
+      "sourceMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.00033299997448921204,
+        "max": 0.0005000000237487257
+      },
+      "collectionMs": {
+        "p50": 0.501667999993515,
+        "p95": 0.6913339999737218,
+        "max": 0.8122089999960735
+      },
+      "compileMs": {
+        "p50": 0.15962500000023283,
+        "p95": 0.2741249999962747,
+        "max": 0.34845799999311566
+      },
+      "retainedBytes": {
+        "p50": 3034,
+        "p95": 3163,
+        "max": 3242
+      },
+      "sampledParentRssBytes": {
+        "p50": 358645616,
+        "p95": 377153176,
+        "max": 382255512
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 233.01491700002225,
+        "p95": 349.45416599998134,
+        "max": 360.51291699998546
+      },
+      "sourceMs": {
+        "p50": 228.51191699999617,
+        "p95": 335.64783400000306,
+        "max": 349.9621670000197
+      },
+      "collectionMs": {
+        "p50": 2.9908350000041537,
+        "p95": 12.521465000056196,
+        "max": 14.568207000091206
+      },
+      "compileMs": {
+        "p50": 0.924457999994047,
+        "p95": 2.4095419999794103,
+        "max": 3.4973339999851305
+      },
+      "retainedBytes": {
+        "p50": 63571,
+        "p95": 81252,
+        "max": 82969
+      },
+      "sampledParentRssBytes": {
+        "p50": 380125928,
+        "p95": 425835248,
+        "max": 448067496
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 3.7536249999975553,
+        "p95": 10.395375000000058,
+        "max": 10.771916999976384
+      },
+      "sourceMs": {
+        "p50": 0.5973340000200551,
+        "p95": 0.9102920000004815,
+        "max": 0.9385000000474975
+      },
+      "collectionMs": {
+        "p50": 2.722666000132449,
+        "p95": 8.949038999999175,
+        "max": 9.561375000048429
+      },
+      "compileMs": {
+        "p50": 0.7551250000251457,
+        "p95": 1.954583000013372,
+        "max": 2.283917000022484
+      },
+      "retainedBytes": {
+        "p50": 63563,
+        "p95": 81248,
+        "max": 82965
+      },
+      "sampledParentRssBytes": {
+        "p50": 372258680,
+        "p95": 393821080,
+        "max": 412268408
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.7484999999869615,
+        "p95": 1.221624999991036,
+        "max": 1.3718339999904856
+      },
+      "sourceMs": {
+        "p50": 0.00012499999138526618,
+        "p95": 0.0004580000022542663,
+        "max": 0.0005830000009154901
+      },
+      "collectionMs": {
+        "p50": 0.679168000118807,
+        "p95": 1.0768319999915548,
+        "max": 1.2102920000907034
+      },
+      "compileMs": {
+        "p50": 0.20291600000928156,
+        "p95": 0.39095800009090453,
+        "max": 0.4642080000048736
+      },
+      "retainedBytes": {
+        "p50": 3055,
+        "p95": 3584,
+        "max": 3586
+      },
+      "sampledParentRssBytes": {
+        "p50": 369586336,
+        "p95": 392771232,
+        "max": 412268408
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 2776.58033300002,
+        "p95": 9200.791957999987,
+        "max": 10498.924333000003
+      },
+      "sourceMs": {
+        "p50": 2731.981667999993,
+        "p95": 9040.20150200004,
+        "max": 10346.92237200003
+      },
+      "collectionMs": {
+        "p50": 40.40524700039532,
+        "p95": 154.8607970000594,
+        "max": 195.44624700021814
+      },
+      "compileMs": {
+        "p50": 1.3039579999749549,
+        "p95": 4.1976250000006985,
+        "max": 4.902000000001863
+      },
+      "retainedBytes": {
+        "p50": 571239,
+        "p95": 1761581,
+        "max": 2165119
+      },
+      "sampledParentRssBytes": {
+        "p50": 371750608,
+        "p95": 394475216,
+        "max": 413415336
+      },
+      "queryCount": 489,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 29.88712499999383,
+        "p95": 94.21441600000253,
+        "max": 111.83949999997276
+      },
+      "sourceMs": {
+        "p50": 5.2098759999498725,
+        "p95": 12.834748999972362,
+        "max": 15.422083000070415
+      },
+      "collectionMs": {
+        "p50": 22.17262099980144,
+        "p95": 77.67069400002947,
+        "max": 90.62532499962253
+      },
+      "compileMs": {
+        "p50": 0.6411669999943115,
+        "p95": 1.8000420000171289,
+        "max": 1.8771249999990687
+      },
+      "retainedBytes": {
+        "p50": 571198,
+        "p95": 1761466,
+        "max": 2164986
+      },
+      "sampledParentRssBytes": {
+        "p50": 353008968,
+        "p95": 378340048,
+        "max": 396654408
+      },
+      "queryCount": 489,
+      "cacheHits": 489
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6153340000018943,
+        "p95": 0.8845409999485128,
+        "max": 1.565500000026077
+      },
+      "sourceMs": {
+        "p50": 0.0002079999540001154,
+        "p95": 0.0005410000158008188,
+        "max": 0.0036659999896073714
+      },
+      "collectionMs": {
+        "p50": 0.5346670000581071,
+        "p95": 0.7768339999893215,
+        "max": 1.4683339999173768
+      },
+      "compileMs": {
+        "p50": 0.1678749999991851,
+        "p95": 0.25774999998975545,
+        "max": 0.319167000008747
+      },
+      "retainedBytes": {
+        "p50": 3058,
+        "p95": 3588,
+        "max": 3590
+      },
+      "sampledParentRssBytes": {
+        "p50": 359744064,
+        "p95": 378403400,
+        "max": 395163440
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 233.80437500000698,
+        "p95": 354.8579159999499,
+        "max": 361.74366699997336
+      },
+      "sourceMs": {
+        "p50": 232.22349999996368,
+        "p95": 353.98037500004284,
+        "max": 358.04725000006147
+      },
+      "collectionMs": {
+        "p50": 1.7307500001043081,
+        "p95": 5.063792000000831,
+        "max": 5.622208999964641
+      },
+      "compileMs": {
+        "p50": 0.5521250000456348,
+        "p95": 1.6119159999943804,
+        "max": 2.242541000014171
+      },
+      "retainedBytes": {
+        "p50": 52774,
+        "p95": 61814,
+        "max": 62249
+      },
+      "sampledParentRssBytes": {
+        "p50": 367198136,
+        "p95": 412172984,
+        "max": 440386160
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 2.2145000000018626,
+        "p95": 6.093624999994063,
+        "max": 9.078708000015467
+      },
+      "sourceMs": {
+        "p50": 0.3442090000025928,
+        "p95": 0.9659170000013546,
+        "max": 1.003207999994629
+      },
+      "collectionMs": {
+        "p50": 1.4159990001935512,
+        "p95": 4.247873000014806,
+        "max": 7.717041000141762
+      },
+      "compileMs": {
+        "p50": 0.42762500001117587,
+        "p95": 0.9758339999971213,
+        "max": 1.1236669999998412
+      },
+      "retainedBytes": {
+        "p50": 52770,
+        "p95": 61810,
+        "max": 62246
+      },
+      "sampledParentRssBytes": {
+        "p50": 361495544,
+        "p95": 394475024,
+        "max": 412172984
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.38833400001749396,
+        "p95": 0.8970830000180285,
+        "max": 1.3395419999942533
+      },
+      "sourceMs": {
+        "p50": 0.0001250000059371814,
+        "p95": 0.0005409999866969883,
+        "max": 0.0006250000005820766
+      },
+      "collectionMs": {
+        "p50": 0.34420999995199963,
+        "p95": 0.6848759999265894,
+        "max": 1.1164160000043921
+      },
+      "compileMs": {
+        "p50": 0.15004100000078324,
+        "p95": 0.3022079999791458,
+        "max": 0.39354199999797856
+      },
+      "retainedBytes": {
+        "p50": 2618,
+        "p95": 2883,
+        "max": 2926
+      },
+      "sampledParentRssBytes": {
+        "p50": 361069848,
+        "p95": 392331672,
+        "max": 394475024
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 1769.1828339999774,
+        "p95": 7094.176040999999,
+        "max": 8795.043082999997
+      },
+      "sourceMs": {
+        "p50": 1754.414624000201,
+        "p95": 6980.153624999992,
+        "max": 8727.325833000126
+      },
+      "collectionMs": {
+        "p50": 17.09787299990421,
+        "p95": 95.77513299988641,
+        "max": 100.37312800012296
+      },
+      "compileMs": {
+        "p50": 0.7130840000172611,
+        "p95": 3.0204999999841675,
+        "max": 3.022832999995444
+      },
+      "retainedBytes": {
+        "p50": 322172,
+        "p95": 1375932,
+        "max": 1634345
+      },
+      "sampledParentRssBytes": {
+        "p50": 362757184,
+        "p95": 393576904,
+        "max": 395687488
+      },
+      "queryCount": 354,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 13.76762499997858,
+        "p95": 62.92258399998536,
+        "max": 66.80745900000329
+      },
+      "sourceMs": {
+        "p50": 3.0661260000051698,
+        "p95": 9.795622999954503,
+        "max": 10.554667999618687
+      },
+      "collectionMs": {
+        "p50": 10.332704999891575,
+        "p95": 51.08692199975485,
+        "max": 53.10654100019019
+      },
+      "compileMs": {
+        "p50": 0.3162089999532327,
+        "p95": 0.8481250000186265,
+        "max": 0.9106250000186265
+      },
+      "retainedBytes": {
+        "p50": 322147,
+        "p95": 1375837,
+        "max": 1634216
+      },
+      "sampledParentRssBytes": {
+        "p50": 358267560,
+        "p95": 381452840,
+        "max": 394658392
+      },
+      "queryCount": 354,
+      "cacheHits": 354
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.3843330000017886,
+        "p95": 0.5799169999954756,
+        "max": 0.6912089999968885
+      },
+      "sourceMs": {
+        "p50": 0.0001669999910518527,
+        "p95": 0.000375000003259629,
+        "max": 0.0004999999655410647
+      },
+      "collectionMs": {
+        "p50": 0.32512499997392297,
+        "p95": 0.4915820000023814,
+        "max": 0.6016669999880833
+      },
+      "compileMs": {
+        "p50": 0.12125000002561137,
+        "p95": 0.19774999999935972,
+        "max": 0.20720900000014808
+      },
+      "retainedBytes": {
+        "p50": 2622,
+        "p95": 2887,
+        "max": 2929
+      },
+      "sampledParentRssBytes": {
+        "p50": 359170528,
+        "p95": 382436024,
+        "max": 395739880
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.23720899992622435,
+        "p95": 0.38941699999850243,
+        "max": 0.38941699999850243
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.23024900013115257,
+        "p95": 0.32829099986702204,
+        "max": 0.32829099986702204
+      },
+      "compileMs": {
+        "p50": 0.00008299993351101875,
+        "p95": 0.00495900004170835,
+        "max": 0.00495900004170835
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 822,
+        "max": 822
+      },
+      "sampledParentRssBytes": {
+        "p50": 380208040,
+        "p95": 380208040,
+        "max": 380208040
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.22745899995788932,
+        "p95": 0.31266599998343736,
+        "max": 0.31266599998343736
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.22187500004656613,
+        "p95": 0.2833329999120906,
+        "max": 0.2833329999120906
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.0003749999450519681,
+        "max": 0.0003749999450519681
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 824,
+        "max": 824
+      },
+      "sampledParentRssBytes": {
+        "p50": 380208040,
+        "p95": 380208040,
+        "max": 380208040
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.22595800005365163,
+        "p95": 0.22758299997076392,
+        "max": 0.22758299997076392
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.21912499994505197,
+        "p95": 0.22054100001696497,
+        "max": 0.22054100001696497
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00008300004992634058,
+        "max": 0.00008300004992634058
+      },
+      "retainedBytes": {
+        "p50": 829,
+        "p95": 835,
+        "max": 835
+      },
+      "sampledParentRssBytes": {
+        "p50": 380208040,
+        "p95": 380208040,
+        "max": 380208040
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.22704099991824478,
+        "p95": 0.22966700000688434,
+        "max": 0.22966700000688434
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.22100000001955777,
+        "p95": 0.22183399996720254,
+        "max": 0.22183399996720254
+      },
+      "compileMs": {
+        "p50": 0.00008400005754083395,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 824,
+        "max": 824
+      },
+      "sampledParentRssBytes": {
+        "p50": 380208040,
+        "p95": 380208040,
+        "max": 380208040
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.2265830000396818,
+        "p95": 0.23329200001899153,
+        "max": 0.23329200001899153
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.22104199999012053,
+        "p95": 0.22745799995027483,
+        "max": 0.22745799995027483
+      },
+      "compileMs": {
+        "p50": 0.00008299993351101875,
+        "p95": 0.00008299993351101875,
+        "max": 0.00008299993351101875
+      },
+      "retainedBytes": {
+        "p50": 817,
+        "p95": 823,
+        "max": 823
+      },
+      "sampledParentRssBytes": {
+        "p50": 380208040,
+        "p95": 380208040,
+        "max": 380208040
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.22349999996367842,
+        "p95": 0.22450000001117587,
+        "max": 0.22450000001117587
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2181669999845326,
+        "p95": 0.2190829999744892,
+        "max": 0.2190829999744892
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00004199997056275606,
+        "max": 0.00004199997056275606
+      },
+      "retainedBytes": {
+        "p50": 829,
+        "p95": 836,
+        "max": 836
+      },
+      "sampledParentRssBytes": {
+        "p50": 380208040,
+        "p95": 380208040,
+        "max": 380208040
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.33600000001024455,
+        "p95": 0.3827090000268072,
+        "max": 0.3827090000268072
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3298749999376014,
+        "p95": 0.3683750000782311,
+        "max": 0.3683750000782311
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.0002500000409781933,
+        "max": 0.0002500000409781933
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 380224424,
+        "p95": 380224424,
+        "max": 380224424
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.32058399997185916,
+        "p95": 0.3232079999288544,
+        "max": 0.3232079999288544
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.31466700008604676,
+        "p95": 0.3157500000670552,
+        "max": 0.3157500000670552
+      },
+      "compileMs": {
+        "p50": 0.00008399994112551212,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 380224424,
+        "p95": 380224424,
+        "max": 380224424
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3262500000419095,
+        "p95": 0.3580000000074506,
+        "max": 0.3580000000074506
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3208749998593703,
+        "p95": 0.3523750000167638,
+        "max": 0.3523750000167638
+      },
+      "compileMs": {
+        "p50": 0.00004100007936358452,
+        "p95": 0.00004200008697807789,
+        "max": 0.00004200008697807789
+      },
+      "retainedBytes": {
+        "p50": 937,
+        "p95": 937,
+        "max": 937
+      },
+      "sampledParentRssBytes": {
+        "p50": 380224424,
+        "p95": 380224424,
+        "max": 380224424
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.31637499993667006,
+        "p95": 0.3263750000623986,
+        "max": 0.3263750000623986
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.31058299995493144,
+        "p95": 0.32037600001785904,
+        "max": 0.32037600001785904
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00008399994112551212,
+        "max": 0.00008399994112551212
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 380224424,
+        "p95": 380224424,
+        "max": 380224424
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.31116699997801334,
+        "p95": 0.32400000002235174,
+        "max": 0.32400000002235174
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3058740000706166,
+        "p95": 0.31808300013653934,
+        "max": 0.31808300013653934
+      },
+      "compileMs": {
+        "p50": 0.00004100007936358452,
+        "p95": 0.00008300004992634058,
+        "max": 0.00008300004992634058
+      },
+      "retainedBytes": {
+        "p50": 925,
+        "p95": 925,
+        "max": 925
+      },
+      "sampledParentRssBytes": {
+        "p50": 380224424,
+        "p95": 380224424,
+        "max": 380224424
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.31720799999311566,
+        "p95": 0.47862499998882413,
+        "max": 0.47862499998882413
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.311418000026606,
+        "p95": 0.431542000034824,
+        "max": 0.431542000034824
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.0005830000154674053,
+        "max": 0.0005830000154674053
+      },
+      "retainedBytes": {
+        "p50": 937,
+        "p95": 937,
+        "max": 937
+      },
+      "sampledParentRssBytes": {
+        "p50": 380224424,
+        "p95": 380224424,
+        "max": 380224424
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.07958400005009025,
+        "p95": 0.17716599989216775,
+        "max": 0.17716599989216775
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.0720419998979196,
+        "p95": 0.17020799999590963,
+        "max": 0.17020799999590963
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 380240808,
+        "p95": 380240808,
+        "max": 380240808
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.10266599990427494,
+        "p95": 0.13662500004284084,
+        "max": 0.13662500004284084
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.09458399994764477,
+        "p95": 0.13058300002012402,
+        "max": 0.13058300002012402
+      },
+      "compileMs": {
+        "p50": 0.00004100007936358452,
+        "p95": 0.00008400005754083395,
+        "max": 0.00008400005754083395
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 380240808,
+        "p95": 380240808,
+        "max": 380240808
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0661250000121072,
+        "p95": 0.1200829999288544,
+        "max": 0.1200829999288544
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06066700001247227,
+        "p95": 0.11454199999570847,
+        "max": 0.11454199999570847
+      },
+      "compileMs": {
+        "p50": 0.00004099996294826269,
+        "p95": 0.00008300004992634058,
+        "max": 0.00008300004992634058
+      },
+      "retainedBytes": {
+        "p50": 685,
+        "p95": 813,
+        "max": 813
+      },
+      "sampledParentRssBytes": {
+        "p50": 380240808,
+        "p95": 380240808,
+        "max": 380240808
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.11137499997857958,
+        "p95": 0.8082089999224991,
+        "max": 0.8082089999224991
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.10537499992642552,
+        "p95": 0.7811659999424592,
+        "max": 0.7811659999424592
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00008400005754083395,
+        "max": 0.00008400005754083395
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 380240808,
+        "p95": 380240808,
+        "max": 380240808
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.07250000000931323,
+        "p95": 0.12416700005996972,
+        "max": 0.12416700005996972
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06429100001696497,
+        "p95": 0.11883199994917959,
+        "max": 0.11883199994917959
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 673,
+        "p95": 801,
+        "max": 801
+      },
+      "sampledParentRssBytes": {
+        "p50": 374031080,
+        "p95": 380240808,
+        "max": 380240808
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "maia:prefix0.90",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06445800000801682,
+        "p95": 0.11833399999886751,
+        "max": 0.11833399999886751
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05941699992399663,
+        "p95": 0.11329199990723282,
+        "max": 0.11329199990723282
+      },
+      "compileMs": {
+        "p50": 0.00004199997056275606,
+        "p95": 0.00008400005754083395,
+        "max": 0.00008400005754083395
+      },
+      "retainedBytes": {
+        "p50": 685,
+        "p95": 813,
+        "max": 813
+      },
+      "sampledParentRssBytes": {
+        "p50": 374031080,
+        "p95": 380240808,
+        "max": 380240808
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    }
+  ],
+  "repeatUnit": "one_case_execution_not_machine_repeat_trials",
+  "startupIncluded": false,
+  "memoryScope": "sampled_parent_lower_bound_not_engine_or_model_peak",
+  "modelPolicyCoverage": {
+    "authority": "both_sides_configured_model_not_human_frequency_or_all_defences_proof",
+    "groups": [
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 89,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.8054670542478561,
+          "p50": 0.9423671960830688,
+          "p95": 1,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 89,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.8054670542478561,
+          "p50": 0.9423671960830688,
+          "p95": 1,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 46,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 46,
+        "stopStatuses": {
+          "partial_traversal_abstain": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 16,
+          "frozen_frontier_exhausted_below_joint_threshold": 30
+        },
+        "observedNodes": 322,
+        "observedEdges": 741,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.5974137827522067,
+          "p50": 0.7478767136018475,
+          "p95": 1,
+          "max": 1.0000000149011612
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 16,
+          "frozen_frontier_exhausted_below_joint_threshold": 30
+        },
+        "observedNodes": 322,
+        "observedEdges": 741,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.5974137827522067,
+          "p50": 0.7478767136018475,
+          "p95": 1,
+          "max": 1.0000000149011612
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 46,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 46,
+        "stopStatuses": {
+          "partial_traversal_abstain": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 114,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.8095357865095139,
+          "p50": 0.9208896458148956,
+          "p95": 1.0000000298023224,
+          "max": 1.0000000298023224
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 114,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.8095357865095139,
+          "p50": 0.9208896458148956,
+          "p95": 1.0000000298023224,
+          "max": 1.0000000298023224
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "unclear",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 53,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 53,
+        "stopStatuses": {
+          "partial_traversal_abstain": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 29,
+          "joint_rule_satisfied": 24
+        },
+        "observedNodes": 411,
+        "observedEdges": 836,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.5997170034681655,
+          "p50": 0.7934476933549572,
+          "p95": 0.9227118811467125,
+          "max": 1
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 29,
+          "joint_rule_satisfied": 24
+        },
+        "observedNodes": 411,
+        "observedEdges": 836,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.5997170034681655,
+          "p50": 0.7934476933549572,
+          "p95": 0.9227118811467125,
+          "max": 1
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "unclear",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 53,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 53,
+        "stopStatuses": {
+          "partial_traversal_abstain": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 41
+        },
+        "observedNodes": 41,
+        "observedEdges": 104,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.8086742162704468,
+          "p50": 0.895009770989418,
+          "p95": 1,
+          "max": 1
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 41
+        },
+        "observedNodes": 41,
+        "observedEdges": 104,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.8086742162704468,
+          "p50": 0.895009770989418,
+          "p95": 1,
+          "max": 1
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 41,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 41,
+        "stopStatuses": {
+          "partial_traversal_abstain": 41
+        },
+        "observedNodes": 41,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 22,
+          "joint_rule_satisfied": 19
+        },
+        "observedNodes": 346,
+        "observedEdges": 771,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.6124363816171369,
+          "p50": 0.795514772265931,
+          "p95": 0.9023988246917725,
+          "max": 0.9999999403953552
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 22,
+          "joint_rule_satisfied": 19
+        },
+        "observedNodes": 346,
+        "observedEdges": 771,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.6124363816171369,
+          "p50": 0.795514772265931,
+          "p95": 0.9023988246917725,
+          "max": 0.9999999403953552
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 41,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 41,
+        "stopStatuses": {
+          "partial_traversal_abstain": 41
+        },
+        "observedNodes": 41,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 68,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.8149723410606384,
+          "p50": 1,
+          "p95": 1,
+          "max": 1.0000000298023224
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 68,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.8149723410606384,
+          "p50": 1,
+          "p95": 1,
+          "max": 1.0000000298023224
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "endgame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 39,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 39,
+        "stopStatuses": {
+          "partial_traversal_abstain": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 22,
+          "joint_rule_satisfied": 17
+        },
+        "observedNodes": 257,
+        "observedEdges": 559,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.6468277903699521,
+          "p50": 0.787297809397521,
+          "p95": 1,
+          "max": 1.0000000573913246
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 22,
+          "joint_rule_satisfied": 17
+        },
+        "observedNodes": 257,
+        "observedEdges": 559,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.6468277903699521,
+          "p50": 0.787297809397521,
+          "p95": 1,
+          "max": 1.0000000573913246
+        }
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "endgame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 39,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 39,
+        "stopStatuses": {
+          "partial_traversal_abstain": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.80",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 113,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.90114376693964,
+          "p50": 1,
+          "p95": 1.0000000149011612,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 113,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.90114376693964,
+          "p50": 1,
+          "p95": 1.0000000149011612,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 46,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 46,
+        "stopStatuses": {
+          "partial_traversal_abstain": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 25,
+          "frozen_frontier_exhausted_below_joint_threshold": 21
+        },
+        "observedNodes": 484,
+        "observedEdges": 1517,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.7772524786475401,
+          "p50": 0.9076960120694266,
+          "p95": 1,
+          "max": 1.0000000149011612
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": null,
+        "result": "available",
+        "count": 46,
+        "complete": 46,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 25,
+          "frozen_frontier_exhausted_below_joint_threshold": 21
+        },
+        "observedNodes": 484,
+        "observedEdges": 1517,
+        "frontierMass": {
+          "count": 46,
+          "min": 0.7772524786475401,
+          "p50": 0.9076960120694266,
+          "p95": 1,
+          "max": 1.0000000149011612
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 46,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 46,
+        "stopStatuses": {
+          "partial_traversal_abstain": 46
+        },
+        "observedNodes": 46,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 132,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.9013548046350479,
+          "p50": 0.9999999701976776,
+          "p95": 1.0000000596046448,
+          "max": 1.0000000596046448
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 132,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.9013548046350479,
+          "p50": 0.9999999701976776,
+          "p95": 1.0000000596046448,
+          "max": 1.0000000596046448
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "unclear",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 53,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 53,
+        "stopStatuses": {
+          "partial_traversal_abstain": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 33,
+          "frozen_frontier_exhausted_below_joint_threshold": 20
+        },
+        "observedNodes": 547,
+        "observedEdges": 1392,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.793350078090592,
+          "p50": 0.9153513300099843,
+          "p95": 0.999999925494194,
+          "max": 1.0000000596046448
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "unclear",
+        "focus": null,
+        "result": "available",
+        "count": 53,
+        "complete": 53,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 33,
+          "frozen_frontier_exhausted_below_joint_threshold": 20
+        },
+        "observedNodes": 547,
+        "observedEdges": 1392,
+        "frontierMass": {
+          "count": 53,
+          "min": 0.793350078090592,
+          "p50": 0.9153513300099843,
+          "p95": 0.999999925494194,
+          "max": 1.0000000596046448
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "unclear",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 53,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 53,
+        "stopStatuses": {
+          "partial_traversal_abstain": 53
+        },
+        "observedNodes": 53,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 39,
+          "frozen_frontier_exhausted_below_joint_threshold": 2
+        },
+        "observedNodes": 41,
+        "observedEdges": 131,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.8112895451486111,
+          "p50": 0.970567412674427,
+          "p95": 1.0000000298023224,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 39,
+          "frozen_frontier_exhausted_below_joint_threshold": 2
+        },
+        "observedNodes": 41,
+        "observedEdges": 131,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.8112895451486111,
+          "p50": 0.970567412674427,
+          "p95": 1.0000000298023224,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 41,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 41,
+        "stopStatuses": {
+          "partial_traversal_abstain": 41
+        },
+        "observedNodes": 41,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 18,
+          "joint_rule_satisfied": 23
+        },
+        "observedNodes": 489,
+        "observedEdges": 1367,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.794106698997728,
+          "p50": 0.9041311144828796,
+          "p95": 0.9999999170990658,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "available",
+        "count": 41,
+        "complete": 41,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "frozen_frontier_exhausted_below_joint_threshold": 18,
+          "joint_rule_satisfied": 23
+        },
+        "observedNodes": 489,
+        "observedEdges": 1367,
+        "frontierMass": {
+          "count": 41,
+          "min": 0.794106698997728,
+          "p50": 0.9041311144828796,
+          "p95": 0.9999999170990658,
+          "max": 1.0000000447034836
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 41,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 41,
+        "stopStatuses": {
+          "partial_traversal_abstain": 41
+        },
+        "observedNodes": 41,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 81,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.9004387706518173,
+          "p50": 1,
+          "p95": 1.0000000149011612,
+          "max": 1.0000000298023224
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 81,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.9004387706518173,
+          "p50": 1,
+          "p95": 1.0000000149011612,
+          "max": 1.0000000298023224
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "endgame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 39,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 39,
+        "stopStatuses": {
+          "partial_traversal_abstain": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 24,
+          "frozen_frontier_exhausted_below_joint_threshold": 15
+        },
+        "observedNodes": 354,
+        "observedEdges": 963,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.823524320799521,
+          "p50": 0.9177338570247092,
+          "p95": 1.0000000102481215,
+          "max": 1.0000000573913246
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "endgame",
+        "focus": null,
+        "result": "available",
+        "count": 39,
+        "complete": 39,
+        "noTarget": 0,
+        "unknown": 0,
+        "stopStatuses": {
+          "joint_rule_satisfied": 24,
+          "frozen_frontier_exhausted_below_joint_threshold": 15
+        },
+        "observedNodes": 354,
+        "observedEdges": 963,
+        "frontierMass": {
+          "count": 39,
+          "min": 0.823524320799521,
+          "p50": 0.9177338570247092,
+          "p95": 1.0000000102481215,
+          "max": 1.0000000573913246
+        }
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "endgame",
+        "focus": null,
+        "result": "source_unavailable",
+        "count": 39,
+        "complete": 0,
+        "noTarget": 0,
+        "unknown": 39,
+        "stopStatuses": {
+          "partial_traversal_abstain": 39
+        },
+        "observedNodes": 39,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "opening",
+        "focus": "retained_pressure",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "middlegame",
+        "focus": "quiet_plan",
+        "result": "no_target",
+        "count": 3,
+        "complete": 0,
+        "noTarget": 3,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "cold",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "warm",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 2,
+        "regime": "provider_offline",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "cold",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "warm",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      },
+      {
+        "setting": "maia:prefix0.90",
+        "horizon": 4,
+        "regime": "provider_offline",
+        "phase": "unclassified",
+        "focus": "tactical",
+        "result": "no_target",
+        "count": 8,
+        "complete": 0,
+        "noTarget": 8,
+        "unknown": 0,
+        "stopStatuses": {},
+        "observedNodes": 0,
+        "observedEdges": 0,
+        "frontierMass": null
+      }
+    ]
+  }
+}

@@ -20,6 +20,10 @@ helpers = runpy.run_path(str(HERE / "coherent-five-approach-check.py"))
 observe, terminal = helpers["pv_observation"], helpers["terminal"]
 preparation_result, root_result = helpers["preparation_result"], helpers["root_result"]
 recursive = runpy.run_path(str(HERE / "coherent-recursive-semantic-check.py"))
+policy = runpy.run_path(str(HERE / "coherent-horizon-policy-check.py"))
+model_checker = None
+model_engine = None
+checked_model_receipts = set()
 
 
 def require(value, message):
@@ -47,6 +51,10 @@ def board_at(root, history):
 
 def provider(receipt):
     q, lines = receipt["operands"], receipt["lines"]
+    if q["provider"] == "maia":
+        require(model_checker is not None and model_engine is not None, "Unregistered model source")
+        model_checker["check_receipt"](receipt, model_engine)
+        return
     require(q["provider"] == "stockfish" and lines[-1].startswith("bestmove "), "missing source delimiter")
     legal = sorted(m.uci() for m in chess.Board(q["fen"]).legal_moves)
     count = min(q["multiPv"], len(legal))
@@ -81,6 +89,100 @@ def provider(receipt):
         trailingPartialDepth=max(parsed) if max(parsed) > depth else None, bestmove=best,
         scorePerspective="side_to_move", authority="provider_search_not_engine_causality")
     require(expected == receipt["result"], "source differs from literal independent table")
+
+
+def verify_model_population(row, raw, root, target_ids):
+    if not row["setting"].startswith("maia:"):
+        return
+    require(row["setting"] in ["maia:prefix0.80", "maia:prefix0.90"], "Undeclared model profile")
+    result, threshold = raw["result"], float(row["setting"].split("prefix")[1])
+    layers = 1 if row["horizon"] == 2 else 3
+    frontier = result["modelFrontier"]
+    source_by_path = {}
+    for source in raw["dependencies"]:
+        q = source["operands"]
+        require(q["provider"] == "maia" and q["rootFen"] == root and q["historyUci"][0] == row["candidateUci"], "Crossed model root/path")
+        key = tuple(q["historyUci"])
+        require(key not in source_by_path, "Repeated literal model query")
+        source_by_path[key] = source
+    if not target_ids:
+        require(frontier == dict(nodes=[], edges=[], coverage=dict(status="not_requested_no_target"))
+                and not source_by_path and not result["observations"], "No-target invented policy")
+        return
+    rule_name = "per_node_prefix_includes_overshoot_max8_not_joint_threshold_selector"
+    if result["terminalReason"] is not None:
+        expected = dict(nodes=[], edges=[], coverage=dict(complete=True, observedLayerMasses=[1]*layers,
+            frontierMass=1, observedFrontierMass=1, stopRule=policy["stop"](threshold, 1, False, layers),
+            policyMeaning="absorbing_candidate_no_further_model_decision", selectionRule=rule_name))
+        require(frontier == expected and not source_by_path and not result["observations"], "Lost absorbing candidate mass")
+        return
+    nodes, edges, used_sources = [], [], []
+    visited, exhausted, complete = 0, False, True
+    def walk(history, parent_mass):
+        nonlocal visited, exhausted, complete
+        key = tuple(history)
+        require(key in source_by_path, "Missing actual scheduled model query")
+        source = source_by_path[key]
+        used_sources.append(key)
+        board = board_at(root, history)
+        require(terminal(board) is None, "Model queried absorbing path")
+        legal = sorted(m.uci() for m in board.legal_moves)
+        node = dict(history=history, fen=board.fen(en_passant="legal"), parentJointMass=parent_mass,
+                    legalUcis=legal, state=source["state"])
+        if source["receipt"] is None:
+            complete = False
+            node.update(selected=None, coveredConditionalMass=None, residualConditionalMass=None,
+                        omittedWithinSupport=None, legalOutsideSupport=None)
+            nodes.append(node)
+            return
+        support = source["receipt"]["result"]["configuredSupport"]
+        selected, mass = [], 0
+        for item in support[:8]:
+            if mass >= threshold:
+                break
+            selected.append(item)
+            mass += item["mass"]
+        node.update(selected=selected, coveredConditionalMass=mass, residualConditionalMass=max(0, 1-mass),
+                    omittedWithinSupport=[x["legalUci"] for x in support if x not in selected],
+                    legalOutsideSupport=[x for x in legal if x not in [s["legalUci"] for s in support]])
+        nodes.append(node)
+        for item in selected:
+            visited += 1
+            if visited > result["nodeCap"]:
+                complete, exhausted = False, True
+                break
+            next_history = history + [item["legalUci"]]
+            next_board = board_at(root, next_history)
+            reason = terminal(next_board)
+            joint = parent_mass * item["mass"]
+            edges.append(dict(history=next_history, conditionalMass=item["mass"], jointMass=joint, terminalReason=reason))
+            if len(next_history) < row["horizon"] and reason is None:
+                walk(next_history, joint)
+            if exhausted:
+                break
+    walk([row["candidateUci"]], 1)
+    require(used_sources == list(source_by_path), "Unused/reordered model query")
+    require(frontier["nodes"] == nodes and frontier["edges"] == edges, "Changed complete policy frontier, omissions or conditional products")
+    require(result["visited"] == visited, "False model node budget count")
+    # The declared JS frontier is an ordered left fold. Python 3.12+'s
+    # compensated sum() is a different operation (one-ULP disagreements are
+    # observable); preserve the declared arithmetic without loosening admission.
+    masses = []
+    for layer in range(layers):
+        mass = 0.0
+        for edge in edges:
+            if len(edge["history"]) == layer+2 or len(edge["history"]) < layer+2 and edge["terminalReason"] is not None:
+                mass += edge["jointMass"]
+        masses.append(mass)
+    stop = policy["stop"](threshold, masses[-1], False, layers) if complete else dict(status="partial_traversal_abstain",
+        requiredJointMass=threshold, coveredJointMass=None, residualMass=None, authority="missing_source_or_budget_not_known_zero_coverage")
+    expected = dict(complete=complete, observedLayerMasses=masses, frontierMass=masses[-1] if complete else None,
+        observedFrontierMass=masses[-1], stopRule=stop,
+        policyMeaning="both_sides_configured_model_not_human_frequency_or_arbitrary_learner", selectionRule=rule_name)
+    require(frontier["coverage"] == expected, "False joint coverage, absorption, residual or stop status: "
+            + json.dumps(dict(case=raw["cell"], actual=frontier["coverage"], expected=expected)))
+    require([(x["targetId"], x["history"]) for x in result["observations"]]
+            == [(tid, edge["history"]) for edge in edges for tid in target_ids], "Missing source-selected model observations")
 
 
 def first_events(root, candidate, definition):
@@ -185,8 +287,13 @@ def verify_semantic_population(row, raw, root, definitions, target_ids):
 
 def verify_record(record, roots, definitions, cells, source_digest):
     row, raw = record["row"], record["raw"]
-    require(digest(compact(raw)) == row["rawCaptureDigest"], "raw digest changed")
-    require(len(compact(raw)) == row["retainedBytes"], "retained bytes changed")
+    model = row["setting"].startswith("maia:")
+    if model:
+        require(isinstance(record.get("rawLiteral"), str) and json.loads(record["rawLiteral"]) == raw, "Missing/crossed original float hash input")
+        require(len(record.get("receiptLiterals", [])) == len(raw["dependencies"]), "Missing original source hash inputs")
+    literal = record["rawLiteral"].encode() if model else compact(raw)
+    require(digest(literal) == row["rawCaptureDigest"], "raw digest changed")
+    require(len(literal) == row["retainedBytes"], "retained bytes changed")
     require(raw["cell"] == {k: row[k] for k in ["rootId", "candidateUci", "setting", "horizon", "regime"]}, "crossed case")
     elapsed = raw["clock"]["ended"] - raw["clock"]["started"]
     require(elapsed == row["timing"]["elapsedMs"] and math.isfinite(elapsed) and elapsed >= 0, "crossed clock")
@@ -198,21 +305,34 @@ def verify_record(record, roots, definitions, cells, source_digest):
     expected_preps = [] if terminal(candidate) is not None else sorted(m.uci() for m in candidate.legal_moves)
     require(result["legalPreparationUcis"] == expected_preps and result["terminalReason"] == terminal(candidate), "changed exact preparation denominator")
     require(len(raw["dependencies"]) == len(row["providerQueries"]), "missing raw source")
-    for source, ledger in zip(raw["dependencies"], row["providerQueries"]):
+    for index, (source, ledger) in enumerate(zip(raw["dependencies"], row["providerQueries"])):
         require(source["operands"] == ledger["operands"] and source["state"] == ledger["state"], "crossed source ledger")
         require(source["operands"]["sourceDigest"] == source_digest, "crossed source binary/config")
         receipt = source["receipt"]
         if receipt is not None:
-            require(source["operands"] == receipt["operands"] and digest(compact(receipt)) == ledger["receiptDigest"], "changed receipt")
-            provider(receipt)
+            receipt_literal = record["receiptLiterals"][index] if model else None
+            if model:
+                require(isinstance(receipt_literal, str) and json.loads(receipt_literal) == receipt, "Crossed literal model receipt")
+            require(source["operands"] == receipt["operands"] and digest(receipt_literal.encode() if model else compact(receipt)) == ledger["receiptDigest"], "changed receipt")
+            if not model or ledger["receiptDigest"] not in checked_model_receipts:
+                provider(receipt)
+                if model:
+                    checked_model_receipts.add(ledger["receiptDigest"])
             require(receipt["started"] <= receipt["ended"], "crossed source clock")
             if source["state"] == "executed":
                 require(raw["clock"]["started"] <= receipt["started"] <= receipt["ended"] <= raw["clock"]["ended"], "source outside operation")
         else:
             require(ledger["receiptDigest"] is None and ledger["state"] not in ["executed", "cached"], "unobserved admitted source")
+            if model:
+                require(record["receiptLiterals"][index] is None, "Absent model carried literal receipt")
         if row["regime"] == "provider_offline":
             require(ledger["state"] == "unavailable" and receipt is None, "offline borrowed/executed provider")
     target_ids = cells[(row["rootId"], row["candidateUci"])]
+    failure = next((x for x in row["providerQueries"] if x["state"] not in ["executed", "cached"]), None)
+    kind = "no_target" if not target_ids else "absorbing_terminal" if terminal(candidate) is not None else (
+        dict(unavailable="source_unavailable", invalid="invalid_source", timed_out="budget_exhausted")[failure["state"]] if failure else
+        "budget_exhausted" if result["visited"] > result["nodeCap"] else "available")
+    require(row["kind"] == kind, "Available/empty laundering of failed source or budget")
     require([x["targetId"] for x in result["projections"]] == target_ids, "lost target projection")
     for item in result["observations"]:
         require(item["targetId"] in target_ids and 1 <= len(item["history"]) <= row["horizon"], "foreign target/horizon")
@@ -254,13 +374,30 @@ def verify_record(record, roots, definitions, cells, source_digest):
         require(len(result["observations"]) == len(target_ids)
                 and all(x["history"] == entry["pv"][:row["horizon"]] for x in result["observations"]), "wrong source-selected PV population")
     verify_semantic_population(row, raw, root, definitions, target_ids)
+    verify_model_population(row, raw, root, target_ids)
     return len(result["observations"])
 
 
 def main():
+    global model_checker, model_engine
     out = Path(sys.argv[1])
     pack = json.loads(gzip.decompress(out.read_bytes())) if out.is_file() else None
     metadata = pack["metadata"] if pack is not None else json.loads((out / "metadata.json").read_bytes())
+    if metadata["provider"].get("imageId"):
+        model_checker = runpy.run_path(str(HERE / "cost-maia-check.py"))
+        ready = metadata["provider"]["ready"]
+        require(json.loads(metadata["provider"]["readyLiteral"]) == ready
+                and all(ready[k] == v for k, v in model_checker["PINS"].items()), "Unpinned model readiness")
+        cfg = model_checker["pinned_cfg"]()
+        require(digest(Path(cfg.checkpoint_path).read_bytes()) == ready["modelCheckpointSha256"]
+                and digest(Path(sys.modules["maia3.uci"].__file__).read_bytes()) == ready["uciSourceSha256"], "Independent model/runtime drift")
+        require(ready["workerDigest"] == metadata["instrumentDigests"]["cost-maia-worker.py"]
+                and ready["runtimeDigest"] == metadata["instrumentDigests"]["maia_capture_runtime.py"], "Crossed model instrument source")
+        require(ready["device"] == "cpu" and ready["threads"] == 1 and ready["useUciHistory"] is True
+                and ready["torchVersion"] == model_checker["torch"].__version__, "Crossed configured sampler runtime")
+        require(metadata["provider"]["sourceDigest"] == digest(compact(dict(imageId=metadata["provider"]["imageId"], ready=ready,
+            selfElo=1400, opponentElo=1400, temperature=0.8, topP=0.92, preRootHistory="unavailable_not_invented"))), "Crossed model composite identity")
+        model_engine = model_checker["Maia3UCIEngine"](cfg)
     if pack is not None:
         require(pack["version"] == 1 and pack["authority"] == "lossless_partial_cost_capture_not_full_profile", "foreign package")
         for name, expected in metadata["instrumentDigests"].items():
@@ -299,6 +436,7 @@ def main():
                 require(cold_receipts.get(compact(q["operands"])) == q["receiptDigest"], "unpaired warm receipt")
         records.extend(group)
     require([x["raw"]["cell"] for x in records] == metadata["cases"], "filtered/reordered declared batch")
+    corruption_count = 0
     if "--negative-controls" in sys.argv:
         positive = next(r for r in records if r["raw"]["dependencies"] and r["raw"]["dependencies"][0]["receipt"] is not None)
         for field, value in [("retainedBytes", -1), ("rawCaptureDigest", "sha256:wrong"), ("kind", "honest_empty")]:
@@ -306,11 +444,21 @@ def main():
             try:
                 verify_record(changed, roots, definitions, cells, metadata["provider"]["sourceDigest"])
             except AssertionError:
+                corruption_count += 1
                 continue
             raise AssertionError("negative control admitted: " + field)
         def reseal(record):
-            record["row"]["rawCaptureDigest"] = digest(compact(record["raw"]))
-            record["row"]["retainedBytes"] = len(compact(record["raw"]))
+            literal = compact(record["raw"])
+            if record["row"]["setting"].startswith("maia:"):
+                record["rawLiteral"] = literal.decode()
+                record["receiptLiterals"] = [compact(x["receipt"]).decode() if x["receipt"] is not None else None for x in record["raw"]["dependencies"]]
+                for source, ledger in zip(record["raw"]["dependencies"], record["row"]["providerQueries"]):
+                    if source["receipt"] is not None:
+                        ledger["receiptDigest"] = digest(compact(source["receipt"]))
+                literal = compact(record["raw"])
+                record["rawLiteral"] = literal.decode()
+            record["row"]["rawCaptureDigest"] = digest(literal)
+            record["row"]["retainedBytes"] = len(literal)
         corruptions = []
         changed = copy.deepcopy(positive)
         changed["raw"]["result"]["projections"][0]["rawQuantifier"]["availability"] = "exists_preparation_surviving_all_defences"
@@ -319,7 +467,11 @@ def main():
         changed["raw"]["result"]["observations"][0]["history"] = [changed["row"]["candidateUci"], "a1a8"]
         corruptions.append(changed)
         changed = copy.deepcopy(positive)
-        changed["raw"]["dependencies"][0]["receipt"]["result"]["entries"][0]["score"]["value"] += 1
+        result = changed["raw"]["dependencies"][0]["receipt"]["result"]
+        if changed["row"]["setting"].startswith("maia:"):
+            result["rawFullLegal"][0]["mass"] += 0.01
+        else:
+            result["entries"][0]["score"]["value"] += 1
         changed["row"]["providerQueries"][0]["receiptDigest"] = digest(compact(changed["raw"]["dependencies"][0]["receipt"]))
         corruptions.append(changed)
         for changed in corruptions:
@@ -327,6 +479,7 @@ def main():
             try:
                 verify_record(changed, roots, definitions, cells, metadata["provider"]["sourceDigest"])
             except AssertionError:
+                corruption_count += 1
                 continue
             raise AssertionError("resealed semantic negative control admitted")
         if positive["raw"]["result"].get("selections"):
@@ -344,9 +497,39 @@ def main():
                 try:
                     verify_record(changed, roots, definitions, cells, metadata["provider"]["sourceDigest"])
                 except AssertionError:
+                    corruption_count += 1
                     continue
                 raise AssertionError("semantic frontier corruption admitted: " + mode)
+        if positive["raw"]["result"].get("modelFrontier"):
+            # Exercise products and layer omissions on an actual multi-layer
+            # positive, not only on the first (two-ply) record in a batch.
+            positive = next((r for r in records if r["row"]["horizon"] == 4
+                             and r["row"]["kind"] == "available"
+                             and len(r["raw"]["result"]["modelFrontier"]["nodes"]) > 1), positive)
+            for mode in ["false_prefix", "false_product", "false_joint_mass", "missing_node", "missing_observation", "false_coverage_complete", "false_source_history"]:
+                changed = copy.deepcopy(positive)
+                frontier = changed["raw"]["result"]["modelFrontier"]
+                if mode == "false_prefix": frontier["nodes"][0]["selected"].pop()
+                elif mode == "false_product": frontier["edges"][0]["jointMass"] += 0.1
+                elif mode == "false_joint_mass": frontier["coverage"]["frontierMass"] += 0.1
+                elif mode == "missing_node": frontier["nodes"].pop()
+                elif mode == "missing_observation": changed["raw"]["result"]["observations"].pop()
+                elif mode == "false_coverage_complete": frontier["coverage"]["stopRule"]["status"] = "joint_rule_satisfied" if frontier["coverage"]["stopRule"]["status"] != "joint_rule_satisfied" else "numerical_boundary_abstain"
+                else:
+                    receipt = changed["raw"]["dependencies"][0]["receipt"]
+                    receipt["operands"]["historyUci"] = []
+                    response = json.loads(receipt["lines"][0]); response["payload"]["operands"]["historyUci"] = []
+                    receipt["lines"] = [compact(response).decode()]
+                    receipt["result"]["operands"]["historyUci"] = []
+                reseal(changed)
+                try:
+                    verify_record(changed, roots, definitions, cells, metadata["provider"]["sourceDigest"])
+                except AssertionError:
+                    corruption_count += 1
+                    continue
+                raise AssertionError("model frontier corruption admitted: " + mode)
     print(json.dumps(dict(rows=len(records), observations=observations,
+        rejectedCorruptions=corruption_count,
         validation="independent_python_chess_receipt_replay", clock="interval_consistency_not_independent_wall_clock",
         interactiveGate="not_measured", productionProfileSelected=False)))
 

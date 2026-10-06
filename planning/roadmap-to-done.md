@@ -19,6 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 configured-policy traversal checkpoint: both actual ordered-history
+Maia prefixes now execute across all three layers, with conditional products,
+joint residuals, terminal absorption and unknown partial coverage. Both complete
+1,158-case populations independently replay, adding 18,266 target observations.
+The runner supports 53/53 settings; five complete populations now retain
+5,790/61,374 cost cases, not the whole plan. Cold four-ply p95 exceeds 1,500 ms in
+every named phase and local prefixes do not universally meet joint coverage;
+warm results are not browser proof. Remaining 48 populations, fresh-outcome
+sensitivity, source memory and browser/profile evidence keep D3262 doing and
+the RFC draft. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`.
+Routine hashes/trackers refresh automatically; no milestone/capability promotion.
+
 2026-10-06 configured-Maia source checkpoint: actual offline source controls
 retain three literal receipts / 77 legal moves. Exact history tokens, full legal
 logits, configured sampler and cold/warm/offline identities replay independently;

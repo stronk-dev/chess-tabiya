@@ -6,12 +6,14 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { caseIdentity, costCases, loadCostPlan, sha, validateCostRows } from "./cost-contract.mjs";
 import { CostStockfish, parseProbe } from "./cost-stockfish.mjs";
+import { createCostMaia, parseMaiaReceipt } from "./cost-maia.mjs";
 import { executeCostCase, executionSubject, inputPins, loadExecutionInputs, supportedFamilies } from "./cost-execution.mjs";
 
 const instrumentNames = ["cost-batch.mjs", "cost-execution.mjs", "cost-stockfish.mjs", "cost-contract.mjs",
   "exact-reply-enumeration.mjs", "stockfish-coherent-table.mjs", "exact-arm-trigger-core.mjs", "coherent-actual-proof.mjs",
   "dist/target-opportunity-v2.mjs", "cost-semantic.mjs", "coherent-recursive-semantic.mjs",
-  "dist/semantic-relation-event-first-layer.mjs", "dist/recursive-relation-events.mjs"];
+  "dist/semantic-relation-event-first-layer.mjs", "dist/recursive-relation-events.mjs", "cost-model.mjs",
+  "coherent-horizon-policy.mjs", "cost-maia.mjs", "cost-maia-worker.py", "maia_capture_runtime.py"];
 const check = (v, m) => { if (!v) throw new Error(m); };
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const frozenBytes = value => `${JSON.stringify(value, null, 2)}\n`;
@@ -23,6 +25,10 @@ export function selectBatchCases(plan, start, limit) {
   const settings = new Map(plan.settings.map(x => [x.id, x]));
   check(cases.every(x => supportedFamilies.includes(settings.get(x.setting).family)),
     "Unimplemented traversal remains in full plan; cannot capture this batch yet");
+  const families = cases.map(x => settings.get(x.setting).family);
+  check(!(families.includes("configured_model") && families.some(x =>
+    ["provider_line", "engine_beam", "first_reply_reserve_diagnostic", "recursive_semantic"].includes(x))),
+  "Single-source batch requires separate Maia and Stockfish ranges; never cross source metadata");
   return cases;
 }
 
@@ -35,13 +41,20 @@ export function checkRawCapture(record) {
   check(raw.clock.ended >= raw.clock.started && row.timing.elapsedMs === raw.clock.ended - raw.clock.started,
     "Crossed whole-operation monotonic interval");
   check(row.retainedBytes === Buffer.byteLength(JSON.stringify(raw)), "Crossed retained byte count");
+  if (row.setting.startsWith("maia:")) {
+    check(record.rawLiteral === JSON.stringify(raw) && record.receiptLiterals?.length === raw.dependencies.length,
+      "Missing original model hash inputs; do not restamp float formatting");
+    check(raw.dependencies.every((x, i) => record.receiptLiterals[i] === (x.receipt ? JSON.stringify(x.receipt) : null)),
+      "Changed literal model receipt serialization");
+  }
   check(raw.dependencies.length === row.providerQueries.length, "Missing literal dependency capture");
   for (const [index, source] of raw.dependencies.entries()) {
     const ledger = row.providerQueries[index];
     check(same(source.operands, ledger.operands) && source.state === ledger.state, "Crossed raw query");
     if (source.receipt) {
       check(sha(JSON.stringify(source.receipt)) === ledger.receiptDigest && same(source.receipt.operands, ledger.operands), "Changed admitted provider bytes");
-      check(same(parseProbe(source.operands, source.receipt.lines), source.receipt.result), "Provider result differs from literal UCI replay");
+      const parse = source.operands.provider === "maia" ? parseMaiaReceipt : parseProbe;
+      check(same(parse(source.operands, source.receipt.lines), source.receipt.result), "Provider result differs from literal source replay");
       check(source.receipt.ended >= source.receipt.started, "Invalid provider clock interval");
       if (source.state === "executed") check(source.receipt.started >= raw.clock.started && source.receipt.ended <= raw.clock.ended,
         "Provider execution outside measured operation");
@@ -56,7 +69,8 @@ export async function captureBatch({ out, start, limit, command = process.env.SF
   // Refuse overwrite before running any costly source operation.
   mkdirSync(out);
   const needsEngine = cases.some(cell => ["provider_line", "engine_beam", "first_reply_reserve_diagnostic", "recursive_semantic"].includes(plan.settings.find(x => x.id === cell.setting).family));
-  const adapter = needsEngine ? new CostStockfish(command) : {
+  const needsModel = cases.some(cell => plan.settings.find(x => x.id === cell.setting).family === "configured_model");
+  const adapter = needsEngine ? new CostStockfish(command) : needsModel ? createCostMaia() : {
     sourceDigest: sha("D3262 source-free execution: no provider requested"), engineName: null, startupMs: 0,
     async initialize() {}, async close() {}, async execute() { throw new Error("Source-free arm attempted a provider query"); },
   };
@@ -69,8 +83,10 @@ export async function captureBatch({ out, start, limit, command = process.env.SF
         [name, sha(readFileSync(new URL(name, import.meta.url)))])),
       machine: { platform: os.platform(), release: os.release(), arch: os.arch(), node: process.version,
         cpu: os.cpus()[0]?.model ?? "unknown", logicalCpus: os.cpus().length, memoryBytes: os.totalmem() },
-      provider: { requested: needsEngine, name: adapter.engineName, sourceDigest: adapter.sourceDigest, startupMs: adapter.startupMs,
-        threads: needsEngine ? 1 : 0, hashMb: needsEngine ? 16 : 0, clearHashPerQuery: needsEngine, timeoutMs: adapter.timeoutMs ?? 0 },
+      provider: { requested: needsEngine || needsModel, name: needsModel ? "Maia3-5m" : adapter.engineName,
+        sourceDigest: adapter.sourceDigest, startupMs: adapter.startupMs,
+        threads: needsEngine || needsModel ? 1 : 0, hashMb: needsEngine ? 16 : 0, clearHashPerQuery: needsEngine, timeoutMs: adapter.timeoutMs ?? 0,
+        ...(needsModel ? { imageId: adapter.imageId, ready: adapter.ready, readyLiteral: adapter.readyLiteral } : {}) },
       concurrency: 1, memoryScope: "parent_process_sampled_rss_lower_bound_not_engine_or_model_peak",
       unsupportedFamilies: plan.settings.map(x => x.family).filter((x, i, all) => !supportedFamilies.includes(x) && all.indexOf(x) === i),
       interactiveGate: "not_measured", productionProfileSelected: false };
@@ -82,7 +98,8 @@ export async function captureBatch({ out, start, limit, command = process.env.SF
         const value = await executeCostCase({ cell, setting: settings.get(cell.setting), subject: executionSubject(inputs, cell),
           planDigest: metadata.planDigest, adapter, initialCache: cell.regime === "warm" ? coldCache : new Map() });
         if (cell.regime === "cold") coldCache = value.cache;
-        checkRawCapture(value); captured.push({ row: value.row, raw: value.raw });
+        checkRawCapture(value); captured.push({ row: value.row, raw: value.raw,
+          ...(value.rawLiteral !== undefined ? { rawLiteral: value.rawLiteral, receiptLiterals: value.receiptLiterals } : {}) });
       }
       const name = `triplet-${String(start + index).padStart(6, "0")}.json.gz`, bytes = gzipSync(frozenBytes(captured));
       writeFileSync(`${out}/${name}`, bytes, { flag: "wx" });

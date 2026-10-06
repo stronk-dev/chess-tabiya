@@ -1,29 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3262]] now has actual live execution for three complete setting populations:
-depth-8 PV plus depth-8/width-two/top-eight first-event and recursive reserves.
-Each retains all 193 candidates / 66 roots, both horizons and cold/warm/offline:
-3,474 cases in total, independently replayed. The full plan stays 61,374 cases;
-this is **not full cost calibration, browser proof or a production profile**.
-The disposable runner supports 51 settings, including all 36 semantic/recursive
-combinations; only configured Maia's two settings explicitly refuse. The new
-independent checker reconstructs the entire source-selected frontier, not merely
-legal examples, including first/later reserve and unranked-event distinctions.
-The actual ordered-history Maia source boundary is now verified separately:
-three live receipts / 77 legal moves, exact frozen-child distribution, distinct
-model tokens for two paths to one FEN, 37 source controls and nine independent
-resealed corruption refusals. No configured traversal or new cost case is claimed;
-the two model settings still refuse. Receipt:
-`planning/semantic-consequence-search/d3262-cost-maia-source-control-2026-10-06.md`.
-Next wire the actual source into all three frozen configured-prefix decision
-layers, retain conditional/joint mass and terminal residuals with independent
-whole-frontier replay, then capture both complete model populations and remaining
-budgets/widths/arms with matching cold dependencies, compare fresh outcomes with
-the frozen semantic reference, measure source memory and bind real browser
-identities. Do not re-run the three captured populations or borrow old durations.
-Normal commands and immutable evidence:
-`planning/semantic-consequence-search/d3262-cost-live-semantic-2026-10-06.md` and
-the earlier `d3262-cost-live-pv-depth8-2026-10-06.md`.
+[[D3262]] now retains five complete setting populations: depth-8 PV,
+depth-8/width-two/top-eight first-event and recursive reserves, and both actual
+ordered-history configured Maia prefixes. Each retains all 193 candidates /
+66 roots, both horizons and cold/warm/offline: 5,790/61,374 total cases. The
+disposable runner supports all 53 settings, not 53 measured populations.
+The two model settings add 2,316 independently replayed cases / 18,266 target
+observations, literal conditional products/joint residuals, terminal absorption
+and unknown partial coverage. Thirteen resealed corruption refusals per model
+batch pass; 137 execution/source and eight synthesis controls pass. Cold four-ply
+model p95 exceeds 1,500 ms in every named phase; local prefixes do not universally
+satisfy joint coverage. Warm timings do not establish a browser pass.
+Next capture the remaining 48 setting populations with matching cold dependencies,
+compare fresh outcomes with the frozen semantic reference, measure individual
+source/model memory and bind actual browser identities. Do not re-run/restamp the
+five complete populations or borrow old durations. D3262 remains doing, the search
+RFC draft; this is **not full calibration, a browser proof or a production profile**.
+Normal commands, full populations and scope:
+`planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
+`d3262-cost-live-semantic-2026-10-06.md` and `d3262-cost-live-pv-depth8-2026-10-06.md`.
 Routine metadata/hash and tracker maintenance remains automatic.
 
 Completed [[D3503]]: the full D3497 browser before/after populations each retain

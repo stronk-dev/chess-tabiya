@@ -149,13 +149,16 @@ test("node exhaustion retains actual omissions and never returns an available tr
   const id = "complete:four-ply", v = await run({ nodeCap: 1, cell: { ...cell, setting: id }, setting: { id, family: "bounded_oracle_diagnostic" } });
   assert.equal(v.row.kind, "budget_exhausted"); assert.ok(v.raw.result.projections[0].rawQuantifier.omittedPreparations.length > 0);
 });
-test("unimplemented model family refuses before any timing capture", async () => {
-  await assert.rejects(run({ setting: { ...setting, family: "configured_model" } }), /Unimplemented/);
+test("model family refuses an undeclared profile rather than borrowing an engine traversal", async () => {
+  await assert.rejects(run({ setting: { ...setting, family: "configured_model" } }), /Undeclared/);
+  const id = "maia:prefix0.80";
+  await assert.rejects(run({ cell: { ...cell, setting: id }, setting: { id, family: "configured_model" } }), /Maia receipt/);
 });
 test("batch range must preserve complete regime triplets and full-plan identities", () => {
   const plan = loadCostPlan(); assert.equal(selectBatchCases(plan, 0, 6).length, 6);
-  for (const [start, limit] of [[1, 3], [0, 2], [-3, 3], [0, 0], [plan.expectedCases, 3], [37056, 3]])
+  for (const [start, limit] of [[1, 3], [0, 2], [-3, 3], [0, 0], [plan.expectedCases, 3], [37053, 6], [39369, 6]])
     assert.throws(() => selectBatchCases(plan, start, limit));
+  assert.equal(selectBatchCases(plan, 37056, 6).length, 6);
   assert.equal(plan.expectedCases, 61374);
 });
 test("real frozen input population yields exact candidate definitions and rejects foreign subject", () => {

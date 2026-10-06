@@ -7,9 +7,10 @@ import { replayReply } from "./exact-arm-trigger-core.mjs";
 import { observeTargetPathV2, convention } from "./dist/target-opportunity-v2.mjs";
 import { projectPreparation, projectRoot } from "./coherent-actual-proof.mjs";
 import { firstReplyEvents, recursiveEvents, reserveFirstReply, reserveRecursiveLayer } from "./cost-semantic.mjs";
+import { absorbingModelFrontier, configuredThreshold, executeModelFrontier } from "./cost-model.mjs";
 
 export const supportedFamilies = Object.freeze(["provider_line", "engine_beam", "exact_reply_forcing", "bounded_oracle_diagnostic",
-  "first_reply_reserve_diagnostic", "recursive_semantic"]);
+  "first_reply_reserve_diagnostic", "recursive_semantic", "configured_model"]);
 export const inputPins = Object.freeze({
   "d3262-coherent-root-frame.json": "sha256:dcf339d6042392e3a5d0cc355c3d6779ed751d5540a8a8094d50ce3d7e43df2b",
   "d3262-coherent-target-comparison-frame.json": "sha256:229335224b1c175478537554ec52ee7341b983e7358222fe1c7d67c2af16cc6b",
@@ -38,6 +39,9 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
   if (!supportedFamilies.includes(setting.family)) throw new Error(`Unimplemented traversal family: ${setting.family}`);
   if (setting.id !== cell.setting || ![2, 4].includes(cell.horizon) || !Number.isSafeInteger(nodeCap) || nodeCap < 1)
     throw new Error("Crossed setting/horizon/node budget");
+  const model = setting.family === "configured_model";
+  const threshold = model ? configuredThreshold(setting.id) : null;
+  if (model && typeof adapter.admitReceipt !== "function") throw new Error("Model traversal needs declared Maia receipt admission");
   const dependencies = new CostDependencies(adapter, cell.regime, initialCache);
   const started = performance.now();
   let rss = process.memoryUsage().rss, visited = 0, exhausted = false, collectionMs = 0, compileMs = 0;
@@ -58,8 +62,15 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
   const observations = [];
   const selections = [];
   let providerPv = null;
+  let modelFrontier = model ? subject.definitions.length && reason !== null ? absorbingModelFrontier(cell.horizon, threshold)
+    : { nodes: [], edges: [], coverage: { status: "not_requested_no_target" } } : null;
   // A no-target row still enumerates this candidate's legal boundary. No fabricated hypothesis.
-  if (subject.definitions.length && reason === null && setting.family === "provider_line") {
+  if (subject.definitions.length && reason === null && model) {
+    modelFrontier = await executeModelFrontier({ rootFen: subject.rootFen, candidateUci: cell.candidateUci,
+      horizon: cell.horizon, threshold, dependencies, sourceDigest: adapter.sourceDigest, collect, visit,
+      observe(history) { for (const definition of subject.definitions) observations.push(collect(() => ({ targetId: definition.id, history,
+        observation: observeTargetPathV2(subject.rootFen, history, definition) }))); } });
+  } else if (subject.definitions.length && reason === null && setting.family === "provider_line") {
     const legal = collect(() => legalMoves(position(subject.rootFen)).length);
     const probe = await query(subject.rootFen, legal);
     if (probe) {
@@ -182,6 +193,7 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
   const result = { kind, rootFen: subject.rootFen, horizon: cell.horizon, terminalReason: reason,
     legalPreparationUcis: reason === null ? candidate.replies.map(x => x.uci) : [], projections, observations, providerPv,
     ...(semantic ? { selections, schedulingAuthority: "source_blind_named_geometry_not_profit_or_proof" } : {}),
+    ...(model ? { modelFrontier } : {}),
     visited, nodeCap, productionProfileSelected: false, moveReason: "not_an_engine_reason" };
   const raw = { cell, result, dependencies: dependencies.raw, clock: { started, ended: performance.now() } };
   const elapsedMs = raw.clock.ended - started;
@@ -191,5 +203,8 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
     initialCacheEntries: dependencies.initialCacheEntries, cacheHits: dependencies.ledger.filter(x => x.state === "cached").length,
     retainedBytes: Buffer.byteLength(JSON.stringify(raw)), rawCaptureDigest: sha(JSON.stringify(raw)),
     measurementBoundary: "server_execution_only_not_browser_rendering" };
-  return { row, raw, cache: dependencies.cache };
+  // Literal hash inputs avoid pretending Python and JS format every float identically.
+  // These archive bytes are not extra elapsed time or a cached final answer.
+  return { row, raw, cache: dependencies.cache, ...(model ? { rawLiteral: JSON.stringify(raw),
+    receiptLiterals: raw.dependencies.map(x => x.receipt ? JSON.stringify(x.receipt) : null) } : {}) };
 }

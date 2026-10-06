@@ -822,7 +822,7 @@ semantic-search-cost-build: semantic-search-target-v2-build
 	./node_modules/.bin/esbuild tools/d3262-search-calibration/semantic-relation-event-first-layer.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/semantic-relation-event-first-layer.mjs --log-level=warning
 
 semantic-search-cost-test: semantic-search-cost-build
-	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs tools/d3262-search-calibration/cost-semantic.test.mjs tools/d3262-search-calibration/cost-maia.test.mjs
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs tools/d3262-search-calibration/cost-semantic.test.mjs tools/d3262-search-calibration/cost-maia.test.mjs tools/d3262-search-calibration/cost-model.test.mjs
 
 .PHONY: semantic-search-cost-maia-probe
 semantic-search-cost-maia-probe: semantic-search-cost-test

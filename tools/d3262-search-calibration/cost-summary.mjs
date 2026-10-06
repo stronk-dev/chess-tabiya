@@ -12,11 +12,13 @@ export function summarizeCostArchives(names = defaultNames) {
   if (!Array.isArray(names) || !names.length || names.some(name => typeof name !== "string"
     || !/^d3262-cost-live-[a-z0-9-]+\.json\.gz$/u.test(name)) || new Set(names).size !== names.length)
     throw new Error("Explicit unique immutable capture names required");
-  const plan = loadCostPlan(), rows = [], inputs = {};
+  const plan = loadCostPlan(), rows = [], inputs = {}, modelRecords = [];
   for (const name of names) {
     const bytes = readFileSync(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes));
     verifyPackedCostValue(pack); inputs[name] = sha(bytes);
-    rows.push(...pack.groups.flatMap(x => JSON.parse(gunzipSync(Buffer.from(x.base64, "base64"))).map(x => x.row)));
+    const records = pack.groups.flatMap(x => JSON.parse(gunzipSync(Buffer.from(x.base64, "base64"))));
+    rows.push(...records.map(x => x.row));
+    modelRecords.push(...records.filter(x => x.row.setting.startsWith("maia:")));
   }
   const admission = validateCostRows(plan, rows), groups = new Map();
   const quantiles = values => {
@@ -38,7 +40,40 @@ export function summarizeCostArchives(names = defaultNames) {
       retainedBytes: quantiles(rows.map(x => x.retainedBytes)), sampledParentRssBytes: quantiles(rows.map(x => x.memory.peakRssBytes)),
       queryCount: rows.reduce((n, x) => n + x.providerQueries.length, 0), cacheHits: rows.reduce((n, x) => n + x.cacheHits, 0) })),
     repeatUnit: "one_case_execution_not_machine_repeat_trials", startupIncluded: false,
-    memoryScope: "sampled_parent_lower_bound_not_engine_or_model_peak", interactiveGate: "not_measured", productionProfileSelected: false };
+    memoryScope: "sampled_parent_lower_bound_not_engine_or_model_peak", interactiveGate: "not_measured", productionProfileSelected: false,
+    ...(modelRecords.length ? { modelPolicyCoverage: summarizeModelCoverage(modelRecords, plan.candidates) } : {}) };
+}
+
+/** Describes literal configured-policy coverage, never human frequency or proof.
+ * Unknown coverage is not coerced to zero; shorter-horizon mass stays separate.
+ */
+export function summarizeModelCoverage(records, candidates = []) {
+  const groups = new Map();
+  const subjects = new Map(candidates.map(x => [JSON.stringify([x.rootId, x.candidateUci]), x]));
+  for (const { row, raw } of records) {
+    const subject = subjects.get(JSON.stringify([row.rootId, row.candidateUci]));
+    const axis = { setting: row.setting, horizon: row.horizon, regime: row.regime,
+      phase: subject?.phase ?? null, focus: subject?.focus ?? null, result: row.kind };
+    const key = JSON.stringify(axis), group = groups.get(key) ?? { ...axis, count: 0, complete: 0,
+      noTarget: 0, unknown: 0, stopStatuses: {}, frontierMasses: [], observedNodes: 0, observedEdges: 0 };
+    const frontier = raw.result.modelFrontier, coverage = frontier.coverage;
+    group.count++; group.observedNodes += frontier.nodes.length; group.observedEdges += frontier.edges.length;
+    if (coverage.status === "not_requested_no_target") group.noTarget++;
+    else {
+      const status = coverage.stopRule.status;
+      group.stopStatuses[status] = (group.stopStatuses[status] ?? 0) + 1;
+      if (coverage.complete) { group.complete++; group.frontierMasses.push(coverage.frontierMass); }
+      else group.unknown++;
+    }
+    groups.set(key, group);
+  }
+  return { authority: "both_sides_configured_model_not_human_frequency_or_all_defences_proof",
+    groups: [...groups.values()].map(({ frontierMasses, ...group }) => {
+      const sorted = frontierMasses.sort((a, b) => a - b);
+      return { ...group, frontierMass: sorted.length ? { count: sorted.length, min: sorted[0],
+        p50: sorted[Math.ceil(sorted.length * 0.5) - 1], p95: sorted[Math.ceil(sorted.length * 0.95) - 1],
+        max: sorted.at(-1) } : null };
+    }) };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
