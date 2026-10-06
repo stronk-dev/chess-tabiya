@@ -477,6 +477,13 @@
     margin-inline: auto;
   }
 
+  /* Vendor coordinates use fixed offsets for large boards. Keep each glyph in its edge
+     square instead, including compact/reflow and comparison boards, without changing sizing. */
+  .board :global(coords.ranks) { top:0; left:4px; }
+  .board :global(coords.ranks coord) { transform:none; padding-top:2px; box-sizing:border-box; }
+  .board :global(coords.files) { left:0; bottom:0; height:12.5%; }
+  .board :global(coords.files coord) { display:flex; justify-content:flex-end; align-items:flex-end; padding:2px 4px; box-sizing:border-box; }
+
   .semantic-grid {
     position: absolute;
     inset: 0;
@@ -516,10 +523,13 @@
     position: absolute;
     inset: 40% 8% auto;
     z-index: 2;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.25rem;
     padding: 0.5rem;
     background: var(--panel);
     border: 1px solid var(--line);
   }
+  .promotion-picker button { min-width:0; min-height:2.75rem; padding:.35rem; font-size:.8rem; }
+  .promotion-picker button:last-child { grid-column:1 / -1; }
 </style>

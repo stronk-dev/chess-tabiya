@@ -61,6 +61,16 @@ an identical run/sequence snapshot does not repeat that selection. A new guard s
 On compact screens the help-style popover is inset from both viewport edges, independently of
 its topbar trigger. Its declared scroll region bounds long preset text without displacing the board
 or putting radio controls outside the phone viewport.
+While open, the chooser owns an explicit interaction boundary: covered background controls are
+inert, Tab stays inside, and Escape closes it and restores focus to the summary. Choosing a style
+also returns focus there. This does not change the phone companion's separately tracked policy.
+The sticky support promise stays inside the rail width rather than creating horizontal scrolling.
+
+Timeline move, branch and marker controls share one inline row inside the fixed 40 px strip.
+Only horizontal scrolling belongs there. The play branch shelf instead uses the companion's
+single vertical scroller; branch labels wrap and its native compare/Hide actions remain available.
+Board coordinates sit inside their edge squares at every size. Promotion offers four bounded
+columns and a full-width Cancel row inside the existing overlay, without changing the board box.
 
 Raw position structure, transition census, human-model candidates and corpus counts are available
 only in the explicit full-screen Evidence Inspector. Ordinary play does not render those diagnostic
@@ -116,13 +126,23 @@ controller, rung, marks and request count survive. Mounted frame tests preserve 
 through responsive/collapse transitions and retain native disabled-button behavior.
 
 `make test-browser-matrix` and `make test-browser` require all 112 distinct current-run successful,
-unretried PNG attachments. The JSON report, attachment dimensions and closed cell names are checked
+unretried PNG attachments, each paired with a measured, non-vacuous, issue-free conformance JSON
+from the same result. Active control centers, rendered text clipping, horizontal document extent,
+declared scroll families and same-axis nesting are inspected in the real post-gesture DOM before
+the screenshot. Deliberately clipped/covered buttons and nested scrollers fail the same checker;
+native collapsed details, inert background and keyboard projection have explicit positive controls.
+Scrolling inspection restores original offsets and never manufactures chess state or a click.
+`make play-composition-conformance-check` runs all 112 cells plus these negative/positive controls.
+The JSON report, attachment dimensions and closed cell names are checked
 by `tools/play-composition-matrix.mjs`. The validated matrix is copied to a report-digest-bound
-directory under `test-results/composition/`, which survives later browser tiers and is included in
-CI's always-uploaded evidence. `make play-composition-matrix-contract` tests missing, duplicate,
-foreign, failed, retried, wrong-size and escaped attachments; synthetic PNG containers test the
+directory under `test-results/composition/`, retaining both PNGs and conformance JSON through
+later browser tiers and included in CI's always-uploaded evidence. `make play-composition-matrix-contract` tests missing, duplicate,
+foreign, failed, retried, wrong-size and escaped attachments, missing/failed/malformed conformance,
+wrong identities/viewports and records from a different result; synthetic PNG containers test the
 verifier, never substitute for real browser screenshots.
 
-The RFC remains implementing. A complete screenshot population does not prove every A3 hit target,
-A4 vocabulary destination, every-module max-load conformance, proposed ceiling, or owner-use
-discharge; the remaining obligations still gate archival.
+The RFC remains implementing. Screenshot count alone does not prove conformance. The paired
+per-cell checks prove a center/clipping/scroll floor, not complete non-overlap: D3458 records
+partial phone Appearance/text-entry overlap with both centers still reachable. Whole-affordance
+bounds and affected square gestures remain to be measured and repaired. A4 vocabulary destinations,
+every-module max-load conformance, proposed ceilings and owner-use still gate archival.

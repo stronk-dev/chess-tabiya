@@ -10,7 +10,7 @@ function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), "tabiya-composition-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, "test-results/playwright"), { recursive: true });
-  const attachments = CELL_NAMES.map(name => {
+  const attachments = CELL_NAMES.flatMap(name => {
     // Synthetic container fixtures test dimensions/joins, not screenshot content or browser behavior.
     const bytes = Buffer.alloc(45);
     Buffer.from("89504e470d0a1a0a", "hex").copy(bytes);
@@ -20,7 +20,8 @@ function fixture(t) {
     Buffer.from("0000000049454e44ae426082", "hex").copy(bytes, 33);
     const path = `test-results/playwright/${name}.png`;
     writeFileSync(join(root, path), bytes);
-    return { name, contentType: "image/png", path };
+    const conformance = { version: 1, cell: name, viewport: { width, height }, controls: 1, boxes: 1, keyboardProjections: 0, inertControls: 0, scrollers: [], issues: [] };
+    return [{ name, contentType: "image/png", path }, { name: `composition-conformance-${name}`, contentType: "application/json", body: Buffer.from(JSON.stringify(conformance)).toString("base64") }];
   });
   // Playwright omits suites on leaf suites; nested suites remain recursively checked.
   const report = { errors: [], stats: { unexpected: 0 }, suites: [{ specs: [{ ok: true, tests: [{ projectName: "desktop-chromium", expectedStatus: "passed", results: [{ status: "passed", retry: 0, attachments }] }] }] }] };
@@ -34,15 +35,45 @@ test("publishes exactly 112 distinct cells, with byte-bound PNGs surviving later
   assert.deepEqual(receipt.cells.map(cell => cell.name), CELL_NAMES);
   rmSync(join(root, "test-results/playwright"), { recursive: true });
   for (const cell of receipt.cells) assert.ok(readFileSync(join(root, cell.path)).length >= 45);
+  for (const cell of receipt.cells) assert.equal(JSON.parse(readFileSync(join(root, cell.conformance.path), "utf8")).cell, cell.name);
   assert.deepEqual(JSON.parse(readFileSync(join(root, "test-results/composition/receipt.json"), "utf8")), receipt);
 });
+
+for (const mutation of ["missing", "duplicate", "foreign", "wrong_type", "two_authorities", "wrong_cell", "wrong_viewport", "failed_predicate", "vacuous", "negative_count", "unknown_scroller", "wrong_axis", "malformed", "different_result"]) {
+  test(`refuses ${mutation} conformance paired with otherwise successful PNGs`, t => {
+    const { root, report, attachments, result } = fixture(t);
+    publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
+    const prior = readFileSync(join(root, "test-results/composition/receipt.json"));
+    const attachment = attachments[1];
+    const data = JSON.parse(Buffer.from(attachment.body, "base64"));
+    if (mutation === "missing") attachments.splice(1, 1);
+    if (mutation === "duplicate") attachments.push({ ...attachment });
+    if (mutation === "foreign") attachment.name += "-invented";
+    if (mutation === "wrong_type") attachment.contentType = "text/plain";
+    if (mutation === "two_authorities") attachment.path = attachments[0].path;
+    if (mutation === "wrong_cell") data.cell = CELL_NAMES[1];
+    if (mutation === "wrong_viewport") data.viewport.width++;
+    if (mutation === "failed_predicate") data.issues.push({ kind: "clipped_box", element: "button", detail: "clipped" });
+    if (mutation === "vacuous") data.controls = 0;
+    if (mutation === "negative_count") data.boxes = -1;
+    if (mutation === "unknown_scroller") data.scrollers.push({ element: "invented", family: "whatever", axes: "y" });
+    if (mutation === "wrong_axis") data.scrollers.push({ element: "rail", family: "rail", axes: "x" });
+    attachment.body = Buffer.from(mutation === "malformed" ? "not json" : JSON.stringify(data)).toString("base64");
+    if (mutation === "different_result") {
+      attachments.splice(1, 1);
+      report.suites[0].specs.push({ ok: true, tests: [{ projectName: "desktop-chromium", expectedStatus: "passed", results: [{ ...result, attachments: [attachment] }] }] });
+    }
+    assert.throws(() => publishCompositionEvidence(root, Buffer.from(JSON.stringify(report))));
+    assert.ok(readFileSync(join(root, "test-results/composition/receipt.json")).equals(prior));
+  });
+}
 
 for (const mutation of ["missing", "duplicate", "foreign", "failed", "retry", "skipped", "wrong_project", "report_error", "wrong_size", "wrong_type", "two_authorities", "outside", "symlink", "missing_file", "not_png"]) {
   test(`refuses ${mutation} evidence instead of reusing an old receipt`, async t => {
     const { root, report, result, attachments } = fixture(t);
     publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
     const prior = readFileSync(join(root, "test-results/composition/receipt.json"));
-    if (mutation === "missing") attachments.pop();
+    if (mutation === "missing") attachments.splice(0, 1);
     if (mutation === "duplicate") attachments.push({ ...attachments[0] });
     if (mutation === "foreign") attachments[0].name += "-invented";
     if (mutation === "failed") result.status = "failed";

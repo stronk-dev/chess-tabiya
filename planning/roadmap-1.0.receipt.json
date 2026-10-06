@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:df9b91da0f750c7e2dc5c84511d5f55b4dcb81fb5779b699307fefe5abbbfa72",
+    "roadmap": "sha256:d8583153488b48c585ffb100d9b72159c312f71cef11b47c74b79aa08712574b",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:189de7262923498a3626120bd081b7eb4c702d9eb494a181abac77476a462858",
-    "rfcRegister": "sha256:6e7a51a85c6c2fe99787879bb0466d3a6e1a05775dc6ef6ecc9060db39609445",
+    "workState": "sha256:d87460415689c0efe0689e0c31955e92acb3b5f7e613c43295a72343562b8709",
+    "rfcRegister": "sha256:909af7ff091f0dbb710ab7b603255e8ad9d82c22ca66d8c84cc0acc75d48aace",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 0,
       "blocked": 1058,
-      "done": 1352,
+      "done": 1359,
       "refused": 161
     },
     "workItems": {
@@ -769,10 +769,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Complete D1834/A3 across the existing 7×16 cells: independent actionable-center hits, clipping bounds, horizontal-body extent and declared same-axis scroll whitelist, with clipped-control and nested-scroller negatives. Complete A4 Inspector positive/destination/vocabulary arms and review D3309 structural fidelity. Reconcile D3436 phone overlay/below-board/modality authority without incidental policy changes; rule D1639 before claiming complete defaults. Persistent compact tablet queue D3444–D3450 is verified, not queued again.",
+      "nextAction": "Measure D3458 whole phone text-entry/Appearance affordance bounds and affected physical-square gestures, then repair genuine overlap before completing A4 Inspector positive/destination/vocabulary arms and reviewing D3309 structural fidelity. D3451–D3457 now supply the paired 112-cell center/clipping/scroll floor and measured repairs, not full no-overlap acceptance. Reconcile D3436 phone overlay/below-board/modality authority without incidental policy changes; rule D1639 before claiming complete defaults. Persistent compact tablet queue D3444–D3450 remains verified, not queued again.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3444–D3450 deliver a persistent compact tablet head/single selector row, existing More controls as a named group, native swaps/warning restoration, independent header conformance and delayed-answer/guard selection retention. Actual header passes four widths; overlap negative fails. Genuine delayed packets preserve Theory and explicitly selected More; new guard foregrounds its prompt once per run/sequence, not repeated snapshots. Ninety-one mounted tests pass. Complete final exact-index software passes 3244 tests/341 files, seven isolated performance tests and every downstream gate; final content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Complete rebuilt browser CI passes 126 journeys with one existing optional real-Maia skip, zero retries and 112 retained PNG/report bytes verified after the packaged tier. Earlier failed aggregate runs are recorded, not relabelled. Final tracking/log bytes have separate staged-governance and normal-hook checks. D1834/D910, full A3/A4/Inspector/vocabulary, D3436 phone reconciliation, ceilings, Advanced hintDistance, latency/analytics and owner-use remain open. Earlier genuine eight-seat and stable-board/shared-Hint/preset proofs remain linked. Zero untriaged of 1686 live items; none doing. No whole RFC, capability or milestone promotion.",
+        "summary": "D3451–D3457 add same-result non-vacuous conformance JSON to all 112 genuine post-gesture cells and repair measured coordinate clipping, promise-footer overflow, chooser background ownership, timeline chip clipping, promotion Cancel and inner branch scrolling. Clipped, covered, invisible-active and nested-scroll negatives fail the same predicate. Complete rebuilt browser CI passes 127 journeys with one existing optional real-Maia skip and zero retries; a later checker-only refinement is separately verified by nine journeys/all 112 cells (1735 controls, 9934 text bounds), never relabelled as the earlier pipeline. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Complete exact-index software passes 3244 tests/341 files, seven isolated performance tests/four files, clean types, 33 artifact controls and every downstream gate at tree 13063943302450635d95ff806961114a43ae1605. Subsequent tracking/log/proof bytes receive separate staged-governance and normal-hook checks. Seven scoped rows close on path evidence; zero untriaged of 1687 live items and none doing. Visual inspection finds D3458 partial Appearance/text-entry overlap despite reachable centers; full A3/D1834, A4/Inspector/vocabulary, D3436 phone reconciliation, ceilings and owner-use remain open. No whole RFC, capability or milestone promotion. Earlier genuine eight-seat, persistent queue and stable-board/Hint/preset proofs remain linked.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
@@ -830,7 +830,12 @@
           "planning/play-composition/tablet-queue-software-2026-10-06.json",
           "planning/play-composition/tablet-queue-matrix-2026-10-06.json",
           "apps/web/src/lib/CompanionSeat.svelte",
-          "apps/web/src/lib/CompanionSeat.test.ts"
+          "apps/web/src/lib/CompanionSeat.test.ts",
+          "planning/play-composition/conformance-2026-10-06.md",
+          "planning/play-composition/conformance-matrix-2026-10-06.json",
+          "tests/browser/composition-conformance.ts",
+          "tests/browser/composition-conformance.spec.ts",
+          "planning/play-composition/conformance-software-2026-10-06.json"
         ],
         "anchors": [
           {
@@ -946,7 +951,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:b8edde1c6b9d8186d84725258236fe33da7499a775ca7b1629605449728f5e24"
+            "digest": "sha256:6a0d8d00b930b578ce575a595f53a76946af98443a286075ceeed2e66564ffea"
           },
           {
             "kind": "work_state",
@@ -1037,6 +1042,11 @@
             "kind": "work_state",
             "id": "D3450",
             "digest": "sha256:f0fb83f1b1ecfcdff25c87d42b0c2a29a26b4419e31892e5fceaa92f875d2ec9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3458",
+            "digest": "sha256:132de7902c9f6f388a9ec72752a5d8b1c8608ab8f82793b89e56453459ce6654"
           }
         ]
       },

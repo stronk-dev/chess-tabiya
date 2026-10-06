@@ -97,6 +97,14 @@ remain in their owning RFCs.
     Late proactive delivery preserves explicit selection (D3448); new consequence events select
     the tools head while identical recorded-event snapshots do not (D3449).
     Explicit More selection also survives delayed delivery while reveal opens (D3450).
+23. Every real post-gesture cell now carries a paired center/clipping/scroll record. Deliberately
+    clipped, covered, invisible-active and nested-scroller controls fail the same predicate.
+    D3452–D3457 repair measured coordinate glyph clipping, promise-footer overflow, chooser
+    interaction ownership, timeline chips, promotion Cancel and inner branch scroll authorities.
+    Final focused coverage passes nine journeys/all 112 cells. Receipt:
+    `conformance-2026-10-06.md`; full gate results are recorded there before commit.
+    This supersedes checkpoint 13's inner tablet branch scrolling, not full A3 acceptance:
+    D3458 retains partial phone board-chrome overlap missed by a center-only predicate.
 
 ## Remaining before archive
 
@@ -119,12 +127,12 @@ overlay/modality contract reconciliation; complete A3/A4/Inspector/ceiling/owner
    population gap. The tablet head-plus-single-selector-row is now implemented (D3444);
    [[D3436]] retains the phone contract reconciliation;
    actionable A3 and destination A4 obligations remain. Counts alone are not semantic acceptance.
-   Next, instrument each existing cell before its screenshot: independent actionable center hits,
-   clipping-ancestor bounds, horizontal-body extent and the declared same-axis scroll whitelist.
-   Prove the checker against deliberate clipped-control and nested-scroller negatives before
-   repairing actual failures. Keep modal-inert board controls distinct from hidden actionable
-   controls; D3436 must reconcile phone authority before changing its policy. This is the existing
-   D1834/A3 obligation, not a new parallel tracker or a count-only closure.
+   The paired A3 center/clipping/scroll floor now runs on all 112 cells with negative controls
+   (`conformance-2026-10-06.md`). Next measure D3458's complete phone text-entry/Appearance
+   affordance bounds and actual affected square gestures, then repair the genuine overlap before
+   A4. Do not infer complete no-overlap from reachable centers. Keep modal-inert board controls
+   distinct from hidden actionable controls; D3436 must reconcile phone authority before changing
+   its policy. This is the existing D1834/A3 obligation, not a parallel tracker or count-only closure.
 4. Bind the full Inspector's amended accepts list when `learner-modules` implements, including the
    D924 phase/pivotal/classifier/compare families.
 5. Reconcile `docs/drill-client.md`, close the remaining ledger rows, append final lifecycle logs,

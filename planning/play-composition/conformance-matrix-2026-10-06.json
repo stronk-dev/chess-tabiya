@@ -1,0 +1,1464 @@
+{
+  "version": 1,
+  "reportDigest": "sha256:9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba",
+  "requiredCells": 112,
+  "provenCells": 112,
+  "cells": [
+    {
+      "name": "play-composition-1440x900-01-calm-rest",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:23ef6f278cf1373808b3bcb9907936d89756311e47e1881316029f00b780137d",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-01-calm-rest.json",
+        "digest": "sha256:74b4aeb32c79e02fa47c4ea76e935876fb9015a8e74fcef2e49b689e16c1c633",
+        "controls": 12,
+        "boxes": 115
+      }
+    },
+    {
+      "name": "play-composition-1440x900-02-square-selected",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:d64acfa4eaaebee34b56d054c19e37055139ee0fd80e5ffb8f5f0e607e0ab5ee",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-02-square-selected.json",
+        "digest": "sha256:6f8fbe378435e0249cb9b9615d437bbb41c3a2716a5c099167e17051ef8d791e",
+        "controls": 21,
+        "boxes": 125
+      }
+    },
+    {
+      "name": "play-composition-1440x900-03-move-staged-cue",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:4c6b10f2696c5cd99507ca1ccb854da4fe9f06846c9b4b8089eb14ebb3af325c",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-03-move-staged-cue.json",
+        "digest": "sha256:5750bfb6fae0dc110a66b5f3609ca51e267a9f229ad89bde75e6168b64c55a21",
+        "controls": 20,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-1440x900-04-post-commit-guard",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:3645b363af75fa782b45d439cb67e37ea1b6a9b4a8412b8c57ab297479232c9f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-04-post-commit-guard.json",
+        "digest": "sha256:eb51f1cbe82e8fe2c49a617bc96b801432dde0eaccff0945e4b3812e4b7a7244",
+        "controls": 26,
+        "boxes": 132
+      }
+    },
+    {
+      "name": "play-composition-1440x900-05-rail-module-expanded",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:36b99eefd834848585f79f3caeff446048ff98a8dea90a414fbfd28b3afe2458",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-05-rail-module-expanded.json",
+        "digest": "sha256:57adce31c603b8a4cefa4be53124e8218aaec289743edd260b22d77641a9f581",
+        "controls": 19,
+        "boxes": 124
+      }
+    },
+    {
+      "name": "play-composition-1440x900-06-guided-hint-final-stage",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:881fb770e30049cce279f11b3c7b3e060c6acf4667ad52e2af823bf80b49a7ab",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-06-guided-hint-final-stage.json",
+        "digest": "sha256:129310ebc01e59d2e1e93630766e241d29271fee3fa97b802b86c1ecd652338c",
+        "controls": 19,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-1440x900-07-menu-popover-open",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:a601174120a43fbc1c470c2bcf25582f95ee02866f6669b74ae62ee8c94a400c",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-07-menu-popover-open.json",
+        "digest": "sha256:6fae8653e394311015ff9821abdb0cf63325683cbd3f20232d740d1c62f96515",
+        "controls": 7,
+        "boxes": 14
+      }
+    },
+    {
+      "name": "play-composition-1440x900-08-long-objective",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:73923e1881ccd1fde4ff49cd35e97b33c31013b90a6bd0a3626d6fac31f55fae",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-08-long-objective.json",
+        "digest": "sha256:d1327b17e6d0470973fa1c26dfe2aaa87776bb4a450e6d68b7664a7b6dc6f4fd",
+        "controls": 16,
+        "boxes": 115
+      }
+    },
+    {
+      "name": "play-composition-1440x900-09-evidence-unavailable-honest-empty",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:89e54fea3de8cdac5cc543ca807c1aafbe26ff41fcbcd3200491c46e8903620b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:2f616d92975d7699342b511b9c4db2d48204b8fe786644c125fe062a33cc6d90",
+        "controls": 21,
+        "boxes": 131
+      }
+    },
+    {
+      "name": "play-composition-1440x900-10-inspector-open",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:d339dd1c9e17093c343cc40206aad7e8952adc3f2c9d97b26fb8cd1c1242e920",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-10-inspector-open.json",
+        "digest": "sha256:586bfc53017e43653af5724a067bb8c79f9637ea04ea3aedbc2bfe2faefcdfd4",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-1440x900-11-timeline-rewind-fork-reentry",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:a64492c690ab129cd09ce386ae938efeb65d768346eb0a7a2cb5a5fef23e0bb5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:c24388f9f6538c125adf8728e0c2b101f120c040b973c04ed014b1f169792731",
+        "controls": 24,
+        "boxes": 126
+      }
+    },
+    {
+      "name": "play-composition-1440x900-12-compare-open",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:e35ec3b0fe1b3e6919b923139de2f94a50c876e0b344b88e7d41276ec0603d5f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-12-compare-open.json",
+        "digest": "sha256:889beb0cc821a1819eb3f0bfd0cd46743dac7d59682f697d3d0f92c38b97a494",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-1440x900-13-max-load",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:b9ef51373d30aab456ba05f0786c185f9903401558c04ace998f624ec6f81a25",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-13-max-load.json",
+        "digest": "sha256:7c84a8d6507183ef68838fe24f85cbcb23479c09c1eea264b23be96eeb8a8e42",
+        "controls": 28,
+        "boxes": 145
+      }
+    },
+    {
+      "name": "play-composition-1440x900-14-terminal-outcome",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:29a69e6f99db6361f9f877a5acb97601c712fee0ce45e2fc31dc86e0809f6607",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-14-terminal-outcome.json",
+        "digest": "sha256:08578a6df641a6db4a211639200ec54e33ddd0144bdb23f74871f63d4a983474",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-1440x900-15-promotion-pending",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:9bcd0a486d4eb0ee39585813f5d5dbca819978aee80be2c27d96ab771b143715",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-15-promotion-pending.json",
+        "digest": "sha256:7fe419dd14a43090067c3c1eac494be431bf6e8020b27e3d3f6daab77d209544",
+        "controls": 17,
+        "boxes": 117
+      }
+    },
+    {
+      "name": "play-composition-1440x900-16-keyboard-text-entry-active",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:eaaf2494550f8664bad981fc65d72974edc7f47a0d29dbc75c334391c6a2f084",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1440x900-16-keyboard-text-entry-active.json",
+        "digest": "sha256:7e1f5eba9c4e54f5317639f4d9cbceccd7cccc97681db6fa49e9f3a27626a36a",
+        "controls": 18,
+        "boxes": 117
+      }
+    },
+    {
+      "name": "play-composition-1366x768-01-calm-rest",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:beb7e97218834cf2920cd7fafe331cf09d6a911249986d394fabd118f6f6be19",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-01-calm-rest.json",
+        "digest": "sha256:c8ff02952aad353938f21fcd56aafae7ab370ab4aac7bb1f361efe185907ed92",
+        "controls": 18,
+        "boxes": 121
+      }
+    },
+    {
+      "name": "play-composition-1366x768-02-square-selected",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:32ce8179da8008a705b3764797e4429d5567e1344a3d53f1521aa2e2dfc048bb",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-02-square-selected.json",
+        "digest": "sha256:69bc13d0b1212dea53397769bf3748b67129a2f27fd31fb211c5933f240217d5",
+        "controls": 21,
+        "boxes": 125
+      }
+    },
+    {
+      "name": "play-composition-1366x768-03-move-staged-cue",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:2f33bdced10b49b2a693fd32db4aeaef68fc5a12678820b8375d23f2730fde97",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-03-move-staged-cue.json",
+        "digest": "sha256:63db48f4cf48370f487572ff13de07d42f68bd16ca99f283e051a3c44bec6c6b",
+        "controls": 20,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-1366x768-04-post-commit-guard",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:ae92909db7b6e715079eac3ae45b95c1a2b01950daa1a5f0620b6446155201a4",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-04-post-commit-guard.json",
+        "digest": "sha256:853d24eae0047d9069aa99c6cc5e760efdc88e490a0e2313da603beeb27e1859",
+        "controls": 26,
+        "boxes": 132
+      }
+    },
+    {
+      "name": "play-composition-1366x768-05-rail-module-expanded",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:0c0d853a4e4e512492a987c9e24423bb88b00b35587dd406e2dbf87269e5cbfe",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-05-rail-module-expanded.json",
+        "digest": "sha256:7132a173a1243ae279cd828011b65487b515029f4688f7c72f2ad1dca50d557e",
+        "controls": 19,
+        "boxes": 124
+      }
+    },
+    {
+      "name": "play-composition-1366x768-06-guided-hint-final-stage",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:251b406df845f7d5f5b7198c159bc1ee1b0ac7069f7206ef990eaf9589fff72c",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-06-guided-hint-final-stage.json",
+        "digest": "sha256:1102294ea06300605f7f9aba579de8064b98be9e2a57a920587c2198c615e2ec",
+        "controls": 19,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-1366x768-07-menu-popover-open",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:891b5ee48b3c65754bc7dc535d29a2ba8553d2f3bcd83e6cf49dd1c81d066b37",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-07-menu-popover-open.json",
+        "digest": "sha256:aa04a3335187ecc9d6e4b47537e33c662560675a1ebdb5cd10933d95bb795be8",
+        "controls": 8,
+        "boxes": 15
+      }
+    },
+    {
+      "name": "play-composition-1366x768-08-long-objective",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:ef35d6d8dcc1bcaf98ad31f837bb2280a5a6cf76cc38ca9bbf57d5808e95537f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-08-long-objective.json",
+        "digest": "sha256:a3fd91414ace8e6fa73a31a1ab0b54e0376c195bace6913d043538f63f472771",
+        "controls": 17,
+        "boxes": 116
+      }
+    },
+    {
+      "name": "play-composition-1366x768-09-evidence-unavailable-honest-empty",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:3d3efec7f045cdfb2f6d7c9423e59f48ff8539d19fac411a4ba9479f2c9f3ad3",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:6ae4612e73f9e97a75a21a2bab90e16a2e8e8dbc3a931a7217851bb62f6d3750",
+        "controls": 21,
+        "boxes": 131
+      }
+    },
+    {
+      "name": "play-composition-1366x768-10-inspector-open",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:6e63af280e1c62167accb613be2b69c29798a8037f348462878fc678116d7fd7",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-10-inspector-open.json",
+        "digest": "sha256:6ee008eff906c44f28fa76fbb4b2c4c1f4990acbe0c406fa36b955d3e5d25a9c",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-1366x768-11-timeline-rewind-fork-reentry",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:3311640eeca63ed429497071d4fb71c9212730c551768a7b762f5a1e891f0d7a",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:38a14905a4b3cbb8f7290e356c256b908bcc20886ea42723100330a9c463eb0f",
+        "controls": 24,
+        "boxes": 126
+      }
+    },
+    {
+      "name": "play-composition-1366x768-12-compare-open",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:0513df824253a6ba752453e4b1e210386b10414cdad4df8a463ae0963fec8418",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-12-compare-open.json",
+        "digest": "sha256:8cd89d25f2918752e2b00387a8c63d8c8038736402179f512a29afe82fc9520b",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-1366x768-13-max-load",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:2eb215ab22f66568d931a3685baaa05eaeef8e5964584fbcb16fd626f767b893",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-13-max-load.json",
+        "digest": "sha256:40e12dd56dcae4a261b08f49bdd2ebad0dd44c51e0b67d66e61c001674031d50",
+        "controls": 28,
+        "boxes": 145
+      }
+    },
+    {
+      "name": "play-composition-1366x768-14-terminal-outcome",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:3003c74cc0e5b7f09a23f3b57443693870686a85ea18f056406cd8f0459674d4",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-14-terminal-outcome.json",
+        "digest": "sha256:ceae47797bf2b682d8238d653de87af9a23a79b9c94834df8516f8cdbfa53b37",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-1366x768-15-promotion-pending",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:23d4e3b6745321c29266a65d85a85319b7331a4aac5bae5fa5bd7c337b3c5106",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-15-promotion-pending.json",
+        "digest": "sha256:574110b1c00377b00c01b7f0328b2d87a2f22b5fad50c59964641aeecd3e4401",
+        "controls": 17,
+        "boxes": 117
+      }
+    },
+    {
+      "name": "play-composition-1366x768-16-keyboard-text-entry-active",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:ebea84063728dc0d4c96f2d0422c1453dce45187bc6b943ac31c68cbabf7704b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1366x768-16-keyboard-text-entry-active.json",
+        "digest": "sha256:371080aea193dfe651f160d461e1364fecfc783cd74ebefc1c83a52dd1d97530",
+        "controls": 19,
+        "boxes": 118
+      }
+    },
+    {
+      "name": "play-composition-1280x720-01-calm-rest",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:d63aeeb6aa6ce49aa217185b8eab31c70f191e514b8839873a9b28d56e380056",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-01-calm-rest.json",
+        "digest": "sha256:65467858ce998ae4a1d0891886703386ec02bf9976c2b236bba32446e9fd8599",
+        "controls": 18,
+        "boxes": 121
+      }
+    },
+    {
+      "name": "play-composition-1280x720-02-square-selected",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:83fa0e1911f7d408c056d1f9b46ffa2e29ee5e45243894c89573d32bd7a8bfe5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-02-square-selected.json",
+        "digest": "sha256:34b521a94d2601157c20d5579d1585ae780fa7c1ba2cad97eeaaabfa60ad73cb",
+        "controls": 21,
+        "boxes": 125
+      }
+    },
+    {
+      "name": "play-composition-1280x720-03-move-staged-cue",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:fcf14510439c6ff7406594673f24fd8633919f8ebda3dca4f6dc30740e44cb30",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-03-move-staged-cue.json",
+        "digest": "sha256:81e7e2adfe408161cf1b0cd898960ec90e1a4c2d33ec8b56270c6a05f209fde4",
+        "controls": 20,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-1280x720-04-post-commit-guard",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:ad3f97cb751c0bce23030553f797dd3574da6d5ab8ab861405e5acb96008dcd5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-04-post-commit-guard.json",
+        "digest": "sha256:5e65f9830ac2fb9a5f257b54d73fe7336a98ab9cce1a5fdc1708cda50e367303",
+        "controls": 26,
+        "boxes": 132
+      }
+    },
+    {
+      "name": "play-composition-1280x720-05-rail-module-expanded",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:e643f75884733008f1c3f9378ed904e9a3e274a68f1678fe4ef775afa83e931b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-05-rail-module-expanded.json",
+        "digest": "sha256:e0fedd8957dd6838e6d3a5c02655244dee953da0fe6c4244385e08d7c04f5349",
+        "controls": 19,
+        "boxes": 124
+      }
+    },
+    {
+      "name": "play-composition-1280x720-06-guided-hint-final-stage",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:83f8e973e2dc98db360106a076dfe05f9f255f4ca2f5de648c0b98a0f7e83773",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-06-guided-hint-final-stage.json",
+        "digest": "sha256:d94e1089ee8af28ae8e2d311b51fff33ba1892fe99aff3f173a1d38e9ca0cd72",
+        "controls": 19,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-1280x720-07-menu-popover-open",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:5252ff1cf7975a76eb505d2f5e4e6c53854b6c6ccad4ed75ecca49e9221d344a",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-07-menu-popover-open.json",
+        "digest": "sha256:f0b0421c8c7cd00516be8d87329ffd2bad8039a20896170d9041710562d577fd",
+        "controls": 8,
+        "boxes": 15
+      }
+    },
+    {
+      "name": "play-composition-1280x720-08-long-objective",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:3779d8729eda4b849017fa6384e41902cd6dac1391c23b8b6262e3fd71829ba3",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-08-long-objective.json",
+        "digest": "sha256:47af5f722b0c27cae70ac6ed519b452161538856de79cb4ea950ee20e5a916a9",
+        "controls": 17,
+        "boxes": 116
+      }
+    },
+    {
+      "name": "play-composition-1280x720-09-evidence-unavailable-honest-empty",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:f775496b7504f536f9df99d08808de089053117d06e04939e66823266cf48ee5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:65f5067ffb652681379f8d49131b021f208ad9d65b451cec7553e1e641e3fd93",
+        "controls": 21,
+        "boxes": 131
+      }
+    },
+    {
+      "name": "play-composition-1280x720-10-inspector-open",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:6488b5c516ef658b9056fdcd15d501c930355c765ed78551766cebfac4ea1e45",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-10-inspector-open.json",
+        "digest": "sha256:dca1d7bfb34ae69e666fe30cd917cc619192d3cd774dcc5c93e1e088837ced0d",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-1280x720-11-timeline-rewind-fork-reentry",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:23b9e320b6d51d085dc241188052c70f69b5ec1da6c8a6235fd1b536809ad0a7",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:c0ce2121026a7a2322192b126b0f21fdf280f3853c398f910200fc4703e78300",
+        "controls": 24,
+        "boxes": 126
+      }
+    },
+    {
+      "name": "play-composition-1280x720-12-compare-open",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:fd537126a642fdc31b6c612b359c35fa09e9d9191c52b6f4f4f16f02ead2fbf3",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-12-compare-open.json",
+        "digest": "sha256:a0250f7437a2e56840e5bccc8315ff2356a7a862770e74e934d60d62c273a385",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-1280x720-13-max-load",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:17ae50089532faf3bce27229eb80f5a22b3377d2e43cf2430657098b61ae540e",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-13-max-load.json",
+        "digest": "sha256:26a2601b526655ee3c2a07c5aec997264fe6ee94197b7de1cd23d6edce66da47",
+        "controls": 28,
+        "boxes": 145
+      }
+    },
+    {
+      "name": "play-composition-1280x720-14-terminal-outcome",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:8f893384c6de0129c66c971d97f3bf07caf7c014772259f82da8d9d4d68ac33f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-14-terminal-outcome.json",
+        "digest": "sha256:f84fb7d331a35833442ec4ae86ced1f5dbacb2fd33f11ded9862faa3ec9b69a3",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-1280x720-15-promotion-pending",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:273266fc9de9eb7c25e376a231c75901d2319bdc6c6c92005851e58623ccb104",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-15-promotion-pending.json",
+        "digest": "sha256:59a3d01502b189c34a4e1105da0e889950b4e4ae1e59fcad267b47d6af45de9a",
+        "controls": 17,
+        "boxes": 117
+      }
+    },
+    {
+      "name": "play-composition-1280x720-16-keyboard-text-entry-active",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:9d90c4bf953c891770a885981321a4be18e9f3ef7e33feb759a98183bfbfaa9f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-1280x720-16-keyboard-text-entry-active.json",
+        "digest": "sha256:c4db53bc486309a75ea99c15c741363e465c1a33b6e14c1c3f8afaecb0bea3d0",
+        "controls": 19,
+        "boxes": 118
+      }
+    },
+    {
+      "name": "play-composition-768x1024-01-calm-rest",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:8a126fc0047e673debf2e97e0ec7ffcf3bc4b66a145756133d41d2239e81cf2d",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-01-calm-rest.json",
+        "digest": "sha256:3b5dd3f7e559a49c2c9b4e570266d307355212acea549c97c19aa9471eb0ac46",
+        "controls": 19,
+        "boxes": 123
+      }
+    },
+    {
+      "name": "play-composition-768x1024-02-square-selected",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:34ff0cf92ac61924f5e2c9b7fe5cb0845aa24117b1e6449748a1ba1bf3ccd900",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-02-square-selected.json",
+        "digest": "sha256:9869642915c91846065b687c036755e3e7cbff2168d9a4a84fd8a78cb1c2125f",
+        "controls": 21,
+        "boxes": 111
+      }
+    },
+    {
+      "name": "play-composition-768x1024-03-move-staged-cue",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:496f50230c7b2df0139f35b7a993db55ba725d6f73149e9e32b32aeab18885cc",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-03-move-staged-cue.json",
+        "digest": "sha256:e94a8b978810bf4b0332d8bc2038669a1937521586f4cff49d0ff524c64cfe82",
+        "controls": 19,
+        "boxes": 111
+      }
+    },
+    {
+      "name": "play-composition-768x1024-04-post-commit-guard",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:d8ae47c510d69b1e0e6352c84400acd3c3ef0e62a9886f481479b4eca5cdb9da",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-04-post-commit-guard.json",
+        "digest": "sha256:6d48ebd6b6da05e63a8ece3997fb68de446f9ef06650f5b4ba7a30806f16a425",
+        "controls": 27,
+        "boxes": 134
+      }
+    },
+    {
+      "name": "play-composition-768x1024-05-rail-module-expanded",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:31b312fae27b61be502034af9192fffaffe8a6efaca9938c5bcbff6847064107",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-05-rail-module-expanded.json",
+        "digest": "sha256:f2e7eba9d3a6ad0bb4b3e05372a27a7c04e3915f5c1806eb9b093133a23d365f",
+        "controls": 18,
+        "boxes": 109
+      }
+    },
+    {
+      "name": "play-composition-768x1024-06-guided-hint-final-stage",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:072e5b122eb5f7efd9270dac13826fb7e6a302160650d42b1d0aabd668b9f45b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-06-guided-hint-final-stage.json",
+        "digest": "sha256:8cc2e7b074b9432b885fc67ba0cbec9c4ee67f91b0731de67c09b85eb0121160",
+        "controls": 18,
+        "boxes": 111
+      }
+    },
+    {
+      "name": "play-composition-768x1024-07-menu-popover-open",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:9f9be00d949f8a131a1712c2b2210eb9f00a23b18a74187cf7c4ff2642894aaf",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-07-menu-popover-open.json",
+        "digest": "sha256:0182c37ae320376401dfe78c44aadd8ddc7d349649d9a7425afa202d0536c0bf",
+        "controls": 8,
+        "boxes": 15
+      }
+    },
+    {
+      "name": "play-composition-768x1024-08-long-objective",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:484d79c217a8f72dd8d64ddb2203abdd3ba38a8e7873428e63d668f7490b7869",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-08-long-objective.json",
+        "digest": "sha256:f6a8417335e698c5971a66fc227c043a6a5085ed7bc239e5db5be7491cb16776",
+        "controls": 17,
+        "boxes": 116
+      }
+    },
+    {
+      "name": "play-composition-768x1024-09-evidence-unavailable-honest-empty",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:c9b79230fbc2d73b6ac15dc4a0af7052df44875e2c3e3a6957db7bea921bb267",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:c82c3751ea8ef8c6785d5f787f1b31654aa609f976345accdce7cacde29f3b65",
+        "controls": 20,
+        "boxes": 116
+      }
+    },
+    {
+      "name": "play-composition-768x1024-10-inspector-open",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:3d70d4e3f16655b3c2751781d651242ea8ed0be788437f6019ef455987eb0056",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-10-inspector-open.json",
+        "digest": "sha256:f70e5177c36db2a548581d79da6d1c518cbef599b9bdf5b91a84f35a4db4d296",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-768x1024-11-timeline-rewind-fork-reentry",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:8b5761b756066f3c0bf53ac9d69e8efd98f84b127200b65cccc3d8c428a26ff5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:6aac6eaa8553b8d94559e9e410f5b12b15a026210b71a4a59f3e6ba409b27145",
+        "controls": 24,
+        "boxes": 126
+      }
+    },
+    {
+      "name": "play-composition-768x1024-12-compare-open",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:4c486d3583624579f3335422f14bc22f8d5cf70eaf039bdc6a39f3ec2b55ee26",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-12-compare-open.json",
+        "digest": "sha256:8916dc6d750d3404efa022009ac80de16c5b6e734479e721a7e90a32e75fdd40",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-768x1024-13-max-load",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:e1ab809bf0ae24b1f438abe785399ef6a214ed2654478cd28507c9bdae6c04cb",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-13-max-load.json",
+        "digest": "sha256:eab7b7d1dd0b97cd053b65e195874f7675f200d1139746bb9c808c9d42f4dadc",
+        "controls": 26,
+        "boxes": 127
+      }
+    },
+    {
+      "name": "play-composition-768x1024-14-terminal-outcome",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:dfafa6f9d9ddc1b13706df4c68f922a2d38b69febd8334876f42edfd0bf4cca1",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-14-terminal-outcome.json",
+        "digest": "sha256:25549b9d67721f75e816bc4006cd9bbf451f4ad913f679e6b83838021d1ce0c9",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-768x1024-15-promotion-pending",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:444dc008d9d3f37069046e4f2ad7ad3cc1b82e9fc9e15b29e30e7828d03df0b8",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-15-promotion-pending.json",
+        "digest": "sha256:94685880c542c6af001133bc4c8c2fbec72c32b7b166467bddadc9945a7ec30c",
+        "controls": 18,
+        "boxes": 119
+      }
+    },
+    {
+      "name": "play-composition-768x1024-16-keyboard-text-entry-active",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:9aa7a6acdafa8193148d993dd4c50ba948595c3c8384c7dcd5bb90b390dc369a",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-768x1024-16-keyboard-text-entry-active.json",
+        "digest": "sha256:7f7299ac6ebc0365e7954ea82062a09e7a082f84acee6d4b975e2cc18e16f8fd",
+        "controls": 19,
+        "boxes": 118
+      }
+    },
+    {
+      "name": "play-composition-430x932-01-calm-rest",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:49a6e3de0dbf815a3af41306e2f2b4b211c11ffab731290cf2445d5e390c1be2",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-01-calm-rest.json",
+        "digest": "sha256:d18bec0ef5f542d917a44da357f95a24c066926e2aa8c535dc7de893ef771da2",
+        "controls": 12,
+        "boxes": 95
+      }
+    },
+    {
+      "name": "play-composition-430x932-02-square-selected",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:f94684edf20b6d52a6e8b66cd80393e5969ef7a663e53284cc421c5566cd1bd8",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-02-square-selected.json",
+        "digest": "sha256:7bd57f3dfcb802308252c835540faadc35e328b4cf17a7f3575ca8c655c0665f",
+        "controls": 13,
+        "boxes": 29
+      }
+    },
+    {
+      "name": "play-composition-430x932-03-move-staged-cue",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:8b93e8c865668e8f1faf2e6eb9b3e8f25045fb38d2d69c454a97863c9947ce20",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-03-move-staged-cue.json",
+        "digest": "sha256:a1f53aac9176d84fff0dbc2ebc7bef9dbd6d723274a112a7507f8be3b31acc49",
+        "controls": 12,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-430x932-04-post-commit-guard",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:68a9bb196786b2f81a49d8b84b0002902c94d4ff3750758f315a7db9ee0def10",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-04-post-commit-guard.json",
+        "digest": "sha256:649583ea2e81e9b8fba8729105793ba8772979b8196452c24225c62d3ec50940",
+        "controls": 16,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-430x932-05-rail-module-expanded",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:1b84cb9ea3c0ce0896545267e9b04fa25fd0444cd021285dfa401c121b2dfcae",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-05-rail-module-expanded.json",
+        "digest": "sha256:d987adb182ee8633c554b78570f45129d4d9a6b256f1a88326b95b8e865b8870",
+        "controls": 11,
+        "boxes": 29
+      }
+    },
+    {
+      "name": "play-composition-430x932-06-guided-hint-final-stage",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:9d716f804bbac1010bd5167e5e8598f882e7c81205a7b4272dadd0db33e8c56c",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-06-guided-hint-final-stage.json",
+        "digest": "sha256:8ae11ab335c197d2eca80782fc29fd20d15c1f0182e7c15163bc7a7c9c6cf4f3",
+        "controls": 11,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-430x932-07-menu-popover-open",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:7006af29c0479f4b61880b27e7b834421d2fa2137512aabb1ea8f88da773cc5d",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-07-menu-popover-open.json",
+        "digest": "sha256:320d37c95f6fb608a8ca08baf54ddaa9d5cfe63c665211bc641b543e7aeb9bb6",
+        "controls": 8,
+        "boxes": 15
+      }
+    },
+    {
+      "name": "play-composition-430x932-08-long-objective",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:9bd11fa2715a9fc2375bb59cdf7301ed58a1afe1bf98c3bd39407c186191342f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-08-long-objective.json",
+        "digest": "sha256:2a36ada8508c15d73dec0393b05c7e7ce3f3f950571bb6be0a7621e2e5bcf700",
+        "controls": 12,
+        "boxes": 95
+      }
+    },
+    {
+      "name": "play-composition-430x932-09-evidence-unavailable-honest-empty",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:984c07072f3b4b0cac2cc403c11b38ccfc7aef01f2b930c508f80d420b49ce28",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:3de3e30d6a2aff9a1bec18d7c44bf29ffafcaed0bb88de863d2982d020581d41",
+        "controls": 12,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-430x932-10-inspector-open",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:cdfea06dba53dfa56dbf41340baae1e90cd33409635c4bb728d8b642dfd42716",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-10-inspector-open.json",
+        "digest": "sha256:5ee247e42274b6696066a4da187278f091565bad3500c19aa613f2b7815bacbf",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-430x932-11-timeline-rewind-fork-reentry",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:f559819f78200ce310a836c0358e39a2210d885c5850ff5b18925a080eb00593",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:a4b001499c91cd1ea3da56a28f88f78a7501dfd5dcbcb24fde07b9e51f8e4e2d",
+        "controls": 12,
+        "boxes": 20
+      }
+    },
+    {
+      "name": "play-composition-430x932-12-compare-open",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:adb3ee2a9966007e8760c04c487f7235099d12b48467bd0b082a6519406026b6",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-12-compare-open.json",
+        "digest": "sha256:ce40b5b9fada203ee8e7cb4be2e0ce922db28d9acea877773328acf928e1d6dd",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-430x932-13-max-load",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:8a7e5b3c4794886cfae6fb11d8279c4a3de652bf77d789c65b3683209f65f48f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-13-max-load.json",
+        "digest": "sha256:7ed4d8c54d5f4671edd25da0b4bb1714fd4b2228d0607e3272a684d918c1a58f",
+        "controls": 16,
+        "boxes": 42
+      }
+    },
+    {
+      "name": "play-composition-430x932-14-terminal-outcome",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:1e62c78d593d9b0e933c23066853a32781d687fa2b6845de63c10ccdee0a5248",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-14-terminal-outcome.json",
+        "digest": "sha256:c31e681fe6a36a6c7ee4315bf41e8212b6998218ad61164e8cc3fc535edf3ade",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-430x932-15-promotion-pending",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:f99d7082d631c1f999835f7551bcc943551a9148fff4ee468cf93d5aa257dc4e",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-15-promotion-pending.json",
+        "digest": "sha256:9133a5a61e4cec082238847760d58231340fd98a7f28aa260c3fdc5a1a39e1bf",
+        "controls": 16,
+        "boxes": 99
+      }
+    },
+    {
+      "name": "play-composition-430x932-16-keyboard-text-entry-active",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:66b2d75a27aaa5b7f7a8089f59edb7b959b239252880293b53835cea5f737446",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-430x932-16-keyboard-text-entry-active.json",
+        "digest": "sha256:68d09af9aa2627f7cccdba09ad72464babc705521bb2c12eeaaf862f443e24bb",
+        "controls": 14,
+        "boxes": 97
+      }
+    },
+    {
+      "name": "play-composition-390x844-01-calm-rest",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:54a280930d5427a98ce49bf0390ae8aefdbe263760c24f246e67ab9e0d46c0e5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-01-calm-rest.json",
+        "digest": "sha256:784d40afa455aef7ea9a22ebf5cce6a011905e8d5805501c794ee2ed79c201c3",
+        "controls": 12,
+        "boxes": 95
+      }
+    },
+    {
+      "name": "play-composition-390x844-02-square-selected",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:da1a396cf9cc99fff39fff0d97eb96ede6189c48fae8f8d0707080a3f92acaa8",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-02-square-selected.json",
+        "digest": "sha256:a5b54756b42fe7defe8b7d780bba6d24df3e09365d840469d8393a2dd62fce50",
+        "controls": 13,
+        "boxes": 29
+      }
+    },
+    {
+      "name": "play-composition-390x844-03-move-staged-cue",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:d4640b7651311d7b77c97dba5b910ba0fe8a6d8c285380b9e70278c2d00f2b9d",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-03-move-staged-cue.json",
+        "digest": "sha256:08ff755d1ea97e1245781e19f04fc1f504e4ca83786981921797c3f107c6c3b4",
+        "controls": 12,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-390x844-04-post-commit-guard",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:5f39972429a559bc6b20d24b5d1bc37c25cc2e0909abc67e9f4b4987d9cac439",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-04-post-commit-guard.json",
+        "digest": "sha256:6e84892b82a85e76783f6e4e6dd28489870fa0e6595a71be3ca1d04815f3c5ac",
+        "controls": 16,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-390x844-05-rail-module-expanded",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:ff81fcedbdf276428cc0f605753490d8ddbd701831b0b04026e2c06811bf365b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-05-rail-module-expanded.json",
+        "digest": "sha256:349203c56011185ead13bcde2a96ebedc6ff3f3726fb2e7f6a1876d4fb29b10f",
+        "controls": 11,
+        "boxes": 29
+      }
+    },
+    {
+      "name": "play-composition-390x844-06-guided-hint-final-stage",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:ff98d3e3d5be232ca39876781e57a516146e6025ecf1c6b7ba99ef04f6b354dc",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-06-guided-hint-final-stage.json",
+        "digest": "sha256:59310b9689d43856e6498b91a5386f85b171b9118b284bad1f246191e5297c81",
+        "controls": 11,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-390x844-07-menu-popover-open",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:c68e373a672aef1e51e6d0c6e4ea832e0bf544511f1a1caefd9e748f417d9401",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-07-menu-popover-open.json",
+        "digest": "sha256:5ed03842bc114b481c3faffddbcb17bde309b133685dc69461eb0da674853173",
+        "controls": 8,
+        "boxes": 15
+      }
+    },
+    {
+      "name": "play-composition-390x844-08-long-objective",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:a07217ee366199490b230e20a2cd2d92ca3d574c81633e93f0ab6d4d95111d2b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-08-long-objective.json",
+        "digest": "sha256:28d47e5e1a22ebadc5e2dfefd2871bcf7e670d9be5e7c503a67645092341e23a",
+        "controls": 12,
+        "boxes": 95
+      }
+    },
+    {
+      "name": "play-composition-390x844-09-evidence-unavailable-honest-empty",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:99ae6e484085b88c88c71b2ceba90b31a81c8f416c4ab264023e7172fc3b99f6",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:359b52047edd8b2c394b2b97ac77ea274e1ea112c12583dd1ecdfb3e5dbb6e0d",
+        "controls": 12,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-390x844-10-inspector-open",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:01c06d87dd95f2552e5fa5b52155a671443418b603aa2569d1423b0b1c47ff84",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-10-inspector-open.json",
+        "digest": "sha256:c1470ea03a2605d00033a0bb5d5530e753b818546b03f78b2bacc5db13d97932",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-390x844-11-timeline-rewind-fork-reentry",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:4b3c4149f64680c97e9b2375f67eb2c7cdd77c6f3b78eb422aab968e5b473778",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:1732d8d866dd6154678e5a188404618caa0e325cc626081a836660a1c33cbeda",
+        "controls": 12,
+        "boxes": 20
+      }
+    },
+    {
+      "name": "play-composition-390x844-12-compare-open",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:6d955b12d2e7590ca3aeebfbec8464920fd37d4e69d64b20356809c9a8add0b2",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-12-compare-open.json",
+        "digest": "sha256:d4306a96744246b3d504d9b7ec5516e34e0b751fb03591f837cde08cf0d85192",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-390x844-13-max-load",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:f8ddfa2b2f19a2aa75dd3a04536202039b3aa91167d41a0c815e1f8ad16a740b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-13-max-load.json",
+        "digest": "sha256:0ab2f8bef6c64b14932ad24cd8f84e46757db6afcbb4070b0ff21d5719ac1756",
+        "controls": 16,
+        "boxes": 42
+      }
+    },
+    {
+      "name": "play-composition-390x844-14-terminal-outcome",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:4e000db001e06a6b272c9ca8dbc9b378933b8b8c9ad32bd1ac6abed75d03d818",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-14-terminal-outcome.json",
+        "digest": "sha256:9a1f0436aa64aef81cb702a8b41dca37af8ca0f6c50ccc5600337ce44e645e14",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-390x844-15-promotion-pending",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:4099c7a88b85bf34da2dd0606d1ec67032cfe044c6c225810e3678053bb3918c",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-15-promotion-pending.json",
+        "digest": "sha256:1c37f95df55a81b39bbc3dc6e3e58242413a0a0890ffa0ade6579514f9b8cfc5",
+        "controls": 16,
+        "boxes": 99
+      }
+    },
+    {
+      "name": "play-composition-390x844-16-keyboard-text-entry-active",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:1bdd7b06e4ab2c0e481c58618968ba8733c88f3585a1a2d6b8193dcf592a2c06",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-390x844-16-keyboard-text-entry-active.json",
+        "digest": "sha256:5b7914fe9bb0687f309dff5e5470344ee169ecc385da66cb936714670c3131a0",
+        "controls": 14,
+        "boxes": 97
+      }
+    },
+    {
+      "name": "play-composition-360x680-01-calm-rest",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:9d1a38340b921dc241c38a232603a3a3755ccf6c5f64b089c306c63a839def1d",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-01-calm-rest.json",
+        "digest": "sha256:dc61c4d6a698039b4096b0161c13e2e38d112214e7d74226da7b5ad8a074acfd",
+        "controls": 12,
+        "boxes": 95
+      }
+    },
+    {
+      "name": "play-composition-360x680-02-square-selected",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:8915d0bf3cecfbce5686d16fd8741c161f885fdf21dd47329196474b39a885d6",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-02-square-selected.json",
+        "digest": "sha256:b23779e3e881d69b708e1b8db4368d5e39f6cc20c637634f000f658c2eb0aea7",
+        "controls": 13,
+        "boxes": 29
+      }
+    },
+    {
+      "name": "play-composition-360x680-03-move-staged-cue",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:3622f860c03a9785cd37a9252cc51aeadb8cbb501f164b38c63f5e9bf0fe7ed0",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-03-move-staged-cue.json",
+        "digest": "sha256:d241d76a32f93d21e9d018eaea719ee2e60842c577b96d9ed5fc040c0ad46cae",
+        "controls": 12,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-360x680-04-post-commit-guard",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:e11f1927a3d258475cc4090dadc6adf10e0acac06f4ad33557262fbd28eafda8",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-04-post-commit-guard.json",
+        "digest": "sha256:c3e8f1c65289675f57c099dae45337147f29aaf8434c50b61ba544b674862fab",
+        "controls": 16,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-360x680-05-rail-module-expanded",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:e5338aa9e2ba9285875740cc21e184451e9fe37d57b1ebe6db1b77eb870ea366",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-05-rail-module-expanded.json",
+        "digest": "sha256:b28994d1d47117061b63ddecb449e3c4a2067b7ef15c68127c1fb65490c6ba17",
+        "controls": 11,
+        "boxes": 29
+      }
+    },
+    {
+      "name": "play-composition-360x680-06-guided-hint-final-stage",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:a1fc7b53c9689442cce9b035633dc4f9bf2cfc8f33575ab1b9dfe3d6609366bb",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-06-guided-hint-final-stage.json",
+        "digest": "sha256:51998ac683c318413ee3d3f4426be8bf7016bfe13c75f96d30063441cd1a43ff",
+        "controls": 11,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-360x680-07-menu-popover-open",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:29faccfb66b449286cbfe04a50c4037ac2903e0605c80bd03af162b373a5edfa",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-07-menu-popover-open.json",
+        "digest": "sha256:18f760de042b9017a75403d8e82b1efba71f85bda7fc33f6571b505944e569ef",
+        "controls": 8,
+        "boxes": 15
+      }
+    },
+    {
+      "name": "play-composition-360x680-08-long-objective",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:b9e91fd753d5840c0aad8846555b4066079ef9a40468082b8d33eaa72e77fb83",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-08-long-objective.json",
+        "digest": "sha256:99d471dfa60625b664187388d9bdfba71bc147c50c930dc58369ed430fa8589f",
+        "controls": 12,
+        "boxes": 95
+      }
+    },
+    {
+      "name": "play-composition-360x680-09-evidence-unavailable-honest-empty",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:8d1939d736bae3a9e94fd6dec519c38a95a7e0e3569995dfea4c813e04015dc5",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:a149c51159ed95f2bcce0301a0c4f9539386f75f049fc67df18bef1220fdd0bb",
+        "controls": 12,
+        "boxes": 32
+      }
+    },
+    {
+      "name": "play-composition-360x680-10-inspector-open",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:574e9945cce2cf4b01188a6c4130d17500bccaa6c290336988c9b0c9b9c8576e",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-10-inspector-open.json",
+        "digest": "sha256:8a9e4adb90c541debe8075805d47751e55e7822da91b93b9654c94dc3e70d475",
+        "controls": 18,
+        "boxes": 54
+      }
+    },
+    {
+      "name": "play-composition-360x680-11-timeline-rewind-fork-reentry",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:3fdecb6cbd744a4afece00673abbafcefd56df914c6a6f9c0552ffc12d0ce24a",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:4e893695f562780dd713431b4d414ed166ebb2685be6ff105dc5da288a1ddbc4",
+        "controls": 12,
+        "boxes": 20
+      }
+    },
+    {
+      "name": "play-composition-360x680-12-compare-open",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:9b5b5b853191b3726b50153e06fb8fc93cb61739ccfe2d4ed92c19d7d17d56de",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-12-compare-open.json",
+        "digest": "sha256:0f0f80f2f7daf1c29dcb9935b4481620ecf6435e1ef914690715e87e81510d88",
+        "controls": 9,
+        "boxes": 214
+      }
+    },
+    {
+      "name": "play-composition-360x680-13-max-load",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:341a6fb9d0d7a8153759dc37a6643a2951b843477aeb9bfd23a18d4ea1b7764f",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-13-max-load.json",
+        "digest": "sha256:beedb3df1117b7e05f8fa594e59ce9f37378cb479b6548d770c6c97cf6de89ea",
+        "controls": 16,
+        "boxes": 42
+      }
+    },
+    {
+      "name": "play-composition-360x680-14-terminal-outcome",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:ed58074e2d156b4c80a6de201d06bdedc08ac8c942bc5b83726265cc40a4fc4b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-14-terminal-outcome.json",
+        "digest": "sha256:8191d80b5e1b08c2f9b4d20270cc1aa91cf9c7af725c7c0a0031bde5ef70269b",
+        "controls": 5,
+        "boxes": 16
+      }
+    },
+    {
+      "name": "play-composition-360x680-15-promotion-pending",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:517aa040b9b47b6e6a153d8c7c5ee458f122da308f96fafd3c302561dd3a944b",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-15-promotion-pending.json",
+        "digest": "sha256:5a9cb818bf26305ff9ef3be59111bd840d8723b76a2871685107f122ff7cfd23",
+        "controls": 16,
+        "boxes": 99
+      }
+    },
+    {
+      "name": "play-composition-360x680-16-keyboard-text-entry-active",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:a65ba3de93df91003a454d8939fbeec801eb659215e50f786673c5847ccb350c",
+      "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/9af870e7b0f77dceb399c39cb5e902759b4d5eb291ef0e534d09d5330e97e3ba/play-composition-360x680-16-keyboard-text-entry-active.json",
+        "digest": "sha256:5e8a760b23f6bbe304e5ca8bb5ae4003a2cd8fcbbc6c31774636bed6ff56618b",
+        "controls": 14,
+        "boxes": 97
+      }
+    }
+  ]
+}

@@ -298,6 +298,7 @@
   let assistanceQuery = 0;
   let assistance: AssistanceConfig = $derived(compiledAssistance?.config ?? SILENT_ASSISTANCE);
   let assistanceMenuOpen = $state(false);
+  let assistanceSummary: HTMLElement | undefined = $state();
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
@@ -1156,6 +1157,7 @@
   function choosePreset(preset: PresetId): void {
     commitPreference(selectNamedPreset(activeAssistanceProfile, preference, preset));
     assistanceMenuOpen = false;
+    assistanceSummary?.focus();
   }
 
   /** Advanced: every changed raw field becomes a sparse explicit override (criterion 18). */
@@ -2076,8 +2078,11 @@
       <div class="topbar-actions">
         {#if run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
-        <details class="assistance-control" bind:open={assistanceMenuOpen}>
-          <summary aria-label={`Support style: ${presetPillLabel}`}><span class="preset-pill" data-preset-mode={compiledAssistance?.displayMode ?? "pending"}>{presetPillLabel}</span></summary>
+        <details class="assistance-control" bind:open={assistanceMenuOpen}
+          role={assistanceMenuOpen ? "dialog" : undefined} aria-modal={assistanceMenuOpen ? "true" : undefined}
+          aria-label={assistanceMenuOpen ? "Choose help style" : undefined} use:modalBoundary={assistanceMenuOpen}
+          onkeydown={(event) => { if (assistanceMenuOpen && event.key === "Escape") { event.preventDefault(); event.stopPropagation(); assistanceMenuOpen = false; assistanceSummary?.focus(); } }}>
+          <summary bind:this={assistanceSummary} aria-haspopup="dialog" aria-label={`Support style: ${presetPillLabel}`}><span class="preset-pill" data-preset-mode={compiledAssistance?.displayMode ?? "pending"}>{presetPillLabel}</span></summary>
           <div class="support-menu">
             <p class="preset-menu-promise">{presetHeadline}</p>
             <fieldset class="preset-options">
@@ -3001,7 +3006,7 @@
   .assistance-control summary::-webkit-details-marker { display: none; }
   .preset-pill { display:inline-flex; align-items:center; min-height:2rem; padding:0 .7rem; border:1px solid var(--accent); border-radius:999px; color:var(--accent); font-size:.72rem; font-weight:700; white-space:nowrap; }
   .preset-menu-promise { padding-bottom:.45rem; border-bottom:1px solid var(--line); color:var(--ink) !important; }
-  .preset-disclosure { position:sticky; top:0; z-index:2; display:grid; grid-template-columns:auto minmax(0,1fr); gap:.5rem; align-items:baseline; margin:-.65rem -.65rem 0; padding:.55rem .65rem; border-bottom:1px solid var(--line); background:var(--panel); }
+  .preset-disclosure { position:sticky; top:0; z-index:2; display:grid; grid-template-columns:auto minmax(0,1fr); gap:.5rem; align-items:baseline; margin:0; padding:.55rem .65rem; border-bottom:1px solid var(--line); background:var(--panel); }
   .preset-disclosure strong { color:var(--accent); font-size:.72rem; }
   .preset-disclosure span { min-width:0; color:var(--muted); font-size:.72rem; line-height:1.35; }
   .assistance-grid { display:grid; gap:.55rem; }
@@ -3109,8 +3114,12 @@
   :global(.timeline-strip .timeline-heading) { display: flex; gap: .25rem; align-items: baseline; padding: 0 .35rem; white-space: nowrap; }
   :global(.timeline-strip .timeline-heading h2) { font-size: .68rem; }
   :global(.timeline-strip .timeline-heading span) { font-size: .62rem; }
-  :global(.timeline-strip .timeline ol) { height: 100%; margin: 0; padding: .2rem; align-items: center; }
-  :global(.timeline-strip .timeline li > button) { min-width: 3rem; padding: .28rem .42rem; }
+  :global(.timeline-strip .timeline ol) { height: 100%; min-height:0; box-sizing:border-box; margin: 0; padding: .2rem; align-items: center; }
+  :global(.timeline-strip .timeline li) { display:flex; align-items:center; gap:.25rem; height:100%; }
+  :global(.timeline-strip .timeline li > button) { display:flex; align-items:center; gap:.25rem; min-width: 3rem; padding: .28rem .42rem; font-size:.72rem; white-space:nowrap; }
+  :global(.timeline-strip .timeline .ply), :global(.timeline-strip .timeline .authored-marker), :global(.timeline-strip .timeline .guard-marker) { display:inline; margin:0; }
+  :global(.timeline-strip .timeline .branch-links) { display:flex; align-items:center; gap:.25rem; margin:0; }
+  :global(.timeline-strip .timeline .pivotal-marker), :global(.timeline-strip .timeline .shape-marker) { margin:0; width:auto; }
   :global(.timeline-strip .timeline .confirm) { position: absolute; right: .25rem; bottom: .25rem; margin: 0; padding: .25rem .4rem; }
 
   .quick-actions {
@@ -3125,6 +3134,14 @@
   .companion-scroll { min-height: 0; display: grid; padding: .65rem; overflow: hidden; }
   .companion-section { min-width: 0; min-height: 0; display: none; gap: .55rem; overflow-y: auto; overscroll-behavior: contain; }
   .companion-section.compact-active { display: grid; }
+  .branch-seat { align-content:start; }
+  /* BranchRail is also used outside play. Here the companion region alone owns scrolling. */
+  .branch-seat :global(.rail) { display:flex; overflow:visible; min-height:min-content; }
+  .branch-seat :global(.heading) { padding-block:.2rem; }
+  .branch-seat :global(.rail ol) { display:grid; flex:none; overflow:visible; }
+  .branch-seat :global(.rail ol > li) { overflow:visible; }
+  .branch-seat :global(.rail-actions) { overflow:visible; }
+  .branch-seat :global(.copy strong), .branch-seat :global(.copy small) { overflow:visible; white-space:normal; overflow-wrap:anywhere; }
   .companion-queue { display:contents; }
   .companion-queue.band { min-width:0; min-height:0; height:100%; display:grid; grid-template-columns:repeat(var(--queue-columns),minmax(0,1fr)); grid-template-rows:minmax(0,1fr) 2rem; gap:.35rem; }
   .next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{position:fixed;z-index:24;left:50%;bottom:1rem;width:min(60rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);transform:translateX(-50%);display:flex;align-items:end;align-content:start;gap:.65rem;flex-wrap:wrap;overflow:auto;overscroll-behavior:contain;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel);box-shadow:var(--shadow)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{min-height:2rem;padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.board-return{flex-basis:auto}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}

@@ -5,6 +5,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 
 import { chooseBot, chooseRawRung } from "./play-helpers.js";
+import { inspectComposition, type CompositionConformance } from "./composition-conformance.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 import type { ModuleQueryPage } from "@chess-tabiya/runtime";
 
@@ -44,6 +45,8 @@ async function choosePreset(page: Page, name: RegExp): Promise<void> {
   await page.getByRole("radio", { name }).check();
   await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
   if (await page.locator("details.assistance-control").getAttribute("open") !== null) await summary.click();
+  await expect(page.locator("details.assistance-control")).not.toHaveAttribute("open", "");
+  await expect(page.locator(".workspace")).not.toHaveAttribute("inert", "");
 }
 
 /** Opens the companion's Support region when it is collapsed behind the compact tab. */
@@ -174,6 +177,8 @@ async function attachCompositionCell(
   state: string,
 ): Promise<void> {
   const name = `play-composition-${viewport.width}x${viewport.height}-${state}`;
+  const conformance = await inspectComposition(page, name);
+  await testInfo.attach(`composition-conformance-${name}`, { body: Buffer.from(JSON.stringify(conformance)), contentType: "application/json" });
   const path = testInfo.outputPath(`${name}.png`);
   await page.screenshot({ path, animations: "disabled" });
   await testInfo.attach(name, { path, contentType: "image/png" });
@@ -206,6 +211,16 @@ const ENDGAME_INPUT_PROJECTIONS = [
 ] as const;
 
 test.beforeEach(async ({ page }) => register(page));
+
+test.afterEach(async ({}, testInfo) => {
+  const reports = testInfo.attachments.filter(a => a.name.startsWith("composition-conformance-"));
+  for (const attachment of reports) {
+    expect(attachment.body, `${attachment.name}: missing measured report`).toBeDefined();
+    const report = JSON.parse(attachment.body!.toString("utf8")) as CompositionConformance;
+    expect(report.controls, `${report.cell}: vacuous actionable census`).toBeGreaterThan(0);
+    expect(report.issues, `${report.cell}: ${JSON.stringify(report.issues, null, 2)}`).toEqual([]);
+  }
+});
 
 test("an anonymous visitor understands the product, browses positions, and keeps the chosen rehearsal through registration", async ({ page }) => {
   await page.context().clearCookies();
@@ -2337,9 +2352,17 @@ test("@matrix play composition keeps one exact board rectangle through reachable
 
     await page.locator("details.assistance-control summary").click();
     await expect(page.locator("details.assistance-control")).toHaveAttribute("open", "");
+    await expect(page.getByRole("dialog", { name: "Choose help style" })).toBeVisible();
+    await expect(page.locator(".workspace")).toHaveAttribute("inert", "");
+    await page.getByRole("button", { name: "Advanced support controls", exact: true }).focus();
+    await page.keyboard.press("Tab");
+    await expect(page.locator("details.assistance-control summary")).toBeFocused();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await attachCompositionCell(page, testInfo, viewport, "07-menu-popover-open");
-    await page.locator("details.assistance-control summary").click();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("details.assistance-control")).not.toHaveAttribute("open", "");
+    await expect(page.locator(".workspace")).not.toHaveAttribute("inert", "");
+    await expect(page.locator("details.assistance-control summary")).toBeFocused();
 
     await attachCompositionCell(page, testInfo, viewport, "08-long-objective");
 

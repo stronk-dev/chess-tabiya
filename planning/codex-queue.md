@@ -1,16 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3444]] is the next executable play-composition task after the current wave's full gates and
-commit: replace stacked desktop rows inside the tablet band with its accepted §2.2 head plus
-single badge/selector row, native in-place swaps and internally scrolling head. Include Guided
-Hint and warning priority without creating a second expansion or evidence authority. Keep the
-board box fixed and extend the genuine eight-seat browser journey to assert the presentation,
-not just the band token. [[D3436]] retains the phone overlay/below-board/modal contract conflict;
-do not change modality incidentally.
-[[D3445]] adds an independent tablet brand/context bounds check from the retained crowded-header
-image before any header repair; visual inspection is not falsely promoted to a measured collision.
-[[D1834]]/[[D910]], complete A3/A4, Inspector and
-ceiling/owner-use discharges remain open.
+Completed executable wave: [[D3451]]–[[D3457]], the accepted play-composition A3 per-cell
+control/clipping/scroll instrument and actual coordinate, promise-footer, chooser, timeline,
+promotion and branch-scroll repairs. Full software/content/browser replacement gates pass;
+`planning/play-composition/conformance-2026-10-06.md` records failures as failures.
+Next, measure [[D3458]]'s whole phone text-entry/Appearance affordance bounds and affected square
+gestures, then repair genuine overlap before A4 destination/vocabulary/Inspector positives and
+the remaining D1834 semantic obligations. [[D3436]] retains the phone overlay/below-board/modal contract reconciliation;
+the companion policy is not changed incidentally by this chooser-boundary repair.
+[[D3444]]–[[D3450]] already landed at `d262958c`, including the persistent tablet frame,
+independent header controls and delayed-answer/guard retention. Do not queue that finished work again.
+[[D1834]]/[[D910]], full RFC, ceilings and owner-use discharges remain open. Routine metadata
+and hashes are automatic closeout, not a reason to ask the owner or stop the active 1.0 goal.
 
 Current [[D3435]]/[[D3437]]–[[D3442]] checkpoint: all eight seats are exercised at seven viewports
 through actual compiler, domain and source requests, with receipt-bound badges, native swaps,

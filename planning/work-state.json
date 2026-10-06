@@ -28448,6 +28448,77 @@
       "uxItems": [],
       "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3451",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e668077b5c69d54b599fff468ed4af33640a6406258b93ef542531e17ed2caca",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3452",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dfab34d24fe4fae27d1eb7703ebcf863a55810e805a790cf1245ee1f1e946eea",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3453",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:177ef1553f4982b723e6ecf1fab4beec0de8b7c10b98ef03bf6ea051a14b1607",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3454",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6637700e3b0f2e6548c818e09f494f642b40c842a1710f91dd51c3b5d833790f",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3455",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f3095a280f55cc18813ab09ca609ad0f455b19c59ec68124ee55fd9edd354ec6",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3456",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:114532d17644ba9cb9ba0aa28761a04303aa193daa8e7481a116c3dc4aa7bc14",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3457",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dbe6d9b5e01674980cd2351f3ea4450179d13b07cf09828255b033ad3e1e33cc",
+      "uxItems": [],
+      "evidence": "planning/play-composition/conformance-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3458",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:132de7902c9f6f388a9ec72752a5d8b1c8608ab8f82793b89e56453459ce6654",
+      "uxItems": [],
+      "owner": "client-platform"
     }
   ]
 }
