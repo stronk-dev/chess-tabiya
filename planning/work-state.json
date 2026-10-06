@@ -28604,11 +28604,22 @@
     },
     {
       "id": "D3468",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c24405cd3faf8c235fa92d0faf724918ad59792e2c04070bcc56b6aeb5515cef",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d75bf30d0ff433243d368896c485347905eb8b3059e05662adbaa870c6cef9ad",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "planning/play-composition/corpus-subjects-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3469",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d7bf5c1d2153b5ea894ae3338da4d2c114882907bb23bc37ecce308381a2842f",
+      "uxItems": [],
+      "owner": "core-loop",
+      "blocker": "rfc:evidence-presentation.md",
+      "question": "Specify authenticated inspected-decision attribution for corpus committed-move context before offering branch-specific context."
     }
   ]
 }

@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 corpus subject checkpoint: [[D3468]] repairs future-active-decision lookup
+for historical/root previews and stale same-predecessor settlements, including screen
+destruction. Genuine imported-game and sibling-branch journeys retain the source counts
+without mismatched committed labels. Complete sequential exact-index software, content
+and browser gates pass; receipt: `planning/play-composition/corpus-subjects-2026-10-06.md`.
+[[D3469]] retains the branch-aware committed-context successor contract. Full A4/source
+migrations, the RFC and 1.0 remain open; routine metadata maintenance is automatic.
+
 2026-10-06 Inspector subject checkpoint: [[D3466]]/[[D3467]] repair historical
 material-classification and displayed-preview attachment identity. Divergent legal
 positions and attachment absence fail on the predecessor; mounted/native import,

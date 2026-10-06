@@ -65,11 +65,27 @@ Shown receipts use the registered Inspector population renderer; absent sources 
 empty receipt. The browser validates the exact consumer, projection, renderer, attribution
 and move membership before displaying it. It never creates Explorer source evidence.
 
+Timeline preview is not a rewind. The Inspector resolves the latest learner decision
+on the displayed node's ancestry and requests its predecessor; before any learner decision,
+it requests the displayed node itself. A later active-path decision cannot supply the query.
+An inspected-subject/disclosure epoch retires pages, errors and pending requests on preview,
+branch or permission changes, including leave-and-return to the same predecessor. Ordinary
+evidence attachments at the same decision do not discard a completed population reading.
+
+The current endpoint's committed-move context still names the active-path child. The client
+shows that line only when it matches the inspected learner decision; root previews and
+mismatches retain genuine population components without inventing a replacement membership
+claim. Branch-specific committed context is an open successor contract (D3469), not an
+implemented transport extension.
+
 ## Client contract
 
-Assistance preferences are version 2; valid version-1 values upgrade with corpus off,
-and the localStorage key remains unchanged. Corpus remains off by default and is shown
-only when the provider exists and the server-derived permission is free.
+The primitive configuration is AssistanceConfig version 4. The browser stores a
+version-2 workflow receipt with assistanceHead 4 per context and migrates valid older
+assistance settings forward. Defaults and overrides are server-compiled; see
+`docs/adaptive-guidance.md`. Corpus acquisition remains an explicit request, constrained
+by provider availability and the server-derived permission. Raw counts live in Inspector,
+not an automatically expanded play feed.
 
 Every rendered result begins with its population attribution and the byte-fixed line:
 

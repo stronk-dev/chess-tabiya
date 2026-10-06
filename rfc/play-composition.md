@@ -17,6 +17,13 @@
   Focused mounted/native controls pass; full replacement results and bounded closeout:
   `planning/play-composition/inspector-subjects-2026-10-06.md`. No source-schema, permission,
   chess convention, full A4 or lifecycle promotion is implied.
+- **Implementation checkpoint 2026-10-06, corpus subjects:** D3468 derives the existing
+  pre-move query from displayed ancestry and retires stale subject/disclosure/ABA and
+  destroyed-screen settlements. Genuine population components remain; mismatched
+  active-branch committed context is suppressed, not replaced with browser-minted facts.
+  Full replacement gates and closeout: `planning/play-composition/corpus-subjects-2026-10-06.md`.
+  D3469 retains the inspected-decision successor contract; no source/route extension,
+  permission, convention, full A4 or lifecycle promotion is implied.
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
   §3-forms (form inventory and the alternate-rendering acceptance test), §3a (silence default);
   `design/03-product-breadth.md` §IA (the inspector as a deliberate separate surface)

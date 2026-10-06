@@ -1042,6 +1042,147 @@ test("endgame evidence names a technique only with its setup convention id and v
   await expect(evidence).not.toContainText("Philidor");
 });
 
+async function importCorpusPreviewGame(page: Page): Promise<{ runId: string; graph: RunGraph }> {
+  await page.goto("/review");
+  await page.getByLabel("PGN").fill('[Event "Corpus preview subject"]\n[White "Alice"]\n[Black "Bob"]\n[Result "*"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 *');
+  await page.getByRole("button", { name: "Build game story" }).click();
+  await expect(page).toHaveURL(/\/review\/game\/import-/);
+  await expect(page.getByText("Evaluation coverage: 7 of 7 positions on this line carry a recorded engine evaluation.")).toBeVisible({ timeout: 15_000 });
+  const runId = page.url().split("/").at(-1)!;
+  const graph = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph as RunGraph;
+  return { runId, graph };
+}
+
+async function enableCorpusInspector(page: Page): Promise<void> {
+  await openAdvancedSupport(page);
+  await page.getByLabel("Corpus counts on request").check();
+  await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
+}
+
+async function previewCorpusNode(page: Page, nodeId: string): Promise<void> {
+  await page.getByRole("button", { name: "Return to play" }).click();
+  await page.locator(`[data-timeline-node="${nodeId}"]`).click();
+  await page.getByRole("button", { name: "Inspector", exact: true }).click();
+}
+
+async function loadCorpusAt(page: Page, runId: string, nodeId: string) {
+  const received = page.waitForResponse(response => new URL(response.url()).pathname === `/runs/${runId}/corpus`);
+  await page.getByRole("region", { name: "Corpus evidence" }).getByRole("button", { name: "Load corpus counts", exact: true }).click();
+  const response = await received;
+  expect(new URL(response.url()).searchParams.get("nodeId")).toBe(nodeId);
+  expect(response.ok()).toBe(true);
+  const body = await response.json();
+  expect(body.nodeId).toBe(nodeId);
+  return body;
+}
+
+test("corpus ancestry follows historical opponent and learner previews without rewinding", async ({ page }) => {
+  const { runId, graph } = await importCorpusPreviewGame(page);
+  await page.goto(`/play/run/${runId}`);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const boardBefore = await page.getByLabel("Chessboard").boundingBox();
+  await enableCorpusInspector(page);
+  const corpus = page.getByRole("region", { name: "Corpus evidence" });
+  const firstOpponent = graph.nodes.find(node => node.moveUci === "e7e5")!;
+  const secondLearner = graph.nodes.find(node => node.moveUci === "g1f3")!;
+  const lastLearner = graph.nodes.find(node => node.moveUci === "f1b5")!;
+  await loadCorpusAt(page, runId, lastLearner.parentId!);
+  await expect(corpus).toContainText("37 games recorded here");
+  await previewCorpusNode(page, firstOpponent.id);
+  const historical = await loadCorpusAt(page, runId, graph.nodes[0]!.id);
+  expect(historical.committedMoveSan).toBe("e4");
+  await expect(corpus).toContainText("e4 — 60 of 120 games");
+  await expect(corpus).toContainText("Your committed move here: e4.");
+  await previewCorpusNode(page, secondLearner.id);
+  await expect(corpus).toContainText("No corpus page loaded for this position.");
+  await loadCorpusAt(page, runId, firstOpponent.id);
+  await expect(corpus).toContainText("37 games recorded here");
+  await page.getByRole("button", { name: "Return to play" }).click();
+  expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBefore);
+  const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+  expect(after.activeCursor).toEqual(graph.activeCursor);
+  expect(after.nodes).toEqual(graph.nodes);
+});
+
+test("corpus preview discards a real delayed response after leave-and-return to the same predecessor", async ({ page }) => {
+  const { runId, graph } = await importCorpusPreviewGame(page);
+  await page.goto(`/play/run/${runId}`);
+  await enableCorpusInspector(page);
+  const firstLearner = graph.nodes.find(node => node.moveUci === "e2e4")!;
+  const firstOpponent = graph.nodes.find(node => node.moveUci === "e7e5")!;
+  await previewCorpusNode(page, firstLearner.id);
+  let release!: () => void;
+  let captured!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  const acquired = new Promise<void>(resolve => { captured = resolve; });
+  const corpusUrl = `**/runs/${runId}/corpus?*`;
+  await page.route(corpusUrl, async route => {
+    // Delay only delivery of the genuine authenticated server response. Never
+    // replace source bytes, invent a renderer payload or bypass disclosure.
+    const response = await route.fetch();
+    expect(response.ok()).toBe(true);
+    expect((await response.json()).nodeId).toBe(graph.nodes[0]!.id);
+    captured(); await held;
+    await route.fulfill({ response });
+  });
+  try {
+    const corpus = page.getByRole("region", { name: "Corpus evidence" });
+    await corpus.getByRole("button", { name: "Load corpus counts", exact: true }).click();
+    await acquired;
+    await expect(corpus).toContainText("Loading human game counts");
+    await previewCorpusNode(page, firstOpponent.id);
+    await expect(corpus).toContainText("No corpus page loaded for this position.");
+    await previewCorpusNode(page, firstLearner.id);
+    const received = page.waitForResponse(response => new URL(response.url()).pathname === `/runs/${runId}/corpus`);
+    release(); await received;
+    await expect(corpus).toContainText("No corpus page loaded for this position.");
+    await expect(corpus.locator("[data-presented]")).toHaveCount(0);
+    await expect(corpus.getByRole("button", { name: "Load corpus counts", exact: true })).toBeEnabled();
+  } finally { release(); await page.unroute(corpusUrl); }
+});
+
+test("corpus ancestry follows a sibling branch and its root through native review reentry", async ({ page }) => {
+  const { runId, graph } = await importCorpusPreviewGame(page);
+  await page.getByRole("button", { name: "Retry from before move 1 (e4)", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`, "u"));
+  // Reentry also seats the separate "guess the game's next move" board. The
+  // actual rehearsal gestures belong to the board stage, never that predictor.
+  const stageBoard = page.locator(".board-frame").getByLabel("Chessboard");
+  await expect(stageBoard).toBeVisible();
+  await move(page, "d2", "d4", "white", stageBoard);
+  await expect(page.getByText("Thinking…")).toHaveCount(0);
+  await move(page, "c2", "c4", "white", stageBoard);
+  await expect(page.getByText("Thinking…")).toHaveCount(0);
+  await showSupportTools(page);
+  const reveal = page.getByRole("button", { name: "Show support for this position", exact: true });
+  if (await reveal.isVisible()) await reveal.click();
+  await enableCorpusInspector(page);
+  const branched = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph as RunGraph;
+  const firstUser = branched.nodes.find(node => node.moveUci === "d2d4")!;
+  const opponent = branched.nodes.find(node => node.parentId === firstUser.id)!;
+  expect(opponent.actor).toBe("opponent");
+  await previewCorpusNode(page, opponent.id);
+  await loadCorpusAt(page, runId, graph.nodes[0]!.id);
+  await expect(page.getByRole("region", { name: "Corpus evidence" })).toContainText("Your committed move here: d4.");
+  await previewCorpusNode(page, graph.nodes[0]!.id);
+  const rootPage = await loadCorpusAt(page, runId, graph.nodes[0]!.id);
+  expect(rootPage.committedMoveSan).toBe("d4"); // Existing active-path wire contract.
+  const corpus = page.getByRole("region", { name: "Corpus evidence" });
+  await expect(corpus).toContainText("e4 — 60 of 120 games");
+  await expect(corpus).not.toContainText("Your committed move");
+  await page.getByRole("button", { name: "Return to play" }).click();
+  const original = branched.branches.find(branch => branch.id === graph.activeCursor.branchId)!;
+  await page.getByLabel("Branches from the start").getByRole("button", { name: original.label, exact: true }).click();
+  await expect(page.locator(".rail")).toHaveAttribute("data-active-branch-id", original.id);
+  await page.locator(`[data-timeline-node="${graph.nodes.find(node => node.moveUci === "e7e5")!.id}"]`).click();
+  await page.getByRole("button", { name: "Inspector", exact: true }).click();
+  await expect(corpus).toContainText("No corpus page loaded for this position.");
+  await loadCorpusAt(page, runId, graph.nodes[0]!.id);
+  await expect(corpus).toContainText("Your committed move here: e4.");
+  const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph as RunGraph;
+  expect(after.nodes.map(node => node.moveUci)).toEqual(expect.arrayContaining(["e2e4", "e7e5", "g1f3", "b8c6", "f1b5", "a7a6", "d2d4", "c2c4"]));
+});
+
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
@@ -1707,8 +1848,7 @@ function squarePoint(
   };
 }
 
-async function move(page: Page, from: string, to: string, orientation: "white" | "black" = "white"): Promise<void> {
-  const board = page.getByLabel("Chessboard");
+async function move(page: Page, from: string, to: string, orientation: "white" | "black" = "white", board: Locator = page.getByLabel("Chessboard")): Promise<void> {
   await expect(board).toBeVisible();
   await board.evaluate(
     (element) =>

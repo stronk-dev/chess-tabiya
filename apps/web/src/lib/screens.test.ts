@@ -8,6 +8,7 @@ import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   appendEvents,
+  appendOpponentPly,
   attachEvidence,
   BOT_PROFILE_CATALOG,
   commitMove,
@@ -1656,6 +1657,138 @@ describe("Layer 3 screens", () => {
       expect(evidence).not.toContain("e1e2");
     });
     await unmount(component);
+  });
+
+  describe("corpus preview subjects", () => {
+    function corpusRun(sibling: boolean): DrillRun {
+      let run = createRun({
+        id: `corpus-ancestry-${sibling}`,
+        session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+        sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
+      });
+      const rootId = run.activeCursor.nodeId;
+      function play(moves: readonly string[]): void {
+        moves.forEach((move, index) => {
+          run = index % 2 === 0 ? commitMove(run, move, { at }).run : appendOpponentPly(run, {
+            moveUci: move, policyModeApplied: "human_common",
+            engine: { id: "corpus-test-opponent", name: "Fixture opponent", version: "1", seedHonored: true, eloHonored: false },
+          }, { at }).run;
+        });
+      }
+      play(["e2e4", "e7e5", "g1f3", "b8c6", "f1b5", "a7a6"]);
+      if (sibling) {
+        run = fork(run, rootId, { label: "Queen pawn alternative", at }).run;
+        play(["d2d4", "d7d5", "c2c4", "e7e6", "b1c3", "g8f6"]);
+      }
+      return revealFeedback(run, at).run;
+    }
+    function unavailablePage(nodeId: string): CorpusPage {
+      return corpusPageFixture({ nodeId, committedMoveSan: null, result: {
+        kind: "abstention", reason: "source_unavailable", detail: "PRIVATE_UNAVAILABLE",
+        population: { source: "lichess-explorer", ratings: [1600], speeds: ["rapid"], since: "2020-01", until: "2026-09" },
+      } });
+    }
+    async function openCorpus(run: DrillRun, onCorpus: (nodeId: string) => Promise<CorpusPage>) {
+      const onRewind = vi.fn();
+      const onSwitchBranch = vi.fn();
+      const component = mountDrill({ target: target(), props: {
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+        assistanceStorage: { getItem: (key: string) => key === workflowPreferenceKey("position") ? explicitPreference("just_play", { corpus: "on_request" }) : null, setItem: vi.fn() },
+        capabilities: { providerHealth: fixtureProviderHealth({ "explorer-primary": "available" }, { "explorer-primary": "local_fixture" }) } as Capabilities,
+        onMove: vi.fn(), onRewind, onFork: vi.fn(), onSwitchBranch, onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onCorpus, registerKeyboardRegion,
+      } });
+      await assistanceSettled();
+      const inspect = () => document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
+      const close = () => [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Return to play")!.click();
+      const preview = async (nodeId: string) => {
+        close(); await tick();
+        document.querySelector<HTMLButtonElement>(`[data-timeline-node="${nodeId}"]`)!.click(); await tick();
+        inspect(); await tick();
+      };
+      inspect(); await tick();
+      const section = () => document.querySelector<HTMLElement>("[aria-label='Corpus evidence']")!;
+      const load = () => section().querySelector<HTMLButtonElement>("button")!.click();
+      return { component, preview, section, load, onRewind, onSwitchBranch };
+    }
+
+    it.each([false, true])("uses corpus ancestry of earlier opponent and learner previews, not the future active decision (sibling: %s)", async sibling => {
+      const run = corpusRun(sibling), before = JSON.stringify(run);
+      const onCorpus = vi.fn(async (nodeId: string) => unavailablePage(nodeId));
+      const view = await openCorpus(run, onCorpus);
+      try {
+        const firstUser = run.nodes.find(node => node.moveUci === (sibling ? "d2d4" : "e2e4"))!;
+        const firstOpponent = run.nodes.find(node => node.moveUci === (sibling ? "d7d5" : "e7e5"))!;
+        const secondUser = run.nodes.find(node => node.moveUci === (sibling ? "c2c4" : "g1f3"))!;
+        view.load(); await vi.waitFor(() => expect(onCorpus).toHaveBeenCalledTimes(1));
+        const activeUser = run.nodes.find(node => node.moveUci === (sibling ? "b1c3" : "f1b5"))!;
+        expect(onCorpus).toHaveBeenLastCalledWith(activeUser.parentId);
+        await view.preview(firstOpponent.id); view.load();
+        await vi.waitFor(() => expect(onCorpus).toHaveBeenCalledTimes(2));
+        expect(onCorpus).toHaveBeenLastCalledWith(firstUser.parentId);
+        await view.preview(secondUser.id); view.load();
+        await vi.waitFor(() => expect(onCorpus).toHaveBeenCalledTimes(3));
+        expect(onCorpus).toHaveBeenLastCalledWith(firstOpponent.id);
+        expect(view.onRewind).not.toHaveBeenCalled(); expect(view.onSwitchBranch).not.toHaveBeenCalled();
+        expect(JSON.stringify(run)).toBe(before);
+      } finally { await unmount(view.component); }
+    });
+
+    it("queries corpus at the fork root without attributing the active branch's future move to that preview", async () => {
+      const run = corpusRun(true);
+      const rootId = run.nodes[0]!.id;
+      const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt(modernCorpusCapture());
+      const parsed = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+      const source = providerSourceEvidence("lichess_explorer.position_page@1", PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, ...parsed, servedAt: acquisition.retrievedAt }));
+      const page = modernCorpusPageFixture(source, rootId, "d4");
+      const onCorpus = vi.fn(async () => page);
+      const view = await openCorpus(run, onCorpus);
+      try {
+        await view.preview(rootId); view.load();
+        await vi.waitFor(() => expect(view.section().querySelector("[data-presented]")).not.toBeNull());
+        expect(onCorpus).toHaveBeenCalledWith(rootId);
+        expect(view.section().textContent).toContain("Lichess explorer");
+        expect(view.section().textContent).not.toContain("Your committed move");
+      } finally { await unmount(view.component); }
+    });
+
+    it.each(["success", "failure"])("retires corpus %s after the inspected screen is destroyed", async settlement => {
+      const run = corpusRun(false);
+      const decision = run.nodes.find(node => node.moveUci === "f1b5")!;
+      const pending = deferred<CorpusPage>();
+      const warn = vi.spyOn(console, "warn");
+      const view = await openCorpus(run, () => pending.promise);
+      view.load(); await tick();
+      await unmount(view.component);
+      if (settlement === "success") pending.resolve(unavailablePage(decision.parentId!));
+      else pending.reject(new Error("PRIVATE_DESTROYED_FAILURE"));
+      await pending.promise.catch(() => undefined); await tick();
+      expect(warn).not.toHaveBeenCalled();
+      expect(document.body.textContent).not.toContain("PRIVATE_DESTROYED_FAILURE");
+      expect(document.querySelector("[aria-label='Corpus evidence']")).toBeNull();
+    });
+
+    it.each(["success", "failure", "leave-and-return"])("retires late corpus %s across previews sharing the same predecessor", async settlement => {
+      const run = corpusRun(false), rootId = run.nodes[0]!.id;
+      const pending = deferred<CorpusPage>();
+      const onCorpus = vi.fn(() => pending.promise);
+      const view = await openCorpus(run, onCorpus);
+      try {
+        const firstUser = run.nodes.find(node => node.moveUci === "e2e4")!;
+        const opponent = run.nodes.find(node => node.moveUci === "e7e5")!;
+        await view.preview(firstUser.id); view.load();
+        expect(onCorpus).toHaveBeenCalledWith(rootId);
+        await view.preview(opponent.id);
+        if (settlement === "leave-and-return") await view.preview(firstUser.id);
+        if (settlement === "failure") pending.reject(new Error("PRIVATE_LATE_FAILURE"));
+        else pending.resolve(unavailablePage(rootId));
+        await pending.promise.catch(() => undefined); await tick();
+        expect(view.section().textContent).toContain("No corpus page loaded for this position.");
+        expect(view.section().textContent).not.toContain("The corpus source is unavailable");
+        expect(view.section().querySelector("[role='alert']")).toBeNull();
+        expect(view.section().textContent).not.toContain("PRIVATE_LATE_FAILURE");
+        expect(view.section().querySelector<HTMLButtonElement>("button")!.disabled).toBe(false);
+      } finally { await unmount(view.component); }
+    });
   });
 
   it.each([1, 2])("renders admitted corpus v%i through its registered component and recovers after failure", async version => {

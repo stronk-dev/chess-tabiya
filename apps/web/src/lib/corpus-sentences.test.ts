@@ -17,6 +17,10 @@ describe("corpus sentence closure", () => {
     expect(lines.join(" ")).toContain("2026-08");
     expect(lines.join(" ")).not.toContain("PRIVATE_PROVIDER_SAN");
     expect(corpusContextSentences(page)).toEqual(["Your committed move here: e4."]);
+    expect(corpusContextSentences(page, "e4")).toEqual(["Your committed move here: e4."]);
+    expect(corpusContextSentences(page, "d4")).toEqual([]);
+    expect(corpusContextSentences(page, null)).toEqual([]);
+    expect(renderCorpusPage(page).join(" ")).toContain("116 games are outside");
   });
   it("renders facts with the byte-pinned popularity guard in every result", () => {
     const pages = [

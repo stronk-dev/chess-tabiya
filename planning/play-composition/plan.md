@@ -117,6 +117,13 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
+Corpus subject repair D3468 derives the request from displayed ancestry and retires
+old answers/errors through preview, branch/disclosure changes and destruction. Real
+longer-line/root/sibling/ABA and matched-context controls pass, alongside full sequential
+software/content/browser replacement gates. Receipt: `corpus-subjects-2026-10-06.md`.
+D3469 retains the authenticated inspected-decision context contract; suppressing a wrong
+active-branch label does not implement it. Full A4/D1834 and source migrations stay open.
+
 Inspector subject repair D3466/D3467 binds historical material readings to the exact
 selected recorded FEN and position attachments to the displayed preview node, without
 substituting active evidence into missing historical subjects. Terminal ownership stays

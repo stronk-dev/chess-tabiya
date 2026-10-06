@@ -8,11 +8,18 @@ prove the repairs; full exact-index software, content and browser gates pass. Re
 destination/source obligations after that bounded checkpoint; do not infer that these
 repairs authorize D3309's structural successor or D3363's observed-move migration.
 
-Next bounded subject wave: D3468's corpus lookup can use a future active-path learner
-decision when an earlier opponent/root node is previewed. Reproduce longer-line, root,
-sibling-branch and late response cases before fixing ancestry; keep the existing
-learner-decision predecessor semantics. It is assigned core-loop, not closed by the
-D3466/D3467 proofs and not a request to change the source schema or permission ceiling.
+Completed D3468 binds corpus lookup to displayed ancestry and retires stale pages,
+errors and requests across previews, branch changes and screen destruction. Eight
+permanent mounted controls and genuine import/reentry/sibling/root/delayed-response
+journeys pass; full exact-index software, content and browser gates pass. Receipt:
+`planning/play-composition/corpus-subjects-2026-10-06.md`. Do not re-queue it.
+
+D3469 retains the branch-context contract: the current endpoint deliberately attributes
+the active-path learner child. Mismatched labels are now suppressed without fabricating
+membership; a successor must specify authenticated inspected-decision/predecessor and
+response identity before branch-specific context is implemented. Core-loop author repair
+under evidence-presentation; this does not block the existing A4 destination/source
+positives and remaining D1834 obligations. D3309/D3363 source and full-RFC holds remain.
 
 Completed D3465 supplies A4's permanent rendered vocabulary sweep and same-result retained
 records across all 112 real states. Inline and accessible text, Inspector exceptions, native

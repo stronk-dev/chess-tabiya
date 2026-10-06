@@ -306,6 +306,7 @@
   let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
   let corpusPage: CorpusPage | undefined = $state();
+  let corpusPageSubject: string | undefined = $state();
   let humanSplitBusyNodeId: string | undefined = $state();
   let corpusBusyNodeId: string | undefined = $state();
   let humanSplitError: { readonly nodeId: string; readonly text: string } | undefined = $state();
@@ -849,10 +850,10 @@
   let positionEvidence = $derived(
     displayedNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads)),
   );
-  let corpusQueryNodeId = $derived((() => {
-    const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
-    return decision?.parentId ?? displayedNode.id;
-  })());
+  let corpusDecision = $derived(
+    [...historyFrom(run, displayedNode.id)].reverse().find((node) => node.actor === "user"),
+  );
+  let corpusQueryNodeId = $derived(corpusDecision?.parentId ?? displayedNode.id);
   $effect(() => {
     if (spokenAudio !== undefined && spokenAudio.nodeId !== displayedNode.id) {
       spokenAudio.audio.pause();
@@ -1086,6 +1087,21 @@
     ...(hintMarks.rung === "move" ? [{ orig: hintKey(hintMarks.arrow.from), dest: hintKey(hintMarks.arrow.to), brush: "green" }] : []),
   ]);
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
+  // A pre-move node may be shared by distinct previews and branches. Counts are
+  // ephemeral: neither an answer, error nor spinner may outlive its inspected
+  // subject/disclosure. The epoch also rejects leave-and-return (ABA) settlements.
+  let corpusSubject = $derived(JSON.stringify([
+    run.id, displayedNode.id, corpusQueryNodeId, run.activeCursor,
+    assistancePermission.corpus, assistance.corpus,
+  ]));
+  $effect(() => {
+    corpusSubject;
+    ++corpusRequest;
+    corpusPage = undefined;
+    corpusPageSubject = undefined;
+    corpusBusyNodeId = undefined;
+    corpusError = undefined;
+  });
   let contextPolicy = $derived(workflowContextPolicy(activeAssistanceProfile));
   let requestedPresetId = $derived(requestedPreset(preference, activeAssistanceProfile) ?? contextPolicy.defaultPreset);
   let requestedConfig = $derived(requestedAssistanceConfig(activeAssistanceProfile, preference));
@@ -1221,20 +1237,22 @@
   async function requestCorpus(): Promise<void> {
     if (onCorpus === undefined) return;
     const nodeId = corpusQueryNodeId;
+    const subject = corpusSubject;
     const request = ++corpusRequest;
     corpusBusyNodeId = nodeId;
     corpusError = undefined;
     if (corpusPage?.nodeId === nodeId) corpusPage = undefined;
     try {
       const page = await onCorpus(nodeId);
-      if (request !== corpusRequest || corpusQueryNodeId !== nodeId) return;
+      if (request !== corpusRequest || corpusSubject !== subject) return;
       if (page.nodeId !== nodeId) {
         corpusError = { nodeId, text: "Those game counts no longer match this position. Load them again." };
         return;
       }
       corpusPage = corpusEvidence(page);
+      corpusPageSubject = subject;
     } catch {
-      if (request === corpusRequest && corpusQueryNodeId === nodeId) {
+      if (request === corpusRequest && corpusSubject === subject) {
         corpusError = { nodeId, text: "Human game counts are unavailable right now. Try again." };
       }
     } finally {
@@ -1950,6 +1968,7 @@
     compareRequest += 1;
     rewindRequest += 1;
     branchSwitchRequest += 1;
+    corpusRequest += 1;
     analysisRequest += 1;
     groupAnalysisRequest += 1;
     if (spokenAudio !== undefined) {
@@ -2643,9 +2662,9 @@
           {#if assistancePermission.corpus === "free" && onCorpus !== undefined}{#if corpusNotice.notConfigured}<p class="honest provider-notice" data-provider-state="not_configured">{learnerProse(corpusNotice.reason)}</p>{:else}<button type="button" disabled={corpusBusyNodeId === corpusQueryNodeId} onclick={() => void requestCorpus()}>{corpusBusyNodeId === corpusQueryNodeId ? "Loading game counts…" : corpusNotice.requestable ? "Load corpus counts" : "Retry corpus counts"}</button>{#if !corpusNotice.requestable}<p class="honest provider-notice" data-provider-state={corpusNotice.tone} data-testid="corpus-provider-notice">{learnerProse(corpusNotice.reason)}</p>{/if}{/if}{/if}
           {#if corpusBusyNodeId === corpusQueryNodeId}<p role="status">Loading human game counts for this position…</p>{/if}
           {#if corpusError?.nodeId === corpusQueryNodeId}<p role="alert">{corpusError.text}</p>{/if}
-          {#if corpusPage?.nodeId === corpusQueryNodeId}
+          {#if corpusPage?.nodeId === corpusQueryNodeId && corpusPageSubject === corpusSubject}
             <PresentedEvidence items={corpusPresentation(corpusPage)} />
-            {#each corpusContextSentences(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#each corpusContextSentences(corpusPage, corpusDecision?.moveSan ?? null) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
           {:else if corpusBusyNodeId !== corpusQueryNodeId && corpusError?.nodeId !== corpusQueryNodeId}<p class="honest">No corpus page loaded for this position.</p>{/if}
         </section>
         <section aria-label="Recorded moment evidence" data-evidence-consumer="inspector.pivotal_marker">

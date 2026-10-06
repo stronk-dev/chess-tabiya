@@ -14,12 +14,15 @@ export function renderCorpusPage(page: CorpusPage): readonly string[] {
 }
 
 /** Availability and learner commitment are transport context, not browser-minted source evidence. */
-export function corpusContextSentences(page: CorpusPage): readonly string[] {
+export function corpusContextSentences(page: CorpusPage, inspectedMoveSan: string | null = page.committedMoveSan): readonly string[] {
   corpusPresentation(page);
   const lines: string[] = page.status.kind === "shown" ? [] : [
       `Lichess explorer — rating buckets ${page.population.ratings.join(",")}; speeds ${page.population.speeds.join(",")}; ${page.population.since} to ${page.population.until}.`, CORPUS_GUARD,
       page.status.kind === "below_floor" ? `${page.status.total} games recorded here — below the 100-game abstention floor. No frequencies are shown.` : "The corpus source is unavailable. No frequencies are shown.",
     ];
-  if (page.status.kind === "shown" && page.committedMoveSan !== null) lines.push(page.committedMoveListed ? `Your committed move here: ${page.committedMoveSan}.` : `Your committed move ${page.committedMoveSan} does not appear among this population's recorded moves.`);
+  // The current transport attributes the active-path child, not a preview's
+  // child. A local identity check may suppress that context, never fabricate a
+  // replacement membership result or alter the admitted population components.
+  if (page.status.kind === "shown" && page.committedMoveSan !== null && page.committedMoveSan === inspectedMoveSan) lines.push(page.committedMoveListed ? `Your committed move here: ${page.committedMoveSan}.` : `Your committed move ${page.committedMoveSan} does not appear among this population's recorded moves.`);
   return Object.freeze(lines);
 }

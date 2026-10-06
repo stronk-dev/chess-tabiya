@@ -1,0 +1,67 @@
+{
+  "command": "make inspector-corpus-browser-check",
+  "reportDigest": "sha256:d5a19837e92a3258612ba8eac3df60a520c08a76019a768c1afb52084667119b",
+  "stats": {
+    "startTime": "2026-10-06T06:30:32.389Z",
+    "duration": 16882.501,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "errors": [],
+  "tests": [
+    {
+      "title": "corpus ancestry follows historical opponent and learner previews without rewinding",
+      "ok": true,
+      "expected": "passed",
+      "project": "desktop-chromium",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2523
+        }
+      ]
+    },
+    {
+      "title": "corpus preview discards a real delayed response after leave-and-return to the same predecessor",
+      "ok": true,
+      "expected": "passed",
+      "project": "desktop-chromium",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1768
+        }
+      ]
+    },
+    {
+      "title": "corpus ancestry follows a sibling branch and its root through native review reentry",
+      "ok": true,
+      "expected": "passed",
+      "project": "desktop-chromium",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2293
+        }
+      ]
+    },
+    {
+      "title": "runtime corpus counts stay silent until reveal and render population facts on request",
+      "ok": true,
+      "expected": "passed",
+      "project": "desktop-chromium",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1438
+        }
+      ]
+    }
+  ]
+}
