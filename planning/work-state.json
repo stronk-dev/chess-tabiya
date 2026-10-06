@@ -28746,6 +28746,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3484",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff32c790f408288f2af6ff20e9f603bd4e62a669fddd9ed7e7910c0c23ce3222",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-semantic-final-ply-capture-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed bounded source [[D3484]]: all 870 missing semantic-continuation positions /
+2,028 budget queries pass complete merge/check and independent board/PV/source replay;
+137,949 PV moves, 35 literal interval hash/row comparisons and eight corruption refusals
+pass. Seven JS/five Python controls pass. D3478's original frame/capturer stays live
+and unchanged; its planned reuse is not supplied by this supplement. Next: complete
+that engine capture and join actual target outcomes; recursive/five-arm/proof/cost
+and production authorization stay open. Receipt:
+`planning/semantic-consequence-search/d3262-semantic-final-ply-capture-2026-10-06.md`.
+
 Completed bounded research [[D3483]]: all 182 named cells / 3,276 semantic-reserve
 arms follow their actual same-budget/width learner replies, retaining all 193 offered
 candidates and explicit unsupported controls. Independent replay and seven corruption

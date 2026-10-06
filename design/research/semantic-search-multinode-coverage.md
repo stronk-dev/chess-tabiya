@@ -92,6 +92,17 @@ followed by ordinary engine learner selection is not recursive semantic traversa
 the complete fifth arm. Literal hashes, commands and limitations:
 `planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md`.
 
+[V] All 870 missing semantic-continuation positions / 2,028 budget queries now have
+actual pinned Stockfish sources, separately captured without changing the live
+16,813-job frame/capturer. Complete merge/check and independent board/source/PV replay
+pass 15,939 ranked entries / 137,949 PV moves and every one of the 35 literal original
+interval hashes/row comparisons. Eight actual source corruptions refuse, alongside
+seven JS/five Python controls. This is source/legal verification, not independent
+re-inference of numerical scores or a semantic target verdict. The 33,022 planned
+reuse queries still await the original complete capture. Source identities, digest,
+commands and concurrent-host timing limitations:
+`planning/semantic-consequence-search/d3262-semantic-final-ply-capture-2026-10-06.md`.
+
 [P] Outstanding: the 16,813 final-ply engine jobs are being captured through checked
 immutable intervals; no complete engine source or final-ply outcome is yet claimed. Semantic-
 target-preserving deeper traversal, the five-arm proof/abstention and natural-

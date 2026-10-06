@@ -55,6 +55,15 @@ planned reuse queries remain awaiting checked capture, not supplied evidence.
 This is not recursive semantic selection or full five-arm proof. Receipt:
 `planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md`.
 
+2026-10-06 D3484: all 870 additional semantic-continuation positions / 2,028 budget
+queries now have actual checked Stockfish sources. Independent legal/source/PV replay
+passes 137,949 PV moves and 35 original interval hash/row comparisons, with eight
+corruption refusals and seven JS/five Python controls. D3478's original larger
+capture stays live and unchanged; 33,022 planned reuse queries are not supplied by
+this supplement. Actual target outcomes, recursive/five-arm/proof/cost and production
+authorization stay open. Receipt:
+`planning/semantic-consequence-search/d3262-semantic-final-ply-capture-2026-10-06.md`.
+
 | # | Question | Status | Attached gates |
 |---|---|---|---|
 | Q1a | Is the integrated rehearsal loop competitively novel? | ✅ settled-go (owner ruling 2026-08-12) | E1 |

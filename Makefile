@@ -584,6 +584,30 @@ semantic-search-semantic-third-ply-independent:
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-semantic-third-ply-check.py --negative-controls
 
 .PHONY: semantic-search-final-ply-preflight semantic-search-maia-final-ply-capture semantic-search-maia-final-ply-check semantic-search-stockfish-final-ply-capture semantic-search-stockfish-final-ply-check
+.PHONY: semantic-search-semantic-final-ply-source-test semantic-search-semantic-final-ply-batch semantic-search-semantic-final-ply-merge semantic-search-semantic-final-ply-check
+semantic-search-semantic-final-ply-source-test:
+	$(CI_NODE) tools/d3262-search-calibration/semantic-third-ply-capture.mjs preflight
+	$(CI_NODE) --test tools/d3262-search-calibration/semantic-third-ply-capture.test.mjs
+
+semantic-search-semantic-final-ply-batch: semantic-search-semantic-final-ply-source-test
+	$(CI_NODE) tools/d3262-search-calibration/semantic-third-ply-capture.mjs batch $(if $(MAX_NEW),--max-new "$(MAX_NEW)",)
+
+semantic-search-semantic-final-ply-merge: semantic-search-semantic-final-ply-source-test
+	$(CI_NODE) tools/d3262-search-calibration/semantic-third-ply-capture.mjs merge --write
+
+semantic-search-semantic-final-ply-check: semantic-search-semantic-final-ply-source-test
+	$(CI_NODE) tools/d3262-search-calibration/semantic-third-ply-capture.mjs check
+
+.PHONY: semantic-search-stockfish-source-independent-test semantic-search-semantic-final-ply-independent semantic-search-stockfish-final-ply-independent
+semantic-search-stockfish-source-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/third-ply-stockfish-independent.test.py
+
+semantic-search-semantic-final-ply-independent: semantic-search-stockfish-source-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/third-ply-stockfish-independent.py semantic --negative-controls --with-chunks
+
+semantic-search-stockfish-final-ply-independent: semantic-search-stockfish-source-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/third-ply-stockfish-independent.py third-ply --negative-controls --with-chunks
+
 semantic-search-final-ply-preflight:
 	$(CI_NODE) tools/d3262-search-calibration/third-ply-source-check.mjs preflight
 
