@@ -1,15 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3435]] is the next executable play-composition acceptance task after the current wave's full
-gates and commit: replace state 13's three-default-row/first-badge check with the real complete
-seatable-module population required by A6, at all seven viewports. Activate modules through the
-existing compiler/request paths and preserve honest source absence; never mint packets or treat
-112 screenshot names as semantic completion. [[D1834]]/[[D910]], complete A3/A4, Inspector and
-ceiling/owner-use discharges remain open. The current [[D3432]]–[[D3434]] wave binds Guided Hint to
-the shared expansion/paint authority, preserves decision/rung without re-requesting on reopen,
-fixes phone preset containment, and adds the current-run artifact verifier/retention path.
-Receipt: `planning/play-composition/hint-and-matrix-2026-10-06.md`; full gates close out before
-moving to the next implementation. Routine metadata/hash maintenance remains automatic.
+[[D3444]] is the next executable play-composition task after the current wave's full gates and
+commit: replace stacked desktop rows inside the tablet band with its accepted §2.2 head plus
+single badge/selector row, native in-place swaps and internally scrolling head. Include Guided
+Hint and warning priority without creating a second expansion or evidence authority. Keep the
+board box fixed and extend the genuine eight-seat browser journey to assert the presentation,
+not just the band token. [[D3436]] retains the phone overlay/below-board/modal contract conflict;
+do not change modality incidentally.
+[[D3445]] adds an independent tablet brand/context bounds check from the retained crowded-header
+image before any header repair; visual inspection is not falsely promoted to a measured collision.
+[[D1834]]/[[D910]], complete A3/A4, Inspector and
+ceiling/owner-use discharges remain open.
+
+Current [[D3435]]/[[D3437]]–[[D3442]] checkpoint: all eight seats are exercised at seven viewports
+through actual compiler, domain and source requests, with receipt-bound badges, native swaps,
+warning displacement/restoration and unchanged board geometry. Compilation/snapshot/held-square
+seams caught by that journey are repaired. Receipt: `planning/play-composition/max-load-2026-10-06.md`;
+full replacement gates and tracker closeout precede commit and the next implementation. This
+supersedes the three-row population gap, not every A6 requirement or the full RFC. Routine
+metadata/hash maintenance remains automatic; the 1.0 goal stays active.
 
 [[D3431]] removes repeated semantic collection across growing longitudinal prefixes using
 bounded exact-edge membership reuse, without narrowing the source closure or changing revision 1.

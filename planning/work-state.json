@@ -7501,7 +7501,7 @@
       "id": "D910",
       "state": "todo",
       "sourceGlyph": "📊",
-      "sourceDigest": "sha256:a68ce8abac5d8de89c456d65e097b6c32deff9be7b573251386dc5044713bb2b",
+      "sourceDigest": "sha256:6cef5afe112c798511824426691329734ac57a81b7d6e3ac7f278082d818eba5",
       "uxItems": [],
       "owner": "core-loop"
     },
@@ -13992,7 +13992,7 @@
       "id": "D1834",
       "state": "todo",
       "sourceGlyph": "📜",
-      "sourceDigest": "sha256:97cf59fb59c2212753d3ae94528f30b03540b913117a4f2fd5a986f30f220ec8",
+      "sourceDigest": "sha256:05c97cdb7f18d0fcdac9e288ec9ac7ee3a646577565f9243376bab6eed0b19ab",
       "uxItems": [],
       "owner": "core-loop"
     },
@@ -28283,7 +28283,7 @@
       "id": "D3432",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:e7be96c192d9cb576ab8c68e1af05f3636626fa5b21bb6bea5d6334e2be9ddbb",
+      "sourceDigest": "sha256:b15af5af6c08fa372ee127f55c4b89c7a859fdde4e62ab3ba0db9e3b7ba3dcde",
       "uxItems": [],
       "evidence": "planning/play-composition/hint-and-matrix-2026-10-06.md",
       "evidenceKind": "path"
@@ -28308,9 +28308,97 @@
     },
     {
       "id": "D3435",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a8bdcdbaae9cf9eb1506abf2d1c4b158fddcfe0a3ea81f8eeb6757962b9bd4ca",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3436",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f82cda73fa4c4a38a347cf3074f6aa215495b95b5df1f6fd39aa537666cbf8ce",
+      "sourceDigest": "sha256:10db391bc72018005a43e4384e2fe79de9c4ae870d48631c9136a45b965e03f0",
+      "uxItems": [],
+      "owner": "coordinator"
+    },
+    {
+      "id": "D3437",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:31f0f71c168ded58a2a547f7162b410c3f6a0d3a8b2aa8229b85b69a62f4775f",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3438",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6bc8d8fa84f97669f8c7910f985f6b1ef0129f689f2dec8e595c4cd6ce2852f7",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3439",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:50b4c8d8c56c8626a4a5645ebc3a3fb0aecf384443e70abe8738450fb534806a",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3440",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d634564ef632406a7541e80f25dde087b8c361de3ba98b4108846308a259d1c7",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3441",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:96f97f43819158a1bf55f3aae3f73486145023a8f01644fc2ba2548cb648b16c",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3442",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:54a935a789c149a99f785a066b96c058fcc4b158e7a02e6652fccb849bc976a8",
+      "uxItems": [],
+      "evidence": "planning/play-composition/max-load-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3443",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:bca8f4d0533e1c6cd05e897dc63a182b93c971100c54419e17b4c9e90fb6b73d",
+      "uxItems": [],
+      "ruling": "ledger:D3443",
+      "rulingKind": "source-row"
+    },
+    {
+      "id": "D3444",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c246eb9ced5e8c1681e634ee7c6a21c366b9b5f72bbda1a57bc2464fd5ed7c7b",
+      "uxItems": [],
+      "owner": "client-platform"
+    },
+    {
+      "id": "D3445",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9b2022c3aef22c4efe08054a4e75db1f22fb0d03b18bc6ee7d457d68ab8fc299",
       "uxItems": [],
       "owner": "client-platform"
     }

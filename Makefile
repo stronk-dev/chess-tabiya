@@ -10,7 +10,7 @@ SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfi
 export SF_CMD
 
 .PHONY: longitudinal-projector-check
-.PHONY: play-composition-hint-check play-composition-client-check play-composition-matrix-contract
+.PHONY: play-composition-hint-check play-composition-max-load-check play-composition-client-check play-composition-matrix-contract
 
 .PHONY: foundation-source-author-audit foundation-source-author-repair tablebase-census-contract tablebase-census-check phase-classifier-census phase-band-census phase-source-composition-census phase-source-composition-author-contract phase-source-composition-fresh-review phase-source-composition-author-repair endgame-technique-applicability-census endgame-method-path-contract endgame-setup-reachability-contract endgame-setup-convention-validation bot-trait-screen-contract bot-trait-screen bot-endgame-trait-screen-contract bot-endgame-trait-screen bot-human-endgame-reference-contract bot-human-endgame-reference-population bot-human-endgame-reference bot-human-endgame-reference-report
 
@@ -115,6 +115,9 @@ test-browser-matrix: play-composition-matrix-contract
 
 play-composition-hint-check:
 	./node_modules/.bin/playwright test --grep "@matrix final Guided Hint"
+
+play-composition-max-load-check:
+	./node_modules/.bin/playwright test --grep "@matrix maximum-load"
 
 play-composition-client-check:
 	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts

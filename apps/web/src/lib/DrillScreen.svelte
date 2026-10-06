@@ -954,7 +954,10 @@
 
   // Post-commit proactive seats: one query per new learner move, before any automatic reply is read.
   let postCommitSubject = $derived.by(() => {
-    if (!postCommitEffectActive || !feedbackDeliveryOpen(run)) return undefined;
+    // Opening disclosure recompiles assistance. The server's module route already sees the new
+    // boundary, so an old compiled digest cannot admit its result. Wait for that compilation;
+    // pending -> ready also re-queries the same subject under its actual current authority.
+    if (assistanceQueryState !== "ready" || !postCommitEffectActive || !feedbackDeliveryOpen(run)) return undefined;
     return latestLearnerMoveId === proactiveHeldNodeId ? undefined : latestLearnerMoveId;
   });
   $effect(() => {
@@ -979,12 +982,17 @@
   });
   // sight_on_request: the square gesture IS the request (module-registration §4.2).
   let sightActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "sight_on_request", "pre_commit"));
+  // SSE may replace a Node object without changing the learner's selected position. A primitive
+  // identity prevents unrelated stored deliveries from re-requesting/reopening the square card.
+  let sightSubject = $derived.by(() => {
+    if (assistanceQueryState !== "ready" || !sightActive || selectedSquare === undefined || previewNodeId !== undefined) return undefined;
+    return JSON.stringify([run.id, displayedNode.id, selectedSquare, compiledAssistance?.finalDigest]);
+  });
   $effect(() => {
-    const square = selectedSquare;
-    const active = sightActive;
-    const node = displayedNode.id;
+    const subject = sightSubject;
     untrack(() => {
-      if (!active || square === undefined || previewNodeId !== undefined) { clearSeat(["sight_on_request"]); return; }
+      if (subject === undefined) { clearSeat(["sight_on_request"]); return; }
+      const [, node, square] = JSON.parse(subject) as [string, string, string, string];
       seatExpanded = "sight_on_request";
       void queryModuleSeats({ timing: "pre_commit", nodeId: node, selectedSquare: square, requested: ["sight_on_request"] }, node, ["sight_on_request"]);
     });
@@ -1366,7 +1374,6 @@
   }
 
   async function boardMove(uci: string): Promise<boolean> {
-    selectedSquare = undefined;
     if (groupOpen && groupSource === "hand_picked") {
       captureGroupMove(uci);
       return false;
@@ -1376,6 +1383,7 @@
   }
 
   async function commitBoardMove(uci: string): Promise<boolean> {
+    selectedSquare = undefined;
     const before = activeGroup;
     const beforeIndex = before?.members.findIndex((member) => member.branchId === run.activeCursor.branchId) ?? -1;
     const committed = await onMove(uci);
@@ -2275,7 +2283,7 @@
               </section>
             {/if}
             {#if hints !== undefined && hintCeiling !== "off"}
-              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
+              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
             {/if}
             {#if seats.length > 0}
               <ModuleSeats
@@ -2283,7 +2291,7 @@
                 packets={seatPackets}
                 pending={seatPending}
                 failed={seatFailed}
-                expanded={seatExpanded === "guided_hint" ? undefined : seatExpanded}
+                expanded={stagedCue !== undefined || seatExpanded === "guided_hint" ? undefined : seatExpanded}
                 doorBlocked={seatDoorReasons}
                 staged={stagedCue}
                 onToggle={toggleSeat}

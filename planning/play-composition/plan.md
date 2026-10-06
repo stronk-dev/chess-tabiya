@@ -91,17 +91,25 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
-1. Compile and seat the eleven learner modules once their collector dependencies land; extend the
-   shipped one-expanded structural queue with the declared module seats and fact-count badges rather
-   than treating Support/Branches/Actions as final module composition.
+Current maximum-load checkpoint: `max-load-2026-10-06.md`. The genuine eight-seat fixture and
+receipt-bound badges replace the three-default-row check; compilation/snapshot/held-cue seams are
+repaired. Full replacement gates run before commit. D3436 retains the overlay/modality contract
+reconciliation, D3445 the tablet topbar separation assertion, and complete
+A3/A4/compact queue/Inspector/ceiling/owner-use obligations remain.
+
+1. The eleven-module compiler and real Play seats now ship. Finish remaining cross-surface,
+   source/absence and seat conformance, including [[D3444]]'s tablet queue; neither the structural
+   Support/Branches/Actions tabs nor eight delivered Play badges are complete module composition.
 2. Remove the remaining ordinary-surface vocabulary leaks named by §5. Related-pack title/SAN and
    the ordinary Support/terminal evidence-pipeline copy are complete; phase, compare, tablebase and
    voice families still need their compiled module renderers.
-3. Finish semantic acceptance of the 7×16 matrix ([[D1834]]). All 112 named attachments are now
-   required by the executable current-run checker, but the state-13 fixture asserts only three
-   default rail rows and its first badge. [[D3435]] owns the real every-seatable-module/A6 fixture,
-   including every badge and companion token; all actionable A3 and destination A4 obligations
-   remain. A screenshot name/count is not proof of the fixture's full semantic population.
+3. Finish semantic acceptance of the 7×16 matrix ([[D1834]]). The current-run checker requires
+   all 112 distinct attachments. State 13 now exercises all eight seats with real domain/source
+   requests, independently counted badges, native swaps, warning priority and fixed board/band/rim
+   geometry at seven viewports (`max-load-2026-10-06.md`). This closes the former three-row
+   population gap, not every A6 presentation requirement: [[D3444]] owns the missing tablet
+   head-plus-single-selector-row queue. [[D3436]] retains the phone contract reconciliation;
+   actionable A3 and destination A4 obligations remain. Counts alone are not semantic acceptance.
 4. Bind the full Inspector's amended accepts list when `learner-modules` implements, including the
    D924 phase/pivotal/classifier/compare families.
 5. Reconcile `docs/drill-client.md`, close the remaining ledger rows, append final lifecycle logs,

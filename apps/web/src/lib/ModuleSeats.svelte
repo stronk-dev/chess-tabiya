@@ -38,7 +38,8 @@
       {#if staged.state === "checking"}
         <p role="status">Checking the staged move {staged.move}…</p>
       {:else if staged.state === "warning"}
-        <strong>Before you play {staged.move}</strong>
+        {@const badge = seatBadge(staged.packet)!}
+        <div class="cue-heading"><strong>Before you play {staged.move}</strong><span class="seat-badge" aria-label={`${badge} ${badge === 1 ? "fact" : "facts"}`}>{badge}</span></div>
         <PresentedEvidence items={staged.packet.items} {onFocusSquares} />
         <div class="seat-actions">
           <button type="button" class="primary" onclick={onReviseStaged}>Revise</button>
@@ -97,6 +98,7 @@
   .module-seats{display:grid;gap:.45rem}
   .module-seat{display:grid;gap:.35rem;margin:0;padding:.55rem .65rem;border:1px solid var(--line);border-radius:.7rem;background:var(--panel)}
   .head-slot{border-color:var(--warning)}
+  .cue-heading{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
   .seat-row{display:flex;justify-content:space-between;align-items:center;gap:.5rem;width:100%;padding:0;border:0;background:none;color:var(--ink);font:inherit;font-weight:600;text-align:left;cursor:pointer}
   .seat-badge{min-width:1.3rem;padding:0 .35rem;border-radius:.65rem;background:var(--accent-soft);color:var(--ink);font-size:.72rem;text-align:center;font-variant-numeric:tabular-nums}
   .seat-card{display:grid;gap:.35rem;font-size:.78rem}

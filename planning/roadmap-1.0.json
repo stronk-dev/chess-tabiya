@@ -1257,7 +1257,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:38f662109b5d4d2bf91fe1601b30c3022d8fd740f15b7c582dbb25191d1e8989"
+              "digest": "sha256:c28b6547fcca174331adb55e133b1b8f2dc4f6e5f1224b968a274cee4b81aa5b"
             },
             {
               "kind": "work_state",
@@ -1380,10 +1380,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
+        "nextAction": "Implement D3444: tablet head plus single badge/selector row, in-place native swaps and internally scrolling card under accepted play-composition §2.2. Reproduce D3445 with independent tablet topbar brand/context bounds before any header repair. Reconcile D3436 phone overlay/below-board/modality authority without incidental policy changes. Complete A3/A4/Inspector/vocabulary and review D3309 structural fidelity; rule D1639 before claiming complete defaults.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3432–D3434 close the shared Guided Hint composition/paint seam, narrow-phone preset radio clipping, and missing/unretained screenshot population. The real final-permitted-rung journey preserves the decision, rung, request trace and exact board box through Theory-to-Hint at all seven viewports; original unbound behavior fails its permanent control. Replacement matrix and packaged gates pass 50 plus one journeys, with 112/112 successful unretried PNG attachments accepted and byte-retained through the packaged tier. The unchanged-UI smoke/content tiers pass 68 plus five journeys with one existing optional real-Maia skip. The first aggregate gate's inline-body artifact refusal remains recorded, not relabelled as success. Nineteen artifact controls and 73 focused client tests pass; complete replacement software/content/governance and staged proofs are recorded before commit. D3435 queues the actual every-module max-load fixture, since today's state 13 checks three default rows and its first badge. D1834/D910, full A3/A4/A6, remaining Inspector/vocabulary/source joins, proposed D1639 ceilings, Advanced hintDistance, latency/analytics and owner-use discharges remain open. Existing shipped presets, module seats, exact calculation admission/retry, sealed Compare/Story/Inspector and board-input repairs remain linked in the checkpoint evidence. Zero untriaged of 1686 live items; none doing. No whole RFC, capability or milestone promotion.",
+          "summary": "D3435/D3437–D3442 close the true eight-seat population and six compile/snapshot/head/selection integration seams. All seven viewports exercise actual compiler/domain/source/Hint requests, independently counted current-digest badges, native one-expanded swaps, warning displacement and Revise restoration with unchanged board geometry. Identical-snapshot Hint retention fails against the predecessor; genuine head changes still retire it. Seventy-nine mounted client tests pass. Complete replacement exact-index software passes 3232 tests/340 files plus seven isolated performance tests and all downstream gates; complete content passes 225 tests/23 files. Complete rebuilt browser CI passes 125 journeys with one existing optional real-Maia skip; all 112 unretried matrix images/report bytes remain hash-equal after the packaged tier. Complete staged-process/governance passes; final proof/log/tracker bytes run through normal hooks before commit. D3444 owns remaining tablet head-plus-selector presentation, D3436 the phone contract conflict; D3445 the independent tablet header separation check prompted by visual crowding (not a measured collision). D1834/D910, full A3/A4/A6 presentation, Inspector/source/vocabulary, proposed ceilings, Advanced hintDistance, latency/analytics and owner-use remain open. Earlier stable-board/shared-Hint/preset and retained 112-cell evidence remain linked. Zero untriaged of 1688 live items; none doing. No whole RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
@@ -1432,13 +1432,17 @@
             "docs/play-composition.md",
             "docs/testing.md",
             "planning/play-composition/matrix-evidence-2026-10-06.json",
-            "planning/roadmap-to-done.md"
+            "planning/roadmap-to-done.md",
+            "planning/play-composition/max-load-2026-10-06.md",
+            "planning/play-composition/max-load-software-2026-10-06.json",
+            "apps/web/src/lib/ModuleSeats.svelte",
+            "planning/play-composition/max-load-matrix-2026-10-06.json"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:38f662109b5d4d2bf91fe1601b30c3022d8fd740f15b7c582dbb25191d1e8989"
+              "digest": "sha256:c28b6547fcca174331adb55e133b1b8f2dc4f6e5f1224b968a274cee4b81aa5b"
             },
             {
               "kind": "rfc",
@@ -1548,7 +1552,72 @@
             {
               "kind": "rfc",
               "id": "play-composition.md",
-              "digest": "sha256:89f1de613045197debf0de869727eb51082589ed6a7f74b2981fc972675fbc84"
+              "digest": "sha256:b3a6e47c84af5de395ee5a16bcdab205c89ae2539a5f7cb62a0d8c2e314b3192"
+            },
+            {
+              "kind": "work_state",
+              "id": "D1834",
+              "digest": "sha256:05c97cdb7f18d0fcdac9e288ec9ac7ee3a646577565f9243376bab6eed0b19ab"
+            },
+            {
+              "kind": "work_state",
+              "id": "D910",
+              "digest": "sha256:6cef5afe112c798511824426691329734ac57a81b7d6e3ac7f278082d818eba5"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3435",
+              "digest": "sha256:a8bdcdbaae9cf9eb1506abf2d1c4b158fddcfe0a3ea81f8eeb6757962b9bd4ca"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3436",
+              "digest": "sha256:10db391bc72018005a43e4384e2fe79de9c4ae870d48631c9136a45b965e03f0"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3437",
+              "digest": "sha256:31f0f71c168ded58a2a547f7162b410c3f6a0d3a8b2aa8229b85b69a62f4775f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3438",
+              "digest": "sha256:6bc8d8fa84f97669f8c7910f985f6b1ef0129f689f2dec8e595c4cd6ce2852f7"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3439",
+              "digest": "sha256:50b4c8d8c56c8626a4a5645ebc3a3fb0aecf384443e70abe8738450fb534806a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3440",
+              "digest": "sha256:d634564ef632406a7541e80f25dde087b8c361de3ba98b4108846308a259d1c7"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3441",
+              "digest": "sha256:96f97f43819158a1bf55f3aae3f73486145023a8f01644fc2ba2548cb648b16c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3442",
+              "digest": "sha256:54a935a789c149a99f785a066b96c058fcc4b158e7a02e6652fccb849bc976a8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3443",
+              "digest": "sha256:bca8f4d0533e1c6cd05e897dc63a182b93c971100c54419e17b4c9e90fb6b73d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3444",
+              "digest": "sha256:c246eb9ced5e8c1681e634ee7c6a21c366b9b5f72bbda1a57bc2464fd5ed7c7b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3445",
+              "digest": "sha256:9b2022c3aef22c4efe08054a4e75db1f22fb0d03b18bc6ee7d457d68ab8fc299"
             }
           ]
         },

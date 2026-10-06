@@ -4,6 +4,12 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make play-composition-max-load-check` exercises all eight play seats through the real assistance
+compiler, domain branches, requests and sealed receipts at seven viewports. It includes held-cue
+priority, every badge, native swaps/hits, compact tokens and board stability; no packet fixtures or
+forced input. `make play-composition-client-check` adds mounted snapshot/decision/badge controls.
+These focused commands do not replace the full CI tiers or remaining complete UX acceptance.
+
 | Tier | Command | Owns | Must not substitute for |
 |---|---|---|---|
 | Fast commit checks | Lefthook `pre-commit` | Staged diff hygiene, affected package checks, and process contracts over an isolated Git-index snapshot | Full CI or a push gate |
@@ -34,7 +40,9 @@ the HTML report are uploaded on every outcome. The matrix verifier reads the cur
 refuses missing/duplicate/foreign/failed/retried/wrong-size or out-of-run attachments, then preserves
 the report and PNG bytes under `test-results/composition/<report-hash>/`. Later tiers cannot erase
 that matrix generation. Its 19 Node controls test the evidence join, not image content or complete
-A3/A4/A6 acceptance; the remaining every-module max-load fixture is tracked as D3435.
+A3/A4/A6 acceptance. The genuine eight-seat population fixture is recorded as D3435's
+maximum-load checkpoint; D3444 retains compact tablet presentation and D3436 phone contract
+reconciliation rather than treating population/counts as the complete UX contract.
 
 Playwright has explicit desktop Chromium and Pixel 7 projects. Project-level test filters keep
 ordinary journeys on one desktop browser while `@mobile` matrix cases inherit the device's mobile

@@ -2,6 +2,7 @@
 // rfc/hint-distance.md §7 — the web client and rail seat contracts (criteria 11 and 12, web arm).
 
 import { mount, tick, unmount } from "svelte";
+import { SvelteMap } from "svelte/reactivity";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { compileAssistanceRequest, hintDecisionStamp, hintReceiptDigest, type DrillRun, type HintDeliveryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime";
@@ -150,6 +151,55 @@ describe("GuidedHintSeat", () => {
   }
   const assistanceRequest = () => compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
   const settle = async () => { for (let index = 0; index < 8; index += 1) { await tick(); await new Promise((resolve) => setTimeout(resolve, 5)); } };
+
+  it("keeps a disclosure across identical snapshots but resets on a genuinely changed decision", async () => {
+    const run = revealedRun();
+    const snapshots = new SvelteMap([["current", run]]);
+    const client = fakeClient((body) => ({ state: "available", delivery: receipt(run, body.rung) }));
+    const component = mount(GuidedHintSeat, { target: target(), props: { get run() { return snapshots.get("current")!; }, ceiling: "square", canWrite: true, client, assistanceRequest, onToggle: vi.fn(), pollIntervalMs: 1 } });
+    try {
+      await settle();
+      document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+      await settle();
+      expect(document.querySelector(".seat-badge")?.textContent).toBe("1");
+      snapshots.set("current", JSON.parse(JSON.stringify(run)) as DrillRun);
+      await settle();
+      expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
+      expect(document.querySelector(".seat-badge")?.textContent).toBe("1");
+      expect(client.bodies).toHaveLength(1);
+      snapshots.set("current", revealedRun(run.id, 3));
+      await settle();
+      expect(document.querySelector(".hint-sentence")).toBeNull();
+      expect(document.querySelector(".seat-badge")).toBeNull();
+      expect(client.bodies).toHaveLength(1);
+    } finally { await unmount(component); }
+  });
+
+  it.each(["available", "honest_empty", "source_unavailable", "failed", "policy_refused"] as const)("badges only answered facts for %s, never a door or extra rung", async state => {
+    const run = revealedRun();
+    const client = fakeClient((body): HintResponse => {
+      if (state === "available") return { state, delivery: receipt(run, body.rung) };
+      if (state === "policy_refused") return { state, rung: body.rung, reason: "disclosure_closed" };
+      if (state === "honest_empty") return { state, requestId: "f".repeat(32), rung: body.rung, reason: "no_admitted_occurrence" };
+      if (state === "source_unavailable") return { state, requestId: "f".repeat(32), rung: body.rung, reason: "provider_unavailable" };
+      return { state, requestId: "f".repeat(32), rung: body.rung, reason: "internal_error" };
+    });
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "square", canWrite: true, client, assistanceRequest, onToggle: vi.fn(), pollIntervalMs: 1 } });
+    try {
+      await settle();
+      expect(document.querySelector(".seat-badge")).toBeNull();
+      document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+      await settle();
+      const expected = state === "available" ? "1" : state === "honest_empty" || state === "source_unavailable" ? "0" : undefined;
+      expect(document.querySelector(".seat-badge")?.textContent).toBe(expected);
+      if (state === "available") {
+        document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+        await settle();
+        expect(client.bodies.map((body) => body.rung)).toEqual(["pattern", "square"]);
+        expect(document.querySelector(".seat-badge")?.textContent).toBe("1");
+      }
+    } finally { await unmount(component); }
+  });
 
   it("asks only on request, climbs one rung per press to the ceiling, and shows only the receipt's sentence", async () => {
     const run = revealedRun();

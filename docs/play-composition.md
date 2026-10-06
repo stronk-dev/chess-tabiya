@@ -39,6 +39,12 @@ same expansion authority: opening it collapses the other module card and vice ve
 hint keeps its exact decision and rung while hiding both its card and board marks. Reopening it
 does not request another hint; only **Hint** or **A little more** advances the disclosure.
 
+A held staged cue displaces both ordinary module cards and Guided Hint; its own badge counts the
+receipt's delivered facts. Revise restores ordinary expansion. The selected origin-square answer
+survives staging because the move has not been committed. Opening disclosure waits for the new
+assistance compilation before requesting proactive nudge/structure packets. Selected-square
+requests use the exact run/node/square/configuration identity, not unrelated snapshot updates.
+
 On compact screens the help-style popover is inset from both viewport edges, independently of
 its topbar trigger. Its declared scroll region bounds long preset text without displacing the board
 or putting radio controls outside the phone viewport.
@@ -76,7 +82,13 @@ multi-user match behavior.
 
 A module-seat matrix covers composition states 3 (staged move with the head-slot cue, followed by a
 real move submission), 5 (a rail module expanded), 9 (honest-empty and not-consulted states) and 13
-(max load, exactly one expanded) at all seven projections with the board rectangle unchanged.
+(max load) at all seven projections with the board rectangle unchanged. State 13 activates the
+complete eight-seat population through actual Advanced controls, records two attempts, requests
+every on-request answer and independently verifies all delivered-fact badges. Native card swaps,
+the held cue's displacement and Revise, real square hit targets, tablet band/phone rim tokens and
+unchanged board geometry are asserted. `make play-composition-max-load-check` runs that journey.
+The current phone companion is modal: close it before board gestures, reopen it to inspect the
+answer. D3436 retains the unresolved contract reconciliation with the later no-overlay floor.
 
 State 6 uses the actual hint request/poll protocol through the preset's final permitted `distance`
 rung. At every projection it checks one expanded seat, board stability, collapse/reopen without

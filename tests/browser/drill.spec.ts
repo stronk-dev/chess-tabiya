@@ -6,6 +6,7 @@ import { expect, test, type Locator, type Page, type TestInfo } from "@playwrigh
 
 import { chooseBot, chooseRawRung } from "./play-helpers.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
+import type { ModuleQueryPage } from "@chess-tabiya/runtime";
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
 
@@ -2429,7 +2430,159 @@ async function startSupportFromFen(page: Page, fen: string, side: "white" | "bla
   await choosePreset(page, /Support/u);
 }
 
-test("@matrix module seats render sealed evidence without moving the board (states 3, 5, 9, 13)", async ({ page }, testInfo) => {
+test("@matrix maximum-load modules use real requests and evidence at every viewport", async ({ page }, testInfo) => {
+  test.setTimeout(300_000);
+  page.setDefaultTimeout(15_000);
+  const projections = [
+    { width: 1440, height: 900 }, { width: 1366, height: 768 }, { width: 1280, height: 720 },
+    { width: 768, height: 1024 }, { width: 430, height: 932 }, { width: 390, height: 844 },
+    { width: 360, height: 680 },
+  ] as const;
+  const seat = (module: string) => page.locator(`[data-module="${module}"]`);
+  // Independent observation of the public receipt, not the client's badge implementation.
+  const factCount = (packet: ModuleQueryPage["packets"][number]) => new Set(packet.receipt.items.map((item) => item.evidenceRef === null ? item.componentDigest : `${item.evidenceRef.projection.id}#${item.evidenceRef.evidenceDigest}`)).size;
+  const assertPage = (page: ModuleQueryPage, runId: string, finalDigest: string) => {
+    expect(page.runId).toBe(runId);
+    expect(page.effectiveConfigDigest).toBe(finalDigest);
+    for (const packet of page.packets) {
+      expect(packet.disclosure.effectiveConfigDigest).toBe(finalDigest);
+      expect(packet.disclosure.subject.nodeId).toBe(page.subjectNodeId);
+      expect(packet.disclosure.componentDigests).toEqual(packet.receipt.items.map((item) => item.componentDigest));
+    }
+    return page;
+  };
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await startSupportFromFen(page, SCHOLAR_TRAP, "black");
+    await choosePreset(page, /Guide me/u);
+    await openAdvancedSupport(page);
+    for (const label of ["Threat radar", "Staged-move risk check"]) {
+      await page.getByRole("checkbox", { name: label, exact: true }).check();
+      await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
+    }
+    await page.getByRole("button", { name: "Return to play" }).click();
+    // Build the other attempt through real domain operations, not a synthetic comparison packet.
+    // The UI move and public rewind/fork routes preserve both attempts in the stored run.
+    const firstMove = page.waitForResponse((response) => response.url().endsWith("/moves") && response.request().postDataJSON().uci === "d8e7");
+    await move(page, "d8", "e7", "black");
+    expect((await firstMove).ok()).toBe(true);
+    const runId = page.url().split("/").at(-1)!;
+    const graphResponse = await page.request.get(`/runs/${runId}/graph`);
+    const graph = await graphResponse.json() as { graph: { nodes: { id: string; parentId: string | null }[] } };
+    const root = graph.graph.nodes.find((node) => node.parentId === null)!;
+    const writer = await page.evaluate((id) => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
+    for (const [action, data] of [["rewind", { nodeId: root.id }], ["fork", { nodeId: root.id, label: "Pawn attack", intent: "Compare the pawn attack with the queen defence" }]] as const) {
+      const response = await page.request.post(`/runs/${runId}/${action}`, { headers: { "x-writer-id": writer! }, data });
+      expect(response.ok(), await response.text()).toBe(true);
+    }
+    await page.reload();
+    await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    await move(page, "g7", "g6", "black");
+    await showSupport(page);
+    const cue = seat("blunder_prevention");
+    await expect(cue).toHaveAttribute("data-seat-state", "warning");
+    await cue.getByRole("button", { name: /anyway$/u }).click();
+    await showSupport(page);
+    const compiledResponse = page.waitForResponse((response) => response.url().endsWith("/assistance") && response.request().method() === "POST");
+    const postcommitResponse = page.waitForResponse((response) => response.url().endsWith("/modules/query") && response.request().postDataJSON().query.timing === "post_commit" && response.request().postDataJSON().query.requested.length === 0);
+    await page.getByRole("button", { name: "Show support for this position" }).click();
+    const compiled = (await (await compiledResponse).json()).assistance as { finalDigest: string; modules: string[] };
+    expect(compiled.modules.slice().sort()).toEqual(["rules_floor", "postcommit_nudge", "sight_on_request", "threat_radar", "structure_nudge", "theory_breadcrumb", "guided_hint", "compare_coach", "blunder_prevention"].sort());
+    const raw = await (await postcommitResponse).json();
+    const delivered = assertPage(raw.page as ModuleQueryPage, runId, compiled.finalDigest);
+    expect(delivered.packets.find((packet) => packet.module === "postcommit_nudge")!.receipt.items.length).toBeGreaterThan(0);
+    for (const packet of delivered.packets) await expect(seat(packet.module).locator(".seat-badge")).toHaveText(String(factCount(packet)));
+    // The reveal starts real recorded evidence jobs. Their completions legitimately change the
+    // exact hint decision. Await their recorded coverage, then load that settled head before
+    // asking for a hint; never preserve an answer across a genuinely changed event head.
+    await expect.poll(async () => {
+      const events = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).events as { type: string; data: { node?: { id: string; branchId: string }; nodeId?: string; branch?: { id: string } } }[];
+      const attached = new Set(events.filter((event) => event.type === "evidence.attached").map((event) => event.data.nodeId));
+      const branch = events.find((event) => event.type === "branch.forked")!.data.branch!.id;
+      return events.filter((event) => event.type === "move.committed" && event.data.node!.branchId === branch && !attached.has(event.data.node!.id)).length;
+    }).toBe(0);
+    const resumedNudge = page.waitForResponse((response) => response.url().endsWith("/modules/query") && response.request().postDataJSON().query.timing === "post_commit" && response.request().postDataJSON().query.requested.length === 0);
+    await page.reload();
+    await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
+    await showSupport(page);
+    const resumed = assertPage((await (await resumedNudge).json()).page as ModuleQueryPage, runId, compiled.finalDigest);
+    for (const packet of resumed.packets) await expect(seat(packet.module).locator(".seat-badge")).toHaveText(String(factCount(packet)));
+    for (const module of ["postcommit_nudge", "sight_on_request", "threat_radar", "structure_nudge", "theory_breadcrumb", "guided_hint", "compare_coach"]) {
+      await expect(seat(module), `complete rail population: ${module}`).toHaveCount(1);
+    }
+    // The shipped phone companion is modal: close it through its real affordance before a
+    // board gesture. Changing that product policy belongs to D3436, not a forced test click.
+    if (viewport.width < 720) await page.getByRole("button", { name: "Collapse companion" }).click();
+    await page.getByLabel("Chessboard").evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    const boardBox = await page.getByLabel("Chessboard").boundingBox();
+    const square = squarePoint(boardBox!, "g6", "black");
+    const hit = await page.getByLabel("Chessboard").evaluate((element, point) => { const target = document.elementFromPoint(point.x, point.y); return { inside: element.contains(target), square: point, board: element.getBoundingClientRect().toJSON(), target: target?.outerHTML.slice(0, 400) }; }, square);
+    expect(hit.inside, JSON.stringify(hit)).toBe(true);
+    const sightResponse = page.waitForResponse((response) => response.url().endsWith("/modules/query") && response.request().postDataJSON().query.selectedSquare === "g6");
+    await page.mouse.click(square.x, square.y);
+    const sightRaw = await (await sightResponse).json();
+    const sight = assertPage(sightRaw.page as ModuleQueryPage, runId, compiled.finalDigest);
+    await showSupport(page);
+    await expect(seat("sight_on_request").locator(".seat-badge")).toHaveText(String(factCount(sight.packets.find((packet) => packet.module === "sight_on_request")!)));
+    for (const module of ["threat_radar", "theory_breadcrumb", "compare_coach"]) {
+      await seat(module).locator(".seat-row").click();
+      const response = page.waitForResponse((candidate) => candidate.url().endsWith("/modules/query") && candidate.request().postDataJSON().query.requested.includes(module));
+      await seat(module).getByRole("button", { name: "Show", exact: true }).click();
+      const raw = await (await response).json();
+      const answer = assertPage(raw.page as ModuleQueryPage, runId, compiled.finalDigest);
+      const packet = answer.packets.find((candidate) => candidate.module === module)!;
+      expect(packet, `real ${module} answer`).toBeDefined();
+      if (module === "compare_coach") expect(packet.receipt.items.length).toBeGreaterThan(0);
+      await expect(seat(module).locator(".seat-badge")).toHaveText(String(factCount(packet)));
+      await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    }
+    const eventsBefore = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).events.map((event: { seq: number; type: string }) => [event.seq, event.type]);
+    const hintResponse = page.waitForResponse(async (response) => /\/hints(?:\/[^/]+)?$/u.test(response.url()) && ["available", "honest_empty", "source_unavailable"].includes((await response.json()).hint?.state));
+    await seat("guided_hint").getByRole("button", { name: "Hint", exact: true }).click();
+    const hint = (await (await hintResponse).json()).hint;
+    await expect(seat("guided_hint").locator(".seat-badge")).toHaveText(hint.state === "available" ? "1" : "0");
+    for (const module of ["postcommit_nudge", "structure_nudge", "theory_breadcrumb", "compare_coach", "threat_radar", "sight_on_request"]) {
+      await seat(module).locator(".seat-row").click();
+      await expect(seat(module)).toHaveAttribute("data-seat-state", "expanded");
+      await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+      await expect(seat("guided_hint").locator(".hint-card")).toBeHidden();
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    }
+    const eventsAfter = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).events.map((event: { seq: number; type: string }) => [event.seq, event.type]);
+    await expect(page.locator('.module-seat[data-seat-class="rail"] .seat-badge'), JSON.stringify({ eventsBefore, eventsAfter })).toHaveCount(7);
+    if (viewport.width < 720) await page.getByRole("button", { name: "Collapse companion" }).click();
+    const stagedResponse = page.waitForResponse((response) => response.url().endsWith("/modules/query") && response.request().postDataJSON().query.candidateUci === "g6g5");
+    await move(page, "g6", "g5", "black");
+    const stagedRaw = await (await stagedResponse).json();
+    const staged = assertPage(stagedRaw.page as ModuleQueryPage, runId, compiled.finalDigest).packets.find((packet) => packet.module === "blunder_prevention")!;
+    expect(staged.receipt.items.length).toBeGreaterThan(0);
+    await showSupport(page);
+    await expect(cue).toHaveAttribute("data-seat-state", "warning");
+    await expect(cue.locator(".seat-badge")).toHaveText(String(factCount(staged)));
+    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(0);
+    await expect(seat("guided_hint").locator(".hint-card")).toBeHidden();
+    await expect(page.locator(".module-seat .seat-badge")).toHaveCount(8);
+    if (viewport.width >= 720 && viewport.width < 1024) {
+      const token = await page.locator("main.drill").evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue("--band-h")));
+      expect((await page.locator(".rail-stack").boundingBox())!.height).toBe(token);
+    } else if (viewport.width < 720) {
+      const token = await page.locator("main.drill").evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue("--rim-h")));
+      expect((await page.locator(".compact-tabs").boundingBox())!.height).toBe(token);
+      expect((await page.locator(".rail-stack").boundingBox())!.y).toBeGreaterThanOrEqual(calm!.y + calm!.height);
+    }
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "13-max-load");
+    await cue.getByRole("button", { name: "Revise", exact: true }).click();
+    await expect(cue).toHaveCount(0);
+    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+  }
+});
+
+test("@matrix module seats render sealed evidence without moving the board (states 3, 5, 9)", async ({ page }, testInfo) => {
   test.setTimeout(300_000);
   const projections = [
     { width: 1440, height: 900 },
@@ -2499,15 +2652,6 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await attachCompositionCell(page, testInfo, viewport, "09-evidence-unavailable-honest-empty");
 
-    // State 13 — max load: every composed rail seat is present with its row; exactly one expanded;
-    // expanding another collapses the first (post-gesture).
-    await seat("threat_radar").locator(".seat-row").click();
-    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
-    await expect(seat("theory_breadcrumb")).not.toHaveAttribute("data-seat-state", "expanded");
-    for (const module of ["sight_on_request", "threat_radar", "theory_breadcrumb"]) await expect(seat(module)).toHaveCount(1);
-    await expect(page.locator(".module-seat .seat-badge").first()).toBeVisible();
-    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
-    await attachCompositionCell(page, testInfo, viewport, "13-max-load");
   }
 });
 

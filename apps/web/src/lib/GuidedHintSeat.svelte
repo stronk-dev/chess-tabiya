@@ -51,6 +51,9 @@
   let next = $derived(nextHintRung(progress, decisionDigest, ceiling));
   let revealed = $derived(progress?.decisionDigest === decisionDigest ? progress.revealed : null);
   let sentence = $derived(response?.state === "available" ? (response.delivery.rendered.voice.state === "rendered" ? response.delivery.rendered.voice.sentence : response.delivery.rendered.sentence) : undefined);
+  // One progressive disclosure is one fact, not a count of revealed rungs. A door, pending
+  // request, policy refusal or failed transport makes no assertion about available evidence.
+  let badge = $derived(response?.state === "available" ? 1 : response?.state === "honest_empty" || response?.state === "source_unavailable" ? 0 : undefined);
   let message = $derived.by(() => {
     if (clientProblem === "poll_limit") return "The hint is taking longer than expected. Try again.";
     if (clientProblem === "transport_error") return "The hint request could not be completed. Try again.";
@@ -83,7 +86,6 @@
   // §5: commit, rewind, fork, cursor or boundary change and a replaced run reset the ladder.
   $effect(() => {
     void decisionDigest;
-    void run.id;
     untrack(reset);
   });
   onDestroy(() => { generation += 1; const pending = activeRequestId ?? retryRequestId; if (pending !== undefined) void client.cancel(pending).catch(() => undefined); onMarks?.(undefined); });
@@ -163,7 +165,7 @@
   <h2 id="guided-hint-title">
     {#if onToggle === undefined}Ask for the least that helps
     {:else}
-      <button type="button" class="seat-row" aria-label={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"} aria-expanded={expanded} aria-controls="guided-hint-card" disabled={!expanded && revealed === null && (!canWrite || busy)} onclick={() => { const shouldAsk = !expanded && revealed === null; onToggle?.(); if (shouldAsk) void ask(); }}>Ask for the least that helps</button>
+      <button type="button" class="seat-row" aria-label={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"} aria-expanded={expanded} aria-controls="guided-hint-card" disabled={!expanded && revealed === null && (!canWrite || busy)} onclick={() => { const shouldAsk = !expanded && revealed === null; onToggle?.(); if (shouldAsk) void ask(); }}><span>Ask for the least that helps</span>{#if badge !== undefined}<span class="seat-badge" aria-label={`${badge} ${badge === 1 ? "fact" : "facts"}`}>{badge}</span>{/if}</button>
     {/if}
   </h2>
   <div class="hint-card" id="guided-hint-card" hidden={!expanded}>
@@ -187,7 +189,8 @@
   .hint-sentence { font-size:.82rem; line-height:1.45; }
   .hint-card { display:grid; gap:.4rem; }
   .hint-card[hidden] { display:none; }
-  .seat-row { width:100%; border:0; padding:0; color:inherit; background:none; font:inherit; text-align:left; cursor:pointer; }
+  .seat-row { display:flex; align-items:center; justify-content:space-between; gap:.5rem; width:100%; border:0; padding:0; color:inherit; background:none; font:inherit; text-align:left; cursor:pointer; }
+  .seat-badge { min-width:1.3rem; padding:0 .35rem; border-radius:.65rem; background:var(--accent-soft); color:var(--ink); font:normal .72rem var(--display-font); text-align:center; font-variant-numeric:tabular-nums; }
   .hint-message { color:var(--muted); font-size:.76rem; line-height:1.4; }
   .hint-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; }
   .hint-actions button { justify-self:start; padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }

@@ -1,5 +1,12 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-06 maximum-load checkpoint:** D3438/D3441 add receipt-bound one/zero fact badges
+  and retain an answer across identical run snapshots; genuinely changed decision heads still
+  retire it. D3439 makes the held staged cue displace the hint card without re-requesting or
+  discarding the current disclosure. Mounted predecessor/absence controls and the real eight-seat
+  journey are recorded in `planning/play-composition/max-load-2026-10-06.md`. No ceiling, source,
+  codec, rung or full-RFC discharge changes.
+
 - **2026-10-06 composition checkpoint:** D3433 connects the existing mounted seat to the play
   queue's expansion authority. Collapse retains the exact decision and rung but removes its card
   and board paint; reopening does not request another hint. The real final-permitted-rung journey

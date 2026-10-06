@@ -16,6 +16,11 @@ board marks without resetting the current decision, cancelling an operation, or 
 ladder. **Open guided hint** restores an already revealed rung without another request. The card
 stays mounted while collapsed; decision changes and teardown still own reset/cancellation.
 
+The row counts the one delivered disclosure, not the number of rungs. Available answers show one
+fact; explicit empty or unavailable-source answers show zero. An unasked/pending/failed/refused
+request has no count. Identical snapshots preserve the answer; an actual decision-digest change
+retires it. A held staged-move warning temporarily displaces the card without requesting again.
+
 The seat never asks on its own. The learner has to press the button, and the request only runs when
 the run's disclosure boundary is open, for example after **Show support for this position** in Just
 Play. When the boundary is closed, the seat says so instead of showing a hint.
