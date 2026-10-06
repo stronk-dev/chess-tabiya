@@ -37,6 +37,19 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3493: common actual four-ply five-approach join passes on all 193
+candidates / 182 cells / 116 pairs, 34 actual settings plus 19 separate diagnostics.
+Both forcing sensitivities prove all eight bounded surviving preparations;
+engine/recursive depth12/top8 prove none despite reaching 40/48 and executing
+38/48. PV withholds its coincidentally closed raw universal. No actual directional
+contrast certifies. Six JS/four Python controls, nine input/twelve output
+corruptions, independent algebra/PV replay and deterministic reconstruction pass.
+All 182 focus values remain null; do not substitute target-family labels.
+D3262 remains doing on common two-ply, joint-policy stopping, phase/focus,
+controlled cold/warm/offline end-to-end cost and production profile. No gate
+promotion. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md`.
+
 2026-10-06 D3492: the special-move research oracle is corrected under the separate
 target-opportunity@2 convention, with actual captured-square identity and plural
 positive promotion/execution witnesses. All 339,764 states / 1,519,144 all-stage

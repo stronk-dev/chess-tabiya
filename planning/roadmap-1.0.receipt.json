@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5a7751ddbe7b4e1ac86542264236c7e95fd2a04c8647a30c989b87620ba43421",
+    "roadmap": "sha256:724365fd8414593a2b7ba50190e0e90f175bdc696946814228c30392118a6747",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:18bec42e4dcff7b559e9eafcb495c3873a67f6b42493410652bf6cd72dde29ad",
+    "workState": "sha256:c1f9aa361e7d35e9cf4789e47e14cc8f534dce6e6a5d3ed988ef070d3e2ffcd5",
     "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 1,
       "blocked": 1059,
-      "done": 1393,
+      "done": 1394,
       "refused": 161
     },
     "workItems": {
@@ -254,7 +254,7 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3492 closes the research-oracle en-passant/promotion gap with separate target-opportunity@2: match actual captured squares and retain every positive promotion/execution choice. Complete all-stage audit retains 339,764 distinct states / 1,519,144 snapshot occurrences, all 193 offered candidates / 182 named cells and four controls. The independently recomputed legal baseline and actual model/engine/first-reply-reserve/recursive outcomes have zero changed actions/outcomes; 58 reintroductions and eight surviving cells remain. Typecheck, six JS/two audit/five Python controls, nine input and twelve output corruption refusals, independent legal/local-exchange convention replay and byte-identical reconstruction pass. Artifact SHA-256 95295ad43ef1e41ade4eb4405aaf9302490bf5533837b74148ecba5e065bd144. Historical/original196 sources, frozen selectors and earlier artifacts remain unchanged; future calibration uses plural v2 witnesses, not the known-gap scalar observer. D3262 remains doing on full five-arm proof/refutation/abstention, joint-policy stopping, phase/focus, controlled cold/warm/offline cost and every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; routine metadata/hash updates are automatic.",
+        "summary": "D3493 closes the common actual four-ply five-approach join under plural target-opportunity@2: 193 candidates / 182 cells / 116 pairs across 34 actual settings and 19 separate diagnostics, with four controls / 17 unpaired targets. Both forcing sensitivities reach 51/58 and prove all eight bounded surviving preparations; engine depth12/top8 reaches/executes 40/38, recursive 48/48, both prove zero. PV depth12 reaches nine/executes two and withholds one coincidentally closed raw universal under its line ceiling. No actual directional contrast certifies; bounded oracle alone certifies 13. Literal model mass, legal omissions, phase/focus, fourteen no-target candidates and all-null focus remain. Six JS/four Python controls, nine input/twelve output corruption refusals, independent common algebra/PV replay and deterministic reconstruction pass. Artifact SHA-256 c6660605e24c13b631f39f2003f1219406baadb02b03614eac9260c6a81c15bf. Earlier/original196 inputs/results remain unchanged. D3262 remains doing on common two-ply, joint-policy stopping, phase/focus, controlled cold/warm/offline end-to-end cost and production-profile selection, plus every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; metadata maintenance is automatic.",
         "impact": "advanced",
         "evidence": [
           "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -455,6 +455,12 @@
           "tools/d3262-search-calibration/coherent-recursive-evaluation-check.test.py",
           "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md",
           "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.json.gz",
+          "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md",
+          "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.json.gz",
+          "tools/d3262-search-calibration/coherent-five-approach-comparison.mjs",
+          "tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs",
+          "tools/d3262-search-calibration/coherent-five-approach-check.py",
+          "tools/d3262-search-calibration/coherent-five-approach-check.test.py",
           "tools/d3262-search-calibration/target-opportunity-v2.ts",
           "tools/d3262-search-calibration/target-opportunity-v2.test.mjs",
           "tools/d3262-search-calibration/target-opportunity-audit.mjs",
@@ -917,6 +923,11 @@
             "kind": "work_state",
             "id": "D3492",
             "digest": "sha256:75fffbf032ac0d2ea84264c6d874e179eb833e7aa24c875c6cbaf0543ae8d4f2"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3493",
+            "digest": "sha256:7f5660dc556e6ea7b07dc99c7f623b63c786077475bdcc4128e1ffe314777c51"
           }
         ]
       },

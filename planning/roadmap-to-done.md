@@ -19,6 +19,20 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 common four-ply five-approach checkpoint: D3493 joins all 193 candidates
+/ 182 cells / 116 pairs across 34 actual settings and 19 separate diagnostics.
+Both forcing sensitivities prove all eight bounded surviving preparations;
+engine depth12/top8 reaches/executes 40/38, recursive 48/48, both prove zero.
+PV depth12 reaches nine/executes two and withholds one coincidentally closed raw
+universal. No actual directional contrast certifies. Six JS/four Python controls,
+nine input/twelve output corruptions, independent common algebra/PV replay and
+deterministic reconstruction pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md`.
+Fourteen no-target candidates/all-null focus stay visible. D3262 remains active
+on common two-ply, joint-policy stopping, phase/focus, controlled end-to-end cost
+and production profile. No RFC/capability/milestone promotion. Routine metadata
+maintenance stays automatic, with no owner decision or interruption.
+
 2026-10-06 special-move oracle checkpoint: D3492 fixes EP captured-square identity
 and plural positive promotion/execution choices in target-opportunity@2. All
 339,764 distinct states / 1,519,144 all-stage snapshot occurrences are audited;

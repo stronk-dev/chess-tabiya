@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed common four-ply comparison [[D3493]]: all five approach families join
+on 193 candidates / 182 cells / 116 pairs across 34 actual and 19 diagnostic
+settings. Both forcing sensitivities reach 51/58 and prove all eight survivors;
+engine depth12/top8 reaches/executes 40/38, recursive 48/48, both prove zero.
+PV depth12 reaches nine/executes two and withholds a coincidentally closed raw
+universal under its line ceiling. No actual directional contrast certifies.
+Six JS/four Python controls, nine input/twelve output corruptions, independent
+common join/PV replay and deterministic reconstruction pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md`.
+Next: common two-ply projection, joint-policy coverage/stopping and controlled
+cold/warm/provider-offline end-to-end cost before profile selection. All 182
+focus values are null; retain that missingness while completing focus validation,
+never infer tactical/quiet labels from target family. D3262 stays active on the
+entire experiment and production obligations.
+
 Completed [[D3491]]: all 166,137 actual recursive observations / 182 cells /
 18 settings and 116 pairs retain opportunity/execution and quantified omissions.
 Depth12/top8/top8 reaches and executes 48/58 versus ordinary engine 40/38;

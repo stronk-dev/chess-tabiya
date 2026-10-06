@@ -806,6 +806,23 @@ semantic-search-target-v2-independent-test:
 semantic-search-target-v2-independent: semantic-search-target-v2-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/target-opportunity-audit-check.py --negative-controls
 
+# Disposable draft-RFC research; intentionally not a software/release CI gate.
+.PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
+semantic-search-five-approach-test: semantic-search-target-v2-build
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs
+
+semantic-search-five-approach-update: semantic-search-five-approach-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-five-approach-comparison.mjs --write
+
+semantic-search-five-approach-check: semantic-search-five-approach-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-five-approach-comparison.mjs
+
+semantic-search-five-approach-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-five-approach-check.test.py
+
+semantic-search-five-approach-independent: semantic-search-five-approach-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-five-approach-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

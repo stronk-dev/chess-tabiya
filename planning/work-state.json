@@ -28828,6 +28828,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3493",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7f5660dc556e6ea7b07dc99c7f623b63c786077475bdcc4128e1ffe314777c51",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md",
+      "evidenceKind": "path"
     }
   ]
 }

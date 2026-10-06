@@ -236,8 +236,28 @@ independently re-infers the literal local-exchange convention, not strategic
 truth or an engine reason. Original196 and all old artifacts remain unchanged.
 Source: `planning/semantic-consequence-search/d3262-target-opportunity-v2-audit.md`.
 
-[P] Outstanding: the five-arm
-proof/refutation/abstention, joint coverage stop rules, phase/focus stratification and controlled
+[V] D3493 supplies a common actual four-ply five-approach proof/contrast join:
+193 candidates / 182 cells / 116 pairs, 34 actual settings and 19 separate
+one-hop/oracle diagnostics. Both forcing sensitivities reach 51/58 and establish
+all eight positive bounded preparations; engine depth12/top8 reaches/executes
+40/38 and recursive 48/48, both proving zero survivors. PV depth12 reaches
+nine/executes two and withholds its one coincidentally closed universal under
+line-only authority. Actual settings certify zero directional contrasts; the
+complete bounded oracle alone certifies 13. Fourteen no-target candidates,
+controls/unpaired cases, phase/focus and literal model masses remain. All focus
+values are null, not tactical/quiet labels. Six JS/four Python controls, nine
+input/twelve output corruptions, independent common algebra/PV replay and
+deterministic reconstruction pass. Source:
+`planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.md`.
+
+[M] Implication: bounded forcing and recursive event search serve different
+evidence duties. More observed executions do not establish all-defence coverage;
+complete forcing branches can establish a positive preparation without proving
+absence on every unexpanded branch. No production default or engine reason
+follows before cost/usefulness and scope qualification.
+
+[P] Outstanding: common two-ply comparison, joint coverage stop rules,
+phase/focus stratification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.
 Source: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`
