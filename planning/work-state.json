@@ -28792,6 +28792,32 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-actual-proof.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3489",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:67166e3e42e8f5b7eb4e1d4042d85c14e902c35d240cb634bdb9a12d51fdc40d",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-recursive-semantic-frame.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3490",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d7ef328ef5b6dd0a3a3fb3b59ee847d28495b7dd229ec9ba971cc853ae43f7c1",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-recursive-semantic-frame.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3491",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:e9bf8bc506778ce9e91ee36525ca8303bfc1d5ccc535ce06be3370a575b5cfcc",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

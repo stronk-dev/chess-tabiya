@@ -166,6 +166,25 @@ export type TargetPathObservation = {
 
 // Observe only the supplied legal history. No alternate learner defence or
 // automatically appended target capture is substituted into its population.
+// Scheduling-only projection: no availableFollow/SEE/outcome is evaluated.
+export function trackTargetPath(rootFen: string, historyUci: readonly string[], definition: any): {
+  readonly fen: string; readonly terminalReason: string | null; readonly tracked: any;
+} {
+  check(historyUci.length >= 1 && historyUci.length <= 4, "Tracking requires one to four actual plies");
+  let pos = position(rootFen), tracked: Target | undefined = targetFrom(definition);
+  check(tracked.kind === "material" ? samePiece(pos, tracked.attacker) && samePiece(pos, tracked.target)
+    : samePiece(pos, tracked.minor), "Named tracking identity absent at root");
+  for (const [index, uci] of historyUci.entries()) {
+    check(terminalReason(pos) === null, "Tracking continues past game terminal");
+    const parsed = parseUci(uci), move = parsed === undefined ? undefined : normalizeMove(pos, parsed);
+    check(move !== undefined && pos.isLegal(move) && externalUci(pos, move) === uci, "Illegal/noncanonical tracking move");
+    const next = tracked === undefined ? undefined : index === 0
+      ? beginTrackedCandidate(pos, move, tracked) : playTracking(pos, move, tracked);
+    pos = pos.clone(); pos.play(move); tracked = next?.target;
+  }
+  return { fen: makeFen(pos.toSetup()), terminalReason: terminalReason(pos), tracked: externalTarget(tracked) };
+}
+
 export function observeTargetPath(rootFen: string, historyUci: readonly string[], definition: any): TargetPathObservation {
   check(historyUci.length >= 1 && historyUci.length <= 4, "Target observation requires one to four actual plies");
   const root = position(rootFen), originalTarget = targetFrom(definition);

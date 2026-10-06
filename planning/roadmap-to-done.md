@@ -19,6 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 recursive scheduling/source checkpoint: D3489/D3490 preregister a
+source-blind named-relation rule and independently reconstruct 16,607 three-ply
+paths across 193 candidates / 182 cells / 18 settings. All 418 new positions /
+958 missing queries / 17 immutable intervals now have checked actual sources;
+the separate fourth-ply join retains 147,018 distinct histories, zero source-off
+nodes and unchanged previously supplied selections. Independent frame/source/
+completion replay refuses 9/8/10 corruptions; deterministic checks pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-recursive-semantic-frame.md`.
+D3491 owns recursive target/contrast/quantifier outcomes; geometric event/path
+counts are not profit, proof or useful explanation. D3262/full five-arm/policy/
+phase/cost and every production/source/A4/1.0 obligation remain open. No RFC,
+capability or milestone promotion; metadata/hash maintenance is routine.
+
 2026-10-06 actual quantifier checkpoint: D3488 independently checks all 193
 offered candidates / 6,176 preparation / 194,664 defence edges and all 182 named
 cells / 29 settings. Depth12/top8 refutes five roots at this bound and proves

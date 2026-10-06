@@ -23,7 +23,10 @@ def digest(raw):
     return "sha256:" + hashlib.sha256(raw).hexdigest()
 
 
-def verify(frame, frame_bytes, capture, semantic):
+def verify(frame, frame_bytes, capture, semantic, scope=None):
+    expected_scope = scope if scope is not None else ("semantic_third_ply_missing_budgets_only" if semantic else None)
+    require(expected_scope in ["semantic_third_ply_missing_budgets_only", "recursive_semantic_third_ply_missing_budgets_only"]
+            if semantic else expected_scope is None, "Undeclared independent source scope")
     jobs = frame["supplementJobs"] if semantic else frame["engineJobs"]
     require(type(capture["version"]) is int and capture["version"] == 1 and capture["manifest"] == frame["manifest"]
             and capture["frontierDigest"] == digest(frame_bytes), "Crossed independent source frame")
@@ -31,7 +34,7 @@ def verify(frame, frame_bytes, capture, semantic):
             and capture["start"] == 0 and capture["positions"] == len(jobs)
             and len(capture["rows"]) == len(jobs) and capture["partial"] is False,
             "Incomplete independent capture population")
-    require(capture.get("captureScope") == ("semantic_third_ply_missing_budgets_only" if semantic else None),
+    require(capture.get("captureScope") == expected_scope,
             "Crossed independent capture scope")
     identity = frame["finalPlyQueries"]["stockfish"]
     require(capture["source"] == identity and all(type(capture["source"][key]) is type(value)
@@ -97,16 +100,21 @@ def verify(frame, frame_bytes, capture, semantic):
 
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else None
-    require(mode in ["semantic", "third-ply"], "Pass one declared independent population")
-    semantic = mode == "semantic"
+    require(mode in ["semantic", "third-ply", "recursive"], "Pass one declared independent population")
+    recursive = mode == "recursive"
+    semantic = mode != "third-ply"
+    scope = "recursive_semantic_third_ply_missing_budgets_only" if recursive else None
     directory = Path("planning/semantic-consequence-search")
-    name = "d3262-coherent-semantic-third-ply.json.gz" if semantic else "d3262-coherent-third-ply-frame.json"
+    name = ("d3262-coherent-recursive-semantic-frame.json.gz" if recursive else
+            "d3262-coherent-semantic-third-ply.json.gz" if semantic else "d3262-coherent-third-ply-frame.json")
     frame_bytes = (directory / name).read_bytes()
-    expected = ("sha256:191ca5935b501dc6164116cbc10ecaeb3ac1ae8e87e1ec6d3295b65f84508252" if semantic else
+    expected = ("sha256:508c9e84515233e456ba12ed5cf787c8bb1eb14748314de010c5d76e5fa52232" if recursive else
+                "sha256:191ca5935b501dc6164116cbc10ecaeb3ac1ae8e87e1ec6d3295b65f84508252" if semantic else
                 "sha256:3059fb3a45eb10bdcd56b7a4190bbbcf7370b4bf58750934befabde62712dc07")
     require(digest(frame_bytes) == expected, "Changed independent frozen frame")
     frame = json.loads(gzip.decompress(frame_bytes) if semantic else frame_bytes)
-    source_name = "d3262-stockfish-semantic-third-ply-capture.json.gz" if semantic else "d3262-stockfish-third-ply-capture.json.gz"
+    source_name = ("d3262-stockfish-recursive-third-ply-capture.json.gz" if recursive else
+                   "d3262-stockfish-semantic-third-ply-capture.json.gz" if semantic else "d3262-stockfish-third-ply-capture.json.gz")
     capture_bytes = (directory / source_name).read_bytes()
     capture = json.loads(gzip.decompress(capture_bytes))
     refused = []
@@ -125,16 +133,17 @@ def main():
             changed = copy.deepcopy(capture)
             mutate(changed)
             try:
-                verify(frame, frame_bytes, changed, semantic)
+                verify(frame, frame_bytes, changed, semantic, scope)
             except (AssertionError, ValueError) as error:
                 require(guard in str(error), "Corruption failed at wrong guard: " + label)
                 refused.append(label)
             else:
                 raise AssertionError("Corruption accepted: " + label)
-    summary = verify(frame, frame_bytes, capture, semantic)
+    summary = verify(frame, frame_bytes, capture, semantic, scope)
     verified_chunks = 0
     if "--with-chunks" in sys.argv:
-        chunk_directory = directory / ("d3262-stockfish-semantic-third-ply-chunks" if semantic else "d3262-stockfish-third-ply-chunks")
+        chunk_directory = directory / ("d3262-stockfish-recursive-third-ply-chunks" if recursive else
+                                       "d3262-stockfish-semantic-third-ply-chunks" if semantic else "d3262-stockfish-third-ply-chunks")
         start = 0
         for record in capture["chunkDigests"]:
             raw = (chunk_directory / record["file"]).read_bytes()

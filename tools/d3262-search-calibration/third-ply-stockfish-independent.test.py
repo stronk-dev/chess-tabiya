@@ -37,6 +37,18 @@ def fixture(fen=None):
 
 
 class IndependentSourceControls(unittest.TestCase):
+    def test_recursive_and_prior_populations_keep_separate_declared_scopes(self):
+        frame, raw, capture = fixture()
+        scope = "recursive_semantic_third_ply_missing_budgets_only"
+        with self.assertRaisesRegex(AssertionError, "capture scope"):
+            checker.verify(frame, raw, capture, True, scope)
+        capture["captureScope"] = scope
+        self.assertEqual(checker.verify(frame, raw, capture, True, scope)["positions"], 1)
+        with self.assertRaisesRegex(AssertionError, "capture scope"):
+            checker.verify(frame, raw, capture, True)
+        with self.assertRaisesRegex(AssertionError, "Undeclared"):
+            checker.verify(frame, raw, capture, True, "anything")
+
     def test_original_provider_legal_terminal_contract_is_not_rewritten(self):
         frame, raw, capture = fixture("8/8/8/8/8/8/4K3/6k1 w - - 0 1")
         frame["engineJobs"] = frame["supplementJobs"]

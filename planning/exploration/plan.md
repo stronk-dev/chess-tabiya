@@ -37,6 +37,17 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3489/D3490: preregistered recursive relation scheduling now has an
+independently reconstructed frame and complete actual fourth-ply sources. All
+193 candidates / 182 cells / 18 settings remain; 16,607 three-ply paths and
+147,018 distinct four-ply histories. All 418 additional positions / 958 queries
+/ 17 intervals pass independent source/board/PV replay; existing captured
+selections stay unchanged. These are geometric scheduling counts, not target
+outcomes, profit or proof. D3491 owns that next frozen-path target/contrast/
+quantifier join. D3262/full five-arm/policy-stop-rule/controlled-cost and production
+remain open; no gate/RFC/capability promotion. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-recursive-semantic-frame.md`.
+
 2026-10-06 D3488: the complete actual-path quantifier receipt independently
 replays all 193 offered candidates / 6,176 preparation / 194,664 defence edges
 and all 182 named cells / 29 settings. Depth12/top8 supplies five all-preparation

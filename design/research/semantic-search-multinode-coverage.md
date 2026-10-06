@@ -175,7 +175,26 @@ target-aware continuation/coverage beyond the current selected engine/model
 lines. This is not a production profile choice or permission to overstate the
 source authority; the full recursive semantic and joint-policy experiment remains.
 
-[P] Outstanding: recursively target-preserving traversal, the five-arm
+[V] A separately preregistered recursive geometric scheduling rule now follows
+named relation changes at learner nodes and exact named capture/arrival events
+at opponent nodes. All 193 offered candidates / 182 named cells / 18 settings
+remain. Independent python-chess reconstruction checks 16,607 three-ply paths,
+18,717 event nodes, frozen seeds and every missing query, refusing nine output
+corruptions. All 418 new positions / 958 missing budget queries are actually
+captured in 17 immutable intervals; independent source replay checks 62,608 PV
+moves and all interval bytes, with eight corruptions refused. The separate actual
+fourth-ply join retains 147,018 distinct histories and 609,637 setting edges, with
+no source-off final nodes or changed prior supplied selections. Counts, literal
+sources, commands, special-move controls and limitations:
+`planning/semantic-consequence-search/d3262-coherent-recursive-semantic-frame.md`.
+
+[M] This closes the missing recursive scheduling/source prerequisite, not the
+claim that recursion improves target reach, profitable exchange, meaningful
+explanation, survival or bot quality. Geometric event counts do not answer those
+questions. D3491 explicitly owns opportunity/execution, contrast and quantifier
+joins on the same frozen traversal; no held-out target result may choose branches.
+
+[P] Outstanding: recursive target-outcome/contrast/quantifier measurement, the five-arm
 proof/refutation/abstention, joint coverage stop rules, phase/focus stratification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.

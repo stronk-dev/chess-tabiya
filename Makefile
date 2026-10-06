@@ -705,6 +705,64 @@ semantic-search-actual-proof-independent-test:
 semantic-search-actual-proof-independent: semantic-search-actual-proof-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-actual-proof-check.py --negative-controls
 
+.PHONY: semantic-search-recursive-build semantic-search-recursive-test semantic-search-recursive-update semantic-search-recursive-check
+semantic-search-recursive-build:
+	./node_modules/.bin/esbuild tools/d3262-search-calibration/recursive-relation-events.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/recursive-relation-events.mjs --log-level=warning
+	./node_modules/.bin/esbuild tools/d3262-search-calibration/coherent-bounded-targets.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/coherent-bounded-targets.mjs --log-level=warning
+
+semantic-search-recursive-test: semantic-search-recursive-build
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-recursive-semantic.test.mjs
+
+semantic-search-recursive-update: semantic-search-recursive-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-recursive-semantic.mjs --write
+
+semantic-search-recursive-check: semantic-search-recursive-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-recursive-semantic.mjs
+
+.PHONY: semantic-search-recursive-independent-test semantic-search-recursive-independent
+semantic-search-recursive-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-semantic-check.test.py
+
+semantic-search-recursive-independent: semantic-search-recursive-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-semantic-check.py --negative-controls
+
+.PHONY: semantic-search-recursive-source-test semantic-search-recursive-source-preflight semantic-search-recursive-source-batch semantic-search-recursive-source-merge semantic-search-recursive-source-check
+semantic-search-recursive-source-test: semantic-search-recursive-build
+	$(CI_NODE) --test tools/d3262-search-calibration/recursive-third-ply-capture.test.mjs
+
+semantic-search-recursive-source-preflight: semantic-search-recursive-source-test
+	$(CI_NODE) tools/d3262-search-calibration/recursive-third-ply-capture.mjs preflight
+
+semantic-search-recursive-source-batch: semantic-search-recursive-source-preflight
+	$(CI_NODE) tools/d3262-search-calibration/recursive-third-ply-capture.mjs batch $(if $(MAX_NEW),--max-new "$(MAX_NEW)",)
+
+semantic-search-recursive-source-merge: semantic-search-recursive-source-preflight
+	$(CI_NODE) tools/d3262-search-calibration/recursive-third-ply-capture.mjs merge --write
+
+semantic-search-recursive-source-check: semantic-search-recursive-source-preflight
+	$(CI_NODE) tools/d3262-search-calibration/recursive-third-ply-capture.mjs check
+
+.PHONY: semantic-search-recursive-source-independent
+semantic-search-recursive-source-independent: semantic-search-stockfish-source-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/third-ply-stockfish-independent.py recursive --negative-controls --with-chunks
+
+.PHONY: semantic-search-recursive-fourth-test semantic-search-recursive-fourth-update semantic-search-recursive-fourth-check
+semantic-search-recursive-fourth-test:
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-recursive-fourth-ply.test.mjs
+
+semantic-search-recursive-fourth-update: semantic-search-recursive-fourth-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-recursive-fourth-ply.mjs --write
+
+semantic-search-recursive-fourth-check: semantic-search-recursive-fourth-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-recursive-fourth-ply.mjs
+
+.PHONY: semantic-search-recursive-fourth-independent-test semantic-search-recursive-fourth-independent
+semantic-search-recursive-fourth-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-fourth-check.test.py
+
+semantic-search-recursive-fourth-independent: semantic-search-recursive-fourth-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-fourth-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

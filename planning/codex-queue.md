@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Next [[D3491]]: join actual recursive selected paths to named opportunity versus
+execution, frozen source/alternative pairs and preparation/defence quantifiers.
+Retain every candidate/control/omission and partial abstention; do not optimize
+the frozen traversal from target successes or promote geometric events to profit.
+
+Completed [[D3489]]/[[D3490]]: the preregistered recursive relation frame passes
+independent identity/geometry/rank replay; all 418 missing positions / 958 actual
+queries / 17 intervals are captured and independently checked. Complete fourth
+ply retains 147,018 distinct histories / 89,329 final nodes, zero source-off nodes
+and unchanged previous supplied selections. Frame/source/completion corruption
+refusals are 9/8/10. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-recursive-semantic-frame.md`.
+
 Completed [[D3488]]: all 193 candidates / 6,176 preparation / 194,664 defence
 edges and 182 named cells / 29 settings have independently checked actual-path
 quantifier receipts. Depth12/top8 refutes five roots at this bound, but proves none
@@ -16,10 +29,11 @@ output corruption refusals and deterministic replay pass. Receipt:
 `planning/semantic-consequence-search/d3262-coherent-actual-contrast.md`.
 
 Current next action (2026-10-06): [[D3262]] remains doing under evidence-foundation.
-The actual target contrast and bounded preparation/defence quantifier joins are
-complete; retain every omitted branch and typed abstention while completing the
-full five-arm proof/refutation/coverage-stop-rule/cost and
-recursively target-preserving selection experiment before choosing production
+The older actual target contrast and bounded preparation/defence quantifier joins
+are complete. Recursive scheduling and actual fourth-ply sources now also exist;
+D3491 owns their next target/contrast/quantifier join. Retain every omitted branch
+and typed abstention while completing the full five-arm proof/refutation/
+coverage-stop-rule/cost experiment before choosing production
 defaults. Do not substitute the earlier common exact learner evaluator or claim
 engine causality from a visited event. D3478/D3485/D3486 are closed bounded
 prerequisites, not the completed five-arm profile or permission to implement the
