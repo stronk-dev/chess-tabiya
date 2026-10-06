@@ -141,7 +141,7 @@ play-composition-vocabulary-check:
 	node tools/play-composition-matrix.mjs
 
 play-composition-client-check:
-	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/Chessboard.test.ts apps/web/src/lib/CreateSeedChooser.test.ts apps/web/src/lib/BoardNotation.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/Chessboard.test.ts apps/web/src/lib/CreateSeedChooser.test.ts apps/web/src/lib/BoardNotation.test.ts
 
 .PHONY: inspector-subject-check inspector-subject-browser-check inspector-corpus-subject-check inspector-corpus-browser-check
 inspector-subject-check:
@@ -159,6 +159,14 @@ inspector-corpus-browser-check:
 .PHONY: inspector-lifecycle-check inspector-lifecycle-browser-check
 inspector-lifecycle-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "full Inspector request lifecycle"
+
+.PHONY: support-seat-lifecycle-check
+support-seat-lifecycle-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "Support seat request lifecycle"
+
+.PHONY: support-seat-lifecycle-browser-check
+support-seat-lifecycle-browser-check:
+	./node_modules/.bin/playwright test --grep "Support seats (retire|refuse)"
 
 inspector-lifecycle-browser-check:
 	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires)"

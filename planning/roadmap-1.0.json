@@ -1384,12 +1384,16 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. D3470 Inspector request admission and D3468 ancestry are complete, not queued again. D3469 needs an inspected-decision context contract before branch-specific committed labels can ship. Review D3309 structural operand authority before any lossy renderer swap; D3363 source migration, D3436 phone reconciliation and D1639 ceilings retain their named contracts. No whole RFC or milestone closure.",
+        "nextAction": "Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. D3471 Support seats, D3470 Inspector request admission and D3468 ancestry are complete, not queued again. D3469 needs an inspected-decision context contract before branch-specific committed labels can ship. Review D3309 structural operand authority before any lossy renderer swap; D3363 source migration, D3436 phone reconciliation and D1639 ceilings retain their named contracts. No whole RFC or milestone closure.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3470 repairs same-position Full Inspector packets surviving a help change, and obsolete parsing after close/destruction. Exact compiled-help/subject/server-decision identity and request epochs retire success/error settlements; sealed older-decision replay refuses. Identical snapshots retain their reading; changed recorded heads reacquire it. Five predecessor negatives and an independent decision-check negative calibrate nine permanent lifecycle controls. 132 full composition/client tests and two native source/settings/delivery journeys pass. Full sequential exact-index software passes 3278 tests/343 files, seven isolated performance tests/four files and all downstream gates at 507ffde1ab66230ecec6e69f1446324a89a0186c; content passes 225/23, 92 clearance docs/zero errors and 104 exact declarations. Browser passes 142 journeys, one optional Maia skip, zero retries; all 337 retained files/all 112 triples survive packaging unchanged. Receipt: planning/play-composition/inspector-lifecycle-2026-10-06.md. No source/permission/schema changes or full A4/source/phone/ceiling/owner-use/RFC/milestone promotion. Prior history remains in linked receipts and append-only logs.",
+          "summary": "D3471 repairs shared ordinary-seat admission against the current recorded decision, finalized help and complete request operands. Pending/completed pages retire on navigation, branch, preview, help and access changes; destruction also retires staged generations. Sealed square/candidate/generation/decision replays refuse, and stale empty staged checks cannot auto-commit. Seventeen predecessor failures become 19 passing lifecycle controls; 151 complete client tests, clean types and two genuine native help/branch-replay journeys pass. Complete sequential gates pass: 3297 software tests/343 files, seven isolated performance tests/four files, 225 content tests/23 files and 144 browser journeys (79 smoke, five content, 59 matrix, one packaged), zero retries and one existing optional Maia skip. All 112 composition cells and 337 retained files survive packaging. D3471 closes on path evidence in planning/play-composition/support-seat-lifecycle-2026-10-06.md; zero untriaged/1687 live and zero doing. Existing no-retroactivity, explicit requests and selection remain; no new source, permission, schema or full A4/D1834/phone/ceiling/owner-use/RFC/milestone promotion. Prior checkpoints remain in linked receipts and append-only logs.",
           "impact": "advanced",
           "evidence": [
+            "planning/play-composition/support-seat-lifecycle-2026-10-06.md",
+            "planning/play-composition/support-seat-lifecycle-native-2026-10-06.json",
+            "planning/play-composition/support-seat-lifecycle-software-2026-10-06.json",
+            "planning/play-composition/support-seat-lifecycle-browser-2026-10-06.json",
             "planning/play-composition/inspector-lifecycle-2026-10-06.md",
             "planning/play-composition/inspector-lifecycle-native-2026-10-06.json",
             "planning/play-composition/inspector-lifecycle-software-2026-10-06.json",
@@ -1494,7 +1498,7 @@
             {
               "kind": "rfc",
               "id": "module-registration.md",
-              "digest": "sha256:28111fa1f05d31c2547573de43a348459dd355c2562b002f72c039421296a15d"
+              "digest": "sha256:f829923970114538d86b62039d2acc8a357a716920b32a5d2fb109c4267f4fe0"
             },
             {
               "kind": "rfc",
@@ -1599,7 +1603,7 @@
             {
               "kind": "rfc",
               "id": "play-composition.md",
-              "digest": "sha256:e63c57e6fffb729006c4d11686fe80b25879c7a1ae42a0204106e3b67349583e"
+              "digest": "sha256:e49d5179bce7066e20da9a30f609c91047388c3c8792eeadc76cc8dee0123120"
             },
             {
               "kind": "work_state",
@@ -1740,6 +1744,11 @@
               "kind": "work_state",
               "id": "D3470",
               "digest": "sha256:52286668ae8c1600a897b31e1aa92a38f84f31e96f5dff88c8a28918f998899d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3471",
+              "digest": "sha256:b99183dd47578fbd795554fddf62179663d60673ac321654ec36bcffa8de6bbd"
             }
           ]
         },

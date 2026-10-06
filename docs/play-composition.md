@@ -49,6 +49,14 @@ same expansion authority: opening it collapses the other module card and vice ve
 hint keeps its exact decision and rung while hiding both its card and board marks. Reopening it
 does not request another hint; only **Hint** or **A little more** advances the disclosure.
 
+Ordinary seats bind delivery to the current recorded decision and compiled help,
+including pending requests that have not produced a badge yet. Navigation, branch,
+preview, help and access changes retire old answers and paint; leaving the screen
+retires all outstanding delivery. Identical snapshots preserve the current reading.
+An on-request seat requires another explicit request after retirement. A staged
+reply must also match its exact candidate and generation: a stale empty check never
+commits a move, while an unavailable check still permits explicit confirmation.
+
 On tablet, `CompanionSeat.svelte` keeps those same controllers mounted while placing the one
 expanded card above a single selector row. Only the card scrolls; Support itself cannot grow or
 scroll around the fixed 176 px band. Short selector labels retain their full accessible names and

@@ -1479,7 +1479,7 @@ describe("Layer 3 screens", () => {
     // Keep the reactive getter intact; mountDrill's setup-only prop spread evaluates getters.
     const component = mount(DrillScreen, { target: target(), props: {
       onAssistanceQuery: testAssistanceAuthority,
-      get snapshot() { return snapshots.get("current")!; }, onModuleQuery: testModuleQuery(run),
+      get snapshot() { return snapshots.get("current")!; }, onModuleQuery: body => testModuleQuery(snapshots.get("current")!.run)(body),
       assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -1500,7 +1500,7 @@ describe("Layer 3 screens", () => {
     await tick();
     await tick();
     expect(theory.getAttribute("data-seat-state")).not.toBe("expanded");
-    expect(document.querySelector('[data-module="postcommit_nudge"]')!.getAttribute("data-seat-state")).not.toBe("expanded");
+    await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"]')!.getAttribute("data-seat-state")).not.toBe("expanded"));
     await unmount(component);
   });
 
@@ -1658,6 +1658,233 @@ describe("Layer 3 screens", () => {
       expect(evidence).not.toContain("e1e2");
     });
     await unmount(component);
+  });
+
+  describe("Support seat request lifecycle", () => {
+    async function setup(options: { delayed?: boolean; staleDecision?: boolean; wrongSquare?: boolean } = {}) {
+      const initial = createRun({ id: "support-seat-lifecycle", session: { kind: "position", start: { fen: "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3", side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      const sourceRun = revealFeedback(initial, at).run;
+      const advance = (run: DrillRun) => appendEvents(run, [{ type: "feedback.generated", at, data: { nodeId: run.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]);
+      const run = options.staleDecision ? advance(sourceRun) : sourceRun;
+      const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
+      const realQuery = (body: Parameters<ReturnType<typeof testModuleQuery>>[0]) => testModuleQuery(options.staleDecision ? sourceRun : snapshots.get("current")!.run)(options.wrongSquare ? { ...body, query: { ...(body.query as object), selectedSquare: "h5" } } : body);
+      const pending = deferred<unknown>();
+      let delayedPage: Promise<unknown> | undefined;
+      const calls: Parameters<typeof realQuery>[0][] = [];
+      const onModuleQuery = vi.fn((body: Parameters<typeof realQuery>[0]) => {
+        if (!(body.query as { requested?: readonly string[] }).requested?.includes("threat_radar")) return realQuery(body);
+        calls.push(body);
+        if (options.delayed && calls.length === 1) { delayedPage = realQuery(body); return pending.promise; }
+        return realQuery(body);
+      });
+      const preferences = new Map([[workflowPreferenceKey("position"), explicitPreference("support", { arrows: "off" })]]);
+      // queryModuleSeats currently resolves its parser callee BEFORE awaiting the response.
+      // Install the observer before starting the request, not just before releasing delivery.
+      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
+      const component = mount(DrillScreen, { target: target(), props: {
+        get snapshot() { return snapshots.get("current")!; }, onAssistanceQuery: testAssistanceAuthority, onModuleQuery,
+        assistanceStorage: { getItem: key => preferences.get(key) ?? null, setItem: (key, value) => { preferences.set(key, value); } },
+        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+      await assistanceSettled(); await tick();
+      const section = () => document.querySelector<HTMLElement>('[data-module="threat_radar"]');
+      const request = async () => {
+        if (section()?.querySelector<HTMLButtonElement>(".seat-row")?.getAttribute("aria-expanded") !== "true") section()?.querySelector<HTMLButtonElement>(".seat-row")!.click();
+        await tick();
+        section()?.querySelector<HTMLButtonElement>(".seat-card button")!.click();
+        await tick();
+      };
+      const change = async () => {
+        preferences.set(workflowPreferenceKey("position"), explicitPreference("support", { arrows: "sight" }));
+        globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") }));
+        await assistanceSettled(); await tick();
+      };
+      const publish = async (next: DrillRun) => { snapshots.set("current", { run: next, access: "writer", pendingEvidence: 0, withheld: false }); await tick(); await tick(); };
+      const release = async (kind: "success" | "failure") => {
+        if (kind === "success") pending.resolve(await delayedPage!); else pending.reject(new Error("PRIVATE_SUPPORT_FAILURE"));
+        await pending.promise.catch(() => undefined); await tick(); await tick();
+      };
+      await request();
+      await vi.waitFor(() => expect(calls).toHaveLength(1));
+      return { component, run, sourceRun, advance, section, request, change, publish, release, calls, parser };
+    }
+
+    it("refuses a genuinely sealed same-position page from an older recorded decision", async () => {
+      const view = await setup({ staleDecision: true });
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("Nothing was checked"));
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      await unmount(view.component);
+    });
+
+    it("preserves a completed real page and explicit expansion on an identical snapshot", async () => {
+      const view = await setup();
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const previous = view.section()?.textContent;
+      await view.publish(structuredClone(view.run));
+      expect(view.calls).toHaveLength(1);
+      expect(view.section()?.textContent).toBe(previous);
+      expect(view.section()?.querySelector(".seat-row")?.getAttribute("aria-expanded")).toBe("true");
+      await unmount(view.component);
+    });
+
+    it("refuses a genuinely sealed page that answers another square gesture", async () => {
+      const view = await setup({ wrongSquare: true });
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("Nothing was checked"));
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("a same-position new decision retires pending %s without an unsolicited on-request retry", async kind => {
+      const view = await setup({ delayed: true });
+      await view.publish(view.advance(view.run));
+      expect(view.section()?.querySelector('[role="status"]')).toBeNull();
+      const parser = view.parser.mockClear();
+      await view.release(kind);
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      expect(view.calls).toHaveLength(1);
+      await view.request();
+      await vi.waitFor(() => expect(view.calls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it("a sibling branch retires a pending page even when it shares the same root position", async () => {
+      const view = await setup({ delayed: true });
+      const next = revealFeedback(fork(view.run, view.run.activeCursor.nodeId, { at, label: "Other idea" }).run, at).run;
+      await view.publish(next);
+      const parser = view.parser.mockClear();
+      await view.release("success");
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      expect(view.calls).toHaveLength(1);
+      await view.request();
+      await vi.waitFor(() => expect(view.calls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it("retires completed help on a same-node config change without making an unsolicited request", async () => {
+      const view = await setup();
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await view.change();
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      expect(view.calls).toHaveLength(1);
+      await view.request();
+      await vi.waitFor(() => expect(view.calls).toHaveLength(2));
+      expect(view.calls[1]!.assistance.requestDigest).not.toBe(view.calls[0]!.assistance.requestDigest);
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("navigation retires a pending real page's late %s before parsing or showing failure", async kind => {
+      const view = await setup({ delayed: true });
+      const next = revealFeedback(commitMove(view.run, "g8f6", { at }).run, at).run;
+      await view.publish(next);
+      expect(view.section()?.querySelector('[role="status"]')).toBeNull();
+      const parser = view.parser.mockClear();
+      await view.release(kind);
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await view.request();
+      await vi.waitFor(() => expect(view.calls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it("an actual rewind to the same node cannot resurrect the original pending receipt", async () => {
+      const view = await setup({ delayed: true });
+      const moved = commitMove(view.run, "g8f6", { at }).run;
+      await view.publish(revealFeedback(moved, at).run);
+      await view.publish(revealFeedback(rewind(moved, view.run.activeCursor.nodeId, at).run, at).run);
+      const parser = view.parser.mockClear();
+      await view.release("success");
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      await view.request();
+      await vi.waitFor(() => expect(view.calls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("replacement help survives a pending old page's late %s", async kind => {
+      const view = await setup({ delayed: true });
+      await view.change();
+      await view.request();
+      await vi.waitFor(() => expect(view.calls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const previous = view.section()?.textContent;
+      const parser = view.parser.mockClear();
+      await view.release(kind);
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(view.section()?.textContent).toBe(previous);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("screen destruction retires pending Support %s before parsing", async kind => {
+      const view = await setup({ delayed: true });
+      await unmount(view.component);
+      const parser = view.parser.mockClear();
+      const warning = vi.spyOn(console, "warn");
+      await view.release(kind);
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(warning).not.toHaveBeenCalled(); warning.mockRestore();
+      expect(document.body.textContent).not.toContain("PRIVATE_SUPPORT_FAILURE");
+    });
+
+    async function setupStaged(kind: "decision" | "candidate" | "generation" | "pending") {
+      const initial = createRun({ id: "staged-seat-lifecycle", session: { kind: "position", start: { fen: "4k3/8/8/8/8/8/P7/4K3 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"d".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      const source = revealFeedback(initial, at).run;
+      const run = kind === "decision" ? appendEvents(source, [{ type: "feedback.generated", at, data: { nodeId: source.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]) : source;
+      const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
+      const pending = deferred<unknown>();
+      let genuinePage: Promise<unknown> | undefined;
+      const onModuleQuery = vi.fn((body: Parameters<ReturnType<typeof testModuleQuery>>[0]) => {
+        const query = parseModuleQueryRequest(body.query);
+        const replacement = query.timing !== "at_commit" ? query : kind === "candidate" ? { ...query, candidateUci: "e1d2" } : kind === "generation" ? { ...query, generation: query.generation + 1 } : query;
+        const page = testModuleQuery(kind === "decision" ? source : snapshots.get("current")!.run)({ ...body, query: replacement });
+        if (query.timing === "at_commit" && kind === "pending") { genuinePage = page; return pending.promise; }
+        return page;
+      });
+      const onMove = vi.fn();
+      const component = mount(DrillScreen, { target: target(), props: {
+        get snapshot() { return snapshots.get("current")!; }, onAssistanceQuery: testAssistanceAuthority, onModuleQuery,
+        assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("support") : null, setItem: () => undefined },
+        onMove, onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+      await assistanceSettled(); await tick();
+      const details = document.querySelector<HTMLDetailsElement>(".move-entry .text-move")!;
+      details.open = true; details.dispatchEvent(new Event("toggle")); await tick();
+      const input = details.querySelector<HTMLInputElement>("input")!;
+      input.value = "Ke2"; input.dispatchEvent(new Event("input", { bubbles: true })); await tick();
+      details.querySelector<HTMLFormElement>("form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+      await vi.waitFor(() => expect(onModuleQuery.mock.calls.some(([body]) => (body.query as { timing: string }).timing === "at_commit")).toBe(true));
+      const release = async () => { pending.resolve(await genuinePage!); await pending.promise; await tick(); await tick(); };
+      const publish = async () => { snapshots.set("current", { run: commitMove(run, "e1e2", { at }).run, access: "writer", pendingEvidence: 0, withheld: false }); await tick(); await tick(); };
+      return { component, onMove, release, publish };
+    }
+
+    it.each(["decision", "candidate", "generation"] as const)("an empty staged check with another %s cannot silently commit; explicit confirmation still works", async kind => {
+      const view = await setupStaged(kind);
+      await vi.waitFor(() => expect(document.querySelector('[data-module="blunder_prevention"]')?.textContent).toContain("nothing was checked"));
+      expect(view.onMove).not.toHaveBeenCalled();
+      const play = [...document.querySelectorAll<HTMLButtonElement>('[data-module="blunder_prevention"] button')].find(button => button.textContent === "Play Ke2")!;
+      play.click();
+      await vi.waitFor(() => expect(view.onMove).toHaveBeenCalledExactlyOnceWith("e1e2"));
+      await unmount(view.component);
+    });
+
+    it.each(["navigation", "destruction"] as const)("a delayed empty staged check cannot commit after %s", async kind => {
+      const view = await setupStaged("pending");
+      if (kind === "navigation") await view.publish(); else await unmount(view.component);
+      await view.release();
+      expect(view.onMove).not.toHaveBeenCalled();
+      expect(document.querySelector('[data-module="blunder_prevention"]')).toBeNull();
+      if (kind === "navigation") await unmount(view.component);
+    });
   });
 
   describe("full Inspector request lifecycle", () => {

@@ -117,6 +117,15 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
+Shared seat admission D3471 binds every pending/completed ordinary seat to the
+current recorded decision and compiled help, retires navigation/branch/recompile/
+destruction and rejects mismatched staged candidates/generations. On-request doors
+stay explicit and stale empty checks cannot auto-commit. Nineteen mounted controls,
+151 complete client tests and two actual browser journeys pass. Complete sequential
+software/content/browser gates pass; D3471 closes on the retained path evidence in
+`support-seat-lifecycle-2026-10-06.md`, not on a full-RFC promotion.
+Existing A4/D1834/source/phone/ceiling/owner-use and full-RFC obligations remain.
+
 Inspector request admission D3470 binds genuine packets to their finalized help identity
 and exact recorded decision, retiring close/recompile/destroy settlements. Identical
 snapshots preserve completed evidence; older-decision replay abstains. Nine permanent

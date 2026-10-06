@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed D3471: ordinary Support seats admit only the exact recorded decision,
+compiled help and query operands. Navigation/branch/recompile/destruction retire
+pending and completed pages; stale empty staged checks cannot auto-commit. Nineteen
+permanent lifecycle controls, 151 complete client tests and two native journeys
+pass; full sequential software/content/browser gates pass. Receipt:
+`planning/play-composition/support-seat-lifecycle-2026-10-06.md`. Do not re-queue it.
+Continue the existing A4/D1834/source/phone/ceiling/owner-use obligations; no new
+source, selection or permission policy and no full RFC/milestone promotion.
+
 Completed Inspector admission repair: [[D3470]] binds current compiled help and the
 recorded decision, retires close/recompile/destroy requests and rejects older sealed
 replay. Nine lifecycle controls, 132 full client tests and two genuine native journeys

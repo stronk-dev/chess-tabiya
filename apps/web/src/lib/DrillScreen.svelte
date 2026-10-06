@@ -33,7 +33,7 @@
   import CompanionSeat from "./CompanionSeat.svelte";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
-  import { composedSeats, effectActive, occupiedRailSeats, toggleExpanded, type PlayExpandedSeat, type PlaySeatModule, type StagedCue } from "./module-seats.js";
+  import { PLAY_SEAT_MODULES, composedSeats, effectActive, occupiedRailSeats, toggleExpanded, type PlayExpandedSeat, type PlaySeatModule, type StagedCue } from "./module-seats.js";
   import { boardPaint } from "./evidence/presented-view.js";
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
@@ -908,6 +908,31 @@
   let seatFocusSquares: readonly string[] | undefined = $state();
   const seatRequests = new Map<PlaySeatModule, number>();
   let seatRequestCounter = 0;
+  let seatAlive = true;
+  let seatDecisionDigest = $derived(moduleDecisionStamp(run).digest);
+  // One scalar authority for all seats, including pending ones with no completed seatSubjects.
+  // Snapshot object replacement is not a change; a return to the same node after a rewind is.
+  let seatAuthority = $derived(JSON.stringify([
+    run.id, seatDecisionDigest, compiledAssistance?.finalDigest, assistanceQueryState,
+    viewerRole, seatedInContest, reviewing, previewNodeId,
+  ]));
+  let previousSeatAuthority: string | undefined;
+  let stagedPosition: string | undefined;
+  $effect(() => {
+    const authority = seatAuthority;
+    if (authority === previousSeatAuthority) return;
+    previousSeatAuthority = authority;
+    untrack(() => {
+      clearSeat(PLAY_SEAT_MODULES);
+      seatDoorReasons = {};
+      seatFocusSquares = undefined;
+      if (stagedCue !== undefined) {
+        if (stagedPosition !== `${run.id}:${currentNode.id}` || previewNodeId !== undefined
+          || (assistanceQueryState === "ready" && !effectActive(compiledAssistance, "blunder_prevention", "at_commit"))) reviseStagedMove();
+        else stagedCue = { state: "unavailable", move: stagedCue.move };
+      }
+    });
+  });
   let postCommitEffectActive = $derived(effectActive(compiledAssistance, "postcommit_nudge", "post_commit") || effectActive(compiledAssistance, "structure_nudge", "post_commit"));
   // Criterion 9: raising the preset mid-run is not a learner request. The move already on the board when
   // a proactive post-commit effect switches on is held back; the next committed move is the first one served.
@@ -928,14 +953,26 @@
 
   /** One module query for `modules`; the result lands only if still current (decision/digest/request). */
   async function queryModuleSeats(query: ModuleQueryRequest, subjectNodeId: string, modules: readonly PlaySeatModule[]): Promise<ParsedModulePacket[] | undefined> {
-    if (onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined || modules.length === 0) return undefined;
+    if (!seatAlive || assistanceQueryState !== "ready" || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined || modules.length === 0) return undefined;
+    const runId = run.id;
+    const authority = seatAuthority;
+    const decisionDigest = seatDecisionDigest;
     const finalDigest = compiledAssistance.finalDigest;
     const assistanceRequest = requestedAssistance;
     const tokens = modules.map((module) => { const token = ++seatRequestCounter; seatRequests.set(module, token); return [module, token] as const; });
+    const current = () => seatAlive && seatAuthority === authority && seatDecisionDigest === decisionDigest
+      && tokens.some(([module, token]) => seatRequests.get(module) === token);
     for (const module of modules) { seatPending = withSeat(seatPending, module, true); seatFailed = withSeat(seatFailed, module, false); }
     try {
-      const page = parseModuleQueryPage(await onModuleQuery({ assistance: assistanceRequest, query }), { runId: run.id, subjectNodeId, finalDigest });
-      if (compiledAssistance?.finalDigest !== finalDigest) return undefined;
+      const value = await onModuleQuery({ assistance: assistanceRequest, query });
+      if (!current()) return undefined;
+      const page = parseModuleQueryPage(value, { runId, subjectNodeId, finalDigest });
+      if (page.decisionDigest !== decisionDigest || page.timing !== query.timing || page.packets.some(packet =>
+        packet.disclosure.requestedConfigDigest !== assistanceRequest.requestDigest
+        || packet.disclosure.subject.selectedSquare !== (query.timing === "pre_commit" ? query.selectedSquare ?? null : null)
+        || packet.disclosure.subject.candidateUci !== (query.timing === "at_commit" ? query.candidateUci : null)
+        || packet.disclosure.subject.generation !== (query.timing === "at_commit" ? query.generation : null)
+      )) throw new TypeError("Module page answers a different request or recorded decision");
       const packets: ParsedModulePacket[] = [];
       let nextPackets = new Map(seatPackets), nextSubjects = new Map(seatSubjects), nextDoors = { ...seatDoorReasons };
       for (const [module, token] of tokens) {
@@ -952,6 +989,7 @@
       seatPackets = nextPackets; seatSubjects = nextSubjects; seatDoorReasons = nextDoors;
       return packets;
     } catch {
+      if (!current()) return undefined;
       for (const [module, token] of tokens) {
         if (seatRequests.get(module) !== token) continue;
         seatPending = withSeat(seatPending, module, false);
@@ -973,10 +1011,11 @@
     // boundary, so an old compiled digest cannot admit its result. Wait for that compilation;
     // pending -> ready also re-queries the same subject under its actual current authority.
     if (assistanceQueryState !== "ready" || !postCommitEffectActive || !feedbackDeliveryOpen(run)) return undefined;
-    return latestLearnerMoveId === proactiveHeldNodeId ? undefined : latestLearnerMoveId;
+    return latestLearnerMoveId === undefined || latestLearnerMoveId === proactiveHeldNodeId ? undefined : JSON.stringify([latestLearnerMoveId, seatAuthority]);
   });
   $effect(() => {
-    const subject = postCommitSubject;
+    const identity = postCommitSubject;
+    const subject = identity === undefined ? undefined : (JSON.parse(identity) as [string, string])[0];
     const proactive = untrack(() => seats.filter((seat) => seat.proactive && (seat.module === "postcommit_nudge" || seat.module === "structure_nudge")).map((seat) => seat.module));
     if (subject === undefined) { untrack(() => clearSeat(["postcommit_nudge", "structure_nudge"])); return; }
     if (proactive.every((module) => untrack(() => seatSubjects.get(module)) === subject)) return;
@@ -990,30 +1029,24 @@
         && (seatExpanded === undefined || seatExpanded === "postcommit_nudge")) seatExpanded = "postcommit_nudge";
     });
   });
-  // On-request answers describe one subject: moving on, rewinding or switching branch retires them.
-  $effect(() => {
-    const node = currentNode.id;
-    void node;
-    untrack(() => {
-      const stale = [...seatSubjects].filter(([module, subject]) => module !== "postcommit_nudge" && module !== "structure_nudge" && module !== "sight_on_request" && subject !== latestLearnerMoveId && subject !== currentNode.id).map(([module]) => module);
-      if (stale.length > 0) clearSeat(stale);
-      seatDoorReasons = {};
-    });
-  });
   // sight_on_request: the square gesture IS the request (module-registration §4.2).
   let sightActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "sight_on_request", "pre_commit"));
   // SSE may replace a Node object without changing the learner's selected position. A primitive
   // identity prevents unrelated stored deliveries from re-requesting/reopening the square card.
   let sightSubject = $derived.by(() => {
     if (assistanceQueryState !== "ready" || !sightActive || selectedSquare === undefined || previewNodeId !== undefined) return undefined;
-    return JSON.stringify([run.id, displayedNode.id, selectedSquare, compiledAssistance?.finalDigest]);
+    return JSON.stringify([run.id, displayedNode.id, selectedSquare, seatAuthority]);
   });
+  let previousSightGesture: string | undefined;
   $effect(() => {
     const subject = sightSubject;
     untrack(() => {
-      if (subject === undefined) { clearSeat(["sight_on_request"]); return; }
+      if (subject === undefined) { clearSeat(["sight_on_request"]); if (selectedSquare === undefined) previousSightGesture = undefined; return; }
       const [, node, square] = JSON.parse(subject) as [string, string, string, string];
-      seatExpanded = "sight_on_request";
+      const gesture = JSON.stringify([run.id, node, square]);
+      // A current selected-square refresh may fill its badge, not close another explicit card.
+      if (gesture !== previousSightGesture) seatExpanded = "sight_on_request";
+      previousSightGesture = gesture;
       void queryModuleSeats({ timing: "pre_commit", nodeId: node, selectedSquare: square, requested: ["sight_on_request"] }, node, ["sight_on_request"]);
     });
   });
@@ -1394,6 +1427,7 @@
   async function stageMove(uci: string): Promise<"commit" | "held"> {
     if (onModuleQuery === undefined || !effectActive(compiledAssistance, "blunder_prevention", "at_commit")) return "commit";
     const generation = ++stagedGeneration;
+    stagedPosition = `${run.id}:${currentNode.id}`;
     const move = moveSanFromUci(currentNode.fen, uci) ?? "this move";
     stagedUci = uci;
     stagedCue = { state: "checking", move };
@@ -1985,6 +2019,9 @@
     branchSwitchRequest += 1;
     corpusRequest += 1;
     fullInspectorRequest += 1;
+    seatAlive = false;
+    seatRequests.clear();
+    stagedGeneration += 1;
     analysisRequest += 1;
     groupAnalysisRequest += 1;
     if (spokenAudio !== undefined) {

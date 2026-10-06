@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 ordinary Support admission checkpoint: [[D3471]] applies current-decision/
+compiled-help and exact-request fencing to all pending/completed seats, including
+navigation, branch, settings and destruction. Sealed square/candidate/generation
+replays refuse; a stale empty staged check never auto-commits. Seventeen predecessor
+failures become 19 passing controls, 151 full client tests and two native journeys.
+Complete sequential software/content/browser gates pass: 3,297 software tests,
+225 content tests and 144 browser journeys, zero retries. D3471 closes on path
+evidence: `planning/play-composition/support-seat-lifecycle-2026-10-06.md`.
+Whole source/A4/D1834/presets/phone/owner-use and 1.0 obligations remain open.
+
 2026-10-06 Inspector request-admission checkpoint: [[D3470]] binds the current packet
 to its displayed subject, recorded decision and finalized help, rather than retaining
 old settings at the same position. Recompile/close/destroy epochs fence late responses;

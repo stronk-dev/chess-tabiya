@@ -28629,6 +28629,15 @@
       "uxItems": [],
       "evidence": "planning/play-composition/inspector-lifecycle-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3471",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b99183dd47578fbd795554fddf62179663d60673ac321654ec36bcffa8de6bbd",
+      "uxItems": [],
+      "evidence": "planning/play-composition/support-seat-lifecycle-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

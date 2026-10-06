@@ -1,0 +1,28 @@
+{
+  "command": "make support-seat-lifecycle-browser-check",
+  "reportDigest": "sha256:b08a74961283d26c518369d4534344683c57156ee997418e467797b36b612283",
+  "stats": {
+    "startTime": "2026-10-06T07:41:50.488Z",
+    "duration": 11901.646,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "specs": [
+    {
+      "title": "Support seats retire completed and delayed old-help packets without unsolicited requests",
+      "status": "expected",
+      "result": "passed",
+      "retry": 0,
+      "attachment": "support-seat-help-lifetime"
+    },
+    {
+      "title": "Support seats refuse a genuinely sealed older-decision replay after same-position branch changes",
+      "status": "expected",
+      "result": "passed",
+      "retry": 0,
+      "attachment": "support-seat-decision-replay"
+    }
+  ]
+}

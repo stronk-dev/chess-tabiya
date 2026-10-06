@@ -28,6 +28,14 @@
   commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
 - **Created:** 2026-08-24
+- **Implementation checkpoint 2026-10-06, §2.5.2/§2.6/§2.7:** D3471 applies the existing
+  current-decision and complete-request admission to the shared Support path, including
+  pending subjects, help changes, navigation, destruction and staged empty-check replies.
+  Seventeen predecessor failures become 19 passing controls; 151 full client tests and
+  two native source-bound journeys and complete software/content/browser gates pass.
+  D3471 closes on the bounded gate/closeout evidence:
+  `planning/play-composition/support-seat-lifecycle-2026-10-06.md`. No source, reducer,
+  permission or full registry/discharge completion is implied.
 - **Design refs:** `design/05-in-run-experience.md` §1 (the six invariants — *"absence is stated,
   never simulated"* is this document's load-bearing one), §2 (the five regions), §3/§3-forms as
   amended by O1/O4 (source risk, form orthogonality, the config algebra), §3a (silence is the

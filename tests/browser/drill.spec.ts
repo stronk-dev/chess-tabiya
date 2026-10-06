@@ -2753,6 +2753,118 @@ async function assertFullInspectorPacket(page: Page, packet: ModuleQueryPage["pa
   await expect(inspector.getByRole("alert")).toHaveCount(0);
 }
 
+async function openThreatSeatRun(page: Page): Promise<void> {
+  await page.getByLabel("Your side").selectOption("black");
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill(SCHOLAR_TRAP);
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await choosePreset(page, /^Support Staged/u);
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  await page.locator('[data-module="threat_radar"] .seat-row').click();
+}
+
+function isThreatResponse(response: { url(): string; request(): { postDataJSON(): { query?: { requested?: string[] } } } }): boolean {
+  return response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.requested?.includes("threat_radar") === true;
+}
+
+async function assertThreatPacket(page: Page, packet: ModuleQueryPage["packets"][number]): Promise<void> {
+  const seat = page.locator('[data-module="threat_radar"]');
+  const items = seat.locator("[data-presented]");
+  expect(packet.receipt.items.length).toBeGreaterThan(0);
+  await expect(items).toHaveCount(packet.receipt.items.length);
+  for (const [index, item] of packet.receipt.items.entries()) {
+    await expect(items.nth(index)).toHaveAttribute("data-presented", item.component.id);
+    if (item.component.id === "fact_statement") await expect(items.nth(index)).toHaveText(item.component.operand.renderedText);
+    if (item.component.id === "square_set") await expect(items.nth(index)).toContainText(item.component.operand.caption.renderedText);
+    await expect(items.nth(index)).not.toBeEmpty();
+  }
+  await expect(seat.getByRole("alert")).toHaveCount(0);
+}
+
+test("Support seats retire completed and delayed old-help packets without unsolicited requests", async ({ page }, testInfo) => {
+  await openThreatSeatRun(page);
+  const seat = page.locator('[data-module="threat_radar"]');
+  const firstResponse = page.waitForResponse(isThreatResponse);
+  await seat.getByRole("button", { name: "Show", exact: true }).click();
+  const first = (await (await firstResponse).json() as { page: ModuleQueryPage }).page;
+  await assertThreatPacket(page, first.packets.find(p => p.module === "threat_radar")!);
+  await openAdvancedSupport(page);
+  await page.getByRole("combobox", { name: "Arrows", exact: true }).selectOption("off");
+  await page.getByRole("button", { name: "Return to play" }).click();
+  await expect(seat.locator("[data-presented]")).toHaveCount(0);
+  await expect(seat.getByRole("button", { name: "Show", exact: true })).toBeVisible();
+  let oldResponse: APIResponse | undefined;
+  let release: (() => void) | undefined;
+  let held = false;
+  await page.route("**/runs/*/modules/query", async route => {
+    if (!held && route.request().postDataJSON().query?.requested?.includes("threat_radar")) {
+      held = true; oldResponse = await route.fetch();
+      await new Promise<void>(resolve => { release = resolve; });
+      await route.fulfill({ response: oldResponse });
+    } else await route.continue();
+  });
+  await seat.getByRole("button", { name: "Show", exact: true }).click();
+  await expect.poll(() => release !== undefined).toBe(true);
+  await expect(seat.getByRole("status")).toContainText("Asking");
+  await openAdvancedSupport(page);
+  await page.getByRole("combobox", { name: "Arrows", exact: true }).selectOption("sight");
+  await page.getByRole("button", { name: "Return to play" }).click();
+  await expect(seat.getByRole("status")).toHaveCount(0);
+  await expect(seat.getByRole("button", { name: "Show", exact: true })).toBeVisible();
+  const nextResponse = page.waitForResponse(isThreatResponse);
+  await seat.getByRole("button", { name: "Show", exact: true }).click();
+  const next = (await (await nextResponse).json() as { page: ModuleQueryPage }).page;
+  const old = (await oldResponse!.json() as { page: ModuleQueryPage }).page;
+  expect(old.subjectNodeId).toBe(next.subjectNodeId);
+  expect(old.effectiveConfigDigest).not.toBe(next.effectiveConfigDigest);
+  const packet = next.packets.find(p => p.module === "threat_radar")!;
+  await assertThreatPacket(page, packet);
+  const delivery = page.waitForResponse(r => isThreatResponse(r) && r.request().postDataJSON().assistance.requestDigest === old.requestedConfigDigest);
+  release!(); await delivery;
+  await assertThreatPacket(page, packet);
+  await testInfo.attach("support-seat-help-lifetime", { body: JSON.stringify({ first, old, next }), contentType: "application/json" });
+  expect((await inspectCompositionVocabulary(page, "support-seat-replaced")).leaks).toEqual([]);
+});
+
+test("Support seats refuse a genuinely sealed older-decision replay after same-position branch changes", async ({ page }, testInfo) => {
+  await openThreatSeatRun(page);
+  const seat = page.locator('[data-module="threat_radar"]');
+  const firstResponse = page.waitForResponse(isThreatResponse);
+  await seat.getByRole("button", { name: "Show", exact: true }).click();
+  const response = await firstResponse;
+  const first = (await response.json() as { page: ModuleQueryPage }).page;
+  await assertThreatPacket(page, first.packets.find(p => p.module === "threat_radar")!);
+  // Change the authoritative recorded head, not the position or the source bytes. The exact
+  // response is replayed untouched; a genuine seal is not authority for this new decision.
+  await page.getByRole("button", { name: "Actions", exact: true }).click();
+  await page.getByRole("button", { name: "Fork branch", exact: true }).click();
+  await page.getByLabel("What are you trying?").fill("Compare another continuation from this exact position");
+  await page.getByLabel("Short name").fill("Another idea");
+  const mutationResponse = page.waitForResponse(r => r.url().endsWith("/fork"));
+  await page.getByRole("button", { name: "Create branch", exact: true }).click();
+  expect((await mutationResponse).ok()).toBe(true);
+  await page.getByRole("button", { name: "Support", exact: true }).click();
+  await expect(seat.locator("[data-presented]")).toHaveCount(0);
+  await page.route("**/runs/*/modules/query", async route => {
+    if (route.request().postDataJSON().query?.requested?.includes("threat_radar")) await route.fulfill({ status: response.status(), headers: response.headers(), body: await response.body() });
+    else await route.continue();
+  });
+  await seat.getByRole("button", { name: "Show", exact: true }).click();
+  await expect(seat.getByRole("alert")).toContainText("Nothing was checked");
+  await expect(seat.locator("[data-presented]")).toHaveCount(0);
+  await page.unroute("**/runs/*/modules/query");
+  const nextResponse = page.waitForResponse(isThreatResponse);
+  await seat.getByRole("button", { name: "Try again", exact: true }).click();
+  const next = (await (await nextResponse).json() as { page: ModuleQueryPage }).page;
+  expect(next.subjectNodeId).toBe(first.subjectNodeId);
+  expect(next.decision.digest).not.toBe(first.decision.digest);
+  await assertThreatPacket(page, next.packets.find(p => p.module === "threat_radar")!);
+  await testInfo.attach("support-seat-decision-replay", { body: JSON.stringify({ first, next }), contentType: "application/json" });
+});
+
 test("full Inspector recompiles its real packet after same-position Advanced settings change", async ({ page }, testInfo) => {
   await openFullInspectorRun(page);
   const firstResponse = page.waitForResponse(isFullInspectorResponse);
