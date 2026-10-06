@@ -28737,6 +28737,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3483",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:382f4d2ce9f3699774e91df4aa171fbb5a35681ac23f679c86626a4f39ae6a5d",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md",
+      "evidenceKind": "path"
     }
   ]
 }

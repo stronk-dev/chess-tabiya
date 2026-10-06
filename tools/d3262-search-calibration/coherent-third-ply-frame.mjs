@@ -73,7 +73,7 @@ function prefix(support, threshold) {
   }
   return result;
 }
-function engineMoves(row, fen, arm, cache) {
+export function engineMoves(row, fen, arm, cache) {
   const [, budget, top] = arm.split(":");
   const cached = cache.get(row)?.get(budget);
   if (cached !== undefined) return cached.slice(0, Number(top.slice(3)));

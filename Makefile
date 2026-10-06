@@ -570,6 +570,19 @@ semantic-search-coherent-third-ply-check: semantic-search-coherent-deeper-union-
 semantic-search-coherent-third-ply-independent:
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-third-ply-check.py
 
+.PHONY: semantic-search-semantic-third-ply-update semantic-search-semantic-third-ply-check
+semantic-search-semantic-third-ply-update: semantic-search-coherent-semantic-reserve-check semantic-search-coherent-semantic-source-union-check semantic-search-coherent-third-ply-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-semantic-third-ply.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-semantic-third-ply.mjs --write
+
+semantic-search-semantic-third-ply-check: semantic-search-coherent-semantic-reserve-check semantic-search-coherent-semantic-source-union-check semantic-search-coherent-third-ply-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-semantic-third-ply.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-semantic-third-ply.mjs
+
+.PHONY: semantic-search-semantic-third-ply-independent
+semantic-search-semantic-third-ply-independent:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-semantic-third-ply-check.py --negative-controls
+
 .PHONY: semantic-search-final-ply-preflight semantic-search-maia-final-ply-capture semantic-search-maia-final-ply-check semantic-search-stockfish-final-ply-capture semantic-search-stockfish-final-ply-check
 semantic-search-final-ply-preflight:
 	$(CI_NODE) tools/d3262-search-calibration/third-ply-source-check.mjs preflight

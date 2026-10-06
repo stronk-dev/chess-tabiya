@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed bounded research [[D3483]]: all 182 named cells / 3,276 semantic-reserve
+arms follow their actual same-budget/width learner replies, retaining all 193 offered
+candidates and explicit unsupported controls. Independent replay and seven corruption
+refusals pass; six permanent controls and source prerequisites pass. The frozen frame
+has 16,634 paths and needs 870 additional positions / 2,028 budget queries beyond
+D3478's **planned**, still-in-flight frame. Planned reuse is not captured evidence.
+Next: capture that separate supplement, complete D3478 and join actual target outcomes;
+recursive semantic selection and the complete fifth arm remain open. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md`.
+
 Completed [[D3482]]: actual model histories now join all 182 named target/candidate
 cells with separate opportunity and execution weights. The 0.90 frontier visits
 19 of 58 known possible reintroductions and executes eight; all partial negatives

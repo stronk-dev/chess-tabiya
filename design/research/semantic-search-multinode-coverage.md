@@ -80,6 +80,18 @@ threshold from this curated model population or calling missed threats prevented
 All 364 partial negative/universal verdicts remain abstaining/not evaluated in the
 artifact cited above.
 
+[V] The frozen first-reply semantic reserve now follows its actual same-budget/width
+learner continuations across 182 cells / 3,276 arms. The full 193 offered candidates
+remain, including explicit unsupported/no-target controls. Independent legal,
+history, source-rank and FEN/budget reconstruction passes all 16,634 paths and seven
+corruption refusals; six permanent controls and unchanged source prerequisites pass.
+The frame needs 870 additional positions / 2,028 budget queries beyond the 33,022
+queries matching the still-running **planned** frame. Planned reuse is explicitly
+awaiting checked capture, not counted as supplied evidence. This first-reply reserve
+followed by ordinary engine learner selection is not recursive semantic traversal or
+the complete fifth arm. Literal hashes, commands and limitations:
+`planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md`.
+
 [P] Outstanding: the 16,813 final-ply engine jobs are being captured through checked
 immutable intervals; no complete engine source or final-ply outcome is yet claimed. Semantic-
 target-preserving deeper traversal, the five-arm proof/abstention and natural-

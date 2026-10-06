@@ -46,6 +46,15 @@ actual corruption refusals pass. D3478, semantic selection and full five-arm
 proof/contrast/cost stay open. Receipt:
 `planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md`.
 
+2026-10-06 D3483: the frozen first-reply semantic reserve now follows actual
+same-budget/width learner continuations across all 182 cells / 3,276 arms, retaining
+all 193 offered candidates and explicit unsupported controls. Six permanent controls
+and independent all-path/source/job replay with seven corruption refusals pass.
+The 16,634-path frame needs 870 extra positions / 2,028 budget queries; 33,022
+planned reuse queries remain awaiting checked capture, not supplied evidence.
+This is not recursive semantic selection or full five-arm proof. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md`.
+
 | # | Question | Status | Attached gates |
 |---|---|---|---|
 | Q1a | Is the integrated rehearsal loop competitively novel? | ✅ settled-go (owner ruling 2026-08-12) | E1 |

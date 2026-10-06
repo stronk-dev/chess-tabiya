@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ae14bb31f277f9aa4e11fa37a9bf61dadfa68b42389b7dedb5d09d8e033b700b",
+    "roadmap": "sha256:a3f5567d4aa087520b4aa92c8ac0c0f9fef972b92d65a2327eafc80f82808567",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:ac83ed1ffdfc1547398fa1f41d186f401619d77770bb79419c70a28a6d73081c",
+    "workState": "sha256:53bdd6050f9781e9cf41bae5ba6617d228e6e974244386a59d0066173970dcd7",
     "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 1,
       "blocked": 1059,
-      "done": 1382,
+      "done": 1383,
       "refused": 161
     },
     "workItems": {
@@ -254,7 +254,7 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3482 joins all 182 registered target/candidate cells to actual selected model histories, retaining 96 source controls, 86 natural alternatives, piece identity, phase and separate opportunity versus actual-execution mass. Configured 0.90 visits 19 of 58 known possible exact reintroductions and executes eight; all 364 partial target arms abstain from negative/universal proof. Six tests and independent board/identity/source-mass replay with seven corruption refusals pass; the local-SEE predicate remains shared, not an independent strategic oracle. D3478's unchanged 16,813-job Stockfish queue remains doing. This disposable research is not a production profile or five-arm verdict; deeper semantic selection, common proof/refutation/contrast/cost and source/A4/full 1.0 obligations remain open, without full promotion.",
+        "summary": "D3483 replays all 182 target/candidate cells / 3,276 frozen first-reply semantic-reserve arms through their actual same-budget/width learner choices, retaining all 193 offered candidates with explicit unsupported/no-target controls. Six permanent controls and independent all-path/source/job reconstruction plus seven corruption refusals pass. The 16,634-path frame needs 870 additional positions / 2,028 budget queries beyond 33,022 queries matching the unchanged D3478 planned frame; every reuse binding remains awaiting checked capture. This is first-reply reserve then engine continuation, not recursive semantic selection, a full fifth arm or production authorization. D3478's actual capture, semantic outcomes, common proof/refutation/contrast/cost and full source/A4/1.0 obligations remain open.",
         "impact": "advanced",
         "evidence": [
           "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -402,7 +402,11 @@
           "planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md",
           "planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.json",
           "tools/d3262-search-calibration/coherent-maia-target-outcome.test.mjs",
-          "tools/d3262-search-calibration/coherent-maia-target-check.py"
+          "tools/d3262-search-calibration/coherent-maia-target-check.py",
+          "planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.md",
+          "planning/semantic-consequence-search/d3262-coherent-semantic-third-ply.json.gz",
+          "tools/d3262-search-calibration/coherent-semantic-third-ply.test.mjs",
+          "tools/d3262-search-calibration/coherent-semantic-third-ply-check.py"
         ],
         "anchors": [
           {
@@ -804,6 +808,11 @@
             "kind": "work_state",
             "id": "D3482",
             "digest": "sha256:c38836f08b310cdd3cfb2dc735d91fcfe87d9e96b281461255cba095fa7ef426"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3483",
+            "digest": "sha256:382f4d2ce9f3699774e91df4aa171fbb5a35681ac23f679c86626a4f39ae6a5d"
           }
         ]
       },
