@@ -7501,7 +7501,7 @@
       "id": "D910",
       "state": "todo",
       "sourceGlyph": "📊",
-      "sourceDigest": "sha256:6cef5afe112c798511824426691329734ac57a81b7d6e3ac7f278082d818eba5",
+      "sourceDigest": "sha256:658ad3867d260022b3cd47b45d7987c7f3661a5b24a68e39d8f8433bed30b6d2",
       "uxItems": [],
       "owner": "core-loop"
     },
@@ -13992,7 +13992,7 @@
       "id": "D1834",
       "state": "todo",
       "sourceGlyph": "📜",
-      "sourceDigest": "sha256:05c97cdb7f18d0fcdac9e288ec9ac7ee3a646577565f9243376bab6eed0b19ab",
+      "sourceDigest": "sha256:c18e794bd44f1219c6cb54d0ccf0cfabb7fe489a72d4be9d39eed3672a0e7951",
       "uxItems": [],
       "owner": "core-loop"
     },
@@ -28388,19 +28388,66 @@
     },
     {
       "id": "D3444",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c246eb9ced5e8c1681e634ee7c6a21c366b9b5f72bbda1a57bc2464fd5ed7c7b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6ffbfc721ba867f0fce34fbf3e14c8fba6eec9c17f17d0163ffd1af14ad345d1",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3445",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9b2022c3aef22c4efe08054a4e75db1f22fb0d03b18bc6ee7d457d68ab8fc299",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:386c58dedd54cc5ce2e475aa932287556cc08373f563d3c8cab2b59f1301e794",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3446",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:60176b0d4b67e4f593e74d3d0586a0b0fa174c293544e849aa37fe5394d0a557",
+      "uxItems": [],
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3447",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:910870ab66b05a38bdf7f4f2e73f550cc0a1e0cf66435b6206fa1f4c2426bbdf",
+      "uxItems": [],
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3448",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3a82f354b36b8feccd747713d4017ace8d6336fec8e3f2a1139a03ea0b04f4fe",
+      "uxItems": [],
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3449",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f2af323d691f611622c2cb926a9a3f5122e492fc394aa7240a93e797aa0b7685",
+      "uxItems": [],
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3450",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f0fb83f1b1ecfcdff25c87d42b0c2a29a26b4419e31892e5fceaa92f875d2ec9",
+      "uxItems": [],
+      "evidence": "planning/play-composition/tablet-queue-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

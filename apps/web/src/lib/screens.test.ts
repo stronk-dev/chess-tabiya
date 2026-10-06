@@ -272,6 +272,7 @@ afterEach(() => {
   chessground.destroy.mockClear();
   regionKeyboard = undefined;
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe("Layer 3 screens", () => {
@@ -1348,6 +1349,73 @@ describe("Layer 3 screens", () => {
     await tick();
     expect(postCommitCalls()).toHaveLength(0);
     expect(seat()).toBeNull();
+    await unmount(component);
+  });
+
+  it.each(["theory_breadcrumb", "support_tools"] as const)("a late genuine proactive packet never closes explicitly selected %s", async (selected) => {
+    vi.stubGlobal("innerWidth", 768);
+    vi.stubGlobal("innerHeight", 1024);
+    const initial = createRun({ id: "late-nudge-seat", session: { kind: "position", start: { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    const run = revealFeedback(commitMove(initial, "e4d5", { at }).run, at).run;
+    const realQuery = testModuleQuery(run);
+    let release: (() => Promise<void>) | undefined;
+    const onModuleQuery = vi.fn((body: Parameters<typeof realQuery>[0]) => {
+      if ((body.query as { requested: readonly string[] }).requested.length > 0) return realQuery(body);
+      return new Promise<unknown>(resolve => { release = async () => { resolve(await realQuery(body)); }; });
+    });
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onModuleQuery,
+      assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await vi.waitFor(() => expect(release).toBeDefined());
+    const selectedCard = document.querySelector<HTMLDivElement>(`#${selected}-card`)!;
+    const selector = document.querySelector<HTMLButtonElement>(`button[aria-controls="${selected}-card"]`)!;
+    selector.click();
+    await tick();
+    expect(selector.getAttribute("aria-expanded")).toBe("true");
+    expect(selectedCard.hidden).toBe(false);
+    await release!();
+    await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [data-presented]')).not.toBeNull());
+    expect(selector.getAttribute("aria-expanded")).toBe("true");
+    expect(selectedCard.hidden).toBe(false);
+    expect(document.querySelector('[data-module="postcommit_nudge"]')!.getAttribute("data-seat-state")).not.toBe("expanded");
+    await unmount(component);
+  });
+
+  it("a guard selects tools once, not on an identical replayed snapshot", async () => {
+    const initial = createRun({ id: "guard-seat-identity", session: { kind: "position", start: { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    const played = revealFeedback(commitMove(initial, "e4d5", { at }).run, at).run;
+    // Navigation-only recorded-event fixture; material is computed from the legal position.
+    // No engine, grade, module payload or strategic judgement is manufactured here.
+    const run = appendEvents(played, [{ type: "feedback.generated", at, data: { nodeId: played.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]);
+    const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
+    // Keep the reactive getter intact; mountDrill's setup-only prop spread evaluates getters.
+    const component = mount(DrillScreen, { target: target(), props: {
+      onAssistanceQuery: testAssistanceAuthority,
+      get snapshot() { return snapshots.get("current")!; }, onModuleQuery: testModuleQuery(run),
+      assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await assistanceSettled();
+    await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [data-presented]')).not.toBeNull());
+    const theory = document.querySelector('[data-module="theory_breadcrumb"]')!;
+    expect(theory.getAttribute("data-seat-state")).not.toBe("expanded");
+    theory.querySelector<HTMLButtonElement>(".seat-row")!.click();
+    await tick();
+    expect(theory.getAttribute("data-seat-state")).toBe("expanded");
+    snapshots.set("current", { run: structuredClone(run), access: "writer", pendingEvidence: 0, withheld: false });
+    await tick();
+    await tick();
+    expect(theory.getAttribute("data-seat-state")).toBe("expanded");
+    const nextGuard = appendEvents(run, [{ type: "feedback.generated", at, data: { nodeId: run.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]);
+    snapshots.set("current", { run: nextGuard, access: "writer", pendingEvidence: 0, withheld: false });
+    await tick();
+    await tick();
+    expect(theory.getAttribute("data-seat-state")).not.toBe("expanded");
+    expect(document.querySelector('[data-module="postcommit_nudge"]')!.getAttribute("data-seat-state")).not.toBe("expanded");
     await unmount(component);
   });
 

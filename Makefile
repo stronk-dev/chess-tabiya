@@ -119,8 +119,12 @@ play-composition-hint-check:
 play-composition-max-load-check:
 	./node_modules/.bin/playwright test --grep "@matrix maximum-load"
 
+.PHONY: play-composition-tablet-check
+play-composition-tablet-check:
+	./node_modules/.bin/playwright test --grep "@matrix (maximum-load|tablet topbar|final Guided Hint|module seats render|post-commit guard)"
+
 play-composition-client-check:
-	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts
+	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts
 
 play-composition-matrix-contract:
 	node --test tools/play-composition-matrix.test.mjs

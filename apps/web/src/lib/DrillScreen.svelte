@@ -28,9 +28,10 @@
   import { corpusContextSentences } from "./corpus-sentences.js";
   import { corpusEvidence, corpusPresentation, humanSplitEvidence } from "./inspector-evidence.js";
   import ModuleSeats from "./ModuleSeats.svelte";
+  import CompanionSeat from "./CompanionSeat.svelte";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
-  import { composedSeats, effectActive, toggleExpanded, type PlayExpandedSeat, type PlaySeatModule, type StagedCue } from "./module-seats.js";
+  import { composedSeats, effectActive, occupiedRailSeats, toggleExpanded, type PlayExpandedSeat, type PlaySeatModule, type StagedCue } from "./module-seats.js";
   import { boardPaint } from "./evidence/presented-view.js";
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
@@ -456,6 +457,7 @@
     return undefined;
   });
   let compactViewport = $derived(playViewportClass(viewportSupport.width, viewportSupport.height) === "phone");
+  let tabletViewport = $derived(playViewportClass(viewportSupport.width, viewportSupport.height) === "tablet");
   let reflowViewport = $derived(compactViewport && viewportSupport.height > 0 && viewportSupport.height < 680);
   let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
   let phoneSheetModal = $derived(viewportSupport.width > 0 && compactViewport && sheetOpen);
@@ -728,6 +730,8 @@
       ? guardEvent.data.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads))
       : [],
   );
+  // A repeated snapshot of the same guard is not another foreground-selection event.
+  let guardSelectionKey = $derived(guardEvent?.type === "feedback.generated" ? JSON.stringify([run.id, guardEvent.seq]) : undefined);
   let guardRewindNodeId = $derived.by(() => {
     if (guardEvent?.type !== "feedback.generated") return undefined;
     const consequence = run.nodes.find((node) => node.id === guardEvent.data.nodeId);
@@ -967,7 +971,12 @@
     if (proactive.every((module) => untrack(() => seatSubjects.get(module)) === subject)) return;
     void untrack(() => queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [] }, subject, proactive)).then((packets) => {
       // play-composition §4.1: a critical post-commit fact may auto-expand the nudge seat.
-      if (packets?.some((packet) => packet.module === "postcommit_nudge" && packet.items.length > 0) && stagedCue === undefined) seatExpanded = "postcommit_nudge";
+      // A late automatic answer may fill its badge, never close a learner-selected other card
+      // or displace the consequence prompt. Only an unselected default or Nudge can auto-expand;
+      // explicitly selected More owns its reveal/control interaction just like any other card.
+      if (packets?.some((packet) => packet.module === "postcommit_nudge" && packet.items.length > 0)
+        && stagedCue === undefined && guardEvent === undefined
+        && (seatExpanded === undefined || seatExpanded === "postcommit_nudge")) seatExpanded = "postcommit_nudge";
     });
   });
   // On-request answers describe one subject: moving on, rewinding or switching branch retires them.
@@ -1050,12 +1059,13 @@
 
   // §4.5: board paint is the expanded seat's own facts (or the held cue's); collapsing removes it.
   let seatPaint = $derived.by(() => {
-    const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined || seatExpanded === "guided_hint" ? [] : seatPackets.get(seatExpanded)?.items ?? [];
+    const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined || seatExpanded === "guided_hint" || seatExpanded === "support_tools" ? [] : seatPackets.get(seatExpanded)?.items ?? [];
     return boardPaint(items);
   });
   // rfc/hint-distance.md §5/§7: the Guided Hint seat is shown exactly when the server-compiled preset
   // carries `guided_hint` under a non-off ceiling. The ceiling is the D1639 table, marked proposed.
   let hintCeiling = $derived(compiledAssistance?.modules.includes("guided_hint") === true ? compiledAssistance.hintCeiling.rung : "off");
+  let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets).length + (hints !== undefined && hintCeiling !== "off" ? 1 : 0) + 1);
   let hintMarks: HintDeliveryMarks | undefined = $state();
   function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
     try { return compileAssistanceRequest({ contextHint: activeAssistanceProfile, preference }); } catch { return undefined; }
@@ -1995,8 +2005,9 @@
   });
 
   $effect(() => {
-    if (guardEvent?.type !== "feedback.generated") return;
+    if (guardSelectionKey === undefined) return;
     compactTab = "evidence";
+    seatExpanded = "support_tools";
     sheetOpen = true;
   });
 
@@ -2213,6 +2224,45 @@
 
         <div class="companion-scroll">
           <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+            <div class="companion-queue" class:band={tabletViewport} style={`--queue-columns: ${queueSelectorCount}`}>
+            {#if seats.length > 0}
+              <ModuleSeats
+                {seats}
+                band={tabletViewport}
+                packets={seatPackets}
+                pending={seatPending}
+                failed={seatFailed}
+                expanded={stagedCue !== undefined || seatExpanded === "guided_hint" || seatExpanded === "support_tools" ? undefined : seatExpanded}
+                doorBlocked={seatDoorReasons}
+                staged={stagedCue}
+                onToggle={toggleSeat}
+                onRequest={requestSeat}
+                onConfirmStaged={() => void confirmStagedMove()}
+                onReviseStaged={reviseStagedMove}
+                onFocusSquares={(squares) => seatFocusSquares = squares}
+              />
+            {/if}
+            {#if hints !== undefined && hintCeiling !== "off"}
+              <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
+            {/if}
+              <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"
+                band={tabletViewport} tools open={stagedCue === undefined && (seatExpanded === undefined || seatExpanded === "support_tools")}
+                onToggle={() => toggleSeat("support_tools")}>
+            {#if guardEvent?.type === "feedback.generated"}
+              <section class="guard-prompt" aria-label="Consequence to review">
+                <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect what changed." />
+                <div>
+                  <strong>The consequence exposed something concrete.</strong>
+                  <p>Your played line stays preserved.</p>
+                </div>
+                <div class="guard-actions">
+                  <button type="button" disabled={rewindBusy} onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
+                  {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect what changed</button>{/if}
+                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined || rewindBusy} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>{rewindBusy ? "Rewinding…" : guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId }) !== undefined ? "Try rewind again" : "Rewind"}</button>
+                </div>
+                {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
+              </section>
+            {/if}
             <footer class="preset-disclosure" aria-label="Active support promise" data-preset-state={assistanceQueryState}>
               <strong>{presetPillLabel}</strong>
               <span>{presetHeadline}</span>
@@ -2267,40 +2317,6 @@
               {#if analysisRequestError?.nodeId === currentNode.id}<p class="analysis-error" role="alert">{analysisRequestError.text}</p>{/if}
               {#if recordedEngineEvidence.length > 0}<p class="analysis-ready" role="status">A recorded calculation is available for this position.</p>{/if}
             </section>
-            {#if guardEvent?.type === "feedback.generated"}
-              <section class="guard-prompt" aria-label="Consequence to review">
-                <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect what changed." />
-                <div>
-                  <strong>The consequence exposed something concrete.</strong>
-                  <p>Your played line stays preserved.</p>
-                </div>
-                <div class="guard-actions">
-                  <button type="button" disabled={rewindBusy} onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
-                  {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect what changed</button>{/if}
-                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined || rewindBusy} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>{rewindBusy ? "Rewinding…" : guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId }) !== undefined ? "Try rewind again" : "Rewind"}</button>
-                </div>
-                {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
-              </section>
-            {/if}
-            {#if hints !== undefined && hintCeiling !== "off"}
-              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
-            {/if}
-            {#if seats.length > 0}
-              <ModuleSeats
-                {seats}
-                packets={seatPackets}
-                pending={seatPending}
-                failed={seatFailed}
-                expanded={stagedCue !== undefined || seatExpanded === "guided_hint" ? undefined : seatExpanded}
-                doorBlocked={seatDoorReasons}
-                staged={stagedCue}
-                onToggle={toggleSeat}
-                onRequest={requestSeat}
-                onConfirmStaged={() => void confirmStagedMove()}
-                onReviseStaged={reviseStagedMove}
-                onFocusSquares={(squares) => seatFocusSquares = squares}
-              />
-            {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No extra highlights are available here; basic board guidance remains available.</p>{/if}
             {#if rawStructure.structures.length === 0 && !firings.some((firing) => firing.openEnded && firing.lastNodeId === currentNode.id)}
@@ -2324,6 +2340,8 @@
             {#if run.sessionKind === "imported" && canWrite && onGuessImportedMove !== undefined && importedNextMove(run) !== undefined}
               <ImportedGuessPanel fen={currentNode.fen} {startSide} lastMove={currentNode.moveUci} {busy} guess={importedGuess?.nodeId === currentNode.id ? importedGuess : undefined} onGuess={onGuessImportedMove} />
             {/if}
+              </CompanionSeat>
+            </div>
           </section>
 
           <section class="companion-section branch-seat" class:compact-active={compactTab === "branches"} aria-label="Branches">
@@ -3107,6 +3125,8 @@
   .companion-scroll { min-height: 0; display: grid; padding: .65rem; overflow: hidden; }
   .companion-section { min-width: 0; min-height: 0; display: none; gap: .55rem; overflow-y: auto; overscroll-behavior: contain; }
   .companion-section.compact-active { display: grid; }
+  .companion-queue { display:contents; }
+  .companion-queue.band { min-width:0; min-height:0; height:100%; display:grid; grid-template-columns:repeat(var(--queue-columns),minmax(0,1fr)); grid-template-rows:minmax(0,1fr) 2rem; gap:.35rem; }
   .next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{position:fixed;z-index:24;left:50%;bottom:1rem;width:min(60rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);transform:translateX(-50%);display:flex;align-items:end;align-content:start;gap:.65rem;flex-wrap:wrap;overflow:auto;overscroll-behavior:contain;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel);box-shadow:var(--shadow)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{min-height:2rem;padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.board-return{flex-basis:auto}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
   .mark-controls { display: grid; gap: .35rem; padding: .55rem; border: 1px solid var(--line); border-radius: .65rem; color: var(--muted); font-size: .72rem; }
   .mark-controls label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
@@ -3238,6 +3258,8 @@
     .companion-scroll { overflow: hidden; }
     .companion-section { display: none; height: 100%; overflow-y: auto; }
     .companion-section.compact-active { display: grid; }
+    .companion-section.evidence-seat.compact-active { grid-template-rows:minmax(0,1fr); overflow:hidden; }
+    .preset-disclosure { position:static; margin:0; padding:0 0 .4rem; }
   }
 
   .drill.compact {

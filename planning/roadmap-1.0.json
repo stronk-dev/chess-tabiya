@@ -1380,10 +1380,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Implement D3444: tablet head plus single badge/selector row, in-place native swaps and internally scrolling card under accepted play-composition §2.2. Reproduce D3445 with independent tablet topbar brand/context bounds before any header repair. Reconcile D3436 phone overlay/below-board/modality authority without incidental policy changes. Complete A3/A4/Inspector/vocabulary and review D3309 structural fidelity; rule D1639 before claiming complete defaults.",
+        "nextAction": "Complete D1834/A3 across the existing 7×16 cells: independent actionable-center hits, clipping bounds, horizontal-body extent and declared same-axis scroll whitelist, with clipped-control and nested-scroller negatives. Complete A4 Inspector positive/destination/vocabulary arms and review D3309 structural fidelity. Reconcile D3436 phone overlay/below-board/modality authority without incidental policy changes; rule D1639 before claiming complete defaults. Persistent compact tablet queue D3444–D3450 is verified, not queued again.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3435/D3437–D3442 close the true eight-seat population and six compile/snapshot/head/selection integration seams. All seven viewports exercise actual compiler/domain/source/Hint requests, independently counted current-digest badges, native one-expanded swaps, warning displacement and Revise restoration with unchanged board geometry. Identical-snapshot Hint retention fails against the predecessor; genuine head changes still retire it. Seventy-nine mounted client tests pass. Complete replacement exact-index software passes 3232 tests/340 files plus seven isolated performance tests and all downstream gates; complete content passes 225 tests/23 files. Complete rebuilt browser CI passes 125 journeys with one existing optional real-Maia skip; all 112 unretried matrix images/report bytes remain hash-equal after the packaged tier. Complete staged-process/governance passes; final proof/log/tracker bytes run through normal hooks before commit. D3444 owns remaining tablet head-plus-selector presentation, D3436 the phone contract conflict; D3445 the independent tablet header separation check prompted by visual crowding (not a measured collision). D1834/D910, full A3/A4/A6 presentation, Inspector/source/vocabulary, proposed ceilings, Advanced hintDistance, latency/analytics and owner-use remain open. Earlier stable-board/shared-Hint/preset and retained 112-cell evidence remain linked. Zero untriaged of 1688 live items; none doing. No whole RFC, capability or milestone promotion.",
+          "summary": "D3444–D3450 deliver a persistent compact tablet head/single selector row, existing More controls as a named group, native swaps/warning restoration, independent header conformance and delayed-answer/guard selection retention. Actual header passes four widths; overlap negative fails. Genuine delayed packets preserve Theory and explicitly selected More; new guard foregrounds its prompt once per run/sequence, not repeated snapshots. Ninety-one mounted tests pass. Complete final exact-index software passes 3244 tests/341 files, seven isolated performance tests and every downstream gate; final content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Complete rebuilt browser CI passes 126 journeys with one existing optional real-Maia skip, zero retries and 112 retained PNG/report bytes verified after the packaged tier. Earlier failed aggregate runs are recorded, not relabelled. Final tracking/log bytes have separate staged-governance and normal-hook checks. D1834/D910, full A3/A4/Inspector/vocabulary, D3436 phone reconciliation, ceilings, Advanced hintDistance, latency/analytics and owner-use remain open. Earlier genuine eight-seat and stable-board/shared-Hint/preset proofs remain linked. Zero untriaged of 1686 live items; none doing. No whole RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
@@ -1436,7 +1436,12 @@
             "planning/play-composition/max-load-2026-10-06.md",
             "planning/play-composition/max-load-software-2026-10-06.json",
             "apps/web/src/lib/ModuleSeats.svelte",
-            "planning/play-composition/max-load-matrix-2026-10-06.json"
+            "planning/play-composition/max-load-matrix-2026-10-06.json",
+            "planning/play-composition/tablet-queue-2026-10-06.md",
+            "planning/play-composition/tablet-queue-software-2026-10-06.json",
+            "planning/play-composition/tablet-queue-matrix-2026-10-06.json",
+            "apps/web/src/lib/CompanionSeat.svelte",
+            "apps/web/src/lib/CompanionSeat.test.ts"
           ],
           "anchors": [
             {
@@ -1552,17 +1557,17 @@
             {
               "kind": "rfc",
               "id": "play-composition.md",
-              "digest": "sha256:b3a6e47c84af5de395ee5a16bcdab205c89ae2539a5f7cb62a0d8c2e314b3192"
+              "digest": "sha256:b8edde1c6b9d8186d84725258236fe33da7499a775ca7b1629605449728f5e24"
             },
             {
               "kind": "work_state",
               "id": "D1834",
-              "digest": "sha256:05c97cdb7f18d0fcdac9e288ec9ac7ee3a646577565f9243376bab6eed0b19ab"
+              "digest": "sha256:c18e794bd44f1219c6cb54d0ccf0cfabb7fe489a72d4be9d39eed3672a0e7951"
             },
             {
               "kind": "work_state",
               "id": "D910",
-              "digest": "sha256:6cef5afe112c798511824426691329734ac57a81b7d6e3ac7f278082d818eba5"
+              "digest": "sha256:658ad3867d260022b3cd47b45d7987c7f3661a5b24a68e39d8f8433bed30b6d2"
             },
             {
               "kind": "work_state",
@@ -1612,12 +1617,37 @@
             {
               "kind": "work_state",
               "id": "D3444",
-              "digest": "sha256:c246eb9ced5e8c1681e634ee7c6a21c366b9b5f72bbda1a57bc2464fd5ed7c7b"
+              "digest": "sha256:6ffbfc721ba867f0fce34fbf3e14c8fba6eec9c17f17d0163ffd1af14ad345d1"
             },
             {
               "kind": "work_state",
               "id": "D3445",
-              "digest": "sha256:9b2022c3aef22c4efe08054a4e75db1f22fb0d03b18bc6ee7d457d68ab8fc299"
+              "digest": "sha256:386c58dedd54cc5ce2e475aa932287556cc08373f563d3c8cab2b59f1301e794"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3446",
+              "digest": "sha256:60176b0d4b67e4f593e74d3d0586a0b0fa174c293544e849aa37fe5394d0a557"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3447",
+              "digest": "sha256:910870ab66b05a38bdf7f4f2e73f550cc0a1e0cf66435b6206fa1f4c2426bbdf"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3448",
+              "digest": "sha256:3a82f354b36b8feccd747713d4017ace8d6336fec8e3f2a1139a03ea0b04f4fe"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3449",
+              "digest": "sha256:f2af323d691f611622c2cb926a9a3f5122e492fc394aa7240a93e797aa0b7685"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3450",
+              "digest": "sha256:f0fb83f1b1ecfcdff25c87d42b0c2a29a26b4419e31892e5fceaa92f875d2ec9"
             }
           ]
         },

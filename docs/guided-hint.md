@@ -15,6 +15,8 @@ modules' one-expanded-card state. Opening Theory or another module collapses it 
 board marks without resetting the current decision, cancelling an operation, or advancing the
 ladder. **Open guided hint** restores an already revealed rung without another request. The card
 stays mounted while collapsed; decision changes and teardown still own reset/cancellation.
+Tablet shows the same controller inside the compact queue head, with a **Hint** selector below.
+Resizing between tablet and desktop does not remount it, reset its rung or ask again.
 
 The row counts the one delivered disclosure, not the number of rungs. Available answers show one
 fact; explicit empty or unavailable-source answers show zero. An unasked/pending/failed/refused

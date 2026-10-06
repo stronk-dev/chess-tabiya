@@ -54,6 +54,58 @@ async function showSupport(page: Page): Promise<void> {
   await expect(page.getByRole("region", { name: "Support", exact: true })).toBeVisible();
 }
 
+/** The tablet's bounded queue keeps existing Support actions in its real More head. */
+async function showSupportTools(page: Page): Promise<void> {
+  await showSupport(page);
+  const more = page.getByRole("button", { name: "Support tools and help-style promise", exact: true });
+  if (await more.isVisible() && await more.getAttribute("aria-expanded") !== "true") await more.click();
+}
+
+async function assertTabletQueueHead(page: Page, id: string): Promise<void> {
+  const queue = page.locator(".companion-queue.band");
+  await expect(queue).toBeVisible();
+  const heads = queue.locator("[data-queue-head]");
+  await expect(heads).toHaveCount(1);
+  const head = heads.first();
+  await expect(head).toHaveAttribute("data-queue-head", id);
+  const selectors = queue.locator(".queue-selector");
+  await expect(selectors).toHaveCount(8); // Seven ordinary module doors and existing Support tools.
+  const headBox = (await head.boundingBox())!;
+  const queueBox = (await queue.boundingBox())!;
+  expect(headBox.y).toBeGreaterThanOrEqual(queueBox.y);
+  expect(headBox.x).toBeGreaterThanOrEqual(queueBox.x);
+  expect(headBox.x + headBox.width).toBeLessThanOrEqual(queueBox.x + queueBox.width);
+  const row = await selectors.evaluateAll((buttons) => buttons.map((button) => {
+    const box = button.getBoundingClientRect();
+    return { ...box.toJSON(), hit: button.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) };
+  }));
+  expect(new Set(row.map((box) => box.y)).size).toBe(1);
+  for (const box of row) {
+    expect(box.y).toBeGreaterThanOrEqual(headBox.y + headBox.height);
+    expect(box.x).toBeGreaterThanOrEqual(queueBox.x);
+    expect(box.x + box.width).toBeLessThanOrEqual(queueBox.x + queueBox.width);
+    expect(box.y + box.height).toBeLessThanOrEqual(queueBox.y + queueBox.height);
+    expect(box.hit).toBe(true);
+  }
+  expect(await head.evaluate((element) => getComputedStyle(element).overflowY)).toBe("auto");
+  expect(await page.getByLabel("Support", { exact: true }).last().evaluate((element) => element.scrollHeight <= element.clientHeight)).toBe(true);
+}
+
+async function assertTopbarSeparation(page: Page, width: number): Promise<void> {
+  const brand = (await page.locator(".topbar .wordmark").boundingBox())!;
+  const context = (await page.locator(".topbar .status").boundingBox())!;
+  const actions = (await page.locator(".topbar-actions").boundingBox())!;
+  expect(brand.x + brand.width, `brand/context separation at ${width}`).toBeLessThanOrEqual(context.x);
+  expect(context.x + context.width, `context/actions separation at ${width}`).toBeLessThanOrEqual(actions.x);
+  const bar = (await page.locator(".topbar").boundingBox())!;
+  expect(context.y).toBeGreaterThanOrEqual(bar.y);
+  expect(context.y + context.height).toBeLessThanOrEqual(bar.y + bar.height);
+  for (const button of await page.locator(".topbar button").all()) {
+    if (!await button.isVisible()) continue;
+    expect(await button.evaluate((element) => { const box = element.getBoundingClientRect(); return element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)); })).toBe(true);
+  }
+}
+
 async function openAdvancedSupport(page: Page): Promise<void> {
   await page.locator("details.assistance-control summary").click();
   await page.getByRole("button", { name: "Advanced support controls" }).click();
@@ -2387,6 +2439,7 @@ test("@matrix final Guided Hint shares one expanded seat and preserves the board
     await assertRunViewport(page, viewport);
     const calm = await page.getByLabel("Chessboard").boundingBox();
     await showSupport(page);
+    await showSupportTools(page);
     await page.getByRole("button", { name: "Show support for this position" }).click();
     const hint = page.locator('[data-module="guided_hint"]');
     const firstPost = postedRungs.length;
@@ -2410,11 +2463,23 @@ test("@matrix final Guided Hint shares one expanded seat and preserves the board
     await expect(painted).toHaveCount(0);
     await hint.getByRole("button", { name: "Open guided hint", exact: true }).click();
     await expect(hint.locator('[data-hint-rung="distance"]')).toBeVisible();
-    await expect(theory.locator(".seat-card")).toHaveCount(0);
+    await expect(theory.locator(".seat-card")).toBeHidden();
     await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
     await expect(painted).toHaveCount(markCount);
     expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    if (viewport.width === 768) {
+      const mountedHint = await hint.elementHandle();
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await assertRunViewport(page, { width: 1440, height: 900 });
+      await page.setViewportSize(viewport);
+      await assertRunViewport(page, viewport);
+      expect(await mountedHint!.evaluate((element) => element.isConnected && element === document.querySelector('[data-module="guided_hint"]'))).toBe(true);
+      await expect(hint.locator('[data-hint-rung="distance"]')).toBeVisible();
+      await expect(painted).toHaveCount(markCount);
+      expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    }
     await attachCompositionCell(page, testInfo, viewport, "06-guided-hint-final-stage");
   }
 });
@@ -2485,6 +2550,7 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     await expect(cue).toHaveAttribute("data-seat-state", "warning");
     await cue.getByRole("button", { name: /anyway$/u }).click();
     await showSupport(page);
+    await showSupportTools(page);
     const compiledResponse = page.waitForResponse((response) => response.url().endsWith("/assistance") && response.request().method() === "POST");
     const postcommitResponse = page.waitForResponse((response) => response.url().endsWith("/modules/query") && response.request().postDataJSON().query.timing === "post_commit" && response.request().postDataJSON().query.requested.length === 0);
     await page.getByRole("button", { name: "Show support for this position" }).click();
@@ -2544,11 +2610,13 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     await seat("guided_hint").getByRole("button", { name: "Hint", exact: true }).click();
     const hint = (await (await hintResponse).json()).hint;
     await expect(seat("guided_hint").locator(".seat-badge")).toHaveText(hint.state === "available" ? "1" : "0");
+    if (viewport.width === 768) await assertTabletQueueHead(page, "guided_hint");
     for (const module of ["postcommit_nudge", "structure_nudge", "theory_breadcrumb", "compare_coach", "threat_radar", "sight_on_request"]) {
       await seat(module).locator(".seat-row").click();
       await expect(seat(module)).toHaveAttribute("data-seat-state", "expanded");
       await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
       await expect(seat("guided_hint").locator(".hint-card")).toBeHidden();
+      if (viewport.width === 768) await assertTabletQueueHead(page, module);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     }
     const eventsAfter = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).events.map((event: { seq: number; type: string }) => [event.seq, event.type]);
@@ -2568,6 +2636,8 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     if (viewport.width >= 720 && viewport.width < 1024) {
       const token = await page.locator("main.drill").evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue("--band-h")));
       expect((await page.locator(".rail-stack").boundingBox())!.height).toBe(token);
+      await assertTabletQueueHead(page, "blunder_prevention");
+      await expect(cue.getByRole("button", { name: "Revise", exact: true })).toBeVisible();
     } else if (viewport.width < 720) {
       const token = await page.locator("main.drill").evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue("--rim-h")));
       expect((await page.locator(".compact-tabs").boundingBox())!.height).toBe(token);
@@ -2579,11 +2649,36 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     await expect(cue).toHaveCount(0);
     await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    if (viewport.width === 768) {
+      await assertTabletQueueHead(page, "sight_on_request");
+      await showSupportTools(page);
+      await assertTabletQueueHead(page, "support_tools");
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    }
+  }
+});
+
+test("@matrix tablet topbar separates brand, context and actionable controls", async ({ page }) => {
+  for (const width of [720, 768, 820, 1023]) {
+    await page.setViewportSize({ width, height: 1024 });
+    await startSupportFromFen(page, SCHOLAR_TRAP, "black");
+    await assertTopbarSeparation(page, width);
+    if (width === 768) {
+      // Disposable negative layout control: prove the independent bounds check detects overlap.
+      const brand = page.locator(".topbar .wordmark");
+      const box = (await brand.boundingBox())!;
+      const context = (await page.locator(".topbar .status").boundingBox())!;
+      await brand.evaluate((element, shift) => { (element as HTMLElement).style.transform = `translateX(${shift}px)`; }, context.x - box.x - box.width + 8);
+      await expect(assertTopbarSeparation(page, width)).rejects.toThrow(/brand\/context separation/u);
+      await brand.evaluate(element => { (element as HTMLElement).style.removeProperty("transform"); });
+      await assertTopbarSeparation(page, width);
+    }
   }
 });
 
 test("@matrix module seats render sealed evidence without moving the board (states 3, 5, 9)", async ({ page }, testInfo) => {
   test.setTimeout(300_000);
+  page.setDefaultTimeout(15_000);
   const projections = [
     { width: 1440, height: 900 },
     { width: 1366, height: 768 },
@@ -2637,6 +2732,7 @@ test("@matrix module seats render sealed evidence without moving the board (stat
 
     // State 9 — honest empty: opened doors state their declared absence inside their own card.
     await showSupport(page);
+    await showSupportTools(page);
     const reveal = page.getByRole("button", { name: "Show support for this position" });
     await expect(reveal).toBeEnabled();
     await reveal.click();

@@ -9,6 +9,13 @@ compiler, domain branches, requests and sealed receipts at seven viewports. It i
 priority, every badge, native swaps/hits, compact tokens and board stability; no packet fixtures or
 forced input. `make play-composition-client-check` adds mounted snapshot/decision/badge controls.
 These focused commands do not replace the full CI tiers or remaining complete UX acceptance.
+`make play-composition-tablet-check` additionally runs final Hint resize/retention, every compact
+head swap, staged/empty/consequence states and four independent header separation checks with an
+overlap negative control. Native matrix actions have a finite fail-fast timeout, not forced clicks.
+`make play-composition-client-check` includes the persistent frame/native-button controls.
+It also delays a genuine proactive packet after selecting Theory or More, and replays a guard
+snapshot to verify that neither steals the learner's current card; a genuinely new guard retains
+its foreground-selection behavior.
 
 | Tier | Command | Owns | Must not substitute for |
 |---|---|---|---|
@@ -41,8 +48,9 @@ refuses missing/duplicate/foreign/failed/retried/wrong-size or out-of-run attach
 the report and PNG bytes under `test-results/composition/<report-hash>/`. Later tiers cannot erase
 that matrix generation. Its 19 Node controls test the evidence join, not image content or complete
 A3/A4/A6 acceptance. The genuine eight-seat population fixture is recorded as D3435's
-maximum-load checkpoint; D3444 retains compact tablet presentation and D3436 phone contract
-reconciliation rather than treating population/counts as the complete UX contract.
+maximum-load checkpoint. The compact tablet queue adds head/selector geometry and native-hit
+coverage; D3436 retains phone contract reconciliation. Neither checkpoint treats population/counts
+as the complete UX contract.
 
 Playwright has explicit desktop Chromium and Pixel 7 projects. Project-level test filters keep
 ordinary journeys on one desktop browser while `@mobile` matrix cases inherit the device's mobile

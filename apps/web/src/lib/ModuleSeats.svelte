@@ -5,8 +5,9 @@
   // every change is companion-internal, never stage layout. The head slot belongs to the one
   // board-adjacent cue (blunder_prevention) and appears only while a staged move is held.
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
+  import CompanionSeat from "./CompanionSeat.svelte";
   import type { ParsedModulePacket } from "./module-query-response.js";
-  import { seatBadge, unavailableSentences, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
+  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
 
   interface Props {
     seats: readonly SeatDeclaration[];
@@ -14,6 +15,7 @@
     pending: ReadonlySet<PlaySeatModule>;
     failed: ReadonlySet<PlaySeatModule>;
     expanded: PlaySeatModule | undefined;
+    band?: boolean;
     /** Why an on-request door cannot open right now (e.g. no subject yet); absent when it can. */
     doorBlocked: Readonly<Partial<Record<PlaySeatModule, string>>>;
     staged: StagedCue | undefined;
@@ -23,18 +25,18 @@
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, doorBlocked, staged, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, band = false, doorBlocked, staged, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
 
-  const railSeats = $derived(seats.filter((seat) => !seat.headSlot && !(seat.emptySilent && (packets.get(seat.module)?.items.length ?? 0) === 0)));
+  const railSeats = $derived(occupiedRailSeats(seats, packets));
   const headSeat = $derived(seats.find((seat) => seat.headSlot));
 </script>
 
-<div class="module-seats" data-seat-count={railSeats.length + (staged === undefined || headSeat === undefined ? 0 : 1)}>
+<div class="module-seats" class:band data-seat-count={railSeats.length + (staged === undefined || headSeat === undefined ? 0 : 1)}>
   {#if headSeat !== undefined && staged !== undefined}
-    <section class="module-seat head-slot" data-module="blunder_prevention" data-seat-class="board_adjacent" data-seat-state={staged.state} aria-label={headSeat.label}>
+    <CompanionSeat id="blunder_prevention" module="blunder_prevention" label={headSeat.label} headSlot {band} state={staged.state}>
       {#if staged.state === "checking"}
         <p role="status">Checking the staged move {staged.move}…</p>
       {:else if staged.state === "warning"}
@@ -52,20 +54,15 @@
           <button type="button" onclick={onConfirmStaged}>Play {staged.move}</button>
         </div>
       {/if}
-    </section>
+    </CompanionSeat>
   {/if}
   {#each railSeats as seat (seat.module)}
     {@const packet = packets.get(seat.module)}
     {@const badge = seatBadge(packet)}
     {@const open = expanded === seat.module}
     {@const state = packet === undefined ? "door" : packet.items.length === 0 ? "empty" : "filled"}
-    <section class="module-seat" data-module={seat.module} data-seat-class="rail" data-seat-state={open ? "expanded" : state} aria-label={seat.label}>
-      <button type="button" class="seat-row" aria-expanded={open} aria-controls={`seat-card-${seat.module}`} onclick={() => onToggle(seat.module)}>
-        <span class="seat-label">{seat.label}</span>
-        {#if badge !== null}<span class="seat-badge" aria-label={`${badge} ${badge === 1 ? "fact" : "facts"}`}>{badge}</span>{/if}
-      </button>
-      {#if open}
-        <div class="seat-card" id={`seat-card-${seat.module}`}>
+    <CompanionSeat id={seat.module} module={seat.module} label={seat.label} shortLabel={COMPACT_SEAT_LABELS[seat.module]}
+      {band} {open} {state} {badge} onToggle={() => onToggle(seat.module)}>
           {#if pending.has(seat.module)}
             <p role="status">Asking…</p>
           {:else if failed.has(seat.module)}
@@ -88,21 +85,15 @@
             {#if seat.module === "postcommit_nudge" && packet.items.length > 0}<p>{NUDGE_CLOSING}</p>{/if}
             {#if !seat.proactive && doorBlocked[seat.module] === undefined}<button type="button" class="seat-request secondary" onclick={() => onRequest(seat.module)}>Ask again here</button>{/if}
           {/if}
-        </div>
-      {/if}
-    </section>
+    </CompanionSeat>
   {/each}
 </div>
 
 <style>
   .module-seats{display:grid;gap:.45rem}
-  .module-seat{display:grid;gap:.35rem;margin:0;padding:.55rem .65rem;border:1px solid var(--line);border-radius:.7rem;background:var(--panel)}
-  .head-slot{border-color:var(--warning)}
+  .module-seats.band{display:contents}
   .cue-heading{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-  .seat-row{display:flex;justify-content:space-between;align-items:center;gap:.5rem;width:100%;padding:0;border:0;background:none;color:var(--ink);font:inherit;font-weight:600;text-align:left;cursor:pointer}
   .seat-badge{min-width:1.3rem;padding:0 .35rem;border-radius:.65rem;background:var(--accent-soft);color:var(--ink);font-size:.72rem;text-align:center;font-variant-numeric:tabular-nums}
-  .seat-card{display:grid;gap:.35rem;font-size:.78rem}
-  .seat-card p{margin:0}
   .stated-empty,.door-reason,.unavailable{color:var(--muted)}
   .seat-actions{display:flex;flex-wrap:wrap;gap:.4rem}
 </style>

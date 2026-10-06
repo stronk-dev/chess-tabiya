@@ -21,7 +21,13 @@ export const PLAY_SEAT_MODULES = Object.freeze([
 ] as const satisfies readonly ModuleId[]);
 export type PlaySeatModule = (typeof PLAY_SEAT_MODULES)[number];
 /** Guided Hint keeps its own delivery protocol but shares the same expansion authority. */
-export type PlayExpandedSeat = PlaySeatModule | "guided_hint";
+export type PlayExpandedSeat = PlaySeatModule | "guided_hint" | "support_tools";
+
+/** Compact UI labels, never aliases for a producer or another evidence identity. */
+export const COMPACT_SEAT_LABELS: Readonly<Record<PlaySeatModule, string>> = Object.freeze({
+  blunder_prevention: "Before you play", postcommit_nudge: "Nudge", sight_on_request: "Squares",
+  threat_radar: "Threats", structure_nudge: "Structure", theory_breadcrumb: "Theory", compare_coach: "Compare",
+});
 
 const PLAY_TIMINGS = new Set(["pre_commit", "at_commit", "post_commit", "checkpoint"]);
 
@@ -53,6 +59,11 @@ export function composedSeats(compiled: { readonly modules: readonly ModuleId[];
       emptySilent: policy.emptyBehavior.kind === "silent",
     })];
   }));
+}
+
+/** The same admitted rail population drives rendering and the tablet's selector-column count. */
+export function occupiedRailSeats(seats: readonly SeatDeclaration[], packets: ReadonlyMap<PlaySeatModule, ParsedModulePacket>): readonly SeatDeclaration[] {
+  return seats.filter((seat) => !seat.headSlot && !(seat.emptySilent && (packets.get(seat.module)?.items.length ?? 0) === 0));
 }
 
 /** Whether one compiled effect exists (the exact gate a delivery is bound to). */

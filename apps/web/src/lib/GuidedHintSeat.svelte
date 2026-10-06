@@ -16,6 +16,7 @@
   } from "@chess-tabiya/runtime";
 
   import { ApiError, type GuidedHintClient, type HintRequestBody } from "./api.js";
+  import CompanionSeat from "./CompanionSeat.svelte";
 
   interface Props {
     run: DrillRun;
@@ -27,9 +28,10 @@
     pollIntervalMs?: number;
     expanded?: boolean;
     onToggle?: (() => void) | undefined;
+    band?: boolean;
   }
 
-  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 350, expanded = true, onToggle }: Props = $props();
+  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 350, expanded = true, onToggle, band = false }: Props = $props();
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -160,14 +162,12 @@
   }
 </script>
 
-<section class="module-seat guided-hint" aria-label="Ask for the least that helps" data-module="guided_hint" data-seat-class="rail" data-seat-state={expanded ? "expanded" : revealed === null ? "door" : "filled"}>
+<CompanionSeat id="guided_hint" module="guided_hint" label="Ask for the least that helps" shortLabel="Hint"
+  {band} open={expanded} state={revealed === null ? "door" : "filled"} {badge}
+  controlLabel={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"}
+  disabled={onToggle !== undefined && !expanded && revealed === null && (!canWrite || busy)}
+  onToggle={onToggle === undefined ? undefined : () => { const shouldAsk = !expanded && revealed === null; onToggle?.(); if (shouldAsk) void ask(); }}>
   <p class="eyebrow">Stuck?</p>
-  <h2 id="guided-hint-title">
-    {#if onToggle === undefined}Ask for the least that helps
-    {:else}
-      <button type="button" class="seat-row" aria-label={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"} aria-expanded={expanded} aria-controls="guided-hint-card" disabled={!expanded && revealed === null && (!canWrite || busy)} onclick={() => { const shouldAsk = !expanded && revealed === null; onToggle?.(); if (shouldAsk) void ask(); }}><span>Ask for the least that helps</span>{#if badge !== undefined}<span class="seat-badge" aria-label={`${badge} ${badge === 1 ? "fact" : "facts"}`}>{badge}</span>{/if}</button>
-    {/if}
-  </h2>
   <div class="hint-card" id="guided-hint-card" hidden={!expanded}>
   {#if sentence !== undefined}<p class="hint-sentence" role="status" data-hint-rung={revealed}>{sentence}</p>{/if}
   {#if message !== undefined}<p class="hint-message" role={response?.state === "pending" ? "status" : undefined}>{message}</p>{/if}
@@ -179,18 +179,13 @@
     {#if !canWrite}<span class="honest">This read-only view cannot ask for hints.</span>{/if}
   </div>
   </div>
-</section>
+</CompanionSeat>
 
 <style>
-  .guided-hint { display:grid; gap:.4rem; padding:.75rem; border:1px solid var(--line); border-radius:.8rem; background:var(--panel); }
-  .guided-hint > p, .guided-hint h2 { margin:0; }
   .eyebrow { color:var(--accent); font:700 .62rem ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
-  .guided-hint h2 { font:600 1rem/1.2 var(--display-font); }
   .hint-sentence { font-size:.82rem; line-height:1.45; }
   .hint-card { display:grid; gap:.4rem; }
   .hint-card[hidden] { display:none; }
-  .seat-row { display:flex; align-items:center; justify-content:space-between; gap:.5rem; width:100%; border:0; padding:0; color:inherit; background:none; font:inherit; text-align:left; cursor:pointer; }
-  .seat-badge { min-width:1.3rem; padding:0 .35rem; border-radius:.65rem; background:var(--accent-soft); color:var(--ink); font:normal .72rem var(--display-font); text-align:center; font-variant-numeric:tabular-nums; }
   .hint-message { color:var(--muted); font-size:.76rem; line-height:1.4; }
   .hint-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; }
   .hint-actions button { justify-self:start; padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }

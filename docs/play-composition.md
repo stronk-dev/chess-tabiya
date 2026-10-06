@@ -39,11 +39,24 @@ same expansion authority: opening it collapses the other module card and vice ve
 hint keeps its exact decision and rung while hiding both its card and board marks. Reopening it
 does not request another hint; only **Hint** or **A little more** advances the disclosure.
 
+On tablet, `CompanionSeat.svelte` keeps those same controllers mounted while placing the one
+expanded card above a single selector row. Only the card scrolls; Support itself cannot grow or
+scroll around the fixed 176 px band. Short selector labels retain their full accessible names and
+receipt-bound badges. **More** opens the existing support promise, temporary reveal and other
+support tools in that same head. It is a named controls group within Support, not a second
+Support landmark, evidence module or producer.
+An unanswered selector does not invent a fact count. The held risk cue temporarily owns the head;
+Revise restores the learner's previous card. Desktop/phone retain their ordinary rail/sheet layout.
+
 A held staged cue displaces both ordinary module cards and Guided Hint; its own badge counts the
 receipt's delivered facts. Revise restores ordinary expansion. The selected origin-square answer
 survives staging because the move has not been committed. Opening disclosure waits for the new
 assistance compilation before requesting proactive nudge/structure packets. Selected-square
 requests use the exact run/node/square/configuration identity, not unrelated snapshot updates.
+Late proactive packets fill their badges without closing a learner-selected card, including More
+while its reveal/control interaction is underway. Unselected default/Nudge heads still auto-expand.
+A genuine consequence guard selects More and puts its prompt before generic controls;
+an identical run/sequence snapshot does not repeat that selection. A new guard still does.
 
 On compact screens the help-style popover is inset from both viewport edges, independently of
 its topbar trigger. Its declared scroll region bounds long preset text without displacing the board
@@ -87,6 +100,10 @@ complete eight-seat population through actual Advanced controls, records two att
 every on-request answer and independently verifies all delivered-fact badges. Native card swaps,
 the held cue's displacement and Revise, real square hit targets, tablet band/phone rim tokens and
 unchanged board geometry are asserted. `make play-composition-max-load-check` runs that journey.
+`make play-composition-tablet-check` also tests the head/row bounds and native selector center hits
+for Hint, every ordinary card, the warning and More. It checks header separation at 720, 768, 820
+and 1023 px, including an intentionally overlapping negative control. The real header already
+passes; the test is new coverage, not evidence of a shipped header collision.
 The current phone companion is modal: close it before board gestures, reopen it to inspect the
 answer. D3436 retains the unresolved contract reconciliation with the later no-overlay floor.
 
@@ -94,6 +111,9 @@ State 6 uses the actual hint request/poll protocol through the preset's final pe
 rung. At every projection it checks one expanded seat, board stability, collapse/reopen without
 another request, and removal/restoration of the hint's real board marks. It does not change the
 proposed ceiling table or reveal a direct move.
+The tablet projection additionally resizes to desktop and back, proving the same mounted Hint
+controller, rung, marks and request count survive. Mounted frame tests preserve control drafts
+through responsive/collapse transitions and retain native disabled-button behavior.
 
 `make test-browser-matrix` and `make test-browser` require all 112 distinct current-run successful,
 unretried PNG attachments. The JSON report, attachment dimensions and closed cell names are checked

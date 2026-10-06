@@ -23,8 +23,12 @@ doors but remain incomplete across the eight release dimensions below.
 the narrow-phone unreachable preset radios, and incomplete/unretained screenshot artifacts. The
 real seven-viewport hint journey preserves the exact decision/rung, request counts and board box.
 The artifact checker accepts 112/112 successful unretried cells and their retained bytes survive
-the packaged-default tier. [[D3435]] queues the actual remaining every-module max-load fixture;
-[[D1834]]/[[D910]], full A3/A4/A6, Inspector/vocabulary, ceilings and owner-use discharges remain
+the packaged-default tier. [[D3435]] now supplies the genuine eight-seat maximum-load fixture,
+with actual requests, exact badge counts, native swaps and warning restoration at all seven viewports.
+The compact tablet checkpoint [[D3444]]–[[D3450]] adds the shared persistent head/selector frame,
+native More controls, independent header conformance and delayed-answer/guard selection retention.
+Receipt: `planning/play-composition/tablet-queue-2026-10-06.md` (full final gates recorded there).
+[[D1834]]/[[D910]], full A3/A4, [[D3436]] phone reconciliation, Inspector/vocabulary, ceilings and owner-use discharges remain
 open. This is an advanced checkpoint, not a completed milestone or capability. Receipt:
 `planning/play-composition/hint-and-matrix-2026-10-06.md`.
 

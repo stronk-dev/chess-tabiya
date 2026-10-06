@@ -88,17 +88,26 @@ remain in their owning RFCs.
     unretried current-run PNG attachments and retain the exact report/PNG bytes through later tiers.
     Receipt: `hint-and-matrix-2026-10-06.md`. This is artifact completeness, not a waiver of the
     max-load and full conformance obligations below.
+22. The tablet Support queue now renders one internally scrolling head above a single fixed
+    selector row. Native swaps, the held cue/Revise and More preserve board/band geometry and
+    source-bound badges. Shared mounted frames retain Hint and control state through resize.
+    Independent header bounds/hits pass at four tablet widths and fail a deliberate overlap;
+    no production header collision is claimed. More is a named controls group, not another
+    Support landmark (D3447). Receipt: `tablet-queue-2026-10-06.md`.
+    Late proactive delivery preserves explicit selection (D3448); new consequence events select
+    the tools head while identical recorded-event snapshots do not (D3449).
+    Explicit More selection also survives delayed delivery while reveal opens (D3450).
 
 ## Remaining before archive
 
 Current maximum-load checkpoint: `max-load-2026-10-06.md`. The genuine eight-seat fixture and
 receipt-bound badges replace the three-default-row check; compilation/snapshot/held-cue seams are
-repaired. Full replacement gates run before commit. D3436 retains the overlay/modality contract
-reconciliation, D3445 the tablet topbar separation assertion, and complete
-A3/A4/compact queue/Inspector/ceiling/owner-use obligations remain.
+repaired. The compact queue and independent header coverage checkpoint is
+`tablet-queue-2026-10-06.md`; full replacement gates run before commit. D3436 retains the
+overlay/modality contract reconciliation; complete A3/A4/Inspector/ceiling/owner-use obligations remain.
 
 1. The eleven-module compiler and real Play seats now ship. Finish remaining cross-surface,
-   source/absence and seat conformance, including [[D3444]]'s tablet queue; neither the structural
+   source/absence and seat conformance; neither the structural
    Support/Branches/Actions tabs nor eight delivered Play badges are complete module composition.
 2. Remove the remaining ordinary-surface vocabulary leaks named by §5. Related-pack title/SAN and
    the ordinary Support/terminal evidence-pipeline copy are complete; phase, compare, tablebase and
@@ -107,9 +116,15 @@ A3/A4/compact queue/Inspector/ceiling/owner-use obligations remain.
    all 112 distinct attachments. State 13 now exercises all eight seats with real domain/source
    requests, independently counted badges, native swaps, warning priority and fixed board/band/rim
    geometry at seven viewports (`max-load-2026-10-06.md`). This closes the former three-row
-   population gap, not every A6 presentation requirement: [[D3444]] owns the missing tablet
-   head-plus-single-selector-row queue. [[D3436]] retains the phone contract reconciliation;
+   population gap. The tablet head-plus-single-selector-row is now implemented (D3444);
+   [[D3436]] retains the phone contract reconciliation;
    actionable A3 and destination A4 obligations remain. Counts alone are not semantic acceptance.
+   Next, instrument each existing cell before its screenshot: independent actionable center hits,
+   clipping-ancestor bounds, horizontal-body extent and the declared same-axis scroll whitelist.
+   Prove the checker against deliberate clipped-control and nested-scroller negatives before
+   repairing actual failures. Keep modal-inert board controls distinct from hidden actionable
+   controls; D3436 must reconcile phone authority before changing its policy. This is the existing
+   D1834/A3 obligation, not a new parallel tracker or a count-only closure.
 4. Bind the full Inspector's amended accepts list when `learner-modules` implements, including the
    D924 phase/pivotal/classifier/compare families.
 5. Reconcile `docs/drill-client.md`, close the remaining ledger rows, append final lifecycle logs,
