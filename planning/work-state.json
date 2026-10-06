@@ -28728,6 +28728,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3482",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c38836f08b310cdd3cfb2dc735d91fcfe87d9e96b281461255cba095fa7ef426",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md",
+      "evidenceKind": "path"
     }
   ]
 }

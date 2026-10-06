@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3482]]: actual model histories now join all 182 named target/candidate
+cells with separate opportunity and execution weights. The 0.90 frontier visits
+19 of 58 known possible reintroductions and executes eight; all partial negatives
+abstain. Six controls and independent board/identity/source-mass replay with seven
+corruption refusals pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md`.
+Engine [[D3478]] continues independently. Next: complete engine source/target join,
+deeper semantic-selection arm, common proof/refutation/contrast and actual costs.
+
 Completed [[D3481]]: the actual same-arm four-ply Maia frontier retains 4,127
 ordered leaves, three-layer joint mass, residuals and terminal absorption. All
 1,401 predecessor histories/386 candidate arms pass independent legal/mass replay

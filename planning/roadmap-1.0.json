@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3481 follows all actual captured Maia histories into 4,127 ordered fourth-ply leaves, retaining all 193 candidates, phase strata, literal source/history identities, terminal absorption and three-layer mass/residuals. Minimum joint configured 0.80 coverage is 0.597414 with 114/193 below joint 0.80; configured 0.90 gives 0.777252 and 85/193. Five new/six preserved controls and independent all-path/all-mass replay with eight actual corruption refusals pass. D3478's unchanged 16,813-job engine queue remains doing. This is disposable research, not a chosen production profile, five-arm verdict or exact proof. Deeper semantic selection, common proof/refutation/contrast/cost and source/A4/full 1.0 holds remain open; no full promotion.",
+          "summary": "D3482 joins all 182 registered target/candidate cells to actual selected model histories, retaining 96 source controls, 86 natural alternatives, piece identity, phase and separate opportunity versus actual-execution mass. Configured 0.90 visits 19 of 58 known possible exact reintroductions and executes eight; all 364 partial target arms abstain from negative/universal proof. Six tests and independent board/identity/source-mass replay with seven corruption refusals pass; the local-SEE predicate remains shared, not an independent strategic oracle. D3478's unchanged 16,813-job Stockfish queue remains doing. This disposable research is not a production profile or five-arm verdict; deeper semantic selection, common proof/refutation/contrast/cost and source/A4/full 1.0 obligations remain open, without full promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1009,7 +1009,11 @@
             "planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md",
             "planning/semantic-consequence-search/d3262-maia-third-ply-capture.json",
             "planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md",
-            "planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.json"
+            "planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.json",
+            "planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md",
+            "planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.json",
+            "tools/d3262-search-calibration/coherent-maia-target-outcome.test.mjs",
+            "tools/d3262-search-calibration/coherent-maia-target-check.py"
           ],
           "anchors": [
             {
@@ -1406,6 +1410,11 @@
               "kind": "work_state",
               "id": "D3481",
               "digest": "sha256:f0d342d58ee40484b7b6f0cb59b50e69f9ae9f5207e8257950279ae67c895d3f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3482",
+              "digest": "sha256:c38836f08b310cdd3cfb2dc735d91fcfe87d9e96b281461255cba095fa7ef426"
             }
           ]
         },

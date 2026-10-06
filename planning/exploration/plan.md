@@ -37,6 +37,15 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3482: all 182 target/candidate cells now observe actual selected model
+histories rather than substituting exact learner replies or appending unplayed
+target actions. The 0.90 arm sees 19 of 58 possible exact reintroductions and
+executes eight; all 364 target arms abstain from partial negative/universal proof.
+Six tests and independent board/identity/source-mass reconstruction with seven
+actual corruption refusals pass. D3478, semantic selection and full five-arm
+proof/contrast/cost stay open. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md`.
+
 | # | Question | Status | Attached gates |
 |---|---|---|---|
 | Q1a | Is the integrated rehearsal loop competitively novel? | ✅ settled-go (owner ruling 2026-08-12) | E1 |

@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 actual semantic-path checkpoint: D3482 joins all 182 named target/candidate
+cells to the selected model histories. The 0.90 frontier sees 19 of 58 known possible
+reintroductions and executes eight; partial misses never become prevention proofs.
+Six controls and independent board/identity/source-mass replay across all 364 arms
+with seven corruption refusals pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md`.
+This advances disposable D3262 research only. Engine D3478, deeper semantic selection,
+common proof/contrast/cost and full production/source/A4/1.0 obligations remain open.
+No milestone/capability promotion.
+
 2026-10-06 four-ply model checkpoint: D3481 compiles 4,127 actual ordered model
 leaves; independent replay verifies every legal path and all 386 candidate-arm
 mass/residual values, with eight actual corruption refusals. Three-layer minimum

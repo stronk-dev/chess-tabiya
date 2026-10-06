@@ -615,6 +615,19 @@ semantic-search-maia-fourth-ply-check: semantic-search-maia-final-ply-check
 semantic-search-maia-fourth-ply-independent:
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-maia-fourth-ply-check.py --negative-controls
 
+.PHONY: semantic-search-maia-target-update semantic-search-maia-target-check
+semantic-search-maia-target-update: semantic-search-coherent-bounded-targets-check semantic-search-maia-fourth-ply-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-maia-target-outcome.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-target-outcome.mjs --write
+
+semantic-search-maia-target-check: semantic-search-coherent-bounded-targets-check semantic-search-maia-fourth-ply-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-maia-target-outcome.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-target-outcome.mjs
+
+.PHONY: semantic-search-maia-target-independent
+semantic-search-maia-target-independent:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-maia-target-check.py --negative-controls
+
 semantic-search-coherent-exact-trigger-update: semantic-search-coherent-bounded-targets-check semantic-search-coherent-exact-replies-check
 	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/coherent-exact-trigger-outcome.ts
 	./node_modules/.bin/esbuild tools/d3262-search-calibration/coherent-exact-trigger-outcome.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/coherent-exact-trigger-outcome.mjs

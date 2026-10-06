@@ -121,6 +121,90 @@ function destinationAvailable(pos: Chess, target: Destination): boolean {
   return pos.turn === target.minor.color && samePiece(pos, target.minor) && pos.board.get(target.square) === undefined
     && locallyNonLosingQuiet(pos, { from: target.minor.square, to: target.square });
 }
+
+function beginTrackedCandidate(root: Chess, candidate: Move, target: Target): { readonly pos: Chess; readonly target: Target } | undefined {
+  // Preserve the already measured question: the named controlling pawn is
+  // a post-candidate identity, not a fact transferred to every alternative.
+  if (target.kind === "material") return playTracking(root, candidate, target);
+  const next = root.clone();
+  next.play(candidate);
+  if (!samePiece(next, target.minor)) return undefined;
+  return { pos: next, target: { ...target,
+    controllingPawn: target.controllingPawn !== undefined && samePiece(next, target.controllingPawn)
+      ? target.controllingPawn : undefined } };
+}
+function terminalReason(pos: Chess): string | null {
+  if (legalMoves(pos).length === 0) return pos.isCheck() ? "CHECKMATE" : "STALEMATE";
+  if (pos.isInsufficientMaterial()) return "INSUFFICIENT_MATERIAL";
+  if (pos.halfmoves >= 150) return "SEVENTYFIVE_MOVES";
+  return null; // Unavailable pre-root history cannot prove fivefold repetition.
+}
+function availableFollow(pos: Chess, target: Target): Move | undefined {
+  if (terminalReason(pos) !== null) return undefined;
+  if (target.kind === "material") return positiveTargetCapture(pos, target);
+  return destinationAvailable(pos, target) ? { from: target.minor.square, to: target.square } : undefined;
+}
+function externalTarget(target: Target | undefined): unknown {
+  const piece = (entry: Identity) => ({ ...entry, square: makeSquare(entry.square) });
+  return target === undefined ? null : target.kind === "material"
+    ? { kind: target.kind, attacker: piece(target.attacker), target: piece(target.target) }
+    : { kind: target.kind, minor: piece(target.minor),
+      controllingPawn: target.controllingPawn === undefined ? null : piece(target.controllingPawn), square: makeSquare(target.square) };
+}
+
+export type TargetPathObservation = {
+  readonly immediate: Reading["immediate"];
+  readonly opportunityAtThirdPly: boolean;
+  readonly reintroducedAtThirdPly: boolean;
+  readonly executedAtFourthPly: boolean;
+  readonly executionWitness: readonly string[] | null;
+  readonly snapshots: readonly {
+    readonly ply: number; readonly fen: string; readonly terminalReason: string | null;
+    readonly tracked: unknown; readonly availableMoveUci: string | null;
+  }[];
+};
+
+// Observe only the supplied legal history. No alternate learner defence or
+// automatically appended target capture is substituted into its population.
+export function observeTargetPath(rootFen: string, historyUci: readonly string[], definition: any): TargetPathObservation {
+  check(historyUci.length >= 1 && historyUci.length <= 4, "Target observation requires one to four actual plies");
+  const root = position(rootFen), originalTarget = targetFrom(definition);
+  check(originalTarget.kind === "material" ? samePiece(root, originalTarget.attacker) && samePiece(root, originalTarget.target)
+    : samePiece(root, originalTarget.minor), "Named target identity absent at root");
+  let pos = root, tracked: Target | undefined = originalTarget;
+  let immediate: Reading["immediate"] = "identity_lost";
+  let opportunityAtThirdPly = false, executedAtFourthPly = false;
+  const snapshots: TargetPathObservation["snapshots"][number][] = [];
+  for (const [index, uci] of historyUci.entries()) {
+    check(terminalReason(pos) === null, "Actual target path continues past a game terminal");
+    const parsed = parseUci(uci);
+    check(parsed !== undefined, `Invalid actual target UCI ${uci}`);
+    const move = normalizeMove(pos, parsed);
+    check(pos.isLegal(move) && externalUci(pos, move) === uci, `Illegal or noncanonical actual target UCI ${uci}`);
+    if (index === 3 && tracked !== undefined) {
+      const follow = availableFollow(pos, tracked);
+      executedAtFourthPly = follow !== undefined && externalUci(pos, follow) === uci;
+    }
+    const nextTracked = tracked === undefined ? undefined : index === 0
+      ? beginTrackedCandidate(pos, move, tracked) : playTracking(pos, move, tracked);
+    if (index === 0 && nextTracked === undefined) {
+      immediate = originalTarget.kind === "material" && exchangeCaptureAt(pos, move)?.square !== originalTarget.attacker.square
+        ? "identity_lost" : "removed";
+    }
+    const next = pos.clone();
+    next.play(move);
+    pos = next;
+    tracked = nextTracked?.target;
+    const follow = tracked === undefined ? undefined : availableFollow(pos, tracked);
+    if (index === 0 && tracked !== undefined) immediate = follow === undefined ? "removed" : "preserved";
+    if (index === 2) opportunityAtThirdPly = follow !== undefined;
+    snapshots.push({ ply: index + 1, fen: makeFen(pos.toSetup()), terminalReason: terminalReason(pos),
+      tracked: externalTarget(tracked), availableMoveUci: follow === undefined ? null : externalUci(pos, follow) });
+  }
+  return { immediate, opportunityAtThirdPly,
+    reintroducedAtThirdPly: immediate === "removed" && opportunityAtThirdPly,
+    executedAtFourthPly, executionWitness: executedAtFourthPly ? [...historyUci] : null, snapshots };
+}
 function reading(immediate: Reading["immediate"], witness: readonly string[] | null, refutation: readonly string[] | null,
   universal: boolean, visited: number, kind: Reading["kind"] = "result"): Reading {
   return { kind, immediate, reintroducedWithin3Ply: immediate === "removed" && witness?.length === 4,
@@ -156,14 +240,7 @@ export function evaluateBoundedTarget(rootFen: string, candidateUci: string, def
     : samePiece(root, target.minor), "Named target identity absent at root");
   // A destination's named controlling pawn is a *post-candidate* identity.
   // Natural alternatives must not inherit its existence from the source move.
-  const tracked = target.kind === "material" ? playTracking(root, candidate, target) : (() => {
-    const next = root.clone();
-    next.play(candidate);
-    if (!samePiece(next, target.minor)) return undefined;
-    return { pos: next, target: { ...target,
-      controllingPawn: target.controllingPawn !== undefined && samePiece(next, target.controllingPawn)
-        ? target.controllingPawn : undefined } };
-  })();
+  const tracked = beginTrackedCandidate(root, candidate, target);
   if (tracked === undefined) {
     if (target.kind === "material" && exchangeCaptureAt(root, candidate)?.square !== target.attacker.square) {
       return reading("identity_lost", null, null, false, 1);

@@ -61,6 +61,25 @@ profile needs a joint path budget/stop rule, not merely one prefix repeated at e
 node. No new numerical production threshold is selected from this diagnostic, and
 greater retained mass still has not demonstrated greater useful semantic reach.
 
+[V] The model paths now join the same registered material/destination questions,
+without substituting exact learner replies or appending an unplayed target action.
+All 182 target/candidate cells / 364 arms remain. Node-local 0.90 visits 19 of 58
+known possible exact reintroductions and executes eight; 0.80 visits 16 and executes
+six. Opportunities use predecessor mass once, executions only actual selected
+leaf mass. Independent board/identity/source-mass replay and seven corruption
+refusals pass, alongside six target controls and preserved baseline tests. The local
+SEE/quiet-destination predicate is still the shared registered evaluator, not a
+separate independent strategic oracle. Counts, commands and source limits:
+`planning/semantic-consequence-search/d3262-coherent-maia-target-outcome.md`.
+
+[M] Greater retained model mass did not close the measured semantic gaps: 39 of
+58 known possible reintroductions are absent from the 0.90 visited paths. A selected
+model opportunity, actual target execution and all-defence proof need distinct
+claims. This supports testing the deeper semantic arm, not selecting a production
+threshold from this curated model population or calling missed threats prevented.
+All 364 partial negative/universal verdicts remain abstaining/not evaluated in the
+artifact cited above.
+
 [P] Outstanding: the 16,813 final-ply engine jobs are being captured through checked
 immutable intervals; no complete engine source or final-ply outcome is yet claimed. Semantic-
 target-preserving deeper traversal, the five-arm proof/abstention and natural-
