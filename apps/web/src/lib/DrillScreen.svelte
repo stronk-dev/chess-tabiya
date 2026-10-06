@@ -30,7 +30,7 @@
   import ModuleSeats from "./ModuleSeats.svelte";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
-  import { composedSeats, effectActive, toggleExpanded, type PlaySeatModule, type StagedCue } from "./module-seats.js";
+  import { composedSeats, effectActive, toggleExpanded, type PlayExpandedSeat, type PlaySeatModule, type StagedCue } from "./module-seats.js";
   import { boardPaint } from "./evidence/presented-view.js";
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
@@ -886,7 +886,7 @@
   let seatPending: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
   let seatFailed: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
   let seatDoorReasons: Readonly<Partial<Record<PlaySeatModule, string>>> = $state.raw({});
-  let seatExpanded: PlaySeatModule | undefined = $state();
+  let seatExpanded: PlayExpandedSeat | undefined = $state();
   let stagedCue: StagedCue | undefined = $state();
   let stagedUci: string | undefined;
   let stagedGeneration = 0;
@@ -1001,7 +1001,7 @@
     void queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [module] }, subject, [module]);
   }
 
-  function toggleSeat(module: PlaySeatModule): void {
+  function toggleSeat(module: PlayExpandedSeat): void {
     seatExpanded = toggleExpanded(seatExpanded, module);
     seatFocusSquares = undefined;
   }
@@ -1042,7 +1042,7 @@
 
   // §4.5: board paint is the expanded seat's own facts (or the held cue's); collapsing removes it.
   let seatPaint = $derived.by(() => {
-    const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined ? [] : seatPackets.get(seatExpanded)?.items ?? [];
+    const items = stagedCue?.state === "warning" ? stagedCue.packet.items : seatExpanded === undefined || seatExpanded === "guided_hint" ? [] : seatPackets.get(seatExpanded)?.items ?? [];
     return boardPaint(items);
   });
   // rfc/hint-distance.md §5/§7: the Guided Hint seat is shown exactly when the server-compiled preset
@@ -1053,7 +1053,7 @@
     try { return compileAssistanceRequest({ contextHint: activeAssistanceProfile, preference }); } catch { return undefined; }
   }
   const hintKey = (square: string): DrawShape["orig"] => square as DrawShape["orig"];
-  let hintOverlays: readonly DrawShape[] = $derived(hintMarks === undefined || hintMarks.rung === "pattern" || displayedNode.id !== run.activeCursor.nodeId ? [] : [
+  let hintOverlays: readonly DrawShape[] = $derived(seatExpanded !== "guided_hint" || stagedCue?.state === "warning" || hintMarks === undefined || hintMarks.rung === "pattern" || displayedNode.id !== run.activeCursor.nodeId ? [] : [
     ...hintMarks.squares.map((square) => ({ orig: hintKey(square), brush: "yellow" })),
     ...(hintMarks.rung === "square" ? [] : [{ orig: hintKey(hintMarks.piece.square), brush: "green" }]),
     ...(hintMarks.rung === "move" ? [{ orig: hintKey(hintMarks.arrow.from), dest: hintKey(hintMarks.arrow.to), brush: "green" }] : []),
@@ -2275,7 +2275,7 @@
               </section>
             {/if}
             {#if hints !== undefined && hintCeiling !== "off"}
-              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} />
+              <GuidedHintSeat {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
             {/if}
             {#if seats.length > 0}
               <ModuleSeats
@@ -2283,7 +2283,7 @@
                 packets={seatPackets}
                 pending={seatPending}
                 failed={seatFailed}
-                expanded={seatExpanded}
+                expanded={seatExpanded === "guided_hint" ? undefined : seatExpanded}
                 doorBlocked={seatDoorReasons}
                 staged={stagedCue}
                 onToggle={toggleSeat}
@@ -3235,6 +3235,17 @@
   .drill.compact {
       --stage-pad: 8px;
       width: 100%;
+  }
+
+  .drill.compact .support-menu {
+    position: fixed;
+    top: calc(var(--topbar-h) + .4rem);
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    max-height: calc(100dvh - var(--topbar-h) - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .drill.compact .topbar {

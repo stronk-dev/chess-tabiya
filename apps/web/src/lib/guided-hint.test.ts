@@ -8,6 +8,7 @@ import { compileAssistanceRequest, hintDecisionStamp, hintReceiptDigest, type Dr
 
 import { ApiError, DrillApi, type GuidedHintClient, type HintRequestBody } from "./api.js";
 import GuidedHintSeat from "./GuidedHintSeat.svelte";
+import { PLAY_SEAT_MODULES, toggleExpanded } from "./module-seats.js";
 
 const revealedRun = (id = "hint-run", seq = 2): DrillRun => ({
   id,
@@ -41,6 +42,13 @@ function target(): HTMLElement {
 }
 
 afterEach(() => document.body.replaceChildren());
+
+it("Guided Hint shares the one-expanded authority without entering the module-packet protocol", () => {
+  expect(toggleExpanded("theory_breadcrumb", "guided_hint")).toBe("guided_hint");
+  expect(toggleExpanded("guided_hint", "theory_breadcrumb")).toBe("theory_breadcrumb");
+  expect(toggleExpanded("guided_hint", "guided_hint")).toBeUndefined();
+  expect(PLAY_SEAT_MODULES).not.toContain("guided_hint");
+});
 
 describe("DrillApi Guided Hint wire", () => {
   it("POSTs the decision with the writer header, polls and cancels one exact id, and refuses a malformed envelope", async () => {

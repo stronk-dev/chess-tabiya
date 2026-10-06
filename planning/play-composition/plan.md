@@ -40,9 +40,9 @@ remain in their owning RFCs.
     family-level Support summaries while retaining exact sentences in Inspector; collapses duplicate
     phase enums; removes UCI/ply/simulated transport vocabulary from ordinary controls; and names the
     bounded reveal after learner support rather than the evidence pipeline.
-12. The executable composition matrix retains 77 named screenshots: eleven reachable states at
-    all seven viewports, including real guard, terminal, promotion, rewind/fork/re-entry and Compare
-    journeys. The other five state columns depend exactly on learner-module emission.
+12. Historical 2026-08-27 checkpoint: the composition matrix retained 77 named screenshots across
+    eleven reachable states at seven viewports. Module emission subsequently added states 3, 5, 9
+    and 13 on 2026-09-24; the old five-column hold is superseded by checkpoint 21 below.
 13. Selected-square captions follow Chessboard's authoritative settled selection across pointer,
     keyboard, commit and history changes. The tablet branch band separates identity, horizontally
     scrollable cards and actions, so its real branch buttons are not covered by footer controls.
@@ -81,6 +81,13 @@ remain in their owning RFCs.
     inspect what changed; unavailable lighting names extra highlights; and terminal/classroom copy
     names analysis details and opened help. Advanced Inspector retains exact source and projection
     vocabulary.
+21. Guided Hint shares the real module expansion/paint authority while retaining its separate
+    protocol and exact decision/rung. The final permitted rung has a seven-viewport real-request
+    journey, including Theory → Hint without new requests or board movement. Compact preset radios
+    stay within the viewport. Normal matrix/full browser commands require 112 distinct successful
+    unretried current-run PNG attachments and retain the exact report/PNG bytes through later tiers.
+    Receipt: `hint-and-matrix-2026-10-06.md`. This is artifact completeness, not a waiver of the
+    max-load and full conformance obligations below.
 
 ## Remaining before archive
 
@@ -90,9 +97,11 @@ remain in their owning RFCs.
 2. Remove the remaining ordinary-surface vocabulary leaks named by §5. Related-pack title/SAN and
    the ordinary Support/terminal evidence-pipeline copy are complete; phase, compare, tablebase and
    voice families still need their compiled module renderers.
-3. Complete the five module-dependent acceptance states in the 7×16 matrix ([[D1834]]). States 1,
-   2, 4, 7, 8, 10, 11, 12, 14, 15 and 16 now retain 77/112 successful screenshots. States 3, 5,
-   6, 9 and 13 wait on accepted producer/module emission; do not count blocked cells as screenshots.
+3. Finish semantic acceptance of the 7×16 matrix ([[D1834]]). All 112 named attachments are now
+   required by the executable current-run checker, but the state-13 fixture asserts only three
+   default rail rows and its first badge. [[D3435]] owns the real every-seatable-module/A6 fixture,
+   including every badge and companion token; all actionable A3 and destination A4 obligations
+   remain. A screenshot name/count is not proof of the fixture's full semantic population.
 4. Bind the full Inspector's amended accepts list when `learner-modules` implements, including the
    D924 phase/pivotal/classifier/compare families.
 5. Reconcile `docs/drill-client.md`, close the remaining ledger rows, append final lifecycle logs,

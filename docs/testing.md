@@ -14,8 +14,9 @@ is not proof that the production application routes an endpoint.
 | Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes, including the published-pack evidence-digest invariant | Authored chess judgement or software contracts already expressible with synthetic fixtures |
 | Browser journeys | `make test-browser-smoke` | Stable user journeys asserted through roles, state and outcomes | Mutable authored prose or exhaustive viewport coverage |
 | Real-content integration | `make test-browser-content` | Representative draft/pack integration with the application | Chess-truth validation or product behavior already expressible with a synthetic fixture |
-| Responsive/accessibility matrices | `make test-browser-matrix` | Post-gesture geometry, input projections, semantic board/navigation, WCAG A/AA scanning, and real mobile input semantics | A resting screenshot |
-| Complete browser gate | `make test-browser-ci` | The same three named browser tiers used by GitHub | Release-image, migration or backup proof |
+| Responsive/accessibility matrices | `make test-browser-matrix` | Post-gesture geometry/input/accessibility plus all 112 distinct successful unretried composition screenshot attachments | A resting screenshot, cell names alone, or complete every-module semantic conformance |
+| Packaged default journey | `make test-browser-production` | Built default configuration, disclosed committed catalogue content, and a real rehearsal without development fixture injection | A deployment-envelope, migration or backup drill |
+| Complete browser gate | `make test-browser-ci` | The same four named browser tiers used by GitHub | Release-image, migration or backup proof |
 | Full non-browser gate | `make verify` | Software + governance + real-content targets, matching the three required GitHub jobs | Browser or release-image proof |
 | Exact local CI | `make ci-local` | Pinned Node/pnpm, Stockfish and Compose preflight, then all required non-browser and browser tiers | Ordinary development checks |
 
@@ -25,10 +26,15 @@ shared-runner scheduler or garbage-collection pause from becoming a false produc
 budgets and sample populations remain explicit in the tests. User-perceived tail latency belongs to the
 browser and owner-use instruments, not a lucky or unlucky single Node timer observation.
 
-`make test-browser` remains a convenient single Playwright invocation for local debugging. GitHub
+`make test-browser` remains a convenient single Playwright invocation with the complete screenshot
+artifact check for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core
-journey, real-content integration, or the interaction matrix. Traces, screenshots and the HTML
-report are uploaded when a browser tier fails.
+journey, real-content integration, interaction matrix, or packaged default. Traces, screenshots and
+the HTML report are uploaded on every outcome. The matrix verifier reads the current JSON report,
+refuses missing/duplicate/foreign/failed/retried/wrong-size or out-of-run attachments, then preserves
+the report and PNG bytes under `test-results/composition/<report-hash>/`. Later tiers cannot erase
+that matrix generation. Its 19 Node controls test the evidence join, not image content or complete
+A3/A4/A6 acceptance; the remaining every-module max-load fixture is tracked as D3435.
 
 Playwright has explicit desktop Chromium and Pixel 7 projects. Project-level test filters keep
 ordinary journeys on one desktop browser while `@mobile` matrix cases inherit the device's mobile

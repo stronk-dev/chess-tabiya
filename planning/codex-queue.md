@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+[[D3435]] is the next executable play-composition acceptance task after the current wave's full
+gates and commit: replace state 13's three-default-row/first-badge check with the real complete
+seatable-module population required by A6, at all seven viewports. Activate modules through the
+existing compiler/request paths and preserve honest source absence; never mint packets or treat
+112 screenshot names as semantic completion. [[D1834]]/[[D910]], complete A3/A4, Inspector and
+ceiling/owner-use discharges remain open. The current [[D3432]]–[[D3434]] wave binds Guided Hint to
+the shared expansion/paint authority, preserves decision/rung without re-requesting on reopen,
+fixes phone preset containment, and adds the current-run artifact verifier/retention path.
+Receipt: `planning/play-composition/hint-and-matrix-2026-10-06.md`; full gates close out before
+moving to the next implementation. Routine metadata/hash maintenance remains automatic.
+
 [[D3431]] removes repeated semantic collection across growing longitudinal prefixes using
 bounded exact-edge membership reuse, without narrowing the source closure or changing revision 1.
 Full source replay, legal-population enumeration, ownership/refs/denominators and lease/drain

@@ -10,6 +10,7 @@ SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfi
 export SF_CMD
 
 .PHONY: longitudinal-projector-check
+.PHONY: play-composition-hint-check play-composition-client-check play-composition-matrix-contract
 
 .PHONY: foundation-source-author-audit foundation-source-author-repair tablebase-census-contract tablebase-census-check phase-classifier-census phase-band-census phase-source-composition-census phase-source-composition-author-contract phase-source-composition-fresh-review phase-source-composition-author-repair endgame-technique-applicability-census endgame-method-path-contract endgame-setup-reachability-contract endgame-setup-convention-validation bot-trait-screen-contract bot-trait-screen bot-endgame-trait-screen-contract bot-endgame-trait-screen bot-human-endgame-reference-contract bot-human-endgame-reference-population bot-human-endgame-reference bot-human-endgame-reference-report
 
@@ -100,6 +101,7 @@ staged-process-contracts:
 
 test-browser:
 	pnpm test:browser
+	node tools/play-composition-matrix.mjs
 
 test-browser-smoke:
 	./node_modules/.bin/playwright test --grep-invert "@content|@matrix"
@@ -107,8 +109,18 @@ test-browser-smoke:
 test-browser-content:
 	./node_modules/.bin/playwright test --grep "@content"
 
-test-browser-matrix:
+test-browser-matrix: play-composition-matrix-contract
 	./node_modules/.bin/playwright test --grep "@matrix"
+	node tools/play-composition-matrix.mjs
+
+play-composition-hint-check:
+	./node_modules/.bin/playwright test --grep "@matrix final Guided Hint"
+
+play-composition-client-check:
+	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts
+
+play-composition-matrix-contract:
+	node --test tools/play-composition-matrix.test.mjs
 
 test-browser-production:
 	./node_modules/.bin/playwright test --config playwright.production.config.ts
@@ -2447,7 +2459,7 @@ rating-pool-research:
 build:
 	pnpm build
 
-verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check
+verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract
 
 verify-governance: register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 

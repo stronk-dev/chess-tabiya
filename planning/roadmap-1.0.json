@@ -1257,7 +1257,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:cf2a4807b0588bb561ce609b297c122ffbd41d868d465d57f8389caabe65a809"
+              "digest": "sha256:38f662109b5d4d2bf91fe1601b30c3022d8fd740f15b7c582dbb25191d1e8989"
             },
             {
               "kind": "work_state",
@@ -1383,7 +1383,7 @@
         "nextAction": "Review D3309's versioned structural-reading successor plan, then implement its per-kind operand and visible-fidelity contract before migrating that Inspector section; finish the other Inspector consumers, raw-id leaks and evidence-presentation D1/D9; rule the D1639 per-context Guided Hint ceilings before claiming complete opinionated defaults.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3427 closes the existing client transport-retry identity defect: exact ordered calculation requests retain their UUID through transport/invalid-receipt failure and retire it on validated admission. Three predecessor controls become 152 focused passes with clean types and two built-browser journeys. Authenticated HTTP/SQLite response loss replays one admitted batch/jobs; a later deliberate calculation gets a fresh identity. Support reports uncertainty, not false non-admission. No server canonical-request policy, reload or terminal-status contract changes; D3426 remains held. Zero untriaged/1684 live, no item doing; broad local verification is logged before commit. D3424/D3425 close the existing calculation admission and successful-completion path: complete 202 batch/job/node/kind parsing, mutation-stable pending jobs and exact result consumption reach the Support control. Twenty-two controlled predecessor failures become 150 focused passes with clean types; authenticated production HTTP/SQLite and the built browser prove fresh and repeated calculations at one node. D3426 retains the missing authenticated terminal-batch status/retry/resume contract. Full local gates are logged before commit, with zero untriaged/1684 live and no item doing. No complete calculation recovery, source persistence, full RFC or milestone is claimed. D3421 closes the exact modern Inspector corpus server-to-client join and routes admitted facts through the registered component. Authenticated HTTP controls exercise the real web parser; mounted screens preserve standalone v1, modern v2, loading, failure, retry and below-floor states. Population attribution, canonical counts, floors, recency, unlisted mass and committed membership remain intact; crossed tuples and contradictory availability refuse. This is one complete consumer join, not full Inspector or source/RFC completion. Presets and Guided Hint drive the shipped learner module seats. Compare's narrative, trajectory, strips, routes and position facts use admitted typed components; Reading, Story and Compare voice derive provider/checker sentences from those same sealed components. Recorded engine readings speak their source authoring date through typed components while staying post-provider. The Inspector's sparse-reading notice follows a validated response boolean, and its move-transition section now renders sealed admitted components. The existing Claude UX landing adds a phone companion below the unchanged board, one-activity Advanced help settings, high-contrast Accessibility settings, screen-local streamer mode, factual Home suggestions and clearer import/live/account disclosures. D3312 preserves the Home rail's objective and host-owned history facts; D3313 replaces gesture-breaking full redraws with pointer-bound invalidation and a held-touch identity/submission fixture. D3331 replaces inaccessible evidence captions/endpoints/chart points with native controls, keeps read-only views free of inert buttons and repairs figure captions; 15 mounted-component cases and warning-free typecheck prove this scoped repair, not full board/browser/owner-use acceptance. Coach-wall ordering stays owner-blocked under D1479. The adjacent structural section is held on D3309's measured operand loss; other Inspector-modal legacy sections, raw-id leaks, evidence-presentation D1/D9 and the owner's D1639 ceiling ruling remain open. D3411–D3414 repair operation-owned voice cancellation/deadline/shutdown through authenticated outbound HTTP, recover failed engine discovery without losing idempotency, make explicit learner retry delete the failed record before unchanged re-POST, and key retained sealed horizons by complete decision identity. Sixty focused tests and clean types pass; four predecessor mutations fail fourteen assertions, then restored fixed bytes pass. The rebuilt browser retry journey passes. This scoped reliability checkpoint does not discharge full evidence availability, integrated latency, Advanced hintDistance, proposed ceilings or owner use. D3415–D3416 now retain live searches under cache pressure and real client cleanup identity at the 200-poll limit or transport failure, with local errors instead of invented server receipts. Four predecessor controls fail, then 64 focused tests and clean types pass; the rebuilt browser suite passes 121 journeys with one existing optional skip and zero retries. Zero untriaged/1683 live; full support/source/ceiling/codec/owner-use obligations remain open.",
+          "summary": "D3432–D3434 close the shared Guided Hint composition/paint seam, narrow-phone preset radio clipping, and missing/unretained screenshot population. The real final-permitted-rung journey preserves the decision, rung, request trace and exact board box through Theory-to-Hint at all seven viewports; original unbound behavior fails its permanent control. Replacement matrix and packaged gates pass 50 plus one journeys, with 112/112 successful unretried PNG attachments accepted and byte-retained through the packaged tier. The unchanged-UI smoke/content tiers pass 68 plus five journeys with one existing optional real-Maia skip. The first aggregate gate's inline-body artifact refusal remains recorded, not relabelled as success. Nineteen artifact controls and 73 focused client tests pass; complete replacement software/content/governance and staged proofs are recorded before commit. D3435 queues the actual every-module max-load fixture, since today's state 13 checks three default rows and its first badge. D1834/D910, full A3/A4/A6, remaining Inspector/vocabulary/source joins, proposed D1639 ceilings, Advanced hintDistance, latency/analytics and owner-use discharges remain open. Existing shipped presets, module seats, exact calculation admission/retry, sealed Compare/Story/Inspector and board-input repairs remain linked in the checkpoint evidence. Zero untriaged of 1686 live items; none doing. No whole RFC, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
@@ -1421,13 +1421,24 @@
             "planning/evidence-job-durability/calculation-client-2026-10-06.md",
             "apps/server/src/analysis-client.test.ts",
             "apps/web/src/lib/analysis-response.test.ts",
-            "apps/web/src/lib/run-state.test.ts"
+            "apps/web/src/lib/run-state.test.ts",
+            "planning/play-composition/hint-and-matrix-2026-10-06.md",
+            "planning/play-composition/plan.md",
+            "rfc/play-composition.md",
+            "apps/web/src/lib/GuidedHintSeat.svelte",
+            "apps/web/src/lib/module-seats.ts",
+            "tools/play-composition-matrix.mjs",
+            "tools/play-composition-matrix.test.mjs",
+            "docs/play-composition.md",
+            "docs/testing.md",
+            "planning/play-composition/matrix-evidence-2026-10-06.json",
+            "planning/roadmap-to-done.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:cf2a4807b0588bb561ce609b297c122ffbd41d868d465d57f8389caabe65a809"
+              "digest": "sha256:38f662109b5d4d2bf91fe1601b30c3022d8fd740f15b7c582dbb25191d1e8989"
             },
             {
               "kind": "rfc",
@@ -1533,6 +1544,11 @@
               "kind": "work_state",
               "id": "D3427",
               "digest": "sha256:e3bc7d250350d1049fbcbd6d03673c8a56d516e1601e05f38ca84afaea677e04"
+            },
+            {
+              "kind": "rfc",
+              "id": "play-composition.md",
+              "digest": "sha256:89f1de613045197debf0de869727eb51082589ed6a7f74b2981fc972675fbc84"
             }
           ]
         },

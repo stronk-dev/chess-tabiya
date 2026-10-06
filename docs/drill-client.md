@@ -204,6 +204,11 @@ suppression when a context, access or source ceiling removes something—for exa
 This makes intentional silence distinguishable from missing or broken analysis. The label and
 promise follow per-workflow preference changes; they do not move individual evidence controls out
 of Advanced.
+Guided Hint shares the Support modules' one-expanded-card state, while retaining its separate
+hint request/poll protocol. Switching modules hides its board marks and card, not its current
+decision or rung; reopening an already answered hint never makes another request. The compact
+help-style menu is viewport-inset and vertically bounded, so its preset radios remain reachable
+on narrow phones without affecting board geometry.
 The Settings copy of those advanced preferences consumes both the workflow module ceiling and
 `permittedAssistance`. A Match / Arena profile, whose ceiling is rules-only, keeps all nine saved
 values but disables their controls and binds each one to the visible reason that optional support

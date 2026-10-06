@@ -3,7 +3,7 @@
 // timing (intent-presets Checkpoint B); `blunder_prevention` owns the one board-adjacent head slot;
 // every other seat is a rail seat in the companion region. At most one seat is expanded; expanding
 // one collapses the previous. On-request seats carry no count before a request: the row is the door.
-// Guided Hint's seat is owned by the hint-distance lane and is not modelled here.
+// Guided Hint keeps its hint-distance delivery protocol, but shares this expansion authority.
 
 import { MODULE_LABELS, MODULE_POLICIES, type CompiledAssistanceEffect, type ModuleId, type PresentedEvidenceItem } from "@chess-tabiya/runtime";
 
@@ -20,6 +20,8 @@ export const PLAY_SEAT_MODULES = Object.freeze([
   "blunder_prevention", "postcommit_nudge", "sight_on_request", "threat_radar", "structure_nudge", "theory_breadcrumb", "compare_coach",
 ] as const satisfies readonly ModuleId[]);
 export type PlaySeatModule = (typeof PLAY_SEAT_MODULES)[number];
+/** Guided Hint keeps its own delivery protocol but shares the same expansion authority. */
+export type PlayExpandedSeat = PlaySeatModule | "guided_hint";
 
 const PLAY_TIMINGS = new Set(["pre_commit", "at_commit", "post_commit", "checkpoint"]);
 
@@ -65,7 +67,7 @@ export function seatBadge(packet: ParsedModulePacket | undefined): number | null
 }
 
 /** One-expanded protocol (play-composition §4.1): expanding one collapses the previous. */
-export function toggleExpanded(current: PlaySeatModule | undefined, module: PlaySeatModule): PlaySeatModule | undefined {
+export function toggleExpanded(current: PlayExpandedSeat | undefined, module: PlayExpandedSeat): PlayExpandedSeat | undefined {
   return current === module ? undefined : module;
 }
 

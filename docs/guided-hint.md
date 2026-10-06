@@ -10,6 +10,12 @@ a ceiling other than `off`, the run's Support region shows a seat headed **Ask f
 helps**. It has one button: **Hint**. After the first answer the button reads **A little more**.
 There is no rung or source picker in ordinary play.
 
+The first **Hint** opens the card and makes one request. Guided Hint shares the other Support
+modules' one-expanded-card state. Opening Theory or another module collapses it and removes its
+board marks without resetting the current decision, cancelling an operation, or advancing the
+ladder. **Open guided hint** restores an already revealed rung without another request. The card
+stays mounted while collapsed; decision changes and teardown still own reset/cancellation.
+
 The seat never asks on its own. The learner has to press the button, and the request only runs when
 the run's disclosure boundary is open, for example after **Show support for this position** in Just
 Play. When the boundary is closed, the seat says so instead of showing a hint.
@@ -132,6 +138,10 @@ starts (`#refuseRatedAssistance`).
   exact closed honest-empty response, source-unavailable, voice fallback, and the shared search and packet service,
   all through `createApplication`.
 - `apps/web/src/lib/guided-hint.test.ts` covers the wire and the seat.
+- `make play-composition-client-check` runs the mounted hint and run-screen contracts.
+- The real state-6 browser journey covers the final permitted rung, shared expansion, retained
+  progress, request counts and actual board marks at all seven composition projections. It runs
+  in `make test-browser-ci`; `make play-composition-hint-check` selects just that regression.
 - The browser journey in `tests/browser/drill.spec.ts` runs Guide me → Hint → A little more
   up to the ceiling, then resets on commit. A separate transport-failure journey proves explicit
   DELETE → unchanged POST retry and subsequent ladder continuation against the real server.

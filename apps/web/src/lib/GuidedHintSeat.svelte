@@ -25,9 +25,11 @@
     assistanceRequest: () => RequestedAssistanceV1 | undefined;
     onMarks?: ((marks: HintDeliveryMarks | undefined) => void) | undefined;
     pollIntervalMs?: number;
+    expanded?: boolean;
+    onToggle?: (() => void) | undefined;
   }
 
-  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 350 }: Props = $props();
+  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 350, expanded = true, onToggle }: Props = $props();
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -156,9 +158,15 @@
   }
 </script>
 
-<section class="module-seat guided-hint" aria-labelledby="guided-hint-title" data-module="guided_hint">
+<section class="module-seat guided-hint" aria-label="Ask for the least that helps" data-module="guided_hint" data-seat-class="rail" data-seat-state={expanded ? "expanded" : revealed === null ? "door" : "filled"}>
   <p class="eyebrow">Stuck?</p>
-  <h2 id="guided-hint-title">Ask for the least that helps</h2>
+  <h2 id="guided-hint-title">
+    {#if onToggle === undefined}Ask for the least that helps
+    {:else}
+      <button type="button" class="seat-row" aria-label={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"} aria-expanded={expanded} aria-controls="guided-hint-card" disabled={!expanded && revealed === null && (!canWrite || busy)} onclick={() => { const shouldAsk = !expanded && revealed === null; onToggle?.(); if (shouldAsk) void ask(); }}>Ask for the least that helps</button>
+    {/if}
+  </h2>
+  <div class="hint-card" id="guided-hint-card" hidden={!expanded}>
   {#if sentence !== undefined}<p class="hint-sentence" role="status" data-hint-rung={revealed}>{sentence}</p>{/if}
   {#if message !== undefined}<p class="hint-message" role={response?.state === "pending" ? "status" : undefined}>{message}</p>{/if}
   <div class="hint-actions">
@@ -168,6 +176,7 @@
     {#if next === undefined && revealed !== null}<span id="guided-hint-limit" class="honest">That is as far as this help style goes here.</span>{/if}
     {#if !canWrite}<span class="honest">This read-only view cannot ask for hints.</span>{/if}
   </div>
+  </div>
 </section>
 
 <style>
@@ -176,6 +185,9 @@
   .eyebrow { color:var(--accent); font:700 .62rem ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
   .guided-hint h2 { font:600 1rem/1.2 var(--display-font); }
   .hint-sentence { font-size:.82rem; line-height:1.45; }
+  .hint-card { display:grid; gap:.4rem; }
+  .hint-card[hidden] { display:none; }
+  .seat-row { width:100%; border:0; padding:0; color:inherit; background:none; font:inherit; text-align:left; cursor:pointer; }
   .hint-message { color:var(--muted); font-size:.76rem; line-height:1.4; }
   .hint-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; }
   .hint-actions button { justify-self:start; padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }

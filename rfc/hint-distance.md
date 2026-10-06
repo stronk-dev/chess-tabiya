@@ -1,5 +1,12 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-06 composition checkpoint:** D3433 connects the existing mounted seat to the play
+  queue's expansion authority. Collapse retains the exact decision and rung but removes its card
+  and board paint; reopening does not request another hint. The real final-permitted-rung journey
+  runs at all seven composition viewports. The hint request/poll/admission path, source, proposed
+  ceiling table, Advanced codec and full-RFC discharges are unchanged. Receipt:
+  `planning/play-composition/hint-and-matrix-2026-10-06.md`.
+
 - **2026-10-05 pressure/client cleanup checkpoint:** D3415–D3416 preserve live search subscribers under horizon-cache pressure and retain real operation identity after bounded polling or a transport failure. The client uses local error state, not an invented failed server receipt; explicit retry/reset/teardown cancels the known operation. Four permanent controls first fail against the predecessor, then all 64 focused cases and clean types pass. No policy, source, rung, codec or full-RFC completion changes.
 
 - **2026-10-05 lifetime and recovery checkpoint:** D3411–D3414 carry each operation's abort lifetime through application/health/external voice, detach ignored-abort work on cancel/stale/evict/shutdown, retain sibling search subscribers, and key sealed horizons by the complete decision digest. Engine discovery coalesces only while pending; failed starts and unavailable horizons no longer poison recovery. Explicit learner retry deletes the failed record before unchanged decision/rung re-POST, preserving idempotency and no autonomous retry. Permanent service, authenticated outbound HTTP, mounted seat and browser controls cover these paths. No source, ceiling, sampler, Advanced codec, proposed-table validation or full-RFC completion changes.

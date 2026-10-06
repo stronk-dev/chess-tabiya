@@ -34,7 +34,14 @@ fact count; an on-request row carries no count before it is opened), expands to 
 quiet when honestly empty; at most one seat is expanded. The Staged-move risk check owns the one
 board-adjacent head slot and appears only while a staged move is held for Revise or play-anyway.
 Every seat renders only sealed presentation components from the module query, and board paint is
-the expanded seat's own facts. The Guided Hint seat belongs to the hint-distance lane.
+the expanded seat's own facts. Guided Hint uses its own hint-distance delivery protocol but the
+same expansion authority: opening it collapses the other module card and vice versa. A collapsed
+hint keeps its exact decision and rung while hiding both its card and board marks. Reopening it
+does not request another hint; only **Hint** or **A little more** advances the disclosure.
+
+On compact screens the help-style popover is inset from both viewport edges, independently of
+its topbar trigger. Its declared scroll region bounds long preset text without displacing the board
+or putting radio controls outside the phone viewport.
 
 Raw position structure, transition census, human-model candidates and corpus counts are available
 only in the explicit full-screen Evidence Inspector. Ordinary play does not render those diagnostic
@@ -71,5 +78,19 @@ A module-seat matrix covers composition states 3 (staged move with the head-slot
 real move submission), 5 (a rail module expanded), 9 (honest-empty and not-consulted states) and 13
 (max load, exactly one expanded) at all seven projections with the board rectangle unchanged.
 
-The RFC remains implementing: state 6 (guided hint at its final stage) waits on the hint-distance
-lane's seat, and the remaining vocabulary cleanup is still required before archival.
+State 6 uses the actual hint request/poll protocol through the preset's final permitted `distance`
+rung. At every projection it checks one expanded seat, board stability, collapse/reopen without
+another request, and removal/restoration of the hint's real board marks. It does not change the
+proposed ceiling table or reveal a direct move.
+
+`make test-browser-matrix` and `make test-browser` require all 112 distinct current-run successful,
+unretried PNG attachments. The JSON report, attachment dimensions and closed cell names are checked
+by `tools/play-composition-matrix.mjs`. The validated matrix is copied to a report-digest-bound
+directory under `test-results/composition/`, which survives later browser tiers and is included in
+CI's always-uploaded evidence. `make play-composition-matrix-contract` tests missing, duplicate,
+foreign, failed, retried, wrong-size and escaped attachments; synthetic PNG containers test the
+verifier, never substitute for real browser screenshots.
+
+The RFC remains implementing. A complete screenshot population does not prove every A3 hit target,
+A4 vocabulary destination, every-module max-load conformance, proposed ceiling, or owner-use
+discharge; the remaining obligations still gate archival.

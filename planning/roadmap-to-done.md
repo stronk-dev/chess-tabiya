@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 composition checkpoint: [[D3432]]–[[D3434]] close Guided Hint's unbound expansion/paint,
+the narrow-phone unreachable preset radios, and incomplete/unretained screenshot artifacts. The
+real seven-viewport hint journey preserves the exact decision/rung, request counts and board box.
+The artifact checker accepts 112/112 successful unretried cells and their retained bytes survive
+the packaged-default tier. [[D3435]] queues the actual remaining every-module max-load fixture;
+[[D1834]]/[[D910]], full A3/A4/A6, Inspector/vocabulary, ceilings and owner-use discharges remain
+open. This is an advanced checkpoint, not a completed milestone or capability. Receipt:
+`planning/play-composition/hint-and-matrix-2026-10-06.md`.
+
 2026-10-06 bot-reference checkpoint: [[D3430]] revalidates all historical priced roots and all
 24 fixed band/window/half cells, retaining mate domains and shared-game clusters. The complete
 reference has 1,640 mixed and 78 mate-only roots; 1,391 cp-played mixed roots and 1,056 multi-window

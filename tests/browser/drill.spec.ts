@@ -34,6 +34,12 @@ async function register(page: Page): Promise<string> {
 async function choosePreset(page: Page, name: RegExp): Promise<void> {
   const summary = page.locator("details.assistance-control summary");
   await summary.click();
+  const menu = page.locator("details.assistance-control .support-menu");
+  const viewport = page.viewportSize();
+  const menuBox = await menu.boundingBox();
+  if (viewport === null || menuBox === null) throw new Error("Help-style menu has no viewport or box");
+  expect(menuBox.x).toBeGreaterThanOrEqual(0);
+  expect(menuBox.x + menuBox.width).toBeLessThanOrEqual(viewport.width);
   await page.getByRole("radio", { name }).check();
   await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
   if (await page.locator("details.assistance-control").getAttribute("open") !== null) await summary.click();
@@ -114,13 +120,10 @@ async function attachCompositionCell(
   viewport: { readonly width: number; readonly height: number },
   state: string,
 ): Promise<void> {
-  await testInfo.attach(
-    `play-composition-${viewport.width}x${viewport.height}-${state}`,
-    {
-      body: await page.screenshot({ animations: "disabled" }),
-      contentType: "image/png",
-    },
-  );
+  const name = `play-composition-${viewport.width}x${viewport.height}-${state}`;
+  const path = testInfo.outputPath(`${name}.png`);
+  await page.screenshot({ path, animations: "disabled" });
+  await testInfo.attach(name, { path, contentType: "image/png" });
 }
 
 const ENDGAME_VIEWPORT_PACKS = [
@@ -2361,10 +2364,59 @@ test("selected-square support clears with the visible selection and displayed po
 });
 
 // rfc/play-composition.md §6 states 3, 5, 9 and 13 — the module-emitter-dependent columns — over
-// real module seats fed by the module query route (module-registration §2.5.2). State 6 (guided
-// hint at its final stage) belongs to the hint-distance lane that owns the Guided Hint seat.
+// real module seats fed by the module query route (module-registration §2.5.2). The adjacent
+// state-6 journey uses the real hint-distance request/poll protocol at the permitted final rung.
 // The Scholar's-mate trap is a Just Play position the learner (Black) plays under Support.
 const SCHOLAR_TRAP = "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3";
+
+test("@matrix final Guided Hint shares one expanded seat and preserves the board and rung", async ({ page }, testInfo) => {
+  test.setTimeout(180_000);
+  const projections = [
+    { width: 1440, height: 900 }, { width: 1366, height: 768 }, { width: 1280, height: 720 },
+    { width: 768, height: 1024 }, { width: 430, height: 932 }, { width: 390, height: 844 }, { width: 360, height: 680 },
+  ];
+  const postedRungs: string[] = [];
+  page.on("request", request => {
+    if (request.method() === "POST" && request.url().endsWith("/hints")) postedRungs.push(String(request.postDataJSON().rung));
+  });
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await startSupportFromFen(page, "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1", "white");
+    await choosePreset(page, /Guide me/u);
+    await assertRunViewport(page, viewport);
+    const calm = await page.getByLabel("Chessboard").boundingBox();
+    await showSupport(page);
+    await page.getByRole("button", { name: "Show support for this position" }).click();
+    const hint = page.locator('[data-module="guided_hint"]');
+    const firstPost = postedRungs.length;
+    await hint.getByRole("button", { name: "Hint", exact: true }).click();
+    for (const [rung, sentence] of [["pattern", "finds a double attack for you."], ["square", "It involves d1 and d3."], ["piece", "The piece involved is your knight on a4."], ["distance", "It appears after this move."]] as const) {
+      if (rung !== "pattern") await hint.getByRole("button", { name: "A little more", exact: true }).click();
+      await expect(hint.locator(`[data-hint-rung="${rung}"]`)).toContainText(sentence);
+      await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    }
+    expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
+    await expect(hint.getByRole("button", { name: "A little more", exact: true })).toBeDisabled();
+    await expect(hint).not.toContainText("Nb2");
+    const painted = page.locator(".cg-shapes circle");
+    await expect.poll(() => painted.count()).toBeGreaterThan(0);
+    const markCount = await painted.count();
+    const theory = page.locator('[data-module="theory_breadcrumb"]');
+    await theory.locator(".seat-row").click();
+    await expect(hint.locator(".hint-card")).toBeHidden();
+    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+    await expect(painted).toHaveCount(0);
+    await hint.getByRole("button", { name: "Open guided hint", exact: true }).click();
+    await expect(hint.locator('[data-hint-rung="distance"]')).toBeVisible();
+    await expect(theory.locator(".seat-card")).toHaveCount(0);
+    await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
+    await expect(painted).toHaveCount(markCount);
+    expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    await attachCompositionCell(page, testInfo, viewport, "06-guided-hint-final-stage");
+  }
+});
 
 async function startSupportFromFen(page: Page, fen: string, side: "white" | "black"): Promise<void> {
   await page.goto("/play");
