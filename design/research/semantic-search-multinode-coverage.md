@@ -46,6 +46,21 @@ entrypoints use the packaged offline checkpoint rather than an absent downloader
 Source identities, complete legal/support counts, commands and limitations:
 `planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md`.
 
+[V] The same-arm model frontier now selects the fourth-ply opponent reply as well:
+4,127 ordered leaves from all 1,401 third-ply histories, with all 193 candidates
+and every phase retained. Minimum three-layer configured coverage falls to 0.597414
+for node-local 0.80 and 0.777252 for 0.90; 114/193 and 85/193 respectively fall below
+the same joint threshold. Independent legal and conditional-mass reconstruction
+passes every path and all 386 candidate arms, with eight actual corruption refusals.
+The verified material terminal absorbs mass without inventing another move. Commands,
+literal source/digest bindings, phase counts and scope limitations:
+`planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md`.
+
+[M] This strengthens the prior coverage implication: a registered policy-coverage
+profile needs a joint path budget/stop rule, not merely one prefix repeated at each
+node. No new numerical production threshold is selected from this diagnostic, and
+greater retained mass still has not demonstrated greater useful semantic reach.
+
 [P] Outstanding: the 16,813 final-ply engine jobs are being captured through checked
 immutable intervals; no complete engine source or final-ply outcome is yet claimed. Semantic-
 target-preserving deeper traversal, the five-arm proof/abstention and natural-

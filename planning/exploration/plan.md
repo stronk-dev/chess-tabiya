@@ -27,6 +27,14 @@ D3478 stays doing while the exact 16,813-job Stockfish queue runs in checked
 immutable intervals. No five-arm verdict, production budget or milestone changes.
 Receipt: `planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md`.
 
+2026-10-06 D3481: all captured model histories now select the same arm's fourth
+ply. Independent replay verifies 4,127 ordered leaves and all 386 candidate-arm
+coverage/residual values, plus eight actual corruption refusals. Three-layer
+minimum configured mass is 0.597414 for node-local 0.80; 114/193 fall below joint
+0.80. Per-node coverage cannot serve as joint coverage or arbitrary-defence proof.
+Engine D3478, semantic-target continuation and full five-arm proof/contrast/cost
+remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md`.
+
 ## Question ledger
 
 | # | Question | Status | Attached gates |

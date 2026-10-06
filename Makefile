@@ -602,6 +602,19 @@ semantic-search-stockfish-final-ply-batch: semantic-search-final-ply-preflight
 semantic-search-stockfish-final-ply-merge: semantic-search-final-ply-preflight
 	$(CI_NODE) tools/d3262-search-calibration/third-ply-stockfish-merge.mjs --write
 
+.PHONY: semantic-search-maia-fourth-ply-update semantic-search-maia-fourth-ply-check
+semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write
+
+semantic-search-maia-fourth-ply-check: semantic-search-maia-final-ply-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs
+
+.PHONY: semantic-search-maia-fourth-ply-independent
+semantic-search-maia-fourth-ply-independent:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-maia-fourth-ply-check.py --negative-controls
+
 semantic-search-coherent-exact-trigger-update: semantic-search-coherent-bounded-targets-check semantic-search-coherent-exact-replies-check
 	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/coherent-exact-trigger-outcome.ts
 	./node_modules/.bin/esbuild tools/d3262-search-calibration/coherent-exact-trigger-outcome.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/coherent-exact-trigger-outcome.mjs

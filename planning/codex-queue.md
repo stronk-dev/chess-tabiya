@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3481]]: the actual same-arm four-ply Maia frontier retains 4,127
+ordered leaves, three-layer joint mass, residuals and terminal absorption. All
+1,401 predecessor histories/386 candidate arms pass independent legal/mass replay
+and eight actual corruption refusals. Minimum joint configured 0.80 coverage is
+0.597414; 114/193 fall below joint 0.80. This remains disposable D3262 research,
+not full five-arm proof or a production profile. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md`.
+Engine queue [[D3478]] continues separately; no restart or subset completion is
+permitted. Next: engine complete-source join, semantic-target deeper selection,
+common target/proof/refutation/contrast and cold/warm/offline cost.
+
 2026-10-06 final-ply execution: all 1,401 ordered Maia requests have actual checked
 sources; independent model re-inference reproduces all 1,400 nonterminal policies
 exactly, with one board-verified terminal. D3479/D3480 close forged-terminal and

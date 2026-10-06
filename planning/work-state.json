@@ -28719,6 +28719,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3481",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f0d342d58ee40484b7b6f0cb59b50e69f9ae9f5207e8257950279ae67c895d3f",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md",
+      "evidenceKind": "path"
     }
   ]
 }

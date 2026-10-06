@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 four-ply model checkpoint: D3481 compiles 4,127 actual ordered model
+leaves; independent replay verifies every legal path and all 386 candidate-arm
+mass/residual values, with eight actual corruption refusals. Three-layer minimum
+configured 0.80 coverage is 0.597414 and 114/193 fall below joint 0.80. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-maia-fourth-ply.md`.
+This advances D3262's disposable research, not production search authorization.
+Engine D3478, semantic deeper selection, common proof/contrast/cost and full
+source/A4/1.0 obligations remain open; no milestone/capability promotion.
+
 2026-10-06 final-ply source checkpoint: all 1,401 ordered Maia histories now have
 checked actual sources and independent model re-inference; all 1,400 nonterminal
 policies reproduce exactly, with one verified material terminal. D3479/D3480 close
