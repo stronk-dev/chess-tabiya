@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:81dbc64db0c904cfaebc77ce017f3a530029ba2e01e05b81fd439668dd97f1fc",
+    "roadmap": "sha256:8dfdc6aa70abdb389a0547c8fb83e690a3b2f726dc15c7a6e406fe5efb56dc50",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:4859e1095f6e68f7b1fb55f2bff8fff18bad88ef639e8d041b2f8e020eeab37c",
+    "workState": "sha256:5f92c11030313f2ecaa92081991a951035df1d8c1410feebd897887b2b337508",
     "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 1,
       "blocked": 1059,
-      "done": 1391,
+      "done": 1392,
       "refused": 161
     },
     "workItems": {
@@ -254,7 +254,7 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3489/D3490 preregister and independently reconstruct source-blind recursive named-relation scheduling across all 193 candidates / 182 cells / 18 settings and 16,607 three-ply paths. All 418 missing engine positions / 958 budget queries / 17 immutable intervals are actually captured; complete independent source replay checks 62,608 PV moves and every interval byte. The separate fourth-ply artifact consumes 35,028 actual queries and retains 147,018 distinct histories / 89,329 final nodes, with zero source-off nodes and unchanged previously supplied selections. Geometric events and 33,408 final reservations are scheduling counts, not profitable target reach, proof, useful explanation or bot quality. Frame/source/completion independent replay refuses 9/8/10 corruptions; focused special-move/provider-off/typed-boundary controls and deterministic reconstruction pass. Artifact SHA-256 e393b10383db546f05ae40957f9bf8c72f53b4c28bb220ba6514e08edab21472; the frozen frame and original/one-hop results remain unchanged. D3491 owns the actual recursive target/contrast/quantifier join. D3262 remains doing on full five-arm comparison, joint-policy stopping, phase/focus, controlled cold/warm/offline cost and every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; routine metadata/hash updates are automatic.",
+        "summary": "D3491 completes the actual recursive target/contrast/quantifier measurement over all 166,137 named observations / 193 candidates / 182 cells / 18 settings / 116 pairs, retaining 17 unpaired targets and four controls. Depth12/top8/top8 reaches and executes 48 of 58 known reintroductions, versus ordinary traversal's 40 reached / 38 executed; it still proves none of eight known surviving roots and certifies no directional prevention. Five JS and three Python controls, ten input and thirteen output corruption refusals, complete independent legal-board/identity/quantifier replay and byte-identical reconstruction pass. Artifact SHA-256 c692b1c16efce9491d560f9d6b7453200b925d1bf63810700c3e77d7f5fcd55a. Frozen scheduling, captured sources and historical populations/results remain unchanged. D3492 owns the discovered shared-oracle en-passant/promotion gap: audit every stage and repair with a separately versioned plural-witness predicate before profile promotion. Zero final special-move events does not clear earlier opportunities. D3262 remains doing on full five-arm comparison, joint-policy stopping, phase/focus, controlled cold/warm/offline cost and every production/source/A4/1.0 obligation. No RFC/capability/milestone promotion; routine metadata/hash updates are automatic.",
         "impact": "advanced",
         "evidence": [
           "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -446,7 +446,13 @@
           "tools/d3262-search-calibration/coherent-recursive-semantic-check.py",
           "tools/d3262-search-calibration/recursive-third-ply-capture.mjs",
           "tools/d3262-search-calibration/coherent-recursive-fourth-ply.mjs",
-          "tools/d3262-search-calibration/coherent-recursive-fourth-check.py"
+          "tools/d3262-search-calibration/coherent-recursive-fourth-check.py",
+          "planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md",
+          "planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.json.gz",
+          "tools/d3262-search-calibration/coherent-recursive-evaluation.mjs",
+          "tools/d3262-search-calibration/coherent-recursive-evaluation.test.mjs",
+          "tools/d3262-search-calibration/coherent-recursive-evaluation-check.py",
+          "tools/d3262-search-calibration/coherent-recursive-evaluation-check.test.py"
         ],
         "anchors": [
           {
@@ -893,6 +899,11 @@
             "kind": "work_state",
             "id": "D3490",
             "digest": "sha256:d7ef328ef5b6dd0a3a3fb3b59ee847d28495b7dd229ec9ba971cc853ae43f7c1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3491",
+            "digest": "sha256:7fb913e2242d3095b1bdaf2435cacbfc743aca2ce5d52956b26490d9c532859b"
           }
         ]
       },

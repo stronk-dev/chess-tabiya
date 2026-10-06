@@ -28813,9 +28813,18 @@
     },
     {
       "id": "D3491",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7fb913e2242d3095b1bdaf2435cacbfc743aca2ce5d52956b26490d9c532859b",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3492",
       "state": "todo",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:e9bf8bc506778ce9e91ee36525ca8303bfc1d5ccc535ce06be3370a575b5cfcc",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:942add61a5b76aac41c5b2507da0790d8c35118c9f65a0233d2187740edf1a6b",
       "uxItems": [],
       "owner": "evidence-foundation"
     }

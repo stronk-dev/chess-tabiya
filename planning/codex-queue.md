@@ -1,9 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
-Next [[D3491]]: join actual recursive selected paths to named opportunity versus
-execution, frozen source/alternative pairs and preparation/defence quantifiers.
-Retain every candidate/control/omission and partial abstention; do not optimize
-the frozen traversal from target successes or promote geometric events to profit.
+Completed [[D3491]]: all 166,137 actual recursive observations / 182 cells /
+18 settings and 116 pairs retain opportunity/execution and quantified omissions.
+Depth12/top8/top8 reaches and executes 48/58 versus ordinary engine 40/38;
+none of eight known surviving roots is proved and no prevention direction
+certifies. Independent board/identity/legal graph/algebra replay, five JS/three
+Python controls, ten input/13 output corruptions and deterministic checks pass.
+Receipt: `planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md`.
+
+Next oracle boundary [[D3492]]: the shared research predicate misses EP and
+promotion capture opportunities. Preserve the historical baseline and results;
+audit all stages and version any correction separately, including plural legal
+promotion witnesses/execution. Zero such final target events does not clear
+immediate/earlier opportunities or future packs.
 
 Completed [[D3489]]/[[D3490]]: the preregistered recursive relation frame passes
 independent identity/geometry/rank replay; all 418 missing positions / 958 actual
@@ -31,7 +40,8 @@ output corruption refusals and deterministic replay pass. Receipt:
 Current next action (2026-10-06): [[D3262]] remains doing under evidence-foundation.
 The older actual target contrast and bounded preparation/defence quantifier joins
 are complete. Recursive scheduling and actual fourth-ply sources now also exist;
-D3491 owns their next target/contrast/quantifier join. Retain every omitted branch
+Their actual target/contrast/quantifier joins now pass. D3492 owns the next
+shared-oracle all-stage audit/versioned repair. Retain every omitted branch
 and typed abstention while completing the full five-arm proof/refutation/
 coverage-stop-rule/cost experiment before choosing production
 defaults. Do not substitute the earlier common exact learner evaluator or claim

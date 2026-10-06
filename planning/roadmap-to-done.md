@@ -19,6 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 recursive outcome checkpoint: D3491 joins all 166,137 actual named
+observations / 182 cells / 18 settings and 116 pairs, independently replaying
+boards, identities, legal graphs, contrast and quantifiers. Depth12/top8/top8
+reaches and executes 48/58 known reintroductions versus ordinary engine 40/38,
+but proves none of eight surviving roots and certifies no directional prevention.
+Five JS/three Python controls, ten input/13 output corruptions and deterministic
+replay pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md`.
+D3492 explicitly owns demonstrated EP/promotion omissions in the shared oracle,
+an all-stage affected-case audit and separately versioned repair. D3262/full
+proof/coverage/phase/cost and every production/source/A4/1.0 obligation remain
+open. No RFC, capability or milestone promotion; routine metadata is automatic.
+
 2026-10-06 recursive scheduling/source checkpoint: D3489/D3490 preregister a
 source-blind named-relation rule and independently reconstruct 16,607 three-ply
 paths across 193 candidates / 182 cells / 18 settings. All 418 new positions /

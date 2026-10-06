@@ -37,6 +37,17 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3491: all actual recursive named target/contrast/quantifier joins pass
+independent reconstruction: 166,137 observations / 182 cells / 18 settings and
+116 pairs, with ten input/13 output corruptions refused. Depth12/top8/top8 reaches
+and executes 48/58 known reintroductions versus ordinary engine 40/38, but proves
+none of eight surviving roots; 29 apparent directions include 18 exact ties and
+zero certified prevention. All phases/controls/unpaired cases remain. D3492 owns
+the demonstrated EP/promotion shared-oracle omissions and complete affected-case/
+versioned repair before promotion. D3262 full proof/coverage/cost and production
+remain open; no gate/RFC/capability changes. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md`.
+
 2026-10-06 D3489/D3490: preregistered recursive relation scheduling now has an
 independently reconstructed frame and complete actual fourth-ply sources. All
 193 candidates / 182 cells / 18 settings remain; 16,607 three-ply paths and

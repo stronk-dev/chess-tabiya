@@ -763,6 +763,26 @@ semantic-search-recursive-fourth-independent-test:
 semantic-search-recursive-fourth-independent: semantic-search-recursive-fourth-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-fourth-check.py --negative-controls
 
+.PHONY: semantic-search-recursive-evaluation-build semantic-search-recursive-evaluation-test semantic-search-recursive-evaluation-update semantic-search-recursive-evaluation-check
+semantic-search-recursive-evaluation-build: semantic-search-recursive-build
+	./node_modules/.bin/esbuild packages/runtime/src/exchange.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/target-exchange.mjs --log-level=warning
+
+semantic-search-recursive-evaluation-test: semantic-search-recursive-evaluation-build
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-recursive-evaluation.test.mjs
+
+semantic-search-recursive-evaluation-update: semantic-search-recursive-evaluation-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-recursive-evaluation.mjs --write
+
+semantic-search-recursive-evaluation-check: semantic-search-recursive-evaluation-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-recursive-evaluation.mjs
+
+.PHONY: semantic-search-recursive-evaluation-independent-test semantic-search-recursive-evaluation-independent
+semantic-search-recursive-evaluation-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-evaluation-check.test.py
+
+semantic-search-recursive-evaluation-independent: semantic-search-recursive-evaluation-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-recursive-evaluation-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

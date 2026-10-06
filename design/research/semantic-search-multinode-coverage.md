@@ -194,7 +194,37 @@ explanation, survival or bot quality. Geometric event counts do not answer those
 questions. D3491 explicitly owns opportunity/execution, contrast and quantifier
 joins on the same frozen traversal; no held-out target result may choose branches.
 
-[P] Outstanding: recursive target-outcome/contrast/quantifier measurement, the five-arm
+[V] The recursive traversal now joins all 166,137 actual named observations /
+182 cells / 18 settings, all 193 offered candidates and 116 pairs / 17 unpaired
+targets. Depth12/top8/top8 reaches and executes 48/58 known reintroductions,
+against the ordinary engine's 40 reached / 38 executed; the all-legal first-reply
+event variant reaches/executes 46. It refutes five applicable roots but proves
+none of eight known surviving roots, each still missing 16–29 preparations.
+Three refuted roots still allow existential target reach. The same setting shows
+29 apparent opportunity directions, 18 on exact ties, and zero certified
+directional prevention. All declared phases remain, including unclear; material
+and destination reach is 25/29 and 23/29. Five JS/three Python controls, ten input/
+13 output corruptions, independent all-board/identity/legal-graph/contrast/
+quantifier reconstruction and deterministic replay pass. The shared local SEE
+predicate is not independently re-inferred strategic truth. Counts and sources:
+`planning/semantic-consequence-search/d3262-coherent-recursive-evaluation.md`.
+
+[V] Permanent controls expose a general shared-oracle limitation: the historical
+material predicate misses one legal positive local-SEE EP capture and all four
+positive capture-promotion choices. The final recursive event population contains
+zero such events, but that does not clear earlier opportunities or future packs.
+D3492 explicitly owns the complete affected-population audit and separately
+versioned correction, with original outcomes preserved. Source: the receipt's
+Shared oracle limitation section and
+`tools/d3262-search-calibration/coherent-recursive-evaluation.test.mjs`.
+
+[M] Implication: recursive target-aware scheduling improves this fixed population's
+observed reach/execution, but one reserved relation event neither guarantees a
+useful explanation nor closes a universal defence set. The next safe action is
+oracle-scope correction and full proof/coverage/cost research, not promoting these
+counts to production default or engine causality.
+
+[P] Outstanding: shared-oracle affected-population/versioned repair, the five-arm
 proof/refutation/abstention, joint coverage stop rules, phase/focus stratification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.
