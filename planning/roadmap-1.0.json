@@ -865,9 +865,13 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3495 closes common scope/focus/source-budget qualification on all 193 candidates / 182 named cells / 53 settings / 116 pairs and 212 actual control receipts. Four control roots retain 14 labelled candidates; all main-cell focus stays unknown. Actual PV/first-reply selections retain named fork refutations, partial/provider-line ceilings, an unforced bishop retreat with exact screen/queen identity and authored-not-autonomous Carlsbad. Semantic controls without registered targets stay unsupported rather than borrowing plain-engine fallbacks. Only 33/66 roots share a first choice across three budgets; 86/116 pair orders agree and 30 differ. Literal rank, cp/mate/bound/depth authorities remain separate. Six JS/four Python controls, eight immutable-input/fourteen actual-output corruptions, complete independent control board/identity/pressure replay and deterministic reconstruction pass. Artifact SHA-256 c6d623443796c9b6c88ee6a0f56ee5dabfaaf8ccc7eea6bf6700155f4c2cc89c. Source-bound scope and agreement are not tactical/quiet generalization, consumer usefulness or engine causality. D3262 remains doing on actual cold/warm/provider-offline end-to-end cost, complete consumer scope and source-declared production profile. Every production/source/A4/full-1.0 obligation remains; no RFC/capability/milestone promotion. Tracking maintenance is automatic.",
+          "summary": "D3262 now retains actual depth-8 PV execution for all 193 candidates / 66 roots at horizons two/four and cold/warm/offline: 1,158 live cases, including 84 no-target and 358 unavailable outcomes. Independent python-chess replays 728 actual target observations, literal UCI coherence, legal denominators, v2 actions, quantifiers and paired receipts; retained instrument snapshots and raw compressed bytes survive lossless packaging. The 42-group synthesis separates phase/focus/result; server timings and sampled-parent memory do not discharge browser gates or individual engine/model peaks. Forty execution/subprocess controls, eleven package controls and the unchanged 36 preregistration controls pass. Fifteen settings are executable; configured Maia, first-reply reserve and recursive adapters (38 settings) explicitly refuse until implemented. The full preregistration remains 61,374 cases; remaining population captures, fresh-source sensitivity, complete consumer scope and actual browser/profile decision keep D3262 doing and the RFC draft. Earlier D3495 scope qualification remains in linked evidence. No RFC, capability, milestone or full-1.0 promotion. Routine receipts and tracking are maintained automatically.",
           "impact": "advanced",
           "evidence": [
+            "planning/semantic-consequence-search/d3262-cost-live-pv-depth8-2026-10-06.md",
+            "planning/semantic-consequence-search/d3262-cost-live-pv-initial-2026-10-06.json.gz",
+            "planning/semantic-consequence-search/d3262-cost-live-pv-depth8-population-2026-10-06.json.gz",
+            "planning/semantic-consequence-search/d3262-cost-live-pv-depth8-summary-2026-10-06.json",
             "planning/play-composition/corpus-subjects-2026-10-06.md",
             "planning/play-composition/corpus-subject-native-2026-10-06.json",
             "planning/play-composition/corpus-subject-software-2026-10-06.json",
@@ -1505,7 +1509,7 @@
             {
               "kind": "work_state",
               "id": "D3262",
-              "digest": "sha256:f290ecb6353e577891710c1444d3082db0cdda0d051a13d6a8bbcb3cfd001dbe"
+              "digest": "sha256:1dbb47b7b8b198f6ab8304d47a07380dadce2378530c591f6bfc477ddef1a805"
             },
             {
               "kind": "work_state",

@@ -816,6 +816,34 @@ semantic-search-cost-plan-freeze:
 	$(CI_NODE) --test tools/d3262-search-calibration/cost-contract.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/cost-contract.mjs --write
 
+.PHONY: semantic-search-cost-test semantic-search-cost-batch semantic-search-cost-check
+semantic-search-cost-test: semantic-search-target-v2-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs
+
+semantic-search-cost-batch: semantic-search-cost-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --start "$(START)" --limit "$(LIMIT)" --out "$(OUT)"
+
+semantic-search-cost-check: semantic-search-target-v2-build
+	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --check --out "$(OUT)"
+
+.PHONY: semantic-search-cost-independent
+semantic-search-cost-independent:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-independent.py "$(OUT)" --negative-controls
+
+.PHONY: semantic-search-cost-pack semantic-search-cost-packed-check
+semantic-search-cost-pack: semantic-search-target-v2-build
+	$(CI_NODE) tools/d3262-search-calibration/cost-pack.mjs --out "$(OUT)" --archive "$(ARCHIVE)"
+
+semantic-search-cost-packed-check: semantic-search-target-v2-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-pack.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/cost-pack.mjs --check --archive "$(ARCHIVE)"
+
+.PHONY: semantic-search-cost-summary semantic-search-cost-summary-freeze
+semantic-search-cost-summary: semantic-search-target-v2-build
+	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs
+semantic-search-cost-summary-freeze: semantic-search-target-v2-build
+	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs --write
+
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 semantic-search-five-approach-test: semantic-search-target-v2-build
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs

@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 D3262 live-cost checkpoint: the complete depth-8 PV setting now has
+1,158 actual cases (193 candidates, both horizons, all three regimes), including
+no-target and source-off outcomes. Independent chess/receipt replay passes.
+This is one setting of the unchanged 61,374-case plan, not full search calibration
+or browser proof. Remaining configured Maia and semantic adapters, population
+captures and profile decision keep the search foundation open. Evidence:
+`planning/semantic-consequence-search/d3262-cost-live-pv-depth8-2026-10-06.md`.
+No capability or milestone is promoted by this research checkpoint.
+
 2026-10-06 actual-browser checkpoint: D3497 now retains full before/after
 880-row/44-cell/twenty-sample Chromium populations and sixty voice baselines per
 build. D3503 reduces shipping pending polling from 100 to 50 ms without changing

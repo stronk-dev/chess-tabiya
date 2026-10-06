@@ -1,14 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3262]] cost preregistration now has one executable, source-pinned population
-contract: all 53 primary/diagnostic settings, 193 candidates/66 roots, both
-horizons and cold/warm/offline states (61,374 cases). It is a plan and structural
-receipt reader, **not measured execution or a production profile**. Normal target:
-`make semantic-search-cost-contract`. Next build actual timed five-family adapters
-and immutable batches, retain provider-off/no-target/terminal cases, independently
-replay source/clock evidence, and bind the actual browser boundary. Do not call
-artifact decoding or historical-duration sums end-to-end latency. Preregistration:
-`planning/semantic-consequence-search/d3262-cost-preregistration-v1.md`.
+[[D3262]] now has actual live depth-8 PV execution for all 193 candidates / 66 roots,
+both horizons and cold/warm/offline states: 1,158 rows, independently replayed,
+including 84 no-target and 358 unavailable outcomes. The full plan stays 61,374
+cases; this is **not full cost calibration, browser proof or a production profile**.
+The disposable runner supports PV/beam/exact/local-diagnostic (15 settings);
+model, first-reply reserve and recursive adapters (38 settings) explicitly refuse.
+Next implement those adapters, capture remaining budgets/arms with matching cold
+dependencies, independently replay them and bind real browser identities. Do not
+re-run the captured first PV population or use historical durations as live cost.
+Normal commands and immutable evidence:
+`planning/semantic-consequence-search/d3262-cost-live-pv-depth8-2026-10-06.md`.
 Routine metadata/hash and tracker maintenance remains automatic.
 
 Completed [[D3503]]: the full D3497 browser before/after populations each retain
