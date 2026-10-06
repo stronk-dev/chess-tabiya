@@ -38,6 +38,7 @@
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
   import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
+  import { moduleDecisionStamp } from "@chess-tabiya/runtime";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -1039,23 +1040,37 @@
   let fullInspector: ParsedModulePacket | undefined = $state.raw();
   let fullInspectorState: "idle" | "pending" | "failed" = $state("idle");
   let fullInspectorRequest = 0;
+  let fullInspectorPageSubject: string | undefined = $state();
+  let fullInspectorDecisionDigest = $derived(moduleDecisionStamp(run).digest);
+  let fullInspectorSubject = $derived(JSON.stringify([
+    run.id, displayedNode.id, fullInspectorDecisionDigest, feedbackDeliveryOpen(run),
+    compiledAssistance?.finalDigest, assistanceQueryState, viewerRole, seatedInContest, reviewing,
+  ]));
   $effect(() => {
     const open = inspectorOpen;
     const active = fullInspectorActive;
-    const node = displayedNode.id;
+    const subject = fullInspectorSubject;
+    const request = ++fullInspectorRequest;
     untrack(() => {
-      if (!open || !active || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) { fullInspector = undefined; fullInspectorState = "idle"; return; }
-      const request = ++fullInspectorRequest;
+      fullInspector = undefined;
+      fullInspectorPageSubject = undefined;
+      fullInspectorState = "idle";
+      if (!open || !active || assistanceQueryState !== "ready" || !feedbackDeliveryOpen(run) || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) return;
+      const node = displayedNode.id;
+      const runId = run.id;
+      const decisionDigest = fullInspectorDecisionDigest;
       const finalDigest = compiledAssistance.finalDigest;
       fullInspectorState = "pending";
       void onModuleQuery({ assistance: requestedAssistance, query: { timing: "review", nodeId: node, requested: ["full_inspector"] } })
         .then((value) => {
-          if (request !== fullInspectorRequest) return;
-          const page = parseModuleQueryPage(value, { runId: run.id, subjectNodeId: node, finalDigest });
+          if (request !== fullInspectorRequest || subject !== fullInspectorSubject) return;
+          const page = parseModuleQueryPage(value, { runId, subjectNodeId: node, finalDigest });
+          if (page.decisionDigest !== decisionDigest) throw new TypeError("Inspector page answers an obsolete recorded decision");
           fullInspector = page.packets.find((packet) => packet.module === "full_inspector");
+          fullInspectorPageSubject = subject;
           fullInspectorState = "idle";
         })
-        .catch(() => { if (request === fullInspectorRequest) { fullInspector = undefined; fullInspectorState = "failed"; } });
+        .catch(() => { if (request === fullInspectorRequest && subject === fullInspectorSubject) { fullInspector = undefined; fullInspectorPageSubject = undefined; fullInspectorState = "failed"; } });
     });
   });
   const INSPECTOR_FAMILY_LABELS: Readonly<Record<string, string>> = Object.freeze({ local_rules: "Local rules", authored_theory: "Authored theory", recorded_run: "Recorded game", stockfish: "Stockfish", syzygy: "Tablebase", maia: "Human-move model", explorer: "Game corpus", derived: "Derived readings" });
@@ -1969,6 +1984,7 @@
     rewindRequest += 1;
     branchSwitchRequest += 1;
     corpusRequest += 1;
+    fullInspectorRequest += 1;
     analysisRequest += 1;
     groupAnalysisRequest += 1;
     if (spokenAudio !== undefined) {
@@ -2632,7 +2648,7 @@
             <h3>Everything recorded here, attributed</h3>
             {#if fullInspectorState === "pending"}<p role="status">Collecting the recorded evidence…</p>
             {:else if fullInspectorState === "failed"}<p role="alert">The full inspector could not be loaded.</p>
-            {:else if fullInspector !== undefined}
+            {:else if fullInspector !== undefined && fullInspectorPageSubject === fullInspectorSubject}
               {#if fullInspector.empty?.kind === "family_partitioned"}<ul class="inspector-families">{#each fullInspector.empty.families as state (state.family)}<li data-family-state={state.kind}>{familyLine(state)}</li>{/each}</ul>{/if}
               <PresentedEvidence items={fullInspector.items} />
             {/if}

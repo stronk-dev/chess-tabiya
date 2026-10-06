@@ -1,0 +1,33 @@
+{
+  "command": "make inspector-lifecycle-browser-check",
+  "at": "2026-10-06",
+  "reportDigest": "sha256:2236fe0ac586014a26fe1614f79244ac03c697938eff7478f0b10b88ab295d54",
+  "results": [
+    {
+      "title": "full Inspector recompiles its real packet after same-position Advanced settings change",
+      "project": "desktop-chromium",
+      "status": "passed",
+      "retries": [
+        0
+      ],
+      "durationMs": 1721
+    },
+    {
+      "title": "full Inspector retires a real delayed packet while help recompiles and survives reopening",
+      "project": "desktop-chromium",
+      "status": "passed",
+      "retries": [
+        0
+      ],
+      "durationMs": 1421
+    }
+  ],
+  "stats": {
+    "startTime": "2026-10-06T07:05:16.579Z",
+    "duration": 12027.733,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

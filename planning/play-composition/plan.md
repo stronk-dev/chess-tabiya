@@ -117,6 +117,13 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
+Inspector request admission D3470 binds genuine packets to their finalized help identity
+and exact recorded decision, retiring close/recompile/destroy settlements. Identical
+snapshots preserve completed evidence; older-decision replay abstains. Nine permanent
+mounted and two native source/settings/delivery controls pass. Complete replacement
+verification and bounded closeout: `inspector-lifecycle-2026-10-06.md`. This is not all
+fifteen A4 destinations, source migrations or full-RFC/owner-use completion.
+
 Corpus subject repair D3468 derives the request from displayed ancestry and retires
 old answers/errors through preview, branch/disclosure changes and destruction. Real
 longer-line/root/sibling/ABA and matched-context controls pass, alongside full sequential

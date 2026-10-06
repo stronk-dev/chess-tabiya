@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 Inspector request-admission checkpoint: [[D3470]] binds the current packet
+to its displayed subject, recorded decision and finalized help, rather than retaining
+old settings at the same position. Recompile/close/destroy epochs fence late responses;
+older-decision replay is refused and identical snapshots preserve the completed reading.
+Mounted/native source-bound controls and complete replacement verification are recorded
+in `planning/play-composition/inspector-lifecycle-2026-10-06.md`. Full A4/source/phone/
+ceiling/owner-use, RFC, milestone and 1.0 completion remain open.
+
 2026-10-06 corpus subject checkpoint: [[D3468]] repairs future-active-decision lookup
 for historical/root previews and stale same-predecessor settlements, including screen
 destruction. Genuine imported-game and sibling-branch journeys retain the source counts

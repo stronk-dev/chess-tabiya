@@ -88,6 +88,12 @@ readings as a hint stream. The attempt-complete dialog follows the same boundary
 outcome, authored commentary and return actions in view, while an explicit “Inspect recorded
 evidence” door opens the exact terminal engine/tablebase records in the Inspector.
 
+Full Inspector module pages also follow the exact displayed subject, recorded decision and
+finalized help configuration. Changing Advanced controls replaces the page even when the
+module stays enabled at the same position; pending recompilation, closing and leaving the
+screen retire obsolete success/error deliveries. Identical republished snapshots keep the
+completed reading. A genuinely sealed page from an older recorded decision is still rejected.
+
 Ordinary move copy has one final boundary: it renders SAN or honest unavailable copy. It never
 falls back to the run's UCI identity when SAN is absent; raw move identities remain Inspector/export
 data.

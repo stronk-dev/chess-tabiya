@@ -74,6 +74,7 @@ import type {
 import { latestCheckpoint } from "./screen-model.js";
 import { workflowPreferenceKey } from "./assistance-preference.js";
 import type { RunStateSnapshot } from "./run-state.js";
+import * as moduleResponses from "./module-query-response.js";
 
 const assistanceKey = (context: string): string => `tabiya.assistance.v1.${context}`;
 const workflowKey = (context: string): string => `tabiya.workflow.v1.${context}`;
@@ -1657,6 +1658,125 @@ describe("Layer 3 screens", () => {
       expect(evidence).not.toContain("e1e2");
     });
     await unmount(component);
+  });
+
+  describe("full Inspector request lifecycle", () => {
+    async function setup(delayed: boolean, staleDecision = false) {
+      const initial = createRun({ id: "inspector-lifecycle", session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      const sourceRun = revealFeedback(initial, at).run;
+      const run = staleDecision ? appendEvents(sourceRun, [{ type: "feedback.generated", at, data: { nodeId: sourceRun.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]) : sourceRun;
+      const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
+      const realQuery = (body: Parameters<ReturnType<typeof testModuleQuery>>[0]) => testModuleQuery(staleDecision ? sourceRun : snapshots.get("current")!.run)(body);
+      const pending = deferred<unknown>();
+      let firstBody: Parameters<typeof realQuery>[0] | undefined;
+      const inspectorCalls: Parameters<typeof realQuery>[0][] = [];
+      const onModuleQuery = vi.fn((body: Parameters<typeof realQuery>[0]) => {
+        if (!(body.query as { requested: readonly string[] }).requested.includes("full_inspector")) return realQuery(body);
+        inspectorCalls.push(body);
+        if (delayed && inspectorCalls.length === 1) { firstBody = body; return pending.promise; }
+        return realQuery(body);
+      });
+      const preference = (arrows: string) => JSON.stringify({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset: "quiet", overrides: { arrows }, moduleOverrides: { include: ["full_inspector"], exclude: [] } } });
+      const preferences = new Map([[workflowPreferenceKey("position"), preference("off")]]);
+      const component = mount(DrillScreen, { target: target(), props: {
+        onAssistanceQuery: testAssistanceAuthority,
+        get snapshot() { return snapshots.get("current")!; }, onModuleQuery,
+        assistanceStorage: { getItem: key => preferences.get(key) ?? null, setItem: (key, value) => { preferences.set(key, value); } },
+        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+      await assistanceSettled();
+      const open = async () => { document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick(); };
+      const close = async () => { [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Return to play")!.click(); await tick(); };
+      const change = async (arrows: string) => {
+        preferences.set(workflowPreferenceKey("position"), preference(arrows));
+        globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") }));
+        await assistanceSettled(); await tick();
+      };
+      const section = () => document.querySelector<HTMLElement>(".full-inspector");
+      const release = async (kind: "success" | "failure") => {
+        if (kind === "success") pending.resolve(await realQuery(firstBody!)); else pending.reject(new Error("PRIVATE_INSPECTOR_FAILURE"));
+        await pending.promise.catch(() => undefined); await tick(); await tick();
+      };
+      await open();
+      await vi.waitFor(() => expect(inspectorCalls).toHaveLength(1));
+      const publish = async (next: DrillRun) => { snapshots.set("current", { run: next, access: "writer", pendingEvidence: 0, withheld: false }); await tick(); await tick(); };
+      return { component, run, open, close, change, section, release, inspectorCalls, publish };
+    }
+
+    it("keeps identical snapshots but replaces evidence when the recorded decision advances", async () => {
+      const view = await setup(false);
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const previous = view.section()?.textContent;
+      await view.publish(structuredClone(view.run));
+      expect(view.inspectorCalls).toHaveLength(1);
+      expect(view.section()?.textContent).toBe(previous);
+      const next = appendEvents(view.run, [{ type: "feedback.generated", at, data: { nodeId: view.run.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]);
+      await view.publish(next);
+      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await unmount(view.component);
+    });
+
+    it("refuses a genuine same-position packet replayed from an older recorded decision", async () => {
+      const view = await setup(false, true);
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded"));
+      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      await unmount(view.component);
+    });
+
+    it("recompiles a completed genuine packet when the same-node help digest changes", async () => {
+      const view = await setup(false);
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const first = view.inspectorCalls[0]!.assistance.requestDigest;
+      await view.change("sight");
+      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
+      expect(view.inspectorCalls[1]!.assistance.requestDigest).not.toBe(first);
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("retires a pending packet's late %s after the help digest changes", async kind => {
+      const view = await setup(true);
+      expect(view.section()?.querySelector('[role="status"]')).not.toBeNull();
+      await view.change("sight");
+      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const replacement = view.section()?.textContent;
+      await view.release(kind);
+      expect(view.section()?.textContent).toBe(replacement);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("closing retires a late %s and reopening requests only current evidence", async kind => {
+      const view = await setup(true);
+      await view.close();
+      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
+      await view.release(kind);
+      expect(parser).not.toHaveBeenCalled();
+      parser.mockRestore();
+      expect(view.section()).toBeNull();
+      await view.open();
+      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("destroying the screen retires a pending genuine packet's %s without warnings", async kind => {
+      const view = await setup(true);
+      const warning = vi.spyOn(console, "warn");
+      await unmount(view.component);
+      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
+      await view.release(kind);
+      expect(parser).not.toHaveBeenCalled();
+      parser.mockRestore();
+      expect(warning).not.toHaveBeenCalled();
+      expect(document.body.textContent).not.toContain("PRIVATE_INSPECTOR_FAILURE");
+      expect(view.section()).toBeNull();
+      warning.mockRestore();
+    });
   });
 
   describe("corpus preview subjects", () => {

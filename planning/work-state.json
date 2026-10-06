@@ -28620,6 +28620,15 @@
       "owner": "core-loop",
       "blocker": "rfc:evidence-presentation.md",
       "question": "Specify authenticated inspected-decision attribution for corpus committed-move context before offering branch-specific context."
+    },
+    {
+      "id": "D3470",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:52286668ae8c1600a897b31e1aa92a38f84f31e96f5dff88c8a28918f998899d",
+      "uxItems": [],
+      "evidence": "planning/play-composition/inspector-lifecycle-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

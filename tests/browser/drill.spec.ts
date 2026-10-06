@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
+import { expect, test, type APIResponse, type Locator, type Page, type TestInfo } from "@playwright/test";
 
 import { chooseBot, chooseRawRung } from "./play-helpers.js";
 import { inspectComposition, type CompositionConformance } from "./composition-conformance.js";
@@ -2719,6 +2719,94 @@ test("@matrix A4 Inspector carries actual admitted local evidence and returns it
   const after = await inspectCompositionVocabulary(page, "actual-inspector-closed");
   expect(after.inspectorTextNodes).toBe(0);
   expect(after.leaks).toEqual([]);
+});
+
+async function openFullInspectorRun(page: Page): Promise<void> {
+  await page.getByLabel("Your side").selectOption("black");
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill(SCHOLAR_TRAP);
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await choosePreset(page, /Guide me/u);
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  await openAdvancedSupport(page);
+}
+
+function isFullInspectorResponse(response: { url(): string; request(): { postDataJSON(): { query?: { requested?: string[] } } } }): boolean {
+  return response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.requested?.includes("full_inspector") === true;
+}
+
+async function assertFullInspectorPacket(page: Page, packet: ModuleQueryPage["packets"][number]): Promise<void> {
+  const inspector = page.locator(".full-inspector");
+  const mounted = inspector.locator("[data-presented]");
+  await expect(mounted).toHaveCount(packet.receipt.items.length);
+  expect(packet.receipt.items.length).toBeGreaterThan(0);
+  for (const [index, item] of packet.receipt.items.entries()) {
+    await expect(mounted.nth(index)).toHaveAttribute("data-presented", item.component.id);
+    if (item.component.id === "square_set") await expect(mounted.nth(index)).toContainText(item.component.operand.caption.renderedText);
+    if (item.component.id === "fact_statement") await expect(mounted.nth(index)).toHaveText(item.component.operand.renderedText);
+    await expect(mounted.nth(index)).not.toBeEmpty();
+  }
+  await expect(inspector.locator("[data-family-state]")).toHaveCount(8);
+  await expect(inspector.getByRole("alert")).toHaveCount(0);
+}
+
+test("full Inspector recompiles its real packet after same-position Advanced settings change", async ({ page }, testInfo) => {
+  await openFullInspectorRun(page);
+  const firstResponse = page.waitForResponse(isFullInspectorResponse);
+  await page.getByRole("checkbox", { name: "Full inspector", exact: true }).check();
+  const first = (await (await firstResponse).json() as { page: ModuleQueryPage }).page;
+  await assertFullInspectorPacket(page, first.packets.find(p => p.module === "full_inspector")!);
+  const nextResponse = page.waitForResponse(isFullInspectorResponse);
+  await page.getByRole("combobox", { name: "Arrows", exact: true }).selectOption("off");
+  const next = (await (await nextResponse).json() as { page: ModuleQueryPage }).page;
+  expect(next.subjectNodeId).toBe(first.subjectNodeId);
+  expect(next.runId).toBe(first.runId);
+  expect(next.effectiveConfigDigest).not.toBe(first.effectiveConfigDigest);
+  await assertFullInspectorPacket(page, next.packets.find(p => p.module === "full_inspector")!);
+  await testInfo.attach("inspector-help-recompilation", { body: JSON.stringify({ first, next }), contentType: "application/json" });
+  await page.getByRole("button", { name: "Return to play" }).click();
+  expect((await inspectCompositionVocabulary(page, "inspector-recompiled-closed")).leaks).toEqual([]);
+});
+
+test("full Inspector retires a real delayed packet while help recompiles and survives reopening", async ({ page }, testInfo) => {
+  await openFullInspectorRun(page);
+  let held = false;
+  let oldResponse: APIResponse | undefined;
+  let release: (() => void) | undefined;
+  await page.route("**/runs/*/modules/query", async route => {
+    const requested = route.request().postDataJSON().query.requested as string[];
+    if (!held && requested.includes("full_inspector")) {
+      held = true;
+      oldResponse = await route.fetch();
+      await new Promise<void>(resolve => { release = resolve; });
+      await route.fulfill({ response: oldResponse });
+    } else await route.continue();
+  });
+  await page.getByRole("checkbox", { name: "Full inspector", exact: true }).check();
+  await expect.poll(() => release !== undefined).toBe(true);
+  await expect(page.locator(".full-inspector").getByRole("status")).toContainText("Collecting");
+  const old = (await oldResponse!.json() as { page: ModuleQueryPage }).page;
+  const nextResponse = page.waitForResponse(isFullInspectorResponse);
+  await page.getByRole("combobox", { name: "Arrows", exact: true }).selectOption("off");
+  const next = (await (await nextResponse).json() as { page: ModuleQueryPage }).page;
+  expect(next.subjectNodeId).toBe(old.subjectNodeId);
+  expect(next.effectiveConfigDigest).not.toBe(old.effectiveConfigDigest);
+  const packet = next.packets.find(p => p.module === "full_inspector")!;
+  await assertFullInspectorPacket(page, packet);
+  const oldDelivery = page.waitForResponse(r => isFullInspectorResponse(r) && r.request().postDataJSON().assistance.requestDigest === old.requestedConfigDigest);
+  release!();
+  await oldDelivery;
+  await assertFullInspectorPacket(page, packet);
+  await page.getByRole("button", { name: "Return to play" }).click();
+  const reopenResponse = page.waitForResponse(isFullInspectorResponse);
+  await page.locator(".inspector-entry").click();
+  const reopened = (await (await reopenResponse).json() as { page: ModuleQueryPage }).page;
+  expect(reopened.effectiveConfigDigest).toBe(next.effectiveConfigDigest);
+  await assertFullInspectorPacket(page, reopened.packets.find(p => p.module === "full_inspector")!);
+  await testInfo.attach("inspector-retired-delivery", { body: JSON.stringify({ old, next, reopened }), contentType: "application/json" });
 });
 
 test("@matrix final Guided Hint shares one expanded seat and preserves the board and rung", async ({ page }, testInfo) => {

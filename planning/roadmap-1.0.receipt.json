@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4fb92bb5624f9dee9848db42a923d069a7de47ed3a8958e66445da1551cad924",
+    "roadmap": "sha256:9d12717c6c1ee8cbe44d720ebb036ce07cdcbce791d914a21ba271ec5543e114",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:f487cac8b732703cd4e68f7738b5d5c07893942e1d1681d303c1ed2baa7e3093",
-    "rfcRegister": "sha256:312ad33e0e71b51ad95e47f3b9fd3b77ecf4e43010b19930fa71bbdd509c9426",
+    "workState": "sha256:7aa6c8a6a03b30c89a142d0b0638449c1f0a2f018c2e4accb27d63b2002051b1",
+    "rfcRegister": "sha256:2fa755d8a7e5861d92ea71074ec157dd73a4eb4785b59accecb6c15a1248feea",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 0,
       "blocked": 1059,
-      "done": 1370,
+      "done": 1371,
       "refused": 161
     },
     "workItems": {
@@ -773,12 +773,16 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. D3468 corpus ancestry, including root/sibling/late/destroyed subjects, is complete and not queued again. D3469 needs the inspected-decision context contract before branch-specific committed labels can ship. Review D3309 structural operand authority before any lossy renderer swap; D3363 source migration, D3436 phone reconciliation and D1639 ceilings retain their named contracts. No whole RFC or milestone closure.",
+      "nextAction": "Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. D3470 Inspector request admission and D3468 ancestry are complete, not queued again. D3469 needs an inspected-decision context contract before branch-specific committed labels can ship. Review D3309 structural operand authority before any lossy renderer swap; D3363 source migration, D3436 phone reconciliation and D1639 ceilings retain their named contracts. No whole RFC or milestone closure.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3468 repairs future-active-decision corpus lookup using displayed ancestry, preserving learner predecessor semantics. Exact subject/disclosure epochs discard cached/error/pending/ABA and destroyed-screen settlements; unrelated evidence attachments do not erase completed counts. Wrong active-branch committed labels are suppressed without inventing membership. Eight new mounted controls, 94 complete corpus client tests and four native regressions pass. Full exact-index software passes 3269 tests/343 files, seven performance tests/four files and all downstream gates at ebde88a1545bc7c8ed163e5b3de15ee1e26a31af. Content passes 225/23, 92 clearance documents/zero errors and 104 exact declarations. Browser passes 140 journeys, one optional Maia skip, zero retries; all 337 retained files/all 112 triples survive packaging unchanged. Receipt: planning/play-composition/corpus-subjects-2026-10-06.md. D3469's branch-aware committed-context successor, full A4/source migrations and RFC/milestone discharges remain open. Prior checkpoint history remains in linked receipts and append-only logs.",
+        "summary": "D3470 repairs same-position Full Inspector packets surviving a help change, and obsolete parsing after close/destruction. Exact compiled-help/subject/server-decision identity and request epochs retire success/error settlements; sealed older-decision replay refuses. Identical snapshots retain their reading; changed recorded heads reacquire it. Five predecessor negatives and an independent decision-check negative calibrate nine permanent lifecycle controls. 132 full composition/client tests and two native source/settings/delivery journeys pass. Full sequential exact-index software passes 3278 tests/343 files, seven isolated performance tests/four files and all downstream gates at 507ffde1ab66230ecec6e69f1446324a89a0186c; content passes 225/23, 92 clearance docs/zero errors and 104 exact declarations. Browser passes 142 journeys, one optional Maia skip, zero retries; all 337 retained files/all 112 triples survive packaging unchanged. Receipt: planning/play-composition/inspector-lifecycle-2026-10-06.md. No source/permission/schema changes or full A4/source/phone/ceiling/owner-use/RFC/milestone promotion. Prior history remains in linked receipts and append-only logs.",
         "impact": "advanced",
         "evidence": [
+          "planning/play-composition/inspector-lifecycle-2026-10-06.md",
+          "planning/play-composition/inspector-lifecycle-native-2026-10-06.json",
+          "planning/play-composition/inspector-lifecycle-software-2026-10-06.json",
+          "planning/play-composition/inspector-lifecycle-browser-2026-10-06.json",
           "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
           "packages/runtime/src/hint-distance.ts",
           "rfc/hint-distance.md",
@@ -984,7 +988,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:b248628e051a255b93e72ab14e1650490f236f94ac42964dce52a5263b79b6a6"
+            "digest": "sha256:e63c57e6fffb729006c4d11686fe80b25879c7a1ae42a0204106e3b67349583e"
           },
           {
             "kind": "work_state",
@@ -1120,6 +1124,11 @@
             "kind": "work_state",
             "id": "D3469",
             "digest": "sha256:d7bf5c1d2153b5ea894ae3338da4d2c114882907bb23bc37ecce308381a2842f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3470",
+            "digest": "sha256:52286668ae8c1600a897b31e1aa92a38f84f31e96f5dff88c8a28918f998899d"
           }
         ]
       },

@@ -156,6 +156,13 @@ inspector-corpus-subject-check:
 inspector-corpus-browser-check:
 	./node_modules/.bin/playwright test --grep "corpus (ancestry|preview|counts)"
 
+.PHONY: inspector-lifecycle-check inspector-lifecycle-browser-check
+inspector-lifecycle-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "full Inspector request lifecycle"
+
+inspector-lifecycle-browser-check:
+	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires)"
+
 play-composition-matrix-contract:
 	node --test tools/play-composition-matrix.test.mjs
 

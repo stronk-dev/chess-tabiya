@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed Inspector admission repair: [[D3470]] binds current compiled help and the
+recorded decision, retires close/recompile/destroy requests and rejects older sealed
+replay. Nine lifecycle controls, 132 full client tests and two genuine native journeys
+pass; complete sequential software/content/browser gates pass. Receipt:
+`planning/play-composition/inspector-lifecycle-2026-10-06.md`. Do not re-queue it.
+Continue A4's fifteen-family destinations, D1834 and existing source obligations;
+no source/permission extension, full-RFC or milestone promotion is inferred.
+
 Completed D3466/D3467 Inspector subject wave repairs historical material classification
 and preview attachment ownership without changing terminal evidence, permission or
 source semantics. Native imported-game/timeline/Inspector and mounted absence tests

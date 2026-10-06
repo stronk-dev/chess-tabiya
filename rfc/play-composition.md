@@ -24,6 +24,13 @@
   Full replacement gates and closeout: `planning/play-composition/corpus-subjects-2026-10-06.md`.
   D3469 retains the inspected-decision successor contract; no source/route extension,
   permission, convention, full A4 or lifecycle promotion is implied.
+- **Implementation checkpoint 2026-10-06, Inspector request admission:** D3470 binds
+  pages to their exact displayed subject, recorded decision and finalized help identity;
+  close, recompilation and destruction retire obsolete requests before parsing/publication.
+  Identical snapshots preserve their page; a sealed older-decision replay is refused.
+  Nine mounted controls, 132 complete client tests and two real native settings/delivery
+  journeys pass. Complete replacement results: `planning/play-composition/inspector-lifecycle-2026-10-06.md`.
+  No source/permission/schema change or full A4/lifecycle promotion is implied.
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
   §3-forms (form inventory and the alternate-rendering acceptance test), §3a (silence default);
   `design/03-product-breadth.md` §IA (the inspector as a deliberate separate surface)
