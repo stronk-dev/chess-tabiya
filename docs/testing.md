@@ -16,6 +16,16 @@ overlap negative control. Native matrix actions have a finite fail-fast timeout,
 It also delays a genuine proactive packet after selecting Theory or More, and replays a guard
 snapshot to verify that neither steals the learner's current card; a genuinely new guard retains
 its foreground-selection behavior.
+`make play-composition-board-controls-check` measures whole shell-control bounds, strip seating and all 64
+physical square centers at six projections, including native scroll/recovery at 320×256. Actual
+back-rank clicks, promotion Cancel/drag retry and native notation-versus-draft submission remain
+separate gestures, not forced clicks or a screenshot-only proof. Mounted notation tests retain
+grounded refusal text, modal focus/background release and the read-only controller boundary.
+The same focused command checks the actual inert background regions and full native forward/reverse
+Tab traversal. The containing workspace is not made inert when it owns the active dialog.
+The conformance predicate follows actual fixed-position containing blocks, not every DOM ancestor.
+A native-hit positive calibrates viewport-fixed escape; transformed/contained ancestors, an overlay's
+own clipped label and an off-viewport fixed edge remain negative controls.
 
 | Tier | Command | Owns | Must not substitute for |
 |---|---|---|---|
@@ -46,7 +56,7 @@ journey, real-content integration, interaction matrix, or packaged default. Trac
 the HTML report are uploaded on every outcome. The matrix verifier reads the current JSON report,
 refuses missing/duplicate/foreign/failed/retried/wrong-size or out-of-run attachments, then preserves
 the report and PNG bytes under `test-results/composition/<report-hash>/`. Later tiers cannot erase
-that matrix generation. Its 19 Node controls test the evidence join, not image content or complete
+that matrix generation. Its Node negative controls test the evidence join, not image content or complete
 A3/A4/A6 acceptance. The genuine eight-seat population fixture is recorded as D3435's
 maximum-load checkpoint. The compact tablet queue adds head/selector geometry and native-hit
 coverage; D3436 retains phone contract reconciliation. Neither checkpoint treats population/counts

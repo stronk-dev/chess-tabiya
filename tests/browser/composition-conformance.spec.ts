@@ -48,4 +48,17 @@ test("@matrix A3 conformance rejects clipped/covered controls and nested same-ax
   expect((await inspectComposition(page, "objective-summary-projection")).issues).toEqual([]);
   await page.locator("button").evaluate(e => { e.style.marginLeft = "100px"; });
   expect((await inspectComposition(page, "objective-door-still-clips")).issues.some(i => i.kind === "clipped_box")).toBe(true);
+  await page.setContent('<main style="width:60px;height:40px;overflow:hidden"><div style="position:fixed;left:180px;top:120px"><button>Fixed overlay action</button></div></main>');
+  const fixed = page.getByRole("button", { name: "Fixed overlay action" });
+  expect(await fixed.evaluate(e => { const r=e.getBoundingClientRect();return e.contains(document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)); })).toBe(true);
+  expect((await inspectComposition(page, "viewport-fixed-escape-positive")).issues).toEqual([]);
+  for (const style of ["transform:translateZ(0)", "perspective:1000px", "filter:blur(0px)", "backdrop-filter:blur(0px)", "contain:layout", "contain:paint", "will-change:transform", "content-visibility:auto"]) {
+    await page.locator("main").evaluate((e, style) => { e.setAttribute("style", `width:60px;height:40px;overflow:hidden;${style}`); }, style);
+    const clipped = await inspectComposition(page, `fixed-containing-block-negative-${style}`);
+    expect(clipped.issues.some(i => i.kind === "clipped_box"), style).toBe(true);
+  }
+  await page.setContent('<main style="overflow:hidden"><button style="position:fixed;left:-12px;top:120px">Fixed outside viewport</button></main>');
+  expect((await inspectComposition(page, "fixed-viewport-edge-negative")).issues.some(i => i.kind === "clipped_box")).toBe(true);
+  await page.setContent('<main style="width:60px;height:40px;overflow:hidden"><button style="position:fixed;left:180px;top:120px;width:80px;overflow:hidden;white-space:nowrap">Fixed does not exempt its own clipped label</button></main>');
+  expect((await inspectComposition(page, "fixed-own-label-still-clips")).issues.some(i => i.kind === "clipped_box")).toBe(true);
 });

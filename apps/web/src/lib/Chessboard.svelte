@@ -33,6 +33,7 @@
   import type { BoardThemeId, PieceSetId } from "./theme/axes.js";
   import { MARK_BRUSHES } from "./theme/catalog.js";
   import { animationConfig, type ResolvedTheme } from "./theme/controller.js";
+  import BoardNotation from "./BoardNotation.svelte";
 
   interface Props {
     fen: string;
@@ -62,6 +63,8 @@
     onFocusRestored?: () => void;
     /** `false` means the candidate was handled without an authoritative commit. */
     onMove: (uci: string) => boolean | void | Promise<boolean | void>;
+    /** Play seats the same controller's notation projection in its fixed timeline strip. */
+    showControls?: boolean;
   }
 
   let {
@@ -90,6 +93,7 @@
     onMoveSettled,
     onFocusRestored,
     onMove,
+    showControls = true,
   }: Props = $props();
   let boardElement: HTMLDivElement;
   let gridElement: HTMLDivElement;
@@ -100,7 +104,6 @@
   let moveGeneration = 0;
   const theme = useTheme();
   let resolvedTheme: ResolvedTheme = $state(theme.current);
-  let moveText = $state("");
   let escapeArmed = false;
   function newController(): BoardInputController {
     return new BoardInputController(
@@ -262,6 +265,9 @@
 
   function cancelPromotion(): void {
     dispatch({ type: "cancel" });
+    // Chessground paints a dragged pawn before the shared controller asks for
+    // promotion. Cancel has no committed FEN change, so restore that FEN too.
+    board?.set(config());
     void tick().then(() => gridElement?.focus());
   }
 
@@ -310,11 +316,12 @@
     }
   }
 
-  function submitText(event: SubmitEvent): void {
-    event.preventDefault();
-    const result = dispatch({ type: "text_move", value: moveText });
-    if (result.moveUci !== undefined) moveText = "";
+  export function submitNotation(value: string): BoardInputResult {
+    return dispatch({ type: "text_move", value });
   }
+
+  export function notationDisabled(): boolean { return inputDisabled; }
+  export function notationAvailable(): boolean { return !disabled; }
 
   onMount(() => {
     const unsubscribeTheme = theme.subscribe((next) => {
@@ -377,17 +384,6 @@
 </script>
 
 <div class="board-shell" data-board-theme={boardTheme ?? resolvedTheme.preference.boardTheme} data-piece-set={pieceSet ?? resolvedTheme.preference.pieceSet} data-animation={resolvedTheme.animation}>
-  {#if !disabled}<a class="appearance-link" href="/settings#appearance-settings">Appearance</a>{/if}
-  {#if !disabled}
-    <details class="text-move">
-      <summary>Enter a move</summary>
-      <form onsubmit={submitText}>
-        <label>Move in chess notation <input bind:value={moveText} disabled={inputDisabled} aria-describedby={inputDisabled ? `${semanticBoardId}-text-move-disabled` : undefined} autocomplete="off" /></label>
-        <button type="submit" disabled={inputDisabled} aria-describedby={inputDisabled ? `${semanticBoardId}-text-move-disabled` : undefined}>Submit move</button>
-        {#if inputDisabled}<span id={`${semanticBoardId}-text-move-disabled`}>This board is waiting for the other side to move.</span>{/if}
-      </form>
-    </details>
-  {/if}
   <div class="board-surface">
     <!-- svelte-ignore a11y_no_static_element_interactions (Chessground owns the interactive board subtree) -->
     <div class="board" bind:this={boardElement} aria-label="Chessboard" aria-describedby={describedBy}></div>
@@ -437,37 +433,21 @@
       </div>
     {/if}
   </div>
+  {#if !disabled && showControls}
+    <BoardNotation disabled={inputDisabled} onSubmit={submitNotation} />
+  {/if}
 </div>
 
 <style>
   .board-shell {
     position: relative;
     width: 100%;
-    aspect-ratio: 1;
-  }
-
-  .appearance-link {
-    position: absolute;
-    z-index: 5;
-    top: .45rem;
-    left: .45rem;
-    padding: .25rem .4rem;
-    min-height: 1.5rem;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--line);
-    border-radius: .4rem;
-    background: var(--panel);
-    color: var(--muted);
-    font-size: .65rem;
-    text-decoration: none;
   }
 
   .board-surface,
   .board {
     position: relative;
-    height: 100%;
+    width: 100%;
     max-width: 100%;
     aspect-ratio: 1;
   }
@@ -476,6 +456,8 @@
     min-height: 0;
     margin-inline: auto;
   }
+
+  .board { position:absolute; inset:0; }
 
   /* Vendor coordinates use fixed offsets for large boards. Keep each glyph in its edge
      square instead, including compact/reflow and comparison boards, without changing sizing. */
@@ -499,25 +481,6 @@
   .semantic-cell { min-width: 0; min-height: 0; display: grid; place-items: center; color: transparent; }
   .semantic-cell.active { color: var(--ink); outline: 3px solid var(--ink); outline-offset: -3px; background: color-mix(in srgb, var(--ink) 16%, transparent); }
   .semantic-cell span { font: 600 0.55rem/1 ui-monospace, monospace; }
-
-  .text-move {
-    position: absolute;
-    z-index: 5;
-    top: 0.45rem;
-    right: 0.45rem;
-    width: min(18rem, calc(100% - 0.9rem));
-    padding: 0.3rem 0.45rem;
-    border: 1px solid var(--line);
-    border-radius: 0.4rem;
-    background: var(--panel);
-    font-size: 0.72rem;
-  }
-
-  .text-move summary { cursor: pointer; }
-  .text-move form { grid-template-columns: minmax(0, 1fr) auto; gap: 0.3rem; margin-top: 0.35rem; }
-  .text-move[open] form { display: grid; }
-  .text-move label { display: grid; gap: 0.15rem; }
-  .text-move input, .text-move button { min-width: 0; min-height: 1.5rem; box-sizing: border-box; padding: 0.25rem; color: inherit; background: var(--panel); border: 1px solid var(--line); }
 
   .promotion-picker {
     position: absolute;

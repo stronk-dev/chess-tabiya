@@ -9,6 +9,8 @@
   import BranchRail from "./BranchRail.svelte";
   import CheckpointSheet from "./CheckpointSheet.svelte";
   import Chessboard from "./Chessboard.svelte";
+  import BoardNotation from "./BoardNotation.svelte";
+  import type { BoardInputResult } from "./board-input.js";
   import CompareView from "./CompareView.svelte";
   import HonestControl from "./HonestControl.svelte";
   import KeyboardHelp from "./KeyboardHelp.svelte";
@@ -299,6 +301,7 @@
   let assistance: AssistanceConfig = $derived(compiledAssistance?.config ?? SILENT_ASSISTANCE);
   let assistanceMenuOpen = $state(false);
   let assistanceSummary: HTMLElement | undefined = $state();
+  let inputBoard: { submitNotation(value: string): BoardInputResult; notationDisabled(): boolean; notationAvailable(): boolean } | undefined = $state();
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
@@ -2129,6 +2132,8 @@
           <div class="board-frame" class:previewing={previewNodeId !== undefined} class:checkpoint-paused={checkpoint !== undefined}>
             {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
               <Chessboard
+                bind:this={inputBoard}
+                showControls={false}
                 fen={displayedNode.fen}
                 startSide={boardSide ?? startSide}
                 lastMove={displayedNode.moveUci}
@@ -2161,6 +2166,7 @@
           </div>
         </div>
         <div class="timeline-strip">
+          {#if inputBoard?.notationAvailable()}<div class="move-entry"><BoardNotation popup disabled={inputBoard.notationDisabled()} onSubmit={(value) => inputBoard!.submitNotation(value)} /></div>{/if}
           <Timeline
             {entries}
             activeNodeId={run.activeCursor.nodeId}
@@ -3109,8 +3115,9 @@
     text-transform: uppercase;
   }
 
-  .timeline-strip { width: var(--board-edge); height: var(--strip-h); min-width: 0; overflow: hidden; }
-  :global(.timeline-strip .timeline) { height: var(--strip-h); display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; padding: 0 .3rem; border: 0; border-radius: 0 0 .7rem .7rem; }
+  .timeline-strip { width: var(--board-edge); height: var(--strip-h); min-width: 0; overflow: hidden; display:flex; align-items:center; }
+  .move-entry { flex:0 0 auto; padding-inline:.2rem; }
+  :global(.timeline-strip .timeline) { flex:1; min-width:0; height: var(--strip-h); display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; padding: 0 .3rem; border: 0; border-radius: 0 0 .7rem .7rem; }
   :global(.timeline-strip .timeline-heading) { display: flex; gap: .25rem; align-items: baseline; padding: 0 .35rem; white-space: nowrap; }
   :global(.timeline-strip .timeline-heading h2) { font-size: .68rem; }
   :global(.timeline-strip .timeline-heading span) { font-size: .62rem; }

@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "date": "2026-10-06",
+  "sourceHead": "92994e48545989cd4b47ca4f2b8b47a438f58f7a",
+  "scope": "Final strip-seated board repair; focused native gestures before the complete browser CI rerun",
+  "command": "make play-composition-board-controls-check",
+  "reportDigest": "sha256:7c7c4bcfde055bffd2c1090d7f8b30655daca6e10483617dead51ff4e7fbf318",
+  "result": "passed",
+  "journeys": [
+    {
+      "title": "@matrix board controls do not overlap each other or consume physical square centers",
+      "status": "passed",
+      "retry": 0,
+      "attachments": [
+        {
+          "name": "board-controls-1440x900",
+          "value": {
+            "board": {
+              "x": 168,
+              "y": 74,
+              "width": 768,
+              "height": 768
+            },
+            "entry": {
+              "x": 171.1875,
+              "y": 846,
+              "width": 106.875,
+              "height": 32
+            },
+            "strip": {
+              "x": 168,
+              "y": 842,
+              "width": 768,
+              "height": 40
+            },
+            "timeline": {
+              "x": 281.25,
+              "y": 842,
+              "width": 654.75,
+              "height": 40
+            },
+            "boardOverlap": 0,
+            "collisions": [],
+            "blocked": [],
+            "squares": 64
+          }
+        },
+        {
+          "name": "board-controls-768x1024",
+          "value": {
+            "board": {
+              "x": 40,
+              "y": 72,
+              "width": 688,
+              "height": 688
+            },
+            "entry": {
+              "x": 43.1875,
+              "y": 764,
+              "width": 32,
+              "height": 32
+            },
+            "strip": {
+              "x": 40,
+              "y": 760,
+              "width": 688,
+              "height": 40
+            },
+            "timeline": {
+              "x": 78.375,
+              "y": 760,
+              "width": 649.625,
+              "height": 40
+            },
+            "boardOverlap": 0,
+            "collisions": [],
+            "blocked": [],
+            "squares": 64
+          }
+        },
+        {
+          "name": "board-controls-430x932",
+          "value": {
+            "board": {
+              "x": 11,
+              "y": 56,
+              "width": 408,
+              "height": 408
+            },
+            "entry": {
+              "x": 14.1875,
+              "y": 468,
+              "width": 32,
+              "height": 32
+            },
+            "strip": {
+              "x": 11,
+              "y": 464,
+              "width": 408,
+              "height": 40
+            },
+            "timeline": {
+              "x": 49.375,
+              "y": 464,
+              "width": 369.625,
+              "height": 40
+            },
+            "boardOverlap": 0,
+            "collisions": [],
+            "blocked": [],
+            "squares": 64
+          }
+        },
+        {
+          "name": "board-controls-390x844",
+          "value": {
+            "board": {
+              "x": 11,
+              "y": 56,
+              "width": 368,
+              "height": 368
+            },
+            "entry": {
+              "x": 14.1875,
+              "y": 428,
+              "width": 32,
+              "height": 32
+            },
+            "strip": {
+              "x": 11,
+              "y": 424,
+              "width": 368,
+              "height": 40
+            },
+            "timeline": {
+              "x": 49.375,
+              "y": 424,
+              "width": 329.625,
+              "height": 40
+            },
+            "boardOverlap": 0,
+            "collisions": [],
+            "blocked": [],
+            "squares": 64
+          }
+        },
+        {
+          "name": "board-controls-360x680",
+          "value": {
+            "board": {
+              "x": 8,
+              "y": 56,
+              "width": 344,
+              "height": 344
+            },
+            "entry": {
+              "x": 11.1875,
+              "y": 404,
+              "width": 32,
+              "height": 32
+            },
+            "strip": {
+              "x": 8,
+              "y": 400,
+              "width": 344,
+              "height": 40
+            },
+            "timeline": {
+              "x": 46.375,
+              "y": 400,
+              "width": 305.625,
+              "height": 40
+            },
+            "boardOverlap": 0,
+            "collisions": [],
+            "blocked": [],
+            "squares": 64
+          }
+        },
+        {
+          "name": "board-controls-320x256",
+          "value": {
+            "board": {
+              "x": 8,
+              "y": 56,
+              "width": 304,
+              "height": 304
+            },
+            "entry": {
+              "x": 11.1875,
+              "y": 364,
+              "width": 32,
+              "height": 32
+            },
+            "strip": {
+              "x": 8,
+              "y": 360,
+              "width": 304,
+              "height": 40
+            },
+            "timeline": {
+              "x": 46.375,
+              "y": 360,
+              "width": 265.625,
+              "height": 40
+            },
+            "boardOverlap": 0,
+            "collisions": [],
+            "blocked": [],
+            "squares": 64
+          }
+        }
+      ]
+    },
+    {
+      "title": "@matrix board controls preserve genuine click back-rank promotion gestures",
+      "status": "passed",
+      "retry": 0,
+      "attachments": [
+        {
+          "name": "board-controls-gesture-1440x900",
+          "value": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "before": {
+              "x": 168,
+              "y": 74,
+              "width": 768,
+              "height": 768
+            },
+            "after": {
+              "x": 168,
+              "y": 74,
+              "width": 768,
+              "height": 768
+            },
+            "promotionPending": true,
+            "entryOpen": false
+          }
+        },
+        {
+          "name": "board-controls-gesture-768x1024",
+          "value": {
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "before": {
+              "x": 40,
+              "y": 72,
+              "width": 688,
+              "height": 688
+            },
+            "after": {
+              "x": 40,
+              "y": 72,
+              "width": 688,
+              "height": 688
+            },
+            "promotionPending": true,
+            "entryOpen": false
+          }
+        },
+        {
+          "name": "board-controls-gesture-430x932",
+          "value": {
+            "viewport": {
+              "width": 430,
+              "height": 932
+            },
+            "before": {
+              "x": 11,
+              "y": 56,
+              "width": 408,
+              "height": 408
+            },
+            "after": {
+              "x": 11,
+              "y": 56,
+              "width": 408,
+              "height": 408
+            },
+            "promotionPending": true,
+            "entryOpen": false
+          }
+        },
+        {
+          "name": "board-controls-gesture-390x844",
+          "value": {
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "before": {
+              "x": 11,
+              "y": 56,
+              "width": 368,
+              "height": 368
+            },
+            "after": {
+              "x": 11,
+              "y": 56,
+              "width": 368,
+              "height": 368
+            },
+            "promotionPending": true,
+            "entryOpen": false
+          }
+        },
+        {
+          "name": "board-controls-gesture-360x680",
+          "value": {
+            "viewport": {
+              "width": 360,
+              "height": 680
+            },
+            "before": {
+              "x": 8,
+              "y": 56,
+              "width": 344,
+              "height": 344
+            },
+            "after": {
+              "x": 8,
+              "y": 56,
+              "width": 344,
+              "height": 344
+            },
+            "promotionPending": true,
+            "entryOpen": false
+          }
+        }
+      ]
+    },
+    {
+      "title": "@matrix board controls keep authoring notation separate from native draft submission",
+      "status": "passed",
+      "retry": 0,
+      "attachments": []
+    },
+    {
+      "title": "@matrix board controls restore an uncommitted promotion for another real gesture",
+      "status": "passed",
+      "retry": 0,
+      "attachments": [
+        {
+          "name": "board-controls-promotion-cancel",
+          "value": {
+            "before": {
+              "x": 195,
+              "y": 102,
+              "width": 46,
+              "height": 46
+            },
+            "after": {
+              "x": 195,
+              "y": 102,
+              "width": 46,
+              "height": 46
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

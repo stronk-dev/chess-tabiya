@@ -1,0 +1,349 @@
+{
+  "sourceRevision": "92994e48",
+  "result": "failed",
+  "records": [
+    {
+      "name": "board-controls-1440x900",
+      "data": {
+        "board": {
+          "x": 168,
+          "y": 74,
+          "width": 768,
+          "height": 768
+        },
+        "appearance": {
+          "x": 175.1875,
+          "y": 81.1875,
+          "width": 74.671875,
+          "height": 24
+        },
+        "entry": {
+          "x": 640.8125,
+          "y": 81.1875,
+          "width": 288,
+          "height": 24.59375
+        },
+        "overlap": {
+          "width": 0,
+          "height": 24
+        },
+        "blocked": []
+      }
+    },
+    {
+      "name": "board-controls-768x1024",
+      "data": {
+        "board": {
+          "x": 40,
+          "y": 72,
+          "width": 688,
+          "height": 688
+        },
+        "appearance": {
+          "x": 47.1875,
+          "y": 79.1875,
+          "width": 74.671875,
+          "height": 24
+        },
+        "entry": {
+          "x": 432.8125,
+          "y": 79.1875,
+          "width": 288,
+          "height": 24.59375
+        },
+        "overlap": {
+          "width": 0,
+          "height": 24
+        },
+        "blocked": []
+      }
+    },
+    {
+      "name": "board-controls-430x932",
+      "data": {
+        "board": {
+          "x": 11,
+          "y": 56,
+          "width": 408,
+          "height": 408
+        },
+        "appearance": {
+          "x": 18.1875,
+          "y": 63.1875,
+          "width": 74.671875,
+          "height": 24
+        },
+        "entry": {
+          "x": 123.8125,
+          "y": 63.1875,
+          "width": 288,
+          "height": 24.59375
+        },
+        "overlap": {
+          "width": 0,
+          "height": 24
+        },
+        "blocked": [
+          "a8:A.appearance-link svelte-med61j",
+          "b8:A.appearance-link svelte-med61j",
+          "c8:SUMMARY.svelte-med61j",
+          "d8:SUMMARY.svelte-med61j",
+          "e8:SUMMARY.svelte-med61j",
+          "f8:SUMMARY.svelte-med61j",
+          "g8:SUMMARY.svelte-med61j",
+          "h8:SUMMARY.svelte-med61j"
+        ]
+      }
+    },
+    {
+      "name": "board-controls-390x844",
+      "data": {
+        "board": {
+          "x": 11,
+          "y": 56,
+          "width": 368,
+          "height": 368
+        },
+        "appearance": {
+          "x": 18.1875,
+          "y": 63.1875,
+          "width": 74.671875,
+          "height": 24
+        },
+        "entry": {
+          "x": 83.8125,
+          "y": 63.1875,
+          "width": 288,
+          "height": 24.59375
+        },
+        "overlap": {
+          "width": 9.046875,
+          "height": 24
+        },
+        "blocked": [
+          "a8:A.appearance-link svelte-med61j",
+          "b8:A.appearance-link svelte-med61j",
+          "c8:SUMMARY.svelte-med61j",
+          "d8:SUMMARY.svelte-med61j",
+          "e8:SUMMARY.svelte-med61j",
+          "f8:SUMMARY.svelte-med61j",
+          "g8:SUMMARY.svelte-med61j",
+          "h8:SUMMARY.svelte-med61j"
+        ]
+      }
+    },
+    {
+      "name": "board-controls-360x680",
+      "data": {
+        "board": {
+          "x": 8,
+          "y": 56,
+          "width": 344,
+          "height": 344
+        },
+        "appearance": {
+          "x": 15.1875,
+          "y": 63.1875,
+          "width": 74.671875,
+          "height": 24
+        },
+        "entry": {
+          "x": 56.8125,
+          "y": 63.1875,
+          "width": 288,
+          "height": 24.59375
+        },
+        "overlap": {
+          "width": 33.046875,
+          "height": 24
+        },
+        "blocked": [
+          "a8:A.appearance-link svelte-med61j",
+          "b8:SUMMARY.svelte-med61j",
+          "c8:SUMMARY.svelte-med61j",
+          "d8:SUMMARY.svelte-med61j",
+          "e8:SUMMARY.svelte-med61j",
+          "f8:SUMMARY.svelte-med61j",
+          "g8:SUMMARY.svelte-med61j",
+          "h8:SUMMARY.svelte-med61j"
+        ]
+      }
+    },
+    {
+      "name": "board-controls-320x256",
+      "data": {
+        "board": {
+          "x": 8,
+          "y": 56,
+          "width": 304,
+          "height": 304
+        },
+        "appearance": {
+          "x": 15.1875,
+          "y": 63.1875,
+          "width": 74.671875,
+          "height": 24
+        },
+        "entry": {
+          "x": 16.8125,
+          "y": 63.1875,
+          "width": 288,
+          "height": 24.59375
+        },
+        "overlap": {
+          "width": 73.046875,
+          "height": 24
+        },
+        "blocked": [
+          "a8:SUMMARY.svelte-med61j",
+          "b8:SUMMARY.svelte-med61j",
+          "c8:SUMMARY.svelte-med61j",
+          "d8:SUMMARY.svelte-med61j",
+          "e8:SUMMARY.svelte-med61j",
+          "f8:SUMMARY.svelte-med61j",
+          "g8:SUMMARY.svelte-med61j",
+          "h8:SUMMARY.svelte-med61j",
+          "a3:nothing",
+          "b3:nothing",
+          "c3:nothing",
+          "d3:nothing",
+          "e3:nothing",
+          "f3:nothing",
+          "g3:nothing",
+          "h3:nothing",
+          "a2:nothing",
+          "b2:nothing",
+          "c2:nothing",
+          "d2:nothing",
+          "e2:nothing",
+          "f2:nothing",
+          "g2:nothing",
+          "h2:nothing",
+          "a1:nothing",
+          "b1:nothing",
+          "c1:nothing",
+          "d1:nothing",
+          "e1:nothing",
+          "f1:nothing",
+          "g1:nothing",
+          "h1:nothing"
+        ]
+      }
+    },
+    {
+      "name": "board-controls-gesture-1440x900",
+      "data": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "before": {
+          "x": 168,
+          "y": 74,
+          "width": 768,
+          "height": 768
+        },
+        "after": {
+          "x": 168,
+          "y": 74,
+          "width": 768,
+          "height": 768
+        },
+        "promotionPending": true,
+        "entryOpen": false
+      }
+    },
+    {
+      "name": "board-controls-gesture-768x1024",
+      "data": {
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        },
+        "before": {
+          "x": 40,
+          "y": 72,
+          "width": 688,
+          "height": 688
+        },
+        "after": {
+          "x": 40,
+          "y": 72,
+          "width": 688,
+          "height": 688
+        },
+        "promotionPending": true,
+        "entryOpen": false
+      }
+    },
+    {
+      "name": "board-controls-gesture-430x932",
+      "data": {
+        "viewport": {
+          "width": 430,
+          "height": 932
+        },
+        "before": {
+          "x": 11,
+          "y": 56,
+          "width": 408,
+          "height": 408
+        },
+        "after": {
+          "x": 11,
+          "y": 56,
+          "width": 408,
+          "height": 408
+        },
+        "promotionPending": true,
+        "entryOpen": false
+      }
+    },
+    {
+      "name": "board-controls-gesture-390x844",
+      "data": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "before": {
+          "x": 11,
+          "y": 56,
+          "width": 368,
+          "height": 368
+        },
+        "after": {
+          "x": 11,
+          "y": 56,
+          "width": 368,
+          "height": 368
+        },
+        "promotionPending": true,
+        "entryOpen": false
+      }
+    },
+    {
+      "name": "board-controls-gesture-360x680",
+      "data": {
+        "viewport": {
+          "width": 360,
+          "height": 680
+        },
+        "before": {
+          "x": 8,
+          "y": 56,
+          "width": 344,
+          "height": 344
+        },
+        "after": {
+          "x": 8,
+          "y": 56,
+          "width": 344,
+          "height": 344
+        },
+        "promotionPending": true,
+        "entryOpen": false
+      }
+    }
+  ]
+}

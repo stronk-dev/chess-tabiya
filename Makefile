@@ -128,8 +128,12 @@ play-composition-conformance-check:
 	./node_modules/.bin/playwright test --grep "@matrix (A3 conformance|play composition keeps|final Guided Hint|maximum-load modules|module seats render|post-commit guard|terminal outcome|promotion picker|rewind, fork)"
 	node tools/play-composition-matrix.mjs
 
+.PHONY: play-composition-board-controls-check
+play-composition-board-controls-check:
+	./node_modules/.bin/playwright test --grep "@matrix (board controls|normal Tab traversal)"
+
 play-composition-client-check:
-	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts
+	pnpm exec vitest run apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/Chessboard.test.ts apps/web/src/lib/CreateSeedChooser.test.ts apps/web/src/lib/BoardNotation.test.ts
 
 play-composition-matrix-contract:
 	node --test tools/play-composition-matrix.test.mjs

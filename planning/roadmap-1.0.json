@@ -1380,10 +1380,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Measure D3458 whole phone text-entry/Appearance affordance bounds and affected physical-square gestures, then repair genuine overlap before completing A4 Inspector positive/destination/vocabulary arms and reviewing D3309 structural fidelity. D3451–D3457 now supply the paired 112-cell center/clipping/scroll floor and measured repairs, not full no-overlap acceptance. Reconcile D3436 phone overlay/below-board/modality authority without incidental policy changes; rule D1639 before claiming complete defaults. Persistent compact tablet queue D3444–D3450 remains verified, not queued again.",
+        "nextAction": "Continue A4 Inspector positive/destination/vocabulary arms and remaining D1834 semantic obligations. Review D3309 detailed structural operand authority before a renderer swap; reconcile D3436 phone modality/placement without incidental policy changes and rule D1639 before complete defaults. D3458–D3463 native input/strip/authoring/Cancel/containing-block repairs and D3451–D3457 conformance are verified, not queued again.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3451–D3457 add same-result non-vacuous conformance JSON to all 112 genuine post-gesture cells and repair measured coordinate clipping, promise-footer overflow, chooser background ownership, timeline chip clipping, promotion Cancel and inner branch scrolling. Clipped, covered, invisible-active and nested-scroll negatives fail the same predicate. Complete rebuilt browser CI passes 127 journeys with one existing optional real-Maia skip and zero retries; a later checker-only refinement is separately verified by nine journeys/all 112 cells (1735 controls, 9934 text bounds), never relabelled as the earlier pipeline. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Complete exact-index software passes 3244 tests/341 files, seven isolated performance tests/four files, clean types, 33 artifact controls and every downstream gate at tree 13063943302450635d95ff806961114a43ae1605. Subsequent tracking/log/proof bytes receive separate staged-governance and normal-hook checks. Seven scoped rows close on path evidence; zero untriaged of 1687 live items and none doing. Visual inspection finds D3458 partial Appearance/text-entry overlap despite reachable centers; full A3/D1834, A4/Inspector/vocabulary, D3436 phone reconciliation, ceilings and owner-use remain open. No whole RFC, capability or milestone promotion. Earlier genuine eight-seat, persistent queue and stable-board/Hint/preset proofs remain linked.",
+          "summary": "D3458–D3463 repair actual board-chrome overlap, independent native authoring forms and promotion Cancel/retry under accepted contracts. The notation door sits in the fixed strip; whole shell/strip bounds and all 64 physical centers pass at six projections, genuine back-rank clicks at five, native authoring posts only through Create, and the unchanged pawn supports a real drag retry. Fixed-panel positive and containing-block/own-label/viewport negatives calibrate the checker. Five native focus/input journeys and 110 mounted tests pass. Complete replacement browser CI passes 131 journeys (68 smoke, five content, 57 matrix, one packaged), one existing optional real-Maia skip and zero retries; all 112 paired PNG/JSON cells and their report remain hash-equal after packaging, with 1593 active controls and 9183 text bounds. Failed predecessor, obsolete mobile/whole-workspace selectors, initial strip checker failures and superseded topbar images are preserved as failures/superseded, never relabelled. Exact-index software passes 3248 tests/343 files, seven isolated performance tests/four files, clean types and all downstream gates at tree 9ae457acbcd382bd710f8ad8131b51d57eed6899. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Later tracker/docs/log bytes get separate staged governance and normal hooks. Six scoped rows close on retained path evidence, zero untriaged of 1686 live items and none doing. No whole RFC/capability/milestone promotion; full A3/A4, D1834, D3436, D3309, ceilings and owner-use remain open.",
           "impact": "advanced",
           "evidence": [
             "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
@@ -1446,7 +1446,19 @@
             "planning/play-composition/conformance-matrix-2026-10-06.json",
             "tests/browser/composition-conformance.ts",
             "tests/browser/composition-conformance.spec.ts",
-            "planning/play-composition/conformance-software-2026-10-06.json"
+            "planning/play-composition/conformance-software-2026-10-06.json",
+            "rfc/accessible-board-input.md",
+            "planning/accessible-board-input/plan.md",
+            "apps/web/src/lib/BoardNotation.svelte",
+            "apps/web/src/lib/BoardNotation.test.ts",
+            "apps/web/src/lib/CreateSeedChooser.svelte",
+            "apps/web/src/lib/CreateSeedChooser.test.ts",
+            "planning/play-composition/board-controls-2026-10-06.md",
+            "planning/play-composition/board-controls-software-2026-10-06.json",
+            "planning/play-composition/board-controls-matrix-2026-10-06.json",
+            "planning/play-composition/board-controls-native-2026-10-06.json",
+            "planning/play-composition/board-controls-native-predecessor-2026-10-06.json",
+            "planning/play-composition/board-controls-predecessor-2026-10-06.json"
           ],
           "anchors": [
             {
@@ -1562,7 +1574,7 @@
             {
               "kind": "rfc",
               "id": "play-composition.md",
-              "digest": "sha256:6a0d8d00b930b578ce575a595f53a76946af98443a286075ceeed2e66564ffea"
+              "digest": "sha256:803015234ae9aada116d5ce97a8a8ae9cc11c0b2f0fde6ef92e3291b5ebe502a"
             },
             {
               "kind": "work_state",
@@ -1657,7 +1669,37 @@
             {
               "kind": "work_state",
               "id": "D3458",
-              "digest": "sha256:132de7902c9f6f388a9ec72752a5d8b1c8608ab8f82793b89e56453459ce6654"
+              "digest": "sha256:578d9d8cb32fa3571b6398f2e469edcfba5f449ce8f4db4a1785a604b6d19cef"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3459",
+              "digest": "sha256:744bc2934b96507287e8a81e60a5879f0ad19ea9daa31c9d0e7c7be4361a677e"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3460",
+              "digest": "sha256:7df0bfba1ff81d72e3b748d31a83bbc503ee25076eb7de6de7991150ff462698"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3461",
+              "digest": "sha256:5cb74144da0580627d3cd19e2ea96b24bdb85c36747e000b1ed5962c979cc832"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3462",
+              "digest": "sha256:ad354a5322c60dc3a8c2b52b1d675d95aade65736e1cdbb8e2705ba9164e011d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3463",
+              "digest": "sha256:f261c99f980002988e9707f2b1d605e4c7230bb4aeb6aab616dd75fdab0bf75e"
+            },
+            {
+              "kind": "rfc",
+              "id": "accessible-board-input.md",
+              "digest": "sha256:0ba15b351907ca9dc16ece92961dba61c23f421a3ee88a806d8ef34fe2de488e"
             }
           ]
         },

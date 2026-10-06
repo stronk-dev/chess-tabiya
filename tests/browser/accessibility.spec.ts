@@ -89,7 +89,7 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
   const criticalTargets = [
     page.getByRole("link", { name: "Appearance" }),
   ];
-  await page.getByText("Enter a move", { exact: true }).click();
+  await page.locator(".text-move summary").click();
   criticalTargets.push(page.getByLabel("Move in chess notation"), page.getByRole("button", { name: "Submit move" }));
   for (const target of criticalTargets) {
     const box = await target.boundingBox();
@@ -97,7 +97,7 @@ test("@matrix @mobile the mobile project uses real touch and coarse-pointer sema
     expect(box!.width).toBeGreaterThanOrEqual(24);
     expect(box!.height).toBeGreaterThanOrEqual(24);
   }
-  await page.getByText("Enter a move", { exact: true }).click();
+  await page.locator(".text-move summary").click();
 
   const supportTab = page.getByRole("button", { name: "Support" });
   await supportTab.click();

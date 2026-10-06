@@ -1753,7 +1753,7 @@ async function liveInputMove(
     (response) => response.request().method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(response.url()).pathname),
   );
   if (mode === "text") {
-    await page.getByText("Enter a move", { exact: true }).click();
+    await page.locator(".text-move summary").click();
     await page.getByLabel("Move in chess notation").fill(uci);
     await page.getByRole("button", { name: "Submit move" }).click();
   } else if (mode === "keyboard") {
@@ -2366,11 +2366,11 @@ test("@matrix play composition keeps one exact board rectangle through reachable
 
     await attachCompositionCell(page, testInfo, viewport, "08-long-objective");
 
-    await page.getByText("Enter a move", { exact: true }).click();
+    await page.locator(".text-move summary").click();
     await expect(page.getByLabel("Move in chess notation")).toBeVisible();
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await attachCompositionCell(page, testInfo, viewport, "16-keyboard-text-entry-active");
-    await page.getByText("Enter a move", { exact: true }).click();
+    await page.locator(".text-move summary").click();
 
     await page.getByRole("button", { name: "Inspector" }).click();
     await expect(page.getByRole("dialog", { name: "Evidence inspector" })).toBeVisible();
@@ -2841,6 +2841,113 @@ test("@matrix terminal outcome preserves the board rectangle at every compositio
   }
 });
 
+test("@matrix board controls do not overlap each other or consume physical square centers", async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
+  for (const viewport of [{ width:1440, height:900 }, { width:768, height:1024 }, { width:430, height:932 }, { width:390, height:844 }, { width:360, height:680 }, { width:320, height:256 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page.getByRole("button", { name:"Start from a FEN" }).click();
+    await page.getByLabel("Position FEN").fill("k7/4P3/8/8/8/8/8/7K w - - 0 1");
+    await chooseRawRung(page);
+    await page.getByRole("button", { name:"Start and keep the game" }).click();
+    const board = page.getByLabel("Chessboard");
+    await expect(board).toBeVisible();
+    const measured = await board.evaluate(element => {
+      const rect = (e: Element) => { const b=e.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height}; };
+      const entry = document.querySelector(".text-move summary")!;
+      const controls=[...document.querySelectorAll<HTMLElement>(".topbar-actions > button, .topbar-actions > details > summary, .move-entry .text-move > summary")];
+      const overlap=(a:DOMRect,b:DOMRect)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+      const t=entry.getBoundingClientRect(), b=element.getBoundingClientRect();
+      const collisions:string[]=[];
+      for(let i=0;i<controls.length;i++)for(let j=i+1;j<controls.length;j++)if(overlap(controls[i]!.getBoundingClientRect(),controls[j]!.getBoundingClientRect())>0)collisions.push(`${controls[i]!.textContent}/${controls[j]!.textContent}`);
+      const blocked:string[]=[];
+      const offsets=[...document.querySelectorAll<HTMLElement>("*")].map(e=>({e,left:e.scrollLeft,top:e.scrollTop})), pageOffset={left:scrollX,top:scrollY};
+      const cells=[...element.parentElement!.querySelectorAll<HTMLElement>('[role="gridcell"]')];
+      try { for(let i=0;i<cells.length;i++){
+        const cell=cells[i]!;cell.scrollIntoView({block:"nearest",inline:"nearest",behavior:"instant"});
+        const r=cell.getBoundingClientRect(), hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+        if(!hit||!element.contains(hit))blocked.push(`${cell.textContent}:${hit instanceof HTMLElement?hit.tagName+'.'+hit.className:'nothing'}`);
+      } } finally {
+        for(const {e,left,top} of offsets)if(e.scrollLeft!==left||e.scrollTop!==top)e.scrollTo({left,top,behavior:"instant"});
+        window.scrollTo({...pageOffset,behavior:"instant"});
+      }
+      return {board:rect(element),entry:rect(entry),strip:rect(document.querySelector(".timeline-strip")!),timeline:rect(document.querySelector(".timeline-strip .timeline")!),boardOverlap:overlap(t,b),collisions,blocked,squares:cells.length};
+    });
+    await testInfo.attach(`board-controls-${viewport.width}x${viewport.height}`,{body:JSON.stringify(measured,null,2),contentType:"application/json"});
+    expect.soft(measured.boardOverlap,`entry must not paint on the board at ${viewport.width}`).toBe(0);
+    expect.soft(measured.collisions,`whole shell control bounds at ${viewport.width}`).toEqual([]);
+    expect.soft(measured.entry.x).toBeGreaterThanOrEqual(measured.strip.x);
+    expect.soft(measured.entry.y).toBeGreaterThanOrEqual(measured.strip.y);
+    expect.soft(measured.entry.x+measured.entry.width).toBeLessThanOrEqual(measured.timeline.x);
+    expect.soft(measured.entry.y+measured.entry.height).toBeLessThanOrEqual(measured.strip.y+measured.strip.height);
+    expect.soft(measured.squares).toBe(64);
+    expect.soft(measured.blocked,`physical board centers at ${viewport.width}`).toEqual([]);
+  }
+});
+
+test("@matrix board controls preserve genuine click back-rank promotion gestures", async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
+  for (const viewport of [{ width:1440, height:900 }, { width:768, height:1024 }, { width:430, height:932 }, { width:390, height:844 }, { width:360, height:680 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page.getByRole("button", { name:"Start from a FEN" }).click();
+    await page.getByLabel("Position FEN").fill("k7/4P3/8/8/8/8/8/7K w - - 0 1");
+    await chooseRawRung(page);
+    await page.getByRole("button", { name:"Start and keep the game" }).click();
+    const before = await page.getByLabel("Chessboard").boundingBox();
+    const origin=squarePoint(before!,"e7"), destination=squarePoint(before!,"e8");
+    await page.mouse.click(origin.x,origin.y);
+    await page.mouse.click(destination.x,destination.y);
+    const picker=page.getByRole("dialog",{name:"Choose promotion piece"});
+    await expect.soft(picker,`actual e7→e8 at ${viewport.width}`).toBeVisible();
+    const pending=await picker.isVisible();
+    await testInfo.attach(`board-controls-gesture-${viewport.width}x${viewport.height}`,{body:JSON.stringify({viewport,before,after:await page.getByLabel("Chessboard").boundingBox(),promotionPending:pending,entryOpen:await page.locator(".text-move").getAttribute("open")!==null}),contentType:"application/json"});
+    if(pending){await picker.getByRole("button",{name:"Cancel",exact:true}).click();await expect(picker).toBeHidden();}
+    expect.soft(await page.getByLabel("Chessboard").boundingBox()).toEqual(before);
+  }
+});
+
+test("@matrix board controls keep authoring notation separate from native draft submission", async ({ page }, testInfo) => {
+  await register(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/create");
+  await page.getByRole("button", { name: /^Position/ }).click();
+  await page.getByLabel("Draft title", { exact: true }).fill("Native notation seed");
+  const posts: unknown[] = [];
+  page.on("request", request => {
+    if (request.method() === "POST" && new URL(request.url()).pathname === "/packs/drafts") posts.push(request.postDataJSON());
+  });
+  const entry = page.locator(".text-move");
+  await entry.locator("summary").click();
+  await entry.getByLabel("Move in chess notation").fill("e4");
+  await entry.getByRole("button", { name: "Submit move", exact: true }).click();
+  await expect(page.getByLabel("Starting FEN")).toHaveValue("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1");
+  expect(posts).toEqual([]);
+  expect(await page.locator("form form").count()).toBe(0);
+  await expect(page.getByRole("button", { name: "Create ten-field draft", exact: true })).toBeEnabled();
+  await testInfo.attach("board-controls-authoring-entry", { body: await page.screenshot(), contentType: "image/png" });
+  const submitted = page.waitForResponse(response => new URL(response.url()).pathname === "/packs/drafts" && response.request().method() === "POST");
+  await page.getByRole("button", { name: "Create ten-field draft", exact: true }).click();
+  expect((await submitted).ok()).toBe(true);
+  expect(posts).toHaveLength(1);
+});
+
+test("@matrix board controls restore an uncommitted promotion for another real gesture", async ({ page }, testInfo) => {
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/play");await page.getByRole("button",{name:"Start from a FEN"}).click();
+  await page.getByLabel("Position FEN").fill("k7/4P3/8/8/8/8/8/7K w - - 0 1");await chooseRawRung(page);
+  await page.getByRole("button",{name:"Start and keep the game"}).click();
+  const pawn=page.locator('.board piece.white.pawn:not(.ghost)'),before=await pawn.boundingBox();
+  await move(page,"e7","e8");const picker=page.getByRole("dialog",{name:"Choose promotion piece"});await expect(picker).toBeVisible();
+  await picker.getByRole("button",{name:"Cancel",exact:true}).click();await expect(picker).toBeHidden();
+  // Restoring FEN uses the user's normal Chessground animation. Require the
+  // exact source rectangle after interpolation, not its first animation frame.
+  await expect.poll(() => pawn.boundingBox(), "cancel restores the actual source square").toEqual(before);
+  await testInfo.attach("board-controls-promotion-cancel",{body:JSON.stringify({before,after:await pawn.boundingBox()}),contentType:"application/json"});
+  expect.soft(await pawn.boundingBox(),"cancel restores pawn to its actual source square").toEqual(before);
+  await move(page,"e7","e8");await expect(picker).toBeVisible();
+});
+
 test("@matrix promotion picker overlays the unchanged board at every composition viewport", async ({ page }, testInfo) => {
   const projections = [
     { width: 1440, height: 900 },
@@ -3155,7 +3262,7 @@ test("@matrix the semantic board remains complete and yields focus to a checkpoi
   await expect(grid.getByRole("row")).toHaveCount(8);
   await expect(grid.getByRole("gridcell")).toHaveCount(64);
   await expect(grid.locator('[aria-selected="true"]')).toHaveCount(1);
-  await expect(page.getByText("Enter a move", { exact: true })).toBeVisible();
+  await expect(page.locator(".text-move summary")).toBeVisible();
   await liveInputMove(page, "c1e3", "white", "keyboard");
   const checkpoint = page.getByRole("dialog", { name: "Choose the setup" });
   await expect(checkpoint).toBeVisible();
@@ -3517,7 +3624,20 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
   await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
-  await page.getByText("Enter a move", { exact: true }).click();
+  await page.locator(".text-move summary").click();
+  const entry=page.getByRole("dialog",{name:"Enter a move",exact:true});
+  await expect(entry).toBeVisible();
+  const entryBackground = [".topbar", ".board-slot", ".timeline-strip .timeline", ".rail-stack"];
+  for (const selector of entryBackground) await expect(page.locator(selector)).toHaveAttribute("inert", "");
+  expect(await entry.evaluate(e => e.closest("[inert]") === null)).toBe(true);
+  const input=entry.getByLabel("Move in chess notation"), submit=entry.getByRole("button",{name:"Submit move"});
+  await input.focus();await page.keyboard.press("Tab");await expect(submit).toBeFocused();
+  await page.keyboard.press("Tab");await expect(entry.getByRole("link",{name:"Appearance"})).toBeFocused();
+  await page.keyboard.press("Tab");await expect(entry.locator("summary")).toBeFocused();
+  await page.keyboard.press("Shift+Tab");await expect(entry.getByRole("link",{name:"Appearance"})).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(entry).toBeHidden();await expect(page.locator(".text-move summary")).toBeFocused();
+  for (const selector of entryBackground) await expect(page.locator(selector)).not.toHaveAttribute("inert", "");
 
   const marker = () => page.evaluate(() => {
     const active = document.activeElement;
@@ -3554,7 +3674,7 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
     throw new Error(`${keys} did not leave the drill region`);
   }
 
-  const alwaysReachable = ["assistance", "inspector", "help", "text-summary", "text-input", "text-submit", "board-grid", "timeline", "companion-tabs"];
+  const alwaysReachable = ["assistance", "inspector", "help", "text-summary", "board-grid", "timeline", "companion-tabs"];
   for (const [region, regionMarkers, reverseStart] of [
     ["Branches", ["branches"], ".branch-seat button"],
     ["Actions", ["board-marks", "run-actions"], ".quick-actions button:last-child"],
@@ -3609,16 +3729,16 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   const contextBox = await runContext.boundingBox();
   expect(contextBox?.width).toBeLessThanOrEqual(1);
   expect(contextBox?.height).toBeLessThanOrEqual(1);
+  await page.locator(".text-move summary").click();
   const appearanceBox = await page.getByRole("link", { name: "Appearance" }).boundingBox();
   expect(appearanceBox?.width).toBeGreaterThanOrEqual(24);
   expect(appearanceBox?.height).toBeGreaterThanOrEqual(24);
-  await page.getByText("Enter a move", { exact: true }).click();
   for (const target of [page.getByLabel("Move in chess notation"), page.getByRole("button", { name: "Submit move" })]) {
     const box = await target.boundingBox();
     expect(box?.width).toBeGreaterThanOrEqual(24);
     expect(box?.height).toBeGreaterThanOrEqual(24);
   }
-  await page.getByText("Enter a move", { exact: true }).click();
+  await page.locator(".text-move summary").click();
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 680 }] as const) {
     await page.setViewportSize(viewport);
     await assertRunViewport(page, viewport);

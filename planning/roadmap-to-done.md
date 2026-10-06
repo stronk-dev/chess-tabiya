@@ -32,9 +32,13 @@ The bounded A3 checkpoint [[D3451]]–[[D3457]] now pairs all 112 real cells wit
 center/clipping/scroll records and repairs measured coordinate, footer, chooser, timeline,
 promotion and branch-scroll failures. Full browser CI passes 127 journeys; the final checker-only
 refinement separately passes nine journeys/all 112 cells. Receipt:
-`planning/play-composition/conformance-2026-10-06.md`. Visual QA records [[D3458]] partial phone
-Appearance/text-entry overlap despite reachable centers; complete no-overlap is not inferred.
-Measure whole affordances and affected square gestures, then repair that overlap before A4.
+`planning/play-composition/conformance-2026-10-06.md`. The subsequent [[D3458]]–[[D3463]]
+checkpoint measures whole affordances and all 64 physical centers at six projections, moves
+notation into the fixed strip, separates authoring forms, restores promotion Cancel/drag retry
+and calibrates fixed-panel clipping with genuine negatives. Five native input/focus journeys,
+all 112 paired cells and complete replacement software/content/browser gates pass. Receipt:
+`planning/play-composition/board-controls-2026-10-06.md`. Continue A4 Inspector positive/
+destination/vocabulary and D1834's remaining semantic obligations; geometry does not close them.
 [[D1834]]/[[D910]], full A3/A4, [[D3436]] phone reconciliation, Inspector/vocabulary, ceilings and owner-use discharges remain
 open. This is an advanced checkpoint, not a completed milestone or capability. Receipt:
 `planning/play-composition/hint-and-matrix-2026-10-06.md`.

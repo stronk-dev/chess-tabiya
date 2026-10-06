@@ -9,7 +9,7 @@ export const COMPOSITION_SCROLL_REGIONS = [
   { selector: ".compare .boards, .compare .strip-band, .evaluation-table-wrap", family: "strip-x", axes: "x" },
   { selector: ".companion-queue.band .seat-card", family: "seat-card", axes: "y" },
   { selector: ".objective-copy", family: "seat-card", axes: "y" },
-  { selector: ".inspector-grid, .sheet, .support-menu, .group-creator, .shape-panel, .comparison-inspector", family: "sheet-body", axes: "y" },
+  { selector: ".inspector-grid, .sheet, .support-menu, .notation-panel, .group-creator, .shape-panel, .comparison-inspector", family: "sheet-body", axes: "y" },
   { selector: '.dialog[role="dialog"], .modal[role="dialog"]', family: "sheet-body", axes: "y" },
 ] as const;
 
@@ -86,8 +86,19 @@ export async function inspectComposition(page: Page, cell: string): Promise<Comp
 
     function clipping(e: HTMLElement, r = e.getBoundingClientRect(), includeSelf = false): void {
       let box = { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+      // Fixed descendants escape ordinary overflow ancestors until their actual containing
+      // block. Their own frame still clips, as do transformed/contained ancestors. This
+      // follows paint geometry; it is not a selector exemption for the notation panel.
+      const fixedContainingBlock = (s: CSSStyleDeclaration) =>
+        s.transform !== "none" || s.perspective !== "none" || s.filter !== "none"
+        || s.backdropFilter !== "none" || /\b(layout|paint|strict|content)\b/u.test(s.contain)
+        || /\b(transform|perspective|filter|backdrop-filter)\b/u.test(s.willChange)
+        || s.contentVisibility === "auto";
+      let escaping = !includeSelf && getComputedStyle(e).position === "fixed";
       for (let p = includeSelf ? e : e.parentElement; p; p = p.parentElement) {
         const s = getComputedStyle(p), r = p.getBoundingClientRect();
+        if (escaping && !fixedContainingBlock(s)) continue;
+        escaping = false;
         const bounds = { left: r.left + p.clientLeft, right: r.left + p.clientLeft + p.clientWidth, top: r.top + p.clientTop, bottom: r.top + p.clientTop + p.clientHeight };
         for (const axis of ["x", "y"] as const) {
           const overflow = axis === "x" ? s.overflowX : s.overflowY;
@@ -103,6 +114,10 @@ export async function inspectComposition(page: Page, cell: string): Promise<Comp
             return;
           }
         }
+        if (s.position === "fixed") escaping = true;
+      }
+      if (escaping && (box.left < -1 || box.right > innerWidth + 1 || box.top < -1 || box.bottom > innerHeight + 1)) {
+        issues.push({ kind: "clipped_box", element: label(e), detail: "fixed projection outside the viewport" });
       }
     }
 

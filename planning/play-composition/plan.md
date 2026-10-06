@@ -17,11 +17,12 @@ remain in their owning RFCs.
    phone has a 48 px rim whose expanded sheet overlays instead of reflowing.
 5. Raw structure, transition, human-model and corpus readings moved to a separate full-screen
    Inspector. Ordinary play retains only the bounded Support/Branches/Actions seats.
-6. Text move entry overlays the board component without changing its box. The keyed board remount
+6. Text move entry overlays the composition without changing its box. Its collapsed door sits in
+   the fixed timeline strip, outside the physical squares. The keyed board remount
    is gone; a reset token re-asserts capture state through the existing `board.set()` path.
 7. Permanent browser checks cover exact geometry at all seven viewports, text entry, objective and
    Inspector overlays, phone sheet gestures, stable board DOM identity, keyboard traversal, the
-   150 input projections, visible move interpolation and the multi-user match flows. Current browser result: 60 passed, one
+   150 input projections, visible move interpolation and the multi-user match flows. Initial browser result: 60 passed, one
    optional Maia latency test skipped. Successful CI now retains an HTML report on every outcome;
    the first explicit state matrix contributes 42 named attachments (six reachable states × seven
    viewports) instead of producing evidence only when a test fails.
@@ -104,7 +105,15 @@ remain in their owning RFCs.
     Final focused coverage passes nine journeys/all 112 cells. Receipt:
     `conformance-2026-10-06.md`; full gate results are recorded there before commit.
     This supersedes checkpoint 13's inner tablet branch scrolling, not full A3 acceptance:
-    D3458 retains partial phone board-chrome overlap missed by a center-only predicate.
+    That checkpoint retained D3458 partial phone board-chrome overlap missed by a center-only predicate.
+24. The board-controls repair measures complete shell bounds and all 64 physical centers, seats
+    the notation door in the contract's fixed strip, and keeps its open form modal with local
+    grounded refusals. Separate native authoring forms prevent notation from creating a draft.
+    Promotion Cancel restores unchanged graphical paint and a subsequent real drag succeeds.
+    Fixed-panel positive and transformed/contained/own-label negatives calibrate the clipping
+    instrument without a product selector exemption. Receipt: `board-controls-2026-10-06.md`;
+    nine conformance journeys/all 112 cells, five native control/focus journeys and 110 mounted tests
+    pass. Full replacement gates and scoped closeout are recorded in that receipt before commit.
 
 ## Remaining before archive
 
@@ -128,9 +137,10 @@ overlay/modality contract reconciliation; complete A3/A4/Inspector/ceiling/owner
    [[D3436]] retains the phone contract reconciliation;
    actionable A3 and destination A4 obligations remain. Counts alone are not semantic acceptance.
    The paired A3 center/clipping/scroll floor now runs on all 112 cells with negative controls
-   (`conformance-2026-10-06.md`). Next measure D3458's complete phone text-entry/Appearance
-   affordance bounds and actual affected square gestures, then repair the genuine overlap before
-   A4. Do not infer complete no-overlap from reachable centers. Keep modal-inert board controls
+   (`conformance-2026-10-06.md`). The board-controls checkpoint independently measures complete
+   affordances and actual affected square gestures (`board-controls-2026-10-06.md`). Continue A4's
+   Inspector positive/destination/vocabulary arms; do not infer its semantic acceptance from
+   geometry. Keep modal-inert board controls
    distinct from hidden actionable controls; D3436 must reconcile phone authority before changing
    its policy. This is the existing D1834/A3 obligation, not a parallel tracker or count-only closure.
 4. Bind the full Inspector's amended accepts list when `learner-modules` implements, including the

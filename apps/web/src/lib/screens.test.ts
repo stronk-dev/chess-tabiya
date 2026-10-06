@@ -706,6 +706,7 @@ describe("Layer 3 screens", () => {
     expect(document.getElementById(forkButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
     expect(document.getElementById(groupButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
     expect(document.body.textContent).toContain("Watching");
+    expect(document.querySelector(".text-move")).toBeNull();
     expect(document.body.textContent).toContain("moves and rewinds happen there");
     expect(document.body.textContent).not.toContain("Read-only follower");
     expect(document.body.textContent).not.toContain("Another browser owns");

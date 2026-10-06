@@ -39,6 +39,42 @@ afterEach(() => {
 });
 
 describe("Chessboard", () => {
+  it("restores authoritative paint when an uncommitted pointer promotion is cancelled", async () => {
+    const fen = "8/P7/8/8/8/8/8/4K2k w - - 0 1";
+    const target = document.body.appendChild(document.createElement("div"));
+    const onMove = vi.fn();
+    const component = mount(Chessboard, { target, props: { fen, startSide: "white", onMove } });
+    await tick();
+    const after = chessground.configs.at(-1)!.movable!.events!.after!;
+    after("a7", "a8", { premove: false, holdTime: 0 });
+    await tick();
+    expect(target.querySelector(".promotion-picker")).not.toBeNull();
+    const calls = chessground.set.mock.calls.length;
+    [...target.querySelectorAll<HTMLButtonElement>(".promotion-picker button")].find(button => button.textContent === "Cancel")!.click();
+    await tick();
+    expect(target.querySelector(".promotion-picker")).toBeNull();
+    expect(onMove).not.toHaveBeenCalled();
+    expect(chessground.set.mock.calls.length).toBeGreaterThan(calls);
+    expect(chessground.set.mock.calls.at(-1)![0].fen).toBe(fen);
+    after("a7", "a8", { premove: false, holdTime: 0 });
+    await tick();
+    expect(target.querySelector(".promotion-picker")).not.toBeNull();
+    expect(onMove).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("exposes notation only through its same validated controller, even with external chrome", async () => {
+    const target=document.body.appendChild(document.createElement("div")), onMove=vi.fn();
+    const component=mount(Chessboard,{target,props:{fen:"8/8/8/8/8/8/4P3/4K2k w - - 0 1",startSide:"white",showControls:false,onMove}});await tick();
+    expect(target.querySelector(".text-move")).toBeNull();expect(component.notationDisabled()).toBe(false);expect(component.notationAvailable()).toBe(true);
+    expect(component.submitNotation("e5").moveUci).toBeUndefined();expect(onMove).not.toHaveBeenCalled();
+    expect(component.submitNotation("e4").moveUci).toBe("e2e4");expect(onMove).toHaveBeenCalledExactlyOnceWith("e2e4");
+    await unmount(component);
+    const readOnly=mount(Chessboard,{target,props:{fen:"8/8/8/8/8/8/4P3/4K2k w - - 0 1",startSide:"white",disabled:true,showControls:false,onMove}});await tick();
+    expect(readOnly.notationDisabled()).toBe(true);expect(readOnly.notationAvailable()).toBe(false);expect(readOnly.submitNotation("e4").moveUci).toBeUndefined();expect(onMove).toHaveBeenCalledTimes(1);
+    await unmount(readOnly);
+  });
+
   it("scopes semantic cell ids to each mounted board", async () => {
     const firstTarget = document.createElement("div");
     const secondTarget = document.createElement("div");

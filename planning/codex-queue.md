@@ -1,13 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
-Completed executable wave: [[D3451]]–[[D3457]], the accepted play-composition A3 per-cell
-control/clipping/scroll instrument and actual coordinate, promise-footer, chooser, timeline,
-promotion and branch-scroll repairs. Full software/content/browser replacement gates pass;
-`planning/play-composition/conformance-2026-10-06.md` records failures as failures.
-Next, measure [[D3458]]'s whole phone text-entry/Appearance affordance bounds and affected square
-gestures, then repair genuine overlap before A4 destination/vocabulary/Inspector positives and
-the remaining D1834 semantic obligations. [[D3436]] retains the phone overlay/below-board/modal contract reconciliation;
-the companion policy is not changed incidentally by this chooser-boundary repair.
+Completed executable wave: [[D3458]]–[[D3463]], the accepted board-controls/input/composition
+repair. Whole shell/strip bounds and all 64 physical square centers pass at six projections;
+native back-rank clicks, graphical promotion Cancel/drag retry and independent authoring forms
+pass. The notation door sits in the existing fixed strip, never over the board. Modal background,
+Tab/Escape and bidirectional region traversal pass; fixed paint/containing-block calibration
+retains genuine clipping negatives. Full software/content/browser replacement gates and all 112
+paired artifacts pass. Receipt: `planning/play-composition/board-controls-2026-10-06.md`.
+[[D3451]]–[[D3457]] remain completed, not queued again. Continue A4 Inspector positive/destination/
+vocabulary arms and the remaining D1834 semantic obligations; review [[D3309]]'s detailed
+structural operand contract before replacing its richer raw Inspector with a poorer renderer.
+[[D3436]] retains phone overlay/below-board/modal reconciliation; its policy is unchanged.
 [[D3444]]–[[D3450]] already landed at `d262958c`, including the persistent tablet frame,
 independent header controls and delayed-answer/guard retention. Do not queue that finished work again.
 [[D1834]]/[[D910]], full RFC, ceilings and owner-use discharges remain open. Routine metadata

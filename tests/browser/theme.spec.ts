@@ -35,7 +35,9 @@ test("appearance axes apply live without replacing the board or its position", a
   const shell = page.locator(".board-shell").first();
   const board = shell.getByLabel("Chessboard");
   await expect(board).toBeVisible();
-  await expect(shell.getByRole("link", { name: "Appearance" })).toHaveAttribute("href", "/settings#appearance-settings");
+  await page.locator(".text-move summary").click();
+  await expect(page.getByRole("link", { name: "Appearance" })).toHaveAttribute("href", "/settings#appearance-settings");
+  await page.keyboard.press("Escape");
 
   const before = await board.evaluate((element) => {
     element.setAttribute("data-theme-identity", "same-board");

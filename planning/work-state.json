@@ -28453,7 +28453,7 @@
       "id": "D3451",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:e668077b5c69d54b599fff468ed4af33640a6406258b93ef542531e17ed2caca",
+      "sourceDigest": "sha256:5fb00bcb4b2508b460f7dc769ffb29e45ab51b79430d0e5421c27499734d2ac7",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
@@ -28462,7 +28462,7 @@
       "id": "D3452",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:dfab34d24fe4fae27d1eb7703ebcf863a55810e805a790cf1245ee1f1e946eea",
+      "sourceDigest": "sha256:780c4d04dd76fe0d70c61704d3af8e324ab4a3a5f82d27cea6299fe9417b48e9",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
@@ -28471,7 +28471,7 @@
       "id": "D3453",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:177ef1553f4982b723e6ecf1fab4beec0de8b7c10b98ef03bf6ea051a14b1607",
+      "sourceDigest": "sha256:87a8499a36f5517c71c557cb6e877b68055a775b27dcfad684d59282ff8f3f32",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
@@ -28480,7 +28480,7 @@
       "id": "D3454",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:6637700e3b0f2e6548c818e09f494f642b40c842a1710f91dd51c3b5d833790f",
+      "sourceDigest": "sha256:82330d8a4d65b4a6adcdb906a8b4f4f22d62f537a38194b566d92a4eb35cdbb4",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
@@ -28489,7 +28489,7 @@
       "id": "D3455",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:f3095a280f55cc18813ab09ca609ad0f455b19c59ec68124ee55fd9edd354ec6",
+      "sourceDigest": "sha256:715f6f7763fbf69b383754f3c8c39a33827c7fc6a648776606c94b06680f83dc",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
@@ -28498,7 +28498,7 @@
       "id": "D3456",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:114532d17644ba9cb9ba0aa28761a04303aa193daa8e7481a116c3dc4aa7bc14",
+      "sourceDigest": "sha256:da173925ca3e8955704da410169434f842fd042cacbcca520b0d8c320ad0b6c6",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
@@ -28507,18 +28507,64 @@
       "id": "D3457",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:dbe6d9b5e01674980cd2351f3ea4450179d13b07cf09828255b033ad3e1e33cc",
+      "sourceDigest": "sha256:32a1caf7a5bfb63bf9ba9947465a10fc8df85b5f9788b72bbcef214bc2c4b7de",
       "uxItems": [],
       "evidence": "planning/play-composition/conformance-2026-10-06.md",
       "evidenceKind": "path"
     },
     {
       "id": "D3458",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:132de7902c9f6f388a9ec72752a5d8b1c8608ab8f82793b89e56453459ce6654",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:578d9d8cb32fa3571b6398f2e469edcfba5f449ce8f4db4a1785a604b6d19cef",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "planning/play-composition/board-controls-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3459",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:744bc2934b96507287e8a81e60a5879f0ad19ea9daa31c9d0e7c7be4361a677e",
+      "uxItems": [],
+      "evidence": "planning/play-composition/board-controls-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3460",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7df0bfba1ff81d72e3b748d31a83bbc503ee25076eb7de6de7991150ff462698",
+      "uxItems": [],
+      "evidence": "planning/play-composition/board-controls-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3461",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5cb74144da0580627d3cd19e2ea96b24bdb85c36747e000b1ed5962c979cc832",
+      "uxItems": [],
+      "evidence": "planning/play-composition/board-controls-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3462",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ad354a5322c60dc3a8c2b52b1d675d95aade65736e1cdbb8e2705ba9164e011d",
+      "uxItems": [],
+      "evidence": "planning/play-composition/board-controls-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3463",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f261c99f980002988e9707f2b1d605e4c7230bb4aeb6aab616dd75fdab0bf75e",
+      "uxItems": [],
+      "evidence": "planning/play-composition/board-controls-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

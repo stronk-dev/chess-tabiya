@@ -97,6 +97,7 @@
     </div>
     <div class="board-preview" aria-label="Board and piece preview">
       <Chessboard
+        showControls={false}
         fen={PREVIEW_FEN}
         startSide="white"
         lastMove="b4b6"

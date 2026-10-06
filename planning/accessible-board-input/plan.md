@@ -20,6 +20,13 @@ ordinary browser focus traversal, and makes the exact move matrix permanent.
    post-gesture semantic-grid check, bidirectional region traversal and short-desktop layout guard.
 5. Update the help sheet and canonical app-shell/drill-client docs.
 
+2026-10-06 maintenance: the Play notation door moves off the physical squares into the fixed
+timeline strip, through the same controller's component port. Other playable boards use its normal-flow
+projection; authoring position and notation forms have separate native owners. Promotion Cancel
+restores authoritative graphical paint as well as input state. Permanent predecessor, mounted
+and native browser controls are recorded in `planning/play-composition/board-controls-2026-10-06.md`.
+This preserves the five-mode floor and the read-only/assistance ceiling, not a D3 discharge.
+
 ## Remaining discharge
 
 D3 is the owner's ordinary device/browser/assistive-technology use session. No code work waits on

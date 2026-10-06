@@ -372,6 +372,13 @@ keyboard/assistive board entry, and the text form is the independent fallback.
 
 ## Changelog
 
+- 2026-10-06: bounded maintenance under the accepted input/composition contracts: a single
+  controller port drives the strip-seated notation projection, authoring forms have independent
+  native owners, and Cancel restores unchanged Chessground paint before a genuine retry.
+  Whole-control/64-square, actual click/drag and native authoring controls supplement, rather
+  than replace, the permanent 150-cell input floor. Receipt:
+  `planning/play-composition/board-controls-2026-10-06.md`. D3 remains the owner's use session;
+  no normative input, assistance ceiling or acceptance requirement changes.
 - 2026-08-21: initial F12-F draft from R18/O13, refreshed after the exact pointer/touch repair.
 - 2026-08-21: cross-review corrections (claude): matrix arithmetic re-derived against the actual
   instruments (A2 harness 90/90 vs the 18-cell permanent click gate; 150 = 6×5×5); promotion made

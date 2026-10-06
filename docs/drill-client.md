@@ -376,6 +376,17 @@ refresh Chessground without resetting the controller's in-flight origin; this
 keeps a two-tap touch move intact while evidence lighting reacts to the first
 square.
 
+Play seats the notation projection in its fixed timeline strip, outside the physical squares. The
+`Chessboard` component exposes only `submitNotation`, `notationAvailable` and `notationDisabled`
+for that projection; validation and submission remain in the one board-input controller. The
+open panel owns modal focus/background interaction, keeps invalid text and renders the exact
+controller refusal locally. Other playable boards use the same `BoardNotation` below the square
+in normal flow; read-only previews omit it. Appearance remains reachable inside the notation door.
+Create's position fields and move-entry form are separate native forms: notation changes the FEN,
+while the explicit Create button names its position-form owner and creates the draft. Cancelling
+promotion also restores the unchanged authoritative FEN to the graphical board, retaining a
+real pointer retry instead of leaving the uncommitted pawn at its destination.
+
 ## Evidence sentences
 
 The browser owns an enumerable evidence sentence table. Every exported

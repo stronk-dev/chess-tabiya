@@ -20,6 +20,16 @@ Text move entry, promotion, errors, read-only notices, objectives, checkpoints a
 the composition. They never add a stage row. The Chessground DOM node also survives committed
 moves; position changes use the component's `board.set()` path.
 
+The fixed timeline strip owns the collapsed **Enter a move** door; phone/tablet use its labelled keyboard
+icon. Appearance is inside that door, not painted onto the chess squares. The open notation panel
+uses the existing modal boundary, with background inertness, circular Tab traversal and Escape
+focus restoration. It submits through the mounted Chessboard's own validated controller port;
+there is no second parser, API or chess state. Illegal input retains the entered text and shows
+the controller's exact refusal inside the active panel. Explicitly disabled/read-only boards omit
+the door; a playable board waiting on the opponent retains the disabled form and reason.
+Cancelling promotion restores the unchanged authoritative FEN to Chessground as well as cancelling
+the controller's pending choice, so the pawn returns to its source and a new native gesture works.
+
 ## Companion and Inspector
 
 Desktop uses a fixed 336 px companion rail. Tablet uses a fixed 176 px band. Phone keeps a 48 px
@@ -142,7 +152,12 @@ wrong identities/viewports and records from a different result; synthetic PNG co
 verifier, never substitute for real browser screenshots.
 
 The RFC remains implementing. Screenshot count alone does not prove conformance. The paired
-per-cell checks prove a center/clipping/scroll floor, not complete non-overlap: D3458 records
-partial phone Appearance/text-entry overlap with both centers still reachable. Whole-affordance
-bounds and affected square gestures remain to be measured and repaired. A4 vocabulary destinations,
+per-cell checks prove a center/clipping/scroll floor, not complete non-overlap. The separate
+`make play-composition-board-controls-check` compares whole shell-control bounds and strip seating, checks all 64
+physical square centers using native scroll/restoration at six projections including 320×256,
+and exercises genuine back-rank clicks and promotion Cancel/drag retry. Its native Create journey
+also proves notation advances the seed without posting a draft, while the explicit Create action
+still posts once. Non-Play boards seat the same notation projection below their physical square,
+in normal flow; the authoring seed wrapper sizes to that whole content, not only a square box.
+A4 vocabulary destinations,
 every-module max-load conformance, proposed ceilings and owner-use still gate archival.

@@ -28,6 +28,7 @@
   let runTitle = $state("");
   let selectedPackId = $state("");
   let turn = $derived(positionTurn(fen));
+  const positionFormId = $props.id();
 
   function choose(value: Door): void {
     if (busy) return;
@@ -59,18 +60,18 @@
       <button type="button" disabled={busy} aria-describedby={busy ? "seed-action-busy" : undefined} onclick={() => choose("pack")}><strong>Existing pack</strong><span>Copy a served pack with fresh review debt and a new identity.</span></button>
     </div>
   {:else if door === "position"}
-    <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onPosition({ title: title.trim(), fen: fen.trim(), side }); }}>
+    <form id={positionFormId} aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onPosition({ title: title.trim(), fen: fen.trim(), side }); }}>
       <div class="seed-fields">
         <label>Draft title<input required maxlength="120" disabled={busy} bind:value={title} placeholder="What consequence will this rehearse?" /></label>
         <label>Learner side<select disabled={busy} bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
         <label class="fen-field">Starting FEN<input required disabled={busy} bind:value={fen} aria-invalid={turn === undefined} /></label>
       </div>
+    </form>
       {#if turn}
         <div class="seed-board"><Chessboard {fen} startSide={turn} showDests highlightMoves disabled={busy} onMove={moveOnSeedBoard} /></div>
         <p class="honest">Move pieces legally to advance the seed position. The learner side is separate from whose turn it is on this setup board.</p>
       {:else}<p role="alert">Enter a legal FEN before using the board.</p>{/if}
-      <button class="primary" type="submit" disabled={busy || title.trim() === "" || turn === undefined} aria-describedby={busy ? "seed-action-busy" : undefined}>{busy ? "Creating…" : "Create ten-field draft"}</button>
-    </form>
+      <button class="primary" type="submit" form={positionFormId} disabled={busy || title.trim() === "" || turn === undefined} aria-describedby={busy ? "seed-action-busy" : undefined}>{busy ? "Creating…" : "Create ten-field draft"}</button>
   {:else if door === "game"}
     <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onGame({ title: title.trim(), side, pgn, url: url.trim() }); }}>
       <label>Draft title<input required maxlength="120" disabled={busy} bind:value={title} placeholder="What should this game's rehearsal teach?" /></label>
@@ -115,7 +116,7 @@
   input, select, textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--paper); color: var(--ink); }
   .seed-fields { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(8rem, .35fr); gap: .7rem; }
   .fen-field { grid-column: 1 / -1; }
-  .seed-board { width: min(100%, 30rem); aspect-ratio: 1; margin-block: .5rem; }
+  .seed-board { width: min(100%, 30rem); margin-block: .5rem; }
   @media (max-width: 56rem) { .seed-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 35rem) { .seed-heading { display: grid; } .seed-doors, .seed-fields { grid-template-columns: 1fr; } .fen-field { grid-column: 1; } }
 </style>
