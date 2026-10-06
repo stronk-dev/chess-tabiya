@@ -28846,6 +28846,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-horizon-policy.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3495",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0576ed6f7f91920462f0af8254866fdd04a07b78ce4f8377b56a7fb4d4e75ab1",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-qualification.md",
+      "evidenceKind": "path"
     }
   ]
 }

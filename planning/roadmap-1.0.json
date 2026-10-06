@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3494 closes the common actual two-ply projection and frozen joint-policy stop audit under v2: all 193 candidates / 182 cells / 53 settings / 116 pairs, four controls / 17 unpaired targets / fourteen no-target candidates retained. Independent replay covers 6,068 observations and 1,158 model/horizon receipts. There are 107 immediate opportunities and 84 exact current-option contrasts, not later prevention or engine causality. Local 0.80 prefixes clear joint coverage on 193/139/79 candidates at two/three/four plies; 0.90 on 191/153/108. Exhausted caps remain partial, with literal conditional products, absorbing mass, omissions/residuals and conservative float32 coverage/execution intervals. Six JS/four Python controls, nine input/fifteen output corruption refusals, complete independent model/board/identity/stop reconstruction and deterministic replay pass. Artifact SHA-256 172bfccf3a8c84e12a985d27529bec4131a2e3e56b366bb410097f80e442ec8a. Earlier/original196 sources/results, thresholds, distributions and selectors stay unchanged. D3262 remains doing on source-declared production profile, focus/usefulness and controlled cold/warm/provider-offline end-to-end cost; any new joint-budget selector needs separate preregistration. Every production/source/A4/full-1.0 obligation remains; no RFC/capability/milestone promotion. Tracking maintenance is automatic.",
+          "summary": "D3495 closes common scope/focus/source-budget qualification on all 193 candidates / 182 named cells / 53 settings / 116 pairs and 212 actual control receipts. Four control roots retain 14 labelled candidates; all main-cell focus stays unknown. Actual PV/first-reply selections retain named fork refutations, partial/provider-line ceilings, an unforced bishop retreat with exact screen/queen identity and authored-not-autonomous Carlsbad. Semantic controls without registered targets stay unsupported rather than borrowing plain-engine fallbacks. Only 33/66 roots share a first choice across three budgets; 86/116 pair orders agree and 30 differ. Literal rank, cp/mate/bound/depth authorities remain separate. Six JS/four Python controls, eight immutable-input/fourteen actual-output corruptions, complete independent control board/identity/pressure replay and deterministic reconstruction pass. Artifact SHA-256 c6d623443796c9b6c88ee6a0f56ee5dabfaaf8ccc7eea6bf6700155f4c2cc89c. Source-bound scope and agreement are not tactical/quiet generalization, consumer usefulness or engine causality. D3262 remains doing on actual cold/warm/provider-offline end-to-end cost, complete consumer scope and source-declared production profile. Every production/source/A4/full-1.0 obligation remains; no RFC/capability/milestone promotion. Tracking maintenance is automatic.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1070,6 +1070,12 @@
             "planning/semantic-consequence-search/d3262-coherent-five-approach-comparison.json.gz",
             "planning/semantic-consequence-search/d3262-coherent-horizon-policy.md",
             "planning/semantic-consequence-search/d3262-coherent-horizon-policy.json.gz",
+            "planning/semantic-consequence-search/d3262-coherent-qualification.md",
+            "planning/semantic-consequence-search/d3262-coherent-qualification.json",
+            "tools/d3262-search-calibration/coherent-qualification.mjs",
+            "tools/d3262-search-calibration/coherent-qualification.test.mjs",
+            "tools/d3262-search-calibration/coherent-qualification-check.py",
+            "tools/d3262-search-calibration/coherent-qualification-check.test.py",
             "tools/d3262-search-calibration/coherent-horizon-policy.mjs",
             "tools/d3262-search-calibration/coherent-horizon-policy.test.mjs",
             "tools/d3262-search-calibration/coherent-horizon-policy-check.py",
@@ -1550,6 +1556,11 @@
               "kind": "work_state",
               "id": "D3494",
               "digest": "sha256:684b45c8674f1de5b961944156e470627042a9bce34da3c5285e42f1c91d7d20"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3495",
+              "digest": "sha256:0576ed6f7f91920462f0af8254866fdd04a07b78ce4f8377b56a7fb4d4e75ab1"
             }
           ]
         },

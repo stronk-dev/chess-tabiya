@@ -274,8 +274,28 @@ partial coverage/abstention or test a separately preregistered joint-budget
 strategy. This does not authorize higher caps, changed distributions or claiming
 the actual learner follows the configured policy on both colors.
 
+[V] D3495 qualifies the complete common population's scope and source-budget
+agreement without inventing focus or chess truth. Root focus is preserved on
+the four controls (14 candidates), while all 182 main named-target cells remain
+unknown. All 212 control/setting receipts bind actual PV/first-reply selections
+where supplied; semantic selectors without registered targets explicitly
+abstain. Independent python-chess replays all four control roots' candidate/reply
+boards, named fork identities and bishop/screen/queen exposure. Only 33/66 roots
+retain the same engine first choice across three budgets; 86/116 pairs retain
+their ordering and 30 differ. Literal cp/mate/bound/depth authorities stay
+separate. Six JS/four Python controls, eight input/fourteen output corruption
+refusals and deterministic reconstruction pass. Source:
+`planning/semantic-consequence-search/d3262-coherent-qualification.md`.
+
+[M] Implication: this population qualifies two named local relation families
+and explicit hard controls, not general tactical/quiet-plan usefulness or an
+engine's causal reason. Source disagreement is a reason to preserve budget
+identity, not select the most convenient engine reading. A profile decision
+still needs actual cost and consumer-scope qualification; numerical event
+counts cannot supply the missing comprehension evidence.
+
 [P] Outstanding: source-declared production-profile selection,
-phase/focus/usefulness qualification and controlled
+consumer usefulness/generalization and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.
 Source: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`

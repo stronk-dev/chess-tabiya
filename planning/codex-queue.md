@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3495]]: scope/focus/source-budget qualification retains all 193
+candidates / 182 cells / 53 settings / 116 pairs and 212 actual hard-control
+receipts. Four controls carry 14 labelled candidates; main cells retain unknown
+focus. Independent legal board/identity/pressure replay, six JS/four Python
+controls, eight input/fourteen output corruptions and deterministic replay pass.
+Only 33/66 roots share an engine first choice across three budgets; 86/116 pairs
+retain order, 30 differ. Scope and disagreement are not usefulness or causality.
+Receipt: `planning/semantic-consequence-search/d3262-coherent-qualification.md`.
+Next: actual controlled cold/warm/provider-offline end-to-end cost and complete
+declared consumer scope before a production-profile decision. Keep semantic
+control targets unsupported where no declared selector exists; do not borrow an
+engine fallback or manufacture tactical focus. D3262 remains active.
+
 Completed [[D3494]]: common actual two-ply projection on 193 candidates / 182 cells
 / 53 settings / 116 pairs and joint-policy stop audit across 1,158 horizon receipts.
 Independent replay covers 6,068 board/identity/action observations. Current options

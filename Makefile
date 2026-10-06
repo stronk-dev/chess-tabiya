@@ -839,6 +839,22 @@ semantic-search-horizon-policy-independent-test:
 semantic-search-horizon-policy-independent: semantic-search-horizon-policy-independent-test
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-horizon-policy-check.py --negative-controls
 
+.PHONY: semantic-search-qualification-test semantic-search-qualification-update semantic-search-qualification-check semantic-search-qualification-independent-test semantic-search-qualification-independent
+semantic-search-qualification-test:
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-qualification.test.mjs
+
+semantic-search-qualification-update: semantic-search-qualification-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-qualification.mjs --write
+
+semantic-search-qualification-check: semantic-search-qualification-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-qualification.mjs
+
+semantic-search-qualification-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-qualification-check.test.py
+
+semantic-search-qualification-independent: semantic-search-qualification-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-qualification-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

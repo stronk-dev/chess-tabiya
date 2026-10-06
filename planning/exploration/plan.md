@@ -37,6 +37,16 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3495: common scope/focus and three-budget agreement audit passes on
+193 candidates / 182 named cells / 53 settings / 116 pairs / 212 control receipts.
+Four control roots retain 14 labelled candidates; main-cell focus remains unknown.
+Only 33/66 roots share the same engine first choice, and 86/116 pairs retain
+ordering across budgets. Six JS/four Python controls, eight input/fourteen output
+corruption refusals, independent control board/identity/pressure reconstruction
+and deterministic replay pass. No tactical/quiet generalization, consumer
+usefulness, engine causality or end-to-end cost is inferred. D3262 remains doing.
+Receipt: `planning/semantic-consequence-search/d3262-coherent-qualification.md`.
+
 2026-10-06 D3494: common actual two-ply projection and frozen joint-policy stop
 audit pass on all 193 candidates / 182 cells / 53 settings / 116 pairs. Independent
 replay covers 6,068 observations and all 1,158 model/horizon receipts: local 0.80

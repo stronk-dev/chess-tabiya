@@ -19,6 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 qualification checkpoint: D3495 closes scope/focus/source-budget
+qualification on the complete 193-candidate / 182-cell / 53-setting / 116-pair
+frame and 212 hard-control receipts. Four labelled controls carry 14 candidates;
+the main cells remain unknown focus. Only 33/66 roots share an engine first
+choice across three budgets; 86/116 pair orderings agree and 30 differ.
+Independent python-chess control replay, six JS/four Python controls, eight
+input/fourteen output corruptions and deterministic reconstruction pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-qualification.md`.
+This is source-bound scope qualification, not general tactical/quiet-plan
+usefulness or an engine reason. D3262 remains active on actual cold/warm/offline
+end-to-end cost, complete consumer scope and a source-declared production profile.
+No RFC/capability/milestone promotion or narrowing of full 1.0.
+
 2026-10-06 horizon/policy checkpoint: D3494 closes the actual common two-ply
 projection and frozen joint-stop audit, retaining all 193 candidates / 182 cells /
 53 settings / 116 pairs and 1,158 model/horizon receipts. Independent replay
