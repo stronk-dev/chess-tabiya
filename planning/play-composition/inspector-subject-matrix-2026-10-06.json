@@ -1,0 +1,2136 @@
+{
+  "version": 1,
+  "reportDigest": "sha256:2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5",
+  "requiredCells": 112,
+  "provenCells": 112,
+  "cells": [
+    {
+      "name": "play-composition-1440x900-01-calm-rest",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:e69aa6d88729f46455afc9abcdaede5721f2d2c6d05b4aecb71ba51af54edfae",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-01-calm-rest.json",
+        "digest": "sha256:5f7a2d998622ade09882a5e7c6d8e3892e82ac3e75a98498bfa29f76d0ae349f",
+        "controls": 11,
+        "boxes": 115
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-01-calm-rest.vocabulary.json",
+        "digest": "sha256:8dca3365ad86c26995e42deb5746949f1eec8422228e6ff7f4cd1faba6ed482e",
+        "ordinaryTextNodes": 117,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-02-square-selected",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:12d3948c5ac5b7d72ec3b3acfa871fedd4b9b759ba16ffb169bc86568526c7a8",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-02-square-selected.json",
+        "digest": "sha256:1a8e6020cf80a208a1d33da507c80b51611a097220967f24b168fba8a6a9ae90",
+        "controls": 20,
+        "boxes": 125
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-02-square-selected.vocabulary.json",
+        "digest": "sha256:eef9f0fd1337df9415bb7f5f3c7c5ae7bea95767c5d786754738b6f1cac37a59",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-03-move-staged-cue",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:1fb4a2dc5f871d09a5452fa267c82ded7586acd0df9cf07821889377829dc38f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-03-move-staged-cue.json",
+        "digest": "sha256:4fc0abb90f458cabc7fc0742871e528e36a96c66fb22455655740297f2250ad2",
+        "controls": 19,
+        "boxes": 127
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:af8399f27f58f2485ee9546e19c07d2cbfa37e7244c69b9a2c844797d459b8ed",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-04-post-commit-guard",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:ffb92b004ac624c450e0b8d517f606c73a27b4b0dd23b31954fdb8c2b3b3d382",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-04-post-commit-guard.json",
+        "digest": "sha256:15179e61b56a1e2df1afbe363fde304481d895da1a8a97e9cd5a7e628e42e09f",
+        "controls": 25,
+        "boxes": 132
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:4392584043c4ae40734abca5a50b0f56aad74311b6c3f69361fed3e9b5843058",
+        "ordinaryTextNodes": 135,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-05-rail-module-expanded",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:7f9821cc62b767998be9a40f05e700f2980a541a185ae8933c630187a80b0132",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-05-rail-module-expanded.json",
+        "digest": "sha256:99ee6bc97d750c25acc0138a64ceebf147b1b7ecc33e14b8625144e162990c91",
+        "controls": 18,
+        "boxes": 124
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:0d108128c74fa50ccfe4f5e4bae3790100a431933be9a96a85fc6ac59fb941f0",
+        "ordinaryTextNodes": 126,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-06-guided-hint-final-stage",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:7efed0c935fda371bd962d5ab04dbf22c198897968c814347558504ab17dc0e1",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-06-guided-hint-final-stage.json",
+        "digest": "sha256:b9a636a634627b1e2f75cf698fcf7883a8ac18187c4c4da6df332f5842a741c7",
+        "controls": 18,
+        "boxes": 127
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:14395ddd27a63b5f8a07aca5ede4b885013ff4451879512ecc80aa23babbfd84",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-07-menu-popover-open",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:5111ca056bdf985918a70c7495083c5c553ad7dc6bb024d6dddf362b6679d9a3",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-07-menu-popover-open.json",
+        "digest": "sha256:0f4ac24988e05394c6f0076860efb0b8158bf86ccaa95948b4c5cc0b49b57971",
+        "controls": 7,
+        "boxes": 14
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:dc668af9b2d6b29d40f42eff2af6dd89bc253ae68c0d7aa8de61029e755524ea",
+        "ordinaryTextNodes": 130,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-08-long-objective",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:f1256988f83b2616a68833fc49a450ab3d23460f413e5866a21d9ecc5c7efc66",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-08-long-objective.json",
+        "digest": "sha256:79638f4da6a1c8c63e3ee5123bcc5eca256c2528d02ab6367da31de3b2f129e0",
+        "controls": 15,
+        "boxes": 115
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-08-long-objective.vocabulary.json",
+        "digest": "sha256:27a1f567fe42f589f4ddf8e64ec197996955d90343e1432b9851e8266e831726",
+        "ordinaryTextNodes": 117,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-09-evidence-unavailable-honest-empty",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:7b3c0ed654e2cca79e6117cec6710f03963f718d66be8d02d848ce00267d3b93",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:c9f49903fc7fb7e0f2a7d94ba16b5770172f3b04a09c07b17f91299f3fa70951",
+        "controls": 20,
+        "boxes": 131
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:d4741e9e0f018b26dea35336f56caf3db99c2a4cac136c3f5ffca1d101825e3c",
+        "ordinaryTextNodes": 133,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-10-inspector-open",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:2ec0655cf006d04ef2e3aa03e96583a7ee7213602ba8c89c2365da77d212fea7",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-10-inspector-open.json",
+        "digest": "sha256:7eb1bd833691e735ca879f2104d474f7bc425cb88d1fb951d0f98e868ab85ca7",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-10-inspector-open.vocabulary.json",
+        "digest": "sha256:db156efbe22df36c0e2d926a01c8bffb4d05400e09955d40fe60d488190e1238",
+        "ordinaryTextNodes": 117,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-1440x900-11-timeline-rewind-fork-reentry",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:2d706fc9b58fd334afeeaa129ad3281c0000ee55d3cd7386bb300ee42f42bf93",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:3b79d61423caae56092f1951b29a246a83b4753322e9543808242a154db63841",
+        "controls": 23,
+        "boxes": 126
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:86888f987cdebe794c07afe1288af0ba7403252833d00471bf0d67485ac6dea3",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-12-compare-open",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:e35ec3b0fe1b3e6919b923139de2f94a50c876e0b344b88e7d41276ec0603d5f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-12-compare-open.json",
+        "digest": "sha256:889beb0cc821a1819eb3f0bfd0cd46743dac7d59682f697d3d0f92c38b97a494",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-12-compare-open.vocabulary.json",
+        "digest": "sha256:c3996f3c2beb4df7c8e7a1437457d518f915aa8f5a408c9d0f65b71527c83c53",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-13-max-load",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:697a0cf20a31778e8ecd66ae98162289175b67a8dcaf464ecf8da90496d28f48",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-13-max-load.json",
+        "digest": "sha256:70a224dceeec36e503ffd3a0c1ec83a6ad8e728c24eab5f4a940bc8d8ddbc037",
+        "controls": 27,
+        "boxes": 145
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-13-max-load.vocabulary.json",
+        "digest": "sha256:5aa7fcef77959b5d0e28bd62f89f1515128aeadedaa5856ae4a972d39aaa4beb",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-14-terminal-outcome",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:b32f581724a53ddbc2734410a9f8ff322685fec7048087e68a31b97f000a766e",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-14-terminal-outcome.json",
+        "digest": "sha256:08578a6df641a6db4a211639200ec54e33ddd0144bdb23f74871f63d4a983474",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:8cadc7ec5f6929bc50d29f3d541d03009ea941159e134705114d1240d42c29f5",
+        "ordinaryTextNodes": 145,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-15-promotion-pending",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:3b3a5a322b1e9dc42a6c333d33ba71ba925503c761181525d85d755a794729a7",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-15-promotion-pending.json",
+        "digest": "sha256:659db9c8561c21623dcce8e6854c79cbcd4225d59579bdb15f6337995b699511",
+        "controls": 16,
+        "boxes": 117
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:9f4bdb82f39fbd64c14e4fa5dd2e80bf7dc9ae836b3c800736889f9c3f993aa8",
+        "ordinaryTextNodes": 119,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1440x900-16-keyboard-text-entry-active",
+      "width": 1440,
+      "height": 900,
+      "digest": "sha256:5ec272fb7947e5d3de5ea8817d52f05c3caeced4d73b697ff31f0e448cc7bb15",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-16-keyboard-text-entry-active.json",
+        "digest": "sha256:79d7622e7c1cfd0ff8a4d2cea924064795aca7a6840b0b425f46216cd581a286",
+        "controls": 4,
+        "boxes": 5
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1440x900-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:5ac797fb995d55c3ba6690b1954bd9e75a00a4a9e52f404d69f5dda567aec2d6",
+        "ordinaryTextNodes": 120,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-01-calm-rest",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:1ae6209bfaf624bcd0904268e0462b980d1d5870b474af12e9927785a70da2af",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-01-calm-rest.json",
+        "digest": "sha256:f65e075d4d5feb977ddac0fc503876e53c88d595db215dd405c569a5d2ead413",
+        "controls": 17,
+        "boxes": 121
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-01-calm-rest.vocabulary.json",
+        "digest": "sha256:0a1e2cbb6bb8cfba573817b05e1d2e21ea2423dd235d4a223074262f87659e32",
+        "ordinaryTextNodes": 123,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-02-square-selected",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:0141bf0911d32680ecf5480a7426c6eda30196fe77e11d47d261895d6be40e24",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-02-square-selected.json",
+        "digest": "sha256:d4ff2fb784c4085d8133a00836fd9699ac795643a0359498010fcdf5fc181a3e",
+        "controls": 20,
+        "boxes": 125
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-02-square-selected.vocabulary.json",
+        "digest": "sha256:34ccc56588331273aef3e2045d6758b5d5b48c95acbbd764edab4f930f68f210",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-03-move-staged-cue",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:6b9463f25d73e50a6443688f99c8c34782cf3cefb2a1207038bfc80a40b8079d",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-03-move-staged-cue.json",
+        "digest": "sha256:e14bcbede2e61f2bece293695cff371eb262b239d2bcf54ad285116a9121eab3",
+        "controls": 19,
+        "boxes": 127
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:12a594782a733e0a2dea5bb03a899c4580c517e8015449990d84f1e59bf5b5ec",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-04-post-commit-guard",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:ad9789358f2cdb0575fb33b0ae412775c504a9c8f0fa2dbe35a2660c15d5065c",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-04-post-commit-guard.json",
+        "digest": "sha256:6402384e0b93d947342e8098e3e0c0fe8761eb51193a2f70eb6e6e05912cb944",
+        "controls": 25,
+        "boxes": 132
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:645f07760db1672f2a10f61a15c1694ad3eb699d68ac59992296f8773b219c84",
+        "ordinaryTextNodes": 135,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-05-rail-module-expanded",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:ecfc81fc1042896a46082410c052dc0cbcd0ebb1aeff9b795f52493bb1fa3af3",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-05-rail-module-expanded.json",
+        "digest": "sha256:815a6d7d1d07e0cf2cbc9a52ebc777ba099e4a00c60b757d27ca9af98031c835",
+        "controls": 18,
+        "boxes": 124
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:821e96300b3f6949a36ea1f6edc1c5d7a5327b4528c61379fb8704d358d40e50",
+        "ordinaryTextNodes": 126,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-06-guided-hint-final-stage",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:cd7e4464ab054414acd76cc43af13e7382478ba5c449d2f360d2544b2bb0218f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-06-guided-hint-final-stage.json",
+        "digest": "sha256:963ed6ef15fdcad67b477e4e0a9e4df4de3d453172bacaeb7149e9a68a049131",
+        "controls": 18,
+        "boxes": 127
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:40afeb547f6bca31fbdeab932aadfc586405b45a00fc446b847a9b2cff902516",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-07-menu-popover-open",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:21bea8411ee445507d182d53e006a550f0b7fd0b821ff5aaa7056eea6dc4cafc",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-07-menu-popover-open.json",
+        "digest": "sha256:960ac0fb5dd82e83b9713be4d540bb4945f76c4921e6b83f8dc5e6a4cb5f3370",
+        "controls": 8,
+        "boxes": 15
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:1d96687506a5031c6a9fb4999888ec64ab191fd5d0c045e99d2f1331b2c09e4d",
+        "ordinaryTextNodes": 131,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-08-long-objective",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:89d7dc2eb3d38c6e18a2fb2494d3ab1e2fbf8f9f22232397f0b7c91c505323c4",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-08-long-objective.json",
+        "digest": "sha256:2d5cd7b1d59647702644f2e7fa772a6e76667a45921e92144b5d74b8bda5ac88",
+        "controls": 16,
+        "boxes": 116
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-08-long-objective.vocabulary.json",
+        "digest": "sha256:48f10bc66aa90c28bfc18d110ae37fa3a7829bba5aa1a18beb18ae0425e1c605",
+        "ordinaryTextNodes": 118,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-09-evidence-unavailable-honest-empty",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:698b05258c8303367dd24d623d561e78e61646af8ee2a9ea0e247bfb91dee156",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:274e07e454c0ea2afd7d35fe1eed698955db7668a9a7eb873f43a66dfae6053d",
+        "controls": 20,
+        "boxes": 131
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:ec40d98d8f211cdcabc0db4c6bb91def4ca8134bef0179f0653869023a7500c1",
+        "ordinaryTextNodes": 133,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-10-inspector-open",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:448ceab7a1c1a518f648d84f8e6c5800a0cf36633b2bc886d119cf40354b292e",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-10-inspector-open.json",
+        "digest": "sha256:a97cbc6621a84375fcb9e2785445f3a0245da4eaf14a30c5710ebc67fc1b28a8",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-10-inspector-open.vocabulary.json",
+        "digest": "sha256:c63e6002b8c6803be6be50a9c894f35b5c4ae4b16b5c1c39bbfdeb617f72956b",
+        "ordinaryTextNodes": 118,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-1366x768-11-timeline-rewind-fork-reentry",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:0d835ba196b65a5c8b6420fa5d6ee32ed4812262054f7f2dbd5683958c5fccdc",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:75359334feb20104f4c393961ac6a1ed12af4eecd265b8ee49c5c1f19290e57b",
+        "controls": 23,
+        "boxes": 126
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:6b43606c66ab16307e4b0fd5a325e5e62f66ca12acf2d9628524e0e7478043f5",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-12-compare-open",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:0513df824253a6ba752453e4b1e210386b10414cdad4df8a463ae0963fec8418",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-12-compare-open.json",
+        "digest": "sha256:8cd89d25f2918752e2b00387a8c63d8c8038736402179f512a29afe82fc9520b",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-12-compare-open.vocabulary.json",
+        "digest": "sha256:74a1a824909b0afd189c4a2ad1e0c6bfa11bf97b9264ee0dd0558795b6738667",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-13-max-load",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:ec1018ea3602a87d821c58e41c2658557139af4a869ea7effeeefe23daf2c353",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-13-max-load.json",
+        "digest": "sha256:da1f4f271666afe0a70f9219ca56cb2f605544bb95ffc4babb4e4db6712e80bf",
+        "controls": 27,
+        "boxes": 145
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-13-max-load.vocabulary.json",
+        "digest": "sha256:f45d7b3f4d8964b6a6bad24f415e5293af5637ca91307409b415aeb93b935340",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-14-terminal-outcome",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:086c7e071f36bca9db53e581d8645ee684db3ad7399fd054bea17f3da629cc07",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-14-terminal-outcome.json",
+        "digest": "sha256:ceae47797bf2b682d8238d653de87af9a23a79b9c94834df8516f8cdbfa53b37",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:e4a79bd1ae9450b7c7634f52e4de12554e717eb77fa24fa3bf22bbd8e80abab8",
+        "ordinaryTextNodes": 145,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-15-promotion-pending",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:c109a17fe96eda758d5552ac70502116f56407a26af0d32748434f88895e7e56",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-15-promotion-pending.json",
+        "digest": "sha256:3bbb9adb0a8e8e74b8da1b11a91748b9759d1bd603e2a156ec1f2b458d02f2cb",
+        "controls": 16,
+        "boxes": 117
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:f958a41d35f2550c5219adb255d4410fa8047b9b0e06d9b1cfaf63d0813c2e91",
+        "ordinaryTextNodes": 119,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1366x768-16-keyboard-text-entry-active",
+      "width": 1366,
+      "height": 768,
+      "digest": "sha256:fb8e85093e6e2fa9e7f07aed82e38b2e78a15a504d6cec1838688568e53ee0a3",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-16-keyboard-text-entry-active.json",
+        "digest": "sha256:fa62453ee8acaca90c8b02369e5368c36053af43baf8c0631977132d81591a0d",
+        "controls": 4,
+        "boxes": 5
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1366x768-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:b34072ce139b6757c4d56cb2c18e874bfd2ed83a0e00ab6c3978a3aa7a6baf43",
+        "ordinaryTextNodes": 121,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-01-calm-rest",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:af0e4a2122a26eacc1fb3df101bdcb39009e90f43cf6e02965e817286864ad8b",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-01-calm-rest.json",
+        "digest": "sha256:cf4c49bb7e464a6c6f9b9984cbe60819cdc1f1640f9980a9ac58276ddcd9b383",
+        "controls": 17,
+        "boxes": 121
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-01-calm-rest.vocabulary.json",
+        "digest": "sha256:c68d859833c52b3939cffa9eae4efbd6dae91076d534ee332bf6475b0f3ffdb5",
+        "ordinaryTextNodes": 123,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-02-square-selected",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:46d6d1afd8acbca07e69449afccadb4408f16eb3fbdef3073dea9589aaf25400",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-02-square-selected.json",
+        "digest": "sha256:c57cb0f6e8c793d23746874f86afb3d95a1fab55cfd704a5c9df6f2309b5bc23",
+        "controls": 20,
+        "boxes": 125
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-02-square-selected.vocabulary.json",
+        "digest": "sha256:4b9530889859aef71eabc351f5eb73a0e2d0819bdbb3faf68cfb9b65fdfee512",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-03-move-staged-cue",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:f18f638eae2a409efe8d730cdb11a7b25007185e1b05041dff2294b42da8a46e",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-03-move-staged-cue.json",
+        "digest": "sha256:611cf425208ddc922cf6cd617b8aa52519a9ed99ae3ce5d0c8e1c97c5b1b1612",
+        "controls": 19,
+        "boxes": 127
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:c63e388688da0acb9b41ef82b8d722e1562731eeec8c78c68394e2cbed648d0f",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-04-post-commit-guard",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:bdbb9b5262d7999dddb45c8c878851dbbfe49eef7a37ebd3cbee94cb1b9d5a81",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-04-post-commit-guard.json",
+        "digest": "sha256:4046612fb0999baf9677e41e203e8481a69c745c541463ce036f6c1ac65b51e1",
+        "controls": 25,
+        "boxes": 132
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:c76f6123527a07b208de223d8cb0ffde89e4617ebbf3c95bd545e565ff4b2154",
+        "ordinaryTextNodes": 135,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-05-rail-module-expanded",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:fdfc11876ff41b018bd5da1ca5803b2a902499e78a61f9e65b8389a3df8afcdd",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-05-rail-module-expanded.json",
+        "digest": "sha256:3296bfc73f275336cf90d84617a219c86decc634c2a3307ca309944b7093f242",
+        "controls": 18,
+        "boxes": 124
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:337643b90f9e907a27f9856ba359196214c9733a08dd5af9c9b733778157471c",
+        "ordinaryTextNodes": 126,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-06-guided-hint-final-stage",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:9519a178f7cd9ffe1ceea2a4c05f0ec5bc1efca1ba87fdf39da02c512ed90494",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-06-guided-hint-final-stage.json",
+        "digest": "sha256:f4eb1f6d0ac07a4976506e6a3039301984849c8a88d6bc10c36d98c91d8394c2",
+        "controls": 18,
+        "boxes": 127
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:3ebca882b4b0bb5306dcb04119347c8e6c78d405fdc9305ae31d60401f8b4b3b",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-07-menu-popover-open",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:03d97f24aa084180247e18442e6885cee37ed0891a8260f859037695ac995d3f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-07-menu-popover-open.json",
+        "digest": "sha256:59577c4294e0cd7139b4bec8c84efa0e4483d54fb1063622b32e2ec07bbc4e11",
+        "controls": 8,
+        "boxes": 15
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:daa7bb3d5518e64caa3e02d10623710f9fec15d0fd7ab99e308f258f84f9c3b6",
+        "ordinaryTextNodes": 131,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-08-long-objective",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:4524ed55f7f93f45d842ebcb6f156c67cda5e40bb04cd510a2d31bffb15946ad",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-08-long-objective.json",
+        "digest": "sha256:d6aa3efeeaaff349a6905f7bb5b562c85104da269ab55f10d4dc3850c5f6db33",
+        "controls": 16,
+        "boxes": 116
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-08-long-objective.vocabulary.json",
+        "digest": "sha256:00ed7ed439795bf9c13b474e2f42c983e6e4495073e5a8741637d1b5828e5db6",
+        "ordinaryTextNodes": 118,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-09-evidence-unavailable-honest-empty",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:d0f8c650355a656541bc5542dd528a6f46a90cf43735d1f433de0a7c3d47a566",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:86dc2f9981a34871a8b7063f055bc7fa8bd3dbf78386723bff479ed2a3e81976",
+        "controls": 20,
+        "boxes": 131
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:54555648c800da01a2d311694dd32a5d2a95337c291584c486f68e5cfc0d34a8",
+        "ordinaryTextNodes": 133,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-10-inspector-open",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:45f2bce86b733a4939e7f4dde2b37e01b41bb4c7cddc10638c0e3af1347d6563",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-10-inspector-open.json",
+        "digest": "sha256:778d2c7b339b3c848e1aeda455566940161bec09d34423969090152f985bd0fb",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-10-inspector-open.vocabulary.json",
+        "digest": "sha256:1e416f2e34d43b2cd174326b775b71183606d5a1551e42654878390f2c9fbc29",
+        "ordinaryTextNodes": 118,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-1280x720-11-timeline-rewind-fork-reentry",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:2982840d768863dd7b926251ee28a35769dfd9c9682033a1a46f1754675d6283",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:1322a668a6755f702ee2d9a71a97fc83e0f40257dbd7d063c436abea0c3ebfc7",
+        "controls": 23,
+        "boxes": 126
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:ede622fa4e158443be8bc0c6a40abbfe944b16a4dfa13cc576c6c762b5dee914",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-12-compare-open",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:fd537126a642fdc31b6c612b359c35fa09e9d9191c52b6f4f4f16f02ead2fbf3",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-12-compare-open.json",
+        "digest": "sha256:a0250f7437a2e56840e5bccc8315ff2356a7a862770e74e934d60d62c273a385",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-12-compare-open.vocabulary.json",
+        "digest": "sha256:3cbe09b515c1225d62f2b288430d3757f442ef7d018bcb4e1cc752cdf19fea2b",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-13-max-load",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:2c8d07e84097aa7d3854d3ac62e85e3b2058c885bf88aa25aac1778ce3abc1e5",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-13-max-load.json",
+        "digest": "sha256:f58c4c1c815c6752c512e950b8450b44235886088c119e12c6e66a01d68d8ce1",
+        "controls": 27,
+        "boxes": 145
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-13-max-load.vocabulary.json",
+        "digest": "sha256:27be4f2941228d5a9b593ee8dcc432742cf4d0cc2345a0a37b3ee643dd083433",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-14-terminal-outcome",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:e49f6af7eba407d8358566016cd23d69c505ad92a5d477a797bc07fe3b2e18aa",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-14-terminal-outcome.json",
+        "digest": "sha256:f84fb7d331a35833442ec4ae86ced1f5dbacb2fd33f11ded9862faa3ec9b69a3",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:0478d790d918bb29f62962b286e63e3f9ea0c2292609ef369e62a34d12baca02",
+        "ordinaryTextNodes": 145,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-15-promotion-pending",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:0e1231502ddd667da87145e26a5925ed35efeb22992c392ee8edfdfef43b6332",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-15-promotion-pending.json",
+        "digest": "sha256:7391fbb2018e8e069feae94e962a5d19853f3f69f52afc4dc1e0d9b9c50c4d4f",
+        "controls": 16,
+        "boxes": 117
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:2f525f1c67cc7de22ca5b4ce55150bd1de6a60d58b25e5dba2ba51267faaaa15",
+        "ordinaryTextNodes": 119,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-1280x720-16-keyboard-text-entry-active",
+      "width": 1280,
+      "height": 720,
+      "digest": "sha256:dad435194dbf4dbd8110ce70295217e916d5f786d3b7d1cd31279dedea91856e",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-16-keyboard-text-entry-active.json",
+        "digest": "sha256:1cd68d134e1ec65c2dfd188f073df6f454209d7865104dde48e4f88a808e92a4",
+        "controls": 4,
+        "boxes": 5
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-1280x720-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:d300fa3cc9b8cf51c842beb0a9063c5f459aa1740af7ae8174e6826a0b9dba55",
+        "ordinaryTextNodes": 121,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-01-calm-rest",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:5c226f6f62a94462ff30cf94e4a7a538efdc4c304b075c6ba4bd1e9d6614d537",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-01-calm-rest.json",
+        "digest": "sha256:c6359cf437cae3734a5d939aa4792244a1a6d1083c8db0ea4ee4f2dfae664413",
+        "controls": 18,
+        "boxes": 122
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-01-calm-rest.vocabulary.json",
+        "digest": "sha256:8caecdb50220e6e7e9ad30c1deb70c10c57ecdf1443f002d9e893e0f10944167",
+        "ordinaryTextNodes": 124,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-02-square-selected",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:fe508ce511aff5887ecffc9d9c25ea3a3eceef444e496cce15f218e0060a7d7c",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-02-square-selected.json",
+        "digest": "sha256:544c5a05270e758f4ab9103649e947cca0163de3a8802614ec383d28cc426436",
+        "controls": 20,
+        "boxes": 110
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-02-square-selected.vocabulary.json",
+        "digest": "sha256:171f34ec213cba06ed3313d58e6eed5098858a97811b93cedc5d987f5d732501",
+        "ordinaryTextNodes": 112,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-03-move-staged-cue",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:785e8f9269bf584761a5c559cfc5931d496b561601067b11f609d85de76b107d",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-03-move-staged-cue.json",
+        "digest": "sha256:77d343fc676f2628dec72f83592c5cc9498db65fd89b6e411795bb4b9dc0e578",
+        "controls": 18,
+        "boxes": 110
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:d68035f59c7f29728d503456cc007f1ca9967de0ef0aed3465258150ef15ff75",
+        "ordinaryTextNodes": 112,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-04-post-commit-guard",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:722615cb2fcda76b51a1082fa71e7ba1055c23af9a15cd8426d98ddf09e9c9ce",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-04-post-commit-guard.json",
+        "digest": "sha256:6fb9fa74021d8648590c635b7e4ed05f135ac313f16ce5ef5c4cc2d830b6fd54",
+        "controls": 26,
+        "boxes": 133
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:694af6b6865a9344a4d0eb02ac1ed7c5c03e5cbdea3187f463b4174f334dc4cd",
+        "ordinaryTextNodes": 136,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-05-rail-module-expanded",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:bb47c8bdfd898f691985ae8ff471237c8f0066fbd5b4f3366d113218a2372ba3",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-05-rail-module-expanded.json",
+        "digest": "sha256:05f66f980f7abb16a173b510aabbd8ab4742d008081038f1e99a198f053bab0b",
+        "controls": 17,
+        "boxes": 108
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:d4358b765d2e4d99e58fa32c932f4db94ebbf8bf1699bc5079e1361176668dd2",
+        "ordinaryTextNodes": 110,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-06-guided-hint-final-stage",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:f377a1f4447eac162db535bbb918f7ddbeee59c82144635cb27de89d1e6e442f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-06-guided-hint-final-stage.json",
+        "digest": "sha256:78d6ecb321acab35a5d38ef7a965d789f96a091570c761fe0b0497e2c58bb7bb",
+        "controls": 17,
+        "boxes": 110
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:478bf74470808c0aef2a014d879e33ea27c5359e1ecf0255f8b10d4b58ed0fbe",
+        "ordinaryTextNodes": 112,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-07-menu-popover-open",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:228a2cdef6819c008103ce779f2a4b198983f704d6230c5b09cb4c09a6e9182b",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-07-menu-popover-open.json",
+        "digest": "sha256:ba0918b5b82ae1b1cea087e07fefd45cc3a75a4bd36e1c51e29ac115b33985f1",
+        "controls": 8,
+        "boxes": 15
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:27399f248e57d1dea6ab14d3025221fd21eb00638632d98362358bd3f1044e0c",
+        "ordinaryTextNodes": 130,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-08-long-objective",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:36a9d1977a728ac2c32e12b41628df994133cde4504fd7ef242f0af2c2db86f3",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-08-long-objective.json",
+        "digest": "sha256:0ee5b94f7528cd38318d244b92b6a8c5b6183903d6094a31902a3c2a4f678942",
+        "controls": 16,
+        "boxes": 115
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-08-long-objective.vocabulary.json",
+        "digest": "sha256:9599f1eb145433ccf8afab92b990f0a96b63e9f3f2a23f67d006c8a33bf186bd",
+        "ordinaryTextNodes": 117,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-09-evidence-unavailable-honest-empty",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:f509e7cc3347e8f413dbffc196ef87f326517d2a70e4c67e4cf1d921eef13d81",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:1c0d1413416d5709e75cf13b55a447b8aa990345a880d967b0effba0d1d9e7f4",
+        "controls": 19,
+        "boxes": 115
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:20f296d427201d38c32d580f9ff3d9d0728988c870876520e151cbb5d7891141",
+        "ordinaryTextNodes": 117,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-10-inspector-open",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:3d70d4e3f16655b3c2751781d651242ea8ed0be788437f6019ef455987eb0056",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-10-inspector-open.json",
+        "digest": "sha256:236f5abcaad764ff36eaa0c5b2eae06b6d7a86bc36a3960417a150cd9b0ee5b8",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-10-inspector-open.vocabulary.json",
+        "digest": "sha256:534fd7856db8eb8b106eea95c63be1b2c10acbdf461c39eebc7294fc195942b6",
+        "ordinaryTextNodes": 117,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-768x1024-11-timeline-rewind-fork-reentry",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:e8b448d03b52a0ad8eb5e013b6ec4519e152276a688af7c59dc878904bd49fde",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:5efb3836f9842ca591f4feb7f7999458bbf13b5d19960e7882be894c68927bff",
+        "controls": 23,
+        "boxes": 125
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:15a1494d84cf22c372eb652fa8b380c6a6fff86556cb049d310edec86adf150f",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-12-compare-open",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:4c486d3583624579f3335422f14bc22f8d5cf70eaf039bdc6a39f3ec2b55ee26",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-12-compare-open.json",
+        "digest": "sha256:8916dc6d750d3404efa022009ac80de16c5b6e734479e721a7e90a32e75fdd40",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-12-compare-open.vocabulary.json",
+        "digest": "sha256:ca63193964965afa9ffca5cb400043729ed771a2ef539fbb1f759858305ce01b",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-13-max-load",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:71b9a09ef27e17ac6782c45fee21aa7abfd3a574359627228236577a33a51820",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-13-max-load.json",
+        "digest": "sha256:d60e71cd8c101aa8012d8e7e5d1d20999e3688a7b51feb0e8c8a044add50c4d3",
+        "controls": 25,
+        "boxes": 126
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-13-max-load.vocabulary.json",
+        "digest": "sha256:c361e7fda4b59aca43fd8ea11b086a6826c02680b36ae466f4ccfd913fc87d04",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-14-terminal-outcome",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:64338752aea636b3fb15c5000280fcd62b59ace3a448d1f6d1c24185820919d1",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-14-terminal-outcome.json",
+        "digest": "sha256:25549b9d67721f75e816bc4006cd9bbf451f4ad913f679e6b83838021d1ce0c9",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:827653f2c1e43d1cff8f1dca7966a55647c2840b08adfb9280fe408f6e86bfe1",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-15-promotion-pending",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:37f7ac7a7fe386d86bd109374f90dddaecbb1db3b00232a54f3b9e827f953de0",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-15-promotion-pending.json",
+        "digest": "sha256:00ebce7f56671a05a27a858d9a6db3820dc72af5fbc5ee3eff6572c627526515",
+        "controls": 17,
+        "boxes": 118
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:53248eb2e2ef1ff92de9dbdfbae5eb5cbb9549195284a00f14faae76ce2e7467",
+        "ordinaryTextNodes": 120,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-768x1024-16-keyboard-text-entry-active",
+      "width": 768,
+      "height": 1024,
+      "digest": "sha256:87cdebf7d5a75055cce3cc99d5526778c9fa9c217f29c9d211b369b83ddfe315",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-16-keyboard-text-entry-active.json",
+        "digest": "sha256:0d15b34e05fdb257a4c8bb1000cbd8ec33100a475b38dc3a12f77036939d9a7c",
+        "controls": 4,
+        "boxes": 4
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-768x1024-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:53fa6945be8f73bd49f5a89f1ac6d55d88c7dde98280d1bd71c1767728f91f41",
+        "ordinaryTextNodes": 120,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-01-calm-rest",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:69d372d312c006ac325215607455bdb72120082393c7a8556ffb8652f99bdc36",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-01-calm-rest.json",
+        "digest": "sha256:524855eb87c4af1342c543928a9dc77854c8ebbad14b1cbdd0b09f216b20a944",
+        "controls": 11,
+        "boxes": 94
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-01-calm-rest.vocabulary.json",
+        "digest": "sha256:17bc71829da66fc4dd9b063b3139ad435da33f184cf4a1ea220b13c411f44ad7",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-02-square-selected",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:12b38a7134ad9d199ef8150a19eb99a381ed423e4f04d16f2f571e5644529af4",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-02-square-selected.json",
+        "digest": "sha256:c82b1fc96e60432ccd52810691e700943a00fc7098c8a908ed0d24204e8e07eb",
+        "controls": 13,
+        "boxes": 29
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-02-square-selected.vocabulary.json",
+        "digest": "sha256:2aca5a5f30dac1fd32d1cfd284a10566647428597429256527c0e4b4b2988edc",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-03-move-staged-cue",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:dac9c6d9c29b5d3892b0e8ba515e97385bda0904ae945425a2e52b7420ef20cf",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-03-move-staged-cue.json",
+        "digest": "sha256:53dbc3910aec13e2896dc4fbf524a32f3da80f6af50cbce91f96e10f9b0d11c5",
+        "controls": 12,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:9b3dcb22ec59342b3320655e5910ac659ebbfe7c95360e1967ef1a668418acca",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-04-post-commit-guard",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:2ce6a95a63799079aa2579593169e2aa86dd6df85b942593e6708ea81a1406e6",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-04-post-commit-guard.json",
+        "digest": "sha256:191f5ecc3f17a8f1089d960c4957b8385b9672af9548bc55e0618bd58ea81c52",
+        "controls": 16,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:2b283f639c3ed882f97dd22ead940fe64c6b6e92fb6e7fbf1a0e5a3048ed6d6d",
+        "ordinaryTextNodes": 135,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-05-rail-module-expanded",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:130cb6e5ddec45f86cfcd5a4af6e4390bc21ee3a5a74587eec9c0588b98f0692",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-05-rail-module-expanded.json",
+        "digest": "sha256:5dbf23e56f8ba5f78313b5e983c21efb0088283930a2c6cfcf30500267706b13",
+        "controls": 11,
+        "boxes": 29
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:c57cd7885a7b91f13164dfb44bff69d9f680c9e79a861dbc91a51e386fa95064",
+        "ordinaryTextNodes": 126,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-06-guided-hint-final-stage",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:db353367f2254c3c713d606879f20f4ccd2c77bcfcd3ba420a9746fddd041992",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-06-guided-hint-final-stage.json",
+        "digest": "sha256:8c5b7260f58f0f95a4a9bd28a1276b03246e83482f518df4e0d7113ea4b0930f",
+        "controls": 11,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:219b17b7d6f28830dbccdeb0a0905dd28844f08563d8e05851bc714ff2663635",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-07-menu-popover-open",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:da9f5be853857975e27d176260c1e31ab658c2eed6daf0aac53f460f468eca69",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-07-menu-popover-open.json",
+        "digest": "sha256:a6906db05c1a83cc2fdf63d4a9d04d56098585c2f30a86e90fcb94b3a37d877e",
+        "controls": 8,
+        "boxes": 15
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:90f7c6d5a8c3ff55065fc7101adce8536757d90d97ea83158d2a12a5fd40312e",
+        "ordinaryTextNodes": 114,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-08-long-objective",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:3cbd2618758251f393f3c5f208c371a147004a5fa19e25ba40ca13fcb815208c",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-08-long-objective.json",
+        "digest": "sha256:7b5a572a0345761021e5602726102d6b8df78d4201e392ceabcf6f637739e3cc",
+        "controls": 11,
+        "boxes": 94
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-08-long-objective.vocabulary.json",
+        "digest": "sha256:582632c618985d5deb5b841b03c2b698b4ea4a6b6fc7d1f3e78c9c0b4987783c",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-09-evidence-unavailable-honest-empty",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:d73bc7d4120f36a2df1475b584ada03e378784ba50329e658581822091d01c8c",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:9febd38c35ff2204f21503935c2c689d08e772595b45dd364bbc3288c01e17f1",
+        "controls": 12,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:e96cbe8fdfecdcd8c21d309929905589a6127d0980ec13cbf64c59e5cfe50fb5",
+        "ordinaryTextNodes": 133,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-10-inspector-open",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:7ac3f46bafef422e08cebdcd9675d509c021b03d6439268769197a0308c1f988",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-10-inspector-open.json",
+        "digest": "sha256:4cd31e8a8236f13e70f3a2eb28011692944821534de448f5cf64b4d86c940b68",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-10-inspector-open.vocabulary.json",
+        "digest": "sha256:3a2697dfbe28c1c1c2ff632ff1f87bb9abe8337258d7625bba8545d96f6b8140",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-430x932-11-timeline-rewind-fork-reentry",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:41ce7df13e10e6d9c941c4a3edcf26a77b24b2bbad94626607d9149cec63f063",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:23d27193138b97eb90f4e6fd98417bd9d1280e2262273f6f73ddf5f17da248bc",
+        "controls": 12,
+        "boxes": 20
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:fd5b008d07823c8ecfa553c3591491200480be16740cd557c679dfde5a6ff386",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-12-compare-open",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:adb3ee2a9966007e8760c04c487f7235099d12b48467bd0b082a6519406026b6",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-12-compare-open.json",
+        "digest": "sha256:ce40b5b9fada203ee8e7cb4be2e0ce922db28d9acea877773328acf928e1d6dd",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-12-compare-open.vocabulary.json",
+        "digest": "sha256:05d448ad5b9519e4263edb381360f01ba2080f0acfb741fe12c2b42dafa18e70",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-13-max-load",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:7d3df380233153b3e8a388993a218413eeb11d47bf9574a5f7e7138095d9a41f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-13-max-load.json",
+        "digest": "sha256:870888ef7b7ea775ac4fc768ad6de8cb5a503f811d9754eb0cf05a04d373a9cd",
+        "controls": 16,
+        "boxes": 42
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-13-max-load.vocabulary.json",
+        "digest": "sha256:f822e693ea5cf7975c34fb22e304937f38869945a22917cb28803d3b03f7c6a3",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-14-terminal-outcome",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:02a3411a3005f019554e4d6f4647515040d14c56539cf8f2e9f112ddcba8c63a",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-14-terminal-outcome.json",
+        "digest": "sha256:c31e681fe6a36a6c7ee4315bf41e8212b6998218ad61164e8cc3fc535edf3ade",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:da8f9bbe4372cc01f155e2a4bc8167a3152d3f14ecbc3c2abf916407b9abe156",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-15-promotion-pending",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:923ef7971a3cc93e7ddbc0ce838a8981ed4bfa6bbd16654b14275dc43efdc227",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-15-promotion-pending.json",
+        "digest": "sha256:389ee2041aa04cc1b300db9bbdca8b111fb7fb2490a5445f89f1c6ff819fcf53",
+        "controls": 15,
+        "boxes": 98
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:58fe870249228d0e2d3db7b53263a3fe73bf69f591e3d52f2e6f58370a244aad",
+        "ordinaryTextNodes": 104,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-430x932-16-keyboard-text-entry-active",
+      "width": 430,
+      "height": 932,
+      "digest": "sha256:0c71db666af9e1b0e65e7ed90d1473fb0fb7cb0ff395d8c0d4c3006cc5571723",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-16-keyboard-text-entry-active.json",
+        "digest": "sha256:ccb0cd32e80f72c7b29f0aacca8f7fa7f3b64be857cc94f03b152a6983a1dbde",
+        "controls": 4,
+        "boxes": 4
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-430x932-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:cb2528bae1c4a8f9f38f031e16f2070287f857d52baf4319a8a9fc9bf4c1f071",
+        "ordinaryTextNodes": 104,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-01-calm-rest",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:5c504d3796919895e7f1f2d344d058e79154110327a5dd01ba4c2345734541bd",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-01-calm-rest.json",
+        "digest": "sha256:ef5ca7bdddabf716cdb2bae768fc16dd910bca7094baa6763d263fa163ddef52",
+        "controls": 11,
+        "boxes": 94
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-01-calm-rest.vocabulary.json",
+        "digest": "sha256:9c5a7b56fd1b87f1d95d0080da7bbd6a0ae404fcf81992a0722421b9973ee245",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-02-square-selected",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:1049971baaef2cbf18d4db627000130a49be27ad1249c42cc2c9646496a30773",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-02-square-selected.json",
+        "digest": "sha256:046f00364282367ff1f19d4e11ac58a701d22c7d5860527750fb4b77da526a7f",
+        "controls": 13,
+        "boxes": 29
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-02-square-selected.vocabulary.json",
+        "digest": "sha256:8c1af3cbcc88a0d042d29af49da6ddb894b1341c56f2b19b4a195bc7fe8ee5c9",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-03-move-staged-cue",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:937afdb82b040b224748ab42b5fd642d31003d97316b0b621da1f720159b6eee",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-03-move-staged-cue.json",
+        "digest": "sha256:6cb50e5cffd0c09d84b6f427ad73f1c25157113c8f6effa83cd1d9e90df720bc",
+        "controls": 12,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:85cddf41dd5050f505d7be59903adfbeb42e7e42b6cd22538d34858c8ec9145f",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-04-post-commit-guard",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:4b72173c4125c1b8ca3dce70e1d2bbe4649cdd76908dce9ad7138c5f00b25d4f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-04-post-commit-guard.json",
+        "digest": "sha256:733b370acad0f92e683004b812bd552e1aa37ac462c9c3e96f6828dee0871ea6",
+        "controls": 16,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:ddc5d681ce683799b99a3f82be1a3a8fc3cd93e5222b9f39c4585ef497a0eaa6",
+        "ordinaryTextNodes": 135,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-05-rail-module-expanded",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:16d887c66af72657a21fd53e70193bc0c288e6fba3aa55bdff0833ac79b157c8",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-05-rail-module-expanded.json",
+        "digest": "sha256:beeca5ee5ebef7a65f0cf823d5e41c379cb6385fabaa1ed1e4e08eed76a93cd2",
+        "controls": 11,
+        "boxes": 29
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:edcbb04286e06326fa5d63837615b33a5847bc03730482795e756c12bc2592fa",
+        "ordinaryTextNodes": 126,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-06-guided-hint-final-stage",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:b8d613a37666929756133df17e08f16439a8c12074bf61d0a3cef5646aa90173",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-06-guided-hint-final-stage.json",
+        "digest": "sha256:b56c708a4b43553024f0a83fe78c5cdcf04adbda3509c8081af466295c1348d1",
+        "controls": 11,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:cf068d0eb17baf23b8b954440fa7f37e02ff9ed69c9e8d316877c6219154d149",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-07-menu-popover-open",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:b4190358dcf7a2f2b0623bbf5a216c5a0b8d2933f93cd9a2273cbfc9c0892a58",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-07-menu-popover-open.json",
+        "digest": "sha256:312ea3d205a1235181b583573e8a8f1968b686563f03153006cedfa70542101d",
+        "controls": 8,
+        "boxes": 15
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:8f3272fa1449f3af6e5433f4c4deb8b8f6969048d124eafec97b76ada1b266b5",
+        "ordinaryTextNodes": 114,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-08-long-objective",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:16fec12623b005f79489999b51a4611ae29eb8d8900af14b9500ecd8e77a8033",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-08-long-objective.json",
+        "digest": "sha256:c737336f0ec3ff80f24edfe2b9ec458e7bb37e7c99bf739d3707982a951120ac",
+        "controls": 11,
+        "boxes": 94
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-08-long-objective.vocabulary.json",
+        "digest": "sha256:27627e5a82a74bd90d860ed370bb2f2748ebc14a138cf5631c782fba4b1ca5fe",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-09-evidence-unavailable-honest-empty",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:c43ce8c1059760a32650949805d13921728ab6b769078ea83028030abe49fc22",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:ab9909e433883eb915cbdb7198ff4ec38c42243865e74b52b3aa2328f160af72",
+        "controls": 12,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:11b38f5d0b793508124ab2c04868144a3e90c7b1bcbbc5bcb477369e8201ac39",
+        "ordinaryTextNodes": 133,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-10-inspector-open",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:963dbacf036423994270112984d75b22697502686d65b73d72a5805af5b47abd",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-10-inspector-open.json",
+        "digest": "sha256:d36c9a7eefbfebf612de115a68707c157841267631893f25cacdbc12925d691a",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-10-inspector-open.vocabulary.json",
+        "digest": "sha256:2ed51e297c6522ac7ec3791af9935d52fbf98405d3f3ec98a261fcbf2d8f7cf8",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-390x844-11-timeline-rewind-fork-reentry",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:7d93dd62b8a106f42afb431b4a28e62d32bded76595438e90fa18fdec437d72f",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:483404c1649395a411b600fa9b02be817ea69af20ecadd950b9d63e4745d4520",
+        "controls": 12,
+        "boxes": 20
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:fe1097b6e8cd0a2c627e98bc22c5ec4d2384a46e38c8dff8de4a63eef72cb894",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-12-compare-open",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:6d955b12d2e7590ca3aeebfbec8464920fd37d4e69d64b20356809c9a8add0b2",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-12-compare-open.json",
+        "digest": "sha256:d4306a96744246b3d504d9b7ec5516e34e0b751fb03591f837cde08cf0d85192",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-12-compare-open.vocabulary.json",
+        "digest": "sha256:b2a1098535d0cf0a68baebd9becac0227003f9070622cf81b1f72cd7bccffea6",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-13-max-load",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:f54c19f6e0d2eef0ff71695f844e555f017e7511b383518164dde862f8f7ff2b",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-13-max-load.json",
+        "digest": "sha256:f7d01abd4c2b316a53f73382e791c55012217983761d8021738b34a05f215f5f",
+        "controls": 16,
+        "boxes": 42
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-13-max-load.vocabulary.json",
+        "digest": "sha256:1dfd3095408d5a67df6638c8e7efb5bee4d668d53c7f6629083305383940aeba",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-14-terminal-outcome",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:4385c2c9e270beb6fcd1551ba7bd2f0f8849a040c4a1b4cce9f76337fc4ef341",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-14-terminal-outcome.json",
+        "digest": "sha256:9a1f0436aa64aef81cb702a8b41dca37af8ca0f6c50ccc5600337ce44e645e14",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:ae1a99542243ec2eaa9cab887c406fa55bee28b52468f1e4a13f63464ddb8aab",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-15-promotion-pending",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:b3ca322236748e30e3a980e0a828d8509cc0696e8bae2a39aafd773b954a4861",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-15-promotion-pending.json",
+        "digest": "sha256:ac4d7ff92010ef98e7b4ec5e5adb8c89520f507ecce9be659da216d3cc629e8f",
+        "controls": 15,
+        "boxes": 98
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:df111ebc394d0158e69f0b95e96d714e14386a6a972f90bc2984e445963d1017",
+        "ordinaryTextNodes": 104,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-390x844-16-keyboard-text-entry-active",
+      "width": 390,
+      "height": 844,
+      "digest": "sha256:4c9f425f4fc3f9bef05c27b221952b876dc04c9d4eb71267e229e6ec13f695f8",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-16-keyboard-text-entry-active.json",
+        "digest": "sha256:1cbd6b7f71185697d478afbd2431c2cf695de7fe5badd8d22d1a8d9c9f910f46",
+        "controls": 4,
+        "boxes": 4
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-390x844-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:2f5bb7cdae02bfc57fe10ef1ae3e0699aeddb8e542694202185a23b33054b217",
+        "ordinaryTextNodes": 104,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-01-calm-rest",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:8d0d2cbbe55cfe96044e81bfc1e260ef4627a57531f8eb5a341887faf051ff87",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-01-calm-rest.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-01-calm-rest.json",
+        "digest": "sha256:507d359087b64bfb43b72811afd7c0c46024445c82e41e4fb748f16df39b194b",
+        "controls": 11,
+        "boxes": 94
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-01-calm-rest.vocabulary.json",
+        "digest": "sha256:e25b6da43f10c8577dd22af4f7a62c3034efbbc7ce77f34814992d664adac8c8",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-02-square-selected",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:bc65c080f788ae730890b1c5b56a39210ffb7bc2ed7ec0804853612cbb1df762",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-02-square-selected.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-02-square-selected.json",
+        "digest": "sha256:0b63e4bc4d5b6c73334fa1aa11657b4be45ecc489c3b369b6441a97c4689e702",
+        "controls": 13,
+        "boxes": 29
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-02-square-selected.vocabulary.json",
+        "digest": "sha256:b0ccc59ecd310c672ab75cd334589d05571bfbafbda90e7cb21c44e96a77690e",
+        "ordinaryTextNodes": 127,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-03-move-staged-cue",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:8e578d0b3a35a0dc4e56001a26f62004a145f9e646a15617d914a13169373d03",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-03-move-staged-cue.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-03-move-staged-cue.json",
+        "digest": "sha256:4041af6cd096b2ccbef07b70acca70f2cae4e31dd8e0dc8b646f6e86f3ba3327",
+        "controls": 12,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-03-move-staged-cue.vocabulary.json",
+        "digest": "sha256:32ef671db4f5f818e1f3d750eb43e6fd33dbd224b61c5bf0f0a937bb561ba698",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-04-post-commit-guard",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:33f31f6385388534f6e3897603888e6b7eee5fc6173fe0f60210675c93abd40d",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-04-post-commit-guard.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-04-post-commit-guard.json",
+        "digest": "sha256:c9fa47dcfe45256db9bac86de7c8194e000f1f87e84de690234d236e5712b17b",
+        "controls": 16,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-04-post-commit-guard.vocabulary.json",
+        "digest": "sha256:be2da766421b39114a76d17e2d1d0361dbcf551fe552672ef7c8f8608e8cf886",
+        "ordinaryTextNodes": 135,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-05-rail-module-expanded",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:790d0f5875f4a98f8983fb1798b2c5b12eddea32d648942e07afaafdab370123",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-05-rail-module-expanded.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-05-rail-module-expanded.json",
+        "digest": "sha256:ab820a81fcf624014dd85067451a43aafd0cd341052926413196ef6487889774",
+        "controls": 11,
+        "boxes": 29
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-05-rail-module-expanded.vocabulary.json",
+        "digest": "sha256:5c7908bef3b32c2913c7ad96506fb0fa700dbcff274d3ddb20413fba071deeba",
+        "ordinaryTextNodes": 126,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-06-guided-hint-final-stage",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:6e0dc350eed84e751427cdf6c4996b9ab661a9c70e4bcae5e9b291181e84885a",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-06-guided-hint-final-stage.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-06-guided-hint-final-stage.json",
+        "digest": "sha256:1cc3599e811bcdeb2a46b65aad462225fb2b724f9482f938eec72285c511fba8",
+        "controls": 11,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-06-guided-hint-final-stage.vocabulary.json",
+        "digest": "sha256:4b4e7e4fbb7c54be33e3bd02975196094a3405c6d9c7b4caa0dedbffab81edf7",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-07-menu-popover-open",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:85954885653faeae19e245997cb108fc6929e565290ac59b3a4e88337fe77c77",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-07-menu-popover-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-07-menu-popover-open.json",
+        "digest": "sha256:d81a8672d7ecff30bd975f370a28ca80d28f0baf8e97e0de38e22a718a78bd85",
+        "controls": 8,
+        "boxes": 15
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-07-menu-popover-open.vocabulary.json",
+        "digest": "sha256:73f3ee6ec2475a1a7a3740b493580d0c252ef4ac27ebee6866e895aa77c8d95e",
+        "ordinaryTextNodes": 114,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-08-long-objective",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:2601353b710307548fad1e756c744613e2bdfc1cf6597842c812421cfa4241bd",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-08-long-objective.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-08-long-objective.json",
+        "digest": "sha256:2c5c465b9be6a49a41124c9143c4a90f69f94ba90f022da40deb32ff7432bc22",
+        "controls": 11,
+        "boxes": 94
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-08-long-objective.vocabulary.json",
+        "digest": "sha256:a4e8cb05016eb5faf82fb5a3fd2fb1be815c17b6736ee2aeeadcf523dd6c91fd",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-09-evidence-unavailable-honest-empty",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:852bb48ebf0bf977861db2c019793a074fe54daba4ba58205b787ec00a61b365",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-09-evidence-unavailable-honest-empty.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-09-evidence-unavailable-honest-empty.json",
+        "digest": "sha256:7ad9900059ca7879a285c1f410ba18467046286069bc36b6c0f6d2051a104dc0",
+        "controls": 12,
+        "boxes": 32
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-09-evidence-unavailable-honest-empty.vocabulary.json",
+        "digest": "sha256:2401423d9e4f4c1f0c019580e3c08b9a6f7208dac5989641c489b994251d1e7b",
+        "ordinaryTextNodes": 133,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-10-inspector-open",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:7c2820f0f58d20cf3b672dcee911b8750202a5f43ab8f26e08eac1d076af4319",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-10-inspector-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-10-inspector-open.json",
+        "digest": "sha256:35081642cd9c453911c7c66d1236b888bde27b83dc178f020218301826f14955",
+        "controls": 18,
+        "boxes": 54
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-10-inspector-open.vocabulary.json",
+        "digest": "sha256:b43d9374251c2faf11bfbd098912513b56766b02e41a1534b7a54d29ef756829",
+        "ordinaryTextNodes": 101,
+        "inspectorTextNodes": 54
+      }
+    },
+    {
+      "name": "play-composition-360x680-11-timeline-rewind-fork-reentry",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:524b41183dff881d96479b209e8277ad1057d87b55e1024eef4c3ae46f2a5a7b",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-11-timeline-rewind-fork-reentry.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-11-timeline-rewind-fork-reentry.json",
+        "digest": "sha256:e8d6799ae7d3d53f343828df74ea9accbc9619271c6ba7587f9652c1fd479a1c",
+        "controls": 12,
+        "boxes": 20
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-11-timeline-rewind-fork-reentry.vocabulary.json",
+        "digest": "sha256:720deab937775718f43349202d61c66038909f567223b76de75e65d8b9b1f59a",
+        "ordinaryTextNodes": 128,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-12-compare-open",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:9b5b5b853191b3726b50153e06fb8fc93cb61739ccfe2d4ed92c19d7d17d56de",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-12-compare-open.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-12-compare-open.json",
+        "digest": "sha256:0f0f80f2f7daf1c29dcb9935b4481620ecf6435e1ef914690715e87e81510d88",
+        "controls": 9,
+        "boxes": 214
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-12-compare-open.vocabulary.json",
+        "digest": "sha256:22050bd19ad7bb7fada11a3777f24ac590087eef6a523b7baaf96ce63cd8cb42",
+        "ordinaryTextNodes": 217,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-13-max-load",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:c228e27d4849e2a91bbd0b61b282dc2d6f4a91b52f2b02486ffbee3c2cd6d041",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-13-max-load.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-13-max-load.json",
+        "digest": "sha256:b797b460630e3988b19157f8e1404a1a34b4a9a1547199229eadc756476a7b43",
+        "controls": 16,
+        "boxes": 42
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-13-max-load.vocabulary.json",
+        "digest": "sha256:c9386cca6f3fe0d37265637c2c603eb044424eecb39085186bd8a58c3b0c3d3b",
+        "ordinaryTextNodes": 147,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-14-terminal-outcome",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:ce235d6c243a5ebed372432494236257de278a8e05a17a2b49912bfabc10ca8e",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-14-terminal-outcome.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-14-terminal-outcome.json",
+        "digest": "sha256:8191d80b5e1b08c2f9b4d20270cc1aa91cf9c7af725c7c0a0031bde5ef70269b",
+        "controls": 5,
+        "boxes": 16
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-14-terminal-outcome.vocabulary.json",
+        "digest": "sha256:bc269e667660ca451e2ac772dce13dd28d088496375e74f2a82336165dcb582e",
+        "ordinaryTextNodes": 129,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-15-promotion-pending",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:af3b933054207c6e1cfa6ab294961e2ec95d758ec7c974523872e6c532c52a0e",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-15-promotion-pending.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-15-promotion-pending.json",
+        "digest": "sha256:2fa78121fe3a9bd2f9095d10ebe62dcd6adb99989813c198122ab20af5447c35",
+        "controls": 15,
+        "boxes": 98
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-15-promotion-pending.vocabulary.json",
+        "digest": "sha256:f7f60e5e5c9c4ade5ab3b1c7e320df5007dcf954bbd61335583a5c46ac61304f",
+        "ordinaryTextNodes": 104,
+        "inspectorTextNodes": 0
+      }
+    },
+    {
+      "name": "play-composition-360x680-16-keyboard-text-entry-active",
+      "width": 360,
+      "height": 680,
+      "digest": "sha256:61570e7d9e948c19e46e2ad272ca91fb6f708d8149c39148c8ffb8017f4fbbab",
+      "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-16-keyboard-text-entry-active.png",
+      "conformance": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-16-keyboard-text-entry-active.json",
+        "digest": "sha256:e9cf04a17ec629fe2a999c66ce8c9976315be75fb4b9017e87817abbb488ee80",
+        "controls": 4,
+        "boxes": 4
+      },
+      "vocabulary": {
+        "path": "test-results/composition/2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5/play-composition-360x680-16-keyboard-text-entry-active.vocabulary.json",
+        "digest": "sha256:c33f385a590fdea76d19e1f51ba800fd5a9b55104aa2d80523f953a24e0f2745",
+        "ordinaryTextNodes": 104,
+        "inspectorTextNodes": 0
+      }
+    }
+  ]
+}

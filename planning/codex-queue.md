@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed D3466/D3467 Inspector subject wave repairs historical material classification
+and preview attachment ownership without changing terminal evidence, permission or
+source semantics. Native imported-game/timeline/Inspector and mounted absence tests
+prove the repairs; full exact-index software, content and browser gates pass. Receipt:
+`planning/play-composition/inspector-subjects-2026-10-06.md`. Continue the existing A4
+destination/source obligations after that bounded checkpoint; do not infer that these
+repairs authorize D3309's structural successor or D3363's observed-move migration.
+
+Next bounded subject wave: D3468's corpus lookup can use a future active-path learner
+decision when an earlier opponent/root node is previewed. Reproduce longer-line, root,
+sibling-branch and late response cases before fixing ancestry; keep the existing
+learner-decision predecessor semantics. It is assigned core-loop, not closed by the
+D3466/D3467 proofs and not a request to change the source schema or permission ceiling.
+
 Completed D3465 supplies A4's permanent rendered vocabulary sweep and same-result retained
 records across all 112 real states. Inline and accessible text, Inspector exceptions, native
 details and artifact negatives are calibrated; the authenticated Inspector positive checks

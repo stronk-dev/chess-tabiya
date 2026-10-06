@@ -11,6 +11,12 @@
   All 112 retained PNG/geometry/vocabulary triples survive the packaged tier. This does not close all
   fifteen positive destinations, held source migrations or full A4/RFC discharges. Receipt:
   `planning/play-composition/vocabulary-boundary-2026-10-06.md`.
+- **Implementation checkpoint 2026-10-06, Inspector subjects:** D3466/D3467 bind historical
+  material readings to the selected recorded FEN and position attachments to the displayed
+  preview node, preserving active terminal ownership and abstention for missing evidence.
+  Focused mounted/native controls pass; full replacement results and bounded closeout:
+  `planning/play-composition/inspector-subjects-2026-10-06.md`. No source-schema, permission,
+  chess convention, full A4 or lifecycle promotion is implied.
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
   §3-forms (form inventory and the alternate-rendering acceptance test), §3a (silence default);
   `design/03-product-breadth.md` §IA (the inspector as a deliberate separate surface)

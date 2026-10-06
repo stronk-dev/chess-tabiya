@@ -28583,6 +28583,32 @@
       "uxItems": [],
       "evidence": "planning/play-composition/vocabulary-boundary-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3466",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1ac0c004b40567aca2bb3f9d998d3621076456f8fea455e855511cd4b3a32ff7",
+      "uxItems": [],
+      "evidence": "planning/play-composition/inspector-subjects-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3467",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7f05d7f1fe6a84986268ea1d0a35139149649564bb60ea4c1e2325a8d4b3a256",
+      "uxItems": [],
+      "evidence": "planning/play-composition/inspector-subjects-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3468",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c24405cd3faf8c235fa92d0faf724918ad59792e2c04070bcc56b6aeb5515cef",
+      "uxItems": [],
+      "owner": "core-loop"
     }
   ]
 }

@@ -117,6 +117,14 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
+Inspector subject repair D3466/D3467 binds historical material readings to the exact
+selected recorded FEN and position attachments to the displayed preview node, without
+substituting active evidence into missing historical subjects. Terminal ownership stays
+unchanged. Seven focused mounted checks, 115 complete client checks and four native
+import/timeline/Inspector journeys pass; full replacement gates and closeout are recorded
+in `inspector-subjects-2026-10-06.md`. These are bounded subject repairs, not the held
+D3309/D3363 migration contracts or all fifteen A4 destination positives.
+
 Current maximum-load checkpoint: `max-load-2026-10-06.md`. The genuine eight-seat fixture and
 receipt-bound badges replace the three-default-row check; compilation/snapshot/held-cue seams are
 repaired. The compact queue and independent header coverage checkpoint is

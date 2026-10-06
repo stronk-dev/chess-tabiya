@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 Inspector subject checkpoint: [[D3466]]/[[D3467]] repair historical
+material-classification and displayed-preview attachment identity. Divergent legal
+positions and attachment absence fail on the predecessor; mounted/native import,
+timeline, calculation and Inspector checks pass after repair without cursor mutation.
+Full exact-index software, content and browser replacement gates pass, recorded in
+`planning/play-composition/inspector-subjects-2026-10-06.md`. This does not close all
+fifteen A4 destinations, held source migrations, the RFC or 1.0.
+
 2026-10-06 A4 vocabulary checkpoint: [[D3465]] binds a rendered-text boundary to every real
 composition cell and retains its non-vacuous same-result record with PNG/geometry evidence.
 Inline markup and accessible equivalent prose cannot conceal raw UCI/evaluation/producer text;

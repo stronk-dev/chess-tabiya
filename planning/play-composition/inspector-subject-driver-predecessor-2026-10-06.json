@@ -1,0 +1,25 @@
+{
+  "scope": "Focused native driver predecessor; three endgame subject cases pass, attachment driver incorrectly assumes graph endpoint contains events. Not product defect or replacement proof.",
+  "digest": "sha256:3ee9f9ab623c741f3e9a4632868ad75c37034d47b6f382cb53b1761620045df9",
+  "stats": {
+    "startTime": "2026-10-06T05:54:04.778Z",
+    "duration": 14299.284,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "failures": [
+    {
+      "title": "previewed position keeps its own attached evidence",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "error": "TypeError: Cannot read properties of undefined (reading 'find')"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "scope": "Final focused native replacement: three historical/current material cases and the distinct recorded active-position calculation versus historical preview; four passed, zero failures or retries. Not full release proof.",
+  "digest": "sha256:592dfd38a7ebfbca4013b803af8301c9f8a942f092162c423394cbf17e48ee46",
+  "stats": {
+    "startTime": "2026-10-06T05:55:55.503Z",
+    "duration": 15621.690999999999,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

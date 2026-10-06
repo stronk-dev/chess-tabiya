@@ -1136,6 +1136,88 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it.each([
+    { name: "rook moment versus unclassified current material", fen: "4k2r/4p3/8/8/8/8/4R3/4K3 w - - 0 1", first: "e2e7", second: "e8e7", moment: "Rook ending under Tabiya's material-census convention.", current: "Endgame; the material is outside Tabiya's material-census convention." },
+    { name: "unclassified moment versus current pawn ending", fen: "4k3/4q3/8/8/8/8/P3Q3/4K3 w - - 0 1", first: "e2e7", second: "e8e7", moment: "Endgame; the material is outside Tabiya's material-census convention.", current: "Pawn ending under Tabiya's material-census convention." },
+    { name: "non-endgame moment versus current rook ending", fen: "4k2r/4q3/8/8/8/8/4Q3/R3K3 w - - 0 1", first: "e2e7", second: "e8e7", moment: null, current: "Rook ending under Tabiya's material-census convention." },
+  ])("keeps historical and current Inspector subjects separate: $name", async ({ name, fen, first, second, moment, current }) => {
+    const root = createRun({
+      id: `inspector-subject-${name}`,
+      session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"9".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1, createdAt: at,
+    });
+    const historical = commitMove(root, first).run;
+    const run = commitMove(historical, second).run;
+    const onVoice = vi.fn(async (_nodeId: string, scope: VoicePage["scope"]) => ({ text: "Source-bound selected evidence.", source: "provider" as const, scope, recordedReadingsPresent: false }));
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("quiet", { markers: "live", voice: "persona" }) : null, setItem: vi.fn() },
+      capabilities: { providerHealth: fixtureProviderHealth({ "maia-inference": "available", "stockfish-play": "available", "stockfish-analysis": "available", "external-voice": "available" }, { "maia-inference": "local_fixture", "stockfish-play": "local_fixture", "stockfish-analysis": "local_fixture" }) } as Capabilities,
+      onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await assistanceSettled();
+    const marker = document.querySelector<HTMLButtonElement>('.pivotal-marker[aria-label$="at rehearsal step 1"]');
+    expect(marker).not.toBeNull();
+    marker!.click(); await tick();
+    document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click(); await tick();
+    const historicalSection = document.querySelector<HTMLElement>('[aria-label="Recorded moment evidence"]')!;
+    const currentSection = document.querySelector<HTMLElement>('[aria-label="Current-position endgame evidence"]')!;
+    expect(currentSection.textContent).toContain(current);
+    expect(historicalSection.textContent).not.toContain(current);
+    if (moment === null) expect(historicalSection.textContent).not.toContain("material-census convention");
+    else expect(historicalSection.textContent).toContain(moment);
+    historicalSection.querySelector<HTMLButtonElement>("button")!.click();
+    await vi.waitFor(() => expect(onVoice).toHaveBeenCalledWith(historical.activeCursor.nodeId, "marker"));
+    document.querySelector<HTMLElement>('[aria-label="Current-position evidence rendering"]')!.querySelector<HTMLButtonElement>("button")!.click();
+    await vi.waitFor(() => expect(onVoice).toHaveBeenCalledWith(run.activeCursor.nodeId, "reading"));
+    await unmount(component);
+  });
+
+  it.each([true, false])("binds previewed position attachments to the displayed subject (has history: %s)", async (withHistoricalEvidence) => {
+    let run = createRun({
+      id: `preview-attachments-${withHistoricalEvidence}`,
+      session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"8".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1, createdAt: at,
+    });
+    run = commitMove(run, "e2e4").run;
+    const historicalId = run.activeCursor.nodeId;
+    if (withHistoricalEvidence) run = attachEvidence(run, historicalId, ["engine:history-attachment"], { kind: "eval", source: "engine_validated", values: { centipawns: 25 } }, at).run;
+    run = commitMove(run, "e7e5").run;
+    run = attachEvidence(run, run.activeCursor.nodeId, ["engine:active-attachment"], { kind: "eval", source: "engine_validated", values: { centipawns: 120 } }, at).run;
+    const before = JSON.stringify(run);
+    const onRewind = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await assistanceSettled();
+    const inspect = () => [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspector")!.click();
+    const close = () => [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Return to play")!.click();
+    inspect(); await tick();
+    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Recorded engine evaluation: +1.20 pawns");
+    close(); await tick();
+    const preview = document.querySelector<HTMLButtonElement>(`[data-timeline-node="${historicalId}"]`)!;
+    preview.click(); await tick();
+    expect(document.querySelector(".preview-label")?.textContent).toBe("Preview");
+    inspect(); await tick();
+    const evidence = document.querySelector('[aria-label="Evidence attached to this position"]');
+    if (withHistoricalEvidence) {
+      expect(evidence?.textContent).toContain("Recorded engine evaluation: +0.25 pawns");
+      expect(evidence?.textContent).not.toContain("+1.20");
+    } else expect(evidence).toBeNull();
+    close(); await tick();
+    preview.click(); await tick();
+    inspect(); await tick();
+    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Recorded engine evaluation: +1.20 pawns");
+    expect(onRewind).not.toHaveBeenCalled();
+    expect(JSON.stringify(run)).toBe(before);
+    await unmount(component);
+  });
+
   it("binds concurrent revoicing to the requested moment, position, and scope", async () => {
     const root = createRun({
       id: "scoped-revoice",

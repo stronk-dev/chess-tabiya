@@ -9,6 +9,7 @@ import { inspectComposition, type CompositionConformance } from "./composition-c
 import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 import type { ModuleQueryPage } from "@chess-tabiya/runtime";
+import type { RunGraph } from "../../apps/web/src/lib/api.js";
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
 
@@ -925,6 +926,89 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await page.getByLabel("Passive markers").uncheck();
   await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("button", { name: /Open (?:Irreversible change|Phase transition)/ })).toHaveCount(0);
+});
+
+for (const subject of [
+  { name: "rook moment", fen: "4k2r/4p3/8/8/8/8/4R3/4K3 w - - 0 1", moves: "1. Rxe7+ Kxe7 *", moment: "Rook ending under Tabiya's material-census convention.", current: "Endgame; the material is outside Tabiya's material-census convention." },
+  { name: "unclassified moment", fen: "4k3/4q3/8/8/8/8/P3Q3/4K3 w - - 0 1", moves: "1. Qxe7+ Kxe7 *", moment: "Endgame; the material is outside Tabiya's material-census convention.", current: "Pawn ending under Tabiya's material-census convention." },
+  { name: "non-endgame moment", fen: "4k2r/4q3/8/8/8/8/4Q3/R3K3 w - - 0 1", moves: "1. Qxe7+ Kxe7 *", moment: null, current: "Rook ending under Tabiya's material-census convention." },
+]) {
+  test(`historical moment keeps its own endgame subject: ${subject.name}`, async ({ page }) => {
+    await page.goto("/review");
+    await page.getByLabel("PGN").fill(`[Event "Inspector subject"]\n[White "Alice"]\n[Black "Bob"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${subject.fen}"]\n\n${subject.moves}`);
+    await page.getByRole("button", { name: "Build game story" }).click();
+    await expect(page).toHaveURL(/\/review\/game\/import-/);
+    const runId = page.url().split("/").at(-1)!;
+    await page.goto(`/play/run/${runId}`);
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    const boardBefore = await page.getByLabel("Chessboard").boundingBox();
+    await openAdvancedSupport(page);
+    await page.getByLabel("Passive markers").check();
+    await page.getByRole("button", { name: "Return to play" }).click();
+    const marker = page.getByRole("button", { name: /Open .* at rehearsal step 1$/u });
+    await marker.click();
+    await page.getByRole("dialog", { name: /Review/ }).getByRole("button", { name: "Open in Inspector" }).click();
+    const historical = page.getByRole("region", { name: "Recorded moment evidence" });
+    const current = page.getByRole("region", { name: "Current-position endgame evidence" });
+    await expect(current).toContainText(subject.current);
+    await expect(historical).not.toContainText(subject.current);
+    if (subject.moment === null) await expect(historical).not.toContainText("material-census convention");
+    else await expect(historical).toContainText(subject.moment);
+    await expect(page.getByLabel("Chessboard")).toHaveCount(1);
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBefore);
+    await page.getByRole("button", { name: "Return to play" }).click();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBefore);
+    const graph = await (await page.request.get(`/runs/${runId}/graph`)).json();
+    expect(graph.graph.nodes.map((node: { moveUci: string | null }) => node.moveUci).filter(Boolean)).toEqual(["e2e7", "e8e7"]);
+  });
+}
+
+test("previewed position keeps its own attached evidence", async ({ page }) => {
+  await page.goto("/review");
+  await page.getByLabel("PGN").fill(`[Event "Inspector attachment subject"]\n[White "Alice"]\n[Black "Bob"]\n[Result "*"]\n[SetUp "1"]\n[FEN "4k2r/4p3/8/8/8/8/4R3/4K3 w - - 0 1"]\n\n1. Rxe7+ Kxe7 *`);
+  await page.getByRole("button", { name: "Build game story" }).click();
+  await expect(page).toHaveURL(/\/review\/game\/import-/);
+  await expect(page.getByText("Evaluation coverage: 3 of 3 positions on this line carry a recorded engine evaluation.")).toBeVisible({ timeout: 15_000 });
+  const runId = page.url().split("/").at(-1)!;
+  await page.goto(`/play/run/${runId}`);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await showSupport(page);
+  // Request an actual bounded line at the active position. The labelled mock's
+  // evaluations are all zero, so equal evaluation text alone cannot prove identity.
+  const calculation = page.locator(".analysis-request");
+  await calculation.getByRole("button", { name: "Calculate this position", exact: true }).click();
+  await expect(calculation.getByRole("button", { name: "Calculate this position", exact: true })).toBeEnabled({ timeout: 10_000 });
+  await expect(calculation).toContainText("A recorded calculation is available for this position.", { timeout: 10_000 });
+  const before = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph as RunGraph;
+  const history = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).events as {
+    type: string; data: { nodeId: string; evidenceRefs: string[]; payload: { kind: string; values: { movesUci: string[] } } };
+  }[];
+  const historical = before.nodes.find(node => node.moveUci === "e2e7")!;
+  const recordedLine = history.find(event => event.type === "evidence.attached" && event.data.nodeId === before.activeCursor.nodeId && event.data.payload.kind === "bestline")!;
+  expect(recordedLine).toBeDefined();
+  expect(historical.evidenceRefs).not.toEqual(expect.arrayContaining(recordedLine.data.evidenceRefs));
+  const lineText = `Recorded engine line: ${recordedLine.data.payload.values.movesUci.join(" ")}`;
+  const attachments = page.getByRole("region", { name: "Evidence attached to this position" });
+  const boardBefore = await page.getByLabel("Chessboard").boundingBox();
+  await page.getByRole("button", { name: "Inspector", exact: true }).click();
+  await expect(attachments).toContainText(lineText);
+  await page.getByRole("button", { name: "Return to play" }).click();
+  const preview = page.locator(`[data-timeline-node="${historical.id}"]`);
+  await preview.click();
+  await expect(page.locator(".preview-label")).toHaveText("Preview");
+  await page.getByRole("button", { name: "Inspector", exact: true }).click();
+  await expect(attachments).toContainText("Recorded engine evaluation:");
+  await expect(attachments).not.toContainText("Recorded engine line:");
+  await page.getByRole("button", { name: "Return to play" }).click();
+  await preview.click();
+  await expect(page.locator(".preview-label")).toHaveCount(0);
+  await page.getByRole("button", { name: "Inspector", exact: true }).click();
+  await expect(attachments).toContainText(lineText);
+  await page.getByRole("button", { name: "Return to play" }).click();
+  expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBefore);
+  const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+  expect(after.activeCursor).toEqual(before.activeCursor);
+  expect(after.nodes).toEqual(before.nodes);
 });
 
 test("endgame evidence is inspectable without a pivotal marker", async ({ page }) => {

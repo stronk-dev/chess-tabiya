@@ -1,0 +1,20 @@
+{
+  "scope": "focused predecessor, not replacement proof; two passed, bare-kings fixture reaches the proper terminal modal and cannot use the live-play menu",
+  "digest": "sha256:8bbd7e49a39d3dc26ac01fda3171ad317733087b1e56229f6c3d2ce5a8a8dc48",
+  "stats": {
+    "startTime": "2026-10-06T05:47:48.812Z",
+    "duration": 42452.414000000004,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "failures": [
+    {
+      "title": "historical moment keeps its own endgame subject: unclassified moment",
+      "status": "timedOut",
+      "retry": 0,
+      "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+    }
+  ]
+}

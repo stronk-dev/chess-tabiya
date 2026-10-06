@@ -273,9 +273,15 @@ Inspector also exposes current-position endgame reading and provider rendering i
 pivotal markers. The endgame line states the material class. It names Lucena, Philidor or Vancura
 only when a registered setup convention matches (`theory.endgame.setup_match@1`), and it always
 cites that convention's id and version. This works even when no forward detector produced a
-timeline moment. Provider
+timeline moment. The selected moment's material reading is computed from that exact
+recorded node's FEN, never substituted from the current board. A missing recorded
+subject stays absent. Inspector's attached-evidence section follows the displayed
+position during timeline preview; an attachment-free preview remains empty. Cancelling
+preview returns to the active node's attachments without rewinding or changing stored
+nodes. TerminalSheet separately retains the active outcome's evidence. Provider
 renderings and speech requests retain the requested `reading` or `marker` scope, and a returned
-rendering is shown only while its source node remains the position displayed on the board.
+rendering is shown only while its exact requested reading or recorded-moment subject
+remains selected in that scope.
 
 The imported-game Story follows the imported workflow's voice preference. An available external
 provider does not itself expose narration: the learner must have selected persona voice for that

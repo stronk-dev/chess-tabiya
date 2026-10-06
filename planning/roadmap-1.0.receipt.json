@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f56e3ea2fd67e1b5810ce5e474f936a0d97bd36f4c87e040802f59d371f9c778",
+    "roadmap": "sha256:3a3b01e2c75574af3c4f017d1fe9dc51e0f87964dae8e9a9ec414abb7ee57155",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:e7e1d1000295a99f4e8f7144b2b340601df3da0c9436bf2c46aecd7769990481",
-    "rfcRegister": "sha256:3af776378a80687a51a854fde3a0b6c72a1663a9cc79550eae06f2d2f6f34975",
+    "workState": "sha256:dec5a26ceba3ba171298d20b60d4ca82a522833f7ed95d98ceceaf7d83766582",
+    "rfcRegister": "sha256:21785143e2471f4745482b2f51e9b22a6ea74dbeb86663e1a49462414d92ddfe",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 0,
       "blocked": 1058,
-      "done": 1367,
+      "done": 1369,
       "refused": 161
     },
     "workItems": {
@@ -769,10 +769,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. The permanent 112-cell vocabulary floor and actual local Inspector receipt/component/close positive are complete, not queued again. Review D3309 detailed structural operand authority before any lossy renderer swap; reconcile D3436 phone modality/placement and rule D1639 before full defaults. D3451–D3465 bounded checkpoints remain completed; no whole RFC or milestone closure.",
+      "nextAction": "Reproduce and repair D3468 corpus ancestry for historical/root/sibling previews without changing source semantics. Finish A4 fifteen-family destination/source positives and remaining D1834 semantic obligations. The permanent 112-cell vocabulary floor and actual local Inspector receipt/component/close positive are complete, not queued again. Review D3309 detailed structural operand authority before any lossy renderer swap; reconcile D3436 phone modality/placement and rule D1639 before full defaults. D3451–D3467 bounded checkpoints remain completed; no whole RFC or milestone closure.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3465 closes A4's permanent inline/accessibility-aware vocabulary arm across 112 genuine cells with retained same-result records, independent calibration and an authenticated real local Inspector receipt/component/close positive. Complete exact-index software passes 3256 tests/343 files, seven isolated performance tests/four files, clean types and all downstream gates at 05fdca265d21d0a336e7751dc5d1e739eec34eed. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 exact requirements. Browser CI passes 133 journeys, one existing optional Maia skip and zero retries. All 337 retained files survive packaging unchanged; 14549 ordinary text nodes have zero leaks and 378 Inspector text nodes remain in their explicit home. The matrix has zero raw Inspector examples; full fifteen-family destination/source positives remain open, not implied by these counts. All 47 artifact controls pass. D3363, D3309, D1834/full A4, phone reconciliation, ceilings and owner-use remain open; no milestone/RFC promotion. D3464 repairs requested-as-applied human-model attribution and misleading player-rating wording through the existing registered distribution and equivalent sentence. Nine predecessor assertions fail; 38 focused replacement tests and clean types pass. Complete exact-index software passes 3256 tests/343 files, seven performance tests/four files and all downstream gates at c9f48be4b64bbf0a777e2b4cc42ade0cc2af2bc7. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 exact requirements; browser CI passes 131 journeys, one existing optional real-Maia skip and zero retries, retaining all 112 paired artifacts. Metadata successors retain all 970 declarations, 278 factory outcomes, authored chess fields and validation observations; only 104 requirement stamps and 68 ledger digests change. D3363 source migration, D3309 structural fidelity, raw Inspector migration and full A4 remain open. D3458–D3463 repair actual board-chrome overlap, independent native authoring forms and promotion Cancel/retry under accepted contracts. The notation door sits in the fixed strip; whole shell/strip bounds and all 64 physical centers pass at six projections, genuine back-rank clicks at five, native authoring posts only through Create, and the unchanged pawn supports a real drag retry. Fixed-panel positive and containing-block/own-label/viewport negatives calibrate the checker. Five native focus/input journeys and 110 mounted tests pass. Complete replacement browser CI passes 131 journeys (68 smoke, five content, 57 matrix, one packaged), one existing optional real-Maia skip and zero retries; all 112 paired PNG/JSON cells and their report remain hash-equal after packaging, with 1593 active controls and 9183 text bounds. Failed predecessor, obsolete mobile/whole-workspace selectors, initial strip checker failures and superseded topbar images are preserved as failures/superseded, never relabelled. Exact-index software passes 3248 tests/343 files, seven isolated performance tests/four files, clean types and all downstream gates at tree 9ae457acbcd382bd710f8ad8131b51d57eed6899. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Later tracker/docs/log bytes get separate staged governance and normal hooks. Six scoped rows close on retained path evidence, zero untriaged of 1686 live items and none doing. No whole RFC/capability/milestone promotion; full A3/A4, D1834, D3436, D3309, ceilings and owner-use remain open.",
+        "summary": "D3466/D3467 repair historical-moment material classification and preview-position attachment ownership with missing-subject abstention and unchanged terminal ownership. Seven focused mounted checks, 115 full client tests/six files and four native import/timeline/calculation/Inspector journeys pass, with clean types. Complete isolated exact-index software passes 3261 tests/343 files, seven performance tests/four files, clean types and all downstream gates at e091236a7dd3f807a889c4df483ec36820c99880. Content passes 225 tests/23 files, zero clearance errors and 104 exact declarations. Browser CI passes 137 journeys, one existing optional Maia skip, zero retries, with all 337 retained files unchanged after packaging. The earlier concurrent-load software run timed out once and remains recorded; no timeout/assertion was changed. Both rows close on path evidence; D3468 corpus ancestry stays assigned and queued; receipt planning/play-composition/inspector-subjects-2026-10-06.md. No full A4, source migration, RFC or milestone promotion. D3465 closes A4's permanent inline/accessibility-aware vocabulary arm across 112 genuine cells with retained same-result records, independent calibration and an authenticated real local Inspector receipt/component/close positive. Complete exact-index software passes 3256 tests/343 files, seven isolated performance tests/four files, clean types and all downstream gates at 05fdca265d21d0a336e7751dc5d1e739eec34eed. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 exact requirements. Browser CI passes 133 journeys, one existing optional Maia skip and zero retries. All 337 retained files survive packaging unchanged; 14549 ordinary text nodes have zero leaks and 378 Inspector text nodes remain in their explicit home. The matrix has zero raw Inspector examples; full fifteen-family destination/source positives remain open, not implied by these counts. All 47 artifact controls pass. D3363, D3309, D1834/full A4, phone reconciliation, ceilings and owner-use remain open; no milestone/RFC promotion. D3464 repairs requested-as-applied human-model attribution and misleading player-rating wording through the existing registered distribution and equivalent sentence. Nine predecessor assertions fail; 38 focused replacement tests and clean types pass. Complete exact-index software passes 3256 tests/343 files, seven performance tests/four files and all downstream gates at c9f48be4b64bbf0a777e2b4cc42ade0cc2af2bc7. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 exact requirements; browser CI passes 131 journeys, one existing optional real-Maia skip and zero retries, retaining all 112 paired artifacts. Metadata successors retain all 970 declarations, 278 factory outcomes, authored chess fields and validation observations; only 104 requirement stamps and 68 ledger digests change. D3363 source migration, D3309 structural fidelity, raw Inspector migration and full A4 remain open. D3458–D3463 repair actual board-chrome overlap, independent native authoring forms and promotion Cancel/retry under accepted contracts. The notation door sits in the fixed strip; whole shell/strip bounds and all 64 physical centers pass at six projections, genuine back-rank clicks at five, native authoring posts only through Create, and the unchanged pawn supports a real drag retry. Fixed-panel positive and containing-block/own-label/viewport negatives calibrate the checker. Five native focus/input journeys and 110 mounted tests pass. Complete replacement browser CI passes 131 journeys (68 smoke, five content, 57 matrix, one packaged), one existing optional real-Maia skip and zero retries; all 112 paired PNG/JSON cells and their report remain hash-equal after packaging, with 1593 active controls and 9183 text bounds. Failed predecessor, obsolete mobile/whole-workspace selectors, initial strip checker failures and superseded topbar images are preserved as failures/superseded, never relabelled. Exact-index software passes 3248 tests/343 files, seven isolated performance tests/four files, clean types and all downstream gates at tree 9ae457acbcd382bd710f8ad8131b51d57eed6899. Content passes 225 tests/23 files, 92 clearance documents/zero errors and 104 derived-equal capability documents. Later tracker/docs/log bytes get separate staged governance and normal hooks. Six scoped rows close on retained path evidence, zero untriaged of 1686 live items and none doing. No whole RFC/capability/milestone promotion; full A3/A4, D1834, D3436, D3309, ceilings and owner-use remain open.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-job-durability/calculation-retry-2026-10-06.md",
@@ -859,7 +859,12 @@
           "planning/play-composition/vocabulary-boundary-matrix-2026-10-06.json",
           "planning/play-composition/vocabulary-boundary-inventory-2026-10-06.json",
           "tests/browser/composition-vocabulary.ts",
-          "tests/browser/composition-vocabulary.spec.ts"
+          "tests/browser/composition-vocabulary.spec.ts",
+          "planning/play-composition/inspector-subjects-2026-10-06.md",
+          "planning/play-composition/inspector-subject-native-2026-10-06.json",
+          "planning/play-composition/inspector-subject-software-2026-10-06.json",
+          "planning/play-composition/inspector-subject-matrix-2026-10-06.json",
+          "planning/play-composition/inspector-subject-inventory-2026-10-06.json"
         ],
         "anchors": [
           {
@@ -975,7 +980,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:3267c3d988cbd8a6b5d2c78325f5d749ce88bbd6fadb197265e712d6d9bcec28"
+            "digest": "sha256:0f0e5f7d5eec25bc6f307131a8a67be3f11da063e44cee700e9f075b6a249c14"
           },
           {
             "kind": "work_state",

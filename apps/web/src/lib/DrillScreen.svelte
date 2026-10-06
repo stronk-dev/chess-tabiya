@@ -844,6 +844,11 @@
       ? currentNode
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
+  // Preview is not a rewind: Inspector follows the displayed position while
+  // TerminalSheet retains the active outcome's evidence above.
+  let positionEvidence = $derived(
+    displayedNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads)),
+  );
   let corpusQueryNodeId = $derived((() => {
     const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
     return decision?.parentId ?? displayedNode.id;
@@ -1108,6 +1113,9 @@
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
   let openPivotalNode = $derived(openPivotalNodeId === undefined ? undefined : run.nodes.find((node) => node.id === openPivotalNodeId));
+  // A timeline moment owns its recorded position even while the board displays another node.
+  // Missing historical subjects abstain; the current board is never a substitute evidence source.
+  let openPivotalEndgame = $derived(openPivotalNode === undefined ? null : endgameClassification(openPivotalNode.fen));
   function preferenceStorage(): PreferenceStorage | undefined {
     if (assistanceStorage !== undefined) return assistanceStorage;
     if (import.meta.env.MODE === "test") return undefined;
@@ -2647,7 +2655,7 @@
           {:else}
             <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · {rehearsalStepLabel(openPivotalNode?.ply ?? 0).toLocaleLowerCase()}</p>
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
-            {#each renderEndgameClassification(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#each renderEndgameClassification(openPivotalEndgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.voice === "persona" && !voiceNotice.notConfigured && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
             {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
             {#if voiceError?.nodeId === openPivotalNodeId && voiceError.scope === "marker"}<p role="alert">{voiceError.text}</p>{/if}
@@ -2725,10 +2733,10 @@
             {/each}
           </section>
         {/if}
-        {#if terminalEvidence.length > 0}
+        {#if positionEvidence.length > 0}
           <section aria-label="Evidence attached to this position" data-evidence-consumer="inspector.position_evidence">
             <h3>Evidence attached to this position</h3>
-            {#each terminalEvidence as sentence}
+            {#each positionEvidence as sentence}
               <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
             {/each}
           </section>

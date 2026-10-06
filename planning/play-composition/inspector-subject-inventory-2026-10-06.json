@@ -1,0 +1,18 @@
+{
+  "scope": "Complete browser CI passed 137 journeys: 72 smoke, five content, 59 matrix and one packaged; one existing optional Maia skip, zero retries. Independent post-packaging verification of retained current-run triples/report, not full A4 acceptance.",
+  "reportDigest": "sha256:2bddf1e7f0d510f94e419af5898ec29e57d004932a69a00ab1cace756811efe5",
+  "stats": {
+    "startTime": "2026-10-06T06:00:07.303Z",
+    "duration": 337317.245,
+    "expected": 59,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checkedFiles": 337,
+  "requiredCells": 112,
+  "provenCells": 112,
+  "ordinaryTextNodes": 14549,
+  "inspectorTextNodes": 378,
+  "retainedRecordsUnchanged": true
+}
