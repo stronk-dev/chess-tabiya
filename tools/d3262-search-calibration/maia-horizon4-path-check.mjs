@@ -10,6 +10,15 @@ const directory = "planning/semantic-consequence-search";
 function check(value, message) { if (!value) throw new Error(message); }
 function sha(bytes) { return `sha256:${createHash("sha256").update(bytes).digest("hex")}`; }
 function legal(fen) { return legalMoves(Chess.fromSetup(parseFen(fen).unwrap()).unwrap()).map((row) => row.uci); }
+export function boardTerminalReason(fen) {
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  if (legalMoves(position).length === 0) return position.isCheck() ? "CHECKMATE" : "STALEMATE";
+  if (position.isInsufficientMaterial()) return "INSUFFICIENT_MATERIAL";
+  if (position.halfmoves >= 150) return "SEVENTYFIVE_MOVES";
+  // Captured paths start at the declared root with unavailable pre-root
+  // history and contain at most three moves. They cannot establish fivefold.
+  return null;
+}
 function masses(items, expectedLegal, label, complete = false) {
   check(Array.isArray(items) && items.length > 0, `Missing ${label}`);
   const seen = new Set();
@@ -31,7 +40,7 @@ export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, direc
   captureAuthority: "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof",
   frameName: "d3262-maia-horizon4-path-frame.json", positions: 2189, sharedFenControl: true,
 }) {
-  const jobs = ["d3262-coherent-deeper-supplement-frame.json", "d3262-coherent-semantic-supplement-frame.json"]
+  const jobs = ["d3262-coherent-deeper-supplement-frame.json", "d3262-coherent-semantic-supplement-frame.json", "d3262-coherent-third-ply-frame.json"]
     .includes(expected.frameName) ? frame.maiaJobs : frame.jobs;
   check(frame.authority === expected.frameAuthority && jobs.length === expected.positions
     && capture.version === 1 && capture.manifest === frame.manifest && capture.positions === expected.positions && capture.rows.length === expected.positions
@@ -43,7 +52,7 @@ export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, direc
   check(source.modelId === direct.source.modelId && source.modelCheckpointSha256 === direct.source.modelCheckpointSha256
     && source.uciSourceSha256 === direct.source.uciSourceSha256 && source.mode === "human_common"
     && source.band === 1400 && source.temperature === 0.8 && source.topP === 0.92
-    && source.useUciHistory === true && source.historyUci === "root_candidate_reply_path_per_row"
+    && source.useUciHistory === true && source.historyUci === (expected.historyUci ?? "root_candidate_reply_path_per_row")
     && source.preRootHistory === "unavailable_not_inferred" && source.device === "cpu", "Maia path model or history source changed");
   let legalMovesCount = 0, configuredSupport = 0, terminal = 0;
   for (let index = 0; index < jobs.length; index += 1) {
@@ -57,9 +66,11 @@ export function validateMaiaHorizon4PathCapture(frame, frameBytes, direct, direc
     if (row.terminal) {
       check(typeof row.terminalReason === "string" && row.terminalReason.length > 0
         && row.rawFullLegal.length === 0 && row.configuredSupport.length === 0, `Terminal Maia path manufactured policy ${index}`);
+      check(row.terminalReason === boardTerminalReason(job.fen), `Maia terminal contradicts board authority ${index}`);
       terminal += 1;
       continue;
     }
+    check(boardTerminalReason(job.fen) === null, `Maia nonterminal contradicts board authority ${index}`);
     check(row.terminal === false && row.terminalReason === null && exactLegal.length > 0, `Nonterminal Maia path missing policy ${index}`);
     const legalSet = new Set(exactLegal);
     masses(row.rawFullLegal, legalSet, `raw Maia path ${index}`, true);

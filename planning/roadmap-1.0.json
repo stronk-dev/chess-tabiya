@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3476/D3477 replay the actual second provider-selection layer on the frozen coherent-root population: 17,507 three-ply paths, 16,813 exact engine-FEN and 1,401 ordered Maia-history final-ply jobs. Joint configured 0.80 mass falls to 0.675384; residuals remain explicit. Original Carlsbad bytes and manifest are restored independently of live pack migrations. Six continuation controls, three manifest controls and independent full legal replay pass. Final-ply captures, deeper semantic selector, five-arm proof/contrast/cost and all source/A4/1.0 holds remain open; no full promotion.",
+          "summary": "D3478 executes the frozen 16,813-job final-ply Stockfish queue through immutable checked intervals and remains doing until the complete source/merge passes. All 1,401 ordered Maia histories now have checked actual captures; independent model re-inference reproduces all 1,400 nonterminal policies exactly, with one verified material terminal. D3479/D3480 repair forged terminal admission and use the packaged offline checkpoint without downloads or model changes. Sixteen source controls and complete historical prerequisite replay pass. The earlier 17,507-path frame and composed mass boundary remain unchanged. Deeper semantic selection, five-arm proof/contrast/cost, production/source/A4 and full 1.0 holds remain open; no full promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1005,7 +1005,9 @@
             "planning/semantic-consequence-search/d3262-coherent-third-ply-frame.json",
             "design/research/semantic-search-multinode-coverage.md",
             "tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs",
-            "tools/d3262-search-calibration/manifest.test.mjs"
+            "tools/d3262-search-calibration/manifest.test.mjs",
+            "planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md",
+            "planning/semantic-consequence-search/d3262-maia-third-ply-capture.json"
           ],
           "anchors": [
             {
@@ -1382,6 +1384,21 @@
               "kind": "work_state",
               "id": "D3477",
               "digest": "sha256:f746a36a1364b05ccfb01379706253ca7e827b699885581faa8d5e63068005aa"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3478",
+              "digest": "sha256:b73830ef6cde96012b3f0ca1bab762edb5e26e31d08aabfadb093111c295446e"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3479",
+              "digest": "sha256:2bfc78045003e0142a4beadb6b6294461d8b88e4fa488892be9cb62df555978a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3480",
+              "digest": "sha256:af7520b9dd62044eab27543a689056a60b2f4cb9f007509c5854da118e60be0c"
             }
           ]
         },

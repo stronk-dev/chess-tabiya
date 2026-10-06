@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 final-ply source checkpoint: all 1,401 ordered Maia histories now have
+checked actual sources and independent model re-inference; all 1,400 nonterminal
+policies reproduce exactly, with one verified material terminal. D3479/D3480 close
+two research source defects. D3478 remains doing: the 16,813-job Stockfish queue is
+running in immutable checked intervals, not complete. Receipt:
+`planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md`.
+Five-arm proof/contrast/cost and the full production foundation remain open;
+no capability, official pack, RFC or milestone is promoted by source capture.
+
 2026-10-06 semantic-search research checkpoint: D3476/D3477 add a checked actual
 second provider-selection layer and restore its historical input isolation.
 17,507 three-ply paths now have exact engine-FEN versus Maia-history final-ply

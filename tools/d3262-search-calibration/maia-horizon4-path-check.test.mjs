@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { validateMaiaHorizon4PathCapture } from "./maia-horizon4-path-check.mjs";
+import { boardTerminalReason, validateMaiaHorizon4PathCapture } from "./maia-horizon4-path-check.mjs";
 
 const directory = "planning/semantic-consequence-search";
 const bytes = (name) => readFileSync(`${directory}/${name}.json`);
@@ -41,4 +41,23 @@ test("crossed path, legal denominator, support mass and fabricated terminal refu
   terminal.rows[0].terminal = true;
   terminal.rows[0].terminalReason = "CHECKMATE";
   assert.throws(() => verify(terminal), /manufactured policy/u);
+});
+
+test("empty policy cannot launder a forged board-terminal reason", () => {
+  for (const reason of ["CHECKMATE", "STALEMATE", "INSUFFICIENT_MATERIAL", "SEVENTYFIVE_MOVES", "FIVEFOLD_REPETITION", "invented"]) {
+    const terminal = structuredClone(capture);
+    terminal.rows[0].terminal = true;
+    terminal.rows[0].terminalReason = reason;
+    terminal.rows[0].rawFullLegal = [];
+    terminal.rows[0].configuredSupport = [];
+    assert.throws(() => verify(terminal), /terminal.*board|board.*terminal/u, reason);
+  }
+});
+
+test("board-terminal authority preserves mate/stalemate, material and automatic-move boundaries", () => {
+  assert.equal(boardTerminalReason("7k/6Q1/5K2/8/8/8/8/8 b - - 150 1"), "CHECKMATE");
+  assert.equal(boardTerminalReason("7k/5K2/6Q1/8/8/8/8/8 b - - 0 1"), "STALEMATE");
+  assert.equal(boardTerminalReason("4k3/8/8/8/8/8/8/4K3 w - - 0 1"), "INSUFFICIENT_MATERIAL");
+  assert.equal(boardTerminalReason("4k3/8/8/8/8/8/8/R3K3 w - - 149 1"), null);
+  assert.equal(boardTerminalReason("4k3/8/8/8/8/8/8/R3K3 w - - 150 1"), "SEVENTYFIVE_MOVES");
 });

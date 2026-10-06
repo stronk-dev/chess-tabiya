@@ -15,7 +15,8 @@ import torch
 from torch.amp import autocast
 
 from maia3.dataset import get_legal_moves_mask
-from maia3.uci import Maia3UCIEngine, parse_args
+from maia3.uci import Maia3UCIEngine
+from maia_capture_runtime import pinned_cfg
 
 
 ROOT = Path("planning/semantic-consequence-search")
@@ -80,7 +81,7 @@ def main():
         jobs.extend((root, candidate) for candidate in root["candidates"] if candidate["candidateUci"] not in retained)
     require(len(jobs) == 3 and sum(candidate["replyCount"] for _, candidate in jobs) == 55, "New Maia child population changed")
 
-    cfg = parse_args(["--model", "5m", "--use-uci-history", "--local-files-only", "--device", "cpu"])
+    cfg = pinned_cfg()
     engine = Maia3UCIEngine(cfg)
     engine.ensure_model_loaded()
     engine.self_elo = 1400

@@ -17,7 +17,8 @@ import torch
 from torch.amp import autocast
 
 from maia3.dataset import get_legal_moves_mask
-from maia3.uci import Maia3UCIEngine, parse_args
+from maia3.uci import Maia3UCIEngine
+from maia_capture_runtime import pinned_cfg
 
 
 ROOT = Path("planning/semantic-consequence-search")
@@ -86,7 +87,7 @@ def main():
                   for root in graph["roots"] for child in root["candidates"]}
     require(len(candidates) == 196, "Duplicate exact-reply child")
 
-    cfg = parse_args(["--model", "5m", "--use-uci-history", "--local-files-only", "--device", "cpu"])
+    cfg = pinned_cfg()
     engine = Maia3UCIEngine(cfg)
     engine.ensure_model_loaded()
     engine.self_elo = 1400

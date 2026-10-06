@@ -36,7 +36,18 @@ digest, original provenance and 66-root manifest. This restores reproducibility,
 not a new population: receipt §Verification and prerequisite repair above,
 `tools/d3262-search-calibration/manifest.test.mjs`.
 
-[P] Outstanding: the final-ply provider queries are declared, not captured. Semantic-
+[V] Follow-up: all 1,401 ordered final-ply Maia histories are now captured, including
+one board-verified insufficient-material outcome with seven legal moves. Independent
+python-chess replay and actual pinned-model re-inference reproduce all 1,400
+nonterminal policies with maximum mass difference 0.0. Fourteen of 17 same-FEN
+history comparisons differ, supporting history-bound requests rather than FEN-only
+model caching. The source checker now refuses forged terminal labels; research
+entrypoints use the packaged offline checkpoint rather than an absent downloader.
+Source identities, complete legal/support counts, commands and limitations:
+`planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md`.
+
+[P] Outstanding: the 16,813 final-ply engine jobs are being captured through checked
+immutable intervals; no complete engine source or final-ply outcome is yet claimed. Semantic-
 target-preserving deeper traversal, the five-arm proof/abstention and natural-
 alternative comparisons, phase/focus stratification and end-to-end cost remain
 open. No production search service, richer hint, pack proof or capability is claimed.

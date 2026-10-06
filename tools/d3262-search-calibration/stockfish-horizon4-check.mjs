@@ -26,19 +26,21 @@ function replay(fen, pv) {
 
 export function validateHorizon4Capture(frontier, frontierBytes, capture, reference, expected = { authority: "partial_frontier_provider_capture_frame_not_search_result", positions: 2185 }) {
   check(frontier.authority === expected.authority && frontier.jobs.length === expected.positions, "Wrong horizon-four frontier");
-  check(capture.manifest === frontier.manifest && capture.frontierDigest === sha(frontierBytes), "Crossed frontier capture");
+  check(capture.version === 1 && capture.manifest === frontier.manifest && capture.frontierDigest === sha(frontierBytes), "Crossed frontier capture");
   check(reference.manifest === frontier.manifest && capture.source.engineName === reference.source.engineName && capture.source.executableDigest === reference.source.executableDigest, "Crossed Stockfish binary");
-  check(capture.source.multiPv === "top8_legal_moves_at_selected_reply" && capture.source.scorePerspective === "raw_uci_uninterpreted" && capture.source.threads === 1 && capture.source.hashMb === 16, "Wrong bounded Stockfish source");
+  check(capture.source.multiPv === (expected.multiPv ?? "top8_legal_moves_at_selected_reply") && capture.source.scorePerspective === "raw_uci_uninterpreted" && capture.source.threads === 1 && capture.source.hashMb === 16, "Wrong bounded Stockfish source");
   check(Number.isSafeInteger(capture.start) && capture.start >= 0 && Number.isSafeInteger(capture.positions) && capture.positions > 0 && capture.start + capture.positions <= frontier.jobs.length && capture.rows.length === capture.positions, "Invalid capture interval");
   check(capture.partial === (capture.start !== 0 || capture.positions !== frontier.jobs.length), "Partial/full capture mislabelled");
   let legalMovesCount = 0, rankedMovesCount = 0, trailingPartial = 0;
   capture.rows.forEach((row, index) => {
     const job = frontier.jobs[capture.start + index];
     check(row.jobId === job.id && row.fen === job.fen, `Crossed captured position ${index}`);
-    check(Array.isArray(row.probes) && row.probes.length === 3, `Missing Stockfish budgets ${index}`);
+    const requiredBudgets = expected.jobBudgets ? job.budgets : budgets;
+    if (expected.jobBudgets) check(JSON.stringify(row.budgets) === JSON.stringify(requiredBudgets), `Crossed requested Stockfish budgets ${index}`);
+    check(Array.isArray(row.probes) && row.probes.length === requiredBudgets.length, `Missing Stockfish budgets ${index}`);
     const legal = legalMoves(position(row.fen)).map((item) => item.uci);
     row.probes.forEach((probe, budgetIndex) => {
-      check(probe.budget === budgets[budgetIndex] && probe.terminal === (legal.length === 0), `Crossed budget/terminal ${index}/${budgetIndex}`);
+      check(probe.budget === requiredBudgets[budgetIndex] && probe.terminal === (legal.length === 0), `Crossed budget/terminal ${index}/${budgetIndex}`);
       check(JSON.stringify(probe.legal) === JSON.stringify(legal), `Incomplete legal denominator ${index}/${budgetIndex}`);
       const count = Math.min(8, legal.length);
       check(probe.entries.length === count && probe.missingMoves.length === legal.length - count, `Incomplete top-eight rank table ${index}/${budgetIndex}`);

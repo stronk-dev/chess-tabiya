@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import sys
+from time import perf_counter
 from pathlib import Path
 
 import chess
@@ -16,7 +17,8 @@ import torch
 from torch.amp import autocast
 
 from maia3.dataset import get_legal_moves_mask
-from maia3.uci import Maia3UCIEngine, parse_args
+from maia3.uci import Maia3UCIEngine
+from maia_capture_runtime import pinned_cfg
 
 
 ROOT = Path("planning/semantic-consequence-search")
@@ -65,9 +67,12 @@ def main():
     parser.add_argument("--out", required=True)
     parser.add_argument("--coherent-supplement", action="store_true")
     parser.add_argument("--semantic-supplement", action="store_true")
+    parser.add_argument("--coherent-third-ply", action="store_true")
     args = parser.parse_args()
-    require(not (args.coherent_supplement and args.semantic_supplement), "Select one Maia capture population")
-    frame_path = ROOT / ("d3262-coherent-semantic-supplement-frame.json" if args.semantic_supplement
+    require(sum([args.coherent_supplement, args.semantic_supplement, args.coherent_third_ply]) <= 1, "Select one Maia capture population")
+    require(not Path(args.out).exists(), "Refusing to replace path-keyed Maia source")
+    frame_path = ROOT / ("d3262-coherent-third-ply-frame.json" if args.coherent_third_ply
+                         else "d3262-coherent-semantic-supplement-frame.json" if args.semantic_supplement
                          else "d3262-coherent-deeper-supplement-frame.json" if args.coherent_supplement
                          else "d3262-maia-horizon4-path-frame.json")
     direct_path = ROOT / "d3262-maia-direct-logits.json"
@@ -75,16 +80,17 @@ def main():
     frame = json.loads(frame_path.read_text())
     direct = json.loads(direct_path.read_text())
     child = json.loads(child_path.read_text())
-    jobs = frame["maiaJobs"] if args.coherent_supplement or args.semantic_supplement else frame["jobs"]
-    expected_authority = ("missing_semantic_event_provider_jobs_not_result_or_move_grade" if args.semantic_supplement
+    jobs = frame["maiaJobs"] if args.coherent_supplement or args.semantic_supplement or args.coherent_third_ply else frame["jobs"]
+    expected_authority = ("two_layer_provider_path_selection_and_final_ply_jobs_not_four_ply_proof_or_human_frequency" if args.coherent_third_ply
+                          else "missing_semantic_event_provider_jobs_not_result_or_move_grade" if args.semantic_supplement
                           else "missing_deeper_provider_jobs_not_result_or_move_grade" if args.coherent_supplement
                           else "path_keyed_maia_horizon_four_capture_jobs_not_policy_result")
-    expected_jobs = 1 if args.semantic_supplement else 250 if args.coherent_supplement else 2189
+    expected_jobs = 1401 if args.coherent_third_ply else 1 if args.semantic_supplement else 250 if args.coherent_supplement else 2189
     require(frame["authority"] == expected_authority
             and frame["manifest"] == direct["manifest"] == child["manifest"]
             and len(jobs) == expected_jobs, "Crossed Maia path frame")
 
-    cfg = parse_args(["--model", "5m", "--use-uci-history", "--local-files-only", "--device", "cpu"])
+    cfg = pinned_cfg()
     engine = Maia3UCIEngine(cfg)
     engine.ensure_model_loaded()
     engine.self_elo = 1400
@@ -107,15 +113,22 @@ def main():
 
     rows = []
     for index, job in enumerate(jobs):
-        require(job["historyUci"] == [job["candidateUci"], job["replyUci"]], f"Maia path identity changed at {index}")
+        query_started = perf_counter()
+        if args.coherent_third_ply:
+            require(len(job["historyUci"]) == 3, f"Third-ply Maia history changed at {index}")
+        else:
+            require(job["historyUci"] == [job["candidateUci"], job["replyUci"]], f"Maia path identity changed at {index}")
         engine.cmd_position(f"position fen {job['rootFen']} moves {' '.join(job['historyUci'])}")
-        require(engine.board.fen() == job["fen"] and len(engine.history) == 3, f"Maia path replay failed at {index}")
+        require(engine.board.fen() == job["fen"] and len(engine.history) == len(job["historyUci"]) + 1, f"Maia path replay failed at {index}")
         legal = sorted(move.uci() for move in engine.board.legal_moves)
         outcome = engine.board.outcome(claim_draw=False)
         terminal = outcome is not None
         raw, support = ([], []) if terminal else distribution(engine, cfg)
         require(terminal or legal == [item["legalUci"] for item in raw], f"Maia legal denominator differs at {index}")
-        source_job = {field: job[field] for field in ("id", "rootId", "candidateUci", "replyUci", "rootFen", "historyUci", "fen")}
+        source_job = {field: job[field] for field in ("id", "rootId", "rootFen", "historyUci", "fen")}
+        source_job.update({"candidateUci": job["historyUci"][0], "replyUci": job["historyUci"][1]})
+        if args.coherent_third_ply:
+            source_job.update({"learnerUci": job["historyUci"][2], "elapsedMs": round((perf_counter() - query_started) * 1000, 3)})
         rows.append({
             **source_job, "terminal": terminal,
             "terminalReason": outcome.termination.name if terminal else None,
@@ -126,14 +139,17 @@ def main():
 
     artifact = {
         "version": 1, "manifest": frame["manifest"],
-        "authority": ("coherent_semantic_path_keyed_maia_not_human_frequency_or_proof" if args.semantic_supplement
+        "authority": ("coherent_third_ply_path_keyed_maia_not_human_frequency_or_proof" if args.coherent_third_ply
+                      else "coherent_semantic_path_keyed_maia_not_human_frequency_or_proof" if args.semantic_supplement
                       else "coherent_deeper_path_keyed_maia_not_human_frequency_or_proof" if args.coherent_supplement
                       else "path_keyed_maia_horizon_four_full_legal_distribution_not_human_frequency_or_proof"),
         "inputDigests": {frame_path.name: digest(frame_path), direct_path.name: digest(direct_path), child_path.name: digest(child_path)},
-        "source": {**direct["source"], "historyUci": "root_candidate_reply_path_per_row",
+        "source": {**direct["source"], "historyUci": "root_candidate_reply_learner_path_per_row" if args.coherent_third_ply else "root_candidate_reply_path_per_row",
                    "preRootHistory": "unavailable_not_inferred"},
         "positions": len(rows), "rows": rows,
     }
+    if args.coherent_third_ply:
+        artifact["partial"] = False
     output = Path(args.out)
     require(not output.exists(), "Refusing to replace path-keyed Maia source")
     temporary = Path(f"{output}.partial-{os.getpid()}")

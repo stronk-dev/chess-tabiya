@@ -20,6 +20,13 @@ research prerequisite and historical-input repair. Five-arm proof/contrast/cost,
 semantic-target continuation and production-profile selection remain open.
 Receipt: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`.
 
+2026-10-06 source execution follow-up: all 1,401 final-ply Maia histories are
+captured and independently replayed/re-inferred; one material terminal is verified,
+not mistaken for no legal moves. D3479/D3480 close source-validation/runtime defects.
+D3478 stays doing while the exact 16,813-job Stockfish queue runs in checked
+immutable intervals. No five-arm verdict, production budget or milestone changes.
+Receipt: `planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md`.
+
 ## Question ledger
 
 | # | Question | Status | Attached gates |

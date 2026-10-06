@@ -28,7 +28,10 @@ at top-eight MultiPV width. The **1,401 Maia jobs retain distinct root-plus-thre
 move histories**. A transposition control shares one engine FEN job while keeping
 two differently ordered model requests. Pre-root history remains unavailable.
 
-These are final-ply **requests**, not captured final-ply answers. No elapsed
+At this frame checkpoint these were final-ply **requests**, not captured answers.
+The subsequent `d3262-final-ply-capture-2026-10-06.md` records the complete 1,401-path
+Maia capture and independent model re-inference; engine capture remains in progress.
+No elapsed
 provider time or interactive latency is inferred from their count. The semantic
 target-preserving arm and its separate 152-event source population are not folded
 into these eleven provider configurations. Their deeper selector remains open.

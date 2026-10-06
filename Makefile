@@ -360,6 +360,10 @@ semantic-search-manifest:
 	$(CI_NODE) --test tools/d3262-search-calibration/manifest.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/manifest.mjs $(if $(ROWS),--rows,)
 
+.PHONY: semantic-search-maia-terminal-check
+semantic-search-maia-terminal-check:
+	$(CI_NODE) --test tools/d3262-search-calibration/maia-horizon4-path-check.test.mjs
+
 semantic-search-stockfish-capture:
 	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
 
@@ -565,6 +569,38 @@ semantic-search-coherent-third-ply-check: semantic-search-coherent-deeper-union-
 
 semantic-search-coherent-third-ply-independent:
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-third-ply-check.py
+
+.PHONY: semantic-search-final-ply-preflight semantic-search-maia-final-ply-capture semantic-search-maia-final-ply-check semantic-search-stockfish-final-ply-capture semantic-search-stockfish-final-ply-check
+semantic-search-final-ply-preflight:
+	$(CI_NODE) tools/d3262-search-calibration/third-ply-source-check.mjs preflight
+
+.PHONY: semantic-search-final-ply-source-test
+semantic-search-final-ply-source-test: semantic-search-final-ply-preflight
+	$(CI_NODE) --test tools/d3262-search-calibration/third-ply-source-check.test.mjs tools/d3262-search-calibration/stockfish-horizon4-check.test.mjs tools/d3262-search-calibration/stockfish-horizon4-batch.test.mjs tools/d3262-search-calibration/stockfish-horizon4-merge.test.mjs tools/d3262-search-calibration/maia-horizon4-path-check.test.mjs
+
+semantic-search-maia-final-ply-capture: semantic-search-final-ply-preflight
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/maia-horizon4-path-capture.py --coherent-third-ply --out planning/semantic-consequence-search/d3262-maia-third-ply-capture.json
+	$(CI_NODE) tools/d3262-search-calibration/third-ply-source-check.mjs maia planning/semantic-consequence-search/d3262-maia-third-ply-capture.json
+
+semantic-search-maia-final-ply-check: semantic-search-final-ply-preflight
+	$(CI_NODE) tools/d3262-search-calibration/third-ply-source-check.mjs maia planning/semantic-consequence-search/d3262-maia-third-ply-capture.json
+
+.PHONY: semantic-search-maia-final-ply-independent
+semantic-search-maia-final-ply-independent: semantic-search-maia-final-ply-check
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/third-ply-maia-independent.py
+
+semantic-search-stockfish-final-ply-capture: semantic-search-final-ply-preflight
+	$(CI_NODE) tools/d3262-search-calibration/stockfish-capture.mjs --coherent-third-ply $(if $(START),--start $(START),) $(if $(LIMIT),--limit $(LIMIT),) $(if $(OUT),--out "$(abspath $(OUT))",)
+
+semantic-search-stockfish-final-ply-check: semantic-search-final-ply-preflight
+	$(CI_NODE) tools/d3262-search-calibration/third-ply-source-check.mjs stockfish "$(if $(OUT),$(abspath $(OUT)),planning/semantic-consequence-search/d3262-stockfish-third-ply-capture.json.gz)"
+
+.PHONY: semantic-search-stockfish-final-ply-batch semantic-search-stockfish-final-ply-merge
+semantic-search-stockfish-final-ply-batch: semantic-search-final-ply-preflight
+	$(CI_NODE) tools/d3262-search-calibration/third-ply-stockfish-batch.mjs $(if $(MAX_NEW),--max-new $(MAX_NEW),)
+
+semantic-search-stockfish-final-ply-merge: semantic-search-final-ply-preflight
+	$(CI_NODE) tools/d3262-search-calibration/third-ply-stockfish-merge.mjs --write
 
 semantic-search-coherent-exact-trigger-update: semantic-search-coherent-bounded-targets-check semantic-search-coherent-exact-replies-check
 	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/coherent-exact-trigger-outcome.ts

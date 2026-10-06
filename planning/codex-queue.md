@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-06 final-ply execution: all 1,401 ordered Maia requests have actual checked
+sources; independent model re-inference reproduces all 1,400 nonterminal policies
+exactly, with one board-verified terminal. D3479/D3480 close forged-terminal and
+packaged offline checkpoint defects. D3478 stays doing while the exact 16,813-job
+Stockfish queue runs through immutable checked intervals. Resume with the ordinary
+Make batch target, then merge/check the complete population; never call a prefix
+complete. Next research still includes deeper semantic selection and the common
+proof/contrast/cost verdict, not production search. Receipt:
+`planning/semantic-consequence-search/d3262-final-ply-capture-2026-10-06.md`.
+
 2026-10-06 D3262 continuation: the actual second provider-selection layer is now
 replayed in the disposable coherent-root instrument. D3476/D3477 close only this
 bounded prerequisite: 17,507 three-ply paths, 16,813 final-ply engine-FEN jobs and

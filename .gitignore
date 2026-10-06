@@ -16,6 +16,8 @@ content/sources/
 !.env.example
 tools/maia-harness/out/
 planning/semantic-consequence-search/d3262-stockfish-horizon4-chunks/
+planning/semantic-consequence-search/d3262-stockfish-third-ply-chunks/
+tools/d3262-search-calibration/__pycache__/
 
 # Default file-backed application database (createApplication without DATABASE_PATH)
 /data/
