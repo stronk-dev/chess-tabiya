@@ -1,5 +1,12 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed D3464 repairs actual-band attribution and non-rating wording in the registered
+human-model distribution. Nine permanent predecessor controls fail; the focused replacement
+passes 38 tests and clean types. Full replacement software/content/browser gates pass;
+receipt: `planning/platform-alignment/evidence-presentation/human-model-attribution-2026-10-06.md`.
+Do not count this as D3363's source migration or as the raw Inspector UI migration; those remain
+separate, and D3309's detailed structure successor contract remains held.
+
 Completed executable wave: [[D3458]]–[[D3463]], the accepted board-controls/input/composition
 repair. Whole shell/strip bounds and all 64 physical square centers pass at six projections;
 native back-rank clicks, graphical promotion Cancel/drag retry and independent authoring forms

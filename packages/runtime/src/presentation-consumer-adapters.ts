@@ -591,7 +591,7 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
 
   // --- Inspector: the human-move model's policy (a model output, never a grade)
   add("inspector.human_split", V1("human.maia.policy"), "distribution", ["list", "panel"], ["engine", "targetElo", "candidates"], ["copied_byte_equal", "retained_convention"], (evidence) => {
-    const page = evidence.payload as { readonly engine: { readonly name: string; readonly version: string }; readonly targetElo: number | null; readonly candidates: readonly { readonly moveUci: string; readonly mass?: number }[] };
+    const page = evidence.payload as { readonly engine: { readonly name: string; readonly version: string; readonly eloHonored?: boolean; readonly eloApplied?: number }; readonly targetElo: number | null; readonly candidates: readonly { readonly moveUci: string; readonly mass?: number }[] };
     if (page.candidates.length === 0) throw new TypeError("a human-split page with no candidates is stated through its abstention seat, never drawn");
     const rows = page.candidates.map((candidate) => {
       if (candidate.mass === undefined) throw new TypeError("a human-split candidate without model mass cannot be drawn as a share");
@@ -602,7 +602,9 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
     return { id: "distribution", operand: {
       rows,
       residual: listed < 0.995 ? { share: Math.max(0, 1 - listed), label: "unlisted_mass" } : null,
-      convention: kit.convention(evidence, { kind: "human_model", model: { name: page.engine.name, version: page.engine.version }, band: page.targetElo }, "side_to_move"),
+      // A requested dial is not an observation of execution. The entire engine identity is a
+      // retained operand; only its explicit applied-band report can attribute these policy shares.
+      convention: kit.convention(evidence, { kind: "human_model", model: { name: page.engine.name, version: page.engine.version }, band: page.engine.eloHonored === true ? page.engine.eloApplied ?? null : null }, "side_to_move"),
       highlight: null,
     } };
   });

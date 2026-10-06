@@ -170,9 +170,29 @@ describe("consumer adapters: the Inspector's transitions, Explorer and human-mov
   });
 
   it("draws the human-move model's policy as a distribution with the model as its convention", () => {
-    const page = { nodeId: "n1", engine: { id: "maia", name: "Maia", version: "2", seedHonored: true }, targetElo: 1500, candidates: [{ moveUci: "e2e4", mass: 0.5, rank: 1 }, { moveUci: "d2d4", mass: 0.3, rank: 2 }] };
+    const page = { nodeId: "n1", engine: { id: "maia", name: "Maia", version: "2", seedHonored: true, eloHonored: true, eloApplied: 1500 }, targetElo: 1500, candidates: [{ moveUci: "e2e4", mass: 0.5, rank: 1 }, { moveUci: "d2d4", mass: 0.3, rank: 2 }] };
     const [item] = present("inspector.human_split", [humanSplitPageEvidence(page)]);
-    expect(presentedSentence(item!)).toBe("Move shares (Maia 2 at 1500 rating): e2–e4 50%, d2–d4 30% and moves the model left unlisted 20%.");
+    expect(presentedSentence(item!)).toBe("Move shares (Maia 2, human-model rung 1500; not a player rating): e2–e4 50%, d2–d4 30% and moves the model left unlisted 20%.");
+  });
+
+  it.each([
+    { targetElo: 1500, identity: { eloHonored: false }, applied: null },
+    { targetElo: 1500, identity: {}, applied: null },
+    { targetElo: 1500, identity: { eloHonored: true }, applied: null },
+    { targetElo: 1500, identity: { eloHonored: false, eloApplied: 1000 }, applied: null },
+    { targetElo: 1500, identity: { eloHonored: true, eloApplied: 1000 }, applied: 1000 },
+    { targetElo: null, identity: { eloHonored: true, eloApplied: 1800 }, applied: 1800 },
+  ])("does not relabel requested or unhonored model bands as recorded ($identity)", ({ targetElo, identity, applied }) => {
+    const page = { nodeId: "n1", engine: { id: "maia", name: "Maia", version: "2", seedHonored: true, ...identity }, targetElo, candidates: [{ moveUci: "e2e4", mass: 0.5, rank: 1 }] };
+    const [item] = present("inspector.human_split", [humanSplitPageEvidence(page)]);
+    expect(item!.component.id).toBe("distribution");
+    if (item!.component.id !== "distribution") throw new Error("Expected model distribution");
+    expect(item!.component.operand.convention.basis).toEqual({ kind: "human_model", model: { name: "Maia", version: "2" }, band: applied });
+    const sentence = presentedSentence(item!);
+    expect(sentence).toContain("not a player rating");
+    expect(sentence).toContain("e2–e4 50%");
+    expect(sentence).not.toContain("1500");
+    if (applied !== null) expect(sentence).toContain(`human-model rung ${applied}`);
   });
 });
 

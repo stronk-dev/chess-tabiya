@@ -43,6 +43,17 @@ destination/vocabulary and D1834's remaining semantic obligations; geometry does
 open. This is an advanced checkpoint, not a completed milestone or capability. Receipt:
 `planning/play-composition/hint-and-matrix-2026-10-06.md`.
 
+2026-10-06 human-model attribution checkpoint: [[D3464]] repairs the registered distribution's
+requested-as-applied model band and misleading player-rating wording. The closed receipt and
+mounted chart retain shares, candidates and remainder; only an explicitly honored recorded
+applied rung is displayed, with the non-rating guard. Nine predecessor controls fail and the
+replacement passes 38 focused tests with clean types. Routine provenance successors and
+requirement/digest updates preserve all authored chess fields, factory outcomes and validation
+observations. Full replacement gates are recorded before closeout in
+`planning/platform-alignment/evidence-presentation/human-model-attribution-2026-10-06.md`.
+This does not close [[D3363]]'s source migration, [[D3309]]'s structural fidelity contract, the
+raw Inspector migration, full A4, the RFC, a milestone or 1.0.
+
 2026-10-06 bot-reference checkpoint: [[D3430]] revalidates all historical priced roots and all
 24 fixed band/window/half cells, retaining mate domains and shared-game clusters. The complete
 reference has 1,640 mixed and 78 mate-only roots; 1,391 cp-played mixed roots and 1,056 multi-window

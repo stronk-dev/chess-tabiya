@@ -18,6 +18,12 @@ dispatched by `PresentedEvidence.svelte`.
 - Numbers carry their `ConventionReceipt` (search execution, recorded search, exact tablebase, human
   model, human population or a registered declared convention); the attribution renders inside the
   component root. Shares are computed by the component from counts; no operand carries a percentage.
+- Human-model convention captions and equivalent sentences state that model rungs are not player
+  ratings. The human-split distribution attributes a rung only when its retained engine reports
+  `eloHonored:true` and an actual `eloApplied`; a requested `targetElo` cannot fill that observation.
+  If execution reports a different applied rung, that recorded value is shown. Missing/unhonored
+  reports remain unbanded. The raw Inspector candidate section and D3363's modern source migration
+  are still open; this attribution repair does not claim their completion.
 - A magnitude over `recorded.engine.eval@1` also carries the exact source `retrievedAt`; its
   equivalent sentence states the pack-authoring date. Construction checks timestamp equality with
   the admitted reading, including the time of day. Other magnitude sources cannot carry this field.

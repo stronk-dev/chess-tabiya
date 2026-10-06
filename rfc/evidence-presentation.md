@@ -17,6 +17,12 @@
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
+- **Implementation checkpoint 2026-10-06, human-model attribution:** D3464 repairs the existing
+  distribution adapter's requested-as-applied band and its player-rating wording. The source,
+  projection, consumer, operands and receipt versions remain unchanged; only explicitly honored
+  recorded execution attributes a rung. Registered chart captions and equivalent sentences carry
+  the non-rating guard together. D3363's next-move source migration and the current-consumer UI
+  migration remain open. Receipt: `planning/platform-alignment/evidence-presentation/human-model-attribution-2026-10-06.md`.
 - **Implementation checkpoint 2026-10-05, corpus Inspector:** D3421 repairs the modern
   `inspector.corpus@2` wire/client mismatch and migrates shown corpus facts to the registered
   component. Exact consumer/projection pairs, attribution, floors, recency, unlisted counts,

@@ -13,6 +13,12 @@ import {
   factStatementOperand,
   parseComponentValue,
   presentationDigest,
+  PRIMARY_EVIDENCE_MANIFEST,
+  evidenceForConsumer,
+  humanSplitPageEvidence,
+  presentEvidenceItems,
+  serializePresentedEvidence,
+  parsePresentationReceipt,
   type ComponentId,
   type ComponentValue,
   type ConventionReceipt,
@@ -24,6 +30,7 @@ import AbstentionView from "./components/AbstentionView.svelte";
 import CitationView from "./components/CitationView.svelte";
 import CountView from "./components/CountView.svelte";
 import DistributionView from "./components/DistributionView.svelte";
+import PresentedEvidence from "./PresentedEvidence.svelte";
 import EnumStateView from "./components/EnumStateView.svelte";
 import MagnitudeTrailView from "./components/MagnitudeTrailView.svelte";
 import MagnitudeView from "./components/MagnitudeView.svelte";
@@ -183,6 +190,28 @@ describe("criterion 6: a real zero, a withheld value and an absent producer rend
 });
 
 describe("criterion 7: a convention-requiring component cannot exist without its convention, which renders inside the root", () => {
+  it.each([false, true])("D3464: model percentages and actual rung attribution share one sealed figure (applied=%s)", applied => {
+    const page = { nodeId: "n1", engine: { id: "maia", name: "Maia", version: "2", seedHonored: true, eloHonored: applied, eloApplied: 1500 }, targetElo: 1800, candidates: [{ moveUci: "e2e4", mass: .5, rank: 1 }] };
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.human_split", version: 1 }, [humanSplitPageEvidence(page)]);
+    const items = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(view)))));
+    const root = globalThis.document.createElement("div"); globalThis.document.body.append(root);
+    const instance = mount(PresentedEvidence, { target: root, props: { items } });
+    flushSync();
+    try {
+      const figure = root.querySelector("figure[data-component='distribution']")!;
+      expect(figure.querySelector(".share")?.textContent).toBe("50%");
+      const caption = figure.querySelector("figcaption")?.textContent ?? "";
+      expect(caption).toContain("Maia 2");
+      expect(caption).toContain("not a player rating");
+      expect(caption).not.toContain("1800");
+      expect(caption.includes("human-model rung 1500")).toBe(applied);
+      const equivalent = figure.querySelector(".visually-hidden")?.textContent ?? "";
+      expect(equivalent).toContain(caption);
+      expect(equivalent).toContain("e2–e4 50%");
+      expect(equivalent).toContain("moves the model left unlisted 50%");
+    } finally { unmount(instance); root.remove(); }
+  });
+
   it("D3331: figure captions remain a valid first or last child for observed, zero and withheld values", () => {
     for (const [id, operand] of [["distribution", MATRIX.distribution.many], ["outcome_split", MATRIX.outcome_split.many], ["outcome_split", MATRIX.outcome_split.zero], ["outcome_split", MATRIX.outcome_split.withheld]] as const) {
       const { root, done } = render(id, operand);

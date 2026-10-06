@@ -1218,7 +1218,19 @@ provider-scheduler-lifetime-check: provider-scheduler-contract-check
 return-frequency-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
 
-.PHONY: analysis-client-check analysis-browser-check inspector-corpus-client-check inspector-corpus-check
+.PHONY: analysis-client-check analysis-browser-check inspector-corpus-client-check inspector-corpus-check human-model-presentation-check human-model-attribution-metadata-check human-model-attribution-metadata-update
+human-model-attribution-metadata-update: semantic-validation-update capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/human-model-attribution-metadata.js --log-level=warning
+	$(CI_NODE) apps/server/dist/human-model-attribution-metadata.js --human-model-attribution --apply-metadata
+
+human-model-attribution-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/human-model-attribution-metadata.js --log-level=warning
+	$(CI_NODE) apps/server/dist/human-model-attribution-metadata.js --human-model-attribution
+
+human-model-presentation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/evidence/components.test.ts
+	$(MAKE) typecheck
+
 analysis-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/analysis-client.test.ts apps/web/src/lib/analysis-response.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
 	$(MAKE) typecheck

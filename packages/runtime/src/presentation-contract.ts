@@ -664,7 +664,7 @@ export function conventionAttribution(convention: ConventionReceipt): string {
     case "search": return `${engineLabel(basis.execution.engine)}, ${presentSearchBound(basis.execution.bound)}`;
     case "recorded_search": return `${basis.engine === null ? "stored engine reading" : engineLabel(basis.engine)}${basis.depth === null ? "" : `, depth ${basis.depth}`}`;
     case "tablebase_exact": return "exact Syzygy tablebase";
-    case "human_model": return `${engineLabel(basis.model)}${basis.band === null ? "" : ` at ${basis.band} rating`}`;
+    case "human_model": return `${engineLabel(basis.model)}${basis.band === null ? "" : `, human-model rung ${basis.band}`}; not a player rating`;
     case "human_population": return `${countOf(basis.sampleSize, "game")} from ${populationPhrase(basis.population)}`;
     case "declared": return PRESENTATION_CONVENTIONS[basis.convention].label;
   }

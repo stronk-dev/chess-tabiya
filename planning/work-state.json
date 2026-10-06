@@ -28565,6 +28565,15 @@
       "uxItems": [],
       "evidence": "planning/play-composition/board-controls-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3464",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0f5abb807957c8bcd7114d6ca3d985fe03acbe40ca579ebc4a5a01f3d6c36c6e",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/evidence-presentation/human-model-attribution-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }
