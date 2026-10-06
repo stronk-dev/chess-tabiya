@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 semantic live-cost continuation: the disposable runner now executes
+51/53 settings, including all 36 first-event/recursive combinations; actual
+configured Maia is still refused. Two more complete 1,158-case populations retain
+all 193 candidates / both horizons / three regimes. Independent replay reconstructs
+the full selected frontier and 11,570 new target observations; combined with PV,
+3,474/61,374 case identities are captured. Remaining settings, source memory,
+fresh-outcome sensitivity, browser joins and production profile stay open. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-semantic-2026-10-06.md`.
+Tracking and generated hashes refresh automatically, not through an owner question.
+No milestone/capability is promoted by disposable research.
+
 2026-10-06 D3262 live-cost checkpoint: the complete depth-8 PV setting now has
 1,158 actual cases (193 candidates, both horizons, all three regimes), including
 no-target and source-off outcomes. Independent chess/receipt replay passes.

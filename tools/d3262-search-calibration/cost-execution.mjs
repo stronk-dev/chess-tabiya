@@ -6,8 +6,10 @@ import { enumerateCandidate, legalMoves } from "./exact-reply-enumeration.mjs";
 import { replayReply } from "./exact-arm-trigger-core.mjs";
 import { observeTargetPathV2, convention } from "./dist/target-opportunity-v2.mjs";
 import { projectPreparation, projectRoot } from "./coherent-actual-proof.mjs";
+import { firstReplyEvents, recursiveEvents, reserveFirstReply, reserveRecursiveLayer } from "./cost-semantic.mjs";
 
-export const supportedFamilies = Object.freeze(["provider_line", "engine_beam", "exact_reply_forcing", "bounded_oracle_diagnostic"]);
+export const supportedFamilies = Object.freeze(["provider_line", "engine_beam", "exact_reply_forcing", "bounded_oracle_diagnostic",
+  "first_reply_reserve_diagnostic", "recursive_semantic"]);
 export const inputPins = Object.freeze({
   "d3262-coherent-root-frame.json": "sha256:dcf339d6042392e3a5d0cc355c3d6779ed751d5540a8a8094d50ce3d7e43df2b",
   "d3262-coherent-target-comparison-frame.json": "sha256:229335224b1c175478537554ec52ee7341b983e7358222fe1c7d67c2af16cc6b",
@@ -45,12 +47,16 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
   const candidate = collect(() => enumerateCandidate(subject.rootFen, cell.candidateUci));
   const reason = collect(() => terminal(position(candidate.afterFen)));
   const budget = setting.budget ?? cell.setting.split(":")[1];
-  const width = Number(/:top(2|4|8)$/u.exec(cell.setting)?.[1]);
+  const width = Number(/:top(2|4|8)(?::|$)/u.exec(cell.setting)?.[1]);
+  const semantic = ["first_reply_reserve_diagnostic", "recursive_semantic"].includes(setting.family);
+  const engineTraversal = setting.family === "engine_beam" || semantic;
+  const eventSourceWidth = cell.setting.split(":")[3];
   const query = async (fen, multiPv) => {
     const value = await dependencies.query({ provider: "stockfish", sourceDigest: adapter.sourceDigest, fen, budget, multiPv });
     sample(); return value.result;
   };
   const observations = [];
+  const selections = [];
   let providerPv = null;
   // A no-target row still enumerates this candidate's legal boundary. No fabricated hypothesis.
   if (subject.definitions.length && reason === null && setting.family === "provider_line") {
@@ -69,13 +75,25 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
     }
   } else if (subject.definitions.length && reason === null) {
     let rankedPreparations = null;
-    if (setting.family === "engine_beam") {
+    if (engineTraversal) {
       const source = await query(candidate.afterFen, 8);
       rankedPreparations = source?.entries.slice(0, width).map(x => x.moveUci) ?? [];
     }
     for (const definition of subject.definitions) {
+      let selectedPreparations = rankedPreparations;
+      if (semantic && rankedPreparations.length) {
+        const events = collect(() => firstReplyEvents(subject.rootFen, candidate, definition));
+        const top = await query(candidate.afterFen, 8);
+        const eventSource = eventSourceWidth === "all_legal" ? await query(candidate.afterFen, candidate.replyCount) : top;
+        if (eventSource) {
+          const selection = collect(() => reserveFirstReply(candidate.replies.map(x => x.uci), top.entries.map(x => x.moveUci),
+            eventSource.entries.map(x => x.moveUci), events.eventReplies.map(x => x.uci), width));
+          selections.push({ targetId: definition.id, history: [cell.candidateUci], events, ...selection });
+          selectedPreparations = selection.selected;
+        } else selectedPreparations = [];
+      }
       for (const preparation of candidate.replies) {
-        if (rankedPreparations !== null && !rankedPreparations.includes(preparation.uci)) continue;
+        if (selectedPreparations !== null && !selectedPreparations.includes(preparation.uci)) continue;
         if (!visit()) break;
         const history = [cell.candidateUci, preparation.uci];
         observations.push(collect(() => ({ targetId: definition.id, history,
@@ -89,9 +107,14 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
         if (!expanded || collect(() => terminal(pos)) !== null) continue;
         const defences = collect(() => legalMoves(pos));
         let selected = defences.map(x => x.uci);
-        if (setting.family === "engine_beam") {
+        if (engineTraversal) {
           const source = await query(fenOf(pos), 8);
           selected = source?.entries.slice(0, width).map(x => x.moveUci) ?? [];
+          if (source && setting.family === "recursive_semantic") {
+            const events = collect(() => recursiveEvents(subject.rootFen, history, definition));
+            const selection = collect(() => reserveRecursiveLayer(events.legal, source.entries.map(x => x.moveUci), events.events.map(x => x.uci), width));
+            selections.push({ targetId: definition.id, history, events, ...selection }); selected = selection.selected;
+          }
         }
         for (const defence of selected) {
           if (!visit()) break;
@@ -99,13 +122,19 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
           observations.push(collect(() => ({ targetId: definition.id, history: third,
             observation: observeTargetPathV2(subject.rootFen, third, definition) })));
           // Exact arms evaluate availability, not invented fourth-ply execution.
-          if (setting.family !== "engine_beam") continue;
+          if (!engineTraversal) continue;
           const next = collect(() => replay(subject.rootFen, third));
           if (collect(() => terminal(next)) !== null) continue;
           const source = await query(fenOf(next), 8);
-          for (const leaf of source?.entries.slice(0, width) ?? []) {
+          let selectedLeaves = source?.entries.slice(0, width).map(x => x.moveUci) ?? [];
+          if (source && setting.family === "recursive_semantic") {
+            const events = collect(() => recursiveEvents(subject.rootFen, third, definition));
+            const selection = collect(() => reserveRecursiveLayer(events.legal, source.entries.map(x => x.moveUci), events.events.map(x => x.uci), width));
+            selections.push({ targetId: definition.id, history: third, events, ...selection }); selectedLeaves = selection.selected;
+          }
+          for (const leaf of selectedLeaves) {
             if (!visit()) break;
-            const fourth = [...third, leaf.moveUci];
+            const fourth = [...third, leaf];
             observations.push(collect(() => ({ targetId: definition.id, history: fourth,
               observation: observeTargetPathV2(subject.rootFen, fourth, definition) })));
           }
@@ -152,6 +181,7 @@ export async function executeCostCase({ cell, setting, subject, planDigest, adap
       : exhausted ? "budget_exhausted" : "available";
   const result = { kind, rootFen: subject.rootFen, horizon: cell.horizon, terminalReason: reason,
     legalPreparationUcis: reason === null ? candidate.replies.map(x => x.uci) : [], projections, observations, providerPv,
+    ...(semantic ? { selections, schedulingAuthority: "source_blind_named_geometry_not_profit_or_proof" } : {}),
     visited, nodeCap, productionProfileSelected: false, moveReason: "not_an_engine_reason" };
   const raw = { cell, result, dependencies: dependencies.raw, clock: { started, ended: performance.now() } };
   const elapsedMs = raw.clock.ended - started;

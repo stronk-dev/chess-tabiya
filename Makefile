@@ -817,13 +817,17 @@ semantic-search-cost-plan-freeze:
 	$(CI_NODE) tools/d3262-search-calibration/cost-contract.mjs --write
 
 .PHONY: semantic-search-cost-test semantic-search-cost-batch semantic-search-cost-check
-semantic-search-cost-test: semantic-search-target-v2-build
-	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs
+.PHONY: semantic-search-cost-build
+semantic-search-cost-build: semantic-search-target-v2-build
+	./node_modules/.bin/esbuild tools/d3262-search-calibration/semantic-relation-event-first-layer.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/semantic-relation-event-first-layer.mjs --log-level=warning
+
+semantic-search-cost-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs tools/d3262-search-calibration/cost-semantic.test.mjs
 
 semantic-search-cost-batch: semantic-search-cost-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --start "$(START)" --limit "$(LIMIT)" --out "$(OUT)"
 
-semantic-search-cost-check: semantic-search-target-v2-build
+semantic-search-cost-check: semantic-search-cost-build
 	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --check --out "$(OUT)"
 
 .PHONY: semantic-search-cost-independent
@@ -831,18 +835,20 @@ semantic-search-cost-independent:
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-independent.py "$(OUT)" --negative-controls
 
 .PHONY: semantic-search-cost-pack semantic-search-cost-packed-check
-semantic-search-cost-pack: semantic-search-target-v2-build
+semantic-search-cost-pack: semantic-search-cost-build
 	$(CI_NODE) tools/d3262-search-calibration/cost-pack.mjs --out "$(OUT)" --archive "$(ARCHIVE)"
 
-semantic-search-cost-packed-check: semantic-search-target-v2-build
+semantic-search-cost-packed-check: semantic-search-cost-build
 	$(CI_NODE) --test tools/d3262-search-calibration/cost-pack.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/cost-pack.mjs --check --archive "$(ARCHIVE)"
 
 .PHONY: semantic-search-cost-summary semantic-search-cost-summary-freeze
-semantic-search-cost-summary: semantic-search-target-v2-build
-	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs
-semantic-search-cost-summary-freeze: semantic-search-target-v2-build
-	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs --write
+semantic-search-cost-summary: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-summary.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs $(if $(ARCHIVES),--archives "$(ARCHIVES)" --out "$(OUT)",)
+semantic-search-cost-summary-freeze: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-summary.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs --write $(if $(ARCHIVES),--archives "$(ARCHIVES)" --out "$(OUT)",)
 
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 semantic-search-five-approach-test: semantic-search-target-v2-build

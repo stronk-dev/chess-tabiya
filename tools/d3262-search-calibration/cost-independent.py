@@ -19,6 +19,7 @@ HERE = Path(__file__).parent
 helpers = runpy.run_path(str(HERE / "coherent-five-approach-check.py"))
 observe, terminal = helpers["pv_observation"], helpers["terminal"]
 preparation_result, root_result = helpers["preparation_result"], helpers["root_result"]
+recursive = runpy.run_path(str(HERE / "coherent-recursive-semantic-check.py"))
 
 
 def require(value, message):
@@ -80,6 +81,106 @@ def provider(receipt):
         trailingPartialDepth=max(parsed) if max(parsed) > depth else None, bestmove=best,
         scorePerspective="side_to_move", authority="provider_search_not_engine_causality")
     require(expected == receipt["result"], "source differs from literal independent table")
+
+
+def first_events(root, candidate, definition):
+    board = chess.Board(root)
+    target = definition["target"]
+    actor = target["attacker"] if definition["family"] == "material" else target["minor"]
+    other = target["target"] if definition["family"] == "material" else target["controllingPawn"]
+    if definition["family"] == "destination" and not recursive["present"](board, other):
+        origins = {s["candidateUci"][:2] for s in definition["sources"] if s["candidateUci"][2:4] == other["square"]}
+        require(len(origins) == 1, "ambiguous declared first-layer pawn")
+        other = dict(other, square=next(iter(origins)))
+    require(recursive["present"](board, actor) and recursive["present"](board, other), "absent first-layer root operand")
+    move = chess.Move.from_uci(candidate)
+    actor, other = recursive["advance"](board, move, actor), recursive["advance"](board, move, other)
+    board.push(move)
+    events = []
+    if actor is not None and other is not None:
+        for move in sorted(board.legal_moves, key=lambda m: m.uci()):
+            event = move.from_square == chess.parse_square(actor["square"]) and (
+                helpers["v2"]["captured_square"](board, move) == chess.parse_square(other["square"]) if definition["family"] == "material"
+                else move.to_square == chess.parse_square(target["square"]))
+            if event:
+                events.append(dict(uci=move.uci(), kind="named_attacker_captures_target" if definition["family"] == "material" else "named_minor_arrives_on_square"))
+    return dict(rootId=definition["rootId"], targetId=definition["id"], candidateUci=candidate, family=definition["family"],
+        status="operand_absent" if actor is None or other is None else "event_available" if events else "no_legal_event",
+        legalReplies=len(list(board.legal_moves)), eventReplies=events)
+
+
+def verify_semantic_population(row, raw, root, definitions, target_ids):
+    result = raw["result"]
+    if not row["setting"].startswith(("semantic:", "recursive:")):
+        return
+    require(result["schedulingAuthority"] == "source_blind_named_geometry_not_profit_or_proof", "changed scheduling authority")
+    family, budget, width_text, event_width = row["setting"].split(":")
+    width = int(width_text[3:])
+    sources = {(s["operands"]["fen"], s["operands"]["multiPv"]): s["receipt"]["result"]
+               for s in raw["dependencies"] if s["receipt"] is not None}
+    require(all(s["operands"]["budget"] == budget for s in raw["dependencies"]), "crossed semantic budget")
+    selections = result["selections"]
+    selected = {}
+    for item in selections:
+        tid, history = item["targetId"], item["history"]
+        require(tid in target_ids and history[0] == row["candidateUci"], "foreign semantic target/path")
+        key = (tid, tuple(history))
+        require(key not in selected, "duplicate semantic decision")
+        selected[key] = item
+        board = board_at(root, history)
+        legal = sorted(m.uci() for m in board.legal_moves)
+        fen = board.fen(en_passant="legal")
+        top = sources[(fen, 8)]
+        ranked = [x["moveUci"] for x in top["entries"]]
+        if len(history) == 1:
+            events = first_events(root, history[0], definitions[tid])
+            source = sources[(fen, len(legal))] if event_width == "all_legal" else top
+            event_ranked = [x["moveUci"] for x in source["entries"]]
+            event_ucis = [x["uci"] for x in events["eventReplies"]]
+            chosen = next((uci for uci in event_ranked if uci in event_ucis), None)
+            baseline = ranked[:width]
+            expected = dict(baseline=baseline, reservedUci=chosen, reservedRank=event_ranked.index(chosen) + 1 if chosen else None,
+                selected=baseline if chosen is None or chosen in baseline else baseline[:-1] + [chosen],
+                eventOrderAuthority="declared_first_reply_source_width_not_profit_or_proof",
+                status="event_outside_source_width" if chosen is None and event_ucis else "no_legal_event" if chosen is None
+                    else "event_already_in_baseline" if chosen in baseline else "event_reserved_outside_baseline")
+        else:
+            require(family == "recursive" and len(history) in [2, 3], "shallow reserve masquerades as recursive")
+            events = recursive["event_node"](root, history, definitions[tid])
+            expected = recursive["reserve"](legal, ranked, [x["uci"] for x in events["events"]], width)
+        require(item["events"] == events and all(item[k] == v for k, v in expected.items()), "changed geometry/rank/one-slot selection")
+    # Failures/exhaustion stay partial; an available traversal must retain EVERY
+    # actually source-selected edge, not merely legal examples from that frontier.
+    if row["kind"] != "available":
+        return
+    expected_paths, expected_selections = [], set()
+    def choice(tid, history):
+        key = (tid, tuple(history))
+        if len(history) == 1 or family == "recursive":
+            require(key in selected, "missing source-selected semantic decision")
+            expected_selections.add(key)
+            return selected[key]["selected"]
+        board = board_at(root, history)
+        return [x["moveUci"] for x in sources[(board.fen(en_passant="legal"), 8)]["entries"][:width]]
+    for tid in target_ids:
+        history = [row["candidateUci"]]
+        first = choice(tid, history)
+        for preparation in result["legalPreparationUcis"]:
+            if preparation not in first:
+                continue
+            second = history + [preparation]
+            expected_paths.append((tid, second))
+            if row["horizon"] == 2 or terminal(board_at(root, second)) is not None:
+                continue
+            for defence in choice(tid, second):
+                third = second + [defence]
+                expected_paths.append((tid, third))
+                if terminal(board_at(root, third)) is not None:
+                    continue
+                for leaf in choice(tid, third):
+                    expected_paths.append((tid, third + [leaf]))
+    require(expected_selections == set(selected), "foreign/unvisited semantic decision")
+    require([(x["targetId"], x["history"]) for x in result["observations"]] == expected_paths, "incomplete source-selected semantic population")
 
 
 def verify_record(record, roots, definitions, cells, source_digest):
@@ -152,6 +253,7 @@ def verify_record(record, roots, definitions, cells, source_digest):
         require(result["providerPv"] == entry, "PV detached from literal provider entry")
         require(len(result["observations"]) == len(target_ids)
                 and all(x["history"] == entry["pv"][:row["horizon"]] for x in result["observations"]), "wrong source-selected PV population")
+    verify_semantic_population(row, raw, root, definitions, target_ids)
     return len(result["observations"])
 
 
@@ -227,6 +329,23 @@ def main():
             except AssertionError:
                 continue
             raise AssertionError("resealed semantic negative control admitted")
+        if positive["raw"]["result"].get("selections"):
+            for mode in ["false_selection", "false_event_geometry", "lost_decision", "lost_observation"]:
+                changed = copy.deepcopy(positive)
+                if mode == "false_selection":
+                    changed["raw"]["result"]["selections"][0]["selected"][0] = "a1a8"
+                elif mode == "false_event_geometry":
+                    changed["raw"]["result"]["selections"][0]["events"]["status"] = "forged_event"
+                elif mode == "lost_decision":
+                    changed["raw"]["result"]["selections"].pop()
+                else:
+                    changed["raw"]["result"]["observations"].pop()
+                reseal(changed)
+                try:
+                    verify_record(changed, roots, definitions, cells, metadata["provider"]["sourceDigest"])
+                except AssertionError:
+                    continue
+                raise AssertionError("semantic frontier corruption admitted: " + mode)
     print(json.dumps(dict(rows=len(records), observations=observations,
         validation="independent_python_chess_receipt_replay", clock="interval_consistency_not_independent_wall_clock",
         interactiveGate="not_measured", productionProfileSelected=False)))

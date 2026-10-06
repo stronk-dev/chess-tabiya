@@ -149,14 +149,12 @@ test("node exhaustion retains actual omissions and never returns an available tr
   const id = "complete:four-ply", v = await run({ nodeCap: 1, cell: { ...cell, setting: id }, setting: { id, family: "bounded_oracle_diagnostic" } });
   assert.equal(v.row.kind, "budget_exhausted"); assert.ok(v.raw.result.projections[0].rawQuantifier.omittedPreparations.length > 0);
 });
-test("unimplemented model/recursive/reserve families refuse before any timing capture", async () => {
-  for (const family of ["configured_model", "recursive_semantic", "first_reply_reserve_diagnostic"]) {
-    await assert.rejects(run({ setting: { ...setting, family } }), /Unimplemented/);
-  }
+test("unimplemented model family refuses before any timing capture", async () => {
+  await assert.rejects(run({ setting: { ...setting, family: "configured_model" } }), /Unimplemented/);
 });
 test("batch range must preserve complete regime triplets and full-plan identities", () => {
   const plan = loadCostPlan(); assert.equal(selectBatchCases(plan, 0, 6).length, 6);
-  for (const [start, limit] of [[1, 3], [0, 2], [-3, 3], [0, 0], [plan.expectedCases, 3], [16212, 3]])
+  for (const [start, limit] of [[1, 3], [0, 2], [-3, 3], [0, 0], [plan.expectedCases, 3], [37056, 3]])
     assert.throws(() => selectBatchCases(plan, start, limit));
   assert.equal(plan.expectedCases, 61374);
 });

@@ -10,7 +10,8 @@ import { executeCostCase, executionSubject, inputPins, loadExecutionInputs, supp
 
 const instrumentNames = ["cost-batch.mjs", "cost-execution.mjs", "cost-stockfish.mjs", "cost-contract.mjs",
   "exact-reply-enumeration.mjs", "stockfish-coherent-table.mjs", "exact-arm-trigger-core.mjs", "coherent-actual-proof.mjs",
-  "dist/target-opportunity-v2.mjs"];
+  "dist/target-opportunity-v2.mjs", "cost-semantic.mjs", "coherent-recursive-semantic.mjs",
+  "dist/semantic-relation-event-first-layer.mjs", "dist/recursive-relation-events.mjs"];
 const check = (v, m) => { if (!v) throw new Error(m); };
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const frozenBytes = value => `${JSON.stringify(value, null, 2)}\n`;
@@ -54,7 +55,7 @@ export async function captureBatch({ out, start, limit, command = process.env.SF
   check(typeof out === "string" && out.length > 0, "Explicit immutable output directory required");
   // Refuse overwrite before running any costly source operation.
   mkdirSync(out);
-  const needsEngine = cases.some(cell => ["provider_line", "engine_beam"].includes(plan.settings.find(x => x.id === cell.setting).family));
+  const needsEngine = cases.some(cell => ["provider_line", "engine_beam", "first_reply_reserve_diagnostic", "recursive_semantic"].includes(plan.settings.find(x => x.id === cell.setting).family));
   const adapter = needsEngine ? new CostStockfish(command) : {
     sourceDigest: sha("D3262 source-free execution: no provider requested"), engineName: null, startupMs: 0,
     async initialize() {}, async close() {}, async execute() { throw new Error("Source-free arm attempted a provider query"); },

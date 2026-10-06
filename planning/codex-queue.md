@@ -1,16 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3262]] now has actual live depth-8 PV execution for all 193 candidates / 66 roots,
-both horizons and cold/warm/offline states: 1,158 rows, independently replayed,
-including 84 no-target and 358 unavailable outcomes. The full plan stays 61,374
-cases; this is **not full cost calibration, browser proof or a production profile**.
-The disposable runner supports PV/beam/exact/local-diagnostic (15 settings);
-model, first-reply reserve and recursive adapters (38 settings) explicitly refuse.
-Next implement those adapters, capture remaining budgets/arms with matching cold
-dependencies, independently replay them and bind real browser identities. Do not
-re-run the captured first PV population or use historical durations as live cost.
+[[D3262]] now has actual live execution for three complete setting populations:
+depth-8 PV plus depth-8/width-two/top-eight first-event and recursive reserves.
+Each retains all 193 candidates / 66 roots, both horizons and cold/warm/offline:
+3,474 cases in total, independently replayed. The full plan stays 61,374 cases;
+this is **not full cost calibration, browser proof or a production profile**.
+The disposable runner supports 51 settings, including all 36 semantic/recursive
+combinations; only configured Maia's two settings explicitly refuse. The new
+independent checker reconstructs the entire source-selected frontier, not merely
+legal examples, including first/later reserve and unranked-event distinctions.
+Next implement actual ordered-history configured Maia, capture remaining
+budgets/widths/arms with matching cold dependencies, compare fresh outcomes with
+the frozen semantic reference, measure source memory and bind real browser
+identities. Do not re-run the three captured populations or borrow old durations.
 Normal commands and immutable evidence:
-`planning/semantic-consequence-search/d3262-cost-live-pv-depth8-2026-10-06.md`.
+`planning/semantic-consequence-search/d3262-cost-live-semantic-2026-10-06.md` and
+the earlier `d3262-cost-live-pv-depth8-2026-10-06.md`.
 Routine metadata/hash and tracker maintenance remains automatic.
 
 Completed [[D3503]]: the full D3497 browser before/after populations each retain
