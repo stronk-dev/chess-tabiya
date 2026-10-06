@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { checkBatch, checkRawCapture, selectBatchCases } from "./cost-batch.mjs";
 import { loadCostPlan, sha, validateCostRows } from "./cost-contract.mjs";
 import { inputPins } from "./cost-execution.mjs";
+import { verifyProjectedCostEnvelope } from "./cost-refusal.mjs";
 
 export function packCostBatch(out, archive) {
   const summary = checkBatch(out), metadata = JSON.parse(readFileSync(`${out}/metadata.json`));
@@ -26,6 +27,7 @@ export function packCostBatch(out, archive) {
 }
 export function verifyPackedCostValue(pack) {
   if (pack.version !== 1 || pack.authority !== "lossless_partial_cost_capture_not_full_profile") throw new Error("Foreign capture package");
+  verifyProjectedCostEnvelope(pack);
   const plan = loadCostPlan(), same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   if (pack.metadata.planDigest !== sha(`${JSON.stringify(plan, null, 2)}\n`) || !same(pack.metadata.inputs, inputPins)
     || !same(pack.metadata.cases, selectBatchCases(plan, pack.metadata.start, pack.metadata.limit))) throw new Error("Changed batch population/input identity");

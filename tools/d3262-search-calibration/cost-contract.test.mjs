@@ -76,6 +76,14 @@ test("warm dependency receipts must join this exact cold case, not another query
   warm.providerQueries[0].operands = { ...engine, fen: "another query position" };
   assert.throws(() => validateCostRows(plan, [cold, warm]), /exact cold case/u);
 });
+test("one cache hit cannot conceal another fresh execution labelled warm", () => {
+  const cold = row(), warm = row("pv:depth12", "warm");
+  warm.initialCacheEntries = warm.cacheHits = 1;
+  warm.providerQueries[0].state = "cached";
+  warm.providerQueries.push({ ...structuredClone(cold.providerQueries[0]),
+    operands: { ...engine, fen: "another scheduled query" } });
+  assert.throws(() => validateCostRows(plan, [cold, warm]), /warm provider result without warm dependencies/);
+});
 
 const negatives = {
   "foreign candidate": r => { r.candidateUci = "foreign"; },

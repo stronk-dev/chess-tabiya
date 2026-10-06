@@ -230,6 +230,41 @@ def forcing_expands(board, move, definition, trigger):
         trigger == "square_control" or definition["family"] == "material")
 
 
+def verify_pv_population(row, raw, root, target_ids):
+    """Bind the literal root query to the entire provider-line population.
+
+    A legal receipt is insufficient: it must be the one requested full-root
+    query, and its candidate entry must supply exactly one path per target.
+    This arm consumes no traversal visits and never extends a short PV.
+    """
+    if not row["setting"].startswith("pv:"):
+        return
+    budget = row["setting"].split(":")[1]
+    require(row["setting"] in ["pv:depth8", "pv:depth12", "pv:movetime100"], "undeclared PV profile")
+    result, sources = raw["result"], raw["dependencies"]
+    require(type(result["nodeCap"]) is int and result["nodeCap"] > 0, "invalid PV cap")
+    require(type(result["visited"]) is int and result["visited"] == 0, "PV invented traversal visits")
+    candidate = board_at(root, [row["candidateUci"]])
+    requested = bool(target_ids) and terminal(candidate) is None
+    require(len(sources) == (1 if requested else 0), "missing/foreign scheduled PV query")
+    expected_entry, expected_paths = None, []
+    if requested:
+        source = sources[0]
+        q = source["operands"]
+        require(q["provider"] == "stockfish" and q["fen"] == root
+                and q["budget"] == budget and q["multiPv"] == chess.Board(root).legal_moves.count(),
+                "crossed scheduled PV query")
+        if source["receipt"] is not None:
+            expected_entry = next((x for x in source["receipt"]["result"]["entries"]
+                                   if x["moveUci"] == row["candidateUci"]), None)
+            require(expected_entry is not None, "full-root PV source lost candidate")
+            path = expected_entry["pv"][:row["horizon"]]
+            expected_paths = [(tid, path) for tid in target_ids]
+    require(result["providerPv"] == expected_entry, "PV detached from literal provider entry")
+    require([(x["targetId"], x["history"]) for x in result["observations"]] == expected_paths,
+            "incomplete or reordered scheduled PV population")
+
+
 def verify_plain_population(row, raw, root, definitions, target_ids):
     """Rebuild the complete scheduled engine/exact frontier, including stops.
 
@@ -435,6 +470,8 @@ def verify_record(record, roots, definitions, cells, source_digest):
                 require(record["receiptLiterals"][index] is None, "Absent model carried literal receipt")
         if row["regime"] == "provider_offline":
             require(ledger["state"] == "unavailable" and receipt is None, "offline borrowed/executed provider")
+        if row["regime"] == "warm":
+            require(ledger["state"] != "executed", "warm performed fresh source execution")
     target_ids = cells[(row["rootId"], row["candidateUci"])]
     failure = next((x for x in row["providerQueries"] if x["state"] not in ["executed", "cached"]), None)
     kind = "no_target" if not target_ids else "absorbing_terminal" if terminal(candidate) is not None else (
@@ -475,12 +512,7 @@ def verify_record(record, roots, definitions, cells, source_digest):
         require(projection["licensedAvailability"] == licensed, "provider ceiling laundering")
         require(projection["opportunityObserved"] == any(x["observation"]["opportunityAtThirdPly"] for x in observations)
                 and projection["executionObserved"] == any(x["observation"]["executedAtFourthPly"] for x in observations), "invented observation aggregate")
-    if row["setting"].startswith("pv:") and result["providerPv"] is not None:
-        source = next(x["receipt"] for x in raw["dependencies"] if x["receipt"] is not None)
-        entry = next(x for x in source["result"]["entries"] if x["moveUci"] == row["candidateUci"])
-        require(result["providerPv"] == entry, "PV detached from literal provider entry")
-        require(len(result["observations"]) == len(target_ids)
-                and all(x["history"] == entry["pv"][:row["horizon"]] for x in result["observations"]), "wrong source-selected PV population")
+    verify_pv_population(row, raw, root, target_ids)
     verify_plain_population(row, raw, root, definitions, target_ids)
     verify_semantic_population(row, raw, root, definitions, target_ids)
     verify_model_population(row, raw, root, target_ids)
@@ -596,6 +628,38 @@ def main():
                 corruption_count += 1
                 continue
             raise AssertionError("resealed semantic negative control admitted")
+        if positive["row"]["setting"].startswith("pv:"):
+            for mode in ["lost_entry", "foreign_root", "missing_query", "invented_visit", "missing_observation"]:
+                changed = copy.deepcopy(positive)
+                if mode == "lost_entry":
+                    changed["raw"]["result"]["providerPv"] = None
+                elif mode == "foreign_root":
+                    # Change only the root's fullmove counter. The same legal
+                    # table/PV remains coherent, so literal receipt validation
+                    # alone cannot detect the wrong requested root.
+                    source = changed["raw"]["dependencies"][0]
+                    fields = source["operands"]["fen"].split()
+                    fields[-1] = str(int(fields[-1]) + 1)
+                    foreign = " ".join(fields)
+                    source["operands"]["fen"] = foreign
+                    source["receipt"]["operands"]["fen"] = foreign
+                    ledger = changed["row"]["providerQueries"][0]
+                    ledger["operands"]["fen"] = foreign
+                    ledger["receiptDigest"] = digest(compact(source["receipt"]))
+                elif mode == "missing_query":
+                    changed["raw"]["dependencies"] = []
+                    changed["row"]["providerQueries"] = []
+                elif mode == "invented_visit":
+                    changed["raw"]["result"]["visited"] = 1
+                else:
+                    changed["raw"]["result"]["observations"].pop()
+                reseal(changed)
+                try:
+                    verify_record(changed, roots, definitions, cells, metadata["provider"]["sourceDigest"])
+                except AssertionError:
+                    corruption_count += 1
+                    continue
+                raise AssertionError("PV frontier corruption admitted: " + mode)
         if positive["raw"]["result"].get("selections"):
             for mode in ["false_selection", "false_event_geometry", "lost_decision", "lost_observation"]:
                 changed = copy.deepcopy(positive)

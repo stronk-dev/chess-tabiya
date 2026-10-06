@@ -19,6 +19,20 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 provider-line budget continuation: all three PV budgets now retain
+complete populations. Total admitted search-cost evidence reaches **11,580 /
+61,374**, ten of 53 settings, not full profile calibration. D3505 closes the
+independent query/population verification gap. D3506 fixes fresh queries being
+labelled warm after cold failure; the original refused 2,316-row capture remains
+preserved, while a separate complete repaired 100-ms capture retains four invalid
+cold tables and four unavailable warm partners. No individual failure is removed.
+PV fresh/frozen sensitivity is descriptive, not engine causality; remaining 43
+settings, other-family sensitivity, source/model memory and consumer/browser
+qualification keep D3262 doing and the search RFC draft. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-pv-budgets-2026-10-07.md`.
+Routine metadata/receipts/tracker maintenance needs no owner decision; no
+capability, milestone, content or full-1.0 promotion follows.
+
 2026-10-07 engine/exact live-cost continuation: three more complete setting
 populations retain 3,474 cases / 240,861 independently replayed target observations.
 The complete schedule is checked, not merely the legality of retained examples;

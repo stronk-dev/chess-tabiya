@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bace330128d44de4cb199a26c945db4e2fa1c847b5ea93d776c35f032fdc1227",
+    "roadmap": "sha256:95e4c360dfa05a5ac02ba42a2a3cecc33ab2434a2f8cfa69233c74c27aafaf6e",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:3dfc993fe58054a5b8b63555c2fb7b2cebbc2915edc516285a6a3e30d9d81c1a",
+    "workState": "sha256:a145b8cc308eba864d3f9dd6a7ba336d8966afd5ef6a0b2515749de45fbe7a15",
     "rfcRegister": "sha256:30924497290c821bd160a4a67600787a2a212bc565f06ab64d147f5442feb696",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 2,
       "blocked": 1059,
-      "done": 1403,
+      "done": 1405,
       "refused": 161
     },
     "workItems": {
@@ -254,9 +254,16 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "D3262 adds complete engine depth8/top2 and both provider-free exact-trigger cost populations: 3,474 cases / 240,861 independently replayed target observations, retaining all 193 candidates, two horizons and three regimes. D3504 closes the plain-schedule verifier gap: sixteen boundary controls reconstruct actual query coalescing/order, source-ranked deeper edges, exact geometry, failures and shared budget stops. Six engine/five provider-free corruption refusals pass. Eight complete populations now retain 9,264/61,374 cases; all five primary search families have one live population, not complete profile calibration. Four-ply available-case server p95 ranges from 65.830 to 733.348 ms, without browser, repeated-machine, isolated-host or equal-evidence-strength claims. Source-free availability is not invented fourth-ply execution. The original source snapshots, captures and PV synthesis remain unchanged; routine hashes and trackers flow back automatically. Remaining 45 settings, fresh-source sensitivity, individual source/model memory, complete consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. No production UI/API behavior, capability, milestone or full-1.0 promotion.",
+        "summary": "D3262 now retains ten complete live setting populations / 11,580 of 61,374 cases, all 193 candidates, two horizons and three regimes. All five primary families have a population and all three PV budgets are complete. D3505 closes exact PV source/query/target-population replay with 26 boundary controls and eleven corruption refusals per batch. D3506 forbids fresh warm queries after failed cold sources: the complete refused original 2,316-case capture stays lossless, depth12 projection binds original parent bytes, and the separate complete repaired 100-ms setting retains four invalid cold tables/four missing warm receipts and zero fresh warm queries. Independent PV observations are 728/728/720. Fresh/frozen PV sensitivity preserves literal paths, raw score domains, ranks and outcomes without causal attribution. Earlier source/timing/summary bytes stay unchanged. Full exact-index software and content pass; routine hashes and trackers flow back automatically. Remaining 43 settings, non-PV sensitivity, individual source/model memory, consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. No production UI/API behavior, capability, milestone, content or full-1.0 promotion.",
         "impact": "advanced",
         "evidence": [
+          "planning/semantic-consequence-search/d3262-cost-live-pv-budgets-2026-10-07.md",
+          "planning/semantic-consequence-search/d3262-cost-live-pv-rejected-warm-miss-2026-10-07.json.gz",
+          "planning/semantic-consequence-search/d3262-cost-live-pv-depth12-projection-2026-10-07.json.gz",
+          "planning/semantic-consequence-search/d3262-cost-live-pv-movetime100-warm-repair-2026-10-07.json.gz",
+          "planning/semantic-consequence-search/d3262-cost-live-pv-budgets-summary-2026-10-07.json",
+          "planning/semantic-consequence-search/d3262-cost-live-pv-sensitivity-2026-10-07.json",
+          "planning/semantic-consequence-search/d3262-cost-pv-budgets-software-2026-10-07.json",
           "planning/semantic-consequence-search/d3262-cost-live-plain-2026-10-07.md",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-top2-initial-2026-10-07.json.gz",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-top2-population-2026-10-07.json.gz",
@@ -922,7 +929,7 @@
           {
             "kind": "work_state",
             "id": "D3262",
-            "digest": "sha256:7bb3d57bb6b5bae159d7d94784137fea4706ba6be4b9673c422136905241a6a8"
+            "digest": "sha256:23421554918d759479ceb72d18bb79168d854d86ec8975a281de7b912b289bcc"
           },
           {
             "kind": "work_state",

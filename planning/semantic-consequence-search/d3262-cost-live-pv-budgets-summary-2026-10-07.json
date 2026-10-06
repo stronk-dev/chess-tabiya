@@ -1,0 +1,5353 @@
+{
+  "question": "D3262",
+  "authority": "partial_candidate_population_cost_not_browser_or_profile_decision",
+  "inputs": {
+    "d3262-cost-live-pv-initial-2026-10-06.json.gz": "sha256:bb73c8ca2f11f2063631ca0bd11cebfbaa950cd47537d1cbd9b5c85fbc7103e5",
+    "d3262-cost-live-pv-depth8-population-2026-10-06.json.gz": "sha256:4de7e4307b41b9a4a1343b1b9eaa07cc4359c7cb040a03b6c1234f5d6c281671",
+    "d3262-cost-live-pv-depth12-projection-2026-10-07.json.gz": "sha256:b0adb831f234d7d1008898fd34d8546e3393588037ef1a4ac9a11940a378c22c",
+    "d3262-cost-live-pv-movetime100-warm-repair-2026-10-07.json.gz": "sha256:58399dbb39571e1b32936039b60cb5a47c183f24bb823a1328b74b3aa049b58a"
+  },
+  "admittedRows": 3474,
+  "expectedCases": 61374,
+  "complete": false,
+  "pairedWarmCases": 1158,
+  "evidence": "structural_admission_only",
+  "interactiveGate": "not_measured",
+  "productionProfileSelected": false,
+  "retainedCandidates": 193,
+  "rows": [
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 237.81120900000678,
+        "p95": 334.2074169999978,
+        "max": 357.5508330000001
+      },
+      "sourceMs": {
+        "p50": 236.43537500000093,
+        "p95": 332.8719159999964,
+        "max": 341.39475000000004
+      },
+      "collectionMs": {
+        "p50": 1.130165999988094,
+        "p95": 2.704708999983268,
+        "max": 15.266751
+      },
+      "compileMs": {
+        "p50": 0.2992500000000291,
+        "p95": 0.791958000001614,
+        "max": 1.1381670000000668
+      },
+      "retainedBytes": {
+        "p50": 45446,
+        "p95": 50075,
+        "max": 50142
+      },
+      "sampledParentRssBytes": {
+        "p50": 297147968,
+        "p95": 763171344,
+        "max": 765563528
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 50.29320800000096,
+        "p95": 58.33795800000007,
+        "max": 160.26425000000745
+      },
+      "sourceMs": {
+        "p50": 48.805749999999534,
+        "p95": 56.77795800000604,
+        "max": 155.37216700000863
+      },
+      "collectionMs": {
+        "p50": 1.0732929999994667,
+        "p95": 1.9927490000002308,
+        "max": 4.136666000005789
+      },
+      "compileMs": {
+        "p50": 0.2966669999877922,
+        "p95": 0.5618340000000899,
+        "max": 3.9248329999973066
+      },
+      "retainedBytes": {
+        "p50": 45444,
+        "p95": 50074,
+        "max": 50140
+      },
+      "sampledParentRssBytes": {
+        "p50": 296967744,
+        "p95": 762925392,
+        "max": 764465752
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.6151249999998072,
+        "p95": 0.8388330000000224,
+        "max": 0.9391250000044238
+      },
+      "sourceMs": {
+        "p50": 0.00020899999799439684,
+        "p95": 0.0004579999949783087,
+        "max": 0.0018340000005991897
+      },
+      "collectionMs": {
+        "p50": 0.5607089999975869,
+        "p95": 0.7508340000003955,
+        "max": 0.8548330000194255
+      },
+      "compileMs": {
+        "p50": 0.22504200000003038,
+        "p95": 0.37274999999999636,
+        "max": 0.4138329999987036
+      },
+      "retainedBytes": {
+        "p50": 1927,
+        "p95": 2744,
+        "max": 2893
+      },
+      "sampledParentRssBytes": {
+        "p50": 296967744,
+        "p95": 762958160,
+        "max": 764531288
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 239.37129199999617,
+        "p95": 334.31716700000106,
+        "max": 360.8745829999971
+      },
+      "sourceMs": {
+        "p50": 237.55862499999057,
+        "p95": 332.69645899999887,
+        "max": 359.0946249999979
+      },
+      "collectionMs": {
+        "p50": 1.5225420000060694,
+        "p95": 2.702250999998796,
+        "max": 3.077248999979929
+      },
+      "compileMs": {
+        "p50": 0.30929099999957543,
+        "p95": 0.5503340000000208,
+        "max": 0.7133750000029977
+      },
+      "retainedBytes": {
+        "p50": 45644,
+        "p95": 50754,
+        "max": 50896
+      },
+      "sampledParentRssBytes": {
+        "p50": 297197792,
+        "p95": 763433368,
+        "max": 764924552
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 51.30695800000103,
+        "p95": 59.80137499999546,
+        "max": 60.9252919999999
+      },
+      "sourceMs": {
+        "p50": 48.79283299999952,
+        "p95": 58.053083000006154,
+        "max": 59.16816599999993
+      },
+      "collectionMs": {
+        "p50": 1.4934580000117421,
+        "p95": 2.2432079999998678,
+        "max": 2.7344989999983227
+      },
+      "compileMs": {
+        "p50": 0.3094999999993888,
+        "p95": 0.5676249999996799,
+        "max": 0.8481670000001031
+      },
+      "retainedBytes": {
+        "p50": 45642,
+        "p95": 50752,
+        "max": 50896
+      },
+      "sampledParentRssBytes": {
+        "p50": 296984152,
+        "p95": 673731160,
+        "max": 764973656
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.6150829999969574,
+        "p95": 0.8204160000022966,
+        "max": 0.8686670000006416
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.0003329999999550637,
+        "max": 0.000375000003259629
+      },
+      "collectionMs": {
+        "p50": 0.5478750000074797,
+        "p95": 0.7521249999990687,
+        "max": 0.8159569999988889
+      },
+      "compileMs": {
+        "p50": 0.2328330000018468,
+        "p95": 0.3619590000016615,
+        "max": 0.4522500000002765
+      },
+      "retainedBytes": {
+        "p50": 1927,
+        "p95": 2744,
+        "max": 2893
+      },
+      "sampledParentRssBytes": {
+        "p50": 296984152,
+        "p95": 673731160,
+        "max": 765170264
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 209.58200000000215,
+        "p95": 330.4898749999993,
+        "max": 347.9159589999981
+      },
+      "sourceMs": {
+        "p50": 208.34633400000166,
+        "p95": 329.0025000000023,
+        "max": 345.9436659999992
+      },
+      "collectionMs": {
+        "p50": 1.1189980000199284,
+        "p95": 1.6524600000411738,
+        "max": 2.2393339999980526
+      },
+      "compileMs": {
+        "p50": 0.29766699999163393,
+        "p95": 0.4540419999975711,
+        "max": 0.8622080000022834
+      },
+      "retainedBytes": {
+        "p50": 43982,
+        "p95": 58655,
+        "max": 58804
+      },
+      "sampledParentRssBytes": {
+        "p50": 296934544,
+        "p95": 387535496,
+        "max": 387863200
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 47.60237500000221,
+        "p95": 78.31524999999965,
+        "max": 84.50012499999866
+      },
+      "sourceMs": {
+        "p50": 46.48945900000399,
+        "p95": 76.82775000000038,
+        "max": 82.03766700000415
+      },
+      "collectionMs": {
+        "p50": 1.0169590000150492,
+        "p95": 1.7031239999778336,
+        "max": 2.1374590000050375
+      },
+      "compileMs": {
+        "p50": 0.29312499999650754,
+        "p95": 0.48204200000327546,
+        "max": 1.109042000003683
+      },
+      "retainedBytes": {
+        "p50": 43980,
+        "p95": 58653,
+        "max": 58802
+      },
+      "sampledParentRssBytes": {
+        "p50": 296574048,
+        "p95": 387453504,
+        "max": 387502728
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.5997079999942798,
+        "p95": 0.7325410000012198,
+        "max": 0.7979590000031749
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.0004579999986162875,
+        "max": 0.0005419999943114817
+      },
+      "collectionMs": {
+        "p50": 0.5512090000120224,
+        "p95": 0.6509149999910733,
+        "max": 0.7445829999924172
+      },
+      "compileMs": {
+        "p50": 0.21104199999535922,
+        "p95": 0.2952499999992142,
+        "max": 0.3103339999979653
+      },
+      "retainedBytes": {
+        "p50": 1944,
+        "p95": 2030,
+        "max": 2079
+      },
+      "sampledParentRssBytes": {
+        "p50": 296442832,
+        "p95": 387371632,
+        "max": 387502728
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 215.8971670000028,
+        "p95": 347.4876249999943,
+        "max": 395.25683299999946
+      },
+      "sourceMs": {
+        "p50": 213.13754199999676,
+        "p95": 344.34787500000675,
+        "max": 393.03749999999854
+      },
+      "collectionMs": {
+        "p50": 1.5091249999968568,
+        "p95": 2.5178739999973914,
+        "max": 2.843540000001667
+      },
+      "compileMs": {
+        "p50": 0.3019999999960419,
+        "p95": 0.561915999998746,
+        "max": 0.7901249999995343
+      },
+      "retainedBytes": {
+        "p50": 44726,
+        "p95": 59246,
+        "max": 59439
+      },
+      "sampledParentRssBytes": {
+        "p50": 296803328,
+        "p95": 387437168,
+        "max": 387830408
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 48.159542000008514,
+        "p95": 76.55574999999953,
+        "max": 91.92891699999745
+      },
+      "sourceMs": {
+        "p50": 46.48787500000617,
+        "p95": 74.68395899999814,
+        "max": 89.8404159999991
+      },
+      "collectionMs": {
+        "p50": 1.4653759999928297,
+        "p95": 2.0081239999963145,
+        "max": 2.1408339999834425
+      },
+      "compileMs": {
+        "p50": 0.2973749999946449,
+        "p95": 0.40512499999749707,
+        "max": 0.41604199999710545
+      },
+      "retainedBytes": {
+        "p50": 44721,
+        "p95": 59244,
+        "max": 59440
+      },
+      "sampledParentRssBytes": {
+        "p50": 296442832,
+        "p95": 387486296,
+        "max": 387535496
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.5895829999935813,
+        "p95": 0.807874999998603,
+        "max": 12.15137500000128
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.000375000003259629,
+        "max": 0.0004170000011072261
+      },
+      "collectionMs": {
+        "p50": 0.5494999999791617,
+        "p95": 0.7435849999892525,
+        "max": 12.0741260000068
+      },
+      "compileMs": {
+        "p50": 0.21104199999535922,
+        "p95": 0.31524999999965075,
+        "max": 11.745249999999942
+      },
+      "retainedBytes": {
+        "p50": 1944,
+        "p95": 2030,
+        "max": 2080
+      },
+      "sampledParentRssBytes": {
+        "p50": 296492008,
+        "p95": 387486296,
+        "max": 387535496
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 199.10429200000362,
+        "p95": 290.91425000000163,
+        "max": 431.28591700000106
+      },
+      "sourceMs": {
+        "p50": 197.93116600000212,
+        "p95": 288.8923749999958,
+        "max": 429.710917000004
+      },
+      "collectionMs": {
+        "p50": 1.2072899999839137,
+        "p95": 2.0671260000090115,
+        "max": 2.6702080000104615
+      },
+      "compileMs": {
+        "p50": 0.33933299999989686,
+        "p95": 0.6392500000001746,
+        "max": 0.7055829999953858
+      },
+      "retainedBytes": {
+        "p50": 45303,
+        "p95": 50573,
+        "max": 53447
+      },
+      "sampledParentRssBytes": {
+        "p50": 296097928,
+        "p95": 298000776,
+        "max": 298017184
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 52.276749999997264,
+        "p95": 73.86683300000004,
+        "max": 87.03191700000025
+      },
+      "sourceMs": {
+        "p50": 50.72770899999887,
+        "p95": 72.25283299999865,
+        "max": 85.40804200001003
+      },
+      "collectionMs": {
+        "p50": 1.2280839999984892,
+        "p95": 1.7738749999989523,
+        "max": 2.0648739999960526
+      },
+      "compileMs": {
+        "p50": 0.3275830000056885,
+        "p95": 0.5795839999991586,
+        "max": 0.5851249999977881
+      },
+      "retainedBytes": {
+        "p50": 45302,
+        "p95": 50571,
+        "max": 53446
+      },
+      "sampledParentRssBytes": {
+        "p50": 295901752,
+        "p95": 297607488,
+        "max": 297640280
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6339999999981956,
+        "p95": 0.8475410000028205,
+        "max": 0.9176250000018626
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.0004170000011072261,
+        "max": 0.0007089999999152496
+      },
+      "collectionMs": {
+        "p50": 0.5776659999974072,
+        "p95": 0.7924160000038682,
+        "max": 0.8654180000012275
+      },
+      "compileMs": {
+        "p50": 0.22699999999895226,
+        "p95": 0.31629199998860713,
+        "max": 0.46991699999489356
+      },
+      "retainedBytes": {
+        "p50": 1959,
+        "p95": 2313,
+        "max": 2314
+      },
+      "sampledParentRssBytes": {
+        "p50": 295901752,
+        "p95": 297607488,
+        "max": 297640280
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 192.9508330000026,
+        "p95": 285.5127919999941,
+        "max": 387.24274999999034
+      },
+      "sourceMs": {
+        "p50": 191.0137079999986,
+        "p95": 283.2014999999956,
+        "max": 384.94337500000256
+      },
+      "collectionMs": {
+        "p50": 1.713830999993661,
+        "p95": 2.2749169999951846,
+        "max": 2.6098740000088583
+      },
+      "compileMs": {
+        "p50": 0.3438750000004802,
+        "p95": 0.4940409999981057,
+        "max": 0.5583750000005239
+      },
+      "retainedBytes": {
+        "p50": 45930,
+        "p95": 51361,
+        "max": 54219
+      },
+      "sampledParentRssBytes": {
+        "p50": 296130720,
+        "p95": 297967984,
+        "max": 298017184
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 53.08204200000182,
+        "p95": 68.75745800000004,
+        "max": 87.37658300000476
+      },
+      "sourceMs": {
+        "p50": 51.01220900000044,
+        "p95": 66.76995799999713,
+        "max": 84.97945800000161
+      },
+      "collectionMs": {
+        "p50": 1.6717919999937294,
+        "p95": 2.1560000000026776,
+        "max": 2.5002519999979995
+      },
+      "compileMs": {
+        "p50": 0.3387079999956768,
+        "p95": 0.5356670000037411,
+        "max": 0.5548750000016298
+      },
+      "retainedBytes": {
+        "p50": 45928,
+        "p95": 51358,
+        "max": 54217
+      },
+      "sampledParentRssBytes": {
+        "p50": 295918136,
+        "p95": 297607488,
+        "max": 297656688
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6445410000014817,
+        "p95": 0.8765830000047572,
+        "max": 2.72345900000073
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.0003749999996216502,
+        "max": 0.00041700000292621553
+      },
+      "collectionMs": {
+        "p50": 0.5964590000003227,
+        "p95": 0.8118749999994179,
+        "max": 2.5272080000067945
+      },
+      "compileMs": {
+        "p50": 0.22529100000247126,
+        "p95": 0.35091600000305334,
+        "max": 0.6775829999969574
+      },
+      "retainedBytes": {
+        "p50": 1957,
+        "p95": 2311,
+        "max": 2314
+      },
+      "sampledParentRssBytes": {
+        "p50": 295918136,
+        "p95": 297607488,
+        "max": 297656688
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 121.2096249999995,
+        "p95": 373.91904200000863,
+        "max": 374.2135419999977
+      },
+      "sourceMs": {
+        "p50": 120.23174999999901,
+        "p95": 372.7887080000073,
+        "max": 373.3524170000019
+      },
+      "collectionMs": {
+        "p50": 0.7246239999967656,
+        "p95": 1.0374159999919357,
+        "max": 1.062748999996984
+      },
+      "compileMs": {
+        "p50": 0.22058300000207964,
+        "p95": 0.3490410000013071,
+        "max": 0.3995420000064769
+      },
+      "retainedBytes": {
+        "p50": 29599,
+        "p95": 52891,
+        "max": 53119
+      },
+      "sampledParentRssBytes": {
+        "p50": 296410016,
+        "p95": 297394400,
+        "max": 297492752
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 23.62762499999917,
+        "p95": 44.78912500000297,
+        "max": 44.92754199999763
+      },
+      "sourceMs": {
+        "p50": 22.702666999999565,
+        "p95": 43.87904200000048,
+        "max": 44.065124999993714
+      },
+      "collectionMs": {
+        "p50": 0.7089999999880092,
+        "p95": 0.9229159999958938,
+        "max": 0.9404149999900255
+      },
+      "compileMs": {
+        "p50": 0.21349999999802094,
+        "p95": 0.25641600000381004,
+        "max": 0.26754199999413686
+      },
+      "retainedBytes": {
+        "p50": 29597,
+        "p95": 52888,
+        "max": 53116
+      },
+      "sampledParentRssBytes": {
+        "p50": 296131200,
+        "p95": 297345248,
+        "max": 297394400
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.382540999999037,
+        "p95": 0.5385420000020531,
+        "max": 0.5975410000028205
+      },
+      "sourceMs": {
+        "p50": 0.0002080000012938399,
+        "p95": 0.0004169999956502579,
+        "max": 0.004666000000725035
+      },
+      "collectionMs": {
+        "p50": 0.33637399999133777,
+        "p95": 0.4650420000034501,
+        "max": 0.5164159999912954
+      },
+      "compileMs": {
+        "p50": 0.17124999999941792,
+        "p95": 0.2470000000030268,
+        "max": 0.28266699999949196
+      },
+      "retainedBytes": {
+        "p50": 1670,
+        "p95": 1846,
+        "max": 1873
+      },
+      "sampledParentRssBytes": {
+        "p50": 296131200,
+        "p95": 297345248,
+        "max": 297394400
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 130.9619160000002,
+        "p95": 372.3538329999865,
+        "max": 385.1742079999967
+      },
+      "sourceMs": {
+        "p50": 129.08554100000038,
+        "p95": 371.1263340000005,
+        "max": 383.8904169999878
+      },
+      "collectionMs": {
+        "p50": 1.0722910000040429,
+        "p95": 2.054125999995449,
+        "max": 2.240875000032247
+      },
+      "compileMs": {
+        "p50": 0.2302919999929145,
+        "p95": 0.43000000000029104,
+        "max": 0.4489579999935813
+      },
+      "retainedBytes": {
+        "p50": 30348,
+        "p95": 53383,
+        "max": 53600
+      },
+      "sampledParentRssBytes": {
+        "p50": 296131200,
+        "p95": 297345248,
+        "max": 297394400
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 24.287749999999505,
+        "p95": 45.395332999993116,
+        "max": 46.783500000005006
+      },
+      "sourceMs": {
+        "p50": 23.031750000000102,
+        "p95": 44.02933399999165,
+        "max": 45.422292000002926
+      },
+      "collectionMs": {
+        "p50": 1.0467090000165626,
+        "p95": 1.824625000001106,
+        "max": 1.9462489999714307
+      },
+      "compileMs": {
+        "p50": 0.23558399999456014,
+        "p95": 0.3245000000024447,
+        "max": 0.34558300000207964
+      },
+      "retainedBytes": {
+        "p50": 30346,
+        "p95": 53381,
+        "max": 53599
+      },
+      "sampledParentRssBytes": {
+        "p50": 296131200,
+        "p95": 297345248,
+        "max": 297394400
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.3834579999984271,
+        "p95": 0.6644999999989523,
+        "max": 0.6839580000014394
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.0004160000025876798,
+        "max": 0.0004169999956502579
+      },
+      "collectionMs": {
+        "p50": 0.3317910000005213,
+        "p95": 0.609915999986697,
+        "max": 0.6345839999994496
+      },
+      "compileMs": {
+        "p50": 0.17233399999895482,
+        "p95": 0.3126249999986612,
+        "max": 0.40895799999998417
+      },
+      "retainedBytes": {
+        "p50": 1670,
+        "p95": 1846,
+        "max": 1874
+      },
+      "sampledParentRssBytes": {
+        "p50": 296131200,
+        "p95": 297378016,
+        "max": 297394400
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.27441600000020117,
+        "p95": 0.2977499999979045,
+        "max": 0.2977499999979045
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2660420000029262,
+        "p95": 0.2831670000014128,
+        "max": 0.2831670000014128
+      },
+      "compileMs": {
+        "p50": 0.00020799999765586108,
+        "p95": 0.0012500000011641532,
+        "max": 0.0012500000011641532
+      },
+      "retainedBytes": {
+        "p50": 723,
+        "p95": 727,
+        "max": 727
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.23770800000056624,
+        "p95": 0.2640839999949094,
+        "max": 0.2640839999949094
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2319170000118902,
+        "p95": 0.2568749999918509,
+        "max": 0.2568749999918509
+      },
+      "compileMs": {
+        "p50": 0.0001250000059371814,
+        "p95": 0.00016700000560376793,
+        "max": 0.00016700000560376793
+      },
+      "retainedBytes": {
+        "p50": 723,
+        "p95": 730,
+        "max": 730
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.23524999999790452,
+        "p95": 0.242459000000963,
+        "max": 0.242459000000963
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2299160000111442,
+        "p95": 0.23725000000558794,
+        "max": 0.23725000000558794
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 735,
+        "p95": 742,
+        "max": 742
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.2409159999951953,
+        "p95": 0.25974999999743886,
+        "max": 0.25974999999743886
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2353339999972377,
+        "p95": 0.2537080000038259,
+        "max": 0.2537080000038259
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 723,
+        "p95": 730,
+        "max": 730
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.24370900000212714,
+        "p95": 0.24816699999792036,
+        "max": 0.24816699999792036
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.23879200000374112,
+        "p95": 0.24308300000848249,
+        "max": 0.24308300000848249
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 723,
+        "p95": 730,
+        "max": 730
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.24629200001072604,
+        "p95": 0.48870800000440795,
+        "max": 0.48870800000440795
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.24116700000013225,
+        "p95": 0.4761670000007143,
+        "max": 0.4761670000007143
+      },
+      "compileMs": {
+        "p50": 0.00008400001388508826,
+        "p95": 0.0006250000005820766,
+        "max": 0.0006250000005820766
+      },
+      "retainedBytes": {
+        "p50": 735,
+        "p95": 742,
+        "max": 742
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3462089999957243,
+        "p95": 0.35708300000987947,
+        "max": 0.35708300000987947
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.33991599999717437,
+        "p95": 0.3513330000132555,
+        "max": 0.3513330000132555
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.0000830000062705949,
+        "max": 0.0000830000062705949
+      },
+      "retainedBytes": {
+        "p50": 831,
+        "p95": 831,
+        "max": 831
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.334166999993613,
+        "p95": 0.3433329999970738,
+        "max": 0.3433329999970738
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3296660000050906,
+        "p95": 0.33879199999501,
+        "max": 0.33879199999501
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.0000830000062705949,
+        "max": 0.0000830000062705949
+      },
+      "retainedBytes": {
+        "p50": 831,
+        "p95": 831,
+        "max": 831
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3260830000072019,
+        "p95": 0.377582999994047,
+        "max": 0.377582999994047
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3216249999968568,
+        "p95": 0.3670830000191927,
+        "max": 0.3670830000191927
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.0004579999949783087,
+        "max": 0.0004579999949783087
+      },
+      "retainedBytes": {
+        "p50": 843,
+        "p95": 843,
+        "max": 843
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.35058300000673626,
+        "p95": 0.3877080000092974,
+        "max": 0.3877080000092974
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3445839999913005,
+        "p95": 0.37583300001278985,
+        "max": 0.37583300001278985
+      },
+      "compileMs": {
+        "p50": 0.0001250000059371814,
+        "p95": 0.000291000003926456,
+        "max": 0.000291000003926456
+      },
+      "retainedBytes": {
+        "p50": 831,
+        "p95": 831,
+        "max": 831
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3316659999982221,
+        "p95": 0.3564159999950789,
+        "max": 0.3564159999950789
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3271249999961583,
+        "p95": 0.3488749999960419,
+        "max": 0.3488749999960419
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.00016700000560376793,
+        "max": 0.00016700000560376793
+      },
+      "retainedBytes": {
+        "p50": 831,
+        "p95": 831,
+        "max": 831
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.34187499999825377,
+        "p95": 0.3469159999949625,
+        "max": 0.3469159999949625
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3372079999971902,
+        "p95": 0.34212500001012813,
+        "max": 0.34212500001012813
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.00016599999798927456,
+        "max": 0.00016599999798927456
+      },
+      "retainedBytes": {
+        "p50": 843,
+        "p95": 843,
+        "max": 843
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297247232,
+        "max": 297247232
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0726660000073025,
+        "p95": 0.16579100000672042,
+        "max": 0.16579100000672042
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06575000000884756,
+        "p95": 0.1592499999969732,
+        "max": 0.1592499999969732
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.00012499999138526618,
+        "max": 0.00012499999138526618
+      },
+      "retainedBytes": {
+        "p50": 579,
+        "p95": 707,
+        "max": 707
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297345536,
+        "max": 297345536
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06724999999278225,
+        "p95": 0.13237499998649582,
+        "max": 0.13237499998649582
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06266800001321826,
+        "p95": 0.12716699999873526,
+        "max": 0.12716699999873526
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 579,
+        "p95": 707,
+        "max": 707
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297345536,
+        "max": 297345536
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06674999999813735,
+        "p95": 0.12787499999103602,
+        "max": 0.12787499999103602
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.062126000004354864,
+        "p95": 0.1234169999952428,
+        "max": 0.1234169999952428
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 591,
+        "p95": 719,
+        "max": 719
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297345536,
+        "max": 297345536
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.11691599999903701,
+        "p95": 0.13425000000279397,
+        "max": 0.13425000000279397
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.10199999999895226,
+        "p95": 0.1280430000188062,
+        "max": 0.1280430000188062
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00020899999071843922,
+        "max": 0.00020899999071843922
+      },
+      "retainedBytes": {
+        "p50": 579,
+        "p95": 707,
+        "max": 707
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297345536,
+        "max": 297345536
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.07862500000919681,
+        "p95": 0.1274169999960577,
+        "max": 0.1274169999960577
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06900000000314321,
+        "p95": 0.12270800000987947,
+        "max": 0.12270800000987947
+      },
+      "compileMs": {
+        "p50": 0.00008299999171867967,
+        "p95": 0.0002500000118743628,
+        "max": 0.0002500000118743628
+      },
+      "retainedBytes": {
+        "p50": 579,
+        "p95": 705,
+        "max": 705
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297345536,
+        "max": 297345536
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth8",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.09595899999840185,
+        "p95": 0.12766600000031758,
+        "max": 0.12766600000031758
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.09016700001666322,
+        "p95": 0.12316699999792036,
+        "max": 0.12316699999792036
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00016700000560376793,
+        "max": 0.00016700000560376793
+      },
+      "retainedBytes": {
+        "p50": 591,
+        "p95": 719,
+        "max": 719
+      },
+      "sampledParentRssBytes": {
+        "p50": 297247232,
+        "p95": 297345536,
+        "max": 297345536
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 1777.1086249999935,
+        "p95": 2609.848457999993,
+        "max": 2658.4532080000063
+      },
+      "sourceMs": {
+        "p50": 1775.7526249999937,
+        "p95": 2608.816584,
+        "max": 2657.269291000004
+      },
+      "collectionMs": {
+        "p50": 1.1207500000000437,
+        "p95": 1.911417999988771,
+        "max": 12.972167000000354
+      },
+      "compileMs": {
+        "p50": 0.30354199999419507,
+        "p95": 0.6605420000123559,
+        "max": 1.069416000000274
+      },
+      "retainedBytes": {
+        "p50": 67934,
+        "p95": 77771,
+        "max": 77863
+      },
+      "sampledParentRssBytes": {
+        "p50": 335064792,
+        "p95": 335819152,
+        "max": 796009200
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 102.56745799999044,
+        "p95": 129.58729099994525,
+        "max": 381.85412499995437
+      },
+      "sourceMs": {
+        "p50": 100.82291699999769,
+        "p95": 128.2860830000136,
+        "max": 380.54162499995437
+      },
+      "collectionMs": {
+        "p50": 1.038042999978643,
+        "p95": 1.753874000030919,
+        "max": 6.147249999921769
+      },
+      "compileMs": {
+        "p50": 0.2948749999923166,
+        "p95": 0.5903330000001006,
+        "max": 1.1338339999783784
+      },
+      "retainedBytes": {
+        "p50": 67933,
+        "p95": 77769,
+        "max": 77861
+      },
+      "sampledParentRssBytes": {
+        "p50": 334605992,
+        "p95": 335425888,
+        "max": 618619560
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.5937089999788441,
+        "p95": 0.8722080000443384,
+        "max": 1.2272920000104932
+      },
+      "sourceMs": {
+        "p50": 0.0002500000409781933,
+        "p95": 0.0004580000095302239,
+        "max": 0.000750000006519258
+      },
+      "collectionMs": {
+        "p50": 0.541999000000942,
+        "p95": 0.741749000037089,
+        "max": 1.1272090000129538
+      },
+      "compileMs": {
+        "p50": 0.22291700006462634,
+        "p95": 0.4827090000035241,
+        "max": 0.6877499999973224
+      },
+      "retainedBytes": {
+        "p50": 1931,
+        "p95": 2747,
+        "max": 2896
+      },
+      "sampledParentRssBytes": {
+        "p50": 334605992,
+        "p95": 335425888,
+        "max": 618701480
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 1779.132334,
+        "p95": 2591.2248329999857,
+        "max": 2618.0172500000044
+      },
+      "sourceMs": {
+        "p50": 1777.4426669999957,
+        "p95": 2588.9331249999814,
+        "max": 2616.301708999992
+      },
+      "collectionMs": {
+        "p50": 1.5630420000525191,
+        "p95": 2.478919000015594,
+        "max": 3.4298759999801405
+      },
+      "compileMs": {
+        "p50": 0.3179999999993015,
+        "p95": 0.5700840000063181,
+        "max": 0.7476250000181608
+      },
+      "retainedBytes": {
+        "p50": 68497,
+        "p95": 78307,
+        "max": 78527
+      },
+      "sampledParentRssBytes": {
+        "p50": 335097560,
+        "p95": 335835560,
+        "max": 619275016
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 103.17937499999971,
+        "p95": 126.48295799992047,
+        "max": 130.71012499998324
+      },
+      "sourceMs": {
+        "p50": 101.48870899999747,
+        "p95": 124.5557920000283,
+        "max": 128.72204200003762
+      },
+      "collectionMs": {
+        "p50": 1.4912489998387173,
+        "p95": 2.4763309999834746,
+        "max": 3.1364189999876544
+      },
+      "compileMs": {
+        "p50": 0.3004579999978887,
+        "p95": 0.596291999987443,
+        "max": 0.7378329999628477
+      },
+      "retainedBytes": {
+        "p50": 68497,
+        "p95": 78304,
+        "max": 78523
+      },
+      "sampledParentRssBytes": {
+        "p50": 334605992,
+        "p95": 335425888,
+        "max": 443769488
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.5814159999135882,
+        "p95": 0.8907909999834374,
+        "max": 0.971959000104107
+      },
+      "sourceMs": {
+        "p50": 0.0002500000409781933,
+        "p95": 0.000417000032030046,
+        "max": 0.0006250001024454832
+      },
+      "collectionMs": {
+        "p50": 0.5157079999917187,
+        "p95": 0.8145830000285059,
+        "max": 0.8785849999403581
+      },
+      "compileMs": {
+        "p50": 0.21545800002058968,
+        "p95": 0.37116700000478886,
+        "max": 0.4742499999701977
+      },
+      "retainedBytes": {
+        "p50": 1929,
+        "p95": 2748,
+        "max": 2897
+      },
+      "sampledParentRssBytes": {
+        "p50": 334605992,
+        "p95": 335425888,
+        "max": 443769488
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 1772.2105829999782,
+        "p95": 2842.412540999998,
+        "max": 3082.991707999987
+      },
+      "sourceMs": {
+        "p50": 1771.0195419999654,
+        "p95": 2841.1948340000235,
+        "max": 3081.522209000017
+      },
+      "collectionMs": {
+        "p50": 1.1523339999257587,
+        "p95": 1.81300199998077,
+        "max": 2.832832999934908
+      },
+      "compileMs": {
+        "p50": 0.3108340000035241,
+        "p95": 0.4915000000037253,
+        "max": 0.6454159999848343
+      },
+      "retainedBytes": {
+        "p50": 67252,
+        "p95": 89465,
+        "max": 89656
+      },
+      "sampledParentRssBytes": {
+        "p50": 334589272,
+        "p95": 336179888,
+        "max": 336212704
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 104.70308399997884,
+        "p95": 157.69820799998706,
+        "max": 167.50812499999302
+      },
+      "sourceMs": {
+        "p50": 103.4579580000136,
+        "p95": 156.50833300000522,
+        "max": 166.03370799997356
+      },
+      "collectionMs": {
+        "p50": 1.0340419998392463,
+        "p95": 1.4660010000225157,
+        "max": 1.716207999998005
+      },
+      "compileMs": {
+        "p50": 0.29616700002225116,
+        "p95": 0.47208300000056624,
+        "max": 0.5822500000358559
+      },
+      "retainedBytes": {
+        "p50": 67246,
+        "p95": 89463,
+        "max": 89650
+      },
+      "sampledParentRssBytes": {
+        "p50": 334064936,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.5862079999933485,
+        "p95": 0.832750000001397,
+        "max": 1.3733749999664724
+      },
+      "sourceMs": {
+        "p50": 0.0002500000409781933,
+        "p95": 0.00045899999895482324,
+        "max": 0.0005000000237487257
+      },
+      "collectionMs": {
+        "p50": 0.5303750000020955,
+        "p95": 0.7759579999838024,
+        "max": 1.2196250001434237
+      },
+      "compileMs": {
+        "p50": 0.2142089999979362,
+        "p95": 0.3255829999689013,
+        "max": 0.5199579999316484
+      },
+      "retainedBytes": {
+        "p50": 1948,
+        "p95": 2034,
+        "max": 2082
+      },
+      "sampledParentRssBytes": {
+        "p50": 334064936,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 1748.6160830000008,
+        "p95": 2798.444125000009,
+        "max": 2935.5439999999944
+      },
+      "sourceMs": {
+        "p50": 1746.8005420000118,
+        "p95": 2796.7171250000247,
+        "max": 2933.5125830000034
+      },
+      "collectionMs": {
+        "p50": 1.5899599999538623,
+        "p95": 2.658917999942787,
+        "max": 5.940667999966536
+      },
+      "compileMs": {
+        "p50": 0.3226250000006985,
+        "p95": 0.5292499999632128,
+        "max": 0.5813329999800771
+      },
+      "retainedBytes": {
+        "p50": 67917,
+        "p95": 90050,
+        "max": 90246
+      },
+      "sampledParentRssBytes": {
+        "p50": 334556504,
+        "p95": 336147120,
+        "max": 336179936
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 104.05970899999375,
+        "p95": 155.12020899998606,
+        "max": 161.4778750000114
+      },
+      "sourceMs": {
+        "p50": 102.21324999999342,
+        "p95": 153.41929200000595,
+        "max": 159.5354160000279
+      },
+      "collectionMs": {
+        "p50": 1.4928740001050755,
+        "p95": 2.262248000013642,
+        "max": 2.4902899999869987
+      },
+      "compileMs": {
+        "p50": 0.3035000000381842,
+        "p95": 0.4067090000025928,
+        "max": 0.4331250000104774
+      },
+      "retainedBytes": {
+        "p50": 67915,
+        "p95": 90047,
+        "max": 90246
+      },
+      "sampledParentRssBytes": {
+        "p50": 334474560,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.5908340000314638,
+        "p95": 0.7647080000024289,
+        "max": 0.8210829999297857
+      },
+      "sourceMs": {
+        "p50": 0.0002500000118743628,
+        "p95": 0.00041699997382238507,
+        "max": 0.0006660000653937459
+      },
+      "collectionMs": {
+        "p50": 0.5276260000246111,
+        "p95": 0.7042920000094455,
+        "max": 0.7589590001152828
+      },
+      "compileMs": {
+        "p50": 0.20516600005794317,
+        "p95": 0.2884170000033919,
+        "max": 0.3265419999952428
+      },
+      "retainedBytes": {
+        "p50": 1948,
+        "p95": 2031,
+        "max": 2082
+      },
+      "sampledParentRssBytes": {
+        "p50": 334523952,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 1659.8127089999616,
+        "p95": 4357.250249999983,
+        "max": 4493.455084000016
+      },
+      "sourceMs": {
+        "p50": 1657.820624999993,
+        "p95": 4355.631125000014,
+        "max": 4491.892374999996
+      },
+      "collectionMs": {
+        "p50": 1.1260409999813419,
+        "p95": 1.7911680000834167,
+        "max": 2.2285419999971054
+      },
+      "compileMs": {
+        "p50": 0.30516600000555627,
+        "p95": 0.4849580000154674,
+        "max": 0.6352499999920838
+      },
+      "retainedBytes": {
+        "p50": 68411,
+        "p95": 77808,
+        "max": 81590
+      },
+      "sampledParentRssBytes": {
+        "p50": 334048072,
+        "p95": 335786576,
+        "max": 335852136
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 101.27641599997878,
+        "p95": 147.65150000000722,
+        "max": 165.55779200000688
+      },
+      "sourceMs": {
+        "p50": 99.90570799999114,
+        "p95": 146.06825000001118,
+        "max": 163.5702090000268
+      },
+      "collectionMs": {
+        "p50": 1.0198310000123456,
+        "p95": 1.6591239999688696,
+        "max": 1.8012920000473969
+      },
+      "compileMs": {
+        "p50": 0.29616700002225116,
+        "p95": 0.4542500000097789,
+        "max": 0.6942920000001322
+      },
+      "retainedBytes": {
+        "p50": 68409,
+        "p95": 77809,
+        "max": 81588
+      },
+      "sampledParentRssBytes": {
+        "p50": 333589176,
+        "p95": 335262240,
+        "max": 335327800
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6067909999983385,
+        "p95": 0.7046669999836013,
+        "max": 0.9807499999878928
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.000417000032030046,
+        "max": 0.0005830000009154901
+      },
+      "collectionMs": {
+        "p50": 0.5379169998923317,
+        "p95": 0.6486250000016298,
+        "max": 0.911915999953635
+      },
+      "compileMs": {
+        "p50": 0.2103750000242144,
+        "p95": 0.3290410000481643,
+        "max": 0.3993330000084825
+      },
+      "retainedBytes": {
+        "p50": 1964,
+        "p95": 2317,
+        "max": 2318
+      },
+      "sampledParentRssBytes": {
+        "p50": 333589176,
+        "p95": 335262240,
+        "max": 335327800
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 1627.4076670000213,
+        "p95": 4434.082874999993,
+        "max": 4675.24204099999
+      },
+      "sourceMs": {
+        "p50": 1625.4120419999817,
+        "p95": 4430.967000000004,
+        "max": 4672.979708000028
+      },
+      "collectionMs": {
+        "p50": 1.6317899999849033,
+        "p95": 2.6269149998552166,
+        "max": 5.747624000010546
+      },
+      "compileMs": {
+        "p50": 0.31433299998752773,
+        "p95": 0.5077080000191927,
+        "max": 0.548584000003757
+      },
+      "retainedBytes": {
+        "p50": 69173,
+        "p95": 78522,
+        "max": 82447
+      },
+      "sampledParentRssBytes": {
+        "p50": 334015256,
+        "p95": 335786576,
+        "max": 335852136
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 103.2573750000447,
+        "p95": 141.81912500000908,
+        "max": 151.46883399999933
+      },
+      "sourceMs": {
+        "p50": 101.39899999997579,
+        "p95": 139.9890000000014,
+        "max": 149.18362500000512
+      },
+      "collectionMs": {
+        "p50": 1.4727489999495447,
+        "p95": 2.172207999974489,
+        "max": 2.496209000062663
+      },
+      "compileMs": {
+        "p50": 0.29887500003678724,
+        "p95": 0.4625419999938458,
+        "max": 0.5322499999892898
+      },
+      "retainedBytes": {
+        "p50": 69171,
+        "p95": 78520,
+        "max": 82445
+      },
+      "sampledParentRssBytes": {
+        "p50": 333589176,
+        "p95": 335262240,
+        "max": 335327800
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.5840000000025611,
+        "p95": 0.7655410000006668,
+        "max": 0.834333999955561
+      },
+      "sourceMs": {
+        "p50": 0.0002500000409781933,
+        "p95": 0.00033400001120753586,
+        "max": 0.00041699997382238507
+      },
+      "collectionMs": {
+        "p50": 0.5328739999968093,
+        "p95": 0.7109170000185259,
+        "max": 0.7828340000123717
+      },
+      "compileMs": {
+        "p50": 0.2037080000009155,
+        "p95": 0.28583399998024106,
+        "max": 0.3765000000130385
+      },
+      "retainedBytes": {
+        "p50": 1964,
+        "p95": 2317,
+        "max": 2318
+      },
+      "sampledParentRssBytes": {
+        "p50": 333589176,
+        "p95": 335311392,
+        "max": 335327800
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 799.8120409999974,
+        "p95": 1751.953999999998,
+        "max": 1795.6356659999947
+      },
+      "sourceMs": {
+        "p50": 798.6450000000041,
+        "p95": 1750.844624999998,
+        "max": 1794.2029159999947
+      },
+      "collectionMs": {
+        "p50": 0.7691259998828173,
+        "p95": 1.2493340000000899,
+        "max": 2.158582999953069
+      },
+      "compileMs": {
+        "p50": 0.22558299999218434,
+        "p95": 0.36129199992865324,
+        "max": 0.430832999991253
+      },
+      "retainedBytes": {
+        "p50": 44531,
+        "p95": 78640,
+        "max": 78926
+      },
+      "sampledParentRssBytes": {
+        "p50": 333965696,
+        "p95": 335638520,
+        "max": 335868304
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 47.36383400001796,
+        "p95": 85.62004200002411,
+        "max": 87.08641700004227
+      },
+      "sourceMs": {
+        "p50": 46.358000000000175,
+        "p95": 84.43858299998101,
+        "max": 85.94333400001051
+      },
+      "collectionMs": {
+        "p50": 0.7352490002522245,
+        "p95": 0.942626999982167,
+        "max": 1.2863339999967138
+      },
+      "compileMs": {
+        "p50": 0.22491599999193568,
+        "p95": 0.29954199999338016,
+        "max": 0.3726660000029369
+      },
+      "retainedBytes": {
+        "p50": 44530,
+        "p95": 78637,
+        "max": 78924
+      },
+      "sampledParentRssBytes": {
+        "p50": 333588816,
+        "p95": 335442272,
+        "max": 335442272
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.38300000003073364,
+        "p95": 0.5349580000038259,
+        "max": 0.5656670000171289
+      },
+      "sourceMs": {
+        "p50": 0.00024999998277053237,
+        "p95": 0.000417000032030046,
+        "max": 0.0006670000148005784
+      },
+      "collectionMs": {
+        "p50": 0.33170900004915893,
+        "p95": 0.4750839999760501,
+        "max": 0.5011259999591857
+      },
+      "compileMs": {
+        "p50": 0.1642920000012964,
+        "p95": 0.26954200000182027,
+        "max": 0.2716670000227168
+      },
+      "retainedBytes": {
+        "p50": 1672,
+        "p95": 1850,
+        "max": 1878
+      },
+      "sampledParentRssBytes": {
+        "p50": 333588816,
+        "p95": 335442272,
+        "max": 335442272
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 809.4828330000018,
+        "p95": 1763.5516659999994,
+        "max": 1802.6769170000334
+      },
+      "sourceMs": {
+        "p50": 808.2129589999968,
+        "p95": 1762.1751670000012,
+        "max": 1800.8678749999963
+      },
+      "collectionMs": {
+        "p50": 1.0666659999988042,
+        "p95": 1.7941659999196418,
+        "max": 1.9869999998481944
+      },
+      "compileMs": {
+        "p50": 0.23824999999487773,
+        "p95": 0.40304200001992285,
+        "max": 0.41354199999477714
+      },
+      "retainedBytes": {
+        "p50": 45297,
+        "p95": 79127,
+        "max": 79402
+      },
+      "sampledParentRssBytes": {
+        "p50": 333588816,
+        "p95": 335572984,
+        "max": 335605800
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 47.6081669999985,
+        "p95": 87.28779099998064,
+        "max": 89.15529099997366
+      },
+      "sourceMs": {
+        "p50": 46.656208999978844,
+        "p95": 84.95224999997299,
+        "max": 87.04787499998929
+      },
+      "collectionMs": {
+        "p50": 1.102876999982982,
+        "p95": 1.844502000079956,
+        "max": 1.901291000074707
+      },
+      "compileMs": {
+        "p50": 0.2313750000030268,
+        "p95": 0.32512499997392297,
+        "max": 0.42562499997438863
+      },
+      "retainedBytes": {
+        "p50": 45294,
+        "p95": 79124,
+        "max": 79400
+      },
+      "sampledParentRssBytes": {
+        "p50": 333588816,
+        "p95": 335442272,
+        "max": 335442272
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.3709999999846332,
+        "p95": 0.5204999999841675,
+        "max": 0.5508339999942109
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.000375000003259629,
+        "max": 0.000417000032030046
+      },
+      "collectionMs": {
+        "p50": 0.3179580000578426,
+        "p95": 0.46420800004852936,
+        "max": 0.4697499999892898
+      },
+      "compileMs": {
+        "p50": 0.1723750000091968,
+        "p95": 0.24562500000320142,
+        "max": 0.25154199998360127
+      },
+      "retainedBytes": {
+        "p50": 1672,
+        "p95": 1850,
+        "max": 1878
+      },
+      "sampledParentRssBytes": {
+        "p50": 333588816,
+        "p95": 335442272,
+        "max": 335442272
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.2984159999759868,
+        "p95": 0.31020900001749396,
+        "max": 0.31020900001749396
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2849589999532327,
+        "p95": 0.29862500017043203,
+        "max": 0.29862500017043203
+      },
+      "compileMs": {
+        "p50": 0.0002090000780299306,
+        "p95": 0.0011249999515712261,
+        "max": 0.0011249999515712261
+      },
+      "retainedBytes": {
+        "p50": 723,
+        "p95": 731,
+        "max": 731
+      },
+      "sampledParentRssBytes": {
+        "p50": 335655600,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.2424170000012964,
+        "p95": 0.259332999936305,
+        "max": 0.259332999936305
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2343760000076145,
+        "p95": 0.2515000000130385,
+        "max": 0.2515000000130385
+      },
+      "compileMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.00016599998343735933,
+        "max": 0.00016599998343735933
+      },
+      "retainedBytes": {
+        "p50": 724,
+        "p95": 731,
+        "max": 731
+      },
+      "sampledParentRssBytes": {
+        "p50": 335655600,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.23333300009835511,
+        "p95": 0.23529099998995662,
+        "max": 0.23529099998995662
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.22754199989140034,
+        "p95": 0.22804099996574223,
+        "max": 0.22804099996574223
+      },
+      "compileMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 736,
+        "p95": 743,
+        "max": 743
+      },
+      "sampledParentRssBytes": {
+        "p50": 335655600,
+        "p95": 335655600,
+        "max": 335655600
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.26875000004656613,
+        "p95": 0.3034170001046732,
+        "max": 0.3034170001046732
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.26241700001992285,
+        "p95": 0.29004200000781566,
+        "max": 0.29004200000781566
+      },
+      "compileMs": {
+        "p50": 0.00012499990407377481,
+        "p95": 0.00020800007041543722,
+        "max": 0.00020800007041543722
+      },
+      "retainedBytes": {
+        "p50": 724,
+        "p95": 731,
+        "max": 731
+      },
+      "sampledParentRssBytes": {
+        "p50": 335655600,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.23208400001749396,
+        "p95": 0.25250000006053597,
+        "max": 0.25250000006053597
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.22658399993088096,
+        "p95": 0.24479200004134327,
+        "max": 0.24479200004134327
+      },
+      "compileMs": {
+        "p50": 0.00008399994112551212,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 724,
+        "p95": 730,
+        "max": 730
+      },
+      "sampledParentRssBytes": {
+        "p50": 335655600,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.22974999994039536,
+        "p95": 0.24054200004320592,
+        "max": 0.24054200004320592
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.22441700007766485,
+        "p95": 0.23416700004599988,
+        "max": 0.23416700004599988
+      },
+      "compileMs": {
+        "p50": 0.00008400005754083395,
+        "p95": 0.00012499990407377481,
+        "max": 0.00012499990407377481
+      },
+      "retainedBytes": {
+        "p50": 736,
+        "p95": 739,
+        "max": 739
+      },
+      "sampledParentRssBytes": {
+        "p50": 335655600,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3381250000093132,
+        "p95": 0.35662500001490116,
+        "max": 0.35662500001490116
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.331499999971129,
+        "p95": 0.349083999870345,
+        "max": 0.349083999870345
+      },
+      "compileMs": {
+        "p50": 0.00008400005754083395,
+        "p95": 0.00008400005754083395,
+        "max": 0.00008400005754083395
+      },
+      "retainedBytes": {
+        "p50": 831,
+        "p95": 831,
+        "max": 831
+      },
+      "sampledParentRssBytes": {
+        "p50": 335671984,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.32370899990200996,
+        "p95": 0.32958400005009025,
+        "max": 0.32958400005009025
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.31824999989476055,
+        "p95": 0.32349999994039536,
+        "max": 0.32349999994039536
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 832,
+        "p95": 832,
+        "max": 832
+      },
+      "sampledParentRssBytes": {
+        "p50": 335671984,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3147079999325797,
+        "p95": 0.3148329999530688,
+        "max": 0.3148329999530688
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3090009998995811,
+        "p95": 0.3094580000033602,
+        "max": 0.3094580000033602
+      },
+      "compileMs": {
+        "p50": 0.00012500002048909664,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 844,
+        "p95": 844,
+        "max": 844
+      },
+      "sampledParentRssBytes": {
+        "p50": 335671984,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3396669999929145,
+        "p95": 0.5321669999975711,
+        "max": 0.5321669999975711
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.332916000043042,
+        "p95": 0.5247489999746904,
+        "max": 0.5247489999746904
+      },
+      "compileMs": {
+        "p50": 0.00012499990407377481,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 832,
+        "p95": 832,
+        "max": 832
+      },
+      "sampledParentRssBytes": {
+        "p50": 335671984,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3275420001009479,
+        "p95": 0.32879100006539375,
+        "max": 0.32879100006539375
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3217090000398457,
+        "p95": 0.32308300002478063,
+        "max": 0.32308300002478063
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.00008300004992634058,
+        "max": 0.00008300004992634058
+      },
+      "retainedBytes": {
+        "p50": 832,
+        "p95": 832,
+        "max": 832
+      },
+      "sampledParentRssBytes": {
+        "p50": 335671984,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.31537500000558794,
+        "p95": 0.3180829999037087,
+        "max": 0.3180829999037087
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.31008399999700487,
+        "p95": 0.3119169999845326,
+        "max": 0.3119169999845326
+      },
+      "compileMs": {
+        "p50": 0.00008399994112551212,
+        "p95": 0.00008400005754083395,
+        "max": 0.00008400005754083395
+      },
+      "retainedBytes": {
+        "p50": 843,
+        "p95": 844,
+        "max": 844
+      },
+      "sampledParentRssBytes": {
+        "p50": 335671984,
+        "p95": 335671984,
+        "max": 335671984
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06933299999218434,
+        "p95": 0.17695799993816763,
+        "max": 0.17695799993816763
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06300000008195639,
+        "p95": 0.1699999999254942,
+        "max": 0.1699999999254942
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.00008399994112551212,
+        "max": 0.00008399994112551212
+      },
+      "retainedBytes": {
+        "p50": 580,
+        "p95": 708,
+        "max": 708
+      },
+      "sampledParentRssBytes": {
+        "p50": 335688368,
+        "p95": 335704752,
+        "max": 335704752
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06879199994727969,
+        "p95": 0.1290830000070855,
+        "max": 0.1290830000070855
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.0626250000204891,
+        "p95": 0.12366599985398352,
+        "max": 0.12366599985398352
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 580,
+        "p95": 708,
+        "max": 708
+      },
+      "sampledParentRssBytes": {
+        "p50": 335688368,
+        "p95": 335704752,
+        "max": 335704752
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06504200003109872,
+        "p95": 0.12620800000149757,
+        "max": 0.12620800000149757
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05987600015942007,
+        "p95": 0.12054099992383271,
+        "max": 0.12054099992383271
+      },
+      "compileMs": {
+        "p50": 0.00008299993351101875,
+        "p95": 0.00008399994112551212,
+        "max": 0.00008399994112551212
+      },
+      "retainedBytes": {
+        "p50": 592,
+        "p95": 720,
+        "max": 720
+      },
+      "sampledParentRssBytes": {
+        "p50": 335688368,
+        "p95": 335704752,
+        "max": 335704752
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06474999990314245,
+        "p95": 0.13179200002923608,
+        "max": 0.13179200002923608
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05929199990350753,
+        "p95": 0.12554099992848933,
+        "max": 0.12554099992848933
+      },
+      "compileMs": {
+        "p50": 0.00008299993351101875,
+        "p95": 0.00020800007041543722,
+        "max": 0.00020800007041543722
+      },
+      "retainedBytes": {
+        "p50": 580,
+        "p95": 708,
+        "max": 708
+      },
+      "sampledParentRssBytes": {
+        "p50": 335688368,
+        "p95": 335704752,
+        "max": 335704752
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0742910000262782,
+        "p95": 0.12483300000894815,
+        "max": 0.12483300000894815
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06829099997412413,
+        "p95": 0.11945800005923957,
+        "max": 0.11945800005923957
+      },
+      "compileMs": {
+        "p50": 0.00008300004992634058,
+        "p95": 0.00012500002048909664,
+        "max": 0.00012500002048909664
+      },
+      "retainedBytes": {
+        "p50": 580,
+        "p95": 708,
+        "max": 708
+      },
+      "sampledParentRssBytes": {
+        "p50": 335688368,
+        "p95": 335704752,
+        "max": 335704752
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:depth12",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.065165999927558,
+        "p95": 0.1253750000614673,
+        "max": 0.1253750000614673
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.05945800000336021,
+        "p95": 0.12004199996590614,
+        "max": 0.12004199996590614
+      },
+      "compileMs": {
+        "p50": 0.00008299993351101875,
+        "p95": 0.00008399994112551212,
+        "max": 0.00008399994112551212
+      },
+      "retainedBytes": {
+        "p50": 592,
+        "p95": 720,
+        "max": 720
+      },
+      "sampledParentRssBytes": {
+        "p50": 335688368,
+        "p95": 335704752,
+        "max": 335704752
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 205.6872919999987,
+        "p95": 234.2233339999998,
+        "max": 249.43262500000003
+      },
+      "sourceMs": {
+        "p50": 204.0610000000015,
+        "p95": 232.820416999999,
+        "max": 234.82516600000008
+      },
+      "collectionMs": {
+        "p50": 1.0232489999998506,
+        "p95": 1.6710830000006354,
+        "max": 13.736252000000036
+      },
+      "compileMs": {
+        "p50": 0.2804999999998472,
+        "p95": 0.5305420000004233,
+        "max": 1.0985839999999598
+      },
+      "retainedBytes": {
+        "p50": 44490,
+        "p95": 54062,
+        "max": 54162
+      },
+      "sampledParentRssBytes": {
+        "p50": 333655168,
+        "p95": 554164664,
+        "max": 800465192
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 48.02204100000381,
+        "p95": 62.67374999999811,
+        "max": 102.81499999999869
+      },
+      "sourceMs": {
+        "p50": 46.83529099999578,
+        "p95": 61.54795899999954,
+        "max": 101.49533400000291
+      },
+      "collectionMs": {
+        "p50": 0.9619579999998678,
+        "p95": 1.8212499999899592,
+        "max": 1.997456000000966
+      },
+      "compileMs": {
+        "p50": 0.27350000001024455,
+        "p95": 0.5024589999993623,
+        "max": 0.6158330000034766
+      },
+      "retainedBytes": {
+        "p50": 44488,
+        "p95": 54058,
+        "max": 54160
+      },
+      "sampledParentRssBytes": {
+        "p50": 333490248,
+        "p95": 553656616,
+        "max": 799531208
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.5619169999990845,
+        "p95": 0.7591250000004948,
+        "max": 0.8418749999998454
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.00033400000029359944,
+        "max": 0.0004169999992882367
+      },
+      "collectionMs": {
+        "p50": 0.5063340000051539,
+        "p95": 0.6943330000012793,
+        "max": 0.7356249999975262
+      },
+      "compileMs": {
+        "p50": 0.2041249999892898,
+        "p95": 0.37225000000034925,
+        "max": 0.38116699999955017
+      },
+      "retainedBytes": {
+        "p50": 1938,
+        "p95": 2754,
+        "max": 2903
+      },
+      "sampledParentRssBytes": {
+        "p50": 333490248,
+        "p95": 553656616,
+        "max": 799580360
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 205.89345799999978,
+        "p95": 235.77250000000276,
+        "max": 244.0972499999989
+      },
+      "sourceMs": {
+        "p50": 203.25950000000012,
+        "p95": 234.22187499999927,
+        "max": 242.307208000002
+      },
+      "collectionMs": {
+        "p50": 1.3992099999886705,
+        "p95": 2.188666000005469,
+        "max": 4.329748999989533
+      },
+      "compileMs": {
+        "p50": 0.2822089999999662,
+        "p95": 0.5918749999982538,
+        "max": 0.794832999999926
+      },
+      "retainedBytes": {
+        "p50": 45694,
+        "p95": 54543,
+        "max": 54894
+      },
+      "sampledParentRssBytes": {
+        "p50": 333655168,
+        "p95": 554049928,
+        "max": 799973624
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": null,
+      "result": "available",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 47.80583299999125,
+        "p95": 63.1104579999992,
+        "max": 64.95445800000016
+      },
+      "sourceMs": {
+        "p50": 46.34799999999814,
+        "p95": 61.63008300000001,
+        "max": 63.379541999998764
+      },
+      "collectionMs": {
+        "p50": 1.3893329999991693,
+        "p95": 2.1045000000005984,
+        "max": 3.666334999994433
+      },
+      "compileMs": {
+        "p50": 0.2781669999967562,
+        "p95": 0.48570799999288283,
+        "max": 0.7387089999974705
+      },
+      "retainedBytes": {
+        "p50": 45690,
+        "p95": 54541,
+        "max": 54892
+      },
+      "sampledParentRssBytes": {
+        "p50": 333523064,
+        "p95": 553591056,
+        "max": 800055544
+      },
+      "queryCount": 46,
+      "cacheHits": 46
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 46,
+      "elapsedMs": {
+        "p50": 0.5682920000035665,
+        "p95": 0.7408749999995052,
+        "max": 1.0774590000000899
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.000375000003259629,
+        "max": 0.0005840000085299835
+      },
+      "collectionMs": {
+        "p50": 0.5130840000347234,
+        "p95": 0.6824579999993148,
+        "max": 1.0189160000081756
+      },
+      "compileMs": {
+        "p50": 0.1965409999975236,
+        "p95": 0.30679199999940465,
+        "max": 0.5392089999950258
+      },
+      "retainedBytes": {
+        "p50": 1938,
+        "p95": 2754,
+        "max": 2901
+      },
+      "sampledParentRssBytes": {
+        "p50": 333523064,
+        "p95": 553591056,
+        "max": 800055544
+      },
+      "queryCount": 46,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 206.85870799999975,
+        "p95": 274.47350000000006,
+        "max": 293.1822089999987
+      },
+      "sourceMs": {
+        "p50": 205.4780000000028,
+        "p95": 272.26970900000015,
+        "max": 291.4134159999994
+      },
+      "collectionMs": {
+        "p50": 1.1107499999989159,
+        "p95": 1.8422929999942426,
+        "max": 1.9644999999909487
+      },
+      "compileMs": {
+        "p50": 0.30975000000034925,
+        "p95": 0.5174160000024131,
+        "max": 0.5652499999996508
+      },
+      "retainedBytes": {
+        "p50": 45503,
+        "p95": 58054,
+        "max": 58156
+      },
+      "sampledParentRssBytes": {
+        "p50": 333785592,
+        "p95": 433496504,
+        "max": 433693232
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 49.99600000001374,
+        "p95": 80.48345800000243,
+        "max": 92.5555830000012
+      },
+      "sourceMs": {
+        "p50": 48.79520799999591,
+        "p95": 78.97175000000425,
+        "max": 90.85179100000096
+      },
+      "collectionMs": {
+        "p50": 1.0429170000279555,
+        "p95": 1.6925020000053337,
+        "max": 2.1753760000065085
+      },
+      "compileMs": {
+        "p50": 0.28954199999861885,
+        "p95": 0.4845419999983278,
+        "max": 0.7098340000011376
+      },
+      "retainedBytes": {
+        "p50": 45500,
+        "p95": 58052,
+        "max": 58154
+      },
+      "sampledParentRssBytes": {
+        "p50": 333457864,
+        "p95": 433250696,
+        "max": 433332736
+      },
+      "queryCount": 53,
+      "cacheHits": 53
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.5878750000001673,
+        "p95": 0.7984590000050957,
+        "max": 0.844083000003593
+      },
+      "sourceMs": {
+        "p50": 0.0002919999969890341,
+        "p95": 0.000375000003259629,
+        "max": 0.0008340000003954628
+      },
+      "collectionMs": {
+        "p50": 0.5432930000097258,
+        "p95": 0.7257909999971162,
+        "max": 0.7883750000182772
+      },
+      "compileMs": {
+        "p50": 0.21883399999933317,
+        "p95": 0.2967910000006668,
+        "max": 0.3297080000011192
+      },
+      "retainedBytes": {
+        "p50": 1953,
+        "p95": 2038,
+        "max": 2089
+      },
+      "sampledParentRssBytes": {
+        "p50": 333457864,
+        "p95": 433250696,
+        "max": 433332736
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 51,
+      "elapsedMs": {
+        "p50": 205.81266600000163,
+        "p95": 266.885291999999,
+        "max": 292.9307910000025
+      },
+      "sourceMs": {
+        "p50": 203.882834,
+        "p95": 264.96345799999835,
+        "max": 290.6115839999984
+      },
+      "collectionMs": {
+        "p50": 1.4894180000119377,
+        "p95": 2.194833000015933,
+        "max": 2.7632510000257753
+      },
+      "compileMs": {
+        "p50": 0.317083999994793,
+        "p95": 0.4351669999996375,
+        "max": 0.47212500000023283
+      },
+      "retainedBytes": {
+        "p50": 44926,
+        "p95": 58652,
+        "max": 58835
+      },
+      "sampledParentRssBytes": {
+        "p50": 333785976,
+        "p95": 433594832,
+        "max": 433726048
+      },
+      "queryCount": 51,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "available",
+      "count": 51,
+      "elapsedMs": {
+        "p50": 49.56133299999783,
+        "p95": 79.49458400000003,
+        "max": 90.83212500000081
+      },
+      "sourceMs": {
+        "p50": 47.64133300000685,
+        "p95": 77.48849999999948,
+        "max": 88.5916670000006
+      },
+      "collectionMs": {
+        "p50": 1.4743349999625934,
+        "p95": 2.006001000005199,
+        "max": 2.095250999991549
+      },
+      "compileMs": {
+        "p50": 0.3014579999871785,
+        "p95": 0.40441699999792036,
+        "max": 0.4343339999904856
+      },
+      "retainedBytes": {
+        "p50": 44924,
+        "p95": 58652,
+        "max": 58833
+      },
+      "sampledParentRssBytes": {
+        "p50": 333457864,
+        "p95": 433070424,
+        "max": 433316328
+      },
+      "queryCount": 51,
+      "cacheHits": 51
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 53,
+      "elapsedMs": {
+        "p50": 0.595499999995809,
+        "p95": 0.783832999994047,
+        "max": 0.8276250000017171
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.000375000003259629,
+        "max": 0.0006250000005820766
+      },
+      "collectionMs": {
+        "p50": 0.5410829999964335,
+        "p95": 0.7386670000014419,
+        "max": 0.7553330000046117
+      },
+      "compileMs": {
+        "p50": 0.20954099998925813,
+        "p95": 0.3425829999996495,
+        "max": 0.417249999998603
+      },
+      "retainedBytes": {
+        "p50": 1954,
+        "p95": 2039,
+        "max": 2087
+      },
+      "sampledParentRssBytes": {
+        "p50": 333408688,
+        "p95": 433103192,
+        "max": 433316328
+      },
+      "queryCount": 53,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 229.1137080000044,
+        "p95": 267.6925839999967,
+        "max": 279.83908299999894
+      },
+      "sourceMs": {
+        "p50": 227.86291599999822,
+        "p95": 266.2137500000026,
+        "max": 278.2977499999979
+      },
+      "collectionMs": {
+        "p50": 1.0813339999986056,
+        "p95": 1.7367100000046776,
+        "max": 2.0131250000267755
+      },
+      "compileMs": {
+        "p50": 0.3067919999957667,
+        "p95": 0.49579200000152923,
+        "max": 0.6009580000027199
+      },
+      "retainedBytes": {
+        "p50": 47701,
+        "p95": 56210,
+        "max": 56850
+      },
+      "sampledParentRssBytes": {
+        "p50": 333244104,
+        "p95": 335129992,
+        "max": 335179168
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 60.8384170000063,
+        "p95": 72.87458300000071,
+        "max": 83.12983299999905
+      },
+      "sourceMs": {
+        "p50": 59.25129200000083,
+        "p95": 71.58816699999988,
+        "max": 81.76645900000585
+      },
+      "collectionMs": {
+        "p50": 1.0518759999977192,
+        "p95": 1.5346649999992223,
+        "max": 1.5678729999926873
+      },
+      "compileMs": {
+        "p50": 0.29754200000024866,
+        "p95": 0.4042500000068685,
+        "max": 0.45033300000068266
+      },
+      "retainedBytes": {
+        "p50": 47699,
+        "p95": 56208,
+        "max": 56848
+      },
+      "sampledParentRssBytes": {
+        "p50": 332965984,
+        "p95": 334736728,
+        "max": 334753136
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6088749999980791,
+        "p95": 0.7789170000032755,
+        "max": 0.8621249999996508
+      },
+      "sourceMs": {
+        "p50": 0.0002500000045984052,
+        "p95": 0.000375000003259629,
+        "max": 0.0005410000012489036
+      },
+      "collectionMs": {
+        "p50": 0.5645839999997406,
+        "p95": 0.7245420000035665,
+        "max": 0.807293000005302
+      },
+      "compileMs": {
+        "p50": 0.2178329999987909,
+        "p95": 0.2751250000001164,
+        "max": 0.3492079999996349
+      },
+      "retainedBytes": {
+        "p50": 1970,
+        "p95": 2323,
+        "max": 2324
+      },
+      "sampledParentRssBytes": {
+        "p50": 332965984,
+        "p95": 334736728,
+        "max": 334753136
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 230.09341700001096,
+        "p95": 270.2092499999999,
+        "max": 277.18329200000153
+      },
+      "sourceMs": {
+        "p50": 228.40033299999777,
+        "p95": 268.562334000002,
+        "max": 275.49295800000255
+      },
+      "collectionMs": {
+        "p50": 1.5809180000069318,
+        "p95": 2.2235819999914384,
+        "max": 2.853125000008731
+      },
+      "compileMs": {
+        "p50": 0.31824999999662396,
+        "p95": 0.5055829999910202,
+        "max": 0.6778749999939464
+      },
+      "retainedBytes": {
+        "p50": 48431,
+        "p95": 56956,
+        "max": 57633
+      },
+      "sampledParentRssBytes": {
+        "p50": 333227720,
+        "p95": 335129992,
+        "max": 335162808
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "available",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 60.07012499999837,
+        "p95": 76.17762500000026,
+        "max": 82.96341699999903
+      },
+      "sourceMs": {
+        "p50": 58.24687499999709,
+        "p95": 74.51795800000036,
+        "max": 81.07254100000137
+      },
+      "collectionMs": {
+        "p50": 1.4513330000045244,
+        "p95": 2.0772089999809396,
+        "max": 2.276916999995592
+      },
+      "compileMs": {
+        "p50": 0.30108300000028976,
+        "p95": 0.4008749999993597,
+        "max": 0.4853330000041751
+      },
+      "retainedBytes": {
+        "p50": 48433,
+        "p95": 56954,
+        "max": 57631
+      },
+      "sampledParentRssBytes": {
+        "p50": 332916832,
+        "p95": 334736728,
+        "max": 334769544
+      },
+      "queryCount": 41,
+      "cacheHits": 41
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 41,
+      "elapsedMs": {
+        "p50": 0.6013329999987036,
+        "p95": 0.8105420000065351,
+        "max": 0.9308749999981956
+      },
+      "sourceMs": {
+        "p50": 0.0002500000045984052,
+        "p95": 0.0003749999959836714,
+        "max": 0.000375000003259629
+      },
+      "collectionMs": {
+        "p50": 0.5491679999904591,
+        "p95": 0.757540999999037,
+        "max": 0.8665430000037304
+      },
+      "compileMs": {
+        "p50": 0.20975000000180444,
+        "p95": 0.2741660000028787,
+        "max": 0.3763749999998254
+      },
+      "retainedBytes": {
+        "p50": 1969,
+        "p95": 2323,
+        "max": 2324
+      },
+      "sampledParentRssBytes": {
+        "p50": 332949600,
+        "p95": 334736728,
+        "max": 334769544
+      },
+      "queryCount": 41,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "invalid_source",
+      "count": 2,
+      "elapsedMs": {
+        "p50": 140.471375000001,
+        "p95": 140.71437499999956,
+        "max": 140.71437499999956
+      },
+      "sourceMs": {
+        "p50": 140.0465839999997,
+        "p95": 140.2692500000012,
+        "max": 140.2692500000012
+      },
+      "collectionMs": {
+        "p50": 0.3832490000004327,
+        "p95": 0.4049590000013268,
+        "max": 0.4049590000013268
+      },
+      "compileMs": {
+        "p50": 0.17708300000049348,
+        "p95": 0.18325000000004366,
+        "max": 0.18325000000004366
+      },
+      "retainedBytes": {
+        "p50": 25549,
+        "p95": 25592,
+        "max": 25592
+      },
+      "sampledParentRssBytes": {
+        "p50": 323134000,
+        "p95": 323461728,
+        "max": 323461728
+      },
+      "queryCount": 2,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 2,
+      "elapsedMs": {
+        "p50": 0.31216700000004494,
+        "p95": 0.37837499999841384,
+        "max": 0.37837499999841384
+      },
+      "sourceMs": {
+        "p50": 0.0002500000009604264,
+        "p95": 0.0002500000009604264,
+        "max": 0.0002500000009604264
+      },
+      "collectionMs": {
+        "p50": 0.2864160000008269,
+        "p95": 0.34912399999848276,
+        "max": 0.34912399999848276
+      },
+      "compileMs": {
+        "p50": 0.10883300000023155,
+        "p95": 0.1549589999995078,
+        "max": 0.1549589999995078
+      },
+      "retainedBytes": {
+        "p50": 1813,
+        "p95": 1856,
+        "max": 1856
+      },
+      "sampledParentRssBytes": {
+        "p50": 323134000,
+        "p95": 323134000,
+        "max": 323134000
+      },
+      "queryCount": 2,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.3289999999979045,
+        "p95": 0.48458400000527035,
+        "max": 0.5075830000005226
+      },
+      "sourceMs": {
+        "p50": 0.0002499999973224476,
+        "p95": 0.00041599999531172216,
+        "max": 0.0005000000091968104
+      },
+      "collectionMs": {
+        "p50": 0.2887489999848185,
+        "p95": 0.4232510000001639,
+        "max": 0.4547919999986334
+      },
+      "compileMs": {
+        "p50": 0.14687500000582077,
+        "p95": 0.20391700000618584,
+        "max": 0.2308750000083819
+      },
+      "retainedBytes": {
+        "p50": 1680,
+        "p95": 1856,
+        "max": 1884
+      },
+      "sampledParentRssBytes": {
+        "p50": 333179096,
+        "p95": 334343320,
+        "max": 334343320
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 166.7165410000016,
+        "p95": 212.69341700000223,
+        "max": 224.63708299999416
+      },
+      "sourceMs": {
+        "p50": 165.79737499999464,
+        "p95": 211.1319999999978,
+        "max": 222.69324999999662
+      },
+      "collectionMs": {
+        "p50": 0.9812090000050375,
+        "p95": 1.3532909999776166,
+        "max": 1.728209999986575
+      },
+      "compileMs": {
+        "p50": 0.2227500000008149,
+        "p95": 0.32083399999828544,
+        "max": 0.33904200000688434
+      },
+      "retainedBytes": {
+        "p50": 33417,
+        "p95": 58465,
+        "max": 58690
+      },
+      "sampledParentRssBytes": {
+        "p50": 333277808,
+        "p95": 334343320,
+        "max": 334343320
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 28.115999999999985,
+        "p95": 54.45245799999975,
+        "max": 57.00299999999879
+      },
+      "sourceMs": {
+        "p50": 27.015625,
+        "p95": 50.988082999989274,
+        "max": 52.68941700000141
+      },
+      "collectionMs": {
+        "p50": 0.9430819999997766,
+        "p95": 1.5619990000122925,
+        "max": 11.90400100000079
+      },
+      "compileMs": {
+        "p50": 0.21945799999957671,
+        "p95": 0.3489160000026459,
+        "max": 11.126458999999159
+      },
+      "retainedBytes": {
+        "p50": 33416,
+        "p95": 58463,
+        "max": 58690
+      },
+      "sampledParentRssBytes": {
+        "p50": 333179096,
+        "p95": 334343320,
+        "max": 334343320
+      },
+      "queryCount": 39,
+      "cacheHits": 39
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "endgame",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 39,
+      "elapsedMs": {
+        "p50": 0.34883300000001327,
+        "p95": 0.5059170000022277,
+        "max": 0.5735419999982696
+      },
+      "sourceMs": {
+        "p50": 0.000249999999141437,
+        "p95": 0.00045900000259280205,
+        "max": 0.0005830000009154901
+      },
+      "collectionMs": {
+        "p50": 0.30212500000197906,
+        "p95": 0.42899999999644933,
+        "max": 0.5172079999902053
+      },
+      "compileMs": {
+        "p50": 0.15016600000672042,
+        "p95": 0.2130410000027041,
+        "max": 0.25420900000608526
+      },
+      "retainedBytes": {
+        "p50": 1680,
+        "p95": 1856,
+        "max": 1884
+      },
+      "sampledParentRssBytes": {
+        "p50": 333179096,
+        "p95": 334343320,
+        "max": 334343320
+      },
+      "queryCount": 39,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 37,
+      "elapsedMs": {
+        "p50": 165.68174999999974,
+        "p95": 209.09729099999822,
+        "max": 211.70241600000008
+      },
+      "sourceMs": {
+        "p50": 164.83024999999907,
+        "p95": 208.0320420000062,
+        "max": 210.60558400000446
+      },
+      "collectionMs": {
+        "p50": 0.6988329999967391,
+        "p95": 0.9415009999975155,
+        "max": 1.064375999980257
+      },
+      "compileMs": {
+        "p50": 0.21837499999674037,
+        "p95": 0.2988750000076834,
+        "max": 0.35429100001056213
+      },
+      "retainedBytes": {
+        "p50": 32703,
+        "p95": 57971,
+        "max": 58214
+      },
+      "sampledParentRssBytes": {
+        "p50": 333310024,
+        "p95": 334343320,
+        "max": 334671048
+      },
+      "queryCount": 37,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "endgame",
+      "focus": null,
+      "result": "available",
+      "count": 37,
+      "elapsedMs": {
+        "p50": 29.026749999997264,
+        "p95": 52.89724999999453,
+        "max": 54.27141600000323
+      },
+      "sourceMs": {
+        "p50": 28.123084000002564,
+        "p95": 51.57574999998906,
+        "max": 53.212625000000116
+      },
+      "collectionMs": {
+        "p50": 0.6719589999702293,
+        "p95": 1.0242089999956079,
+        "max": 1.1043749999807915
+      },
+      "compileMs": {
+        "p50": 0.21537499999976717,
+        "p95": 0.3028749999939464,
+        "max": 0.30466699998942204
+      },
+      "retainedBytes": {
+        "p50": 32702,
+        "p95": 57967,
+        "max": 58212
+      },
+      "sampledParentRssBytes": {
+        "p50": 333179816,
+        "p95": 334343320,
+        "max": 334343320
+      },
+      "queryCount": 37,
+      "cacheHits": 37
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclear",
+      "focus": null,
+      "result": "invalid_source",
+      "count": 2,
+      "elapsedMs": {
+        "p50": 203.51308399999834,
+        "p95": 204.76045799999702,
+        "max": 204.76045799999702
+      },
+      "sourceMs": {
+        "p50": 202.6954160000023,
+        "p95": 203.9288749999978,
+        "max": 203.9288749999978
+      },
+      "collectionMs": {
+        "p50": 0.7667080000028363,
+        "p95": 0.7741239999959362,
+        "max": 0.7741239999959362
+      },
+      "compileMs": {
+        "p50": 0.32270900000003166,
+        "p95": 0.41091700000106357,
+        "max": 0.41091700000106357
+      },
+      "retainedBytes": {
+        "p50": 47268,
+        "p95": 47372,
+        "max": 47372
+      },
+      "sampledParentRssBytes": {
+        "p50": 331490440,
+        "p95": 331539592,
+        "max": 331539592
+      },
+      "queryCount": 2,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclear",
+      "focus": null,
+      "result": "source_unavailable",
+      "count": 2,
+      "elapsedMs": {
+        "p50": 0.7019169999985024,
+        "p95": 0.866874999999709,
+        "max": 0.866874999999709
+      },
+      "sourceMs": {
+        "p50": 0.00020799999765586108,
+        "p95": 0.00033400000029359944,
+        "max": 0.00033400000029359944
+      },
+      "collectionMs": {
+        "p50": 0.6649169999946025,
+        "p95": 0.8079600000019127,
+        "max": 0.8079600000019127
+      },
+      "compileMs": {
+        "p50": 0.2646659999991243,
+        "p95": 0.29558299999916926,
+        "max": 0.29558299999916926
+      },
+      "retainedBytes": {
+        "p50": 2017,
+        "p95": 2052,
+        "max": 2052
+      },
+      "sampledParentRssBytes": {
+        "p50": 331097176,
+        "p95": 331113560,
+        "max": 331113560
+      },
+      "queryCount": 2,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.32133299999986775,
+        "p95": 0.3216669999965234,
+        "max": 0.3216669999965234
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3045410000049742,
+        "p95": 0.3047919999953592,
+        "max": 0.3047919999953592
+      },
+      "compileMs": {
+        "p50": 0.000291000003926456,
+        "p95": 0.0011249999952269718,
+        "max": 0.0011249999952269718
+      },
+      "retainedBytes": {
+        "p50": 728,
+        "p95": 733,
+        "max": 733
+      },
+      "sampledParentRssBytes": {
+        "p50": 333901360,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.2733330000046408,
+        "p95": 0.2773750000051223,
+        "max": 0.2773750000051223
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2640410000021802,
+        "p95": 0.26958400002331473,
+        "max": 0.26958400002331473
+      },
+      "compileMs": {
+        "p50": 0.0001250000059371814,
+        "p95": 0.0001669999910518527,
+        "max": 0.0001669999910518527
+      },
+      "retainedBytes": {
+        "p50": 728,
+        "p95": 734,
+        "max": 734
+      },
+      "sampledParentRssBytes": {
+        "p50": 333901360,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.258125000007567,
+        "p95": 0.2652079999970738,
+        "max": 0.2652079999970738
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.25170900000375696,
+        "p95": 0.258125000007567,
+        "max": 0.258125000007567
+      },
+      "compileMs": {
+        "p50": 0.00012499999138526618,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 740,
+        "p95": 747,
+        "max": 747
+      },
+      "sampledParentRssBytes": {
+        "p50": 333901360,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.31787500000791624,
+        "p95": 0.34054200000537094,
+        "max": 0.34054200000537094
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3038760000054026,
+        "p95": 0.31566700000257697,
+        "max": 0.31566700000257697
+      },
+      "compileMs": {
+        "p50": 0.00020799999765586108,
+        "p95": 0.0002500000118743628,
+        "max": 0.0002500000118743628
+      },
+      "retainedBytes": {
+        "p50": 728,
+        "p95": 735,
+        "max": 735
+      },
+      "sampledParentRssBytes": {
+        "p50": 333901360,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.264458999998169,
+        "p95": 0.2661249999946449,
+        "max": 0.2661249999946449
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.25479200000700075,
+        "p95": 0.25820899999234825,
+        "max": 0.25820899999234825
+      },
+      "compileMs": {
+        "p50": 0.0001250000059371814,
+        "p95": 0.00016599999798927456,
+        "max": 0.00016599999798927456
+      },
+      "retainedBytes": {
+        "p50": 728,
+        "p95": 734,
+        "max": 734
+      },
+      "sampledParentRssBytes": {
+        "p50": 333901360,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.25266699999338016,
+        "p95": 0.2561249999998836,
+        "max": 0.2561249999998836
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.2459169999929145,
+        "p95": 0.24962499999674037,
+        "max": 0.24962499999674037
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.00016599999798927456,
+        "max": 0.00016599999798927456
+      },
+      "retainedBytes": {
+        "p50": 740,
+        "p95": 746,
+        "max": 746
+      },
+      "sampledParentRssBytes": {
+        "p50": 333901360,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3840419999905862,
+        "p95": 0.3909579999890411,
+        "max": 0.3909579999890411
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3732080000190763,
+        "p95": 0.37420900001598056,
+        "max": 0.37420900001598056
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00033400001120753586,
+        "max": 0.00033400001120753586
+      },
+      "retainedBytes": {
+        "p50": 836,
+        "p95": 836,
+        "max": 836
+      },
+      "sampledParentRssBytes": {
+        "p50": 333917744,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3376250000001164,
+        "p95": 0.36920800000370946,
+        "max": 0.36920800000370946
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3319589999882737,
+        "p95": 0.3614159999997355,
+        "max": 0.3614159999997355
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.0001669999910518527,
+        "max": 0.0001669999910518527
+      },
+      "retainedBytes": {
+        "p50": 836,
+        "p95": 836,
+        "max": 836
+      },
+      "sampledParentRssBytes": {
+        "p50": 333917744,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.33895799999299925,
+        "p95": 0.645541999998386,
+        "max": 0.645541999998386
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.33283299999311566,
+        "p95": 0.6260840000031749,
+        "max": 0.6260840000031749
+      },
+      "compileMs": {
+        "p50": 0.00012499999138526618,
+        "p95": 0.00041700000292621553,
+        "max": 0.00041700000292621553
+      },
+      "retainedBytes": {
+        "p50": 848,
+        "p95": 848,
+        "max": 848
+      },
+      "sampledParentRssBytes": {
+        "p50": 333917744,
+        "p95": 333917744,
+        "max": 333917744
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3867079999909038,
+        "p95": 0.393833000009181,
+        "max": 0.393833000009181
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.37579200000618584,
+        "p95": 0.3824989999993704,
+        "max": 0.3824989999993704
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.00016599999798927456,
+        "max": 0.00016599999798927456
+      },
+      "retainedBytes": {
+        "p50": 836,
+        "p95": 836,
+        "max": 836
+      },
+      "sampledParentRssBytes": {
+        "p50": 333917744,
+        "p95": 333934128,
+        "max": 333934128
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3428330000024289,
+        "p95": 0.35320800000044983,
+        "max": 0.35320800000044983
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.33699899999191985,
+        "p95": 0.3452079999842681,
+        "max": 0.3452079999842681
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 834,
+        "p95": 836,
+        "max": 836
+      },
+      "sampledParentRssBytes": {
+        "p50": 333917744,
+        "p95": 333934128,
+        "max": 333934128
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "result": "no_target",
+      "count": 3,
+      "elapsedMs": {
+        "p50": 0.3407500000030268,
+        "p95": 0.3431669999990845,
+        "max": 0.3431669999990845
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.3336669999989681,
+        "p95": 0.3371669999905862,
+        "max": 0.3371669999905862
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00008399999933317304,
+        "max": 0.00008399999933317304
+      },
+      "retainedBytes": {
+        "p50": 848,
+        "p95": 848,
+        "max": 848
+      },
+      "sampledParentRssBytes": {
+        "p50": 333917744,
+        "p95": 333934128,
+        "max": 333934128
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0736250000045402,
+        "p95": 0.21183300000848249,
+        "max": 0.21183300000848249
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06783299999369774,
+        "p95": 0.19433300000673626,
+        "max": 0.19433300000673626
+      },
+      "compileMs": {
+        "p50": 0.00004199999966658652,
+        "p95": 0.0002500000118743628,
+        "max": 0.0002500000118743628
+      },
+      "retainedBytes": {
+        "p50": 584,
+        "p95": 712,
+        "max": 712
+      },
+      "sampledParentRssBytes": {
+        "p50": 333934128,
+        "p95": 333950512,
+        "max": 333950512
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06779200000164565,
+        "p95": 0.14512500001001172,
+        "max": 0.14512500001001172
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06262499999138527,
+        "p95": 0.13670799999090377,
+        "max": 0.13670799999090377
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 584,
+        "p95": 712,
+        "max": 712
+      },
+      "sampledParentRssBytes": {
+        "p50": 333934128,
+        "p95": 333950512,
+        "max": 333950512
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 2,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0665420000004815,
+        "p95": 0.13195900000573602,
+        "max": 0.13195900000573602
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.061208000013721175,
+        "p95": 0.12570800000685267,
+        "max": 0.12570800000685267
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 596,
+        "p95": 724,
+        "max": 724
+      },
+      "sampledParentRssBytes": {
+        "p50": 333934128,
+        "p95": 333950512,
+        "max": 333950512
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "cold",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06620800000382587,
+        "p95": 0.132540999999037,
+        "max": 0.132540999999037
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.060582999998587184,
+        "p95": 0.1254999999946449,
+        "max": 0.1254999999946449
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.00012499999138526618,
+        "max": 0.00012499999138526618
+      },
+      "retainedBytes": {
+        "p50": 584,
+        "p95": 712,
+        "max": 712
+      },
+      "sampledParentRssBytes": {
+        "p50": 333934128,
+        "p95": 333950512,
+        "max": 333950512
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "warm",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.06895800000347663,
+        "p95": 0.12841699999989942,
+        "max": 0.12841699999989942
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.06329100001312327,
+        "p95": 0.12300099999993108,
+        "max": 0.12300099999993108
+      },
+      "compileMs": {
+        "p50": 0.00008399999933317304,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 584,
+        "p95": 712,
+        "max": 712
+      },
+      "sampledParentRssBytes": {
+        "p50": 333934128,
+        "p95": 333950512,
+        "max": 333950512
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    },
+    {
+      "setting": "pv:movetime100",
+      "horizon": 4,
+      "regime": "provider_offline",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "result": "no_target",
+      "count": 8,
+      "elapsedMs": {
+        "p50": 0.0664589999942109,
+        "p95": 0.12733400000433903,
+        "max": 0.12733400000433903
+      },
+      "sourceMs": {
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "collectionMs": {
+        "p50": 0.061417000004439615,
+        "p95": 0.12149900001531933,
+        "max": 0.12149900001531933
+      },
+      "compileMs": {
+        "p50": 0.0000830000062705949,
+        "p95": 0.0001250000059371814,
+        "max": 0.0001250000059371814
+      },
+      "retainedBytes": {
+        "p50": 596,
+        "p95": 724,
+        "max": 724
+      },
+      "sampledParentRssBytes": {
+        "p50": 333934128,
+        "p95": 333950512,
+        "max": 333950512
+      },
+      "queryCount": 0,
+      "cacheHits": 0
+    }
+  ],
+  "repeatUnit": "one_case_execution_not_machine_repeat_trials",
+  "startupIncluded": false,
+  "memoryScope": "sampled_parent_lower_bound_not_engine_or_model_peak"
+}

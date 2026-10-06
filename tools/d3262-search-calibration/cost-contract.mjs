@@ -138,6 +138,8 @@ export function validateCostRows(plan, rows, { complete = false } = {}) {
     const cached = row.providerQueries.filter(q => q.state === "cached").length;
     check(cached === row.cacheHits, "cache-hit ledger disagreement");
     if (row.regime !== "warm") check(row.initialCacheEntries === 0 && cached === 0, "cold/offline cache contamination");
+    if (row.regime === "warm") check(row.providerQueries.every(q => q.state !== "executed"),
+      "warm provider result without warm dependencies");
     if (row.regime === "provider_offline") check(row.providerQueries.every(q => q.state === "unavailable"),
       "provider-offline reused or executed a provider");
     const family = settings.get(row.setting).family;

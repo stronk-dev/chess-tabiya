@@ -57,10 +57,10 @@ test("exact cold literal source is reparsed on warm; final results are not cache
     assert.equal(warm.ledger[0].receiptDigest, cold.ledger[0].receiptDigest);
     assert.equal(adapter.sequence, 1);
     const alternate = q(["d2d4"], adapter.sourceDigest);
-    assert.equal((await warm.query(alternate)).state, "executed");
-    assert.equal(adapter.sequence, 2);
+    assert.equal((await warm.query(alternate)).state, "unavailable");
+    assert.equal(adapter.sequence, 1);
     const offline = new CostDependencies(adapter, "provider_offline");
-    assert.equal((await offline.query(operands)).state, "unavailable"); assert.equal(adapter.sequence, 2);
+    assert.equal((await offline.query(operands)).state, "unavailable"); assert.equal(adapter.sequence, 1);
     const forged = structuredClone(cold.cache.get(queryIdentity(operands))); forged.result.configuredSupport[0].mass = 1;
     const bad = new CostDependencies(adapter, "warm", new Map([[queryIdentity(operands), forged]]));
     assert.equal((await bad.query(operands)).state, "invalid");

@@ -26780,7 +26780,7 @@
       "id": "D3262",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:7bb3d57bb6b5bae159d7d94784137fea4706ba6be4b9673c422136905241a6a8",
+      "sourceDigest": "sha256:23421554918d759479ceb72d18bb79168d854d86ec8975a281de7b912b289bcc",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
@@ -28934,6 +28934,24 @@
       "sourceDigest": "sha256:56d820e10d3302b43da8a45012f212fa8c3b97c6ffca84559da98673eff38f44",
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-cost-live-plain-2026-10-07.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3505",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2d8eae2df72cf1883408ad7dd1c287feba57f09b55b7425bbcfac4b30fe44e90",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-cost-live-pv-budgets-2026-10-07.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3506",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:093bc0a9c033f5a4cff1dbb269d74386dc4694401bb47d7ee64fe91dae1dce2f",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-cost-live-pv-budgets-2026-10-07.md",
       "evidenceKind": "path"
     }
   ]

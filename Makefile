@@ -854,6 +854,14 @@ semantic-search-cost-packed-check: semantic-search-cost-build
 	$(CI_NODE) --test tools/d3262-search-calibration/cost-pack.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/cost-pack.mjs --check --archive "$(ARCHIVE)"
 
+.PHONY: semantic-search-cost-refused-test semantic-search-cost-refused-pack semantic-search-cost-setting-project
+semantic-search-cost-refused-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-refusal.test.mjs
+semantic-search-cost-refused-pack: semantic-search-cost-refused-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-refusal.mjs --out "$(OUT)" --archive "$(ARCHIVE)"
+semantic-search-cost-setting-project: semantic-search-cost-refused-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-refusal.mjs --parent "$(PARENT)" --setting "$(SETTING)" --archive "$(ARCHIVE)"
+
 .PHONY: semantic-search-cost-summary semantic-search-cost-summary-freeze
 semantic-search-cost-summary: semantic-search-cost-build
 	$(CI_NODE) --test tools/d3262-search-calibration/cost-summary.test.mjs
@@ -861,6 +869,14 @@ semantic-search-cost-summary: semantic-search-cost-build
 semantic-search-cost-summary-freeze: semantic-search-cost-build
 	$(CI_NODE) --test tools/d3262-search-calibration/cost-summary.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/cost-summary.mjs --write $(if $(ARCHIVES),--archives "$(ARCHIVES)" --out "$(OUT)",)
+
+.PHONY: semantic-search-cost-pv-sensitivity-test semantic-search-cost-pv-sensitivity-freeze semantic-search-cost-pv-sensitivity-check
+semantic-search-cost-pv-sensitivity-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-pv-sensitivity.test.mjs
+semantic-search-cost-pv-sensitivity-freeze: semantic-search-cost-pv-sensitivity-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-pv-sensitivity.mjs --write --archives "$(ARCHIVES)" --out "$(OUT)"
+semantic-search-cost-pv-sensitivity-check: semantic-search-cost-pv-sensitivity-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-pv-sensitivity.mjs --archives "$(ARCHIVES)" --out "$(OUT)"
 
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 semantic-search-five-approach-test: semantic-search-target-v2-build

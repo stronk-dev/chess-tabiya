@@ -87,7 +87,7 @@ test("changed budget, FEN, source or MultiPV never reuses cold dependencies", as
   const cold = new CostDependencies(syntheticAdapter(), "cold"); await cold.query(operand());
   for (const changed of [{ budget: "depth12" }, { multiPv: 2 }, { fen: fenOf(replay(fen, ["e2e3"])) }, { sourceDigest: sha("other") }]) {
     const adapter = syntheticAdapter(), warm = new CostDependencies(adapter, "warm", cold.cache);
-    await warm.query({ ...operand(), ...changed }); assert.equal(adapter.calls, 1); assert.equal(warm.ledger[0].state, "executed");
+    await warm.query({ ...operand(), ...changed }); assert.equal(adapter.calls, 0); assert.equal(warm.ledger[0].state, "unavailable");
   }
 });
 test("forged cached result is rejected from literal UCI rather than admitted", async () => {
@@ -115,6 +115,17 @@ for (const [failure, kind] of [["unavailable", "source_unavailable"], ["invalid"
     const value = await run({ adapter: syntheticAdapter({ failure }) });
     assert.equal(value.row.kind, kind); assert.equal(value.row.providerQueries[0].receiptDigest, null);
     assert.equal(value.raw.result.providerPv, null);
+  });
+for (const failure of ["unavailable", "invalid", "timed_out"])
+  test(`${failure} cold query cannot turn into a fresh execution labelled warm`, async () => {
+    const cold = await run({ adapter: syntheticAdapter({ failure }) });
+    const recovered = syntheticAdapter();
+    const warm = await run({ adapter: recovered, cell: { ...cell, regime: "warm" }, initialCache: cold.cache });
+    assert.equal(recovered.calls, 0);
+    assert.equal(warm.row.kind, "source_unavailable");
+    assert.equal(warm.row.cacheHits, 0);
+    assert.equal(warm.raw.result.providerPv, null);
+    assert.match(warm.raw.dependencies[0].failure, /matching cold receipt unavailable/);
   });
 test("provider-off case attempts dependency and retains typed absence", async () => {
   const adapter = syntheticAdapter(), v = await run({ adapter, cell: { ...cell, regime: "provider_offline" } });

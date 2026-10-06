@@ -173,6 +173,7 @@ export class CostDependencies {
     const started = performance.now(); let receipt, state, failure, rejectedCapture;
     if (this.regime === "provider_offline") { state = "unavailable"; failure = "Deliberately denied provider execution"; }
     else if (this.cache.has(identity)) { state = "cached"; receipt = this.cache.get(identity); }
+    else if (this.regime === "warm") { state = "unavailable"; failure = "matching cold receipt unavailable; fresh execution is not warm"; }
     else {
       try { receipt = await this.adapter.execute(operands); state = "executed"; }
       catch (e) { if (!(e instanceof SourceFailure)) throw e; state = e.state; failure = e.message; rejectedCapture = e.capture; }
