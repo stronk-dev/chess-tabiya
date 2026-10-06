@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed current-head persistence/recovery [[D3500]] / [[D3501]]: runtime owns
+the pure v4 codec and v1–v4 migration; the browser no longer has a private validator.
+All actual type domains have persistence controls. Settings displays registered
+recovery with accessible description, preserves unreadable bytes until explicit
+choice and reports refused saves. 108 focused cases/clean types and three real
+built-browser journeys pass, zero retries. Receipt:
+`planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md`.
+This is not v5/full Hint D12, D1639's proposed ruling, Campaign or full RFC closure.
+Do not requeue the removed duplicate validator. The optional-voice lifecycle below,
+D7's real shipping paint/permitted-rung evidence and D3262 cost/profile remain open.
+Routine generated receipts and roadmap anchors refresh without asking the owner.
+Completed [[D3502]]: Compare's control now requires exact fork cardinality, branch
+headings and one reading-or-absence per timeline cell rather than counting the
+entire timeline as the fork. Five content-browser journeys and the full 145-pass /
+one optional-skip browser gate pass, zero retries, including all 112 composition cells.
+Full staged software 3396/344, seven isolated performance cases and content 227/23
+also pass. All 977 historic declarations, 278 factory outcomes and authored content
+are preserved by the canonical metadata proof. This does not change production comparison.
+
 Measured HTTP checkpoint [[D3497]]: the real Node-24/Stockfish production Hint latency instrument
 retains cold/warm identities, complete empty/refused/offline outcomes and paired
 optional-voice baselines. The first complete 880-row / 44-cell / twenty-sample

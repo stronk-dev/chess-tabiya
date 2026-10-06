@@ -52,6 +52,10 @@ spectators get `off`. Whether a source is available never lowers the ceiling. If
 missing, the answer is an honest `source_unavailable`.
 
 The stored Advanced `hintDistance` preference (`AssistanceConfig` v5, D12) is not implemented yet.
+The shared runtime assistance parser/migrator is implemented for the registered v4 head, with
+TypeChecker-derived current-domain and browser-persistence controls. The browser no longer
+carries its own assistance migration validator; v5/rung storage and the proposed owner table
+remain distinct open obligations.
 Until it lands, the stored-preference term of the minimum is simply absent.
 
 ## How a hint is built

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
+  import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, renderSuppression, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
   import { onDestroy, onMount } from "svelte";
 
   import type { AccountExportProgress, AccountImportReceipt, AccountInventory, Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
@@ -220,12 +220,16 @@
       {@const selected = activePreset(kind)}
       {@const isCustom = custom(kind)}
       {@const modules = requestedModules(receipts[kind], selected)}
+      {@const receipt = receipts[kind]}
       <fieldset data-assistance-context={kind}>
         <legend>{labels[kind]}</legend>
         {#if refusal}<p id={`assistance-profile-refusal-${kind}`} class="honest">{refusal}</p>{/if}
         {#if kind === "campaign"}<p class="honest">Campaign encounters are not separate yet; this choice is kept for when they are.</p>{/if}
+        {#if receipt.kind === "invalid_fallback"}
+          <p id={`help-recovery-${kind}`} class="honest" role="status">{renderSuppression({ kind: "preference_recovery", reason: receipt.reason }, kind)}</p>
+        {/if}
         <label>Help style
-          <select value={isCustom ? "custom" : selected} disabled={refusal !== undefined} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => choosePreset(kind, event.currentTarget.value as PresetId)}>
+          <select value={isCustom ? "custom" : selected} disabled={refusal !== undefined} aria-describedby={[refusal ? `assistance-profile-refusal-${kind}` : "", receipt.kind === "invalid_fallback" ? `help-recovery-${kind}` : ""].filter(Boolean).join(" ") || undefined} onchange={(event) => choosePreset(kind, event.currentTarget.value as PresetId)}>
             {#if isCustom}<option value="custom" disabled aria-describedby={`custom-help-${kind}`}>Custom (from {presetDeclaration(selected).label})</option>{/if}
             {#each policy.allowedPresets as preset}<option value={preset}>{presetDeclaration(preset).label}</option>{/each}
           </select>

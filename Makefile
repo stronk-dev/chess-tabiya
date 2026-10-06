@@ -3328,6 +3328,23 @@ guided-hint-lifetime-check:
 guided-hint-client-check:
 	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts apps/web/src/lib/guided-hint.test.ts
 
+.PHONY: assistance-codec-check
+assistance-codec-check:
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts packages/runtime/src/assistance-codec.test.ts packages/runtime/src/assistance-register.test.ts packages/runtime/src/presets.test.ts packages/runtime/src/assistance-exchange.test.ts apps/web/src/lib/assistance-preference.test.ts
+
+.PHONY: assistance-codec-browser-check
+assistance-codec-browser-check:
+	./node_modules/.bin/playwright test --grep "shared assistance codec preserves legacy settings|mobile shell, settings, and install manifest|choosing a help style activates"
+
+.PHONY: assistance-codec-metadata-update assistance-codec-metadata-check
+assistance-codec-metadata-update: semantic-validation-update capability-declarations
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/assistance-codec-metadata.js --log-level=warning
+	node apps/server/dist/assistance-codec-metadata.js --assistance-codec --apply-metadata
+
+assistance-codec-metadata-check:
+	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/assistance-codec-metadata.js --log-level=warning
+	node apps/server/dist/assistance-codec-metadata.js --assistance-codec
+
 # D3497: isolated production-boundary measurement; not a CI/default-on latency gate.
 HINT_LATENCY_OUTPUT ?= .cache/verification/hint-latency-http-$(shell date -u +%Y%m%dT%H%M%SZ).json
 HINT_LATENCY_RECEIPT ?= planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.json

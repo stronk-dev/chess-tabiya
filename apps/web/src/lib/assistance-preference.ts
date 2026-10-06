@@ -1,9 +1,9 @@
 import {
-  ASSISTANCE_PREFERENCE_FIELDS,
   EMPTY_MODULE_OVERRIDES,
   PRESET_IDS,
   WORKFLOW_CONTEXTS,
   deriveWorkflowContext,
+  migrateAssistanceConfig,
   parseWorkflowPreferenceV2,
   presetDeclaration,
   requestedAssistanceFields,
@@ -41,20 +41,6 @@ function readLegacy(storage: PreferenceStorage, key: string): Legacy {
 const plain = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value);
 const oneOf = (value: unknown, domain: readonly string[]): boolean => typeof value === "string" && domain.includes(value);
 
-/** Private migration helper: the shipped v1–v4 value migration, preserved byte-for-byte. */
-function migrateLegacyAssistance(value: unknown): { readonly config: AssistanceConfig; readonly sourceVersion: 1 | 2 | 3 | 4 } | undefined {
-  if (!plain(value)) return undefined;
-  const item = value;
-  const base = oneOf(item.markers, ["off", "live"]) && oneOf(item.guided, ["off", "live"]) && oneOf(item.humanSplit, ["off", "on_request"]) && oneOf(item.voice, ["authored", "persona"]);
-  if (!base) return undefined;
-  const pick = (fields: Record<string, unknown>) => Object.freeze(Object.fromEntries([["version", 4], ...ASSISTANCE_PREFERENCE_FIELDS.map((field) => [field, fields[field]])])) as unknown as AssistanceConfig;
-  if (item.version === 4 && oneOf(item.corpus, ["off", "on_request"]) && oneOf(item.spoken, ["off", "browser", "provider"]) && oneOf(item.boardLighting, ["off", "legal", "sight", "evidence"]) && oneOf(item.arrows, ["off", "sight", "evidence"]) && oneOf(item.ambient, ["off", "on"])) return { config: pick(item), sourceVersion: 4 };
-  if (item.version === 3 && oneOf(item.corpus, ["off", "on_request"]) && oneOf(item.spoken, ["off", "on"])) return { config: pick({ ...item, spoken: item.spoken === "on" ? "browser" : "off", boardLighting: "legal", arrows: "off", ambient: "off" }), sourceVersion: 3 };
-  if (item.version === 2 && oneOf(item.corpus, ["off", "on_request"])) return { config: pick({ ...item, spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), sourceVersion: 2 };
-  if (item.version === 1) return { config: pick({ ...item, corpus: "off", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), sourceVersion: 1 };
-  return undefined;
-}
-
 function migrateLegacy(context: WorkflowContextId, storage: PreferenceStorage): WorkflowPreferenceV2["intent"] {
   const workflow = readLegacy(storage, legacyWorkflowKey(context));
   const assistance = readLegacy(storage, legacyAssistanceKey(context));
@@ -68,8 +54,9 @@ function migrateLegacy(context: WorkflowContextId, storage: PreferenceStorage): 
   }
   if (assistance.kind === "malformed") return { kind: "invalid_fallback", reason: "malformed" };
   if (assistance.kind === "value") {
-    const migrated = migrateLegacyAssistance(assistance.value);
-    if (migrated === undefined) return { kind: "invalid_fallback", reason: "malformed" };
+    let migrated;
+    try { migrated = migrateAssistanceConfig(assistance.value); }
+    catch { return { kind: "invalid_fallback", reason: "malformed" }; }
     return { kind: "migrated_snapshot", preset: preset ?? workflowContextPolicy(context).defaultPreset, config: migrated.config, sourceVersion: migrated.sourceVersion, moduleOverrides: EMPTY_MODULE_OVERRIDES };
   }
   return { kind: "explicit", preset: preset!, overrides: {}, moduleOverrides: EMPTY_MODULE_OVERRIDES };

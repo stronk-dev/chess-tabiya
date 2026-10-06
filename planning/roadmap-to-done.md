@@ -19,6 +19,21 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 persistence/recovery checkpoint: D3500 replaces the browser's private
+assistance validator with one runtime v4 codec and preserves all four historical
+migrations. D3501 makes Settings recovery visible and accessible without overwriting
+unreadable bytes before an explicit choice. All type-derived domains have actual
+store controls; 108 focused cases, clean types and three built-browser journeys
+pass, zero retries. Receipt:
+`planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md`.
+This is not v5/full D12, optional-voice repair, measured browser latency or a
+milestone/capability promotion. All full-1.0 scope remains and tracking is automatic.
+The complete checkpoint now passes staged software 3396/344, seven isolated
+performance cases, content 227/23 and full browser 145 passes/one optional Maia
+skip/zero retries, including all 112 composition cells. D3502's fork-scoped test
+repair changes no production comparison. Canonical metadata preserves all 977
+historical declarations and authored chess content; D3500–D3502 are path-backed done.
+
 2026-10-06 Hint latency checkpoint: D3497 preserves the rejected full module-control
 predecessor and repeats 880 real Node-24/Stockfish HTTP responses / 44 cells /
 twenty samples, plus sixty voice baselines. Actual retained source/packet identities

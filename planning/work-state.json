@@ -28890,6 +28890,33 @@
       "uxItems": [],
       "evidence": "tools/play-composition-matrix.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3500",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8ed0c12759af437d5c6b7ff380364eb5b9fc62aa2c843cbd36c39af3bc7c9c0b",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3501",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:56b07e4d72da86b7a41891658dee4be6e678b53e05b1be69def5e7ae6603a369",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3502",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:63fe8f80a695b31b7e2e0031a0b24049f7455ca5e514cf5259205fd8b284bd65",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,5 +1,20 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
+- **2026-10-06 persistence/recovery checkpoint:** D3500 unifies runtime field/snapshot
+  parsing and the browser's historical v1–v4 migration at the existing assistance v4 /
+  workflow v2 head. Every TypeChecker-derived literal has actual store round-trip controls.
+  D3501 renders registered preference recovery beside the affected Settings control,
+  binds its accessible description and preserves unreadable bytes until explicit choice;
+  refused saves remain honest. 108 focused cases, clean types and three built-browser
+  journeys pass. No preset, permission, head, campaign or full-RFC discharge changes.
+  Receipt: `planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md`.
+
+  Final checkpoint gates pass: staged software 3396/344, seven isolated performance
+  cases, content 227/23, full browser 145 passes/one optional Maia skip/zero retries
+  and all 112 composition cells. D3502 corrects the fork-scoped browser control,
+  not production comparison; canonical metadata retains historic declarations and
+  authored chess content. Full-RFC obligations remain open.
+
 - **Status:** implementing — **Checkpoint B landed 2026-09-24 (receipt `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`): every module
   delivery goes through `POST /runs/:id/modules/query`, which recompiles and finalizes the requested
   assistance server-side, delivers only modules whose compiled effect exists at the requested timing,

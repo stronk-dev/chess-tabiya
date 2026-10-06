@@ -201,11 +201,12 @@ describe("rfc/intent-presets.md — the ∩ algebra, compiled", () => {
   });
 
   it("criterion 6: presets.ts and the exchange import no eligibility, event or evidence-packet symbol", () => {
-    for (const file of ["presets.ts", "assistance-exchange.ts"]) {
+    for (const file of ["presets.ts", "assistance-exchange.ts", "assistance-codec.ts"]) {
       const imports = [...readFileSync(join(__dirname, file), "utf8").matchAll(/from "(\.\/[^"]+)"/gu)].map((match) => match[1]);
       // 2026-09-24: the digest moved to its own module and the exchange now imports the campaign
       // encounter receipt verifier (campaign-core §5.1) and Guided Hint reads the hint registry for its rungs — none is an eligibility/event/packet symbol.
-      expect(imports.every((path) => ["./assistance.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js", "./assistance-exchange-digest.js", "./campaign-receipt.js", "./hint-registry.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
+      expect(imports.every((path) => ["./assistance.js", "./assistance-codec.js", "./module-contract.js", "./module-policy.js", "./types.js", "./presets.js", "./assistance-exchange-digest.js", "./campaign-receipt.js", "./hint-registry.js"].includes(path!)), `${file}: ${imports.join(", ")}`).toBe(true);
+      if (file === "assistance-codec.ts") expect(imports).toEqual(["./assistance.js"]);
     }
   });
 

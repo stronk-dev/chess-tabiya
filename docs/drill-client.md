@@ -185,7 +185,23 @@ open recovery obligations, not completed by the successful calculation path. Run
 controls.
 
 Device-local assistance preferences are live inputs, not mount-time configuration. The drill
-derives its active profile from the current workflow context, reloads when that context changes,
+uses the runtime's pure `assistance-codec.ts` for current-head fields/snapshots and one-way
+legacy v1–v4 migration; the browser owns storage, not a parallel config validator. Historical
+migration still ignores extra legacy keys without copying them into the sealed v2 preference.
+Current snapshots reject missing/unknown/invalid fields; sparse overrides allow omission but
+reject unknown keys and invalid values. The registered
+assistance head remains v4: this does not adopt `hintDistance`, choose proposed ceilings or
+complete Guided Hint's v5 discharge. `make assistance-codec-check` joins every actual
+TypeChecker-derived field/domain member to the runtime parser and real browser save/load.
+Settings renders typed malformed-data/storage-unavailable recovery using the existing registered
+suppression copy beside the affected activity's style control, including its accessible description.
+Unreadable current bytes remain untouched until an explicit choice replaces them; a refused write
+keeps the existing visible unsaved-choice notice. `make assistance-codec-browser-check` exercises
+actual built-browser legacy migration, reload, recovery and help-style changes.
+The normal `assistance-codec-metadata-update`/`assistance-codec-metadata-check` targets
+preserve historical capability declarations and prove authored content unchanged while
+refreshing source-bound requirement stamps; these are automatic maintenance, not new chess content.
+The drill derives its active profile from the current workflow context, reloads when that context changes,
 and listens for browser `storage` events so a Settings change from another tab updates an already
 mounted run. The ordinary topbar Support menu opens the workflow's Support region; individual
 evidence-channel switches remain available through **Advanced support controls** in the explicit

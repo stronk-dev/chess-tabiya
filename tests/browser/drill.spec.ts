@@ -2148,7 +2148,15 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   const evaluationAxis = page.locator('[data-evidence-consumer="compare.engine_trajectory"]');
   await expect(evaluationAxis).toHaveCount(1);
   await expect(evaluationAxis.locator("tbody tr")).not.toHaveCount(0);
-  await expect(evaluationAxis.locator('[data-component="magnitude"]')).toHaveCount(2);
+  await expect(evaluationAxis.locator("thead th")).toHaveText(["Position", "quiet setup", "main"]);
+  await expect(evaluationAxis.locator('.evidence-cell[data-ply-offset="0"] [data-component="magnitude"]')).toHaveCount(2);
+  // Two readings belong to the fork, not the entire asynchronously populated trajectory.
+  // Later recorded positions stay on the same two-column axis with literal absence.
+  expect(await evaluationAxis.locator("tbody tr").evaluateAll((rows) => rows.every((row) => {
+    const cells = [...row.querySelectorAll("td.evidence-cell")];
+    return cells.length === 2 && cells.every((cell) =>
+      cell.querySelectorAll('[data-component="magnitude"]').length + cell.querySelectorAll(".no-record").length === 1);
+  }))).toBe(true);
   await expect(page.locator(".sparkline")).toHaveCount(0);
   await expect.poll(() =>
     page.locator(".strip-band article").evaluateAll((articles) =>
@@ -4215,6 +4223,48 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
     const backward = await trace("Shift+Tab", page.locator(reverseStart).last());
     for (const item of expected) expect(backward.has(item), `${region} reverse traversal missed ${item}`).toBe(true);
   }
+});
+
+test("shared assistance codec preserves legacy settings and explains unreadable current preferences", async ({ page }) => {
+  await page.goto("/settings");
+  const config = { version: 4, markers: "live", guided: "live", humanSplit: "on_request", corpus: "on_request",
+    voice: "authored", spoken: "off", boardLighting: "evidence", arrows: "evidence", ambient: "on" };
+  await page.evaluate((value) => {
+    localStorage.removeItem("tabiya.workflow.v2.position");
+    localStorage.setItem("tabiya.assistance.v1.position", JSON.stringify({ ...value, ignored: "historical", hintDistance: "move" }));
+  }, config);
+  await page.reload();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  const position = page.getByRole("group", { name: "Just Play" });
+  await expect(position.getByLabel("Help style")).toHaveValue("custom");
+  await position.locator("summary").filter({ hasText: "Individual help channels" }).click();
+  for (const label of ["Passive markers", "Named-pattern guidance", "Human move split on request", "Corpus counts on request", "Ambient presence"]) {
+    await expect(position.getByLabel(label, { exact: true })).toBeChecked();
+  }
+  await expect(position.getByLabel("Board lighting")).toHaveValue("evidence");
+  await expect(position.getByRole("combobox", { name: /^Arrows\b/u })).toHaveValue("evidence");
+  await expect(position.getByLabel("Spoken guidance")).toHaveValue("off");
+  await expect(position.getByLabel("External voice")).not.toBeChecked();
+  const key = "tabiya.workflow.v2.position";
+  const sealed = await page.evaluate((key) => localStorage.getItem(key), key);
+  expect(JSON.parse(sealed!)).toEqual({ version: 2, assistanceHead: 4, intent: {
+    kind: "migrated_snapshot", preset: "quiet", config, sourceVersion: 4, moduleOverrides: { include: [], exclude: [] },
+  } });
+  await page.reload();
+  expect(await page.evaluate((key) => localStorage.getItem(key), key)).toBe(sealed);
+  await page.evaluate((key) => localStorage.setItem(key, "unreadable-current-preference"), key);
+  await page.reload();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  await expect(position.getByLabel("Help style")).toHaveValue("quiet");
+  await expect(position.getByRole("status")).toHaveText("Your saved help settings could not be read, so this workflow's default is shown.");
+  await expect(position.getByLabel("Help style")).toHaveAttribute("aria-describedby", "help-recovery-position");
+  expect(await page.evaluate((key) => localStorage.getItem(key), key)).toBe("unreadable-current-preference");
+  await position.getByLabel("Help style").selectOption("guided");
+  await expect(position.getByRole("status")).toHaveCount(0);
+  await page.reload();
+  await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+  await expect(position.getByLabel("Help style")).toHaveValue("guided");
+  expect(JSON.parse((await page.evaluate((key) => localStorage.getItem(key), key))!)).toMatchObject({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset: "guided" } });
 });
 
 test("@matrix mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {

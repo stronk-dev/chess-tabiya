@@ -1,4 +1,6 @@
 import type { AssistanceConfig, AssistancePermission } from "./assistance.js";
+import { ASSISTANCE_PREFERENCE_FIELDS, ASSISTANCE_FIELD_DOMAINS, AssistanceCodecError, parseAssistanceConfig, parseAssistancePreferenceFields, type AssistancePreferenceField, type AssistancePreferenceFields } from "./assistance-codec.js";
+export { ASSISTANCE_PREFERENCE_FIELDS, ASSISTANCE_FIELD_DOMAINS, type AssistancePreferenceField, type AssistancePreferenceFields } from "./assistance-codec.js";
 import { minHintDistance, type HintDistance } from "./hint-registry.js";
 import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 import type { LiveSessionKind, RunFeedbackPolicy, RunSessionKind } from "./types.js";
@@ -22,27 +24,6 @@ export type PresetId = (typeof PRESET_IDS)[number];
 
 // ---------------------------------------------------------------------------------------------
 // §5.3 — the nine-field registry and its per-field domain orders (§3.2's first table).
-
-export const ASSISTANCE_PREFERENCE_FIELDS = Object.freeze([
-  "markers", "guided", "humanSplit", "corpus", "voice", "spoken",
-  "boardLighting", "arrows", "ambient",
-] as const satisfies readonly (keyof Omit<AssistanceConfig, "version">)[]);
-export type AssistancePreferenceField = (typeof ASSISTANCE_PREFERENCE_FIELDS)[number];
-export type AssistancePreferenceFields = Readonly<Pick<Omit<AssistanceConfig, "version">, AssistancePreferenceField>>;
-
-type FieldDomains = { readonly [K in AssistancePreferenceField]: readonly AssistanceConfig[K][] };
-/** Lowest → highest. Every member of every domain stays reachable from Advanced (criterion 18). */
-export const ASSISTANCE_FIELD_DOMAINS: FieldDomains = Object.freeze({
-  markers: Object.freeze(["off", "live"] as const),
-  guided: Object.freeze(["off", "live"] as const),
-  humanSplit: Object.freeze(["off", "on_request"] as const),
-  corpus: Object.freeze(["off", "on_request"] as const),
-  voice: Object.freeze(["authored", "persona"] as const),
-  spoken: Object.freeze(["off", "browser", "provider"] as const),
-  boardLighting: Object.freeze(["off", "legal", "sight", "evidence"] as const),
-  arrows: Object.freeze(["off", "sight", "evidence"] as const),
-  ambient: Object.freeze(["off", "on"] as const),
-});
 
 /** §3.2: the clamp is TOTAL over the nine fields and `version` is not clampable. */
 export type ConfigClamp = Readonly<Record<AssistancePreferenceField, AssistancePermission>>;
@@ -455,20 +436,11 @@ function parseModuleOverrides(value: unknown): CustomModuleOverrides {
 }
 
 function parseFields(value: unknown, complete: boolean): Readonly<Partial<AssistancePreferenceFields>> {
-  if (!plain(value)) throw new PreferenceParseError("PREFERENCE_FIELDS", "field overrides must be a plain object");
-  const keys = Object.keys(value);
-  if (keys.some((key) => !(ASSISTANCE_PREFERENCE_FIELDS as readonly string[]).includes(key))) throw new PreferenceParseError("PREFERENCE_FIELDS", "unknown assistance field");
-  if (complete && keys.length !== ASSISTANCE_PREFERENCE_FIELDS.length) throw new PreferenceParseError("PREFERENCE_FIELDS", "a snapshot carries all nine fields");
-  const out: Record<string, string> = {};
-  for (const field of ASSISTANCE_PREFERENCE_FIELDS) {
-    if (!Object.hasOwn(value, field)) continue;
-    const selected = value[field];
-    if (typeof selected !== "string" || !(ASSISTANCE_FIELD_DOMAINS[field] as readonly string[]).includes(selected)) {
-      throw new PreferenceParseError("PREFERENCE_VALUE", `${field} carries an invalid value`);
-    }
-    out[field] = selected;
+  try { return parseAssistancePreferenceFields(value, complete); }
+  catch (error) {
+    if (!(error instanceof AssistanceCodecError)) throw error;
+    throw new PreferenceParseError(error.code === "ASSISTANCE_VALUE" ? "PREFERENCE_VALUE" : "PREFERENCE_FIELDS", error.message);
   }
-  return Object.freeze(out) as Readonly<Partial<AssistancePreferenceFields>>;
 }
 
 function parsePreset(value: unknown): PresetId {
@@ -490,9 +462,13 @@ export function parseWorkflowPreferenceV2(value: unknown): WorkflowPreferenceV2 
   } else if (raw.kind === "migrated_snapshot" && exactKeys(raw, ["kind", "preset", "config", "sourceVersion", "moduleOverrides"])) {
     if (raw.sourceVersion !== 1 && raw.sourceVersion !== 2 && raw.sourceVersion !== 3 && raw.sourceVersion !== 4) throw new PreferenceParseError("PREFERENCE_INTENT", "sourceVersion must be 1-4");
     if (!plain(raw.config) || raw.config.version !== 4) throw new PreferenceParseError("PREFERENCE_FIELDS", "a snapshot is a complete v4 config");
-    const { version: _version, ...fields } = raw.config;
-    const parsed = parseFields(fields, true) as AssistancePreferenceFields;
-    intent = Object.freeze({ kind: "migrated_snapshot", preset: parsePreset(raw.preset), config: Object.freeze({ version: 4, ...parsed }), sourceVersion: raw.sourceVersion, moduleOverrides: parseModuleOverrides(raw.moduleOverrides) });
+    let config: AssistanceConfig;
+    try { config = parseAssistanceConfig(raw.config); }
+    catch (error) {
+      if (!(error instanceof AssistanceCodecError)) throw error;
+      throw new PreferenceParseError(error.code === "ASSISTANCE_VALUE" ? "PREFERENCE_VALUE" : "PREFERENCE_FIELDS", error.message);
+    }
+    intent = Object.freeze({ kind: "migrated_snapshot", preset: parsePreset(raw.preset), config, sourceVersion: raw.sourceVersion, moduleOverrides: parseModuleOverrides(raw.moduleOverrides) });
   } else if (raw.kind === "invalid_fallback" && exactKeys(raw, ["kind", "reason"]) && raw.reason === "malformed") {
     intent = Object.freeze({ kind: "invalid_fallback", reason: "malformed" });
   } else {

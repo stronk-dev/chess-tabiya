@@ -90,6 +90,7 @@ export {
   type ModuleTimingDeclaration,
 } from "./module-contract.js";
 export { SILENT_ASSISTANCE, accessPermission, permittedAssistance, reviewingGrant, type AssistanceAccess, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
+export { AssistanceCodecError, migrateAssistanceConfig, parseAssistanceConfig, parseAssistancePreferenceFields, type AssistanceMigration } from "./assistance-codec.js";
 export {
   ASSISTANCE_FIELD_DOMAINS, ASSISTANCE_PREFERENCE_FIELDS, CLAMP_TOKENS, CONFIGURABLE_MODULE_IDS, EMPTY_MODULE_OVERRIDES, HINT_CEILING_TABLE,
   MODULE_PRESENTATION_FACTS, MODULE_PRESENTATION_SOURCE, PRESET_CONTRACT_ERROR_CODES, PRESET_DECLARATIONS, PRESET_IDS, WORKFLOW_CONTEXT_POLICIES, WORKFLOW_CONTEXTS,

@@ -1,5 +1,21 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-06 current-head codec checkpoint:** D3500 removes the browser's separate
+  v1–v4 validator/migrator. Runtime snapshots and sparse overrides use one pure codec;
+  historical defaults, ignored extra keys and exact migration provenance are preserved.
+  TypeChecker-derived domains and real preference persistence are executable. D3501
+  exposes registered recovery in Settings, preserving unreadable bytes until an explicit
+  choice. 108 focused cases, clean types and three built-browser journeys pass. This
+  remains assistance v4/workflow v2, not v5 or full D12 discharge; D1639, D7/D3497 and
+  D3498 remain open. Receipt:
+  `planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md`.
+
+  Final checkpoint gates pass: staged software 3396/344, seven isolated performance
+  cases, content 227/23, full browser 145 passes/one optional Maia skip/zero retries
+  and all 112 composition cells. D3502 repairs the fork-scoped browser assertion;
+  production comparison is unchanged. All historical capability declarations and
+  authored chess content survive canonical metadata refresh. No full D12 discharge.
+
 - **2026-10-06 HTTP-latency checkpoint:** D3497 repeats 880 real Node-24/Stockfish
   responses / 44 cells / twenty samples plus sixty voice baselines and preserves the rejected
   module-control predecessor. Source/packet cache identities and independent Guide me

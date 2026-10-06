@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { SILENT_ASSISTANCE, parseWorkflowPreferenceV2, presetDeclaration, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule } from "@chess-tabiya/runtime";
 import { ASSISTANCE_PROFILES, assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, workflowPreferenceKey } from "./assistance-preference.js";
 import AssistanceSettings from "./AssistanceSettings.svelte";
+import { assistanceTypeDomains } from "../../../../tools/assistance-codec-conformance.js";
 
 afterEach(() => { document.body.replaceChildren(); vi.unstubAllGlobals(); });
 
@@ -24,6 +25,54 @@ function memory(entries: readonly (readonly [string, string])[] = []) {
 
 const legacy = (context: string) => `tabiya.assistance.v1.${context}`;
 const legacyWorkflow = (context: string) => `tabiya.workflow.v1.${context}`;
+
+describe("registered assistance domain → real browser persistence", () => {
+  const matrix = assistanceTypeDomains();
+  for (const [field, values] of Object.entries(matrix.fields)) {
+    for (const value of values) it(`retains ${field}=${value} through save/load, migration and reload`, () => {
+      const config = { ...SILENT_ASSISTANCE, [field]: value };
+      const explicit = parseWorkflowPreferenceV2({ version: 2, assistanceHead: matrix.version, intent: {
+        kind: "explicit", preset: "quiet", overrides: { [field]: value }, moduleOverrides: { include: [], exclude: [] },
+      } });
+      const saved = memory();
+      expect(saveWorkflowPreference("position", explicit, saved.storage)).toBe(true);
+      const firstBytes = saved.values.get(workflowPreferenceKey("position"));
+      expect(loadWorkflowPreference("position", saved.storage)).toEqual(explicit.intent);
+      expect(requestedAssistanceConfig("position", loadWorkflowPreference("position", saved.storage))).toEqual(config);
+      expect(saveWorkflowPreference("position", explicit, saved.storage)).toBe(true);
+      expect(saved.values.get(workflowPreferenceKey("position"))).toBe(firstBytes);
+      const old = memory([[legacy("position"), JSON.stringify(config)]]);
+      const migrated = loadWorkflowPreference("position", old.storage);
+      expect(migrated).toMatchObject({ kind: "migrated_snapshot", sourceVersion: 4, config });
+      expect(loadWorkflowPreference("position", old.storage)).toEqual(migrated);
+      expect(requestedAssistanceConfig("position", migrated)).toEqual(config);
+    });
+  }
+
+  it("fails closed on malformed current snapshots while preserving historically ignored legacy keys", () => {
+    const good = { version: 2, assistanceHead: 4, intent: {
+      kind: "migrated_snapshot", preset: "quiet", config: SILENT_ASSISTANCE, sourceVersion: 4,
+      moduleOverrides: { include: [], exclude: [] },
+    } };
+    for (const config of [
+      { ...SILENT_ASSISTANCE, extra: "unknown" },
+      { ...SILENT_ASSISTANCE, hintDistance: "move" },
+      { ...SILENT_ASSISTANCE, version: 5 },
+      { ...SILENT_ASSISTANCE, ambient: ["on"] },
+    ]) {
+      const invalid = memory([[workflowPreferenceKey("position"), JSON.stringify({ ...good, intent: { ...good.intent, config } })],
+        [legacy("position"), JSON.stringify(SILENT_ASSISTANCE)]]);
+      expect(loadWorkflowPreference("position", invalid.storage)).toEqual({ kind: "invalid_fallback", reason: "malformed" });
+      expect(invalid.writes).toEqual([]);
+    }
+    const old = memory([[legacy("position"), JSON.stringify({ ...SILENT_ASSISTANCE, ignored: "historical", hintDistance: "move" })]]);
+    expect(loadWorkflowPreference("position", old.storage)).toMatchObject({ kind: "migrated_snapshot", config: SILENT_ASSISTANCE });
+    expect(old.values.get(workflowPreferenceKey("position"))).not.toContain("hintDistance");
+    const source = readFileSync(join(process.cwd(), "apps/web/src/lib/assistance-preference.ts"), "utf8");
+    expect(source).toContain("migrateAssistanceConfig(assistance.value)");
+    expect(source).not.toMatch(/migrateLegacyAssistance|validV[1-5]|item\.markers|item\.spoken/u);
+  });
+});
 
 describe("workflow preference receipt (rfc/intent-presets.md §5.3, criterion 17)", () => {
   it("represents empty storage as unset — never as nine explicit choices — and seals the same arm", () => {
@@ -141,6 +190,38 @@ describe("settings: preset first, primitives under Advanced", () => {
     activity.dispatchEvent(new Event("change", { bubbles: true }));
     await tick();
   };
+
+  it("renders typed malformed-data recovery and preserves bytes until an explicit choice", async () => {
+    const key = workflowPreferenceKey("position");
+    const { values, storage } = memory([[key, "unreadable saved value"]]);
+    vi.stubGlobal("localStorage", storage);
+    const component = mount(AssistanceSettings, { target: target(), props: { onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn() } });
+    await tick();
+    const style = contexts()[0]!.querySelector<HTMLSelectElement>(":scope > label select")!;
+    expect(style.value).toBe("quiet");
+    expect(style.getAttribute("aria-describedby")).toBe("help-recovery-position");
+    expect(document.getElementById("help-recovery-position")?.textContent).toBe("Your saved help settings could not be read, so this workflow's default is shown.");
+    expect(values.get(key)).toBe("unreadable saved value");
+    style.value = "guided";
+    style.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    expect(document.getElementById("help-recovery-position")).toBeNull();
+    expect(loadWorkflowPreference("position", storage)).toMatchObject({ kind: "explicit", preset: "guided" });
+    await unmount(component);
+  });
+
+  it("renders the registered storage-unavailable reason, never claims a save succeeded", async () => {
+    vi.stubGlobal("localStorage", { getItem: () => { throw new Error("denied"); }, setItem: () => { throw new Error("denied"); } });
+    const component = mount(AssistanceSettings, { target: target(), props: { onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn() } });
+    await tick();
+    expect(document.getElementById("help-recovery-position")?.textContent).toBe("Help settings can't be saved in this browser, so this workflow's default is shown.");
+    const style = contexts()[0]!.querySelector<HTMLSelectElement>(":scope > label select")!;
+    style.value = "guided";
+    style.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    expect(document.body.textContent).toContain("This browser is not saving help settings");
+    await unmount(component);
+  });
 
   it("never shows a person the activity matrix or the word context; Advanced edits one activity at a time (SET-a14)", async () => {
     const component = mount(AssistanceSettings, { target: target(), props: {
