@@ -26778,11 +26778,12 @@
     },
     {
       "id": "D3262",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🔬",
       "sourceDigest": "sha256:8bfe3263ca70d7bff68eca7e8625d61762da9bb044cc5e9ecbf12c1052016095",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-10-06"
     },
     {
       "id": "D3263",
@@ -28695,12 +28696,12 @@
     },
     {
       "id": "D3478",
-      "state": "doing",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:b73830ef6cde96012b3f0ca1bab762edb5e26e31d08aabfadb093111c295446e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:060546ff5948421bbafc29ec19a66fb02825a1789b4cc237d5cb1c6fc930a039",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-10-06"
+      "evidence": "planning/semantic-consequence-search/d3262-engine-final-ply-capture-2026-10-06.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3479",
@@ -28754,6 +28755,24 @@
       "sourceDigest": "sha256:ff32c790f408288f2af6ff20e9f603bd4e62a669fddd9ed7e7910c0c23ce3222",
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-semantic-final-ply-capture-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3485",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9cf5713edb597429efff3f4398ecd7de2c69f5c4ae1da9fc110bd32d83e00b5d",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3486",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:123285308560392ac2ddc6c59c4dfaa9e1c6b94c22b250defdefd728fd0efc12",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md",
       "evidenceKind": "path"
     }
   ]

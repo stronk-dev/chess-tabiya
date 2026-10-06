@@ -1,5 +1,32 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Current next action (2026-10-06): [[D3262]] remains doing under evidence-foundation.
+Join the **actual** engine, model and frozen-first-reply-reserve target outcomes to
+the existing 116 source/alternative pairs, retain every omitted branch and typed
+abstention, then complete the common proof/refutation/coverage-stop-rule/cost and
+recursively target-preserving selection experiment before choosing production
+defaults. Do not substitute the earlier common exact learner evaluator or claim
+engine causality from a visited event. D3478/D3485/D3486 are closed bounded
+prerequisites, not the completed five-arm profile or permission to implement the
+draft search RFC.
+
+Completed actual-source/path/target wave: all 16,813 engine jobs / 35,389 queries /
+673 original intervals pass merge and independent replay; 158,176 distinct four-ply
+histories consume every actual source, with five automatic terminals absorbed.
+All 182 named cells per engine/reserve profile / 4,914 arms retain opportunity
+versus executed target action. Depth12/top8 sees 40/58 possible reintroductions
+and executes 38; the first-reply reserve supplies no improvement here and partial
+misses abstain. Independent complete source, frontier and target checks refuse
+8/8/9 corruptions respectively; focused controls and final deterministic checks
+pass. Receipts:
+`planning/semantic-consequence-search/d3262-engine-final-ply-capture-2026-10-06.md`,
+`planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.md`,
+`planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md`.
+
+Earlier same-day receipts below describe their checkpoint state; their in-flight
+engine and planned-source statements are superseded by the complete wave above.
+The authoritative next action is above, not those historical continuation notes.
+
 Completed bounded source [[D3484]]: all 870 missing semantic-continuation positions /
 2,028 budget queries pass complete merge/check and independent board/PV/source replay;
 137,949 PV moves, 35 literal interval hash/row comparisons and eight corruption refusals

@@ -103,10 +103,45 @@ reuse queries still await the original complete capture. Source identities, dige
 commands and concurrent-host timing limitations:
 `planning/semantic-consequence-search/d3262-semantic-final-ply-capture-2026-10-06.md`.
 
-[P] Outstanding: the 16,813 final-ply engine jobs are being captured through checked
-immutable intervals; no complete engine source or final-ply outcome is yet claimed. Semantic-
-target-preserving deeper traversal, the five-arm proof/abstention and natural-
-alternative comparisons, phase/focus stratification and end-to-end cost remain
-open. No production search service, richer hint, pack proof or capability is claimed.
+[V] The original engine source is now complete: 16,813 jobs / 35,389 budget queries
+retain 278,160 coherent ranks and all 673 original interval hashes/rows. Independent
+python-chess source replay checks 2,388,305 PV moves and refuses eight actual
+corruptions. This supersedes the earlier same-day in-flight/planned-source states
+above without rewriting their checkpoint observations. Literal sources, query
+conditions and concurrent-host cost limits:
+`planning/semantic-consequence-search/d3262-engine-final-ply-capture-2026-10-06.md`.
+
+[V] Actual same-budget/width engine continuation and the frozen first-reply reserve
+now produce 158,176 distinct ordered fourth-ply histories. All 193 engine candidates
+and 182 reserve cells remain, along with the reserve's offered-candidate/unsupported
+inventory. Every one of the 33,022 planned reuse and 2,028 supplement queries resolves
+to actual checked sources. Independent source-rank/board/history reconstruction and
+eight corruption refusals pass. Five automatic-material terminal histories retain
+legal moves but do not expand their 15 captured budget queries into future play:
+`planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.md`.
+
+[V] Both partial profiles now join all 182 named cells through 166,835 actual target
+observations. Depth12/top8 visits 40/58 known possible exact reintroductions and
+executes 38; the same first-reply top-eight-event-source reserve does not improve
+that reading, while its all-legal-event-source variant visits 37 and executes 35.
+All 4,914 arms keep partial-negative abstention/universal-not-evaluated states and
+their source omissions. Independent board/identity/source-selection replay checks
+16,908 predecessor / 149,927 leaf observations and nine actual corruptions. The
+shared local-SEE/quiet-availability predicate is not independently established
+strategic truth. Exact scoped counts, compact identity-reference validation and
+commands: `planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md`.
+
+[M] The first-hop scheduling improvement sought by the reserve is not enough to
+improve this measured deeper outcome. The calibrated profile still needs the
+declared recursive semantic selector and common actual-path contrast/proof/cost
+comparison; expanding the width or polishing a line observation cannot turn the
+18 absent known possibilities into verified prevention. This implication follows
+the bounded receipt above, not a general claim that semantic search cannot help.
+
+[P] Outstanding: recursively target-preserving traversal, the five-arm
+proof/refutation/abstention and actual source-versus-natural-alternative
+comparisons, joint coverage stop rules, phase/focus stratification and controlled
+end-to-end cost. No production search service, richer hint, pack proof or capability
+is claimed. D3262 remains doing.
 Source: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`
 §Remaining work; draft RFC §14 and criterion 23.

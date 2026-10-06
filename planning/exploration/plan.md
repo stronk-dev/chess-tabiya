@@ -37,6 +37,20 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3478/D3485/D3486: complete original engine source, actual four-ply
+engine/reserve frontiers and same named target observations now pass full checks.
+Independent replay verifies all 16,813 jobs, 158,176 fourth-ply histories and
+166,835 target observations, refusing 8/8/9 source/frontier/target corruptions.
+Depth12/top8 sees 40/58 possible exact reintroductions and actually executes 38;
+the first-reply reserve does not improve that reading. Every partial negative
+still abstains. This supersedes the in-flight engine/planned reuse states in the
+earlier same-day entries below. D3262 is doing: common actual-path contrast,
+proof/refutation/coverage-stop-rule/cost and recursive semantic selection remain
+open, with no production profile or RFC/capability/milestone promotion. Receipts:
+`planning/semantic-consequence-search/d3262-engine-final-ply-capture-2026-10-06.md`,
+`planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.md`,
+`planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md`.
+
 2026-10-06 D3482: all 182 target/candidate cells now observe actual selected model
 histories rather than substituting exact learner replies or appending unplayed
 target actions. The 0.90 arm sees 19 of 58 possible exact reintroductions and

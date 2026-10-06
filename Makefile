@@ -640,6 +640,37 @@ semantic-search-stockfish-final-ply-merge: semantic-search-final-ply-preflight
 	$(CI_NODE) tools/d3262-search-calibration/third-ply-stockfish-merge.mjs --write
 
 .PHONY: semantic-search-maia-fourth-ply-update semantic-search-maia-fourth-ply-check
+.PHONY: semantic-search-engine-fourth-ply-test semantic-search-engine-fourth-ply-update semantic-search-engine-fourth-ply-check
+semantic-search-engine-fourth-ply-test:
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-engine-fourth-ply.test.mjs
+
+semantic-search-engine-fourth-ply-update: semantic-search-stockfish-final-ply-check semantic-search-semantic-final-ply-check semantic-search-engine-fourth-ply-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-engine-fourth-ply.mjs --write
+
+semantic-search-engine-fourth-ply-check: semantic-search-stockfish-final-ply-check semantic-search-semantic-final-ply-check semantic-search-engine-fourth-ply-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-engine-fourth-ply.mjs
+
+.PHONY: semantic-search-engine-fourth-ply-independent-test semantic-search-engine-fourth-ply-independent
+semantic-search-engine-fourth-ply-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-engine-fourth-ply-check.test.py
+
+semantic-search-engine-fourth-ply-independent: semantic-search-stockfish-source-independent-test semantic-search-engine-fourth-ply-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-engine-fourth-ply-check.py --negative-controls
+
+.PHONY: semantic-search-engine-target-test semantic-search-engine-target-update semantic-search-engine-target-check
+semantic-search-engine-target-test: semantic-search-coherent-bounded-targets-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-engine-target-outcome.test.mjs tools/d3262-search-calibration/coherent-maia-target-outcome.test.mjs
+
+semantic-search-engine-target-update: semantic-search-coherent-bounded-targets-check semantic-search-engine-fourth-ply-check semantic-search-engine-target-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-engine-target-outcome.mjs --write
+
+semantic-search-engine-target-check: semantic-search-coherent-bounded-targets-check semantic-search-engine-fourth-ply-check semantic-search-engine-target-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-engine-target-outcome.mjs
+
+.PHONY: semantic-search-engine-target-independent
+semantic-search-engine-target-independent:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-engine-target-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

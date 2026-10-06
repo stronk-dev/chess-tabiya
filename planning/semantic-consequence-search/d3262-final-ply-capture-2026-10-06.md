@@ -1,5 +1,9 @@
 # D3262 / D3478–D3480 — final-ply source capture checkpoint
 
+The engine in-flight state below is historical, superseded by the complete-source
+receipt `d3262-engine-final-ply-capture-2026-10-06.md`. The Maia capture and repair
+measurements below are unchanged; source completion is not five-arm completion.
+
 Measured 2026-10-06. Disposable research, not production search authorization.
 This consumes the unchanged 66-root/193-candidate coherent profile and its frozen
 third-ply request frame. It does not discharge the five-arm proof/cost comparison,

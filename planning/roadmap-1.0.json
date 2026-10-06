@@ -865,7 +865,7 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3484 captures all 870 missing semantic-continuation positions / 2,028 budget queries using the pinned Stockfish source and a separate immutable queue, without changing D3478's original live frame/capturer. Complete merge/check and independent source/board/PV replay pass 15,939 ranked entries / 137,949 PV moves, all 35 original interval hash/row comparisons and eight corruption refusals; seven JS/five Python controls pass. Portable source SHA-256 b5a6e8558aff3e43e4226e40ea5e70efa3c3f935925ad7ca04051edd9d14ddb7. Its 33,022 planned reuse queries still await the original complete capture. Actual target outcomes, recursive semantic selection, full five-arm proof/contrast/cost, production authorization and all source/A4/1.0 obligations remain open without promotion. Routine metadata maintenance is automatic.",
+          "summary": "D3478 completes all 16,813 original engine positions / 35,389 queries and 673 immutable intervals; independent legal/source replay checks 2,388,305 PV moves and eight corruptions. D3485 consumes all 33,022 planned reuse plus 2,028 actual supplement queries into 158,176 ordered fourth-ply histories, absorbing five automatic-material terminals / 15 queries; independent full source/rank/board reconstruction and eight corruptions pass. D3486 joins all 182 named cells per profile / 4,914 arms through 166,835 target observations: depth12/top8 visits 40/58 possible reintroductions and executes 38, with no improvement from the top-eight-source first-reply reserve; all-legal reserve visits 37 and executes 35. Independent board/identity/source-selection replay and nine corruptions, focused controls and deterministic checks pass. Compact literal-identity references reduce the target artifact from 95.9 MB provisional to 19.6 MB. Partial misses abstain and local SEE remains a shared predicate, not independent strategic truth. D3262 is explicitly doing; common actual-path contrast, proof/refutation, joint-coverage stop rules, recursive semantic selection, controlled cost and all production/source/A4/1.0 obligations remain open. No milestone/capability/RFC promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -1022,7 +1022,20 @@
             "planning/semantic-consequence-search/d3262-stockfish-semantic-third-ply-capture.json.gz",
             "tools/d3262-search-calibration/semantic-third-ply-capture.test.mjs",
             "tools/d3262-search-calibration/third-ply-stockfish-independent.py",
-            "tools/d3262-search-calibration/third-ply-stockfish-independent.test.py"
+            "tools/d3262-search-calibration/third-ply-stockfish-independent.test.py",
+            "planning/semantic-consequence-search/d3262-engine-final-ply-capture-2026-10-06.md",
+            "planning/semantic-consequence-search/d3262-stockfish-third-ply-capture.json.gz",
+            "planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.md",
+            "planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.json.gz",
+            "planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md",
+            "planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.json.gz",
+            "tools/d3262-search-calibration/coherent-engine-fourth-ply.mjs",
+            "tools/d3262-search-calibration/coherent-engine-fourth-ply.test.mjs",
+            "tools/d3262-search-calibration/coherent-engine-fourth-ply-check.py",
+            "tools/d3262-search-calibration/coherent-engine-fourth-ply-check.test.py",
+            "tools/d3262-search-calibration/coherent-engine-target-outcome.mjs",
+            "tools/d3262-search-calibration/coherent-engine-target-outcome.test.mjs",
+            "tools/d3262-search-calibration/coherent-engine-target-check.py"
           ],
           "anchors": [
             {
@@ -1403,7 +1416,7 @@
             {
               "kind": "work_state",
               "id": "D3478",
-              "digest": "sha256:b73830ef6cde96012b3f0ca1bab762edb5e26e31d08aabfadb093111c295446e"
+              "digest": "sha256:060546ff5948421bbafc29ec19a66fb02825a1789b4cc237d5cb1c6fc930a039"
             },
             {
               "kind": "work_state",
@@ -1432,8 +1445,23 @@
             },
             {
               "kind": "work_state",
-            "id": "D3484",
-            "digest": "sha256:ff32c790f408288f2af6ff20e9f603bd4e62a669fddd9ed7e7910c0c23ce3222"
+              "id": "D3484",
+              "digest": "sha256:ff32c790f408288f2af6ff20e9f603bd4e62a669fddd9ed7e7910c0c23ce3222"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3262",
+              "digest": "sha256:8bfe3263ca70d7bff68eca7e8625d61762da9bb044cc5e9ecbf12c1052016095"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3485",
+              "digest": "sha256:9cf5713edb597429efff3f4398ecd7de2c69f5c4ae1da9fc110bd32d83e00b5d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3486",
+              "digest": "sha256:123285308560392ac2ddc6c59c4dfaa9e1c6b94c22b250defdefd728fd0efc12"
             }
           ]
         },

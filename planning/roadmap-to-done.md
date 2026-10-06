@@ -19,6 +19,20 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 actual engine-path checkpoint: D3478/D3485/D3486 close complete source
+capture, the actual engine/reserve fourth-ply frontier and same named target join.
+Independent replay verifies all 16,813 jobs, 158,176 histories and 166,835 target
+observations, with 8/8/9 corruption refusals. Depth12/top8 visits 40/58 known
+possible reintroductions and executes 38; first-reply reservation does not improve
+that result. Partial misses abstain. Receipts:
+`planning/semantic-consequence-search/d3262-engine-final-ply-capture-2026-10-06.md`,
+`planning/semantic-consequence-search/d3262-coherent-engine-fourth-ply.md`,
+`planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md`.
+Earlier same-day in-flight engine states below are historical, superseded by this
+complete-source checkpoint. D3262 remains doing: common actual-path contrast,
+proof/refutation/coverage-stop-rule/cost, recursive semantic selection and all
+production/source/A4/1.0 obligations remain open. No milestone/capability promotion.
+
 2026-10-06 actual semantic-path checkpoint: D3482 joins all 182 named target/candidate
 cells to the selected model histories. The 0.90 frontier sees 19 of 58 known possible
 reintroductions and executes eight; partial misses never become prevention proofs.
