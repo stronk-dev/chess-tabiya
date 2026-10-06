@@ -28674,6 +28674,24 @@
       "uxItems": [],
       "evidence": "planning/play-composition/human-model-window-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3476",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:047ae83e87ed122576944a229791d2f7013fc4f8e4459de557440dbb36053388",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3477",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f746a36a1364b05ccfb01379706253ca7e827b699885581faa8d5e63068005aa",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md",
+      "evidenceKind": "path"
     }
   ]
 }

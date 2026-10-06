@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 semantic-search research checkpoint: D3476/D3477 add a checked actual
+second provider-selection layer and restore its historical input isolation.
+17,507 three-ply paths now have exact engine-FEN versus Maia-history final-ply
+queues. Per-node 0.80 prefixes retain minimum joint model mass 0.675384; the
+eventual coverage compiler must preserve residuals. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`.
+D3262's five-arm outcome/proof/contrast/cost and full 1.0 obligations remain open;
+no capability, official pack, RFC or milestone is promoted by this research.
+
 2026-10-06 human-model window checkpoint: D3474/D3475 fixes a sampled-marker
 distribution refusal and a focused test-tier omission. Bot selection and literal
 probabilities are unchanged. Two predecessor controls fail; 102 focused tests,

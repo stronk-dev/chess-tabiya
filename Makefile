@@ -357,6 +357,7 @@ semantic-search-input-readiness:
 	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs
 
 semantic-search-manifest:
+	$(CI_NODE) --test tools/d3262-search-calibration/manifest.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/manifest.mjs $(if $(ROWS),--rows,)
 
 semantic-search-stockfish-capture:
@@ -552,6 +553,18 @@ semantic-search-coherent-semantic-source-union-update: semantic-search-coherent-
 semantic-search-coherent-semantic-source-union-check: semantic-search-coherent-semantic-source-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-semantic-source-union.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-semantic-source-union.mjs
+
+.PHONY: semantic-search-coherent-third-ply-update semantic-search-coherent-third-ply-check semantic-search-coherent-third-ply-independent
+semantic-search-coherent-third-ply-update: semantic-search-coherent-deeper-union-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-third-ply-frame.mjs --write
+
+semantic-search-coherent-third-ply-check: semantic-search-coherent-deeper-union-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/coherent-third-ply-frame.mjs
+
+semantic-search-coherent-third-ply-independent:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-third-ply-check.py
 
 semantic-search-coherent-exact-trigger-update: semantic-search-coherent-bounded-targets-check semantic-search-coherent-exact-replies-check
 	./node_modules/.bin/tsc --noEmit --target es2022 --module nodenext --moduleResolution nodenext --skipLibCheck tools/d3262-search-calibration/coherent-exact-trigger-outcome.ts

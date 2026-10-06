@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ef1ad893c0b4ab5655390cadf694676c64cb31239e69cada09e975d229669d63",
+    "roadmap": "sha256:96ddeb870bf32f29dcee890b41c78ecbf4a524cddf8217773a32b984d9bdb8de",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:fed5a4eac69b7c6e43372067fbf169a8758d015f4974d982c0d32f50b8cdec51",
+    "workState": "sha256:b78128739262dcfd34ac170707c8b859ef8fdd164b7034353cd0d0c0de20b37d",
     "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 0,
       "blocked": 1059,
-      "done": 1376,
+      "done": 1378,
       "refused": 161
     },
     "workItems": {
@@ -254,7 +254,7 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3427 closes the existing client transport-retry identity defect: exact ordered calculation requests retain their UUID through transport/invalid-receipt failure and retire it on validated admission. Three predecessor controls become 152 focused passes with clean types and two built-browser journeys. Authenticated HTTP/SQLite response loss replays one admitted batch/jobs; a later deliberate calculation gets a fresh identity. Support reports uncertainty, not false non-admission. No server canonical-request policy, reload or terminal-status contract changes; D3426 remains held. Zero untriaged/1684 live, no item doing; broad local verification is logged before commit. D3424/D3425 close the existing calculation admission and successful-completion path: complete 202 batch/job/node/kind parsing, mutation-stable pending jobs and exact result consumption reach the Support control. Twenty-two controlled predecessor failures become 150 focused passes with clean types; authenticated production HTTP/SQLite and the built browser prove fresh and repeated calculations at one node. D3426 retains the missing authenticated terminal-batch status/retry/resume contract. Full local gates are logged before commit, with zero untriaged/1684 live and no item doing. No complete calculation recovery, source persistence, full RFC or milestone is claimed. D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. D3421 closes the exact modern Inspector corpus server-to-client join and routes admitted facts through the registered component. Authenticated HTTP controls exercise the real web parser; mounted screens preserve standalone v1, modern v2, loading, failure, retry and below-floor states. Population attribution, canonical counts, floors, recency, unlisted mass and committed membership remain intact; crossed tuples and contradictory availability refuse. This is one complete consumer join, not full Inspector or source/RFC completion. D3420 detaches cancelled durable worker flights and returns exact shutdown leases before close resolves, independent of provider/upgrader acknowledgement. Three clean predecessor controls fail; five new permanent SQLite cases pass within 54 focused tests and clean types. Same-owner database reopen at generation 2 fences late success/rejection; independent active/queued survivors remain live. Physical I/O stays source-owned; no source, schema or capacity changes. D3419 repairs shared provider deadlines and leases: direct monotonic checks, independent waiter expiry, early-timer rearming and exactly-once logical capacity release fence abort-ignoring late results and same-key replacements. Five predecessor controls fail; eight new permanent controls and authenticated provider integration own the repair. Source identities, capacity, parser and retention policies are unchanged; physical provider I/O remains descriptor-owned. Broad local verification is recorded before commit. D3418 closes actual local module-query preflight for Sight, Threat Radar, Blunder Prevention and Structure Nudge: every effective local consumer compiles before the first selected source read and lazy server pack/shape preparation. Generic unavailable replaces partial output on invalid contracts; suppression and repeated decision checks remain. Eighteen corrected predecessor failures become 79 passing focused cases with warning-free types and permanent authenticated HTTP controls. The full compilation census is unchanged at 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; the whole manifest still refuses all unsupported sources, and compilation is not runtime-adoption proof. No declaration/source/preset/factory/capacity changes. Zero untriaged/1683 live. Full software/content/browser/governance closeout is recorded in planning/exploration/log.md before commit. Remaining execution/source-resolution/availability/persistence/retirement and D3363/D3370/D3373/D3376/D3391/D3392 author holds stay open; no RFC, capability or milestone promotion.",
+        "summary": "D3476/D3477 replay the actual second provider-selection layer on the frozen coherent-root population: 17,507 three-ply paths, 16,813 exact engine-FEN and 1,401 ordered Maia-history final-ply jobs. Joint configured 0.80 mass falls to 0.675384; residuals remain explicit. Original Carlsbad bytes and manifest are restored independently of live pack migrations. Six continuation controls, three manifest controls and independent full legal replay pass. Final-ply captures, deeper semantic selector, five-arm proof/contrast/cost and all source/A4/1.0 holds remain open; no full promotion.",
         "impact": "advanced",
         "evidence": [
           "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -389,7 +389,12 @@
           "apps/server/src/analysis-client.test.ts",
           "apps/web/src/lib/analysis-response.test.ts",
           "apps/web/src/lib/run-state.test.ts",
-          "tests/browser/drill.spec.ts"
+          "tests/browser/drill.spec.ts",
+          "planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md",
+          "planning/semantic-consequence-search/d3262-coherent-third-ply-frame.json",
+          "design/research/semantic-search-multinode-coverage.md",
+          "tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs",
+          "tools/d3262-search-calibration/manifest.test.mjs"
         ],
         "anchors": [
           {
@@ -756,6 +761,16 @@
             "kind": "work_state",
             "id": "D3427",
             "digest": "sha256:e3bc7d250350d1049fbcbd6d03673c8a56d516e1601e05f38ca84afaea677e04"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3476",
+            "digest": "sha256:047ae83e87ed122576944a229791d2f7013fc4f8e4459de557440dbb36053388"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3477",
+            "digest": "sha256:f746a36a1364b05ccfb01379706253ca7e827b699885581faa8d5e63068005aa"
           }
         ]
       },

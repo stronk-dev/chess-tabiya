@@ -45,12 +45,17 @@ function sanLine(sans) {
   }
   return edges;
 }
-const carlsbadBytes = readFileSync(new URL("../../content/drafts/carlsbad-minority-attack.json", import.meta.url));
-const carlsbadDigest = createHash("sha256").update(carlsbadBytes).digest("hex");
-if (carlsbadDigest !== "b23c29b5d9136ba36f9f15cde34be831b7c13d990e5f3e51a0a84a25a86b7d52") {
-  throw new Error("The authored Carlsbad control changed; D3262 requires a new preregistration");
+// Historical source bytes, not today's migrated production pack. Keep the
+// original source pointer below: fixture location is not new provenance.
+export function validateCarlsbadFixture(bytes) {
+  const digest = createHash("sha256").update(bytes).digest("hex");
+  if (digest !== "b23c29b5d9136ba36f9f15cde34be831b7c13d990e5f3e51a0a84a25a86b7d52") {
+    throw new Error("The authored Carlsbad control changed; D3262 requires a new preregistration");
+  }
+  return { digest, pack: JSON.parse(bytes.toString("utf8")) };
 }
-const carlsbad = JSON.parse(carlsbadBytes.toString("utf8"));
+const carlsbadBytes = readFileSync(new URL("./fixtures/carlsbad-minority-attack.json", import.meta.url));
+const { digest: carlsbadDigest, pack: carlsbad } = validateCarlsbadFixture(carlsbadBytes);
 if (carlsbad.spine?.[0]?.id !== "nf8-regroup" || carlsbad.spine[0].moveUci !== "d7f8") throw new Error("Carlsbad's authored route control changed");
 const bishop = sanLine(["d4", "d5", "Nf3", "Nf6", "e3", "Bg4", "h3", "Bh5"]);
 const specials = [

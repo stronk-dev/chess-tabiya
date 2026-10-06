@@ -12,6 +12,14 @@ Companion files: `gates.md` (hypotheses H1–H5, kill criteria K1–K10,
 exploration-to-slice gates E1–E5, continuation gates C1–C7), `log.md` (append-only
 record). Evidence lands as dossiers in `design/research/`.
 
+2026-10-06 D3262 checkpoint: actual second-layer provider selections now replay
+17,507 ordered three-ply paths, with independent legal verification and exact
+final-ply engine-FEN/model-history jobs. Per-node 0.80 policy thresholds retain
+minimum joint mass 0.675384; residuals stay visible. D3476/D3477 close only this
+research prerequisite and historical-input repair. Five-arm proof/contrast/cost,
+semantic-target continuation and production-profile selection remain open.
+Receipt: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`.
+
 ## Question ledger
 
 | # | Question | Status | Attached gates |

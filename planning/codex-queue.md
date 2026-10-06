@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-06 D3262 continuation: the actual second provider-selection layer is now
+replayed in the disposable coherent-root instrument. D3476/D3477 close only this
+bounded prerequisite: 17,507 three-ply paths, 16,813 final-ply engine-FEN jobs and
+1,401 ordered Maia-history jobs; the frozen Carlsbad input is independent of the
+migrated live pack. Per-node 0.80 model prefixes retain minimum joint 0.675384;
+never publish node coverage as joint coverage or model mass as human frequency.
+Next: capture/check the exact final-ply queue, deeper semantic selector, common
+target/proof/contrast and end-to-end cost. D3262, Discharge D1, criterion 23 and
+production implementation remain open. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`.
+
 Completed D3474/D3475: the existing human-split endpoint excludes out-of-window
 sample-record markers from its reported distribution, preserving literal policy
 mass and bot selection. Two real selector → HTTP → client-parser regressions fail
