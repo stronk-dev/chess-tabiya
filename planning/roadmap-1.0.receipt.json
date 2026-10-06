@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:cd8324b26f95de9a7e2437a39cf91a44326fba8f41132d308a039085e7fa4dcb",
+    "roadmap": "sha256:6e5f6eca4714990c7dc5fb1d363f3bffdf62c00e26fe4f728d4935ade167c9ce",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:b3657251f900425f145caaa2d79f78c64a18141da440db9760eba7ba7c0f1c5c",
+    "workState": "sha256:eff6af30612f55f7601cb458cd589fe40d97fcbc874d71676489ad6d269a6cfc",
     "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 1,
       "blocked": 1059,
-      "done": 1387,
+      "done": 1388,
       "refused": 161
     },
     "workItems": {
@@ -254,7 +254,7 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3478 completes all 16,813 original engine positions / 35,389 queries and 673 immutable intervals; independent legal/source replay checks 2,388,305 PV moves and eight corruptions. D3485 consumes all 33,022 planned reuse plus 2,028 actual supplement queries into 158,176 ordered fourth-ply histories, absorbing five automatic-material terminals / 15 queries; independent full source/rank/board reconstruction and eight corruptions pass. D3486 joins all 182 named cells per profile / 4,914 arms through 166,835 target observations: depth12/top8 visits 40/58 possible reintroductions and executes 38, with no improvement from the top-eight-source first-reply reserve; all-legal reserve visits 37 and executes 35. Independent board/identity/source-selection replay and nine corruptions, focused controls and deterministic checks pass. Compact literal-identity references reduce the target artifact from 95.9 MB provisional to 19.6 MB. Partial misses abstain and local SEE remains a shared predicate, not independent strategic truth. D3262 is explicitly doing; common actual-path contrast, proof/refutation, joint-coverage stop rules, recursive semantic selection, controlled cost and all production/source/A4/1.0 obligations remain open. No milestone/capability/RFC promotion.",
+        "summary": "D3487 joins the complete checked actual four-ply engine, configured-model and frozen-first-reply-reserve target outcomes to all 116 source/alternative pairs / 29 settings / 3,364 paired outcomes, preserving 17 unpaired targets, all offered-candidate controls, literal input/model masses and each arm's omissions. Depth12/top8 observes 36 opportunity directions, 26 on exact same-reach pairs; the top-eight-event reserve matches it, while all-legal event scheduling observes 40 with 31 on ties. Model0.90 observes 52 with 46 on ties. No partial arm certifies directional prevention or executed absence; direct/visited positive existence does not supply an engine reason. Six JS/four independent Python tests, nine actual-source/ten actual-output corruption refusals, full independent contrast reconstruction and byte-identical replay pass. Artifact SHA-256 d710ef726b446e212ae6818cde6d8131d4c6614621e68f03f3fa4b5a5a24724e; captured provider/target inputs remain unchanged. The actual contrast is complete, not a stale next job. D3262 remains doing on the full common proof/refutation, joint-coverage stop rules, recursive semantic preservation, phase/focus stratification, controlled cost and all production/source/A4/1.0 obligations. No capability/RFC/milestone promotion; routine metadata maintenance is automatic.",
         "impact": "advanced",
         "evidence": [
           "planning/play-composition/corpus-subjects-2026-10-06.md",
@@ -424,7 +424,13 @@
           "tools/d3262-search-calibration/coherent-engine-fourth-ply-check.test.py",
           "tools/d3262-search-calibration/coherent-engine-target-outcome.mjs",
           "tools/d3262-search-calibration/coherent-engine-target-outcome.test.mjs",
-          "tools/d3262-search-calibration/coherent-engine-target-check.py"
+          "tools/d3262-search-calibration/coherent-engine-target-check.py",
+          "planning/semantic-consequence-search/d3262-coherent-actual-contrast.md",
+          "planning/semantic-consequence-search/d3262-coherent-actual-contrast.json",
+          "tools/d3262-search-calibration/coherent-actual-contrast.mjs",
+          "tools/d3262-search-calibration/coherent-actual-contrast.test.mjs",
+          "tools/d3262-search-calibration/coherent-actual-contrast-check.py",
+          "tools/d3262-search-calibration/coherent-actual-contrast-check.test.py"
         ],
         "anchors": [
           {
@@ -851,6 +857,11 @@
             "kind": "work_state",
             "id": "D3486",
             "digest": "sha256:123285308560392ac2ddc6c59c4dfaa9e1c6b94c22b250defdefd728fd0efc12"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3487",
+            "digest": "sha256:72be6ef29b17bd6a6f9ffe12dcd03d56bcd941f5a641a8f62bde66b40814f902"
           }
         ]
       },

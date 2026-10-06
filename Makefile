@@ -671,6 +671,23 @@ semantic-search-engine-target-check: semantic-search-coherent-bounded-targets-ch
 semantic-search-engine-target-independent:
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-engine-target-check.py --negative-controls
 
+.PHONY: semantic-search-actual-contrast-test semantic-search-actual-contrast-update semantic-search-actual-contrast-check
+semantic-search-actual-contrast-test: semantic-search-coherent-bounded-targets-check
+	$(CI_NODE) --test tools/d3262-search-calibration/coherent-actual-contrast.test.mjs
+
+semantic-search-actual-contrast-update: semantic-search-actual-contrast-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-actual-contrast.mjs --write
+
+semantic-search-actual-contrast-check: semantic-search-actual-contrast-test
+	$(CI_NODE) tools/d3262-search-calibration/coherent-actual-contrast.mjs
+
+.PHONY: semantic-search-actual-contrast-independent-test semantic-search-actual-contrast-independent
+semantic-search-actual-contrast-independent-test:
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-actual-contrast-check.test.py
+
+semantic-search-actual-contrast-independent: semantic-search-actual-contrast-independent-test
+	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/coherent-actual-contrast-check.py --negative-controls
+
 semantic-search-maia-fourth-ply-update: semantic-search-maia-final-ply-check
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-third-ply-frame.test.mjs tools/d3262-search-calibration/coherent-maia-fourth-ply.test.mjs
 	$(CI_NODE) tools/d3262-search-calibration/coherent-maia-fourth-ply.mjs --write

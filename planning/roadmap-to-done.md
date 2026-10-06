@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 actual contrast checkpoint: D3487 joins all 116 frozen source/alternative
+pairs / 29 settings / 3,364 paired outcomes, preserving 17 unpaired targets.
+Depth12/top8 observes 36 directions, 26 on exact ties; no partial arm certifies
+directional prevention. Six JS/four independent Python controls, nine source/ten
+output corruption refusals and deterministic replay pass. Receipt:
+`planning/semantic-consequence-search/d3262-coherent-actual-contrast.md`.
+The actual contrast is no longer a missing join. D3262 remains doing on common
+proof/refutation/coverage stop rules, recursive semantic preservation, phase/focus
+and controlled cost. No production/RFC/capability/milestone promotion.
+
 2026-10-06 actual engine-path checkpoint: D3478/D3485/D3486 close complete source
 capture, the actual engine/reserve fourth-ply frontier and same named target join.
 Independent replay verifies all 16,813 jobs, 158,176 histories and 166,835 target

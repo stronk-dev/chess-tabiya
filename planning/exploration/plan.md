@@ -37,6 +37,16 @@ remain open. Receipt: `planning/semantic-consequence-search/d3262-coherent-maia-
 
 ## Question ledger
 
+2026-10-06 D3487: all 116 actual-path source/alternative pairs / 29 settings now
+retain opportunity versus execution, literal model masses/residuals and every
+unpaired/unsupported case. Depth12/top8 observes 36 directions, 26 on exact ties;
+zero directional prevention contrasts certify. Six JS/four Python controls,
+independent 3,364-outcome reconstruction, nine source/ten output corruptions and
+byte-identical replay pass. D3262 stays doing on common proof/refutation/coverage,
+recursive semantic preservation, phase/focus and controlled cost, not a stale
+instruction to rerun the completed contrast. No gate/capability/RFC promotion.
+Receipt: `planning/semantic-consequence-search/d3262-coherent-actual-contrast.md`.
+
 2026-10-06 D3478/D3485/D3486: complete original engine source, actual four-ply
 engine/reserve frontiers and same named target observations now pass full checks.
 Independent replay verifies all 16,813 jobs, 158,176 fourth-ply histories and

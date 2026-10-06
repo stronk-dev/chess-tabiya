@@ -28774,6 +28774,15 @@
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-coherent-engine-target-outcome.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3487",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:72be6ef29b17bd6a6f9ffe12dcd03d56bcd941f5a641a8f62bde66b40814f902",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-coherent-actual-contrast.md",
+      "evidenceKind": "path"
     }
   ]
 }

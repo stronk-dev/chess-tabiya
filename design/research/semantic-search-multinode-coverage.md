@@ -138,9 +138,25 @@ comparison; expanding the width or polishing a line observation cannot turn the
 18 absent known possibilities into verified prevention. This implication follows
 the bounded receipt above, not a general claim that semantic search cannot help.
 
+[V] The actual model/engine/reserve outcome contrast now retains all 116 frozen
+source/alternative pairs, 17 unpaired targets and 29 settings / 3,364 paired
+outcomes. Depth12/top8 observes 36 directions, 26 on exact same-reach pairs;
+the top-eight-event-source reserve matches it, while all-legal event scheduling
+observes 40 directions with 31 on exact ties. Model0.90 observes 52, with 46 on
+exact ties. No partial arm certifies directional prevention; execution remains
+observed-only. Six JS/four Python controls, nine actual-source and ten actual-output
+corruption refusals, independent all-pair reconstruction and byte-identical replay
+pass. Source identities, literal model masses and omissions remain intact:
+`planning/semantic-consequence-search/d3262-coherent-actual-contrast.md`.
+
+[M] Implication: adding deeper provider-selected lines can increase apparent
+differences while leaving the missing-branch problem unsolved. That is evidence
+for a dedicated counterfactual/refutation/coverage boundary before rendering a
+preventive explanation, not a verdict that semantic search or coaching cannot
+work. It does not settle a production width, model policy or strategic cause.
+
 [P] Outstanding: recursively target-preserving traversal, the five-arm
-proof/refutation/abstention and actual source-versus-natural-alternative
-comparisons, joint coverage stop rules, phase/focus stratification and controlled
+proof/refutation/abstention, joint coverage stop rules, phase/focus stratification and controlled
 end-to-end cost. No production search service, richer hint, pack proof or capability
 is claimed. D3262 remains doing.
 Source: `planning/semantic-consequence-search/d3262-coherent-third-ply-frame.md`
