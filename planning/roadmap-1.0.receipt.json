@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:44bd73d7ae1c56a71fe46288dbfb4f69cb360b9b7937e2388bea7b8c6633c0e3",
+    "roadmap": "sha256:08f04aeb80eb2113f18a253409f769cb22aa2d81ddf922e30a0b7f80ddc67c09",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:52f5246197171f6908420c6aaa89e5bdaa41bd188ca1b54ea28f0a6092d4c866",
+    "workState": "sha256:02e59f80e4ab80d3fd6ca2f848ab82dd3b4afca20d53067a493f3968dcdf72c4",
     "rfcRegister": "sha256:30924497290c821bd160a4a67600787a2a212bc565f06ab64d147f5442feb696",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -894,7 +894,7 @@
           {
             "kind": "work_state",
             "id": "D3262",
-            "digest": "sha256:8bfe3263ca70d7bff68eca7e8625d61762da9bb044cc5e9ecbf12c1052016095"
+            "digest": "sha256:f290ecb6353e577891710c1444d3082db0cdda0d051a13d6a8bbcb3cfd001dbe"
           },
           {
             "kind": "work_state",

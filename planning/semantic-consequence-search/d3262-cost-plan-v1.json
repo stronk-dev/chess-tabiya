@@ -1,0 +1,1694 @@
+{
+  "version": 1,
+  "question": "D3262",
+  "authority": "disposable_preregistered_cost_population_not_measurement_or_production_profile",
+  "comparisonDigest": "sha256:c6660605e24c13b631f39f2003f1219406baadb02b03614eac9260c6a81c15bf",
+  "manifest": "sha256:244c750c432e0a73f37b32fcbfcc8158a6b511d980fcf9b0267d95f8506dff86",
+  "settings": [
+    {
+      "id": "pv:depth8",
+      "family": "provider_line",
+      "budget": "depth8",
+      "diagnostic": false
+    },
+    {
+      "id": "pv:depth12",
+      "family": "provider_line",
+      "budget": "depth12",
+      "diagnostic": false
+    },
+    {
+      "id": "pv:movetime100",
+      "family": "provider_line",
+      "budget": "movetime100",
+      "diagnostic": false
+    },
+    {
+      "id": "forcing:square_control",
+      "family": "exact_reply_forcing",
+      "trigger": "square_control",
+      "diagnostic": false
+    },
+    {
+      "id": "forcing:enemy_piece",
+      "family": "exact_reply_forcing",
+      "trigger": "enemy_piece",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:depth8:top2",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:depth8:top4",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:depth8:top8",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:depth12:top2",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:depth12:top4",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:depth12:top8",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:movetime100:top2",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:movetime100:top4",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "engine:movetime100:top8",
+      "family": "engine_beam",
+      "kind": "engine",
+      "diagnostic": false
+    },
+    {
+      "id": "semantic:depth8:top2:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth8:top2:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth8:top4:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth8:top4:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth8:top8:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth8:top8:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth12:top2:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth12:top2:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth12:top4:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth12:top4:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth12:top8:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:depth12:top8:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:movetime100:top2:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:movetime100:top2:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:movetime100:top4:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:movetime100:top4:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:movetime100:top8:top8",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic:movetime100:top8:all_legal",
+      "family": "first_reply_reserve_diagnostic",
+      "kind": "semantic_first_reply_reserve",
+      "diagnostic": true
+    },
+    {
+      "id": "maia:prefix0.80",
+      "family": "configured_model",
+      "kind": "model",
+      "diagnostic": false
+    },
+    {
+      "id": "maia:prefix0.90",
+      "family": "configured_model",
+      "kind": "model",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth8:top2:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth8:top2:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth8:top4:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth8:top4:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth8:top8:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth8:top8:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth12:top2:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth12:top2:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth12:top4:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth12:top4:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth12:top8:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:depth12:top8:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:movetime100:top2:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:movetime100:top2:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:movetime100:top4:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:movetime100:top4:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:movetime100:top8:top8",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "recursive:movetime100:top8:all_legal",
+      "family": "recursive_semantic",
+      "kind": "recursive",
+      "diagnostic": false
+    },
+    {
+      "id": "complete:four-ply",
+      "family": "bounded_oracle_diagnostic",
+      "diagnostic": true
+    }
+  ],
+  "candidates": [
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "c2c3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "d4c5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "e5e6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:0d7de0d86430f444",
+      "candidateUci": "g1f3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "candidateUci": "b8d7",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "candidateUci": "e5d4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:0d9e2b67f643a200",
+      "candidateUci": "f8e7",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "candidateUci": "e7h4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:15ae7b99d6eaa7b1",
+      "candidateUci": "g8h6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "candidateUci": "c2c3",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:1755bba04565192c",
+      "candidateUci": "e1g1",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "candidateUci": "c8e6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:1a7084ddf4ce33d5",
+      "candidateUci": "d8d6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "candidateUci": "e8g8",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "candidateUci": "f6e4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:22769455c8ed5d0c",
+      "candidateUci": "f6g8",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "candidateUci": "c7c6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:26707a86f92b638e",
+      "candidateUci": "e7e1",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "candidateUci": "d7d5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:2d489b66490e30f2",
+      "candidateUci": "e4f6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "candidateUci": "f5e7",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:2f2950b030bc6722",
+      "candidateUci": "f7f6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "candidateUci": "e5d4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:30b49fbc2e177700",
+      "candidateUci": "g8e7",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "candidateUci": "d1e1",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "candidateUci": "d4b3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "candidateUci": "d4e2",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:30e8c7888b84e04e",
+      "candidateUci": "d4f5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "e8d7",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "f7f5",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "g7g5",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:32dbd41ca364bdb7",
+      "candidateUci": "h7h5",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "candidateUci": "c8b7",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "candidateUci": "d5c4",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:33b3cf41e935dfb3",
+      "candidateUci": "d6g3",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "candidateUci": "c8h3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 2
+    },
+    {
+      "rootId": "d1023:39f4b8a5afff2321",
+      "candidateUci": "e4f3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 2
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "c1d2",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "d4d5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "f3d2",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:3e77bf53f9edd017",
+      "candidateUci": "f3e5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "candidateUci": "a5c7",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "candidateUci": "a7a6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:3f3bae7705d0c126",
+      "candidateUci": "e8g8",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "candidateUci": "c3d4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "candidateUci": "e1g1",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:402cccc15ea24b1f",
+      "candidateUci": "f3h4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "candidateUci": "d1d4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "candidateUci": "e5e6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:48c69f44c7994f27",
+      "candidateUci": "f3d4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "candidateUci": "d2d6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "candidateUci": "d2d7",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "candidateUci": "d2f2",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:4b8565c9a5372755",
+      "candidateUci": "e6c4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "candidateUci": "c5c4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5349bf6a339256e5",
+      "candidateUci": "d2d1",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "candidateUci": "c8a6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "candidateUci": "c8d7",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:54bf540393f76a8a",
+      "candidateUci": "f6h4",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "candidateUci": "a3b4",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "candidateUci": "c7c6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5736c670d59a6fb9",
+      "candidateUci": "h8e8",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "candidateUci": "d6e5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5aeadf7b395cac74",
+      "candidateUci": "g2h1",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "candidateUci": "c7c6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "candidateUci": "g2g4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:5b13efc149c44518",
+      "candidateUci": "h2g1",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "b6a5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "b6a6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "b6c5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "c8f5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:60dea30119fdb203",
+      "candidateUci": "h7h6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:668dc8aad37cb498",
+      "candidateUci": "a7a6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 2
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "candidateUci": "c7c5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "candidateUci": "f6g4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:69697d269fd5389d",
+      "candidateUci": "g7g5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "candidateUci": "c7c6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:6b8c498cf444842a",
+      "candidateUci": "f8e8",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "candidateUci": "e7e6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "candidateUci": "f7f5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:75d766e89debc7ff",
+      "candidateUci": "f8d8",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "candidateUci": "b7b6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "candidateUci": "c7c5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:7a95268085c02ca4",
+      "candidateUci": "f7f5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "candidateUci": "d8e7",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:7dad12c8f48a9409",
+      "candidateUci": "e4c5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "candidateUci": "b7b6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:8427d8998bfbf3b9",
+      "candidateUci": "b7c6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "candidateUci": "b8a6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "candidateUci": "f6d5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:873b5e380b31b977",
+      "candidateUci": "f6e4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "candidateUci": "b4d3",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:87feca64394ec8cd",
+      "candidateUci": "c8f5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "candidateUci": "d4d5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:8a8514f8f2f1a370",
+      "candidateUci": "e4e5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "candidateUci": "c6b4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:8b3fb7d4d9d95c5a",
+      "candidateUci": "e8e1",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "candidateUci": "f4g3",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:92265995f8fe8596",
+      "candidateUci": "g2g4",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "candidateUci": "c7c1",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:979b52c0f665251f",
+      "candidateUci": "e7c5",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "c5d4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "c8g4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "d8b6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "e7e6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:97f19370bc28f4ec",
+      "candidateUci": "h8g8",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "candidateUci": "e8c8",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9840521190fdbfff",
+      "candidateUci": "e8e4",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "candidateUci": "b3c1",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "candidateUci": "b3d4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9b18090f9036e620",
+      "candidateUci": "f2f3",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "candidateUci": "c8c2",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "candidateUci": "c8c6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:9d2989a01b3f30f1",
+      "candidateUci": "g7g5",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "candidateUci": "e6e5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:a3e8d485fab10509",
+      "candidateUci": "h7h6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "candidateUci": "e7e5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ac3d22de578d29d1",
+      "candidateUci": "e7e6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "candidateUci": "b7b5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "candidateUci": "b8d7",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ad1cab4183426f19",
+      "candidateUci": "e5d4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "a7a5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "c6c5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "d7d6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b2c0051a04c7f157",
+      "candidateUci": "g6g5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "b8c6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "d7d5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "d7d6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b442d22b427a3141",
+      "candidateUci": "g8e7",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "c5d4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "c6a5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "c6e7",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "e6d5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b532b7870e77d174",
+      "candidateUci": "e6e5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "candidateUci": "a6a5",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "candidateUci": "f7f6",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:b893141580b18d5f",
+      "candidateUci": "f8c8",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "a2a4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "b1c3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "b1d2",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cc0aaadaeed4f2ce",
+      "candidateUci": "e4e5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "candidateUci": "a7a6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "candidateUci": "c7c5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:cd69be023b15ea3e",
+      "candidateUci": "g8e7",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:d1e1300f0eec8303",
+      "candidateUci": "d7d5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "b1c3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "d2d4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "f1b5",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "g1e2",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e09a678c1c7e5ddb",
+      "candidateUci": "g1f3",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "a1b1",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "f2f3",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "f2f4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "g2g4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e539b1202c9dcb20",
+      "candidateUci": "h2h4",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "candidateUci": "e5c4",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "candidateUci": "e7e6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:e864f0d19d48dc64",
+      "candidateUci": "g8f6",
+      "phase": "opening",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "a1a2",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "e1e2",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "f2f3",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ef628fec1346fe49",
+      "candidateUci": "h2h3",
+      "phase": "endgame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "candidateUci": "a7a6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "candidateUci": "c6a5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:efcdf77989ef8bbe",
+      "candidateUci": "c8e6",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "candidateUci": "e4d5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:f4d472eb6a000524",
+      "candidateUci": "f3e5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "candidateUci": "a7a5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "candidateUci": "c6e7",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:f9a63bd3ee891678",
+      "candidateUci": "f6d5",
+      "phase": "middlegame",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "candidateUci": "d4d3",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "candidateUci": "e8e1",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fa5511ef0e8ae61f",
+      "candidateUci": "e8e4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "c2c3",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "d4c5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "f1e2",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:fbc0c15e6636cd89",
+      "candidateUci": "g2g4",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "candidateUci": "a6a5",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "d1023:ff15de5a0fa18704",
+      "candidateUci": "a6b6",
+      "phase": "unclear",
+      "focus": null,
+      "namedCells": 1
+    },
+    {
+      "rootId": "pressure:bg4-h3-bh5",
+      "candidateUci": "c2c4",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "namedCells": 0
+    },
+    {
+      "rootId": "pressure:bg4-h3-bh5",
+      "candidateUci": "f1e2",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "namedCells": 0
+    },
+    {
+      "rootId": "pressure:bg4-h3-bh5",
+      "candidateUci": "h2h3",
+      "phase": "opening",
+      "focus": "retained_pressure",
+      "namedCells": 0
+    },
+    {
+      "rootId": "quiet-plan:carlsbad-nf8",
+      "candidateUci": "a7a5",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "namedCells": 0
+    },
+    {
+      "rootId": "quiet-plan:carlsbad-nf8",
+      "candidateUci": "d7f8",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "namedCells": 0
+    },
+    {
+      "rootId": "quiet-plan:carlsbad-nf8",
+      "candidateUci": "h7h6",
+      "phase": "middlegame",
+      "focus": "quiet_plan",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-parried",
+      "candidateUci": "e6c7",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-parried",
+      "candidateUci": "e6f4",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-parried",
+      "candidateUci": "e6g5",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-parried",
+      "candidateUci": "h1g2",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "candidateUci": "e6c7",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "candidateUci": "e6d4",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "candidateUci": "e6f4",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    },
+    {
+      "rootId": "tactical:fork-survives",
+      "candidateUci": "h1g2",
+      "phase": "unclassified",
+      "focus": "tactical",
+      "namedCells": 0
+    }
+  ],
+  "horizons": [
+    2,
+    4
+  ],
+  "regimes": [
+    "cold",
+    "warm",
+    "provider_offline"
+  ],
+  "expectedCases": 61374,
+  "sampleUnit": "one_complete_candidate_setting_horizon_regime_execution",
+  "quantileUnit": "candidate_population_not_repeated_machine_trials_or_human_use",
+  "browserGate": "separate_actual_browser_request_dependency_resolution_and_visible_output_required",
+  "captures": "not_started",
+  "productionProfileSelected": false
+}

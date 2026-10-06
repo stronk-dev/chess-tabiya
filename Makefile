@@ -807,6 +807,15 @@ semantic-search-target-v2-independent: semantic-search-target-v2-independent-tes
 	docker run --rm --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/target-opportunity-audit-check.py --negative-controls
 
 # Disposable draft-RFC research; intentionally not a software/release CI gate.
+.PHONY: semantic-search-cost-contract semantic-search-cost-plan-freeze
+semantic-search-cost-contract:
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-contract.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/cost-contract.mjs
+
+semantic-search-cost-plan-freeze:
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-contract.test.mjs
+	$(CI_NODE) tools/d3262-search-calibration/cost-contract.mjs --write
+
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 semantic-search-five-approach-test: semantic-search-target-v2-build
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs
