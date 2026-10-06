@@ -1578,10 +1578,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "D3500/D3501 current-head codec/Settings recovery are complete; do not requeue the duplicate validator. Complete the still-open full v5/D12 contract without treating it as shipped or ruling D1639 by implementation. D3498 needs a contract-preserving optional-voice lifecycle amendment, followed by D3497/D7 actual shipping browser paint and permitted-rung measurement. Continue A4 fifteen-family positives and remaining D1834 semantic obligations; D3469, D3309, D3363, D3436 and D1639 retain their named contracts. No source, permission, full-RFC or milestone promotion.",
+        "nextAction": "D3503's 50 ms cadence is path-backed done on complete before/after browser evidence and full local software/content/browser gates; do not requeue it or the D3500 removed duplicate codec. D3497 has separate complete HTTP/browser populations but full D7 remains. D3498 needs an accepted contract-preserving optional-voice lifecycle amendment; D7 retains permitted-rung and owner-device/use obligations. Complete full v5/D12 without ruling D1639 by implementation. Continue A4 fifteen-family positives and remaining D1834 semantic obligations; D3469, D3309, D3363 and D3436 retain their named contracts. D3262 still owns actual five-approach cost/profile. No source, permission, full-RFC or milestone promotion.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3500 unifies runtime current-v4 parsing, sparse overrides and pure v1–v4 migration, removing the browser validator while retaining original defaults, ignored legacy extras and exact provenance. D3501 displays registered preference recovery beside the affected Settings control, with accessible description, unchanged unreadable bytes until explicit choice and honest refused saves. Actual TypeChecker-derived domains pass store round-trip controls: 108 focused cases/five files, clean types and three built-browser journeys/zero retries. Assistance remains v4 and workflow v2; no preset, ceiling or future head adoption. Full Hint D12/v5, D1639's proposed table, D3498 optional-voice lifecycle, D3497/D7 shipping paint/permitted-rung evidence, D3262 cost/profile and full 1.0 remain open. Earlier 880-row HTTP timing is a historical checkpoint, not this build's latency result. Routine generated receipts/anchors are automatic and prior checkpoints remain linked. Final gates are green: exact staged software 3396/344 and seven isolated performance cases, content 227/23, full browser 145 passes/one optional Maia skip/zero retries and 112 composition cells. D3502 binds Compare cardinality to the fork with exact headings/reading-or-absence per cell; no production trajectory changes. All 977 historical declarations, 278 factory outcomes and authored content remain identical during canonical metadata refresh. D3500–D3502 are path-backed done; no full RFC, capability or milestone promotion.",
+          "summary": "D3497 retains complete separate before/after production Chromium populations: each 880 rows/44 cells/twenty samples and sixty voice baselines. Trusted visible post-frame output binds exact decision/rung/sentence and source/cache identities; empty/unavailable/REST-refused/unreachable outcomes all remain. D3503 reduces serialized pending polling from 100 to 50 ms with unchanged 70-second lifetime and exact retry/cancel identity. Voice-unavailable dependency-to-frame p95 improves 161.875 to 97.382 ms; all non-timeout rendered cells max 105.526 ms. Optional voice timeout remains 2066.049 ms (lower 2065.772) and stays D3498, not a waived budget. Twenty-seven mounted cases, seven actual predecessor failures, strict capture types and 63 pure checker/source-off controls pass. Full exact-index software passes 3398/344 plus seven isolated performance cases; content 227/23 and full browser 145 passes/one optional Maia skip/zero retries with 112 composition cells are green. D3503 is path-backed done; final scoped governance precedes commit. This is one desktop viewport and post-frame visibility, not physical-display/owner-device/fifth-rung proof or full D7. All 984 declarations/history stay current; zero migration writes/restamps. D3500–D3502 remain completed in linked prior receipts. Full Hint v5/D12, proposed D1639, D3262 cost/profile and every full-1.0 obligation remain. Routine receipts/anchors refresh automatically. No milestone/capability, RFC, content or release promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/play-composition/human-model-window-2026-10-06.md",
@@ -1698,7 +1698,12 @@
             "packages/runtime/src/assistance-codec.test.ts",
             "tools/assistance-codec-conformance.ts",
             "apps/web/src/lib/assistance-preference.test.ts",
-            "planning/provider-exchange-and-execution/assistance-codec-software-2026-10-06.json"
+            "planning/provider-exchange-and-execution/assistance-codec-software-2026-10-06.json",
+            "planning/provider-exchange-and-execution/hint-latency-browser-before-cadence-2026-10-06.json",
+            "planning/provider-exchange-and-execution/hint-latency-browser-2026-10-06.json",
+            "tools/d3497-hint-latency/browser-capture.ts",
+            "tools/d3497-hint-latency/source-off-check.mjs",
+            "planning/provider-exchange-and-execution/hint-latency-browser-software-2026-10-06.json"
           ],
           "anchors": [
             {
@@ -1989,12 +1994,12 @@
             {
               "kind": "work_state",
               "id": "D3497",
-              "digest": "sha256:012eca55d1143ca3ff562eca07cf1dd54bfaf53c261a574106b6bb1a08448197"
+              "digest": "sha256:d285da46db6f3607fc0b4b65c1bb18dfa9208a0068f9e0b8eff11eb15314da38"
             },
             {
               "kind": "work_state",
               "id": "D3498",
-              "digest": "sha256:689c4200bdc0e93871c86804e1f8243a78d09c0e203750ad0495d443c9194aa1"
+              "digest": "sha256:ab5a43431c39a718d9aa43f56b84f6e987793a11457fc26895a0421cdd4d4059"
             },
             {
               "kind": "work_state",
@@ -2010,6 +2015,11 @@
               "kind": "work_state",
               "id": "D3502",
               "digest": "sha256:63fe8f80a695b31b7e2e0031a0b24049f7455ca5e514cf5259205fd8b284bd65"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3503",
+              "digest": "sha256:625ba3641a4f1392f4be9adb66e4a73e650280b98fde94e3fdcac41ddeadf000"
             }
           ]
         },

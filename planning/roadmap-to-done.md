@@ -19,6 +19,21 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 actual-browser checkpoint: D3497 now retains full before/after
+880-row/44-cell/twenty-sample Chromium populations and sixty voice baselines per
+build. D3503 reduces shipping pending polling from 100 to 50 ms without changing
+the 70-second lifetime, response identities, source, rung or cleanup. Repaired
+non-timeout rendered cells have maximum dependencies-to-visible-frame p95
+105.526 ms, below 150; optional voice still reaches 2066.049 ms and stays D3498.
+The preserved refusal/unreachable population is not five rendered rungs or owner
+device/use proof. D3497/D7, Hint v5/D12, proposed D1639, D3262 and full 1.0 remain
+open. Full before/after evidence and regression results:
+`planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`.
+Routine bookkeeping remains automatic; no milestone/capability promotion.
+D3503 closes on full staged software 3398/344 plus seven isolated performance
+cases, content 227/23 and complete browser 145 passes/one optional Maia skip/zero
+retries with all 112 composition cells. All other named holds remain open.
+
 2026-10-06 persistence/recovery checkpoint: D3500 replaces the browser's private
 assistance validator with one runtime v4 codec and preserves all four historical
 migrations. D3501 makes Settings recovery visible and accessible without overwriting

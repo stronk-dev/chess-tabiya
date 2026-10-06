@@ -3350,7 +3350,10 @@ HINT_LATENCY_OUTPUT ?= .cache/verification/hint-latency-http-$(shell date -u +%Y
 HINT_LATENCY_RECEIPT ?= planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.json
 .PHONY: guided-hint-latency-build guided-hint-latency-smoke guided-hint-latency guided-hint-latency-check guided-hint-latency-receipt-check
 guided-hint-latency-check:
+	./node_modules/.bin/tsc -p tools/d3497-hint-latency/tsconfig.json
 	$(CI_NODE) --test tools/d3497-hint-latency/receipt.test.mjs
+	$(CI_NODE) --test tools/d3497-hint-latency/browser-receipt.test.mjs
+	$(CI_NODE) --test tools/d3497-hint-latency/source-off-check.test.mjs
 	$(CI_NODE) tools/d3497-hint-latency/predecessor-check.mjs
 guided-hint-latency-receipt-check: guided-hint-latency-check
 	$(CI_NODE) tools/d3497-hint-latency/verify.mjs "$(HINT_LATENCY_RECEIPT)"
@@ -3360,6 +3363,18 @@ guided-hint-latency-smoke: guided-hint-latency-build
 	$(CI_NODE) tools/d3497-hint-latency/dist/capture.mjs 1 "$(HINT_LATENCY_OUTPUT)"
 guided-hint-latency: guided-hint-latency-check guided-hint-latency-build
 	$(CI_NODE) tools/d3497-hint-latency/dist/capture.mjs 20 "$(HINT_LATENCY_OUTPUT)"
+
+HINT_BROWSER_OUTPUT ?= .cache/verification/hint-latency-browser-$(shell date -u +%Y%m%dT%H%M%SZ).json
+HINT_BROWSER_RECEIPT ?= planning/provider-exchange-and-execution/hint-latency-browser-2026-10-06.json
+.PHONY: guided-hint-browser-build guided-hint-browser-smoke guided-hint-browser-latency guided-hint-browser-receipt-check
+guided-hint-browser-receipt-check: guided-hint-latency-check
+	$(CI_NODE) tools/d3497-hint-latency/browser-verify.mjs "$(HINT_BROWSER_RECEIPT)"
+guided-hint-browser-build: build
+	./node_modules/.bin/esbuild tools/d3497-hint-latency/browser-capture.ts --bundle --platform=node --format=esm --external:typescript --external:@playwright/test --outfile=tools/d3497-hint-latency/dist/browser-capture.mjs --log-level=warning
+guided-hint-browser-smoke: guided-hint-browser-build
+	$(CI_NODE) tools/d3497-hint-latency/dist/browser-capture.mjs 1 "$(HINT_BROWSER_OUTPUT)"
+guided-hint-browser-latency: guided-hint-latency-check guided-hint-browser-build
+	$(CI_NODE) tools/d3497-hint-latency/dist/browser-capture.mjs 20 "$(HINT_BROWSER_OUTPUT)"
 
 .PHONY: guided-hint-execution-metadata-update guided-hint-execution-metadata-check
 guided-hint-execution-metadata-update:

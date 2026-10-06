@@ -64,3 +64,38 @@ are preserved in `planning/provider-exchange-and-execution/`: Support's
 `guided: off` kept `structure_nudge` ineffective despite explicit module inclusion.
 V2 corrects that control's preset before repeating the full population. It does
 not drop failed rows, lower the module requirement or change the Hint profile.
+
+## Browser axis — separately frozen population
+
+`make guided-hint-browser-smoke` and `make guided-hint-browser-latency` build the
+shipping web app and run real Chromium Hint clicks against isolated applications
+using the existing `BOT_CALIBRATION_SF_CMD` pinned Stockfish configuration. No
+route interception, mocked chess source, cadence override or alternative seat is
+used. `browser-plan.json` retains every base-plan cell. Rungs that cannot be
+reached after an empty predecessor remain `not_reachable` with null timing;
+the move REST refusal is a separately labelled ceiling control, not a UI answer.
+Every voice arm retains a separate real browser baseline.
+
+The observer records trusted input, exact visible sentence/rung and two animation
+frames, viewport bounds and centre hit testing. It brackets browser/Node clocks
+with five RPC intervals and retains the narrowest uncertainty interval. Retained
+horizon timing starts at actual server request entry, not driver actionability
+checks. AsyncLocalStorage keeps mandatory source traces attached to the actual
+Hint operation rather than unrelated background requests. An available response
+must bind to the exact outgoing decision/rung. Post-frame visibility is a browser
+rendering opportunity, not a compositor or physical-display claim.
+
+Pure checker controls join `make guided-hint-latency-check` and ordinary software
+verification. Machine-specific capture does not. Failed/incomplete capture is
+written before rejection; a full receipt cannot overwrite an older result.
+`make guided-hint-browser-receipt-check` replays the full population read-only,
+checks source hashes and reports budget failures without relabelling checker
+acceptance as a latency pass. Capture hashes all tracked production source and
+the actual built app/worker artifacts. Missing future rung policy, optional voice
+lifecycle and owner-device validation remain their separately tracked obligations.
+
+The saved browser replay additionally uses `source-off-check.mjs` to require both
+fixed positive controls to deliver actual items with exact packet/decision/subject/
+component joins. Its eleven corruption controls run in the ordinary software gate.
+This independent strengthening does not rewrite the original captured checker,
+source digests or timing population; older receipt images remain historical.

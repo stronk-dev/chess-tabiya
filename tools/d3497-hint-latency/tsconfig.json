@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "paths": { "@chess-tabiya/runtime": ["../../packages/runtime/src/index.ts"] }
+  },
+  "include": ["browser-capture.ts"]
+}

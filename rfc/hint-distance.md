@@ -1,5 +1,19 @@
 # RFC: Guided-hint disclosure distance
 
+- **2026-10-06 browser-latency checkpoint:** D3497 retains complete before/after
+  populations of 880 rows/44 cells/twenty samples and sixty voice baselines per build.
+  Real shipping Chromium clicks show the 100 ms cadence exceeding §10 without voice;
+  D3503 changes it to 50 ms, preserving the 70-second bound, sequential requests and
+  exact retry/cancel identity. The repaired non-timeout rendered p95 maximum is
+  105.526 ms; optional timeout remains 2066.049 ms and is still D3498. First honest
+  output is at most 56.2 ms p95. Post-frame visibility is not physical-display paint;
+  all refused/unreachable rungs remain, and move is not a rendered fifth rung.
+  D7, v5/D12, proposed D1639 and owner use stay open. Receipt:
+  `planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`.
+  D3503's path-backed closeout passes full staged software 3398/344 plus seven
+  isolated performance cases, content 227/23 and browser 145 passes/one optional
+  Maia skip/zero retries with all 112 composition cells. No full RFC discharge.
+
 - **2026-10-06 current-head codec checkpoint:** D3500 removes the browser's separate
   v1–v4 validator/migrator. Runtime snapshots and sparse overrides use one pure codec;
   historical defaults, ignored extra keys and exact migration provenance are preserved.

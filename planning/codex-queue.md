@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed [[D3503]]: the full D3497 browser before/after populations each retain
+880 rows/60 baselines. Shipping 50 ms polling preserves the 70-second pending
+window, exact retry/teardown and disclosure identities. The full repeat lowers
+voice-unavailable p95 161.875→97.382 ms; all non-timeout rendered cells are at most
+105.526 ms. Twenty-seven mounted controls, seven actual predecessor failures,
+strict types and 63 pure receipt/source-off controls pass. Full staged software
+3398/344 plus seven isolated performance cases, content 227/23 and complete browser
+145 passes/one optional skip/zero retries with 112 composition cells also pass.
+Final scoped governance precedes commit. Baseline:
+`planning/provider-exchange-and-execution/hint-latency-browser-before-cadence-2026-10-06.json`.
+The repaired build's optional timeout still reaches 2,066.049 ms p95 and stays D3498;
+D3497/D7 remain open and no source-off/empty/move-refusal row is removed.
+
 Completed current-head persistence/recovery [[D3500]] / [[D3501]]: runtime owns
 the pure v4 codec and v1–v4 migration; the browser no longer has a private validator.
 All actual type domains have persistence controls. Settings displays registered
@@ -9,7 +22,7 @@ built-browser journeys pass, zero retries. Receipt:
 `planning/provider-exchange-and-execution/assistance-codec-2026-10-06.md`.
 This is not v5/full Hint D12, D1639's proposed ruling, Campaign or full RFC closure.
 Do not requeue the removed duplicate validator. The optional-voice lifecycle below,
-D7's real shipping paint/permitted-rung evidence and D3262 cost/profile remain open.
+D7's voice lifecycle/permitted-rung/owner-device discharge and D3262 cost/profile remain open.
 Routine generated receipts and roadmap anchors refresh without asking the owner.
 Completed [[D3502]]: Compare's control now requires exact fork cardinality, branch
 headings and one reading-or-absence per timeline cell rather than counting the

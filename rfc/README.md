@@ -15,6 +15,18 @@ supersedes that row's retained historical clause saying the arm is unrun; rated 
 owner-use validation remain. **AC-11 is also discharged:** rating now has a dedicated package
 subpath, an AST-resolved two-way import-graph guard, and a multi-rating rendered-byte fixture.
 
+**Hint register checkpoint, 2026-10-06:** the implementing `hint-distance.md`
+entry now has separate full before/after browser measurements (D3497), not only
+HTTP. D3503's 50 ms cadence preserves the 70-second window; all non-timeout
+rendered cells have dependencies-to-frame p95 at most 105.526 ms. Optional voice
+still waits 2066.049 ms (D3498), so D7 remains open. Refused/unreachable rungs,
+v5/D12, proposed D1639 and owner use are not discharged. Earlier row descriptions
+remain historical. Evidence and final gates:
+`planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`.
+D3503 is now path-backed done: staged software 3398/344 plus seven performance
+cases, content 227/23 and browser 145 passes/one optional skip/zero retries,
+including 112 composition cells. Hint remains implementing with the above holds.
+
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |

@@ -83,7 +83,7 @@ describe("DrillApi Guided Hint wire", () => {
 });
 
 describe("GuidedHintSeat", () => {
-  it.each([0, 99, 101, 351])("the shipping cadence renders a result ready at %i ms within the next 100 ms", async readyAt => {
+  it.each([0, 49, 51, 151, 199, 201])("the shipping cadence renders a result ready at %i ms within the next 50 ms", async readyAt => {
     const run = revealedRun(), requestId = "e".repeat(32);
     const client: GuidedHintClient = {
       async request(body) { return { state: "pending", requestId, rung: body.rung }; },
@@ -95,7 +95,7 @@ describe("GuidedHintSeat", () => {
     vi.useFakeTimers(); vi.setSystemTime(0);
     try {
       document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
-      await vi.advanceTimersByTimeAsync(readyAt + 100); await tick();
+      await vi.advanceTimersByTimeAsync(readyAt + 50); await tick();
       expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
     } finally { await unmount(component); vi.useRealTimers(); }
   });
@@ -117,7 +117,7 @@ describe("GuidedHintSeat", () => {
       await vi.advanceTimersByTimeAsync(1); await tick();
       expect(button.disabled).toBe(false);
       expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
-      expect(poll).toHaveBeenCalledTimes(700);
+      expect(poll).toHaveBeenCalledTimes(1400);
       expect(request).toHaveBeenCalledTimes(1);
       expect(cancel).not.toHaveBeenCalled();
     } finally { await unmount(component); vi.useRealTimers(); }
@@ -138,11 +138,11 @@ describe("GuidedHintSeat", () => {
     await settle(); vi.useFakeTimers();
     try {
       document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
-      await vi.advanceTimersByTimeAsync(70_200); await tick();
-      expect(poll).toHaveBeenCalledTimes(117);
+      await vi.advanceTimersByTimeAsync(70_400); await tick();
+      expect(poll).toHaveBeenCalledTimes(128);
       expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
       await vi.advanceTimersByTimeAsync(70_000);
-      expect(poll).toHaveBeenCalledTimes(117);
+      expect(poll).toHaveBeenCalledTimes(128);
     } finally { await unmount(component); vi.useRealTimers(); }
   });
 
@@ -156,7 +156,7 @@ describe("GuidedHintSeat", () => {
     let removed = false;
     try {
       document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
-      await vi.advanceTimersByTimeAsync(99); await tick();
+      await vi.advanceTimersByTimeAsync(49); await tick();
       await unmount(component); removed = true;
       await vi.advanceTimersByTimeAsync(200);
       expect(cancel).toHaveBeenCalledWith(requestId);
@@ -182,7 +182,7 @@ describe("GuidedHintSeat", () => {
     try {
       button().click();
       await vi.advanceTimersByTimeAsync(70_001); await tick();
-      expect(poll).toHaveBeenCalledTimes(700);
+      expect(poll).toHaveBeenCalledTimes(1400);
       expect(button().disabled).toBe(false);
       expect(document.querySelector(".hint-message")?.textContent).toContain("taking longer than expected");
       expect(trace).toEqual(["POST"]); // The cap must not autonomously cancel/retry or advance.

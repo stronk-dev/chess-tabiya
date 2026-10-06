@@ -17,8 +17,13 @@ completion from optional voice. The timeout control uses an explicit local voice
 transport, not a paid LLM and not a manufactured source result. The complete
 twenty-sample timeout cell measures 2,102.1 ms at p95 after the mandatory
 dependencies; the immutable population is `hint-latency-http-2026-10-06.json`
-with its report. Browser paint is an additional unmeasured cost, not a way to clear that
-already-over-budget wait. No population is dropped on failure.
+with its report. At that HTTP checkpoint browser rendering was unmeasured, not
+a way to clear the already-over-budget wait. The separate complete shipping
+Chromium follow-up now measures visible post-frame output: the repaired 50 ms
+cadence still reaches 2066.049 ms p95 after mandatory dependencies (lower bound
+2065.772), while all non-timeout rendered cells stay below 150 ms. Its unchanged
+880 rows/sixty baselines and before/after source images are linked in
+`hint-latency-http-2026-10-06.md` §Browser follow-up. No population is dropped.
 
 ## Constraints on a proper repair
 

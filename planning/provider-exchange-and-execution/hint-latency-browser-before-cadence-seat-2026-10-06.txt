@@ -31,7 +31,7 @@
     band?: boolean;
   }
 
-  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false }: Props = $props();
+  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 100, expanded = true, onToggle, band = false }: Props = $props();
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -113,12 +113,11 @@
         retryRequestId = undefined;
       }
       let current = await client.request(body);
-      // §10/D3503: leave transport/paint room in the 150 ms budget. The measured
-      // 100 ms wait exhausted it even with no optional voice call. Keep the
+      // §10: a ready result must not sit behind the old 350 ms cadence. Keep the
       // original 200 × 350 ms pending window, separately from polling frequency.
       // Bound elapsed time as well as count, including slow network round trips.
       const pendingWindowMs = 70_000;
-      const cadence = Number.isFinite(pollIntervalMs) && pollIntervalMs > 0 ? pollIntervalMs : 50;
+      const cadence = Number.isFinite(pollIntervalMs) && pollIntervalMs > 0 ? pollIntervalMs : 100;
       const deadline = Date.now() + pendingWindowMs;
       const maxPolls = Math.ceil(pendingWindowMs / cadence);
       for (let attempt = 0; current.state === "pending" && attempt < maxPolls && Date.now() < deadline; attempt += 1) {

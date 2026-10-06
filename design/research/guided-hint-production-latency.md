@@ -100,3 +100,29 @@ tactical/quiet breadth or the reason Stockfish preferred a move. D3497/D7 requir
 their actual remaining boundaries; D3262's five-approach cost/profile question
 is distinct and stays open. [Instrument plan/checker; `rfc/hint-distance.md` §10;
 `rfc/semantic-consequence-search.md` research prerequisite.]
+
+## Separate actual-browser follow-up — 2026-10-06
+
+`[V]` Complete before/after Chromium populations retain 880 rows/44 cells/twenty
+samples and sixty baselines per build, including empty, unavailable, REST refusal
+and unreachable outcomes. Trusted clicks, literal response/rung/decision joins,
+visible centre-hit-tested text after two animation frames and five RPC clock
+brackets measure post-frame visibility, not physical-display paint. The initial
+100 ms cadence renders the voice-unavailable deterministic hint at p95 161.875 ms
+after mandatory dependencies. The complete 50 ms repeat lowers it to 97.382 ms;
+all non-timeout rendered cells are at most 105.526 ms. The same 70-second pending
+window, sequential polls, retry/cancel identity, source/profile and rung limits
+remain. [Full methods, source images, hashes and raw populations:
+`planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`
+§Browser follow-up; `tools/d3497-hint-latency/browser-plan.json`.]
+
+`[V]` Optional voice timeout still takes 2066.049 ms p95 after dependencies,
+with lower clock bound 2065.772 ms. All twenty paired deterministic sentences
+match. The stronger source-off replay verifies both requested positive modules
+actually deliver with exact decision/subject/component joins, rather than
+accepting an omitted `empty` field. Source hashes and all 880 rows replay with
+no budget waiver. The checker reports pending-budget true, rendered-budget false,
+D7 false; fifth-rung refusals and owner-device/use remain separate gaps. This
+supersedes only the browser-unmeasured clause above, not the historical HTTP
+receipt or full discharge. [Same report/raw JSON; `browser-verify.mjs`,
+`source-off-check.mjs` and their permanent corruption controls.]

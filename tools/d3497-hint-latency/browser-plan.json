@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "workItem": "D3497",
+  "authority": "rfc/hint-distance.md §10 / D7",
+  "samplesPerCell": 20,
+  "viewport": { "width": 1440, "height": 1000 },
+  "basePlan": "tools/d3497-hint-latency/plan.json",
+  "measurement": "trusted browser click to visible DOM after two animation frames; not a compositor or physical-display stopwatch",
+  "clock": "browser performance clock bracketed by five Node RPC round trips; minimum-width interval retained, no unbounded clock subtraction",
+  "population": "Every base-plan position/cold-warm/rung/sample remains. Pattern uses the real UI. Higher rungs use the UI only after an available predecessor; otherwise retain not_reachable with the literal predecessor. Move is separately measured at REST and must also have a disabled UI ceiling. Voice/source-off arms use the real pattern seat. Each voice arm retains a separate deterministic baseline.",
+  "cold": "fresh application with real Stockfish, fresh Hint and candidate caches; browser navigation is part of production and any pre-acquisition is reported, not reset",
+  "warm": "new run, same FEN/application; check literal retained source acquisition and packet hit",
+  "voice": "local timeout/empty-output transport, never a paid LLM; browser preference requests persona through the current workflow-v2 codec",
+  "sourceOffModules": "Retain actual post-commit named structure/theory API receipts. This independent control is not browser paint for those modules.",
+  "bounds": { "honestPendingP95Ms": 1500, "dependenciesToRenderedRungP95Ms": 150 },
+  "receiptRules": [
+    "Keep all failed and unreachable rows; no pruning timing outliers",
+    "Missing or hidden DOM is not a render",
+    "Mutation time is not the post-frame visibility time",
+    "Retain response identities, deterministic sentence bytes and literal dependency trace",
+    "Cold/warm, voice and source-off populations remain distinct",
+    "The existing move refusal and optional-voice delay cannot discharge D7",
+    "Smoke is not twenty-sample evidence; one Chromium viewport is not owner-device validation"
+  ]
+}
