@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 human-model window checkpoint: D3474/D3475 fixes a sampled-marker
+distribution refusal and a focused test-tier omission. Bot selection and literal
+probabilities are unchanged. Two predecessor controls fail; 102 focused tests,
+clean types, 3329 software/227 content tests and 145 browser journeys pass, with
+zero retries and 112 retained states. Receipt:
+`planning/play-composition/human-model-window-2026-10-06.md`.
+This closes two boundary defects, not the source migrations, A4/D1834 or 1.0.
+
 2026-10-06 explicit Inspector lifetime checkpoint: D3472/D3473 retires human-model,
 narration and speech on current decision/subject/help/access and close/destroy epochs,
 before evidence consumption or audio creation. Owned playback releases once. All 31

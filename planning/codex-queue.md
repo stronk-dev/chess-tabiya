@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Completed D3474/D3475: the existing human-split endpoint excludes out-of-window
+sample-record markers from its reported distribution, preserving literal policy
+mass and bot selection. Two real selector → HTTP → client-parser regressions fail
+before the repair; 102 focused tests and types pass after it. Focused Inspector
+commands now execute guidance tests under their actual content tier, with six
+permanent literal-command guards. Full replacement software/content/browser
+checks pass (3329 software/227 content tests, 145 journeys, zero retries); do not
+duplicate the wave. Final staged governance precedes commit. Receipt:
+`planning/play-composition/human-model-window-2026-10-06.md`. Source, A4/D1834,
+phone/ceilings, owner-use and full-RFC holds remain separate.
+
 Completed D3472/D3473: explicit human-model/narration/speech replies retire on current
 decision/subject/help/access and close/destroy epochs before consumption or audio;
 owned playback releases once. Quiet retains its existing disclosed explicit Inspector

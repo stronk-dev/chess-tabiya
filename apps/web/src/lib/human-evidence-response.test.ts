@@ -31,6 +31,14 @@ describe("human evidence response authority", () => {
     expect(page).toEqual(split); expect(Object.isFrozen(page)).toBe(true); expect(Object.isFrozen(page.candidates[0]?.wdl)).toBe(true);
   });
 
+  it("refuses an unattributed sampled marker without weakening the reported distribution", () => {
+    const sampledMarker = { moveUci: "a7a5", rank: 3, offWindow: true };
+    expect(() => parseHumanSplitPage({ ...split, candidates: [...split.candidates, sampledMarker] }, "node-1")).toThrow(/selected trailing off-window move/u);
+    const partialWindow = { ...split, candidates: [{ moveUci: "e7e5", rank: 1, mass: 0.31 }, { moveUci: "c7c5", rank: 2, mass: 0.24 }] };
+    expect(parseHumanSplitPage(partialWindow, "node-1").candidates).toEqual(partialWindow.candidates);
+    expect(parseHumanSplitPage({ ...split, candidates: [] }, "node-1").candidates).toEqual([]);
+  });
+
   it.each([
     [{ ...split, nodeId: "node-2" }],
     [{ ...split, candidates: [split.candidates[0], { ...split.candidates[1], moveUci: "e7e5" }] }],

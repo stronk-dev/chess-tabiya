@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b5675cd3f9cecab9b25c8eea13faabdd18b2cc05cd8fc249a080a69abdf2df6f",
+    "roadmap": "sha256:ef1ad893c0b4ab5655390cadf694676c64cb31239e69cada09e975d229669d63",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:9887c74d12fe71eb39d681129e1d0c9190fc551f212c4fe4df468958b9bee019",
+    "workState": "sha256:fed5a4eac69b7c6e43372067fbf169a8758d015f4974d982c0d32f50b8cdec51",
     "rfcRegister": "sha256:907c11e7f231bd3f42153b137e29de94d8d07c655ff90860702302cc256a55a5",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
-    "rest": "sha256:fdf1da3b64e1cca46a85ad6c7340358be1b5722c401d461b3f73ca43bb888808"
+    "rest": "sha256:4d6b3cfaf4f2fdd0afad9b8d21131714e0638d8948afc744eef9552d4b16827c"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 0,
       "blocked": 1059,
-      "done": 1374,
+      "done": 1376,
       "refused": 161
     },
     "workItems": {
@@ -773,12 +773,13 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
+      "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3474/D3475 legacy distribution/tier boundaries, D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
       "latestCheckpoint": {
         "at": "2026-10-06",
-        "summary": "D3472/D3473 repair explicit human-model/narration/speech lifetimes against current decision, displayed subject, compiled help/access and close/destroy epochs, before branding, prose consumption or audio creation. Owned provider/browser playback releases once. Quiet retains its existing disclosed explicit Inspector request. Final calibration produces 27 predecessor failures/four passes; replacement passes all 31 controls, 182 client tests, clean types and two native journeys. Complete corrected sequential gates pass: 3328 software tests/343 files, seven isolated performance tests/four files, 225 content tests/23 files and 145 browser journeys (80 smoke, five content, 59 matrix, one packaged), zero retries and one existing optional Maia skip. All 112 cells/337 retained files survive packaging. Initial disabled-door regression is corrected without weakening the unchanged reveal test; preliminary software/failed browser records remain. D3472/D3473 close on path evidence; zero untriaged/1687 live and zero doing. No source receipt, D3363/D3309/A4/D1834/phone/ceiling/owner-use/RFC/milestone promotion. Prior checkpoints remain linked; routine metadata maintenance is automatic and the full 1.0 goal stays active.",
+        "summary": "D3474/D3475 repair the legacy Inspector distribution and focused test-tier omission under the existing engine-request contract. Two real selector/REST/closed-parser predecessor controls fail, and the replacement preserves literal probabilities, actual sampled selection, retry/cache behavior and non-commit semantics. The client parser remains strict. Focused replacement passes 102 tests with clean types; the governance-only literal tier-command guard passes six permanent controls. Full staged software passes 3329 tests/343 files plus seven isolated performance tests/four files and downstream contracts at tree 793757c2d3a42ee05deaf099214a58762a093801. Full content passes 227 tests/23 files; 145 browser journeys pass with zero retries and the existing optional Maia skip, including all 112 retained matrix states and the packaged default. Both defects close on path evidence; zero untriaged of 1687 live and zero doing. Final staged process/governance checks pass. D3363/D3309 source migrations, full A4/D1834, phone/ceilings, owner-use and full RFC/milestone/release remain open. Earlier checkpoints remain linked; routine metadata/hash maintenance is automatic and the full 1.0 goal stays active.",
         "impact": "advanced",
         "evidence": [
+          "planning/play-composition/human-model-window-2026-10-06.md",
           "planning/play-composition/inspector-explicit-lifecycle-browser-before-quiet-repair-2026-10-06.json",
           "planning/play-composition/inspector-explicit-lifecycle-software-before-quiet-repair-2026-10-06.json",
           "planning/play-composition/inspector-explicit-lifecycle-browser-2026-10-06.json",
@@ -1154,6 +1155,16 @@
             "kind": "work_state",
             "id": "D3473",
             "digest": "sha256:a9698c1fd9db9581020f3cc98648dd17e2d7bde0a5ae8e370e4c5d7d3e5888cf"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3474",
+            "digest": "sha256:18aafbd757e2941d51cc4cfb52a801dbfac99fc7f678a9838aaf4ab303345627"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3475",
+            "digest": "sha256:b235377eac75b7fabdef6a6e5e504eb5ff1738f2a597c433f7d43d01bdbffc18"
           }
         ]
       },

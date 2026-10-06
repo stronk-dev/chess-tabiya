@@ -1758,7 +1758,11 @@ export function createRestHandler(
           ...(access.pack === undefined ? {} : { packId: access.pack.document.id }),
         }, { signal: request.signal });
         recheck();
-        return json(200, { nodeId: access.node.id, engine: selection.engine, targetElo: authored.targetElo ?? null, candidates: selection.candidates ?? [] });
+        // A sampled move outside MultiPV belongs to the selection record, not
+        // this distribution: its insertion rank is not reported and it has no mass.
+        // Preserve the reported window/mass rather than inventing or normalizing it.
+        const candidates = (selection.candidates ?? []).filter(candidate => candidate.offWindow !== true);
+        return json(200, { nodeId: access.node.id, engine: selection.engine, targetElo: authored.targetElo ?? null, candidates });
       }
       if (request.method === "GET" && route.action === "corpus") {
         if (corpusSource === undefined) throw new ServerError("CORPUS_UNAVAILABLE", "Corpus evidence is unavailable");

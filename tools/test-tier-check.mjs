@@ -11,6 +11,34 @@ const CONTENT_PATH = /content\/(?:drafts|packs|candidates)\//u;
 const CONTENT_CENSUS = /\bconstructReachReport\s*\(/u;
 const PERFORMANCE_FILE = /-performance\.test\.ts$/u;
 
+// Check explicit repository test files in the three established tier commands.
+// Disposable harness configs and shell-variable/glob expansion are not inferred.
+export function validateFocusedTestCommands(makefile) {
+  const errors = [];
+  const content = new Set(CONTENT_CONTRACT_TESTS);
+  const performance = new Set(PERFORMANCE_CONTRACT_TESTS);
+  const commands = [];
+  let pending = "", start = 1;
+  for (const [index, line] of makefile.split(/\r?\n/u).entries()) {
+    if (pending === "") start = index + 1;
+    pending += line;
+    if (pending.endsWith("\\")) { pending = pending.slice(0, -1) + " "; continue; }
+    commands.push({ line: pending, start });
+    pending = "";
+  }
+  for (const { line, start } of commands) {
+    if (!line.startsWith("\t") || !/\bvitest\s+run\b/u.test(line)) continue;
+    const config = /--config(?:=|\s+)vitest\.(software|content|performance)\.config\.ts\b/u.exec(line)?.[1];
+    if (config === undefined) continue;
+    const files = [...line.matchAll(/(?:^|\s)["']?((?:apps|packages)\/[\w./-]+\.test\.ts)["']?(?=\s|$)/gu)].map(match => match[1]);
+    for (const file of files) {
+      const actual = content.has(file) ? "content" : performance.has(file) ? "performance" : "software";
+      if (config !== actual) errors.push(`Makefile:${start}: vitest.${config}.config.ts excludes ${file}; use the ${actual} tier`);
+    }
+  }
+  return errors;
+}
+
 function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const absolute = path.join(directory, entry.name);
@@ -20,6 +48,8 @@ function walk(directory) {
 }
 export function validateTestTiers(root = ROOT) {
   const errors = [];
+  const makefile = path.join(root, "Makefile");
+  if (fs.existsSync(makefile)) errors.push(...validateFocusedTestCommands(fs.readFileSync(makefile, "utf8")));
   const declared = new Set(CONTENT_CONTRACT_TESTS);
   const performance = new Set(PERFORMANCE_CONTRACT_TESTS);
   for (const relative of declared) {
@@ -50,6 +80,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     console.error(`test-tier-check failed:\n- ${errors.join("\n- ")}`);
     process.exitCode = 1;
   } else {
-    console.log(`test-tier-check: ${CONTENT_CONTRACT_TESTS.length} real-content and ${PERFORMANCE_CONTRACT_TESTS.length} performance test files are isolated from generic software contracts`);
+    console.log(`test-tier-check: ${CONTENT_CONTRACT_TESTS.length} real-content and ${PERFORMANCE_CONTRACT_TESTS.length} performance test files are isolated; literal focused Makefile commands match their selected tiers`);
   }
 }

@@ -1384,12 +1384,13 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
+        "nextAction": "Continue A4 fifteen-family source/destination positives and remaining D1834 semantic obligations. D3474/D3475 legacy distribution/tier boundaries, D3472/D3473 explicit Inspector lifetimes, D3471 ordinary-seat admission and D3470 full Inspector admission are completed, not queued again. D3469 needs its inspected-decision context contract; D3309, D3363, D3436 and D1639 retain named contracts. No source/permission/full-RFC promotion.",
         "latestCheckpoint": {
           "at": "2026-10-06",
-          "summary": "D3472/D3473 repair explicit human-model/narration/speech lifetimes against current decision, displayed subject, compiled help/access and close/destroy epochs, before branding, prose consumption or audio creation. Owned provider/browser playback releases once. Quiet retains its existing disclosed explicit Inspector request. Final calibration produces 27 predecessor failures/four passes; replacement passes all 31 controls, 182 client tests, clean types and two native journeys. Complete corrected sequential gates pass: 3328 software tests/343 files, seven isolated performance tests/four files, 225 content tests/23 files and 145 browser journeys (80 smoke, five content, 59 matrix, one packaged), zero retries and one existing optional Maia skip. All 112 cells/337 retained files survive packaging. Initial disabled-door regression is corrected without weakening the unchanged reveal test; preliminary software/failed browser records remain. D3472/D3473 close on path evidence; zero untriaged/1687 live and zero doing. No source receipt, D3363/D3309/A4/D1834/phone/ceiling/owner-use/RFC/milestone promotion. Prior checkpoints remain linked; routine metadata maintenance is automatic and the full 1.0 goal stays active.",
+          "summary": "D3474/D3475 repair the legacy Inspector distribution and focused test-tier omission under the existing engine-request contract. Two real selector/REST/closed-parser predecessor controls fail, and the replacement preserves literal probabilities, actual sampled selection, retry/cache behavior and non-commit semantics. The client parser remains strict. Focused replacement passes 102 tests with clean types; the governance-only literal tier-command guard passes six permanent controls. Full staged software passes 3329 tests/343 files plus seven isolated performance tests/four files and downstream contracts at tree 793757c2d3a42ee05deaf099214a58762a093801. Full content passes 227 tests/23 files; 145 browser journeys pass with zero retries and the existing optional Maia skip, including all 112 retained matrix states and the packaged default. Both defects close on path evidence; zero untriaged of 1687 live and zero doing. Final staged process/governance checks pass. D3363/D3309 source migrations, full A4/D1834, phone/ceilings, owner-use and full RFC/milestone/release remain open. Earlier checkpoints remain linked; routine metadata/hash maintenance is automatic and the full 1.0 goal stays active.",
           "impact": "advanced",
           "evidence": [
+            "planning/play-composition/human-model-window-2026-10-06.md",
             "planning/play-composition/inspector-explicit-lifecycle-browser-before-quiet-repair-2026-10-06.json",
             "planning/play-composition/inspector-explicit-lifecycle-software-before-quiet-repair-2026-10-06.json",
             "planning/play-composition/inspector-explicit-lifecycle-browser-2026-10-06.json",
@@ -1765,6 +1766,16 @@
               "kind": "work_state",
               "id": "D3473",
               "digest": "sha256:a9698c1fd9db9581020f3cc98648dd17e2d7bde0a5ae8e370e4c5d7d3e5888cf"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3474",
+              "digest": "sha256:18aafbd757e2941d51cc4cfb52a801dbfac99fc7f678a9838aaf4ab303345627"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3475",
+              "digest": "sha256:b235377eac75b7fabdef6a6e5e504eb5ff1738f2a597c433f7d43d01bdbffc18"
             }
           ]
         },

@@ -28656,6 +28656,24 @@
       "uxItems": [],
       "evidence": "planning/play-composition/inspector-explicit-lifecycle-2026-10-06.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3474",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:18aafbd757e2941d51cc4cfb52a801dbfac99fc7f678a9838aaf4ab303345627",
+      "uxItems": [],
+      "evidence": "planning/play-composition/human-model-window-2026-10-06.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3475",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b235377eac75b7fabdef6a6e5e504eb5ff1738f2a597c433f7d43d01bdbffc18",
+      "uxItems": [],
+      "evidence": "planning/play-composition/human-model-window-2026-10-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1275,6 +1275,12 @@ human-model-presentation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/evidence/components.test.ts
 	$(MAKE) typecheck
 
+.PHONY: human-model-distribution-check
+human-model-distribution-check:
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/guidance.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/opponent-selector.test.ts apps/web/src/lib/human-evidence-response.test.ts apps/web/src/lib/opponent-selection-response.test.ts
+	$(MAKE) typecheck
+
 analysis-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/analysis-client.test.ts apps/web/src/lib/analysis-response.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
 	$(MAKE) typecheck
@@ -1290,7 +1296,8 @@ inspector-corpus-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-protocol.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/screens.test.ts
 
 inspector-corpus-check: evidence-manifest-check
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/guidance.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/human-evidence-response.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/guidance.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/human-evidence-response.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
 
 theory-source-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts packages/runtime/src/explorer-summary.test.ts

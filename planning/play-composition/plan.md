@@ -117,6 +117,14 @@ remain in their owning RFCs.
 
 ## Remaining before archive
 
+Human-model window D3474/D3475 excludes only the unreported sampled marker from
+the legacy Inspector distribution, preserving policy mass, bot selection and
+strict client parsing. The focused HTTP boundary executes in its actual content
+tier, with permanent literal-command guards. Two predecessor controls fail; 102
+focused tests/types, complete staged software/content and 145 browser journeys
+pass. Receipt: `human-model-window-2026-10-06.md`. This is not D3363's source
+migration, the remaining A4 destinations or full RFC completion.
+
 Explicit Inspector D3472/D3473 binds human-model/narration/speech to current
 decision, displayed subject, help/access and reading/marker lifetime, retiring
 close/destroy/ABA output before evidence consumption or audio creation. Owned

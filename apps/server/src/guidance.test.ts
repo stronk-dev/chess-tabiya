@@ -25,6 +25,7 @@ import { ExternalHttpTtsProvider, type TtsProvider } from "./external-tts.js";
 import { IdentityService } from "./identity.js";
 import { testProviderHealth } from "./provider-health.test-support.js";
 import { PackRegistry } from "./pack-registry.js";
+import { parseHumanSplitPage } from "../../web/src/lib/human-evidence-response.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-14T00:00:00.000Z";
@@ -32,7 +33,8 @@ const reasoningDocument = JSON.parse(readFileSync(new URL("../../../content/draf
 const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }; } };
 class MaiaClient implements SelectorEngineClient {
   readonly calls: EngineRequest[] = [];
-  async execute(_id: string, request: EngineRequest): Promise<readonly string[]> { this.calls.push(request); return ["info multipv 1 policy 0.31 pv e2e4", "info multipv 2 policy 0.24 pv d2d4", "info multipv 3 policy 0.19 pv g1f3", "bestmove e2e4"]; }
+  constructor(readonly sampledMove = "e2e4") {}
+  async execute(_id: string, request: EngineRequest): Promise<readonly string[]> { this.calls.push(request); return ["info multipv 1 policy 0.31 pv e2e4", "info multipv 2 policy 0.24 pv d2d4", "info multipv 3 policy 0.19 pv g1f3", `bestmove ${this.sampledMove}`]; }
   health(id: string): EngineHealth { return { id, status: "ready", restartCount: 0, identity: { id, kind: "opponent", name: "Maia fixture", version: "1", seedHonored: false } }; }
 }
 const capabilities: CapabilitiesProvider = {
@@ -175,11 +177,11 @@ describe("adaptive guidance server seams", () => {
   const stores: SQLiteRunStorage[] = [];
   afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
 
-  async function setup() {
+  async function setup(sampledMove = "e2e4") {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
     const service = new RunService(storage, { evidenceQueue: new EvidenceJobQueue(executor) });
     const run = await service.create({ id: "guide", session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at }, "writer");
-    const client = new MaiaClient(), selector = new OpponentSelector(client, { maiaEngineId: "maia", strongEngineId: "stockfish" });
+    const client = new MaiaClient(sampledMove), selector = new OpponentSelector(client, { maiaEngineId: "maia", strongEngineId: "stockfish" });
     return { service, run, client, selector };
   }
 
@@ -195,6 +197,27 @@ describe("adaptive guidance server seams", () => {
     service.move("guide", "writer", "e2e4", { at });
     const current = service.graph("guide").activeCursor.nodeId;
     expect((await handler(request(`/runs/guide/human-split?nodeId=${encodeURIComponent(current)}`))).status).toBe(409);
+  });
+
+  it.each(["e2e3", "a2a4"])("retains the sampled %s move in selection but excludes its marker from the Inspector distribution", async (sampledMove) => {
+    const { service, run, client, selector } = await setup(sampledMove);
+    const selected = await selector.select({ startFen: FEN, historyUci: [], policy: { mode: "human_common", policyConfigDigest: run.sessionDigest, targetElo: 1500 }, seed: 4 });
+    expect(selected.moveUci).toBe(sampledMove);
+    expect(selected.candidates?.at(-1)).toEqual({ moveUci: sampledMove, rank: 4, offWindow: true });
+    expect(client.calls).toHaveLength(2); // The real selector's one full-width retry remains intact.
+
+    service.reveal("guide", "writer", at);
+    const response = await createRestHandler(service, selector, capabilities)(request(`/runs/guide/human-split?nodeId=${encodeURIComponent(run.activeCursor.nodeId)}`));
+    expect(response.status).toBe(200);
+    const page = parseHumanSplitPage(await response.json(), run.activeCursor.nodeId);
+    expect(page.candidates).toEqual(selected.candidates?.filter(candidate => candidate.offWindow !== true));
+    expect(page.candidates.map(candidate => candidate.mass)).toEqual([0.31, 0.24, 0.19]); // No normalization of the reported 0.74 window.
+    expect(page.candidates.some(candidate => candidate.moveUci === sampledMove)).toBe(false);
+    expect(page.engine).toEqual(selected.engine);
+    expect(page.targetElo).toBe(1500);
+    expect(Object.isFrozen(page.candidates)).toBe(true);
+    expect(client.calls).toHaveLength(2); // The same seeded selection is cached; the distribution does not resample it.
+    expect(service.graph("guide").nodes).toHaveLength(1); // Requesting a distribution never commits the sampled move.
   });
 
   it("maps absent voice to a typed 503 and rejects provider inventions after one retry", async () => {

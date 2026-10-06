@@ -297,6 +297,11 @@ The raw model request in Inspector remains an explicit, disclosure-permitted act
 even under Quiet. Turning off the ordinary channel retires its old page; it does not
 remove Inspector's separately permission-gated request door.
 
+The human-model page contains the reported candidate window, not the sampled
+selection record. An out-of-window sampled move has no reported probability or
+rank and is omitted from that distribution. Reported probabilities are never
+renormalized; requesting the page neither changes the opponent move nor commits it.
+
 The imported-game Story follows the imported workflow's voice preference. An available external
 provider does not itself expose narration: the learner must have selected persona voice for that
 workflow, while the authored default keeps recorded evidence and deterministic rendering only.
