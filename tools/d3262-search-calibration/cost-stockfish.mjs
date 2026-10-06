@@ -180,7 +180,7 @@ export class CostDependencies {
     if (receipt) {
       try {
         if (queryIdentity(receipt.operands) !== identity
-          || JSON.stringify(parseProbe(operands, receipt.lines)) !== JSON.stringify(receipt.result))
+          || JSON.stringify((this.adapter.admitReceipt ?? parseProbe)(operands, receipt.lines)) !== JSON.stringify(receipt.result))
           throw new Error("Crossed dependency receipt/literal provider result");
       } catch (e) { state = "invalid"; failure = e.message; rejectedCapture = receipt; receipt = undefined; }
     }

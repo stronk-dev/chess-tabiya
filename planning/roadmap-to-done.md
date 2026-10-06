@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-06 configured-Maia source checkpoint: actual offline source controls
+retain three literal receipts / 77 legal moves. Exact history tokens, full legal
+logits, configured sampler and cold/warm/offline identities replay independently;
+nine resealed corruptions refuse. This is the source boundary, not completed
+configured traversal or a new cost population. All-layer prefix/joint-residual
+integration and both full populations remain next; 51/53 runner settings and
+3,474/61,374 captured cases are unchanged. Receipt:
+`planning/semantic-consequence-search/d3262-cost-maia-source-control-2026-10-06.md`.
+Routine metadata/tracker maintenance is automatic; full 1.0 remains open.
+
 2026-10-06 semantic live-cost continuation: the disposable runner now executes
 51/53 settings, including all 36 first-event/recursive combinations; actual
 configured Maia is still refused. Two more complete 1,158-case populations retain

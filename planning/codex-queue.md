@@ -9,7 +9,15 @@ The disposable runner supports 51 settings, including all 36 semantic/recursive
 combinations; only configured Maia's two settings explicitly refuse. The new
 independent checker reconstructs the entire source-selected frontier, not merely
 legal examples, including first/later reserve and unranked-event distinctions.
-Next implement actual ordered-history configured Maia, capture remaining
+The actual ordered-history Maia source boundary is now verified separately:
+three live receipts / 77 legal moves, exact frozen-child distribution, distinct
+model tokens for two paths to one FEN, 37 source controls and nine independent
+resealed corruption refusals. No configured traversal or new cost case is claimed;
+the two model settings still refuse. Receipt:
+`planning/semantic-consequence-search/d3262-cost-maia-source-control-2026-10-06.md`.
+Next wire the actual source into all three frozen configured-prefix decision
+layers, retain conditional/joint mass and terminal residuals with independent
+whole-frontier replay, then capture both complete model populations and remaining
 budgets/widths/arms with matching cold dependencies, compare fresh outcomes with
 the frozen semantic reference, measure source memory and bind real browser
 identities. Do not re-run the three captured populations or borrow old durations.

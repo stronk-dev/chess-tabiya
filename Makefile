@@ -822,7 +822,16 @@ semantic-search-cost-build: semantic-search-target-v2-build
 	./node_modules/.bin/esbuild tools/d3262-search-calibration/semantic-relation-event-first-layer.ts --bundle --platform=node --format=esm --outfile=tools/d3262-search-calibration/dist/semantic-relation-event-first-layer.mjs --log-level=warning
 
 semantic-search-cost-test: semantic-search-cost-build
-	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs tools/d3262-search-calibration/cost-semantic.test.mjs
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-execution.test.mjs tools/d3262-search-calibration/cost-semantic.test.mjs tools/d3262-search-calibration/cost-maia.test.mjs
+
+.PHONY: semantic-search-cost-maia-probe
+semantic-search-cost-maia-probe: semantic-search-cost-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-maia-probe.mjs --out "$(OUT)"
+
+.PHONY: semantic-search-cost-maia-independent
+semantic-search-cost-maia-independent:
+	$(CI_NODE) tools/d3262-search-calibration/cost-maia-probe.mjs --check "$(OUT)"
+	docker run --rm --network none --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-maia-check.py "$(OUT)" --negative-controls
 
 semantic-search-cost-batch: semantic-search-cost-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --start "$(START)" --limit "$(LIMIT)" --out "$(OUT)"
