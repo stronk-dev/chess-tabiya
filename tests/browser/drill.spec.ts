@@ -233,7 +233,9 @@ const ENDGAME_INPUT_PROJECTIONS = [
   { width: 390, height: 844 },
 ] as const;
 
-test.beforeEach(async ({ page }) => register(page));
+test.beforeEach(async ({ page }) => {
+  await test.step("Register the learner on the test's input page", () => register(page));
+});
 
 test.afterEach(async ({}, testInfo) => {
   const reports = testInfo.attachments.filter(a => a.name.startsWith("composition-conformance-"));
@@ -3863,33 +3865,33 @@ test("@content a served related rehearsal names its source and the move in SAN",
 
 for (const viewport of ENDGAME_INPUT_PROJECTIONS) {
   for (const mode of ["click", "drag", "touch", "keyboard", "text"] as const satisfies readonly BoardInputMode[]) {
-    test(`@matrix served endgame packs submit exact ${mode} moves at ${viewport.width}×${viewport.height}`, async ({
-      page, browser,
-    }) => {
-      test.setTimeout(60_000);
-      await enableEndgamePolicies(page);
-      await page.setViewportSize(viewport);
-      const touchContext = mode === "touch"
-        ? await browser.newContext({ viewport, hasTouch: true, isMobile: true })
-        : undefined;
-      try {
-        const inputPage = touchContext === undefined ? page : await touchContext.newPage();
-        if (touchContext !== undefined) {
-          await enableEndgamePolicies(inputPage);
-          await register(inputPage);
+    test.describe(`${mode} input at ${viewport.width}×${viewport.height}`, () => {
+      // The runner owns the actual input context, including failure traces and teardown.
+      // Touch used to create/register a second page and close it inside the expired test.
+      test.use({ viewport, hasTouch: mode === "touch", isMobile: mode === "touch" });
+      test(`@matrix served endgame packs submit exact ${mode} moves at ${viewport.width}×${viewport.height}`, async ({ page }) => {
+        test.setTimeout(60_000);
+        await enableEndgamePolicies(page);
+        if (mode === "touch") {
+          const inputDevice = await page.evaluate(() => ({
+            touch: navigator.maxTouchPoints > 0,
+            coarsePointer: matchMedia("(pointer: coarse)").matches,
+          }));
+          expect(inputDevice).toEqual({ touch: true, coarsePointer: true });
         }
         for (const pack of ENDGAME_INTERACTION_PACKS) {
-          await inputPage.goto("/play");
-          await inputPage
-            .getByRole("article")
-            .filter({ hasText: pack.title })
-            .getByRole("button", { name: /Rehearse this position/ })
-            .click();
-          await liveInputMove(inputPage, pack.uci, pack.orientation, mode);
+          await test.step(`Open rehearsal: ${pack.title}`, async () => {
+            await page.goto("/play");
+            await page
+              .getByRole("article")
+              .filter({ hasText: pack.title })
+              .getByRole("button", { name: /Rehearse this position/ })
+              .click();
+          });
+          await test.step(`Submit ${pack.uci} by ${mode}: ${pack.title}`, () =>
+            liveInputMove(page, pack.uci, pack.orientation, mode));
         }
-      } finally {
-        await touchContext?.close();
-      }
+      });
     });
   }
 }

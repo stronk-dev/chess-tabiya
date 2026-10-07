@@ -26,11 +26,14 @@ explicitly separate, with future large captures outside ordinary Git.
    declaring release readiness. Passing replays leave these findings open.
    [[D3529]]/[[D3530]] are diagnosed host interruptions: exact trace timestamps match
    clamshell/maintenance sleep, and both unchanged awake journeys pass. No application
-   geometry/auth repair is claimed. The new complete awake run is still red on [[D3531]]:
-   the six-pack 1440×1000 touch journey times out at its unchanged 60-second limit and
-   trace retention reports a truncated ZIP. Locate the awaited operation and repair
-   failure diagnostics before replay; host load 192 is context, not a proven cause.
-   No deadline increase, retry, forced gesture, skipped pack or complete-browser claim.
+   geometry/auth repair is claimed. [[D3531]] repairs fixture ownership/diagnostics:
+   touch uses the runner-owned page, no extra registration or timed-body context close,
+   actual touch/coarse-pointer assertions and named registration/open/submit steps.
+   The complete changed-fixture browser gate passes 88 smoke / five content / 59 matrix /
+   one packaged-default, retaining all 150 exact input cells and 112 unretried composition
+   cells. D3531 stays open: the original timeout's cause and deliberate failure trace
+   retention are not proven. Host load 192 remains context, not a cause. No deadline,
+   retry, forced gesture, population or application-input change; software is still red.
 2. [[D3521]], [[D3523]], [[D3524]] are in final verification: a grounded filled Threat
    Radar caption, loose-piece readings for the learner rather than the opponent, and a
    compact registered capture warning within the unchanged staged-cue budget. Both-colour

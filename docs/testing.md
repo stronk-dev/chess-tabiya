@@ -73,6 +73,13 @@ user agent, touch points and coarse pointer. The accessibility matrix runs axe-c
 authenticated catalogue, Settings and an active rehearsal; it gates WCAG A/AA violations and
 complements interaction assertions for focus ownership, announcements and responsive state.
 
+The permanent endgame-input matrix checks six packs at five viewports through click, drag,
+touch, keyboard and text: 150 exact-move cells. Each case uses the runner-owned page/context,
+including touch capability and coarse-pointer assertions for touch cases. Registration, opening
+each rehearsal and submitting each exact move have named steps; touch does not register an unused
+desktop page or close a second context inside an expired test body. Failure artifacts and context
+cleanup remain owned by Playwright. This fixture ownership does not prove the cause of a past timeout.
+
 Pre-commit process checks intentionally do not read the shared working tree. The hook materializes
 the Git index and runs register, status, work, roadmap and intent checks inside that temporary
 snapshot. This makes the commit's staged bytes the unit under review and prevents an unrelated
