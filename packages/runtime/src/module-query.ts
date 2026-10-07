@@ -43,7 +43,7 @@ import {
   type PresentationReceipt,
   type PresentedEvidenceItem,
 } from "./presentation-contract.js";
-import { postcommitEdgeEvidence } from "./postcommit-nudge.js";
+import { hasKingZoneWitness, postcommitEdgeEvidence } from "./postcommit-nudge.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, Node } from "./types.js";
 import { transposeKey } from "./chess.js";
@@ -229,11 +229,9 @@ export function witnessedEvidence(evidence: DeclaredEvidence<unknown>): boolean 
     case "rules.structural.reading.pawn_connectivity": return (payload.colors as readonly { readonly islandCount: number }[]).some((entry) => entry.islandCount > 0);
     case "rules.tactic.reading.defender_duty_set": return nonEmpty("duties");
     case "rules.king.reading.zone_state": return nonEmpty("kings");
-    // A king-zone event with no change is not an event: it would read as an all-clear.
-    case "rules.king.event.zone_state": {
-      const event = payload as { readonly king: { readonly relocated: boolean }; readonly attackers: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly defenders: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly shelter: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly escapes: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] } };
-      return event.king.relocated || [event.attackers, event.defenders, event.shelter, event.escapes].some((change) => change.gained.length + change.lost.length > 0);
-    }
+    // Both king event vocabularies must obey the same no-change exclusion.
+    case "rules.structural.event.king_zone":
+    case "rules.king.event.zone_state": return hasKingZoneWitness(evidence);
     case "human.explorer.population": return (payload.result as { readonly kind: string }).kind === "stats";
     default: return true;
   }

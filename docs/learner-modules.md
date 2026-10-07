@@ -48,6 +48,10 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   budget over whole fact bundles (`fitModulePresentation`) and returns a `presentation.receipt@1`
   plus a `ModuleDisclosureReceipt` bound to the decision stamp and to the finalized digest.
   Post-commit output waits for `feedbackDeliveryOpen`. Empty is the module's declared state.
+  Both king-event vocabularies exclude unchanged king observations before packet reduction,
+  including the legacy Nudge operation. For example, 1.e4 does not fill the Nudge with
+  unchanged king-edge facts; its real line-opening consequences remain eligible. Actual king-location/zone changes remain eligible;
+  the raw collector evidence is not deleted or rewritten.
   Sight, Threat Radar, Blunder Prevention and Structure Nudge now preflight their complete
   execution bindings after finalized demand/timing/square/disclosure checks, before any selected
   module collects. All effective local consumers pass before the first source read. Server pack

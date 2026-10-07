@@ -146,6 +146,28 @@ function render(id: ComponentId, operand: Fixture, onFocusSquares?: (squares: re
   return { root: target, sentence, done: () => { void unmount(instance); target.remove(); } };
 }
 
+describe("citation source navigation", () => {
+  it.each(["https://example.org/theory#position", "http://example.org/source"])("links the exact admitted public source %s and retains attribution", (url) => {
+    const fixture = MATRIX.citation.one as Readonly<Record<string, unknown>>;
+    const { root, done } = render("citation", { ...fixture, source: { ...(fixture.source as object), url } });
+    const link = root.querySelector("a");
+    expect(link?.getAttribute("href")).toBe(url);
+    expect(link?.textContent).toBe("Syzygy tablebase result");
+    expect(link?.getAttribute("rel")).toContain("noopener");
+    expect(root.textContent).toContain("computed chess facts · revision endpoint contract 1");
+    expect(root.querySelector("blockquote")?.textContent).toBe("Exact tablebase result: a win.");
+    done();
+  });
+
+  it.each([undefined, "javascript:alert(1)", "data:text/html,source", "file:///tmp/source", "/relative-source", "not a URL", "https://user:password@example.org/private"])("keeps unsafe or absent source %s as plain attribution", (url) => {
+    const fixture = MATRIX.citation.one as Readonly<Record<string, unknown>>;
+    const { root, done } = render("citation", { ...fixture, source: { ...(fixture.source as object), ...(url === undefined ? {} : { url }) } });
+    expect(root.querySelector("a")).toBeNull();
+    expect(root.textContent).toContain("Syzygy tablebase result");
+    done();
+  });
+});
+
 describe("criterion 17: every component has an explicit zero / one / many / withheld / unavailable declaration", () => {
   it("the matrix is set-equal to COMPONENT_DECLARATIONS and every applicable cell renders its own sentence", () => {
     expect(Object.keys(MATRIX).sort()).toEqual([...COMPONENT_IDS].sort());

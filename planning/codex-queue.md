@@ -10,6 +10,29 @@ collection or tracking-system expansion follows from this cleanup. Product progr
 be established by implemented user journeys and their software tests; research remains
 explicitly separate, with future large captures outside ordinary Git.
 
+## Active delivery order — 2026-10-07
+
+1. [[D3517]]: connect Nudge and Compare cards to the existing rehearsal actions.
+   Prove recorded move → rewind → alternate continuation → comparison, with the old
+   attempt preserved; include stale, pending, failure and read-only cases.
+
+Completed narrow repairs: [[D3516]] excludes unchanged king facts in both Nudge
+operations while retaining real changes and raw observations; the built Guided bot
+journey passes. [[D3515]] links admitted safe citation URLs, preserving full attribution;
+unsafe URLs remain plain text. Neither repair finishes the full support experience.
+
+Run the normal software and relevant browser gates before committing. The open
+intermittent failures below remain open until their cause is located. Declaration/hash
+checks establish repository consistency, not product completion. No new bulk search
+capture or research controller is next work for this delivery sequence.
+
+[[D3518]] blocks software/release readiness: the current full software run passes
+3,414 tests but the real Stockfish version probe fails its unchanged 5-second UCI
+deadline. The normal provider-traversal gate and failure-only transcript must locate
+the handshake failure; a passing replay is not a repair or a replacement full-gate pass.
+
+## Existing verification findings and research checkpoints (not the delivery queue)
+
 [[D3514]] is the current verification failure: artifact-free `make verify` passes
 typecheck and 3,402 software tests, but Sight suppression without a selected square
 times out at its unchanged 5-second limit. Locate the stage/cause in
@@ -69,7 +92,7 @@ replay the depth-twelve capture only after its original exact handle terminates.
 That handle has terminated; lossless packaging and independent replay pass. Current lifecycle
 receipt: `planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md`.
 Three real subprocess controls prove that terminal failure prevents another UCI
-write, while a nonfatal parser refusal does not. D3512 stays doing; isolate/recover
+write, while a nonfatal parser refusal does not. D3512 remains unqualified; isolate/recover
 under a preregistered successor protocol before the omitted wide-arm attempts can
 support profile comparison. Source images, failures and clocks remain unchanged.
 The successor protocol is now recorded before execution in
@@ -83,13 +106,13 @@ cases; Node read-only reconstruction and independent Python full-cohort/byte rep
 pass, with three methods and sixteen corruption variants. The v1 prototype image
 is retained, not current capture authority. Current receipt:
 `planning/semantic-consequence-search/d3512-source-isolation-instrument-2026-10-07.md`.
-Next implement the immutable whole-cohort native controller and partial-abort/
-source-image controls, bound to the current selection; then actual successor
-capture and independent lifecycle/source/board/observation replay before missing
-attempts or setting counts can qualify. No ad hoc loop or native result is claimed.
+The unfinished research includes an immutable whole-cohort native controller,
+partial-abort/source-image controls, successor capture and independent replay.
+These are retained research requirements, not authorization or an instruction to
+run another capture now. No ad hoc loop or native result is claimed.
 Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
 `d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
-D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is
+D3262 and D3512 are retained todo research, not current delivery work; the search RFC stays draft. Routine metadata/hash/state upkeep is
 automatic, no approval question and no production/RFC/1.0 promotion.
 
 [[D3510]] is doing under release-engineering: this checkpoint's full normal software

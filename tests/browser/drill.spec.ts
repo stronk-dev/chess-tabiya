@@ -438,6 +438,28 @@ test("review map remainder: eval graph by keyboard, explicit Analyze withheld du
   expect(graphAfter.graph.nodes.map((node) => node.moveUci)).toEqual(expect.arrayContaining(["e2e4", "e7e5", "g1f3", "b8c6", "f1c4"]));
 });
 
+test("Guided Nudge after 1.e4 retains real consequences without unchanged king-edge facts", async ({ page }) => {
+  await chooseBot(page, "human-baseline.1400@1");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await choosePreset(page, /^Guide me/u);
+  await move(page, "e2", "e4");
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+
+  const selector = page.getByRole("button", { name: "After-move nudge", exact: true });
+  await expect(selector).toBeVisible();
+  if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
+  const nudge = page.locator('[data-module="postcommit_nudge"]');
+  await expect(nudge.locator("[data-presented]").first()).toBeVisible();
+  await expect(nudge).not.toContainText(/still holds:.*king/iu);
+  await expect(nudge).toContainText(/After e4/iu);
+  const runId = page.url().split("/").at(-1)!;
+  const { graph } = await (await page.request.get(`/runs/${runId}/graph`)).json() as RunGraph;
+  expect(graph.nodes.some((node) => node.moveUci === "e2e4")).toBe(true);
+  await assertRunViewport(page, page.viewportSize()!);
+});
+
 test("account lifecycle downloads data, deletes one run, and clears this browser on account deletion", async ({ page }) => {
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();

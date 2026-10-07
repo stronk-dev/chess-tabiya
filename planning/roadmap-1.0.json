@@ -1561,12 +1561,12 @@
             {
               "kind": "work_state",
               "id": "D3262",
-              "digest": "sha256:bd41c762496ffb58d8d7ede90360262829b71c99b8d99d540954699fbc4f749c"
+              "digest": "sha256:554c3c24a94615e3b382569de2a49d5fe7e0fdb49362c2b26d1f93499d582fc0"
             },
             {
               "kind": "work_state",
               "id": "D3512",
-              "digest": "sha256:54ede9c0186957cffcf2dc2642b538a5c95dbb35f2fd727955147425cfd330e0"
+              "digest": "sha256:5873d965f579c83cefc7aac43d99171ddf213e5ab32fafd9d9364fa093539f21"
             },
             {
               "kind": "work_state",
@@ -1654,7 +1654,7 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "D3309 now has strict types and 195 real-FEN fidelity controls; author/review the exact sixteen v2 operand/factory/renderer/binding successors before both DrillScreen and Compare migration and actual component/browser proof. Preserve all v1 bytes and the existing seal. D3503's 50 ms cadence and D3500 codec are done, not requeued. D3497 retains full D7; D3498 needs the accepted optional-voice lifecycle contract. Complete full v5/D12 without ruling D1639 by implementation. Continue A4 fifteen-family positives and remaining D1834 obligations; D3469, D3363 and D3436 retain their named contracts. D3262 owns actual five-approach cost/profile. No full-RFC or milestone promotion.",
+        "nextAction": "First complete D3517: bind existing Nudge/Compare cards to the exact recorded rehearsal actions and prove rewind, alternate continuation and comparison with the original preserved. D3515/D3516 are narrow citation/unchanged-king repairs, not full Support completion. D3309 retains its strict types and 195 real-FEN controls but needs accepted sixteen v2 successors before migration; preserve v1 bytes. D3503/D3500 are done. D3497 retains D7, D3498 its accepted-lifecycle hold, and full v5/D12 does not rule D1639. A4/D1834 and D3469/D3363/D3436 remain open. D3262 cost/profile research stays todo, not the next capture. No full-RFC or milestone promotion.",
         "latestCheckpoint": {
           "at": "2026-10-07",
           "summary": "D3309 now has strict TypeScript and 195 disposable real-FEN controls through actual sealed factories, admission and presentation. All sixteen affected families omit detailed operands; twelve piece-count readings collide in one typed caption and Pack B loses its seven-pawn/d3-light-square statements. A closed FEN-verified research reader preserves current sentences and refuses missing/mismatched/nested/prose mutations; actual seal-forgery refusal also passes. It is not a registered v2 projection or component. Versioned contract review, real successors/bindings/wire controls and both DrillScreen/Compare/browser migrations stay open. Current source v1 bytes and historical D3497/D3500–D3503 full suite/browser receipts remain unchanged, not fresh current release proof. Full D7/v5/D12, optional voice lifecycle, owner-device/use and D3262 cost/profile remain. Canonical state/anchor/receipt checks and ordinary hooks precede the owned checkpoint. Metadata maintenance is automatic; no capability, milestone, RFC, content or 1.0 promotion.",

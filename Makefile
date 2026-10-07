@@ -214,6 +214,10 @@ inspector-explicit-lifecycle-browser-check:
 support-seat-lifecycle-browser-check:
 	./node_modules/.bin/playwright test --grep "Support seats (retire|refuse)"
 
+.PHONY: postcommit-nudge-browser-check
+postcommit-nudge-browser-check:
+	./node_modules/.bin/playwright test --grep "Guided Nudge after 1.e4"
+
 inspector-lifecycle-browser-check:
 	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires)"
 
@@ -1719,7 +1723,7 @@ theory-binding-execution-check:
 
 .PHONY: local-module-execution-check
 local-module-execution-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
 	$(MAKE) typecheck
 
 .PHONY: hint-empty-response-check
@@ -1851,6 +1855,10 @@ repertoire-source-check: evidence-manifest-check
 # maia-policy-page, syzygy-position, explorer-position-page).
 provider-traversal: build
 	node apps/server/dist/provider-traversal.js $(OP)
+
+.PHONY: provider-traversal-check
+provider-traversal-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-traversal.test.ts
 
 # Permanent value-authority gate (rfc/evidence-value-authority.md §8): single mint, central invoker,
 # registry = non-retired catalogue, receipts, positives and falsifiers for every factory.

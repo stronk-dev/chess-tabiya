@@ -7,12 +7,12 @@
 // is authored here, and silence is the declared empty state.
 
 import { branchPath } from "./branch-path.js";
-import type { DeclaredEvidence, EvidenceGrounding, EvidenceRole } from "./evidence-contract.js";
+import { evidenceDigest, type DeclaredEvidence, type EvidenceGrounding, type EvidenceRole } from "./evidence-contract.js";
 import { assertMoveQualityGradeSentence, renderMoveQualityGrade, type GradeSide, type MoveQualityGrade } from "./grade.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { compileModulePacket, type ModulePacketRefusal } from "./module-packets.js";
 import type { ModuleFact, ReductionQualityRecorder } from "./module-reducers.js";
-import { localSemanticEventClosure } from "./semantic-evidence.js";
+import { localSemanticEventClosure, type StructuralSemanticEventOperands } from "./semantic-evidence.js";
 import { evidenceGroundingLabel } from "./story.js";
 import type { DrillRun, EvidencePayload, Node } from "./types.js";
 
@@ -59,9 +59,24 @@ function evaluationPacket(run: DrillRun, nodeId: string): EvidencePayload | unde
   return Object.freeze({ kind, source, values });
 }
 
+/** The accepted unchanged-king exclusion, shared by the query and legacy Nudge operations. */
+export function hasKingZoneWitness(evidence: DeclaredEvidence<unknown>): boolean {
+  if (evidence.projection.id === "rules.structural.event.king_zone") {
+    const event = evidence.payload as StructuralSemanticEventOperands;
+    // Compare the observations, not their edge's FEN or move identity: every committed move
+    // changes the latter even when both kings remain on exactly the same squares.
+    return evidenceDigest(event.before) !== evidenceDigest(event.after);
+  }
+  if (evidence.projection.id === "rules.king.event.zone_state") {
+    const event = evidence.payload as { readonly king: { readonly relocated: boolean }; readonly attackers: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly defenders: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly shelter: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] }; readonly escapes: { readonly gained: readonly unknown[]; readonly lost: readonly unknown[] } };
+    return event.king.relocated || [event.attackers, event.defenders, event.shelter, event.escapes].some((change) => change.gained.length + change.lost.length > 0);
+  }
+  return true;
+}
+
 /** The evidence a production operation can seal for one committed edge today. */
 export function postcommitEdgeEvidence(run: DrillRun, parent: Node, node: Node): readonly DeclaredEvidence<unknown>[] {
-  const events = localSemanticEventClosure(parent.fen, node.moveUci!, node.fen).events.map((event) => event.evidence);
+  const events = localSemanticEventClosure(parent.fen, node.moveUci!, node.fen).events.map((event) => event.evidence).filter(hasKingZoneWitness);
   const before = evaluationPacket(run, parent.id);
   const after = evaluationPacket(run, node.id);
   if (before === undefined || after === undefined) return Object.freeze(events);

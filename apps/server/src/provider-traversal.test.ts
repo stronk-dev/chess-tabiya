@@ -382,6 +382,11 @@ async function stockfishVersion(): Promise<string> {
   const supervisor = new EngineSupervisor([{ id: "stockfish-analysis", kind: "judge", command: STOCKFISH!, name: "Stockfish" }], { artifactProbe: binaryArtifactProbe });
   try {
     return (await supervisor.start("stockfish-analysis")).version;
+  } catch (error) {
+    // Failure-only protocol context distinguishes uci/uciok from isready/readyok and process
+    // exit. Preserve the production handshake deadline; a passing replay is not its repair.
+    console.error("Stockfish version probe failed", supervisor.transcript("stockfish-analysis"));
+    throw error;
   } finally {
     await supervisor.shutdown();
   }

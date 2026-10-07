@@ -9,6 +9,8 @@ import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { compileModulePacket } from "./module-packets.js";
 import { ArrayReductionQualityRecorder } from "./module-reducers.js";
 import { POSTCOMMIT_NUDGE_TEMPLATES, postcommitNudgePacket } from "./postcommit-nudge.js";
+import { commitMove, createRun } from "./runtime.js";
+import { localSemanticEventClosure } from "./semantic-evidence.js";
 import { reviewMapProjection } from "./review-map.js";
 import { reviewText } from "./review-map-templates.js";
 import { storyMomentsForRun } from "./story.js";
@@ -69,6 +71,19 @@ describe("the grade reaches exactly its two module consumers", () => {
 describe("Post-commit Nudge — the post_commit production operation", () => {
   const run = reviewFixtureRun({ id: "nudge", kind: "position", plies: 12 });
   const path = branchPath(run, run.activeCursor.branchId);
+
+  it("does not turn unchanged king locations into a nudge in the legacy operation either", () => {
+    const initial = createRun({ id: "quiet-king-edge", session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-10-07T00:00:00Z" });
+    const moved = commitMove(initial, "e2e4", { at: "2026-10-07T00:00:00Z" }).run;
+    const node = moved.nodes.find((item) => item.id === moved.activeCursor.nodeId)!;
+    // Retain the raw facts for research/inspection; only the learner nudge excludes the no-change.
+    const raw = localSemanticEventClosure(initial.nodes[0]!.fen, "e2e4", node.fen).events;
+    expect(raw.filter((event) => event.projection.id === "rules.structural.event.king_zone")).toHaveLength(2);
+    const packet = postcommitNudgePacket({ run: moved, nodeId: node.id, ...LEARNER });
+    expect(packet.kind).toBe("packet");
+    if (packet.kind !== "packet") throw new Error("expected a learner packet");
+    expect(packet.facts.every((fact) => fact.projection !== "rules.structural.event.king_zone@1")).toBe(true);
+  });
 
   it("packets one committed learner move: at most two admitted facts, each a grounded sentence", () => {
     const recorder = new ArrayReductionQualityRecorder();

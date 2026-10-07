@@ -145,6 +145,23 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
 describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb and compare coach", () => {
   const assistance = finalized("onramp", "guided");
 
+  it("does not present the unchanged kings as consequences of 1.e4", () => {
+    const run = packRun("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", ["e2e4"]);
+    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp", request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] } });
+    const nudge = packetOf(page, "postcommit_nudge")!;
+    const sentences = assertDelivered(nudge, assistance);
+    expect(sentences.join(" ")).not.toMatch(/still holds:.*king/iu);
+    expect(nudge.receipt.items.every((item) => item.evidenceRef?.projection.id !== "rules.structural.event.king_zone")).toBe(true);
+  });
+
+  it("still presents a real king-location change", () => {
+    const run = packRun("4k3/8/8/8/8/8/4K3/R7 w - - 0 1", ["e2e1"]);
+    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp", request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] } });
+    const nudge = packetOf(page, "postcommit_nudge")!;
+    expect(assertDelivered(nudge, assistance).join(" ")).toMatch(/king.*e1/iu);
+    expect(nudge.empty).toBeNull();
+  });
+
   it("structure nudge delivers one post-commit structure fact", () => {
     const run = packRun("r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", ["b1c3"]);
     const subject = run.activeCursor.nodeId;

@@ -2,7 +2,7 @@ import type { AddressInfo } from "node:net";
 import * as runtime from "@chess-tabiya/runtime";
 import * as execution from "../../../packages/runtime/src/evidence-binding-execution.js";
 import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { ShapeRegistry } from "./shape-registry.js";
 
@@ -16,15 +16,32 @@ const originalRoute = routes.invokeEvidenceValueRoute;
 afterEach(() => vi.restoreAllMocks());
 
 async function control(module: LocalModule, fault?: Fault, disclose = true) {
+  const started = performance.now();
+  const boundaries: string[] = [];
+  const boundary = (stage: string) => boundaries.push(`${Math.round(performance.now() - started)}ms ${stage}`);
+  boundary("compose application");
+  onTestFailed(() => console.error(`Local Support (${module}) lifecycle: ${boundaries.join(" → ")}`));
   vi.spyOn(console, "info").mockImplementation(() => {});
   const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
+  const close = async () => {
+    boundary("close application");
+    await application.close();
+    boundary("application closed");
+  };
   try {
+    boundary("listen");
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
     const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
-    const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "local_module", password: "local-module-password" }) });
+    const request = async (path: string, init: RequestInit) => {
+      boundary(`request ${path}`);
+      const response = await fetch(`${origin}${path}`, init);
+      boundary(`headers ${path}`);
+      return response;
+    };
+    const registered = await request("/auth/register", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "local_module", password: "local-module-password" }) });
     expect(registered.status).toBe(201);
     const headers = { "content-type": "application/json", cookie: registered.headers.get("set-cookie")!.split(";", 1)[0]!, "x-writer-id": "local-module-writer" };
-    const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers, body: JSON.stringify(body) });
+    const post = (path: string, body: unknown) => request(path, { method: "POST", headers, body: JSON.stringify(body) });
     const created = await post("/runs", { id: "local-module", session: { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
     expect(created.status, await created.clone().text()).toBe(201);
     if (module === "structure_nudge") {
@@ -32,7 +49,8 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
       expect(moved.status, await moved.clone().text()).toBe(200);
       if (disclose) expect((await post("/runs/local-module/reveal", {})).status).toBe(200);
     }
-    const graph = await (await fetch(`${origin}/runs/local-module/graph`, { headers })).json() as { graph: Pick<runtime.DrillRun, "activeCursor"> };
+    const graph = await (await request("/runs/local-module/graph", { headers })).json() as { graph: Pick<runtime.DrillRun, "activeCursor"> };
+    boundary("graph body read");
     const nodeId = graph.graph.activeCursor.nodeId;
     const trace: string[] = [];
     const originalShapes = ShapeRegistry.prototype.list;
@@ -66,8 +84,8 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
       assistance: runtime.compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
       query: overrideQuery,
     });
-    return { application, ask, query, trace, compile, collect, prepare, fault(value?: Fault) { fault = value; } };
-  } catch (error) { vi.restoreAllMocks(); await application.close(); throw error; }
+    return { application, close, ask, query, trace, compile, collect, prepare, fault(value?: Fault) { fault = value; } };
+  } catch (error) { vi.restoreAllMocks(); await close(); throw error; }
 }
 
 describe("authenticated complete local Support execution", () => {
@@ -81,7 +99,7 @@ describe("authenticated complete local Support execution", () => {
         expect(app.trace).toEqual([`compile:module.${module}@1`]);
         expect(app.collect).not.toHaveBeenCalled();
         expect(app.prepare).not.toHaveBeenCalled();
-      } finally { vi.restoreAllMocks(); await app.application.close(); }
+      } finally { vi.restoreAllMocks(); await app.close(); }
     });
 
     it(`${module}: real valid delivery follows complete preflight`, async () => {
@@ -99,7 +117,7 @@ describe("authenticated complete local Support execution", () => {
           expect(runtime.moduleDisclosureDigest(body)).toBe(digest);
           for (const item of runtime.parsePresentationReceipt(packet.receipt)) expect(runtime.presentedSentence(item)).not.toMatch(/detector|\b[a-h][1-8][a-h][1-8]\b/u);
         }
-      } finally { vi.restoreAllMocks(); await app.application.close(); }
+      } finally { vi.restoreAllMocks(); await app.close(); }
     });
 
     it(`${module}: Quiet suppresses even a broken contract without collection`, async () => {
@@ -109,7 +127,7 @@ describe("authenticated complete local Support execution", () => {
         expect(response.status).toBe(200);
         expect((await response.json() as { page: runtime.ModuleQueryPage }).page.packets).toEqual([]);
         expect(app.trace).toEqual([]);
-      } finally { vi.restoreAllMocks(); await app.application.close(); }
+      } finally { vi.restoreAllMocks(); await app.close(); }
     });
   }
 
@@ -120,7 +138,7 @@ describe("authenticated complete local Support execution", () => {
       expect(response.status).toBe(503);
       expect(app.trace).toEqual(["compile:module.sight_on_request@1", "compile:module.threat_radar@1"]);
       expect(app.collect).not.toHaveBeenCalled();
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
   it("checks every repeated decision request, not only the first valid request", async () => {
@@ -131,7 +149,7 @@ describe("authenticated complete local Support execution", () => {
       expect((await app.ask()).status).toBe(503);
       expect(app.trace).toEqual(["compile:module.sight_on_request@1"]);
       expect(app.collect).not.toHaveBeenCalled();
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
   it("does not prepare or compile Sight without a selected square", async () => {
@@ -144,7 +162,7 @@ describe("authenticated complete local Support execution", () => {
       expect(page.packets).toEqual([]);
       expect(page.suppressions).toEqual([{ module: "sight_on_request", reason: "no_square" }]);
       expect(app.trace).toEqual([]);
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
   it("does not preflight an unopened on-request module", async () => {
@@ -155,7 +173,7 @@ describe("authenticated complete local Support execution", () => {
       expect(response.status).toBe(200);
       expect((await response.json() as { page: runtime.ModuleQueryPage }).page.packets).toEqual([]);
       expect(app.trace).toEqual([]);
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
   it("preserves timing suppression ahead of source preparation and execution", async () => {
@@ -168,7 +186,7 @@ describe("authenticated complete local Support execution", () => {
       expect(page.packets).toEqual([]);
       expect(page.suppressions).toEqual([{ module: "structure_nudge", reason: "timing_outside_module" }]);
       expect(app.trace).toEqual([]);
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
   it("keeps post-commit disclosure closed even when its module contract is broken", async () => {
@@ -178,6 +196,6 @@ describe("authenticated complete local Support execution", () => {
       expect(response.status).toBe(409);
       expect((await response.json() as { error: { code: string } }).error.code).toBe("ASSISTANCE_WITHHELD");
       expect(app.trace).toEqual([]);
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { vi.restoreAllMocks(); await app.close(); }
   });
 });

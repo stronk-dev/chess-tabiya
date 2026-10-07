@@ -58,6 +58,10 @@ dispatched by `PresentedEvidence.svelte`.
 - `relation_overlay` edges must join retained nodes; its visible caption and endpoint labels name
   only those endpoints. Native caption/endpoint controls expose the same full relation through
   the owning board callback, never a second query or a wider paint budget.
+- `citation` retains its quoted passage and complete attribution. When its source carries an
+  absolute HTTP(S) URL without embedded credentials, the source title opens that exact URL in a
+  new tab. Missing, malformed or unsafe URLs remain plain attribution; the renderer never invents
+  a source destination.
 - Magnitude-trail point controls identify the corresponding circle without changing the registered
   plot geometry or scale; all values remain readable without hover. Figure captions stay inside
   their figure in valid first/last-child position.

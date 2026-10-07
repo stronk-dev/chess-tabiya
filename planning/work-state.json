@@ -26778,12 +26778,11 @@
     },
     {
       "id": "D3262",
-      "state": "doing",
+      "state": "todo",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:bd41c762496ffb58d8d7ede90360262829b71c99b8d99d540954699fbc4f749c",
+      "sourceDigest": "sha256:554c3c24a94615e3b382569de2a49d5fe7e0fdb49362c2b26d1f93499d582fc0",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-10-07"
+      "owner": "evidence-foundation"
     },
     {
       "id": "D3263",
@@ -29003,12 +29002,11 @@
     },
     {
       "id": "D3512",
-      "state": "doing",
+      "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:54ede9c0186957cffcf2dc2642b538a5c95dbb35f2fd727955147425cfd330e0",
+      "sourceDigest": "sha256:5873d965f579c83cefc7aac43d99171ddf213e5ab32fafd9d9364fa093539f21",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-10-07"
+      "owner": "evidence-foundation"
     },
     {
       "id": "D3513",
@@ -29024,6 +29022,41 @@
       "state": "doing",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:c06789726227e60fdddeb97703ad1457e5bb6e09feb9161975d3545cfdcebc92",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-07"
+    },
+    {
+      "id": "D3515",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:53cea039f4c88bfab6d75bc69df970d7293e6c6d24c916808c3327a8b67ca4cf",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/evidence/components.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3516",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5ae55e1c0cbc1e46dc4a0a651e5183e8121318d213f16a141c36099c26c861a5",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3517",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2972ba0000c540c52fd13ba8264a79238598ce94fc0ef426c5882d67cd52cece",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
+    },
+    {
+      "id": "D3518",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:79fe4c05f9f01eb096b98b2043c6ece72a1a4ad50139d25f2c1a9997c4832e6a",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
