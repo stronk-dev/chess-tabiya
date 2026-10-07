@@ -24,14 +24,29 @@ tiny aggregate layer differences remain literal, not changed chess verdicts.
 Explicit executed→cached node custody is checked separately from compiled
 policy/target evidence. No-target is policy-not-requested, not zero coverage.
 Original captures, source refusals and clocks remain unchanged. This closes the
-model policy/outcome comparison slice, not weighted semantic-projection,
-consumer/cache/browser/source-memory qualification or profile admission.
+model policy/outcome comparison slice, not consumer/cache/browser/source-memory
+qualification or profile admission. The separate weighted-target join now preserves
+all 364 named target-prefix masks and canonical masses over 2,316 original cases,
+with 28 no-target policies separately retained. Forty-six Node controls, nine
+independent Python methods and actual replay reject 15 output/seven source
+corruptions. Three original aggregate-order differences and literal float32 overshoot
+remain explicit; configured model mass is not human frequency, causal explanation
+or all-defence proof. No new setting or clock is counted. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.md`.
 Recursive tooling requires all six settings at a budget; pack and independently
 replay the depth-twelve capture only after its original exact handle terminates.
 Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
 `d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
 D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is
 automatic, no approval question and no production/RFC/1.0 promotion.
+
+[[D3510]] is doing under release-engineering: this checkpoint's full normal software
+gate times out on legacy supplied-Theory application composition (30 seconds), while
+3,397 other tests pass. The normal focused Theory gate passes 115 tests, so root cause
+is not yet established. Permanent last-boundary diagnostics preserve the timeout;
+the fresh full gate now passes all 3,398 tests / 344 files, seven performance tests
+and downstream contracts. This is current-run proof, not a located cause or repair
+of the initial stall; D3510 stays doing. Do not substitute the old checkpoint's run.
 
 Completed [[D3503]]: the full D3497 browser before/after populations each retain
 880 rows/60 baselines. Shipping 50 ms polling preserves the 70-second pending

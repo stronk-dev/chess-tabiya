@@ -938,6 +938,20 @@ semantic-search-cost-model-sensitivity-freeze: semantic-search-cost-model-sensit
 semantic-search-cost-model-sensitivity-check: semantic-search-cost-model-sensitivity-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-model-sensitivity.mjs --archives "$(ARCHIVES)" --out "$(OUT)"
 
+.PHONY: semantic-search-cost-weighted-targets-test semantic-search-cost-weighted-targets-freeze semantic-search-cost-weighted-targets-check
+semantic-search-cost-weighted-targets-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-weighted-targets.test.mjs
+semantic-search-cost-weighted-targets-freeze: semantic-search-cost-weighted-targets-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-weighted-targets.mjs --write --archives "$(ARCHIVES)" --out "$(OUT)"
+semantic-search-cost-weighted-targets-check: semantic-search-cost-weighted-targets-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-weighted-targets.mjs --archives "$(ARCHIVES)" --out "$(OUT)"
+
+.PHONY: semantic-search-cost-weighted-targets-independent-test semantic-search-cost-weighted-targets-independent
+semantic-search-cost-weighted-targets-independent-test:
+	docker run --rm --network none --tmpfs /tmp:rw,nosuid,nodev,size=16m --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-weighted-targets.test.py
+semantic-search-cost-weighted-targets-independent: semantic-search-cost-weighted-targets-independent-test
+	docker run --rm --network none --tmpfs /tmp:rw,nosuid,nodev,size=16m --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-weighted-targets-check.py "$(OUT)" --negative-controls
+
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 .PHONY: semantic-search-timed-table-audit-test semantic-search-timed-table-audit-freeze semantic-search-timed-table-audit-check
 # Disposable D3508 literal-source audit; never changes live execution or admission.

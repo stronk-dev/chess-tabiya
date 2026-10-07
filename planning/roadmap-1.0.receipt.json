@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d8b33a1562a91f898580743884fb0257147778aa0cf6644fa3815973e75b3b97",
+    "roadmap": "sha256:757ecffd20c9d793dcfa1fae384dd17163e6418f3465b7ff5abe349c35df2a7e",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:08d2c89e9a8a681f9eb6aca698e8e43e909bf47777cd3db822b862561ea7b2c6",
+    "workState": "sha256:7bc7050d24a2cf436e7474c6946c8df8fcfefe6df51aa16b779df3c0ea2ec660",
     "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 626,
-      "doing": 5,
+      "doing": 6,
       "blocked": 1059,
       "done": 1407,
       "refused": 161
@@ -256,11 +256,16 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "D3262 now retains twenty-three complete setting populations / 26,634 of 61,374 cases; thirty settings remain. All nine engine budget/widths and all six recursive depth-eight settings are complete. The original new five-setting capture retains 5,790 cases / 1,930 triplets; independent Python replay verifies 479,960 target observations with ten corruption refusals after thirty boundary controls. Sixty-one recursive reader controls and full six-setting synthesis retain 6,948 cases / 1,092 target cells / 2,316 cold-warm pairs: no target-specific frontier, coverage, witness or outcome differs from its own frozen arm, and no fresh warm source query occurs. Equality to each setting's reference is not equality between settings. Eight quantitative controls and full stratification retain all 210 strata, including intentional offline and no-target cases. Wider cold p95 exceeds 1,500 ms; prototype literal-reparse timing is not shipping-cache/browser latency or production-profile admission. D3509 is closed: twenty-five Node controls, four independent Python methods with twenty-three negative variants, actual oversized shared-writer audit and the full package generator's automatic path preserve the exact original 151,609,742-byte compressed archive in four at-most-40-MiB members. Original clocks, eighteen source digests, source failures and candidate populations remain unchanged. Prior timed-source disagreement/refusals and literal Maia weight findings remain in immutable receipts; source-admission holds D3508/D3373 are not silently repaired. The next six-setting depth-twelve original capture is live, not counted delivered or restarted on timeout. Twelve recursive primary settings, seventeen first-reply-reserve diagnostics and one complete-local diagnostic remain in scope. Full weighted semantic qualification, actual consumer/cache/browser joins, broader source/model memory and reviewed profile keep D3262 doing and the search RFC draft. Full normal software verification passes clean types, 3,398 tests / 344 files, seven isolated performance cases and downstream build/package/source/value/capability/migration/retained-Hint checks. Tracking/hash/receipt upkeep is automatic. No fresh content/browser/GitHub/native-release proof, milestone/capability promotion or full-1.0 completion is claimed.",
+        "summary": "D3262 retains 23 complete settings / 26,634 of 61,374 cases; 30 remain. All nine engine widths and six recursive depth-eight settings are complete; original recursive replay verifies 479,960 observations and full six-setting synthesis preserves 1,092 named cells and 2,316 cache pairs against their own arms. D3509 preserves exact oversized bytes without restamping clocks. The complete configured-model weighted-target qualification now retains 2,316 original cases / 364 cells / 28 no-target policies: opportunity counts each predecessor once, execution its own selected fourth-ply leaves. All masks and canonical masses match each own prefix; three original summation-order differences and literal float32 overshoot remain explicit. Forty-six Node controls, nine independent Python methods and actual replay reject 15 output and seven source corruptions; this is algebra/custody, not another chess or timing oracle. No new captured setting, human frequency, engine reason, all-defence proof or profile is selected. The original six-setting depth-twelve capture is live, not delivered or restarted on timeout. Full remaining cost, consumer/cache/browser, source/model-memory and reviewed profile remain open under D3262; D3508/D3373 source holds stay explicit. Current full normal software verification fails D3510 on legacy Theory composition at the unchanged 30-second timeout; 3,397 other tests pass. The focused normal Theory gate passes all 115 tests, but root cause remains unproven. Last-boundary diagnostics preserve every timeout/assertion; a fresh full normal gate now passes clean types, 3,398 tests / 344 files, seven performance tests and downstream contracts. D3510 stays doing because a passing replay does not locate or fix the original stall. Full normal governance passes with all 1,691 live rows assigned and zero untriaged. Routine metadata/hash/state/receipt upkeep is automatic. No content/browser/GitHub/native-release proof or milestone/capability/full-1.0 completion follows.",
         "impact": "advanced",
         "evidence": [
           "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md",
           "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-parts-2026-10-07.json.gz",
+          "planning/semantic-consequence-search/d3262-live-weighted-target-preregistration-2026-10-07.md",
+          "planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.md",
+          "planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.json.gz",
+          "tools/d3262-search-calibration/cost-weighted-targets.mjs",
+          "tools/d3262-search-calibration/cost-weighted-targets-check.py",
           "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-remaining-summary-2026-10-07.json",
           "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-sensitivity-2026-10-07.json.gz",
           "tools/d3262-search-calibration/cost-archive-parts.mjs",
@@ -969,7 +974,12 @@
           {
             "kind": "work_state",
             "id": "D3262",
-            "digest": "sha256:3d8df4dfb584e2509c9ad323880a236d696517c4e96d9d72e25d6f181423993f"
+            "digest": "sha256:80c385f1876c50a5113c99cd8d0c1b24f2bb1dbae89bddc948e645faa92e4fa5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3510",
+            "digest": "sha256:db69c0929b65ece03c308e628a7809f91a4bb2e286da2173c8eb68583157435f"
           },
           {
             "kind": "work_state",

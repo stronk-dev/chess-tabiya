@@ -19,6 +19,22 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 configured-model weighted-target qualification: **2,316 original cases /
+364 named target-prefix cells / 28 no-target policies**, all preserved. Opportunity
+counts each predecessor once; execution uses its own fourth-ply leaves. Forty-six
+Node controls, nine independent Python methods and actual replay rejecting fifteen
+output/seven source corruptions pass. No masks or canonical masses differ from each
+own prefix's reference; three original summation-order differences and literal
+float32 overshoot remain unchanged. No new capture setting, human frequency, engine
+cause or production default is claimed. The bounded weighted join is qualified;
+full cost, consumer/cache/browser, source-memory and profile obligations remain.
+Receipt: `planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.md`.
+Current software failure [[D3510]] remains doing: the full gate times out on legacy
+Theory composition, despite the normal focused 115-test gate passing. Last-boundary
+diagnostics preserve the timeout; a fresh complete gate now passes 3,398 software
+tests / 344 files, seven performance tests and downstream contracts. Current-run
+verification does not establish the initial failure's cause, so D3510 is not closed.
+
 2026-10-07 complete recursive depth-eight checkpoint: **23 complete settings /
 26,634 of 61,374 cases**, thirty settings remaining. The five newly completed
 populations independently replay 479,960 observations with ten corruption refusals.

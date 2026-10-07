@@ -966,3 +966,44 @@ source/model memory and reviewed profile admission remain open; D3508/D3373 sour
 holds are not repaired by a successful recursive arm. No capability/milestone,
 official-content or full-1.0 completion follows. `[V]` frozen cost plan, current
 original command/metadata, prior source receipts and canonical roadmap.
+
+## 2026-10-07 — complete configured-model weighted-target qualification
+
+The preregistered weighted join retains all 2,316 original configured-Maia cases /
+193 candidates / 364 named target-prefix cells / 28 no-target policy entries,
+both horizons and cold/warm/offline. The preceding complete policy comparison
+must still admit every case and all 772 cache pairs. The earlier target observer
+and fresh `d3262-target-opportunity@2` stay separately named; no capture, provider
+literal, refusal, clock or input digest changes. `[V]`
+`planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.md`
+§Population and custody and the preregistration cited there.
+
+Opportunity counts each three-ply predecessor once; execution counts only its
+selected fourth-ply leaves that execute the same named action. Reintroduction
+requires immediate removal. All masks and canonical weighted sums match each
+own prefix's frozen reference, not each other. Per-prefix phase denominators
+remain 49 opening / 53 unclear / 41 middlegame / 39 endgame, all focus null.
+Prefix 0.80 has opportunity/execution on 80/33 cells, prefix 0.90 on 88/46;
+reintroduced opportunity/execution counts are 16/6 and 19/8 respectively.
+These are comparison-cell counts, not human frequencies or all-defence proof.
+`[V]` receipt §What was qualified and immutable complete weighted artifact.
+
+Three cells retain original aggregate-order differences beside canonical sums;
+maximum literal opportunity mass `1.0000000447034836` remains unnormalized within
+the inherited source float32 tolerance. Forty-six Node controls and nine
+independent Python methods pass; actual independent replay rejects fifteen output
+and seven original-source corruptions. The first verifier's compensated Python
+sum was corrected to the declared ordered binary64 addition, with a permanent
+control; source/result bytes and tolerance were not changed. Independent arithmetic
+and custody are not another chess, model or timing oracle. `[V]` receipt §Independent
+falsification, primary/independent readers and terminal normal Make checks.
+
+This closes the bounded weighted-target qualification on the frozen frame and
+two prefixes, not production weighting, usefulness, engine-causal explanation or
+a new setting. D3262 retains 23 complete settings / 26,634 cases; the original
+six-setting depth-twelve capture remains live without restart. Full remaining
+cost populations, consumer/cache/browser joins, broader source/model memory and
+reviewed profile keep the RFC draft. Current full-software timeout D3510 remains
+explicit; a passing focused 115-test Theory gate does not establish its cause.
+No milestone/capability/content or full-1.0 promotion follows. `[V]` weighted receipt
+§Remaining boundary, current ledger/roadmap and software terminal.

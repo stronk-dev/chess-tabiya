@@ -1,5 +1,5 @@
 import type { AddressInfo } from "node:net";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import { compileAssistanceRequest, createRun, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import * as runtime from "@chess-tabiya/runtime";
 import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequestOptions, type CorpusSource } from "./corpus.js";
@@ -479,6 +479,10 @@ describe("learner Explorer shared exchange", () => {
   });
 
   it.each(["success", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", "changed", "revoked", "disconnect", "missing_binding_policy", "non_executable_binding"])("admits supplied Theory pages at authenticated application composition (%s)", { timeout: 30_000 }, async arm => {
+    // Preserve the functional timeout. If setup, transport or teardown stalls,
+    // report the actual last boundary instead of guessing that the provider failed.
+    let boundary = "source fixture";
+    onTestFailed(() => console.error(`Theory composition (${arm}) last boundary: ${boundary}`));
     const { source, remote } = await harness();
     const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
     const delayed = ["changed", "revoked", "disconnect"].includes(arm);
@@ -520,6 +524,7 @@ describe("learner Explorer shared exchange", () => {
       }
     }
     const supplied = new SuppliedSource();
+    boundary = "application composition";
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
     const originalCompile = runtime.compileEvidenceConsumerExecution;
     const compileConsumer = vi.spyOn(runtime, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
@@ -535,12 +540,15 @@ describe("learner Explorer shared exchange", () => {
       return originalCompile({ ...manifest, bindings }, consumer);
     });
     try {
+      boundary = "HTTP listen";
       await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+      boundary = "account registration";
       const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "theory_owner", password: "theory-test-password" }) });
       expect(registered.status).toBe(201);
       const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
       const headers = { "content-type": "application/json", cookie, "x-writer-id": "theory-writer" };
+      boundary = "run creation";
       const created = await fetch(`${origin}/runs`, { method: "POST", headers,
         body: JSON.stringify({ id: "supplied-theory", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
       expect(created.status, await created.clone().text()).toBe(201);
@@ -553,6 +561,7 @@ describe("learner Explorer shared exchange", () => {
         // Only a host (or reviewing grant) may request this assistance in a live run.
         expect((await fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "grant", handle: "theory_guest", role: "host" }) })).status).toBe(200);
       }
+      boundary = "move commit";
       const committed = await fetch(`${route}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "g1f3" }) });
       expect(committed.status, await committed.clone().text()).toBe(200);
       const { run } = await committed.json() as { run: { activeCursor: { nodeId: string } } };
@@ -562,14 +571,18 @@ describe("learner Explorer shared exchange", () => {
       });
       const caller = new AbortController();
       const ask = (preset: "quiet" | "theory_only", modules?: readonly string[]) => fetch(`${route}/modules/query`, { method: "POST", headers: queryHeaders, body: requested(preset, modules), signal: caller.signal });
+      boundary = "authenticated/disclosure refusals";
       expect((await fetch(`${route}/modules/query`, { method: "POST", headers: { "content-type": "application/json" }, body: requested("theory_only") })).status).toBe(401);
       expect((await ask("theory_only")).status).toBe(409);
       expect(supplied.calls).toBe(0);
+      boundary = "reveal";
       expect((await fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+      boundary = "quiet and empty module requests";
       expect((await ask("quiet")).status).toBe(200);
       expect((await ask("theory_only", [])).status).toBe(200);
       expect(supplied.calls).toBe(0);
       expect(compileConsumer).not.toHaveBeenCalled();
+      boundary = "Theory request";
       const pending = ask("theory_only");
       if (["missing_binding_policy", "non_executable_binding"].includes(arm)) {
         const refusal = await pending;
@@ -603,6 +616,7 @@ describe("learner Explorer shared exchange", () => {
         release();
       }
       const response = await pending;
+      boundary = "Theory response validation";
       expect(compileConsumer).toHaveBeenCalledOnce();
       const [manifest, consumer] = compileConsumer.mock.calls[0]!;
       expect(consumer).toEqual({ id: "module.theory_breadcrumb", version: 1 });
@@ -630,7 +644,12 @@ describe("learner Explorer shared exchange", () => {
       expect(JSON.stringify(page)).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|canonicalUci|providerSan|"a7a6"/u);
       expect(supplied.calls).toBe(arm === "legacy" ? 0 : 1);
       expect(stats).not.toHaveBeenCalled();
-    } finally { compileConsumer.mockRestore(); release(); await application.close(); }
+    } finally {
+      const completedBoundary = boundary;
+      boundary = `application shutdown (after ${completedBoundary})`;
+      compileConsumer.mockRestore(); release(); await application.close();
+      boundary = `completed shutdown (after ${completedBoundary})`;
+    }
   });
 
   it.each([0, 37, 100])("binds the real theory query to a move-free %i-game population without a sample floor", async (total) => {
