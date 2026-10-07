@@ -171,8 +171,15 @@ The same schema carries `$defs/trainingSet`, a **sibling artifact, never a drill
 mark, and optional ordered tempo cycles with budget scales. `validateTrainingSet` checks contiguous
 unique ordinals, member/pass-mark scope, registered members at publication, and authored timing
 windows for tempo members when given a pack lookup. Pure helpers count existing objective verdicts
-and scale authored budgets; no move is graded. **Loading, API/client progression, repeat-set and
-live scaled-tempo behavior remain D3318**. Valid format is not a completed training feature.
+and scale authored budgets; no move is graded. Installed documents load from `content/training-sets/`;
+an absent directory is an empty catalogue. `GET /training-sets` lists titles, member counts and
+authored pass requirements/cycles. `GET /training-sets/:id` adds members in ordinal order with their
+ordinary pack summaries. Installation refuses missing packs, invalid ordinals and tempo members
+without authored windows. A set inherits its members' draft status; its own `published` declaration
+cannot turn an unreviewed member into official content. Set digests are separate from pack digests.
+These are catalogue reads, not a delivered training session. **Client progression, repeat-set,
+schedule isolation and live scaled-tempo behavior remain D3318**; D3535 owns the missing durable
+set/cycle context. No authored set is manufactured to make the empty catalogue look populated.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

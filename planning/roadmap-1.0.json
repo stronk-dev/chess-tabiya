@@ -2220,13 +2220,19 @@
         "dependsOn": [
           "durable-product-state"
         ],
-        "nextAction": "Audit the already-routed theory, profile, registered-bot and Campaign families at createApplication, retaining their shipped production doors. Complete missing verbs and native/social/clock/professional families with typed authorization, errors, availability, ownership and release-container journeys; a direct handler or an existing route does not close a whole API family.",
+        "nextAction": "D3318's installed catalogue/detail reads and release packaging are locally verified. Review D3535's bounded execution amendment, then implement durable set/cycle context, member progression, repeat/re-offer and live tempo. Continue the existing theory, profile, bot, Campaign, social/clock and professional API work; catalogue reads do not close the training journey or whole milestone.",
         "latestCheckpoint": {
-          "at": "2026-08-31",
-          "summary": "The production application route inventory is sealed, while foundation-dependent learner, bot, campaign, social and professional operation families remain incomplete.",
-          "impact": "held",
+          "at": "2026-10-07",
+          "summary": "D3318 installs and reads training-set sibling documents through the production application. Nineteen focused checks cover ordered members, authored thresholds, refusals, weakest-member publication, immutable separate bytes and native HTTP/direct member access. Full local verification passes clean types, 3,446 software, seven performance and 227 content cases plus downstream contracts. Browser tiers pass 88 smoke/one optional skip, five content, 59 matrix and packaged-default, with 150 exact inputs and 112 unretried composition cells. Final release policy passes 67 controls after D3536's declared-licence regression. Progression, repeat/re-offer, schedule isolation and live tempo remain; D3535 has a bounded source-linked proposal, not acceptance. No authored set, graduation, migration, whole capability/milestone, remote CI or 1.0 completion is claimed.",
+          "impact": "advanced",
           "evidence": [
             "apps/server/src/application.ts",
+            "apps/server/src/training-set-registry.ts",
+            "apps/server/src/training-set-registry.test.ts",
+            "tools/release/inputs.test.mjs",
+            "tests/browser/production.spec.ts",
+            "planning/training-methods/set-execution-amendment-proposal.md",
+            "rfc/pack-training-forms.md",
             "planning/roadmap-to-done.md"
           ],
           "anchors": [
@@ -2234,6 +2240,26 @@
               "kind": "work_state",
               "id": "D1532",
               "digest": "sha256:b44111952a53ef3e8b52977715088d3e73864be98b2c69171ad8c5d61d6f5e09"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3318",
+              "digest": "sha256:739136d68b7d9bda7dafd5d537edb2a462021c5f6a4a09c5c6207454b4680745"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3535",
+              "digest": "sha256:fff743b443feab7a39954fdcaee3ed9e2f950582ecef7db728af1733dc52e6ee"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3536",
+              "digest": "sha256:11541174f77491b009e062ec6df08a3c59d4374b4d7d09a7fa4f2e47e09f860f"
+            },
+            {
+              "kind": "rfc",
+              "id": "pack-training-forms.md",
+              "digest": "sha256:ed3b80d97c090b0aafdef3db78d1e4cbdf934980461de7ae9e031904f0343bf1"
             }
           ]
         },
@@ -2857,6 +2883,11 @@
     ],
     [
       "/packs",
+      "theory_content",
+      "live"
+    ],
+    [
+      "/training-sets",
       "theory_content",
       "live"
     ],

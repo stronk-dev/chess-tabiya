@@ -116,6 +116,7 @@ import { distillRun } from "./distill.js";
 import type { ClassroomService } from "./classroom.js";
 import type { PrincipleRegistry } from "./principle-registry.js";
 import { LIBRARY_KINDS, LIBRARY_PHASES, openingEntryView, packEntryView, principleEntryView, shapeEntryView, type LibraryKind, type LibraryPhase, type TheoryLibrary } from "./theory-library.js";
+import type { TrainingSetRegistry } from "./training-set-registry.js";
 import { vocabularyUsage } from "./authoring-vocabulary.js";
 import type { LearnerProfileService } from "./learner-profile.js";
 import type { HintService } from "./hint-service.js";
@@ -917,6 +918,7 @@ export function createRestHandler(
   theoryLibrary?: TheoryLibrary,
   campaigns?: CampaignService,
   hints?: HintService,
+  trainingSets?: TrainingSetRegistry,
 ): RestHandler {
   // rfc/phase-source-composition.md §5: the Support call site's phase-source dependencies.
   const phaseSourcesFor = (pack: PackRecord | undefined): PhaseSourceDependencies => Object.freeze({
@@ -1375,6 +1377,17 @@ export function createRestHandler(
       if (request.method === "GET" && exportRoute !== null) {
         if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
         return json(200, studio.export(decodeURIComponent(exportRoute[1]!), authenticate()));
+      }
+      if (url.pathname === "/training-sets" || url.pathname.startsWith("/training-sets/")) {
+        if (request.method !== "GET") return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        if (trainingSets === undefined) throw new ServerError("STORAGE_FAILURE", "Training sets are not configured");
+        if (url.pathname === "/training-sets") return json(200, trainingSets.list());
+        const match = /^\/training-sets\/([^/]+)$/.exec(url.pathname);
+        if (match === null) return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
+        let id: string;
+        try { id = decodeURIComponent(match[1]!); } catch { throw invalid("Training set id contains invalid URL encoding"); }
+        const set = trainingSets.get(id);
+        return set === undefined ? json(404, { error: { code: "NOT_FOUND", message: "Training set not found" } }) : json(200, set);
       }
       if (request.method === "GET" && url.pathname === "/packs") {
         return json(200, service.packs());

@@ -345,6 +345,19 @@ Proposed — id assigned at landing; head was **D1310** at drafting.
 
 ## Changelog
 
+- **2026-10-07** — D3318 catalogue stage: installed sibling documents, ordinal-ordered catalogue/detail
+  reads through the production application, weakest-member publication and release-bundle admission.
+  `make training-set-catalogue-check` passes 19 cases; clean types and release-policy checks pass.
+  Full local verification passes 3,446 software, seven performance and 227 content cases;
+  all browser tiers pass, including packaged-default, 150 exact inputs and 112 composition cells.
+  The final bundle licence regression D3536 passes all 67 release-policy checks.
+  This does not discharge D1 or D3: no client sequence, repeat-set,
+  schedule isolation or live scaled-tempo journey is claimed. D3535 records the absent durable
+  set/cycle occurrence and scaled-window reconstruction contract; it must be specified before those
+  mutation paths are implemented. The source-bound author proposal is
+  `planning/training-methods/set-execution-amendment-proposal.md`, not an accepted extension.
+  No pack digest, run schema or migration is changed here.
+
 - **2026-09-30** — integrated the format/mechanics checkpoint on main. Live ramp-to-assistance
   enforcement is recorded as [[D3317]], and the full training-set loader/API/client progression,
   repeat-set and live tempo journey as [[D3318]]. Criteria exercised only by pure helpers do not

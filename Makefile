@@ -305,6 +305,10 @@ roadmap-check:
 roadmap-progress: roadmap-check
 	node tools/roadmap-progress.mjs
 
+.PHONY: training-set-catalogue-check
+training-set-catalogue-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/training-set-registry.test.ts apps/server/src/training-forms.test.ts
+
 roadmap-receipt:
 	node tools/roadmap-receipt.mjs --write
 

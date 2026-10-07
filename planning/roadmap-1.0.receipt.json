@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:78e60b75e58547e53bfddc9548e23d73ec862214585a9fd0a7e847178636ad3b",
+    "roadmap": "sha256:156d79f6037d875db00a434c2cf7c215f988cd51da1cf4270a12caafde0945f8",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:df9852f16984253a227b8fa20801e41d5c1ed2ef92dbf40423691d03ccba9b14",
+    "workState": "sha256:ce2254c53c5718f22cdfa7378ff40d05b1c80a49fd6c5f46c1cf252ee7698ceb",
     "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
-    "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
-    "rest": "sha256:4d6b3cfaf4f2fdd0afad9b8d21131714e0638d8948afc744eef9552d4b16827c"
+    "application": "sha256:cb86006eb5e23e4a3070288bb23a71a1e3f0a8f2d6127f7f64c429e835aa9bce",
+    "rest": "sha256:76c8ad546e1bec84a672d8d2bdedacfc6d69658973370756699b6f31ed22ac44"
   },
   "summary": {
     "capabilities": 14,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
-      "doing": 9,
-      "blocked": 1059,
-      "done": 1425,
+      "todo": 628,
+      "doing": 10,
+      "blocked": 1060,
+      "done": 1426,
       "refused": 161
     },
     "workItems": {
@@ -57,7 +57,7 @@
       "missing": 0
     },
     "apiFamilies": {
-      "live": 22,
+      "live": 23,
       "live_direct": 1,
       "implemented_but_unreachable": 0,
       "missing": 0
@@ -1609,13 +1609,19 @@
       "dependsOn": [
         "durable-product-state"
       ],
-      "nextAction": "Audit the already-routed theory, profile, registered-bot and Campaign families at createApplication, retaining their shipped production doors. Complete missing verbs and native/social/clock/professional families with typed authorization, errors, availability, ownership and release-container journeys; a direct handler or an existing route does not close a whole API family.",
+      "nextAction": "D3318's installed catalogue/detail reads and release packaging are locally verified. Review D3535's bounded execution amendment, then implement durable set/cycle context, member progression, repeat/re-offer and live tempo. Continue the existing theory, profile, bot, Campaign, social/clock and professional API work; catalogue reads do not close the training journey or whole milestone.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "The production application route inventory is sealed, while foundation-dependent learner, bot, campaign, social and professional operation families remain incomplete.",
-        "impact": "held",
+        "at": "2026-10-07",
+        "summary": "D3318 installs and reads training-set sibling documents through the production application. Nineteen focused checks cover ordered members, authored thresholds, refusals, weakest-member publication, immutable separate bytes and native HTTP/direct member access. Full local verification passes clean types, 3,446 software, seven performance and 227 content cases plus downstream contracts. Browser tiers pass 88 smoke/one optional skip, five content, 59 matrix and packaged-default, with 150 exact inputs and 112 unretried composition cells. Final release policy passes 67 controls after D3536's declared-licence regression. Progression, repeat/re-offer, schedule isolation and live tempo remain; D3535 has a bounded source-linked proposal, not acceptance. No authored set, graduation, migration, whole capability/milestone, remote CI or 1.0 completion is claimed.",
+        "impact": "advanced",
         "evidence": [
           "apps/server/src/application.ts",
+          "apps/server/src/training-set-registry.ts",
+          "apps/server/src/training-set-registry.test.ts",
+          "tools/release/inputs.test.mjs",
+          "tests/browser/production.spec.ts",
+          "planning/training-methods/set-execution-amendment-proposal.md",
+          "rfc/pack-training-forms.md",
           "planning/roadmap-to-done.md"
         ],
         "anchors": [
@@ -1623,6 +1629,26 @@
             "kind": "work_state",
             "id": "D1532",
             "digest": "sha256:b44111952a53ef3e8b52977715088d3e73864be98b2c69171ad8c5d61d6f5e09"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3318",
+            "digest": "sha256:739136d68b7d9bda7dafd5d537edb2a462021c5f6a4a09c5c6207454b4680745"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3535",
+            "digest": "sha256:fff743b443feab7a39954fdcaee3ed9e2f950582ecef7db728af1733dc52e6ee"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3536",
+            "digest": "sha256:11541174f77491b009e062ec6df08a3c59d4374b4d7d09a7fa4f2e47e09f860f"
+          },
+          {
+            "kind": "rfc",
+            "id": "pack-training-forms.md",
+            "digest": "sha256:ed3b80d97c090b0aafdef3db78d1e4cbdf934980461de7ae9e031904f0343bf1"
           }
         ]
       },
@@ -2398,7 +2424,7 @@
         "missing": 0
       },
       "apiFamilies": {
-        "live": 5,
+        "live": 6,
         "live_direct": 0,
         "implemented_but_unreachable": 0,
         "missing": 0

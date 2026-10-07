@@ -111,6 +111,22 @@ test("criterion 9 negative fixture: a valid-looking job file, candidate and brow
   assert.throws(() => planRuntimeContent({ root }), /workstation-local path/u);
 });
 
+test("training sets follow the installed loader into the bundle, without authoring fixtures", () => {
+  const root = contentFixture();
+  try {
+    mkdirSync(join(root, "content/training-sets"), { recursive: true });
+    const set = { id: "chapter", formatVersion: "0.1", title: "Fixture chapter", members: [{ packId: "anti-caro-advance", ordinal: 1 }], provenance: { reviewStatus: "draft", sources: ["fixture"], licence: "CC0-1.0" } };
+    writeFileSync(join(root, "content/training-sets/chapter.json"), JSON.stringify(set));
+    writeFileSync(join(root, "content/training-sets/chapter.browser.json"), JSON.stringify(set));
+    const plan = planRuntimeContent({ root });
+    assert.equal(plan.manifest.files.find(file => file.path === "content/training-sets/chapter.json")?.family, "training-set");
+    assert.equal(plan.manifest.files.find(file => file.path === "content/training-sets/chapter.json")?.licence, "CC0-1.0");
+    assert.equal(plan.manifest.files.find(file => file.path === "content/training-sets/chapter.json")?.licenceBasis, "declared:provenance.licence");
+    assert.equal(plan.manifest.files.some(file => file.path === "content/training-sets/chapter.browser.json"), false);
+    assert.ok(plan.excluded.some(file => file.path === "content/training-sets/chapter.browser.json" && file.reason === "browser-fixture"));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
 test("criterion 9: a staged bundle verifies byte-for-byte; a changed or missing file fails", () => {
   const out = mkdtempSync(join(tmpdir(), "tabiya-staged-"));
   try {

@@ -136,6 +136,8 @@ export async function probeJourney(base) {
   const packs = await (await expectOk(await fetch(`${base}/packs`), "/packs")).json();
   results.packs = packs.length;
   for (const pack of packs) await expectOk(await fetch(`${base}/packs/${encodeURIComponent(pack.id)}`), `/packs/${pack.id}`);
+  const sets = await (await expectOk(await fetch(`${base}/training-sets`), "/training-sets")).json();
+  for (const set of sets) await (await expectOk(await fetch(`${base}/training-sets/${encodeURIComponent(set.id)}`), `/training-sets/${set.id}`)).text();
   results.shapes = (await (await expectOk(await fetch(`${base}/shapes`), "/shapes")).json()).length ?? null;
   await expectOk(await fetch(`${base}/principles`), "/principles");
   const capabilities = await (await expectOk(await fetch(`${base}/capabilities`), "/capabilities")).json();
@@ -165,7 +167,7 @@ export async function probeJourney(base) {
 }
 
 /** Classifies a loader trace against the bundle manifest: every /app read must be allow-listed. */
-export const LOADER_ROOTS = Object.freeze(["content/packs", "content/drafts", "content/shapes", "content/principles", "content/concepts", "content/concepts/revisions", "content/valence", "content/campaigns"]);
+export const LOADER_ROOTS = Object.freeze(["content/packs", "content/drafts", "content/shapes", "content/principles", "content/concepts", "content/concepts/revisions", "content/valence", "content/campaigns", "content/training-sets"]);
 
 export function classifyTrace(traceText, manifest) {
   const allowedFiles = new Set([...manifest.files.map((file) => `/app/${file.path}`), "/app/runtime-content/manifest.json", "/app/runtime-content/facts.json"]);

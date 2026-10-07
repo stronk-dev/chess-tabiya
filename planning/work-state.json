@@ -27261,11 +27261,12 @@
     },
     {
       "id": "D3318",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec89183c24d24c788ef5f24eea4eb07fc097f080de0c1347808925016c459b45",
+      "sourceDigest": "sha256:739136d68b7d9bda7dafd5d537edb2a462021c5f6a4a09c5c6207454b4680745",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "owner": "content-and-theory",
+      "since": "2026-10-07"
     },
     {
       "id": "D3319",
@@ -29203,6 +29204,24 @@
       "sourceDigest": "sha256:f68a0129419a3c9e7830239d0e51f09080cf0a0f64b06c3c80a9683db4b72326",
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3535",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fff743b443feab7a39954fdcaee3ed9e2f950582ecef7db728af1733dc52e6ee",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-training-forms.md"
+    },
+    {
+      "id": "D3536",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:11541174f77491b009e062ec6df08a3c59d4374b4d7d09a7fa4f2e47e09f860f",
+      "uxItems": [],
+      "evidence": "tools/release/inputs.test.mjs",
       "evidenceKind": "path"
     }
   ]

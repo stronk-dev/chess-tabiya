@@ -19,6 +19,10 @@ test("the packaged default exposes disclosed content and starts a learner rehear
   });
 
   expect(packs.length).toBeGreaterThan(0);
+  const sets = await page.request.get("/training-sets", { headers: { accept: "text/html" } });
+  expect(sets.status()).toBe(200);
+  expect(sets.headers()["content-type"]).toContain("application/json");
+  expect(Array.isArray(await sets.json())).toBe(true);
   expect(packs.every((pack) => pack.channel === "official" || pack.channel === "community")).toBe(true);
   expect(packs.some((pack) => pack.channel === "community")).toBe(true);
   expect(packs.every((pack) => pack.reviewStatus !== "schema_example")).toBe(true);

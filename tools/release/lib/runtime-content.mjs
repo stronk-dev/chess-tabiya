@@ -115,7 +115,7 @@ export function planRuntimeContent({ root = REPO_ROOT } = {}) {
       admit(sidecar, "pack-sidecar", [licence, ...thirdParty].join(" AND "), `inherits ${path}${thirdParty.length > 0 ? " plus declared source licences" : "; sources assert no third-party rights"}`);
     }
   }
-  for (const [family, directory] of [["shape", "content/shapes"], ["principle", "content/principles"]]) {
+  for (const [family, directory] of [["shape", "content/shapes"], ["principle", "content/principles"], ["training-set", "content/training-sets"]]) {
     for (const path of listFiles(root, directory, { recursive: false, filter: (name) => extname(name) === ".json" })) {
       const document = JSON.parse(readFileSync(resolve(root, path), "utf8"));
       const declared = declaredLicence(document);

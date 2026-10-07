@@ -83,6 +83,7 @@ import { OPERATOR_PROVIDER_BOUNDS, composeProviderTraversalApplication, type Pro
 import { BotOpponentProviders } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
 import { CampaignRegistry } from "./campaign-registry.js";
+import { TrainingSetRegistry } from "./training-set-registry.js";
 import { CampaignService } from "./campaign-service.js";
 import { loadReleaseAbout, type ReleaseAboutOptions } from "./release-about.js";
 import { BoundedTargetPolicyCompositionOperation } from "./bounded-target-policy.js";
@@ -401,6 +402,8 @@ function isApiPath(pathname: string): boolean {
     pathname === "/opening-identity" ||
     pathname === "/packs" ||
     pathname.startsWith("/packs/") ||
+    pathname === "/training-sets" ||
+    pathname.startsWith("/training-sets/") ||
     pathname === "/shapes" ||
     pathname.startsWith("/shapes/") ||
     pathname === "/principles" ||
@@ -538,6 +541,7 @@ export async function composeApplication(
       ? {}
       : { draftFiles: options.draftPackFiles }),
   });
+  const trainingSets = await TrainingSetRegistry.loadDefault(registry);
   if (options.deployment !== undefined && options.cookieSecure !== undefined && options.cookieSecure !== options.deployment.secureCookie) {
     throw new TypeError("PROFILE_HYBRID_REFUSED: cookieSecure contradicts the deployment profile");
   }
@@ -550,7 +554,7 @@ export async function composeApplication(
     }),
   });
   try {
-    return await composeServices(options, composition, { storage, shapes, principles, registry, workerConfig, about });
+    return await composeServices(options, composition, { storage, shapes, principles, registry, trainingSets, workerConfig, about });
   } catch (error) {
     // Nothing composed after the coordinator may leave the database open ([[D2965]]).
     try { storage.close(); } catch { /* preserve the primary failure */ }
@@ -580,11 +584,12 @@ async function composeServices(
     readonly shapes: ShapeRegistry;
     readonly principles: PrincipleRegistry;
     readonly registry: PackRegistry;
+    readonly trainingSets: TrainingSetRegistry;
     readonly workerConfig: ReturnType<typeof validateLongitudinalWorkerConfig>;
     readonly about: ReturnType<typeof loadReleaseAbout>;
   },
 ): Promise<ChessTabiyaApplication> {
-  const { storage, shapes, principles, registry, workerConfig, about } = authorities;
+  const { storage, shapes, principles, registry, trainingSets, workerConfig, about } = authorities;
   const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
     document: registry.required(summary.id).document,
     title: summary.title,
@@ -871,7 +876,7 @@ async function composeServices(
     availability: () => providerHealth.exchangeOperationAvailability("stockfish.principal_variation@1"),
     ...(voiceProvider === undefined ? {} : { voice: (view, sentence, signal) => voiceProvider.render({ scope: "hint", rendered: view }, options.voicePersona ?? "Clear, concise Tabiya voice. Do not add chess claims.", sentence, "hint", signal) }),
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns, hints);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns, hints, trainingSets);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   let healthProbe: () => Response = () => Response.json({ status: "degraded", engineMode, longitudinal: { status: "degraded", reason: "worker_start_failed" } }, { status: 503 });
