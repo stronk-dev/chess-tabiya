@@ -91,6 +91,16 @@ blocks complete working-tree application gates.
 
 ## 2026-10-07 current-source continuation
 
+The disposable `make ingress-budget-author-check` now passes 127 controls: all 112 inventoried
+operations reach their real handler's first service entry, while a detached model exercises the
+proposed population, bounded reader, selector and permit refusals. Existing aliases and an
+oversized ordinary command still reach current production entries, retaining positive evidence
+that enforcement is absent. Mock authentication and sentinel service cutpoints are not full
+journeys, actual auth, generated-handler closure or native/proxy protection. D3334/D3335 remain
+doing and unaccepted; D1846 remains blocked. `[V]`
+`planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md` §Disposable executable
+authoring model; `tools/d3334-ingress-contract/model.test.mjs`.
+
 The earlier missing-subset finding is expanded, not retroactively presented as a complete census.
 The current manual handler/selector review yields 112 distinct unsafe identities against §8's 99:
 thirteen additions and no removed/duplicate identities. It also finds a 32 MiB account-import

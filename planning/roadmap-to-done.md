@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 ingress authoring continuation: 127 disposable controls pass, including all 112
+inventoried operations at the real REST handler's first service entry and independent proposed
+reader/selector/permit refusals. Production still accepts the retained oversized-command and
+alias counterexamples. Mock authentication and sentinel entries are not successful journeys or
+whole-router/adoption proof. D3334/D3335 stay doing; §8 stays draft for fresh review and D1846
+stays blocked. Receipt: `planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md`.
+Metadata/hash/receipt updates are automatic. The live depth12/top8 capture is unfinished; no
+new search setting, milestone, capability or 1.0 completion is counted.
+
 2026-10-07 depth-twelve top-four continuation: all 1,158 cases independently
 replay 31,204 target observations and refuse six corruptions. Admitted evidence
 reaches **16,212 / 61,374**, fourteen of 53 settings; thirty-nine remain. Both

@@ -27406,7 +27406,7 @@
       "id": "D3334",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:842e62e5c68750e4185fc2c1080a494b6dad54cbc4368170d145fdbf936fbfb3",
+      "sourceDigest": "sha256:55abf6636e532d7cf346131837d3a581a70af0dc63e98210a2be3ee924efbc2e",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
@@ -27415,7 +27415,7 @@
       "id": "D3335",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:eff20d0589ccc0c7cf1f353f2fbc6bc6f6b8aeb54fa7e331629aeac3b6317f35",
+      "sourceDigest": "sha256:52a0d5133ce32ed521f7d131bb5255260f77b444df258c15d9028f58638b7fb8",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"

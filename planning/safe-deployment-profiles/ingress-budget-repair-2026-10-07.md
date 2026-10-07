@@ -260,6 +260,75 @@ Acceptance remains with fresh review; no production implementation precedes that
 None means zero allowed/retained payload, not zero native observation when checking a chunked
 empty/nonempty body. Known route/method refusals can still cancel unread uploads immediately.
 
+## Disposable executable authoring model — 2026-10-07
+
+`make ingress-budget-author-check` bundles the current production REST handler without booting
+the application, then runs **127 / 127** Node authoring tests, zero failures/skips/cancellations.
+The tool is explicitly disposable under RFC-0000, scoped to D3334/D3335, and is neither imported
+by production nor added to required CI. `[V]` `tools/d3334-ingress-contract/handler-entry.ts`,
+`model.mjs`, `fixtures.mjs`, `model.test.mjs`; terminal normal-Make result.
+
+The 112 transport fixtures exercise the actual handler's route and initial parsing to the first
+service entry, then stop with an explicit sentinel error. Controlled authentication returns a
+fixture principal; storage and services do not execute. Exact selector operands distinguish
+shared member-response, board, match, proposal and cohort-visibility entry points. The separate
+model resolves each fixture to its proposed semantic id. This is stronger than an anchor census,
+but **not successful application journeys, real authentication or complete service validation**.
+The initial 125-test run failed on three invalid fixtures: auth.delete had an extra closed-record
+field and select/prediction lacked the existing policy digest. Correcting those fixtures, then
+adding ownership/boundary controls, gives the 127-test result; no handler assertion was weakened.
+`[V]` fixtures/test source and `rest.ts`, `opponent-selector.ts:325–400`.
+
+Other controls refuse missing/duplicate/extra and count-preserving method/path/id/budget changes,
+forged/cloned/cross-compiler/cross-request/replayed permits, mutation, invalid single/shared body
+selectors, invalid UTF-8/JSON/root types, compression, unknown routes/methods before producer pull,
+declared overage before pull, incremental limit/limit+1, nonempty chunked no-body requests and
+pending-read cancellation without waiting for an uncooperative producer. Pre-read refusal and
+invalid native chunks cancel ownership; readers unlock. Retained chunks are copied before a
+producer can mutate them. Canonical account/document/JSON declared-limit+1 cases use their exact
+32/8/0.25 MiB envelopes, not a blanket limit. `[V]` `model.test.mjs` named controls.
+
+Four alias controls first reach the existing production entries, then receive proposed typed
+400 INVALID_REQUEST before any model producer pull: board item/pgn, vote item, scan/enter and
+DELETE repertoire/enter. Two more predecessor controls prove the actual handler still reads an
+unknown auth suffix and reaches classroom.create with an ordinary command exceeding 256 KiB;
+the model rejects the latter. **These positives prove the production gap still exists**, not that
+this tool closes it. `[V]` actual-handler fixtures and model controls.
+
+The independent budget partition is still 4 none /10 document8m /2 account32m /96 json256k.
+The model pins rest.ts's current hash and the explicit 112-id table/RFC population; a source change
+requires re-audit. That pin is a tripwire, **not detection of every unregistered handler branch**.
+Prototype callback dispatch is not production reader/parser/dispatcher adoption. The model does
+not implement real account authentication-before-upload, safe/HEAD route closure, native framing
+or declared-length mismatch behavior, sockets/proxy enforcement, large actual uploads, deployment
+or browser journeys. Its raw reader retains no over-limit payload; native chunk observation and
+the final owned concatenation are not a claim of total process memory at most maxBytes. These
+limits remain explicit fresh-review/implementation exits. D3334/D3335 stay doing, §8 stays draft
+and D1846 stays blocked. `[V]` the complete detached model and first-entry sentinel boundary;
+`[M]` admission/production conclusions remain withheld.
+
+The lightweight subsecond authoring checks overlap the live engine-depth12/top8 capture on the
+same non-isolated host; no source query, search compiler, original clock or receipt is changed.
+No full performance/browser/GitHub run is claimed. Routine metadata/hash/receipt updates remain
+automatic, with no milestone or capability promotion.
+
+Normal `make schema-check test-tier-check` terminates zero: fourteen scaffold/CI/packaging controls,
+scaffold and packaging verification, lefthook validation, and six tier controls pass. The first
+sandboxed invocation could not write pnpm's package-manager lockfile; the same normal command
+with required filesystem permission then ran, without test/env overrides or project lockfile
+changes. Only Make/research-tool/tracking bytes change in this checkpoint; production app,
+package, schema, content, proxy and required CI bytes do not. Previous whole-source proofs are
+not a fresh full-suite proof for this new tool. Scoped process checks and ordinary hooks precede
+the explicitly owned commit. `[V]` normal Make terminal results and owned-file diff.
+
+Normal `make staged-process-contracts` also terminates zero on the explicit fifteen-file index:
+register/lifecycle, work routing/state, roadmap R1–R10/receipt, protected intent and append-only
+checks pass. Its first run detected the two newly stale work-state checkpoint anchors; automatic
+digest/receipt refresh corrected them without state/acceptance changes, then the standard check
+passed. All 1,689 live rows remain assigned/routed, zero untriaged/unrouted. Ordinary commit hooks
+follow this final evidence-only append; no full governance tier or GitHub run is claimed. `[V]`
+current-index Make terminal result and checkpoint diff.
+
 ## Read-only source-grammar verification
 
 Ten diagnostic controls execute the exact regex literals extracted from the SHA-bound current

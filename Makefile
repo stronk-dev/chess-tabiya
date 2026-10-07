@@ -306,6 +306,12 @@ http-streaming-check:
 http-ingress-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-ingress.test.ts
 
+# RFC-0000 disposable D3334/D3335 authoring model: not production protection or required CI.
+.PHONY: ingress-budget-author-check
+ingress-budget-author-check:
+	./node_modules/.bin/esbuild tools/d3334-ingress-contract/handler-entry.ts --bundle --platform=node --format=esm --outfile=.cache/d3334-ingress-contract/handler.mjs --log-level=warning
+	node --test tools/d3334-ingress-contract/model.test.mjs
+
 .PHONY: http-streaming-proxy-check
 http-streaming-proxy-check:
 	./node_modules/.bin/esbuild tools/http-streaming-proxy/upstream.ts --bundle --platform=node --format=esm --outfile=.cache/http-streaming-proxy/upstream.mjs --log-level=warning
