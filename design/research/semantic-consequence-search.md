@@ -713,3 +713,65 @@ default profile. `[V]` `cost-stockfish.mjs` `CostDependencies.query`;
 `apps/server/src/provider-operations.ts` `stockfishDescriptor.admitRetained`;
 `packages/runtime/src/provider-exchange.ts` `makeProviderDelivery` and
 `assertProviderParsedPayloadReceipt`.
+
+### Primary-source author inputs: selection, rank frames and bounds
+
+Checked 2026-10-07 for [[D3508]] and the existing [[D3373]] source-contract hold.
+The April-2006 UCI standard separates a search-ending `bestmove` from `info`:
+PV-related fields belong together; MultiPV identifies ranked variants; score
+bounds remain lower/upper bounds. The protocol does not license assigning an
+earlier frame's score to a different terminating move. `[V]`
+[UCI standard copy, engine-to-GUI bestmove/info](https://backscattering.de/chess/uci/2006-04.txt),
+linked by the [protocol publisher](https://www.shredderchess.com/chess-features/uci-universal-chess-interface.html).
+The last sentence is the contract inference, not a quoted protocol requirement.
+
+In the release-tagged Stockfish-19 source, `Worker::start_searching` emits the
+terminating move from its final chosen root PV. `SearchManager::output_pv` can
+emit a previous score/PV with the preceding depth for an unsearched root; other
+entries can remain current-depth. It separately emits inexact score flags.
+Aborted MultiPV loss handling can restore a prior score/PV or mark an entry
+inexact. These are supported upstream states, not proof that any one branch
+caused our four observed failures. The binary name/digest does not establish its
+build's equality to this tagged source. `[V]`
+[sf_19 search.cpp](https://raw.githubusercontent.com/official-stockfish/Stockfish/sf_19/src/search.cpp),
+`Worker::start_searching`, `Worker::iterative_deepening`,
+`SearchManager::output_pv`; `[P]` mapping to the captured binary is unverified.
+
+Official Stockfish documentation includes a bounded final-score example before
+`bestmove`, describes MultiPV as ranked lines, and recommends sending move
+history for repetition handling. Its FAQ explicitly distinguishes search depth
+from exhaustive ply coverage and engine output from application move labels.
+No source here turns a selected engine move into an explanation of its cause.
+`[V]` [UCI commands](https://official-stockfish.github.io/docs/stockfish-wiki/UCI-Protocol-and-Stockfish-Commands.html)
+§position/§go/§MultiPV;
+[FAQ](https://official-stockfish.github.io/docs/stockfish-wiki/Stockfish-FAQ.html)
+§What is depth/§Move annotations.
+
+Our two existing readers have different declared scopes, not interchangeable
+contracts. The disposable table reader requires every requested rank at one
+depth, rejects a bound-bearing selected table and refuses a fixed-depth
+downgrade. The shipping durable reader already selects one completed unbound
+rank-one iteration, while retaining the actual terminating move separately.
+Its permanent positive explicitly retains score 32 from an e2e4 PV together
+with terminating d2d4. That preserves bytes and selection, but is **not** a
+witness that score 32 evaluates d2d4. `[V]` `cost-stockfish.mjs` `parseProbe`;
+`stockfish-coherent-table.mjs` `selectCoherentTopEntries`;
+`apps/server/src/evidence-queue.ts` `completedInfo`/`StockfishEvidenceExecutor.execute`;
+`apps/server/src/evidence-queue.test.ts` test “preserves the terminating selection
+rather than substituting the PV's first move”. D3374's implemented repair and
+D3373's missing whole-source migration remain distinct.
+
+Author repair inputs, **not accepted semantics** `[M]`: preserve the terminating
+selection, completed rank frame, score/PV subject and literal task boundaries as
+distinct identities. The successor must specify whether an earlier unbound
+timed frame is admissible, how its age/depth and omitted newer information are
+exposed, and what remains unavailable when only selection survives. A score
+for the selected move needs its own same-subject witness; another search is a
+new source/budget, not repaired evidence. Keep fixed-depth shortfalls, invalid
+PVs, terminal history, mixed-depth ranks and bound-only estimates explicit.
+Acceptance negatives must include the real earlier-rank/final-selection
+disagreement, selected-only/score-only cases, crossed tasks/subjects, and a
+consumer trying to substitute rank one or grade from an unrelated score.
+Whole durable consumer adoption and registered source-version/resource claims
+precede retiring the raw path. No new default, source receipt, provider schema,
+production parser, grading rule or engine-causality claim is introduced here.

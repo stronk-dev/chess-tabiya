@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 source-contract author inputs: primary UCI and tagged Stockfish sources
+are checked against the shipping queued reader, not inferred from the engine name.
+All sixty-three normal focused queued-source/durability controls pass. D3373 now
+has an explicit author queue exit joining D3508's retained disagreement to the
+selected-move/value-subject migration contract. Research and proposed semantics
+remain separate; no production repair, profile, complete source migration or
+new completed population is claimed. Dossier: `design/research/semantic-consequence-search.md`
+§Primary-source author inputs.
+
 2026-10-07 timed-source boundary follow-up: D3508 preserves four actual rejected
 timed queries with earlier complete unbound tables; one earlier rank-one differs
 from the final bestmove. Fourteen controls and eighteen custody/output corruptions
