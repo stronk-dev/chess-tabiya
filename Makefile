@@ -834,6 +834,23 @@ semantic-search-cost-test: semantic-search-cost-build
 semantic-search-cost-source-lifecycle-test:
 	$(CI_NODE) --test tools/d3262-search-calibration/cost-source-lifecycle.test.mjs
 
+.PHONY: semantic-search-cost-case-isolation-test semantic-search-cost-isolation-selection-freeze semantic-search-cost-isolation-selection-check
+semantic-search-cost-case-isolation-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-case-isolation.test.mjs tools/d3262-search-calibration/cost-isolation-selection.test.mjs
+
+semantic-search-cost-isolation-selection-freeze: semantic-search-cost-case-isolation-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-isolation-selection.mjs --freeze "$(OUT)"
+
+semantic-search-cost-isolation-selection-check: semantic-search-cost-case-isolation-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-isolation-selection.mjs --check "$(OUT)"
+
+.PHONY: semantic-search-cost-isolation-selection-independent-test semantic-search-cost-isolation-selection-independent
+semantic-search-cost-isolation-selection-independent-test:
+	docker run --rm --network none --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-isolation-selection.test.py
+
+semantic-search-cost-isolation-selection-independent: semantic-search-cost-isolation-selection-independent-test
+	docker run --rm --network none --mount type=bind,src="$(CURDIR)",dst=/repo,readonly -w /repo --entrypoint python chess-tabiya-maia:dev tools/d3262-search-calibration/cost-isolation-selection-check.py "$(OUT)"
+
 .PHONY: semantic-search-cost-maia-probe
 semantic-search-cost-maia-probe: semantic-search-cost-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-maia-probe.mjs --out "$(OUT)"

@@ -1056,4 +1056,13 @@ whole triplets, no retries, fresh process per cold case, visible startup/teardow
 warm fresh-query refusal and an explicit original/successor qualification join.
 It does not replace failed originals or promote the delivered 23 settings.
 `[V]` `planning/semantic-consequence-search/d3512-source-isolation-preregistration-2026-10-07.md`;
-instrument/controls/native evidence and full D3262 admission remain open.
+The disposable isolated-case executor, strict lifecycle custody and structural
+original/successor join now pass 60 Node controls. Current v2 selection retains
+697 cold / 2,091 triplet cases; Node read-only reconstruction and independent
+Python full-cohort/byte replay pass after three methods/sixteen corruption
+variants. The v1 prototype remains preserved, not current capture authority.
+Native controller/capture and independent lifecycle/source/board/observation
+replay remain open; neither synthetic subprocesses nor cohort replay supplies
+new native cost/profile evidence. `[V]`
+`planning/semantic-consequence-search/d3512-source-isolation-instrument-2026-10-07.md`,
+named source/tests, current frozen selection and actual normal Make terminals.

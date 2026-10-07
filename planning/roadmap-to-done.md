@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 D3512 isolated-case execution is implemented as disposable research:
+fresh process per cold case, no retries, literal command/failure/startup/teardown
+custody and closed-before-warm execution. Sixty Node controls pass. The frozen
+current v2 cohort retains all 697 affected cold / 2,091 triplet cases; read-only
+Node reconstruction and independent Python full-cohort/byte replay pass, including
+three methods/sixteen corruption variants. Original source images/failures/clocks
+stay unchanged. Native controller/captures and independent successor lifecycle/
+source/board/observation qualification remain open; **23 qualified settings** stays
+unchanged. Receipt:
+`planning/semantic-consequence-search/d3512-source-isolation-instrument-2026-10-07.md`.
+
 2026-10-07 retained depth-twelve comparison is now complete as checked synthesis:
 6,948 cases / 268 strata, all 1,092 target cells / 2,316 cold-warm pairs. 731 cells
 match their own frozen arm; 361 remain explicitly unpaired. Eight quantitative

@@ -112,8 +112,12 @@ The separately identified successor protocol is now preregistered in
 `d3512-source-isolation-preregistration-2026-10-07.md`: freeze the 697 affected
 cold identities and matching whole triplets, isolate each cold process without
 retrying any case, preserve startup/teardown and original failures, and refuse
-warm fresh execution. Its instrument, controls, original/successor qualification
-join and native evidence remain unimplemented/unmeasured, not new delivered cases.
+warm fresh execution. Disposable isolated-triplet execution, its 60 controls and
+structural original/successor pairing now pass, with independently replayed frozen
+selection of all 697 cold / 2,091 triplet identities. The native controller,
+successor captures and independent lifecycle/source/board/observation qualification
+remain open, not new delivered cases. Current implementation receipt:
+`d3512-source-isolation-instrument-2026-10-07.md`.
 
 ## Complete retained-batch stratification and bounded comparison
 

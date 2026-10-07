@@ -60,9 +60,17 @@ The successor protocol is now recorded before execution in
 `planning/semantic-consequence-search/d3512-source-isolation-preregistration-2026-10-07.md`:
 freeze the 697 affected cold identities and their whole triplets (2,091 cases),
 give each cold case a new ready process, never retry a failed case, preserve startup/
-teardown separately and prohibit warm fresh execution. Implement the disposable
-instrument, its actual subprocess/custody controls and explicit original/successor
-qualification join before native capture or any completed-count promotion.
+teardown separately and prohibit warm fresh execution. Disposable isolated-triplet
+execution and structural original/successor pairing now pass 60 actual-subprocess/
+custody controls. Current v2 frozen selection binds all 697 cold / 2,091 triplet
+cases; Node read-only reconstruction and independent Python full-cohort/byte replay
+pass, with three methods and sixteen corruption variants. The v1 prototype image
+is retained, not current capture authority. Current receipt:
+`planning/semantic-consequence-search/d3512-source-isolation-instrument-2026-10-07.md`.
+Next implement the immutable whole-cohort native controller and partial-abort/
+source-image controls, bound to the current selection; then actual successor
+capture and independent lifecycle/source/board/observation replay before missing
+attempts or setting counts can qualify. No ad hoc loop or native result is claimed.
 Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
 `d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
 D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is
