@@ -28,6 +28,46 @@ is **partial**, not complete. Official content, remaining workflows and release
 proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
+## Product inventory — 2026-10-07
+
+The product is a substantial development build, **not a finished 1.0 or release candidate**.
+The core rehearsal loop is the most mature journey. Major surfaces now execute real backend
+operations; registration, a passing unit suite, or a visible page is not full feature completion.
+This dated inventory is grounded in the production composition and the implemented-system docs;
+the machine map above remains the current assignment/status source.
+
+| Area | Implemented | Still required for full 1.0 |
+|---|---|---|
+| Work tracking | Durable states, named owners, executable queues and checked roadmap joins | Keep completion tied to product proof; repair weak historical closeouts and stale narrative, not just consistent registers |
+| Evidence foundation | Typed rules, structural/tactical/recorded-window facts; provider exchange; candidate population; exact presentation bindings | Complete source authority and consumer execution, runtime opening evidence, remaining operand fidelity and validated deeper consequence search |
+| Rehearsal | Start, commit, opponent consequence, rewind, fork, compare, replay, resume and multiple drill forms | Complete opinionated arrival/return paths and official examples for each form |
+| Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
+| Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
+| Theory and packs | Searchable phase-first Library, entry/rehearsal doors, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content, fix official-versus-installed disclosure, implement durable training-set progression/repeat/tempo and graduate the official corpus |
+| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions and resume | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish rematch/history and bot-event workflows |
+| Learner model | Durable attributed observations with opportunity counts, Rating and private floor-gated profile/history | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
+| Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results and resume | Official educational progression, consumed theory unlocks, complete boss/reward/failure paths, catalogue progression and meaningful long-term rewards |
+| Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
+| Coach/streamer | Classrooms, assignments, submissions, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, submission review, audience/consent/delay and reconnect workflows |
+| Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
+| Account/data | Authentication, authorization, writer leases, export/delete and implemented maintenance operations | Complete portable account round-trip, guest/claim, future-object coverage and native recovery/isolation journeys |
+| Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations and official bundled content |
+
+The evidence-versus-guidance split is implemented in meaningful production paths, **not complete
+across the platform**. Deeper “why this engine move?” search remains research rather than a
+shipping coaching or bot capability. Profile observations are not personality verdicts; bot
+profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+There are **zero graduated official packs**. In particular, an installed Library item's Official
+badge does not by itself establish source review ([[D3540]]).
+
+The next delivery priorities are: close source/operand gaps; finish existing module and
+Review→theory→rehearsal→return journeys; complete training progression and calibrated bot/profile
+behavior; deliver the campaign curriculum/reward loop and representative grounded content; then
+prove the complete release/operator journeys. Independent authorised work can proceed together;
+unaccepted numerical, source or durable-state contracts cannot be guessed around.
+
+## Detailed checkpoint history
+
 2026-10-07 D3512 isolated-case execution is implemented as disposable research:
 fresh process per cold case, no retries, literal command/failure/startup/teardown
 custody and closed-before-warm execution. Sixty Node controls pass. The frozen

@@ -9,6 +9,9 @@ compiler, domain branches, requests and sealed receipts at seven viewports. It i
 priority, every badge, native swaps/hits, compact tokens and board stability; no packet fixtures or
 forced input. `make play-composition-client-check` adds mounted snapshot/decision/badge controls.
 These focused commands do not replace the full CI tiers or remaining complete UX acceptance.
+`make support-theory-navigation-check` checks strict shape receipt rendering and the actual
+desktop/phone Support → Library → saved-run return, including unchanged recorded events.
+It is a focused development check; the same journeys also run in the browser smoke tier.
 `make play-composition-tablet-check` additionally runs final Hint resize/retention, every compact
 head swap, staged/empty/consequence states and four independent header separation checks with an
 overlap negative control. Native matrix actions have a finite fail-fast timeout, not forced clicks.

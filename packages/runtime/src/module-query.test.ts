@@ -262,6 +262,10 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     expect(theory.unavailable).toContainEqual({ projection: "derived.explorer.population_summary@1", reason: explorerUnavailable });
     expect(theory.empty).toBeNull();
     expect(assertDelivered(theory, assistance).join(" ")).toMatch(/maroczy/iu);
+    const shape = theory.receipt.items.find((item) => item.component.id === "fact_statement");
+    expect(shape?.component.id === "fact_statement" && shape.component.operand).toMatchObject({
+      rendererId: "play.shape_entry@1", operands: { entryId: "maroczy-bind", title: "Maroczy bind" },
+    });
   });
 
   it("compare coach needs a second attempt, then renders the other attempt's recorded facts", () => {

@@ -354,6 +354,10 @@ label-sweep:
 evidence-components-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/evidence/components.test.ts
 
+.PHONY: support-theory-navigation-check
+support-theory-navigation-check: evidence-components-check
+	./node_modules/.bin/playwright test --grep "Support opens the exact recognized Library pattern"
+
 .PHONY: http-streaming-check
 http-streaming-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-streaming.test.ts

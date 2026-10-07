@@ -28,6 +28,14 @@
   commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
 - **Created:** 2026-08-24
+- **Implementation checkpoint 2026-10-07, shape-backed learner actions:** D3538 retains
+  the exact fired shape entry ID through the registered presenter and the parsed
+  module receipt. Named-structure and Theory pointer cards can open the existing Library
+  entry; legacy title-only statements remain readable without a guessed link.
+  Two predecessor-red mounted controls, actual query retention and native desktop/phone
+  Library-and-return controls pass, preserving the recorded run. Full-gate results are
+  recorded in `planning/exploration/log.md`. This is the existing §4.6–4.7 action,
+  not new chess prose, opening-source authority, reviewed content or full RFC completion.
 - **Implementation checkpoint 2026-10-06, §2.5.2/§2.6/§2.7:** D3471 applies the existing
   current-decision and complete-request admission to the shared Support path, including
   pending subjects, help changes, navigation, destruction and staged empty-check replies.

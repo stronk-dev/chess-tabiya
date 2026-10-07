@@ -29232,6 +29232,33 @@
       "uxItems": [],
       "evidence": "planning/roadmap-1.0.json",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3538",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:082592c32e9d3ea9ff52db327b39c1c6cbb389cfc7e8e3b040c9e7d2aaa4c4f8",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3539",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c0d58b257f0d774657ae26f26281211185111d7b4c4a2f7536c30c8285f24d63",
+      "uxItems": [],
+      "evidence": "apps/server/src/evidence-manifest.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3540",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:91e9920a01155306fddc5bc4f1a895fb91335b0c2639d46484e46f4b06d613cb",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:theory-drill-current-joins.md"
     }
   ]
 }

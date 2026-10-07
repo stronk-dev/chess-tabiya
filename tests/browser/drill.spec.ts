@@ -3347,6 +3347,38 @@ async function startSupportFromFen(page: Page, fen: string, side: "white" | "bla
   await choosePreset(page, /Support/u);
 }
 
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
+test(`Support opens the exact recognized Library pattern and preserves the recorded run on return (${viewport.width}px)`, async ({ page }) => {
+  await page.setViewportSize(viewport);
+  await startSupportFromFen(page, "r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", "white");
+  await move(page, "b1", "c3");
+  const runUrl = page.url();
+  const runId = runUrl.split("/").at(-1)!;
+  await expect.poll(async () => {
+    const graph = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    return graph.nodes.filter(node => node.actor === "opponent").length;
+  }).toBe(1);
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position" }).click();
+  const theory = page.locator('[data-module="theory_breadcrumb"]');
+  await theory.locator(".seat-row").click();
+  const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().method() === "POST" && res.request().postDataJSON().query?.requested?.includes("theory_breadcrumb"));
+  await theory.getByRole("button", { name: "Show", exact: true }).click();
+  const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(item => item.module === "theory_breadcrumb");
+  expect(packet?.receipt.items.some(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.shape_entry@1" && item.component.operand.operands.entryId === "maroczy-bind")).toBe(true);
+  const before = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json();
+  const link = theory.getByRole("link", { name: "Open pattern entry", exact: true });
+  await expect(link).toHaveAttribute("href", "/library/shape/maroczy-bind");
+  await link.click();
+  await expect(page).toHaveURL(/\/library\/shape\/maroczy-bind$/u);
+  await expect(page.getByRole("heading", { name: "Maroczy Bind", exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(runUrl);
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  expect(await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).toEqual(before);
+});
+}
+
 test("@matrix maximum-load modules use real requests and evidence at every viewport", async ({ page }, testInfo) => {
   test.setTimeout(300_000);
   page.setDefaultTimeout(15_000);

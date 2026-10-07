@@ -10,6 +10,7 @@ import {
   COMPONENT_IDS,
   PRESENTATION_ADAPTERS,
   componentValueSentence,
+  declareShapeFiringEvidence,
   factStatementOperand,
   parseComponentValue,
   presentationDigest,
@@ -43,6 +44,38 @@ import TextStatementView from "./components/TextStatementView.svelte";
 import { trailGeometry } from "./presented-view.js";
 
 const D = (seed: string): string => `sha256:${seed.repeat(64).slice(0, 64)}`;
+
+describe("shape-backed Support theory navigation", () => {
+  it.each(["module.structure_nudge", "module.theory_breadcrumb"])("opens the exact fired entry from the parsed %s receipt", consumer => {
+    const entryId = "maroczy-bind";
+    const evidence = declareShapeFiringEvidence([{ id: entryId, trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }],
+      [{ id: "position", fen: "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5" }]);
+    expect(evidence).toHaveLength(1);
+    const items = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(
+      presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, evidence)),
+    ))));
+    const target = globalThis.document.createElement("div");
+    globalThis.document.body.append(target);
+    const view = mount(PresentedEvidence, { target, props: { items } });
+    try {
+      flushSync();
+      const link = target.querySelector("a");
+      expect(link?.getAttribute("href")).toBe("/library/shape/maroczy-bind");
+      expect(link?.textContent).toBe("Open pattern entry");
+      expect(target.textContent).toContain("not advice for this one");
+      expect(target.textContent).not.toContain("play.shape_entry");
+    } finally { unmount(view); target.remove(); }
+  });
+
+  it("does not guess an entry from an older title-only statement", () => {
+    const component = parseComponentValue({ id: "fact_statement", operand: factStatementOperand("play.shape@1", "declared_convention", "shape-catalogue@1", { title: "Maroczy bind" }) });
+    const target = globalThis.document.createElement("div");
+    globalThis.document.body.append(target);
+    const view = mount(TextStatementView, { target, props: { component: component as Extract<ComponentValue, { id: "fact_statement" }>, sentence: componentValueSentence(component) } });
+    try { flushSync(); expect(target.querySelector("a")).toBeNull(); }
+    finally { unmount(view); target.remove(); }
+  });
+});
 const population = { source: "lichess-explorer" as const, ratings: [1600, 1800], speeds: ["blitz", "rapid"], since: "2023-01", until: "2026-09" };
 const corpus = (sampleSize: number): ConventionReceipt => ({ producer: { id: "human.explorer", version: 1 }, sourceProjection: { id: "human.explorer.population", version: 1 }, sourceEvidenceDigest: D("a"), perspective: "white", basis: { kind: "human_population", population, sampleSize } });
 const recorded: ConventionReceipt = { producer: { id: "derived.compare_narrative", version: 1 }, sourceProjection: { id: "derived.compare.eval_delta", version: 1 }, sourceEvidenceDigest: D("b"), perspective: "white", basis: { kind: "recorded_search", engine: { name: "Stockfish", version: "17" }, depth: 18 } };

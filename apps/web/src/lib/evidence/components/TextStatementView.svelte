@@ -10,7 +10,12 @@
 </script>
 
 <p class="statement" data-component={component.id} data-binding={binding}>{sentence}</p>
+{#if component.id === "fact_statement" && component.operand.rendererId === "play.shape_entry@1"}
+  <a class="pattern-entry" href={`/library/shape/${encodeURIComponent(component.operand.operands.entryId)}`}>Open pattern entry</a>
+{/if}
 
 <style>
   .statement{margin:0;color:var(--ink);white-space:pre-line;overflow-wrap:anywhere}
+  .pattern-entry{display:inline-block;margin-top:.5rem;color:var(--ink);text-underline-offset:.2em}
+  .pattern-entry:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 </style>

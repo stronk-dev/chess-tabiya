@@ -1654,13 +1654,15 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "D3533 request readiness and D3534 pending-setting/delivered-Hint display fixes pass full local verification and browser gates. Retain D3532's original unlocated 80-ply performance failure with bounded phase diagnostics and unchanged 500 ms limit; D3531/D3518/D3514/D3510 causes remain open. D3526 needs a separate exact-witness composition amendment; D3309 owns structural operand fidelity. Complete remaining Inspector, phone, owner-use and Hint obligations without promoting a whole milestone or 1.0.",
+        "nextAction": "D3538's shape-card to Library and saved-run return is closed with full local gates. D3376 still needs runtime opening source authority; D3540 separates installed Library origin from reviewed chess content. Continue remaining Inspector fidelity, Hint default/latency, phone and owner-use obligations. Retain D3532's original unlocated 80-ply failure and the earlier intermittent causes without weakening their assertions. No whole milestone or 1.0 promotion.",
         "latestCheckpoint": {
           "at": "2026-10-07",
-          "summary": "D3534 closes the pending help-style and delivered-Hint display defect. Four controls first fail against the predecessor, then all 208 focused client cases and clean types pass. Current compiled settings are ready-only; delivered text/badges/marks require the current decision and permitted rung. The native seven-view delayed Guide me-to-Support-to-Theory-only journey proves legal-only pending display, same-decision restoration without a POST, module removal and stable board geometry. Full local verification passes 3,440 software cases / 345 files, seven performance / four files, 227 content / 23 files and downstream contracts. All browser tiers pass: 88 smoke/one optional skip, five content, 59 matrix, one packaged-default, 150 input and 112 unretried composition cells. D3532's original 80-ply p95 710.1 ms failure remains unlocated; D3510/D3514/D3518/D3531 causes remain open. D3528 retains all 984 declarations and authored pack bytes. No whole Hint/RFC, capability, milestone, pack, remote CI or 1.0 claim.",
+          "summary": "D3538 closes the shape-backed Support to Library action: exact fired IDs survive both registered adapters and the strict receipt, with no guessed legacy link. Two predecessor-red mounted controls, all 29 component / 100 module-query cases and native desktop/phone Library-and-return journeys pass with unchanged recorded events. Full normal verification passes clean types, 3,449 software cases / 346 files, seven isolated performance / four files, 227 content / 23 files and downstream contracts. All browser tiers pass 155 journeys / one existing optional skip / zero retries, with 150 exact inputs and 112 composition cells. The generated validation refresh changes none of the 984 public declarations or authored packs. D3534 remains delivered; D3376 opening authority, D3540 content review and the earlier intermittent causes remain open. No new chess prose, source, ceiling, schema, official content, whole capability/milestone, remote CI or 1.0 claim.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/module-query.test.ts",
+            "packages/runtime/src/presentation-play-adapters.ts",
+            "apps/web/src/lib/evidence/components/TextStatementView.svelte",
             "tools/d3309-structural-fidelity/fidelity.test.ts",
             "tools/d3309-structural-fidelity/tsconfig.json",
             "tools/d3309-structural-fidelity/vitest.config.ts",
@@ -1791,6 +1793,11 @@
             "planning/exploration/log.md"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3538",
+              "digest": "sha256:082592c32e9d3ea9ff52db327b39c1c6cbb389cfc7e8e3b040c9e7d2aaa4c4f8"
+            },
             {
               "kind": "work_state",
               "id": "D3534",

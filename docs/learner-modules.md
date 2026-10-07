@@ -73,6 +73,11 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   the Named-structure nudge after a move; Staged-move risk check in the head slot while a staged move
   is held (Revise / play anyway). One seat is expanded at a time; board paint is the expanded seat's
   own facts. The client refuses any page compiled under a different final digest.
+  Shape-backed Named-structure and Theory pointer cards offer **Open pattern entry**.
+  Their registered `play.shape_entry@1` statement retains the exact fired entry ID;
+  the link opens that existing Library entry without deriving identity from its title
+  or changing the run. Older title-only statements remain readable but have no guessed link.
+  This connects recognized shapes, not the separately unavailable opening-catalogue source.
   Filled Nudge cards offer **Try another move**, returning to the exact parent of their
   recorded learner move, even after an opponent reply. A different committed move creates
   another attempt without deleting the old one. Filled Compare cards offer **Enter other

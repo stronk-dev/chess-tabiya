@@ -187,6 +187,7 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
   "play.endgame_setup@1": factRenderer(s.obj({ technique: s.str, name: s.str }), (value) =>
     `The pieces match the ${value.name} setup in the cited endgame convention (geometry only; not an outcome or advice).`),
   "play.shape@1": factRenderer(s.obj({ title: s.str }), (value) => `Recognized position pattern: ${value.title}. Named plans for this structure are general to the kind of position, not advice for this one.`),
+  "play.shape_entry@1": factRenderer(s.obj({ entryId: s.str, title: s.str }), (value) => `Recognized position pattern: ${value.title}. Named plans for this structure are general to the kind of position, not advice for this one.`),
   "play.opening@1": factRenderer(s.obj({ eco: s.str, name: s.str }), (value) => `Opening in the cited catalogue: ${value.eco} ${value.name}.`),
   "play.authored_claim@1": factRenderer(s.obj({ text: s.str }), (value) => `The pack author wrote: “${value.text}”`),
   "play.compare_structure@1": factRenderer(s.obj({ observation: observationSchema }), (value) => `On this attempt after the fork: ${observationSentence(value.observation)}`),
@@ -385,7 +386,7 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
   });
   const shapeTitle = (entryId: string): string => entryId.split("-").map((word, index) => index === 0 ? `${word.slice(0, 1).toUpperCase()}${word.slice(1)}` : word).join(" ");
   add("structure_nudge", V1("theory.shapes.firing"), "fact_statement", ["panel", "timeline_marker"], ["entryId"], ["mechanical_transform"], (evidence) =>
-    statement("play.shape@1", "shape-catalogue@1", { title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
+    statement("play.shape_entry@1", "shape-catalogue@1", { entryId: (evidence.payload as { readonly entryId: string }).entryId, title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
 
   // --- theory_breadcrumb: cited or authored theory for this position (module-registration §4.7)
   add("theory_breadcrumb", V1("derived.explorer.population_summary"), "fact_statement", ["list", "panel", "sentence"], ["position", "totals", "opening", "disclosure"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
@@ -393,7 +394,7 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     return statement("play.explorer_summary@1", "explorer-population@1", { total: summary.totals.total, white: summary.totals.white, draws: summary.totals.draws, black: summary.totals.black, ratings: summary.position.population.ratingBuckets, speeds: summary.position.population.speeds, since: summary.position.population.since, until: summary.position.population.until, opening: summary.opening.kind === "reported" ? `${summary.opening.eco} ${summary.opening.name}` : null, disclosure: summary.disclosure.statement });
   });
   add("theory_breadcrumb", V1("theory.shapes.firing"), "fact_statement", ["panel", "sentence"], ["entryId"], ["mechanical_transform"], (evidence) =>
-    statement("play.shape@1", "shape-catalogue@1", { title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
+    statement("play.shape_entry@1", "shape-catalogue@1", { entryId: (evidence.payload as { readonly entryId: string }).entryId, title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
   add("theory_breadcrumb", V1("theory.opening.current_endpoint"), "fact_statement", ["list", "panel", "sentence"], ["eco", "name"], ["copied_byte_equal"], (evidence) => {
     const endpoint = evidence.payload as { readonly eco: string; readonly name: string };
     return statement("play.opening@1", "opening-catalogue@1", { eco: endpoint.eco, name: endpoint.name });
