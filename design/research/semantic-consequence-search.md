@@ -599,9 +599,9 @@ does not claim engine/model peaks. A separate disposable observer now binds the 
 `engine:depth12:top8` batch (start 11,580, limit 1,158) to its original metadata, exact command,
 process birth/parent identities and one direct native Stockfish child. The executor and its
 eighteen frozen instrument sources remain unchanged. Native Darwin `ps(1)` defines `rss` in
-1,024-byte units. This is process-resident memory, not unique physical memory. `[V: original
+1,024-byte units. This is process-resident memory, not unique physical memory. `[V]` Original
 metadata retained in planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top8-memory-window-2026-10-07.jsonl;
-tools/d3262-search-calibration/cost-process-memory.mjs; native Darwin ps(1), rss keyword]`
+tools/d3262-search-calibration/cost-process-memory.mjs; native Darwin ps(1), rss keyword.
 
 The retained late-run window contains **120/120 successful probes**, zero unavailable probes,
 from **03:45:50.409 to 03:49:53.661 UTC** (243,352.378 ms including native probe time).
@@ -611,7 +611,7 @@ maxima, an atomic observation or a deduplicated physical-RAM peak. The append-on
 retains original metadata/observer bytes, native rows, individual clocks, explicit scope and
 a reconstructible digest chain. Its 331,657 bytes hash to
 `sha256:1c3dc3c1ad4f5455d09067703ce1cd227710880fc9916f83b040230df407edff`.
-`[V: the retained journal; make semantic-search-memory-check]`
+`[V]` The retained journal; `make semantic-search-memory-check`.
 
 Thirty-five disposable controls refuse PID reuse/reparenting, added descendants, wrong
 batch/source configuration, unavailable-as-zero, changed/reordered/truncated journals,
@@ -619,8 +619,8 @@ resealed RSS mismatches and promotion to startup/whole-batch/per-case/physical/M
 The reader reconstructs native rows rather than trusting summary labels. It is an integrity
 and scope check, **not independent authentication or repetition of OS memory measurements**.
 Normal Make targets provide observer, reader and controls; they are opt-in research and do
-not add a mandatory CI/content gate. `[V: tools/d3262-search-calibration/cost-process-memory.test.mjs;
-Makefile semantic-search-memory-test/observe/check]`
+not add a mandatory CI/content gate. `[V]` tools/d3262-search-calibration/cost-process-memory.test.mjs;
+Makefile semantic-search-memory-test/observe/check.
 
 This window does not observe startup, the whole batch, per-case attribution, other settings,
 Maia or container memory. Lightweight research/governance work shares the host; existing
@@ -628,5 +628,40 @@ latencies are not isolated by this observer. D3262 stays doing: **fourteen compl
 16,212 of 61,374 admitted cases**, with the top-eight capture still in flight at this checkpoint.
 The remaining 39 settings, broader source/model memory, consumer/browser scope and production
 profile remain open. No production search, grounding authority, capability, milestone or
-1.0 completion follows from these memory readings. `[V: planning/platform-alignment/execution-queue.md,
-D3262; planning/roadmap-1.0.json, evidence-to-consumer-spine]`
+1.0 completion follows from these memory readings. `[V]` planning/platform-alignment/execution-queue.md,
+D3262; planning/roadmap-1.0.json, evidence-to-consumer-spine at checkpoint 9d3d4471.
+
+## 2026-10-07 — complete depth-twelve live populations
+
+The original top-eight capture and lossless packaging now terminate zero with all
+1,158 cases / 386 triplets and eighteen unchanged source snapshots. Independent
+Python-chess replay checks all 206,196 target observations, after thirty boundary
+controls, and refuses six corruptions. All three depth12 widths therefore have
+complete live populations; the total is **fifteen settings / 17,370 of 61,374
+admitted cases**, with 38 settings remaining. Quantitative stratification now
+passes eight controls and retains 44 separate strata; available four-ply warm
+p95 is 2,594.765/2,970.750/2,740.704/1,944.992 ms for opening/unclear/middlegame/
+endgame, respectively. Every phase exceeds the 1,500-ms server reference even
+with cached receipts; this is not a browser/honest-pending gate reading or an
+independently repeated benchmark. Full same-budget width synthesis now passes
+forty-eight controls and retains 3,474 cases / 546 named target cells / 1,158
+cold-warm pairs. The 541 comparable cells retain their exact frozen path,
+coverage and outcome identities; five failed-source cells stay unpaired. Of
+the cold-warm pairs, 1,153 preserve identical compiled evidence and five preserve
+failed-cold/unavailable-warm partial evidence without fresh queries. This compares
+each width with its own frozen arm, not the widths with each other or engine causes.
+`[V]`
+`planning/semantic-consequence-search/d3262-cost-live-engine-depth12-2026-10-07.md`
+§2026-10-07 continuation; `d3262-cost-live-engine-depth12-top8-summary-2026-10-07.json`;
+`d3262-cost-live-engine-depth12-width-sensitivity-2026-10-07.json.gz`;
+original terminal packaging, quantitative/width readers and independent replay.
+
+Both invalid cold-source cases and their unavailable warm partners keep 532/562
+partial observations and all seven rejected literal PVs. A failed source is not
+target absence or a negative comparison. A retained available warm case still
+takes 4,795.143 ms with all 73 queries cached, mainly source parsing/admission;
+this example is neither a phase quantile nor browser proof. None of these results
+selects a production default, explains an engine's cause or licenses weaker proof
+for faster hints. D3262 remains doing on the full profile/memory/consumer/browser
+boundary. `[V]` Original complete capture; same continuation receipt;
+`CostDependencies.query`; `rfc/semantic-consequence-search.md` §14 / criterion 23 / D1.

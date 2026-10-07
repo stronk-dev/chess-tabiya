@@ -19,6 +19,24 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 complete depth-twelve capture continuation: top8 now retains all
+1,158 cases and independently replays 206,196 observations with six corruption
+refusals. The lossless archive preserves all 386 triplets/eighteen source snapshots
+and both invalid cold/unavailable warm pairs with 532/562 partial observations.
+All three depth12 widths have complete live populations; total admitted evidence
+is **17,370 / 61,374**, fifteen settings, with 38 remaining. The quantitative
+reader passes eight controls and retains 44 separate strata; available four-ply
+warm p95 exceeds 1,500 ms in every phase, despite receipt caching. This is a
+server-population measurement, not a browser/honest-pending gate reading.
+Full same-budget width comparison passes forty-eight controls and retains 3,474
+cases / 546 target cells / 1,158 cold-warm pairs. All 541 comparable cells preserve
+their own frozen paths, coverage and outcomes; five failed-source cells stay
+unpaired with their partial evidence, never interpreted as absence.
+D3262 stays doing; no interactive budget, consumer/browser, source-memory peak,
+profile or 1.0 completion. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-engine-depth12-2026-10-07.md`
+§2026-10-07 continuation. Routine metadata/hash/state maintenance is automatic.
+
 2026-10-07 search-source memory continuation: a separate disposable observer retains
 120/120 native process probes across a 243.352-second late-run window without changing
 the cost executor. Sampled maxima are 242,224 KiB for Node and 153,024 KiB for Stockfish;

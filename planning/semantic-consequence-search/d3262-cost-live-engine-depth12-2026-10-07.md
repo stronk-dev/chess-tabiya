@@ -143,3 +143,89 @@ intent parity pass; all 1,689 live ledger rows remain routed, zero untriaged or
 unrouted. Final evidence-only flow-back and ordinary hooks precede the checkpoint
 commit. No thresholds, source profile, permission or completion gates change.
 `[V]` terminal full governance result and explicit owned-file staging.
+
+## 2026-10-07 continuation — top-eight capture and complete-width qualification
+
+The original top-eight handle terminates zero with all **1,158 requested cases /
+386 triplets** at start 11,580. It retains all 193 candidates, both horizons and
+all three regimes. All eighteen original executor snapshots remain byte-identical,
+including after the normal packaging prerequisite rebuild. The separate native
+memory window was committed at `9d3d4471`; it remains a late-window sampled
+lower bound, not startup/whole-batch/per-case/physical or Maia/container memory.
+`[V]` original terminal capture, retained summary/metadata and source-digest
+comparison; `d3262-cost-live-engine-depth12-top8-memory-window-2026-10-07.jsonl`.
+
+The raw population contains **712 available, two invalid source, 360 source
+unavailable and 84 no-target cases**, with 206,196 retained target observations.
+That observation count is a read-only raw inventory; the full independent replay
+result is recorded below.
+Both invalid cold cases are at `d1023:8427d8998bfbf3b9`, horizon four:
+`b7b6` retains 67 executed source receipts, five rejected queries and 532 partial
+observations; `b7c6` retains 71 executed receipts, two rejected queries and 562
+partial observations. All seven rejected literal PVs retain the exact failure
+`Provider PV continued beyond terminal`. No original source, failure, clock or
+partial observation is trimmed, overwritten or rerun into success. `[V]`
+original complete triplets, raw dependencies and read-only population census.
+
+Warm is not a cached answer. At `d1023:fbc0c15e6636cd89/f1e2`, horizon four,
+cold took 44,353.318 ms and warm 4,795.143 ms despite all 73 warm queries hitting
+the exact cold-receipt cache. Warm source parsing/admission accounts for
+4,118.178 ms, collection 648.023 ms and compilation 9.275 ms; the source-reader
+code revalidates each actual receipt, rather than performing fresh engine search.
+This is one retained example, not a phase quantile, an isolated experiment or a
+browser gate reading. `[V]` original `triplet-012633.json.gz` and
+`CostDependencies.query` in the unchanged captured source.
+
+The normal quantitative reader terminates zero after eight permanent controls,
+retaining **44 separate phase/horizon/regime/result strata**, including invalid,
+unavailable and no-target rows. Its unchanged summary digest is
+`161c9a5edf691bc2519d44a3164bad196198bde294657627de0b75534c0badc4`.
+Available four-ply candidate populations have the following actual server costs;
+each count applies separately to cold and warm, not pooled repetitions:
+
+| Phase | Candidates | Cold p95 ms | Warm p95 ms |
+|---|---:|---:|---:|
+| Opening | 46 | 46,800.725 | 2,594.765 |
+| Unclear | 53 | 56,876.880 | 2,970.750 |
+| Middlegame | 41 | 44,738.162 | 2,740.704 |
+| Endgame | 37 | 34,828.227 | 1,944.992 |
+
+Both cold and warm p95 exceed the 1,500-ms reference in every available phase.
+Failed-source and no-target candidates remain in their own strata, never removed
+from the population or pooled into available timings. Focus remains unknown and
+`unclear` stays a phase, not inferred opening/middlegame. These candidate-population
+clocks are neither twenty independent machine repetitions nor dependency-to-visible
+browser/honest-pending gate readings. No source-reading optimization, weaker proof
+or production default follows from the cost report. `[V]`
+`d3262-cost-live-engine-depth12-top8-summary-2026-10-07.json`; terminal ordinary
+`make semantic-search-cost-summary-freeze` and its eight controls.
+
+Full independent replay terminates zero after thirty permanent boundary controls,
+checking all 1,158 cases / 206,196 target observations and refusing six corruptions.
+This checks legal/source/population evidence and clock-interval consistency, not
+independent wall-clock repetition. Lossless packaging also terminates zero,
+preserving all 386 original compressed triplets and eighteen source snapshots in
+the 68,829,020-byte `d3262-cost-live-engine-depth12-top8-2026-10-07.json.gz`, SHA-256
+`9466308da1067b511d0f3c88d6fc2fdc8ac4477ec09ad95e1e46fe64c0850d87`.
+The complete-setting headline now reaches **fifteen / 17,370 of 61,374**, with
+38 settings remaining. Complete depth12 width synthesis now terminates zero,
+joining all three actual archives after forty-eight reader controls: 3,474 cases,
+546 named target cells, and 1,158 cold/warm pairs. Of those, 1,153 preserve identical
+compiled evidence; five failed-cold/unavailable-warm pairs preserve their exact
+partial evidence without fresh queries. The 541 comparable named cells preserve
+exact frontier paths, coverage and outcomes against the frozen depth12 reference;
+the five invalid-source target cells stay unpaired, not negative or absent.
+All 42 no-target width/candidate entries remain. The lossless synthesis archive is
+8,907,121 bytes, SHA-256
+`0465324a269392939579ede29f6e0b831e9af940f7bd0fd8344e112dad3dd1d2`,
+with decoded artifact digest
+`be40b047a13afaeff665cb03a22e3a5419747a762a320bfe275e872f2d61a200`.
+Normal reader controls cover
+all nine declared engine settings and retain third/fourth path and executed
+witness identities, not counts alone. D3262 remains doing and the RFC draft;
+there is no production profile, capability, milestone or 1.0 completion here.
+`[V]` terminal packaging and independent replay, complete-width reader;
+`d3262-cost-live-engine-depth12-width-sensitivity-2026-10-07.json.gz`;
+RFC §14 / criterion 23 / D1. These are descriptive fresh/frozen comparisons,
+not engine-cause attribution or proof that widths share identical outcomes with
+one another; each width is compared to its own frozen arm.
