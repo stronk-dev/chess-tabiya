@@ -174,3 +174,106 @@ workers' unstaged files are excluded. Full `make staged-process-contracts
 verify-governance` also terminates zero; final scoped flow-back and ordinary hooks
 precede commit. No new browser or GitHub result is claimed. `[V]` terminal Make
 results, immutable proof, exact-source diff and staged owned-file list.
+
+## 2026-10-07 continuation — complete timed-engine widths
+
+The original three-setting 100-ms capture terminates zero with every requested
+case: 3,474 cases / 1,158 compressed triplets, all 193 candidates / 66 roots,
+both horizons and cold/warm/offline regimes. Lossless packaging preserves the
+original eighteen instrument snapshots and literal query/result/timing bytes,
+including source refusals rather than replacing them with a rerun. The resulting
+66,664,045-byte archive hashes to
+`767762bbf17c951f9a23a4217269910d2a55b22453deeb9ef0c95df97038d0eb`.
+`[V]` terminal original capture and `make semantic-search-cost-pack`;
+`d3262-cost-live-engine-movetime100-widths-2026-10-07.json.gz`.
+
+Independent Python-chess replay terminates zero over all 3,474 cases and 182,240
+target observations after thirty boundary controls, rejecting six corruptions.
+This validates the declared source-selected schedules, legal histories and
+retained observation population, not independent wall-clock measurements or
+strategic usefulness. The quantitative reader's eight controls and width
+reader's forty-eight controls also pass; both full retained-population syntheses
+terminate zero. The quantitative summary retains 172 separate strata, SHA-256
+`e05f76ec0daf28103233cf38dc8f00e4a3f1caea4440a16d93b4c6cc1800871d`.
+The compressed width comparison is 629,568 bytes, SHA-256
+`e5b1f01645fee072537313984f566f7df7d3d46638db971b62c67290b63562aa`;
+its canonical decoded bytes hash to
+`44eed1d249fc055552cf1be75f0e731c3dad013f58345d900a127918946f686c`.
+`[V]` normal `make semantic-search-cost-independent`,
+`semantic-search-cost-summary-freeze` and
+`semantic-search-cost-engine-width-sensitivity-freeze SEARCH_BUDGET=movetime100`.
+
+Unlike the fixed-depth measurements, fresh timed output does not reproduce the
+frozen frontier throughout. The comparison retains all 546 named target cells:
+134 are comparable and 412 retain invalid-source partial evidence, not absence.
+Among comparable cells, 100 frontiers, 50 omission/coverage readings and eight
+outcomes change. The three counts overlap and are each compared with that width's
+own frozen arm, not with another width. They do not attribute a source-version,
+search-timing or engine-cause effect. All 1,158 cold/warm pairs remain: 697 have
+identical compiled evidence (613 available and 84 no-target pairs), while 461
+retain failed-cold/unavailable-warm evidence without a fresh warm query. `[V]`
+`d3262-cost-live-engine-movetime100-width-sensitivity-2026-10-07.json.gz`.
+
+Full population result counts below include both horizons and all regimes.
+Unavailable combines the deliberate offline arm and missing failed-cold receipts;
+it is not a count of natural provider outages. `[V]` immutable quantitative summary.
+
+| Width | Available | Invalid cold source | Unavailable | No target |
+|---|---:|---:|---:|---:|
+| top2 | 516 | 100 | 458 | 84 |
+| top4 | 364 | 176 | 534 | 84 |
+| top8 | 346 | 185 | 543 | 84 |
+
+Grouping the original cold dependencies by their literal failure field, and
+counting each reason once per case, gives 457 cases containing bound-table
+refusals and six containing PV-beyond-terminal refusals; two contain both.
+There are 1,456 bound-table and 25 terminal-PV rejected query executions in
+those 461 failed cold cases. These are executions, not distinct FENs, independent
+machine repeats or 1,481 failed cases. This population observation does not prove
+an earlier admissible table exists in every refused query: D3508's earlier-table
+finding still has only its four specifically audited examples. `[V]` original
+archive's cold `raw.dependencies`, `state`/`failure` fields; unchanged
+`cost-stockfish.mjs` `CostDependencies.query`; summary's cold invalid counts.
+
+Available four-ply phase p95 below is rounded to milliseconds and conditioned
+on successful admission; failed cases remain above and in all summary strata.
+Top8 has no available opening case. The smaller top4/top8 cells are especially
+limited and do not support a reliability or production-default verdict. `[V]`
+immutable quantitative summary, available/horizon4/null-focus strata.
+
+| Width | Phase | Available candidates | Cold p95 ms | Warm p95 ms |
+|---|---|---:|---:|---:|
+| top2 | opening | 22 | 1077.632 | 156.443 |
+| top2 | unclear | 28 | 1105.540 | 183.378 |
+| top2 | middlegame | 28 | 1149.731 | 196.481 |
+| top2 | endgame | 21 | 1001.831 | 129.882 |
+| top4 | opening | 4 | 3260.388 | 520.633 |
+| top4 | unclear | 13 | 3232.922 | 593.404 |
+| top4 | middlegame | 2 | 2994.317 | 382.254 |
+| top4 | endgame | 3 | 2960.210 | 381.600 |
+| top8 | opening | 0 | — | — |
+| top8 | unclear | 6 | 11488.242 | 1688.609 |
+| top8 | middlegame | 2 | 10684.845 | 1544.741 |
+| top8 | endgame | 2 | 10686.919 | 1512.902 |
+
+Warm reuses exact source receipts but still parses/collects/compiles in this
+disposable runner; the shipping sealed-payload cache has a different boundary.
+These server intervals cannot discharge browser pending/rendering gates, predict
+production cache latency or select a cheaper beam by silently discarding failures.
+`[V]` `CostDependencies.query`; shipping scheduler/cache audit in
+`design/research/semantic-consequence-search.md` §2026-10-07 timed-source admission.
+
+All nine declared engine budget/width settings now have complete populations.
+The full calibration headline is eighteen settings / 20,844 of 61,374 cases,
+with 35 settings remaining. Seventeen remaining recursive primary settings take
+priority; seventeen first-reply-reserve diagnostics and the complete-local
+diagnostic remain in the frozen plan. In particular, `semantic:depth8:top2:top8`
+and `recursive:depth8:top2:top8` were already measured in their original 6+1,152
+case captures and must not be counted or executed again as new settings.
+`[V]` frozen cost plan, original semantic synthesis,
+`d3262-cost-live-semantic-summary-2026-10-06.json`, and original package receipts.
+
+No source parser, production default, score-bound policy, consumer contract,
+browser gate, capability, milestone or 1.0 completion is changed. D3262 remains
+doing; D3508's source-admission audit and D3373's migration contract remain
+separate. Routine hashes, state and receipts update automatically.

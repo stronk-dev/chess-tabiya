@@ -19,6 +19,25 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 complete timed-engine capture: all three declared 100-ms widths now
+retain 3,474 cases / 1,158 original triplets and eighteen unchanged instrument
+snapshots. Thirty independent boundary controls and replay of 182,240 target
+observations pass with six corruption refusals. Lossless packaging terminates
+zero without repairing original failed sources. Calibration now retains
+**eighteen settings / 20,844 of 61,374 cases**, with 35 settings remaining;
+all nine engine budget/width populations are complete. Next are the seventeen
+remaining recursive primary settings; seventeen first-reply-reserve diagnostics
+and the complete-local diagnostic remain in scope. Eight quantitative and
+forty-eight width-reader controls pass; both syntheses terminate zero with 172
+strata and 546 named cells. Only 134 target cells compare; 412 retain invalid-source
+partial evidence. Among comparable cells, 100 frontiers / 50 coverage readings /
+eight outcomes change. All 1,158 cold/warm pairs retain exact evidence: 697 identical
+compiled pairs and 461 failed-cold/unavailable-warm pairs, no fresh warm queries.
+Timed top8 has no successful four-ply opening case; its other three phase cells
+contain only 6/2/2 successes. Conditional latency is not reliability. No default,
+browser gate, source migration,
+milestone or full-1.0 completion follows. Routine tracking/hash upkeep is automatic.
+
 2026-10-07 source-contract author inputs: primary UCI and tagged Stockfish sources
 are checked against the shipping queued reader, not inferred from the engine name.
 All sixty-three normal focused queued-source/durability controls pass. D3373 now

@@ -775,3 +775,54 @@ consumer trying to substitute rank one or grade from an unrelated score.
 Whole durable consumer adoption and registered source-version/resource claims
 precede retiring the raw path. No new default, source receipt, provider schema,
 production parser, grading rule or engine-causality claim is introduced here.
+
+Consumer inspection narrows that migration obligation; a field-name match is not
+proof of a misattributed grade. `reviewAnalysis` prefers its durable typed line,
+then an attached bestline, then the literal terminating move from attached eval.
+The explicit Inspector reveal renders engine attribution, bound and legal SAN,
+not the accompanying centipawn/mate score. `engineWalk` legally plays the selected
+move and issues a separate child-position query; the child's recorded score is
+not borrowed from the parent's ranked PV. Neither inspected path establishes
+the alleged selected-move/parent-score conflation. `[V]`
+`packages/runtime/src/review-analysis.ts` `recordedLine`/`reviewAnalysis`;
+`apps/server/src/sourcing/engine-walk.ts` `engineWalk`/`probe`.
+These actual selection consumers still belong in D3373's migration inventory;
+their inspected behavior is not whole-source adoption or an acceptance discharge.
+
+## 2026-10-07 — complete timed-engine populations and fresh-source sensitivity
+
+All three 100-ms engine widths now retain 3,474 cases / 1,158 original triplets
+and eighteen unchanged instrument snapshots. Independent replay checks 182,240
+target observations after thirty boundary controls and rejects six corruptions.
+Lossless packaging, the eight-control quantitative reader and forty-eight-control
+width synthesis terminate zero. Calibration is now **eighteen complete settings /
+20,844 of 61,374 cases**, with 35 settings remaining; all nine engine budget/width
+populations are complete. Seventeen recursive primary settings take priority,
+while seventeen first-reply-reserve diagnostics and one complete-local diagnostic
+remain in the frozen plan. `[V]`
+`planning/semantic-consequence-search/d3262-cost-live-engine-widths-2026-10-07.md`
+§2026-10-07 continuation; original immutable timed archive and both syntheses.
+
+Fresh timed evidence is not uniformly interchangeable with its frozen arm.
+Of 546 target cells, only 134 compare; 412 preserve invalid-source partial
+evidence. Among comparable cells, 100 complete frontiers, 50 coverage readings
+and eight outcomes change; the counts overlap. All 1,158 cold/warm pairs retain
+exact evidence: 697 identical compiled pairs include 613 available and 84
+no-target pairs; 461 failed-cold pairs retain unavailable warm partners without
+fresh queries. Grouping original cold dependency failures shows 457 cases with
+bound-score refusal and six with PV-beyond-terminal refusal, two overlapping.
+The 1,456/25 respective rejected query executions are not distinct positions or
+failed cases. Earlier-table admissibility remains unmeasured outside D3508's four
+specific examples. `[V]` original archive cold dependency state/failure fields;
+`d3262-cost-live-engine-movetime100-width-summary-2026-10-07.json`;
+`d3262-cost-live-engine-movetime100-width-sensitivity-2026-10-07.json.gz`.
+
+Successful top8 four-ply cells contain only 6/2/2 unclear/middlegame/endgame
+candidates and no available opening case. Their warm p95 is
+1,688.609/1,544.741/1,512.902 ms; it is conditioned on successful admission,
+not a whole-population reliability statement. Wider cold latency, source refusal,
+unknown focus, source-version attribution and browser/consumer qualification
+stay explicit; no lower-cost default, repair to original source semantics or
+engine explanation follows. D3262 and D3508 remain doing. `[V]` quantitative
+summary and same continuation receipt; `rfc/semantic-consequence-search.md`
+§14 / criterion 23 / D1.
