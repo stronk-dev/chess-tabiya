@@ -19,6 +19,33 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 depth-twelve top-four continuation: all 1,158 cases independently
+replay 31,204 target observations and refuse six corruptions. Admitted evidence
+reaches **16,212 / 61,374**, fourteen of 53 settings; thirty-nine remain. Both
+invalid cold cases and their unavailable warm partners preserve partial evidence
+and zero fresh warm queries. Available cold four-ply p95 spans
+10,263.650–18,183.200 ms by phase, not browser/pending proof. Source bytes are
+unchanged from the prior full exact-index software/content checkpoint; those
+results are reused unchanged-source coverage, not fresh suite or GitHub runs.
+Current packaging/replay/summary, staged process and full governance pass;
+final evidence-only flow-back and ordinary hooks precede commit. Complete depth12
+width sensitivity still needs top8, and source
+memory, consumer/profile/browser scope stays open. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top4-2026-10-07.md`.
+Routine metadata and hashes are automatic, with no milestone/capability or
+full-1.0 promotion.
+
+2026-10-07 unauthored-tempo audit: D3322 remains open under core-loop. The
+failure default is already ruled, but position/imported sessions have no grounded
+window issuer and real unauthored commit paths have no transition consumer. The
+archived contract explicitly excluded automatic detection and pinned, rather
+than consumed, the default. Research the supplier/adoption contract before
+wiring actual transitions; do not apply the unauthored helper to authored
+opt-in grading. Receipt:
+`planning/training-methods/unauthored-tempo-consumer-audit-2026-10-07.md`.
+This clarifies the next implementation dependency, not feature completion or a
+new owner decision.
+
 2026-10-07 depth-twelve top-two continuation: the complete 1,158-case population
 independently replays all 5,770 target observations and refuses six corruptions.
 Total admitted evidence reaches **15,054 / 61,374**, thirteen of 53 settings;
