@@ -24,11 +24,13 @@ explicitly separate, with future large captures outside ordinary Git.
    suppress the failing test or claim a passing browser run makes the software gate green.
 1. [[D3518]], [[D3514]], [[D3510]]: locate the intermittent software failures before
    declaring release readiness. Passing replays leave these findings open.
-   The latest complete browser attempt also terminates red: [[D3529]] retains a 368px
-   board after resizing into a 360px viewport (the saved image visibly clips it), and
-   [[D3530]] times out during classroom registration before the native journey. Locate
-   both stages, retain the normal assertions/deadlines, and do not call narrow Support
-   successes a complete browser pass or guess that the unusually long wall time explains it.
+   [[D3529]]/[[D3530]] are diagnosed host interruptions: exact trace timestamps match
+   clamshell/maintenance sleep, and both unchanged awake journeys pass. No application
+   geometry/auth repair is claimed. The new complete awake run is still red on [[D3531]]:
+   the six-pack 1440×1000 touch journey times out at its unchanged 60-second limit and
+   trace retention reports a truncated ZIP. Locate the awaited operation and repair
+   failure diagnostics before replay; host load 192 is context, not a proven cause.
+   No deadline increase, retry, forced gesture, skipped pack or complete-browser claim.
 2. [[D3521]], [[D3523]], [[D3524]] are in final verification: a grounded filled Threat
    Radar caption, loose-piece readings for the learner rather than the opponent, and a
    compact registered capture warning within the unchanged staged-cue budget. Both-colour

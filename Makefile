@@ -229,6 +229,16 @@ test-browser-production:
 
 test-browser-ci: test-browser-smoke test-browser-content test-browser-matrix test-browser-production
 
+# Match verify-awake for local macOS runs without altering any browser tier or deadline.
+# This prevents idle system sleep only; closing the lid still interrupts the run.
+.PHONY: test-browser-ci-awake
+test-browser-ci-awake:
+	@if command -v caffeinate >/dev/null 2>&1; then \
+		exec caffeinate -i $(MAKE) test-browser-ci; \
+	else \
+		exec $(MAKE) test-browser-ci; \
+	fi
+
 ci-local:
 	$(CI_NODE) tools/ci-local.mjs
 
@@ -1723,7 +1733,7 @@ theory-binding-execution-check:
 
 .PHONY: local-module-execution-check
 local-module-execution-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-response.test.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
 	$(MAKE) typecheck
 
 .PHONY: hint-empty-response-check

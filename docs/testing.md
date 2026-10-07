@@ -53,7 +53,12 @@ browser and owner-use instruments, not a lucky or unlucky single Node timer obse
 artifact check for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core
 journey, real-content integration, interaction matrix, or packaged default. Traces, screenshots and
-the HTML report are uploaded on every outcome. The matrix verifier reads the current JSON report,
+the HTML report are uploaded on every outcome. On a local Mac, `make test-browser-ci-awake` runs
+those same four tiers under `caffeinate -i` to prevent idle sleep; elsewhere it runs
+`make test-browser-ci` directly. Keep the lid open: this wrapper does not prevent clamshell sleep.
+A run interrupted by system sleep is not a completed verification; retain the failure and rerun
+the unchanged gate while awake, without increasing deadlines or adding retries.
+The matrix verifier reads the current JSON report,
 refuses missing/duplicate/foreign/failed/retried/wrong-size or out-of-run attachments, then preserves
 the report and PNG bytes under `test-results/composition/<report-hash>/`. Later tiers cannot erase
 that matrix generation. Its Node negative controls test the evidence join, not image content or complete

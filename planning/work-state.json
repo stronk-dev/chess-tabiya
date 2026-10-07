@@ -29153,18 +29153,27 @@
     },
     {
       "id": "D3529",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1fdd327d2717b3cd54e1ad76fdafeb507976f469e5c1d0506f5754a8dad69cd3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d7d3a41a99f19c90f0d93f08094a8d13cd9a1d70e2b1eca47bdd9d44dbb467f8",
       "uxItems": [],
-      "owner": "client-platform",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3530",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ce7f1a9f753babf046c08f3e4b183cb51fa59289a7b86341593aef5f49cc71aa",
+      "uxItems": [],
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3531",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:579fb93cae6f554fcd9521229bbd9fe8392d09fd99f475c96d609e2822da8306",
+      "sourceDigest": "sha256:2ced8ad329d095778103e778f8bfbe5972a218b5c48c2f99e5cafe8d0da84724",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
