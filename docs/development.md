@@ -43,6 +43,53 @@ are documented in `docs/branch-runtime.md`. The normative run shape remains
 
 ## Commands
 
+### Raw research recordings
+
+Large measurement recordings are not source files. `planning/research-artifacts.json`
+retains their original SHA-256 digests, byte counts and logical paths. The exact bytes
+live outside the checkout in `~/.local/share/tabiya/research-artifacts/objects/`.
+This is a local retained archive, not an already-published download service. Back up
+or copy that archive when moving research to another machine; a manifest alone cannot
+recover missing recordings. No new public storage upload is implied.
+
+Before replaying these opt-in research instruments on a fresh checkout:
+
+```sh
+make research-artifacts-restore
+make research-artifacts-check
+```
+
+Set `RESEARCH_ARTIFACT_STORE=/absolute/path/to/copied/archive` as a Make argument
+when using another archive location. Restoration verifies every object first,
+refuses corrupt or conflicting existing files, and recreates the ignored original
+paths. Existing Node/Python readers, source snapshots and evidence hashes therefore
+remain unchanged. No measurement is recaptured or silently substituted.
+
+Normal `make verify-governance` checks the small manifest and artifact tooling without
+requiring or downloading raw recordings. Lefthook checks exact staged blobs; CI checks
+committed changes. Newly added research data at least 1 MiB, ordinary files at least
+5 MiB, and any attempted reintroduction of an externally retained artifact are refused.
+Write new bulk captures under `.cache/` and retain them externally; keep compact results,
+code, manifests and small negative fixtures in Git. `make research-artifacts-test` and
+`make git-size-check` exercise these boundaries independently of chess engines.
+
+For a new recording at its final logical research path, run
+`make research-artifacts-retain INPUT=planning/semantic-consequence-search/<new-file>`
+before committing. This verifies/copies its bytes, updates the manifest and the generated
+exact-path ignore block automatically, and refuses replacing a previously retained identity
+with different evidence. Only the small generated metadata is committed.
+
+`make research-artifacts-evict` removes only these disposable working copies after
+verifying the entire external backup. It never removes stored objects or directory trees;
+use restore when the next research replay needs them. Roadmap references to these artifacts
+are explicitly typed digest/size references, not claims of local availability or fresh replay.
+
+The one-time owner-authorized unpublished-history cleanup has a verified recovery
+bundle and old→new commit map under the artifact store's `migrations/` directory.
+It leaves published history, code bytes, author/committer dates and messages intact.
+Old commit IDs in historical evidence remain resolvable through that recovery archive;
+they are not relabelled as observations from newly generated measurements.
+
 ```sh
 pnpm install
 make verify

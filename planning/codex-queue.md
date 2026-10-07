@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+Owner intervention [[D3513]] takes priority over further bulk collection: externalize
+the 28 identified recordings with verified restoration and a small manifest, add exact
+staged/committed size guards, then remove their blobs from the unpublished range after
+a verified recovery bundle. No source receipt is deleted or recaptured, no clocks are
+restamped, no search qualification count changes. Receipt:
+`planning/research-artifacts-migration-2026-10-07.md`. Large future output belongs in
+ignored capture directories plus external retained objects, not new ordinary Git blobs.
+
 [[D3262]] retains twenty-three complete populations / 26,634 of 61,374 cases:
 all five primary families have a population; all nine engine budget/widths and
 all six recursive depth-eight settings are complete. The five new settings retain

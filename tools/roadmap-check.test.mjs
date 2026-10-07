@@ -1,10 +1,22 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { parseActiveRfcAnchorDigests, parseClientRoutes, parseUxItemIds, parseWorkStateAnchorDigests, validateRegistry } from "./roadmap-check.mjs";
+import { checkpointEvidenceIssue, parseActiveRfcAnchorDigests, parseClientRoutes, parseUxItemIds, parseWorkStateAnchorDigests, validateRegistry } from "./roadmap-check.mjs";
 
 const anchor = { kind: "rfc", id: "a.md", digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" };
 const unknownAnchor = { kind: "work_state", id: "D404", digest: "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" };
+
+test("retained evidence requires explicit exact manifest custody, not a missing-file exception", () => {
+  const entry = { path: "planning/semantic-consequence-search/retained.gz", digest: anchor.digest, bytes: 123 };
+  const reference = { kind: "retained_research", ...entry }, context = { evidenceExists: () => false,
+    retainedArtifacts: new Map([[entry.path, entry]]) };
+  assert.equal(checkpointEvidenceIssue(reference, context), undefined);
+  assert.match(checkpointEvidenceIssue(entry.path, context), /does not exist/u, "plain paths cannot borrow manifest custody");
+  assert.match(checkpointEvidenceIssue(reference, { ...context, retainedArtifacts: new Map() }), /identity differs/u);
+  for (const changed of [{ digest: unknownAnchor.digest }, { bytes: 124 }, { kind: "available" }, { path: "../x" },
+    { bytes: -1 }, { available: true }, { replayed: true }])
+    assert.equal(typeof checkpointEvidenceIssue({ ...reference, ...changed }, context), "string");
+});
 
 test("parses static and dynamic client routes", () => {
   const source = `

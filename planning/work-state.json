@@ -29009,6 +29009,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
+    },
+    {
+      "id": "D3513",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:84f649fbb6f18a59763eea5133b2e1428f54fcce8d6bdf71c0de32a6e37fcba4",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-07"
     }
   ]
 }

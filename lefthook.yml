@@ -6,6 +6,9 @@ pre-commit:
     - name: staged-diff
       run: git diff --cached --check
 
+    - name: staged-file-sizes
+      run: node tools/git-size-check.mjs --staged
+
     - name: runtime-typecheck
       glob: "packages/runtime/**/*.{ts,js}"
       run: pnpm --filter @chess-tabiya/runtime typecheck

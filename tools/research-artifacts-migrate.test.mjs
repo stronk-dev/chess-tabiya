@@ -1,0 +1,44 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { execFileSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { manifestPath, retainArtifacts } from "./research-artifacts.mjs";
+import { parseCommit, rewriteUnpublished } from "./research-artifacts-migrate.mjs";
+
+test("unpublished rewrite removes only named recordings, preserves dirty edits, authorship, dates and recovery bundle", t => {
+  const dir = mkdtempSync(join(tmpdir(), "tabiya-history-control-")), root = join(dir, "repo"), store = join(dir, "store");
+  mkdirSync(root); t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const git = args => execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: "pipe" });
+  git(["init", "-qb", "main"]); git(["config", "user.name", "Control"]); git(["config", "user.email", "control@example.invalid"]);
+  writeFileSync(join(root, "app.txt"), "base"); git(["add", "app.txt"]); git(["commit", "-qm", "published base"]);
+  const base = git(["rev-parse", "HEAD"]).trim(); git(["update-ref", "refs/remotes/origin/main", base]);
+  const path = "planning/semantic-consequence-search/raw.json.gz";
+  mkdirSync(join(root, "planning/semantic-consequence-search"), { recursive: true });
+  writeFileSync(join(root, path), "original source lines"); git(["add", path]); git(["commit", "-qm", "measurement"]);
+  const measuredCommit = parseCommit(git(["cat-file", "commit", "HEAD"]));
+  const manifest = retainArtifacts(root, [path], store); writeFileSync(join(root, manifestPath), JSON.stringify(manifest));
+  git(["rm", "--cached", "--", path]); git(["add", manifestPath]); git(["commit", "-qm", "externalize"]);
+  writeFileSync(join(root, "app.txt"), "other worker's uncommitted change");
+  writeFileSync(join(root, "untracked.txt"), "another worker's file");
+  const status = git(["status", "--porcelain"]), head = git(["rev-parse", "HEAD"]).trim();
+  const receipt = rewriteUnpublished({ root, store });
+  assert.equal(receipt.mapping.length, 2); assert.equal(receipt.originalHead, head);
+  assert.equal(git(["rev-parse", "origin/main"]).trim(), base);
+  assert.equal(git(["status", "--porcelain"]), status);
+  assert.equal(readFileSync(join(root, path), "utf8"), "original source lines");
+  const replaced = parseCommit(git(["cat-file", "commit", receipt.mapping[0].replacement]));
+  assert.deepEqual(replaced.author, measuredCommit.author); assert.deepEqual(replaced.committer, measuredCommit.committer);
+  assert.equal(replaced.message, measuredCommit.message);
+  for (const { replacement } of receipt.mapping) assert.throws(() => git(["cat-file", "-e", `${replacement}:${path}`]));
+  git(["bundle", "verify", receipt.backupBundle]);
+  const recovery = join(dir, "recovery"); mkdirSync(recovery);
+  const recoverGit = args => execFileSync("git", args, { cwd: recovery, encoding: "utf8", stdio: "pipe" });
+  recoverGit(["init", "-q"]); recoverGit(["fetch", root, base]);
+  recoverGit(["bundle", "unbundle", receipt.backupBundle]);
+  assert.equal(recoverGit(["show", `${receipt.mapping[0].original}:${path}`]), "original source lines");
+});
+test("signed commits cannot silently lose their signature", () => {
+  assert.throws(() => parseCommit("tree abc\nauthor A <a> 1 +0000\ncommitter A <a> 1 +0000\ngpgsig signature\n\nmessage\n"), /signed/);
+});

@@ -15,6 +15,7 @@ export const SOURCE_PATHS = Object.freeze({
   router: "apps/web/src/lib/router.ts",
   application: "apps/server/src/application.ts",
   rest: "apps/server/src/rest.ts",
+  researchArtifacts: "planning/research-artifacts.json",
 });
 
 export const RECEIPT_PATH = "planning/roadmap-1.0.receipt.json";

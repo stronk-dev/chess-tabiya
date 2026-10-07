@@ -6,6 +6,16 @@ import { checkoutFetchDepth, missingMakeDependencies, missingRequiredText, workf
 
 const required = ["verify-software", "verify-governance", "verify-content"];
 
+test("raw research storage guards run on commit and in CI without hydrating recordings", () => {
+  const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
+  const hook = readFileSync(new URL("../lefthook.yml", import.meta.url), "utf8");
+  assert.deepEqual(missingMakeDependencies(makefile, "verify-governance",
+    ["git-size-check", "research-artifacts-manifest-check", "research-artifacts-test"]), { ruleFound: true, missing: [] });
+  assert.match(hook, /run: node tools\/git-size-check\.mjs --staged/u);
+  const governance = /^verify-governance:\s*(.+)$/mu.exec(makefile)?.[1] ?? "";
+  assert.doesNotMatch(governance, /research-artifacts-(restore|check|import)(?:\s|$)/u);
+});
+
 test("native release proof runs streaming through the pinned proxy on both architectures", () => {
   const release = readFileSync(new URL("../.github/workflows/release.yml", import.meta.url), "utf8");
   const native = workflowJob(release, "native-proof") ?? "";

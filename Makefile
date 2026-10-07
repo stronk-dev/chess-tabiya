@@ -64,6 +64,44 @@ export SF_CMD
 setup:
 	pnpm install --frozen-lockfile
 
+# Raw recordings are opt-in research inputs, never a normal application-CI download.
+RESEARCH_ARTIFACT_STORE ?= $(HOME)/.local/share/tabiya/research-artifacts
+.PHONY: research-artifacts-test research-artifacts-import research-artifacts-restore research-artifacts-check research-artifacts-manifest-check git-size-check
+research-artifacts-test:
+	$(CI_NODE) --test tools/research-artifacts.test.mjs tools/research-artifacts-migrate.test.mjs
+
+research-artifacts-import:
+	$(CI_NODE) tools/research-artifacts.mjs import-new "$(RESEARCH_ARTIFACT_STORE)"
+
+.PHONY: research-artifacts-retain
+research-artifacts-retain:
+	@test -n "$(INPUT)" || (echo "Usage: make research-artifacts-retain INPUT=planning/<research-directory>/<new-capture>" >&2; exit 2)
+	$(CI_NODE) tools/research-artifacts.mjs retain "$(INPUT)" "$(RESEARCH_ARTIFACT_STORE)"
+
+research-artifacts-restore:
+	$(CI_NODE) tools/research-artifacts.mjs restore "$(RESEARCH_ARTIFACT_STORE)"
+
+research-artifacts-check:
+	$(CI_NODE) tools/research-artifacts.mjs check "$(RESEARCH_ARTIFACT_STORE)"
+
+.PHONY: research-artifacts-roundtrip
+research-artifacts-roundtrip:
+	$(CI_NODE) tools/research-artifacts-roundtrip.mjs "$(RESEARCH_ARTIFACT_STORE)"
+
+.PHONY: research-artifacts-evict
+research-artifacts-evict:
+	$(CI_NODE) tools/research-artifacts.mjs evict "$(RESEARCH_ARTIFACT_STORE)"
+
+research-artifacts-manifest-check:
+	$(CI_NODE) tools/research-artifacts.mjs manifest
+
+git-size-check:
+	$(CI_NODE) tools/git-size-check.mjs
+
+.PHONY: research-artifacts-migrate-history
+research-artifacts-migrate-history:
+	$(CI_NODE) tools/research-artifacts-migrate.mjs "$(RESEARCH_ARTIFACT_STORE)"
+
 check: verify
 
 typecheck:
@@ -3054,7 +3092,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
 
-verify-governance: register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
+verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
 # Draft-RFC evidence remains executable, but it is not a release gate. These targets include
 # historical source images, author models, and counterexamples whose job is to inform an RFC review;
