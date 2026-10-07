@@ -322,3 +322,18 @@ R3 completes only when:
 - R5 proves or refuses the optional renderer over these bounded packets.
 
 Until then, R3 is **MECHANICAL/DESK/REAL-PACKET DONE; OWNER USE to complete**.
+
+## 2026-10-07 — position-structure presentation fidelity
+
+D3309 now has strict types and 195 executable disposable controls over real FEN-computed,
+sealed readings and the actual typed Inspector presenter. Sixteen reading families lose
+declared detailed operands; twelve piece-count readings collide in one generic typed caption.
+The Pack-B seven-pawn/light-square regression is reproduced. A closed, FEN-verified research
+operand reader preserves the current statements and refuses malformed/invented values and
+prose. It is not a production successor or migration approval. [V:
+`tools/d3309-structural-fidelity/fidelity.test.ts`; `make structural-inspector-fidelity-check`]
+
+Versioned producers, registered components and both DrillScreen/Compare consumers remain the
+exit. Full source trace, exclusions and unimplemented binding/component/browser controls:
+`planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md`
+§2026-10-07. Neither the presentation RFC nor R3 owner-use is discharged by these tests. [V]

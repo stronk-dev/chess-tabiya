@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 structural Inspector continuation: D3309 now has strict TypeScript and
+195 disposable controls over the actual FEN collector, sealed factories and typed presenter.
+Sixteen families lose detailed operands; twelve real piece-count readings become one caption,
+and Pack B loses its seven-pawn and bishop-shade statements. A closed FEN-verified research
+reader preserves those statements without permitting invented operands or prose. Versioned
+contract review, actual successor factories/bindings/components and both DrillScreen/Compare
+adoption remain; the production v1 routes are unchanged. No presentation/browser/owner-use,
+milestone or full-1.0 completion. Receipt:
+`planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md`
+§2026-10-07. Metadata/hash/state receipts update automatically.
+
 2026-10-07 ingress authoring continuation: 127 disposable controls pass, including all 112
 inventoried operations at the real REST handler's first service entry and independent proposed
 reader/selector/permit refusals. Production still accepts the retained oversized-command and

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1f03f6e48e93812d1a635db1c75bb0a74c7af587528211ba1716d005333c2082",
+    "roadmap": "sha256:3e06475335a0e6ad7c8bb957e477486dcc09b2ca03d289e4982b10bfd4dfd798",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:7b1ab59f9677d1852d90d387df086eb7cf0fb3eb5bfa55c801629194ab2946d8",
+    "workState": "sha256:7aa9e466d0032f7d7bc6dfbd6ed092bc0e9259f492d6e5da01b93230d0af9592",
     "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -1022,12 +1022,16 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "D3503's 50 ms cadence is path-backed done on complete before/after browser evidence and full local software/content/browser gates; do not requeue it or the D3500 removed duplicate codec. D3497 has separate complete HTTP/browser populations but full D7 remains. D3498 needs an accepted contract-preserving optional-voice lifecycle amendment; D7 retains permitted-rung and owner-device/use obligations. Complete full v5/D12 without ruling D1639 by implementation. Continue A4 fifteen-family positives and remaining D1834 semantic obligations; D3469, D3309, D3363 and D3436 retain their named contracts. D3262 still owns actual five-approach cost/profile. No source, permission, full-RFC or milestone promotion.",
+      "nextAction": "D3309 now has strict types and 195 real-FEN fidelity controls; author/review the exact sixteen v2 operand/factory/renderer/binding successors before both DrillScreen and Compare migration and actual component/browser proof. Preserve all v1 bytes and the existing seal. D3503's 50 ms cadence and D3500 codec are done, not requeued. D3497 retains full D7; D3498 needs the accepted optional-voice lifecycle contract. Complete full v5/D12 without ruling D1639 by implementation. Continue A4 fifteen-family positives and remaining D1834 obligations; D3469, D3363 and D3436 retain their named contracts. D3262 owns actual five-approach cost/profile. No full-RFC or milestone promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-06",
-        "summary": "D3497 retains complete separate before/after production Chromium populations: each 880 rows/44 cells/twenty samples and sixty voice baselines. Trusted visible post-frame output binds exact decision/rung/sentence and source/cache identities; empty/unavailable/REST-refused/unreachable outcomes all remain. D3503 reduces serialized pending polling from 100 to 50 ms with unchanged 70-second lifetime and exact retry/cancel identity. Voice-unavailable dependency-to-frame p95 improves 161.875 to 97.382 ms; all non-timeout rendered cells max 105.526 ms. Optional voice timeout remains 2066.049 ms (lower 2065.772) and stays D3498, not a waived budget. Twenty-seven mounted cases, seven actual predecessor failures, strict capture types and 63 pure checker/source-off controls pass. Full exact-index software passes 3398/344 plus seven isolated performance cases; content 227/23 and full browser 145 passes/one optional Maia skip/zero retries with 112 composition cells are green. D3503 is path-backed done; final scoped governance precedes commit. This is one desktop viewport and post-frame visibility, not physical-display/owner-device/fifth-rung proof or full D7. All 984 declarations/history stay current; zero migration writes/restamps. D3500–D3502 remain completed in linked prior receipts. Full Hint v5/D12, proposed D1639, D3262 cost/profile and every full-1.0 obligation remain. Routine receipts/anchors refresh automatically. No milestone/capability, RFC, content or release promotion.",
+        "at": "2026-10-07",
+        "summary": "D3309 now has strict TypeScript and 195 disposable real-FEN controls through actual sealed factories, admission and presentation. All sixteen affected families omit detailed operands; twelve piece-count readings collide in one typed caption and Pack B loses its seven-pawn/d3-light-square statements. A closed FEN-verified research reader preserves current sentences and refuses missing/mismatched/nested/prose mutations; actual seal-forgery refusal also passes. It is not a registered v2 projection or component. Versioned contract review, real successors/bindings/wire controls and both DrillScreen/Compare/browser migrations stay open. Current source v1 bytes and historical D3497/D3500–D3503 full suite/browser receipts remain unchanged, not fresh current release proof. Full D7/v5/D12, optional voice lifecycle, owner-device/use and D3262 cost/profile remain. Canonical state/anchor/receipt checks and ordinary hooks precede the owned checkpoint. Metadata maintenance is automatic; no capability, milestone, RFC, content or 1.0 promotion.",
         "impact": "advanced",
         "evidence": [
+          "tools/d3309-structural-fidelity/fidelity.test.ts",
+          "tools/d3309-structural-fidelity/tsconfig.json",
+          "tools/d3309-structural-fidelity/vitest.config.ts",
+          "design/research/evidence-presentation.md",
           "planning/play-composition/human-model-window-2026-10-06.md",
           "planning/play-composition/inspector-explicit-lifecycle-browser-before-quiet-repair-2026-10-06.json",
           "planning/play-composition/inspector-explicit-lifecycle-software-before-quiet-repair-2026-10-06.json",
@@ -1193,7 +1197,7 @@
           {
             "kind": "work_state",
             "id": "D3309",
-            "digest": "sha256:2deb9e66cc7e67c1ec26e1092e7e9e7b9ab697b7501972ba56bab7496d6079d1"
+            "digest": "sha256:8e213c65162de8a042b9fc542eb7a7f1b802c32f3312a1a997709362f9a7fd37"
           },
           {
             "kind": "work_state",

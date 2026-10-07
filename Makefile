@@ -1879,6 +1879,12 @@ bot-calibration-verdict-contract:
 bot-calibration-numerical-author-check:
 	node --test tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs
 
+# Disposable D3309 producer/presentation fidelity census. No v2 production migration.
+.PHONY: structural-inspector-fidelity-check
+structural-inspector-fidelity-check:
+	$(CI_NODE) node_modules/typescript/bin/tsc --project tools/d3309-structural-fidelity/tsconfig.json
+	$(CI_NODE) node_modules/vitest/vitest.mjs run --config tools/d3309-structural-fidelity/vitest.config.ts
+
 .PHONY: bot-calibration-population-check bot-calibration-population bot-calibration-population-report bot-calibration-population-report-update bot-calibration-population-report-check
 bot-calibration-population-check: bot-calibration-verdict-contract
 	$(CI_NODE) node_modules/typescript/bin/tsc --project tools/d2236-bot-calibration-verdict-contract/tsconfig.json

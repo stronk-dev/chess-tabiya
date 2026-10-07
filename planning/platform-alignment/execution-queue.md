@@ -25,6 +25,12 @@ dependency edge, they may not.
 | [[D3497]] | **DOING: HTTP and actual browser populations measured, full D7 remains**; evidence-foundation; implementing hint-distance §10/D7 | Complete before/after browser populations retain all 880 rows / 44 cells / twenty samples and sixty baselines per build. Actual source/cache joins and source-off module deliveries pass. Post-frame visibility is measured, not physical-display paint. Optional voice still reaches 2066.049 ms; fifth-rung refusals and unreachable rows are not rendered answers. Receipt: `planning/provider-exchange-and-execution/hint-latency-http-2026-10-06.md`. No D7, owner-device/use or semantic-search cost closeout. |
 | [[D3498]] | **NEXT: contract-preserving optional-voice repair**; evidence-foundation; D3497 full measurement then accepted lifecycle amendment where required | Deterministic evidence must not wait behind optional prose. Preserve exact sealed identity, redaction, fallback truth, cancellation and provider deadline; do not invent early timeout or mutable receipt semantics. `planning/provider-exchange-and-execution/hint-voice-latency-repair-proposal.md` names the author/review boundary and complete production exit. |
 
+## Structural Inspector fidelity checkpoint — 2026-10-07
+
+| Item | Owning lane / prerequisite | Required exit |
+|---|---|---|
+| [[D3309]] | **NEXT: versioned producer/presentation contract review; fidelity research is executable**; assistance-and-presentation; `rfc/evidence-presentation.md` and immutable v1 operand contract | Strict types / 195 disposable real-FEN controls reproduce loss across all sixteen affected families, Pack-B seven-pawn/light-square loss and twelve piece-count captions collapsing to one. Closed FEN-verified research operands preserve the statements and refuse malformed/invented data. Author/review the exact v2 factories, kind-required operands, renderer/binding/wire controls, then migrate both DrillScreen and Compare and prove actual visible components. Do not widen v1, swap to generic text or treat research as production admission. Receipt: `planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md` §2026-10-07; `make structural-inspector-fidelity-check`. |
+
 ## Bot calibration checkpoint — 2026-10-07
 
 | Item | Owning lane / prerequisite | Required exit |
