@@ -29223,6 +29223,15 @@
       "uxItems": [],
       "evidence": "tools/release/inputs.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3537",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5d76f7b1fe9158d4b7c7c8889fa51a6069365f28aee083ac10d4824f36af9afd",
+      "uxItems": [],
+      "evidence": "planning/roadmap-1.0.json",
+      "evidenceKind": "path"
     }
   ]
 }

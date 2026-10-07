@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 progress reconciliation ([[D3537]]): production application and mounted
+client bindings confirm live compiled Support modules, Review Map, Library, bot
+picker, private Profile and a development-only Campaign pilot. The machine
+capability fields no longer call those delivered APIs/screens missing or repeat
+pre-implementation bot/longitudinal review returns as current state. Their status
+is **partial**, not complete. Official content, remaining workflows and release
+proof still block 1.0. Structural/digest checks validate tracking consistency;
+they do not establish that every prose claim describes the product correctly.
+
 2026-10-07 D3512 isolated-case execution is implemented as disposable research:
 fresh process per cold case, no retries, literal command/failure/startup/teardown
 custody and closed-before-warm execution. Sixty Node controls pass. The frozen
@@ -760,7 +769,7 @@ fails `make roadmap-check` until it has an owner.
 
 <!-- roadmap-capability: governance -->
 
-**State: complete and ratcheted.** The ledger, RFC register, status parity,
+**State: assignment coverage is complete and ratcheted; reporting remains partial.** The ledger, RFC register, status parity,
 shared-resource register, intent parity and persistent UX-item registry are real. Every generic
 ledger row now has one durable state joined to its exact source bytes; terminal rows retain landing
 or refusal evidence; live work has an explicit owner or the honest `untriaged`/`unowned` state.

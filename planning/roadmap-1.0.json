@@ -181,7 +181,7 @@
       ],
       "completion": {
         "evidence": [
-          "blocked",
+          "partial",
           "Each module names its eligible projections, disclosure distance, timing, role, and abstention."
         ],
         "state": [
@@ -189,12 +189,12 @@
           "Preset, workflow context, assistance ceiling, learner overrides, and disclosure events compose deterministically."
         ],
         "api": [
-          "blocked",
+          "partial",
           "Module views and availability come from one server contract; provider use cannot widen evidence."
         ],
         "experience": [
           "partial",
-          "The stable board and structural companion seats ship; ordinary play still lacks the eleven evidence-backed learner modules, preset-driven disclosure, and complete honest-empty states."
+          "The stable board, compiled learner modules, preset-driven seats and Guided Hint ship through the production module query; complete emitter coverage, Inspector fidelity, hint defaults and all-context honest-empty journeys remain."
         ],
         "defaults": [
           "blocked",
@@ -205,8 +205,8 @@
           "Theory-only, pattern, square, piece, distance, move, prevention, and honest-empty examples are authored and tested."
         ],
         "verification": [
-          "blocked",
-          "Leakage, word budget, interruption, source-off, LLM-off, per-context ceiling, and responsive layout matrices pass."
+          "partial",
+          "Native module, staged-risk, hint-readiness, help-change and responsive interaction controls pass locally; complete leakage, source-off, LLM-off, all-context ceilings, latency and owner-use obligations remain."
         ],
         "release": [
           "blocked",
@@ -240,8 +240,8 @@
           "Import, story, review compilation, sharing, retry, and return scheduling are reachable and paginated."
         ],
         "experience": [
-          "missing",
-          "A whole-game map and move timeline explain a bounded set of grounded moments, opening/phase arc, and next actions without dumping scores or only eight opaque cards."
+          "partial",
+          "The mounted Review Map has a move timeline, grounded grades, moments, eval graph, Analyze, retry and compare doors. Whole-game cross-source explanation and every origin's complete review-and-return journey remain."
         ],
         "defaults": [
           "blocked",
@@ -283,12 +283,12 @@
           "Draft, official, provenance, capability, migration, and graduation states are machine-readable and non-vacuous."
         ],
         "api": [
-          "missing",
+          "partial",
           "Principles, shapes, theory search, packs, author lint/playtest/register/withdraw, and exact drill joins have production application routes."
         ],
         "experience": [
-          "missing",
-          "Searchable phase-first library and author workflow support find, understand, rehearse, return, preview, validate, and publish."
+          "partial",
+          "The phase-first Library searches packs, principles, shapes, concepts and openings with entry and rehearsal doors; full authoring, cited content, training-set progression and official publication remain incomplete."
         ],
         "defaults": [
           "blocked",
@@ -325,16 +325,16 @@
           "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."
         ],
         "state": [
-          "blocked",
-          "The fifth fresh review proves a genuine profile digest can carry substituted family/layer semantics and coordinated durable rewrites can select a sampler-excluded move; replay/provider authority is not yet trustworthy."
+          "partial",
+          "Migration 29 persists selected registered profiles and opponent decisions; the production compiler and replay parser validate complete profile and provider inputs. Repertoire, memory, timing, durable recovery changes and calibrated behavior remain incomplete."
         ],
         "api": [
           "partial",
           "Opponent discovery and selection expose only registered profiles and reproduce their policy after resume."
         ],
         "experience": [
-          "missing",
-          "A learner chooses an honest bot card and experiences its behavior in play, history, rematches, review, and local bot tournaments."
+          "partial",
+          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Names/assets, measured personality, opening routes, complete rematch/history/Review and local bot events remain."
         ],
         "defaults": [
           "blocked",
@@ -346,7 +346,7 @@
         ],
         "verification": [
           "blocked",
-          "The retained 31+6 controls and eight fifth-review falsifiers pass, but exact profile binding, reconstruction from provider truth, durable replay, request grammar, unique guard rows, current health authority, repository compilation, calibration, phase/endgame and human-likeness gates remain."
+          "Production profile, provider, operation and replay controls exist; full strength calibration, trait observability, phase/endgame behavior, clocks, provider-off journeys and human-likeness proof remain."
         ],
         "release": [
           "blocked",
@@ -371,16 +371,16 @@
           "Every metric has occurrence and opportunity denominators, actor attribution, phase/decision splits, revision, confidence, and source drill-down."
         ],
         "state": [
-          "blocked",
-          "The tenth fresh longitudinal review returned the durable foundation: named mutations are receipt-only, duplicate requests cancel work, source cuts regress, lifecycle states disagree, retries/reclaims cannot run, legacy provenance is inverted, and source identity changed without authority."
+          "partial",
+          "Migration 26 and the production longitudinal service persist owned observations and background projections, with restart and account-lifecycle support. Complete mutation/invalidation, rebuild, cost and downstream style/skill/recommendation journeys remain."
         ],
         "api": [
           "partial",
-          "Rating, history, rated-game, marks, and cohort-standing families cross the production application boundary; longitudinal/profile APIs are absent."
+          "Rating, history, rated-game, marks, cohort-standing and private learner-profile families cross the production application boundary; complete recommendations and all longitudinal lifecycle operations remain."
         ],
         "experience": [
           "partial",
-          "Rating works as a narrow surface; complete history, opening performance, skill credit, style dimensions, privacy, sharing, and grounded recommendations do not."
+          "Rating and the private profile render floor-gated habit cards, opening result counts, observations and history drill-down. Some metrics abstain and the skill valence register is empty; complete skills, comparative style, opening performance and recommendations remain."
         ],
         "defaults": [
           "blocked",
@@ -392,7 +392,7 @@
         ],
         "verification": [
           "partial",
-          "Rating isolation and calibration pass; the longitudinal predecessor chain and 8/8 tenth-review counterexamples pass, but actual mutation/invalidation atomicity, lifecycle closure, actor attribution, rebuild, privacy, cost, recommendation, and presentation gates remain."
+          "Rating isolation, durable-store and native profile controls pass; full mutation/invalidation, lifecycle, actor attribution, rebuild, privacy, cold-game cost, recommendation and all-metric presentation proof remain."
         ],
         "release": [
           "blocked",
@@ -418,15 +418,15 @@
         ],
         "state": [
           "partial",
-          "The seventh fresh review returned the foundation because charged commands can report committed without performing their play mutation or appending a Campaign event; provider, assistance, review, event and curriculum authority also remain caller-mintable."
+          "Migration 30 persists campaign runs, events, charged mutation commands and awards; production campaign/play mutations share a transaction and command replay. Full catalogue progression and all reward/boss/lifecycle combinations remain."
         ],
         "api": [
-          "missing",
-          "Enter, read, seal, fail, reward, spend, unlock, resume, and abandon endpoints do not exist."
+          "partial",
+          "The production campaign family serves catalogue, create/read, loadout, encounter start/submit, abandon, result and Review with durable charged mutations. Catalogue/theory progression, rated bosses and all remaining reward operations are incomplete."
         ],
         "experience": [
-          "missing",
-          "There is no campaign route, map, encounter flow, resource explanation, failure result, or return path in the web app."
+          "partial",
+          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. Complete official progression, rewards and all boss/Review/failure journeys remain."
         ],
         "defaults": [
           "blocked",
@@ -434,11 +434,11 @@
         ],
         "content": [
           "missing",
-          "No authored campaign exists; 1.0 needs a complete, replayable pilot with varied encounter and boss forms."
+          "A development-only draft pilot includes an unrated boss. No owner-reviewed official campaign is delivered; 1.0 needs a varied complete replayable campaign on graduated content."
         ],
         "verification": [
-          "blocked",
-          "The seventh fresh review retains the complete author chain and passes seven new authority counterexamples plus strict TypeScript; a bounded repair, another fresh review, and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."
+          "partial",
+          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. Complete official-run, reward conservation, crash/upgrade, failure, accessibility and campaign-to-Review release journeys remain."
         ],
         "release": [
           "blocked",
