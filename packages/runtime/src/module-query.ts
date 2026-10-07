@@ -22,7 +22,7 @@ import { makeFen, parseFen } from "chessops/fen";
 
 import type { FinalizedAssistanceV1 } from "./assistance-exchange.js";
 import { branchPath } from "./branch-path.js";
-import { compareBranches } from "./compare.js";
+import { compareBranches, type BranchComparison } from "./compare.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
@@ -340,15 +340,22 @@ function inspectorSources(run: DrillRun, subject: ModuleSubject): readonly Modul
   });
 }
 
-/** The other attempt: the newest branch other than the subject's, compared at their fork. */
-function otherAttempt(run: DrillRun, branchId: string): string | undefined {
-  return [...run.branches].reverse().find((branch) => branch.id !== branchId)?.id;
+/** The recorded pair used by both Compare's facts and its enter-other-attempt action. */
+export function moduleComparisonForSubject(run: DrillRun, nodeId: string): BranchComparison | undefined {
+  const subject = run.nodes.find(node => node.id === nodeId);
+  if (subject === undefined) return undefined;
+  // A shared-prefix node retains its creating branch. The current decision's branch is the
+  // subject's attempt when its recorded path contains that node; off-path subjects keep theirs.
+  const branchId = branchPath(run, run.activeCursor.branchId).some(node => node.id === nodeId)
+    ? run.activeCursor.branchId : subject.branchId;
+  const other = [...run.branches].reverse().find(branch => branch.id !== branchId)?.id;
+  return other === undefined ? undefined : compareBranches(run, [branchId, other]);
 }
 
 function compareSources(run: DrillRun, subject: ModuleSubject): readonly ModuleSourceResult[] {
-  const other = otherAttempt(run, subject.node.branchId);
-  if (other === undefined) return [Object.freeze({ kind: "unavailable", projection: "run.record.fork@1", reason: "no_second_attempt" })];
-  const comparison = compareBranches(run, [subject.node.branchId, other]);
+  const comparison = moduleComparisonForSubject(run, subject.node.id);
+  if (comparison === undefined) return [Object.freeze({ kind: "unavailable", projection: "run.record.fork@1", reason: "no_second_attempt" })];
+  const other = comparison.columns[1]!.branchId;
   const branchInput = { run, comparison, branchId: other };
   return [
     route("run.record.fork@1", { run, comparison }),

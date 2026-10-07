@@ -17,6 +17,7 @@ import {
   ModuleQueryError,
   fitModulePresentation,
   moduleDecisionStamp,
+  moduleComparisonForSubject,
   moduleDisclosureDigest,
   parseModuleQueryRequest,
   passFen,
@@ -206,6 +207,29 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     const sentences = assertDelivered(coach, assistance);
     expect(sentences.length).toBeGreaterThan(0);
     expect(coach.budget.after.facts).toBeLessThanOrEqual(2);
+  });
+
+  it("binds comparison to the active attempt at a shared fork and enters its other continuation, not its leaf", () => {
+    let run = packRun(ITALIAN, ["e1g1", "e8g8"]);
+    const root = run.nodes[0]!.id;
+    const original = run.activeCursor.branchId;
+    const firstMove = run.nodes[1]!.id;
+    expect(moduleComparisonForSubject(run, root)).toBeUndefined();
+    run = fork(rewind(run, root, at).run, root, { at }).run;
+    const alternative = run.activeCursor.branchId;
+    const shared = moduleComparisonForSubject(run, root)!;
+    expect(shared.columns.map(column => column.branchId)).toEqual([alternative, original]);
+    expect(shared.rows[0]!.nodes[original]!.id).toBe(firstMove);
+    expect(shared.columns[1]!.leafNodeId).not.toBe(firstMove);
+    run = commitMove(run, "a2a3", { at }).run;
+    const alternativeNode = run.activeCursor.nodeId;
+    run = fork(rewind(run, root, at).run, root, { at }).run;
+    run = commitMove(run, "b1c3", { at }).run;
+    const third = run.activeCursor.branchId;
+    expect(moduleComparisonForSubject(run, run.activeCursor.nodeId)!.columns.map(column => column.branchId)).toEqual([third, alternative]);
+    expect(moduleComparisonForSubject(run, firstMove)!.columns.map(column => column.branchId)).toEqual([original, third]);
+    expect(moduleComparisonForSubject(run, alternativeNode)!.columns.map(column => column.branchId)).toEqual([alternative, third]);
+    expect(moduleComparisonForSubject(run, "missing")).toBeUndefined();
   });
 });
 

@@ -1389,6 +1389,206 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  describe("module rehearsal actions", () => {
+    function actionRun(): DrillRun {
+      const initial = createRun({ id: "module-actions", session: { kind: "position", start: { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      const played = commitMove(initial, "e4d5", { at }).run;
+      return revealFeedback(appendOpponentPly(played, { moveUci: "d8d5", policyModeApplied: "human_common", engine: { id: "action-fixture", name: "Fixture opponent", version: "1", seedHonored: true, eloHonored: false } }, { at }).run, at).run;
+    }
+    function actionScreen(run: DrillRun, access: RunStateSnapshot["access"] = "writer", callbacks: Partial<ComponentProps<typeof DrillScreen>> = {}) {
+      const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access, pendingEvidence: 0, withheld: false }]]);
+      const replace = (next: DrillRun, nextAccess = access) => snapshots.set("current", { run: next, access: nextAccess, pendingEvidence: 0, withheld: false });
+      const onRewind = vi.fn((target: { nodeId?: string; branchId?: string }) => {
+        replace(rewind(snapshots.get("current")!.run, target.nodeId!, at, undefined, target.branchId).run);
+        return true;
+      });
+      const onSwitchBranch = vi.fn((nodeId: string, branchId: string) => { replace(rewind(snapshots.get("current")!.run, nodeId, at, undefined, branchId).run); return true; });
+      const component = mount(DrillScreen, { target: target(), props: {
+        onAssistanceQuery: testAssistanceAuthority,
+        onModuleQuery: body => testModuleQuery(snapshots.get("current")!.run)(body),
+        assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
+        onMove: vi.fn(), onFork: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+        onRewind, onSwitchBranch, ...callbacks,
+        get snapshot() { return snapshots.get("current")!; },
+      } });
+      return { component, snapshots, replace, onRewind, onSwitchBranch };
+    }
+    const action = (module: string) => document.querySelector<HTMLButtonElement>(`[data-module="${module}"] [data-rehearsal-action]`);
+    async function openComparison(): Promise<HTMLButtonElement> {
+      const seat = document.querySelector('[data-module="compare_coach"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click();
+      await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(action("compare_coach")).not.toBeNull());
+      return action("compare_coach")!;
+    }
+
+    it("rewinds the Nudge's learner move, preserves its reply, and enters the other attempt at the divergence", async () => {
+      const original = actionRun();
+      const originalNodes = original.nodes;
+      const subject = original.nodes.find(node => node.moveUci === "e4d5")!;
+      const screen = actionScreen(original);
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      expect(action("postcommit_nudge")!.textContent).toBe("Try another move");
+      action("postcommit_nudge")!.click();
+      await vi.waitFor(() => expect(screen.onRewind).toHaveBeenCalledWith({ nodeId: subject.parentId, branchId: original.activeCursor.branchId }));
+      await vi.waitFor(() => expect(action("postcommit_nudge")).toBeNull());
+      const alternate = revealFeedback(commitMove(screen.snapshots.get("current")!.run, "g1f3", { at }).run, at).run;
+      expect(alternate.branches).toHaveLength(2);
+      expect(alternate.nodes.slice(0, originalNodes.length)).toEqual(originalNodes);
+      screen.replace(alternate);
+      await assistanceSettled();
+      const enter = await openComparison();
+      expect(enter.textContent).toBe("Enter other attempt");
+      enter.click();
+      await vi.waitFor(() => expect(screen.onRewind).toHaveBeenLastCalledWith({ nodeId: subject.parentId, branchId: original.activeCursor.branchId }));
+      expect(screen.onSwitchBranch).not.toHaveBeenCalled(); // It resumes the opponent; entering a recorded comparison must not.
+      expect(screen.snapshots.get("current")!.run.activeCursor).toEqual({ nodeId: subject.parentId, branchId: original.activeCursor.branchId });
+      expect(screen.snapshots.get("current")!.run.nodes).toEqual(alternate.nodes);
+      await unmount(screen.component);
+    });
+
+    it.each([false, "throw"] as const)("keeps the Nudge target and offers an exact retry after %s", async failure => {
+      const run = actionRun();
+      const pending = deferred<boolean>();
+      const onRewind = vi.fn().mockImplementationOnce(() => pending.promise).mockImplementationOnce(() => true);
+      const screen = actionScreen(run, "writer", { onRewind });
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      action("postcommit_nudge")!.click();
+      action("postcommit_nudge")!.click();
+      await tick();
+      expect(onRewind).toHaveBeenCalledOnce();
+      expect(action("postcommit_nudge")!.disabled).toBe(true);
+      expectDisabledControlsExplained();
+      if (failure === false) pending.resolve(false); else pending.reject(new Error("offline"));
+      await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [role="alert"]')?.textContent).toContain("try again"));
+      expect(screen.snapshots.get("current")!.run).toBe(run);
+      action("postcommit_nudge")!.click();
+      await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
+      expect(onRewind.mock.calls[1]).toEqual(onRewind.mock.calls[0]);
+      await unmount(screen.component);
+    });
+
+    it("explains the read-only action and refuses even a dispatched click", async () => {
+      const screen = actionScreen(actionRun(), "read_only");
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      const button = action("postcommit_nudge")!;
+      expect(button.disabled).toBe(true);
+      expect(document.querySelector('[data-module="postcommit_nudge"]')?.textContent).toContain("read-only");
+      expectDisabledControlsExplained();
+      button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("makes Compare's exact branch rewind single-flight and retryable, without resuming the opponent", async () => {
+      const original = actionRun();
+      const root = original.nodes[0]!.id;
+      const alternate = revealFeedback(commitMove(rewind(original, root, at).run, "g1f3", { at }).run, at).run;
+      const pending = deferred<boolean>();
+      const onRewind = vi.fn().mockImplementationOnce(() => pending.promise).mockImplementationOnce(() => true);
+      const screen = actionScreen(alternate, "writer", { onRewind });
+      await assistanceSettled();
+      const enter = await openComparison();
+      enter.click(); enter.click();
+      await tick();
+      expect(onRewind).toHaveBeenCalledOnce();
+      expect(onRewind).toHaveBeenCalledWith({ nodeId: root, branchId: original.activeCursor.branchId });
+      expect(enter.disabled).toBe(true);
+      expectDisabledControlsExplained();
+      pending.resolve(false);
+      await vi.waitFor(() => expect(document.querySelector('[data-module="compare_coach"] [role="alert"]')?.textContent).toContain("try again"));
+      expect(screen.snapshots.get("current")!.run).toBe(alternate);
+      enter.click();
+      await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
+      expect(onRewind.mock.calls[1]).toEqual(onRewind.mock.calls[0]);
+      expect(screen.onSwitchBranch).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("does not create an action before a second attempt and removes a displayed action when write access is lost", async () => {
+      const original = actionRun();
+      const screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = document.querySelector('[data-module="compare_coach"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click();
+      await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(seat.textContent).toContain("Needs a second attempt"));
+      expect(action("compare_coach")).toBeNull();
+      const nudge = action("postcommit_nudge")!;
+      expect(nudge).not.toBeNull();
+      screen.replace(original, "read_only");
+      await tick();
+      nudge.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("refuses an old Nudge action after the recorded decision changes", async () => {
+      const original = actionRun();
+      const screen = actionScreen(original);
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      const oldAction = action("postcommit_nudge")!;
+      screen.replace(revealFeedback(commitMove(original, "g1f3", { at }).run, at).run);
+      await tick();
+      oldAction.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("does not steal board focus when a pending action returns after another decision", async () => {
+      const original = actionRun();
+      const pending = deferred<boolean>();
+      const screen = actionScreen(original, "writer", { onRewind: () => pending.promise });
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      action("postcommit_nudge")!.click();
+      screen.replace(revealFeedback(commitMove(original, "g1f3", { at }).run, at).run);
+      await tick();
+      const focus = vi.spyOn(HTMLElement.prototype, "focus");
+      pending.resolve(true);
+      await tick(); await tick();
+      expect(screen.snapshots.get("current")!.run.activeCursor.nodeId).not.toBe(original.nodes[0]!.id);
+      expect(focus).not.toHaveBeenCalled();
+      focus.mockRestore();
+      await unmount(screen.component);
+    });
+
+    it("discards a successful pending action after unmount without moving focus", async () => {
+      const pending = deferred<boolean>();
+      const screen = actionScreen(actionRun(), "writer", { onRewind: () => pending.promise });
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      action("postcommit_nudge")!.click();
+      await unmount(screen.component);
+      const focus = vi.spyOn(HTMLElement.prototype, "focus");
+      pending.resolve(true);
+      await tick(); await tick();
+      expect(focus).not.toHaveBeenCalled();
+      focus.mockRestore();
+    });
+
+    it("retires a pending action on a different run without focusing or publishing its late failure", async () => {
+      const pending = deferred<boolean>();
+      const screen = actionScreen(actionRun(), "writer", { onRewind: () => pending.promise });
+      await vi.waitFor(() => expect(action("postcommit_nudge")).not.toBeNull());
+      action("postcommit_nudge")!.click();
+      const next = createRun({ id: "replacement-actions", session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      screen.replace(next);
+      await tick();
+      const focus = vi.spyOn(HTMLElement.prototype, "focus");
+      pending.reject(new Error("late"));
+      await tick(); await tick();
+      expect(action("postcommit_nudge")).toBeNull();
+      expect(document.querySelector('[data-module="postcommit_nudge"] [role="alert"]')).toBeNull();
+      expect(focus).not.toHaveBeenCalled();
+      focus.mockRestore();
+      await unmount(screen.component);
+    });
+  });
+
   it("delivers the Post-commit Nudge only through the compiled effect, never retroactively on a preset raise (Checkpoint B, criterion 9)", async () => {
     const START = "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2";
     const initial = createRun({ id: "nudge-seat", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });

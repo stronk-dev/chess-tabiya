@@ -42,6 +42,18 @@ export interface SeatDeclaration {
   readonly emptySilent: boolean;
 }
 
+/** Navigation over an admitted card; never a new evidence producer or a suggested chess move. */
+export interface ModuleSeatAction {
+  readonly label: string;
+  readonly pendingLabel: string;
+  readonly description: string;
+  readonly pending: boolean;
+  readonly blockedReason?: string | undefined;
+  readonly error?: string | undefined;
+  readonly onInvoke: () => void;
+}
+export type ModuleSeatActions = Readonly<Partial<Record<"postcommit_nudge" | "compare_coach", ModuleSeatAction>>>;
+
 /** The seats the compiled assistance composes, in seat order. */
 export function composedSeats(compiled: { readonly modules: readonly ModuleId[]; readonly effects: readonly CompiledAssistanceEffect[] } | undefined): readonly SeatDeclaration[] {
   if (compiled === undefined) return Object.freeze([]);

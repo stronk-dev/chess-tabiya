@@ -5,9 +5,10 @@
   // every change is companion-internal, never stage layout. The head slot belongs to the one
   // board-adjacent cue (blunder_prevention) and appears only while a staged move is held.
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
+  import { learnerProse } from "./labels/index.js";
   import CompanionSeat from "./CompanionSeat.svelte";
   import type { ParsedModulePacket } from "./module-query-response.js";
-  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
+  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type ModuleSeatActions, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
 
   interface Props {
     seats: readonly SeatDeclaration[];
@@ -19,13 +20,14 @@
     /** Why an on-request door cannot open right now (e.g. no subject yet); absent when it can. */
     doorBlocked: Readonly<Partial<Record<PlaySeatModule, string>>>;
     staged: StagedCue | undefined;
+    actions?: ModuleSeatActions;
     onToggle: (module: PlaySeatModule) => void;
     onRequest: (module: PlaySeatModule) => void;
     onConfirmStaged: () => void;
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, band = false, doorBlocked, staged, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, band = false, doorBlocked, staged, actions = {}, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
@@ -83,6 +85,20 @@
             {/if}
             {#each unavailableSentences(packet) as sentence}<p class="unavailable">{sentence}</p>{/each}
             {#if seat.module === "postcommit_nudge" && packet.items.length > 0}<p>{NUDGE_CLOSING}</p>{/if}
+            {#if packet.items.length > 0 && (seat.module === "postcommit_nudge" || seat.module === "compare_coach")}
+              {@const action = actions[seat.module]}
+              {#if action !== undefined}
+                <p>{action.description}</p>
+                <div class="seat-actions">
+                  <button type="button" class="primary" data-rehearsal-action disabled={action.pending || action.blockedReason !== undefined}
+                    aria-describedby={action.pending || action.blockedReason !== undefined ? `${seat.module}-action-status` : action.error !== undefined ? `${seat.module}-action-error` : undefined}
+                    onclick={action.onInvoke}>{action.pending ? action.pendingLabel : action.label}</button>
+                </div>
+                {#if action.pending}<p id={`${seat.module}-action-status`} role="status">{action.pendingLabel} Your recorded lines are kept.</p>
+                {:else if action.blockedReason !== undefined}<p id={`${seat.module}-action-status`} class="door-reason">{learnerProse(action.blockedReason)}</p>{/if}
+                {#if action.error !== undefined}<p id={`${seat.module}-action-error`} role="alert">{action.error}</p>{/if}
+              {/if}
+            {/if}
             {#if !seat.proactive && doorBlocked[seat.module] === undefined}<button type="button" class="seat-request secondary" onclick={() => onRequest(seat.module)}>Ask again here</button>{/if}
           {/if}
     </CompanionSeat>

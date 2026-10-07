@@ -12,9 +12,19 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — 2026-10-07
 
-1. [[D3517]]: connect Nudge and Compare cards to the existing rehearsal actions.
-   Prove recorded move → rewind → alternate continuation → comparison, with the old
-   attempt preserved; include stale, pending, failure and read-only cases.
+1. [[D3518]], [[D3514]], [[D3510]]: locate the intermittent software failures before
+   declaring release readiness. Passing replays leave these findings open.
+2. [[D3521]]: remove implementation jargon from ordinary Threat Radar while preserving
+   its hypothetical turn, one-move limit, exact witnesses and provenance. Prove real
+   module delivery and native rendering, not only a vocabulary scan.
+
+Delivered [[D3517]]/[[D3519]]: Nudge → rewind before the learner move → different move
+→ Compare → enter the other recorded attempt at the common fork → keep playing. Native
+registered-bot journeys pass at 1280×720 and 390×844, without autoplay or deleting recorded
+lines. Single-flight, exact retry, read-only, stale decision, replaced run and unmount
+controls pass. [[D3520]] keeps rematch/header controls above the board and returns phone
+navigation through the modal-to-board focus handoff. These are narrow delivered workflows,
+not completion of Support, presets, a capability or a milestone.
 
 Completed narrow repairs: [[D3516]] excludes unchanged king facts in both Nudge
 operations while retaining real changes and raw observations; the built Guided bot
@@ -26,14 +36,14 @@ intermittent failures below remain open until their cause is located. Declaratio
 checks establish repository consistency, not product completion. No new bulk search
 capture or research controller is next work for this delivery sequence.
 
-[[D3518]] blocks software/release readiness: the current full software run passes
+[[D3518]] blocks release readiness: an earlier full software run passes
 3,414 tests but the real Stockfish version probe fails its unchanged 5-second UCI
 deadline. The normal provider-traversal gate and failure-only transcript must locate
 the handshake failure; a passing replay is not a repair or a replacement full-gate pass.
 
 ## Existing verification findings and research checkpoints (not the delivery queue)
 
-[[D3514]] is the current verification failure: artifact-free `make verify` passes
+[[D3514]] retains an observed unresolved failure: artifact-free `make verify` passes
 typecheck and 3,402 software tests, but Sight suppression without a selected square
 times out at its unchanged 5-second limit. Locate the stage/cause in
 `apps/server/src/local-module-execution.test.ts:137`; do not weaken the timeout or

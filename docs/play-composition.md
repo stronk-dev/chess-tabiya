@@ -84,6 +84,16 @@ inert, Tab stays inside, and Escape closes it and restores focus to the summary.
 also returns focus there. This does not change the phone companion's separately tracked policy.
 The sticky support promise stays inside the rail width rather than creating horizontal scrolling.
 
+Filled Nudge and Compare cards offer their recorded rehearsal action. Nudge rewinds before
+its learner move; Compare selects the other recorded branch at the common fork without
+autoplay. Both preserve all recorded continuations and return focus to board input. On a
+phone, returning to play first closes the companion and releases its modal inertness;
+Keep playing uses the same handoff. Busy/read-only actions explain their disabled state,
+failed navigation offers an exact retry, and old run/decision deliveries cannot navigate.
+The fixed-height header reserves intrinsic width for its controls and bounds the visual
+status text within its own wrapping column, retaining the full live announcement. On phones the secondary
+bot rematch action is in Support tools rather than wrapping into the board.
+
 Timeline move, branch and marker controls share one inline row inside the fixed 40 px strip.
 Only horizontal scrolling belongs there. The play branch shelf instead uses the companion's
 single vertical scroller; branch labels wrap and its native compare/Hide actions remain available.

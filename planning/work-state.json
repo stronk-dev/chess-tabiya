@@ -29046,11 +29046,12 @@
     },
     {
       "id": "D3517",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2972ba0000c540c52fd13ba8264a79238598ce94fc0ef426c5882d67cd52cece",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1e23a4707db21db04c20235351bb0dcf095903fa6f0b0d7a0a6e6c85dde71929",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "apps/web/src/lib/screens.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3518",
@@ -29060,6 +29061,32 @@
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
+    },
+    {
+      "id": "D3519",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5953ef7d1947f43f51665f036e19b6ebd9ed90fb8606f7d100b69085cefae331",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/module-query.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3520",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:06637eac03be7ae288b007cf3c8edea9309df279edf72b4eb6a916a1d3449f4c",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3521",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a4d31ff202bf7013130b9d831bf9e1800af059c1f242b9e6b8d270501e83a545",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
     }
   ]
 }

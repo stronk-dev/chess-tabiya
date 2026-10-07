@@ -1654,12 +1654,13 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "First complete D3517: bind existing Nudge/Compare cards to the exact recorded rehearsal actions and prove rewind, alternate continuation and comparison with the original preserved. D3515/D3516 are narrow citation/unchanged-king repairs, not full Support completion. D3309 retains its strict types and 195 real-FEN controls but needs accepted sixteen v2 successors before migration; preserve v1 bytes. D3503/D3500 are done. D3497 retains D7, D3498 its accepted-lifecycle hold, and full v5/D12 does not rule D1639. A4/D1834 and D3469/D3363/D3436 remain open. D3262 cost/profile research stays todo, not the next capture. No full-RFC or milestone promotion.",
+        "nextAction": "D3517/D3519 now deliver the recorded Nudge-to-alternate-attempt-to-Compare-to-play journey on desktop and phone; D3520 repairs header/control and phone focus boundaries. Next locate D3518/D3514/D3510's intermittent software failures and complete D3521's ordinary Threat Radar wording with real delivery/UI proof. D3309's sixteen v2 successors still need acceptance before migration; preserve v1 bytes. D3497 retains D7, D3498 its accepted-lifecycle hold, and full v5/D12 does not rule D1639. A4/D1834 and D3469/D3363/D3436 remain open. D3262 cost/profile research stays todo, not the next capture. No full-RFC, capability or milestone promotion.",
         "latestCheckpoint": {
           "at": "2026-10-07",
-          "summary": "D3309 now has strict TypeScript and 195 disposable real-FEN controls through actual sealed factories, admission and presentation. All sixteen affected families omit detailed operands; twelve piece-count readings collide in one typed caption and Pack B loses its seven-pawn/d3-light-square statements. A closed FEN-verified research reader preserves current sentences and refuses missing/mismatched/nested/prose mutations; actual seal-forgery refusal also passes. It is not a registered v2 projection or component. Versioned contract review, real successors/bindings/wire controls and both DrillScreen/Compare/browser migrations stay open. Current source v1 bytes and historical D3497/D3500–D3503 full suite/browser receipts remain unchanged, not fresh current release proof. Full D7/v5/D12, optional voice lifecycle, owner-device/use and D3262 cost/profile remain. Canonical state/anchor/receipt checks and ordinary hooks precede the owned checkpoint. Metadata maintenance is automatic; no capability, milestone, RFC, content or 1.0 promotion.",
+          "summary": "D3517/D3519 close two missing learner actions: admitted Nudge rewinds before its exact move, an alternate continuation preserves the original, Compare enters the same other attempt whose facts were delivered at the common fork, and the learner can play again without autoplay. Source delivery and navigation share recorded branch authority. Mounted tests cover exact retries, single flight, read-only, stale decisions, replaced runs and unmount; native registered-bot desktop/phone journeys exercise real API/controller paths. D3520 fixes genuine header overlap, bounded context/menu wrapping and phone modal-to-board focus. All four browser CI tiers pass with 112 unretried composition cells. Screenshot inspection also finds D3521's remaining ordinary Threat Radar jargon; it stays todo. D3309's sixteen v2 contracts/migrations, D7/v5/D12, optional voice lifecycle, owner-use, broader Support and the existing intermittent software causes remain open. These are delivered workflow checkpoints, not full Support, release readiness or a milestone/capability/RFC/content/1.0 promotion.",
           "impact": "advanced",
           "evidence": [
+            "packages/runtime/src/module-query.test.ts",
             "tools/d3309-structural-fidelity/fidelity.test.ts",
             "tools/d3309-structural-fidelity/tsconfig.json",
             "tools/d3309-structural-fidelity/vitest.config.ts",
@@ -1784,6 +1785,21 @@
             "planning/provider-exchange-and-execution/hint-latency-browser-software-2026-10-06.json"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3517",
+              "digest": "sha256:1e23a4707db21db04c20235351bb0dcf095903fa6f0b0d7a0a6e6c85dde71929"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3519",
+              "digest": "sha256:5953ef7d1947f43f51665f036e19b6ebd9ed90fb8606f7d100b69085cefae331"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3520",
+              "digest": "sha256:06637eac03be7ae288b007cf3c8edea9309df279edf72b4eb6a916a1d3449f4c"
+            },
             {
               "kind": "rfc",
               "id": "hint-distance.md",

@@ -38,7 +38,8 @@
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
   import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
-  import { moduleDecisionStamp } from "@chess-tabiya/runtime";
+  import { moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime";
+  import type { ModuleSeatAction, ModuleSeatActions } from "./module-seats.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -903,6 +904,9 @@
   let stagedUci: string | undefined;
   let stagedGeneration = 0;
   let seatFocusSquares: readonly string[] | undefined = $state();
+  let seatActionPending: { readonly module: PlaySeatModule; readonly digest: string } | undefined = $state();
+  let seatActionFailure: { readonly module: PlaySeatModule; readonly digest: string; readonly text: string } | undefined = $state();
+  let seatActionRequest = 0;
   const seatRequests = new Map<PlaySeatModule, number>();
   let seatRequestCounter = 0;
   let seatAlive = true;
@@ -921,6 +925,7 @@
     previousSeatAuthority = authority;
     untrack(() => {
       clearSeat(PLAY_SEAT_MODULES);
+      seatActionFailure = undefined;
       seatDoorReasons = {};
       seatFocusSquares = undefined;
       if (stagedCue !== undefined) {
@@ -1000,6 +1005,75 @@
     let next = new Map(seatPackets), subjects = new Map(seatSubjects);
     for (const module of modules) { next.delete(module); subjects.delete(module); seatRequests.delete(module); seatPending = withSeat(seatPending, module, false); seatFailed = withSeat(seatFailed, module, false); }
     seatPackets = next; seatSubjects = subjects;
+  }
+
+  // Navigation uses the exact admitted subject and current decision, never a sentence or the
+  // latest opponent node. The existing controllers own graph mutations and preserve both paths.
+  function seatActionTarget(module: "postcommit_nudge" | "compare_coach", packet: ParsedModulePacket): { nodeId: string; branchId: string } | undefined {
+    if (packet.module !== module || packet.items.length === 0 || packet.disclosure.runId !== run.id
+      || packet.disclosure.decisionDigest !== seatDecisionDigest || packet.disclosure.effectiveConfigDigest !== compiledAssistance?.finalDigest) return undefined;
+    const subject = run.nodes.find(node => node.id === packet.disclosure.subject.nodeId);
+    if (subject === undefined) return undefined;
+    if (module === "postcommit_nudge") {
+      if (subject.parentId === null || subject.actor !== "user" || subject.moveUci === null) return undefined;
+      const branchId = branchPath(run, run.activeCursor.branchId).some(node => node.id === subject.id) ? run.activeCursor.branchId : subject.branchId;
+      return { nodeId: subject.parentId, branchId };
+    }
+    const recorded = moduleComparisonForSubject(run, subject.id);
+    const other = recorded?.columns[1]?.branchId;
+    return recorded === undefined || other === undefined ? undefined : { nodeId: recorded.forkNodeId, branchId: other };
+  }
+
+  function seatActionBlock(): string | undefined {
+    if (!canWrite) return "This run is read-only. Open your own rehearsal to try another continuation.";
+    if (previewNodeId !== undefined) return "Return to the played position before changing attempts.";
+    if (busy || rewindBusy || branchSwitchBusy !== undefined || seatActionPending !== undefined) return "Wait for the current run action to finish.";
+    return undefined;
+  }
+
+  let seatActions: ModuleSeatActions = $derived.by(() => {
+    const actions: Partial<Record<"postcommit_nudge" | "compare_coach", ModuleSeatAction>> = {};
+    for (const module of ["postcommit_nudge", "compare_coach"] as const) {
+      const packet = seatPackets.get(module);
+      if (packet === undefined || seatActionTarget(module, packet) === undefined) continue;
+      const digest = packet.disclosure.digest;
+      actions[module] = {
+        label: module === "postcommit_nudge" ? "Try another move" : "Enter other attempt",
+        description: module === "postcommit_nudge"
+          ? `Return to before ${run.nodes.find(node => node.id === packet.disclosure.subject.nodeId)!.moveSan}. Playing a different move keeps this line and starts another attempt.`
+          : "Return to where the attempts split, on the other attempt. Both recorded lines stay saved.",
+        pendingLabel: module === "postcommit_nudge" ? "Rewinding…" : "Opening other attempt…",
+        pending: seatActionPending?.module === module && seatActionPending.digest === digest,
+        blockedReason: seatActionBlock(),
+        error: seatActionFailure?.module === module && seatActionFailure.digest === digest ? seatActionFailure.text : undefined,
+        onInvoke: () => void invokeSeatAction(module, packet),
+      };
+    }
+    return actions;
+  });
+
+  async function invokeSeatAction(module: "postcommit_nudge" | "compare_coach", packet: ParsedModulePacket): Promise<void> {
+    const target = seatActionTarget(module, packet);
+    if (!seatAlive || seatActionBlock() !== undefined || seatPackets.get(module)?.disclosure.digest !== packet.disclosure.digest || target === undefined) return;
+    const request = ++seatActionRequest;
+    const runId = run.id, authority = seatAuthority, digest = packet.disclosure.digest;
+    seatActionPending = { module, digest };
+    seatActionFailure = undefined;
+    // Rewind can select an exact branch without executing an opponent reply. Ordinary branch
+    // switching resumes play; that would silently extend/fork the preserved line here.
+    const accepted = await rewindRun(target);
+    if (!seatAlive || request !== seatActionRequest || run.id !== runId) return;
+    if (accepted && run.activeCursor.nodeId === target.nodeId && run.activeCursor.branchId === target.branchId) {
+      previewNodeId = undefined;
+      seatFocusSquares = undefined;
+      await tick();
+      if (seatAlive && request === seatActionRequest && run.id === runId && run.activeCursor.nodeId === target.nodeId && run.activeCursor.branchId === target.branchId) await focusBoardFromSupport();
+    } else if (!accepted && seatAuthority === authority && seatPackets.get(module)?.disclosure.digest === digest) {
+      seatActionFailure = { module, digest, text: module === "postcommit_nudge"
+        ? "The rewind did not finish. Your current attempt and target are unchanged, so you can try again."
+        : "The other attempt did not open. Your recorded attempts are kept; try again." };
+    }
+    if (request === seatActionRequest) seatActionPending = undefined;
   }
 
   // Post-commit proactive seats: one query per new learner move, before any automatic reply is read.
@@ -1780,8 +1854,17 @@
     }
   }
 
-  function focusBoardFromSupport(): void {
-    mainElement?.querySelector<HTMLElement>("[data-board-input-grid]")?.focus();
+  async function focusBoardFromSupport(): Promise<void> {
+    const runId = run.id, nodeId = run.activeCursor.nodeId, branchId = run.activeCursor.branchId;
+    if (compactViewport) {
+      // The phone companion owns modal inertness. Release it before focusing the board, and
+      // do not restore the obsolete card button that navigation may just have removed.
+      sheetOpen = false;
+      companionInvoker = undefined;
+      await tick();
+    }
+    if (seatAlive && run.id === runId && run.activeCursor.nodeId === nodeId && run.activeCursor.branchId === branchId)
+      mainElement?.querySelector<HTMLElement>("[data-board-input-grid]")?.focus();
   }
 
   async function switchRunBranch(nodeId: string, branchId: string): Promise<boolean> {
@@ -2078,6 +2161,7 @@
     corpusRequest += 1;
     fullInspectorRequest += 1;
     seatAlive = false;
+    seatActionRequest += 1;
     seatRequests.clear();
     stagedGeneration += 1;
     analysisRequest += 1;
@@ -2105,6 +2189,16 @@
   $effect(() => {
     if (boardActiveRunId !== run.id) {
       boardActiveRunId = run.id;
+      // Retire navigation owned by the previous run, including unresolved card callbacks.
+      rewindRequest += 1;
+      rewindBusy = false;
+      rewindFailure = undefined;
+      branchSwitchRequest += 1;
+      branchSwitchBusy = undefined;
+      branchSwitchError = undefined;
+      seatActionRequest += 1;
+      seatActionPending = undefined;
+      seatActionFailure = undefined;
       boardActiveSquare = undefined;
       boardMoveAnnouncement = undefined;
       boardFocusRequested = false;
@@ -2201,7 +2295,7 @@
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
       <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${runOpponentStatus(run.opponentPolicy)}. ${run.opponentPolicy.mode === "human_common" && run.opponentPolicy.profile === undefined ? HUMAN_MODEL_RUNG_DISCLAIMER : ""}${botReplyNote === undefined ? "" : ` ${botReplyNote}.`} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Watching" : busy ? "Updating" : "Your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Commentary opens at a checkpoint" : ""}`} />
-      <div class="status visually-hidden-on-phone" aria-hidden="true">
+      <div class="status" class:visually-hidden={compactViewport} class:visually-hidden-on-phone={compactViewport} aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
         <span>{runOpponentStatus(run.opponentPolicy)}</span>
         {#if botReplyNote !== undefined}<span class="bot-reply-note">{botReplyNote}</span>{/if}
@@ -2214,7 +2308,7 @@
         {/if}
       </div>
       <div class="topbar-actions">
-        {#if run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
+        {#if !compactViewport && run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
         <details class="assistance-control" bind:open={assistanceMenuOpen}
           role={assistanceMenuOpen ? "dialog" : undefined} aria-modal={assistanceMenuOpen ? "true" : undefined}
@@ -2381,6 +2475,7 @@
                 expanded={stagedCue !== undefined || seatExpanded === "guided_hint" || seatExpanded === "support_tools" ? undefined : seatExpanded}
                 doorBlocked={seatDoorReasons}
                 staged={stagedCue}
+                actions={seatActions}
                 onToggle={toggleSeat}
                 onRequest={requestSeat}
                 onConfirmStaged={() => void confirmStagedMove()}
@@ -2394,6 +2489,7 @@
               <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"
                 band={tabletViewport} tools open={stagedCue === undefined && (seatExpanded === undefined || seatExpanded === "support_tools")}
                 onToggle={() => toggleSeat("support_tools")}>
+            {#if compactViewport && run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
             {#if guardEvent?.type === "feedback.generated"}
               <section class="guard-prompt" aria-label="Consequence to review">
                 <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect what changed." />
@@ -2966,7 +3062,8 @@
     flex: 0 0 var(--topbar-h);
     height: var(--topbar-h);
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem;
     align-items: center;
     padding: 0 1rem;
   }
@@ -3002,8 +3099,13 @@
   }
 
   .status {
+    min-width: 0;
     display: flex;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .2rem 0;
+    text-align: center;
     color: var(--muted);
     font: 0.68rem ui-monospace, monospace;
     text-transform: uppercase;
@@ -3011,6 +3113,7 @@
 
   .status span + span::before {
     content: "·";
+    margin-left: 0.5rem;
     margin-right: 0.5rem;
   }
 
@@ -3019,6 +3122,7 @@
   }
 
   .topbar-actions { position:relative; justify-self:end; display:flex; align-items:center; gap:.55rem; }
+  .topbar-actions > button, .topbar-actions summary { white-space: nowrap; }
 
   .error,
   .operation-status,
@@ -3438,7 +3542,8 @@
   }
 
   .drill.compact .topbar {
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: .5rem;
       padding: 0 .5rem;
   }
 

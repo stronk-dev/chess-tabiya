@@ -64,6 +64,21 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   the Named-structure nudge after a move; Staged-move risk check in the head slot while a staged move
   is held (Revise / play anyway). One seat is expanded at a time; board paint is the expanded seat's
   own facts. The client refuses any page compiled under a different final digest.
+  Filled Nudge cards offer **Try another move**, returning to the exact parent of their
+  recorded learner move, even after an opponent reply. A different committed move creates
+  another attempt without deleting the old one. Filled Compare cards offer **Enter other
+  attempt**, returning to the shared fork on the same other branch whose facts were delivered.
+  Source delivery and navigation share `moduleComparisonForSubject`: subjects on the active
+  recorded path belong to that attempt, not necessarily to their creating branch; off-path
+  subjects retain their creating branch. The other attempt is the newest remaining branch.
+  Both actions use the existing branch-aware rewind operation, without executing an opponent
+  reply, and return focus to the board. On phones the companion's modal boundary closes first.
+  Exact disclosure/run/decision/configuration checks refuse stale actions; read-only and busy
+  actions have visible explanations, requests are single-flight, and failures retain an exact
+  retry. Leaving the screen or switching runs retires pending navigation.
+  The ordinary bot's phone rematch action lives in Support tools instead of wrapping over
+  the board. Desktop rematch remains in the header; its noninteractive context is bounded
+  within its own wrapping column while the full status announcement remains available to assistive technology.
 - **Review Map** (`reviewMapProjection`, `GET /runs/:id/review`) is unchanged.
 - **Guided Hint** (`compileGuidedHintPacket`, served at `POST|GET|DELETE /runs/:id/hints`): its own
   learner-requested seat beside the module seats — one family×rung disclosure per press, admitted

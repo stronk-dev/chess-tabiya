@@ -101,13 +101,29 @@ async function assertTopbarSeparation(page: Page, width: number): Promise<void> 
   const brand = (await page.locator(".topbar .wordmark").boundingBox())!;
   const context = (await page.locator(".topbar .status").boundingBox())!;
   const actions = (await page.locator(".topbar-actions").boundingBox())!;
-  expect(brand.x + brand.width, `brand/context separation at ${width}`).toBeLessThanOrEqual(context.x);
-  expect(context.x + context.width, `context/actions separation at ${width}`).toBeLessThanOrEqual(actions.x);
   const bar = (await page.locator(".topbar").boundingBox())!;
-  expect(context.y).toBeGreaterThanOrEqual(bar.y);
-  expect(context.y + context.height).toBeLessThanOrEqual(bar.y + bar.height);
-  for (const button of await page.locator(".topbar button").all()) {
+  const phone = await page.locator("main.drill").evaluate(element => element.classList.contains("compact"));
+  if (phone) {
+    // The phone deliberately visually hides the long context, keeping the separate live
+    // announcement. Its one-pixel box is not a visual header column.
+    expect(context.width).toBeLessThanOrEqual(1);
+    expect(context.height).toBeLessThanOrEqual(1);
+    expect(brand.x + brand.width, `brand/actions separation at ${width}`).toBeLessThanOrEqual(actions.x);
+  } else {
+    expect(brand.x + brand.width, `brand/context separation at ${width}`).toBeLessThanOrEqual(context.x);
+    expect(context.x + context.width, `context/actions separation at ${width}`).toBeLessThanOrEqual(actions.x);
+    expect(context.y).toBeGreaterThanOrEqual(bar.y);
+    expect(context.y + context.height).toBeLessThanOrEqual(bar.y + bar.height);
+  }
+  const board = (await page.getByLabel("Chessboard").boundingBox())!;
+  expect(bar.y + bar.height).toBeLessThanOrEqual(board.y);
+  for (const button of await page.locator(".topbar button, .topbar summary").all()) {
     if (!await button.isVisible()) continue;
+    const box = (await button.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(bar.x);
+    expect(box.x + box.width).toBeLessThanOrEqual(bar.x + bar.width);
+    expect(box.y).toBeGreaterThanOrEqual(bar.y);
+    expect(box.y + box.height).toBeLessThanOrEqual(bar.y + bar.height);
     expect(await button.evaluate((element) => { const box = element.getBoundingClientRect(); return element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)); })).toBe(true);
   }
 }
@@ -459,6 +475,73 @@ test("Guided Nudge after 1.e4 retains real consequences without unchanged king-e
   expect(graph.nodes.some((node) => node.moveUci === "e2e4")).toBe(true);
   await assertRunViewport(page, page.viewportSize()!);
 });
+
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+test(`Guided Nudge branches into another move and Compare reopens the preserved attempt without autoplay (${viewport.width}px)`, async ({ page }, testInfo) => {
+  await page.setViewportSize(viewport);
+  await chooseBot(page, "human-baseline.1400@1");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await choosePreset(page, /^Guide me/u);
+  await assertTopbarSeparation(page, viewport.width);
+  if (viewport.width < 720) {
+    await expect(page.locator(".topbar .rematch")).toHaveCount(0);
+    await showSupportTools(page);
+    await expect(page.getByRole("button", { name: "Play this bot again", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Collapse companion", exact: true }).click();
+  }
+  await move(page, "e2", "e4");
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+  const nudgeSelector = page.getByRole("button", { name: "After-move nudge", exact: true });
+  await expect(nudgeSelector).toBeVisible();
+  if (await nudgeSelector.getAttribute("aria-expanded") !== "true") await nudgeSelector.click();
+  const runId = page.url().split("/").at(-1)!;
+  const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+  const original = await graph();
+  const originalBranch = original.activeCursor.branchId;
+  const e4 = original.nodes.find(node => node.moveUci === "e2e4")!;
+  expect(e4).toBeDefined();
+  const nudge = page.locator('[data-module="postcommit_nudge"]');
+  await expect(nudge.getByRole("button", { name: "Try another move", exact: true })).toBeVisible();
+  await expect(nudge).toContainText("Return to before e4");
+  await assertRunViewport(page, page.viewportSize()!);
+  await testInfo.attach("nudge-action", { body: await page.screenshot(), contentType: "image/png" });
+  await nudge.getByRole("button", { name: "Try another move", exact: true }).click();
+  await expect.poll(async () => (await graph()).activeCursor).toEqual({ nodeId: e4.parentId, branchId: originalBranch });
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+  await assertRunViewport(page, page.viewportSize()!);
+
+  await move(page, "d2", "d4");
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+  const alternate = await graph();
+  expect(alternate.branches).toHaveLength(2);
+  expect(alternate.nodes.slice(0, original.nodes.length)).toEqual(original.nodes);
+  expect(alternate.activeCursor.branchId).not.toBe(originalBranch);
+  await showSupport(page);
+  await page.getByRole("button", { name: "Attempt comparison", exact: true }).click();
+  const comparison = page.locator('[data-module="compare_coach"]');
+  await comparison.getByRole("button", { name: "Show", exact: true }).click();
+  await expect(comparison.locator("[data-presented]").first()).toBeVisible();
+  await expect(comparison.getByRole("button", { name: "Enter other attempt", exact: true })).toBeVisible();
+  await assertRunViewport(page, page.viewportSize()!);
+  await comparison.getByRole("button", { name: "Enter other attempt", exact: true }).click();
+  await expect.poll(async () => (await graph()).activeCursor).toEqual({ nodeId: e4.parentId, branchId: originalBranch });
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+  const reopened = await graph();
+  expect(reopened.nodes).toEqual(alternate.nodes);
+  expect(reopened.branches).toEqual(alternate.branches);
+  await assertRunViewport(page, page.viewportSize()!);
+  // The learner can play on immediately; merely entering Compare added no move or branch.
+  await move(page, "g1", "f3");
+  await expect.poll(async () => (await graph()).branches.length).toBe(3);
+  const continued = await graph();
+  expect(continued.nodes.slice(0, reopened.nodes.length)).toEqual(reopened.nodes);
+  expect(continued.nodes.some(node => node.moveUci === "g1f3")).toBe(true);
+  await assertRunViewport(page, page.viewportSize()!);
+});
+}
 
 test("account lifecycle downloads data, deletes one run, and clears this browser on account deletion", async ({ page }) => {
   await chooseRawRung(page);

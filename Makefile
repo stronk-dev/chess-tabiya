@@ -216,7 +216,7 @@ support-seat-lifecycle-browser-check:
 
 .PHONY: postcommit-nudge-browser-check
 postcommit-nudge-browser-check:
-	./node_modules/.bin/playwright test --grep "Guided Nudge after 1.e4"
+	./node_modules/.bin/playwright test --grep "Guided Nudge (after 1.e4|branches into another move)"
 
 inspector-lifecycle-browser-check:
 	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires)"
