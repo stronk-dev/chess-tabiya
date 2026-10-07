@@ -12,7 +12,8 @@ are copied to `~/.local/share/tabiya/research-artifacts/objects/<prefix>/<sha256
 The retained population totals **722,980,928 bytes**. Each exported file is first
 compared with its committed Git bytes, then the stored copy is hash/size checked.
 `planning/research-artifacts.json` is the small in-Git manifest. Original working files
-remain at their historical paths, ignored rather than deleted. Original measured
+were preserved through export and rewriting, then their verified recoverable copies
+were removed from the working directory. Original measured
 transcripts, timestamps, source snapshots, refusals and population counts stay intact.
 
 Explicit `make research-artifacts-restore` verifies the complete stored population
@@ -53,7 +54,43 @@ The bundle and old→new mapping remain outside the repository, under
 their original commit contents are in that recovery archive. Routine bookkeeping
 refreshes are automatic. Current D3262/D3512 search counts and holds do not change.
 
-Final actual migration and normal verification measurements are appended after execution.
+## Actual completed cleanup
+
+The migration rewrote 31 unpublished commits (the original 29 plus the two cleanup
+commits), from `d63d1cd6664ddfa9385366d5f3e1f7b7c46c63eb` to
+`6442704fcafca5e8c3b399256fcf2eff53904f39`. Published base remains
+`e5712da1bae8e32bcaa3ff161623a1229d7d56b3`. Both final source trees hash to
+`3d1a5e36279fde3ee59f970f1d767fc5fc31e8bb`; authors, commit messages and dates
+are preserved. Existing tracked modifications and untracked files were not changed.
+
+The verified original recovery bundle and old-to-new commit mapping are at
+`/Users/stronk/.local/share/tabiya/research-artifacts/migrations/d63d1cd6664ddfa9385366d5f3e1f7b7c46c63eb/`.
+All 28 working copies were then evicted only after their retained bytes verified:
+722,980,928 bytes removed, all 28 archive objects kept. Actual full-store restoration
+had already reproduced every digest and a second restore wrote zero files.
+
+The rewritten range has 204,630,963 logical new blob bytes, including 8,024,350 under
+semantic-consequence-search; repeated versions of large text files explain much of the
+logical total. A standalone `git pack-objects --revs --stdout` pack for `HEAD` excluding
+`origin/main` measures **7,554,418 bytes** before this closeout. This is a measured Git
+pack, not a guarantee of exact eventual network transfer. None of the new blobs reaches
+5 MiB. The search directory still occupies 589 MiB, including older published recordings:
+this scoped cleanup does not rewrite published history or purge historical Git objects.
+Recovery copies intentionally remain outside source control. Nothing was pushed.
+
+Normal verification is run with the 28 working copies absent. This cleanup does not
+establish a finished product journey, a new chess result, or any 1.0 milestone.
+The fresh full `make verify` terminates red: typecheck passes, then 3,402 of 3,403
+software tests pass; the remaining Sight suppression test times out at its unchanged
+5-second limit (`apps/server/src/local-module-execution.test.ts:137`). The software
+failure stops the aggregate before its later governance/content stages. D3514 owns
+the unlocated cause. Storage cleanup is complete; full software/release verification
+is not green and no push readiness is claimed.
+The unchanged focused local-module target subsequently passes 79 tests / five files.
+Separate `make verify-governance schema-check` passes with the recordings absent,
+including all 11 archive/history controls, progress checks, 15 scaffold controls,
+packaging and Lefthook validation. A focused pass does not explain the full-suite
+timeout; D3514 remains open. Content, browser and GitHub CI were not rerun here.
 
 The first ordinary commit hook rejected a materialized index with missing raw roadmap
 evidence. An initial manifest-linked reference approach passed, but the owner's intervention

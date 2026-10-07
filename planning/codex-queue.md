@@ -1,12 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
-Owner intervention [[D3513]] takes priority over further bulk collection: externalize
-the 28 identified recordings with verified restoration and a small manifest, add exact
-staged/committed size guards, then remove their blobs from the unpublished range after
-a verified recovery bundle. No source receipt is deleted or recaptured, no clocks are
-restamped, no search qualification count changes. Receipt:
-`planning/research-artifacts-migration-2026-10-07.md`. Large future output belongs in
-ignored capture directories plus external retained objects, not new ordinary Git blobs.
+Owner intervention [[D3513]] is complete: 28 recordings / 722,980,928 bytes retained
+outside Git, actual restoration verified, and their paths removed from all 31 unpublished
+commits after a verified recovery bundle. Published history and final source tree are
+unchanged; recoverable working copies removed. Progress checks have no raw-recording or
+archive dependency. Receipt: `planning/research-artifacts-migration-2026-10-07.md`.
+This is repository maintenance, not a delivered 1.0 feature. No further bulk experiment
+collection or tracking-system expansion follows from this cleanup. Product progress must
+be established by implemented user journeys and their software tests; research remains
+explicitly separate, with future large captures outside ordinary Git.
+
+[[D3514]] is the current verification failure: artifact-free `make verify` passes
+typecheck and 3,402 software tests, but Sight suppression without a selected square
+times out at its unchanged 5-second limit. Locate the stage/cause in
+`apps/server/src/local-module-execution.test.ts:137`; do not weaken the timeout or
+call a passing focused replay a fix. Full software/CI readiness remains unproven.
 
 [[D3262]] retains twenty-three complete populations / 26,634 of 61,374 cases:
 all five primary families have a population; all nine engine budget/widths and

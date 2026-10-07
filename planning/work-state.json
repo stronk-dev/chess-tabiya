@@ -29012,9 +29012,18 @@
     },
     {
       "id": "D3513",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:514c3e67d3845e119aeed8eeb052b0d60d04c57ceb17a2008b0e7f74f4579a95",
+      "uxItems": [],
+      "evidence": "planning/research-artifacts-migration-2026-10-07.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3514",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:84f649fbb6f18a59763eea5133b2e1428f54fcce8d6bdf71c0de32a6e37fcba4",
+      "sourceDigest": "sha256:c06789726227e60fdddeb97703ad1457e5bb6e09feb9161975d3545cfdcebc92",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
