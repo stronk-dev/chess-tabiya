@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 Theory response-body ownership repair: [[D3511]] closes on all sixteen
+original HTTP scenarios plus five delivery/error controls, including native
+streaming HTTP and normal shutdown. The focused gate passes 120 tests / five files;
+fresh full software passes clean types, **3,403 tests / 345 files**, seven isolated
+performance tests and downstream contracts. This fixes a measured fixture defect,
+not the unlocated [[D3510]] timeout. No timeout, assertion or production lifecycle
+changes, remote CI/release proof or milestone/capability promotion follows. Receipt:
+`planning/provider-exchange-and-execution/theory-http-body-ownership-2026-10-07.md`.
+
 2026-10-07 configured-model weighted-target qualification: **2,316 original cases /
 364 named target-prefix cells / 28 no-target policies**, all preserved. Opportunity
 counts each predecessor once; execution uses its own fourth-ply leaves. Forty-six

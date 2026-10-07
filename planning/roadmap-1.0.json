@@ -686,8 +686,8 @@
         "dependsOn": [],
         "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the browser repair and the narrowed stable-governance topology are implemented but not remotely discharged.",
         "latestCheckpoint": {
-          "at": "2026-10-06",
-          "summary": "D3428 repairs a measured full-suite cold compiler setup timeout: 3217 other software tests passed, but whole-project construction inside the first consumer assertion exceeded five seconds. Shared baseline compilation/semantic receipt setup now has a bounded hook; all six consumer predicates and independent counterfeit/type-error programs remain. Normal concept-closure-check passes 12 tests; global timeouts stay unchanged and the complete replacement gate is logged before commit, not waived. No GitHub or milestone completion is asserted. Required governance remains stable repository invariants rather than the former portfolio of active-draft/historical review artifacts; draft-RFC evidence remains opt-in. The earlier depth-one checkout checkpoint is superseded: implemented capability and semantic-authority history guards require an actual first parent, so software/governance/release verify jobs now fetch depth two and refuse missing history. Per-job scaffold tests bind that requirement; there is no verification-time fetch or new pre-push gate. Live work remains assigned and the roadmap exposes incomplete consumers. A paired green GitHub verify/browser run on the exact pushed revision still awaits authorized publication, so this milestone remains active.",
+          "at": "2026-10-07",
+          "summary": "D3511 repairs original-response-body ownership in all sixteen Theory HTTP fixtures, preserving source/authentication/disclosure/refusal/cancellation assertions and the intentional aborted request. Status-only checks await delivery and propagate body errors; five controls include native streaming HTTP and normal shutdown. The focused normal gate passes 120 tests / five files; fresh full software passes clean types, 3,403 tests / 345 files, seven isolated performance tests and downstream build/contracts. No production lifecycle, global dispatcher, keep-alive setting or timeout changes. This closes a concrete fixture defect, not D3510's unlocated earlier timeout, which remains doing. D3428's preceding bounded compiler hook and genuine semantic/type-error controls remain; required governance is stable repository invariants, draft-RFC evidence opt-in. Software/governance/release jobs retain depth-two checkout and refuse missing parent history; no verification-time fetch or pre-push gate is added. Routine metadata/hash/state/receipt upkeep is automatic and all 1,691 live rows remain assigned. The original search capture remains live with eighteen unchanged executor sources. A paired green GitHub verify/browser run on the exact pushed revision still awaits authorized publication; no fresh content/browser/native-release proof or milestone/capability/full-1.0 completion follows.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -702,7 +702,11 @@
             "docs/testing.md",
             "planning/work-state.json",
             "planning/exploration/log.md",
-            "planning/pack-capability-contract/integration-2026-09-30.md"
+            "planning/pack-capability-contract/integration-2026-09-30.md",
+            "planning/provider-exchange-and-execution/theory-http-body-ownership-2026-10-07.md",
+            "apps/server/src/provider-corpus.test.ts",
+            "apps/server/src/http-response.test-support.ts",
+            "apps/server/src/http-response.test.ts"
           ],
           "anchors": [
             {
@@ -724,6 +728,11 @@
               "kind": "work_state",
               "id": "D3428",
               "digest": "sha256:f02e06a6ec875041107d8fd639df38f5b848714a9f0b4d1a49c3653b787ae151"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3511",
+              "digest": "sha256:a2d4740154011bde9560680ec0baddecb5de2197a78d2a392b53de3987c0bff9"
             },
             {
               "kind": "rfc",

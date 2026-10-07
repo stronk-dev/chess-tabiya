@@ -48,6 +48,15 @@ the fresh full gate now passes all 3,398 tests / 344 files, seven performance te
 and downstream contracts. This is current-run proof, not a located cause or repair
 of the initial stall; D3510 stays doing. Do not substitute the old checkpoint's run.
 
+Completed [[D3511]], the separately observed response-body ownership defect in the
+sixteen Theory HTTP fixtures. Each original body is now read once; status-only assertions
+await complete delivery and propagate body errors. Five controls include a real
+streaming HTTP response and normal shutdown. The normal focused Theory gate passes
+120 tests / five files. Fresh full software passes clean types, 3,403 tests / 345
+files, seven performance tests and downstream contracts. Do not infer
+that D3511 caused or closes D3510. Receipt:
+`planning/provider-exchange-and-execution/theory-http-body-ownership-2026-10-07.md`.
+
 Completed [[D3503]]: the full D3497 browser before/after populations each retain
 880 rows/60 baselines. Shipping 50 ms polling preserves the 70-second pending
 window, exact retry/teardown and disclosure identities. The full repeat lowers

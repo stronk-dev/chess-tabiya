@@ -1782,7 +1782,7 @@ inspector-corpus-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/human-evidence-response.test.ts apps/web/src/lib/corpus-sentences.test.ts apps/web/src/lib/inspector-evidence.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts
 
 theory-source-check: evidence-manifest-check
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts packages/runtime/src/explorer-summary.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-response.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts packages/runtime/src/explorer-summary.test.ts
 
 repertoire-source-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/repertoire.test.ts apps/server/src/capability-operations.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts

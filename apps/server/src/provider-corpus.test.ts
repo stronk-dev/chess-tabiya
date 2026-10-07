@@ -6,6 +6,7 @@ import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequ
 import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { ControlledFetch, ManualClock, flush } from "./provider-exchange.test-support.js";
+import { responseStatus } from "./http-response.test-support.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
 import { testRegistry } from "./provider-health.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
@@ -486,6 +487,7 @@ describe("learner Explorer shared exchange", () => {
     const { source, remote } = await harness();
     const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
     const delayed = ["changed", "revoked", "disconnect"].includes(arm);
+    let sourceAcquisitionStarted = false;
     let release!: () => void;
     let started!: () => void;
     let aborted!: () => void;
@@ -514,6 +516,7 @@ describe("learner Explorer shared exchange", () => {
         await flush();
         if (delayed) {
           remote.calls.at(-1)!.signal.addEventListener("abort", aborted, { once: true });
+          sourceAcquisitionStarted = true;
           started();
           await released;
         }
@@ -545,26 +548,27 @@ describe("learner Explorer shared exchange", () => {
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
       boundary = "account registration";
       const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "theory_owner", password: "theory-test-password" }) });
-      expect(registered.status).toBe(201);
+      expect(registered.status, await registered.text()).toBe(201);
       const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
       const headers = { "content-type": "application/json", cookie, "x-writer-id": "theory-writer" };
       boundary = "run creation";
       const created = await fetch(`${origin}/runs`, { method: "POST", headers,
         body: JSON.stringify({ id: "supplied-theory", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
-      expect(created.status, await created.clone().text()).toBe(201);
+      expect(created.status, await created.text()).toBe(201);
       const route = `${origin}/runs/supplied-theory`;
       let queryHeaders = headers;
       if (arm === "revoked") {
         const guest = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "theory_guest", password: "theory-guest-password" }) });
-        expect(guest.status).toBe(201);
+        expect(guest.status, await guest.text()).toBe(201);
         queryHeaders = { ...headers, cookie: guest.headers.get("set-cookie")!.split(";", 1)[0]! };
         // Only a host (or reviewing grant) may request this assistance in a live run.
-        expect((await fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "grant", handle: "theory_guest", role: "host" }) })).status).toBe(200);
+        expect(await responseStatus(fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "grant", handle: "theory_guest", role: "host" }) }))).toBe(200);
       }
       boundary = "move commit";
       const committed = await fetch(`${route}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "g1f3" }) });
-      expect(committed.status, await committed.clone().text()).toBe(200);
-      const { run } = await committed.json() as { run: { activeCursor: { nodeId: string } } };
+      const committedText = await committed.text();
+      expect(committed.status, committedText).toBe(200);
+      const { run } = JSON.parse(committedText) as { run: { activeCursor: { nodeId: string } } };
       const requested = (preset: "quiet" | "theory_only", modules: readonly string[] = ["theory_breadcrumb"]) => JSON.stringify({
         assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: [] } } }),
         query: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: modules },
@@ -572,29 +576,33 @@ describe("learner Explorer shared exchange", () => {
       const caller = new AbortController();
       const ask = (preset: "quiet" | "theory_only", modules?: readonly string[]) => fetch(`${route}/modules/query`, { method: "POST", headers: queryHeaders, body: requested(preset, modules), signal: caller.signal });
       boundary = "authenticated/disclosure refusals";
-      expect((await fetch(`${route}/modules/query`, { method: "POST", headers: { "content-type": "application/json" }, body: requested("theory_only") })).status).toBe(401);
-      expect((await ask("theory_only")).status).toBe(409);
+      expect(await responseStatus(fetch(`${route}/modules/query`, { method: "POST", headers: { "content-type": "application/json" }, body: requested("theory_only") }))).toBe(401);
+      expect(await responseStatus(ask("theory_only"))).toBe(409);
       expect(supplied.calls).toBe(0);
       boundary = "reveal";
-      expect((await fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+      expect(await responseStatus(fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" }))).toBe(200);
       boundary = "quiet and empty module requests";
-      expect((await ask("quiet")).status).toBe(200);
-      expect((await ask("theory_only", [])).status).toBe(200);
+      expect(await responseStatus(ask("quiet"))).toBe(200);
+      expect(await responseStatus(ask("theory_only", []))).toBe(200);
       expect(supplied.calls).toBe(0);
       expect(compileConsumer).not.toHaveBeenCalled();
       boundary = "Theory request";
       const pending = ask("theory_only");
       if (["missing_binding_policy", "non_executable_binding"].includes(arm)) {
         const refusal = await pending;
-        expect(refusal.status).toBe(500);
+        const refusedText = await refusal.text();
+        expect(refusal.status, refusedText).toBe(500);
         expect(supplied.calls).toBe(0);
         expect(stats).not.toHaveBeenCalled();
         expect(compileConsumer).toHaveBeenCalledOnce();
-        expect(await refusal.text()).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|\d+ games/u);
+        expect(refusedText).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|\d+ games/u);
         return;
       }
       if (delayed) {
-        await Promise.race([didStart, pending.then(async response => { throw new Error(`Expected source acquisition, got ${response.status}: ${await response.clone().text()}`); })]);
+        await Promise.race([didStart, pending.then(async response => {
+          if (sourceAcquisitionStarted) return;
+          throw new Error(`Expected source acquisition, got ${response.status}: ${await response.text()}`);
+        })]);
         if (arm === "disconnect") {
           const refusal = expect(pending).rejects.toMatchObject({ name: "AbortError" });
           caller.abort();
@@ -608,29 +616,30 @@ describe("learner Explorer shared exchange", () => {
           return;
         }
         if (arm === "changed") {
-          expect((await fetch(`${route}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "a7a6" }) })).status).toBe(200);
-          expect((await fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" })).status).toBe(200);
+          expect(await responseStatus(fetch(`${route}/moves`, { method: "POST", headers, body: JSON.stringify({ uci: "a7a6" }) }))).toBe(200);
+          expect(await responseStatus(fetch(`${route}/reveal`, { method: "POST", headers, body: "{}" }))).toBe(200);
         } else {
-          expect((await fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "revoke", handle: "theory_guest" }) })).status).toBe(200);
+          expect(await responseStatus(fetch(`${route}/grants`, { method: "POST", headers, body: JSON.stringify({ op: "revoke", handle: "theory_guest" }) }))).toBe(200);
         }
         release();
       }
       const response = await pending;
       boundary = "Theory response validation";
+      const responseText = await response.text();
       expect(compileConsumer).toHaveBeenCalledOnce();
       const [manifest, consumer] = compileConsumer.mock.calls[0]!;
       expect(consumer).toEqual({ id: "module.theory_breadcrumb", version: 1 });
       expect(manifest.bindings.filter(binding => binding.consumer.id === consumer.id)).toHaveLength(4);
       if (arm === "changed" || arm === "revoked") {
-        expect(response.status, await response.clone().text()).toBe(arm === "changed" ? 400 : 404);
-        const failure = await response.text();
+        expect(response.status, responseText).toBe(arm === "changed" ? 400 : 404);
+        const failure = responseText;
         expect(failure).toContain(arm === "changed" ? "Module decision changed" : "RUN_NOT_FOUND");
         expect(failure).not.toMatch(/\d+ games|MOVE_ROW_SENTINEL/u);
         expect(stats).not.toHaveBeenCalled();
         return;
       }
-      expect(response.status, await response.clone().text()).toBe(200);
-      const { page } = await response.json() as { page: ModuleQueryPage };
+      expect(response.status, responseText).toBe(200);
+      const { page } = JSON.parse(responseText) as { page: ModuleQueryPage };
       const theory = page.packets.find(packet => packet.module === "theory_breadcrumb")!;
       const sentences = parsePresentationReceipt(theory.receipt).map(presentedSentence).join(" ");
       if (["success", "sparse", "zero"].includes(arm)) {

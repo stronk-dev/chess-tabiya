@@ -28991,6 +28991,15 @@
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
+    },
+    {
+      "id": "D3511",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a2d4740154011bde9560680ec0baddecb5de2197a78d2a392b53de3987c0bff9",
+      "uxItems": [],
+      "evidence": "planning/provider-exchange-and-execution/theory-http-body-ownership-2026-10-07.md",
+      "evidenceKind": "path"
     }
   ]
 }
