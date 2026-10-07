@@ -28964,6 +28964,15 @@
       "uxItems": [],
       "evidence": "planning/platform-alignment/execution-queue.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3508",
+      "state": "doing",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:67134ebbd2c76a2411afaea9afd4152a7b43a90617aa02fb82b3e256cb3bb7c7",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-07"
     }
   ]
 }

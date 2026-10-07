@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 timed-source boundary follow-up: D3508 preserves four actual rejected
+timed queries with earlier complete unbound tables; one earlier rank-one differs
+from the final bestmove. Fourteen controls and eighteen custody/output corruptions
+pass without changing original admission, clocks or frozen source bytes. This
+is not a production repair, full-population frequency, perfect-value claim or
+selected profile. The shipping cache reuses sealed parsed payloads, unlike the
+prototype's literal-reparse warm boundary: previous prototype latency is not
+production-cache or browser latency. Actual consumer qualification remains open.
+The live three-width 100-ms capture is unfinished; the complete headline remains
+fifteen settings / 17,370 cases, with 38 settings remaining. D3508 stays doing.
+
 2026-10-07 complete depth-twelve capture continuation: top8 now retains all
 1,158 cases and independently replays 206,196 observations with six corruption
 refusals. The lossless archive preserves all 386 triplets/eighteen source snapshots

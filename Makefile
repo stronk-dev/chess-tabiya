@@ -905,6 +905,16 @@ semantic-search-cost-engine-width-sensitivity-check: semantic-search-cost-engine
 	$(CI_NODE) tools/d3262-search-calibration/cost-engine-width-sensitivity.mjs $(if $(SEARCH_BUDGET),--budget "$(SEARCH_BUDGET)",) --archives "$(ARCHIVES)" --out "$(OUT)"
 
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
+.PHONY: semantic-search-timed-table-audit-test semantic-search-timed-table-audit-freeze semantic-search-timed-table-audit-check
+# Disposable D3508 literal-source audit; never changes live execution or admission.
+semantic-search-timed-table-audit-test:
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-timed-table-audit.test.mjs
+semantic-search-timed-table-audit-freeze: semantic-search-timed-table-audit-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-timed-table-audit.mjs --batch "$(BATCH)" --groups "$(AUDIT_GROUPS)" --out "$(OUT)"
+semantic-search-timed-table-audit-check: semantic-search-timed-table-audit-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-timed-table-audit.mjs --check "$(OUT)"
+	$(CI_NODE) tools/d3262-search-calibration/cost-timed-table-audit-controls.mjs "$(OUT)"
+
 semantic-search-five-approach-test: semantic-search-target-v2-build
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs
 

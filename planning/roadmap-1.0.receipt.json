@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:51332c59ec1bafd0f2208565ca201d778e3535d3de80b7d4998ccd4514a75b02",
+    "roadmap": "sha256:94d6da70ddfb6af0c22ff22fbbf3ec2e7b2fe14b9aa13d8d9e2d51bbda46544a",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:d4bbc901a029ea98361e9a86b4f7dc71688c7a508f81121f90d834fb02e4fe9e",
+    "workState": "sha256:68382e802e4aed0a853036958d5da8b661ed5c6fc8317bc62b86bb5a91b7a2c3",
     "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 626,
-      "doing": 4,
+      "doing": 5,
       "blocked": 1059,
       "done": 1406,
       "refused": 161
@@ -256,9 +256,13 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "D3262 now retains fifteen complete live setting populations / 17,370 of 61,374 cases, with 38 remaining. The original depth12/top8 capture terminates zero with all 1,158 cases and 386 triplets; independent Python-chess replay checks all 206,196 target observations and refuses six corruptions after thirty permanent boundary controls. Lossless packaging preserves eighteen unchanged instrument snapshots and every original compressed triplet in the 68,829,020-byte archive, SHA-256 9466308da1067b511d0f3c88d6fc2fdc8ac4477ec09ad95e1e46fe64c0850d87. Two invalid cold cases and their unavailable warm partners retain 532/562 partial observations, zero fresh warm queries and all seven rejected literal PVs. All three depth12 widths now have complete live populations; quantitative stratification now passes eight controls and retains 44 separate strata. Available four-ply warm p95 is 2,594.765/2,970.750/2,740.704/1,944.992 ms across opening/unclear/middlegame/endgame, all above the 1,500-ms server reference despite receipt caching, not browser/pending gate proof. Complete depth12 synthesis now passes forty-eight controls across 3,474 cases / 546 target cells / 1,158 cold-warm pairs: 541 comparable cells preserve their own frozen paths, coverage and outcomes, five failed-source cells stay unpaired, and 1,153 identical compiled pairs plus five failed-cold/unavailable-warm pairs preserve exact evidence without fresh queries. This is descriptive per-width fresh/frozen comparison, not engine cause or cross-width outcome equivalence. Cached receipts are not an interactive answer: one retained warm case takes 4,795.143 ms despite 73 cache hits, chiefly actual receipt reading/admission. This example is not a phase quantile or browser gate. The native-source memory checkpoint at 9d3d4471 remains only a partial late-window lower bound; startup, whole-batch/per-case/physical and Maia/container memory stay unmeasured. D3309 operand fidelity and D3322 unauthored-tempo contracts remain preserved. Current evidence-only flow-back, full governance and ordinary hooks precede commit; no fresh full software/content/browser/GitHub run is claimed. Remaining populations, source/family sensitivity, broader memory, complete consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. Routine metadata/hash/receipt/tracker updates are automatic; no production behavior, RFC, capability, milestone, official content or full-1.0 promotion.",
+        "summary": "D3262 retains fifteen complete live settings / 17,370 of 61,374 cases, with 38 settings remaining. The complete depth12/top8 population independently replays all 1,158 cases / 206,196 target observations with six corruption refusals; its unchanged literal sources and failed cold/unavailable warm partial evidence remain. Depth12 synthesis passes forty-eight controls across 3,474 cases / 546 target cells / 1,158 cold-warm pairs; 541 comparable cells preserve their own frozen paths, coverage and outcomes, five remain unpaired. The quantitative reader retains 44 strata; available four-ply prototype warm p95 exceeds 1,500 ms in every phase. Code audit now distinguishes that literal-reparse warm boundary from the shipping scheduler, which reuses sealed parsed payloads after TTL and generation checks: prototype latency cannot be projected onto production caching, browser latency or a selected profile. New D3508 retains four actual bound-refused timed queries with earlier complete unbound tables; one earlier rank-one differs from the final bestmove. Fourteen boundary controls and eighteen custody/output corruptions pass; the immutable 818,353-byte literal artifact hashes to f4e48288c744594fd0e57274c99dc772a1433a54928a2bf45d922e13c8d638a8. This is explicit failure-example research, not population frequency, perfect game values, changed source admission or a production fix. Original clocks, refusals and eighteen live executor source snapshots remain unchanged. The original three-width 100-ms capture is live and not admitted to the completed headline. The native memory checkpoint at 9d3d4471 remains a partial late-window lower bound. D3309/D3322 contracts remain preserved. Actual consumer/cache/browser qualification, remaining populations, source/family sensitivity, broader memory and reviewed source/profile semantics keep D3262 and D3508 doing. Routine state/hash/receipt upkeep is automatic. Scoped normal checks and ordinary hooks precede the checkpoint; no fresh full software/content/browser/GitHub result, production change, RFC/capability/milestone promotion or full-1.0 completion is claimed.",
         "impact": "advanced",
         "evidence": [
+          "planning/semantic-consequence-search/d3508-timed-table-literal-examples-2026-10-07.json",
+          "tools/d3262-search-calibration/cost-timed-table-audit.mjs",
+          "tools/d3262-search-calibration/cost-timed-table-audit.test.mjs",
+          "tools/d3262-search-calibration/cost-timed-table-audit-controls.mjs",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top8-2026-10-07.json.gz",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top8-summary-2026-10-07.json",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth12-width-sensitivity-2026-10-07.json.gz",
@@ -951,6 +955,11 @@
             "kind": "work_state",
             "id": "D3262",
             "digest": "sha256:16ae42cec18fdaa0c8ce4de3fe55f7798e2655343c2ce67a56ec679d14d00b3d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3508",
+            "digest": "sha256:67134ebbd2c76a2411afaea9afd4152a7b43a90617aa02fb82b3e256cb3bb7c7"
           },
           {
             "kind": "work_state",

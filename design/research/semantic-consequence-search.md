@@ -665,3 +665,51 @@ selects a production default, explains an engine's cause or licenses weaker proo
 for faster hints. D3262 remains doing on the full profile/memory/consumer/browser
 boundary. `[V]` Original complete capture; same continuation receipt;
 `CostDependencies.query`; `rfc/semantic-consequence-search.md` §14 / criterion 23 / D1.
+
+## 2026-10-07 — timed-source admission and production-cache boundary
+
+[[D3508]] is a separate disposable audit, not a changed cost experiment. The
+unchanged reader chooses its deepest complete rank table before refusing a
+bound-bearing score. Four actual failed queries in original triplets 012741 and
+012747 also contain earlier complete, unbound tables at depths 8/13/9/9 before
+newer depths 9/14/10/10. In one example the earlier rank-one move disagrees with
+the literal final `bestmove`; the other three agree. All raw lines, both original
+compressed triplets, original metadata and auditor/reader bytes are retained in
+the 818,353-byte literal-example artifact, SHA-256
+`f4e48288c744594fd0e57274c99dc772a1433a54928a2bf45d922e13c8d638a8`.
+These are four explicit failure examples, not a random sample or a measured
+population frequency. “Exact/unbound” describes the UCI score flag, not the true
+game value, an exhaustive consequence or engine causality. `[V]`
+`planning/semantic-consequence-search/d3508-timed-table-literal-examples-2026-10-07.json`;
+`tools/d3262-search-calibration/cost-timed-table-audit.mjs`.
+
+Fourteen controls retain the current rejection, keep final selection separate
+from earlier ranking, forbid fixed-depth downgrades, missing/duplicate/illegal
+delimiters, incomplete/bound-only earlier tables and illegal trailing PVs. The
+audit selects only an unchanged contiguous literal prefix, never independently
+filtered ranks or invented scores/PVs. It returns an observation, not a source
+receipt, recommendation, repaired result or production profile. The 18-source
+live executor stays byte-identical. Eighteen additional retained-source/output
+corruptions refuse changed plan/range, filtered/crossed cases and queries, missing
+delimiters, changed sources/scores/depths, invented bestmove agreement and fabricated
+recommendations/profile/population scope. The artifact stays byte-identical.
+These are same-reader integrity controls, not an independent source oracle.
+Complete population replay and any reviewed successor source contract remain
+separate exits.
+`[V]` ordinary `make semantic-search-timed-table-audit-check`; original reader and
+captured-source digest comparison; [[D3508]] execution-queue entry.
+
+The current cost instrument and the shipping cache have different warm boundaries.
+`CostDependencies.query` reparses the complete literal receipt on a warm cache hit.
+The production scheduler instead checks TTL/current Stockfish generation and
+reuses the exact parsed payload and payload receipt; the delivery constructor
+checks their module-private seals, exact payload identity and parser implementation
+digest without running the parser again. Code inspection therefore does **not**
+license translating the disposable 1.9–3.0-second warm p95 into a production cache
+latency claim. It also proves no production speedup. D3262 still owes the actual
+complete consumer/cache/source/request/browser integration before selecting the
+default profile. `[V]` `cost-stockfish.mjs` `CostDependencies.query`;
+`apps/server/src/provider-exchange.ts` `get` retained branch;
+`apps/server/src/provider-operations.ts` `stockfishDescriptor.admitRetained`;
+`packages/runtime/src/provider-exchange.ts` `makeProviderDelivery` and
+`assertProviderParsedPayloadReceipt`.
