@@ -1,12 +1,13 @@
 // Preserve a complete refused capture losslessly. A whole-setting projection
 // can be admitted separately, never by dropping a failed candidate or regime.
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkRawCapture, selectBatchCases } from "./cost-batch.mjs";
 import { loadCostPlan, sha, validateCostRows } from "./cost-contract.mjs";
 import { inputPins } from "./cost-execution.mjs";
+import { readCostArchiveBytes, writeCostArchiveBytes } from "./cost-archive-parts.mjs";
 
 const authority = "lossless_refused_cost_capture_not_admitted_measurement";
 const directory = "planning/semantic-consequence-search";
@@ -53,11 +54,11 @@ export function freezeRefusedCostBatch(out, archive) {
   const pack = { version: 1, authority, metadata, refusal: refusal(loadCostPlan(), records), sourceSnapshot, groups };
   verifyRefusedCostValue(pack);
   const bytes = gzipSync(`${JSON.stringify(pack)}\n`);
-  writeFileSync(archive, bytes, { flag: "wx" });
+  writeCostArchiveBytes(bytes, archive);
   return { archive, digest: sha(bytes), rows: records.length, refusal: pack.refusal, admitted: false };
 }
 export function projectCompleteCostSetting(parentArchive, setting, archive) {
-  const parentBytes = readFileSync(parentArchive), parent = JSON.parse(gunzipSync(parentBytes));
+  const parentBytes = readCostArchiveBytes(parentArchive), parent = JSON.parse(gunzipSync(parentBytes));
   const records = verifyRefusedCostValue(parent), plan = loadCostPlan();
   const settingIndex = plan.settings.findIndex(x => x.id === setting);
   check(settingIndex >= 0, "undeclared setting");
@@ -80,14 +81,14 @@ export function projectCompleteCostSetting(parentArchive, setting, archive) {
     sourceSnapshot: parent.sourceSnapshot, groups };
   verifyProjectedCostEnvelope(pack);
   const bytes = gzipSync(`${JSON.stringify(pack)}\n`);
-  writeFileSync(archive, bytes, { flag: "wx" });
+  writeCostArchiveBytes(bytes, archive);
   return { archive, digest: sha(bytes), rows: selected.length, parent: sha(parentBytes), completeProfile: false };
 }
 export function verifyProjectedCostEnvelope(pack) {
   if (!pack.metadata.projection) return;
   const p = pack.metadata.projection;
   check(/^d3262-cost-live-[a-z0-9-]+\.json\.gz$/u.test(p.parentArchive), "foreign projection parent");
-  const bytes = readFileSync(`${directory}/${p.parentArchive}`);
+  const bytes = readCostArchiveBytes(`${directory}/${p.parentArchive}`);
   check(sha(bytes) === p.parentDigest, "changed projection parent");
   const parent = JSON.parse(gunzipSync(bytes)), records = verifyRefusedCostValue(parent), plan = loadCostPlan();
   const index = plan.settings.findIndex(x => x.id === p.setting), limit = plan.candidates.length * 6;

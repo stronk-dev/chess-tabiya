@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { caseIdentity, costCases, loadCostPlan, sha, sourcePins, validateCostRows } from "./cost-contract.mjs";
 import { verifyPackedCostValue } from "./cost-pack.mjs";
+import { readCostArchiveBytes } from "./cost-archive-parts.mjs";
 
 const directory = "planning/semantic-consequence-search";
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -175,7 +176,7 @@ export function loadEngineWidthSensitivity(names, budget = "depth8") {
     && names.every(x => /^d3262-cost-live-[a-z0-9-]+\.json\.gz$/u.test(x)), "explicit unique immutable archive names required");
   const plan = loadCostPlan(), records = [], inputs = {}, sources = {};
   for (const name of names) {
-    const bytes = readFileSync(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes));
+    const bytes = readCostArchiveBytes(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes));
     verifyPackedCostValue(pack);
     records.push(...pack.groups.flatMap(x => JSON.parse(gunzipSync(Buffer.from(x.base64, "base64")))));
     inputs[name] = sha(bytes); sources[name] = pack.metadata.provider;

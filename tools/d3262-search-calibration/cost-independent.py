@@ -16,6 +16,7 @@ from pathlib import Path
 import chess
 
 HERE = Path(__file__).parent
+archive_reader = runpy.run_path(str(HERE / "cost-archive-parts-check.py"))["read_archive_bytes"]
 helpers = runpy.run_path(str(HERE / "coherent-five-approach-check.py"))
 observe, terminal = helpers["pv_observation"], helpers["terminal"]
 preparation_result, root_result = helpers["preparation_result"], helpers["root_result"]
@@ -522,7 +523,7 @@ def verify_record(record, roots, definitions, cells, source_digest):
 def main():
     global model_checker, model_engine
     out = Path(sys.argv[1])
-    pack = json.loads(gzip.decompress(out.read_bytes())) if out.is_file() else None
+    pack = json.loads(gzip.decompress(archive_reader(out))) if out.is_file() else None
     metadata = pack["metadata"] if pack is not None else json.loads((out / "metadata.json").read_bytes())
     if metadata["provider"].get("imageId"):
         model_checker = runpy.run_path(str(HERE / "cost-maia-check.py"))

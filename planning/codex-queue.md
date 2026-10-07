@@ -1,13 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3262]] retains eighteen complete populations / 20,844 of 61,374 cases:
-all five primary families have a population and all nine engine budget/width
-settings are complete. The original next five depth-eight recursive settings are
-capturing separately; do not restart on observation timeout or count incomplete
-capture as delivered. Thirty-five settings remain in scope, including seventeen
-recursive primary settings, seventeen first-reply-reserve diagnostics and the
-complete-local diagnostic. Do not repeat the already completed depth8/top2/top8
-first-reserve or recursive setting.
+[[D3262]] retains twenty-three complete populations / 26,634 of 61,374 cases:
+all five primary families have a population; all nine engine budget/widths and
+all six recursive depth-eight settings are complete. The five new settings retain
+5,790 original cases and independent replay of 479,960 observations with ten
+corruption refusals. Complete six-setting comparison preserves all 1,092 target
+cells against their own frozen arms and all 2,316 cold/warm evidence pairs.
+Quantitative stratification retains all 210 strata, including offline/no-target.
+The full package generator automatically stores oversized original bytes in
+four bounded parts; D3509 is done, not a source migration or storage-policy ruling.
+Thirty settings remain: twelve recursive primary, seventeen first-reply-reserve
+diagnostics and the complete-local diagnostic. The original next six depth-twelve
+recursive settings are live in `.cache/d3262-cost-live/recursive-depth12-2026-10-07`;
+do not restart on observation timeout or count unfinished capture as delivered.
+No completed population is repeated. Current receipt:
+`planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md`.
 
 Both ordered-history Maia prefixes now have complete fresh/frozen synthesis:
 2,316 cases / 364 target cells / 772 cold-warm pairs. Sixty-seven reader controls
@@ -19,8 +26,8 @@ policy/target evidence. No-target is policy-not-requested, not zero coverage.
 Original captures, source refusals and clocks remain unchanged. This closes the
 model policy/outcome comparison slice, not weighted semantic-projection,
 consumer/cache/browser/source-memory qualification or profile admission.
-Recursive tooling already requires all six settings at a budget; pack and
-independently replay the original capture only after its exact handle terminates.
+Recursive tooling requires all six settings at a budget; pack and independently
+replay the depth-twelve capture only after its original exact handle terminates.
 Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
 `d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
 D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is

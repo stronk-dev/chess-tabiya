@@ -1,5 +1,5 @@
 // Lossless immutable capture packaging; preserves original compressed triplet bytes.
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,6 +7,7 @@ import { checkBatch, checkRawCapture, selectBatchCases } from "./cost-batch.mjs"
 import { loadCostPlan, sha, validateCostRows } from "./cost-contract.mjs";
 import { inputPins } from "./cost-execution.mjs";
 import { verifyProjectedCostEnvelope } from "./cost-refusal.mjs";
+import { readCostArchiveBytes, writeCostArchiveBytes } from "./cost-archive-parts.mjs";
 
 export function packCostBatch(out, archive) {
   const summary = checkBatch(out), metadata = JSON.parse(readFileSync(`${out}/metadata.json`));
@@ -22,8 +23,8 @@ export function packCostBatch(out, archive) {
   });
   const value = { version: 1, authority: "lossless_partial_cost_capture_not_full_profile", metadata, summary, sourceSnapshot, groups };
   const bytes = gzipSync(`${JSON.stringify(value)}\n`);
-  writeFileSync(archive, bytes, { flag: "wx" });
-  return { archive, digest: sha(bytes), rows: summary.admittedRows, complete: summary.complete };
+  const storage = writeCostArchiveBytes(bytes, archive);
+  return { archive, digest: sha(bytes), rows: summary.admittedRows, complete: summary.complete, storage };
 }
 export function verifyPackedCostValue(pack) {
   if (pack.version !== 1 || pack.authority !== "lossless_partial_cost_capture_not_full_profile") throw new Error("Foreign capture package");
@@ -49,7 +50,7 @@ export function verifyPackedCostValue(pack) {
   return admission;
 }
 export function checkPackedCostBatch(archive) {
-  const bytes = readFileSync(archive), pack = JSON.parse(gunzipSync(bytes)), admission = verifyPackedCostValue(pack);
+  const bytes = readCostArchiveBytes(archive), pack = JSON.parse(gunzipSync(bytes)), admission = verifyPackedCostValue(pack);
   return { archive, digest: sha(bytes), ...admission };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

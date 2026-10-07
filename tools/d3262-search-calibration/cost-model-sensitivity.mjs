@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { caseIdentity, costCases, loadCostPlan, sha, sourcePins, validateCostRows } from "./cost-contract.mjs";
 import { verifyPackedCostValue } from "./cost-pack.mjs";
+import { readCostArchiveBytes } from "./cost-archive-parts.mjs";
 import { selectedPrefix, jointStop, sourceMassTolerance } from "./coherent-horizon-policy.mjs";
 import { indexLiveRecursiveFrontier as indexLiveTargetFrontier } from "./cost-recursive-sensitivity.mjs";
 import { encodeSensitivityArtifact, decodeSensitivityArtifact } from "./cost-engine-width-sensitivity.mjs";
@@ -291,7 +292,7 @@ export function loadModelSensitivity(names) {
     && names.every(n => /^d3262-cost-live-[a-z0-9-]+\.json\.gz$/u.test(n)), "explicit unique immutable archive names required");
   const plan = loadCostPlan(), records = [], inputs = {}, sources = {};
   for (const name of names) {
-    const bytes = readFileSync(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes)); verifyPackedCostValue(pack);
+    const bytes = readCostArchiveBytes(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes)); verifyPackedCostValue(pack);
     records.push(...pack.groups.flatMap(g => JSON.parse(gunzipSync(Buffer.from(g.base64, "base64")))));
     inputs[name] = sha(bytes); sources[name] = pack.metadata.provider;
   }

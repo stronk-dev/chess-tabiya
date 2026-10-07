@@ -26780,7 +26780,7 @@
       "id": "D3262",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:c5d6631d27d15b155160aa4c403a759a6f6b655ee685d86293c1b18e6654e369",
+      "sourceDigest": "sha256:3d8df4dfb584e2509c9ad323880a236d696517c4e96d9d72e25d6f181423993f",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
@@ -28973,6 +28973,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
+    },
+    {
+      "id": "D3509",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0e29819dd122699cc59e31d126b7b3de0d704bee2384c6c33399617c17c7723d",
+      "uxItems": [],
+      "evidence": "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -19,6 +19,23 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 complete recursive depth-eight checkpoint: **23 complete settings /
+26,634 of 61,374 cases**, thirty settings remaining. The five newly completed
+populations independently replay 479,960 observations with ten corruption refusals.
+Full six-setting synthesis preserves all 1,092 target cells against their own
+frozen arms and all 2,316 cold/warm evidence pairs; no cross-setting equality or
+profile selection is implied. The quantitative report retains 210 strata, including
+offline/no-target controls. Wide cold costs exceed the 1,500-ms reference, but
+prototype receipt-reparse timing is not shipping cache/browser latency.
+D3509's bounded byte transport and full automatic package generation preserve the
+exact original 151,609,742-byte archive; routine hashes/tracker upkeep is automatic.
+The next six depth-twelve settings are live, not delivered; no restart on observation
+timeout. Source admission, full semantic/cost qualification, actual consumer/cache/
+browser joins and reviewed production profile keep D3262 doing and the RFC draft.
+Receipt: `planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md`.
+No capability, milestone or full-1.0 completion follows. Earlier dated checkpoints
+below retain their historical counts and failures, not competing current headlines.
+
 2026-10-07 complete configured-Maia comparison: sixty-seven controls and immutable
 read-only reconstruction pass over 2,316 cases / 364 named target cells / 772
 cold-warm pairs. All target histories, witnesses, omissions and outcomes match;

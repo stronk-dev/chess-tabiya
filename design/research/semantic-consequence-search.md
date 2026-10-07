@@ -910,3 +910,59 @@ Remaining full populations, consumer/browser/source/memory qualification and
 reviewed profile admission keep D3262 doing. Routine metadata/hash upkeep is
 automatic, with no owner question. `[V]` reader scope, frozen plan and current
 roadmap; synthesis does not promote the draft search RFC or a product capability.
+
+## 2026-10-07 — complete recursive depth-eight live comparison
+
+The original five missing depth-eight recursive populations terminate zero without
+restart: 5,790 cases / 1,930 cold-warm-offline triplets, all 193 candidates and both
+horizons. All eighteen executor source digests remain unchanged. Independent Python
+replay verifies 479,960 target observations and rejects ten corruptions after thirty
+boundary controls. Shared-host measurement is not isolated/machine-repeat or browser
+proof; original clocks and failed-source semantics remain literal. `[V]`
+`planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md`
+§capture boundary and independent replay; original metadata/triplets.
+
+All six recursive settings at this budget now compare against their own frozen
+arms: 6,948 cases / 1,092 target cells / 2,316 cold-warm pairs. Sixty-one controls
+bind all 3,276 frozen target/setting joins and the previous 182 live bindings.
+Zero target cells change their complete frontier, coverage, executed witnesses or
+outcome; every cold-warm pair preserves compiled evidence without fresh queries.
+This does not say different settings have equal frontiers. Fourteen no-target
+candidates per setting remain separately not-requested, not target absence or
+zero coverage. `[V]` complete immutable sensitivity artifact, cells/groups and
+`cost-recursive-sensitivity.mjs` controls; receipt §complete depth-eight comparison.
+
+Eight quantitative controls and the five-setting report retain all 5,790 rows in
+210 strata: 3,580 available, 1,790 intentional provider-offline and 420 no-target.
+Available four-ply phase denominators are 46 opening / 53 unclear / 41 middlegame /
+39 endgame per setting. New top2/all-legal cold p95 stays below 1,500 ms, while the
+wider cold settings exceed it in every phase; some wide warm cells also exceed it.
+The receipt includes all five settings/four phases and literal artifact digests.
+Neither offline-control fraction nor success-conditional timing is natural source
+reliability. Prototype raw-receipt reparse is not shipping sealed-cache or browser/
+paint latency, so this is not a production profile choice. `[V]` immutable quantitative
+report, receipt timing table, preregistered boundary and earlier shipping cache audit.
+
+[[D3509]] closes the observed oversized-archive transport defect without recapture
+or filtering. The 151,609,742-byte original exceeds GitHub's individual-file limit;
+four at-most-40-MiB members and a digest-checked manifest reconstruct the exact
+original compressed bytes in Node and independent Python. Twenty-five Node controls,
+four independent Python methods with 23 negative variants, the actual oversized
+shared-writer audit and the full package generator's automatic branch pass. Legacy
+PV/engine/model/refused-input controls still pass. Capture digests identify original
+reconstructed bytes, with physical manifest digests separate. This is byte custody,
+not another chess/timing oracle, product storage architecture or repository-size
+solution. `[V]` `cost-archive-parts.mjs`, `cost-archive-parts-check.py`, tests, actual
+full-generator terminal and receipt §independent replay and immutable storage;
+https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github.
+
+Complete coverage advances to 23 settings / 26,634 of 61,374 cases. Thirty settings
+remain: twelve recursive primary, seventeen first-reply-reserve diagnostics and one
+complete-local diagnostic. The original next six depth-twelve settings are live,
+not counted delivered and never restarted on observation timeout. Routine hashes,
+state and receipt upkeep is automatic. D3262 stays doing and the search RFC draft:
+full weighted semantic/cost qualification, actual consumer/cache/browser joins,
+source/model memory and reviewed profile admission remain open; D3508/D3373 source
+holds are not repaired by a successful recursive arm. No capability/milestone,
+official-content or full-1.0 completion follows. `[V]` frozen cost plan, current
+original command/metadata, prior source receipts and canonical roadmap.

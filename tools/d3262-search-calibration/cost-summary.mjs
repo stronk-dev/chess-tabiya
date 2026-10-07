@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCostPlan, sha, validateCostRows } from "./cost-contract.mjs";
 import { verifyPackedCostValue } from "./cost-pack.mjs";
+import { readCostArchiveBytes } from "./cost-archive-parts.mjs";
 
 const defaultNames = ["d3262-cost-live-pv-initial-2026-10-06.json.gz", "d3262-cost-live-pv-depth8-population-2026-10-06.json.gz"];
 const directory = "planning/semantic-consequence-search";
@@ -14,7 +15,7 @@ export function summarizeCostArchives(names = defaultNames) {
     throw new Error("Explicit unique immutable capture names required");
   const plan = loadCostPlan(), rows = [], inputs = {}, modelRecords = [];
   for (const name of names) {
-    const bytes = readFileSync(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes));
+    const bytes = readCostArchiveBytes(`${directory}/${name}`), pack = JSON.parse(gunzipSync(bytes));
     verifyPackedCostValue(pack); inputs[name] = sha(bytes);
     const records = pack.groups.flatMap(x => JSON.parse(gunzipSync(Buffer.from(x.base64, "base64"))));
     rows.push(...records.map(x => x.row));
