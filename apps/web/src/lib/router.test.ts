@@ -3,6 +3,10 @@
 import { describe, expect, it } from "vitest";
 
 import { HistoryRouter, parseRoute, routePath, routeTitle } from "./router.js";
+import { reviewTargetBranch } from "./review-target.js";
+import { fork, rewind } from "@chess-tabiya/runtime";
+import { REVIEW_FIXTURE_AT, reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
+import type { RunGraph } from "./api.js";
 
 describe("application router", () => {
   it("parses every shell route and encoded run deep link", () => {
@@ -53,6 +57,35 @@ describe("application router", () => {
     expect(location.pathname).toBe("/settings");
     expect(names).toEqual(["home", "play", "review", "settings"]);
     router.destroy();
+  });
+
+  it("retains the exact cited Review node through navigation, reload and encoded identity", () => {
+    const target = { name: "story", runId: "a / game", nodeId: "node / 100% +" } as const;
+    const path = routePath(target);
+    const url = new URL(path, "https://tabiya.test");
+    expect(parseRoute(url)).toEqual(target);
+    history.replaceState(null, "", "/profile");
+    const router = new HistoryRouter(window);
+    router.navigate(path);
+    expect(router.route).toEqual(target);
+    const reloaded = new HistoryRouter(window);
+    expect(reloaded.route).toEqual(target);
+    reloaded.destroy();
+    for (const search of ["?node=", "?node=%20", "?node=one&node=two"]) expect(parseRoute({ pathname: "/review/game/a", search }).name).toBe("not-found");
+    router.destroy();
+  });
+
+  it("resolves the cited move's recorded branch, not the active retry cursor, and refuses foreign/missing targets", async () => {
+    const original = reviewFixtureRun({ id: "profile-target", plies: 8 });
+    const node = original.nodes[6]!;
+    const branched = fork(rewind(original, original.nodes[2]!.id, REVIEW_FIXTURE_AT).run, original.nodes[2]!.id, { label: "retry", at: REVIEW_FIXTURE_AT }).run;
+    const graph = { id: branched.id, nodes: branched.nodes, branches: branched.branches, activeCursor: branched.activeCursor } as RunGraph;
+    const before = JSON.stringify(branched.events);
+    expect(graph.activeCursor.branchId).not.toBe(node.branchId);
+    expect(await reviewTargetBranch({ graph: async () => graph }, graph.id, node.id)).toBe(node.branchId);
+    await expect(reviewTargetBranch({ graph: async () => graph }, "different-game", node.id)).rejects.toThrow("cited move");
+    await expect(reviewTargetBranch({ graph: async () => graph }, graph.id, "missing-node")).rejects.toThrow("cited move");
+    expect(JSON.stringify(branched.events)).toBe(before);
   });
 
   it("gives every route family a page title", () => {

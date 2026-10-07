@@ -712,14 +712,61 @@ test("the private profile opens from Rating and Learn, abstains below each floor
   const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   expect(scan.violations, JSON.stringify(scan.violations, null, 2)).toEqual([]);
 
+  const contributorResponse = page.waitForResponse(response => response.url().includes("/learner-profile/style/fianchetto_setup_rate"));
   await fianchetto.getByRole("button", { name: "Show the games counted so far" }).click();
-  await expect(fianchetto.getByRole("list", { name: "Fianchetto setup reached: contributing moves" })).toContainText("g3");  await fianchetto.getByRole("button", { name: "Open game review" }).first().click();
-  await expect(page).toHaveURL(new RegExp(`/review/game/${runId}$`, "u"));
+  const contributor = (await (await contributorResponse).json()).contributors.shown[0] as { runId: string; nodeId: string };
+  await expect(fianchetto.getByRole("list", { name: "Fianchetto setup reached: contributing moves" })).toContainText("g3");
+  await fianchetto.getByRole("button", { name: "Open game review" }).first().click();
+  await expect(page).toHaveURL(`/review/game/${runId}?node=${encodeURIComponent(contributor.nodeId)}`);
+  await expect(page.locator(".move-row.selected")).toHaveAttribute("data-node-id", contributor.nodeId);
+  await page.reload();
+  await expect(page.locator(".move-row.selected")).toHaveAttribute("data-node-id", contributor.nodeId);
 
   await primary.getByRole("link", { name: "Learn" }).click();
   await page.getByRole("link", { name: /Your profile/ }).click();
   await expect(page.getByRole("heading", { name: "What your recorded games show" })).toBeVisible();
 });
+
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  test(`cited profile move opens its original line after a retry without mutating play (${viewport.width})`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await chooseRawRung(page);
+    await page.getByRole("button", { name: "Start and keep the game" }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await clickMove(page, "g2", "g3");
+    await expect(page.locator("[data-status-announcement]")).not.toContainText("Thinking", { timeout: 15_000 });
+    const runId = page.url().split("/").at(-1)!;
+    const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    const first = await graph();
+    const cited = first.nodes.find(node => node.moveUci === "g2g3")!;
+    const root = first.nodes.find(node => node.parentId === null)!;
+    const writer = await page.evaluate(id => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
+    for (const [action, data] of [["rewind", { nodeId: root.id }], ["fork", { nodeId: root.id, label: "Another attempt" }]] as const) {
+      const response = await page.request.post(`/runs/${runId}/${action}`, { headers: { "x-writer-id": writer! }, data });
+      expect(response.ok(), await response.text()).toBe(true);
+    }
+    const before = await graph();
+    expect(before.activeCursor.branchId).not.toBe(cited.branchId);
+    let mutations = 0;
+    page.on("request", request => { if (request.method() === "POST" && /\/(?:moves|rewind|fork)$/u.test(new URL(request.url()).pathname)) mutations += 1; });
+    await page.goto(`/review/game/${runId}?node=${encodeURIComponent(cited.id)}`);
+    await expect(page.locator(".move-row.selected")).toHaveAttribute("data-node-id", cited.id);
+    await expect(page.getByLabel("Selected position")).toBeVisible();
+    const bounds = await page.getByLabel("Selected position").boundingBox();
+    expect(bounds).not.toBeNull();
+    expect(bounds!.width).toBeGreaterThan(0);
+    await page.reload();
+    await expect(page.locator(".move-row.selected")).toHaveAttribute("data-node-id", cited.id);
+    const after = await graph();
+    expect(after.activeCursor).toEqual(before.activeCursor);
+    expect(after.branches).toEqual(before.branches);
+    expect(after.nodes.map(node => [node.id, node.parentId, node.branchId, node.fen])).toEqual(before.nodes.map(node => [node.id, node.parentId, node.branchId, node.fen]));
+    expect(mutations).toBe(0);
+    await page.goto(`/review/game/${runId}?node=not-a-recorded-node`);
+    await expect(page.getByRole("alert")).toContainText("The cited move could not be opened");
+    expect(mutations).toBe(0);
+  });
+}
 
 test("choosing a help style activates its modules through the server compiler and persists (rfc/intent-presets.md)", async ({ page }) => {
   await chooseRawRung(page);

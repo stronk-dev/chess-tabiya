@@ -33,9 +33,9 @@ function payload(options: { readonly mayWrite?: boolean; readonly evaluated?: (i
   })) as ReviewMap;
 }
 
-function render(review: ReviewMap, onRetry: (entryNodeId: string) => Promise<void> = vi.fn(async () => {})) {
+function render(review: ReviewMap, onRetry: (entryNodeId: string) => Promise<void> = vi.fn(async () => {}), initialNodeId?: string) {
   assertReviewMapResponse(review, { runId: review.runId });
-  return mount(ReviewMapScreen, { target: document.body, props: { review, onRetry, onExport: vi.fn() } });
+  return mount(ReviewMapScreen, { target: document.body, props: { review, onRetry, onExport: vi.fn(), initialNodeId } });
 }
 
 /** Every text-bearing leaf the learner can read, one per element, so sentence spans stay intact. */
@@ -61,6 +61,16 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it("opens the exact cited recorded move instead of a selected moment, without retrying", async () => {
+    const review = payload();
+    const nodeId = review.rows[17]!.nodeId;
+    const retry = vi.fn(async () => {});
+    const component = render(review, retry, nodeId);
+    expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(nodeId);
+    expect(document.querySelector(".move-row.selected .move-select")?.getAttribute("aria-current")).toBe("true");
+    expect(retry).not.toHaveBeenCalled();
+    await unmount(component);
+  });
   it("[criterion 1] renders a row for every ply, far beyond any moment cap", async () => {
     const review = payload();
     const component = render(review);
@@ -71,6 +81,12 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     expect(rows[0]!.querySelector(".move-label")!.textContent).toBe(review.rows[0]!.label);
     expect(rows.map((row) => row.dataset.side)).toEqual(review.rows.map((row) => row.side));
     await unmount(component);
+  });
+
+  it("rejects a response for a different requested recorded branch", () => {
+    const review = payload();
+    expect(() => assertReviewMapResponse(review, { runId: review.runId, branchId: review.branchId })).not.toThrow();
+    expect(() => assertReviewMapResponse(review, { runId: review.runId, branchId: "another-branch" })).toThrow(/branchId mismatch/u);
   });
 
   it("[criteria 2, 3] renders a chip only for emitted grades, and only as the full grounding sentence", async () => {

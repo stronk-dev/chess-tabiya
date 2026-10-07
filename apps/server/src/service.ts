@@ -1166,12 +1166,20 @@ export class RunService {
     const run = stored.run;
     const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
     const recordedMainline = importedMainlineBranchId(run);
-    const defaultBranch = recordedMainline ?? [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined);
+    // The accepted recorded-prefix authority includes unfinished native lines. A terminal
+    // result chooses the normal result view, but is not permission to inspect a saved line.
+    const defaultBranch = recordedMainline ?? [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined) ?? run.activeCursor.branchId;
     const branchId = requestedBranchId ?? defaultBranch;
-    const importedMainline = recordedMainline !== undefined && branchId === recordedMainline;
     const branchOutcome = outcomeEvents.find((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId===branchId);
-    if (branchId === undefined || (!importedMainline && branchOutcome === undefined)) throw new ServerError("STORY_UNAVAILABLE","This branch has no terminal story");
-    if (!feedbackDisclosed(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal the finished game before opening its story");
+    if (!run.branches.some(branch => branch.id === branchId)) throw new ServerError("STORY_UNAVAILABLE", "This recorded branch is unavailable");
+    const completedLine = branchOutcome !== undefined || branchId === recordedMainline;
+    if (!completedLine) {
+      this.#refuseRatedAssistance(runId);
+      this.#refuseWhileMatchLive(runId, run);
+    }
+    // An unfinished line is still live: its explicit reveal closes on the next move.
+    // Completed/imported review retains the existing recorded-result disclosure rule.
+    if (!(completedLine ? feedbackDisclosed(run) : feedbackDeliveryOpen(run))) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal this recorded line before opening its review");
     const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
     // rfc/review-evidence-compiler.md §4: the subject is derived from parsed storage only.
     const authorize = createReviewPrefixAuthority({

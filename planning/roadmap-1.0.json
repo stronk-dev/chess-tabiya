@@ -2293,13 +2293,21 @@
           "stable-board-and-presets",
           "production-api-closure"
         ],
-        "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
+        "nextAction": "D3541/D3542's paginated Profile evidence and exact unfinished recorded-move Review entry are closed under current disclosure and contest restrictions. Continue complete Review/theory/rehearsal return, valid skill credit and profile lifecycle; complete the independent bot, Campaign, social/professional and account journeys. Resolve D3543's initial startup failures rather than treating a passing repeat as diagnosis. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-10-06",
-          "summary": "D3431 removes repeated collector work across growing longitudinal prefixes through bounded exact-edge immutable membership reuse. Complete real-collector outputs remain byte-identical; all legal alternatives, source replay, ownership and per-decision lease/drain checkpoints remain. One predecessor failure becomes 24 focused passes with clean types. Full exact-index software passes 3225 tests/340 files plus seven performance tests; all packaging/source/capability/history checks, content and governance pass. The cold unseen-game cost, full longitudinal/profile/style/skills and milestone remain open. D3422/D3423 close Review enrichment reservations/completion under existing §4.1: exact synchronous slots, aggregate per-run subscribers, ownership-fenced eviction/cancellation and scalar shared completion wake all requested branches without polling. Four predecessor failures become 47 focused passes and warning-free types. Real scheduler/SQLite and authenticated HTTP prove seven durable positions per concurrent import before any Story read. Full gates are logged before commit; whole Review/source/RFC discharges remain open. Learners now have Review, Learn and a private profile: the Review Map with grounded grades, retry, compare, eval graph, Analyze and the typed evidence packet; return scheduling with standing words; and /profile with floor-gated habit cards, opening counts, recorded observations and cross-pack concept skills, all computed on read from the durable longitudinal store. D3399 now repairs actual Rating direct navigation and reload with Accept/Vary while preserving authenticated JSON and nested API paths; actual HTTP and built-browser signed-in controls pass under learner-rating. The paired invitation response checkpoint proves real register/login/join, refusal and recovery. Complete software, content and rebuilt browser CI pass, but full longitudinal, campaign, social/professional and opinionated end-to-end journeys remain incomplete.",
+          "at": "2026-10-08",
+          "summary": "D3541/D3542 close Profile opening/observation continuation, adjacent retry, stale-page refusal and exact cited-move Review entry. The saved node resolves its actual recorded branch, remains selected on reload and never rewinds or commits merely to inspect. Unfinished native lines now enter Review with an unfinished outcome: current reveal must be open, the next move closes it, and live unpaused/rated contests remain refused. Owner-only actual HTTP pages, unchanged stored board state, missing references, mismatch controls and desktop/phone journeys cover the production boundary. Focused checks pass 100 Support and 83 profile/Review cases with clean types. Final normal verification passes 3,461 software, seven isolated performance and 227 content cases plus all downstream contracts/governance; rebuilt browser tiers pass 157 journeys/one existing optional skip/zero retries, with 150 exact inputs and 112 composition cells. Initial startup/load timeouts remain D3543, not diagnosed by the passing repeat; the stale terminal-only expectation is corrected with no-enqueue refusal retained. No new metric, grade, skill credit, personality, migration, official content, whole capability/milestone or remote release proof is claimed.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
+            "apps/web/src/lib/ProfileScreen.test.ts",
+            "apps/web/src/lib/review-target.ts",
+            "apps/web/src/lib/router.test.ts",
+            "apps/server/src/live-session.test.ts",
+            "apps/server/src/rating-service.test.ts",
+            "tests/browser/drill.spec.ts",
+            "rfc/review-map.md",
+            "docs/learner-profile.md",
             "planning/style/implementation-2026-09-24.md",
             "rfc/player-style.md",
             "rfc/skills.md",
@@ -2327,6 +2335,11 @@
               "kind": "rfc",
               "id": "player-style.md",
               "digest": "sha256:9939e4a13fd7b1b6a1c6ebc52d43f58f82ae3399c9f1af4fcd37a500e231a347"
+            },
+            {
+              "kind": "rfc",
+              "id": "review-map.md",
+              "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
             },
             {
               "kind": "rfc",

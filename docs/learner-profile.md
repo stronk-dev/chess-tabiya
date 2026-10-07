@@ -37,6 +37,20 @@ All routes authenticate and read only the caller's own rows; no route names anot
 
 ## What counts
 
+Opening and observation details offer **Show more** until all counted references are visible.
+Loading is per detail; a failed or changed page keeps the existing list and offers retry/reload.
+A profile refresh discards pending responses from the previous population. The UI checks page
+offsets, totals and duplicate identities before appending; these checks do not certify a habit.
+
+Move-level references open `/review/game/:runId?node=:nodeId`. Review resolves the node's actual
+stored branch, selects that move and retains it on reload. Inspecting a reference does not commit,
+rewind or fork the game. Missing/inaccessible references produce an unavailable message, not a
+different selected move. Run-level history/opening links still open the game's default review.
+
+Native unfinished lines can be reviewed with their honest unfinished outcome. They require an
+open disclosure window, which closes on the next committed move. Open rated games and live
+unpaused matches remain withheld; completed/imported review retains its existing disclosure rule.
+
 A **measured game** is a run that began from the standard starting position with at least one move
 the store attributes to the learner (`played` decisions only — imported games' moves belong to the
 players who made them). Only the run's first line counts; rewound branches do not. Decisions come

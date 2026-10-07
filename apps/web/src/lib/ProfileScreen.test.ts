@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { DrillClientApi } from "./api.js";
 import { profileFixture } from "./profile-fixture.test-support.js";
-import { parseLearnerProfile, parseStyleCardPage } from "./profile-response.js";
+import { parseLearnerProfile, parseObservationDetail, parseOpeningDetail, parseStyleCardPage } from "./profile-response.js";
 import ProfileScreen from "./ProfileScreen.svelte";
 
 afterEach(() => document.body.replaceChildren());
@@ -63,7 +63,104 @@ describe("profile surface", () => {
     expect(target.textContent).toContain("Move 2. Bg2 (ply 3)");
     const review = [...target.querySelectorAll("ol[aria-label='Fianchetto setup reached: contributing moves'] button")].find((item) => item.textContent === "Open game review") as HTMLButtonElement;
     review.click();
-    expect(onNavigate).toHaveBeenCalledWith("/review/game/run-0");
+    expect(onNavigate).toHaveBeenCalledWith("/review/game/run-0?node=run-0-n3");
+    unmount(component);
+  });
+
+  it("loads every opening game across pages, holds the current list on failure and retries the same offset", async () => {
+    const fixture = profileFixture();
+    const row = fixture.profile.openings.rows[0]!;
+    const games = Array.from({ length: 103 }, (_, index) => ({ ...fixture.profile.history.items[0]!, runId: `opening-${index}` }));
+    const openingRow = { ...row, games: 103, results: { win: 103, draw: 0, loss: 0, noResult: 0 } };
+    let fail = true;
+    const learnerProfileOpening = vi.fn(async (_key: string, offset = 0) => {
+      if (offset === 100 && fail) { fail = false; throw new Error("offline"); }
+      return parseOpeningDetail({ row: openingRow, games: { total: 103, offset, items: games.slice(offset, offset + 100), hiddenCount: Math.max(0, 3 - offset) } });
+    });
+    const { target, component } = render({ learnerProfile: async () => parseLearnerProfile(fixture), learnerProfileOpening });
+    await settle();
+    button(target, "Show these games").click();
+    await settle();
+    const list = target.querySelector("ol[aria-label='C50 Italian Game: games']")!;
+    expect(list.children).toHaveLength(100);
+    button(target, "Show more games").click();
+    await settle();
+    expect(list.children).toHaveLength(100);
+    expect(target.querySelector(".opening-list [role=alert]")?.textContent).toContain("Try again");
+    button(target, "Show more games").click();
+    await settle();
+    expect(list.children).toHaveLength(103);
+    expect(learnerProfileOpening.mock.calls.map((call) => call[1])).toEqual([0, 100, 100]);
+    expect(target.querySelector(".opening-list [role=alert]")).toBeNull();
+    expect(target.textContent).toContain("Showing 103 of 103 games.");
+    unmount(component);
+  });
+
+  it("paginates observation moves, prevents duplicate pending requests and retains exact node links", async () => {
+    const fixture = profileFixture();
+    const row = { ...fixture.profile.observations.rows[0]!, occurred: 101, opportunities: 201, byPhase: [{ phase: "opening", occurred: 101, opportunities: 201 }] };
+    const refs = Array.from({ length: 101 }, (_, index) => ({ runId: "same-run", nodeId: `move-${index}`, ply: index + 1, moveSan: "e4", observedAt: "2026-10-07T10:00:00.000Z" }));
+    let release!: () => void;
+    const hold = new Promise<void>((resolve) => { release = resolve; });
+    const learnerProfileObservation = vi.fn(async (_key: string, offset = 0) => {
+      if (offset === 100) await hold;
+      return parseObservationDetail({ row, opportunities: row.opportunities, occurred: { total: 101, offset, items: refs.slice(offset, offset + 100), hiddenCount: Math.max(0, 1 - offset) } });
+    });
+    const { target, component, onNavigate } = render({ learnerProfile: async () => parseLearnerProfile(fixture), learnerProfileObservation });
+    await settle();
+    button(target, "Show moves").click();
+    await settle();
+    const more = button(target, "Show more moves");
+    more.click(); more.click();
+    await settle();
+    expect(learnerProfileObservation).toHaveBeenCalledTimes(2);
+    expect(more.disabled).toBe(true);
+    release();
+    await settle();
+    const list = target.querySelector("ol[aria-label='open file — gained: moves']")!;
+    expect(list.children).toHaveLength(101);
+    (list.lastElementChild!.querySelector("button") as HTMLButtonElement).click();
+    expect(onNavigate).toHaveBeenCalledWith("/review/game/same-run?node=move-100");
+    expect(target.textContent).toContain("Showing 101 of 101 moves.");
+    unmount(component);
+  });
+
+  it("does not install a detail response from before an explicit profile refresh", async () => {
+    const fixture = profileFixture();
+    let release!: () => void;
+    const hold = new Promise<void>((resolve) => { release = resolve; });
+    const learnerProfileOpening = vi.fn(async () => {
+      await hold;
+      return parseOpeningDetail({ row: fixture.profile.openings.rows[0], games: { ...fixture.profile.history, total: 1, hiddenCount: 0 } });
+    });
+    const { target, component } = render({ learnerProfile: async () => parseLearnerProfile(fixture), learnerProfileOpening });
+    await settle();
+    button(target, "Show these games").click();
+    button(target, "Check again").click();
+    await settle();
+    release();
+    await settle();
+    expect(target.querySelector("ol[aria-label='C50 Italian Game: games']")).toBeNull();
+    unmount(component);
+  });
+
+  it.each(["wrong-key", "wrong-offset", "overlap", "changed-total", "changed-row"])("refuses %s continuation rather than misrepresenting the evidence list", async (defect) => {
+    const fixture = profileFixture();
+    const row = fixture.profile.openings.rows[0]!;
+    const first = fixture.profile.history.items[0]!;
+    const learnerProfileOpening = vi.fn(async (_key: string, offset = 0) => parseOpeningDetail({
+      row: offset === 0 ? row : { ...row, key: defect === "wrong-key" ? "another opening" : row.key, name: defect === "changed-row" ? "Changed name" : row.name },
+      games: { total: offset > 0 && defect === "changed-total" ? 3 : 2, offset: offset > 0 && defect === "wrong-offset" ? 0 : offset, items: [{ ...first, runId: offset === 0 || defect === "overlap" ? "first" : "second" }], hiddenCount: offset === 0 ? 1 : defect === "changed-total" ? 1 : 0 },
+    }));
+    const { target, component } = render({ learnerProfile: async () => parseLearnerProfile(fixture), learnerProfileOpening });
+    await settle();
+    button(target, "Show these games").click();
+    await settle();
+    button(target, "Show more games").click();
+    await settle();
+    expect(target.querySelector(".opening-list [role=alert]")?.textContent).toContain("current list is unchanged");
+    expect(target.querySelector(".opening-list .ref-list")!.children).toHaveLength(1);
+    expect(target.textContent).toContain("Showing 1 of 2 games.");
     unmount(component);
   });
 

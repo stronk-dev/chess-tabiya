@@ -309,6 +309,14 @@ roadmap-progress: roadmap-check
 training-set-catalogue-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/training-set-registry.test.ts apps/server/src/training-forms.test.ts
 
+.PHONY: learner-profile-check
+learner-profile-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/ProfileScreen.test.ts apps/web/src/lib/profile-response.test.ts apps/web/src/lib/router.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts apps/server/src/learner-profile.test.ts apps/server/src/learner-profile-application.test.ts apps/server/src/review-map.test.ts apps/server/src/live-session.test.ts apps/server/src/rating-service.test.ts apps/server/src/adoption-wave.test.ts
+
+.PHONY: learner-profile-browser-check
+learner-profile-browser-check:
+	./node_modules/.bin/playwright test --grep "private profile opens|cited profile move"
+
 roadmap-receipt:
 	node tools/roadmap-receipt.mjs --write
 

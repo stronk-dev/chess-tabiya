@@ -125,7 +125,7 @@ describe("adoption wave server contracts", () => {
     expect(storage.read("native")!.run).toEqual(before);
   });
 
-  it("refuses a non-terminal native story without enqueueing a story pass", async () => {
+  it("withholds an undisclosed unfinished native story without enqueueing a story pass", async () => {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
     const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
     const service = new RunService(storage, { evidenceQueue: queue });
@@ -133,7 +133,7 @@ describe("adoption wave server contracts", () => {
     const before = queue.outstanding("unfinished");
     const response = await createRestHandler(service)(new Request("http://tabiya.test/runs/unfinished/story"));
     expect(response.status).toBe(409);
-    expect(await response.json()).toMatchObject({ error: { code: "STORY_UNAVAILABLE" } });
+    expect(await response.json()).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
     expect(queue.outstanding("unfinished")).toEqual(before);
   });
 });

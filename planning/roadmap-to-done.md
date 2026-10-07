@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-09-30 under [[D3302]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]] and [[D3542]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -28,7 +28,7 @@ is **partial**, not complete. Official content, remaining workflows and release
 proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
-## Product inventory — 2026-10-07
+## Product inventory — 2026-10-08
 
 The product is a substantial development build, **not a finished 1.0 or release candidate**.
 The core rehearsal loop is the most mature journey. Major surfaces now execute real backend
@@ -45,7 +45,7 @@ the machine map above remains the current assignment/status source.
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content, fix official-versus-installed disclosure, implement durable training-set progression/repeat/tempo and graduate the official corpus |
 | Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions and resume | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish rematch/history and bot-event workflows |
-| Learner model | Durable attributed observations with opportunity counts, Rating and private floor-gated profile/history | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
+| Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results and resume | Official educational progression, consumed theory unlocks, complete boss/reward/failure paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, submissions, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, submission review, audience/consent/delay and reconnect workflows |
@@ -67,6 +67,24 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 Profile evidence-trail closeout (D3541/D3542): opening/observation
+details paginate with retry and stale/mismatched-page refusal. A cited move opens
+its actual stored branch, remains selected after reload and changes no board
+events. Unfinished native Review requires the current disclosure window; live
+unpaused/rated contests stay withheld and a new move re-closes disclosure.
+The normal focused gates pass 100 Support controls and 83 profile/Review controls
+with clean types. Full rebuilt browser tiers pass 157 journeys, one existing
+optional skip, zero retries, 150 exact-input cells and 112 composition cells.
+Initial full software is red: eight Support setup timeouts, one installed
+Campaign load timeout and one stale terminal-only test expectation. The latter
+is corrected while retaining no-enqueue refusal; D3543 owns the startup/load
+failures and remains open regardless of a passing repeat. Final verification
+passes clean types, 3,461 software / seven performance / 227 content cases and
+all downstream contracts/governance. D3543 remains open: a passing repeat does
+not diagnose the original failures. Results are appended to the exploration
+log in the same commit. This is incremental
+delivery, not completed Review/profile/RFC/milestone or remote release proof.
 
 2026-10-07 D3512 isolated-case execution is implemented as disposable research:
 fresh process per cold case, no retries, literal command/failure/startup/teardown

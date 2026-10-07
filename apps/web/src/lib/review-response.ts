@@ -29,9 +29,10 @@ function fail(message: string): never {
 }
 
 /** Closed shape check for the Review Map payload before any of it renders. */
-export function assertReviewMapResponse(value: unknown, subject: { readonly runId: string }): asserts value is ReviewMap {
+export function assertReviewMapResponse(value: unknown, subject: { readonly runId: string; readonly branchId?: string }): asserts value is ReviewMap {
   const body = record(value) ?? fail("not an object");
   if (body.runId !== subject.runId) fail("runId mismatch");
+  if (subject.branchId !== undefined && body.branchId !== subject.branchId) fail("branchId mismatch");
   if (!text(body.branchId) || !SIDES.has(body.side as string) || typeof body.ready !== "boolean" || !natural(body.pendingEvidence)) fail("header fields");
   if (!text(body.storyTitle)) fail("storyTitle");
   const viewer = record(body.viewer);

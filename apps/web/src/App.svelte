@@ -18,6 +18,7 @@
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import LivePreamble from "./lib/LivePreamble.svelte";
   import ReviewMapScreen from "./lib/ReviewMapScreen.svelte";
+  import { reviewTargetBranch } from "./lib/review-target.js";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
   import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel, RETURN_STANDING_EXPLANATION } from "./lib/learner-copy.js";
   import { packPhaseCopy } from "./lib/pack-catalog.js";
@@ -878,12 +879,19 @@
       } else if (next.name === "story") {
         const refresh=++storyRefreshGeneration;
         const shareRefresh=++storyShareGeneration;
+        let targetBranch: string | undefined;
+        if (next.nodeId !== undefined) {
+          try { targetBranch = await reviewTargetBranch(api, next.runId, next.nodeId); }
+          catch { throw new LearnerRouteError("The cited move could not be opened. Check that this saved game is still available, then try again."); }
+          if (generation !== loadGeneration) return;
+        }
         const loaded = await Promise.all([
-          fetchStory(next.runId, true),
+          fetchStory(next.runId, true, targetBranch),
           api.capabilities(),
           api.storyShares?.(next.runId) ?? Promise.resolve([]),
         ]);
         if (generation !== loadGeneration) return;
+        if (next.nodeId !== undefined && !loaded[0].rows.some((row) => row.nodeId === next.nodeId)) throw new LearnerRouteError("The cited move is not available on this recorded line. No game move was changed.");
         assertStoryShares(loaded[2],next.runId);
         if(refresh===storyRefreshGeneration){
           story = loaded[0];
@@ -1119,12 +1127,12 @@
     storyPoll = setInterval(() => void refreshStory(next.runId, false), 1_000);
   }
 
-  async function fetchStory(runId: string, allowReveal: boolean): Promise<ReviewMap> {
+  async function fetchStory(runId: string, allowReveal: boolean, branchId?: string): Promise<ReviewMap> {
     if (api.review === undefined) throw new Error("Game reviews are unavailable");
     const writer = WriterSession.peek(runId, storage);
     const readReview = async (): Promise<ReviewMap> => {
-      const value = await api.review!(runId);
-      assertReviewMapResponse(value, { runId });
+      const value = await api.review!(runId, branchId);
+      assertReviewMapResponse(value, { runId, ...(branchId === undefined ? {} : { branchId }) });
       return value;
     };
     let nextReview: ReviewMap;
@@ -1139,7 +1147,7 @@
       // rfc/review-evidence-compiler.md §4.1: the story read reaches the Review coordinator's
       // bounded window (the Review Map read itself requests nothing); deliveries attach server-side
       // and the existing poll re-reads the map.
-      await api.story(runId).catch(() => undefined);
+      await api.story(runId, branchId).catch(() => undefined);
     }
     return nextReview;
   }
@@ -1148,7 +1156,7 @@
     const generation=loadGeneration;
     const refresh=++storyRefreshGeneration;
     try{
-      const nextStory=await fetchStory(runId,allowReveal);
+      const nextStory=await fetchStory(runId,allowReveal,story?.runId === runId ? story.branchId : undefined);
       if(generation!==loadGeneration||refresh!==storyRefreshGeneration||route.name!=="story"||route.runId!==runId)return;
       story=nextStory;
       if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
@@ -2754,7 +2762,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<ReviewMapScreen review={story} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}{#key `${story.runId}:${story.branchId}:${route.name === 'story' ? route.nodeId ?? '' : ''}`}<ReviewMapScreen review={story} initialNodeId={route.name === 'story' ? route.nodeId : undefined} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />{/key}
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

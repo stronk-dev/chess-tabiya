@@ -12,6 +12,8 @@
 
   interface Props {
     review: ReviewMap;
+    /** player-style §8: select the cited recorded move without changing the game. */
+    initialNodeId?: string | undefined;
     onRetry: (entryNodeId: string) => void | Promise<void>;
     onExport: () => void | Promise<void>;
     onVoice?: ((nodeId: string) => Promise<string>) | undefined;
@@ -23,7 +25,7 @@
     /** §7 / O7.3: the explicit, secondary Analyze reveal for one reviewed move. */
     onAnalyze?: ((nodeId: string) => Promise<ReviewAnalysisPage>) | undefined;
   }
-  let { review, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze }: Props = $props();
+  let { review, initialNodeId, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze }: Props = $props();
 
   type RetryFailure = "retry.failed.board_held" | "retry.failed.forbidden" | "retry.failed.other";
   let selectedId = $state<string | undefined>();
@@ -53,7 +55,7 @@
 
   const imported = $derived(review.source.kind === "native" ? undefined : review.source);
   const retryAvailable = $derived(review.viewer.mayWrite && !forbidden);
-  const initial = $derived(review.moments.find((moment) => review.rows.some((row) => row.nodeId === moment.nodeId))?.nodeId ?? review.rows[0]?.nodeId);
+  const initial = $derived(review.rows.find((row) => row.nodeId === initialNodeId)?.nodeId ?? review.moments.find((moment) => review.rows.some((row) => row.nodeId === moment.nodeId))?.nodeId ?? review.rows[0]?.nodeId);
   const selectedIndex = $derived(review.rows.findIndex((row) => row.nodeId === (selectedId ?? initial)));
   const selected = $derived(selectedIndex < 0 ? undefined : review.rows[selectedIndex]);
   const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));

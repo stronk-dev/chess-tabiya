@@ -29259,6 +29259,33 @@
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:theory-drill-current-joins.md"
+    },
+    {
+      "id": "D3541",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:21fc05b73327c60505feff1f0aa96bda6e3aace978b1894a96141068917c3e8c",
+      "uxItems": [],
+      "evidence": "apps/server/src/learner-profile-application.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3542",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0951ddb30caa3127df5eb7e55b46fcc504566c2c8104cddcb4f412c25de17912",
+      "uxItems": [],
+      "evidence": "apps/server/src/learner-profile-application.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3543",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4678a08b250672137889e461bc5c2e4d53be1faec45bd1afb653919fdb060b78",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-07"
     }
   ]
 }

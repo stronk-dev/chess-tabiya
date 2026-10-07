@@ -165,6 +165,11 @@ describe("live session platform",()=>{
     expect((await request(handler,"POST","/runs/native-match/lease",{cookie:black.cookie,writerId:"writer-b",body:{expectedHolderLearnerId:white.learner.id}})).status).toBe(200);
     expect((await request(handler,"POST","/runs/native-match/moves",{cookie:black.cookie,writerId:"writer-b",body:{uci:"e7e5"}})).status).toBe(200);
     const authors=deriveMoveAuthorship(storage.read("native-match")!.run,storage.sessionJournal(sid,0),coach.learner.id);expect(authors.map((item)=>item.learnerId)).toEqual([white.learner.id,black.learner.id]);
+    for (const surface of ["review", "story"] as const) {
+      const response = await request(handler, "GET", `/runs/native-match/${surface}`, { cookie: black.cookie });
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({ error: { code: "MATCH_LIVE" } });
+    }
     const beforePause=await request(handler,"POST","/runs/native-match/rewind",{cookie:black.cookie,writerId:"writer-b",body:{nodeId:storage.read("native-match")!.run.nodes[0]!.id}});expect(beforePause.status).toBe(409);expect((await beforePause.json() as any).error.code).toBe("MATCH_LIVE");
     const liveDuplicate=await request(handler,"POST","/runs/native-match/duplicate",{cookie:black.cookie,writerId:"writer-b",body:{id:"escaped-copy",seed:31}});expect(liveDuplicate.status).toBe(409);expect((await liveDuplicate.json() as any).error.code).toBe("MATCH_LIVE");
     const liveFlip=await request(handler,"POST","/runs/native-match/flip",{cookie:black.cookie,body:{nodeId:storage.read("native-match")!.run.activeCursor.nodeId}});expect(liveFlip.status).toBe(409);expect((await liveFlip.json() as any).error.code).toBe("MATCH_LIVE");

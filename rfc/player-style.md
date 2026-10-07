@@ -291,6 +291,8 @@ Proposed — id assigned at landing; head was **D1297** at drafting.
 
 ## Changelog
 
+- 2026-10-07 — §8 evidence-trail repair (D3541): `ProfileScreen.svelte` paginates opening/observation details with exact counts, per-detail loading/retry and stale/mismatched-page refusal. Move references retain the cited node through the actual recorded branch and reload (`review-target.ts`, router, App and ReviewMapScreen). Mounted continuation/refresh controls, actual owner-only HTTP pages and desktop/phone browser journeys cover this path. No new metric, floor, personality, skill credit or progression input is introduced; this is not full player-style completion.
+
 - 2026-09-24 — **implemented at the owner's direction; text defects fixed inline, every other finding became a test.** Corrections:
   1. **§2 / criterion 1 — set-equality "by feature id and floor" is not an identity.** Feature ids repeat (`move.castle_side@1` ×2, `time.spend_share@1` ×3), so the check is set-equality by **metric id**, with feature id and floor compared per row. `apps/server/src/style-registry-check.ts`; drift arms in `style-registry-check.test.ts`.
   2. **§6 vs criterion 15 — `insufficient_evidence` cannot render the rate.** §6 required every state to render the rate and interval; criterion 15 forbids rendering a value below the floor. The admissible rule now declares `insufficient_evidence` over `floor, games, population, phase, timeControl, version` and every other state over the full arithmetic; `assertTierRuleGrounded` checks exactly that.

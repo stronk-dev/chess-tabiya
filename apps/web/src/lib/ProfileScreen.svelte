@@ -11,6 +11,7 @@
     LearnerProfileView,
     ObservationDetail,
     OpeningDetail,
+    ProfilePage,
     ProfileHistoryRow,
     SharedHabitCard,
     StyleContributorRef,
@@ -33,6 +34,11 @@
   let cardDrillError: Record<string, string | undefined> = $state({});
   let openingDrill: Record<string, OpeningDetail | undefined> = $state({});
   let observationDrill: Record<string, ObservationDetail | undefined> = $state({});
+  let openingBusy: Record<string, boolean> = $state({});
+  let observationBusy: Record<string, boolean> = $state({});
+  let openingError: Record<string, string | undefined> = $state({});
+  let observationError: Record<string, string | undefined> = $state({});
+  let cardBusy: Record<string, boolean> = $state({});
   let drillError: string | undefined = $state();
   let historyRows: readonly ProfileHistoryRow[] = $state([]);
   let historyHidden = $state(0);
@@ -56,6 +62,10 @@
     const current = ++generation;
     loading = true;
     error = undefined;
+    cardDrill = {}; cardDrillError = {}; cardBusy = {};
+    openingDrill = {}; openingBusy = {}; openingError = {};
+    observationDrill = {}; observationBusy = {}; observationError = {};
+    drillError = undefined; historyBusy = false;
     try {
       if (api.learnerProfile === undefined) throw new Error("The profile is unavailable.");
       const next = await api.learnerProfile();
@@ -112,52 +122,84 @@
   }
 
   async function openCard(metricId: string, offset = 0): Promise<void> {
-    if (api.learnerProfileStyle === undefined) return;
+    if (api.learnerProfileStyle === undefined || cardBusy[metricId]) return;
+    const current = generation;
+    cardBusy = { ...cardBusy, [metricId]: true };
     cardDrillError = { ...cardDrillError, [metricId]: undefined };
     try {
       const page = await api.learnerProfileStyle(metricId, offset, 25);
-      if (!attached) return;
+      if (!attached || current !== generation) return;
+      if (page.card.metricId !== metricId) throw new Error("Different card");
       const previous = offset === 0 ? [] : cardDrill[metricId]?.contributors.shown ?? [];
       cardDrill = { ...cardDrill, [metricId]: { offset, contributors: { ...page.contributors, shown: [...previous, ...page.contributors.shown] } } };
     } catch {
-      if (attached) cardDrillError = { ...cardDrillError, [metricId]: "The games behind this card could not be loaded. Try again." };
+      if (attached && current === generation) cardDrillError = { ...cardDrillError, [metricId]: "The games behind this card could not be loaded. Try again." };
+    } finally {
+      if (attached && current === generation) cardBusy = { ...cardBusy, [metricId]: false };
     }
   }
 
-  async function openOpening(key: string): Promise<void> {
-    if (api.learnerProfileOpening === undefined) return;
-    drillError = undefined;
+  // Page offsets/counts and identities belong to the response. Refuse overlap or a changed
+  // population instead of silently blending two reads; the first-page action remains a reload.
+  function appendPage<T>(page: ProfilePage<T>, previous: ProfilePage<T> | undefined, offset: number, identity: (item: T) => string): ProfilePage<T> {
+    const before = offset === 0 ? [] : previous?.items ?? [];
+    if (page.offset !== offset || before.length !== offset || page.items.length > 100 || offset + page.items.length + page.hiddenCount !== page.total || (offset > 0 && previous?.total !== page.total) || (page.items.length === 0 && page.hiddenCount > 0)) throw new Error("Changed page");
+    const items = [...before, ...page.items];
+    if (new Set(items.map(identity)).size !== items.length) throw new Error("Repeated item");
+    return { ...page, offset: 0, items };
+  }
+
+  async function openOpening(key: string, offset = 0): Promise<void> {
+    if (api.learnerProfileOpening === undefined || openingBusy[key]) return;
+    const current = generation;
+    openingBusy = { ...openingBusy, [key]: true };
+    openingError = { ...openingError, [key]: undefined };
     try {
-      const detail = await api.learnerProfileOpening(key, 0, 100);
-      if (attached) openingDrill = { ...openingDrill, [key]: detail };
+      const detail = await api.learnerProfileOpening(key, offset, 100);
+      if (!attached || current !== generation) return;
+      const previous = openingDrill[key];
+      if (detail.row.key !== key || (offset > 0 && JSON.stringify(previous?.row) !== JSON.stringify(detail.row))) throw new Error("Changed opening");
+      const games = appendPage(detail.games, previous?.games, offset, (game) => game.runId);
+      openingDrill = { ...openingDrill, [key]: { ...detail, games } };
     } catch {
-      if (attached) drillError = "These games could not be loaded. Try again.";
+      if (attached && current === generation) openingError = { ...openingError, [key]: "These games could not be loaded. Your current list is unchanged. Try again, or reload these games." };
+    } finally {
+      if (attached && current === generation) openingBusy = { ...openingBusy, [key]: false };
     }
   }
 
-  async function openObservation(key: string): Promise<void> {
-    if (api.learnerProfileObservation === undefined) return;
-    drillError = undefined;
+  async function openObservation(key: string, offset = 0): Promise<void> {
+    if (api.learnerProfileObservation === undefined || observationBusy[key]) return;
+    const current = generation;
+    observationBusy = { ...observationBusy, [key]: true };
+    observationError = { ...observationError, [key]: undefined };
     try {
-      const detail = await api.learnerProfileObservation(key, 0, 100);
-      if (attached) observationDrill = { ...observationDrill, [key]: detail };
+      const detail = await api.learnerProfileObservation(key, offset, 100);
+      if (!attached || current !== generation) return;
+      const previous = observationDrill[key];
+      if (detail.row.key !== key || (offset > 0 && JSON.stringify(previous?.row) !== JSON.stringify(detail.row))) throw new Error("Changed observation");
+      const occurred = appendPage(detail.occurred, previous?.occurred, offset, (ref) => JSON.stringify([ref.runId, ref.nodeId]));
+      observationDrill = { ...observationDrill, [key]: { ...detail, occurred } };
     } catch {
-      if (attached) drillError = "These moves could not be loaded. Try again.";
+      if (attached && current === generation) observationError = { ...observationError, [key]: "These moves could not be loaded. Your current list is unchanged. Try again, or reload these moves." };
+    } finally {
+      if (attached && current === generation) observationBusy = { ...observationBusy, [key]: false };
     }
   }
 
   async function moreHistory(): Promise<void> {
-    if (api.learnerProfileHistory === undefined) return;
+    if (api.learnerProfileHistory === undefined || historyBusy) return;
+    const current = generation;
     historyBusy = true;
     try {
       const page = await api.learnerProfileHistory(historyRows.length, 50);
-      if (!attached) return;
+      if (!attached || current !== generation) return;
       historyRows = [...historyRows, ...page.items];
       historyHidden = page.hiddenCount;
     } catch {
-      if (attached) drillError = "More history could not be loaded. Try again.";
+      if (attached && current === generation) drillError = "More history could not be loaded. Try again.";
     } finally {
-      if (attached) historyBusy = false;
+      if (attached && current === generation) historyBusy = false;
     }
   }
 
@@ -193,8 +235,8 @@
     }
   }
 
-  function openRun(runId: string, review: boolean): void {
-    onNavigate(routePath(review ? { name: "story", runId } : { name: "run", runId }));
+  function openRun(runId: string, review: boolean, nodeId?: string): void {
+    onNavigate(routePath(review ? { name: "story", runId, ...(nodeId === undefined ? {} : { nodeId }) } : { name: "run", runId }));
   }
 </script>
 
@@ -204,7 +246,7 @@
       <li>
         <span>{moveLabel(ref)}</span>
         <span class="ref-actions">
-          <button type="button" onclick={() => openRun(ref.runId, true)}>Open game review</button>
+          <button type="button" onclick={() => openRun(ref.runId, true, ref.nodeId)}>Open game review</button>
           <button type="button" onclick={() => openRun(ref.runId, false)}>Open in rehearsal</button>
         </span>
       </li>
@@ -268,7 +310,7 @@
             </details>
             <div class="row-actions">
               {#if card.contributors.total > 0}
-                <button type="button" onclick={() => void openCard(card.metricId)} aria-expanded={cardDrill[card.metricId] !== undefined}>
+                <button type="button" disabled={cardBusy[card.metricId]} onclick={() => void openCard(card.metricId)} aria-expanded={cardDrill[card.metricId] !== undefined}>
                   {card.state === "measured" ? "Show the moves behind this" : "Show the games counted so far"}
                 </button>
               {/if}
@@ -281,7 +323,7 @@
               {@const drill = cardDrill[card.metricId]!}
               {@render refList(drill.contributors.shown, `${card.title}: contributing moves`)}
               <p class="honest">Showing {drill.contributors.shown.length} of {drill.contributors.total}{drill.contributors.hiddenCount > 0 ? `; ${drill.contributors.hiddenCount} more not shown` : ""}.</p>
-              {#if drill.contributors.hiddenCount > 0}<button type="button" onclick={() => void openCard(card.metricId, drill.contributors.shown.length)}>Show more</button>{/if}
+              {#if drill.contributors.hiddenCount > 0}<button type="button" disabled={cardBusy[card.metricId]} onclick={() => void openCard(card.metricId, drill.contributors.shown.length)}>Show more</button>{/if}
             {/if}
             {#if shareIntent === card.metricId}
               <aside class="consent-card" aria-labelledby={`share-${card.metricId}`}>
@@ -325,7 +367,9 @@
                     <div class="row-actions">{#each row.relatedPacks as pack (pack.id)}<button type="button" disabled={onStartPack === undefined} onclick={() => void onStartPack?.(pack.id)}>Rehearse {pack.title}</button>{/each}</div>
                   {/if}
                 </div>
-                <button type="button" onclick={() => void openOpening(row.key)} aria-expanded={openingDrill[row.key] !== undefined}>Show these games</button>
+                <button type="button" disabled={openingBusy[row.key]} onclick={() => void openOpening(row.key)} aria-expanded={openingDrill[row.key] !== undefined}>{openingDrill[row.key] ? "Reload these games" : "Show these games"}</button>
+                {#if openingBusy[row.key]}<p role="status">Loading games…</p>{/if}
+                {#if openingError[row.key]}<p role="alert">{openingError[row.key]}</p>{/if}
                 {#if openingDrill[row.key]}
                   {@const detail = openingDrill[row.key]!}
                   <ol class="ref-list" aria-label={`${row.eco} ${row.name}: games`}>
@@ -333,7 +377,8 @@
                       <li><span>{readableDate(game.observedAt)} · {outcomeText(game.outcome)}</span><span class="ref-actions"><button type="button" onclick={() => openRun(game.runId, true)}>Open game review</button><button type="button" onclick={() => openRun(game.runId, false)}>Open in rehearsal</button></span></li>
                     {/each}
                   </ol>
-                  {#if detail.games.hiddenCount > 0}<p class="honest">{detail.games.hiddenCount} more games not shown.</p>{/if}
+                  <p class="honest">Showing {detail.games.items.length} of {detail.games.total} games.{detail.games.hiddenCount > 0 ? ` ${detail.games.hiddenCount} more games not shown.` : ""}</p>
+                  {#if detail.games.hiddenCount > 0}<button type="button" disabled={openingBusy[row.key]} onclick={() => void openOpening(row.key, detail.games.items.length)}>Show more games</button>{/if}
                 {/if}
               </li>
             {/each}
@@ -358,11 +403,11 @@
                 <tr>
                   <th scope="row">{row.label}<br /><small>Version {row.projectionVersion}</small></th>
                   <td>{row.occurred}</td><td>{row.opportunities}</td><td>{row.runs}</td><td>{row.decisions}</td>
-                  <td><button type="button" disabled={row.occurred === 0} onclick={() => void openObservation(row.key)}>Show moves</button></td>
+                  <td><button type="button" disabled={row.occurred === 0 || observationBusy[row.key]} onclick={() => void openObservation(row.key)}>{observationDrill[row.key] ? "Reload these moves" : "Show moves"}</button>{#if observationBusy[row.key]}<p role="status">Loading moves…</p>{/if}{#if observationError[row.key]}<p role="alert">{observationError[row.key]}</p>{/if}</td>
                 </tr>
                 {#if observationDrill[row.key]}
                   {@const detail = observationDrill[row.key]!}
-                  <tr><td colspan="6">{@render refList(detail.occurred.items, `${row.label}: moves`)}{#if detail.occurred.hiddenCount > 0}<p class="honest">{detail.occurred.hiddenCount} more moves not shown.</p>{/if}</td></tr>
+                  <tr><td colspan="6">{@render refList(detail.occurred.items, `${row.label}: moves`)}<p class="honest">Showing {detail.occurred.items.length} of {detail.occurred.total} moves.{detail.occurred.hiddenCount > 0 ? ` ${detail.occurred.hiddenCount} more moves not shown.` : ""}</p>{#if detail.occurred.hiddenCount > 0}<button type="button" disabled={observationBusy[row.key]} onclick={() => void openObservation(row.key, detail.occurred.items.length)}>Show more moves</button>{/if}</td></tr>
                 {/if}
               {/each}
             </tbody>
@@ -380,7 +425,7 @@
           <article aria-labelledby={`skill-${category.category}`}>
             <h3 id={`skill-${category.category}`}>{category.label}</h3>
             {#if category.marks.length > 0}
-              <ul>{#each category.marks as mark (mark.kind)}<li>{mark.sentence} {readableDate(mark.occurredAt)} <button type="button" onclick={() => openRun(mark.link.runId, true)}>Open the game</button></li>{/each}</ul>
+              <ul>{#each category.marks as mark (mark.kind)}<li>{mark.sentence} {readableDate(mark.occurredAt)} <button type="button" onclick={() => openRun(mark.link.runId, true, mark.link.nodeId)}>Open the game</button></li>{/each}</ul>
             {:else if category.emptyReason}
               <p>{learnerProse(category.emptyReason)}</p>
             {:else}

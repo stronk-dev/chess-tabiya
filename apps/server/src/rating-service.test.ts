@@ -102,6 +102,8 @@ describe("rated-game service", () => {
     expect(good.storage.ratedGame(run.id)).toMatchObject({ state: "open", opponentBand: 1400, startPieceCount: 32 });
     expect(() => good.service.guidanceAccess(run.id, principal, run.nodes[0]!.id)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
     expect(() => good.service.reveal(run.id, principal, lease.writerId, AT)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
+    expect(() => good.service.story(run.id, principal)).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
+    await expect(good.service.review(run.id, principal)).rejects.toMatchObject({ code: "ASSISTANCE_WITHHELD" });
     expect(() => good.service.analysis(run.id, principal, lease.writerId, { nodeIds: [run.nodes[0]!.id], kind: "eval" })).toThrow(expect.objectContaining({ code: "ASSISTANCE_WITHHELD" }));
     // rfc/hint-distance.md §8 / criterion 13: the common enqueue boundary and the hint path refuse too,
     // before any job, provider request or hint bytes exist.
