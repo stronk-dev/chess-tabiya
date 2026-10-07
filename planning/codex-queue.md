@@ -12,11 +12,40 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — 2026-10-07
 
+0. [[D3528]] blocks committing the current verified Support repairs: normal software
+   verification and the independent capability gate reject seven unrelated compatibility
+   digests after a receipt-only hash refresh. Runtime verdicts are byte-equal and the changed
+   receipt hash has no runtime value reader; the AST closure nevertheless hashes the entire
+   declaration. Existing lifecycle versions 22/24 already include repeated wording/source-
+   receipt bumps. Resolve this contract boundary first: explicit public semantics and contract
+   tests should govern pack compatibility; build/source freshness should remain a separate
+   provenance check. This is proposed for owner approval, not an implemented guard removal.
+   Do not rewrite committed declarations, add seven reflexive versions, change authored packs,
+   suppress the failing test or claim a passing browser run makes the software gate green.
 1. [[D3518]], [[D3514]], [[D3510]]: locate the intermittent software failures before
    declaring release readiness. Passing replays leave these findings open.
-2. [[D3521]]: remove implementation jargon from ordinary Threat Radar while preserving
-   its hypothetical turn, one-move limit, exact witnesses and provenance. Prove real
-   module delivery and native rendering, not only a vocabulary scan.
+   The latest complete browser attempt also terminates red: [[D3529]] retains a 368px
+   board after resizing into a 360px viewport (the saved image visibly clips it), and
+   [[D3530]] times out during classroom registration before the native journey. Locate
+   both stages, retain the normal assertions/deadlines, and do not call narrow Support
+   successes a complete browser pass or guess that the unusually long wall time explains it.
+2. [[D3521]], [[D3523]], [[D3524]] are in final verification: a grounded filled Threat
+   Radar caption, loose-piece readings for the learner rather than the opponent, and a
+   compact registered capture warning within the unchanged staged-cue budget. Both-colour
+   software controls are green; native desktop/phone warning → Revise → stage again →
+   explicit confirm and the complete normal gates must pass before closeout.
+3. [[D3522]] independently repairs response-body ownership in the local Support fixture.
+   The normal target also runs the existing unfinished-stream/body-failure/real-HTTP
+   controls. It is not the established cause or repair of the earlier composition timeout.
+   [[D3525]] corrects the maximum-load fixture's false warning expectation on a defensive
+   pawn move, retaining its later genuine mate warning. [[D3527]] waits for the recorded
+   opponent reply before the read-only baseline, then checks the complete unchanged journal
+   and zero Inspector move writes. Their full gates and closeout remain behind D3528.
+4. [[D3526]]: the real phone Threat Radar still duplicates one mate across two producers.
+   Exact witness-level subsumption must preserve distinct capture facts and both provenance
+   chains. Its next author action is a narrow module-registration selection amendment with
+   exact witness equality; [[D3309]]'s structural-operand scope does not own this tactical
+   composition rule. Do not delete a whole multi-threat source or treat wording as full UX.
 
 Delivered [[D3517]]/[[D3519]]: Nudge → rewind before the learner move → different move
 → Compare → enter the other recorded attempt at the common fork → keep playing. Native

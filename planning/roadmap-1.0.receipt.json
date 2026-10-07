@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1049e06b43aa319642d915abdf6ab5a4d9e924be1862db2d637c8586349c5123",
+    "roadmap": "sha256:5de4644cf698565c41d1761762b8779fb5ad7f05e8fd7cb07b3d3712f1ea0187",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:0a286cef6998659173e32a053f07470ea46ad20efff31883f0aaa3636e6d7571",
+    "workState": "sha256:386a1ba7deee394f7c207e07682f259ae3dbe4b8f0480d5e088355fd89ab8028",
     "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 629,
-      "doing": 7,
+      "doing": 16,
       "blocked": 1059,
       "done": 1414,
       "refused": 161
@@ -1043,10 +1043,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "D3517/D3519 now deliver the recorded Nudge-to-alternate-attempt-to-Compare-to-play journey on desktop and phone; D3520 repairs header/control and phone focus boundaries. Next locate D3518/D3514/D3510's intermittent software failures and complete D3521's ordinary Threat Radar wording with real delivery/UI proof. D3309's sixteen v2 successors still need acceptance before migration; preserve v1 bytes. D3497 retains D7, D3498 its accepted-lifecycle hold, and full v5/D12 does not rule D1639. A4/D1834 and D3469/D3363/D3436 remain open. D3262 cost/profile research stays todo, not the next capture. No full-RFC, capability or milestone promotion.",
+      "nextAction": "Resolve D3528 before committing the in-flight Support repairs: receipt-only hash churn triggers seven pack-compatibility version changes despite unchanged runtime verdicts. Proposed owner amendment separates explicit public semantic compatibility/contract tests from build/source freshness; no guard removal, committed-declaration rewrite or reflexive version/pack migration. D3521/D3523/D3524 repair threat copy, learner-side source direction and compact staged warnings; D3522/D3525/D3527 repair independent HTTP and native-test premises. Full software remains red on D3528; full browser remains red on D3529's stale mobile board width and D3530's registration timeout. Locate these causes before closeout; all in-flight rows stay doing. Then locate D3518/D3514/D3510's earlier intermittent causes and declare D3526's exact tactical witness subsumption separately from D3309's sixteen v2 structural successors. D3497 retains D7, D3498 its accepted-lifecycle hold, and full v5/D12 does not rule D1639. A4/D1834 and D3469/D3363/D3436 remain open. No bulk D3262 capture, full-RFC, capability or milestone promotion.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "D3517/D3519 close two missing learner actions: admitted Nudge rewinds before its exact move, an alternate continuation preserves the original, Compare enters the same other attempt whose facts were delivered at the common fork, and the learner can play again without autoplay. Source delivery and navigation share recorded branch authority. Mounted tests cover exact retries, single flight, read-only, stale decisions, replaced runs and unmount; native registered-bot desktop/phone journeys exercise real API/controller paths. D3520 fixes genuine header overlap, bounded context/menu wrapping and phone modal-to-board focus. All four browser CI tiers pass with 112 unretried composition cells. Screenshot inspection also finds D3521's remaining ordinary Threat Radar jargon; it stays todo. D3309's sixteen v2 contracts/migrations, D7/v5/D12, optional voice lifecycle, owner-use, broader Support and the existing intermittent software causes remain open. These are delivered workflow checkpoints, not full Support, release readiness or a milestone/capability/RFC/content/1.0 promotion.",
+        "summary": "The current Support repairs find more than jargon: loose-piece requests inspected the opponent's victims, compact staged capture captions were discarded by their unchanged 20-word budget, and the maximum-load test preserved a wrong-side warning on a defensive pawn move. Both-colour production queries and native desktop/phone queen-warning Revise/Confirm controls pass; a settled-turn baseline repairs the Carlsbad read-only race without removing journal entries. Final-source browser passes 88 smoke tests (optional Maia case skipped), five content journeys and 57 matrix tests, but terminates red: the active 360px viewport retains a 368px board and visibly clips it (D3529), and classroom registration times out before its journey (D3530). Production/default tier does not run. Content verification passes 227 tests and 104 capability documents. The refreshed-tree software gate remains red: 3,430 passed, one failed, because an unchanged verdict table's receipt hash triggers seven unrelated compatibility digest changes. Independent capability-check reproduces D3528; all 984 committed declarations remain untouched. In-flight repairs stay doing/uncommitted pending the proposed compatibility-boundary amendment and complete normal gates. The actual phone card still repeats a mate (D3526); larger Support fidelity, D3309, existing intermittents, owner-use, RFC discharges and official content remain open. No milestone, capability, RFC, pack or 1.0 promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/module-query.test.ts",
@@ -1174,6 +1174,11 @@
           "planning/provider-exchange-and-execution/hint-latency-browser-software-2026-10-06.json"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3528",
+            "digest": "sha256:e0d15df713bc2ede6bc9311efbc83852b71ef032d79419e292b85d1718c6082d"
+          },
           {
             "kind": "work_state",
             "id": "D3517",
