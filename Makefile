@@ -842,6 +842,18 @@ semantic-search-cost-maia-independent:
 semantic-search-cost-batch: semantic-search-cost-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --start "$(START)" --limit "$(LIMIT)" --out "$(OUT)"
 
+# Disposable external RSS attachment. Never overwrites cost rows or claims a whole-batch peak.
+.PHONY: semantic-search-memory-test semantic-search-memory-observe semantic-search-memory-check
+semantic-search-memory-test:
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-process-memory.test.mjs
+
+semantic-search-memory-observe: semantic-search-memory-test
+	@test -n "$(PID)" -a -n "$(BATCH)" -a -n "$(OUT)" || (echo "Usage: make semantic-search-memory-observe PID=<live-worker> BATCH=<original-batch> OUT=<new-journal> [SAMPLES=120] [INTERVAL_MS=2000]" >&2; exit 2)
+	$(CI_NODE) tools/d3262-search-calibration/cost-process-memory.mjs --pid "$(PID)" --batch "$(BATCH)" --executable "$(SF_CMD)" --out "$(OUT)" --samples "$(or $(SAMPLES),120)" --interval-ms "$(or $(INTERVAL_MS),2000)"
+
+semantic-search-memory-check: semantic-search-memory-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-process-memory.mjs --check "$(OUT)"
+
 semantic-search-cost-check: semantic-search-cost-build
 	$(CI_NODE) tools/d3262-search-calibration/cost-batch.mjs --check --out "$(OUT)"
 

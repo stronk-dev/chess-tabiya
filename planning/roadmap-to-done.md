@@ -19,6 +19,18 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 search-source memory continuation: a separate disposable observer retains
+120/120 native process probes across a 243.352-second late-run window without changing
+the cost executor. Sampled maxima are 242,224 KiB for Node and 153,024 KiB for Stockfish;
+395,056 KiB is the maximum reported sum in one probe, not unique physical RAM.
+Thirty-five integrity/scope controls and full retained-row reconstruction pass.
+Startup, whole-batch/per-case peaks, other settings and Maia/container memory remain
+unmeasured. D3262 stays doing at fourteen complete settings / 16,212 of 61,374 cases;
+the original top-eight capture is still live. No profile or 1.0 promotion. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top8-memory-window-2026-10-07.jsonl`;
+scope: `design/research/semantic-consequence-search.md` §2026-10-07.
+Routine metadata/hash/state receipts update automatically.
+
 2026-10-07 structural Inspector continuation: D3309 now has strict TypeScript and
 195 disposable controls over the actual FEN collector, sealed factories and typed presenter.
 Sixteen families lose detailed operands; twelve real piece-count readings become one caption,

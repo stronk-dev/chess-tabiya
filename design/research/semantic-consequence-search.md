@@ -591,3 +591,42 @@ One search/proof substrate can power:
 The LLM remains downstream of the selected sealed proof and may only paraphrase its licensed claim.
 When no proof clears, the product returns an honest engine preference with “no concise semantic
 reason established,” never an invented story.
+
+## 2026-10-07 — external native-source memory window, D3262
+
+The original cost executor reports sampled parent-process RSS only; its metadata explicitly
+does not claim engine/model peaks. A separate disposable observer now binds the still-running
+`engine:depth12:top8` batch (start 11,580, limit 1,158) to its original metadata, exact command,
+process birth/parent identities and one direct native Stockfish child. The executor and its
+eighteen frozen instrument sources remain unchanged. Native Darwin `ps(1)` defines `rss` in
+1,024-byte units. This is process-resident memory, not unique physical memory. `[V: original
+metadata retained in planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top8-memory-window-2026-10-07.jsonl;
+tools/d3262-search-calibration/cost-process-memory.mjs; native Darwin ps(1), rss keyword]`
+
+The retained late-run window contains **120/120 successful probes**, zero unavailable probes,
+from **03:45:50.409 to 03:49:53.661 UTC** (243,352.378 ms including native probe time).
+Observed maxima are **242,224 KiB** for the Node executor and **153,024 KiB** for Stockfish;
+the maximum sum in one probe is **395,056 KiB**. The sum is not the sum of separately timed
+maxima, an atomic observation or a deduplicated physical-RAM peak. The append-only journal
+retains original metadata/observer bytes, native rows, individual clocks, explicit scope and
+a reconstructible digest chain. Its 331,657 bytes hash to
+`sha256:1c3dc3c1ad4f5455d09067703ce1cd227710880fc9916f83b040230df407edff`.
+`[V: the retained journal; make semantic-search-memory-check]`
+
+Thirty-five disposable controls refuse PID reuse/reparenting, added descendants, wrong
+batch/source configuration, unavailable-as-zero, changed/reordered/truncated journals,
+resealed RSS mismatches and promotion to startup/whole-batch/per-case/physical/Maia peaks.
+The reader reconstructs native rows rather than trusting summary labels. It is an integrity
+and scope check, **not independent authentication or repetition of OS memory measurements**.
+Normal Make targets provide observer, reader and controls; they are opt-in research and do
+not add a mandatory CI/content gate. `[V: tools/d3262-search-calibration/cost-process-memory.test.mjs;
+Makefile semantic-search-memory-test/observe/check]`
+
+This window does not observe startup, the whole batch, per-case attribution, other settings,
+Maia or container memory. Lightweight research/governance work shares the host; existing
+latencies are not isolated by this observer. D3262 stays doing: **fourteen complete settings /
+16,212 of 61,374 admitted cases**, with the top-eight capture still in flight at this checkpoint.
+The remaining 39 settings, broader source/model memory, consumer/browser scope and production
+profile remain open. No production search, grounding authority, capability, milestone or
+1.0 completion follows from these memory readings. `[V: planning/platform-alignment/execution-queue.md,
+D3262; planning/roadmap-1.0.json, evidence-to-consumer-spine]`
