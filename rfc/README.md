@@ -8,6 +8,14 @@ Status cells and RFC body Status lines begin with one of the seven lifecycle tok
 emphasis is stripped. Dates and text after the first separator are prose; only an `awaiting` cell's
 first `D<n>` token is machine-read as its discharge pointer.
 
+**Safe-deployment draft amendment, 2026-10-07:** the implementing document's §8 is repaired in
+draft, not newly accepted: 112 literal unsafe identities, transport admission before bounded
+body-selector dispatch, existing account32m ceiling, actual selection-presence move dispatch,
+two-segment modules path and explicit alias refusals. D3334/D3335 require fresh contract review;
+D1846 still owns production reader/dispatcher/proxy enforcement. Earlier directed implementation
+and transport checkpoints remain unchanged. Source census and negative exits:
+`planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md`.
+
 **Register correction, 2026-08-24:** `learner-rating` AC-7 is discharged. Its preregistered
 three-model × two-arrival simulation narrows the publication bracket to **1500–1800 BCS** and
 measures the clock-closing arm at 17–20 periods p50 / 18–23 p90 inside the supported cells. This

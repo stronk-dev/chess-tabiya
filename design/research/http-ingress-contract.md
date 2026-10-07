@@ -88,3 +88,22 @@ No chess detector, content, capability identity, protected intent or kill-criter
 The experiment uses the production adapter and actual deployment refusal function; it does not
 boot the whole authenticated packaged application. The separate Explorer migration D3330 still
 blocks complete working-tree application gates.
+
+## 2026-10-07 current-source continuation
+
+The earlier missing-subset finding is expanded, not retroactively presented as a complete census.
+The current manual handler/selector review yields 112 distinct unsafe identities against §8's 99:
+thirteen additions and no removed/duplicate identities. It also finds a 32 MiB account-import
+reader against proxy `max_size 8MB`, a selection-presence (not actor-enum) move split, the explicit
+two-segment modules path, and accepted session/repertoire aliases absent from the canonical
+template table. Those byte/grammar facts are directly source-checked; no new packaged upload,
+socket, authentication or generation/consumption closure is claimed. `[V]`
+`planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md` source pins and full table.
+
+That report supplies a bounded-transport-then-semantic admission proposal and exact negative
+controls for the existing D3334/D3335 repair queue. Proposed account-sized envelopes and explicit
+alias refusals require the normal contract repair/review boundary; production limits and proxy
+configuration are unchanged. D3334/D3335 remain live and D1846 remains blocked. The D3330 blocker
+above belongs to the historical 2026-09-30 pass, not this continuation: its integration subsequently
+landed in `planning/pack-capability-contract/integration-2026-09-30.md`. `[V]` current work-state
+and the cited dated integration checkpoint; no old transport result is rerun or restamped here.

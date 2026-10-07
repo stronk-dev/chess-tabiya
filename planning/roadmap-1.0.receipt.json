@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3746570f3274625e444701361209e96f62ba033950832c44bbcdbdfa4e6f4c26",
+    "roadmap": "sha256:03a367721ee69617364622d9f98c969594dbb9a7f328853cb8553366c28d17b4",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:5507c05d31cf8e9b92454c2dbf04aedeaeea308ff43b36ef3d84fcfa2bc9b7a5",
-    "rfcRegister": "sha256:30924497290c821bd160a4a67600787a2a212bc565f06ab64d147f5442feb696",
+    "workState": "sha256:865543f0ba32742fb9f1dc80670dd907a52730d95488e43d190c25ff9a92eb27",
+    "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -30,8 +30,8 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
-      "doing": 2,
+      "todo": 626,
+      "doing": 4,
       "blocked": 1059,
       "done": 1405,
       "refused": 161
@@ -1739,11 +1739,11 @@
       "dependsOn": [
         "official-content"
       ],
-      "nextAction": "Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
+      "nextAction": "Fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual generated reader/dispatcher and proxy limits; the 112-id source census is not protection. Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
-        "at": "2026-10-05",
-        "summary": "D3395/D3396/D3398/D3399 close actual response and learner-entry defects: exact application-owned non-CSP headers cover local/static/auth/refusal/error responses; only build-hashed assets are immutable; invitation authentication uses a same-origin module with safe POST fallback and real refusal/recovery; Rating navigation/reload negotiates HTML without changing the authenticated JSON API. The focused gate passes 83 tests and clean types; eight built-browser controls pass. Final exact-index software passes 3067 tests/329 files plus seven isolated performance tests/four files and downstream build, packaging, release-policy, source/value, history, lifecycle and migration checks at 7650ee0c81f4c3b32e87fb6b95aa18e7f02187ac. Content passes 223 tests, all 104 requirements and zero clearance errors; rebuilt browser CI passes 119 journeys, one optional real-Maia skip and zero retries. All 942 committed capabilities retain their meanings and the canonical 352-document migration plan has zero writes or ledger restamps. D3394's static-shell readiness and October 1 native source-appliance proof remain recorded separately, not rerun as full release proof. D3397 holds full CSP because the blanket frame ban conflicts with the existing audience preview; D3393 separately holds probe contracts. Full deployment image/privacy/operator receipts, release/rights/envelope, owner-device use and official content still block the whole milestone. Tracking flows back with zero untriaged/1682 live; no RFC, capability or milestone is promoted.",
-        "impact": "advanced",
+        "at": "2026-10-07",
+        "summary": "D3334/D3335 source audit reads actual handler/selector branches and expands 112 distinct unsafe identities versus the predecessor §8's 99, with thirteen additions and no duplicate/removed identities. Proposed budgets retain four none, ten document8m, two existing account32m and 96 json256k identities. The source audit exposes the account importer/proxy 8MB conflict, selection-presence rather than actor moves, explicit two-segment modules path and unconsumed session/repertoire aliases. The existing RFC §8/criterion 8 now contain a draft transport-envelope then bounded semantic admission repair, exact operation population and negative generation/reader/dispatcher/proxy controls. It is explicitly not accepted for implementation until fresh contract review; no runtime, proxy, API wire, capability or content bytes change. D3334/D3335 are doing; D1846 remains blocked. D3395/D3396/D3398/D3399's October 5 response/browser/software/content checkpoint and D3394/October 1 appliance proof remain historical separate evidence, not fresh runs or full release proof. Current work routing remains zero untriaged. Full ingress protection, CSP/probe contracts, deployment image/privacy/operator receipts, release/rights/envelope, owner-device use and official content still block the milestone. Routine metadata/receipt maintenance is automatic; no RFC acceptance, capability, milestone or full-1.0 completion is promoted.",
+        "impact": "held",
         "evidence": [
           "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
           "rfc/verifiable-runtime-distribution.md",
@@ -1751,6 +1751,7 @@
           "rfc/safe-deployment-profiles.md",
           "planning/safe-deployment-profiles/http-streaming-2026-09-30.md",
           "planning/safe-deployment-profiles/http-ingress-2026-09-30.md",
+          "planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md",
           "design/research/http-ingress-contract.md",
           "apps/server/src/http-ingress.test.ts",
           "apps/server/src/rest.ts",
@@ -1828,6 +1829,16 @@
             "kind": "work_state",
             "id": "D1846",
             "digest": "sha256:64619fb64c32a1e5e5776a5c50fcdfe09563ccde8ff734fd1f6238ab1c93122b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3334",
+            "digest": "sha256:842e62e5c68750e4185fc2c1080a494b6dad54cbc4368170d145fdbf936fbfb3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3335",
+            "digest": "sha256:eff20d0589ccc0c7cf1f353f2fbc6bc6f6b8aeb54fa7e331629aeac3b6317f35"
           },
           {
             "kind": "work_state",

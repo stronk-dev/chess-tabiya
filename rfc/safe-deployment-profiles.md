@@ -1,5 +1,13 @@
 # RFC: Safe deployment profiles and reverse proxy
 
+- **Draft amendment 2026-10-07, request budgets:** §8 now contains the proposed D3334/D3335
+  admission-order/population repair. This amendment is **not accepted for implementation** until
+  fresh contract review accepts the correction. Executable generation/consumption controls remain
+  required for implementation closeout. Existing directed
+  implementation/checkpoints outside §8 remain unchanged. Source audit and compatibility exits:
+  `planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md`. No production/proxy
+  limits, API wire protocol or capability versions change in this authoring checkpoint.
+
 - **Implementation checkpoint 2026-10-05, application response security:** D3395/D3396/D3398 implement the three exact non-CSP headers at the actual response boundary, build-hashed-only immutable caching, and a served same-origin invitation module with safe POST fallback. Actual HTTP and built-browser controls preserve auth/join, refusals, connection recovery, streaming and ingress. D3399 independently repairs Rating document/API negotiation without changing API authentication. D3397 holds full CSP rollout because the specified blanket frame ban conflicts with the existing audience preview; neither a policy exception nor full criterion 11 completion is claimed. Receipt: `planning/safe-deployment-profiles/application-security-2026-10-05.md`.
 
 - **Implementation checkpoint 2026-10-05, static-shell readiness:** D3394 makes the live readiness route consume the same static-serving operation as the learner entry and recheck worker/storage after that await. Bundled process controls reproduce both predecessor false-ready states, then cover missing startup bytes, a directory replacing the live shell and restoration without restart. Canonical storage output and optional-provider behavior are preserved. D3393 holds the separate public/internal liveness and probe-privacy contract; no unilateral status/wire change or full RFC completion follows. Receipt: `planning/safe-deployment-profiles/static-shell-readiness-2026-10-05.md`.
@@ -546,20 +554,32 @@ profiles or origins.
 
 ### 8. Request budgets
 
-The Node server is the authoritative limit; Caddy's matching global 8 MiB cap is an outer guard.
+**D3334/D3335 draft repair, 2026-10-07; held before implementation.** The former pre-body semantic
+selector rule is impossible for body-contained selectors, and its 99-operation population omits
+thirteen shipped identities. The current-source audit supplies the full manual witness table,
+the account-import size conflict and the path-alias counterexamples. Its hashes/counts alone are
+not executable closure. All clauses below require fresh review and real generated-reader adoption.
+
+The Node reader is authoritative. Caddy is an independently verified outer guard and must admit
+the existing 32 MiB account-import ceiling on its two exact routes; ordinary document and JSON
+operations remain smaller. A matching global 8 MiB cap cannot preserve that importer.
 The application declares a closed route budget registry:
 
 ```ts
-type RequestBodyBudget = "none" | "json_256k" | "document_8m";
+type RequestBodyBudget = "none" | "json_256k" | "document_8m" | "account_32m";
 ```
 
-Route and budget identity come from one generated descriptor table, not parallel `if` branches.
-Its key is `<method> <normalized-template>#<semantic-operation>`; path matching, allowed method,
-operation-discriminant parsing, content type and budget all compile from that descriptor. The
-current unsafe semantic-operation set is closed as follows (prefixes are part of the literal ids):
+One descriptor authority generates transport admission, semantic dispatch, reader budgets and
+proxy limits, not parallel handwritten `if` inventories. Semantic keys are
+`<method> <normalized-template>#<semantic-operation>`. A pre-body transport descriptor contains
+the method/template/content type and a closed selector definition plus envelope; only bounded
+parse followed by selector validation can construct its semantic descriptor. The raw body and
+its parsed value are not separately reparsed by dispatch. The literal unsafe semantic-operation
+set is closed as follows (prefixes are part of the ids):
 
 ```text
-auth.{register,login,logout,export,deletion_preview,delete}
+auth.{register,login,logout,export,deletion_preview,delete,import_preview,import}
+campaign.{create,loadout,abandon,start,submit}
 classroom.{create,archive,member_invite,member_remove,member_accept,member_decline,member_leave,assign}
 assignment.{withdraw,submit,submission_withdraw}
 shared.join_accept
@@ -568,6 +588,7 @@ repertoire.{create,delete,scan,gap_enter,answer}
 pack_draft.{create,update,lint,playtest,register,withdraw}
 run.{create,import,share_revoke}
 rated_game.create
+learner_profile.share_card
 progress.schedule_dismiss
 opponent.select
 cohort_standing.{open,close,window,publish,withdraw,show_rating,hide_rating,show_record,hide_record}
@@ -582,7 +603,7 @@ live.leg.import_pgn
 run_action.{marks_replace,marks_rescope,deletion_preview,delete,distill,reasoning_review,
   voice,speech,share,flip,lease,reveal,duplicate,schedule,grant,revoke,group,group_reply,
   move_user,move_opponent,rewind,fork,compare,branch_decidedness,analysis,simulate,
-  simulate_enter,prediction,reasoning,evidence}
+  simulate_enter,prediction,reasoning,evidence,assistance,hints,modules_query,opponent_ply,hint_cancel}
 ```
 
 Those identities bind to the current normalized route templates and discriminants as follows.
@@ -591,6 +612,13 @@ discriminants. This table is input to descriptor generation, not documentation c
 
 ```text
 POST   /auth/:action                                      auth.{register|login|logout|export|deletion-preview→deletion_preview|delete}
+POST   /auth/import-preview                              auth.import_preview
+POST   /auth/import                                      auth.import
+POST   /campaigns/:campaignId/runs                       campaign.create
+PUT    /campaign-runs/:campaignRunId/loadout              campaign.loadout
+POST   /campaign-runs/:campaignRunId/abandon              campaign.abandon
+POST   /campaign-runs/:campaignRunId/nodes/:nodeId/start   campaign.start
+POST   /campaign-runs/:campaignRunId/nodes/:nodeId/submit  campaign.submit
 POST   /classrooms                                       classroom.create
 POST   /classrooms/:classroomId                          classroom.archive {op=archive}
 POST   /classrooms/:classroomId/members                  classroom.{member_invite|member_remove|member_accept|member_decline|member_leave} {op}
@@ -613,6 +641,7 @@ POST   /runs                                             run.create
 POST   /runs/import                                      run.import
 DELETE /runs/:runId/share/:shareId                       run.share_revoke
 POST   /rated-games                                      rated_game.create
+POST   /learner-profile/share-card                       learner_profile.share_card
 POST   /progress/schedules/:scheduleId                   progress.schedule_dismiss {op=dismiss}
 POST   /select-move                                      opponent.select
 POST   /cohorts/:classroomId/standing                    cohort_standing.{open|close|window|publish|withdraw|showRating→show_rating|hideRating→hide_rating|showRecord→show_record|hideRecord→hide_record} {op}
@@ -628,23 +657,47 @@ POST   /sessions/:sessionId/votes                        live.vote.{open|cast|cl
 POST   /sessions/:sessionId/invitations                  live.invitation.create
 POST   /sessions/:sessionId/legs/:leg/pgn                live.leg.import_pgn
 PUT    /runs/:runId/marks                                run_action.{marks_replace|marks_rescope} {rescopeFrom absent|present}
+DELETE /runs/:runId/hints/:requestId                     run_action.hint_cancel {32 lowercase hexadecimal characters}
+POST   /runs/:runId/modules/query                        run_action.modules_query
 POST   /runs/:runId/:action                              run_action.<normalized-action>
 ```
 
-For the final row, `<normalized-action>` is the literal `parseRunRoute` action enum with hyphens
-normalized to underscores. `moves` splits to `move_user | move_opponent` from its closed actor
-discriminant and `grants` splits to `grant | revoke` from its closed `op`; all other POST actions are
-one-to-one. GET descriptors for `graph`, `events`, `evidence`, `authored-feedback`, `pgn`, `grants`,
-`reasoning`, `import`, `story`, `share`, `derivations`, `human-split` and `corpus` independently use
-budget `none`, even when the same normalized template has a separately declared POST descriptor.
-Generation proves the method/template/discriminant expansions are set-equal to the actual router
-grammar and that every generated semantic id occurs exactly once in the budget partition.
+The final row admits only these thirty POST suffixes, never every action in the broader run regex:
+`assistance`, `hints`, `deletion-preview`, `delete`, `distill`, `reasoning-review`, `voice`, `speech`,
+`share`, `flip`, `lease`, `reveal`, `duplicate`, `schedule`, `grants`, `group`, `group-reply`,
+`opponent-ply`, `moves`, `rewind`, `fork`, `compare`, `branch-decidedness`, `analysis`, `simulate`,
+`simulate-enter`, `prediction`, `reasoning`, `evidence`, and the separately declared `modules/query`.
+That last suffix has its own two-segment descriptor, not a one-segment `:action` match.
+Hyphens normalize to underscores only through those literal mappings. `moves` splits to
+`move_user | move_opponent` on **selection absence/presence**, then executes the existing parser
+validation: null is present and invalid, explicit actor/UCI with selection is refused, and a
+selection-less `actor="opponent"` is refused. `grants` uses its closed `op=grant|revoke`; all other
+POST actions are one-to-one. Payload variants such as group source or hint rung are validated
+without becoming undeclared budget authorities.
+
+GET descriptors for `graph`, `events`, `evidence`, `authored-feedback`, `marks`, `pgn`, `grants`,
+`reasoning`, `import`, `story`, `review`, `nudge`, `review-analysis`, `share`, `derivations`,
+`human-split` and `corpus` independently use budget `none`, even where the same path also has a
+declared POST/PUT method. The complete descriptor set also covers every non-run read-only family;
+the 112 unsafe-id count is not a census of all HTTP routes. HEAD keeps its own explicit method
+behavior; zero-body admission does not manufacture GET support for a route that currently refuses it.
+
+Canonical templates are strict. Session item/pgn tails are admitted only where declared and
+consumed: link/proposal items and leg PGN import, with the appropriate methods. Board, match,
+vote, invitation and journal routes do not accept extra item/pgn tails; repertoire `/enter` is
+accepted only after `/gaps`. These formerly source-reachable aliases receive an explicit early
+invalid-request refusal. Prove this deliberate grammar repair with predecessor positives and
+successor negatives; do not claim set equality to the unchanged overbroad regex.
+Generation proves exact equality to the reviewed canonical transport/selector grammar and the
+112-id semantic partition. A complete actual-handler consumer check fails any parser/dispatch
+branch or reader outside that authority, including an added route with no descriptor. An anchor
+census or a count-only match does not satisfy it.
 
 The exact non-default assignments are:
 
 ```text
 none:
-  shared.join_accept, repertoire.delete, run.share_revoke,
+  shared.join_accept, repertoire.delete, run.share_revoke, run_action.hint_cancel,
   method_not_allowed:<every generated route id>, not_found
 
 document_8m:
@@ -653,23 +706,46 @@ document_8m:
   pack_draft.create, pack_draft.update, pack_draft.lint, pack_draft.playtest,
   run.import, live.leg.import_pgn
 
+account_32m:
+  auth.import_preview, auth.import
+
 json_256k:
   every other literal unsafe operation in the closed set above
 ```
 
-“Every other” is computed as exact set difference at generation and serialized into the manifest;
-it is not a runtime fallback. Empty/intersecting/unassigned sets fail generation. A discriminated
-route such as classroom members, cohort standing, live board/match/vote or run moves resolves its
-semantic operation before body read. Unknown operation/method resolves to the generated `none`
-refusal descriptor and cannot spend a JSON budget. The adapter accepts only a compiled descriptor,
-so its reader key is the same object the census counts. Fixtures mislabel one document operation
-small, one ordinary command large, add an unsafe operation, remove its parser, cross a route/action,
-and invoke an unsafe method on a GET-only route; every mutation fails before listening.
+“Every other” is exact set difference at generation, serialized in the manifest, never a runtime
+fallback. The unsafe partition has four none, ten document8m, two account32m and 96 json256k ids;
+refusal/read-only descriptors are separately typed, not additional successful unsafe operations.
+Intersecting, missing, duplicate, crossed or extra identities fail generation.
+
+Before body read, resolve method/template/content type and the generated **transport envelope**:
+the maximum declared raw-byte budget of that route's possible semantic operations. Current
+body-selected siblings all share json256k; no current selector chooses between small/document/
+account limits. A known unsupported route/method refuses without invoking the JSON reader.
+Within an admitted JSON route, bounded parse resolves the existing body selector; unknown/null/
+invalid selector returns typed INVALID_REQUEST **after that bounded read**, never a fictional
+zero-byte promise. The exact semantic descriptor then checks any stricter semantic raw-byte limit
+before executing a service. No added discriminator header, query field or URL is permitted.
+
+Authentication-before-upload on both account import routes remains intact. Keep the existing
+ACCOUNT_IMPORT_TOO_LARGE 413 and maxBytes detail at that boundary; other overages use an explicitly
+typed BODY_TOO_LARGE 413. A successful no-body operation validates declared/chunked body emptiness
+before service execution. Detecting an unknown-length nonempty body may read a first native chunk;
+none means zero permitted/retained payload bytes, **not zero native transport observation**. Known
+refusals may cancel the unread stream immediately without allocating or parsing JSON. Validate
+actual body-read/side-effect behavior independently from status codes and provider availability.
+
+The actual reader/dispatcher accepts only compiler-issued descriptors; tests forge/cross them and
+invoke the real HTTP path. Mutations mislabel document/account operations small, ordinary commands
+large, add an unsafe operation, remove its parser, cross action/method/selector, alter a descriptor
+while preserving counts and POST a GET-only run action. Every mutation fails before listening.
 
 - `none`: every GET/HEAD and unsafe route that accepts no body; any non-empty body is refused.
 - `json_256k`: ordinary commands, identity, run mutations, marks, classroom/social operations.
-- `document_8m`: explicit PGN import, account/pack/shape/repertoire document operations whose
+- `document_8m`: explicit PGN import and pack/shape/repertoire document operations whose
   existing parser can legitimately exceed 256 KiB.
+- `account_32m`: the entire serialized request for the existing authenticated account importer,
+  not merely the bundle field. It must remain bound to ACCOUNT_IMPORT_MAX_BYTES.
 
 Every production unsafe route appears exactly once in the registry. A new route cannot compile or
 pass the route census without a budget. `Content-Length` above the budget returns 413 before body
@@ -680,8 +756,11 @@ accepted by the application in 1.0, preventing a compressed-size bypass.
 The Node server uses strict HTTP validation and explicit bounds: 16 KiB maximum headers, 10 s to
 complete headers, 30 s to complete the request body, 5 s keep-alive idle, and no generic application
 response timeout. Long operations own their own cancellation/deadline contracts. Caddy uses
-compatible edge timeouts and an 8 MiB `request_body max_size`; app limits still pass when Caddy is
-bypassed in focused tests.
+compatible edge timeouts and generated operation-family limits: exact account import/preview
+admits 32 MiB, documents admit 8 MiB, ordinary JSON admits 256 KiB. Raw-path matching and method
+selection must agree with Node after canonicalization; it cannot give an ordinary route an account
+cap through encoding, suffix or method confusion. Reject compressed Content-Encoding rather than
+decompressing requests. Direct-Node controls still pass with the proxy bypassed.
 
 The release proxy is pinned to
 `docker.io/library/caddy:2.11.4-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648`
@@ -689,7 +768,8 @@ The release proxy is pinned to
 `sha256:1172d4…dcba`). Caddy documents `request_body max_size` as experimental in v2.10.0+ and
 returns 413 when later handlers read beyond it:
 <https://caddyserver.com/docs/caddyfile/directives/request_body>. Consequently the rendered-image
-gate runs `caddy validate` plus an actual 8 MiB/8 MiB+1 read through this exact digest on both
+gate runs `caddy validate` plus actual 256 KiB/256 KiB+1, 8 MiB/8 MiB+1 and
+32 MiB/32 MiB+1 reads through this exact digest on both
 architectures. A future Caddy digest must repeat that capability probe; version comparison alone is
 insufficient. Node's per-route reader remains authoritative even when the edge probe passes.
 
@@ -1057,6 +1137,12 @@ state or transition rule. Exact evidence:
 8. The route-budget census covers every production route exactly once. Direct Node and Caddy paths
    both return 413 for declared overages; chunked `limit + 1`, false Content-Length, compressed body,
    slow headers, and slow body are able-to-fail fixtures with bounded memory.
+   The D3334/D3335 draft repair additionally requires the exact 112 unsafe identities, complete
+   read-only/method-refusal grammar, actual compiler-issued reader/dispatcher adoption, bounded
+   body-selector discrimination, predecessor/successor alias controls, no extra discriminator
+   protocol, and successful ordinary/document/account uploads at their own exact raw-byte limits.
+   No-body join/delete/cancel validates emptiness before mutation; unknown-length observation is
+   not falsely called zero transport bytes. Provider absence cannot make a valid route disappear.
 9. A streaming export fixture proves response headers and first chunk reach the client before the
    delayed final chunk exists, peak adapter buffering stays within a fixed small bound independent
    of response size, and disconnect cancels the source.
@@ -1123,6 +1209,16 @@ component that preserves all three workflows and criteria; doing so is an author
 implementation detail.
 
 ## Changelog
+
+- 2026-10-07: **draft §8 repair, held for fresh review**, D3334/D3335. Replace the impossible
+  pre-read body-selector rule with generated transport-envelope then bounded semantic dispatch;
+  enumerate 112 unsafe identities, actual selection-presence moves and two-segment module grammar.
+  Represent existing authenticated account import with account32m and require matching proxy
+  admission; explicitly refuse unconsumed session/repertoire path aliases. Real consumer/forgery,
+  complete route/method, byte/encoding/selector and before/after controls are required. This is
+  authoring, not acceptance, production protection or closure. Historical native/proxy receipts
+  and all implemented bytes remain unchanged. Source audit:
+  `planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md`.
 
 - 2026-09-30: D3333/D3336 repair pre-body policy ordering with lazy byte-preserving Node ingress,
   explicit receive bounds and HTTP/1 full duplex in both pinned proxy templates. Ten native

@@ -2525,6 +2525,15 @@ F12-A/D607/D1846/D1847, `provider-health-degradation` for F12-D/D609/D1848, and
 final F3/F4 runtime-content join. [[D1448]], the remaining F12 children, packaging checks, workflows
 and deploy artifacts own the other residuals.
 
+**2026-10-07 ingress contract continuation ([[D3334]], [[D3335]]):** the manually inspected
+current router expands to 112 distinct unsafe identities versus §8's 99, with thirteen exact
+additions and no removed/duplicate identities. The admission-order proposal now includes the
+32 MiB importer/proxy 8MB conflict, selection-presence move discriminator, explicit two-segment
+module path and current path aliases. The proposal is not accepted production behavior, generated
+descriptor adoption or a new transport proof. D1846 remains blocked on contract repair and actual
+limit/reader/dispatcher/proxy controls; no release milestone moves. Source pins, complete grouped
+table and negative exits: `planning/safe-deployment-profiles/ingress-budget-repair-2026-10-07.md`.
+
 The 2026-09-04 third storage-backup author repair closes the draft seams in
 [[D2608]]–[[D2613]] without claiming implementation. Inherited FD 3 now establishes its own lock
 authority; publication durably commits marker removal; prepare and readiness checks have truthful

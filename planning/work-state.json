@@ -27404,19 +27404,21 @@
     },
     {
       "id": "D3334",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:62f530fac4fcd9ce6596a2bf063418ef9c9ddeaa856cc7f706658a5dc85ad99c",
+      "sourceDigest": "sha256:842e62e5c68750e4185fc2c1080a494b6dad54cbc4368170d145fdbf936fbfb3",
       "uxItems": [],
-      "owner": "release-engineering"
+      "owner": "release-engineering",
+      "since": "2026-10-07"
     },
     {
       "id": "D3335",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bac18d41e03395841fe6adafe0553b570ba5a1513fdf57b884026b7c71ef6a0f",
+      "sourceDigest": "sha256:eff20d0589ccc0c7cf1f353f2fbc6bc6f6b8aeb54fa7e331629aeac3b6317f35",
       "uxItems": [],
-      "owner": "release-engineering"
+      "owner": "release-engineering",
+      "since": "2026-10-07"
     },
     {
       "id": "D3336",
