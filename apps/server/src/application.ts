@@ -498,6 +498,8 @@ export async function createApplication(
   return composeApplication(options, { kind: "worker" });
 }
 
+type StartupCleanup = { readonly name: string; readonly release: () => void | Promise<void> };
+
 /** @internal Shared by `createApplication` and the test-only in-memory helper; never by main.ts. */
 export async function composeApplication(
   options: ApplicationOptions,
@@ -553,11 +555,23 @@ export async function composeApplication(
       validateStoredPack: (document: unknown) => validatePackDocument(document, { shapes, principles, concepts, packs: Object.freeze({ get: (id: string) => registry.get(id)?.document }) }),
     }),
   });
+  // Own resources as soon as they are acquired, before any later awaited validation/readiness.
+  // This private list exists only during construction, not as another runtime registry.
+  const startupCleanups: StartupCleanup[] = [{ name: "database", release: () => storage.close() }];
   try {
-    return await composeServices(options, composition, { storage, shapes, principles, registry, trainingSets, workerConfig, about });
+    const application = await composeServices(options, composition, { storage, shapes, principles, registry, trainingSets, workerConfig, about }, startupCleanups);
+    startupCleanups.length = 0; // Successful composition transfers ownership to application.close.
+    return application;
   } catch (error) {
-    // Nothing composed after the coordinator may leave the database open ([[D2965]]).
-    try { storage.close(); } catch { /* preserve the primary failure */ }
+    // Release dependants before their engines/database, even if another release fails (D3545).
+    for (const cleanup of startupCleanups.reverse()) {
+      try { await cleanup.release(); }
+      catch {
+        // Do not expose arbitrary provider exception text or replace the original startup error.
+        try { console.error(`application startup cleanup failed: ${cleanup.name}`); }
+        catch { /* diagnostics cannot interrupt the remaining resource cleanup */ }
+      }
+    }
     throw error;
   }
 }
@@ -588,6 +602,7 @@ async function composeServices(
     readonly workerConfig: ReturnType<typeof validateLongitudinalWorkerConfig>;
     readonly about: ReturnType<typeof loadReleaseAbout>;
   },
+  startupCleanups: StartupCleanup[],
 ): Promise<ChessTabiyaApplication> {
   const { storage, shapes, principles, registry, trainingSets, workerConfig, about } = authorities;
   const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
@@ -658,6 +673,7 @@ async function composeServices(
     exchangeArtifact: (instanceId) => exchangeArtifact(instanceId),
     ...(options.providerHealthLog === undefined ? {} : { log: options.providerHealthLog }),
   });
+  startupCleanups.push({ name: "provider health", release: () => providerHealth.shutdown() });
   const voiceProvider = options.voiceProvider === undefined ? undefined : healthReportedVoice(options.voiceProvider, providerHealth);
   const reasoningReviewProvider = options.reasoningReviewProvider === undefined ? undefined : healthReportedReasoningReview(options.reasoningReviewProvider, providerHealth);
   const ttsProvider = options.ttsProvider === undefined ? undefined : healthReportedTts(options.ttsProvider, providerHealth);
@@ -684,6 +700,7 @@ async function composeServices(
       onLifecycle: providerHealth.engineLifecycleSink({ "maia-5m": "maia-inference", "stockfish-play": "stockfish-play", "stockfish-analysis": "stockfish-analysis" }),
     });
     supervisor = engines;
+    startupCleanups.push({ name: "engines", release: () => engines.shutdown() });
     exchangeArtifact = (instanceId) => instanceId !== "maia-inference" || engines.artifact("maia-5m")?.kind === "container";
     // An optional engine that cannot start leaves its instance unavailable; it never blocks startup.
     await Promise.allSettled([engines.start("maia-5m"), engines.start("stockfish-play"), engines.start("stockfish-analysis")]);
@@ -753,7 +770,9 @@ async function composeServices(
     availability: botAvailability,
   });
   const botProbe = botOpponent.probe().catch(() => undefined);
+  startupCleanups.push({ name: "bot startup probe", release: () => botProbe });
   const boundedTargets = createBoundedTargetBackgroundService();
+  startupCleanups.push({ name: "bounded targets", release: () => boundedTargets.close() });
   const boundedTargetPolicy = new BoundedTargetPolicyCompositionOperation({
     targets: boundedTargets,
     scheduler: providers.scheduler,
@@ -768,6 +787,7 @@ async function composeServices(
     retry: APPLICATION_EVIDENCE_RETRY_POLICY,
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
   });
+  startupCleanups.push({ name: "evidence queue", release: () => evidenceQueue.close() });
   // rfc/review-evidence-compiler.md §4.1: the one application-lifetime Review coordinator. It shares
   // the application's single provider scheduler and never enqueues on the evidence queue. Explicit
   // 1.0 profile bounds; no implicit unbounded default exists.
@@ -876,6 +896,7 @@ async function composeServices(
     availability: () => providerHealth.exchangeOperationAvailability("stockfish.principal_variation@1"),
     ...(voiceProvider === undefined ? {} : { voice: (view, sentence, signal) => voiceProvider.render({ scope: "hint", rendered: view }, options.voicePersona ?? "Clear, concise Tabiya voice. Do not add chess claims.", sentence, "hint", signal) }),
   });
+  startupCleanups.push({ name: "hints", release: () => hints.close() });
   const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, voiceProvider, options.voicePersona, corpusSource, repertoires, ttsProvider, reasoningReviewProvider, classrooms, openingCatalogue, principles, learnerProfile, new TheoryLibrary({ packs: registry, shapes, principles, openingCatalogue }), campaigns, hints, trainingSets);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
@@ -916,21 +937,17 @@ async function composeServices(
   const reconciliation = storage.reconcileLongitudinalJobs();
   let worker: LongitudinalProjectionWorker | undefined;
   if (composition.kind === "worker") {
-    try {
-      worker = await LongitudinalProjectionWorker.start({
-        database: fileBackedDatabaseIdentity(storage.databasePath),
-        storageVersion: STORAGE_VERSION,
-        config: workerConfig,
-        ...(options.longitudinalWorkerEntry === undefined ? {} : { threadUrl: options.longitudinalWorkerEntry }),
-      });
-    } catch (error) {
-      await evidenceQueue.close();
-      await botProbe;
-      storage.close();
-      await supervisor?.shutdown();
-      throw error;
-    }
+    worker = await LongitudinalProjectionWorker.start({
+      database: fileBackedDatabaseIdentity(storage.databasePath),
+      storageVersion: STORAGE_VERSION,
+      config: workerConfig,
+      ...(options.longitudinalWorkerEntry === undefined ? {} : { threadUrl: options.longitudinalWorkerEntry }),
+    });
     const started = worker;
+    startupCleanups.push({ name: "projection worker", release: async () => {
+      storage.setLongitudinalWakeListener(undefined);
+      await started.drain();
+    } });
     storage.setLongitudinalWakeListener(() => started.wake());
   }
   let draining = false;

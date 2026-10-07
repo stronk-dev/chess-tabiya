@@ -39,6 +39,16 @@ generation, artifact and transcript. Shutdown stops each physical process once. 
 two identical NNUE networks inside the unchanged 512 MiB server limit; searches still state/reset
 their own options and cannot overlap on that process.
 
+Failed application startup releases acquired resources before rejecting readiness, not only the
+SQLite connection. A private construction-time cleanup list owns the provider registry, native
+engines, bot probe, bounded-target service, evidence queue, hints and required projection worker
+as they are created. It unwinds in reverse acquisition order, with storage last. A failed cleanup
+is reported by resource name and does not stop the remaining releases or replace the original
+startup error. Success clears this list and transfers ownership to the existing application close.
+`make application-startup-cleanup-check` exercises real Stockfish startup, invalid valence and
+Campaign documents, a failed worker, cleanup failure and successful restart on the same database.
+The explicitly unavailable Maia arm is not model-play or bot-calibration proof.
+
 Application startup reads the resolved launched binary in 64 KiB chunks through the server's
 standard-library SHA-256 adapter. Permanent tests compare it with the unchanged runtime
 `digestEngineBinary` fixed-domain authority, including chunk/padding boundaries and failed reads.

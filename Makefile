@@ -3532,6 +3532,11 @@ appliance-drill-staged:
 application-readiness-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-appliance.test.ts apps/server/src/longitudinal-worker.test.ts apps/server/src/config.test.ts
 
+.PHONY: application-startup-cleanup-check
+application-startup-cleanup-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-startup-cleanup.test.ts
+	$(MAKE) typecheck
+
 .PHONY: application-security-check application-security-browser
 application-security-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-security.test.ts apps/server/src/http-representation.test.ts apps/server/src/http-streaming.test.ts apps/server/src/http-ingress.test.ts apps/server/src/live-session.test.ts apps/server/src/config.test.ts

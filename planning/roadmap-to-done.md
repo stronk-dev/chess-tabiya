@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]] and [[D3542]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]] and [[D3545]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -67,6 +67,20 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 failed-start cleanup closeout (D3545): four native predecessor controls
+prove that a startup refusal leaves real Stockfish running. The application now
+releases each acquired service in reverse order, keeps storage last and preserves
+the exact startup error even if cleanup fails. Five native controls cover valence,
+Campaign and worker refusal, failed release and subsequent successful startup on
+the same database. Normal `make verify-awake` passes clean types, 3,472 software /
+seven performance / 227 content tests, downstream contracts and governance.
+Rebuilt `make test-browser-ci-awake` passes 157 journeys, one existing optional
+Maia skip, zero retries, all 150 exact-input and 112 composition cells. D3543,
+D3510 and D3532's earlier intermittent causes remain unlocated and open. This
+closes one production lifecycle defect, not a full capability, milestone, RFC,
+remote CI or release obligation. The fourteen-area product inventory above remains
+current; official graduated packs are still zero.
 
 2026-10-08 Profile evidence-trail closeout (D3541/D3542): opening/observation
 details paginate with retry and stale/mismatched-page refusal. A cited move opens

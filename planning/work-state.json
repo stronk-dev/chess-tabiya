@@ -29298,11 +29298,12 @@
     },
     {
       "id": "D3545",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:95c70f17cd12adcb98548115bcddcfda520c7c980fd600be9f0834a42990ebcc",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b2a5338b7e4df05fd2867d327858db01a86972fe31ba703553bc67691a40a238",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "apps/server/src/application-startup-cleanup.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

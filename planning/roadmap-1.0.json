@@ -684,10 +684,10 @@
           "operations"
         ],
         "dependsOn": [],
-        "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the browser repair and the narrowed stable-governance topology are implemented but not remotely discharged.",
+        "nextAction": "Keep every new live row assigned at creation, diagnose D3543/D3510/D3532 without relaxed gates, and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; complete operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
-          "at": "2026-10-07",
-          "summary": "D3511 repairs original-response-body ownership in all sixteen Theory HTTP fixtures, preserving source/authentication/disclosure/refusal/cancellation assertions and the intentional aborted request. Status-only checks await delivery and propagate body errors; five controls include native streaming HTTP and normal shutdown. The focused normal gate passes 120 tests / five files; fresh full software passes clean types, 3,403 tests / 345 files, seven isolated performance tests and downstream build/contracts. No production lifecycle, global dispatcher, keep-alive setting or timeout changes. This closes a concrete fixture defect, not D3510's unlocated earlier timeout, which remains doing. D3428's preceding bounded compiler hook and genuine semantic/type-error controls remain; required governance is stable repository invariants, draft-RFC evidence opt-in. Software/governance/release jobs retain depth-two checkout and refuse missing parent history; no verification-time fetch or pre-push gate is added. Routine metadata/hash/state/receipt upkeep is automatic and all 1,691 live rows remain assigned. The original search capture remains live with eighteen unchanged executor sources. A paired green GitHub verify/browser run on the exact pushed revision still awaits authorized publication; no fresh content/browser/native-release proof or milestone/capability/full-1.0 completion follows.",
+          "at": "2026-10-08",
+          "summary": "D3545 closes failed production startup ownership: four native predecessor controls fail, then five repaired controls prove actual Stockfish shutdown, exact valence/Campaign errors, continued cleanup after a release error, worker refusal and same-database restart. Successful application close is unchanged. D3544 owns late Support test construction; D3511 owns original Theory response bodies. Final normal verify-awake passes clean types, 3,472 software / seven performance / 227 content tests and downstream contracts/governance. Sequential rebuilt browser CI passes 157 journeys, one existing optional Maia skip, zero retries, all 150 exact-input and 112 composition cells. D3543/D3510/D3532 remain open because their original intermittent causes are not located. All 1,700 live rows are assigned; 462 historical prose-only closeouts remain. No pack graduates, full milestone/capability/RFC completes, or remote CI/release result is claimed. Exact pushed-revision GitHub verify/browser and complete operator journeys remain separate obligations.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -700,6 +700,9 @@
             "tools/verify-scaffold.test.mjs",
             "tools/capability-history.mjs",
             "docs/testing.md",
+            "docs/engine-workers.md",
+            "apps/server/src/application.ts",
+            "apps/server/src/application-startup-cleanup.test.ts",
             "planning/work-state.json",
             "planning/exploration/log.md",
             "planning/pack-capability-contract/integration-2026-09-30.md",
@@ -709,6 +712,11 @@
             "apps/server/src/http-response.test.ts"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3545",
+              "digest": "sha256:b2a5338b7e4df05fd2867d327858db01a86972fe31ba703553bc67691a40a238"
+            },
             {
               "kind": "work_state",
               "id": "D3076",
