@@ -7,6 +7,11 @@ import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { responseStatus } from "./http-response.test-support.js";
 import { ShapeRegistry } from "./shape-registry.js";
+import { PrincipleRegistry } from "./principle-registry.js";
+import { PackRegistry } from "./pack-registry.js";
+import { TrainingSetRegistry } from "./training-set-registry.js";
+import { CampaignRegistry } from "./campaign-registry.js";
+import { applicationFixture } from "./application-fixture.test-support.js";
 
 const FEN = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
 const modules = ["sight_on_request", "threat_radar", "blunder_prevention", "structure_nudge"] as const;
@@ -15,23 +20,46 @@ const faults = ["missing_policy", "impossible_latency", "extra_raw_binding"] as 
 type Fault = typeof faults[number];
 const originalCompile = execution.compileEvidenceConsumerExecution;
 const originalRoute = routes.invokeEvidenceValueRoute;
-let fixture: ChessTabiyaApplication | undefined;
+let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | undefined;
 let setupElapsedMs = 0;
 beforeEach(async () => {
   // Fresh application construction is fixture setup, not a module-operation assertion.
   // Keep Vitest's normal hook budget and the unchanged five-second test budget separate.
   const started = performance.now();
+  const phases: string[] = [];
+  const phase = (label: string) => phases.push(`${Math.round(performance.now() - started)}ms ${label}`);
+  const observe = async <T>(name: string, load: () => Promise<T>): Promise<T> => {
+    phase(`${name} start`);
+    try { return await load(); }
+    finally { phase(`${name} settled`); }
+  };
+  // Observe the real loaders, never substitute installed content or validation with a fixture.
+  const shapeLoad = ShapeRegistry.loadDefault;
+  const principleLoad = PrincipleRegistry.loadDefault;
+  const packLoad = PackRegistry.loadDefault;
+  const packBuild = PackRegistry.fromDocuments;
+  const trainingLoad = TrainingSetRegistry.loadDefault;
+  const campaignLoad = CampaignRegistry.loadDefault;
+  vi.spyOn(ShapeRegistry, "loadDefault").mockImplementation((...args) => observe("shapes", () => shapeLoad(...args)));
+  vi.spyOn(PrincipleRegistry, "loadDefault").mockImplementation((...args) => observe("principles", () => principleLoad(...args)));
+  vi.spyOn(PackRegistry, "loadDefault").mockImplementation((...args) => observe("pack files", () => packLoad(...args)));
+  vi.spyOn(PackRegistry, "fromDocuments").mockImplementation((...args) => observe("pack validation/construction", () => packBuild(...args)));
+  vi.spyOn(TrainingSetRegistry, "loadDefault").mockImplementation((...args) => observe("training sets", () => trainingLoad(...args)));
+  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation((...args) => observe("campaigns", () => campaignLoad(...args)));
   let ready = false;
-  onTestFailed(() => console.error(`Local Support setup: ${ready ? `application ready in ${setupElapsedMs}ms` : "application construction did not finish"}`));
-  fixture = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
+  onTestFailed(() => console.error(`Local Support setup: ${ready ? `application ready in ${setupElapsedMs}ms` : "application construction did not finish"}; ${phases.join(" → ")}`));
+  const owned = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
+  fixture = owned;
+  await owned.ready;
+  if (fixture !== owned) return;
   setupElapsedMs = Math.round(performance.now() - started);
   ready = true;
 });
 afterEach(async () => {
   vi.restoreAllMocks();
-  const application = fixture;
+  const owned = fixture;
   fixture = undefined;
-  await application?.close();
+  await owned?.close();
 });
 
 async function control(module: LocalModule, fault?: Fault, disclose = true) {
@@ -41,13 +69,14 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
   boundary(`application ready (setup ${setupElapsedMs}ms)`);
   onTestFailed(() => console.error(`Local Support (${module}) lifecycle: ${boundaries.join(" → ")}`));
   vi.spyOn(console, "info").mockImplementation(() => {});
-  const application = fixture;
-  if (application === undefined) throw new Error("Local Support application fixture is missing");
+  const owned = fixture;
+  const application = owned?.current();
+  if (owned === undefined || application === undefined) throw new Error("Local Support application fixture is missing");
   const close = async () => {
-    if (fixture !== application) return;
+    if (fixture !== owned) return;
     fixture = undefined;
     boundary("close application");
-    await application.close();
+    await owned.close();
     boundary("application closed");
   };
   try {

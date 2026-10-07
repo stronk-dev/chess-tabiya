@@ -85,9 +85,16 @@ cleanup remain owned by Playwright. This fixture ownership does not prove the ca
 
 Local Support HTTP tests construct a fresh application in `beforeEach` and release it in
 `afterEach`, with normal runner hook budgets and unchanged five-second operation-test budgets.
+The test fixture owns the pending construction from the start. Teardown hides its handle
+immediately and awaits the eventual application close exactly once, including construction that
+finishes after a setup timeout. It never publishes that late application into the next test.
+`make application-fixture-check` proves pending, ready, rejected and failed-shutdown ownership
+without artificial sleeps, including closure of a real late-arriving listening server.
 Every response body is consumed before teardown. Failure diagnostics distinguish application
-construction from listen, authentication, module requests and shutdown. A later passing run does
-not establish the cause of an earlier timeout.
+construction's shape/principle/pack/training/Campaign phases from listen, authentication, module
+requests and shutdown. The installed Campaign control also distinguishes pack loading from
+Campaign loading. These observers call the original loaders and retain real installed validation.
+A later passing run does not establish the cause of an earlier timeout.
 
 Pre-commit process checks intentionally do not read the shared working tree. The hook materializes
 the Git index and runs register, status, work, roadmap and intent checks inside that temporary

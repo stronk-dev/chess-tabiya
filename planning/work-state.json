@@ -29286,6 +29286,23 @@
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
+    },
+    {
+      "id": "D3544",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:82fa1c839536670f220f6f6d1f98ac90e77c5e668b8deb0cdd47172c0295b53e",
+      "uxItems": [],
+      "evidence": "apps/server/src/application-fixture.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3545",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:95c70f17cd12adcb98548115bcddcfda520c7c980fd600be9f0834a42990ebcc",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

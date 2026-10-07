@@ -1748,8 +1748,12 @@ theory-binding-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts packages/runtime/src/module-query.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts
 
 .PHONY: local-module-execution-check
+.PHONY: application-fixture-check
+application-fixture-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-fixture.test.ts
+
 local-module-execution-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-response.test.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-fixture.test.ts apps/server/src/http-response.test.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
 	$(MAKE) typecheck
 
 .PHONY: hint-empty-response-check
