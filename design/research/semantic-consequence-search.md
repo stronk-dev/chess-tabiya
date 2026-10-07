@@ -876,3 +876,37 @@ executor source files, original clocks or source refusals is changed by this
 reader. D3262 remains doing; draft RFC criterion 23 / D1, consumer/browser/source
 memory and production-profile admission remain open. `[V]` original command,
 cost-plan range and native capture metadata; Make targets and research worktree.
+
+## 2026-10-07 — complete configured-model fresh/frozen sensitivity
+
+Both already captured Maia prefixes now have a complete descriptive comparison,
+without new inference or reusing a duration as a new measurement. The reader
+requires all 2,316 candidate/setting/horizon/regime cases and checks all 772
+cold/warm pairs. The immutable six-source chain binds the exact candidate-wide
+model history, not a target-specific semantic reserve or a FEN-only policy cache.
+Sixty-seven controls and normal immutable freeze/read-only reconstruction pass.
+`[V]` `tools/d3262-search-calibration/cost-model-sensitivity.mjs`, its tests,
+`planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`
+§continuation and immutable `d3262-cost-live-maia-sensitivity-2026-10-07.json.gz`.
+
+All 364 named target/prefix cells preserve full selected paths, executed witnesses,
+omissions and outcomes. All 358 target-bearing candidate/prefix policies preserve
+their literal conditional/product weights and joint-rule status; 28 no-target
+entries retain policy-not-requested, not zero mass. Aggregate layer values differ
+on 40/179 prefix-0.80 and 72/179 prefix-0.90 policies, by at most
+3.3306690738754696e-16 / 4.440892098500626e-16 respectively. Literal differences
+remain visible without normalization, a changed verdict or invented source cause.
+The comparison is against each prefix's own frozen arm, not cross-prefix equality.
+All 772 cache pairs preserve compiled evidence while 3,568 explicit executed→cached
+node-custody transitions are checked separately. Fresh queries/nodes, changed
+evidence and extended terminal policies refuse. `[V]` synthesis groups/policies/cells,
+literal-value audit, warm-provenance and terminal-absorption controls.
+
+This is a stable provider-policy/target-outcome checkpoint, not all search families
+calibrated, a reinterpretation of the prior weighted semantic projection, human
+frequency, usefulness, production cache latency or an explanation of an engine's
+choice. The eighteen-setting headline and original recursive run remain unchanged.
+Remaining full populations, consumer/browser/source/memory qualification and
+reviewed profile admission keep D3262 doing. Routine metadata/hash upkeep is
+automatic, with no owner question. `[V]` reader scope, frozen plan and current
+roadmap; synthesis does not promote the draft search RFC or a product capability.

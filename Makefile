@@ -912,6 +912,14 @@ semantic-search-cost-recursive-sensitivity-freeze: semantic-search-cost-recursiv
 semantic-search-cost-recursive-sensitivity-check: semantic-search-cost-recursive-sensitivity-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-recursive-sensitivity.mjs $(if $(SEARCH_BUDGET),--budget "$(SEARCH_BUDGET)",) --archives "$(ARCHIVES)" --out "$(OUT)"
 
+.PHONY: semantic-search-cost-model-sensitivity-test semantic-search-cost-model-sensitivity-freeze semantic-search-cost-model-sensitivity-check
+semantic-search-cost-model-sensitivity-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-model-sensitivity.test.mjs
+semantic-search-cost-model-sensitivity-freeze: semantic-search-cost-model-sensitivity-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-model-sensitivity.mjs --write --archives "$(ARCHIVES)" --out "$(OUT)"
+semantic-search-cost-model-sensitivity-check: semantic-search-cost-model-sensitivity-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-model-sensitivity.mjs --archives "$(ARCHIVES)" --out "$(OUT)"
+
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 .PHONY: semantic-search-timed-table-audit-test semantic-search-timed-table-audit-freeze semantic-search-timed-table-audit-check
 # Disposable D3508 literal-source audit; never changes live execution or admission.

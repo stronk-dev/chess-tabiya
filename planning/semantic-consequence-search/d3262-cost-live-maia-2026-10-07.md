@@ -136,3 +136,63 @@ contracts and full governance pass; all 1,689 live rows remain routed, with zero
 untriaged/unrouted. Final source/Make bytes match the tested index; explicit owned
 staging and ordinary hooks precede commit. `[V]` terminal Make output, canonical
 work-state/roadmap receipts and append-only exploration log. No push or goal pause.
+
+## 2026-10-07 continuation — full fresh/frozen model comparison
+
+The separate disposable reader now checks the four existing immutable captures,
+not another inference run. All 2,316 cases, 772 cold/warm pairs, 193 candidates
+per prefix and 364 named target/setting cells are retained. The six-file frozen
+checksum chain binds each candidate's own first prefix, third/fourth histories,
+literal conditional/product masses and joint stop audit. Six historical first
+source receipts outside this 193-candidate frame remain in their source archive;
+they do not expand the measured denominator. `[V]`
+`tools/d3262-search-calibration/cost-model-sensitivity.mjs` and
+`d3262-cost-live-maia-sensitivity-2026-10-07.json.gz`.
+
+All 364 target cells preserve their exact frontier, executed witnesses,
+preparation/defence omissions and grounded outcomes. All 358 target-bearing
+candidate/prefix policies preserve their literal edge weights and joint-rule
+status. The other 28 candidate/prefix entries retain `no_target`, with policy
+not requested: these are not zero-coverage policies. Aggregate layer values
+differ literally on 40/179 policies at prefix 0.80 and 72/179 at 0.90; maximum
+absolute differences are respectively 3.3306690738754696e-16 and
+4.440892098500626e-16. No edge conditional/product weight or threshold verdict
+changes. Values are not rounded, renormalized or attributed to changed model
+behavior. This describes each prefix versus its own frozen arm; it is not an
+assertion that the two prefixes choose the same frontier. `[V]` immutable
+synthesis `groups`, `policies`, `cells`; read-only literal-value comparison.
+
+All 772 cold/warm pairs preserve compiled policy/target evidence. Exactly 3,568
+node states change from `executed` to `cached`; this explicit dependency-custody
+transition is checked separately, not silently removed from the original
+receipts. A fresh warm query or node, changed node identity, selected move,
+probability, coverage or target observation refuses. Two-ply and offline cases
+remain inventory/cache checks, never borrowed four-ply verdicts. Failed,
+exhausted and absorbing candidates retain typed unpaired/partial states; terminal
+edge mass carries forward without a further policy query. `[V]` synthesis and
+sixty-seven permanent reader controls, including both early terminal layers,
+one-ULP controls and warm-provenance falsifiers.
+
+The immutable 995,814-byte gzip artifact hashes to
+`d59a30fa053308cd701f122b12385a64239a34eb52ed690af1850e56bf70761f`.
+Its canonical decoded synthesis hashes to
+`f935ceb0e95b59713e3c449c160d5ddccce08b75ac6ec72dca006cfe28303275`.
+Normal freeze and **read-only reconstruction with the same reader**
+both terminate zero. That reconstruction is custody/synthesis verification,
+not another independent chess oracle; the earlier full Python/Torch source
+replays remain separately recorded above. `[V]` terminal Make results and
+artifact bytes.
+
+```sh
+make semantic-search-cost-model-sensitivity-test
+make semantic-search-cost-model-sensitivity-check ARCHIVES=d3262-cost-live-maia-prefix080-initial-2026-10-06.json.gz,d3262-cost-live-maia-prefix080-population-2026-10-06.json.gz,d3262-cost-live-maia-prefix090-initial-2026-10-07.json.gz,d3262-cost-live-maia-prefix090-population-2026-10-07.json.gz OUT=planning/semantic-consequence-search/d3262-cost-live-maia-sensitivity-2026-10-07.json.gz
+```
+
+No completed setting is captured twice and no timing is restamped. The overall
+headline remains eighteen complete settings / 20,844 of 61,374 cases, with the
+original five-setting recursive capture still in flight at this checkpoint.
+This reader does not reinterpret the older weighted target-semantic projection,
+prove usefulness, attribute an engine reason, admit a source, select a production
+profile or discharge actual consumer/cache/browser or broader model-memory scope.
+D3262 remains doing; routine metadata/hash/state flow-back is automatic. `[V]`
+frozen cost plan, source snapshots, original live handle and reader's declared scope.

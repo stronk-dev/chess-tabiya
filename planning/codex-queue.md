@@ -1,25 +1,30 @@
 # Codex queue — rewritten in full 2026-08-16
 
-[[D3262]] now retains five complete setting populations: depth-8 PV,
-depth-8/width-two/top-eight first-event and recursive reserves, and both actual
-ordered-history configured Maia prefixes. Each retains all 193 candidates /
-66 roots, both horizons and cold/warm/offline: 5,790/61,374 total cases. The
-disposable runner supports all 53 settings, not 53 measured populations.
-The two model settings add 2,316 independently replayed cases / 18,266 target
-observations, literal conditional products/joint residuals, terminal absorption
-and unknown partial coverage. Thirteen resealed corruption refusals per model
-batch pass; 137 execution/source and eight synthesis controls pass. Cold four-ply
-model p95 exceeds 1,500 ms in every named phase; local prefixes do not universally
-satisfy joint coverage. Warm timings do not establish a browser pass.
-Next capture the remaining 48 setting populations with matching cold dependencies,
-compare fresh outcomes with the frozen semantic reference, measure individual
-source/model memory and bind actual browser identities. Do not re-run/restamp the
-five complete populations or borrow old durations. D3262 remains doing, the search
-RFC draft; this is **not full calibration, a browser proof or a production profile**.
-Normal commands, full populations and scope:
-`planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
-`d3262-cost-live-semantic-2026-10-06.md` and `d3262-cost-live-pv-depth8-2026-10-06.md`.
-Routine metadata/hash and tracker maintenance remains automatic.
+[[D3262]] retains eighteen complete populations / 20,844 of 61,374 cases:
+all five primary families have a population and all nine engine budget/width
+settings are complete. The original next five depth-eight recursive settings are
+capturing separately; do not restart on observation timeout or count incomplete
+capture as delivered. Thirty-five settings remain in scope, including seventeen
+recursive primary settings, seventeen first-reply-reserve diagnostics and the
+complete-local diagnostic. Do not repeat the already completed depth8/top2/top8
+first-reserve or recursive setting.
+
+Both ordered-history Maia prefixes now have complete fresh/frozen synthesis:
+2,316 cases / 364 target cells / 772 cold-warm pairs. Sixty-seven reader controls
+and immutable read-only reconstruction pass. Exact paths, witnesses, omissions,
+outcomes, per-edge weights and joint-rule statuses match each own frozen arm;
+tiny aggregate layer differences remain literal, not changed chess verdicts.
+Explicit executed→cached node custody is checked separately from compiled
+policy/target evidence. No-target is policy-not-requested, not zero coverage.
+Original captures, source refusals and clocks remain unchanged. This closes the
+model policy/outcome comparison slice, not weighted semantic-projection,
+consumer/cache/browser/source-memory qualification or profile admission.
+Recursive tooling already requires all six settings at a budget; pack and
+independently replay the original capture only after its exact handle terminates.
+Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
+`d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
+D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is
+automatic, no approval question and no production/RFC/1.0 promotion.
 
 Completed [[D3503]]: the full D3497 browser before/after populations each retain
 880 rows/60 baselines. Shipping 50 ms polling preserves the 70-second pending

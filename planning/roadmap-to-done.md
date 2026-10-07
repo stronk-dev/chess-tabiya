@@ -19,6 +19,21 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 complete configured-Maia comparison: sixty-seven controls and immutable
+read-only reconstruction pass over 2,316 cases / 364 named target cells / 772
+cold-warm pairs. All target histories, witnesses, omissions and outcomes match;
+all 358 policy edge-weight sets and joint-rule statuses match their own frozen
+arms. Tiny literal aggregate differences are retained without changed verdicts.
+Twenty-eight no-target entries remain policy-not-requested; 3,568 explicit
+executed→cached node-custody transitions are checked separately from identical
+compiled evidence. No inference is repeated, original clocks are unchanged and
+no completed setting is counted twice. The overall headline remains eighteen
+settings / 20,844 of 61,374 cases, with the original five-setting recursive capture
+still in flight. Model-weight semantic qualification, complete consumer/cache/browser
+scope, source memory and reviewed production-profile admission remain open.
+Receipt: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`
+§continuation; routine metadata/hash/state upkeep is automatic.
+
 2026-10-07 recursive comparison tooling: sixty-one controls now bind all 3,276
 frozen target/setting frontiers and all 182 live target-frontier bindings from the
 previously retained complete recursive top-two population. The reader refuses
