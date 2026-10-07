@@ -865,9 +865,14 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-07",
-          "summary": "D3262 now retains ten complete live setting populations / 11,580 of 61,374 cases, all 193 candidates, two horizons and three regimes. All five primary families have a population and all three PV budgets are complete. D3505 closes exact PV source/query/target-population replay with 26 boundary controls and eleven corruption refusals per batch. D3506 forbids fresh warm queries after failed cold sources: the complete refused original 2,316-case capture stays lossless, depth12 projection binds original parent bytes, and the separate complete repaired 100-ms setting retains four invalid cold tables/four missing warm receipts and zero fresh warm queries. Independent PV observations are 728/728/720. Fresh/frozen PV sensitivity preserves literal paths, raw score domains, ranks and outcomes without causal attribution. Earlier source/timing/summary bytes stay unchanged. Full exact-index software and content pass; routine hashes and trackers flow back automatically. Remaining 43 settings, non-PV sensitivity, individual source/model memory, consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. No production UI/API behavior, capability, milestone, content or full-1.0 promotion.",
+          "summary": "D3262 now retains twelve complete live setting populations / 13,896 of 61,374 cases, all 193 candidates, two horizons and three regimes. All five primary families have a population; all three PV budgets and all three depth-eight engine widths are complete. The new top4/top8 batch independently replays all 2,316 cases / 237,198 target observations and refuses six corruptions. All 546 width/target cells retain exact frozen third/fourth paths, witnesses, coverage and outcomes; all 1,158 cold/warm pairs retain identical compiled evidence. Forty synthesis/source controls, thirty independent boundary controls, byte-identical reconstruction, full exact-index software/content and governance pass. Wider cold server p95 exceeds the 1,500-ms reference in every named phase; warm top8 middlegame also exceeds it, not a browser/pending gate reading. Original source/timing/refused-parent bytes and D3504-D3506 closeouts stay preserved. Source/package/receipt/anchor maintenance is automatic. Remaining 41 settings, other-budget/family sensitivity, individual source/model memory, consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. Final scoped flow-back and ordinary hooks precede checkpoint commit. No production UI/API behavior, capability, milestone, content or full-1.0 promotion.",
           "impact": "advanced",
           "evidence": [
+            "planning/semantic-consequence-search/d3262-cost-live-engine-widths-2026-10-07.md",
+            "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-top4-top8-2026-10-07.json.gz",
+            "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-width-sensitivity-2026-10-07.json",
+            "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-width-summary-2026-10-07.json",
+            "planning/semantic-consequence-search/d3262-cost-engine-width-software-2026-10-07.json",
             "planning/semantic-consequence-search/d3262-cost-live-pv-budgets-2026-10-07.md",
             "planning/semantic-consequence-search/d3262-cost-live-pv-rejected-warm-miss-2026-10-07.json.gz",
             "planning/semantic-consequence-search/d3262-cost-live-pv-depth12-projection-2026-10-07.json.gz",
@@ -1540,7 +1545,7 @@
             {
               "kind": "work_state",
               "id": "D3262",
-              "digest": "sha256:23421554918d759479ceb72d18bb79168d854d86ec8975a281de7b912b289bcc"
+              "digest": "sha256:546ed9d4b9df4869ed6ea76bdb539ac9f534dbc87d082b45ef1b50452cd48c3b"
             },
             {
               "kind": "work_state",

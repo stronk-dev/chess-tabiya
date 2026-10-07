@@ -878,6 +878,14 @@ semantic-search-cost-pv-sensitivity-freeze: semantic-search-cost-pv-sensitivity-
 semantic-search-cost-pv-sensitivity-check: semantic-search-cost-pv-sensitivity-test
 	$(CI_NODE) tools/d3262-search-calibration/cost-pv-sensitivity.mjs --archives "$(ARCHIVES)" --out "$(OUT)"
 
+.PHONY: semantic-search-cost-engine-width-sensitivity-test semantic-search-cost-engine-width-sensitivity-freeze semantic-search-cost-engine-width-sensitivity-check
+semantic-search-cost-engine-width-sensitivity-test: semantic-search-cost-build
+	$(CI_NODE) --test tools/d3262-search-calibration/cost-engine-width-sensitivity.test.mjs
+semantic-search-cost-engine-width-sensitivity-freeze: semantic-search-cost-engine-width-sensitivity-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-engine-width-sensitivity.mjs --write --archives "$(ARCHIVES)" --out "$(OUT)"
+semantic-search-cost-engine-width-sensitivity-check: semantic-search-cost-engine-width-sensitivity-test
+	$(CI_NODE) tools/d3262-search-calibration/cost-engine-width-sensitivity.mjs --archives "$(ARCHIVES)" --out "$(OUT)"
+
 .PHONY: semantic-search-five-approach-test semantic-search-five-approach-update semantic-search-five-approach-check semantic-search-five-approach-independent-test semantic-search-five-approach-independent
 semantic-search-five-approach-test: semantic-search-target-v2-build
 	$(CI_NODE) --test tools/d3262-search-calibration/coherent-five-approach-comparison.test.mjs

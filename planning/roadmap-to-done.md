@@ -19,6 +19,21 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 engine-width continuation: all three depth-eight engine widths now
+retain complete populations. Total admitted cost evidence reaches **13,896 /
+61,374**, twelve of 53 settings. The new top4/top8 batch independently replays
+all 2,316 cases / 237,198 target observations and refuses six corruptions.
+Complete fresh/frozen synthesis retains all 546 named width/target cells with
+unchanged exact paths, witnesses, coverage and outcomes, plus 1,158 identical
+cold/warm compiled pairs. Wider cold p95 exceeds the existing 1,500-ms reference
+in every named phase; warm top8 middlegame also exceeds it. These server results
+do not measure honest-pending or dependency-to-visible browser gates. Remaining
+41 settings, other-budget/family sensitivity, source/model memory, consumer scope
+and browser/profile qualification keep D3262 doing and the RFC draft. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-engine-widths-2026-10-07.md`.
+Routine metadata/receipts/tracker updates are automatic. No milestone,
+capability, content or full-1.0 promotion follows.
+
 2026-10-07 provider-line budget continuation: all three PV budgets now retain
 complete populations. Total admitted search-cost evidence reaches **11,580 /
 61,374**, ten of 53 settings, not full profile calibration. D3505 closes the

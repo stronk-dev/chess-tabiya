@@ -38,6 +38,38 @@ def engine_fixture(horizon=4, cap=25000):
     return row, raw
 
 
+def wide_engine_fixture(width, horizon=4, budget="depth8", targets=("test",)):
+    """Legal synthetic rank receipts; assert nontrivial full-width cardinality.
+
+    Rank order is reverse lexical; the first preparation loop is deliberately
+    canonical, while both deeper loops must retain source rank order.
+    """
+    dependencies, observed, seen = [], [], {}
+    def selected(history):
+        board = checker["board_at"](root, history)
+        fen = board.fen(en_passant="legal")
+        if fen not in seen:
+            entries = [dict(moveUci=m.uci()) for m in sorted(board.legal_moves, key=lambda m: m.uci(), reverse=True)[:8]]
+            dependencies.append(dict(operands=dict(provider="stockfish", fen=fen, budget=budget, multiPv=8),
+                                     receipt=dict(result=dict(entries=entries))))
+            seen[fen] = [x["moveUci"] for x in entries[:width]]
+        return seen[fen]
+    first = selected(["e2e4"])
+    for tid in targets:
+        for preparation in sorted(first):
+            second = ["e2e4", preparation]
+            observed.append(dict(targetId=tid, history=second))
+            if horizon == 2:
+                continue
+            for defence in selected(second):
+                third = second + [defence]
+                observed.append(dict(targetId=tid, history=third))
+                for leaf in selected(third):
+                    observed.append(dict(targetId=tid, history=third + [leaf]))
+    return dict(setting=f"engine:{budget}:top{width}", candidateUci="e2e4", horizon=horizon), dict(
+        dependencies=dependencies, result=dict(nodeCap=25000, visited=len(observed), providerPv=None, observations=observed))
+
+
 class PopulationTests(unittest.TestCase):
     def test_pv_exact_root_query_for_all_budgets_and_horizons(self):
         for budget in ["depth8", "depth12", "movetime100"]:
@@ -169,6 +201,46 @@ class PopulationTests(unittest.TestCase):
     def test_complete_engine_layers(self):
         row, raw = engine_fixture()
         verify(row, raw, root, {}, ["test"])
+
+    def test_complete_two_four_eight_widths_all_budgets_and_horizons(self):
+        for width in [2, 4, 8]:
+            for budget in ["depth8", "depth12", "movetime100"]:
+                for horizon in [2, 4]:
+                    with self.subTest(width=width, budget=budget, horizon=horizon):
+                        row, raw = wide_engine_fixture(width, horizon, budget)
+                        self.assertEqual(raw["result"]["visited"], width if horizon == 2 else width + width**2 + width**3)
+                        verify(row, raw, root, {}, ["test"])
+
+    def test_wide_two_targets_share_queries_without_losing_observations(self):
+        for width in [4, 8]:
+            with self.subTest(width=width):
+                row, raw = wide_engine_fixture(width, targets=("test", "other"))
+                single_row, single = wide_engine_fixture(width)
+                self.assertEqual(raw["dependencies"], single["dependencies"])
+                self.assertEqual(raw["result"]["visited"], 2 * single["result"]["visited"])
+                verify(row, raw, root, {}, ["test", "other"])
+
+    def test_wide_legal_trim_with_self_consistent_visit_count_refuses(self):
+        for width in [4, 8]:
+            with self.subTest(width=width):
+                row, raw = wide_engine_fixture(width)
+                raw["result"]["observations"].pop()
+                raw["result"]["visited"] -= 1
+                with self.assertRaisesRegex(AssertionError, "false visited count"):
+                    verify(row, raw, root, {}, ["test"])
+
+    def test_wide_rank_order_and_declared_width_cannot_be_changed(self):
+        for mode in ["width", "first_order", "deeper_order"]:
+            with self.subTest(mode=mode):
+                row, raw = wide_engine_fixture(8)
+                if mode == "width":
+                    row["setting"] = "engine:depth8:top4"
+                elif mode == "first_order":
+                    raw["result"]["observations"].reverse()
+                else:
+                    raw["dependencies"][1]["receipt"]["result"]["entries"].reverse()
+                with self.assertRaises(AssertionError):
+                    verify(row, raw, root, {}, ["test"])
 
     def test_two_ply_does_not_request_deeper_source(self):
         row, raw = engine_fixture(2)
