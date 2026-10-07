@@ -752,10 +752,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Complete the accepted evidence/source contracts without filtering remaining refusals. Bot statistics require D3429 numerical-author repair before comparative verdicts: pin mixed cp/mate, fitter bounds, degeneracy, clustered resampling and adjusted tests. D3430 now verifies all historical roots and original authority; D3410 independently holds opening-source repair. The frozen distribution reference, production sampler and complete native ladder remain unchanged/open.",
+        "nextAction": "Complete accepted evidence/source contracts without filtering remaining refusals. Use D3429's primary-source inputs and nine numerical examples to select/cite model/mapping/fitter version, score/mate membership, convergence, whole-game resampling, degeneracy and actual hypothesis/adjusted-test construction before comparative verdicts. D3430 preserves the historical source; D3410 independently holds opening-source repair. Frozen reference, thresholds, production sampler and native ladder remain unchanged/open.",
         "latestCheckpoint": {
-          "at": "2026-10-06",
-          "summary": "D3430 revalidates all 24,000 historical roots and 24 band/window/half cells against immutable original executor/receipt and whole source/chain authority: 1,640 mixed, 78 mate-only roots, 1,391 cp-played mixed roots, 1,056 multi-window games and 30 multi-band games. D3429 records the numerical-contract gap; D3410 separately holds opening-source repair. No reference, threshold, production policy, calibrated label, RFC/capability/milestone promotion.",
+          "at": "2026-10-07",
+          "summary": "D3429 has specific primary-source model/mapping/fitter author inputs and nine synthetic controls for differences, coincidences and flat-root non-identifiability. Complete numerical contract remains held, not adopted. D3430's 24,000 roots retain mixed/mate and game clusters; D3410 separately holds opening-source repair. No source, threshold, policy, fitted/calibrated label, RFC/capability/milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "planning/semantic-convention-provenance/implementation-2026-09-24.md",
@@ -775,7 +775,9 @@
             "planning/bot-roster/calibration-score-domains-2026-10-06.md",
             "planning/bot-roster/calibration-score-domains.json",
             "tools/d2236-bot-calibration-verdict-contract/score-domain-audit.test.ts",
-            "planning/bot-roster/calibration-score-domains-software-2026-10-06.json"
+            "planning/bot-roster/calibration-score-domains-software-2026-10-06.json",
+            "design/research/bot-calibration-verdict-contract.md",
+            "tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs"
           ],
           "anchors": [
             {
@@ -836,7 +838,7 @@
             {
               "kind": "work_state",
               "id": "D3429",
-              "digest": "sha256:38f9c231379de7a9337cc7325c005b374bc71d5abf299d09fb98864ce35baad5"
+              "digest": "sha256:b53996e4b544df980c230e8a6bee1424e1af215410feb032cfd9142c4f413bd1"
             },
             {
               "kind": "work_state",

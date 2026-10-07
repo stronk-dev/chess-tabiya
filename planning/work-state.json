@@ -28261,7 +28261,7 @@
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:38f9c231379de7a9337cc7325c005b374bc71d5abf299d09fb98864ce35baad5",
+      "sourceDigest": "sha256:b53996e4b544df980c230e8a6bee1424e1af215410feb032cfd9142c4f413bd1",
       "uxItems": []
     },
     {
@@ -28954,6 +28954,15 @@
       "sourceDigest": "sha256:093bc0a9c033f5a4cff1dbb269d74386dc4694401bb47d7ee64fe91dae1dce2f",
       "uxItems": [],
       "evidence": "planning/semantic-consequence-search/d3262-cost-live-pv-budgets-2026-10-07.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3507",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:924409635954ce010500b033201a10612f49e2878f02d4e062b26a981ceefd86",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/execution-queue.md",
       "evidenceKind": "path"
     }
   ]

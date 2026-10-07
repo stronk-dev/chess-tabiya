@@ -454,6 +454,20 @@ games make the missing numerical semantics material. [[D3429]] holds metric auth
 into a convenient scalar. No bot, RFC, capability or milestone is promoted. Receipt:
 `planning/bot-roster/calibration-score-domains-2026-10-06.md`.
 
+2026-10-07 bot numerical-author checkpoint: [[D3429]] now has primary-source model/fitter
+inputs and nine executable synthetic counterexamples. Model/mapping/fitter identity now has
+specific versioned source inputs, not a named family as an implementation. Score/mate
+participation, convergence, game-cluster resampling, degeneracy
+and adjusted-test construction still require author repair. No frozen source, threshold, pricing,
+production profile, comparison result or capability is changed. Research:
+`design/research/bot-calibration-verdict-contract.md` §2026-10-07.
+
+2026-10-07 queue reconciliation: [[D3507]] corrects six stale active rows to their existing
+scoped completions (D3342/D3338 source journey; D3330/D3329/D3328 Explorer integration;
+D3323 startup abstention). Historical receipts remain; this prevents duplicate execution, not
+new deployment/provider or 1.0 completion. `planning/platform-alignment/execution-queue.md`
+is reconciled with durable work state.
+
 2026-10-06 calculation retry checkpoint: [[D3427]] retains exact ordered request keys through
 transport or invalid-receipt failure. Real authenticated HTTP/SQLite and built-browser response
 loss replay the original batch/jobs; a later deliberate calculation gets a fresh identity.

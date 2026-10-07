@@ -1874,6 +1874,11 @@ bot-roster-census:
 bot-calibration-verdict-contract:
 	node --test tools/d2236-bot-calibration-verdict-contract/contract.test.mjs
 
+# Disposable D3429 source-formula examples; no calibration or production admission.
+.PHONY: bot-calibration-numerical-author-check
+bot-calibration-numerical-author-check:
+	node --test tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs
+
 .PHONY: bot-calibration-population-check bot-calibration-population bot-calibration-population-report bot-calibration-population-report-update bot-calibration-population-report-check
 bot-calibration-population-check: bot-calibration-verdict-contract
 	$(CI_NODE) node_modules/typescript/bin/tsc --project tools/d2236-bot-calibration-verdict-contract/tsconfig.json

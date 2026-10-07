@@ -3,7 +3,63 @@
 **Question:** [[D2236]], with [[D2234]], [[D2235]] and [[D2237]] as consumers
 **Date:** 2026-09-06
 **Instrument:** `tools/d2236-bot-calibration-verdict-contract/`
-**Status:** verdict vocabulary and frozen reference/pricing established; 2026-10-06 audit finds the numerical metric contract incomplete (D3429); opening-identity population and game ladder remain pending
+**Status:** verdict vocabulary and frozen reference/pricing established; 2026-10-06 numerical-contract hold (D3429) sharpened by the 2026-10-07 primary-source counterexamples below; opening-identity population and game ladder remain pending
+
+### 2026-10-07 primary-source numerical author inputs — D3429
+
+Regan & Haworth's 2011 manuscript separates proxies `y_i = exp(-(delta_i/s)^c)` from
+probabilities. Section 3, printed p4, prefers `p_i = p_0^(1/y_i)` with `sum p_i = 1`, not
+`y_i/sum y`. However, §6's worked percentiling description, printed p7, writes the latter
+normalization. Section 6 also says the reported fit uses percentiling, after rejecting MLE's
+projections. Scaling and equal-top corrections are separate choices. This manuscript alone
+therefore does not pin one implementation of our bounded-MLE contract. `[V]`
+([author-hosted 2011 manuscript](https://cse.buffalo.edu/~regan/papers/pdf/ReHa11c.pdf), §§3–6).
+
+The published AAAI version retains the same mapping and fitting distinction: §3 on p835
+uses the implicit conversion, while §6 on p837 writes direct normalization in its percentiling
+description and identifies percentiling as the method used. The ambiguity is not merely a
+preprint-versus-publication substitution. `[V]`
+([published proceedings PDF](https://ojs.aaai.org/index.php/AAAI/article/view/7951/7810), pp835–837).
+
+The later Regan & Bispo paper gives MLE's objective as `sum_t ln(1/p_t,chosen)` in §IV.A,
+alongside distinct fitting methods. It does not supply our Stockfish cp/mate admission,
+parameter bounds, clustered bootstrap or adjusted-test construction. `[V]` for its fitting
+methods ([author-hosted paper](https://cse.buffalo.edu/~regan/papers/pdf/ReBiNF13av.pdf), §IV);
+`[M]` for the comparison with our incomplete §6 contract.
+
+The disposable `make bot-calibration-numerical-author-check` uses **synthetic dimensionless
+proxies only**, not priced human/bot rows. For `[1, 1/2]`, the implicit mapping solves
+`p_0 + p_0^2 = 1`: approximately `[0.618034, 0.381966]`, versus direct normalization's
+`[0.666667, 0.333333]`. Independent algebraic cases, equal/one-choice cases, permutation,
+finite extreme proxies and invalid-input refusals make that distinction executable.
+Changing to direct normalization must fail the closed-form controls. These are mathematical
+counterexamples, **not a chosen fitter, reusable production implementation or new calibration**.
+`[V]` (`tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs`).
+
+R's official `p.adjust` documentation defines Holm on a family of **p-values**. Naming a
+"Holm-adjusted q05" without a hypothesis/test or interval inversion does not specify the
+calculation. `[V]` for the documented input
+([R stats documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html));
+`[M]` for the missing-contract consequence.
+
+SciPy documents that paired resampling reuses indices and that degenerate BCa bootstrap
+distributions can produce warnings and NaN interval endpoints. Neither is a policy for our
+cross-window game clusters or singular Mahalanobis covariance. `[V]` for those library behaviors
+([SciPy bootstrap documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html));
+`[M]` for the scope distinction. No library/version/default is adopted here.
+
+**Required author repair before comparative results:** select and cite an exact model version,
+including its probability mapping; specify score transformation/units and typed mate participation;
+declare bounded MLE as an extension rather than reproduction if applicable, with objective,
+bounds, starts, tolerances and convergence/refusal cases; fix whole-game resampling and degeneracy
+semantics; define the hypotheses, p-value construction/family and any simultaneous interval
+inversion. Those are algorithmic contract inputs, not a request for routine metadata approval.
+`[M]` (D3429 author-input synthesis; existing obligations in `rfc/bot-roster.md` §6).
+
+The manifest, 24,000-row reference, original pricing journal, required metrics/thresholds and
+production profiles remain unchanged. D3429 stays blocked on numerical author repair, D3410
+separately holds opening-source repair, and no numerical-fit, native ladder, rating or human-like
+verdict follows. `[V]` (unchanged manifest/pricing sources and current work-state).
 
 ### 2026-10-06 numerical-contract and complete-source audit
 
