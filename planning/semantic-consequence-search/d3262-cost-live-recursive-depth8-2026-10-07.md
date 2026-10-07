@@ -153,7 +153,7 @@ Full normal `make verify-software` terminates zero: clean types, 3,398 tests in
 344 files, seven isolated performance cases in four files, and downstream build,
 packaging/release/source/value/capability/migration/matrix/retained-Hint checks.
 Full normal `make roadmap-receipt verify-governance` also terminates zero, with
-all 1,690 live rows routed and zero untriaged/unrouted. Fourteen scaffold controls,
+all 1,690 live rows routed and zero untriaged/unrouted. Thirteen scaffold/CI controls,
 six tier controls, packaging and lefthook validation pass. Only the thirty owned
 research/Make/evidence/tracker files enter the commit; other workers' tests and
 untracked files stay excluded. This is software/governance evidence, not fresh
