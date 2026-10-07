@@ -7,7 +7,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { capabilityId } from "@chess-tabiya/schema";
+import { capabilityId, capabilityKey } from "@chess-tabiya/schema";
 import { CAPABILITY_LIFECYCLE, buildCapabilityRegistry, type CapabilityLifecycleRow } from "@chess-tabiya/runtime";
 import { GENERATED_CAPABILITY_DECLARATIONS } from "../../../../packages/runtime/src/capability/declarations.generated.js";
 
@@ -66,49 +66,38 @@ describe("criterion 19 — the author authorities are inspectable and externally
 });
 
 describe("criterion 13 — the D566 regression", () => {
-  it("a helper-only change to pawn_safe_square's meaning fails at @1, clears at @2, and names the three shapes as judgement", async () => {
+  it("source no-ops preserve compatibility; explicit pawn-safe/outpost successors require shape judgement", async () => {
     const text = read("packages/runtime/src/structure.ts");
     const signature = "function pawnSafetyOnPosition(";
     const brace = text.indexOf("{", text.indexOf(signature) + signature.length);
     const overrides = { "packages/runtime/src/structure.ts": `${text.slice(0, brace + 1)}\n  void "maximal_pawn_reach@2";${text.slice(brace + 1)}` };
 
-    // capability-check fails on the digest mismatch at the pinned version.
+    // Inserting a no-op string does not change a chess outcome or break compatibility.
     const mutated = buildContract({ root: ROOT, overrides }).declarations;
-    const mismatched = compareDeclarations(GENERATED_CAPABILITY_DECLARATIONS, mutated).filter((row) => row.kind === "digest_mismatch").map((row) => row.key);
-    expect(mismatched).toEqual(expect.arrayContaining(["structuralFeature.pawn_safe_square@i:1", "structuralFeature.outpost@i:1"]));
-    expect(mismatched).not.toContain("structuralFeature.isolated_pawn@i:1");
+    expect(compareDeclarations(GENERATED_CAPABILITY_DECLARATIONS, mutated)).toEqual([]);
 
-    // Bumping the evaluator declarations to @2 clears them; only resolved shapes still differ, and
-    // a shape can only move by its own (judged) semver.
-    const integerSubjects = [...new Set(mismatched.filter((key) => key.includes("@i:")).map((key) => key.slice(0, key.indexOf("@"))))];
-    // Advance each affected CURRENT integer version, retaining its existing history.
-    // A transitive dispatcher may already be @2; reusing @2 would mutate a pinned identity.
-    const successorVersions = new Map<string, number>();
-    const bumps: CapabilityLifecycleRow[] = integerSubjects.map((subjectId) => {
-      const history = CAPABILITY_LIFECYCLE.find((row) => row.subjectId === subjectId);
-      const current = history?.versions.at(-1);
-      const version = current?.version.kind === "integer" ? current.version.value : 1;
-      successorVersions.set(subjectId, version + 1);
-      return { subjectId, versions: [
-        ...(history?.versions.slice(0, -1) ?? []),
-        { version: { kind: "integer", value: version }, disposition: { kind: "deprecated", successor: capabilityId(subjectId, version + 1), reason: "D566 fixture", reasonCode: "superseded" } },
-        { version: { kind: "integer", value: version + 1 }, disposition: current?.disposition ?? { kind: "active" } },
-      ] };
-    });
+    // Model a deliberately revised contract explicitly, keeping each released predecessor.
+    // Actual old-contract chess outcomes are pinned in structure.test.ts, not inferred from hashes.
+    const integerSubjects = ["structuralFeature.pawn_safe_square", "structuralFeature.outpost"];
+    const bumps: CapabilityLifecycleRow[] = integerSubjects.map((subjectId) => ({ subjectId, versions: [
+      { version: { kind: "integer", value: 1 }, disposition: { kind: "deprecated", successor: capabilityId(subjectId, 2), reason: "D566 deliberate contract transition fixture", reasonCode: "superseded" } },
+      { version: { kind: "integer", value: 2 }, disposition: { kind: "active" } },
+    ] }));
     const lifecycle = [...CAPABILITY_LIFECYCLE.filter((row) => !integerSubjects.includes(row.subjectId)), ...bumps];
-    const bumped = buildContract({ root: ROOT, overrides, lifecycle }).declarations;
-    const remaining = compareDeclarations(GENERATED_CAPABILITY_DECLARATIONS, bumped).filter((row) => row.kind === "digest_mismatch").map((row) => row.key);
-    expect(remaining.every((key) => key.startsWith("shape.")), remaining.join(", ")).toBe(true);
+    const added = integerSubjects.map(subjectId => {
+      const original = GENERATED_CAPABILITY_DECLARATIONS.find(row => row.subjectId === subjectId && row.id.version.kind === "integer" && row.id.version.value === 1)!;
+      const id = capabilityId(subjectId, 2);
+      return { ...original, id, semanticsDigest: `contract:${capabilityKey(id)}`, dependsOn: original.dependsOn.map(dependency => integerSubjects.includes(dependency.id) ? capabilityId(dependency.id, 2) : dependency) };
+    });
 
     // The plan lists the three predicate-bearing shapes in judgement[], not mechanical[].
-    const added = bumped.filter((row) => integerSubjects.includes(row.subjectId) && row.id.version.kind === "integer" && row.id.version.value === successorVersions.get(row.subjectId));
     const registry = buildCapabilityRegistry([...GENERATED_CAPABILITY_DECLARATIONS, ...added], lifecycle);
     const plan = buildMigrationPlan({ root: ROOT, schema, population: walkPopulation(ROOT), readDocument: (path) => JSON.parse(read(path)) as unknown, registry });
     const judgedShapes = [...new Set(plan.judgement.map((row) => row.document).filter((path) => path.startsWith("content/shapes/")))].sort();
     expect(judgedShapes).toEqual(["content/shapes/knight-vs-bishop.json", "content/shapes/maroczy-bind.json", "content/shapes/open-centre.json"]);
     expect(plan.mechanical.map((row) => row.document)).not.toEqual(expect.arrayContaining(judgedShapes));
-    expect(plan.judgement.every((row) => row.successor.version.kind === "integer" && row.successor.version.value === successorVersions.get(row.successor.id))).toBe(true);
-    expect(successorVersions.get("structuralFeature.pawn_safe_square")).toBe(2);
-    expect(successorVersions.get("structuralFeature.outpost")).toBe(2);
+    expect(plan.judgement.every((row) => row.successor.version.kind === "integer" && row.successor.version.value === 2)).toBe(true);
+    expect(registry.current("structuralFeature.pawn_safe_square")?.id).toEqual(capabilityId("structuralFeature.pawn_safe_square", 2));
+    expect(registry.current("structuralFeature.outpost")?.id).toEqual(capabilityId("structuralFeature.outpost", 2));
   }, SLOW);
 });

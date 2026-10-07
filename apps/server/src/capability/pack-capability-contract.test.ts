@@ -30,7 +30,7 @@ import { GENERATED_CAPABILITY_DECLARATIONS } from "../../../../packages/runtime/
 import { ServerError } from "../errors.js";
 import { PackRegistry } from "../pack-registry.js";
 import { validatePackDocument } from "../pack-validation.js";
-import { buildContract, censusSubjects, compareDeclarations, readAuthority, runCensus } from "./contract.js";
+import { assertDeclarationUpdate, buildContract, censusSubjects, compareDeclarations, readAuthority, runCensus } from "./contract.js";
 import { EXIT_MALFORMED, EXIT_NOT_READY } from "./migration-cli.js";
 import {
   LEGACY_REFUSED_MIGRATION,
@@ -64,9 +64,8 @@ const read = (path: string): string => readFileSync(resolve(ROOT, path), "utf8")
 const example = JSON.parse(read("schemas/drill_pack.example.json")) as Record<string, unknown>;
 const schema = JSON.parse(read("schemas/drill_pack.schema.json")) as unknown;
 const i = (id: string, value = 1): CapabilityId => capabilityId(id, value);
-const digestOf = (rows: readonly GeneratedCapabilityDeclaration[], id: string): string | undefined => rows.find((row) => row.subjectId === id)?.semanticsDigest;
 
-/** Inserts a statement at the top of a named function body — a helper-only meaning change. */
+/** Inserts a statement into a helper: a no-op is a source change, not a meaning change. */
 function mutate(module: string, signature: string, statement: string): Record<string, string> {
   const text = read(module);
   const at = text.indexOf(signature);
@@ -75,7 +74,7 @@ function mutate(module: string, signature: string, statement: string): Record<st
   return { [module]: `${text.slice(0, brace + 1)}\n  ${statement}${text.slice(brace + 1)}` };
 }
 
-describe("criterion 2 — the registry is closed and its digests close through helpers", () => {
+describe("criterion 2 — the registry is closed and compatibility is explicitly versioned", () => {
   const generated = (overrides: Partial<GeneratedCapabilityDeclaration> = {}): GeneratedCapabilityDeclaration => ({
     subjectId: "fixture.subject",
     id: i("fixture.subject"),
@@ -109,23 +108,29 @@ describe("criterion 2 — the registry is closed and its digests close through h
     expect(outpost.dependsOn.map(capabilityKey)).toContain("structuralFeature.pawn_safe_square@i:1");
   });
 
-  it("helper-only edits move the intended digests; an unused same-name symbol moves nothing", () => {
+  it("helper no-ops, an unrelated symbol and receipt-only hash churn preserve every released declaration", () => {
     const overrides = {
       ...mutate("packages/runtime/src/structure.ts", "function pawnSafetyOnPosition(", "void 0;"),
       ...mutate("packages/runtime/src/transition.ts", "export function matchesTransitionFeature(", "void 0;"),
       ...mutate("packages/runtime/src/objective.ts", "function materialScore(", "void 0;"),
       "apps/server/src/capability/stamp-cli.ts": `${read("apps/server/src/capability/stamp-cli.ts")}\nfunction pawnSafetyOnPosition(): number { return 1; }\nvoid pawnSafetyOnPosition;\n`,
+      "packages/runtime/src/semantic-validation-receipt.generated.ts": read("packages/runtime/src/semantic-validation-receipt.generated.ts").replace(/"receiptSha256": "[a-f0-9]+"/u, `"receiptSha256": "${"0".repeat(64)}"`),
     };
     const built = buildContract({ root: ROOT, overrides }).declarations;
-    const moved = (id: string) => digestOf(built, id) !== digestOf(GENERATED_CAPABILITY_DECLARATIONS, id);
-    expect(moved("structuralFeature.pawn_safe_square")).toBe(true);
-    expect(moved("structuralFeature.outpost")).toBe(true);
-    expect(moved("structuralFeature.isolated_pawn")).toBe(false);
-    expect(moved("transitionExpression.feature")).toBe(true);
-    expect(moved("successCondition.material_balance")).toBe(true);
-    expect(moved("phase.opening")).toBe(false);
-    expect(moved("grade.thresholds")).toBe(false);
+    expect(overrides["packages/runtime/src/semantic-validation-receipt.generated.ts"]).not.toBe(read("packages/runtime/src/semantic-validation-receipt.generated.ts"));
+    expect(built).toEqual(GENERATED_CAPABILITY_DECLARATIONS);
+    expect(compareDeclarations(GENERATED_CAPABILITY_DECLARATIONS, built)).toEqual([]);
+    expect(() => assertDeclarationUpdate(GENERATED_CAPABILITY_DECLARATIONS, built)).not.toThrow();
   }, SLOW);
+
+  it("rejects same-version public contract edits and removals before a generator can write", () => {
+    const original = generated();
+    for (const patch of [{ availability: "provider" as const }, { dependsOn: [i("fixture.dependency")] }, { subject: "error_contract" as const }]) {
+      expect(() => assertDeclarationUpdate([original], [{ ...original, ...patch }])).toThrow(/CAPABILITY_DECLARATION_REWRITTEN/u);
+    }
+    expect(() => assertDeclarationUpdate([original], [])).toThrow(/CAPABILITY_DECLARATION_REWRITTEN/u);
+    expect(() => assertDeclarationUpdate([original], [original, generated({ id: i("fixture.subject", 2), semanticsDigest: "contract:fixture.subject@i:2" })])).not.toThrow();
+  });
 });
 
 describe("criterion 4 and 6 — the census has independent roots", () => {
@@ -388,13 +393,14 @@ describe("criteria 11 and 12 — plan shape, apply readiness and the population 
   });
 });
 
-describe("criterion 14 — convention prose is inside the digest", () => {
-  it("one changed character without a version bump moves that convention's digest", async () => {
+describe("criterion 14 — normative convention text is a public contract, not a code hash", () => {
+  it("changed convention text fails at its own version, with zero unrelated incompatibilities", async () => {
     const { BREADTH_CONVENTION_TEXT, SEMANTIC_CONVENTION_TEXT } = await import("../../../../packages/runtime/src/evidence-catalog.js");
     const edited = { BREADTH_CONVENTION_TEXT: { ...BREADTH_CONVENTION_TEXT, pressureLine: `${BREADTH_CONVENTION_TEXT.pressureLine}.` }, SEMANTIC_CONVENTION_TEXT };
     const built = buildContract({ root: ROOT, conventions: edited }).declarations;
     const findings = compareDeclarations(GENERATED_CAPABILITY_DECLARATIONS, built);
-    expect(findings).toEqual([{ key: "pressure-line@i:1", kind: "digest_mismatch" }]);
+    expect(findings).toEqual([{ key: "pressure-line@i:1", kind: "changed" }]);
+    expect(() => assertDeclarationUpdate(GENERATED_CAPABILITY_DECLARATIONS, built)).toThrow(/CAPABILITY_DECLARATION_REWRITTEN: pressure-line@i:1/u);
   }, SLOW);
 });
 

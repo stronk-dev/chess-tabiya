@@ -614,7 +614,15 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
   await expect(marker).toBeVisible();
   const runId = page.url().split("/").at(-1)!;
+  // The marker can arrive before the opponent's scheduled reply. Baseline a settled
+  // recorded turn, not a race between an Inspector walkthrough and that legitimate move.
+  await expect.poll(async () => {
+    const graph = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    return graph.nodes.filter(node => node.actor === "opponent").length;
+  }).toBe(1);
   const before = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
+  let inspectionMoveWrites = 0;
+  page.on("request", request => { if (request.method() === "POST" && request.url().endsWith("/moves")) inspectionMoveWrites++; });
   await page.getByRole("button", { name: "Inspector" }).click();
   const transitionButton = page.getByRole("button", { name: "Move transition" });
   await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
@@ -650,7 +658,8 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await expect(page.getByRole("region", { name: "Named structure evidence" })).toContainText("CC-BY-SA-4.0");
   await page.getByRole("button", { name: "Return to play" }).click();
   const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
-  expect(after.events).toHaveLength(before.events.length);
+  expect(after.events).toEqual(before.events);
+  expect(inspectionMoveWrites).toBe(0);
   await expect(page.getByText("Commentary opens at a checkpoint", { exact: true })).toHaveCount(0);
 });
 
@@ -2886,6 +2895,68 @@ function isThreatResponse(response: { url(): string; request(): { postDataJSON()
   return response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.requested?.includes("threat_radar") === true;
 }
 
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  for (const fixture of [
+    { fen: "5q1k/8/8/8/4B3/8/8/7K b - - 0 1", side: "black", from: "f8", to: "f5", opponent: "White", attacker: "e4" },
+    { fen: "7k/8/8/4b3/8/8/8/5Q1K w - - 0 1", side: "white", from: "f1", to: "f4", opponent: "Black", attacker: "e5" },
+  ] as const) {
+    test(`Support staged warning protects the ${fixture.side} queen and preserves revise/confirm (${viewport.width}px)`, async ({ page }, testInfo) => {
+      await page.setViewportSize(viewport);
+      await startSupportFromFen(page, fixture.fen, fixture.side);
+      await choosePreset(page, /^Support Staged/u);
+      const runId = page.url().split("/").at(-1)!;
+      const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+      const before = await graph();
+      const calm = await page.getByLabel("Chessboard").boundingBox();
+      const uci = `${fixture.from}${fixture.to}`;
+      const learner = fixture.side === "black" ? "Black" : "White";
+      const sentence = `If ${fixture.opponent} moves next: ${fixture.opponent}'s bishop on ${fixture.attacker} could capture ${learner}'s queen on ${fixture.to}.`;
+      const stagedResponse = () => page.waitForResponse(response => response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.candidateUci === uci);
+      let writes = 0;
+      page.on("request", request => { if (request.method() === "POST" && request.url().endsWith("/moves")) writes++; });
+      const response = stagedResponse();
+      await move(page, fixture.from, fixture.to, fixture.side);
+      const delivered = (await (await response).json() as { page: ModuleQueryPage }).page;
+      const warning = delivered.packets.find(packet => packet.module === "blunder_prevention")!;
+      expect(warning.budget.after).toMatchObject({ facts: 1 });
+      expect(warning.budget.after.words).toBeLessThanOrEqual(20);
+      expect(warning.disclosure.subject.candidateUci).toBe(uci);
+      expect(warning.disclosure.subject.nodeId).toBe(before.activeCursor.nodeId);
+      const fact = warning.receipt.items.find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.staged_threats@1");
+      expect(fact).toBeDefined();
+      if (fact?.component.id !== "fact_statement") throw new Error("Expected compact concrete capture warning");
+      expect(fact.component.operand.convention).toBe("threat-convention@1");
+      expect(fact.component.operand.renderedText).toBe(sentence);
+      await showSupport(page);
+      const cue = page.locator('[data-module="blunder_prevention"]');
+      await expect(cue).toHaveAttribute("data-seat-state", "warning");
+      await expect(cue.locator("[data-presented]")).toHaveText(sentence);
+      expect(writes).toBe(0);
+      expect((await graph()).activeCursor).toEqual(before.activeCursor);
+      expect((await graph()).nodes).toEqual(before.nodes);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+      await assertRunViewport(page, viewport);
+      await testInfo.attach("concrete-queen-warning", { body: await page.screenshot(), contentType: "image/png" });
+      await cue.getByRole("button", { name: "Revise", exact: true }).click();
+      await expect(cue).toHaveCount(0);
+      expect(writes).toBe(0);
+      expect((await graph()).nodes).toEqual(before.nodes);
+      if (viewport.width < 720) await page.getByRole("button", { name: "Collapse companion", exact: true }).click();
+      const again = stagedResponse();
+      await move(page, fixture.from, fixture.to, fixture.side);
+      await again;
+      await showSupport(page);
+      await expect(cue.locator("[data-presented]")).toHaveText(sentence);
+      const committed = page.waitForRequest(request => request.method() === "POST" && request.url().endsWith("/moves"));
+      await cue.getByRole("button", { name: /^Play .+ anyway$/u }).click();
+      expect((await committed).postDataJSON()).toMatchObject({ uci });
+      await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === uci)).toBe(true);
+      expect(writes).toBe(1);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    });
+  }
+}
+
 async function assertThreatPacket(page: Page, packet: ModuleQueryPage["packets"][number]): Promise<void> {
   const seat = page.locator('[data-module="threat_radar"]');
   const items = seat.locator("[data-presented]");
@@ -2897,6 +2968,14 @@ async function assertThreatPacket(page: Page, packet: ModuleQueryPage["packets"]
     if (item.component.id === "square_set") await expect(items.nth(index)).toContainText(item.component.operand.caption.renderedText);
     await expect(items.nth(index)).not.toBeEmpty();
   }
+  const threat = packet.receipt.items.find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.threats@1");
+  expect(threat).toBeDefined();
+  if (threat?.component.id !== "fact_statement") throw new Error("Expected the real hypothetical-turn threat statement");
+  expect(threat.component.operand.convention).toBe("threat-convention@1");
+  expect(threat.component.operand.renderedText).toContain("If White could move now:");
+  expect(threat.component.operand.renderedText).toContain("White's queen on h5 could deliver mate on f7");
+  await expect(seat).toContainText("Only immediate threats are shown; this is not a forced continuation.");
+  await expect(seat).not.toContainText(/declared|convention|forced mate/iu);
   await expect(seat.getByRole("alert")).toHaveCount(0);
 }
 
@@ -3211,11 +3290,19 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
     await assertRunViewport(page, viewport);
     const calm = await page.getByLabel("Chessboard").boundingBox();
+    const defenceCheck = page.waitForResponse(response => response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.candidateUci === "g7g6");
+    const defended = page.waitForResponse(response => response.url().endsWith("/moves") && response.request().postDataJSON().uci === "g7g6");
     await move(page, "g7", "g6", "black");
+    // ...g6 stops the immediate mate. An exposed opponent queen is not a threat to Black;
+    // the later ...g5 still exercises the genuine mate-risk head slot at maximum load.
+    const defencePage = (await (await defenceCheck).json()).page as ModuleQueryPage;
+    const defence = defencePage.packets.find(packet => packet.module === "blunder_prevention")!;
+    expect(defence.receipt.items).toEqual([]);
+    expect(defence.empty).toEqual({ kind: "silent" });
+    expect((await defended).ok()).toBe(true);
     await showSupport(page);
     const cue = seat("blunder_prevention");
-    await expect(cue).toHaveAttribute("data-seat-state", "warning");
-    await cue.getByRole("button", { name: /anyway$/u }).click();
+    await expect(cue).toHaveCount(0);
     await showSupport(page);
     await showSupportTools(page);
     const compiledResponse = page.waitForResponse((response) => response.url().endsWith("/assistance") && response.request().method() === "POST");
@@ -3368,7 +3455,10 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     // State 5 — a rail module expanded: Threat radar is opened on request and names the mate threat.
     await showSupport(page);
     await seat("threat_radar").locator(".seat-row").click();
+    const radarResponse = page.waitForResponse(isThreatResponse);
     await seat("threat_radar").getByRole("button", { name: "Show" }).click();
+    const radarPage = (await (await radarResponse).json() as { page: ModuleQueryPage }).page;
+    await assertThreatPacket(page, radarPage.packets.find(packet => packet.module === "threat_radar")!);
     const radar = seat("threat_radar").locator(".seat-card");
     await expect(radar.locator("[data-presented]").first()).toBeVisible();
     await expect(radar).toContainText("mate");

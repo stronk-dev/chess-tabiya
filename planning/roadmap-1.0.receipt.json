@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a96fa1e27d7edfd457821fbe485b95759ab789b1706f081539df18ec1f55731a",
+    "roadmap": "sha256:deb2da9ef2834ccefb2ccd00f0c60b23b8e2bfdb8ef61ff518bb8fd98df8f08f",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:18bcb75900dfdbf74101d8e296635637996f9378e63d23c9ccebb2792fa1f249",
-    "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
+    "workState": "sha256:23c89bda849edd0f4118e3e19774ce4716a558a25a5139b04ec2caa5101ecc86",
+    "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
     "application": "sha256:09f5f351ef5fdd01b13f9906d951b6b6ff8519ed7dfd945c3c0c5ad6933b00ba",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 629,
-      "doing": 14,
+      "doing": 10,
       "blocked": 1059,
-      "done": 1417,
+      "done": 1423,
       "refused": 161
     },
     "workItems": {
@@ -560,7 +560,7 @@
           {
             "kind": "rfc",
             "id": "pack-capability-contract.md",
-            "digest": "sha256:6680c771dd77c8ba549d6274f604eca9373d4b1be85ff1dbf5c58859c29272f2"
+            "digest": "sha256:44f71c0b473d65d6980d6aa6cac459193c111f5eee1e1356fd0e90c1e246011c"
           },
           {
             "kind": "rfc",
@@ -1043,10 +1043,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Obtain owner approval for D3528's compatibility-boundary amendment: separate explicit public semantic compatibility from build/source freshness without rewriting committed declarations or inventing seven version/pack migrations. Support repairs D3521/D3523-D3525/D3527 stay doing and uncommitted while working-source software is red. D3522's independent HTTP fixture repair is closed on focused and exact-index full software gates, not as a cause of earlier intermittent failures. D3531 restores runner-owned input fixtures and named failure steps; the complete changed-fixture browser gate passes, but the original timeout cause and deliberate failure trace-retention proof stay open. Locate D3518/D3514/D3510's earlier software failures. D3526 requires an exact tactical witness-subsumption amendment, separate from D3309's structural successors. Existing Inspector, phone, owner-use, hint and RFC discharges remain; no new bulk capture or milestone/capability/content promotion.",
+      "nextAction": "D3528's owner-approved explicit public-version compatibility and scoped Support repairs D3521/D3523-D3525/D3527 are complete, with all released declarations and authored packs retained. Full gates remain red: locate D3532's 80-ply performance phase without relaxing 500 ms; repair D3533's enabled Guided Hint during pending mutation/assistance compilation with a delayed-reveal native negative and exact one-request recovery. D3531's original timeout cause and deliberate failed-trace proof, and D3518/D3514/D3510's earlier intermittent causes remain open. D3526 needs a separate exact-witness composition amendment; D3309 owns structural operand fidelity. Complete remaining Inspector, phone, owner-use and hint obligations without promoting a whole milestone or 1.0.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "D3522's independent HTTP fixture repair consumes each original response before teardown, retaining real fetch, all refusal/status/payload assertions and deadlines. Normal focused gate passes 100 tests / seven files plus clean types. Exact-index make staged-software-contracts passes 3,426 software tests / 345 files, seven performance tests, clean types and all downstream contracts at tree 43eb969cb65a9d6365b499d71fed8342ef4a96f0; it explicitly excludes unstaged Support source/receipt changes. The earlier full working-source software gate remains red on D3528: 3,430 passed, one failed and seven unrelated compatibility digests changed by receipt-only hash churn. All 984 committed declarations remain intact. The complete changed-fixture browser gate passes 88 smoke, five content, 59 matrix and one packaged-default journey, with one existing optional Maia skip, 150 exact input cells and 112 unretried composition cells. D3531's original timeout cause/failed trace retention and D3510/D3514/D3518's earlier intermittent causes remain open; a passing replay does not establish them. Support source fixes and refreshed receipt remain uncommitted pending owner approval. No full RFC, capability, milestone, pack or 1.0 completion is claimed.",
+        "summary": "D3528 closes the owner-approved KISS repair: explicit public versions and behavior tests replace production source/package hashing, retaining all 984 released declaration rows and authored pack bytes. D3521/D3523-D3525/D3527's captions, learner-victim direction, compact staged warning, quiet defensive move and settled read-only Carlsbad controls pass, including both-colour desktop/phone native Revise/Confirm. Local HTTP 100/7, capability integration 150/6, content 227/23, capability history/census/sites and types pass. Fresh application setup/cleanup uses normal runner hooks; D3514's original earlier cause remains open. Full verify-awake passes 3,433 software tests / 345 files, then fails performance: six passed, 80-ply p95 710.1 ms > 500 ms (D3532); downstream aggregate checks do not run. Full browser gate: 88 smoke plus one existing optional skip, five content, 58 matrix passed / one Guided Hint readiness failure D3533; all 150 input cells pass but no fresh complete 112-cell receipt. Packaged-default and schema/packaging/hook checks pass independently. Earlier D3510/D3514/D3518/D3531 causes/proofs remain open. No complete release gate, remote CI, RFC, capability, milestone, pack or 1.0 claim.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/module-query.test.ts",
@@ -1171,13 +1171,24 @@
           "planning/provider-exchange-and-execution/assistance-codec-software-2026-10-06.json",
           "tools/d3497-hint-latency/browser-capture.ts",
           "tools/d3497-hint-latency/source-off-check.mjs",
-          "planning/provider-exchange-and-execution/hint-latency-browser-software-2026-10-06.json"
+          "planning/provider-exchange-and-execution/hint-latency-browser-software-2026-10-06.json",
+          "rfc/pack-capability-contract.md",
+          "apps/server/src/capability/pack-capability-contract.test.ts",
+          "packages/runtime/src/structure.test.ts",
+          "apps/server/src/local-module-execution.test.ts",
+          "packages/runtime/src/recorded-semantic-path.performance.test.ts",
+          "planning/exploration/log.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
             "id": "D3528",
-            "digest": "sha256:e0d15df713bc2ede6bc9311efbc83852b71ef032d79419e292b85d1718c6082d"
+            "digest": "sha256:72b552cb4c24c23795ecd450c4521e250ec2acabe95c06713bf460cc1a493847"
+          },
+          {
+            "kind": "rfc",
+            "id": "pack-capability-contract.md",
+            "digest": "sha256:44f71c0b473d65d6980d6aa6cac459193c111f5eee1e1356fd0e90c1e246011c"
           },
           {
             "kind": "work_state",

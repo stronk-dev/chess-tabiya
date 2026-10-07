@@ -119,7 +119,73 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
     const { page } = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "pre_commit", nodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } });
     const radar = packetOf(page, "threat_radar")!;
     const sentences = assertDelivered(radar, assistance);
-    expect(sentences.join(" ")).toMatch(/mate/u);
+    const threat = parsePresentationReceipt(radar.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.threats@1");
+    expect(threat).toBeDefined();
+    expect(presentedSentence(threat!)).toContain("If White could move now:");
+    expect(presentedSentence(threat!)).toContain("White's queen on h5 could deliver mate on f7");
+    expect(presentedSentence(threat!)).toContain("Only immediate threats are shown; this is not a forced continuation.");
+    expect(sentences.join(" ")).not.toMatch(/declared|convention/u);
+    expect(threat!.component.id).toBe("fact_statement");
+    if (threat!.component.id !== "fact_statement") throw new Error("Expected threat statement");
+    expect(threat!.component.operand.convention).toBe("threat-convention@1");
+    // Player-facing copy cannot widen the retained horizon or invent an additional claim.
+    const forged = JSON.parse(JSON.stringify(radar.receipt)) as { items: { component: { id: string; operand: Record<string, unknown> } }[] };
+    const forgedThreat = forged.items.find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.threats@1")!;
+    if (forgedThreat.component.id !== "fact_statement") throw new Error("Expected threat statement");
+    forgedThreat.component.operand.renderedText = "White will force mate.";
+    expect(() => parsePresentationReceipt(forged)).toThrow(/disagrees with its retained operands/u);
+  });
+
+  it.each([
+    { fen: "7k/8/8/5q2/4B3/8/8/7K b - - 0 1", mover: "White", actor: "White's bishop on e4", target: "Black's queen on f5" },
+    { fen: "7k/8/8/4b3/5Q2/8/8/7K w - - 0 1", mover: "Black", actor: "Black's bishop on e5", target: "White's queen on f4" },
+  ])("Threat Radar retains both sides' concrete capture witnesses ($mover)", ({ fen, mover, actor, target }) => {
+    const run = positionRun(fen);
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "pre_commit", nodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } });
+    const radar = packetOf(page, "threat_radar")!;
+    const sentences = assertDelivered(radar, assistance);
+    expect(sentences.join(" ")).toContain(`If ${mover} could move now: ${actor} could capture ${target}. Only immediate threats are shown; this is not a forced continuation.`);
+    const threat = parsePresentationReceipt(radar.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.threats@1")!;
+    if (threat.component.id !== "fact_statement") throw new Error("Expected threat statement");
+    expect(threat.component.operand.convention).toBe("threat-convention@1");
+    expect(threat.component.operand.operands).toEqual({ threats: [{ piece: { color: mover.toLowerCase(), role: "bishop" }, from: mover === "White" ? "e4" : "e5", mate: false, target: { color: mover === "White" ? "black" : "white", role: "queen" }, to: mover === "White" ? "f5" : "f4" }] });
+    const exposure = parsePresentationReceipt(radar.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.loose_pieces@1");
+    expect(exposure).toBeDefined();
+    expect(presentedSentence(exposure!)).toBe(`${target} can be captured at a material loss (attacked from ${mover === "White" ? "e4" : "e5"}).`);
+    expect(presentedSentence(exposure!)).not.toContain(`${actor} can be captured`);
+  });
+
+  it.each([
+    { fen: "5q1k/8/8/8/4B3/8/8/7K b - - 0 1", move: "f8f5", victim: "Black", square: "f5", attacker: "e4" },
+    { fen: "7k/8/8/4b3/8/8/8/5Q1K w - - 0 1", move: "f1f4", victim: "White", square: "f4", attacker: "e5" },
+  ])("a staged $victim queen exposure names the learner's piece, not the opponent's", ({ fen, move, victim, square, attacker }) => {
+    const run = positionRun(fen);
+    const before = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "pre_commit", nodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } }).page;
+    expect(packetOf(before, "threat_radar")!.receipt.items.some(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.loose_pieces@1")).toBe(false);
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci: move, generation: 1 } });
+    const warning = packetOf(page, "blunder_prevention")!;
+    const threat = parsePresentationReceipt(warning.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.staged_threats@1");
+    expect(threat, JSON.stringify(warning.budget)).toBeDefined();
+    const opponent = victim === "White" ? "Black" : "White";
+    expect(presentedSentence(threat!)).toBe(`If ${opponent} moves next: ${opponent}'s bishop on ${attacker} could capture ${victim}'s queen on ${square}.`);
+    expect(warning.budget.after.facts).toBe(1);
+    expect(warning.budget.after.words).toBeLessThanOrEqual(20);
+    expect(warning.budget.dropped).toEqual([]);
+    expect(warning.disclosure.subject.candidateUci).toBe(move);
+    expect(warning.disclosure.subject.generation).toBe(1);
+    assertDelivered(warning, assistance);
+    expect(run.activeCursor.nodeId).toBe(warning.disclosure.subject.nodeId);
+    expect(run.events.some(event => event.type === "move.committed")).toBe(false);
+  });
+
+  it("does not turn a refused hypothetical move into a threat or an all-clear", () => {
+    const run = positionRun("4k3/8/8/8/8/8/4q3/4K3 w - - 0 1");
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "pre_commit", nodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } });
+    const radar = packetOf(page, "threat_radar")!;
+    const items = parsePresentationReceipt(radar.receipt);
+    expect(items.some(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.threats@1")).toBe(false);
+    expect(radar.unavailable).toContainEqual({ projection: "rules.tactic.consequence.mate_in_one@1", reason: "invalid_turn_clone" });
+    expect(assertDelivered(radar, assistance).join(" ")).not.toMatch(/could move now|no threats|safe|all.clear/iu);
   });
 
   it("blunder prevention warns on a staged move that allows mate and stays silent otherwise", () => {
@@ -128,9 +194,13 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
     const cue = packetOf(risky, "blunder_prevention")!;
     expect(cue.disclosure.subject).toEqual({ nodeId: run.activeCursor.nodeId, selectedSquare: null, candidateUci: "g8f6", generation: 1 });
     expect(assertDelivered(cue, assistance).join(" ")).toMatch(/mate on f7/u);
-    const quiet = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci: "d8e7", generation: 2 } }).page;
-    const silent = packetOf(quiet, "blunder_prevention")!;
-    expect(silent.receipt.items.length === 0 ? silent.empty : null).toEqual(silent.receipt.items.length === 0 ? { kind: "silent" } : null);
+    for (const candidateUci of ["d8e7", "g7g6"]) {
+      const quiet = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci, generation: 2 } }).page;
+      const silent = packetOf(quiet, "blunder_prevention")!;
+      expect(silent.receipt.items, `defence ${candidateUci}`).toEqual([]);
+      expect(silent.empty).toEqual({ kind: "silent" });
+      expect(silent.budget.after).toEqual({ facts: 0, words: 0, marks: 0, arrows: 0 });
+    }
     expect(() => queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci: "e1e5", generation: 3 } })).toThrow(ModuleQueryError);
   });
 

@@ -112,6 +112,13 @@ const wings = (rights: { readonly kingside: boolean; readonly queenside: boolean
 const WING = s.lit("kingside", "queenside");
 
 const threatSchema = s.obj({ threats: s.arr(s.obj({ piece: pieceSchema, from: s.square, mate: s.bool }, { target: pieceSchema, to: s.square }), { min: 1 }) });
+function threatPhrases(value: ReturnType<typeof threatSchema>): readonly string[] {
+  return value.threats.map((threat) => threat.mate
+    ? `${pieceOn(threat.piece, threat.from)} could deliver mate${threat.to === undefined ? "" : ` on ${threat.to}`}`
+    : threat.target !== undefined && threat.to !== undefined
+      ? `${pieceOn(threat.piece, threat.from)} could capture ${pieceOn(threat.target, threat.to)}`
+      : `${pieceOn(threat.piece, threat.from)} has a threat${threat.to === undefined ? "" : ` on ${threat.to}`}`);
+}
 const mateSchema = s.obj({ mates: s.arr(s.obj({ piece: pieceSchema, from: s.square, to: s.square, king: s.square }), { min: 1 }) });
 const looseSchema = s.obj({ pieces: s.arr(s.obj({ piece: pieceSchema, square: s.square, enPrise: s.bool, loose: s.bool, underDefended: s.bool, capturers: s.arr(s.square), defenders: s.nat }), { min: 1 }) });
 const rayKinds = s.lit("absolute_pin", "relative_pin", "skewer", "xray_attack", "xray_defense");
@@ -149,13 +156,12 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
     `Square control: ${value.colors.map((entry) => `${side(entry.color)} attacks ${plural(entry.pseudo, "square")}${entry.legal === null ? "" : ` (${entry.legal} with legal moves)`}`).join("; ")}.`),
   "play.threats@1": factRenderer(threatSchema, (value) => {
     const mover = value.threats[0]!.piece.color;
-    const phrases = value.threats.map((threat) => threat.mate
-      ? `${pieceOn(threat.piece, threat.from)} could deliver mate${threat.to === undefined ? "" : ` on ${threat.to}`}`
-      : threat.target !== undefined && threat.to !== undefined
-        ? `${pieceOn(threat.piece, threat.from)} could capture ${pieceOn(threat.target, threat.to)}`
-        : `${pieceOn(threat.piece, threat.from)} has a threat${threat.to === undefined ? "" : ` on ${threat.to}`}`);
-    return `If it were ${side(mover)}'s move (declared one-move threat convention): ${listPhrase(phrases)}.`;
+    return `If ${side(mover)} could move now: ${listPhrase(threatPhrases(value))}. Only immediate threats are shown; this is not a forced continuation.`;
   }),
+  // The at-commit cue has a 20-word ceiling. It keeps the same immediate hypothetical
+  // threat, but not the expanded rail card's explanatory frame. No threat is selected here.
+  "play.staged_threats@1": factRenderer(threatSchema, (value) =>
+    `If ${side(value.threats[0]!.piece.color)} moves next: ${listPhrase(threatPhrases(value))}.`),
   "play.mate_in_one@1": factRenderer(mateSchema, (value) =>
     `${listPhrase(value.mates.map((mate) => `${pieceOn(mate.piece, mate.from)} can deliver mate on ${mate.to}`))} (the king on ${value.mates[0]!.king} has no escape).`),
   "play.loose_pieces@1": factRenderer(looseSchema, (value) => value.pieces.map((entry) => {
@@ -311,9 +317,9 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
 
   // --- threat_radar and blunder_prevention: opponent resources, rendered as fact statements
   // (their bindings serve list/panel) or relation overlays where the binding admits arrows.
-  const threatConstruct: Construct = (evidence) => {
+  const threatConstruct = (renderer: "play.threats@1" | "play.staged_threats@1"): Construct => (evidence) => {
     const result = evidence.payload as { readonly kind: "threats" | "abstained"; readonly threats: readonly { readonly threateningPiece: PieceAt; readonly target?: PieceAt; readonly threatenedMove: string; readonly mate: boolean }[] };
-    return statement("play.threats@1", "threat-convention@1", { threats: result.threats.map((threat) => ({ piece: piece(threat.threateningPiece.piece), from: threat.threateningPiece.square, mate: threat.mate, ...(threat.target === undefined ? {} : { target: piece(threat.target.piece) }), to: toSquare(threat.threatenedMove) })) });
+    return statement(renderer, "threat-convention@1", { threats: result.threats.map((threat) => ({ piece: piece(threat.threateningPiece.piece), from: threat.threateningPiece.square, mate: threat.mate, ...(threat.target === undefined ? {} : { target: piece(threat.target.piece) }), to: toSquare(threat.threatenedMove) })) });
   };
   const mateConstruct: Construct = (evidence) => {
     const reading = evidence.payload as { readonly mates: readonly { readonly moveUci: string; readonly mover: { readonly piece: SchemaPiece; readonly from: SquareName; readonly to: SquareName }; readonly matedKing: { readonly square: SquareName } }[] };
@@ -325,7 +331,7 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     return statement("play.loose_pieces@1", "threat-convention@1", { pieces: flagged.map((entry) => ({ piece: piece(entry.piece.occupant), square: entry.piece.square, enPrise: entry.enPrise, loose: entry.loose, underDefended: entry.underDefended, capturers: entry.legalCapturers.map((capturer) => capturer.square), defenders: entry.defenders.length })) });
   };
   for (const module of ["threat_radar", "blunder_prevention"] as const) {
-    add(module, V1("rules.tactic.consequence.threat"), "fact_statement", ["list", "panel"], ["threats"], ["mechanical_transform"], threatConstruct);
+    add(module, V1("rules.tactic.consequence.threat"), "fact_statement", ["list", "panel"], ["threats"], ["mechanical_transform"], threatConstruct(module === "blunder_prevention" ? "play.staged_threats@1" : "play.threats@1"));
     add(module, V1("rules.tactic.consequence.mate_in_one"), "fact_statement", ["list", "panel"], ["mates"], ["mechanical_transform"], mateConstruct);
     add(module, V1("rules.tactic.reading.loose_piece"), "fact_statement", ["list", "panel"], ["pieces"], ["mechanical_transform"], looseConstruct);
   }

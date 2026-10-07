@@ -2686,7 +2686,7 @@ CAPABILITY_CONTRACT_BUNDLE = ./node_modules/.bin/esbuild apps/server/src/capabil
 CAPABILITY_MIGRATION_BUNDLE = ./node_modules/.bin/esbuild apps/server/src/capability/migration-cli.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/capability-migration.js --log-level=warning
 .PHONY: pack-capability-integration-check
 pack-capability-integration-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/capability/capability.test.ts apps/server/src/capability/pack-capability-contract.test.ts apps/server/src/pack-studio.test.ts apps/server/src/training-forms.test.ts apps/web/src/lib/capability-response.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/capability/capability.test.ts packages/runtime/src/structure.test.ts apps/server/src/capability/pack-capability-contract.test.ts apps/server/src/pack-studio.test.ts apps/server/src/training-forms.test.ts apps/web/src/lib/capability-response.test.ts
 
 .PHONY: capability-applicability capability-applicability-check capability-declarations capability-check capability-census capability-site-check capability-lifecycle-check pack-capability-check pack-stamp migration-plan migration-plan-check migration-apply-ready migration-apply
 capability-applicability:

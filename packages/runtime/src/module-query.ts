@@ -257,7 +257,8 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
     if (context.explorerSummary.projection.id !== "derived.explorer.population_summary" || context.explorerSummary.projection.version !== 1) throw new TypeError("Expected exact Explorer summary authority");
   }
   // "What can the opponent do to me": the threat convention reads the position with the learner to
-  // move (it passes the turn itself); a mate/loose reading needs the named side to move.
+  // move (it passes the turn itself); mate/loose readings need the opponent to move.
+  // loosePieceReading reports victims opposite the side to move, i.e. the learner here.
   const learnerToMove = turnOf(fen) === subject.learner ? fen : passFen(fen);
   const opponentToMove = turnOf(fen) === subject.learner ? passFen(fen) : fen;
   const at = (name: string, position: string | undefined): ModuleSourceResult => position === undefined ? Object.freeze({ kind: "unavailable", projection: name, reason: "invalid_turn_clone" }) : route(name, { fen: position });
@@ -266,7 +267,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
     case "threat_radar": return [
       at("rules.tactic.consequence.threat@1", learnerToMove),
       at("rules.tactic.consequence.mate_in_one@1", opponentToMove),
-      at("rules.tactic.reading.loose_piece@1", learnerToMove),
+      at("rules.tactic.reading.loose_piece@1", opponentToMove),
       route("rules.tactic.reading.back_rank@1", { fen }),
       at("rules.tactic.reading.trapped_piece@1", learnerToMove),
       route("rules.tactic.reading.ray_classification@1", { fen }),
@@ -275,7 +276,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
     case "blunder_prevention": return [
       at("rules.tactic.consequence.threat@1", learnerToMove),
       at("rules.tactic.consequence.mate_in_one@1", opponentToMove),
-      at("rules.tactic.reading.loose_piece@1", learnerToMove),
+      at("rules.tactic.reading.loose_piece@1", opponentToMove),
     ];
     case "structure_nudge": return [
       route("rules.structural.reading.named_structure@2", { fen }),

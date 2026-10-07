@@ -59,6 +59,15 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   A broken execution contract returns generic `EVIDENCE_UNAVAILABLE` (503), not partial output
   or source diagnostics. Every repeated request preflights again. This is local production
   adoption, not complete manifest execution or request-specific provider satisfaction.
+  Threat Radar and Blunder Prevention request loose-piece readings with the opponent to
+  move: that collector reports victims opposite its side to move, so the card describes
+  the learner's exposed pieces, not the opponent's. Invalid turn clones remain unavailable.
+  Threat Radar's filled threat caption states the hypothetical turn and the immediate-threat
+  limit in ordinary language, while its receipt retains `threat-convention@1` and all
+  piece/square operands. Blunder Prevention has a separate compact registered caption over
+  those same operands, so a single concrete capture fits its unchanged one-fact/20-word cue.
+  Neither renderer chooses a threat, predicts the opponent's choice, claims a forced line
+  or enlarges the evidence budget. Over-budget bundles remain dropped, not truncated.
 - **Seats** (`apps/web/src/lib/ModuleSeats.svelte`, `module-seats.ts`): Sight on request (the square
   gesture), Threat radar, Theory pointer and Attempt comparison on request; Post-commit Nudge and
   the Named-structure nudge after a move; Staged-move risk check in the head slot while a staged move

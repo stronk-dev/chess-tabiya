@@ -110,6 +110,24 @@ describe("structural predicates", () => {
     expect(unreachable.safe).toBe(true);
   });
 
+  it("pins the pawn-safe and outpost contracts by chess outcomes for both colours", () => {
+    for (const [color, safe, captureReach, square] of [
+      ["white", "4k3/8/8/8/8/3P4/8/4K3 w - - 0 1", "4k3/2p5/8/8/8/3P4/8/4K3 w - - 0 1", "e4"],
+      ["black", "4k3/8/3p4/8/8/8/8/4K3 b - - 0 1", "4k3/8/3p4/8/8/8/2P5/4K3 b - - 0 1", "e5"],
+    ] as const) {
+      expect(pawnSafety(safe, color, square)).toMatchObject({ basis: "maximal_pawn_reach@1", safe: true });
+      expect(pawnSafety(captureReach, color, square)).toMatchObject({ basis: "maximal_pawn_reach@1", safe: false, pushAttackers: [] });
+      expect(pawnSafety(captureReach, color, square).captureAttackers).toHaveLength(1);
+      for (const kind of ["pawn_safe_square", "outpost"] as const) {
+        expect(matchesStructuralFeature(safe, { kind, color, square })).toBe(true);
+        expect(matchesStructuralFeature(captureReach, { kind, color, square })).toBe(false);
+      }
+      expect(matchesStructuralFeature("4k3/8/8/8/8/8/8/4K3 w - - 0 1", { kind: "outpost", color, square })).toBe(false);
+    }
+    expect(matchesStructuralFeature("4k3/8/8/8/8/8/3P4/4K3 w - - 0 1", { kind: "pawn_safe_square", color: "white", square: "e3" })).toBe(true);
+    expect(matchesStructuralFeature("4k3/8/8/8/8/8/3P4/4K3 w - - 0 1", { kind: "outpost", color: "white", square: "e3" })).toBe(false);
+  });
+
   it("treats blocked pawn routes as potential reach rather than a legal prediction", () => {
     const blocked = pawnSafety("4k3/8/8/1n6/P7/P7/P7/4K3 w - - 0 1", "black", "b5");
     expect(blocked.pushAttackers).toEqual([{ square: "a4", pushes: 0 }, { square: "a3", pushes: 1 }, { square: "a2", pushes: 2 }]);

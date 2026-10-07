@@ -133,14 +133,16 @@ reordered, under- or over-declared array. Every writer — the sourcing emitters
 registration, graduation clearance — stamps it through the one function; an author runs
 `make pack-stamp FILE=<pack.json>` after editing content. The stamp is inside `digestDrillPack`.
 
-Each capability is a declaration in `packages/runtime/src/capability/` with a semantics digest over
-the schema member, the interpreter arms and constant tables that define it (closed through
-TypeScript symbol references), its convention prose, its F1 projection or resolved entry, and the
-lockfile-pinned packages it reaches. `make capability-check` fails when a meaning changes at the same
-version. Its Git-history guard separately retains every committed declaration, so regenerating the
-image cannot hide a same-version change. The narrow pre-commit check reads staged bytes; CI compares
-the commit with its first parent and refuses a missing parent. The remedy is to revert or retain the
-old declaration, add its versioned successor and a transition to `lifecycle.ts`, and run
+Each capability is an explicitly versioned public contract in `packages/runtime/src/capability/`.
+Behavior tests pin its concrete chess outcomes and limits. A deliberate meaning change needs a
+version/successor decision; refactoring code, rewording a caption or updating test metadata does not
+invalidate packs. `make capability-check` checks public declaration fields and dependencies, not
+transitive source hashes. Released declarations remain immutable, including their historical source
+records and legacy `semanticsDigest` field; that field does not prove current-code equivalence.
+New declarations use a readable contract marker rather than a source checksum. The generator refuses
+same-version rewrites before writing; the Git guard independently checks staged/committed history.
+For an intentional contract change, retain the old declaration, add its explicit successor and
+transition to `lifecycle.ts`, and run
 `make capability-declarations`, after which `make migration-plan` names every pack or shape whose
 requirement was superseded as judgement debt (`make migration-apply-ready` refuses while any exists).
 `GET /capabilities` publishes `packCapabilities`: the configured active/deprecated capabilities with a

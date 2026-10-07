@@ -80,6 +80,12 @@ each rehearsal and submitting each exact move have named steps; touch does not r
 desktop page or close a second context inside an expired test body. Failure artifacts and context
 cleanup remain owned by Playwright. This fixture ownership does not prove the cause of a past timeout.
 
+Local Support HTTP tests construct a fresh application in `beforeEach` and release it in
+`afterEach`, with normal runner hook budgets and unchanged five-second operation-test budgets.
+Every response body is consumed before teardown. Failure diagnostics distinguish application
+construction from listen, authentication, module requests and shutdown. A later passing run does
+not establish the cause of an earlier timeout.
+
 Pre-commit process checks intentionally do not read the shared working tree. The hook materializes
 the Git index and runs register, status, work, roadmap and intent checks inside that temporary
 snapshot. This makes the commit's staged bytes the unit under review and prevents an unrelated

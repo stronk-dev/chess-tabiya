@@ -29021,7 +29021,7 @@
       "id": "D3514",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c06789726227e60fdddeb97703ad1457e5bb6e09feb9161975d3545cfdcebc92",
+      "sourceDigest": "sha256:616fb858a769e7c425e7c4607f3e6c168089908394d724dd13573bc335cbc042",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
@@ -29082,12 +29082,12 @@
     },
     {
       "id": "D3521",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:384ba084633a51eb759291b88a379c6fcd8c5b75f7f9fdad0ccf0fdbabb8c1ea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e2676cc5f12b0a7e2e9598c6e144fee40ba60cb1690a431d54b9e55fc54104de",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3522",
@@ -29100,30 +29100,30 @@
     },
     {
       "id": "D3523",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:724884227b2be0bc51530bc929cafc821bf10f34f7f8e4318ce7d3c21460addf",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:85804c53e9c1145b242ba648165c6802e6a7200919dda80cb5d0827ab765e992",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3524",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2f4d83ade9df6b5c665edda6ac57f394ee8f887a9c7380d48e079aa3a4281f92",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f493be5058ac43436f5d936921512f1939475d215ac3bab9fbcb4dd3584a3a79",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3525",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a7194d4898df9592b5bfeddcfbcb227b656b4c04a910f02edc579ce5bd3285f7",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:76320dd84e6648406749e61d2ec98adcb0813c49733f3af0dba2499977d38052",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3526",
@@ -29135,21 +29135,21 @@
     },
     {
       "id": "D3527",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0b462f500b9fb37115d5514940892402d7533ff37ceb93e2a7772536987edf07",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f2b61407ac9cc2c7ac3d80299813e2f9fddeb4e94e58e5b4ef6b9eda2be4da1b",
       "uxItems": [],
-      "owner": "client-platform",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3528",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e0d15df713bc2ede6bc9311efbc83852b71ef032d79419e292b85d1718c6082d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:72b552cb4c24c23795ecd450c4521e250ec2acabe95c06713bf460cc1a493847",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-10-07"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3529",
@@ -29176,6 +29176,24 @@
       "sourceDigest": "sha256:efa4371e3860c82eb398465c644374b5d845c6745d6cbe1a9dddca2fb1e22d9c",
       "uxItems": [],
       "owner": "release-engineering",
+      "since": "2026-10-07"
+    },
+    {
+      "id": "D3532",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a38a39352e27b79a61f9574fda1092f51c0d04c21b3f9f1f48cad887c0ddaf69",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-07"
+    },
+    {
+      "id": "D3533",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:06023bdd5adfe264a20ad1112cd4a019c25f100a92526210f5a26b72ec478662",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
       "since": "2026-10-07"
     }
   ]

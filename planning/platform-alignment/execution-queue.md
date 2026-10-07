@@ -4,6 +4,15 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Compatibility and Support checkpoint — 2026-10-07
+
+| Item | Owning lane / prerequisite | Required exit |
+|---|---|---|
+| [[D3528]] | **DONE: owner-approved KISS replacement**; release-engineering; `rfc/pack-capability-contract.md` §2.3 | Explicit public versions and behavioral tests replace transitive source hashing. All 984 released declarations and authored pack bytes retained; same-version refusals and intentional migration tested. Integration 150/6, software 3,433/345, content 227/23 and capability checks pass. Complete verification remains red on D3532; the whole RFC is not complete. |
+| [[D3521]], [[D3523]], [[D3524]], [[D3525]], [[D3527]] | **DONE: scoped Support delivery and native controls**; assistance-and-presentation / client-platform | Readable threat captions, both-colour learner-piece warnings with native revise/confirm, quiet defensive moves and a settled read-only Carlsbad walkthrough pass. Local HTTP gate 100/7 and types pass. Full browser gate: 88 smoke + one optional skip, five content, 58 matrix passed / one failed on D3533. Packaged-default independently passes. No whole Support or fresh complete composition-matrix claim. |
+| [[D3532]] | **DOING: locate performance failure**; evidence-foundation; recorded-semantic-path criterion 17 | The normal full gate measures 80-ply p95 710.1 ms against 500 ms. Retain the failure, identify the costly phase and verify any scoped optimization without changing the threshold or treating a passing rerun as a diagnosis. |
+| [[D3533]] | **DOING: Guided Hint readiness repair**; assistance-and-presentation; hint-distance §5/§7 | A native first request immediately after opening support returns `stale`. Gate the seat on settled mutation/compiled-help/current-decision readiness, then prove a deliberately delayed reveal cannot post an old stamp and one explicit request recovers at the same rung. Keep the server's stale refusal and genuine branch/disclosure reset tests. |
+
 ## Semantic search cost checkpoint — 2026-10-07
 
 | Item | Owning lane / prerequisite | Required exit |

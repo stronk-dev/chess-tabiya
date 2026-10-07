@@ -2,7 +2,7 @@
 //
 // `CAPABILITY_DECLARATIONS` has one declaration per (capability subject, version). The generated
 // half (`declarations.generated.ts`) carries identity, meaning sources, dependencies and the
-// semantics digest that `make capability-check` recomputes from the tree; the authored half
+// legacy declaration marker (never recomputed from today's source); the authored half
 // (`lifecycle.ts`) carries every disposition that is not "active at version 1". `CAPABILITY_HISTORIES`
 // groups declarations by subject, retains obsolete versions and names exactly one current version.
 // The §4.3 invariants run at module load.
@@ -78,6 +78,7 @@ export interface GeneratedCapabilityDeclaration {
   readonly sources: readonly CapabilityMeaningSource[];
   readonly dependsOn: readonly CapabilityId[];
   readonly conventionText?: string;
+  /** Legacy immutable declaration marker. Not a checksum or equivalence proof of current code. */
   readonly semanticsDigest: string;
   readonly availability: CapabilityAvailability;
   /** The provider family a `provider` capability is reached through. */

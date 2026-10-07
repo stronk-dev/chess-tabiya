@@ -1,6 +1,6 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** implementing — landed 2026-09-24 at the owner's direction (no further review round). Pack schema lane 0.30 ships: the structured capability algebra, the closed registry (756 declarations) with semantics digests closed through TypeScript symbol references and lockfile-pinned packages, the generated applicability image, the four-root census, the `requires` stamp checked byte-for-byte in the single drill-pack reader, the registration handshake (422 `PACK_CAPABILITY_UNSUPPORTED`, listing exclusion, boot survival), the `packCapabilities` public projection parsed by one shared authority on both sides, the lifecycle algebra and total legacy-refusal migration, and the read-only planner with its separate applier. The 92-document migration (86 production + 6 browser fixtures) is applied in the implementing commit under [[D3033]]; D560 stays whole for authored content. Criteria 1–19 are tests; corrections are in the changelog. Receipt: `planning/pack-capability-contract/implementation-2026-09-24.md`. Prior status: draft — bounded post-cut author repair complete 2026-09-07 on [[D3120]]–[[D3123]].
+- **Status:** implementing — landed 2026-09-24 at the owner's direction (no further review round). Pack schema lane 0.30 ships the capability registry, generated applicability, required-version checks, registration refusals, public API projection, lifecycle and migration planner. The 92-document migration is applied under [[D3033]]; D560 stays whole for authored content. Historical implementation: `planning/pack-capability-contract/implementation-2026-09-24.md`. **2026-10-07 owner-approved amendment ([[D3528]]):** §2.3 replaces source-hash compatibility with explicit public versions and behavioral tests, preserving all 984 released declaration records and existing pack bytes. Current checks: `make pack-capability-integration-check capability-check verify-content`. This amendment does not discharge the remaining RFC obligations. Prior status: draft — bounded post-cut author repair complete 2026-09-07 on [[D3120]]–[[D3123]].
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -42,7 +42,7 @@ across 32 vocabularies once the two omitted parent unions are counted, and the c
 tripwire baseline, not the contract's definition.)*
 
 This RFC specifies the contract that binds those two facts together: a **capability** is a named,
-versioned, digest-bound unit of evaluator meaning; a pack **declares the capability versions it
+versioned public evaluator contract; a pack **declares the capability versions it
 requires**; the runtime **publishes what it supports**; and a handshake refuses, before
 registration, any pack whose requirements the runtime cannot meet. It adds a read-only
 **migration planner** separate from its applier, and a typed **deprecation** mechanism where every
@@ -51,8 +51,10 @@ withdrawn capability carries a successor or an explicit refusal.
 The one-line test this document must pass: **would it have caught [[D566]]?** That drift changed
 `pawn_safe_square`'s meaning and took `outpost`'s measured truth from 10 observations to **0 of
 643** — with no schema change, no digest movement and no version increment. Every mechanism the
-repo had for noticing change reported "nothing changed". §2.3's semantics digest is the answer, and
-criterion 13 is that exact case as a regression test.
+repo had for noticing change reported "nothing changed". The original source-digest remedy
+proved overbroad under [[D3528]] and is superseded by §2.3's owner-approved explicit-version
+and behavioral-test rule. Criterion 13 retains actual version/migration consequences;
+`structure.test.ts` pins chess outcomes instead of treating a no-op as a meaning change.
 
 Claims **pack-schema lane 0.30**, per owner ruling [[D1058]]. The `migration` claim line is
 **reserved, not exercised**: the durable evidence-job tables it names moved to the successor draft
@@ -211,124 +213,56 @@ Keying on evaluators rather than fields is what makes ordering, prose convention
 constant tables expressible. A JSON field may map to several capabilities; a capability may be
 depended on by several fields.
 
-#### §2.3 The semantics digest — the mechanism that catches D566
+#### §2.3 Explicit compatibility versions, not source hashes
 
-Every capability declaration carries a **semantics digest** over the artifacts that define its
-meaning:
+**Owner-approved replacement, 2026-10-07 ([[D3528]]):** “that's probably better...
+'source-hash ' SCREAMS overcomplicating BS. KISS principle!!” The owner approved
+replacing automatic source-hash incompatibility with explicit public semantic
+versions and behavioral contract tests. This supersedes the prior AST-token and
+transitive helper/package/receipt digest rule, not the pack grammar or §5 lifecycle.
 
-```ts
-export type CapabilitySubjectKind =
-  | "vocabulary_arm"
-  | "expression_node"
-  | "verdict_producer"
-  | "convention"
-  | "constant_table"
-  | "projection"
-  | "resolved_reference"
-  | "contract_identity"
-  | "assistance_surface"
-  | "error_contract";
+A pack requires `{id, version}`. That version identifies the public behavior the
+pack relies on: operands, result interpretation, limits and abstention. The existing
+registry, applicability derivation, supported-version handshake and migration
+planner remain. No replacement fingerprint registry or source-change waiver system
+is introduced.
 
-export interface CapabilityDeclaration {
-  readonly subjectId: string;                   // stable lifecycle identity
-  readonly id: CapabilityId;                    // exact subject + version
-  readonly subject: CapabilitySubjectKind;
-  readonly sources: readonly CapabilityMeaningSource[]; // >= 1; subject-appropriate authority
-  readonly dependsOn: readonly CapabilityId[];           // acyclic; digest closes transitively
-  readonly conventionText?: string;            // when the normative statement is prose (§2.4)
-  readonly semanticsDigest: string;            // `sha256:...` over source images + dependencies + conventionText
-  readonly disposition: SemanticDisposition;  // §5; one vocabulary throughout
-}
-```
+Changing a helper, an import, a build receipt or learner-facing wording is not by
+itself a breaking change. Detector behavior is pinned by tests over concrete chess
+positions, including positive, negative and boundary cases. A deliberate change to
+the promised meaning requires an explicit version/successor decision and updated
+behavioral tests; dependent packs/entries are then reviewed by the existing planner.
+An accidental behavior regression fails those tests. A checksum is not a semantic
+oracle, and the tests are not a substitute for reviewing an intentional contract change.
 
-`CapabilityMeaningSource` is closed. AST-backed subjects use `CapabilitySite`; F1 projections and
-resolved content use their own existing canonical authorities instead of pretending to be named
-TypeScript declarations:
+`make capability-check` verifies the declared identities, subject kinds, public
+dependency versions, availability, convention text and applicability against the
+existing registry. The source-site census remains a wiring check, not a compatibility
+proof. Known declarations keep their historical source records and legacy
+`semanticsDigest` bytes exactly; those records are not assertions about today's code.
+New declarations use a readable `contract:<capability-key>` marker in that legacy
+field, not a new source hash. No consumer may interpret it as behavioral equivalence.
+The immutable-history guard still refuses deletion or rewriting at a released identity.
+The generator refuses such updates before writing, rather than writing an invalid
+image and waiting for a hook to catch it.
 
-```ts
-export type CapabilityMeaningSource =
-  | { readonly kind: "schema_member"; readonly sourceIdentity: SchemaMemberIdentity }
-  | { readonly kind: "ast"; readonly site: CapabilitySite }
-  | { readonly kind: "f1_projection"; readonly projection: CapabilityId }
-  | { readonly kind: "resolved_content"; readonly registry: "shape" | "principle"; readonly entryId: string }
-  | { readonly kind: "package_dependency"; readonly package: string; readonly version: string;
-      readonly integrity: string; readonly lockfile: string; readonly lockfileKey: string };
+The D566 regression is a behavioral obligation: a known pawn-safe/outpost position
+must retain its stated outcome at the old contract. Source-only edits that preserve
+that outcome preserve compatibility. A deliberately different pawn-reach contract
+requires an explicit successor; criterion 13 verifies its actual migration effects,
+without pretending that inserting a no-op string changed chess truth.
 
-export type CapabilitySite =
-  | { readonly kind: "symbol"; readonly module: string; readonly symbol: string }
-  | { readonly kind: "discriminant_arm"; readonly module: string; readonly owner: string;
-      readonly property: string; readonly value: string };
-```
-
-`module` is a repository-relative POSIX path. A symbol site selects exactly one named declaration;
-an arm site selects exactly one equality arm inside the named owner. Zero or multiple matches fail.
-The canonical source image is JCS over the domain tag `tabiya.capability.site.v1`, the site record,
-and the ordered TypeScript token stream `(SyntaxKind name, token text)` with trivia excluded. Sites
-sort by their JCS image; dependencies sort by id. Each dependency contributes its full semantics
-digest, cycles fail, and imports/helpers/constants participate only through an explicit site or
-dependency. Before the registry is generated, every §3.1 named root is exported as the literal
-symbol listed there; inline/property/prose descriptions are not legal sites. The TypeScript package
-and lockfile are part of the repository toolchain; changing the
-extractor format requires a new site-image domain tag rather than silently moving every digest.
-
-A `package_dependency` source is the exact package name, every workspace manifest specifier that
-reaches the source closure, and the lockfile's resolved version plus integrity. It attaches
-automatically when TypeScript symbol-reference closure reaches an import from that package; local
-AST bytes do not pretend to contain external chess behavior. At author HEAD the authority contains
-`chessops@0.15.1`, integrity
-`sha512-hQDwv90AFkrPEsRJBebh3ZE+xDga25TCCv4lavNT2plZmd33UKNFYaZsE+7rafMbnBRrDEWUVsSYFqY3qCIGZw==`,
-joined to all four exact manifest pins and `pnpm-lock.yaml#chessops@0.15.1`. Version, integrity,
-manifest or lock-key drift changes the source image; an unresolved or multiply resolved lock entry
-fails generation. This is the external half of D566: changing chess truth through a dependency
-upgrade cannot preserve a capability digest at the same version.
-
-Every closed-vocabulary declaration also carries its exact `schema_member` source. That source is
-necessary but not sufficient for an interpreted member: the checked `meaningAuthority` in
-`rfc/contracts/pack-capability-applicability-v1.json` adds every interpreter entry site and closes
-each site through TypeScript symbol references, including imported helpers and constant tables.
-The seven multi-site/root families are author-owned rows in that artifact, not implementation
-choices. The compiler set-equals those roots against the exhaustive-switch census: a new switch,
-missing second site, unresolved symbol or reachable helper omitted from closure fails. An unused
-same-name symbol is unreachable and contributes nothing. A helper-only mutation therefore moves
-the dependent digest; a mutation outside the referenced symbol graph does not.
-
-An `f1_projection` source resolves one exact `ProjectionDeclaration` from
-`PRIMARY_EVIDENCE_MANIFEST`. Its source image is JCS over the domain
-`tabiya.capability.f1-projection.v1` and that declaration's id/version, role, plane, payload type,
-semantics, operands, signs, grounding, exactness, confidence, abstention, answer content, forms,
-limitations, disposition, `dependsOn`, literal derivation and compiled execution paths. Its
-capability dependencies are generated from the declaration's `dependsOn` and every derivation
-member. This is the complete F1→F3 bridge; no `CapabilitySite` or copied manifest digest is
-invented.
-
-A `resolved_content` source resolves the exact registry entry, includes its canonical content
-digest and structured semver arm, and adds the semantic dependencies described in §2.6. A source
-kind inconsistent with `subject` fails `CAPABILITY_SOURCE_KIND_INVALID`; zero sources fails
-`CAPABILITY_SOURCE_MISSING`.
-
-`make capability-check` recomputes every `semanticsDigest` from the tree and **fails when a stored
-digest does not match its recomputed value at the same version**. The remedy is always one of two
-things: revert the meaning change, or increment `version` and record the successor relation (§5).
-
-**This is the D566 test.** `pawn_safe_square`'s semantics were repaired to use a disclosed
-`maximal_pawn_reach@1` basis. The pack schema stayed 0.27, no pack byte moved, no `packDigest`
-moved, and the projection stayed `@1` — while `outpost` went from 10 observations in 1.56% of
-positions to **0 of 643**. Under this contract the edit changes the `pawnSafetyOnPosition` symbol
-site declared by `structuralFeature.pawn_safe_square`; dependency closure also invalidates
-`structuralFeature.outpost` while leaving an unrelated structural arm unchanged. Its digest stops
-matching, and `make verify` goes red until
-someone either reverts or bumps to `@2` — at which point every pack requiring `@1` is refused by
-§4's handshake and appears in §6's plan as judgement debt. Criterion 13 fixtures exactly this.
-
-#### §2.4 Prose conventions are digested
+#### §2.4 Normative convention text is a public contract
 
 `BREADTH_CONVENTION_TEXT` (**8** entries — `localNonLosing`, `candidateMajority`, `kingZone`,
 `kingShelter`, `materialRole`, `pressureLine`, `squareControl`, `pawnRelations`) and
 `SEMANTIC_CONVENTION_TEXT` (5 entries) at `packages/runtime/src/evidence-catalog.ts:182-196` are the
 **normative statement** of what **13** collectors assert — including `mate-proof@1`'s 250,000-node cap and `pressure-line@1`'s own
 P1/N3/B3/R5/Q9 role scale. Editing that prose changes what the predicate means with no code change
-at all. Each convention is therefore a capability whose `conventionText` is inside its
-`semanticsDigest`: **a prose edit without a version bump reddens CI**, which is G22's remedy.
+at all. Each convention is therefore a capability with explicit `conventionText`.
+Changing that normative statement at a released version fails the declaration check;
+the generator refuses to overwrite it. This is different from rephrasing a learner
+caption, which does not change the convention and does not bump pack requirements.
 
 #### §2.5 Both interpretation sites, or the capability is not covered
 
@@ -361,8 +295,9 @@ dependent pack with nothing noticing. `named_structure`'s four inline ids (`carl
 
 **Rule:** a pack's derived requirement set closes over the shape entries and principle entries it
 resolves through. Each resolved entry is a generated capability (`shape.<id>` or `principle.<id>`)
-whose capability version is the entry's `{kind:"semver", value:entry.version}` arm and whose
-semantics digest contains the entry's canonical content digest.
+whose capability version is the entry's `{kind:"semver", value:entry.version}` arm.
+Meaningful authored-entry changes require that entry's version decision; exact content
+digests continue to identify actual pack/entry/evidence bytes, not runtime code compatibility.
 
 Content bytes are not the closure. `resolvedCapabilityDependencies(entry)` walks every typed
 semantic expression in the validated entry—the shape trigger, plan trigger/success signature,
@@ -372,12 +307,12 @@ It then closes transitively through referenced entries and evaluator dependencie
 nodes, a reference cycle or an expression with no applicability row fail generation. The generated
 resolved declaration stores that exact dependency list, so `shape.maroczy-bind` depends on
 `structuralFeature.outpost`, which depends on `structuralFeature.pawn_safe_square`; a helper-only
-D566 change therefore invalidates the resolved shape even when the pack reaches outpost only through
-that reference.
+D566 contract transition therefore reaches the resolved shape even when the pack reaches outpost
+only through that reference.
 
-Editing bytes without moving the entry version fails `capability-check`; moving the version changes
-the pack's derived requirement. Editing a depended-on evaluator changes the closed digest and
-requires the evaluator version transition first. This preserves the ruled `{id, version}` pack
+Moving an entry version changes the pack's derived requirement. A deliberate change in a
+depended-on evaluator's public meaning requires its explicit version transition first;
+a source-only refactor does not. This preserves the ruled `{id, version}` pack
 grammar rather than hiding a third field in one requirement family. This is G24's remedy and it is
 the only part of the contract that reaches outside pack bytes.
 
@@ -1281,9 +1216,10 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    invariants throw at module load. Fixture: an `active` AST-backed declaration lacking a source
    fails with `CAPABILITY_SOURCE_MISSING`; an F1-backed declaration with its subject-appropriate
    projection source passes without inventing an AST site. Every schema vocabulary member carries
-   its base schema-member source plus every interpreter root and transitive symbol dependency named
-   by the author authority; helper-only edits in structural, transition and objective families move
-   the intended closed digest, while unused and unreachable same-name symbols do not.
+   its base schema-member source and registered interpreter roots. Source-only no-ops,
+   unrelated source edits and receipt-hash-only refreshes leave all existing declarations
+   and pack requirements unchanged. These are permanent compatibility controls, not
+   proof that any arbitrary code edit preserves chess meaning.
 3. **Declared equals applicable closure, in one gate ([[D3033]]).** `pack-capability-check` requires
    every one of the **86 production-pack plus 6 browser-fixture** `requires` arrays to byte-equal the read-only projection derived
    from that document's own content, and requires that no second drill-pack reader exists. The
@@ -1343,14 +1279,15 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     exit codes and prove ordinary `make verify` stays green while honest judgement debt exists.
 12. **The population is baked.** `make migration-plan` refuses when any of §7's six counts moves.
     Fixture: a temporary seventh document in `content/shapes/` reddens the plan.
-13. **The D566 regression — the criterion this RFC exists for.** A fixture reproduces the
-    `pawn_safe_square` semantics change at a pinned `@1`: `make capability-check` **fails** on the
-    digest mismatch; bumping the declaration to `@2` clears it; and `make migration-plan` then lists
+13. **The D566 regression — behavior and explicit transition.** Concrete pawn-safe/outpost
+    fixtures pin the old contract's behavior; a no-op string is not a meaning change.
+    An explicit `pawn_safe_square`/`outpost` successor at `@2` makes the existing migration planner list
     the three predicate-bearing documents (`content/shapes/{knight-vs-bishop,maroczy-bind,open-centre}.json`)
     in `judgement[]`, not in `mechanical[]`. *Wrong implementation that passes criteria 1–12 and
-    fails this:* any contract keyed on JSON fields.
-14. **Convention prose is inside the digest.** Editing one character of `BREADTH_CONVENTION_TEXT`
-    without a version bump reddens `make capability-check`.
+    fails this:* a planner that silently accepts the obsolete predicate contract.
+14. **Normative convention text is immutable.** Editing `BREADTH_CONVENTION_TEXT`
+    at the same version fails `make capability-check` and a write attempt. Caption
+    changes or a receipt-only hash refresh move zero unrelated declarations.
 15. **The claim-binding handoff is compile-time only (§4.4).** `claim.binding` resolves through the
     generic registry as a structured `CapabilityId`, and a generic round-trip fixture preserves both
     integer and semver arms. The F3 implementation diff contains zero additions to the evidence
@@ -1391,8 +1328,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     `make pack-capability-author-repair` recomputes the cumulative target, its literal 397-member
     source inventory, all 397 public mappings and both mapping digests; removing one row fails.
     Every unconditional/dependency/constant site is `module#symbol` and resolves exactly once.
-    Every external package reached by semantic AST closure contributes exact manifest pins and a
-    lockfile-resolved version+integrity source; mutating the `chessops` version or integrity fails.
+    Dependency installation continues to use the frozen lockfile and ordinary behavior tests.
+    There is no transitive package/source closure in capability compatibility. Historical
+    declaration source records remain frozen, not rewritten to imply current build identity.
 
 Criteria 20–30 of the pre-cut document — the public-card scope census, the closed queued-operation
 population, and every durable admission, lease, retry, settlement, consumption and provider-receipt
@@ -1499,6 +1437,16 @@ Proposed at the 2026-09-06 cut (unnumbered per [[D1503]]; renumber at landing):
 
 ## Changelog
 
+- 2026-10-07 — owner approves [[D3528]]'s KISS replacement after a receipt-only refresh
+  invalidated seven unrelated capabilities with unchanged runtime verdicts. §2.3 and
+  criteria 2/13/14/19 now separate explicit compatibility versions from source bytes.
+  Remove transitive AST/package/receipt hashing from the generator; retain all 984
+  committed declaration records and all existing pack requirements. Normative convention
+  and public dependency/availability changes still fail at their old version, and a
+  generator refuses rewrites before writing. Real pawn-safe/outpost positive/negative/
+  rank/colour controls and an explicit successor migration replace the old no-op-string
+  “meaning change.” No new source-fingerprint register, schema lane, pack migration or
+  claim of full RFC completion; historical proof instruments remain outside compatibility.
 - 2026-09-30 — integrated the recorded owner-directed implementation on main against the current
   Guided Hint and evidence foundation, producing the **initial** 819-declaration registry at this
   landing (the branch's 756 count is historical). [[D3316]] closes dynamic/stored admission through

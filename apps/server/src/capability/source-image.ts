@@ -1,5 +1,6 @@
-// rfc/pack-capability-contract.md §2.3 / §2.5 — canonical source images of the AST sites that define
-// a capability's meaning, closed through TypeScript symbol references.
+// rfc/pack-capability-contract.md §2.5 — source-site census and wiring checks.
+// D3528: site images/closure remain only for the existing historical migration-proof instrument;
+// the capability generator no longer calls them or infers compatibility from source bytes.
 //
 // A symbol site selects exactly one named top-level declaration; an arm site selects the arms of a
 // named owner whose condition compares `<x>.<property>` to the member literal (or tests

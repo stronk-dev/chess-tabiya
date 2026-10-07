@@ -1,12 +1,11 @@
 // rfc/pack-capability-contract.md §2.3, §2.6, §2.7, §3.1 — builds the capability applicability image
-// and every capability declaration, with its semantics digest, from the independent author authority
+// and versioned capability declarations from the independent author authority
 // (`rfc/contracts/pack-capability-applicability-v1.json`), the live pack schema, the F1 manifest, the
 // convention tables, the shape/principle registries and the authored lifecycle.
 //
-// Nothing here is an authority of its own: the author artifact owns the mapping inputs, the tree owns
-// the meaning, and `make capability-check` fails when a stored digest no longer matches the tree at
-// the same version. The remedy is always one of two things: revert the meaning change, or add a
-// version transition to `packages/runtime/src/capability/lifecycle.ts` and regenerate.
+// Public behavior is versioned explicitly and pinned by behavior tests. Source edits are not
+// compatibility transitions. Known declarations retain their historical source/legacy digest;
+// only explicit new versions get a new declaration. D3528 / owner-approved KISS amendment.
 
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
@@ -20,8 +19,6 @@ import {
   semverCapabilityId,
   resolvedShapeDependencies,
   canonicalJson,
-  classifyUnion,
-  valueAtPointer,
   type CapabilityApplicability,
   type CapabilityId,
   type CapabilityKey,
@@ -31,15 +28,12 @@ import {
 import type {
   CapabilityLifecycleRow,
   CapabilityMeaningSource,
-  CapabilitySiteRef,
   CapabilitySubjectKind,
   GeneratedCapabilityDeclaration,
 } from "@chess-tabiya/runtime";
 import type { CompiledEvidenceManifest } from "@chess-tabiya/runtime";
 
-import { CapabilitySourceIndex, sha256Hex } from "./source-image.js";
-
-export const DECLARATION_DIGEST_DOMAIN = "tabiya.capability.declaration.v1" as const;
+import { sha256Hex } from "./source-image.js";
 
 export interface ApplicabilityAuthority {
   readonly artifact: string;
@@ -74,8 +68,6 @@ export interface RegistryEntry {
 }
 
 export interface DeclarationBuildInputs {
-  readonly root: string;
-  readonly index: CapabilitySourceIndex;
   readonly schema: unknown;
   readonly authority: ApplicabilityAuthority;
   readonly lifecycle: readonly CapabilityLifecycleRow[];
@@ -122,57 +114,6 @@ export function buildApplicability(schema: unknown, authority: ApplicabilityAuth
   return Object.freeze(rows);
 }
 
-interface LockPackage { readonly version: string; readonly integrity: string; readonly key: string }
-
-export function readLockPackages(lockfile: string): ReadonlyMap<string, readonly LockPackage[]> {
-  const out = new Map<string, LockPackage[]>();
-  const lines = lockfile.split("\n");
-  const start = lines.indexOf("packages:");
-  const end = lines.indexOf("snapshots:");
-  for (let index = start + 1; index < (end < 0 ? lines.length : end); index += 1) {
-    const match = /^ {2}'?(@?[^@\s']+)@([^:'(]+)'?:$/u.exec(lines[index]!);
-    if (match === null) continue;
-    const integrity = /resolution: \{integrity: ([^}]+)\}/u.exec(lines[index + 1] ?? "")?.[1];
-    if (integrity === undefined) continue;
-    const rows = out.get(match[1]!) ?? [];
-    rows.push({ version: match[2]!, integrity, key: `${match[1]}@${match[2]}` });
-    out.set(match[1]!, rows);
-  }
-  return out;
-}
-
-function packageSource(root: string, name: string, lock: ReadonlyMap<string, readonly LockPackage[]>): CapabilityMeaningSource {
-  const resolved = lock.get(name) ?? [];
-  if (resolved.length !== 1) throw new TypeError(`CAPABILITY_PACKAGE_UNRESOLVED: ${name} resolves to ${resolved.length} lockfile entries`);
-  const [entry] = resolved as [LockPackage];
-  return { kind: "package_dependency", package: name, version: entry.version, integrity: entry.integrity, lockfile: "pnpm-lock.yaml", lockfileKey: entry.key };
-}
-
-/** Workspace manifests that pin `name`, with the pinned specifier. Part of the package source image. */
-function manifestPins(root: string, name: string): readonly string[] {
-  const manifests = ["package.json", "apps/server/package.json", "apps/web/package.json", "packages/runtime/package.json", "packages/schema/package.json"];
-  return manifests.flatMap((path) => {
-    const manifest = JSON.parse(readFileSync(resolve(root, path), "utf8")) as Record<string, Record<string, string> | undefined>;
-    return (["dependencies", "devDependencies"] as const).flatMap((section) => {
-      const specifier = manifest[section]?.[name];
-      return specifier === undefined ? [] : [`${path}#${section}.${name}=${specifier}`];
-    });
-  }).sort();
-}
-
-function memberBranchSchema(schema: unknown, identity: SchemaMemberIdentity): unknown {
-  const node = valueAtPointer(schema, identity.schemaPointer) as Record<string, unknown> | undefined;
-  if (node === undefined) throw new TypeError(`schema member pointer ${identity.schemaPointer} is absent`);
-  const form = classifyUnion(node);
-  if (form === undefined) return { member: identity.member };
-  const branches = node.oneOf as readonly Record<string, unknown>[];
-  if (form.form === "key") return branches[form.keys.indexOf(String(identity.member))];
-  return branches.filter((branch) => {
-    const property = (branch.properties as Record<string, Record<string, unknown>>)[form.discriminator]!;
-    return property.const === identity.member || (Array.isArray(property.enum) && property.enum.includes(identity.member));
-  });
-}
-
 interface Draft {
   readonly subjectId: string;
   readonly id: CapabilityId;
@@ -182,7 +123,6 @@ interface Draft {
   readonly conventionText?: string;
   readonly availability: GeneratedCapabilityDeclaration["availability"];
   readonly providerFamily?: GeneratedCapabilityDeclaration["providerFamily"];
-  readonly sourceImage: () => unknown;
 }
 
 function providerFamilyOf(producerId: string): GeneratedCapabilityDeclaration["providerFamily"] {
@@ -196,14 +136,11 @@ function providerFamilyOf(producerId: string): GeneratedCapabilityDeclaration["p
 export interface BuiltCapabilityContract {
   readonly applicability: readonly CapabilityApplicability[];
   readonly declarations: readonly GeneratedCapabilityDeclaration[];
-  /** Every `module#symbol` reached by any AST-backed declaration's closure. */
-  readonly reachedSites: readonly string[];
 }
 
 export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCapabilityContract {
-  const { index, schema, authority, lifecycle, manifest } = inputs;
+  const { schema, authority, lifecycle, manifest } = inputs;
   const applicability = buildApplicability(schema, authority, lifecycle);
-  const lock = readLockPackages(readFileSync(resolve(inputs.root, "pnpm-lock.yaml"), "utf8"));
   const drafts = new Map<CapabilityKey, Draft>();
   const put = (draft: Draft): void => {
     const key = capabilityKey(draft.id);
@@ -238,7 +175,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
       sources,
       dependsOn: [],
       availability: "local",
-      sourceImage: () => ({ domain: "tabiya.capability.schema-member.v2", sourceIdentity: identity, node: memberBranchSchema(schema, identity) }),
     });
   }
   for (const row of authority.always) {
@@ -249,7 +185,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
       sources: [...row.sites, ...row.dependencies].map(symbolSource),
       dependsOn: [],
       availability: "local",
-      sourceImage: () => null,
     });
   }
   for (const row of authority.meaningAuthority.constantRoots) {
@@ -260,7 +195,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
       sources: row.sites.map(symbolSource),
       dependsOn: [],
       availability: "local",
-      sourceImage: () => null,
     });
   }
   const conventions = authority.meaningAuthority.conventions;
@@ -276,7 +210,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
         dependsOn: [],
         conventionText: text,
         availability: "local",
-        sourceImage: () => ({ domain: "tabiya.capability.convention.v1", table, key, text }),
       });
     }
   }
@@ -302,7 +235,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
       dependsOn: [...canonicalCapabilityRequirements(dependsOn)],
       availability: producer.availability,
       ...(producer.availability === "provider" ? { providerFamily: providerFamilyOf(producer.id) } : {}),
-      sourceImage: () => ({ domain: "tabiya.capability.f1-projection.v1", declaration: projection }),
     });
   }
   for (const subject of authority.lifecycleSubjects) {
@@ -324,7 +256,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
         sources: version.sites.map(symbolSource),
         dependsOn: [],
         availability: "local",
-        sourceImage: () => ({ domain: "tabiya.capability.lifecycle-subject.v1", version: version.version }),
       };
       put(draft);
     }
@@ -339,7 +270,6 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
         sources: [{ kind: "resolved_content", registry, entryId: entry.id }],
         dependsOn: registry === "shape" ? [...resolvedShapeDependencies(schema, members, entry.document)] : [],
         availability: "build_time",
-        sourceImage: () => ({ domain: "tabiya.capability.resolved-content.v1", registry, entryId: entry.id, version: entry.version, contentSha256: sha256Hex(canonicalJson(entry.document)) }),
       });
     }
   }
@@ -372,82 +302,24 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
       for (const projection of authority.memberDependencies.projectionRule.engineCondition[String(identity.member)] ?? []) addDependency(`engineCondition.${String(identity.member)}`, projection);
     }
   }
-  // Semantics digests, current versions only; retained historical versions keep their frozen digest.
+  // Compatibility is the explicit id/version, not a transitive source checksum. Retain released
+  // declaration records exactly. Public dependency/availability/convention edits still compare
+  // against that record; a new version is the explicit way to introduce a changed contract.
   const previous = new Map(inputs.previous.map((row) => [capabilityKey(row.id), row]));
   const all = [...drafts.values()];
-  const draftByKey = new Map<CapabilityKey, Draft>(all.map((draft) => [capabilityKey(draft.id), draft]));
-  const reachedSites = new Set<string>();
-  const familyBoundaries = new Set(authority.meaningAuthority.interpreterRoots.flatMap((family) => family.sites));
-  const digests = new Map<CapabilityKey, string>();
-  const packageCache = new Map<string, CapabilityMeaningSource>();
-  const digestOf = (key: CapabilityKey, stack: readonly CapabilityKey[]): string => {
-    const known = digests.get(key);
-    if (known !== undefined) return known;
-    if (stack.includes(key)) throw new TypeError(`CAPABILITY_DEPENDENCY_CYCLE: ${[...stack, key].join(" -> ")}`);
-    const draft = draftByKey.get(key);
-    if (draft === undefined) {
-      const frozen = previous.get(key);
-      if (frozen === undefined) throw new TypeError(`CAPABILITY_DECLARATION_MISSING: ${key} is depended on and neither current nor retained`);
-      return frozen.semanticsDigest;
-    }
-    const images: string[] = [];
-    const closureSites = new Set<string>();
-    const packages = new Set<string>();
-    for (const source of draft.sources) {
-      if (source.kind === "ast") {
-        images.push(index.siteImage(source.site as CapabilitySiteRef));
-        const closure = index.closure(source.site as CapabilitySiteRef, { boundaries: familyBoundaries });
-        for (const site of closure.sites) closureSites.add(site);
-        for (const name of closure.packages) packages.add(name);
-      } else if (source.kind === "package_dependency") continue;
-      else if (source.kind === "schema_member" || source.kind === "f1_projection" || source.kind === "resolved_content" || source.kind === "convention_entry") {
-        images.push(sha256Hex(canonicalJson(draft.sourceImage())));
-      }
-    }
-    const rootSites = new Set(draft.sources.flatMap((source) => (source.kind === "ast" ? [`${source.site.module}#${source.site.kind === "symbol" ? source.site.symbol : source.site.owner}`] : [])));
-    const closureImages = [...closureSites].filter((site) => !rootSites.has(site)).sort().map((site) => {
-      reachedSites.add(site);
-      const { module, symbol } = parseSite(site);
-      return `${site}=${index.siteImage({ kind: "symbol", module, symbol })}`;
-    });
-    for (const site of rootSites) reachedSites.add(site);
-    for (const name of [...packages].sort()) {
-      if (!packageCache.has(name)) packageCache.set(name, packageSource(inputs.root, name, lock));
-      const source = packageCache.get(name)!;
-      if (!draft.sources.some((candidate) => candidate.kind === "package_dependency" && candidate.package === name)) draft.sources.push(source);
-    }
-    const packageImages = draft.sources.flatMap((source) => (source.kind === "package_dependency"
-      ? [sha256Hex(canonicalJson({ domain: "tabiya.capability.package.v1", package: source.package, version: source.version, integrity: source.integrity, lockfileKey: source.lockfileKey, manifests: manifestPins(inputs.root, source.package) }))]
-      : []));
-    const dependencies = [...draft.dependsOn].sort((left, right) => (capabilityKey(left) < capabilityKey(right) ? -1 : 1)).map((dependency) => ({
-      key: capabilityKey(dependency),
-      digest: digestOf(capabilityKey(dependency), [...stack, key]),
-    }));
-    const digest = `sha256:${sha256Hex(canonicalJson({
-      domain: DECLARATION_DIGEST_DOMAIN,
-      id: draft.id,
-      subject: draft.subject,
-      images: [...images].sort(),
-      closure: closureImages,
-      packages: packageImages.sort(),
-      dependencies,
-      ...(draft.conventionText === undefined ? {} : { conventionText: draft.conventionText }),
-    }))}`;
-    digests.set(key, digest);
-    return digest;
-  };
   const declarations: GeneratedCapabilityDeclaration[] = [];
   for (const draft of all) {
     const key = capabilityKey(draft.id);
-    const semanticsDigest = digestOf(key, []);
+    const released = previous.get(key);
     declarations.push(Object.freeze({
       subjectId: draft.subjectId,
       id: draft.id,
       subject: draft.subject,
-      sources: Object.freeze(draft.sources.map((source) => Object.freeze(source))),
+      sources: released?.sources ?? Object.freeze(draft.sources.map((source) => Object.freeze(source))),
       dependsOn: Object.freeze([...canonicalCapabilityRequirements(draft.dependsOn)]),
       ...(draft.conventionText === undefined ? {} : { conventionText: draft.conventionText }),
-      semanticsDigest,
+      // Preserve the legacy field without claiming it proves today's implementation behavior.
+      semanticsDigest: released?.semanticsDigest ?? `contract:${key}`,
       availability: draft.availability,
       ...(draft.providerFamily === undefined ? {} : { providerFamily: draft.providerFamily }),
     }));
@@ -456,14 +328,14 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
   for (const row of lifecycle) {
     for (const version of row.versions) {
       const key = capabilityKey({ id: row.subjectId, version: version.version });
-      if (draftByKey.has(key)) continue;
+      if (drafts.has(key)) continue;
       const frozen = previous.get(key);
       if (frozen === undefined) throw new TypeError(`CAPABILITY_DECLARATION_MISSING: lifecycle retains ${key} but no generated declaration exists to freeze`);
       declarations.push(frozen);
     }
   }
   declarations.sort((left, right) => (capabilityKey(left.id) < capabilityKey(right.id) ? -1 : 1));
-  return Object.freeze({ applicability, declarations: Object.freeze(declarations), reachedSites: Object.freeze([...reachedSites].sort()) });
+  return Object.freeze({ applicability, declarations: Object.freeze(declarations) });
 }
 
 export function loadRegistryEntries(root: string, directory: "content/shapes" | "content/principles"): readonly RegistryEntry[] {

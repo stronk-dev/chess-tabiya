@@ -2,7 +2,8 @@ import type { AddressInfo } from "node:net";
 import * as runtime from "@chess-tabiya/runtime";
 import * as execution from "../../../packages/runtime/src/evidence-binding-execution.js";
 import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
-import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, onTestFailed, vi } from "vitest";
+import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { responseStatus } from "./http-response.test-support.js";
 import { ShapeRegistry } from "./shape-registry.js";
@@ -14,17 +15,37 @@ const faults = ["missing_policy", "impossible_latency", "extra_raw_binding"] as 
 type Fault = typeof faults[number];
 const originalCompile = execution.compileEvidenceConsumerExecution;
 const originalRoute = routes.invokeEvidenceValueRoute;
-afterEach(() => vi.restoreAllMocks());
+let fixture: ChessTabiyaApplication | undefined;
+let setupElapsedMs = 0;
+beforeEach(async () => {
+  // Fresh application construction is fixture setup, not a module-operation assertion.
+  // Keep Vitest's normal hook budget and the unchanged five-second test budget separate.
+  const started = performance.now();
+  let ready = false;
+  onTestFailed(() => console.error(`Local Support setup: ${ready ? `application ready in ${setupElapsedMs}ms` : "application construction did not finish"}`));
+  fixture = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
+  setupElapsedMs = Math.round(performance.now() - started);
+  ready = true;
+});
+afterEach(async () => {
+  vi.restoreAllMocks();
+  const application = fixture;
+  fixture = undefined;
+  await application?.close();
+});
 
 async function control(module: LocalModule, fault?: Fault, disclose = true) {
   const started = performance.now();
   const boundaries: string[] = [];
   const boundary = (stage: string) => boundaries.push(`${Math.round(performance.now() - started)}ms ${stage}`);
-  boundary("compose application");
+  boundary(`application ready (setup ${setupElapsedMs}ms)`);
   onTestFailed(() => console.error(`Local Support (${module}) lifecycle: ${boundaries.join(" → ")}`));
   vi.spyOn(console, "info").mockImplementation(() => {});
-  const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
+  const application = fixture;
+  if (application === undefined) throw new Error("Local Support application fixture is missing");
   const close = async () => {
+    if (fixture !== application) return;
+    fixture = undefined;
     boundary("close application");
     await application.close();
     boundary("application closed");
