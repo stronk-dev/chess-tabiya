@@ -107,3 +107,55 @@ D3262 remains doing and the search RFC draft. This finding does not change the
 Theory-body repair in `9408fbac`, close D3510's unrelated software timeout, choose
 a search profile, or promote a capability/milestone/content/full-1.0 verdict.
 Routine metadata, hashes, work state and roadmap receipts are updated automatically.
+
+The separately identified successor protocol is now preregistered in
+`d3512-source-isolation-preregistration-2026-10-07.md`: freeze the 697 affected
+cold identities and matching whole triplets, isolate each cold process without
+retrying any case, preserve startup/teardown and original failures, and refuse
+warm fresh execution. Its instrument, controls, original/successor qualification
+join and native evidence remain unimplemented/unmeasured, not new delivered cases.
+
+## Complete retained-batch stratification and bounded comparison
+
+Both original reconstruction handles now terminate zero. Normal
+`make semantic-search-cost-summary-freeze` passes eight reader controls and retains
+all **6,948 rows / 193 candidates / 268 strata**, separating setting, horizon,
+regime, phase, declared focus and result. Counts remain 2,890 available, 2,851
+source-unavailable, six invalid-source, 697 budget-exhausted and 504 no-target.
+These result labels retain their original source-lifecycle qualification above;
+the inherited suffix is not an independent outage/timeout or success-latency
+distribution. [V] `d3262-cost-live-recursive-depth12-summary-2026-10-07.json`,
+`cost-summary.mjs`, permanent controls and actual terminal Make.
+
+Normal `make semantic-search-cost-recursive-sensitivity-freeze` passes 61 reader
+controls and retains all six settings, both horizons and all regimes: **1,092
+named target cells / 2,316 cold-warm pairs**. Of the pairs, 1,613 preserve identical
+compiled evidence and 703 preserve failed-cold/missing-warm receipt states.
+Of the named four-ply cells, **731 compare with their own frozen arm** with zero
+changed frontier, coverage or outcome, while **361 remain explicitly unpaired**.
+Unknown cells are not false negatives or proof of equality across widths. [V]
+`d3262-cost-live-recursive-depth12-sensitivity-2026-10-07.json.gz`,
+`cost-recursive-sensitivity.mjs`, permanent controls and actual terminal Make.
+
+| Source / event width | Named cells | Compared | Unpaired |
+|---|---:|---:|---:|
+| top2 / top8 | 182 | 181 | 1 |
+| top2 / all-legal | 182 | 181 | 1 |
+| top4 / top8 | 182 | 180 | 2 |
+| top4 / all-legal | 182 | 180 | 2 |
+| top8 / top8 | 182 | 9 | 173 |
+| top8 / all-legal | 182 | 0 | 182 |
+
+Each setting retains all 193 candidates and fourteen explicit no-target
+policies. Both reports bind the same preserved original archive digest above.
+The summary has 268,255 bytes, SHA-256
+`a6e2a958457736b741fba0389cd4828d298222810aaf582077493ac604983702`.
+The sensitivity has 2,006,129 compressed bytes, SHA-256
+`4a87e9f1338d87e3c49b621418e90409bd8960b4e8f79d458db14232932857ab`;
+decoded canonical SHA-256 is
+`e2da7f49eda49d794a289f2effd211e514935cbe8b0698e977bd817716252f99`.
+Read-only output inspection confirms those bytes/digests and retained counts.
+This is checked synthesis over independently replayed original data, not another
+independent chess oracle or source attempt. Full cost/profile admission remains
+open; no new setting is promoted. [V] Both artifacts, literal inputs and terminal
+commands; original independent replay and §Admission and next work above.

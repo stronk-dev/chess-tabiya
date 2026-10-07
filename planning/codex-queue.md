@@ -21,6 +21,16 @@ original failed batch; no blind restart, overwrite or completed-count promotion.
 No completed population is repeated. Current receipt:
 `planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md`.
 
+The retained depth-twelve quantitative/sensitivity reconstructions now terminate
+zero: eight/61 controls, 268 strata, all 1,092 target cells and 2,316 cold-warm pairs.
+731 cells match their own frozen frontier/coverage/outcome; 361 remain unpaired.
+Cache checks preserve 1,613 identical compiled pairs and 703 failed-cold/missing-warm
+pairs. Reports bind the preserved original digest and no new source attempt is
+claimed. Both original reconstruction handles are closed; do not restart them.
+Current full synthesis: `d3262-cost-live-recursive-depth12-summary-2026-10-07.json`
+and `d3262-cost-live-recursive-depth12-sensitivity-2026-10-07.json.gz` under
+`planning/semantic-consequence-search/`, with limits in the D3512 lifecycle receipt.
+
 Both ordered-history Maia prefixes now have complete fresh/frozen synthesis:
 2,316 cases / 364 target cells / 772 cold-warm pairs. Sixty-seven reader controls
 and immutable read-only reconstruction pass. Exact paths, witnesses, omissions,
@@ -46,6 +56,13 @@ Three real subprocess controls prove that terminal failure prevents another UCI
 write, while a nonfatal parser refusal does not. D3512 stays doing; isolate/recover
 under a preregistered successor protocol before the omitted wide-arm attempts can
 support profile comparison. Source images, failures and clocks remain unchanged.
+The successor protocol is now recorded before execution in
+`planning/semantic-consequence-search/d3512-source-isolation-preregistration-2026-10-07.md`:
+freeze the 697 affected cold identities and their whole triplets (2,091 cases),
+give each cold case a new ready process, never retry a failed case, preserve startup/
+teardown separately and prohibit warm fresh execution. Implement the disposable
+instrument, its actual subprocess/custody controls and explicit original/successor
+qualification join before native capture or any completed-count promotion.
 Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
 `d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
 D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is

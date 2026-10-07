@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 retained depth-twelve comparison is now complete as checked synthesis:
+6,948 cases / 268 strata, all 1,092 target cells / 2,316 cold-warm pairs. 731 cells
+match their own frozen arm; 361 remain explicitly unpaired. Eight quantitative
+and 61 sensitivity controls plus both full reconstructions pass. D3512's
+case-isolation successor protocol is recorded before implementation/native
+execution: all 697 affected cold identities and whole triplets, fresh process
+per cold case, no retries and an explicit original/successor qualification join.
+It is not a production recovery/default or additional delivered measurement;
+the qualified headline remains **23 settings / 26,634 cases**. Current bounded
+comparison and preregistration are linked from the lifecycle receipt below.
+
 2026-10-07 search-source lifecycle finding: the original six depth-twelve settings
 terminate with 6,948 retained rows, but [[D3512]] exposes one fatal source timeout
 and 699 later inherited dependency failures across 697 affected cold rows. These

@@ -1038,3 +1038,22 @@ headline stays 23 settings / 26,634 cases and the search RFC remains draft.
 This is a bounded instrument/source-lifecycle finding, not an engine cause,
 production recovery/default, useful explanation or milestone/capability/content
 completion. `[V]` receipt §Admission and next work and current ledger/roadmap.
+
+Complete retained depth-twelve synthesis now preserves 6,948 cases in 268
+setting/horizon/regime/phase/focus/result strata. All 1,092 target cells and 2,316
+cold-warm pairs remain: 731 cells match their own frozen frontier/coverage/outcome,
+while 361 stay explicitly unpaired. Cache comparison retains 1,613 identical
+compiled pairs and 703 failed-cold/missing-warm pairs, not fresh warm execution.
+Eight quantitative and 61 sensitivity controls pass with both actual terminal
+reconstructions. Source failures remain qualified exactly as above. `[V]`
+`planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md`
+§Complete retained-batch stratification and bounded comparison and both named
+artifacts/Make readers.
+
+The separately identified case-isolation successor is preregistered before
+implementation/native execution: all 697 deadline-affected cold identities and
+whole triplets, no retries, fresh process per cold case, visible startup/teardown,
+warm fresh-query refusal and an explicit original/successor qualification join.
+It does not replace failed originals or promote the delivered 23 settings.
+`[V]` `planning/semantic-consequence-search/d3512-source-isolation-preregistration-2026-10-07.md`;
+instrument/controls/native evidence and full D3262 admission remain open.
