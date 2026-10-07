@@ -29091,12 +29091,12 @@
     },
     {
       "id": "D3522",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:eccfc2b856cf118138cd18abcbf7a455d7da739c4a658d4d693c177687c61681",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:01360dbd8eed5a6312e3a7f3375004138994a76e3b1631e028a0fc15ead9d348",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-10-07"
+      "evidence": "apps/server/src/local-module-execution.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3523",
@@ -29155,7 +29155,7 @@
       "id": "D3529",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:d7d3a41a99f19c90f0d93f08094a8d13cd9a1d70e2b1eca47bdd9d44dbb467f8",
+      "sourceDigest": "sha256:aeeb9415350d24f0d0dcdd4e6bceaed97934ca640213a9534d5d1fac0dd01ed9",
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
@@ -29164,7 +29164,7 @@
       "id": "D3530",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:ce7f1a9f753babf046c08f3e4b183cb51fa59289a7b86341593aef5f49cc71aa",
+      "sourceDigest": "sha256:069b90b5c4537f2043e5d1cf2389a33bbac73a7be99f51b8e744b0b82e583edf",
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"

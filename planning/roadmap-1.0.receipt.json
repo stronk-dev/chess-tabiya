@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:146a54e04e72927ed88581496e8bce9302328cb60d1b581a8b67777053db2998",
+    "roadmap": "sha256:a96fa1e27d7edfd457821fbe485b95759ab789b1706f081539df18ec1f55731a",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:7421ec8b548260f7f726d6a3b5030a1c93bf5636b78471d7cfc2257703db1401",
+    "workState": "sha256:18bcb75900dfdbf74101d8e296635637996f9378e63d23c9ccebb2792fa1f249",
     "rfcRegister": "sha256:744edc8bc7b4b01f7d0cc5abd95de9d5ac7ef07a9a1735b800eedbe72ad02a54",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 629,
-      "doing": 15,
+      "doing": 14,
       "blocked": 1059,
-      "done": 1416,
+      "done": 1417,
       "refused": 161
     },
     "workItems": {
@@ -1043,10 +1043,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Obtain owner approval for D3528's compatibility-boundary amendment: separate explicit public semantic compatibility from build/source freshness without rewriting committed declarations or inventing seven version/pack migrations. Support repairs D3521-D3525/D3527 stay doing and uncommitted while software is red. D3531 restores runner-owned input fixtures and named failure steps; the complete changed-fixture browser gate passes, but the original timeout cause and deliberate failure trace-retention proof stay open. Locate D3518/D3514/D3510's earlier software failures. D3526 requires an exact tactical witness-subsumption amendment, separate from D3309's structural successors. Existing Inspector, phone, owner-use, hint and RFC discharges remain; no new bulk capture or milestone/capability/content promotion.",
+      "nextAction": "Obtain owner approval for D3528's compatibility-boundary amendment: separate explicit public semantic compatibility from build/source freshness without rewriting committed declarations or inventing seven version/pack migrations. Support repairs D3521/D3523-D3525/D3527 stay doing and uncommitted while working-source software is red. D3522's independent HTTP fixture repair is closed on focused and exact-index full software gates, not as a cause of earlier intermittent failures. D3531 restores runner-owned input fixtures and named failure steps; the complete changed-fixture browser gate passes, but the original timeout cause and deliberate failure trace-retention proof stay open. Locate D3518/D3514/D3510's earlier software failures. D3526 requires an exact tactical witness-subsumption amendment, separate from D3309's structural successors. Existing Inspector, phone, owner-use, hint and RFC discharges remain; no new bulk capture or milestone/capability/content promotion.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "Independent browser-fixture maintenance under the accepted input contract: all 25 endgame cases use the runner-owned page/context; touch retains its actual mobile/coarse-pointer semantics, without an unused extra registration or custom context close inside an expired body. Registration, each pack opening and exact move submission have named steps. Normal complete make test-browser-ci-awake passes 88 smoke tests, five content journeys, 59 matrix tests and one packaged-default journey; the existing optional Maia latency case alone is skipped. All 150 exact input cells and 112 unretried composition cells remain. D3531 stays doing because the original timeout's cause and a deliberate failure's trace retention remain unproven; no application input/geometry/auth repair is claimed. Software remains red on D3528: 3,430 passed, one failed, with seven unrelated compatibility digests changed by receipt-only hash churn. The Support source fixes and regenerated receipt remain uncommitted pending owner approval; all 984 committed declarations remain intact. The independent fixture/diagnostic hunks alone are staged, not the blocked Support tests or implementation. No full RFC, capability, milestone, pack or 1.0 completion is claimed.",
+        "summary": "D3522's independent HTTP fixture repair consumes each original response before teardown, retaining real fetch, all refusal/status/payload assertions and deadlines. Normal focused gate passes 100 tests / seven files plus clean types. Exact-index make staged-software-contracts passes 3,426 software tests / 345 files, seven performance tests, clean types and all downstream contracts at tree 43eb969cb65a9d6365b499d71fed8342ef4a96f0; it explicitly excludes unstaged Support source/receipt changes. The earlier full working-source software gate remains red on D3528: 3,430 passed, one failed and seven unrelated compatibility digests changed by receipt-only hash churn. All 984 committed declarations remain intact. The complete changed-fixture browser gate passes 88 smoke, five content, 59 matrix and one packaged-default journey, with one existing optional Maia skip, 150 exact input cells and 112 unretried composition cells. D3531's original timeout cause/failed trace retention and D3510/D3514/D3518's earlier intermittent causes remain open; a passing replay does not establish them. Support source fixes and refreshed receipt remain uncommitted pending owner approval. No full RFC, capability, milestone, pack or 1.0 completion is claimed.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/module-query.test.ts",

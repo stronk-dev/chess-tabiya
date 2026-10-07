@@ -39,9 +39,13 @@ explicitly separate, with future large captures outside ordinary Git.
    compact registered capture warning within the unchanged staged-cue budget. Both-colour
    software controls are green; native desktop/phone warning → Revise → stage again →
    explicit confirm and the complete normal gates must pass before closeout.
-3. [[D3522]] independently repairs response-body ownership in the local Support fixture.
-   The normal target also runs the existing unfinished-stream/body-failure/real-HTTP
-   controls. It is not the established cause or repair of the earlier composition timeout.
+3. [[D3522]] is closed independently: the local Support fixture now owns each response
+   body before teardown. The focused gate passes 100 tests / seven files and clean types;
+   exact-index make staged-software-contracts passes 3,426 software tests / 345 files,
+   seven performance tests, clean types and all downstream contracts, excluding unstaged
+   Support changes. Existing unfinished-stream/body-failure/real-HTTP controls remain.
+   This is not the established cause or repair of the earlier composition timeout and
+   does not make the pending working-source Support gate green.
    [[D3525]] corrects the maximum-load fixture's false warning expectation on a defensive
    pawn move, retaining its later genuine mate warning. [[D3527]] waits for the recorded
    opponent reply before the read-only baseline, then checks the complete unchanged journal

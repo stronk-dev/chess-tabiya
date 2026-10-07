@@ -4,6 +4,7 @@ import * as execution from "../../../packages/runtime/src/evidence-binding-execu
 import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { responseStatus } from "./http-response.test-support.js";
 import { ShapeRegistry } from "./shape-registry.js";
 
 const FEN = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
@@ -39,15 +40,15 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
       return response;
     };
     const registered = await request("/auth/register", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "local_module", password: "local-module-password" }) });
-    expect(registered.status).toBe(201);
+    expect(await responseStatus(registered)).toBe(201);
     const headers = { "content-type": "application/json", cookie: registered.headers.get("set-cookie")!.split(";", 1)[0]!, "x-writer-id": "local-module-writer" };
     const post = (path: string, body: unknown) => request(path, { method: "POST", headers, body: JSON.stringify(body) });
     const created = await post("/runs", { id: "local-module", session: { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
-    expect(created.status, await created.clone().text()).toBe(201);
+    expect(created.status, await created.text()).toBe(201);
     if (module === "structure_nudge") {
       const moved = await post("/runs/local-module/moves", { uci: "g8f6" });
-      expect(moved.status, await moved.clone().text()).toBe(200);
-      if (disclose) expect((await post("/runs/local-module/reveal", {})).status).toBe(200);
+      expect(moved.status, await moved.text()).toBe(200);
+      if (disclose) expect(await responseStatus(post("/runs/local-module/reveal", {}))).toBe(200);
     }
     const graph = await (await request("/runs/local-module/graph", { headers })).json() as { graph: Pick<runtime.DrillRun, "activeCursor"> };
     boundary("graph body read");
@@ -94,8 +95,9 @@ describe("authenticated complete local Support execution", () => {
       const app = await control(module, fault);
       try {
         const response = await app.ask();
+        const body = await response.json();
         expect(response.status).toBe(503);
-        expect(await response.json()).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Module execution contract is unavailable" } });
+        expect(body).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Module execution contract is unavailable" } });
         expect(app.trace).toEqual([`compile:module.${module}@1`]);
         expect(app.collect).not.toHaveBeenCalled();
         expect(app.prepare).not.toHaveBeenCalled();
@@ -106,8 +108,9 @@ describe("authenticated complete local Support execution", () => {
       const app = await control(module);
       try {
         const response = await app.ask();
-        expect(response.status, await response.clone().text()).toBe(200);
-        const page = (await response.json() as { page: runtime.ModuleQueryPage }).page;
+        const body = await response.text();
+        expect(response.status, body).toBe(200);
+        const page = (JSON.parse(body) as { page: runtime.ModuleQueryPage }).page;
         expect(page.packets.map(packet => packet.module)).toEqual([module]);
         expect(app.trace[0]).toBe(`compile:module.${module}@1`);
         expect(app.collect).toHaveBeenCalled();
@@ -124,8 +127,9 @@ describe("authenticated complete local Support execution", () => {
       const app = await control(module, "extra_raw_binding");
       try {
         const response = await app.ask("quiet");
+        const body = await response.json() as { page: runtime.ModuleQueryPage };
         expect(response.status).toBe(200);
-        expect((await response.json() as { page: runtime.ModuleQueryPage }).page.packets).toEqual([]);
+        expect(body.page.packets).toEqual([]);
         expect(app.trace).toEqual([]);
       } finally { vi.restoreAllMocks(); await app.close(); }
     });
@@ -135,7 +139,7 @@ describe("authenticated complete local Support execution", () => {
     const app = await control("threat_radar", "missing_policy");
     try {
       const response = await app.ask("support", { ...app.query, timing: "pre_commit", nodeId: "nodeId" in app.query ? app.query.nodeId : "", selectedSquare: "c6", requested: ["sight_on_request", "threat_radar"] }, false);
-      expect(response.status).toBe(503);
+      expect(await responseStatus(response)).toBe(503);
       expect(app.trace).toEqual(["compile:module.sight_on_request@1", "compile:module.threat_radar@1"]);
       expect(app.collect).not.toHaveBeenCalled();
     } finally { vi.restoreAllMocks(); await app.close(); }
@@ -144,9 +148,9 @@ describe("authenticated complete local Support execution", () => {
   it("checks every repeated decision request, not only the first valid request", async () => {
     const app = await control("sight_on_request");
     try {
-      expect((await app.ask()).status).toBe(200);
+      expect(await responseStatus(app.ask())).toBe(200);
       app.trace.length = 0; app.collect.mockClear(); app.fault("missing_policy");
-      expect((await app.ask()).status).toBe(503);
+      expect(await responseStatus(app.ask())).toBe(503);
       expect(app.trace).toEqual(["compile:module.sight_on_request@1"]);
       expect(app.collect).not.toHaveBeenCalled();
     } finally { vi.restoreAllMocks(); await app.close(); }
@@ -157,8 +161,8 @@ describe("authenticated complete local Support execution", () => {
     try {
       const nodeId = "nodeId" in app.query ? app.query.nodeId : "";
       const response = await app.ask("support", { timing: "pre_commit", nodeId, requested: ["sight_on_request"] });
-      expect(response.status).toBe(200);
       const page = (await response.json() as { page: runtime.ModuleQueryPage }).page;
+      expect(response.status).toBe(200);
       expect(page.packets).toEqual([]);
       expect(page.suppressions).toEqual([{ module: "sight_on_request", reason: "no_square" }]);
       expect(app.trace).toEqual([]);
@@ -170,8 +174,9 @@ describe("authenticated complete local Support execution", () => {
     try {
       const nodeId = "nodeId" in app.query ? app.query.nodeId : "";
       const response = await app.ask("support", { timing: "pre_commit", nodeId, requested: [] });
+      const body = await response.json() as { page: runtime.ModuleQueryPage };
       expect(response.status).toBe(200);
-      expect((await response.json() as { page: runtime.ModuleQueryPage }).page.packets).toEqual([]);
+      expect(body.page.packets).toEqual([]);
       expect(app.trace).toEqual([]);
     } finally { vi.restoreAllMocks(); await app.close(); }
   });
@@ -181,8 +186,8 @@ describe("authenticated complete local Support execution", () => {
     try {
       const nodeId = "subjectNodeId" in app.query ? app.query.subjectNodeId : "";
       const response = await app.ask("guided", { timing: "checkpoint", nodeId, requested: ["structure_nudge"] });
-      expect(response.status).toBe(200);
       const page = (await response.json() as { page: runtime.ModuleQueryPage }).page;
+      expect(response.status).toBe(200);
       expect(page.packets).toEqual([]);
       expect(page.suppressions).toEqual([{ module: "structure_nudge", reason: "timing_outside_module" }]);
       expect(app.trace).toEqual([]);
@@ -193,8 +198,9 @@ describe("authenticated complete local Support execution", () => {
     const app = await control("structure_nudge", "missing_policy", false);
     try {
       const response = await app.ask();
+      const body = await response.json() as { error: { code: string } };
       expect(response.status).toBe(409);
-      expect((await response.json() as { error: { code: string } }).error.code).toBe("ASSISTANCE_WITHHELD");
+      expect(body.error.code).toBe("ASSISTANCE_WITHHELD");
       expect(app.trace).toEqual([]);
     } finally { vi.restoreAllMocks(); await app.close(); }
   });
