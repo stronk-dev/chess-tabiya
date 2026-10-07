@@ -81,7 +81,7 @@ export function assertStagedRoadmapFlowback(root) {
   if (changedCheckpoints.length === 0) throw new Error("roadmap flow-back failed: no milestone latestCheckpoint changed");
 
   const groundedRfcs = new Set(changedCheckpoints.flatMap((milestone) => milestone.latestCheckpoint?.evidence ?? [])
-    .map((reference) => typeof reference === "string" ? reference.split("#", 1)[0] : reference?.path));
+    .map((reference) => reference.split("#", 1)[0]));
   const ungrounded = stagedRfcs.filter((file) => !groundedRfcs.has(file));
   if (ungrounded.length > 0) {
     throw new Error(`roadmap flow-back failed: changed checkpoints do not name staged RFC evidence ${ungrounded.join(", ")}`);

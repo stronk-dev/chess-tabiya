@@ -1,21 +1,23 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 
 import { checkpointEvidenceIssue, parseActiveRfcAnchorDigests, parseClientRoutes, parseUxItemIds, parseWorkStateAnchorDigests, validateRegistry } from "./roadmap-check.mjs";
 
 const anchor = { kind: "rfc", id: "a.md", digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" };
 const unknownAnchor = { kind: "work_state", id: "D404", digest: "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" };
 
-test("retained evidence requires explicit exact manifest custody, not a missing-file exception", () => {
-  const entry = { path: "planning/semantic-consequence-search/retained.gz", digest: anchor.digest, bytes: 123 };
-  const reference = { kind: "retained_research", ...entry }, context = { evidenceExists: () => false,
-    retainedArtifacts: new Map([[entry.path, entry]]) };
-  assert.equal(checkpointEvidenceIssue(reference, context), undefined);
-  assert.match(checkpointEvidenceIssue(entry.path, context), /does not exist/u, "plain paths cannot borrow manifest custody");
-  assert.match(checkpointEvidenceIssue(reference, { ...context, retainedArtifacts: new Map() }), /identity differs/u);
-  for (const changed of [{ digest: unknownAnchor.digest }, { bytes: 124 }, { kind: "available" }, { path: "../x" },
-    { bytes: -1 }, { available: true }, { replayed: true }])
-    assert.equal(typeof checkpointEvidenceIssue({ ...reference, ...changed }, context), "string");
+test("progress depends on compact reports and code/tests, not recordings or an artifact store", () => {
+  const context = { evidenceExists: () => true };
+  assert.equal(checkpointEvidenceIssue("planning/measured-result.md", context), undefined);
+  assert.match(checkpointEvidenceIssue("planning/measured-result.md", { evidenceExists: () => false }), /does not exist/u);
+  for (const file of ["planning/raw.json.gz", "planning/raw.json.gz.part-0000", "planning/raw.zip",
+    "planning/semantic-consequence-search/d3262-cost-live-width-sensitivity-2026-10-07.json"])
+    assert.match(checkpointEvidenceIssue(file, context), /not a progress dependency/u);
+  assert.match(checkpointEvidenceIssue({ kind: "retained_research", path: "planning/raw.gz" }, context), /invalid/u);
+  const roadmap = JSON.parse(readFileSync(new URL("../planning/roadmap-1.0.json", import.meta.url)));
+  for (const milestone of roadmap.executionPlan.milestones) for (const ref of milestone.latestCheckpoint.evidence)
+    assert.equal(checkpointEvidenceIssue(ref, context), undefined, `${milestone.id}: ${JSON.stringify(ref)}`);
 });
 
 test("parses static and dynamic client routes", () => {

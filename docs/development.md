@@ -81,8 +81,9 @@ with different evidence. Only the small generated metadata is committed.
 
 `make research-artifacts-evict` removes only these disposable working copies after
 verifying the entire external backup. It never removes stored objects or directory trees;
-use restore when the next research replay needs them. Roadmap references to these artifacts
-are explicitly typed digest/size references, not claims of local availability or fresh replay.
+use restore when the next research replay needs them. Progress checks reference compact
+reports and source/test anchors only. They do not read the artifact store or require raw
+recordings; only an explicitly requested research replay needs those bytes.
 
 The one-time owner-authorized unpublished-history cleanup has a verified recovery
 bundle and old→new commit map under the artifact store's `migrations/` directory.

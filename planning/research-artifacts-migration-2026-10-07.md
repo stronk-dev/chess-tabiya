@@ -55,13 +55,14 @@ refreshes are automatic. Current D3262/D3512 search counts and holds do not chan
 
 Final actual migration and normal verification measurements are appended after execution.
 
-The first ordinary commit hook correctly rejected a materialized index with missing raw
-roadmap evidence. Fixed the tracker boundary explicitly: migrated checkpoint references
-now have `kind: retained_research` plus exact path/digest/size, joined to the validated
-manifest. Ordinary string paths still require physical files; missing, forged, extra-field
-or differently sized retained references refuse. The roadmap receipt also seals the small
-manifest. This is catalogue custody, not a claim of local availability or fresh replay.
-The same actual guard is required to pass in an artifact-free staged snapshot/fresh checkout.
+The first ordinary commit hook rejected a materialized index with missing raw roadmap
+evidence. An initial manifest-linked reference approach passed, but the owner's intervention
+correctly identified the underlying coupling: progress is not an artifact-availability check.
+Removed that extension and all **47 raw-recording checkpoint dependencies**, retaining
+existing compact reports, summary receipts and source/test anchors. Progress has no dependency
+on the artifact manifest/store. Permanent controls reject compressed experiment payloads
+and raw cost-detail files as progress evidence, even if physically present; absent ordinary
+reports still refuse. Milestone states, completion gates and measured counts stay unchanged.
 
 Future recordings can be retained before entering Git; their manifest and exact-path ignore
 block update automatically. Verified working-copy eviction is separately tested and removes

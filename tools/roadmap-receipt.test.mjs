@@ -33,7 +33,6 @@ const sources = {
   router: "router",
   application: "application",
   rest: "rest",
-  researchArtifacts: JSON.stringify({ version: 1, authority: "retained_raw_research_not_release_completion", entries: [] }),
 };
 
 test("builds a deterministic vertical status receipt", () => {

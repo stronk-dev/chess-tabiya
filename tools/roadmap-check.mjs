@@ -7,7 +7,6 @@ import { fileURLToPath } from "node:url";
 
 import { parseActiveRfcRows } from "./register-check.mjs";
 import { parseActiveRecords } from "./status-parity.mjs";
-import { manifestPath, validateManifest } from "./research-artifacts.mjs";
 
 export const REQUIRED_DIMENSIONS = Object.freeze([
   "evidence",
@@ -55,21 +54,15 @@ function quotedValues(source) {
   return [...source.matchAll(/["']([^"']+)["']/g)].map((match) => match[1]);
 }
 
-/** A retained reference proves catalogued identity, not local availability or fresh replay. */
+/** Progress consumes reports and source/test anchors, never bulk experiment payloads. */
 export function checkpointEvidenceIssue(reference, context) {
-  const file = typeof reference === "string" ? reference.split("#", 1)[0] : reference?.path;
-  if (typeof file !== "string" || !file || path.isAbsolute(file) || file.split("/").includes(".."))
+  const file = typeof reference === "string" ? reference.split("#", 1)[0] : "";
+  if (!file || path.isAbsolute(file) || file.split("/").includes(".."))
     return `invalid checkpoint evidence ${JSON.stringify(reference)}`;
-  if (typeof reference === "string") return context.evidenceExists && !context.evidenceExists(file)
-    ? `checkpoint evidence does not exist: ${file}` : undefined;
-  if (reference === null || Array.isArray(reference) || Object.keys(reference).sort().join(",") !== "bytes,digest,kind,path"
-    || reference.kind !== "retained_research" || !/^sha256:[a-f0-9]{64}$/u.test(reference.digest ?? "")
-    || !Number.isSafeInteger(reference.bytes) || reference.bytes <= 0)
-    return `invalid retained checkpoint evidence ${JSON.stringify(reference)}`;
-  const entry = context.retainedArtifacts?.get(file);
-  if (!entry || entry.digest !== reference.digest || entry.bytes !== reference.bytes)
-    return `retained checkpoint identity differs from artifact manifest: ${file}`;
-  return undefined;
+  if (/\.(?:gz|zip|bin)(?:\.part-\d+)?$/u.test(file)
+    || /\/d3262-cost-live-.*\.json$/u.test(file) && !file.includes("-summary-"))
+    return `raw recording is not a progress dependency: ${file}; reference its compact report`;
+  return context.evidenceExists && !context.evidenceExists(file) ? `checkpoint evidence does not exist: ${file}` : undefined;
 }
 
 export function parseClientRoutes(source) {
@@ -273,7 +266,6 @@ export function main(root = process.cwd()) {
   const registry = JSON.parse(read("planning/roadmap-1.0.json"));
   const rfcRegister = read("rfc/README.md");
   const workState = read("planning/work-state.json");
-  const retainedArtifacts = new Map(validateManifest(JSON.parse(read(manifestPath))).entries.map(e => [e.path, e]));
   const uxFiles = fs.readdirSync(path.join(root, "design/research"))
     .filter((file) => file.startsWith("ux-") && file.endsWith(".md"))
     .sort();
@@ -288,7 +280,6 @@ export function main(root = process.cwd()) {
     application: read("apps/server/src/application.ts"),
     rest: read("apps/server/src/rest.ts"),
     evidenceExists: (relative) => fs.existsSync(path.join(root, relative)),
-    retainedArtifacts,
   });
   if (result.errors.length > 0) {
     console.error(`roadmap-check failed:\n- ${result.errors.join("\n- ")}`);
