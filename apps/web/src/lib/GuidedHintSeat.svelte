@@ -22,6 +22,7 @@
     run: DrillRun;
     ceiling: HintDistance;
     canWrite: boolean;
+    decisionReady?: boolean;
     client: GuidedHintClient;
     assistanceRequest: () => RequestedAssistanceV1 | undefined;
     onMarks?: ((marks: HintDeliveryMarks | undefined) => void) | undefined;
@@ -31,7 +32,7 @@
     band?: boolean;
   }
 
-  let { run, ceiling, canWrite, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false }: Props = $props();
+  let { run, ceiling, canWrite, decisionReady = true, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false }: Props = $props();
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -95,9 +96,10 @@
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   async function ask(): Promise<void> {
+    if (!canWrite || !decisionReady || busy) return;
     const rung = next;
     const assistance = assistanceRequest();
-    if (rung === undefined || assistance === undefined || busy) return;
+    if (rung === undefined || assistance === undefined) return;
     const mine = ++generation;
     const digest = decisionDigest;
     const body: HintRequestBody = { nodeId: run.activeCursor.nodeId, rung, decisionDigest: digest, assistance };
@@ -173,18 +175,20 @@
 <CompanionSeat id="guided_hint" module="guided_hint" label="Ask for the least that helps" shortLabel="Hint"
   {band} open={expanded} state={revealed === null ? "door" : "filled"} {badge}
   controlLabel={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"}
-  disabled={onToggle !== undefined && !expanded && revealed === null && (!canWrite || busy)}
+  controlDescriptionId={!decisionReady && canWrite ? "guided-hint-wait" : undefined}
+  disabled={onToggle !== undefined && !expanded && revealed === null && (!canWrite || !decisionReady || busy)}
   onToggle={onToggle === undefined ? undefined : () => { const shouldAsk = !expanded && revealed === null; onToggle?.(); if (shouldAsk) void ask(); }}>
   <p class="eyebrow">Stuck?</p>
   <div class="hint-card" id="guided-hint-card" hidden={!expanded}>
   {#if sentence !== undefined}<p class="hint-sentence" role="status" data-hint-rung={revealed}>{sentence}</p>{/if}
   {#if message !== undefined}<p class="hint-message" role={response?.state === "pending" ? "status" : undefined}>{message}</p>{/if}
   <div class="hint-actions">
-    <button type="button" disabled={!canWrite || busy || next === undefined} aria-describedby={next === undefined && revealed !== null ? "guided-hint-limit" : undefined} onclick={() => void ask()}>
+    <button type="button" disabled={!canWrite || !decisionReady || busy || next === undefined} aria-describedby={!decisionReady && canWrite ? "guided-hint-wait" : next === undefined && revealed !== null ? "guided-hint-limit" : undefined} onclick={() => void ask()}>
       {busy ? "Looking…" : revealed === null ? "Hint" : "A little more"}
     </button>
     {#if next === undefined && revealed !== null}<span id="guided-hint-limit" class="honest">That is as far as this help style goes here.</span>{/if}
     {#if !canWrite}<span class="honest">This read-only view cannot ask for hints.</span>{/if}
+    {#if !decisionReady && canWrite}<span id="guided-hint-wait" class="honest" role="status">Wait for this position and its help settings to finish updating.</span>{/if}
   </div>
   </div>
 </CompanionSeat>

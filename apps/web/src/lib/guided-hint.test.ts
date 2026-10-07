@@ -83,6 +83,53 @@ describe("DrillApi Guided Hint wire", () => {
 });
 
 describe("GuidedHintSeat", () => {
+  it.each([true, false])("does not request until the current decision is ready (expanded %s)", async expanded => {
+    const states = new SvelteMap<string, boolean>([["ready", false]]);
+    const run = revealedRun();
+    const request = vi.fn<GuidedHintClient["request"]>(async () => ({ state: "available", delivery: receipt(run, "pattern") }));
+    const component = mount(GuidedHintSeat, { target: target(), props: {
+      run, ceiling: "distance", canWrite: true, client: { request, poll: vi.fn(), cancel: vi.fn() }, assistanceRequest,
+      get decisionReady() { return states.get("ready")!; }, expanded, onToggle: vi.fn(),
+    } });
+    await settle();
+    const button = document.querySelector<HTMLButtonElement>(expanded ? ".hint-actions button" : ".seat-row")!;
+    expect(button.disabled).toBe(true);
+    if (!expanded) expect(document.getElementById(button.getAttribute("aria-describedby")!)?.textContent).toContain("Wait for this position");
+    button.click(); await settle();
+    expect(request).not.toHaveBeenCalled();
+    expect(document.querySelector(".hint-actions")?.textContent).toContain("Wait for this position and its help settings to finish updating.");
+    states.set("ready", true); await settle();
+    expect(request).not.toHaveBeenCalled(); // Readiness itself never asks.
+    expect(button.disabled).toBe(false);
+    button.click(); await settle();
+    expect(request).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ rung: "pattern", decisionDigest: hintDecisionStamp(run).digest }));
+    await unmount(component);
+  });
+
+  it("temporary readiness loss preserves the delivered rung and requires another learner request", async () => {
+    const states = new SvelteMap<string, boolean>([["ready", true]]);
+    const run = revealedRun();
+    const request = vi.fn<GuidedHintClient["request"]>(async body => ({ state: "available", delivery: receipt(run, body.rung) }));
+    const component = mount(GuidedHintSeat, { target: target(), props: {
+      run, ceiling: "distance", canWrite: true, client: { request, poll: vi.fn(), cancel: vi.fn() }, assistanceRequest,
+      get decisionReady() { return states.get("ready")!; },
+    } });
+    await settle();
+    const button = document.querySelector<HTMLButtonElement>(".hint-actions button")!;
+    button.click(); await settle();
+    expect(document.querySelector("[data-hint-rung]")?.getAttribute("data-hint-rung")).toBe("pattern");
+    states.set("ready", false); await settle();
+    expect(button.disabled).toBe(true);
+    button.click(); await settle();
+    expect(request).toHaveBeenCalledTimes(1);
+    states.set("ready", true); await settle();
+    expect(request).toHaveBeenCalledTimes(1);
+    expect(button.textContent).toContain("A little more");
+    button.click(); await settle();
+    expect(request.mock.calls.map(([body]) => body.rung)).toEqual(["pattern", "square"]);
+    await unmount(component);
+  });
+
   it.each([0, 49, 51, 151, 199, 201])("the shipping cadence renders a result ready at %i ms within the next 50 ms", async readyAt => {
     const run = revealedRun(), requestId = "e".repeat(32);
     const client: GuidedHintClient = {

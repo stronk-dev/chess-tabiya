@@ -1654,10 +1654,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "D3528's owner-approved explicit public-version compatibility and scoped Support repairs D3521/D3523-D3525/D3527 are complete, with all released declarations and authored packs retained. Full gates remain red: locate D3532's 80-ply performance phase without relaxing 500 ms; repair D3533's enabled Guided Hint during pending mutation/assistance compilation with a delayed-reveal native negative and exact one-request recovery. D3531's original timeout cause and deliberate failed-trace proof, and D3518/D3514/D3510's earlier intermittent causes remain open. D3526 needs a separate exact-witness composition amendment; D3309 owns structural operand fidelity. Complete remaining Inspector, phone, owner-use and hint obligations without promoting a whole milestone or 1.0.",
+        "nextAction": "D3528 and scoped Support fixes D3521/D3523-D3525/D3527 are complete, with released declarations and authored packs retained. D3533's Guided Hint request-readiness repair passes predecessor-red controls, 30 mounted cases, all seven native projections and the full local verification/browser gates. Continue the remaining Hint and preset authority/visibility obligations against the accepted contracts; requests and already-delivered display must obey current assistance. Retain D3532's original unlocated 80-ply performance failure with bounded phase diagnostics and unchanged 500 ms limit. D3531's original timeout/failed-trace proof and D3518/D3514/D3510's earlier causes remain open. D3526 needs a separate exact-witness composition amendment; D3309 owns structural operand fidelity. Complete remaining Inspector, phone, owner-use and Hint obligations without promoting a whole milestone or 1.0.",
         "latestCheckpoint": {
           "at": "2026-10-07",
-          "summary": "D3528 closes the owner-approved KISS repair: explicit public versions and behavior tests replace production source/package hashing, retaining all 984 released declaration rows and authored pack bytes. D3521/D3523-D3525/D3527's captions, learner-victim direction, compact staged warning, quiet defensive move and settled read-only Carlsbad controls pass, including both-colour desktop/phone native Revise/Confirm. Local HTTP 100/7, capability integration 150/6, content 227/23, capability history/census/sites and types pass. Fresh application setup/cleanup uses normal runner hooks; D3514's original earlier cause remains open. Full verify-awake passes 3,433 software tests / 345 files, then fails performance: six passed, 80-ply p95 710.1 ms > 500 ms (D3532); downstream aggregate checks do not run. Full browser gate: 88 smoke plus one existing optional skip, five content, 58 matrix passed / one Guided Hint readiness failure D3533; all 150 input cells pass but no fresh complete 112-cell receipt. Packaged-default and schema/packaging/hook checks pass independently. Earlier D3510/D3514/D3518/D3531 causes/proofs remain open. No complete release gate, remote CI, RFC, capability, milestone, pack or 1.0 claim.",
+          "summary": "D3533 closes the located Guided Hint readiness race: collapsed/expanded controls and callback require settled mutation/current compiled help, carry an accessible waiting reason and never ask merely on settling. Three mounted controls first fail on the predecessor; 30 client cases and types pass. The seven-view native journey holds real reveal/help responses and proves zero early POSTs, exact current decision/rung recovery, retained paint and unchanged board. Full local verification passes 3,436 software tests / 345 files, seven performance tests / four files, governance and 227 content tests / 23 files plus downstream contracts. Browser aggregate passes 88 smoke plus one optional skip, five content, 59 matrix and one packaged-default; all 150 input cells and 112 unretried composition cells pass. Final-build smoke refresh also passes 88 / one optional skip. D3532's earlier 80-ply p95 710.1 ms > 500 ms cause remains unlocated despite isolated/full performance passes; bounded phase diagnostics are installed, no threshold change or optimization claim. D3528's explicit compatibility and prior scoped Support fixes remain complete with all 984 declarations/pack bytes retained. D3510/D3514/D3518/D3531 earlier causes/proofs remain open. No whole Hint/RFC, capability, milestone, pack, remote CI or 1.0 claim.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/module-query.test.ts",
@@ -1795,6 +1795,16 @@
               "kind": "work_state",
               "id": "D3528",
               "digest": "sha256:72b552cb4c24c23795ecd450c4521e250ec2acabe95c06713bf460cc1a493847"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3533",
+              "digest": "sha256:cfc1db835af6b85a340583d75a48da2b33396041b01e4cf8a08ebe93e13704b3"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3532",
+              "digest": "sha256:ee6a4f5bed8a2ea12fc7eeb9d0474027619ebfdd8139852a1fdc3a2c390bd544"
             },
             {
               "kind": "rfc",

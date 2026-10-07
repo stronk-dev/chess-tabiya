@@ -8,7 +8,8 @@ import { chooseBot, chooseRawRung } from "./play-helpers.js";
 import { inspectComposition, type CompositionConformance } from "./composition-conformance.js";
 import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
-import type { ModuleQueryPage } from "@chess-tabiya/runtime";
+import type { DrillRun, ModuleQueryPage } from "@chess-tabiya/runtime";
+import { hintDecisionStamp } from "../../packages/runtime/src/hint-exchange.js";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import type { HumanSplitPage } from "../../apps/web/src/lib/api.js";
 
@@ -3175,8 +3176,12 @@ test("@matrix final Guided Hint shares one expanded seat and preserves the board
     { width: 768, height: 1024 }, { width: 430, height: 932 }, { width: 390, height: 844 }, { width: 360, height: 680 },
   ];
   const postedRungs: string[] = [];
+  const postedDecisions: string[] = [];
   page.on("request", request => {
-    if (request.method() === "POST" && request.url().endsWith("/hints")) postedRungs.push(String(request.postDataJSON().rung));
+    if (request.method() === "POST" && request.url().endsWith("/hints")) {
+      postedRungs.push(String(request.postDataJSON().rung));
+      postedDecisions.push(String(request.postDataJSON().decisionDigest));
+    }
   });
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
@@ -3186,9 +3191,62 @@ test("@matrix final Guided Hint shares one expanded seat and preserves the board
     const calm = await page.getByLabel("Chessboard").boundingBox();
     await showSupport(page);
     await showSupportTools(page);
-    await page.getByRole("button", { name: "Show support for this position" }).click();
     const hint = page.locator('[data-module="guided_hint"]');
     const firstPost = postedRungs.length;
+    // D3533: hold real responses, first after the reveal is committed on the server,
+    // then after the client adopts it but before its new help configuration arrives.
+    // A disabled native control must not send an obsolete decision in either interval.
+    let releaseReveal!: () => void, revealWritten!: (digest: string) => void;
+    let releaseHelp!: () => void, helpFetched!: () => void;
+    const revealGate = new Promise<void>(resolve => { releaseReveal = resolve; });
+    const helpGate = new Promise<void>(resolve => { releaseHelp = resolve; });
+    const persistedDecision = new Promise<string>(resolve => { revealWritten = resolve; });
+    const pendingHelp = new Promise<void>(resolve => { helpFetched = resolve; });
+    const revealUrl = "**/runs/*/reveal", helpUrl = "**/runs/*/assistance";
+    await page.route(revealUrl, async route => {
+      const response = await route.fetch();
+      expect(response.ok()).toBe(true);
+      const revealed = await response.json() as { run: DrillRun };
+      expect(revealed.run.events.at(-1)?.type).toBe("feedback.revealed");
+      revealWritten(hintDecisionStamp(revealed.run).digest);
+      await revealGate;
+      await route.fulfill({ response });
+    });
+    await page.route(helpUrl, async route => {
+      const response = await route.fetch();
+      expect(response.ok()).toBe(true);
+      helpFetched();
+      await helpGate;
+      await route.fulfill({ response });
+    });
+    let currentDecision: string;
+    const pressDisabledHint = async () => {
+      const control = hint.locator(".seat-row");
+      await expect(control).toBeDisabled();
+      await control.scrollIntoViewIfNeeded();
+      const box = (await control.boundingBox())!;
+      expect(await control.evaluate(element => {
+        const rect = element.getBoundingClientRect();
+        return element.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2));
+      })).toBe(true);
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      expect(postedRungs).toHaveLength(firstPost);
+    };
+    try {
+      await page.getByRole("button", { name: "Show support for this position" }).click();
+      currentDecision = await persistedDecision;
+      await pressDisabledHint();
+      releaseReveal();
+      await pendingHelp;
+      await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "pending");
+      await pressDisabledHint();
+      releaseHelp();
+      await expect(hint.getByRole("button", { name: "Hint", exact: true })).toBeEnabled();
+      expect(postedRungs).toHaveLength(firstPost); // Settling never asks autonomously.
+    } finally {
+      releaseReveal(); releaseHelp();
+      await page.unroute(revealUrl); await page.unroute(helpUrl);
+    }
     await hint.getByRole("button", { name: "Hint", exact: true }).click();
     for (const [rung, sentence] of [["pattern", "finds a double attack for you."], ["square", "It involves d1 and d3."], ["piece", "The piece involved is your knight on a4."], ["distance", "It appears after this move."]] as const) {
       if (rung !== "pattern") await hint.getByRole("button", { name: "A little more", exact: true }).click();
@@ -3197,6 +3255,7 @@ test("@matrix final Guided Hint shares one expanded seat and preserves the board
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     }
     expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
+    expect(postedDecisions.slice(firstPost)).toEqual(Array(4).fill(currentDecision));
     await expect(hint.getByRole("button", { name: "A little more", exact: true })).toBeDisabled();
     await expect(hint).not.toContainText("Nb2");
     const painted = page.locator(".cg-shapes circle");

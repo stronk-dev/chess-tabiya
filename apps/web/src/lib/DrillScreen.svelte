@@ -1197,6 +1197,7 @@
   let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets).length + (hints !== undefined && hintCeiling !== "off" ? 1 : 0) + 1);
   let hintMarks: HintDeliveryMarks | undefined = $state();
   function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
+    if (!hintDecisionReady) return undefined;
     try { return compileAssistanceRequest({ contextHint: activeAssistanceProfile, preference }); } catch { return undefined; }
   }
   const hintKey = (square: string): DrawShape["orig"] => square as DrawShape["orig"];
@@ -2178,7 +2179,9 @@
 
   // The server re-derives access; re-query whenever an access input or the receipt changes.
   let assistanceAccessKey = $derived(`${run.id}|${activeAssistanceProfile}|${feedbackDeliveryOpen(run)}|${viewerRole}|${seatedInContest}|${reviewing}|${JSON.stringify(preference)}`);
-  let queriedAccessKey: string | undefined;
+  let queriedAccessKey: string | undefined = $state();
+  let hintDecisionReady = $derived.by(() => !busy && !rewindBusy && !forkBusy && branchSwitchBusy === undefined && !groupBusy
+    && assistanceQueryState === "ready" && queriedAccessKey === assistanceAccessKey);
   $effect(() => {
     const key = assistanceAccessKey;
     if (key === queriedAccessKey) return;
@@ -2484,7 +2487,7 @@
               />
             {/if}
             {#if hints !== undefined && hintCeiling !== "off"}
-              <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
+              <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} decisionReady={hintDecisionReady} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
             {/if}
               <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"
                 band={tabletViewport} tools open={stagedCue === undefined && (seatExpanded === undefined || seatExpanded === "support_tools")}

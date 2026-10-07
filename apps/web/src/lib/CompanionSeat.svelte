@@ -17,12 +17,13 @@
     headSlot?: boolean;
     tools?: boolean;
     controlLabel?: string;
+    controlDescriptionId?: string | undefined;
     disabled?: boolean;
     onToggle?: (() => void) | undefined;
     children: Snippet;
   }
   let { id, label, shortLabel = label, module, band = false, open = true, state,
-    badge, headSlot = false, tools = false, controlLabel = label, disabled = false,
+    badge, headSlot = false, tools = false, controlLabel = label, controlDescriptionId, disabled = false,
     onToggle, children }: Props = $props();
   let shown = $derived(open || (tools && !band));
 </script>
@@ -34,7 +35,7 @@
   {#if !headSlot && (!tools || band)}
     {#if onToggle !== undefined}
       <button type="button" class="seat-row" class:queue-selector={band}
-        title={band ? label : undefined} aria-label={controlLabel} aria-expanded={open}
+        title={band ? label : undefined} aria-label={controlLabel} aria-describedby={controlDescriptionId} aria-expanded={open}
         aria-controls={`${id}-card`} disabled={disabled} onclick={onToggle}>
         <span class="seat-label">{band ? shortLabel : label}</span>
         {#if badge !== undefined && badge !== null}<span class="seat-badge" aria-label={`${badge} ${badge === 1 ? "fact" : "facts"}`}>{badge}</span>{/if}

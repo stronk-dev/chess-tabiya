@@ -45,14 +45,19 @@ describe("recorded semantic path pinned performance", () => {
       expect(runs).toHaveLength(12);
       for (const run of runs) recordedSemanticPathExecution(run, run.activeCursor.branchId);
       const totals: number[] = [];
+      const samples: { runId: string; repetition: number; timings: ReturnType<typeof recordedSemanticPathExecution>["timings"] }[] = [];
       for (let repetition = 0; repetition < 3; repetition += 1) for (const run of runs) {
         const execution = recordedSemanticPathExecution(run, run.activeCursor.branchId);
         expect(execution.work).toMatchObject({ transitionCompiles: plies, checkProbes: plies, localFanOut: 0, receipts: plies * 13 });
         totals.push(execution.timings.totalMs);
+        samples.push({ runId: run.id, repetition, timings: execution.timings });
       }
       const sorted = totals.sort((left, right) => left - right);
       const p95 = sorted[Math.ceil(sorted.length * 0.95) - 1]!;
       console.log(`recorded-semantic-path ${plies} plies: p50 ${sorted[Math.ceil(sorted.length * 0.5) - 1]!.toFixed(1)} ms · p95 ${p95.toFixed(1)} ms · max ${sorted.at(-1)!.toFixed(1)} ms`);
+      // D3532: preserve which phase exceeded the budget before the assertion fails.
+      // These bounded diagnostic rows do not change the population, work counts or deadline.
+      for (const sample of samples.filter(sample => sample.timings.totalMs > 500)) console.log("recorded-semantic-path over budget", sample);
       expect(p95).toBeLessThanOrEqual(500);
     }, 120_000);
   }

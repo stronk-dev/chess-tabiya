@@ -29182,19 +29182,19 @@
       "id": "D3532",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a38a39352e27b79a61f9574fda1092f51c0d04c21b3f9f1f48cad887c0ddaf69",
+      "sourceDigest": "sha256:ee6a4f5bed8a2ea12fc7eeb9d0474027619ebfdd8139852a1fdc3a2c390bd544",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
     },
     {
       "id": "D3533",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:06023bdd5adfe264a20ad1112cd4a019c25f100a92526210f5a26b72ec478662",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cfc1db835af6b85a340583d75a48da2b33396041b01e4cf8a08ebe93e13704b3",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "since": "2026-10-07"
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }
