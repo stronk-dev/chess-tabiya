@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 recursive comparison tooling: sixty-one controls now bind all 3,276
+frozen target/setting frontiers and all 182 live target-frontier bindings from the
+previously retained complete recursive top-two population. The reader refuses
+that one-setting archive as an incomplete six-setting comparison; exact histories,
+executed witnesses, failed partial states and cache identity cannot be replaced
+by count agreement. The original next five depth-eight recursive populations are
+still capturing and are not counted complete. The headline remains eighteen
+settings / 20,844 of 61,374 cases. Source admission, full calibration, actual
+consumer/browser scope and production profile remain open. Evidence:
+`design/research/semantic-consequence-search.md` §2026-10-07 recursive cost comparison.
+
 2026-10-07 complete timed-engine capture: all three declared 100-ms widths now
 retain 3,474 cases / 1,158 original triplets and eighteen unchanged instrument
 snapshots. Thirty independent boundary controls and replay of 182,240 target

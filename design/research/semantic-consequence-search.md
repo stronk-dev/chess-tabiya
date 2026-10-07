@@ -826,3 +826,53 @@ stay explicit; no lower-cost default, repair to original source semantics or
 engine explanation follows. D3262 and D3508 remain doing. `[V]` quantitative
 summary and same continuation receipt; `rfc/semantic-consequence-search.md`
 §14 / criterion 23 / D1.
+
+## 2026-10-07 — recursive cost comparison reader, not a completed population
+
+The disposable fresh/frozen reader now requires all six recursive settings at one
+declared budget: widths two/four/eight crossed with top-eight/all-legal geometric
+event sources. Every candidate, two/four-ply horizon and cold/warm/provider-offline
+state remains in the denominator. A recursive frontier is indexed by root,
+candidate, named target **and** setting; it cannot borrow the engine beam's
+candidate-wide frontier or another target's reserve. `[V]`
+`tools/d3262-search-calibration/cost-recursive-sensitivity.mjs`
+`recursiveSettings`, `indexRecursiveContinuation`, `summarizeRecursiveSensitivity`.
+
+Sixty-one permanent controls pass under normal
+`make semantic-search-cost-recursive-sensitivity-test`. The checksum chain binds
+the immutable corrected common comparison → recursive evaluation → actual
+recursive fourth-ply continuation → frozen scheduling frame. All 182 × eighteen
+target/setting joins (3,276) bind full ordered third/fourth path identities and
+their projected preparations/counts. Target/setting crossings, missing/duplicate
+cells/arms/nodes, crossed histories, unavailable sources, extending terminals and
+foreign executed witnesses refuse. The earlier complete 1,158-case recursive
+top-two archive supplies all 182 actual live target/frontier bindings, but is
+correctly refused as an incomplete six-setting population. These are instrument
+controls over existing evidence, not new searches or independently authored chess
+truth. `[V]` terminal normal Make result;
+`cost-recursive-sensitivity.test.mjs`; immutable earlier initial/population
+archives `d3262-cost-live-recursive-top2-*-2026-10-06.json.gz`.
+
+Equal-size changed histories cannot hide behind counts. Frontier identities,
+executed witnesses, preparation/learner-defence omissions and grounded target
+outcomes are reported separately. Selected fourth-ply histories are **not** complete
+fourth-reply coverage. Failed/exhausted four-ply cells retain partial outcomes and
+observation counts unpaired; two-ply cells remain inventory/cache checks, not
+borrowed four-ply verdicts. All cold/warm pairs must preserve compiled evidence;
+missing cold receipts cannot start fresh queries labelled warm. No version cause,
+engine reason, useful hint or production-cache latency follows from this reader.
+`[V]` implementation, changed-history/witness/omission controls and exact-cache
+controls; frozen preregistration.
+
+The original next five depth-eight recursive populations are still capturing in
+`.cache/d3262-cost-live/recursive-depth8-remaining-2026-10-07`, starting at cost-plan
+offset 40,530 and requesting 5,790 cases. The already complete depth8/top2/top8
+setting is excluded from that batch, not repeated. Completion, lossless packaging,
+independent replay, quantitative stratification and full six-setting fresh/frozen
+synthesis remain required before changing the eighteen-setting/20,844-case
+headline. The capture host is shared with instrument authoring and normal
+verification, not an isolated benchmark appliance. None of the eighteen captured
+executor source files, original clocks or source refusals is changed by this
+reader. D3262 remains doing; draft RFC criterion 23 / D1, consumer/browser/source
+memory and production-profile admission remain open. `[V]` original command,
+cost-plan range and native capture metadata; Make targets and research worktree.
