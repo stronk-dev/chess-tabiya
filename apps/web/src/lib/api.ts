@@ -52,6 +52,7 @@ import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
 import { parseCapabilities } from "./capability-response.js";
+import { assertDuplicateRunResponse } from "./duplicate-response.js";
 import {
   parseLearnerProfile,
   parseObservationDetail,
@@ -1529,6 +1530,7 @@ export class DrillApi implements DrillClientApi {
       writerId,
       body: input,
     });
+    assertDuplicateRunResponse(body.run, input);
     return body.run;
   }
 

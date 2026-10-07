@@ -47,6 +47,7 @@ import {
   type RunStateSnapshot,
 } from "./run-state.js";
 import { WriterSession, type KeyValueStorage } from "./writer-session.js";
+import { assertDuplicateRunResponse } from "./duplicate-response.js";
 
 export interface DrillSessionState {
   readonly busy: boolean;
@@ -311,6 +312,7 @@ export class DrillSessionController {
   #botRequest: { readonly key: string; readonly id: `botreq_${string}` } | undefined;
   #projectionOnly = false;
   #attachmentGeneration = 0;
+  #duplicateGeneration: number | undefined;
 
   constructor(api: DrillClientApi, options: ControllerOptions = {}) {
     this.#api = api;
@@ -416,43 +418,54 @@ export class DrillSessionController {
     }
   }
 
-  async startDuplicate(sourceRunId: string, scheduleId?: string): Promise<void> {
+  async startDuplicate(sourceRunId: string, scheduleId?: string): Promise<boolean> {
+    if (this.#state.busy || this.#duplicateGeneration === this.#attachmentGeneration) return false;
+    const source = this.#state.runState?.run.id === sourceRunId ? this.#state.runState.run : undefined;
     const generation = ++this.#attachmentGeneration;
+    this.#duplicateGeneration = generation;
     this.#projectionOnly = false;
     this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined, simulation: undefined });
     try {
       if (this.#api.duplicateRun === undefined) throw new Error("Starting another attempt is unavailable");
       const runId = this.#runId();
+      const requestedSeed = this.#seed();
+      const seed = requestedSeed === source?.branches[0]?.seed ? (requestedSeed + 1) >>> 0 : requestedSeed;
       const session = WriterSession.claimFor(runId, this.#storage);
       const [run, capabilities] = await Promise.all([
         this.#api.duplicateRun(sourceRunId, {
           id: runId,
-          seed: this.#seed(),
+          seed,
           ...(scheduleId === undefined ? {} : { scheduleId }),
         }, session.writerId),
         this.#api.capabilities(),
       ]);
-      if (!this.#attachmentIsCurrent(generation)) return;
+      if (!this.#attachmentIsCurrent(generation)) return false;
+      assertDuplicateRunResponse(run, { id: runId, seed, source });
       if (run.sessionKind === "pack") {
         if (run.packId === null) throw new TypeError("Duplicated pack run is missing its pack id");
         const { document, digest } = await this.#api.pack(run.packId);
         const shapes = await this.#loadShapes(document.shapes);
-        if (!this.#attachmentIsCurrent(generation)) return;
+        if (!this.#attachmentIsCurrent(generation)) return false;
         this.#capabilities = capabilities;
         this.#attachStore(this.#newStore(session, run), document, digest, shapes);
       } else {
         const shapes = await this.#loadShapes();
-        if (!this.#attachmentIsCurrent(generation)) return;
+        if (!this.#attachmentIsCurrent(generation)) return false;
         this.#capabilities = capabilities;
         this.#attachStore(this.#newStore(session, run), undefined, undefined, shapes);
       }
       await this.#playOpponentIfNeeded(false, generation);
-      if (!this.#attachmentIsCurrent(generation)) return;
+      if (!this.#attachmentIsCurrent(generation)) return false;
       await this.#refreshAuthoredFeedback();
-      if (this.#attachmentIsCurrent(generation)) this.#onRunStarted?.({ runId });
+      if (!this.#attachmentIsCurrent(generation)) return false;
+      this.#onRunStarted?.({ runId });
+      return true;
     } catch (error) {
       if (this.#attachmentIsCurrent(generation)) this.#fail(error);
+      return false;
+    } finally {
+      if (this.#duplicateGeneration === generation) this.#duplicateGeneration = undefined;
     }
   }
 

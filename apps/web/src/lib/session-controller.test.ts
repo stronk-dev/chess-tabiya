@@ -835,6 +835,113 @@ describe("DrillSessionController", () => {
     expect(environment.started).toEqual([{ runId: "screen-run" }]);
   });
 
+  describe("exact bot rematch", () => {
+    async function source(seed = 9) {
+      const api = new FakeApi();
+      const storage = new MemoryStorage();
+      const writer = WriterSession.claimFor("source-bot", storage);
+      await api.createRun({
+        id: "source-bot",
+        session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", profile: BOT_PROFILE_CATALOG[0]!.reference } },
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+        seed,
+      }, writer.writerId);
+      const environment = controller(api, storage);
+      await environment.controller.resume("source-bot");
+      return environment;
+    }
+
+    for (const defect of ["id", "seed", "profile", "start", "played"] as const) {
+      it(`refuses a crossed ${defect} before replacing the source game`, async () => {
+        const environment = await source();
+        const original = environment.controller.state.runState!.run;
+        const duplicate = environment.api.duplicateRun.bind(environment.api);
+        vi.spyOn(environment.api, "duplicateRun").mockImplementation(async (...args) => {
+          const actual = await duplicate(...args);
+          if (defect === "played") return commitMove(actual, "a2a3", { at }).run;
+          return createRun({
+            id: defect === "id" ? "unrequested-game" : actual.id,
+            session: { kind: "position", start: { ...actual.start, side: defect === "start" ? "black" : actual.start.side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", profile: defect === "profile" ? BOT_PROFILE_CATALOG[1]!.reference : original.opponentPolicy.profile! } },
+            sessionDigest: actual.sessionDigest,
+            policyConfig: actual.policyConfig,
+            seed: defect === "seed" ? 123 : args[1].seed,
+            createdAt: at,
+          });
+        });
+        const accepted = await environment.controller.startDuplicate(original.id);
+        expect(environment.controller.state.runState!.run).toEqual(original);
+        expect(accepted).toBe(false);
+        expect(environment.controller.state.busy).toBe(false);
+        expect(environment.controller.state.error).toBeDefined();
+        expect(environment.started).toEqual([]);
+        environment.controller.destroy();
+      });
+    }
+
+    it("owns one pending rematch and preserves the exact bot on success", async () => {
+      const environment = await source();
+      const original = environment.controller.state.runState!.run;
+      const pending = deferred<DrillRun>();
+      const duplicate = environment.api.duplicateRun.bind(environment.api);
+      const calls = vi.spyOn(environment.api, "duplicateRun").mockImplementation(() => pending.promise);
+      const first = environment.controller.startDuplicate(original.id);
+      const second = environment.controller.startDuplicate(original.id);
+      expect(calls).toHaveBeenCalledTimes(1);
+      expect(await second).toBe(false);
+      const args = calls.mock.calls[0]!;
+      pending.resolve(await duplicate(...args));
+      expect(await first).toBe(true);
+      expect(environment.controller.state.runState!.run.opponentPolicy.profile).toEqual(original.opponentPolicy.profile);
+      expect(environment.controller.state.runState!.run.branches[0]!.seed).toBe(23);
+      expect(environment.started).toEqual([{ runId: "screen-run" }]);
+      environment.controller.destroy();
+    });
+
+    it("retains the pending owner after attachment while feedback is loading", async () => {
+      const environment = await source();
+      const feedback = await environment.api.authoredFeedback();
+      const pending = deferred<typeof feedback>();
+      vi.spyOn(environment.api, "authoredFeedback").mockImplementation(() => pending.promise);
+      const calls = vi.spyOn(environment.api, "duplicateRun");
+      const first = environment.controller.startDuplicate("source-bot");
+      await vi.waitFor(() => expect(environment.controller.state.runState!.run.id).toBe("screen-run"));
+      expect(environment.controller.state.busy).toBe(false);
+      expect(await environment.controller.startDuplicate("screen-run")).toBe(false);
+      expect(calls).toHaveBeenCalledTimes(1);
+      pending.resolve(feedback);
+      expect(await first).toBe(true);
+      environment.controller.destroy();
+    });
+
+    it("uses a different seed even when the random draw matches the source", async () => {
+      const environment = await source(23);
+      expect(await environment.controller.startDuplicate("source-bot")).toBe(true);
+      expect(environment.controller.state.runState!.run.branches[0]!.seed).toBe(24);
+      environment.controller.destroy();
+    });
+
+    it("keeps a failed rematch retryable and ignores completion after leaving", async () => {
+      const environment = await source();
+      const original = environment.controller.state.runState!.run;
+      const pending = deferred<DrillRun>();
+      const duplicate = environment.api.duplicateRun.bind(environment.api);
+      const calls = vi.spyOn(environment.api, "duplicateRun")
+        .mockRejectedValueOnce(new Error("private database failure"))
+        .mockImplementationOnce(() => pending.promise);
+      expect(await environment.controller.startDuplicate(original.id)).toBe(false);
+      expect(environment.controller.state.runState!.run).toEqual(original);
+      expect(environment.controller.state.error).not.toContain("private");
+      const retry = environment.controller.startDuplicate(original.id);
+      const args = calls.mock.calls[1]!;
+      environment.controller.stopSession();
+      pending.resolve(await duplicate(...args));
+      expect(await retry).toBe(false);
+      expect(environment.controller.state.runState).toBeUndefined();
+      expect(environment.started).toEqual([]);
+      environment.controller.destroy();
+    });
+  });
+
   it("adds the current terminal position to the learner return queue", async () => {
     const environment = controller();
     await environment.controller.startPack(pack.id);

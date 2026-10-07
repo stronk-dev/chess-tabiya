@@ -92,6 +92,18 @@ deliveries }`: the sealed decision, the non-circular operation record, and the s
 the profile but never the envelope (it holds guard scores and provider bytes); the recorded
 `candidates` carry Maia's reconstructed mass, not the guard-masked distribution.
 
+**Completed-game replay.** The ordinary bot result sheet offers “Play this bot again” inside its
+focus boundary, alongside Review and rewind. One pending owner covers the header and result action;
+rematch, rewind and opposite-side replay cannot compete through that result. Failure keeps the
+completed game visible with a safe retry. Leaving the game retires client attachment/navigation,
+although an already accepted server-side creation remains saved. The duplicate response must match
+the requested id, seed and fresh root before attachment. When replaying the current game, its exact
+start, session and canonical opponent reference must also match; no same-family substitution is
+accepted. Read-only results do not offer this action, and an active Campaign result retains its
+Declare-done/map workflow. These controls do not establish calibration or personality quality.
+`make bot-rematch-check` and `make bot-rematch-browser-check` exercise the permanent client/HTTP
+controls and desktop/touch-phone journeys. Pinned pack-document retrieval remains [[D3548]].
+
 **The operation** (`RunService.botOpponentPly`, `apps/server/src/bot-opponent-operation.ts`,
 `apps/server/src/bot-opponent-source.ts`). The browser sends exactly `{ requestId,
 expectedNodeId, expectedBranchId, expectedEventHeadDigest }`. The server then:

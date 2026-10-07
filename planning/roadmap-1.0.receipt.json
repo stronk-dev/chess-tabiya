@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:6c8a79c57baaf2bc63dd32edae50ec5b9dd526f98eb974e8dceaea393f6bc867",
+    "roadmap": "sha256:8eb6ac9f6911128f95923498d71b757ae4520ba14385fa34dc9ac23a5458c4c6",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:08c91da68169cb04ff855e440903634c853a6d8672ac0dc62a5e41f24ef4b5b6",
+    "workState": "sha256:27ecf504c3327ee8617358a12562b960a805580397c554f7508ed7334d24aef2",
     "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 11,
       "blocked": 1061,
-      "done": 1433,
+      "done": 1436,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Keep every new live row assigned at creation, diagnose D3543/D3510/D3532 without relaxed gates, and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; complete operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3545 closes failed production startup ownership: four native predecessor controls fail, then five repaired controls prove actual Stockfish shutdown, exact valence/Campaign errors, continued cleanup after a release error, worker refusal and same-database restart. Successful application close is unchanged. D3544 owns late Support test construction; D3511 owns original Theory response bodies. Final normal verify-awake passes clean types, 3,472 software / seven performance / 227 content tests and downstream contracts/governance. Sequential rebuilt browser CI passes 157 journeys, one existing optional Maia skip, zero retries, all 150 exact-input and 112 composition cells. D3543/D3510/D3532 remain open because their original intermittent causes are not located. All 1,700 live rows are assigned; 462 historical prose-only closeouts remain. No pack graduates, full milestone/capability/RFC completes, or remote CI/release result is claimed. Exact pushed-revision GitHub verify/browser and complete operator journeys remain separate obligations.",
+        "summary": "D3545 closes failed production startup ownership: four native predecessor controls fail, then five repaired controls prove actual Stockfish shutdown, exact valence/Campaign errors, continued cleanup after a release error, worker refusal and same-database restart. Successful application close is unchanged. D3544 owns late Support test construction; D3511 owns original Theory response bodies. Current normal verify-awake passes clean types, 3,485 software / seven performance / 227 content tests and downstream contracts/governance; sequential rebuilt browser CI passes 159 journeys, one existing optional Maia skip, zero retries, all 150 exact-input and 112 composition cells. D3549 reconciles stale operations state/API/default/content descriptions against actual implementation and provider-off browser proof without requalifying historical native appliance measurements. D3543/D3510/D3532 remain open because their original intermittent causes are not located. All 1,701 live rows are assigned; 462 historical prose-only closeouts remain. No pack graduates, full milestone/capability/RFC completes, or remote CI/release result is claimed. Exact pushed-revision GitHub verify/browser and complete operator journeys remain separate obligations.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -92,6 +92,10 @@
           "docs/engine-workers.md",
           "apps/server/src/application.ts",
           "apps/server/src/application-startup-cleanup.test.ts",
+          "apps/server/src/capabilities.ts",
+          "apps/server/src/storage-admin.ts",
+          "docs/deployment.md",
+          "tests/browser/provider-health.spec.ts",
           "planning/work-state.json",
           "planning/exploration/log.md",
           "planning/pack-capability-contract/integration-2026-09-30.md",
@@ -101,6 +105,11 @@
           "apps/server/src/http-response.test.ts"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3549",
+            "digest": "sha256:a09b041af3093231b0cbef7014a021ea48eb617ac619f7ebd16959c6982c3750"
+          },
           {
             "kind": "work_state",
             "id": "D3545",
@@ -1690,13 +1699,22 @@
         "stable-board-and-presets",
         "production-api-closure"
       ],
-      "nextAction": "D3541/D3542's paginated Profile evidence and exact unfinished recorded-move Review entry are closed under current disclosure and contest restrictions. Continue complete Review/theory/rehearsal return, valid skill credit and profile lifecycle; complete the independent bot, Campaign, social/professional and account journeys. Resolve D3543's initial startup failures rather than treating a passing repeat as diagnosis. Close UX items by observed behavior, not component presence.",
+      "nextAction": "D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry are closed. Reproduce and repair D3548's pinned-pack client source mismatch under read/disclosure authority. Continue complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional and account journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3541/D3542 close Profile opening/observation continuation, adjacent retry, stale-page refusal and exact cited-move Review entry. The saved node resolves its actual recorded branch, remains selected on reload and never rewinds or commits merely to inspect. Unfinished native lines now enter Review with an unfinished outcome: current reveal must be open, the next move closes it, and live unpaused/rated contests remain refused. Owner-only actual HTTP pages, unchanged stored board state, missing references, mismatch controls and desktop/phone journeys cover the production boundary. Focused checks pass 100 Support and 83 profile/Review cases with clean types. Final normal verification passes 3,461 software, seven isolated performance and 227 content cases plus all downstream contracts/governance; rebuilt browser tiers pass 157 journeys/one existing optional skip/zero retries, with 150 exact inputs and 112 composition cells. Initial startup/load timeouts remain D3543, not diagnosed by the passing repeat; the stale terminal-only expectation is corrected with no-enqueue refusal retained. No new metric, grade, skill credit, personality, migration, official content, whole capability/milestone or remote release proof is claimed.",
+        "summary": "D3546/D3547 close the registered-bot completed-result action and exact fresh-attempt admission. One generation-owned pending operation spans setup; refused substitutions and retry preserve the source, a repeated seed changes, and departure cannot attach or navigate. Fourteen permanent focused controls pass; eight predecessor failures expose seed/profile/start/played substitution, duplicate overlap, the missing result action and return-contract differences, not a previously admitted crossed id. Actual desktop/touch-phone HTTP journeys prove failure, retry, exact canonical profile/new seed, unchanged original, reload and late departure. Current normal gates pass clean types, 3,485 software / seven performance / 227 content cases and downstream contracts/governance; rebuilt browser tiers pass 159 journeys, one existing optional Maia skip, zero retries, 150 input and 112 composition cells. D3541/D3542's paginated exact Profile-to-Review entry remains delivered with disclosure/contest restrictions. D3548's pinned pack retrieval and D3543's initial startup cause remain open. No calibration, personality, skill credit, schema change, official content, full RFC/capability/milestone or remote release completion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
+          "apps/web/src/lib/session-controller.ts",
+          "apps/web/src/lib/session-controller.test.ts",
+          "apps/web/src/lib/duplicate-response.ts",
+          "apps/web/src/lib/api.test.ts",
+          "apps/web/src/lib/screens.test.ts",
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "docs/bot-policy.md",
+          "rfc/bot-policy.md",
+          "rfc/opponent-experience.md",
           "apps/web/src/lib/ProfileScreen.test.ts",
           "apps/web/src/lib/review-target.ts",
           "apps/web/src/lib/router.test.ts",
@@ -1728,6 +1746,26 @@
           "planning/longitudinal-store/prefix-reuse-software-2026-10-06.json"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3546",
+            "digest": "sha256:88cecc812c62cb4da9677c95a1695a75b54d6b72ab6b7bd3c1f57e496961ec75"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3547",
+            "digest": "sha256:b745bf6044984b7b120879fd83ba45d9238553f688ded1d4afb5b8fe1af874d9"
+          },
+          {
+            "kind": "rfc",
+            "id": "bot-policy.md",
+            "digest": "sha256:8170db8a7d61f5ccbb251bf995eeb8b30280370481d758333d5f00bde370c1bc"
+          },
+          {
+            "kind": "rfc",
+            "id": "opponent-experience.md",
+            "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
+          },
           {
             "kind": "rfc",
             "id": "player-style.md",
@@ -2531,7 +2569,7 @@
         ],
         "experience": [
           "partial",
-          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Names/assets, measured personality, opening routes, complete rematch/history/Review and local bot events remain."
+          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Names/assets, measured personality, opening routes, per-bot history/Review, pack-source retrieval and local bot events remain."
         ],
         "defaults": [
           "blocked",
@@ -2936,11 +2974,11 @@
         ],
         "state": [
           "partial",
-          "Schema/register/work/intent checks and three workflows exist. The rebuilt local server image now reaches health with Maia and the copied draft corpus after the 2026-09-23 runtime-dependency and RFC-reference packaging repairs; this is a first-boot proof, not a deployment profile. Storage and deployment contract models still lack proof against real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."
+          "Production storage locking, backup/verify/restore, journalled replacement, migration-safe startup and deployment profiles exist, with real storage/HTTP tests and retained native appliance checkpoints. Failed application startup releases acquired services. Complete operator integration, remaining ingress/security contracts, all-platform resource proof and a verified release remain open."
         ],
         "api": [
           "partial",
-          "Health exists, but `/capabilities` still converts constructor flags into availability and the client still deletes controls when a provider is absent. Provider health was cut to its blocking obligation on 2026-09-06: its twelve-round author model is retired as acceptance authority and the production implementation is now the proof, with durable opponent recovery split into opponent-recovery-journey.md. Route integration, readiness, metrics policy and production-boundary coverage remain."
+          "Capabilities read the live provider-health registry; provider-off controls remain visible with reasons and retry, and failed opponents pause before committing a move. Health/readiness, current response security and authorized streaming operations are integrated. Durable recovery changes, complete public/internal readiness policy, ingress enforcement, CSP and full operator/release coverage remain."
         ],
         "experience": [
           "blocked",
@@ -2948,11 +2986,11 @@
         ],
         "defaults": [
           "partial",
-          "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."
+          "Local, appliance and hosted profiles enforce distinct listener, TLS/cookie and origin boundaries; production requires a profile and contradictory settings refuse startup. The local development profile is loopback HTTP, not a deployable public default. Complete safe operator workflows and remaining security/release obligations are not discharged."
         ],
         "content": [
           "blocked",
-          "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."
+          "Runtime content allow-list, licence notices, pinned build materials, SBOM and release-manifest generation are implemented. Reviewed official content, unresolved model/runtime rights and complete eligible multi-architecture release assets still block release."
         ],
         "verification": [
           "partial",

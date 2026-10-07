@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]] and [[D3545]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3547]] and [[D3549]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -44,7 +44,7 @@ the machine map above remains the current assignment/status source.
 | Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content, fix official-versus-installed disclosure, implement durable training-set progression/repeat/tempo and graduate the official corpus |
-| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions and resume | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish rematch/history and bot-event workflows |
+| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows; bind pack replay to retained document bytes |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results and resume | Official educational progression, consumed theory unlocks, complete boss/reward/failure paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
@@ -60,6 +60,22 @@ profiles are not calibrated ratings; the Campaign pilot is not an official curri
 There are **zero graduated official packs**. In particular, an installed Library item's Official
 badge does not by itself establish source review ([[D3540]]).
 
+The current semantic validation instrument checks **81 subjects, 38 passing migrated cases,
+53 population receipts and eight external receipts, but zero fully validated subjects**.
+The missing required arms, including independent orientation authority, are a foundation gate,
+not evidence that all predicates are wrong. Registered tactics and research selection must not
+be described as fully validated learner guidance. `docs/semantic-evidence.md` explains that boundary.
+
+Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
+10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
+(271 completed, 24 retired, 274 live); **3,298 ledger rows** (1,436 done, 161 refused, 1,701 live,
+zero untriaged). Of the live ledger, 629 are todo, eleven doing and 1,061 blocked. The 462 historical
+prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
+milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
+only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
+capabilities. Counts of documents, routes, tests or closed rows are not a percentage-complete
+estimate. Concrete delivery is recorded below without promoting a whole release gate.
+
 The next delivery priorities are: close source/operand gaps; finish existing module and
 Review→theory→rehearsal→return journeys; complete training progression and calibrated bot/profile
 behavior; deliver the campaign curriculum/reward loop and representative grounded content; then
@@ -67,6 +83,21 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 completed-bot replay closeout (D3546/D3547): the result sheet offers
+same-bot replay inside its focus boundary, with one pending owner, safe retry and
+departure retirement. Admission checks the requested id/seed, replayed fresh root,
+exact source start and canonical opponent before attachment. The original game
+is preserved; read-only and active Campaign results retain their boundaries.
+Fourteen focused controls and actual desktop/touch-phone journeys pass. Full
+normal verification passes clean types, 3,485 software / seven performance /
+227 content tests and downstream contracts/governance. Rebuilt browser tiers
+pass 159 journeys, one existing optional Maia skip, zero retries, all 150 input
+and 112 composition cells. D3548 records the separate current-pack-versus-pinned-run
+retrieval gap and is queued to core-loop. D3549 corrects source-verified stale
+operations descriptions, not new operator implementation or requalification of
+historical native appliance proof. No full RFC/capability/milestone, calibrated
+bot, official pack, remote CI or release completion is claimed.
 
 2026-10-08 failed-start cleanup closeout (D3545): four native predecessor controls
 prove that a startup refusal leaves real Stockfish running. The application now

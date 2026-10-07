@@ -137,7 +137,7 @@
     onCloseCompare: () => void;
     onReplayResistance?: ((input: { readonly fen: string; readonly side: "white" | "black"; readonly targetElo: 1000 | 1400 | 1800 | 2200 }) => void | Promise<void>) | undefined;
     /** Rematch of a bot-profile run: a new run with the exact same profile and a new seed. */
-    onRematch?: (() => void | Promise<void>) | undefined;
+    onRematch?: (() => boolean | void | Promise<boolean | void>) | undefined;
     onRetryOpponent?: (() => void | Promise<unknown>) | undefined;
     /** The paused opponent after a provider failure (rfc/provider-health-degradation.md §10). */
     opponentPause?: OpponentPause | undefined;
@@ -753,6 +753,36 @@
   let trajectory = $derived(pack?.legs === undefined
     ? undefined
     : trajectoryVerdict(pack, run, run.activeCursor.nodeId));
+  let rematchRequest = 0;
+  let rematchPendingRunId: string | undefined = $state();
+  let rematchFailure: { readonly runId: string; readonly text: string } | undefined = $state();
+  let rematching = $derived(rematchPendingRunId === run.id);
+  let rematchError = $derived(rematchFailure?.runId === run.id ? rematchFailure.text : undefined);
+
+  async function rematchBot(): Promise<boolean> {
+    if (onRematch === undefined || busy || rematching || rewindBusy) return false;
+    const runId = run.id;
+    const request = ++rematchRequest;
+    rematchPendingRunId = runId;
+    rematchFailure = undefined;
+    try {
+      const accepted = await onRematch();
+      if (!seatAlive || request !== rematchRequest || run.id !== runId) return false;
+      if (accepted === false) {
+        rematchFailure = { runId, text: "The new game could not be opened. This game stays saved; try again." };
+        return false;
+      }
+      return true;
+    } catch {
+      if (seatAlive && request === rematchRequest && run.id === runId) {
+        rematchFailure = { runId, text: "The new game could not be opened. This game stays saved; try again." };
+      }
+      return false;
+    } finally {
+      if (seatAlive && request === rematchRequest) rematchPendingRunId = undefined;
+    }
+  }
+
   let terminalEvent = $derived(
     [...run.events].reverse().find(
       (event) =>
@@ -2162,6 +2192,7 @@
     simulationRequest += 1;
     compareRequest += 1;
     rewindRequest += 1;
+    rematchRequest += 1;
     branchSwitchRequest += 1;
     corpusRequest += 1;
     fullInspectorRequest += 1;
@@ -2315,7 +2346,7 @@
         {/if}
       </div>
       <div class="topbar-actions">
-        {#if !compactViewport && run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
+        {#if !compactViewport && run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" disabled={busy || rematching || rewindBusy} aria-describedby={busy || rematching || rewindBusy ? "bot-rematch-pending" : undefined} onclick={() => void rematchBot()}>{rematching ? "Opening new game…" : "Play this bot again"}</button>{/if}
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
         <details class="assistance-control" bind:open={assistanceMenuOpen}
           role={assistanceMenuOpen ? "dialog" : undefined} aria-modal={assistanceMenuOpen ? "true" : undefined}
@@ -2341,6 +2372,8 @@
         <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={(event) => { helpInvoker = invoker(event); helpOpen = true; }}>?</button>
       </div>
     </header>
+
+    {#if busy || rematching || rewindBusy}<span id="bot-rematch-pending" class="visually-hidden">Wait for the current action to finish before starting another game.</span>{/if}
 
     {#if opponentPause !== undefined}
       <section class="opponent-pause" role="alert" aria-label="Opponent paused" data-testid="opponent-pause">
@@ -2496,7 +2529,7 @@
               <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"
                 band={tabletViewport} tools open={stagedCue === undefined && (seatExpanded === undefined || seatExpanded === "support_tools")}
                 onToggle={() => toggleSeat("support_tools")}>
-            {#if compactViewport && run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" onclick={() => void onRematch()}>Play this bot again</button>{/if}
+            {#if compactViewport && run.opponentPolicy.profile !== undefined && onRematch !== undefined && snapshot.access !== "read_only"}<button class="rematch" type="button" disabled={busy || rematching || rewindBusy} aria-describedby={busy || rematching || rewindBusy ? "bot-rematch-pending" : undefined} onclick={() => void rematchBot()}>{rematching ? "Opening new game…" : "Play this bot again"}</button>{/if}
             {#if guardEvent?.type === "feedback.generated"}
               <section class="guard-prompt" aria-label="Consequence to review">
                 <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect what changed." />
@@ -2776,6 +2809,9 @@
     rewinding={rewindBusy}
     rewindError={currentNode.parentId === null ? undefined : rewindErrorFor({ nodeId: currentNode.parentId })}
     {onStory}
+    onRematch={run.opponentPolicy.profile !== undefined && snapshot.access !== "read_only" && campaignTerminalAction === undefined && onRematch !== undefined ? rematchBot : undefined}
+    {rematching}
+    {rematchError}
     onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
     onInspectEvidence={() => (inspectorOpen = true)}
     canScheduleReturn={canWrite && run.sessionKind !== "imported" && onScheduleReturn !== undefined}

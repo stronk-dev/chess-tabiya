@@ -26,6 +26,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { APPLICATION_PROVIDER_BOUNDS } from "./application.js";
 import { BotOpponentProviders, parseStoredBotEnvelope, type BotAcquisition, type BotOpponentAcquirer } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
+import { assertDuplicateRunResponse } from "../../web/src/lib/duplicate-response.js";
 import { ProviderRegistry } from "./provider-health.js";
 
 /** Bot availability over a fresh provider-health registry: local fixtures, no outcome yet. */
@@ -171,6 +172,7 @@ describe("run lane 0.18: create, resume and rematch carry the exact profile (A1)
     const response = await call(handler, "POST", `/runs/${source.id}/duplicate`, { id: "bot-rematch", seed: 99 });
     expect(response.status, await response.clone().text()).toBe(201);
     const rematch = ((await response.json()) as { run: DrillRun }).run;
+    expect(() => assertDuplicateRunResponse(rematch, { id: "bot-rematch", seed: 99, source })).not.toThrow();
     expect(rematch.opponentPolicy.profile).toEqual(source.opponentPolicy.profile);
     expect(rematch.branches[0]!.seed).not.toBe(source.branches[0]!.seed);
     expect(profile("pawn-forward.1800@1").digest).not.toBe(source.opponentPolicy.profile!.digest);

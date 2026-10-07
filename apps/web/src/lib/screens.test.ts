@@ -3095,6 +3095,74 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("offers a single recoverable bot rematch inside the completed-game modal", async () => {
+    const started = createRun({
+      id: "completed-bot",
+      session: { kind: "position", start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", profile: BOT_PROFILE_CATALOG[0]!.reference } },
+      sessionDigest: `sha256:${"b".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 4, createdAt: at,
+    });
+    const run = commitMove(started, "g6g7", { at }).run;
+    const first = deferred<boolean>();
+    const second = deferred<boolean>();
+    const onRematch = vi.fn().mockImplementationOnce(() => first.promise).mockImplementationOnce(() => second.promise);
+    const onRewind = vi.fn();
+    const onFlip = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onFlip, onRematch, registerKeyboardRegion,
+    } });
+    await tick();
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"][aria-labelledby="outcome-title"]')!;
+    expect(dialog).not.toBeNull();
+    const rematch = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play this bot again");
+    expect(rematch).toBeDefined();
+    rematch!.click(); rematch!.click();
+    await tick();
+    expect(onRematch).toHaveBeenCalledTimes(1);
+    expect(rematch!.disabled).toBe(true);
+    const rewind = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!;
+    const flip = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Replay this as Black")!;
+    expect(rewind.disabled).toBe(true);
+    expect(flip.disabled).toBe(true);
+    expect(document.body.textContent).toContain("This completed game stays saved.");
+    first.resolve(false);
+    await vi.waitFor(() => expect(dialog.textContent).toContain("The new game could not be opened."));
+    expect(rematch!.disabled).toBe(false);
+    expect(onRewind).not.toHaveBeenCalled();
+    expect(onFlip).not.toHaveBeenCalled();
+    rematch!.click();
+    await vi.waitFor(() => expect(onRematch).toHaveBeenCalledTimes(2));
+    await unmount(component);
+    second.reject(new Error("private departed rematch"));
+    await tick();
+    expect(document.body.textContent).not.toContain("private departed rematch");
+  });
+
+  for (const context of ["read-only", "campaign"] as const) {
+    it(`keeps the completed-bot rematch out of the ${context} result`, async () => {
+      const initial = createRun({
+        id: `terminal-bot-${context}`,
+        session: { kind: "position", start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", profile: BOT_PROFILE_CATALOG[0]!.reference } },
+        sessionDigest: `sha256:${"b".repeat(64)}`,
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at,
+      });
+      const onRematch = vi.fn();
+      const component = mountDrill({ target: target(), props: {
+        snapshot: { run: commitMove(initial, "g6g7", { at }).run, access: context === "read-only" ? "read_only" : "writer", pendingEvidence: 0, withheld: false },
+        campaignTerminalAction: context === "campaign" ? { label: "Declare done", busy: false, onAction: vi.fn() } : undefined,
+        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onRematch, registerKeyboardRegion,
+      } });
+      await tick();
+      const dialog = document.querySelector('[role="dialog"][aria-labelledby="outcome-title"]')!;
+      expect(dialog).not.toBeNull();
+      expect(dialog.textContent).not.toContain("Play this bot again");
+      expect(onRematch).not.toHaveBeenCalled();
+      await unmount(component);
+    });
+  }
+
   it("shows pack mode, difficulty band, and honest review status", async () => {
     const onSelect = vi.fn<(packId: string) => void>();
     const summary: PackSummary = {

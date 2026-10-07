@@ -9,6 +9,7 @@ import { inspectComposition, type CompositionConformance } from "./composition-c
 import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 import type { DrillRun, ModuleQueryPage } from "@chess-tabiya/runtime";
+import { BOT_PROFILE_CATALOG } from "../../packages/runtime/src/bot-profile-catalog.js";
 import { hintDecisionStamp } from "../../packages/runtime/src/hint-exchange.js";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import type { HumanSplitPage } from "../../apps/web/src/lib/api.js";
@@ -4041,6 +4042,106 @@ test("a learner chooses a registered bot, plays it, reloads, and the same bot co
   await expect(page).toHaveURL(/\/play\/run\//u);
   await expect(status).toContainText("Bot · Human baseline · model band 1400");
 });
+
+for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: "phone", width: 390, height: 844 }]) {
+  test(`completed bot game rematches with recovery and exact identity on ${viewport.name}${viewport.name === "phone" ? " @mobile" : ""}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    const id = `result-bot-${randomUUID()}`;
+    const writer = `writer-${randomUUID()}`;
+    const profile = BOT_PROFILE_CATALOG[0]!.reference;
+    const response = await page.request.post("/runs", { headers: { "x-writer-id": writer }, data: {
+      id, session: { kind: "position", start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", profile } },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 7,
+    } });
+    expect(response.status(), await response.text()).toBe(201);
+    await page.evaluate(({ id, writer }) => localStorage.setItem(`chess-tabiya:run:${id}:writer-id`, writer), { id, writer });
+    await page.goto(`/play/run/${id}`);
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await move(page, "g6", "g7", "white");
+    const result = page.getByRole("dialog", { name: "You won." });
+    await expect(result).toBeVisible();
+    const boardBefore = (await (await page.request.get(`/runs/${id}/graph`)).json()) as { graph: RunGraph };
+    const originalEvents = await (await page.request.get(`/runs/${id}/events`)).json();
+    const again = result.getByRole("button", { name: "Play this bot again", exact: true });
+    await expect(again).toBeVisible();
+    await again.focus();
+    await expect(again).toBeFocused();
+
+    let requests = 0;
+    let release!: () => void;
+    let newRun: DrillRun | undefined;
+    const pending = new Promise<void>((resolve) => { release = resolve; });
+    await page.route(`**/runs/${id}/duplicate`, async (route) => {
+      requests += 1;
+      if (requests === 1) {
+        await route.fulfill({ status: 503, json: { error: { code: "PROVIDER_UNAVAILABLE", message: "private provider failure" } } });
+        return;
+      }
+      const response = await route.fetch();
+      expect(response.status()).toBe(201);
+      newRun = ((await response.json()) as { run: DrillRun }).run;
+      await pending;
+      await route.fulfill({ response });
+    });
+    try {
+      await page.keyboard.press("Enter");
+      await expect(result.getByRole("alert")).toContainText("The new game could not be opened.");
+      await expect(result).not.toContainText("private provider failure");
+      await expect(page).toHaveURL(new RegExp(`/play/run/${id}$`));
+      await expect(again).toBeEnabled();
+      expect(await (await page.request.get(`/runs/${id}/events`)).json()).toEqual(originalEvents);
+      await again.click();
+      await expect(result.getByRole("button", { name: "Opening new game…" })).toBeDisabled();
+      await expect(result.getByRole("button", { name: "Play it again from here" })).toBeDisabled();
+      await expect(result.getByRole("button", { name: "Replay this as Black" })).toBeDisabled();
+      await expect(result.getByRole("status")).toContainText("This completed game stays saved.");
+      await expect.poll(() => newRun?.id).toBeTruthy();
+      expect(requests).toBe(2);
+      expect(newRun!.opponentPolicy.profile).toEqual(profile);
+      expect(newRun!.branches[0]!.seed).not.toBe(7);
+      release();
+      await expect(page).toHaveURL(new RegExp(`/play/run/${newRun!.id}$`));
+      await expect(page.locator(".timeline")).toContainText("Active line 0 turns");
+      await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1000");
+      const boardAfter = (await (await page.request.get(`/runs/${id}/graph`)).json()) as { graph: RunGraph };
+      expect(boardAfter.graph.activeCursor).toEqual(boardBefore.graph.activeCursor);
+      expect(boardAfter.graph.nodes).toEqual(boardBefore.graph.nodes);
+      expect(boardAfter.graph.branches).toEqual(boardBefore.graph.branches);
+      await page.reload();
+      await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1000");
+      await expect(page.locator(".timeline")).toContainText("Active line 0 turns");
+
+      // A server-side creation may finish after departure, but cannot replace the chosen page.
+      const replayId = newRun!.id;
+      await move(page, "g6", "g7", "white");
+      await expect(result).toBeVisible();
+      let releaseDeparted!: () => void;
+      const pendingDeparted = new Promise<void>((resolve) => { releaseDeparted = resolve; });
+      let departedRun: DrillRun | undefined;
+      await page.route(`**/runs/${replayId}/duplicate`, async (route) => {
+        const response = await route.fetch();
+        expect(response.status()).toBe(201);
+        departedRun = ((await response.json()) as { run: DrillRun }).run;
+        await pendingDeparted;
+        await route.fulfill({ response });
+      });
+      try {
+        const delivered = page.waitForResponse((response) => response.request().method() === "POST" && new URL(response.url()).pathname === `/runs/${replayId}/duplicate`);
+        await result.getByRole("button", { name: "Play this bot again", exact: true }).click();
+        await expect.poll(() => departedRun?.id).toBeTruthy();
+        await result.getByRole("button", { name: "Stop session", exact: true }).click();
+        await expect(page).toHaveURL(/\/play$/u);
+        releaseDeparted();
+        await delivered;
+        await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
+        await expect(page).toHaveURL(/\/play$/u);
+        expect(departedRun!.opponentPolicy.profile).toEqual(profile);
+        const saved = await page.request.get(`/runs/${departedRun!.id}/graph`);
+        expect(saved.status()).toBe(200);
+      } finally { releaseDeparted(); }
+    } finally { release(); }
+  });
+}
 
 test("a committed move updates the stable board instance instead of remounting it", async ({ page }) => {
   await page.goto("/play");

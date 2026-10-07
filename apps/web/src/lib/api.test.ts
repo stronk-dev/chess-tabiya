@@ -34,6 +34,20 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("admits only the requested fresh duplicate before returning it to a caller", async () => {
+    const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
+    const api = new DrillApi("http://tabiya.test", async (input, init) => {
+      calls.push({ url: String(input), ...(init === undefined ? {} : { init }) });
+      return json({ run });
+    });
+    expect(await api.duplicateRun("source / one", { id: run.id, seed: 7 }, "writer-one")).toEqual(run);
+    expect(calls[0]).toMatchObject({ url: "http://tabiya.test/runs/source%20%2F%20one/duplicate", init: { method: "POST", body: JSON.stringify({ id: run.id, seed: 7 }) } });
+    await expect(api.duplicateRun("source / one", { id: "different-request", seed: 7 }, "writer-one")).rejects.toThrow("requested attempt");
+    await expect(api.duplicateRun("source / one", { id: run.id, seed: 99 }, "writer-one")).rejects.toThrow("requested attempt");
+    const inconsistent = new DrillApi("http://tabiya.test", async () => json({ run: { ...run, start: { ...run.start, side: "black" } } }));
+    await expect(inconsistent.duplicateRun("source", { id: run.id, seed: 7 }, "writer-one")).rejects.toThrow("requested attempt");
+  });
+
   it("posts unsaved pack bytes to the draft lint route without saving them", async () => {
     const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
     const validation = { valid: false, issues: [{ code: "FIXTURE", path: "/title", message: "Fixture issue" }] };

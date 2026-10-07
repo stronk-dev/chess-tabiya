@@ -3537,6 +3537,13 @@ application-startup-cleanup-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-startup-cleanup.test.ts
 	$(MAKE) typecheck
 
+.PHONY: bot-rematch-check bot-rematch-browser-check
+bot-rematch-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/api.test.ts apps/server/src/bot-opponent-ply.test.ts -t "exact bot rematch|recoverable bot rematch|completed-bot rematch|requested fresh duplicate|rematch copies"
+
+bot-rematch-browser-check:
+	./node_modules/.bin/playwright test --grep "completed bot game rematches"
+
 .PHONY: application-security-check application-security-browser
 application-security-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-security.test.ts apps/server/src/http-representation.test.ts apps/server/src/http-streaming.test.ts apps/server/src/http-ingress.test.ts apps/server/src/live-session.test.ts apps/server/src/config.test.ts

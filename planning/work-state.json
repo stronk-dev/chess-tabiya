@@ -29304,6 +29304,41 @@
       "uxItems": [],
       "evidence": "apps/server/src/application-startup-cleanup.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3546",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88cecc812c62cb4da9677c95a1695a75b54d6b72ab6b7bd3c1f57e496961ec75",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/screens.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3547",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b745bf6044984b7b120879fd83ba45d9238553f688ded1d4afb5b8fe1af874d9",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/session-controller.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3548",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:29c633f707498bbce12965b9a776070496d63db24547718ef6c6720fc4a43789",
+      "uxItems": [],
+      "owner": "core-loop"
+    },
+    {
+      "id": "D3549",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a09b041af3093231b0cbef7014a021ea48eb617ac619f7ebd16959c6982c3750",
+      "uxItems": [],
+      "evidence": "apps/server/src/capabilities.ts",
+      "evidenceKind": "path"
     }
   ]
 }

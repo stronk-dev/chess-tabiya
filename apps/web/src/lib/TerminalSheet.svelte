@@ -41,6 +41,9 @@
     run: DrillRun;
     shapes?: readonly ShapeEntryView[];
     onStory?: (() => void) | undefined;
+    onRematch?: (() => boolean | void | Promise<boolean | void>) | undefined;
+    rematching?: boolean;
+    rematchError?: string | undefined;
     onFlip?: (() => void | Promise<void>) | undefined;
     onInspectEvidence?: (() => void) | undefined;
     canScheduleReturn?: boolean | undefined;
@@ -56,7 +59,7 @@
     campaignAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onRematch, rematching = false, rematchError, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
   let submissionBusy = $state(false);
@@ -97,7 +100,7 @@
   }
 
   async function replayOppositeSide(): Promise<void> {
-    if (onFlip === undefined || flipBusy) return;
+    if (onFlip === undefined || flipBusy || rematching || rewinding) return;
     const request = ++flipRequest;
     flipBusy = true;
     flipError = undefined;
@@ -164,7 +167,8 @@
         </div>
       {/if}
       <div class="primary-actions">
-        <button class="primary" type="button" disabled={!canRewind || rewinding} aria-describedby={rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>
+        <button class="primary" type="button" disabled={!canRewind || rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>
+        {#if onRematch}<button type="button" disabled={rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : undefined} onclick={() => void onRematch()}>{rematching ? "Opening new game…" : "Play this bot again"}</button>{/if}
         <HonestControl
           disabled={!canScheduleReturn || returnBusy || returnScheduled || rewinding}
           reasonId="terminal-schedule-unavailable"
@@ -174,11 +178,13 @@
             <button type="button" disabled={!canScheduleReturn || returnBusy || returnScheduled || rewinding} aria-describedby={describedBy} onclick={() => void scheduleReturn()}>{returnScheduled ? "Added to return queue" : returnBusy ? "Saving return…" : "Schedule a retry from here"}</button>
           {/snippet}
         </HonestControl>
-        {#if onStory}<button type="button" disabled={rewinding} onclick={onStory}>Review the whole game</button>{/if}
+        {#if onStory}<button type="button" disabled={rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : undefined} onclick={onStory}>Review the whole game</button>{/if}
       </div>
       {#if returnError}<p role="alert">{returnError}</p>{/if}
       {#if rewinding}<p id="terminal-rewind-busy" role="status">Rewinding from this result. The completed attempt remains open until the run changes.</p>{/if}
       {#if rewindError}<p id="terminal-rewind-error" role="alert">{rewindError}</p>{/if}
+      {#if rematching}<p id="terminal-rematch-busy" role="status">Opening a separate game against the same bot. This completed game stays saved.</p>{/if}
+      {#if rematchError}<p role="alert">{rematchError}</p>{/if}
     </section>
 
     {#if authoredItems.length > 0}
@@ -244,7 +250,7 @@
     {/if}
 
     <div class="actions" aria-label="More completed-attempt actions">
-      {#if onFlip}<button type="button" disabled={rewinding || flipBusy} aria-describedby={flipBusy ? "terminal-flip-busy" : undefined} onclick={() => void replayOppositeSide()}>{flipBusy ? "Opening opposite-side replay…" : `Replay this as ${run.start.side === "white" ? "Black" : "White"}`}</button>{/if}
+      {#if onFlip}<button type="button" disabled={rewinding || flipBusy || rematching} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : undefined} onclick={() => void replayOppositeSide()}>{flipBusy ? "Opening opposite-side replay…" : `Replay this as ${run.start.side === "white" ? "Black" : "White"}`}</button>{/if}
       {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect analysis details <span aria-hidden="true">({evidence.length})</span></button>{/if}
       <button type="button" disabled={rewinding} onclick={onStop}>Stop session</button>
     </div>

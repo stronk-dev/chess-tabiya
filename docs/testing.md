@@ -52,6 +52,13 @@ shared-runner scheduler or garbage-collection pause from becoming a false produc
 budgets and sample populations remain explicit in the tests. User-perceived tail latency belongs to the
 browser and owner-use instruments, not a lucky or unlucky single Node timer observation.
 
+For the registered-bot completed-game replay, `make bot-rematch-check` covers exact duplicate
+admission, one pending owner, result-modal actions, failure/departure and a real SQLite/HTTP
+response through the web validator. `make bot-rematch-browser-check` rebuilds the application and
+exercises recovery, retained original moves, exact opponent/seed, reload and departure on desktop
+and touch-enabled phone. These cases also remain in the ordinary software/browser tiers; the
+focused commands are not substitute release gates or bot-calibration tests.
+
 `make test-browser` remains a convenient single Playwright invocation with the complete screenshot
 artifact check for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core
