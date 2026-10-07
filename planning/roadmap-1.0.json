@@ -876,12 +876,15 @@
         "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
         "latestCheckpoint": {
           "at": "2026-10-07",
-          "summary": "D3262 retains 23 complete settings / 26,634 of 61,374 cases; 30 remain. All nine engine widths and six recursive depth-eight settings are complete; original recursive replay verifies 479,960 observations and full six-setting synthesis preserves 1,092 named cells and 2,316 cache pairs against their own arms. D3509 preserves exact oversized bytes without restamping clocks. The complete configured-model weighted-target qualification now retains 2,316 original cases / 364 cells / 28 no-target policies: opportunity counts each predecessor once, execution its own selected fourth-ply leaves. All masks and canonical masses match each own prefix; three original summation-order differences and literal float32 overshoot remain explicit. Forty-six Node controls, nine independent Python methods and actual replay reject 15 output and seven source corruptions; this is algebra/custody, not another chess or timing oracle. No new captured setting, human frequency, engine reason, all-defence proof or profile is selected. The original six-setting depth-twelve capture is live, not delivered or restarted on timeout. Full remaining cost, consumer/cache/browser, source/model-memory and reviewed profile remain open under D3262; D3508/D3373 source holds stay explicit. Current full normal software verification fails D3510 on legacy Theory composition at the unchanged 30-second timeout; 3,397 other tests pass. The focused normal Theory gate passes all 115 tests, but root cause remains unproven. Last-boundary diagnostics preserve every timeout/assertion; a fresh full normal gate now passes clean types, 3,398 tests / 344 files, seven performance tests and downstream contracts. D3510 stays doing because a passing replay does not locate or fix the original stall. Full normal governance passes with all 1,691 live rows assigned and zero untriaged. Routine metadata/hash/state/receipt upkeep is automatic. No content/browser/GitHub/native-release proof or milestone/capability/full-1.0 completion follows.",
+          "summary": "D3262 retains 23 qualified complete settings / 26,634 of 61,374 cases; 30 remain unqualified. Preceding qualifications and source holds stay unchanged. Original six-setting depth-twelve capture retains 6,948 rows / 2,316 triplets, but D3512 locates one fatal deadline and 699 inherited failures across 697 cold rows. Three real-subprocess controls distinguish terminal adapter refusal without a new command from nonfatal parsing refusal. Lossless packaging preserves 81,561,150 original bytes and eighteen source images; independent replay verifies 85,088 observations and rejects ten corruptions after thirty boundary controls pass. This validates recorded partial evidence, not the two wide arms' missing independent attempts; preregistered successor/lifecycle qualification remains. Original sources/failures/clocks are unchanged, no blind restart or count/profile promotion. Full consumer/cache/browser, broader source/model memory and reviewed profile remain open; D3508/D3373 source holds stay explicit. D3511's verified Theory-body repair is committed as 9408fbac with fresh full software types/3,403 tests/seven performance tests/downstream contracts; D3510's separate earlier timeout remains unlocated. This research continuation claims no new full software/browser/content/GitHub/native-release result. All 1,692 live rows are assigned, zero untriaged; routine metadata/hash/state/receipt upkeep is automatic. No engine causality, human frequency, all-defence proof, capability/milestone or full-1.0 completion follows.",
           "impact": "advanced",
           "evidence": [
             "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md",
             "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-parts-2026-10-07.json.gz",
             "planning/semantic-consequence-search/d3262-live-weighted-target-preregistration-2026-10-07.md",
+            "planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md",
+            "planning/semantic-consequence-search/d3262-cost-live-recursive-depth12-2026-10-07.json.gz",
+            "tools/d3262-search-calibration/cost-source-lifecycle.test.mjs",
             "planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.md",
             "planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.json.gz",
             "tools/d3262-search-calibration/cost-weighted-targets.mjs",
@@ -1594,7 +1597,12 @@
             {
               "kind": "work_state",
               "id": "D3262",
-              "digest": "sha256:80c385f1876c50a5113c99cd8d0c1b24f2bb1dbae89bddc948e645faa92e4fa5"
+              "digest": "sha256:bd41c762496ffb58d8d7ede90360262829b71c99b8d99d540954699fbc4f749c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3512",
+              "digest": "sha256:0ceeee58ebc9156ca574e740928b3d177412c9021cef4cefb3f4e3a35da88504"
             },
             {
               "kind": "work_state",

@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 search-source lifecycle finding: the original six depth-twelve settings
+terminate with 6,948 retained rows, but [[D3512]] exposes one fatal source timeout
+and 699 later inherited dependency failures across 697 affected cold rows. These
+are not independent timeout attempts. Three real-subprocess controls confirm the
+failed-adapter boundary. Lossless packaging and independent replay of 85,088
+observations pass with ten corruption refusals; lifecycle qualification stays open;
+the two wide arms need separately identified successor evidence before cost
+qualification. The delivered count stays **23 settings / 26,634 cases**, not 29.
+Receipt: `planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md`.
+
 2026-10-07 Theory response-body ownership repair: [[D3511]] closes on all sixteen
 original HTTP scenarios plus five delivery/error controls, including native
 streaming HTTP and normal shutdown. The focused gate passes 120 tests / five files;

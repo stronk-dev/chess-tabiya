@@ -11,8 +11,13 @@ The full package generator automatically stores oversized original bytes in
 four bounded parts; D3509 is done, not a source migration or storage-policy ruling.
 Thirty settings remain: twelve recursive primary, seventeen first-reply-reserve
 diagnostics and the complete-local diagnostic. The original next six depth-twelve
-recursive settings are live in `.cache/d3262-cost-live/recursive-depth12-2026-10-07`;
-do not restart on observation timeout or count unfinished capture as delivered.
+recursive settings terminated zero in `.cache/d3262-cost-live/recursive-depth12-2026-10-07`
+with all 6,948 original rows. Lossless packaging and independent replay of 85,088
+observations pass with ten corruption refusals; lifecycle qualification remains
+pending. [[D3512]] identifies one fatal source deadline followed by 699
+inherited dependency failures across 697 affected cold rows; the two wide settings
+cannot count as independently attempted complete cost populations. Preserve the
+original failed batch; no blind restart, overwrite or completed-count promotion.
 No completed population is repeated. Current receipt:
 `planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md`.
 
@@ -35,6 +40,12 @@ or all-defence proof. No new setting or clock is counted. Receipt:
 `planning/semantic-consequence-search/d3262-cost-live-maia-weighted-targets-2026-10-07.md`.
 Recursive tooling requires all six settings at a budget; pack and independently
 replay the depth-twelve capture only after its original exact handle terminates.
+That handle has terminated; lossless packaging and independent replay pass. Current lifecycle
+receipt: `planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md`.
+Three real subprocess controls prove that terminal failure prevents another UCI
+write, while a nonfatal parser refusal does not. D3512 stays doing; isolate/recover
+under a preregistered successor protocol before the omitted wide-arm attempts can
+support profile comparison. Source images, failures and clocks remain unchanged.
 Current receipts: `planning/semantic-consequence-search/d3262-cost-live-maia-2026-10-07.md`,
 `d3262-cost-live-engine-widths-2026-10-07.md` and the existing research dossier.
 D3262 stays doing, the search RFC draft. Routine metadata/hash/state upkeep is

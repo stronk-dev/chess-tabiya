@@ -1007,3 +1007,34 @@ reviewed profile keep the RFC draft. Current full-software timeout D3510 remains
 explicit; a passing focused 115-test Theory gate does not establish its cause.
 No milestone/capability/content or full-1.0 promotion follows. `[V]` weighted receipt
 §Remaining boundary, current ledger/roadmap and software terminal.
+
+## 2026-10-07 source-lifecycle qualification
+
+The original six-setting depth-twelve capture has now terminated with 6,948 rows /
+2,316 triplets; the whole cost plan remains incomplete. Complete ordered audit
+locates one fatal engine deadline and 699 inherited dependency failures across
+697 cold rows. The adapter retains its fatal error and refuses subsequent commands
+before a new UCI write; those rows are not independently attempted timeout trials.
+Three real-subprocess controls distinguish terminal adapter failure from a
+nonfatal invalid-PV refusal. `[V]`
+`planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md`
+§Concrete failure boundary and §Permanent source-boundary controls, original
+metadata/triplets/source image and normal Make terminal.
+
+The first four settings retain 357/357/356/356 available cold rows, each with 28
+no-target rows and its invalid-source remainder. The two wide settings retain
+19/0 available cold rows and 339/358 budget-exhausted labels, each with 28
+no-target rows. Original long elapsed readings are retained, not interpreted as
+engine CPU time or a diagnosed scheduling delay. No original source, failure,
+clock or partial result is replaced. `[V]` receipt complete cold-row table and
+named original fatal triplet; original executor digest join.
+
+Lossless packaging and independent replay of 85,088 observations pass, with thirty
+boundary controls and ten corruption refusals. This checks the retained partial
+evidence, not fresh attempts after the fatal failure. Wide-arm cost qualification
+needs preregistered separately identified successor evidence, not a silently
+repeated or overwritten failed capture. D3512/D3262 remain doing, the delivered
+headline stays 23 settings / 26,634 cases and the search RFC remains draft.
+This is a bounded instrument/source-lifecycle finding, not an engine cause,
+production recovery/default, useful explanation or milestone/capability/content
+completion. `[V]` receipt §Admission and next work and current ledger/roadmap.

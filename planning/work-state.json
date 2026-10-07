@@ -26780,7 +26780,7 @@
       "id": "D3262",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:80c385f1876c50a5113c99cd8d0c1b24f2bb1dbae89bddc948e645faa92e4fa5",
+      "sourceDigest": "sha256:bd41c762496ffb58d8d7ede90360262829b71c99b8d99d540954699fbc4f749c",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-07"
@@ -29000,6 +29000,15 @@
       "uxItems": [],
       "evidence": "planning/provider-exchange-and-execution/theory-http-body-ownership-2026-10-07.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3512",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0ceeee58ebc9156ca574e740928b3d177412c9021cef4cefb3f4e3a35da88504",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-07"
     }
   ]
 }
