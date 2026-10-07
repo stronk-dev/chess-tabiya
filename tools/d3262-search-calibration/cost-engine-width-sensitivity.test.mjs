@@ -2,11 +2,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { summarizeEngineWidthSensitivity, settings, loadEngineWidthSensitivity, indexEngineContinuation } from "./cost-engine-width-sensitivity.mjs";
+import { summarizeEngineWidthSensitivity, settings, engineSettings, loadEngineWidthSensitivity, indexEngineContinuation,
+  encodeSensitivityArtifact, decodeSensitivityArtifact } from "./cost-engine-width-sensitivity.mjs";
 import { costCases, sha, loadCostPlan, sourcePins } from "./cost-contract.mjs";
 
 // Synthetic projection controls, never live engine or chess evidence.
-function fixture() {
+function fixture(budget = "depth8") {
+  const settings = engineSettings(budget);
   const candidates = [{ rootId: "named", candidateUci: "e2e4", phase: "opening", focus: null },
     { rootId: "empty", candidateUci: "d2d4", phase: "endgame", focus: "quiet_plan" }];
   const third = ["e2e4", "e7e5", "g1f3"], fourth = [...third, "b8c6"];
@@ -34,9 +36,9 @@ function fixture() {
     rows: candidates.map(c => ({ ...c, arms: settings.map(arm => ({ arm,
       selectedPaths: c.rootId === "named" ? [pathId] : [], selectedFourthPlyEdges: c.rootId === "named" ? 1 : 0 })) })) }],
     leaves: [{ id: leafId, rootId: "named", historyUci: fourth }] };
-  return { records, candidates, reference, continuation };
+  return { records, candidates, reference, continuation, budget };
 }
-const run = x => summarizeEngineWidthSensitivity(x.records, x.candidates, x.reference, x.continuation);
+const run = x => summarizeEngineWidthSensitivity(x.records, x.candidates, x.reference, x.continuation, x.budget);
 const mutateLive = (x, fn) => {
   for (const r of x.records.filter(r => r.row.rootId === "named" && r.row.setting === settings[0] && r.row.horizon === 4
     && r.row.regime !== "provider_offline")) fn(r);
@@ -158,7 +160,7 @@ for (const mode of ["missing_population", "missing_arm", "false_fourth_count", "
     if (mode === "lost_leaf") x.continuation.leaves = [];
     assert.throws(() => run(x), /D3262_ENGINE_WIDTH_SENSITIVITY/);
   });
-test("all real frozen target/third/fourth identities bind the complete source chain", () => {
+test("all nine real frozen engine settings bind the complete target/third/fourth source chain", () => {
   const directory = "planning/semantic-consequence-search", name = Object.keys(sourcePins)[0];
   const bytes = readFileSync(`${directory}/${name}`);
   assert.equal(sha(bytes), sourcePins[name]);
@@ -169,14 +171,61 @@ test("all real frozen target/third/fourth identities bind the complete source ch
   const continuationName = "d3262-coherent-engine-fourth-ply.json.gz", continuationBytes = readFileSync(`${directory}/${continuationName}`);
   assert.equal(sha(continuationBytes), target.inputDigests[continuationName]);
   const candidates = loadCostPlan().candidates;
-  const indexed = indexEngineContinuation(JSON.parse(gunzipSync(continuationBytes)), candidates);
-  assert.equal(indexed.size, 193 * 3);
-  let checked = 0;
-  for (const cell of reference.rows) for (const setting of settings) {
-    const arm = cell.arms.find(x => x.setting === setting);
-    const bound = indexed.get(JSON.stringify([cell.rootId, cell.candidateUci, setting]));
-    assert.deepEqual(arm.preparations.flatMap(p => p.observed.map(o => o.pathId)).sort(), bound.third);
-    assert.equal(arm.selectedFourthPlyLeaves, bound.fourth.length); checked++;
+  const continuation = JSON.parse(gunzipSync(continuationBytes));
+  let total = 0;
+  for (const budget of ["depth8", "depth12", "movetime100"]) {
+    const settings = engineSettings(budget), indexed = indexEngineContinuation(continuation, candidates, budget);
+    assert.equal(indexed.size, 193 * 3);
+    let checked = 0;
+    for (const cell of reference.rows) for (const setting of settings) {
+      const arm = cell.arms.find(x => x.setting === setting);
+      const bound = indexed.get(JSON.stringify([cell.rootId, cell.candidateUci, setting]));
+      assert.deepEqual(arm.preparations.flatMap(p => p.observed.map(o => o.pathId)).sort(), bound.third);
+      assert.equal(arm.selectedFourthPlyLeaves, bound.fourth.length); checked++;
+    }
+    assert.equal(checked, 182 * 3); total += checked;
   }
-  assert.equal(checked, 182 * 3);
+  assert.equal(total, 182 * 9);
+});
+for (const budget of ["depth12", "movetime100"]) {
+  test(`complete ${budget} synthetic populations use the exact requested budget throughout`, () => {
+    const value = run(fixture(budget));
+    assert.equal(value.rows, 36); assert.equal(value.cells.length, 3);
+    assert.ok(value.cells.every(x => x.setting.startsWith(`engine:${budget}:`)));
+    assert.ok(value.cells.every(x => Object.values(x.changed).every(v => !v)));
+    assert.deepEqual(value.cachePairs, { identicalCompiled: 12, failedColdMissingWarmReceipt: 0 });
+  });
+  test(`${budget} cannot borrow another budget's live or frozen arm`, () => {
+    for (const mode of ["live", "target", "continuation"]) {
+      const x = fixture(budget);
+      if (mode === "live") x.records[0].row.setting = settings[0];
+      else if (mode === "target") x.reference.rows[0].arms[0].setting = settings[0];
+      else x.continuation.profiles[0].rows[0].arms[0].arm = settings[0];
+      assert.throws(() => run(x), /D3262_ENGINE_WIDTH_SENSITIVITY/);
+    }
+  });
+}
+test("undeclared budgets refuse before input reads or comparisons", () => {
+  for (const budget of [null, false, 12, "depth10", "movetime200", "", "../escape"])
+    assert.throws(() => loadEngineWidthSensitivity([], budget), /D3262_ENGINE_WIDTH_SENSITIVITY/);
+  assert.deepEqual(engineSettings(), settings);
+});
+test("plain and compressed sensitivity preserve the exact canonical JSON bytes", () => {
+  const text = `${JSON.stringify(run(fixture()), null, 2)}\n`;
+  for (const name of ["result.json", "result.json.gz"]) {
+    const bytes = encodeSensitivityArtifact(text, name);
+    assert.equal(decodeSensitivityArtifact(bytes, name), text);
+    assert.deepEqual(encodeSensitivityArtifact(text, name), bytes);
+  }
+});
+test("compressed sensitivity rejects truncation or foreign plain bytes", () => {
+  const bytes = encodeSensitivityArtifact("{}\n", "result.json.gz");
+  assert.throws(() => decodeSensitivityArtifact(bytes.subarray(0, bytes.length - 5), "result.json.gz"));
+  assert.throws(() => decodeSensitivityArtifact(Buffer.from("{}\n"), "result.json.gz"));
+});
+test("sensitivity codec refuses unknown output formats without touching a file", () => {
+  for (const name of ["result.gz", "result.txt", "result.json.zip", null]) {
+    assert.throws(() => encodeSensitivityArtifact("{}\n", name), /D3262_ENGINE_WIDTH_SENSITIVITY/);
+    assert.throws(() => decodeSensitivityArtifact(Buffer.from("{}\n"), name), /D3262_ENGINE_WIDTH_SENSITIVITY/);
+  }
 });

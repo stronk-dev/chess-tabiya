@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b5f8b1f29a73404ed14134177e252e74b1788dc15d9a7d18fd0dc79e129af1f7",
+    "roadmap": "sha256:bd911f47a7f31d257be7e1c50aebf5f71cded546957b5c6d18d27c986f4d4913",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:8b526736688253e3f6681b578e15f0929bd67c92be4fc8981f30d5bb3f19cea1",
+    "workState": "sha256:fb136d1335f275c5735b2b55a8141004dcd4c284438ba272e2cf0b98282afa31",
     "rfcRegister": "sha256:30924497290c821bd160a4a67600787a2a212bc565f06ab64d147f5442feb696",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:f54521ee0898c180b9c1c469a5ed7e99a0e7aa74d133e07167958dd5a1d3b463",
@@ -254,9 +254,13 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-07",
-        "summary": "D3262 now retains twelve complete live setting populations / 13,896 of 61,374 cases, all 193 candidates, two horizons and three regimes. All five primary families have a population; all three PV budgets and all three depth-eight engine widths are complete. The new top4/top8 batch independently replays all 2,316 cases / 237,198 target observations and refuses six corruptions. All 546 width/target cells retain exact frozen third/fourth paths, witnesses, coverage and outcomes; all 1,158 cold/warm pairs retain identical compiled evidence. Forty synthesis/source controls, thirty independent boundary controls, byte-identical reconstruction, full exact-index software/content and governance pass. Wider cold server p95 exceeds the 1,500-ms reference in every named phase; warm top8 middlegame also exceeds it, not a browser/pending gate reading. Original source/timing/refused-parent bytes and D3504-D3506 closeouts stay preserved. Source/package/receipt/anchor maintenance is automatic. Remaining 41 settings, other-budget/family sensitivity, individual source/model memory, consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. Final scoped flow-back and ordinary hooks precede checkpoint commit. No production UI/API behavior, capability, milestone, content or full-1.0 promotion.",
+        "summary": "D3262 now retains thirteen complete live setting populations / 15,054 of 61,374 cases, all 193 candidates, two horizons and three regimes. The new depth12/top2 population independently replays all 1,158 cases / 5,770 target observations and refuses six corruptions. One invalid cold case and its unavailable warm partner retain ten partial observations each; no fresh warm query or failure filtering occurs. All 140 source/execution controls, 48 comparison-reader controls and 30 independent boundary controls pass. All nine frozen engine settings bind 1,737 candidate frontiers and 1,638 named target joins. The existing complete depth-eight width comparison and all earlier source/timing/refused-parent bytes remain preserved. Available depth12/top2 cold four-ply p95 spans 5,738.467–8,456.453 ms by phase; this is not browser/pending gate evidence. Content, legacy byte-identical reconstruction, full exact-index software and full governance pass; final scoped evidence-only flow-back and ordinary hooks precede checkpoint commit. Remaining 40 settings, complete depth12 and other-budget/family sensitivity, individual source/model memory, consumer scope and actual browser/profile qualification keep D3262 doing and the search RFC draft. Routine source/package/receipt/anchor maintenance is automatic. No production API/UI behavior, capability, milestone, content or full-1.0 promotion.",
         "impact": "advanced",
         "evidence": [
+          "planning/semantic-consequence-search/d3262-cost-live-engine-depth12-2026-10-07.md",
+          "planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top2-2026-10-07.json.gz",
+          "planning/semantic-consequence-search/d3262-cost-live-engine-depth12-top2-summary-2026-10-07.json",
+          "planning/semantic-consequence-search/d3262-cost-engine-depth12-software-2026-10-07.json",
           "planning/semantic-consequence-search/d3262-cost-live-engine-widths-2026-10-07.md",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-top4-top8-2026-10-07.json.gz",
           "planning/semantic-consequence-search/d3262-cost-live-engine-depth8-width-sensitivity-2026-10-07.json",
@@ -934,7 +938,7 @@
           {
             "kind": "work_state",
             "id": "D3262",
-            "digest": "sha256:546ed9d4b9df4869ed6ea76bdb539ac9f534dbc87d082b45ef1b50452cd48c3b"
+            "digest": "sha256:663873d1dc129575225ec506a9fc0286016c7abbc356a5923c65b55a761fd125"
           },
           {
             "kind": "work_state",

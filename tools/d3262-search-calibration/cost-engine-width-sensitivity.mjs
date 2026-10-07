@@ -1,16 +1,28 @@
-// Disposable D3262 fresh/frozen depth-eight engine-width comparison.
+// Disposable D3262 fresh/frozen complete-width comparison at one declared budget.
 // Describes target/frontier changes, never engine causes or a production profile.
 import { readFileSync, writeFileSync } from "node:fs";
-import { gunzipSync } from "node:zlib";
+import { gzipSync, gunzipSync } from "node:zlib";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { caseIdentity, costCases, loadCostPlan, sha, sourcePins, validateCostRows } from "./cost-contract.mjs";
 import { verifyPackedCostValue } from "./cost-pack.mjs";
 
 const directory = "planning/semantic-consequence-search";
-export const settings = Object.freeze(["engine:depth8:top2", "engine:depth8:top4", "engine:depth8:top8"]);
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const check = (value, message) => { if (!value) throw new Error(`D3262_ENGINE_WIDTH_SENSITIVITY: ${message}`); };
+export function engineSettings(budget = "depth8") {
+  check(["depth8", "depth12", "movetime100"].includes(budget), "undeclared engine budget");
+  return Object.freeze([2, 4, 8].map(width => `engine:${budget}:top${width}`));
+}
+export const settings = engineSettings();
+export function encodeSensitivityArtifact(json, out) {
+  check(typeof json === "string" && typeof out === "string" && /\.json(?:\.gz)?$/u.test(out), "JSON or lossless gzip output required");
+  return out.endsWith(".gz") ? gzipSync(json) : Buffer.from(json);
+}
+export function decodeSensitivityArtifact(bytes, out) {
+  check(Buffer.isBuffer(bytes) && typeof out === "string" && /\.json(?:\.gz)?$/u.test(out), "JSON or lossless gzip input required");
+  return (out.endsWith(".gz") ? gunzipSync(bytes) : bytes).toString("utf8");
+}
 const subjectKey = x => JSON.stringify([x.rootId, x.candidateUci]);
 const uniqueSorted = (values, name) => {
   check(Array.isArray(values) && values.every(x => typeof x === "string")
@@ -34,7 +46,8 @@ function coverage(quantifier, preparations) {
     unvisitedDefences: preparations.map(x => ({ preparationUci: x.preparationUci,
       moves: uniqueSorted(x.unvisitedDefences, "unvisited defence") })).sort((a, b) => a.preparationUci.localeCompare(b.preparationUci)) };
 }
-export function indexEngineContinuation(continuation, candidates) {
+export function indexEngineContinuation(continuation, candidates, budget = "depth8") {
+  const selectedSettings = engineSettings(budget);
   const profiles = continuation.profiles.filter(x => x.kind === "engine");
   check(profiles.length === 1, "missing/duplicate frozen engine continuation");
   const profile = profiles[0], paths = new Map(profile.paths.map(x => [x.id, x]));
@@ -43,7 +56,7 @@ export function indexEngineContinuation(continuation, candidates) {
   check(profile.rows.length === candidates.length && new Set(profile.rows.map(subjectKey)).size === candidates.length
     && profile.rows.every(x => subjects.has(subjectKey(x))), "incomplete frozen continuation population");
   const result = new Map();
-  for (const row of profile.rows) for (const setting of settings) {
+  for (const row of profile.rows) for (const setting of selectedSettings) {
     const arms = row.arms.filter(x => x.arm === setting);
     check(arms.length === 1, "missing/duplicate frozen continuation arm");
     const arm = arms[0], third = uniqueSorted(arm.selectedPaths, "frozen selected path"), fourth = [];
@@ -65,8 +78,9 @@ export function indexEngineContinuation(continuation, candidates) {
   }
   return result;
 }
-export function summarizeEngineWidthSensitivity(records, candidates, reference, continuation) {
-  const frozenFrontiers = indexEngineContinuation(continuation, candidates);
+export function summarizeEngineWidthSensitivity(records, candidates, reference, continuation, budget = "depth8") {
+  const selectedSettings = engineSettings(budget);
+  const frozenFrontiers = indexEngineContinuation(continuation, candidates, budget);
   const subjects = new Map(candidates.map(x => [subjectKey(x), x])), cases = new Map();
   check(subjects.size === candidates.length, "duplicate candidate");
   const targets = new Map(candidates.map(x => [subjectKey(x), []]));
@@ -79,13 +93,13 @@ export function summarizeEngineWidthSensitivity(records, candidates, reference, 
   for (const record of records) {
     const key = caseIdentity(record.row);
     check(!cases.has(key), "duplicate live case");
-    check(subjects.has(subjectKey(record.row)) && settings.includes(record.row.setting)
+    check(subjects.has(subjectKey(record.row)) && selectedSettings.includes(record.row.setting)
       && [2, 4].includes(record.row.horizon) && ["cold", "warm", "provider_offline"].includes(record.row.regime), "foreign live case");
     const actual = uniqueSorted(record.raw.result.projections.map(x => x.targetId), "live target");
     check(same(actual, targets.get(subjectKey(record.row)).map(x => x.targetId).sort()), "lost/foreign target projection");
     cases.set(key, record);
   }
-  const expected = [...costCases({ settings: settings.map(id => ({ id })), candidates,
+  const expected = [...costCases({ settings: selectedSettings.map(id => ({ id })), candidates,
     horizons: [2, 4], regimes: ["cold", "warm", "provider_offline"] })];
   check(records.length === expected.length && expected.every(x => cases.has(caseIdentity(x))), "incomplete complete-width population");
   const cachePairs = { identicalCompiled: 0, failedColdMissingWarmReceipt: 0 };
@@ -155,7 +169,8 @@ export function summarizeEngineWidthSensitivity(records, candidates, reference, 
     sourceDifferenceAttribution: "not_established_version_configuration_timing_and_search_may_differ",
     otherBudgetsAndFamilies: "not_measured_here", productionProfileSelected: false, moveReason: "not_an_engine_reason" };
 }
-export function loadEngineWidthSensitivity(names) {
+export function loadEngineWidthSensitivity(names, budget = "depth8") {
+  engineSettings(budget);
   check(Array.isArray(names) && names.length && new Set(names).size === names.length
     && names.every(x => /^d3262-cost-live-[a-z0-9-]+\.json\.gz$/u.test(x)), "explicit unique immutable archive names required");
   const plan = loadCostPlan(), records = [], inputs = {}, sources = {};
@@ -176,16 +191,18 @@ export function loadEngineWidthSensitivity(names) {
   check(sha(continuationBytes) === target.inputDigests[continuationName], "changed frozen continuation source");
   return { question: "D3262", inputs: { ...inputs, [referenceName]: sha(bytes) }, sources,
     frozenContinuationInputs: { [targetName]: sha(targetBytes), [continuationName]: sha(continuationBytes) },
-    ...summarizeEngineWidthSensitivity(records, plan.candidates, reference, JSON.parse(gunzipSync(continuationBytes))),
+    ...summarizeEngineWidthSensitivity(records, plan.candidates, reference, JSON.parse(gunzipSync(continuationBytes)), budget),
     validation: "checked_archive_synthesis_independent_receipt_replay_required_separately" };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const args = process.argv.slice(2), write = args[0] === "--write", options = write ? args.slice(1) : args;
+  const args = process.argv.slice(2), write = args[0] === "--write";
+  let options = write ? args.slice(1) : args, budget = "depth8";
+  if (options[0] === "--budget") { budget = options[1]; engineSettings(budget); options = options.slice(2); }
   check(options.length === 4 && options[0] === "--archives" && options[2] === "--out" && options[1] && options[3],
-    "use [--write] --archives <CSV> --out <file>");
-  const value = loadEngineWidthSensitivity(options[1].split(",")), bytes = `${JSON.stringify(value, null, 2)}\n`;
-  if (write) writeFileSync(options[3], bytes, { flag: "wx" });
-  else check(readFileSync(options[3], "utf8") === bytes, "changed sensitivity; never overwrite original evidence");
+    "use [--write] [--budget depth8|depth12|movetime100] --archives <CSV> --out <file.json[.gz]>");
+  const value = loadEngineWidthSensitivity(options[1].split(","), budget), bytes = `${JSON.stringify(value, null, 2)}\n`;
+  if (write) writeFileSync(options[3], encodeSensitivityArtifact(bytes, options[3]), { flag: "wx" });
+  else check(decodeSensitivityArtifact(readFileSync(options[3]), options[3]) === bytes, "changed sensitivity; never overwrite original evidence");
   process.stdout.write(`${JSON.stringify({ rows: value.rows, cells: value.cells.length, pairedCases: value.pairedCases,
     digest: sha(bytes), productionProfileSelected: false })}\n`);
 }

@@ -19,6 +19,22 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-07 depth-twelve top-two continuation: the complete 1,158-case population
+independently replays all 5,770 target observations and refuses six corruptions.
+Total admitted evidence reaches **15,054 / 61,374**, thirteen of 53 settings;
+forty remain. One invalid cold-source case and its unavailable warm partner keep
+ten partial observations each and zero fresh warm queries. Cold four-ply p95
+spans 5,738.467–8,456.453 ms by phase, not a browser/pending gate reading. The
+comparison reader binds all nine frozen engine settings; complete live depth12
+width sensitivity still needs top4/top8. Exact-index software, content and legacy
+byte-identical reconstruction and full governance pass; final scoped flow-back
+and ordinary hooks precede checkpoint commit. D3262 stays doing and the RFC draft;
+source/model memory, complete consumer scope and browser/profile qualification
+remain. Receipt:
+`planning/semantic-consequence-search/d3262-cost-live-engine-depth12-2026-10-07.md`.
+Routine metadata/hashes/receipts/tracker updates are automatic; no capability,
+milestone, content or full-1.0 promotion follows.
+
 2026-10-07 engine-width continuation: all three depth-eight engine widths now
 retain complete populations. Total admitted cost evidence reaches **13,896 /
 61,374**, twelve of 53 settings. The new top4/top8 batch independently replays
