@@ -3286,6 +3286,53 @@ test("@matrix final Guided Hint shares one expanded seat and preserves the board
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     }
     await attachCompositionCell(page, testInfo, viewport, "06-guided-hint-final-stage");
+    // D3534: old text/paint is not permission to keep displaying guidance while
+    // the next help style is unresolved. Hold the genuine compiled HTTP response.
+    for (const [label, keepsHint] of [[/Support/u, true], [/Theory only/u, false]] as const) {
+      const companion = page.getByRole("dialog", { name: "Run companion", exact: true });
+      if (await companion.isVisible()) await companion.getByRole("button", { name: "Collapse companion", exact: true }).click();
+      let releaseStyle!: () => void, styleFetched!: () => void;
+      const styleGate = new Promise<void>(resolve => { releaseStyle = resolve; });
+      const pendingStyle = new Promise<void>(resolve => { styleFetched = resolve; });
+      await page.route(helpUrl, async route => {
+        const response = await route.fetch();
+        expect(response.ok()).toBe(true);
+        styleFetched();
+        await styleGate;
+        await route.fulfill({ response });
+      });
+      try {
+        const summary = page.locator("details.assistance-control summary");
+        await summary.click();
+        await page.getByRole("radio", { name: label }).check();
+        await pendingStyle;
+        // Choosing a style normally closes its menu; never reopen it over the next gesture.
+        if (await page.locator("details.assistance-control").getAttribute("open") !== null) await summary.click();
+        await expect(page.locator("details.assistance-control")).not.toHaveAttribute("open", "");
+        await showSupport(page);
+        await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "pending");
+        await expect(page.getByLabel("Active support promise")).toContainText("Confirming help for this run. Legal moves stay visible meanwhile.");
+        await expect(hint.locator("[data-hint-rung]")).toHaveCount(0);
+        await expect(hint.locator(".hint-actions button")).toBeDisabled();
+        await expect(painted).toHaveCount(0);
+        expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
+        expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+        releaseStyle();
+        await expect(page.locator("[data-preset-state]")).toHaveAttribute("data-preset-state", "ready");
+        if (keepsHint) {
+          await expect(hint.locator('[data-hint-rung="distance"]')).toBeVisible();
+          await expect(painted).toHaveCount(markCount);
+        } else {
+          await expect(hint).toHaveCount(0);
+          await expect(painted).toHaveCount(0);
+        }
+        expect(postedRungs.slice(firstPost)).toEqual(["pattern", "square", "piece", "distance"]);
+        expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+      } finally {
+        releaseStyle();
+        await page.unroute(helpUrl);
+      }
+    }
   }
 });
 

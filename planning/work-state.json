@@ -29195,6 +29195,15 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3534",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f68a0129419a3c9e7830239d0e51f09080cf0a0f64b06c3c80a9683db4b72326",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

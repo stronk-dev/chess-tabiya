@@ -38,7 +38,7 @@
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
   import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
-  import { moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime";
+  import { HINT_DISTANCES, moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime";
   import type { ModuleSeatAction, ModuleSeatActions } from "./module-seats.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
@@ -296,8 +296,9 @@
   // the effective config arrives from the server's authoritative/finalized stages and is narrowed
   // here only for browser speech. Pending/unavailable renders the silent floor, never a wider promise.
   let preference: WorkflowPreferenceReceipt = $state({ kind: "unset" });
-  let compiledAssistance: BrowserNarrowedAssistanceV1 | undefined = $state();
+  let retainedAssistance: BrowserNarrowedAssistanceV1 | undefined = $state();
   let assistanceQueryState: "pending" | "ready" | "unavailable" = $state("pending");
+  let compiledAssistance = $derived.by(() => assistanceQueryState === "ready" ? retainedAssistance : undefined);
   let preferenceUnsaved = $state(false);
   let assistanceQuery = 0;
   let assistance: AssistanceConfig = $derived(compiledAssistance?.config ?? SILENT_ASSISTANCE);
@@ -1194,14 +1195,17 @@
   // rfc/hint-distance.md §5/§7: the Guided Hint seat is shown exactly when the server-compiled preset
   // carries `guided_hint` under a non-off ceiling. The ceiling is the D1639 table, marked proposed.
   let hintCeiling = $derived(compiledAssistance?.modules.includes("guided_hint") === true ? compiledAssistance.hintCeiling.rung : "off");
-  let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets).length + (hints !== undefined && hintCeiling !== "off" ? 1 : 0) + 1);
+  // Retain the disabled door through a temporary settings wait, not its old disclosure.
+  // Removing the module in the settled settings unmounts it; pending alone preserves progress.
+  let hintSeatPresent = $derived(retainedAssistance?.modules.includes("guided_hint") === true && retainedAssistance.hintCeiling.rung !== "off");
+  let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets).length + (hints !== undefined && hintSeatPresent ? 1 : 0) + 1);
   let hintMarks: HintDeliveryMarks | undefined = $state();
   function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
     if (!hintDecisionReady) return undefined;
     try { return compileAssistanceRequest({ contextHint: activeAssistanceProfile, preference }); } catch { return undefined; }
   }
   const hintKey = (square: string): DrawShape["orig"] => square as DrawShape["orig"];
-  let hintOverlays: readonly DrawShape[] = $derived(seatExpanded !== "guided_hint" || stagedCue?.state === "warning" || hintMarks === undefined || hintMarks.rung === "pattern" || displayedNode.id !== run.activeCursor.nodeId ? [] : [
+  let hintOverlays: readonly DrawShape[] = $derived.by(() => !hintDecisionReady || hintCeiling === "off" || seatExpanded !== "guided_hint" || stagedCue?.state === "warning" || hintMarks === undefined || HINT_DISTANCES.indexOf(hintMarks.rung) > HINT_DISTANCES.indexOf(hintCeiling) || hintMarks.rung === "pattern" || displayedNode.id !== run.activeCursor.nodeId ? [] : [
     ...hintMarks.squares.map((square) => ({ orig: hintKey(square), brush: "yellow" })),
     ...(hintMarks.rung === "square" ? [] : [{ orig: hintKey(hintMarks.piece.square), brush: "green" }]),
     ...(hintMarks.rung === "move" ? [{ orig: hintKey(hintMarks.arrow.from), dest: hintKey(hintMarks.arrow.to), brush: "green" }] : []),
@@ -1312,12 +1316,12 @@
     try {
       requested = compileAssistanceRequest({ contextHint: context, preference });
     } catch {
-      compiledAssistance = undefined;
+      retainedAssistance = undefined;
       assistanceQueryState = "unavailable";
       return;
     }
     if (onAssistanceQuery === undefined) {
-      compiledAssistance = undefined;
+      retainedAssistance = undefined;
       assistanceQueryState = "unavailable";
       return;
     }
@@ -1326,12 +1330,12 @@
       const finalized = await onAssistanceQuery(requested);
       if (request !== assistanceQuery) return;
       if (finalized.requestedDigest !== requested.requestDigest || finalized.context !== context) throw new TypeError("Assistance response answers a different request");
-      compiledAssistance = narrowBrowserChannels(finalized, browserChannelReceipt(request, speechAvailable ? { state: "available" } : { state: "unavailable", reason: "no_browser_voice" }));
+      retainedAssistance = narrowBrowserChannels(finalized, browserChannelReceipt(request, speechAvailable ? { state: "available" } : { state: "unavailable", reason: "no_browser_voice" }));
       requestedAssistance = requested;
       assistanceQueryState = "ready";
     } catch {
       if (request !== assistanceQuery) return;
-      compiledAssistance = undefined;
+      retainedAssistance = undefined;
       assistanceQueryState = "unavailable";
     }
   }
@@ -2486,7 +2490,7 @@
                 onFocusSquares={(squares) => seatFocusSquares = squares}
               />
             {/if}
-            {#if hints !== undefined && hintCeiling !== "off"}
+            {#if hints !== undefined && hintSeatPresent}
               <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} decisionReady={hintDecisionReady} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
             {/if}
               <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"

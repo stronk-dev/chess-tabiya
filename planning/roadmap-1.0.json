@@ -1654,10 +1654,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "D3528 and scoped Support fixes D3521/D3523-D3525/D3527 are complete, with released declarations and authored packs retained. D3533's Guided Hint request-readiness repair passes predecessor-red controls, 30 mounted cases, all seven native projections and the full local verification/browser gates. Continue the remaining Hint and preset authority/visibility obligations against the accepted contracts; requests and already-delivered display must obey current assistance. Retain D3532's original unlocated 80-ply performance failure with bounded phase diagnostics and unchanged 500 ms limit. D3531's original timeout/failed-trace proof and D3518/D3514/D3510's earlier causes remain open. D3526 needs a separate exact-witness composition amendment; D3309 owns structural operand fidelity. Complete remaining Inspector, phone, owner-use and Hint obligations without promoting a whole milestone or 1.0.",
+        "nextAction": "D3533 request readiness and D3534 pending-setting/delivered-Hint display fixes pass full local verification and browser gates. Retain D3532's original unlocated 80-ply performance failure with bounded phase diagnostics and unchanged 500 ms limit; D3531/D3518/D3514/D3510 causes remain open. D3526 needs a separate exact-witness composition amendment; D3309 owns structural operand fidelity. Complete remaining Inspector, phone, owner-use and Hint obligations without promoting a whole milestone or 1.0.",
         "latestCheckpoint": {
           "at": "2026-10-07",
-          "summary": "D3533 closes the located Guided Hint readiness race: collapsed/expanded controls and callback require settled mutation/current compiled help, carry an accessible waiting reason and never ask merely on settling. Three mounted controls first fail on the predecessor; 30 client cases and types pass. The seven-view native journey holds real reveal/help responses and proves zero early POSTs, exact current decision/rung recovery, retained paint and unchanged board. Full local verification passes 3,436 software tests / 345 files, seven performance tests / four files, governance and 227 content tests / 23 files plus downstream contracts. Browser aggregate passes 88 smoke plus one optional skip, five content, 59 matrix and one packaged-default; all 150 input cells and 112 unretried composition cells pass. Final-build smoke refresh also passes 88 / one optional skip. D3532's earlier 80-ply p95 710.1 ms > 500 ms cause remains unlocated despite isolated/full performance passes; bounded phase diagnostics are installed, no threshold change or optimization claim. D3528's explicit compatibility and prior scoped Support fixes remain complete with all 984 declarations/pack bytes retained. D3510/D3514/D3518/D3531 earlier causes/proofs remain open. No whole Hint/RFC, capability, milestone, pack, remote CI or 1.0 claim.",
+          "summary": "D3534 closes the pending help-style and delivered-Hint display defect. Four controls first fail against the predecessor, then all 208 focused client cases and clean types pass. Current compiled settings are ready-only; delivered text/badges/marks require the current decision and permitted rung. The native seven-view delayed Guide me-to-Support-to-Theory-only journey proves legal-only pending display, same-decision restoration without a POST, module removal and stable board geometry. Full local verification passes 3,440 software cases / 345 files, seven performance / four files, 227 content / 23 files and downstream contracts. All browser tiers pass: 88 smoke/one optional skip, five content, 59 matrix, one packaged-default, 150 input and 112 unretried composition cells. D3532's original 80-ply p95 710.1 ms failure remains unlocated; D3510/D3514/D3518/D3531 causes remain open. D3528 retains all 984 declarations and authored pack bytes. No whole Hint/RFC, capability, milestone, pack, remote CI or 1.0 claim.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/module-query.test.ts",
@@ -1791,6 +1791,11 @@
             "planning/exploration/log.md"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3534",
+              "digest": "sha256:f68a0129419a3c9e7830239d0e51f09080cf0a0f64b06c3c80a9683db4b72326"
+            },
             {
               "kind": "work_state",
               "id": "D3528",

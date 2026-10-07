@@ -30,7 +30,11 @@ Play. When the boundary is closed, the seat says so instead of showing a hint.
 While a move, reveal, rewind or branch change is still being applied, or the new help configuration
 is pending, Hint waits instead of sending the previous decision. The same guard covers the collapsed
 selector and expanded action. Settling that work does not request a hint or advance its rung; an
-already delivered rung remains until the decision itself changes.
+already delivered rung is retained until the decision itself changes. Its sentence and board marks
+are hidden during the wait and whenever the effective ceiling is below that delivered rung. If the
+same decision's settings permit it again, its existing answer returns without a new request.
+Switching to Quiet or theory-only removes the Hint seat; pending settings use legal-only board
+effects and a waiting promise, never the previous style's active promise.
 
 Each press reveals one more rung for the current decision:
 
@@ -162,13 +166,16 @@ starts (`#refuseRatedAssistance`).
   all through `createApplication`.
 - `apps/web/src/lib/guided-hint.test.ts` covers the wire and the seat.
   Readiness controls cover both collapsed/expanded actions, zero autonomous requests and retained
-  rung progression when the same decision temporarily waits.
+  rung progression when the same decision temporarily waits. Delivered text and marks disappear
+  during that wait or below a lowered ceiling, and return only when permitted, without another POST.
 - `make play-composition-client-check` runs the mounted hint and run-screen contracts.
 - The real state-6 browser journey covers the final permitted rung, shared expansion, retained
   progress, request counts and actual board marks at all seven composition projections. It runs
   in `make test-browser-ci`; `make play-composition-hint-check` selects just that regression.
   It also holds genuine reveal/help HTTP responses at both readiness boundaries, hit-tests native
   clicks on disabled controls and verifies every subsequent POST uses the committed decision.
+  Guide me → Support → Theory only holds the actual new-settings responses and proves legal-only
+  pending display, retained same-decision progress, zero autonomous requests and unchanged board.
 - `make guided-hint-browser-latency` separately captures twenty real-Stockfish/Chromium
   samples per frozen cell; `make guided-hint-browser-receipt-check` replays saved identities,
   visible post-frame output and source-off controls. Pure falsifiers/type checks run in

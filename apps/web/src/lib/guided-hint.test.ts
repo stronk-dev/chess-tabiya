@@ -130,6 +130,35 @@ describe("GuidedHintSeat", () => {
     await unmount(component);
   });
 
+  it.each(["waiting", "lowered"])("hides delivered guidance when current help no longer permits it (%s), without asking again", async reason => {
+    const states = new SvelteMap<string, boolean>([["ready", true], ["lowered", false]]);
+    const run = revealedRun();
+    const request = vi.fn<GuidedHintClient["request"]>(async body => ({ state: "available", delivery: receipt(run, body.rung) }));
+    const marks = vi.fn();
+    const component = mount(GuidedHintSeat, { target: target(), props: {
+      run, canWrite: true, client: { request, poll: vi.fn(), cancel: vi.fn() }, assistanceRequest, onMarks: marks,
+      get decisionReady() { return states.get("ready")!; },
+      get ceiling() { return states.get("lowered") ? "pattern" as const : "distance" as const; },
+    } });
+    await settle();
+    const button = document.querySelector<HTMLButtonElement>(".hint-actions button")!;
+    button.click(); await settle(); button.click(); await settle();
+    expect(document.querySelector('[data-hint-rung="square"]')?.textContent).toBe(SENTENCES.square);
+    expect(marks).toHaveBeenLastCalledWith(receipt(run, "square").marks);
+    states.set(reason === "waiting" ? "ready" : "lowered", reason !== "waiting"); await settle();
+    expect(document.querySelector("[data-hint-rung]")).toBeNull();
+    expect(marks).toHaveBeenLastCalledWith(undefined);
+    expect(button.disabled).toBe(true);
+    expect(request).toHaveBeenCalledTimes(2);
+    states.set("ready", true); states.set("lowered", false); await settle();
+    expect(document.querySelector('[data-hint-rung="square"]')?.textContent).toBe(SENTENCES.square);
+    expect(marks).toHaveBeenLastCalledWith(receipt(run, "square").marks);
+    expect(request).toHaveBeenCalledTimes(2);
+    button.click(); await settle();
+    expect(request.mock.calls.map(([body]) => body.rung)).toEqual(["pattern", "square", "piece"]);
+    await unmount(component);
+  });
+
   it.each([0, 49, 51, 151, 199, 201])("the shipping cadence renders a result ready at %i ms within the next 50 ms", async readyAt => {
     const run = revealedRun(), requestId = "e".repeat(32);
     const client: GuidedHintClient = {

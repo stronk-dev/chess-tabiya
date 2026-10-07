@@ -1770,6 +1770,45 @@ describe("Layer 3 screens", () => {
     await unmount(match);
   });
 
+  it.each(["success", "failure"])("uses the legal-only floor while a help-style change is pending (%s)", async outcome => {
+    const run = createRun({
+      id: "pending-help-floor",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"4".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
+    });
+    const pending = deferred<FinalizedAssistanceV1>();
+    const requests: RequestedAssistanceV1[] = [];
+    const onAssistanceQuery = async (request: RequestedAssistanceV1) => {
+      requests.push(request);
+      return requests.length === 1 ? testAssistanceAuthority(request) : pending.promise;
+    };
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onAssistanceQuery,
+      assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: vi.fn() },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await assistanceSettled();
+    const promise = () => document.querySelector('[aria-label="Active support promise"]')?.textContent ?? "";
+    expect(promise()).toContain("After you commit, a small consequence nudge");
+    expect(document.querySelector('button[aria-label="Open assistance"]')).not.toBeNull();
+    document.querySelector<HTMLInputElement>('.preset-options input[value="theory_only"]')!.click();
+    await vi.waitFor(() => expect(requests).toHaveLength(2));
+    expect(document.querySelector("[data-preset-state]")?.getAttribute("data-preset-state")).toBe("pending");
+    expect(promise()).toContain("Confirming help for this run. Legal moves stay visible meanwhile.");
+    expect(promise()).not.toContain("After you commit");
+    expect(document.querySelector('button[aria-label="Open assistance"]')).toBeNull();
+    expect(document.querySelector('[data-module="postcommit_nudge"]')).toBeNull();
+    if (outcome === "success") pending.resolve(await testAssistanceAuthority(requests[1]!));
+    else pending.reject(new Error("HELP_SETTINGS_UNAVAILABLE"));
+    await pending.promise.catch(() => undefined); await tick(); await tick();
+    expect(document.querySelector("[data-preset-state]")?.getAttribute("data-preset-state")).toBe(outcome === "success" ? "ready" : "unavailable");
+    expect(promise()).not.toContain("After you commit");
+    if (outcome === "failure") expect(promise()).toContain("only legal moves are shown");
+    await unmount(component);
+  });
+
   it("keeps individual evidence controls out of the ordinary Support menu", async () => {
     const run = createRun({
       id: "advanced-support-controls",

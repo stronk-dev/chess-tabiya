@@ -4,6 +4,7 @@
   // asks on its own, never offers a rung/source select, and renders only the server's closed receipt.
   import { onDestroy, untrack } from "svelte";
   import {
+    HINT_DISTANCES,
     hintDecisionStamp,
     nextHintRung,
     type DrillRun,
@@ -53,10 +54,14 @@
 
   let next = $derived(nextHintRung(progress, decisionDigest, ceiling));
   let revealed = $derived(progress?.decisionDigest === decisionDigest ? progress.revealed : null);
-  let sentence = $derived(response?.state === "available" ? (response.delivery.rendered.voice.state === "rendered" ? response.delivery.rendered.voice.sentence : response.delivery.rendered.sentence) : undefined);
+  let visibleDelivery = $derived(decisionReady && response?.state === "available"
+    && response.delivery.decision.digest === decisionDigest
+    && HINT_DISTANCES.indexOf(response.delivery.rung) <= HINT_DISTANCES.indexOf(ceiling) ? response.delivery : undefined);
+  let sentence = $derived(visibleDelivery === undefined ? undefined : visibleDelivery.rendered.voice.state === "rendered" ? visibleDelivery.rendered.voice.sentence : visibleDelivery.rendered.sentence);
   // One progressive disclosure is one fact, not a count of revealed rungs. A door, pending
   // request, policy refusal or failed transport makes no assertion about available evidence.
-  let badge = $derived(response?.state === "available" ? 1 : response?.state === "honest_empty" || response?.state === "source_unavailable" ? 0 : undefined);
+  let badge = $derived(visibleDelivery !== undefined ? 1 : decisionReady && (response?.state === "honest_empty" || response?.state === "source_unavailable") ? 0 : undefined);
+  $effect(() => { onMarks?.(visibleDelivery?.marks); });
   let message = $derived.by(() => {
     if (clientProblem === "poll_limit") return "The hint is taking longer than expected. Try again.";
     if (clientProblem === "transport_error") return "The hint request could not be completed. Try again.";
@@ -157,7 +162,6 @@
       retryRequestId = current.state === "source_unavailable" || current.state === "failed" ? current.requestId : undefined;
       if (current.state === "available") {
         progress = { decisionDigest: digest, revealed: rung };
-        onMarks?.(current.delivery.marks);
       }
     } catch {
       if (mine === generation) {
@@ -173,7 +177,7 @@
 </script>
 
 <CompanionSeat id="guided_hint" module="guided_hint" label="Ask for the least that helps" shortLabel="Hint"
-  {band} open={expanded} state={revealed === null ? "door" : "filled"} {badge}
+  {band} open={expanded} state={visibleDelivery === undefined ? "door" : "filled"} {badge}
   controlLabel={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"}
   controlDescriptionId={!decisionReady && canWrite ? "guided-hint-wait" : undefined}
   disabled={onToggle !== undefined && !expanded && revealed === null && (!canWrite || !decisionReady || busy)}
@@ -186,7 +190,7 @@
     <button type="button" disabled={!canWrite || !decisionReady || busy || next === undefined} aria-describedby={!decisionReady && canWrite ? "guided-hint-wait" : next === undefined && revealed !== null ? "guided-hint-limit" : undefined} onclick={() => void ask()}>
       {busy ? "Looking…" : revealed === null ? "Hint" : "A little more"}
     </button>
-    {#if next === undefined && revealed !== null}<span id="guided-hint-limit" class="honest">That is as far as this help style goes here.</span>{/if}
+    {#if decisionReady && next === undefined && revealed !== null}<span id="guided-hint-limit" class="honest">That is as far as this help style goes here.</span>{/if}
     {#if !canWrite}<span class="honest">This read-only view cannot ask for hints.</span>{/if}
     {#if !decisionReady && canWrite}<span id="guided-hint-wait" class="honest" role="status">Wait for this position and its help settings to finish updating.</span>{/if}
   </div>
