@@ -182,16 +182,15 @@ export function latestCheckpoint(
   run: DrillRun,
   afterSeq = 0,
 ): CheckpointNotice | undefined {
-  const pathIds = new Set(
-    historyFrom(run, run.activeCursor.nodeId).map((node) => node.id),
-  );
+  const nodeId = run.activeCursor.nodeId;
+  if (run.events.some(event => event.type === "outcome.reached" && event.data.nodeId === nodeId)) return undefined;
   const event = [...run.events]
     .reverse()
     .find(
       (candidate) =>
         candidate.type === "checkpoint.reached" &&
         candidate.seq > afterSeq &&
-        pathIds.has(candidate.data.nodeId),
+        candidate.data.nodeId === nodeId,
     );
   if (event?.type !== "checkpoint.reached") return undefined;
   const definition = pack.checkpoints.find(

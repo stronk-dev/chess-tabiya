@@ -3029,6 +3029,46 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it.each(["white", "black"] as const)("opens read-only submitted review without claiming the %s learner's result or moving their cursor", async (side) => {
+    const started = createRun({
+      id: `submitted-review-${side}`,
+      session: { kind: "position", start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"b".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 4, createdAt: at,
+    });
+    const run = commitMove(started, "g6g7", { at }).run;
+    const original = JSON.stringify(run);
+    const onMove = vi.fn(), onRewind = vi.fn(), onFork = vi.fn(), onSwitchBranch = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false },
+      viewerRole: "spectator", reviewing: true,
+      onMove, onRewind, onFork, onSwitchBranch,
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const result = document.querySelector<HTMLElement>('[role="dialog"][aria-labelledby="outcome-title"]')!;
+    expect(result.querySelector("h2")?.textContent).toBe("White won.");
+    expect(result.textContent).not.toMatch(/You won|You lost|Your completed attempt|Rewinds are free/);
+    expect(document.querySelector(".readonly-banner")?.textContent).toContain("read-only shared run");
+    expect(document.querySelector(".readonly-banner")?.textContent).not.toContain("another browser");
+    const inspect = [...result.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspect recorded moves");
+    expect(inspect).toBeDefined();
+    inspect!.click();
+    await tick();
+    expect(document.querySelector('[role="dialog"][aria-labelledby="outcome-title"]')).toBeNull();
+    const recordedMove = document.querySelector<HTMLButtonElement>(`[data-timeline-node="${run.activeCursor.nodeId}"]`)!;
+    await vi.waitFor(() => expect(document.activeElement === recordedMove).toBe(true));
+    expect(document.querySelector<HTMLElement>(".workspace")?.inert).not.toBe(true);
+    recordedMove.click();
+    await tick();
+    expect(document.querySelector(".preview-label")?.textContent).toBe("Preview");
+    expect(onMove).not.toHaveBeenCalled(); expect(onRewind).not.toHaveBeenCalled();
+    expect(onFork).not.toHaveBeenCalled(); expect(onSwitchBranch).not.toHaveBeenCalled();
+    expect(JSON.stringify(run)).toBe(original);
+    await unmount(component);
+  });
+
   it("presents terminal authored commentary and recorded engine evidence", async () => {
     const terminalPack = {
       ...pack,

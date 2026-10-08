@@ -98,6 +98,16 @@ manually granted spectator receives read access but not the review rail. An open
 session closes the rail; closing the session allows it to be derived again from durable
 consent and outcome evidence.
 
+A completed read-only run names the actual winning colour, rather than attributing the
+learner's win or loss to the reviewer. **Inspect recorded moves** dismisses the result
+locally and focuses the recorded timeline. Previewing a move does not rewind, fork,
+claim the board, change the shared cursor or grant additional assistance. The learner's
+ordinary result and rewind controls remain unchanged. Withdrawing the submission still
+stops subsequent teacher reads, including after a reload.
+Reopening a saved attempt restores a checkpoint only at its current recorded cursor,
+not an earlier checkpoint it has already passed. A terminal result takes precedence over
+a checkpoint at that same node, preventing two modal boundaries from blocking each other.
+
 For a native match, `viewer.seatedInContest` is true only while the live session is open
 and the learner occupies its White or Black seat. A seated host is capped exactly like a
 seated guest. Closing the match removes the seat ceiling.

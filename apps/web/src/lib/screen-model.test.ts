@@ -69,6 +69,28 @@ describe("screen view models", () => {
     });
   });
 
+  it("restores only the current checkpoint, not an earlier pause after continuation", () => {
+    const paused = reachCheckpoint(commitMove(run(), "c1e3", { at }).run, "plan-commitment", at).run;
+    expect(latestCheckpoint(pack, paused)?.nodeId).toBe(paused.activeCursor.nodeId);
+    const continued = commitMove(paused, "e7e6", { at }).run;
+    expect(latestCheckpoint(pack, continued)).toBeUndefined();
+    const revisited = rewind(continued, paused.activeCursor.nodeId, at).run;
+    expect(latestCheckpoint(pack, revisited)?.nodeId).toBe(paused.activeCursor.nodeId);
+    expect(latestCheckpoint(pack, revisited, paused.events.at(-1)!.seq)).toBeUndefined();
+  });
+
+  it("lets a recorded terminal outcome supersede a checkpoint at the same node", () => {
+    const started = createRun({
+      id: "terminal-checkpoint", packId: pack.id, packDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", seed: 3, createdAt: at,
+    });
+    const completed = commitMove(started, "g6g7", { at }).run;
+    const withCheckpoint = reachCheckpoint(completed, "plan-commitment", at).run;
+    expect(withCheckpoint.events.some(event => event.type === "outcome.reached")).toBe(true);
+    expect(latestCheckpoint(pack, withCheckpoint)).toBeUndefined();
+  });
+
   it("does not promote a missing checkpoint label into its storage id", () => {
     let missing = createRun({
       id: "missing-checkpoint-copy",

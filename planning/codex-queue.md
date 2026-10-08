@@ -60,6 +60,21 @@ The first governance refusal caught this item's missing queue route; the correct
 governance/content/browser sequence passes. This is the preserved-play door,
 not the separate complete whole-game Review journey or an official educational campaign.
 
+[[D3582]]/[[D3583]] are **closed locally** under accepted teacher-surface §2.3/§7.2:
+completed submissions have a winning-colour result and local recorded-move inspection; reopening
+an attempt no longer resurrects an earlier checkpoint beneath the terminal modal. Two-account
+desktop/phone-width share → teacher inspect → learner revoke/reload journeys preserve the cursor,
+nodes, events and write authority. Four predecessor-red mounted/selector controls, 310 focused
+cases and full normal gates pass: clean types/build, 3,624 software, seven performance, 228
+content and 182 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition
+cells. Existing evidence-contract holds remain independent; no separate teacher rail is introduced.
+Next independent accepted repair [[D3584]]: an incomplete submission at its current checkpoint
+offers rewind and authored prediction/reasoning inputs without reader context. Continue already
+dismisses locally because read-only opponent play returns immediately; do not misreport it as a
+failed mutation or a missing escape. First reproduce the two-account read path, then make local
+inspection explicit and remove writer-only affordances while preserving the learner's actual
+pause and closed assistance ceiling. D3582/D3583 do not claim that separate path is repaired.
+
 0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
    37641922404 at d1310090 fails the graduation ruling sweep because depth-one
    blame attributes prior rulings to HEAD; browser run 37641922913 passes at that

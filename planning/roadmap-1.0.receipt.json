@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ed1cefbfd72db33b421d569332c1d5656f3fe5617f02d9df97093ff0667707d5",
+    "roadmap": "sha256:7b9d8682322915b0b88232a5ab471e23dfd77f0e5f5d9287306762460e349033",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:174a25f3a5636cc6e7a094bfc018011a3e1577d682e9c9184ec484a77044204a",
+    "workState": "sha256:cdfa83b6a38546eff0fe8d597892e55e5d6152a5f42ad9cc24b03f110d98abe4",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 12,
       "blocked": 1066,
-      "done": 1463,
+      "done": 1465,
       "refused": 161
     },
     "workItems": {
@@ -45,10 +45,10 @@
     },
     "dimensionStates": {
       "proven": 2,
-      "partial": 60,
+      "partial": 61,
       "blocked": 39,
       "broken": 0,
-      "missing": 3,
+      "missing": 2,
       "not_applicable": 8
     },
     "appRoutes": {
@@ -1759,10 +1759,10 @@
         "stable-board-and-presets",
         "production-api-closure"
       ],
-      "nextAction": "D3577's exact Campaign-to-Game-Review-to-map handoff is closed locally; preserve D3575's retained/deleted/abandoned history, and do not equate this navigation with complete Review evidence. D3567/D3568 account restore/retry, D3550 private-source admission, D3548 retained-pack attachment, D3546/D3547 completed-bot replay and D3541/D3542 Profile-to-Review entry stand. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+      "nextAction": "D3582/D3583's completed-submission inspection and saved-checkpoint restoration are closed locally. Next reproduce D3584's incomplete-submission checkpoint affordances, preserving the learner's pause and closed rail; Continue already dismisses locally without opponent play. Preserve D3577's exact Campaign-to-Review/map handoff and prior account/Profile/bot repairs without equating navigation with complete source coverage. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3581 closes ordinary run-response disclosure of private provider captures and legacy eval move answers. Four corrected predecessor-red controls, all 77 focused Review cases and desktop/phone Retry-response to alternate-move/Compare journeys pass. Actual authenticated application/SQLite restart retains exact capture bytes and reconstructs explicit Analyze without new provider work or event writes. Scalar readings and explicit bestline compatibility remain; no stored format or account archive changes. D3580 records the separate author-blocked narrow tablebase projection and versioned durable handoff. D3577's Campaign-to-Review/map return, account portability, Profile references and bot replay stand. Missing source coverage, official curriculum, training progression and wider learner/social/professional/operator journeys remain. Full sequential normal gates pass clean types/build, 3620 software cases/353 files, seven isolated unchanged-budget performance, 228 content cases/23 files and 181 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. No capability, milestone, pushed-revision CI or release completion.",
+        "summary": "D3582/D3583 complete read-only teacher inspection of a finished submission and prevent stale checkpoints reopening beneath its terminal modal. Four predecessor-red mounted/selector controls, 310 focused cases and desktop/phone-width two-account share/inspect/revoke journeys preserve cursor, nodes, events and write authority; learner results remain unchanged. D3584 separately queues incomplete-checkpoint writer affordances; Continue already dismisses locally without playing. D3581's private Review captures, D3577's Campaign Review/map return and prior account/Profile/bot repairs stand. Source-authority holds, missing Review evidence, official curriculum, training progression and wider learner/social/professional/operator journeys remain. Full sequential normal gates pass clean types/build, 3624 software cases/353 files, seven isolated unchanged-budget performance, 228 content cases/23 files and 182 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. No capability, milestone, pushed-revision CI or release completion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1832,7 +1832,14 @@
           "docs/campaign.md",
           "rfc/campaign-core.md",
           "apps/server/src/feedback-policy.ts",
-          "apps/server/src/feedback-policy.test.ts"
+          "apps/server/src/feedback-policy.test.ts",
+          "apps/web/src/lib/DrillScreen.svelte",
+          "apps/web/src/lib/TerminalSheet.svelte",
+          "apps/web/src/lib/screen-model.ts",
+          "apps/web/src/lib/screen-model.test.ts",
+          "apps/server/src/teacher-surface.test.ts",
+          "docs/classrooms.md",
+          "rfc/archive/teacher-surface.md"
         ],
         "anchors": [
           {
@@ -2930,8 +2937,8 @@
           "Teacher/live endpoints exist; viewer links, audience voting client, provider bridge, submissions review, and full role enforcement remain."
         ],
         "experience": [
-          "missing",
-          "Teach Live, Review Submission, Stream, audience preview, streamer chrome, simul overview, and explained setup are not complete workflows."
+          "partial",
+          "Completed classroom submission, read-only recorded-move inspection and learner revocation have desktop/phone browser proof. Incomplete checkpoint inspection (D3584), Teach Live, Stream, audience preview, streamer chrome, simul overview and guided setup remain incomplete."
         ],
         "defaults": [
           "blocked",

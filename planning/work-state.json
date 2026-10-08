@@ -29629,6 +29629,32 @@
       "uxItems": [],
       "evidence": "apps/server/src/review-map.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3582",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8219f841d0eefd4fb829aa2d19c6ca0543a231985559ff0dfc0462a90e103c20",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3583",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b11d5b0815d0a046e660a9769b9efd16a5f52f5c824d8c8f3c5c0d593f19a39f",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3584",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:47f6386c78bffefc74335e9dfcb7eb6ab1b8120ab55c80a23b6a4c6a8234fa11",
+      "uxItems": [],
+      "owner": "professional-workflows"
     }
   ]
 }

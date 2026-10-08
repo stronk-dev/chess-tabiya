@@ -1900,8 +1900,10 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   await waitingContext.close();
 });
 
-test("a completed assigned attempt offers hand-in inside the outcome sheet", async ({ page, browser }) => {
+for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+test(`a completed assigned attempt offers hand-in inside the outcome sheet and read-only submitted review (${viewport.width}px)`, async ({ page, browser }) => {
   test.setTimeout(60_000);
+  await page.setViewportSize(viewport);
   await page.goto("/live");
   const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
   await classrooms.getByLabel("New classroom").fill("Endgame submissions");
@@ -1946,8 +1948,49 @@ test("a completed assigned attempt offers hand-in inside the outcome sheet", asy
   const status = classrooms.getByLabel("Submission status for Terminal outcome browser fixture");
   await expect(status).toContainText(`@${learnerHandle}`);
   await expect(status).toContainText("Submitted");
+  const learnerRunUrl = learnerPage.url();
+  const runId = new URL(learnerRunUrl).pathname.split("/").at(-1)!;
+  const beforeReview = await (await learnerPage.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
+  const beforeEvents = await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json();
+  const teacherWrites: string[] = [];
+  page.on("request", request => {
+    const path = new URL(request.url()).pathname;
+    if (request.method() !== "GET" && path.startsWith(`/runs/${runId}/`) && /\/(?:moves|rewind|fork|lease)(?:\/|$)/u.test(path)) teacherWrites.push(path);
+  });
+  await status.getByRole("button", { name: `Review @${learnerHandle}'s run` }).click();
+  const teacherResult = page.getByRole("dialog", { name: "Black won." });
+  await expect(teacherResult).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCount(1);
+  await expect(teacherResult).not.toContainText("You lost");
+  await teacherResult.getByRole("button", { name: "Inspect recorded moves" }).click();
+  await expect(teacherResult).toHaveCount(0);
+  await expect(page.locator(".timeline [aria-current='step']")).toBeFocused();
+  await expect(page.getByRole("complementary", { name: "Review access" })).toContainText("Submitted review access");
+  const firstRecordedMove = page.locator("[data-timeline-node]").first();
+  await firstRecordedMove.click();
+  await expect(page.locator(".preview-label")).toHaveText("Preview");
+  await assertRunViewport(page, viewport);
+  await expect(page.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
+  const teacherGraph = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
+  expect(teacherGraph.graph.viewer).toMatchObject({ role: "spectator", mayWrite: false, reviewing: true, reviewRail: "open" });
+  const afterReview = await (await learnerPage.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
+  expect(afterReview.graph.activeCursor).toEqual(beforeReview.graph.activeCursor);
+  assertRecordedNodesPreserved(beforeReview.graph.nodes, afterReview.graph.nodes);
+  expect(await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).toEqual(beforeEvents);
+  expect(teacherWrites).toEqual([]);
+
+  await learnerPage.goto("/learn");
+  await learnerPage.getByRole("button", { name: "Stop future teacher access" }).click();
+  await expect(learnerPage.getByText("Submission withdrawn", { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByLabel("Chessboard")).toHaveCount(0);
+  await learnerPage.goto(learnerRunUrl);
+  await expect(learnerPage.getByRole("dialog", { name: "You lost." })).toBeVisible();
+  expect(teacherWrites).toEqual([]);
   await learnerContext.close();
 });
+}
 
 test("library exposes phase honestly and survives a malformed pack response", async ({
   page,

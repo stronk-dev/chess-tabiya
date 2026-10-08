@@ -3593,6 +3593,13 @@ bot-rematch-browser-check:
 review-route-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts
 
+.PHONY: submission-review-check submission-review-browser-check
+submission-review-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/screen-model.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/teacher-surface.test.ts
+
+submission-review-browser-check:
+	./node_modules/.bin/playwright test --grep "completed assigned attempt|read-only submitted review"
+
 .PHONY: campaign-history-check campaign-history-browser-check
 campaign-history-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/router.test.ts

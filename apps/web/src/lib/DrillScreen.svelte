@@ -789,6 +789,18 @@
         event.type === "outcome.reached" && event.data.nodeId === currentNode.id,
     ),
   );
+  let inspectedTerminalKey: string | undefined = $state();
+  let terminalInspectionKey = $derived(terminalEvent === undefined ? undefined : `${run.id}:${terminalEvent.seq}`);
+  async function inspectCompletedRun(): Promise<void> {
+    if (snapshot.access !== "read_only" || terminalInspectionKey === undefined) return;
+    const key = terminalInspectionKey;
+    inspectedTerminalKey = key;
+    await tick();
+    if (!seatAlive || snapshot.access !== "read_only" || terminalInspectionKey !== key) return;
+    const selected = [...(mainElement?.querySelectorAll<HTMLButtonElement>("[data-timeline-node]") ?? [])]
+      .find(button => button.dataset.timelineNode === currentNode.id);
+    selected?.focus({ preventScroll: true });
+  }
   let timelineRewindNodeIds = $derived.by(() => {
     const ids = new Set<string>();
     for (const event of run.events) {
@@ -2406,7 +2418,7 @@
     {#if branchSwitchError}<p class="error" role="alert">{branchSwitchError}</p>{/if}
     {#if snapshot.access === "read_only"}
       <p class="readonly-banner" role="status">
-        {snapshot.withheld ? "The latest moves are still arriving. Help will appear only when this run reaches a reveal point." : "This run is open on another browser. You can follow along, but moves and rewinds happen there."}
+        {snapshot.withheld ? "The latest moves are still arriving. Help will appear only when this run reaches a reveal point." : viewerRole === "spectator" ? "This is a read-only shared run. You can inspect recorded moves and disclosed help without changing the learner's board." : "This run is open on another browser. You can follow along, but moves and rewinds happen there."}
       </p>
     {/if}
 
@@ -2811,9 +2823,11 @@
   />
 {/if}
 
-{#if viewportSupport.supported && terminalEvent?.type === "outcome.reached"}
+{#if viewportSupport.supported && terminalEvent?.type === "outcome.reached" && !(snapshot.access === "read_only" && inspectedTerminalKey === terminalInspectionKey)}
   <TerminalSheet
     {run}
+    readOnly={snapshot.access === "read_only"}
+    onInspectRun={snapshot.access === "read_only" ? () => void inspectCompletedRun() : undefined}
     campaignAction={campaignTerminalAction}
     outcome={terminalEvent.data.outcome}
     authoredItems={terminalAuthoredItems}

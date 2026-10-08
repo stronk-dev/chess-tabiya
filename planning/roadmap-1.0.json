@@ -519,8 +519,8 @@
           "Teacher/live endpoints exist; viewer links, audience voting client, provider bridge, submissions review, and full role enforcement remain."
         ],
         "experience": [
-          "missing",
-          "Teach Live, Review Submission, Stream, audience preview, streamer chrome, simul overview, and explained setup are not complete workflows."
+          "partial",
+          "Completed classroom submission, read-only recorded-move inspection and learner revocation have desktop/phone browser proof. Incomplete checkpoint inspection (D3584), Teach Live, Stream, audience preview, streamer chrome, simul overview and guided setup remain incomplete."
         ],
         "defaults": [
           "blocked",
@@ -2371,10 +2371,10 @@
           "stable-board-and-presets",
           "production-api-closure"
         ],
-        "nextAction": "D3577's exact Campaign-to-Game-Review-to-map handoff is closed locally; preserve D3575's retained/deleted/abandoned history, and do not equate this navigation with complete Review evidence. D3567/D3568 account restore/retry, D3550 private-source admission, D3548 retained-pack attachment, D3546/D3547 completed-bot replay and D3541/D3542 Profile-to-Review entry stand. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+        "nextAction": "D3582/D3583's completed-submission inspection and saved-checkpoint restoration are closed locally. Next reproduce D3584's incomplete-submission checkpoint affordances, preserving the learner's pause and closed rail; Continue already dismisses locally without opponent play. Preserve D3577's exact Campaign-to-Review/map handoff and prior account/Profile/bot repairs without equating navigation with complete source coverage. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3581 closes ordinary run-response disclosure of private provider captures and legacy eval move answers. Four corrected predecessor-red controls, all 77 focused Review cases and desktop/phone Retry-response to alternate-move/Compare journeys pass. Actual authenticated application/SQLite restart retains exact capture bytes and reconstructs explicit Analyze without new provider work or event writes. Scalar readings and explicit bestline compatibility remain; no stored format or account archive changes. D3580 records the separate author-blocked narrow tablebase projection and versioned durable handoff. D3577's Campaign-to-Review/map return, account portability, Profile references and bot replay stand. Missing source coverage, official curriculum, training progression and wider learner/social/professional/operator journeys remain. Full sequential normal gates pass clean types/build, 3620 software cases/353 files, seven isolated unchanged-budget performance, 228 content cases/23 files and 181 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. No capability, milestone, pushed-revision CI or release completion.",
+          "summary": "D3582/D3583 complete read-only teacher inspection of a finished submission and prevent stale checkpoints reopening beneath its terminal modal. Four predecessor-red mounted/selector controls, 310 focused cases and desktop/phone-width two-account share/inspect/revoke journeys preserve cursor, nodes, events and write authority; learner results remain unchanged. D3584 separately queues incomplete-checkpoint writer affordances; Continue already dismisses locally without playing. D3581's private Review captures, D3577's Campaign Review/map return and prior account/Profile/bot repairs stand. Source-authority holds, missing Review evidence, official curriculum, training progression and wider learner/social/professional/operator journeys remain. Full sequential normal gates pass clean types/build, 3624 software cases/353 files, seven isolated unchanged-budget performance, 228 content cases/23 files and 182 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. No capability, milestone, pushed-revision CI or release completion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -2444,7 +2444,14 @@
             "docs/campaign.md",
             "rfc/campaign-core.md",
             "apps/server/src/feedback-policy.ts",
-            "apps/server/src/feedback-policy.test.ts"
+            "apps/server/src/feedback-policy.test.ts",
+            "apps/web/src/lib/DrillScreen.svelte",
+            "apps/web/src/lib/TerminalSheet.svelte",
+            "apps/web/src/lib/screen-model.ts",
+            "apps/web/src/lib/screen-model.test.ts",
+            "apps/server/src/teacher-surface.test.ts",
+            "docs/classrooms.md",
+            "rfc/archive/teacher-surface.md"
           ],
           "anchors": [
             {

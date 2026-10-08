@@ -4,6 +4,15 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make submission-review-check` covers the mounted run/result components, classroom shell
+and teacher consent/access boundaries. `make submission-review-browser-check` executes
+the actual two-account completed assignment → share → teacher inspect → learner revoke
+journey at desktop and phone widths. It checks read-only role, unchanged recorded nodes,
+cursor and events, zero teacher play/lease writes, and refusal after revocation/reload.
+The permanent tests also run in the ordinary software and browser tiers.
+Current-checkpoint restoration includes continuation, rewind, already-dismissed sequence
+and same-node terminal controls; the browser journey reopens a pack that passed a checkpoint.
+
 `make square-control-presentation-check` verifies populated-target arithmetic through both exact
 Sight/Inspector adapters, receipt parsing and the real REST module query. Initial-position control
 and check-restricted destinations are distinct; an invalid turn clone stays unavailable.

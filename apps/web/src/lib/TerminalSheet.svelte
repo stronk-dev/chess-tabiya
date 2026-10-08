@@ -35,6 +35,9 @@
     rewinding?: boolean;
     rewindError?: string | undefined;
     onStop: () => void;
+    /** A reader may inspect history locally, never rewind the shared run. */
+    readOnly?: boolean;
+    onInspectRun?: (() => void) | undefined;
     assessment?: string | undefined;
     resistance?: readonly string[];
     grade?: string | undefined;
@@ -59,7 +62,8 @@
     campaignAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onRematch, rematching = false, rematchError, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, readOnly = false, onInspectRun, assessment, resistance = [], grade, run, shapes = [], onStory, onRematch, rematching = false, rematchError, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
+  let winningSide = $derived(outcome === "win" ? run.start.side : run.start.side === "white" ? "black" : "white");
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
   let submissionBusy = $state(false);
@@ -147,7 +151,7 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="outcome-title" use:modalBoundary>
     <p class="eyebrow">Attempt complete</p>
     <h2 id="outcome-title" tabindex="-1" bind:this={heading}>
-      {outcome === "win" ? "You won." : outcome === "loss" ? "You lost." : "Draw."}
+      {outcome === "draw" ? "Draw." : readOnly ? winningSide === "white" ? "White won." : "Black won." : outcome === "win" ? "You won." : "You lost."}
     </h2>
 
     {#if assessment !== undefined || resistance.length > 0}
@@ -157,8 +161,8 @@
     <section class="next-step" aria-labelledby="terminal-next-step-title">
       <div>
         <p class="eyebrow">What next</p>
-        <h3 id="terminal-next-step-title">Keep the attempt, then choose where to return.</h3>
-        <p>{campaignAction === undefined ? "Your completed attempt stays saved. Rewinds are free in rehearsals; going back creates another branch without replacing this one." : "Your completed attempt stays saved. In this campaign encounter a rewind spends an earned rewind; declaring done records this game on the campaign map."}</p>
+        <h3 id="terminal-next-step-title">{readOnly ? "Inspect this recorded attempt." : "Keep the attempt, then choose where to return."}</h3>
+        <p>{readOnly ? "This completed attempt stays saved. Inspecting its recorded moves does not move or rewind the learner's board." : campaignAction === undefined ? "Your completed attempt stays saved. Rewinds are free in rehearsals; going back creates another branch without replacing this one." : "Your completed attempt stays saved. In this campaign encounter a rewind spends an earned rewind; declaring done records this game on the campaign map."}</p>
       </div>
       {#if campaignAction}
         <div class="primary-actions">
@@ -167,7 +171,8 @@
         </div>
       {/if}
       <div class="primary-actions">
-        <button class="primary" type="button" disabled={!canRewind || rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>
+        {#if readOnly && onInspectRun}<button class="primary" type="button" onclick={onInspectRun}>Inspect recorded moves</button>
+        {:else}<button class="primary" type="button" disabled={!canRewind || rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>{/if}
         {#if onRematch}<button type="button" disabled={rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : undefined} onclick={() => void onRematch()}>{rematching ? "Opening new game…" : "Play this bot again"}</button>{/if}
         <HonestControl
           disabled={!canScheduleReturn || returnBusy || returnScheduled || rewinding}
