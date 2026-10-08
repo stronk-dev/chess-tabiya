@@ -3533,6 +3533,13 @@
         "refs": [
           {
             "kind": "case",
+            "id": "cited.python-chess.king-to-rook.castled",
+            "version": 1,
+            "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
             "id": "transition.short-castle.castled",
             "version": 1,
             "subject": {
@@ -3549,6 +3556,13 @@
       "semanticNegative": {
         "disposition": "present",
         "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.king-step.no-castle",
+            "version": 1,
+            "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+            "arm": "semantic_negative"
+          },
           {
             "kind": "case",
             "id": "transition.king-steps-e2.no-castle",

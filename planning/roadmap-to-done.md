@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3562]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3563]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -96,15 +96,24 @@ The repository's Maia weight-rights entry
 (`release/maia-weight-rights.v1.json`) still records `unresolved`, which refuses a 1.0 publication;
 this is the local release state, not a new upstream licensing determination.
 
-The current semantic validation instrument checks **81 subjects, 38 passing migrated cases,
+The current semantic validation instrument checks **81 subjects, 38 migrated cases plus two
+independently cited castling cases,
 53 population receipts and eight external receipts, but zero fully validated subjects**.
+[[D3563]] replaces the cited-source resolver's unconditional refusal with a fixed small
+primary-source lookup and exact reference/case/subject/expectation/input/operation/arm checks. All 158 focused
+foundation tests pass. Types, 3,568 software tests, seven performance tests, 227 content tests
+and 175 browser tests pass, with one existing optional Maia skip and zero retries. The first
+full run stopped on this change's missing roadmap RFC anchor; the corrected
+governance/content/browser sequence exits zero on unchanged product/test sources.
+This is working validation
+infrastructure and two independently grounded examples, not completed semantic coverage.
 The missing required arms, including independent orientation authority, are a foundation gate,
 not evidence that all predicates are wrong. Registered tactics and research selection must not
 be described as fully validated learner guidance. `docs/semantic-evidence.md` explains that boundary.
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,311 ledger rows** (1,449 done, 161 refused, 1,701 live,
+(271 completed, 24 retired, 274 live); **3,312 ledger rows** (1,450 done, 161 refused, 1,701 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

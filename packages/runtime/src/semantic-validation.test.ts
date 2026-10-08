@@ -176,6 +176,56 @@ function readProfile(id: string): unknown {
 }
 
 describe("semantic-validation cases and execution", () => {
+  it("resolves pinned independent castling positives and nearby negatives through the production emitter", async () => {
+    for (const id of ["cited.python-chess.king-to-rook.castled", "cited.python-chess.king-step.no-castle"]) {
+      const value = CASE_MAP.get(id)!;
+      expect(value, id).toBeDefined();
+      expect(resolveSemanticValidationProposition(value)).toMatchObject({ subject: value.subject, case: { id, version: 1 }, expectation: value.expectation });
+      const receipt = await run(value);
+      expect(receipt, id).toMatchObject({ status: "passed", invocations: 1 });
+      expect(receipt.targetCount).toBe(value.arm === "positive" ? 1 : 0);
+    }
+  });
+
+  it.each([
+    ["unknown source", { sourceId: "not-registered" }],
+    ["different revision", { sourceRevision: "next-release" }],
+    ["different licence", { licence: "CC0-1.0" }],
+    ["different proposition", { propositionSha256: "0".repeat(64) }],
+    ["different span digest", { span: { start: 0, end: 385, textSha256: "0".repeat(64) } }],
+    ["different span bounds", { span: { start: 1, end: 385, textSha256: "2053e402dfeba29ec24cec387308af4d6b03507a5a3545f5df1a08efc326b650" } }],
+    ["span past retained bytes", { span: { start: 0, end: 386, textSha256: "2053e402dfeba29ec24cec387308af4d6b03507a5a3545f5df1a08efc326b650" } }],
+  ])("rejects a cited reference with %s before production invocation", async (_name, edit) => {
+    const base = rawCase("cited.python-chess.king-to-rook.castled");
+    const value = parseSemanticValidationCase({ ...base, authority: { ...(base.authority as object), ...edit } });
+    expect((await run(value))).toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_AUTHORITY_INVALID" } });
+  });
+
+  it("binds a citation to its exact case, subject, expectation and legal input rather than laundering a reference", async () => {
+    const base = rawCase("cited.python-chess.king-to-rook.castled");
+    const negative = rawCase("cited.python-chess.king-step.no-castle");
+    for (const edit of [
+      { id: "cited.another-case" },
+      { subject: event("rules.transition.event.capture") },
+      { arm: "semantic_negative", expectation: { kind: "omits" } },
+      { input: negative.input },
+    ]) {
+      const value = parseSemanticValidationCase({ ...base, ...edit });
+      expect(await run(value)).toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_AUTHORITY_INVALID" } });
+    }
+  });
+
+  it("cannot pass a castling negative by invoking an unrelated emitter or recategorizing its arm", async () => {
+    const base = rawCase("cited.python-chess.king-step.no-castle");
+    for (const edit of [
+      { operation: { id: "runtime.semantic.structural_edge", version: 1 } },
+      { arm: "counterfactual" },
+    ]) {
+      const value = parseSemanticValidationCase({ ...base, ...edit });
+      expect(await run(value)).toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_AUTHORITY_INVALID" } });
+    }
+  });
+
   it("[16][21] executes every migrated D1713 emitter case through its production operation", async () => {
     const receipts = await Promise.all(CASES.map(run));
     expect(receipts.filter((receipt) => receipt.status !== "passed").map((receipt) => `${receipt.case}: ${receipt.failure?.message}`)).toEqual([]);
@@ -185,8 +235,8 @@ describe("semantic-validation cases and execution", () => {
       else expect(receipt.targetCount).toBe(0);
       for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
     }
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(29);
-    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(9);
+    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(30);
+    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(10);
   });
 
   it("[5][27] refuses callbacks, prebuilt evidence, forged keys, generated ids and @-suffixed dialects", () => {
@@ -487,7 +537,7 @@ describe("semantic-validation consumer eligibility", () => {
 
   it("[23] keeps fixture registries, runner, operations, oracles and authority stores out of the production import graph", () => {
     const closure = semanticValidationImportClosure(["packages/runtime/src/index.ts"]);
-    for (const forbidden of ["semantic-validation-cases.json", "semantic-validation-runner.ts", "semantic-validation-operations.ts", "semantic-validation-oracles.ts", "semantic-validation-authorities.ts", "semantic-validation-receipt.generated.json", "semantic-validation-external.json"]) {
+    for (const forbidden of ["semantic-validation-cases.json", "semantic-validation-runner.ts", "semantic-validation-operations.ts", "semantic-validation-oracles.ts", "semantic-validation-authorities.ts", "semantic-validation-cited-sources.ts", "semantic-validation-receipt.generated.json", "semantic-validation-external.json"]) {
       expect(closure.some((file) => file.endsWith(forbidden)), forbidden).toBe(false);
     }
     expect(closure).toContain("packages/runtime/src/semantic-validation-registry.ts");

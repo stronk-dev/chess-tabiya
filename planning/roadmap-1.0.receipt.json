@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:463d64fd431e7e6f45808552a3c8140392883717c7484b2289bd20b54578dbc2",
+    "roadmap": "sha256:8ffbcacdf7ea459fec78af049d37f946eda100c079465511641fbd4d7c44a4c4",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:ca6bd24d030b07aa35141e117cbf014aabfa183e907501989a23f2c727084955",
+    "workState": "sha256:e6c8bc8298b7a86c3ca2f30d7247fdee2901c0d4270262680dc97469ec5b91e3",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 12,
       "blocked": 1061,
-      "done": 1449,
+      "done": 1450,
       "refused": 161
     },
     "workItems": {
@@ -181,10 +181,14 @@
       "nextAction": "Fresh-review D3373's durable-stockfish-source draft before implementing its same-task selected-move/PV/MultiPV source, exact v1/v2 job/batch/settlement compatibility and provisional migration order. Complete accepted evidence/source contracts without filtering remaining refusals. D3429's numerical calibration contract and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3373 now has a registered follow-up draft for one whole same-task Stockfish source, independent terminal selection and PV, configured MultiPV, narrow packet compatibility and durable v1/v2 job/batch/settlement reading. The proposed stamp-only migration retains historical rows and requires fresh review of its provisional ordering. This is authoring progress only: no runtime operation, migration, source adoption or acceptance. D3429 numerical calibration, D3430 historical roots and D3410 opening-source repair remain independently held. No capability/milestone or 1.0 completion.",
+        "summary": "D3563 implements semantic-validation-authority's cited-source resolver using a fixed six-line python-chess excerpt and exact source/revision/licence/span/proposition/case/subject/expectation/input/operation/arm checks. Two predecessor-red cases now execute the production transition emitter; all 158 focused foundation tests pass. Forty cases still yield zero fully validated subjects; remaining required arms and D0 stay open. Types, 3568 software, seven performance, 227 content and 175 browser cases pass, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. The first full run stopped on this change's missing roadmap RFC anchor; corrected governance/content/browser verification exits zero with product/test sources unchanged. D3373 whole Stockfish source remains draft; D3429 numerical calibration, D3430 historical roots and D3410 opening-source repair remain independently held. No whole capability, milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/durable-stockfish-source.md",
+          "rfc/semantic-validation-authority.md",
+          "packages/runtime/src/semantic-validation-authorities.ts",
+          "packages/runtime/src/semantic-validation-cited-sources.ts",
+          "packages/runtime/src/semantic-validation.test.ts",
           "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
           "apps/server/src/evidence-queue.test.ts",
           "apps/server/src/evidence-jobs.ts",
@@ -219,6 +223,11 @@
             "kind": "rfc",
             "id": "evidence-value-authority.md",
             "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-validation-authority.md",
+            "digest": "sha256:a19391a280d333879d820a4b4a67f243b778c2bec5e7fdf4359e91b8d2ffe41d"
           },
           {
             "kind": "rfc",

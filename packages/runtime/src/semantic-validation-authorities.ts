@@ -13,11 +13,16 @@ import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { evidenceDigest } from "./evidence-contract.js";
+import { SEMANTIC_VALIDATION_CITED_SOURCES } from "./semantic-validation-cited-sources.js";
 import { SEMANTIC_VALIDATION_ORACLE_WITNESSES, type SemanticValidationOracleWitness } from "./semantic-validation-oracles.js";
 import {
   SEMANTIC_VALIDATION_OWNER_STORE_PATH,
   SemanticValidationError,
+  parseSemanticValidationCitedPropositionAuthority,
+  parseSemanticValidationExpectation,
+  parseSemanticValidationFactConstraints,
   parseSemanticValidationOwnerAuthorityStore,
+  parseSemanticValidationSubject,
   semanticFactConstraintSha256,
   semanticValidationDigest,
   semanticValidationSubjectKey,
@@ -98,9 +103,30 @@ export function resolveSemanticValidationExistingAssertionAuthority(value: Seman
   return Object.freeze({ subject: value.subject, case: Object.freeze({ id: value.id, version: 1 as const }), factConstraint: Object.freeze([]), factConstraintSha256: semanticFactConstraintSha256([]), expectation: value.expectation });
 }
 
-/** No immutable cited-source manifest is registered in v1; a cited proposition cannot resolve. */
-export function resolveSemanticValidationCitedPropositionAuthority(_value: SemanticValidationCase, ref: SemanticValidationCitedPropositionAuthority): SemanticValidationPropositionRecord {
-  return invalid(`cited source ${ref.sourceId}@${ref.sourceRevision} has no registered immutable source manifest`);
+/** Exact retained source and proposition lookup; never downloads or accepts a caller's source. */
+export function resolveSemanticValidationCitedPropositionAuthority(value: SemanticValidationCase, reference: SemanticValidationCitedPropositionAuthority): SemanticValidationPropositionRecord {
+  const ref = parseSemanticValidationCitedPropositionAuthority(reference);
+  const sources = SEMANTIC_VALIDATION_CITED_SOURCES.filter((source) => source.sourceId === ref.sourceId && source.sourceRevision === ref.sourceRevision);
+  if (sources.length !== 1) return invalid(`cited source ${ref.sourceId}@${ref.sourceRevision} has no registered immutable source manifest`);
+  const source = sources[0]!;
+  // Offsets are half-open UTF-16 positions within the retained excerpt, not upstream line numbers.
+  // This manifest registers the whole function span; a different slice has no proposition here.
+  if (source.licence !== ref.licence || ref.span.start !== 0 || ref.span.end !== source.text.length || sha256Text(source.text) !== ref.span.textSha256) return invalid(`cited source ${ref.sourceId} licence or retained span differs`);
+  const rows = source.cases.filter((row) => row.proposition.case.id === value.id && row.proposition.case.version === value.version);
+  if (rows.length !== 1) return invalid(`cited source ${ref.sourceId} does not bind case ${value.id}`);
+  const row = rows[0]!;
+  const subject = parseSemanticValidationSubject(row.proposition.subject);
+  const factConstraint = parseSemanticValidationFactConstraints(row.proposition.factConstraint);
+  const proposition: SemanticValidationPropositionRecord = Object.freeze({
+    subject,
+    case: Object.freeze({ ...row.proposition.case }),
+    factConstraint,
+    factConstraintSha256: semanticFactConstraintSha256(factConstraint),
+    expectation: parseSemanticValidationExpectation(row.proposition.expectation, subject),
+  });
+  if (evidenceDigest(proposition) !== ref.propositionSha256) return invalid(`cited proposition ${value.id} digest differs`);
+  if (semanticValidationSubjectKey(subject) !== semanticValidationSubjectKey(value.subject) || evidenceDigest(proposition.expectation) !== evidenceDigest(value.expectation) || evidenceDigest(row.input) !== evidenceDigest(value.input) || evidenceDigest(source.operation) !== evidenceDigest(value.operation) || value.arm !== row.arm) return invalid(`cited proposition ${value.id} binds another subject, expectation, input, operation or arm`);
+  return proposition;
 }
 
 /**

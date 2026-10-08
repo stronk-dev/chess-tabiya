@@ -202,9 +202,19 @@ with four independent authorities:
    subject verdict is `passed` *and* the instance carries the sole-factory value receipt with a
    reproduced payload digest. A missing, alternate or swapped receipt is `event_value_unverified`.
 
-At Slice A, 78 roots have profiles, 38 migrated cases pass (29 positives, 9 negatives), 53 subjects
-carry an executed population receipt and 8 carry D872 external-disagreement receipts — and **zero**
-subjects are validated, because no emitter-level orientation authority exists anywhere. The
+The current register has 81 subjects. The 38 migrated cases remain, and D3563 adds two
+independently cited castling cases (one positive and one nearby negative), giving 40 cases
+(30 positives, 10 negatives). The build-only cited-source store retains six lines / 385 bytes
+from python-chess 1.11.2 at a fixed commit, with attribution and licence. Resolution checks the
+exact source, revision, licence, excerpt and proposition, then binds its case, subject,
+expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
+lookup, caller-provided source or protected owner-store bootstrap is involved. Both cases run
+through the actual transition emitter. This is not independent strategic judgement or a new
+learner permission. The source store is excluded from the production runtime import closure.
+
+53 subjects carry an executed population receipt and 8 carry D872 external-disagreement
+receipts — and **zero** subjects are fully validated, because required arms remain missing,
+including emitter-level orientation authority. The
 avoidance family (D1716) and king opposition (D1717) abstain on every arm until their successors
 land; the eleven v1 multi-edge window events have no production operation (their v2 successors
 do). Validation never transfers from inputs to a derived event, and a new projection version

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "f8a2c630de5aa126e4ae15aa7352df6a3ca40d47d657bb104e0c23bc039bb38c",
-  "caseDigest": "3142c702f98b7886f7080c0314dfe7ba259f180f1e36a27002c366cbf2953e0c",
+  "profileDigest": "25c7216eadf756dfe0d89eae435df91c2e6fb847d21bd5dc9785a2933c1d470c",
+  "caseDigest": "e8122707a8698db737503c0f5a005606003f85ec67d833a71c7861954259c599",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -1596,6 +1596,59 @@
       "authority": {
         "kind": "existing_assertion",
         "propositionSha256": "7d898ceb1ca5c962791318426a12db00dbf235062789617738103454b27ea571",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-step.no-castle",
+      "subject": "event:rules.transition.event.castled@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "9557782c0694bc71de664d59047684fbe71ae16363aa7a7a7d8f87c71178c163",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 8,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "400dd214397ac0ac0b57c82b875820e59eb0c9cb279d5e339967f7f4327752ac",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-to-rook.castled",
+      "subject": "event:rules.transition.event.castled@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "193e7bb7eeed662816625dc8b0e030b80e1664205cec734ca02e74809d48bc44",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 8,
+      "targets": [
+        {
+          "projection": "rules.transition.event.castled@1",
+          "operandDigest": "ea4348fdd5e2fe4774f125f95b868c497501cca238dd0652648db6ddb294eca1",
+          "factory": "createRulesTransitionEventCastledV1Evidence",
+          "inputDigest": "92b522d71fc87e0aacae5d9e963b1fceafa39c4fcd24a6d2343fff8c967578e8",
+          "payloadDigest": "ea4348fdd5e2fe4774f125f95b868c497501cca238dd0652648db6ddb294eca1",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "85b51a267feed5efc3f391d03c99e372757c8ec257e5c15b7191dbd62a55d30b",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -7623,6 +7676,7 @@
           "arm": "positive",
           "status": "passed",
           "refs": [
+            "cited.python-chess.king-to-rook.castled",
             "transition.short-castle.castled"
           ]
         },
@@ -7630,6 +7684,7 @@
           "arm": "semantic_negative",
           "status": "passed",
           "refs": [
+            "cited.python-chess.king-step.no-castle",
             "transition.king-steps-e2.no-castle"
           ]
         },

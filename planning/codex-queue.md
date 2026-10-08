@@ -61,6 +61,14 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
 2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   [[D3563]] implements the existing `rfc/semantic-validation-authority.md` cited-source
+   resolver rather than its unconditional refusal. A fixed six-line primary-source excerpt
+   supports two legal castling cases, with exact reference/input/operation mismatch controls; all 158
+   focused foundation cases pass. Types, 3,568 software, seven performance, 227 content and
+   175 browser cases pass; one existing optional Maia skip and zero retries. The initial
+   full run stopped on a missing roadmap RFC anchor added in this change; the corrected
+   governance/content/browser sequence exits zero without product/test-source changes.
+   Forty case executions still produce zero fully validated subjects; required arms remain.
    Delivered [[D3560]] enforces the existing recorded-game boundary at actual Review
    entry points: retained packets cannot compile/present after a storage change.
    Nine predecessor-red controls, seven identity changes and a native SQLite write/rebuild

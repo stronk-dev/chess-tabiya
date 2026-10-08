@@ -2,6 +2,50 @@
   "schemaVersion": 1,
   "cases": [
     {
+      "id": "cited.python-chess.king-to-rook.castled",
+      "version": 1,
+      "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+      "arm": "positive",
+      "operation": { "id": "runtime.semantic.transition_edge", "version": 1 },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+        "moveUci": "e1h1",
+        "afterFen": "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.castling",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": { "start": 0, "end": 385, "textSha256": "2053e402dfeba29ec24cec387308af4d6b03507a5a3545f5df1a08efc326b650" },
+        "propositionSha256": "85b51a267feed5efc3f391d03c99e372757c8ec257e5c15b7191dbd62a55d30b"
+      },
+      "expectation": { "kind": "emits", "minimum": 1 }
+    },
+    {
+      "id": "cited.python-chess.king-step.no-castle",
+      "version": 1,
+      "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+      "arm": "semantic_negative",
+      "operation": { "id": "runtime.semantic.transition_edge", "version": 1 },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+        "moveUci": "e1e2",
+        "afterFen": "r3k2r/8/8/8/8/8/4K3/R6R b kq - 1 1"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.castling",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": { "start": 0, "end": 385, "textSha256": "2053e402dfeba29ec24cec387308af4d6b03507a5a3545f5df1a08efc326b650" },
+        "propositionSha256": "400dd214397ac0ac0b57c82b875820e59eb0c9cb279d5e339967f7f4327752ac"
+      },
+      "expectation": { "kind": "omits" }
+    },
+    {
       "id": "structural.initial-e4.piece-count",
       "version": 1,
       "subject": {

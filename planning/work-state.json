@@ -29457,6 +29457,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/review-map-screen.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3563",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:da58ae46cf43449a91ff16ef04d25367353071c46f5859a0083cd1e50d5abaa5",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
