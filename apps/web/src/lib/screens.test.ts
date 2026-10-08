@@ -3069,6 +3069,47 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it.each([
+    { kind: "ordinary", interaction: undefined },
+    { kind: "prediction", interaction: { type: "prediction" as const, flipBoard: true } },
+    { kind: "stated_reasoning", interaction: { type: "stated_reasoning" as const } },
+  ])("lets a read-only viewer inspect an unanswered $kind checkpoint without learner actions", async ({ kind, interaction }) => {
+    const run = reachCheckpoint(commitMove(createRun({
+      id: `readonly-checkpoint-${kind}`, packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen, seed: 4, createdAt: at,
+    }), "c1e3", { at }).run, "plan-commitment", at).run;
+    const original = JSON.stringify(run);
+    const onContinueCheckpoint = vi.fn(), onPrediction = vi.fn(), onReasoning = vi.fn(), onReasoningReview = vi.fn();
+    const onMove = vi.fn(), onRewind = vi.fn(), onFork = vi.fn(), onSwitchBranch = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      pack, snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false },
+      checkpoint: { ...latestCheckpoint(pack, run)!, ...(interaction === undefined ? {} : { interaction }) }, viewerRole: "spectator", reviewing: false,
+      onMove, onRewind, onFork, onSwitchBranch, onContinueCheckpoint, onPrediction, onReasoning, onReasoningReview,
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const sheet = document.querySelector<HTMLElement>('[role="dialog"][aria-labelledby="checkpoint-title"]')!;
+    const inspect = [...sheet.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspect recorded moves");
+    expect(inspect).toBeDefined();
+    expect(sheet.textContent).toContain("Inspection does not continue the learner's attempt");
+    expect(sheet.querySelectorAll("textarea, [data-board-input-grid]")).toHaveLength(0);
+    for (const label of ["Continue", "Rewind here", "Record reasoning", "Show the author's points without writing"])
+      expect([...sheet.querySelectorAll("button")].map(button => button.textContent)).not.toContain(label);
+    inspect!.click();
+    await vi.waitFor(() => expect(document.activeElement === document.querySelector(`[data-timeline-node="${run.activeCursor.nodeId}"]`)).toBe(true));
+    expect(document.querySelector('[role="dialog"][aria-labelledby="checkpoint-title"]')).toBeNull();
+    expect(document.querySelector<HTMLElement>(".workspace")?.inert).not.toBe(true);
+    expect(document.querySelector(".checkpoint-pause")?.textContent).toContain("learner's attempt remains paused");
+    expect(regionKeyboard?.(new KeyboardEvent("keydown", { key: "Escape" }))).toBe(true);
+    document.querySelector<HTMLButtonElement>("[data-timeline-node]")!.click();
+    await tick();
+    expect(document.querySelector(".preview-label")?.textContent).toBe("Preview");
+    for (const callback of [onContinueCheckpoint, onPrediction, onReasoning, onReasoningReview, onMove, onRewind, onFork, onSwitchBranch]) expect(callback).not.toHaveBeenCalled();
+    expect(JSON.stringify(run)).toBe(original);
+    await unmount(component);
+  });
+
   it("presents terminal authored commentary and recorded engine evidence", async () => {
     const terminalPack = {
       ...pack,
@@ -3865,6 +3906,62 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("This drill paused here so you can choose what to do next.");
     expect(document.body.textContent).toContain("Escape does not dismiss this checkpoint.");
     expect(document.body.textContent).not.toContain("semantic boundary");
+    await unmount(component);
+  });
+
+  it.each(["matching", "earlier", "different_node"] as const)("scopes a reader's recorded prediction to the checkpoint occurrence (%s)", async (scope) => {
+    const started = createRun({
+      id: `prediction-reader-${scope}`, packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen, seed: 4, createdAt: at,
+    });
+    let run = commitMove(started, "c1e3", { at }).run;
+    const prediction = { type: "prediction.recorded" as const, at, data: {
+      nodeId: scope === "different_node" ? started.activeCursor.nodeId : run.activeCursor.nodeId,
+      checkpointId: "plan-commitment", predictedUci: "e7e6", predictedMass: null, predictedRank: null, candidateCount: 0,
+      distribution: { moveUci: "e7e6", policyModeApplied: "theory_strict" as const,
+        engine: { id: "fixture", name: "Recorded fixture", version: "1", seedHonored: true } },
+    } };
+    if (scope === "earlier") run = appendEvents(run, [prediction]);
+    run = reachCheckpoint(run, "plan-commitment", at).run;
+    const checkpoint = { ...latestCheckpoint(pack, run)!, interaction: { type: "prediction" as const } };
+    if (scope !== "earlier") run = appendEvents(run, [prediction]);
+    const component = mount(CheckpointSheet, { target: target(), props: {
+      run, checkpoint, node: run.nodes.find(node => node.id === run.activeCursor.nodeId)!, readOnly: true,
+      onInspectRun: vi.fn(), canCompare: false, onContinue: vi.fn(), onRewind: vi.fn(), onCompare: vi.fn(), onStop: vi.fn(),
+    } });
+    await tick();
+    expect(document.querySelector(".prediction")?.textContent).toContain(scope === "matching" ? "The learner predicted e6." : "No reply prediction was recorded at this checkpoint.");
+    expect(document.querySelector(".prediction [data-board-input-grid]")).toBeNull();
+    await unmount(component);
+  });
+
+  it.each([false, true])("shows only admitted recorded reasoning to a reader (skipped=%s)", async (skipped) => {
+    const inspect = vi.fn(), onReasoningReview = vi.fn();
+    const component = mount(CheckpointSheet, { target: target(), props: {
+      run: branchedRun(), readOnly: true, onInspectRun: inspect,
+      checkpoint: { id: "reasoning-checkpoint", label: "Recorded plan", nodeId: "node-1", eventSeq: 12, actions: [], interaction: { type: "stated_reasoning" } },
+      reasoning: {
+        checkpointId: "reasoning-checkpoint",
+        occurrences: [{ eventSeq: 13, checkpointEventSeq: 12, branchId: "main", skipped,
+          transcript: skipped ? null : { candidates: ["Ne5"], plan: "I would improve the knight", fears: "An unprotected pawn" },
+          ...(!skipped ? { keyPoints: [{ id: "improve-piece", label: "Improve the worst piece", ground: { kind: "claim" as const, claimId: "piece-activity" }, attribution: "Authored claim: piece activity" }], detections: [{ keyPointId: "improve-piece", status: "not_detected" as const }] } : {}),
+        }],
+        previous: { runId: "other-attempt", eventSeq: 4, skipped: false, transcript: { candidates: [], plan: "Other attempt must stay outside the shared run", fears: "" }, detections: [] },
+        absenceSentence: "No earlier attempt has stated reasoning at this checkpoint.", honestySentence: "Detected means literal phrase overlap, not correctness.",
+      },
+      onReasoningReview, canCompare: false, onContinue: vi.fn(), onRewind: vi.fn(), onCompare: vi.fn(), onStop: vi.fn(),
+    } });
+    await tick();
+    expect(document.querySelector(".reasoning h3")?.textContent).toBe("Learner's recorded reasoning");
+    expect(document.body.textContent).toContain(skipped ? "The learner chose to see the author's points without recording reasoning." : "I would improve the knight");
+    expect(document.body.textContent).not.toContain("Other attempt must stay outside the shared run");
+    expect(document.body.textContent).not.toContain("Your previous attempt");
+    expect(document.body.textContent).not.toContain("Check for another possible mention");
+    if (!skipped) expect(document.body.textContent).toContain("Improve the worst piece");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspect recorded moves")!.click();
+    expect(inspect).toHaveBeenCalledOnce();
+    expect(onReasoningReview).not.toHaveBeenCalled();
     await unmount(component);
   });
 

@@ -68,12 +68,18 @@ nodes, events and write authority. Four predecessor-red mounted/selector control
 cases and full normal gates pass: clean types/build, 3,624 software, seven performance, 228
 content and 182 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition
 cells. Existing evidence-contract holds remain independent; no separate teacher rail is introduced.
-Next independent accepted repair [[D3584]]: an incomplete submission at its current checkpoint
-offers rewind and authored prediction/reasoning inputs without reader context. Continue already
-dismisses locally because read-only opponent play returns immediately; do not misreport it as a
-failed mutation or a missing escape. First reproduce the two-account read path, then make local
-inspection explicit and remove writer-only affordances while preserving the learner's actual
-pause and closed assistance ceiling. D3582/D3583 do not claim that separate path is repaired.
+[[D3584]]/[[D3585]]/[[D3586]] are **closed locally** under the same accepted teacher contract:
+incomplete prediction/reasoning submissions offer local recorded-move inspection without learner
+forms, continuation or new provider review. Already-admitted reasoning and exact recorded
+predictions remain attributed; the learner's pause and closed rail survive inspection/reload.
+The sharing picker truthfully names an attempt. Actual desktop/phone-width two-account journeys
+cover consent, reader focus/preview, reload, learner continuation, recorded reasoning and revocation.
+The existing recorded-play assertion permits background evidence only, never a changed prefix or
+play suffix; the pure assistance POST is not classified as a mutation. All 318 focused cases,
+six actual browser journeys and full sequential normal gates pass: clean types/build, 3,632
+software, seven unchanged-budget performance, 228 content and 186 browser cases, one optional Maia
+skip, zero retries, all 150 input/112 composition cells. No whole professional capability,
+source-authority hold, official content or release gate is promoted by this scoped repair.
 
 0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
    37641922404 at d1310090 fails the graduation ruling sweep because depth-one

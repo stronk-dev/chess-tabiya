@@ -9,6 +9,7 @@
   import type { Node } from "@chess-tabiya/runtime";
   import Chessboard from "./Chessboard.svelte";
   import type { StartSide } from "./board-model.js";
+  import { moveSanFromUci } from "./board-input.js";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
   import { claimProvenance } from "./claim-presentation.js";
   import { modalBoundary } from "./modal-boundary.js";
@@ -21,6 +22,8 @@
     onRewind: () => boolean | void | Promise<boolean | void>;
     onCompare: () => void | Promise<void>;
     onStop: () => void;
+    readOnly?: boolean;
+    onInspectRun?: (() => void) | undefined;
     authoredItems?: readonly AuthoredFeedbackItem[];
     assessment?: string | undefined;
     resistance?: readonly string[];
@@ -48,6 +51,8 @@
     onRewind,
     onCompare,
     onStop,
+    readOnly = false,
+    onInspectRun,
     authoredItems = [],
     assessment,
     resistance = [],
@@ -73,6 +78,11 @@
   let fears = $state("");
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
   let currentReasoning = $derived(reasoning?.occurrences.find((item) => item.checkpointEventSeq === checkpoint.eventSeq));
+  let recordedPrediction = $derived.by(() => {
+    const event = run.events.find(candidate => candidate.type === "prediction.recorded" && candidate.seq > checkpoint.eventSeq
+      && candidate.data.checkpointId === checkpoint.id && candidate.data.nodeId === checkpoint.nodeId);
+    return event?.type === "prediction.recorded" && node !== undefined ? moveSanFromUci(node.fen, event.data.predictedUci) : undefined;
+  });
   let previousReasoning = $derived(reasoning?.previous ?? (reasoning?.occurrences.filter((item) => item.eventSeq !== currentReasoning?.eventSeq).at(-1) ?? null));
   let review = $state<{ readonly checkpointEventSeq: number; readonly proposals: readonly VerifiedReasoningProposal[] } | undefined>();
   let reviewBusy = $state(false);
@@ -87,11 +97,12 @@
   }
 
   function submitReasoning(): void {
+    if (readOnly) return;
     void onReasoning({ transcript: { candidates: candidates.split("\n").map((item) => item.trim()).filter(Boolean), plan, fears } });
   }
 
   async function requestReasoningReview(): Promise<void> {
-    if (onReasoningReview === undefined || currentReasoning?.transcript === null || currentReasoning?.transcript === undefined || currentReasoning.keyPoints === undefined || currentReasoning.detections === undefined || reviewBusy) return;
+    if (readOnly || onReasoningReview === undefined || currentReasoning?.transcript === null || currentReasoning?.transcript === undefined || currentReasoning.keyPoints === undefined || currentReasoning.detections === undefined || reviewBusy) return;
     const request = ++reviewRequest;
     const checkpointEventSeq = currentReasoning.checkpointEventSeq;
     const transcript = currentReasoning.transcript;
@@ -102,7 +113,7 @@
     try {
       const response = await onReasoningReview(checkpointEventSeq);
       const proposals = verifiedReasoningProposals(response, transcript, keyPoints, detections);
-      if (!mounted || request !== reviewRequest || currentReasoning?.checkpointEventSeq !== checkpointEventSeq) return;
+      if (!mounted || readOnly || request !== reviewRequest || currentReasoning?.checkpointEventSeq !== checkpointEventSeq) return;
       review = Object.freeze({ checkpointEventSeq, proposals });
     } catch {
       if (mounted && request === reviewRequest && currentReasoning?.checkpointEventSeq === checkpointEventSeq) {
@@ -121,9 +132,13 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="checkpoint-title" aria-describedby="checkpoint-boundary-note" use:modalBoundary>
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
-    <p id="checkpoint-boundary-note">This drill paused here so you can choose what to do next. Choose an action below to continue; Escape does not dismiss this checkpoint.</p>
+    <p id="checkpoint-boundary-note">{readOnly ? "This recorded attempt is paused at a learner checkpoint. Inspection does not continue the learner's attempt or open additional help." : "This drill paused here so you can choose what to do next. Choose an action below to continue; Escape does not dismiss this checkpoint."}</p>
     {#if checkpoint.interaction?.type === "prediction" && node}
       <section class="prediction" aria-labelledby="prediction-title">
+        {#if readOnly}
+        <h3 id="prediction-title">Learner's recorded prediction</h3>
+        <p>{recordedPrediction ? `The learner predicted ${recordedPrediction}.` : "No reply prediction was recorded at this checkpoint."}</p>
+        {:else}
         <h3 id="prediction-title">Predict the opponent's reply</h3>
         <p>Play the reply you expect. Your prediction stays with this attempt so you can compare it with what happened.</p>
         <Chessboard
@@ -132,12 +147,14 @@
           lastMove={node.moveUci}
           onMove={onPrediction}
         />
+        {/if}
       </section>
     {/if}
     {#if checkpoint.interaction?.type === "stated_reasoning"}
       <section class="reasoning" aria-labelledby="reasoning-title">
-        <h3 id="reasoning-title">State your reasoning</h3>
+        <h3 id="reasoning-title">{readOnly ? "Learner's recorded reasoning" : "State your reasoning"}</h3>
         {#if currentReasoning === undefined}
+          {#if readOnly}<p>No reasoning was recorded at this checkpoint.</p>{:else}
           <div class="reasoning-entry">
             <div>
               <p>Write what you considered before opening the author's points.</p>
@@ -151,16 +168,17 @@
             </div>
             <section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>
           </div>
+          {/if}
         {:else if currentReasoning.skipped}
-          <p>You chose to see the author's points without stating your reasoning first.</p>
+          <p>{readOnly ? "The learner chose to see the author's points without recording reasoning." : "You chose to see the author's points without stating your reasoning first."}</p>
         {:else}
-          <div class="reasoning-columns">
-            <section aria-label="Your reasoning"><h4>Your reasoning</h4><p><strong>Candidates</strong> {currentReasoning.transcript?.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {currentReasoning.transcript?.plan}</p><p><strong>Fears</strong> {currentReasoning.transcript?.fears || "None listed"}</p></section>
+          <div class="reasoning-columns" class:reader={readOnly}>
+            <section aria-label={readOnly ? "Recorded reasoning" : "Your reasoning"}><h4>{readOnly ? "Recorded reasoning" : "Your reasoning"}</h4><p><strong>Candidates</strong> {currentReasoning.transcript?.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {currentReasoning.transcript?.plan}</p><p><strong>Fears</strong> {currentReasoning.transcript?.fears || "None listed"}</p></section>
             <section aria-label="The author's points"><h4>The author's points</h4>
               {#if currentReasoning.keyPoints && currentReasoning.detections}
                 <p class="honesty">{reasoning?.honestySentence}</p>
-                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : "Not detected in your words."}</p>{#each review?.checkpointEventSeq === currentReasoning.checkpointEventSeq ? review.proposals.filter((proposal) => proposal.keyPointId === point.id) : [] as proposal}<p class="proposal">{reasoningProposalSentence(proposal, point.label)}</p>{/each}<small>{point.attribution}</small></li>{/each}</ul>
-                {#if onReasoningReview !== undefined}
+                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : readOnly ? "Not detected in the recorded words." : "Not detected in your words."}</p>{#each !readOnly && review?.checkpointEventSeq === currentReasoning.checkpointEventSeq ? review.proposals.filter((proposal) => proposal.keyPointId === point.id) : [] as proposal}<p class="proposal">{reasoningProposalSentence(proposal, point.label)}</p>{/each}<small>{point.attribution}</small></li>{/each}</ul>
+                {#if !readOnly && onReasoningReview !== undefined}
                   <button type="button" disabled={reviewBusy} onclick={() => void requestReasoningReview()}>{reviewBusy ? "Checking your exact words…" : "Check for another possible mention"}</button>
                   <p class="honesty">The configured language model may select your exact words. It cannot add a detection or grade your reasoning.</p>
                   {#if review !== undefined && review.proposals.length === 0}<p>No additional possible mentions were proposed.</p>{/if}
@@ -168,7 +186,7 @@
                 {/if}
               {:else}<p>Author points remain withheld until this segment opens.</p>{/if}
             </section>
-            <section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>
+            {#if !readOnly}<section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>{/if}
           </div>
         {/if}
       </section>
@@ -207,7 +225,12 @@
         {/if}
       </section>
     {/if}
-    {#if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
+    {#if readOnly}
+    <div class="actions">
+      <button class="primary" type="button" disabled={onInspectRun === undefined} onclick={onInspectRun}>Inspect recorded moves</button>
+      <button type="button" onclick={onStop}>Leave this view</button>
+    </div>
+    {:else if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
     <div class="actions">
       <button class="primary" type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
       <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : rewindError !== undefined ? "checkpoint-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try rewind again" : "Rewind here"}</button>
@@ -285,13 +308,14 @@
   .reasoning textarea { width: 100%; resize: vertical; padding: 0.55rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); color: inherit; font: inherit; }
   .reasoning-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .reasoning-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+  .reasoning-columns.reader { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .reasoning-entry { display: grid; grid-template-columns: minmax(0, 2fr) minmax(14rem, 1fr); gap: 0.75rem; }
   .reasoning-columns section { min-width: 0; padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.6rem; }
   .reasoning-columns h4, .reasoning-columns p { margin: 0 0 0.45rem; }
   .reasoning-columns ul { padding-left: 1rem; }
   .honesty { color: var(--muted); }
   .proposal { padding-left: 0.65rem; border-left: 2px solid var(--accent); }
-  @media (max-width: 760px) { .reasoning-columns, .reasoning-entry { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .reasoning-columns, .reasoning-columns.reader, .reasoning-entry { grid-template-columns: 1fr; } }
 
   .authored-feedback {
     margin-top: 1rem;

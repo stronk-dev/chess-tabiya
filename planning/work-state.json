@@ -29634,7 +29634,7 @@
       "id": "D3582",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:8219f841d0eefd4fb829aa2d19c6ca0543a231985559ff0dfc0462a90e103c20",
+      "sourceDigest": "sha256:c14877762667ab7025faf40d4fae3d10b1d794b87423f5c2840303d8ad322453",
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
@@ -29650,11 +29650,30 @@
     },
     {
       "id": "D3584",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:47f6386c78bffefc74335e9dfcb7eb6ab1b8120ab55c80a23b6a4c6a8234fa11",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0ca5a3455a95fb60118250adf6d6d20fd8e70350fc2bd6444523026d8bb8f724",
       "uxItems": [],
-      "owner": "professional-workflows"
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3585",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a3f6482ed2c57ab4e11fb10240bdf4a125eb8440615ade5278ed2cae5790e4bb",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3586",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e1ff20492493ca9323d9718c05dde345f0da4f47e72da59af43f93308390fffe",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

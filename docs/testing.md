@@ -12,6 +12,17 @@ cursor and events, zero teacher play/lease writes, and refusal after revocation/
 The permanent tests also run in the ordinary software and browser tiers.
 Current-checkpoint restoration includes continuation, rewind, already-dismissed sequence
 and same-node terminal controls; the browser journey reopens a pack that passed a checkpoint.
+The same targets cover incomplete prediction/reasoning submissions at both widths:
+share → inspect → reload → learner remains paused → revoke. They assert the closed
+incomplete-review ceiling, unchanged cursor/recorded nodes, preserved event prefixes with
+evidence-only suffixes, no teacher run writes and
+no learner-only inputs in the reader sheet. Mounted controls retain admitted recorded
+reasoning without cross-attempt history or provider actions, and scope recorded reply
+predictions by checkpoint sequence and node rather than reusing an earlier occurrence.
+The pure assistance-compilation POST on reload is not a play write. Background provider
+completion may append evidence; exact whole-event-page equality would be a race, not a
+stronger read-only contract. The existing recorded-play helper refuses every non-evidence
+suffix and any alteration of the recorded prefix.
 
 `make square-control-presentation-check` verifies populated-target arithmetic through both exact
 Sight/Inspector adapters, receipt parsing and the real REST module query. Initial-position control

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3584]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3586]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -48,7 +48,7 @@ the machine map above remains the current assignment/status source.
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
-| Coach/streamer | Classrooms, assignments, submissions, completed-submission read-only inspection/revocation, proposals, marks, votes and casting/streamer chrome | Complete incomplete-submission controls, guided setup, role-specific presets, audience/consent/delay and reconnect workflows |
+| Coach/streamer | Classrooms, assignments, completed/incomplete submission read-only inspection/revocation, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
 | Account/data | Authentication, authorization, source-scoped pack creation/replay, writer leases, versioned export/import/delete and populated native restore/resume | Guest/claim, complete future-object/schema and shared-link lifecycle, broader recovery/isolation and integrated operator journeys |
 | Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations and official bundled content |
@@ -57,16 +57,16 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
-[[D3582]]/[[D3583]] complete the teacher's recorded-move inspection of a finished submission
-and repair stale checkpoint restoration that blocked both result and checkpoint dialogs.
-Actual desktop/phone-width two-account journeys preserve the learner's cursor, nodes and
-events, send no teacher play/lease writes, and refuse access after withdrawal/reload. Four
-predecessor-red mounted/selector controls, 310 focused cases and full sequential normal gates
-pass: clean types/build, 3,624 software, seven performance, 228 content and 182 browser cases,
-one optional Maia skip, zero retries, all 150 input/112 composition cells. [[D3584]] separately
-queues incomplete-checkpoint writer affordances; local Continue already dismisses without
-playing and must not be described as a missing escape. No whole professional capability,
-official pack, milestone, GitHub CI or release-image completion follows from these repairs.
+[[D3582]]–[[D3586]] complete local teacher inspection of finished and incomplete submissions
+and repair stale checkpoint restoration, misleading sharing copy and race-prone browser assertions.
+Readers cannot enter predictions/reasoning, continue the learner or request new reasoning review;
+exact recorded predictions and already-admitted reasoning remain attributed. Actual desktop/phone-width
+two-account journeys cover consent, inspection/focus, reload, learner continuation and revocation.
+Cursor, recorded nodes and event prefixes remain unchanged; background evidence alone may append.
+All 318 focused cases, six actual browser journeys and full sequential normal gates pass:
+clean types/build, 3,632 software, seven performance, 228 content and 186 browser cases,
+one optional Maia skip, zero retries, all 150 input/112 composition cells. No whole professional
+capability, official pack, milestone, GitHub CI or release-image completion follows from these repairs.
 
 [[D3581]] closes a shared response bypass: ordinary event pages, run snapshots and mutations no
 longer contain saved provider captures or legacy eval move answers. Scalar readings remain;

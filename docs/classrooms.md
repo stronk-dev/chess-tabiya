@@ -108,6 +108,17 @@ Reopening a saved attempt restores a checkpoint only at its current recorded cur
 not an earlier checkpoint it has already passed. A terminal result takes precedence over
 a checkpoint at that same node, preventing two modal boundaries from blocking each other.
 
+An incomplete submission stays an incomplete attempt: **Attempt to share** selects the
+learner's saved run without requiring a result or completing it. At a pending checkpoint,
+a reader gets **Inspect recorded moves**, not the learner's Continue, Rewind, prediction
+board or reasoning form. Inspection is local and leaves the learner's checkpoint, cursor
+and recorded play unchanged; background evidence may still append. Reloading restores
+the checkpoint notice. Recorded reply
+predictions and reasoning remain attributed to the learner, and only already-admitted
+author points are rendered. Another attempt's reasoning and new language-model review
+are not part of this reader view. The incomplete submission's review rail stays closed,
+and withdrawing sharing still refuses subsequent reads.
+
 For a native match, `viewer.seatedInContest` is true only while the live session is open
 and the learner occupies its White or Black seat. A seated host is capped exactly like a
 seated guest. Closing the match removes the seat ceiling.

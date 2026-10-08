@@ -791,15 +791,29 @@
   );
   let inspectedTerminalKey: string | undefined = $state();
   let terminalInspectionKey = $derived(terminalEvent === undefined ? undefined : `${run.id}:${terminalEvent.seq}`);
+  let inspectedCheckpointKey: string | undefined = $state();
+  let checkpointInspectionKey = $derived(checkpoint === undefined ? undefined : `${run.id}:${checkpoint.eventSeq}`);
+  let checkpointOpen = $derived(checkpoint !== undefined && !(snapshot.access === "read_only" && inspectedCheckpointKey === checkpointInspectionKey));
+  function focusRecordedMove(): void {
+    const selected = [...(mainElement?.querySelectorAll<HTMLButtonElement>("[data-timeline-node]") ?? [])]
+      .find(button => button.dataset.timelineNode === currentNode.id);
+    selected?.focus({ preventScroll: true });
+  }
+  async function inspectCheckpoint(): Promise<void> {
+    if (snapshot.access !== "read_only" || checkpointInspectionKey === undefined) return;
+    const key = checkpointInspectionKey;
+    inspectedCheckpointKey = key;
+    await tick();
+    if (!seatAlive || snapshot.access !== "read_only" || checkpointInspectionKey !== key) return;
+    focusRecordedMove();
+  }
   async function inspectCompletedRun(): Promise<void> {
     if (snapshot.access !== "read_only" || terminalInspectionKey === undefined) return;
     const key = terminalInspectionKey;
     inspectedTerminalKey = key;
     await tick();
     if (!seatAlive || snapshot.access !== "read_only" || terminalInspectionKey !== key) return;
-    const selected = [...(mainElement?.querySelectorAll<HTMLButtonElement>("[data-timeline-node]") ?? [])]
-      .find(button => button.dataset.timelineNode === currentNode.id);
-    selected?.focus({ preventScroll: true });
+    focusRecordedMove();
   }
   let timelineRewindNodeIds = $derived.by(() => {
     const ids = new Set<string>();
@@ -2108,7 +2122,7 @@
       else if (checkpointPickerOpen) closeCheckpointPicker();
       else if (comparison !== undefined) closeCompare();
       else if (phoneSheetModal) closeCompanion();
-      else if (checkpoint !== undefined) return false;
+      else if (checkpointOpen) return false;
       else restoreFocus(mainElement);
       event.preventDefault();
       return true;
@@ -2119,7 +2133,7 @@
       helpOpen ||
       forkOpen ||
       checkpointPickerOpen ||
-      checkpoint !== undefined
+      checkpointOpen
     ) {
       return false;
     }
@@ -2456,7 +2470,7 @@
             {#if checkpoint !== undefined}
               <div class="checkpoint-pause" id="checkpoint-board-paused">
                 <strong>Board paused</strong>
-                <span>Choose a checkpoint action to continue.</span>
+                <span>{snapshot.access === "read_only" ? "The learner's attempt remains paused. You can inspect recorded moves without continuing it." : "Choose a checkpoint action to continue."}</span>
               </div>
             {/if}
           </div>
@@ -2794,9 +2808,11 @@
   <SimulationPreview {simulation} {startSide} {busy} onEnter={onEnterSimulation} onClose={closeSimulation} />
 {/if}
 
-{#if viewportSupport.supported && checkpoint}
+{#if viewportSupport.supported && checkpoint && checkpointOpen}
   <CheckpointSheet
     {run}
+    readOnly={snapshot.access === "read_only"}
+    onInspectRun={snapshot.access === "read_only" ? () => void inspectCheckpoint() : undefined}
     node={currentNode}
     {startSide}
     {onPrediction}

@@ -1853,7 +1853,7 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   await assigned.getByRole("button", { name: "Start pack" }).click();
   await expect(submittedPage.getByLabel("Chessboard")).toBeVisible();
   await submittedPage.goto("/learn");
-  await assigned.getByLabel("Completed run").selectOption({ index: 1 });
+  await assigned.getByLabel("Attempt to share").selectOption({ index: 1 });
   await assigned.getByRole("button", { name: "Share with teachers" }).click();
   const confirmation = submittedPage.getByRole("complementary", { name: /Share .+\?/ });
   await expect(confirmation).toContainText("will be able to read this run for up to 90 days");
@@ -1899,6 +1899,114 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   await submittedContext.close();
   await waitingContext.close();
 });
+
+for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+for (const fixture of [
+  { title: SCHEMA_PACK_TITLE, checkpoint: "Predict the reply", interaction: "prediction" },
+  { title: "Stated reasoning browser fixture", checkpoint: "What is your plan?", interaction: "reasoning" },
+]) {
+test(`incomplete submitted review inspects a ${fixture.interaction} checkpoint without continuing the learner (${viewport.width}px)`, async ({ page, browser }) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize(viewport);
+  await page.goto("/live");
+  const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
+  await classrooms.getByLabel("New classroom").fill("Paused attempt review");
+  await classrooms.getByRole("button", { name: "Create", exact: true }).click();
+  const learnerContext = await browser.newContext({ viewport });
+  const learnerPage = await learnerContext.newPage();
+  const learnerHandle = await register(learnerPage);
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  await classrooms.getByLabel("Invite handle").fill(learnerHandle);
+  await classrooms.getByRole("button", { name: "Invite", exact: true }).click();
+  await learnerPage.goto("/live");
+  await learnerPage.getByRole("button", { name: "Accept", exact: true }).click();
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  await classrooms.getByLabel("Pack").selectOption({ label: fixture.title });
+  await classrooms.getByRole("button", { name: "Assign", exact: true }).click();
+  await learnerPage.goto("/learn");
+  const assignment = learnerPage.getByRole("region", { name: "Assigned", exact: true }).getByRole("article").filter({ has: learnerPage.getByRole("heading", { name: fixture.title, exact: true }) });
+  await assignment.getByRole("button", { name: "Start pack" }).click();
+  if (fixture.interaction === "prediction") {
+    await move(learnerPage, "c1", "e3");
+    await learnerPage.getByRole("button", { name: "Continue", exact: true }).click();
+  } else await move(learnerPage, "h2", "h3");
+  await expect(learnerPage.getByRole("dialog", { name: fixture.checkpoint })).toBeVisible();
+  const learnerRunUrl = learnerPage.url();
+  const runId = new URL(learnerRunUrl).pathname.split("/").at(-1)!;
+  const before = await (await learnerPage.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
+  const beforeEvents = await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] };
+  await learnerPage.goto("/learn");
+  await assignment.getByLabel("Attempt to share").selectOption({ index: 1 });
+  await assignment.getByRole("button", { name: "Share with teachers" }).click();
+  await learnerPage.getByRole("button", { name: "Confirm sharing" }).click();
+  await expect(assignment).toContainText("Currently shared with");
+  await classrooms.getByRole("button", { name: "Open", exact: true }).click();
+  const status = classrooms.getByLabel(`Submission status for ${fixture.title}`);
+  await status.getByRole("button", { name: `Review @${learnerHandle}'s run` }).click();
+  const sheet = page.getByRole("dialog", { name: fixture.checkpoint });
+  await expect(sheet).toBeVisible();
+  await expect(sheet.locator("textarea, [data-board-input-grid]")).toHaveCount(0);
+  await expect(sheet.getByRole("button", { name: "Continue", exact: true })).toHaveCount(0);
+  await expect(sheet.getByRole("button", { name: "Rewind here" })).toHaveCount(0);
+  const teacherWrites: string[] = [];
+  page.on("request", request => {
+    const path = new URL(request.url()).pathname;
+    // The assistance POST compiles read-only permissions and appends no run events (rest.ts).
+    if (request.method() !== "GET" && path.startsWith(`/runs/${runId}/`) && path !== `/runs/${runId}/assistance`) teacherWrites.push(path);
+  });
+  await sheet.getByRole("button", { name: "Inspect recorded moves" }).click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page.locator(".timeline [aria-current='step']")).toBeFocused();
+  await expect(page.getByRole("complementary", { name: "Review access" })).toContainText("Review tools open after this attempt reaches its recorded outcome");
+  await page.locator("[data-timeline-node]").first().click();
+  await expect(page.locator(".preview-label")).toHaveText("Preview");
+  await assertRunViewport(page, viewport);
+  const teacher = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
+  expect(teacher.graph.viewer).toMatchObject({ role: "spectator", mayWrite: false, reviewing: false, reviewRail: "closed_incomplete" });
+  const after = await (await learnerPage.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
+  expect(after.graph.activeCursor).toEqual(before.graph.activeCursor);
+  assertRecordedNodesPreserved(before.graph.nodes, after.graph.nodes);
+  const afterEvents = await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] };
+  assertOnlyEvidenceAppended(beforeEvents.events, afterEvents.events);
+  expect(teacherWrites).toEqual([]);
+  await page.reload();
+  await expect(page.getByRole("dialog", { name: fixture.checkpoint }).getByRole("button", { name: "Inspect recorded moves" })).toBeVisible();
+  await learnerPage.goto(learnerRunUrl);
+  const learnerSheet = learnerPage.getByRole("dialog", { name: fixture.checkpoint });
+  await expect(learnerSheet).toBeVisible();
+  await expect(learnerSheet.getByRole("button", { name: "Inspect recorded moves" })).toHaveCount(0);
+  if (fixture.interaction === "prediction") {
+    await expect(learnerSheet.getByLabel("Chessboard")).toBeVisible();
+    await learnerSheet.getByRole("button", { name: "Continue", exact: true }).click();
+    await move(learnerPage, "f2", "f3");
+    await expect(learnerPage.getByRole("dialog", { name: "Critical race resolved" })).toBeVisible();
+  } else {
+    await learnerSheet.getByLabel("Your plan").fill("protect the queen");
+    await learnerSheet.getByRole("button", { name: "Record reasoning" }).click();
+    await expect(learnerSheet).toContainText("Mentioned — matched 'protect the queen'");
+    await page.reload();
+    const recorded = page.getByRole("region", { name: "Learner's recorded reasoning" });
+    await expect(recorded).toContainText("protect the queen");
+    await expect(recorded).toContainText("Keep the queen protected");
+    await expect(recorded.locator("textarea")).toHaveCount(0);
+    await expect(recorded.getByRole("button", { name: "Check for another possible mention" })).toHaveCount(0);
+    const columns = recorded.locator(".reasoning-columns");
+    expect(await columns.evaluate(element => getComputedStyle(element).gridTemplateColumns.split(/\s+/u).length)).toBe(viewport.width <= 760 ? 1 : 2);
+    const bounds = await columns.boundingBox();
+    expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);
+  }
+  await learnerPage.goto("/learn");
+  await learnerPage.getByRole("button", { name: "Stop future teacher access" }).click();
+  await page.reload();
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByLabel("Chessboard")).toHaveCount(0);
+  expect(teacherWrites).toEqual([]);
+  await learnerContext.close();
+});
+}
+}
 
 for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
 test(`a completed assigned attempt offers hand-in inside the outcome sheet and read-only submitted review (${viewport.width}px)`, async ({ page, browser }) => {
@@ -1951,7 +2059,7 @@ test(`a completed assigned attempt offers hand-in inside the outcome sheet and r
   const learnerRunUrl = learnerPage.url();
   const runId = new URL(learnerRunUrl).pathname.split("/").at(-1)!;
   const beforeReview = await (await learnerPage.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
-  const beforeEvents = await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json();
+  const beforeEvents = await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] };
   const teacherWrites: string[] = [];
   page.on("request", request => {
     const path = new URL(request.url()).pathname;
@@ -1976,7 +2084,8 @@ test(`a completed assigned attempt offers hand-in inside the outcome sheet and r
   const afterReview = await (await learnerPage.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph };
   expect(afterReview.graph.activeCursor).toEqual(beforeReview.graph.activeCursor);
   assertRecordedNodesPreserved(beforeReview.graph.nodes, afterReview.graph.nodes);
-  expect(await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).toEqual(beforeEvents);
+  const afterEvents = await (await learnerPage.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] };
+  assertOnlyEvidenceAppended(beforeEvents.events, afterEvents.events);
   expect(teacherWrites).toEqual([]);
 
   await learnerPage.goto("/learn");

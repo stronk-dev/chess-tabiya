@@ -2130,8 +2130,8 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("assigned by @coach");
     expect(document.body.textContent).toContain("overdue");
     expect(document.body.textContent).toContain("Compare both plans");
-    const runSelect = document.querySelector<HTMLSelectElement>("select[aria-label='Completed run']")
-      ?? [...document.querySelectorAll<HTMLSelectElement>("select")].find((select) => select.parentElement?.textContent?.includes("Completed run"))!;
+    expect(document.body.textContent).not.toContain("Completed run");
+    const runSelect = [...document.querySelectorAll<HTMLSelectElement>("select")].find((select) => select.parentElement?.textContent?.includes("Attempt to share"))!;
     runSelect.value = runSummary.id;
     runSelect.dispatchEvent(new Event("change", { bubbles: true }));
     const share = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share with teachers")!;
@@ -2273,7 +2273,7 @@ describe("application shell", () => {
     const component = mount(App, { target: target(), props: { api: assignedApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("Retry group"));
-    const runSelect = [...document.querySelectorAll<HTMLSelectElement>("select")].find((select) => select.parentElement?.textContent?.includes("Completed run"))!;
+    const runSelect = [...document.querySelectorAll<HTMLSelectElement>("select")].find((select) => select.parentElement?.textContent?.includes("Attempt to share"))!;
     runSelect.value = runSummary.id;
     runSelect.dispatchEvent(new Event("change", { bubbles: true }));
     const share = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Share with teachers")!;
