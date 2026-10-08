@@ -144,10 +144,17 @@ for (const [file, env] of [["compose.yaml", process.env], ["compose.appliance.ya
   required(JSON.stringify(config) === JSON.stringify(releaseConfig), `${file}: source/release security or resource topology drifted`);
 }
 
-for (const [label, base, overlay] of [["development", "compose.yaml", "compose.maintenance.yaml"], ["release", releasePath, join(renderedDirectory, "compose.maintenance.yaml")]]) {
-  const missing = spawnSync("docker", ["compose", "-f", base, "-f", overlay, "config", "--quiet"], { encoding: "utf8", env: { ...process.env, TABIYA_BACKUP_DIRECTORY: "" } });
+const maintenanceProfiles = [["development", "compose.yaml"], ...[["source", sourceDirectory], ["release", renderedDirectory]].flatMap(([distribution, directory]) => ["compose.yaml", "compose.appliance.yaml", "compose.hosted.yaml"].map(file => [`${distribution} ${file}`, join(directory, file)]))];
+for (const [label, base] of maintenanceProfiles) {
+  // Execute the same adapter as Make, not a separate hand-written file list that can stay green
+  // while the operator command uses the development image or a different project (D3571).
+  const env = { ...proxyEnv, COMPOSE_FILE: base, COMPOSE_PATH_SEPARATOR: ":", COMPOSE_PROJECT_NAME: "tabiya-packaging-maintenance", TABIYA_DATA_VOLUME: "tabiya-packaging-maintenance", TABIYA_BACKUP_DIRECTORY: "/srv/tabiya-backups" };
+  const missing = spawnSync(process.execPath, ["tools/storage-compose.mjs", "config", "--quiet"], { encoding: "utf8", env: { ...env, TABIYA_BACKUP_DIRECTORY: "" } });
   required(missing.status !== 0, `${label} maintenance: an unset backup directory must refuse`);
-  const config = composeConfigWith({ ...process.env, TABIYA_BACKUP_DIRECTORY: "/srv/tabiya-backups" }, ["-f", base, "-f", overlay, "--profile", "maintenance"]);
+  const projected = spawnSync(process.execPath, ["tools/storage-compose.mjs", "--profile", "maintenance", "config", "--format", "json"], { encoding: "utf8", env });
+  required(projected.status === 0, `${label} maintenance: selected profile must render: ${projected.stderr}`);
+  const config = JSON.parse(projected.stdout);
+  required(config.name === "tabiya-packaging-maintenance", `${label} maintenance: selected project must survive`);
   const admin = config.services["storage-admin"];
   required(admin.image === config.services.server.image, `${label} maintenance: storage-admin must use the server image`);
   required(admin.ports === undefined && admin.network_mode === "none" && admin.restart === "no", `${label} maintenance: no port, no network, no restart`);

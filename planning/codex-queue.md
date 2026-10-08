@@ -18,6 +18,17 @@ replace transitive source hashes without changing authored packs. D3521/D3523/D3
 D3525/D3527 and D3533 are also closed. Their original red outcomes and scoped
 closeouts remain in the ledger and append-only log; they are not active blockers.
 
+Independent operator delivery [[D3570]]/[[D3571]] is closed locally: actual Make
+backup fails on a failed state query/stop/restart, preserves backup errors and
+restarts only a previously running server. Maintenance uses the selected Compose
+profile's matching overlay, project and volume. Ten predecessor-red controls,
+eighteen passing process cases, 47 native storage/CLI/replacement cases, actual
+Compose packaging for seven profiles and all 85 release-policy cases pass.
+[[D3572]] remains executable next: refuse a requested BACKUP outside the configured
+mount instead of silently rewriting its basename; verify before stopping a server.
+Do not claim this fixes exact bundle identity, performs a native image drill or
+completes release-candidate-proof. No live operator deployment is a test target.
+
 0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
    37641922404 at d1310090 fails the graduation ruling sweep because depth-one
    blame attributes prior rulings to HEAD; browser run 37641922913 passes at that

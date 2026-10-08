@@ -664,7 +664,7 @@
         ],
         "verification": [
           "partial",
-          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; fresh storage and deployment reviews now execute fourteen real-authority attacks while retaining both predecessor chains."
+          "D3570/D3571 add eighteen actual-Make process cases, 47 passing native SQLite/CLI/replacement cases and actual Compose packaging for development plus all six source/release profiles; all 85 release-policy cases pass. Exact bundle-path validation remains D3572. Unit/content/browser/accessibility/native release tiers stay separate; this selected-deployment boundary repair is not full image recovery, multi-architecture release or remote CI proof."
         ],
         "release": [
           "blocked",
@@ -2593,10 +2593,14 @@
         ],
         "nextAction": "Fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual generated reader/dispatcher and proxy limits; the 112-id source census is not protection. Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-10-07",
-          "summary": "D3334/D3335 retain a source-derived 112-id census versus predecessor §8's 99, and a draft bounded-transport then semantic admission repair. The normal disposable authoring check now passes 127 tests, covering all 112 actual-handler first-entry cutpoints and proposed population/reader/selector/permit controls. Production oversized-command and alias positives remain: enforcement has not landed. Mock authentication and sentinel service entries are not successful journeys, real account authorization or complete generated-handler adoption. The 4/10/2/96 none/document/account/JSON partition preserves account32m; proxy8MB compatibility, complete safe/HEAD closure and actual native/reader/parser/dispatcher/proxy enforcement remain exits. §8 remains draft for fresh review; D3334/D3335 stay doing and D1846 stays blocked. Normal scaffold/packaging/test-tier and research checks pass, not a fresh full software/browser/GitHub release proof. Earlier October 5 and October 1 proofs remain historical separate evidence. Current routing remains zero untriaged. Full ingress protection, CSP/probe contracts, deployment image/privacy/operator receipts, release/rights/envelope, owner-device use and official content still block the milestone. Metadata/hash/receipt maintenance is automatic; no RFC acceptance, capability, milestone or full-1.0 completion is promoted.",
+          "at": "2026-10-08",
+          "summary": "D3570/D3571 complete the selected-deployment maintenance boundary: ten predecessor-red controls become eighteen passing actual-Make process cases, covering server state/stop/backup/restart failures and all seven maintenance targets with retained project/volume/arguments. A thin adapter selects the existing sibling maintenance overlay from COMPOSE_FILE, including spaces and alternate separators. Actual Compose packaging validates matching server/admin images, data volumes and isolation across development plus all six source/release profiles. All 47 native storage/CLI/replacement cases, fifteen scaffold cases, schema/packaging and 85 release-policy cases pass. D3572 remains executable: exact BACKUP path validation must precede stop/restore instead of discarding the requested parent. This is not a full native image recovery drill, published release or remote CI proof. The prior D3334/D3335 112-id source census and 127 authoring checks remain draft rather than ingress enforcement. CSP/probe contracts, deployment image/privacy/operator receipts, rights/resource proof, owner-device use and official content still block this milestone; prior evidence remains in the append-only log.",
           "impact": "held",
           "evidence": [
+            "Makefile",
+            "tools/storage-compose.mjs",
+            "tools/release/storage-maintenance.test.mjs",
+            "docs/storage-backup-and-recovery.md",
             "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
             "rfc/verifiable-runtime-distribution.md",
             "rfc/storage-backup-recovery.md",

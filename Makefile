@@ -3458,11 +3458,18 @@ DEPLOY_TIER ?= core
 # Respect Compose's standard file list when an operator explicitly supplies one; otherwise use
 # the source-rendered profile. The isolated appliance drill uses an owned loopback-port overlay.
 deployment_compose = docker compose $(if $(COMPOSE_FILE),,-f "$(DEPLOY_RENDER_DIR)/$(1)")
-MAINTENANCE_COMPOSE := docker compose -f compose.yaml -f compose.maintenance.yaml
+MAINTENANCE_COMPOSE := $(CI_NODE) tools/storage-compose.mjs
 STORAGE_ADMIN := $(MAINTENANCE_COMPOSE) run --rm storage-admin
 
 .PHONY: up up-engines down deployment-render deployment-check up-appliance up-hosted appliance-ca-export verify-deployment
 .PHONY: storage-maintenance-check storage-backup storage-verify storage-restore storage-restore-replace storage-rollback storage-upgrade-rehearsal storage-recover
+.PHONY: storage-maintenance-wrapper-check
+storage-maintenance-wrapper-check:
+	$(CI_NODE) --test tools/release/storage-maintenance.test.mjs
+
+.PHONY: storage-recovery-check
+storage-recovery-check: storage-maintenance-wrapper-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-admin.test.ts apps/server/src/storage-replacement.test.ts apps/server/src/storage-appliance.test.ts
 
 # `local`: loopback-only HTTP at http://127.0.0.1:$${TABIYA_PORT:-3000}. Zero configuration.
 up:
@@ -3750,10 +3757,15 @@ bundle_id = $(notdir $(patsubst %/,%,$(BACKUP)))
 
 # Manual backup: stops the server (backup needs a quiesced database), backs up, restarts it if it was running.
 storage-backup: storage-maintenance-check
-	@running=$$(docker compose ps --quiet --status running server); \
-	docker compose stop server >/dev/null 2>&1 || true; \
+	@running=$$(docker compose ps --quiet --status running server) || exit $$?; \
+	if [ -n "$$running" ]; then docker compose stop server >/dev/null || exit $$?; fi; \
 	$(STORAGE_ADMIN) backup; status=$$?; \
-	if [ -n "$$running" ]; then docker compose start server >/dev/null; fi; \
+	if [ -n "$$running" ]; then \
+		if docker compose start server >/dev/null; then :; else \
+			restart_status=$$?; echo "storage-backup: server restart failed; inspect the Compose error above before starting it again" >&2; \
+			if [ "$$status" -eq 0 ]; then status=$$restart_status; fi; \
+		fi; \
+	fi; \
 	exit $$status
 
 storage-verify: storage-maintenance-check

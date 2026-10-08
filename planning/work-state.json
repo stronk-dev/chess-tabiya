@@ -29520,6 +29520,32 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3570",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:42d2eac309ef90a7b77067192b467a25dd64a299eb69b78f4c2d8bba4b36b7ff",
+      "uxItems": [],
+      "evidence": "tools/release/storage-maintenance.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3571",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0dfdd3e84b5f1da06844bf31820843bbb29a227ff426bd7a00c7ab601347062b",
+      "uxItems": [],
+      "evidence": "tools/release/storage-maintenance.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3572",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8b16e55c3b034635f9d529241ba71c12beb76c61594a1eef4d9e8b5f811e00ab",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

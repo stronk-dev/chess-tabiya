@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3569]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3572]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -149,10 +149,20 @@ The missing required arms, including independent orientation authority, are a fo
 not evidence that all predicates are wrong. Registered tactics and research selection must not
 be described as fully validated learner guidance. `docs/semantic-evidence.md` explains that boundary.
 
+2026-10-08 operator checkpoint ([[D3570]]/[[D3571]]): backup now refuses failed
+state queries/stops, restarts a previously running server after backup failure and reports
+failed restart rather than success. All seven maintenance commands use the selected Compose
+profile's sibling overlay, project and data volume. Ten predecessor-red controls and all
+eighteen process cases pass; actual Compose packaging checks development and all six
+source/release profiles. The 47 native storage/CLI/replacement cases, fifteen scaffold cases,
+schema/packaging and all 85 release-policy cases pass. No live operator deployment was touched.
+[[D3572]] remains: the requested backup directory must not be silently discarded. This is
+not full native image/multi-architecture recovery, a new GitHub result or a completed milestone.
+
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,318 ledger rows** (1,455 done, 161 refused, 1,702 live,
-zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,062 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,321 ledger rows** (1,457 done, 161 refused, 1,703 live,
+zero untriaged). Of the live ledger, 629 are todo, twelve doing and 1,062 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

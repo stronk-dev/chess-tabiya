@@ -51,8 +51,15 @@ disk fails.
 ## Commands
 
 All commands need `TABIYA_BACKUP_DIRECTORY=<absolute host directory>`, which is mounted at
-`/backup`. `BACKUP=` takes a bundle directory under that path. Every command prints exactly one
-JSON receipt on stdout. Exit codes: `0` succeeded, `2` refused, `3` failed, `4` internal error.
+`/backup`. `BACKUP=` takes a bundle directory under that path. Storage-admin prints exactly one
+JSON receipt on stdout; Make may also echo commands and next-step instructions. Exit codes:
+`0` succeeded, `2` refused, `3` failed, `4` internal error.
+These are storage-admin exit codes; Make itself returns nonzero when any step fails. The backup
+wrapper also fails if it cannot establish or stop the running server, or cannot restart it.
+A successful backup receipt still describes a valid bundle if the later restart fails; the
+Compose diagnostic and wrapper failure mean service has not been restored. A failed backup still
+attempts to restart a previously running server and retains the original backup failure. An
+already stopped server stays stopped.
 
 ```sh
 export TABIYA_BACKUP_DIRECTORY=$HOME/tabiya-backups
@@ -72,6 +79,20 @@ The operations are `backup`, `verify <bundle>`, `restore <bundle> [--replace-exi
 --confirm-database <path>]`, `rollback <bundle> --confirm-database <path>`, `rehearsal <bundle>`
 and `recover`. For a release install, use the downloaded `compose.maintenance.yaml`, which runs
 the same image digest as `server`.
+
+The Make maintenance commands honor `COMPOSE_FILE`, `COMPOSE_PATH_SEPARATOR`,
+`COMPOSE_PROJECT_NAME` and the selected data volume. They append `compose.maintenance.yaml` from
+the first selected Compose file's directory; they do not fall back to the checkout's development
+overlay for a rendered source or release profile. For example:
+
+```sh
+COMPOSE_FILE=.cache/deploy/local-build/compose.appliance.yaml make storage-backup
+COMPOSE_FILE=release-install/compose.yaml:release-install/compose.hosted.yaml make storage-backup
+```
+
+Keep the matching generated/downloaded maintenance file alongside those profiles. Paths containing
+spaces are passed as individual arguments. The no-Make equivalent uses the same selected profile
+files, then their matching maintenance overlay, before `run --rm storage-admin <operation>`.
 
 `verify` is read-only. Its disposition is one of `current`, `upgradeable`,
 `newer_than_application` (refused), `unsupported_old` (refused) or `invalid` (failed, with a
@@ -149,6 +170,13 @@ recovers readiness without a server restart.
 
 ## Verification
 
+- `make storage-maintenance-wrapper-check` executes all seven actual Make maintenance commands with a
+  test-only Docker executable: running/stopped service, probe/stop/backup/restart failures,
+  selected source/release profiles and project/volume preservation. It does not touch an operator's
+  deployment or replace the native SQLite/image recovery proof below. These process tests also
+  run in the ordinary software tier through `release-policy-check`.
+- `make storage-recovery-check` adds the native SQLite backup/restore, bundled CLI/server and
+  replacement crash-recovery tests to those wrapper controls.
 - `make test-software` covers the unit tier, the process boundary (bundled `main.js` with its
   worker thread and the `storage-admin.js` CLI), and the replacement crash matrix.
   The fixtures cover WAL-only backups, every verifier refusal, read-only preflight of a newer
