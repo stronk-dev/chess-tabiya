@@ -29550,11 +29550,22 @@
     },
     {
       "id": "D3573",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c4cd1fa3f86342763194b05500ed60a498fa6d982c4e58013fb013da72dbd46f",
+      "sourceDigest": "sha256:75d505a244ab0d7510e681846fe7ff6397989415ff995f7a05372f13fdee844e",
       "uxItems": [],
-      "owner": "release-engineering"
+      "owner": "release-engineering",
+      "blocker": "item:D3574"
+    },
+    {
+      "id": "D3574",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:392d4c6e9256d499e5b722d7074990c63f821649434d2f4d889fc6e8958fdcc4",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Approve clearing only old rebuildable cache in the verified tabiya-source-v1 builder, or free Docker space separately?"
     }
   ]
 }

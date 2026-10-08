@@ -28,11 +28,17 @@ Compose packaging for seven profiles and all 85 release-policy cases pass.
 rewriting; all five bundle consumers check the actual mounted directory before
 stop, volume lookup or maintenance. All 33 wrapper controls, 47 native recovery
 and 100 release-policy cases pass, alongside actual Compose packaging.
-[[D3573]] is the next independent operator delivery: the built-image storage drill
-still bypasses these Make commands. Route its test-owned journey through the
-supported commands, preserving direct native CLI refusal controls and proving
-project/volume isolation before start/cleanup. No live operator deployment is a
-test target; no full release-candidate-proof or remote CI completion is claimed.
+[[D3573]] now routes its isolated built-image journey through all seven Make commands,
+with 22 deterministic safety/receipt/capacity controls. Actual native preflight and owned
+cleanup pass, but full recovery remains held on [[D3574]]: Docker's data filesystem
+again has zero space available to uid 1000, independently reproduced as SQLITE_FULL.
+The new native capacity check refuses before HTTP; it is not a positive recovery pass.
+The owner has been asked whether to clear only old rebuildable cache in the verified
+Tabiya-specific builder (about 2.702 GB) or free Docker space separately. No pruning is
+authorized yet. After usable space is restored, run normal `make storage-drill` through
+actual backup/mutation/fresh restore/rehearsal/replacement/exact rollback/reboot and
+measure private-root permissions. No live operator deployment is a test target; no
+full release-candidate-proof or remote CI completion is claimed.
 
 0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
    37641922404 at d1310090 fails the graduation ruling sweep because depth-one

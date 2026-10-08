@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3573]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3574]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -161,14 +161,20 @@ directory before any stop, volume lookup or maintenance. Ten predecessor-red con
 33 passing wrapper cases, including relative/dot/trailing-slash and space-containing root
 positives. The 47 native storage/CLI/replacement cases, schema/packaging and all 100
 release-policy cases pass. Native bundle verification and replacement confirmation are
-unchanged. [[D3573]] still owns the built-image drill's bypass of the actual Make commands,
-including its unmeasured 777-versus-700 host/container permission interaction. This is not
-full native image/multi-architecture recovery, a new GitHub result or a completed milestone.
+unchanged. [[D3573]] now wires the built-image journey through all seven Make commands,
+with 22 deterministic isolation/receipt/capacity controls and private backup directories.
+Its native config/capacity-refusal/owned-cleanup paths pass, but [[D3574]] records recurring
+Docker VM exhaustion: zero bytes available to the non-root image user and independent SQLite
+errcode 13 on /data. No application lock defect, positive Make/image recovery, host-backup
+permission verdict or full release follows. Clearing only old rebuildable Tabiya builder cache
+(about 2.702 GB), or otherwise freeing Docker space, awaits the owner's choice. Normal
+release-policy/storage/schema checks pass 122 policy, 33 wrapper, 47 native storage and fifteen
+scaffold cases plus actual Compose packaging. No new GitHub result or milestone completion.
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,322 ledger rows** (1,458 done, 161 refused, 1,703 live,
-zero untriaged). Of the live ledger, 629 are todo, twelve doing and 1,062 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,323 ledger rows** (1,458 done, 161 refused, 1,704 live,
+zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,064 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

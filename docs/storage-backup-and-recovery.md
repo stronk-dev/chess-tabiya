@@ -192,5 +192,15 @@ recovers readiness without a server restart.
   and invariant failures, guarded replacement, an upgrade from the prior release followed by a
   rollback, publication crashes, lock exclusion across processes, and a crash at every replacement
   fault point with recovery itself crashed.
-- `make storage-drill` runs against the built image: cold boot, restart, lock refusal, backup and
-  verify, restore into a fresh volume and boot, rehearsal, and guarded replacement.
+- `make storage-drill` builds a test-owned image tag and runs the documented Make backup, verify,
+  fresh restore, rehearsal, guarded replacement, rollback and recover commands against that image.
+  It records a branched game, mutates it after backup, checks restored identities/branches/cursor,
+  and compares rolled-back database bytes before reboot. Direct CLI lock and confirmation refusals
+  remain separate controls. The image retains its non-root user; backup directories are not made
+  world-writable. This is a local development-image storage journey with mock providers, not proof
+  of real-bot behavior, every account data class, a prior-release rollback or both release architectures.
+  The command must finish successfully before it supplies native recovery proof.
+  It filters inherited deployment/Make selectors and checks its generated project, fresh volumes,
+  matching images, mounts and loopback ports before starting. It checks space available to the image
+  user on the actual data volume, refusing a full filesystem without automatically pruning Docker.
+  Cleanup removes only its generated project and volumes with matching live Compose ownership labels.

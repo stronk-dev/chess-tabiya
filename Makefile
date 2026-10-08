@@ -3547,8 +3547,7 @@ verify-deployment:
 # Release-tier drills over the built image; each uses its own Compose project and volumes.
 .PHONY: storage-drill appliance-drill appliance-drill-staged application-readiness-check staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
 storage-drill:
-	docker compose build server
-	node tools/appliance-drill.mjs storage --image $(LOCAL_SERVER_IMAGE)
+	$(CI_NODE) tools/appliance-drill.mjs storage
 
 appliance-drill:
 	pnpm exec esbuild tools/source-appliance-client.ts --bundle --platform=node --format=esm --outfile=.cache/deploy/source-appliance-client.mjs
