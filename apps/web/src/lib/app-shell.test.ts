@@ -2917,6 +2917,94 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("replenishes the twenty-card due intake after dismissal without losing keyboard focus", async () => {
+    history.replaceState(null, "", "/learn");
+    const schedules = Array.from({ length: 21 }, (_, index) => ({
+      id: `intake-${index}`, sessionKind: "position" as const, packId: null,
+      kind: "blocked" as const, variant: null,
+      dueAt: `2026-09-13T21:${String(index).padStart(2, "0")}:00.000Z`, sourceRunId: run.id,
+    }));
+    const refreshed = deferred<import("./api.js").DueQueuePage>();
+    const dueProgress = vi.fn().mockResolvedValueOnce(dueQueue(schedules.slice(0, 20), 1))
+      .mockImplementationOnce(() => refreshed.promise);
+    const dismissSchedule = vi.fn().mockResolvedValue(undefined);
+    const component = mount(App, { target: target(), props: { api: { ...api(), dueProgress, dismissSchedule }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    const section = () => document.querySelector<HTMLElement>('section[aria-labelledby="due-title"]')!;
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(20));
+    const button = [...section().querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent === "Dismiss")!;
+    button.focus(); button.click(); button.click();
+    await vi.waitFor(() => expect(dueProgress).toHaveBeenCalledTimes(2));
+    expect(dismissSchedule).toHaveBeenCalledExactlyOnceWith("intake-0");
+    expect(section().querySelectorAll("article")).toHaveLength(19);
+    expect(section().textContent).toContain("Updating your due returns…");
+    refreshed.resolve(dueQueue(schedules.slice(1)));
+    await vi.waitFor(() => expect(section().querySelectorAll("article")).toHaveLength(20));
+    expect(section().textContent).toContain(new Date(schedules[20]!.dueAt).toLocaleString());
+    expect(section().textContent).not.toContain(new Date(schedules[0]!.dueAt).toLocaleString());
+    expect(section().textContent).not.toContain("waiting");
+    expect(document.activeElement?.id).toBe("due-title");
+    await unmount(component);
+  });
+
+  it.each(["unavailable", "crossed", "malformed"] as const)("retries a %s refill without repeating a successful dismissal", async (failure) => {
+    history.replaceState(null, "", "/learn");
+    const first = { id: "removed-return", sessionKind: "position" as const, packId: null, kind: "blocked" as const, variant: null, dueAt: "2026-09-13T21:00:00.000Z", sourceRunId: run.id };
+    const next = { ...first, id: "next-return", dueAt: "2026-09-13T21:10:00.000Z" };
+    const dueProgress = vi.fn().mockResolvedValueOnce(dueQueue([first]));
+    if (failure === "unavailable") dueProgress.mockRejectedValueOnce(new Error("private refresh diagnostics"));
+    else if (failure === "crossed") dueProgress.mockResolvedValueOnce(dueQueue([first, next]));
+    else dueProgress.mockResolvedValueOnce(dueQueue([next], 1)); // A non-full intake cannot withhold a waiting item.
+    dueProgress.mockResolvedValueOnce(dueQueue([next]));
+    const dismissSchedule = vi.fn().mockResolvedValue(undefined);
+    const component = mount(App, { target: target(), props: { api: { ...api(), dueProgress, dismissSchedule }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    const section = () => document.querySelector<HTMLElement>('section[aria-labelledby="due-title"]')!;
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(1));
+    [...section().querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent === "Dismiss")!.click();
+    await vi.waitFor(() => expect(section().textContent).toContain("The return was dismissed, but your remaining due returns could not be refreshed."));
+    expect(section().querySelectorAll("article")).toHaveLength(0);
+    expect(section().textContent).not.toContain("Nothing is due yet");
+    expect(section().textContent).not.toContain("private refresh diagnostics");
+    const retry = [...section().querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent === "Retry loading returns")!;
+    retry.focus(); retry.click(); retry.click();
+    await vi.waitFor(() => expect(section().querySelectorAll("article")).toHaveLength(1));
+    expect(dueProgress).toHaveBeenCalledTimes(3);
+    expect(dismissSchedule).toHaveBeenCalledTimes(1);
+    expect(section().textContent).toContain(new Date(next.dueAt).toLocaleString());
+    expect(section().querySelector('[role="alert"]')).toBeNull();
+    expect(document.activeElement?.id).toBe("due-title");
+    await unmount(component);
+  });
+
+  it.each(["resolve", "reject"] as const)("ignores a departed due refill's late %s and preserves another control's focus", async (settlement) => {
+    history.replaceState(null, "", "/learn");
+    const first = { id: "departed-first", sessionKind: "position" as const, packId: null, kind: "blocked" as const, variant: null, dueAt: "2026-09-13T21:00:00.000Z", sourceRunId: run.id };
+    const next = { ...first, id: "departed-next", dueAt: "2026-09-13T21:10:00.000Z" };
+    const pending = deferred<import("./api.js").DueQueuePage>();
+    const dueProgress = vi.fn().mockResolvedValueOnce(dueQueue([first, next]))
+      .mockImplementationOnce(() => pending.promise).mockResolvedValue(dueQueue([next]));
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: { ...api(), dueProgress, async dismissSchedule() {} }, router, storage: new MemoryStorage() } });
+    const section = () => document.querySelector<HTMLElement>('section[aria-labelledby="due-title"]')!;
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(2));
+    [...section().querySelectorAll<HTMLButtonElement>("button")].find((item) => item.textContent === "Dismiss")!.click();
+    const shellLink = document.querySelector<HTMLAnchorElement>('a[href="/play"]')!;
+    shellLink.focus();
+    await vi.waitFor(() => expect(dueProgress).toHaveBeenCalledTimes(2));
+    expect(document.activeElement).toBe(shellLink);
+    router.navigate("/");
+    await vi.waitFor(() => expect(location.pathname).toBe("/"));
+    router.navigate("/learn");
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(1));
+    if (settlement === "resolve") pending.resolve(dueQueue([first]));
+    else pending.reject(new Error("private departed refresh"));
+    await tick(); await Promise.resolve();
+    expect(section().querySelectorAll("article")).toHaveLength(1);
+    expect(section().textContent).toContain(new Date(next.dueAt).toLocaleString());
+    expect(section().querySelector('[role="alert"]')).toBeNull();
+    expect(section().textContent).not.toContain("Updating your due returns");
+    await unmount(component);
+  });
+
   it("uses pack titles across Learn recommendations and refuses unknown registry ids", async () => {
     history.replaceState(null, "", "/learn");
     const unknownPackId = "missing-in-catalogue";

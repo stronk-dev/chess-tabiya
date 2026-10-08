@@ -322,6 +322,13 @@ learner-profile-check:
 learner-profile-browser-check:
 	./node_modules/.bin/playwright test --grep "private profile opens|cited profile move|profile evidence and sharing"
 
+.PHONY: return-journey-check return-journey-browser-check
+return-journey-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/progress-response.test.ts apps/server/src/progress.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts
+
+return-journey-browser-check:
+	./node_modules/.bin/playwright test --grep "due intake replenishment|Learn shows each due return"
+
 roadmap-receipt:
 	node tools/roadmap-receipt.mjs --write
 

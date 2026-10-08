@@ -12,6 +12,27 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3600]] holds the latest full browser gate: actual warm native readiness reaches
+253.8 ms against the unchanged 250 ms budget. One pack read and 26 shape requests
+remain; no duplicate hydration regression is established. Preserve the failure,
+inspect the bounded request/frame timing and do not call a passing replay a diagnosis.
+
+[[D3598]] is closed locally under accepted return-scheduling §§4/6: the twenty-card
+intake replenishes after dismissal, with separate read-only refresh recovery and
+current-view/focus controls. Five predecessor-red controls, 113 focused cases and
+four actual desktop/touch-phone journeys prove the hidden twenty-first return,
+exact-source start and no repeated dismissal. Final normal tiers pass clean types/build,
+3,723 software, seven performance, 228 content and 197 browser cases, one optional
+Maia skip, zero retries and all 150 input/112 composition cells. The earlier full
+browser arrival failure remains open as D3600; replay success is not diagnosis.
+No scheduling rule, source, endpoint, mastery or release change.
+
+Next independent boundary [[D3599]]: the dismissal POST can commit before its
+response is lost. Current failure copy then wrongly claims the card remains
+pending, and a second POST cannot dismiss a non-pending schedule. Use the existing
+read-only intake to reconcile before retrying a mutation; prove committed-response
+loss through the real authenticated endpoint. Preserve pending-only storage behavior.
+
 [[D3595]]/[[D3596]] are closed locally under accepted player-style §8: history and habit
 continuations preserve displayed operands and exact contributing moves, refuse changed or
 overlapping reads and offer explicit refresh/retry. Per-card preparation/copy retains current

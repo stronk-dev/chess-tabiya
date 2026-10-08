@@ -29773,6 +29773,32 @@
       "uxItems": [],
       "evidence": "docs/engine-workers.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3598",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d5e1f2960b70fa1b05b55bc4f5511cf0b3d16527a4c1915ebc3c5eb67931afe1",
+      "uxItems": [],
+      "evidence": "tests/browser/return.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3599",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1fea97bd4871dcd190094681470d0c98cd58b3313661614496c73b139166112e",
+      "uxItems": [],
+      "owner": "review-and-return"
+    },
+    {
+      "id": "D3600",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b6de972b36d65dd5f3db416db7386ed1dd98405c4f580a5f09d2686037446dad",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-08"
     }
   ]
 }

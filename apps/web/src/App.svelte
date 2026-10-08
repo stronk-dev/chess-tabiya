@@ -28,7 +28,7 @@
   import { validDistilledDraft } from "./lib/distill-response.js";
   import { validPackDraftIdentity } from "./lib/pack-draft-response.js";
   import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
-  import { progressRecommendationSentence } from "./lib/progress-response.js";
+  import { parseDueQueue, progressRecommendationSentence } from "./lib/progress-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import ProfileScreen from "./lib/ProfileScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
@@ -437,6 +437,10 @@
   let scheduleDismissBusy: string | undefined = $state();
   let scheduleDismissErrors: Record<string, string> = $state({});
   let scheduleDismissGeneration = 0;
+  let dueRefreshBusy = $state(false);
+  let dueRefreshError: string | undefined = $state();
+  let dueRefreshGeneration = 0;
+  const dismissedDueIds = new Set<string>();
 
   let activeRepertoireGap = $derived.by(() => {
     const runId=session.runState?.run.id;
@@ -773,21 +777,72 @@
     }
   }
 
+  function dueRequestIsCurrent(generation: number): boolean {
+    return appMounted && route.name === "learn" && generation === loadGeneration;
+  }
+
+  async function refreshDueQueue(): Promise<void> {
+    if (dueRefreshBusy || route.name !== "learn") return;
+    const generation = loadGeneration;
+    const action = ++dueRefreshGeneration;
+    dueRefreshBusy = true;
+    dueRefreshError = undefined;
+    try {
+      if (api.dueProgress === undefined) throw new Error("unavailable");
+      const page = await api.dueProgress();
+      if (!dueRequestIsCurrent(generation) || action !== dueRefreshGeneration) return;
+      const next = parseDueQueue(page);
+      if (next.schedules.some((schedule) => dismissedDueIds.has(schedule.id))) throw new Error("Dismissed return in refreshed intake");
+      dueSchedules = next.schedules;
+      dueWaiting = next.waiting;
+      dueIntakeLimit = next.intakeLimit;
+    } catch {
+      if (dueRequestIsCurrent(generation) && action === dueRefreshGeneration) {
+        dueRefreshError = "The return was dismissed, but your remaining due returns could not be refreshed. Retry loading returns; nothing else was dismissed.";
+      }
+    } finally {
+      if (dueRequestIsCurrent(generation) && action === dueRefreshGeneration) dueRefreshBusy = false;
+    }
+  }
+
+  async function retryDueQueue(button: HTMLButtonElement): Promise<void> {
+    const generation = loadGeneration;
+    const restoreFocus = document.activeElement === button;
+    const refreshed = refreshDueQueue();
+    await tick();
+    if (restoreFocus && dueRequestIsCurrent(generation) && document.activeElement === document.body) {
+      document.getElementById("due-title")?.focus();
+    }
+    await refreshed;
+  }
+
   async function dismissDueSchedule(schedule:ProgressSchedule):Promise<void>{
-    if(scheduleDismissBusy!==undefined)return;
+    if(scheduleDismissBusy!==undefined || dueRefreshBusy || dueRefreshError !== undefined)return;
     const generation=loadGeneration;
     const action=++scheduleDismissGeneration;
+    const focusedCard = document.activeElement?.closest('section[aria-labelledby="due-title"] article');
     scheduleDismissBusy=schedule.id;
     const { [schedule.id]: _previous, ...remainingErrors }=scheduleDismissErrors;
     scheduleDismissErrors=remainingErrors;
     try{
       if(api.dismissSchedule===undefined)throw new Error("unavailable");
       await api.dismissSchedule(schedule.id);
-      if(generation===loadGeneration&&route.name==="learn"&&action===scheduleDismissGeneration){
+      if(dueRequestIsCurrent(generation)&&action===scheduleDismissGeneration){
+        const restoreFocus = focusedCard !== null && focusedCard !== undefined
+          && (focusedCard.contains(document.activeElement) || document.activeElement === document.body);
+        dismissedDueIds.add(schedule.id);
         dueSchedules=dueSchedules.filter((item)=>item.id!==schedule.id);
+        // Refresh only the bounded intake, not the whole Learn page or its recorded attempts.
+        const refreshed = refreshDueQueue();
+        scheduleDismissBusy = undefined;
+        await tick();
+        if (restoreFocus && dueRequestIsCurrent(generation) && document.activeElement === document.body) {
+          document.getElementById("due-title")?.focus();
+        }
+        await refreshed;
       }
     }catch{
-      if(generation===loadGeneration&&route.name==="learn"&&action===scheduleDismissGeneration){
+      if(dueRequestIsCurrent(generation)&&action===scheduleDismissGeneration){
         scheduleDismissErrors={...scheduleDismissErrors,[schedule.id]:"This return could not be dismissed. It remains in your queue; try again."};
       }
     }finally{
@@ -929,6 +984,10 @@
         scheduleDismissGeneration += 1;
         scheduleDismissBusy=undefined;
         scheduleDismissErrors={};
+        dueRefreshGeneration += 1;
+        dueRefreshBusy=false;
+        dueRefreshError=undefined;
+        dismissedDueIds.clear();
         assignmentBusy = undefined;
         assignmentActionError = undefined;
         repertoireMutationBusy=undefined;
@@ -2913,11 +2972,13 @@
         </div>
       </section>
       <section aria-labelledby="due-title">
-        <h2 id="due-title">Due now</h2>
+        <h2 id="due-title" tabindex="-1">Due now</h2>
         {#if dueSchedules.some((schedule) => schedule.frequency !== null)}<p class="honest">{DUE_FREQUENCY_ORDER_NOTE}</p>{/if}
-        {#if dueWaitingSentence(dueWaiting, dueIntakeLimit)}<p class="honest" role="status">{dueWaitingSentence(dueWaiting, dueIntakeLimit)}</p>{/if}
+        {#if dueRefreshBusy}<p id="due-refresh-busy" role="status">Updating your due returns…</p>
+        {:else if dueRefreshError}<p id="due-refresh-error" role="alert">{dueRefreshError}</p><button type="button" onclick={(event) => void retryDueQueue(event.currentTarget)}>Retry loading returns</button>
+        {:else if dueWaitingSentence(dueWaiting, dueIntakeLimit)}<p class="honest" role="status">{dueWaitingSentence(dueWaiting, dueIntakeLimit)}</p>{/if}
         <div class="item-list">
-          {#each dueSchedules as schedule}
+          {#each dueSchedules as schedule (schedule.id)}
             <article>
               <div>
                 <h3>{schedule.packId === null ? "Position rehearsal" : packTitle(schedule.packId)}</h3>
@@ -2925,15 +2986,15 @@
                 {#if dueFrequencySentence(schedule.frequency)}<p class="honest">{dueFrequencySentence(schedule.frequency)}</p>{/if}
               </div>
               <div class="row-actions">
-                <button class="primary" type="button" disabled={session.busy||scheduleDismissBusy!==undefined||(schedule.packId===null&&schedule.sourceRunId===null)} aria-describedby={session.busy?"return-action-busy":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:schedule.packId===null&&schedule.sourceRunId===null?`due-source-missing-${schedule.id}`:undefined} onclick={() => void startDueSchedule(schedule)}>Start due attempt</button>
+                <button class="primary" type="button" disabled={session.busy||dueRefreshBusy||dueRefreshError!==undefined||scheduleDismissBusy!==undefined||(schedule.packId===null&&schedule.sourceRunId===null)} aria-describedby={session.busy?"return-action-busy":dueRefreshBusy?"due-refresh-busy":dueRefreshError!==undefined?"due-refresh-error":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:schedule.packId===null&&schedule.sourceRunId===null?`due-source-missing-${schedule.id}`:undefined} onclick={() => void startDueSchedule(schedule)}>Start due attempt</button>
                 {#if schedule.packId === null && schedule.sourceRunId === null}<span id={`due-source-missing-${schedule.id}`} class="honest">This position return has no surviving source run.</span>{/if}
                 {#if schedule.sourceRunId}<button type="button" onclick={() => navigate(routePath({ name: "run", runId: schedule.sourceRunId! }))}>Open source</button>{/if}
-                <button type="button" disabled={session.busy||scheduleDismissBusy!==undefined} aria-describedby={session.busy?"return-action-busy":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:undefined} onclick={()=>void dismissDueSchedule(schedule)}>Dismiss</button>
+                <button type="button" disabled={session.busy||dueRefreshBusy||dueRefreshError!==undefined||scheduleDismissBusy!==undefined} aria-describedby={session.busy?"return-action-busy":dueRefreshBusy?"due-refresh-busy":dueRefreshError!==undefined?"due-refresh-error":scheduleDismissBusy!==undefined?`schedule-dismiss-busy-${scheduleDismissBusy}`:undefined} onclick={()=>void dismissDueSchedule(schedule)}>Dismiss</button>
               </div>
               {#if scheduleDismissBusy===schedule.id}<p id={`schedule-dismiss-busy-${schedule.id}`} role="status">Dismissing this return…</p>{/if}
               {#if scheduleDismissErrors[schedule.id]}<p role="alert">{scheduleDismissErrors[schedule.id]}</p>{/if}
             </article>
-          {:else}<p>{dueWaiting > 0 ? "Clear a return to see the next waiting one." : "Nothing is due yet. Played attempts create this queue."}</p>{/each}
+          {:else}{#if !dueRefreshBusy && dueRefreshError === undefined}<p>Nothing is due yet. Played attempts create this queue.</p>{/if}{/each}
         </div>
       </section>
       {#if difficultRoots.roots.length > 0}

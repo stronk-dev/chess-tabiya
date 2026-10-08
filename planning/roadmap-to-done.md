@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3597]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3600]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,16 @@ No new style judgement, public share, snapshot protocol or whole learner-model p
 [[D3597]] reconciles stale engine/bot documentation with the existing actual Maia appliance
 closeout and current browser opponent-ply route; calibration and personality proof remain open.
 
+[[D3598]] is closed locally under accepted return-scheduling §§4/6: a successful due-card
+dismissal now refreshes the existing server-owned twenty-card intake, including its waiting count.
+Failed or invalid reads retain the successful dismissal and expose a read-only retry instead of
+stranding hidden returns; keyed cards preserve keyboard focus and departed reads cannot overwrite
+a later view. Five predecessor-red controls, all 113 focused return cases and four actual
+desktop/touch-phone twenty-one-position journeys pass, including exact-source start and failed-read
+recovery without another dismissal. Final normal tiers pass as recorded below. [[D3599]] separately
+owns a lost dismissal response; it is not covered by successful-dismissal replenishment.
+No scheduling rule, source, schema, official content or whole journey milestone is promoted.
+
 Previous provider repair ([[D3594]]) is closed locally: cancelled requests waiting for an upstream
 slot detach without disturbing its owner, elapsed admission cannot acquire a slot, and current
 circuit/generation/shutdown authority is rechecked before dispatch. Four predecessor-red controls,
@@ -92,21 +102,27 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal gates pass:** clean types/build, 3,717 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,723 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-193 browser cases (128 smoke, five content, 59 matrix, one packaged-default). One existing
+197 browser cases (132 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-The complete sequential normal command exits zero. Warm native arrival in this replay
-is median 90.8 ms / p95 115.5 ms against the unchanged 250 ms budget. This is local verification,
-not a new GitHub or native release-image result.
+The first sequence stopped at this batch's missing roadmap RFC anchor, corrected before normal
+governance/content passed. The first full browser run then failed warm native arrival at 253.8 ms
+against 250 ms ([[D3600]]). An unchanged-source complete browser replay exits zero, with native
+median 104.0 ms / p95 131.3 ms; that is not a diagnosis or repair of the original failure.
+No product/test source or budget changed between those browser runs. This is local verification,
+not a new GitHub, native release-image or readiness-to-push result.
 
 [[D3591]] remains open: the earlier full run measured 328.466431 ms maximum event-loop
 delay against the unchanged 250 ms limit. Its diagnostic replay measured 59.736063 ms;
-the latest full performance tier measures 18.169855 ms, p95 11.296767 ms and maximum HTTP probe
+a subsequent full performance replay measured 18.169855 ms, p95 11.296767 ms and maximum HTTP probe
 16.514125 ms, with four renewals and publication at 4,159 ms. Bounded GC and main-thread
 CPU/cycle context is available, but the original stall has not recurred or been attributed.
 A green replay does not establish its cause or close it. Earlier failures remain in the log;
 no release promotion or readiness-to-push claim follows.
+[[D3600]] likewise remains open despite passing arrival replays. Its original sample retained
+one pack read and 26 shape requests, so duplicate hydration has not returned; the bounded timing
+aggregates do not identify why that sample exceeded the unchanged budget.
 
 Previous engine checkpoint ([[D3588]]/[[D3589]]): failed engine children can no longer supply a
 replacement's identity/options/search or be reused by queued work. Shutdown retains its

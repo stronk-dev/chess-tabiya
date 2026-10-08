@@ -120,6 +120,15 @@ retry, and cannot mutate a newly loaded Learn route after departure. Due and ret
 through the run controller's single-flight lifecycle and now expose its pending state to assistive
 technology while their controls are disabled.
 
+After a successful dismissal, Learn reads the existing bounded due endpoint again, so a waiting
+return becomes reachable without leaving the page. The refreshed intake replaces the displayed
+page and its waiting count; it does not append a second batch or change any schedule. While it
+loads, the page states that it is updating. A failed or invalid read keeps the successful dismissal
+and the remaining cards, with **Retry loading returns** rather than another dismissal. That retry
+is read-only. Changed-route and unmounted completions cannot install cards or errors. Cards are
+keyed by their schedule identities; removing a keyboard-focused card or retry button returns focus
+to the Due now heading without taking focus from another control the learner has selected.
+
 Due cards name the variation (the pack's retry-variant kind in words, or a fresh opponent seed),
 the due date with the root's standing word beside it and the fixed explanation *"based on how many
 spaced returns you've held"*, and, when the corpus answered, the population count that ordered them. When intake holds work back,
