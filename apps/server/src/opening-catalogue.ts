@@ -175,7 +175,10 @@ function hasExactKeys(value: Record<string, unknown>, keys: readonly string[]): 
   return Object.keys(value).sort().join("\0") === [...keys].sort().join("\0");
 }
 
-export function compileLoadedOpeningCatalogue(value: unknown): CompiledOpeningCatalogue {
+export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCatalogue {
+  // A validated caller-owned row is not durable authority: the caller could mutate it later.
+  // Take ownership before validation, then freeze every artifact layer before exposing the maps.
+  const value: unknown = structuredClone(input);
   if (!isRecord(value) || !hasExactKeys(value, ["source", "namedEndpoints", "pathMembership", "digest"]) || !isRecord(value.source) || !hasExactKeys(value.source, ["id", "commit", "retrievedAt", "licence", "files", "compilerFiles", "compilerDigest"]) || !Array.isArray(value.namedEndpoints) || !Array.isArray(value.pathMembership) || !Array.isArray(value.source.files) || !Array.isArray(value.source.compilerFiles) || typeof value.digest !== "string" || !/^sha256:[a-f0-9]{64}$/.test(value.digest) || typeof value.source.compilerDigest !== "string") throw new TypeError("Opening catalogue artifact shape is invalid");
   const { digest, ...withoutDigest } = value;
   if (sha256(canonicalizeJson(withoutDigest)) !== digest) throw new RangeError("Opening catalogue artifact digest does not match its bytes");
@@ -194,6 +197,16 @@ export function compileLoadedOpeningCatalogue(value: unknown): CompiledOpeningCa
   }
   if ([...endpoints.keys()].join("\0") !== [...endpoints.keys()].sort((left, right) => left.localeCompare(right)).join("\0") || [...members.keys()].join("\0") !== [...members.keys()].sort((left, right) => left.localeCompare(right)).join("\0")) throw new TypeError("Opening catalogue tables are not canonically sorted");
   const artifact = value as unknown as RuntimeOpeningCatalogue;
+  for (const row of artifact.namedEndpoints) Object.freeze(row);
+  for (const row of artifact.pathMembership) Object.freeze(row);
+  for (const row of artifact.source.files) Object.freeze(row);
+  for (const row of artifact.source.compilerFiles) Object.freeze(row);
+  Object.freeze(artifact.namedEndpoints);
+  Object.freeze(artifact.pathMembership);
+  Object.freeze(artifact.source.files);
+  Object.freeze(artifact.source.compilerFiles);
+  Object.freeze(artifact.source);
+  Object.freeze(artifact);
   const catalogueRef = Object.freeze({ sourceId: OPENING_SOURCE_ID, commit: CHESS_OPENINGS_COMMIT, artifactDigest: digest });
   const observed = (ply: number): void => { if (!Number.isSafeInteger(ply) || ply < 0) throw new TypeError("observedPly must be a non-negative safe integer"); };
   const currentEndpointFor = (positionKey: string, observedPly: number): CurrentOpeningEndpoint => {

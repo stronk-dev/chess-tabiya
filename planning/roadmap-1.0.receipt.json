@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:091fd36ca85f46c35dbfef33ae723ac30acf8fdc662d4c9d7c8b913edfece3ab",
+    "roadmap": "sha256:72995dfbfe002f5702995f788e0065cb3409d939698cf059718634df2f97b193",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:0ce95b1b666963a4d6d3d8f3bd28db65aea227a2e7d67a519941a7aaa352d85e",
+    "workState": "sha256:d2e4c44b054f2ca622d147740ddaebdbce9595730e2022418766902cba2387b3",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 12,
       "blocked": 1064,
-      "done": 1459,
+      "done": 1460,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "Current local verification passes clean types, 3592 software, seven isolated performance and 227 content cases plus downstream software/governance checks. Complete browser tiers pass 114 smoke, five real-content, 59 matrix and one packaged-default case (179 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3575's Campaign sealed/abandoned/deleted-recording journeys pass on desktop and actual-touch phone. Existing account portability, bot replay, Review navigation and warning-actor controls also pass in this run. The first governance refusal caught D3575's missing queue route; the corrected remaining sequence and final closeout governance pass on unchanged product/test code. Prior fixes and failures remain in the append-only log. D3558 and historical engine/application causes remain unlocated. All 1704 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
+        "summary": "Current full sequential normal local verification passes clean types, 3594 software, seven isolated unchanged-budget performance and 227 content cases plus downstream software/governance checks. Complete browser tiers pass 114 smoke, five real-content, 59 matrix and one packaged-default case (179 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3576's detached immutable opening source and predecessor-red mutation controls pass without supplying D3376's missing source authority. D3575's Campaign sealed/abandoned/deleted-recording journeys pass on desktop and actual-touch phone. Existing account portability, bot replay, Review navigation and warning-actor controls also pass in this run. The first governance refusal caught D3575's missing queue route; the corrected remaining sequence and final closeout governance pass on unchanged product/test code. Prior fixes and failures remain in the append-only log. D3558 and historical engine/application causes remain unlocated. All 1704 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -321,9 +321,12 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3561 closes the omitted Review lifecycle release: application shutdown and failed startup cancel and drain the coordinator before storage closes. Pending discovery and late evaluation/line results cannot attach or repump; started attempt counts remain retained. Six predecessor-red native application controls now pass, along with 67 focused Review cases and clean types. D3560's live stored-game boundary remains implemented without replaying collectors during identity checks. D3373's whole Stockfish source remains draft; D3376 opening authority, D3309 Inspector operands and remaining provider/consumer joins stay open. Earlier D3262 research and D3512 lifecycle qualifications remain recorded in the append-only log and cited summaries; no new capture or research completion is claimed. Final sequential normal verification passes clean types, build, governance, 3555 software, seven performance, 227 content and 173 browser cases with one existing optional Maia skip and zero retries; all 150 exact-input and 112 composition cells remain. D3299 no longer requests acceptance of already-landed D921/candidate contracts; the separate process proposal stays unruled. No historical timeout diagnosis, full capability, milestone, remote CI or 1.0 promotion.",
+        "summary": "D3576 reproduces mutable opening source admission: a caller can change the validated endpoint name/ECO/ply without changing its recorded artifact identity. The loader now takes and validates a detached snapshot, then freezes every table, row and source-metadata layer. Two predecessor-red controls now pass alongside all 32 focused opening/phase-source/manifest cases, clean types and build; the compiled catalogue is regenerated by its normal existing command without changing catalogue data. Full sequential normal local verification passes clean types, 3594 software, seven unchanged-budget performance, 227 content and 179 browser cases, one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3560/D3561 recorded-game and Review lifecycle repairs stand. D3376's cross-package opening authority and runtime/Review bindings, D3373's draft Stockfish source, D3309 Inspector operands and remaining provider/consumer joins stay open; the existing author queue explicitly carries the source amendments. No factory is newly available, no new source protocol or content is introduced, and no semantic-validation, whole capability, milestone, historical timeout diagnosis, remote CI or 1.0 promotion follows.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/opening-catalogue.ts",
+          "apps/server/src/opening-catalogue.test.ts",
+          "docs/runtime-opening-identity.md",
           "packages/runtime/src/review-evidence.test.ts",
           "apps/server/src/application-startup-cleanup.test.ts",
           "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md",

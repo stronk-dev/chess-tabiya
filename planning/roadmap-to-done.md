@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3575]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3576]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -57,12 +57,20 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+[[D3576]] closes a reproduced opening-loader mutation bug: validated input and exposed source
+metadata can no longer change the retained lookup. Two predecessor-red controls, all 32 focused
+source/consumer cases and full sequential normal verification pass: clean types, 3,594 software,
+seven unchanged-budget performance, 227 content and 179 browser cases, one optional Maia skip,
+zero retries, all 150 input and 112 composition cells. [[D3376]]'s missing cross-package source
+authority and runtime/Review bindings remain open, now explicitly in the existing author queue.
+No new collector, semantic-validation verdict, official pack or release milestone is claimed.
+
 Campaign history now uses the existing node-history API from sealed map cards, the fresh-seal
 strip and results ([[D3575]]), with a separate unfinished entry after abandonment. Activation
 rechecks and exact response identity prevent dead or crossed navigation; deleted recordings
 leave seals, rewards and abandonment history intact. Fifteen mounted cases, three actual
-campaign application cases and desktop/touchscreen-phone journeys pass. Current local
-verification passes clean types, 3,592 software, seven performance, 227 content and 179 browser
+campaign application cases and desktop/touchscreen-phone journeys pass. That Campaign checkpoint's
+local verification passed clean types, 3,592 software, seven performance, 227 content and 179 browser
 cases, one optional Maia skip, zero retries, all 150 input cells and 112 composition cells.
 The first governance run correctly refused this item's missing queue route; the corrected
 governance/content/browser sequence exits zero on unchanged product code. This opens the
@@ -184,7 +192,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,324 ledger rows** (1,459 done, 161 refused, 1,704 live,
+(271 completed, 24 retired, 274 live); **3,325 ledger rows** (1,460 done, 161 refused, 1,704 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,064 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

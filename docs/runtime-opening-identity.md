@@ -46,6 +46,12 @@ The production operation validates the ply and normalizes the FEN once, then rea
 maps. Individual endpoint and membership methods remain available for consumers that need only one
 projection.
 
+Loading takes a detached snapshot of the artifact, validates that snapshot, and freezes both
+tables, their rows and all source metadata. Mutating a retained parser input cannot change a
+subsequent lookup; returned artifact objects cannot be edited in place. `make opening-source-check`
+exercises those boundaries and the existing phase-source and manifest consumers. This does not
+supply the separate cross-package evidence authority still required by D3376.
+
 The required performance test keeps catalogue load below 250 ms wall time and production lookup
 work below 50 µs CPU time per position at the p95 of bounded batches over all 6,991 recorded sample
 positions. CPU time deliberately excludes periods when a shared CI runner has descheduled the Node

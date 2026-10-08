@@ -94,6 +94,11 @@ not the separate complete whole-game Review journey or an official educational c
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
 2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   [[D3576]] closes the already-specified immutable opening loader with a detached validated
+   snapshot, frozen source metadata and predecessor-red mutation controls. Full sequential
+   local gates pass. [[D3376]]'s cross-package source-authority amendment and runtime/Review
+   bindings remain open, explicitly routed in `planning/rfc-drafting-queue.md`; no factory
+   becomes newly available from this repair.
    [[D3564]] measures an orientation contract gap on real retained FEN/UCI operands;
    the narrow author/review handoff is in `design/research/semantic-validation-closure.md`
    and `planning/rfc-drafting-queue.md`. Do not register more orientation authorities on

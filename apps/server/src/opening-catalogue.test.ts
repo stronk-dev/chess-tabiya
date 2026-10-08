@@ -31,6 +31,51 @@ const IMPORTED = new URL("../../../tools/r2-selection-harness/imported-sample.pg
 const E4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
 
 describe("runtime opening catalogue", () => {
+  it("owns a detached snapshot instead of trusting later mutations of the validated input", async () => {
+    const raw = JSON.parse(await readFile(ARTIFACT, "utf8")) as RuntimeOpeningCatalogue;
+    const catalogue = compileLoadedOpeningCatalogue(raw);
+    const before = catalogue.openingIdentity(E4, 1);
+    if (before.currentEndpoint.kind !== "matched") throw new TypeError("named fixture did not match");
+    const positionKey = before.currentEndpoint.positionKey;
+    const bytes = canonicalizeJson(catalogue.artifact);
+    const endpoint = raw.namedEndpoints.find((row) => row.key === positionKey)!;
+
+    Object.assign(endpoint, { name: "Injected opening", eco: "A99", sourcePly: 999 });
+    Object.assign(raw.source, { commit: "caller-replaced-source" });
+    Object.assign(raw.pathMembership[0]!, { descendantEndpointCount: 999_999 });
+
+    expect(catalogue.openingIdentity(E4, 1)).toEqual(before);
+    expect(canonicalizeJson(catalogue.artifact)).toBe(bytes);
+    expect(catalogue.artifact).not.toBe(raw);
+  });
+
+  it("protects the returned artifact, its nested source and both tables from mutation", async () => {
+    const loaded = await loadOpeningCatalogue(ARTIFACT);
+    if (loaded.kind !== "available") throw new TypeError("fixture catalogue unavailable");
+    const catalogue = loaded.catalogue;
+    const before = catalogue.openingIdentity(E4, 1);
+    if (before.currentEndpoint.kind !== "matched") throw new TypeError("named fixture did not match");
+    const positionKey = before.currentEndpoint.positionKey;
+    const bytes = canonicalizeJson(catalogue.artifact);
+    const endpoint = catalogue.artifact.namedEndpoints.find((row) => row.key === positionKey)!;
+    const mutations = [
+      () => Object.assign(endpoint, { name: "Injected opening" }),
+      () => Object.assign(catalogue.artifact, { digest: "sha256:replaced" }),
+      () => Object.assign(catalogue.artifact.source, { commit: "replaced" }),
+      () => Object.assign(catalogue.artifact.source.files[0]!, { bytes: 1 }),
+      () => Object.assign(catalogue.artifact.source.compilerFiles[0]!, { path: "replaced" }),
+      () => Object.assign(catalogue.artifact.pathMembership[0]!, { descendantEndpointCount: 999_999 }),
+      () => Object.assign(catalogue.artifact.namedEndpoints, { 0: endpoint }),
+      () => Object.assign(catalogue.artifact.pathMembership, { 0: catalogue.artifact.pathMembership[0] }),
+      () => Object.assign(catalogue.artifact.source.files, { 0: catalogue.artifact.source.files[0] }),
+      () => Object.assign(catalogue.artifact.source.compilerFiles, { 0: catalogue.artifact.source.compilerFiles[0] }),
+    ];
+
+    for (const mutate of mutations) expect(mutate).toThrow(TypeError);
+    expect(catalogue.openingIdentity(E4, 1)).toEqual(before);
+    expect(canonicalizeJson(catalogue.artifact)).toBe(bytes);
+  });
+
   it("keeps exact identity separate from path membership at named and unnamed fan-out keys", async () => {
     const loaded = await loadOpeningCatalogue(ARTIFACT);
     expect(loaded.kind).toBe("available");

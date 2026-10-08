@@ -2,6 +2,30 @@
 
 ## Current narrow author handoff — 2026-10-08
 
+- **[[D3376]] — installed opening source → sole factories → actual Review.** The server
+  catalogue is present, but both point factories always return `artifact_missing`, the
+  history factory always returns `input_abstained`, and Review's opening adapter always
+  returns `provider_off`. Author and review the bounded source-authority amendment before
+  learner bindings. Specify one installed-source authority, its cross-package data contract
+  and any required shared-schema registration; neither caller-labelled endpoint objects nor
+  a caller-supplied lookup callback establishes catalogue truth. Keep exact current endpoint,
+  catalogue-path membership and deepest recorded endpoint separate. Bind point lookups to
+  the exact recorded node and historical derivation to the authorised recorded prefix; do
+  not substitute the active cursor or carry a stale historical name into current theory.
+  Required controls include genuine installed-catalogue success through the sole factories
+  and real Review composition, unnamed path membership, missing/corrupt data, substituted
+  source/subject, copied/forged authority and no repeated catalogue load per node. The
+  existing 250 ms load / 50 µs lookup budgets remain; this introduces no bot book, theory
+  prose, ranking or chess judgement. [[D3576]] supplies only the already-specified immutable
+  server snapshot, not this authority or any newly available learner evidence.
+
+- **[[D3373]] — fresh-review the existing durable Stockfish draft.** Review
+  `rfc/durable-stockfish-source.md` against the actual completed-task worker and durable
+  parsers. Preserve terminating selection separately from PV, configured MultiPV and exact
+  historical/modern replay. Resolve the provisional migration order from real dependencies
+  before implementation; the current position behind native ratings is a draft claim, not
+  a demonstrated technical dependency or permission to reorder other claims silently.
+
 - **D3564 — semantic-validation-authority §4.1 input operands.** Review the measured
   proposal in `design/research/semantic-validation-closure.md` before adding orientation
   authorities. Three closed input-relative rules must bind retained FEN/UCI leaves to each

@@ -10,6 +10,7 @@ SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfi
 export SF_CMD
 
 .PHONY: longitudinal-projector-check
+.PHONY: opening-source-check
 .PHONY: play-composition-hint-check play-composition-max-load-check play-composition-client-check play-composition-matrix-contract
 
 .PHONY: foundation-source-author-audit foundation-source-author-repair tablebase-census-contract tablebase-census-check phase-classifier-census phase-band-census phase-source-composition-census phase-source-composition-author-contract phase-source-composition-fresh-review phase-source-composition-author-repair endgame-technique-applicability-census endgame-method-path-contract endgame-setup-reachability-contract endgame-setup-convention-validation bot-trait-screen-contract bot-trait-screen bot-endgame-trait-screen-contract bot-endgame-trait-screen bot-human-endgame-reference-contract bot-human-endgame-reference-population bot-human-endgame-reference bot-human-endgame-reference-report
@@ -1921,6 +1922,9 @@ evidence-value-authority-route-map:
 evidence-value-authority-route-map-update:
 	./node_modules/.bin/esbuild tools/d2144-evidence-value-authority-route-map/route-map.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs
 	node tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs --write
+
+opening-source-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/opening-catalogue.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts
 
 opening-catalogue: build
 	node apps/server/dist/opening-catalogue-build.js
