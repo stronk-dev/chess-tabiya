@@ -2,7 +2,7 @@
   // rfc/review-map.md: the learner-facing whole-game Review Map. Every authored string on this
   // surface is a registered template (`reviewText`); everything else is payload data rendered as is.
   import { parsePresentationReceipt, reviewText } from "@chess-tabiya/runtime";
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
 
   import type { ReviewAnalysisPage, ReviewMap, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
@@ -29,6 +29,7 @@
 
   type RetryFailure = "retry.failed.board_held" | "retry.failed.forbidden" | "retry.failed.other";
   let selectedId = $state<string | undefined>();
+  let moveList = $state<HTMLOListElement>();
   let retrying = $state<string | undefined>();
   let retryError = $state<{ readonly key: string; readonly id: RetryFailure } | undefined>();
   let forbidden = $state(false);
@@ -58,6 +59,7 @@
   const initial = $derived(review.rows.find((row) => row.nodeId === initialNodeId)?.nodeId ?? review.moments.find((moment) => review.rows.some((row) => row.nodeId === moment.nodeId))?.nodeId ?? review.rows[0]?.nodeId);
   const selectedIndex = $derived(review.rows.findIndex((row) => row.nodeId === (selectedId ?? initial)));
   const selected = $derived(selectedIndex < 0 ? undefined : review.rows[selectedIndex]);
+  const selectedNodeId = $derived(selected?.nodeId);
   const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));
   /** rfc/review-evidence-compiler.md: the typed packet components, re-sealed client-side by the exact parser. */
   const packetItems = $derived(selected === undefined ? [] : parsePresentationReceipt(selected.packet));
@@ -118,9 +120,48 @@
     }
   }
 
+  function selectedMoveRow(nodeId: string): HTMLLIElement | undefined {
+    return [...(moveList?.children ?? [])].find((row): row is HTMLLIElement => row instanceof HTMLLIElement && row.dataset.nodeId === nodeId);
+  }
+
+  /** Reveal only inside the bounded list; scrollIntoView would also move the page and board. */
+  function revealMove(nodeId: string): void {
+    const list = moveList;
+    const row = selectedMoveRow(nodeId);
+    if (list === undefined || row === undefined || list.clientHeight === 0) return;
+    const top = list.getBoundingClientRect().top + list.clientTop;
+    const bottom = top + list.clientHeight;
+    const rect = row.getBoundingClientRect();
+    const offset = rect.top < top || rect.height > list.clientHeight ? rect.top - top : Math.max(0, rect.bottom - bottom);
+    if (offset !== 0) list.scrollTop += offset;
+  }
+
+  $effect(() => {
+    const nodeId = selectedNodeId;
+    if (nodeId === undefined || moveList === undefined) return;
+    let current = true;
+    void tick().then(() => { if (current && mounted) revealMove(nodeId); });
+    return () => { current = false; };
+  });
+
   function onListKey(event: KeyboardEvent): void {
-    if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); step(1); }
-    if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    const focusedId = (event.currentTarget as HTMLButtonElement).closest<HTMLLIElement>(".move-row")?.dataset.nodeId;
+    const focusedIndex = review.rows.findIndex((row) => row.nodeId === focusedId);
+    const from = focusedIndex < 0 ? selectedIndex : focusedIndex;
+    let index: number;
+    switch (event.key) {
+      case "ArrowDown": case "ArrowRight": index = from + 1; break;
+      case "ArrowUp": case "ArrowLeft": index = from - 1; break;
+      case "Home": index = 0; break;
+      case "End": index = review.rows.length - 1; break;
+      default: return;
+    }
+    const row = review.rows[Math.max(0, Math.min(review.rows.length - 1, index))];
+    if (row === undefined) return;
+    event.preventDefault();
+    select(row.nodeId);
+    selectedMoveRow(row.nodeId)?.querySelector<HTMLButtonElement>(".move-select")?.focus({ preventScroll: true });
   }
 
   function failureOf(error: unknown): RetryFailure {
@@ -278,7 +319,7 @@
       <h2 id="review-moves-title">{reviewText("moves.title")}</h2>
       <p class="muted">{reviewText("moves.caption")}</p>
       {#if !retryAvailable}<p id="review-retry-unavailable" class="retry-unavailable" role="note">{forbidden ? reviewText("retry.failed.forbidden") : reviewText("retry.unavailable.read_only")}</p>{/if}
-      <ol class="move-list" aria-label={reviewText("moves.label")}>
+      <ol bind:this={moveList} class="move-list" aria-label={reviewText("moves.label")}>
         {#each review.rows as row (row.nodeId)}
           <li class="move-row" class:selected={row.nodeId === selected?.nodeId} data-node-id={row.nodeId} data-side={row.side}>
             <button type="button" class="move-select" aria-current={row.nodeId === selected?.nodeId ? "true" : undefined} onclick={() => select(row.nodeId)} onkeydown={onListKey}>

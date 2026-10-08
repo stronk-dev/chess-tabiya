@@ -459,6 +459,93 @@ test("review map remainder: eval graph by keyboard, explicit Analyze withheld du
   expect(graphAfter.graph.nodes.map((node) => node.moveUci)).toEqual(expect.arrayContaining(["e2e4", "e7e5", "g1f3", "b8c6", "f1c4"]));
 });
 
+for (const projection of ["desktop", "@mobile phone"]) {
+  test(`${projection} Review navigation keeps keyboard focus, list visibility and the original game through Retry and Compare`, async ({ page }) => {
+    await page.getByRole("link", { name: "Review" }).click();
+    await page.getByLabel("PGN").fill(`[Event "Review navigation"]
+[White "Navigation White"]
+[Black "Navigation Black"]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Nb8 10. d4 Nbd7 1-0`);
+    await page.getByRole("button", { name: "Build game story" }).click();
+    await expect(page).toHaveURL(/\/review\/game\/import-/u);
+    const runId = page.url().split("/").at(-1)!;
+    const graph = async (): Promise<RunGraph> => {
+      const response = await page.request.get(`/runs/${runId}/graph`);
+      expect(response.ok()).toBe(true);
+      return (await response.json() as { graph: RunGraph }).graph;
+    };
+    const events = async (): Promise<DrillRun["events"]> => {
+      const response = await page.request.get(`/runs/${runId}/events?sinceSeq=0`);
+      expect(response.ok()).toBe(true);
+      return (await response.json() as { events: DrillRun["events"] }).events;
+    };
+    const original = await graph();
+    const originalEvents = await events();
+    const list = page.getByRole("list", { name: "Move list", exact: true });
+    const moves = list.locator(".move-select");
+    await expect(moves).toHaveCount(20);
+    await moves.first().click();
+    const pageScroll = await page.evaluate(() => window.scrollY);
+    // A keyboard gesture reveals only the list's row, not a distant page section.
+    await page.keyboard.press("End");
+    await expect(moves.last()).toBeFocused();
+    await expect(moves.last()).toHaveAttribute("aria-current", "true");
+    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(pageScroll);
+    const last = await moves.last().boundingBox();
+    const bounds = await list.boundingBox();
+    expect(last!.y).toBeGreaterThanOrEqual(bounds!.y);
+    expect(last!.y + last!.height).toBeLessThanOrEqual(bounds!.y + bounds!.height + 1);
+    await page.keyboard.press("Home");
+    await expect(moves.first()).toBeFocused();
+    await expect(moves.first()).toHaveAttribute("aria-current", "true");
+    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(0);
+    for (const key of ["ArrowRight", "ArrowDown", "ArrowUp", "ArrowLeft"]) await page.keyboard.press(key);
+    await expect(moves.first()).toBeFocused();
+
+    // Selecting the far graph point updates the list without stealing graph focus.
+    const points = page.getByRole("group", { name: /^Evaluation graph, one point per move/u }).getByRole("button");
+    await points.last().focus();
+    await page.keyboard.press("Enter");
+    await expect(points.last()).toBeFocused();
+    await expect(moves.last()).toHaveAttribute("aria-current", "true");
+    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    const browsed = await graph();
+    assertRecordedNodesPreserved(original.nodes, browsed.nodes);
+    assertOnlyEvidenceAppended(originalEvents, await events());
+    expect(browsed.branches).toEqual(original.branches);
+    expect(browsed.activeCursor).toEqual(original.activeCursor);
+
+    // The next Tab still reaches this row's real action, not an old selected move.
+    await moves.first().click();
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowRight");
+    await expect(moves.nth(2)).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Retry from before move 2 (Nf3)" })).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
+    const board = page.locator(".board-frame").getByLabel("Chessboard", { exact: true });
+    await expect(board).toBeVisible();
+    await move(page, "f1", "c4", "white", board);
+    await expect.poll(async () => (await graph()).nodes.some((node) => node.moveUci === "f1c4")).toBe(true);
+    const retried = await graph();
+    const originalIds = new Set(original.nodes.map((node) => node.id));
+    assertRecordedNodesPreserved(original.nodes, retried.nodes.filter((node) => originalIds.has(node.id)));
+    expect(retried.branches.length).toBeGreaterThan(original.branches.length);
+
+    await page.goto(`/review/game/${runId}`);
+    await expect(page.getByRole("heading", { name: "Navigation White – Navigation Black" })).toBeVisible();
+    await page.getByRole("button", { name: "Compare the reviewed line and 1 more from before move 2 (Nf3)" }).click();
+    await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
+    const compared = await graph();
+    assertRecordedNodesPreserved(original.nodes, compared.nodes.filter((node) => originalIds.has(node.id)));
+    expect(compared.nodes.some((node) => node.moveUci === "f1c4")).toBe(true);
+  });
+}
+
 test("Guided Nudge after 1.e4 retains real consequences without unchanged king-edge facts", async ({ page }) => {
   await chooseBot(page, "human-baseline.1400@1");
   await page.getByRole("button", { name: "Start and keep the game" }).click();

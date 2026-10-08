@@ -197,7 +197,12 @@ evaluation job, writes no event and persists no grade.
 - **Move list.** Every ply of the line, with number, SAN and side. SAN is regenerated from the
   legal move, so third-party annotation glyphs, NAGs and comments never reach this surface (the
   import record has not stored them since [[D959]]; a record imported before that fix may still carry
-  them in its stored PGN).
+  them in its stored PGN). Arrow keys select and focus the adjacent move; Home/End select and focus
+  the first/last move. Navigation starts from the focused row even when Tab reached it without
+  selecting it. Browser-modified shortcuts and ordinary Tab traversal remain unchanged. Selection
+  from the graph, moments or board controls reveals the row inside the bounded list without moving
+  the page or taking focus from that control. Browsing does not move, rewind or fork the game;
+  Retry and Compare remain separate explicit actions.
 - **Grades.** Each move is graded from the mover's side by the `derived.grade.move_quality@1`
   producer — the shipped grader's only production caller — on the `report` ladder (context
   `imported_analysis` for imports, `review` for native runs) from the two recorded evaluations

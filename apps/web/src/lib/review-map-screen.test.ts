@@ -61,6 +61,97 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it("moves keyboard focus with the selected move, supports first/last, and does not retry while browsing", async () => {
+    const review = payload({ plies: 20 });
+    const onRetry = vi.fn(async () => {});
+    const component = render(review, onRetry);
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>(".move-select")];
+    const selected = (): string | null => document.querySelector(".move-row.selected")!.getAttribute("data-node-id");
+    buttons[0]!.click();
+    buttons[0]!.focus();
+    await tick();
+    for (const [key, index] of [["ArrowDown", 1], ["ArrowRight", 2], ["End", 19], ["ArrowRight", 19], ["ArrowUp", 18], ["ArrowLeft", 17], ["Home", 0], ["ArrowLeft", 0]] as const) {
+      const event = new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true });
+      document.activeElement!.dispatchEvent(event);
+      await tick();
+      expect(event.defaultPrevented, key).toBe(true);
+      expect(selected(), key).toBe(review.rows[index]!.nodeId);
+      expect(document.activeElement, key).toBe(buttons[index]);
+      expect(buttons[index]!.getAttribute("aria-current"), key).toBe("true");
+    }
+    const otherKey = new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true });
+    buttons[0]!.dispatchEvent(otherKey);
+    expect(otherKey.defaultPrevented).toBe(false);
+    // Tab can reach a different move without selecting it; arrows start at that focused row.
+    buttons[5]!.focus();
+    buttons[5]!.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true, cancelable: true }));
+    await tick();
+    expect(selected()).toBe(review.rows[6]!.nodeId);
+    expect(document.activeElement).toBe(buttons[6]);
+    for (const modifier of ["altKey", "ctrlKey", "metaKey"]) {
+      const event = new KeyboardEvent("keydown", { key: "Home", [modifier]: true, bubbles: true, cancelable: true });
+      buttons[6]!.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(false);
+      expect(selected()).toBe(review.rows[6]!.nodeId);
+    }
+    expect(onRetry).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("reveals a selected move inside its list without scrolling the page or stealing graph focus", async () => {
+    const review = payload({ plies: 20 });
+    const component = render(review);
+    const list = document.querySelector<HTMLOListElement>(".move-list")!;
+    const buttons = [...list.querySelectorAll<HTMLButtonElement>(".move-select")];
+    buttons[0]!.click();
+    await tick();
+    const lastRow = buttons.at(-1)!.closest("li")!;
+    const rect = (top: number, height: number): DOMRect => ({ top, bottom: top + height, height, left: 0, right: 300, width: 300, x: 0, y: top, toJSON: () => ({}) });
+    vi.spyOn(list, "getBoundingClientRect").mockReturnValue(rect(200, 160));
+    Object.defineProperty(list, "clientHeight", { configurable: true, value: 160 });
+    vi.spyOn(lastRow, "getBoundingClientRect").mockReturnValue(rect(600, 70));
+    const scrollPage = vi.spyOn(window, "scrollTo");
+    const graphPoint = [...document.querySelectorAll<HTMLElement>(".eval-graph .point")].at(-1)!;
+    graphPoint.focus();
+    graphPoint.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await tick();
+    await vi.waitFor(() => expect(list.scrollTop).toBeGreaterThan(0));
+    expect(document.activeElement).toBe(graphPoint);
+    expect(scrollPage).not.toHaveBeenCalled();
+    // Previous/Next controls change the selected row, not the control's focus.
+    const previous = [...document.querySelectorAll<HTMLButtonElement>(".nav button")][0]!;
+    previous.focus();
+    previous.click();
+    await tick();
+    expect(document.activeElement).toBe(previous);
+    expect(document.querySelector(".move-row.selected")!.getAttribute("data-node-id")).toBe(review.rows.at(-2)!.nodeId);
+    scrollPage.mockRestore();
+    await unmount(component);
+  });
+
+  it("scrolls up and down only as needed, including rows taller than the bounded list", async () => {
+    const component = render(payload({ plies: 20 }));
+    const list = document.querySelector<HTMLOListElement>(".move-list")!;
+    const rows = [...list.querySelectorAll<HTMLLIElement>("li")];
+    const buttons = [...list.querySelectorAll<HTMLButtonElement>(".move-select")];
+    buttons[0]!.click();
+    await tick();
+    const rect = (top: number, height: number): DOMRect => ({ top, bottom: top + height, height, left: 0, right: 300, width: 300, x: 0, y: top, toJSON: () => ({}) });
+    vi.spyOn(list, "getBoundingClientRect").mockReturnValue(rect(200, 160));
+    Object.defineProperty(list, "clientHeight", { configurable: true, value: 160 });
+    rows.forEach((row, index) => vi.spyOn(row, "getBoundingClientRect").mockImplementation(() => rect(200 + index * 80 - list.scrollTop, index === 5 ? 240 : 70)));
+    buttons.at(-1)!.click();
+    await vi.waitFor(() => expect(list.scrollTop).toBe(1_430));
+    buttons[0]!.click();
+    await vi.waitFor(() => expect(list.scrollTop).toBe(0));
+    buttons[1]!.click();
+    await tick();
+    expect(list.scrollTop).toBe(0);
+    buttons[5]!.click();
+    await vi.waitFor(() => expect(list.scrollTop).toBe(400));
+    await unmount(component);
+  });
+
   it("opens the exact cited recorded move instead of a selected moment, without retrying", async () => {
     const review = payload();
     const nodeId = review.rows[17]!.nodeId;

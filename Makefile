@@ -3559,6 +3559,10 @@ bot-rematch-browser-check:
 review-route-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts
 
+.PHONY: review-navigation-browser-check
+review-navigation-browser-check:
+	./node_modules/.bin/playwright test --grep "Review navigation keeps"
+
 .PHONY: review-arrival-browser-check
 review-arrival-browser-check:
 	./node_modules/.bin/playwright test --grep "arrival readiness measurements|Guided Nudge branches|cited profile move|completed bot game rematches"

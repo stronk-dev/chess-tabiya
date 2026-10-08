@@ -1697,9 +1697,11 @@
         "nextAction": "Keep D3558's existing UI failures open until diagnosed despite the current full local pass. D3376 opening source authority, D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3557's predecessor-red regression reproduces a default-branch poll superseding initial cited Review. Refresh now waits for the initial route and retains its resolved branch/cited row. Sixteen assertion controls permit additive evidence but reject play mutations/lost evidence/non-evidence writes. All ten arrival samples have independent normal deadlines; the complete smoke run records n=5 warm median/p95 154.8/193.0 ms and cold 515.2/937.3 ms. Final sequential make verify-awake test-browser-ci-awake passes clean types, 3529 software, seven performance, 227 content and 173 browser cases with one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3558's earlier UI failures and historical intermittent causes remain open. D3554/D3538 recovery/Library repairs stand. No empty Compare repair, owner-device/default/usefulness closure, whole capability/milestone, remote CI or 1.0 promotion. Source authority, operands, presets and owner-use obligations stand.",
-          "impact": "held",
+          "summary": "D3562 repairs Review's selected-move/focus disagreement and invisible list selection. Two predecessor-red controls now pass; arrows start from the focused row, Home/End reach the ends, and selected rows are revealed inside the list without scrolling the page or taking graph/control focus. All 115 focused cases and desktop/phone native browse, Retry, actual different move and Compare journeys pass; original played nodes/branches survive and browsing permits only additive evidence. D3557's cited-branch polling repair stands. Final sequential make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types, 3558 software, seven performance, 227 content and 175 browser cases, one existing optional Maia skip, zero retries, all 150 exact-input and 112 composition cells, build and governance. D3558 and earlier intermittent causes, source authority, operands, preset/default usefulness and owner-device discharges remain open. No whole Review, capability, milestone, remote CI or 1.0 promotion.",
+          "impact": "advanced",
           "evidence": [
+            "apps/web/src/lib/ReviewMapScreen.svelte",
+            "apps/web/src/lib/review-map-screen.test.ts",
             "packages/runtime/src/module-query.test.ts",
             "packages/runtime/src/presentation-play-adapters.ts",
             "apps/web/src/lib/evidence/components/TextStatementView.svelte",
@@ -1833,6 +1835,11 @@
             "planning/exploration/log.md"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3562",
+              "digest": "sha256:2f7a87496cd019bce3818e358bbcc3a02f8be436a56bed0388005a9e7eff226f"
+            },
             {
               "kind": "work_state",
               "id": "D3538",

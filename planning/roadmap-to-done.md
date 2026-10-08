@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3561]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3562]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -57,6 +57,16 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+Review browsing now keeps the selected move and keyboard focus together ([[D3562]]), with
+first/last navigation and list-local visibility that does not move the page or take graph/control
+focus. All 115 focused cases and both native desktop/phone browse→Retry→different move→Compare
+journeys pass while preserving the original game. Final sequential
+`make roadmap-receipt verify-awake test-browser-ci-awake` exits zero with clean types,
+3,558 software cases, seven isolated performance cases, 227 content cases and 175 browser
+cases. One existing optional Maia skip, zero retries; all 150 exact-input cells and all
+112 composition cells pass, along with build and governance. This does not complete
+missing Review sources or the full Review journey, diagnose historical intermittent
+failures, or establish a new pushed-revision CI/release verdict.
 Review now releases its background coordinator on application close and failed startup
 ([[D3561]]): stopped work cannot attach late evidence or restart its windows. The 67 focused
 Review cases, six real-engine application-cleanup cases and clean types pass. This lifecycle
@@ -94,7 +104,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,310 ledger rows** (1,448 done, 161 refused, 1,701 live,
+(271 completed, 24 retired, 274 live); **3,311 ledger rows** (1,449 done, 161 refused, 1,701 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

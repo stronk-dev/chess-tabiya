@@ -103,7 +103,16 @@ Latest completed product wave: Profile references open the exact recorded move;
 Support shapes open their actual Library entry; completed bots have recoverable
 same-bot replay; resume/duplicate attach retained pack bytes; private digests no
 longer authorise fresh starts; failed application construction releases acquired
-services. These are real production-boundary repairs, not full capability completion.
+services. D3562 also finishes the existing Review move-list keyboard handoff:
+selected move, focus and bounded-list visibility agree; graph and board controls
+keep their own focus. All 115 focused cases and both native desktop/phone
+browse → Retry → actual different move → Compare journeys pass while preserving
+the original game. Final sequential `make roadmap-receipt verify-awake
+test-browser-ci-awake` exits zero: clean types, 3,558 software, seven performance,
+227 content and 175 browser cases, one existing optional Maia skip, zero retries,
+all 150 exact-input cells and 112 composition cells. Build and governance pass.
+This is local proof, not a new pushed-revision CI or release verdict.
+These are real production-boundary repairs, not full capability completion.
 The total fourteen-area inventory and subsequent bot/profile/campaign/content/release
 work remain in `planning/roadmap-to-done.md`, not another competing roadmap.
 
