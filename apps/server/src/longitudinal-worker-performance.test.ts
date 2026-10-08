@@ -13,7 +13,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { monitorEventLoopDelay, performance } from "node:perf_hooks";
+import { monitorEventLoopDelay, performance, PerformanceObserver, type PerformanceEntry } from "node:perf_hooks";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -79,23 +79,47 @@ describe("longitudinal worker responsiveness and lease liveness", () => {
     const histogram = monitorEventLoopDelay({ resolution: 10 });
     histogram.enable();
     const started = performance.now();
+    // D3591: retain bounded attribution alongside the unchanged wall-delay gate. Process-wide CPU
+    // includes the semantic worker; this thread's CPU distinguishes it from serving-loop work.
+    // Neither a small CPU delta nor a passing replay proves a host-scheduling cause.
+    let longestGc = { startMs: 0, durationMs: 0 };
+    const observeGc = (entries: readonly PerformanceEntry[]): void => {
+      for (const entry of entries) if (entry.duration > longestGc.durationMs) {
+        longestGc = { startMs: entry.startTime - started, durationMs: entry.duration };
+      }
+    };
+    const gcObserver = new PerformanceObserver((list) => observeGc(list.getEntries()));
+    gcObserver.observe({ entryTypes: ["gc"] });
+    let longestProbeCycle = { startMs: 0, durationMs: 0, threadCpuMs: 0, jobComplete: false };
     const probes: number[] = [];
     let complete = false;
     let publishedAfterMs = 0;
-    while (performance.now() - started < BUDGET.minimumMs || !complete) {
-      const before = performance.now();
-      const response = await fetch(`${origin}/healthz`);
-      probes.push(performance.now() - before);
-      expect(response.status).toBe(200);
-      await response.arrayBuffer();
-      if (!complete) {
-        complete = (application.longitudinal.progress()?.completed ?? 0) >= 1;
-        if (complete) publishedAfterMs = performance.now() - started;
+    try {
+      while (performance.now() - started < BUDGET.minimumMs || !complete) {
+        const before = performance.now();
+        const cpuBefore = process.threadCpuUsage();
+        const completeBefore = complete;
+        const response = await fetch(`${origin}/healthz`);
+        probes.push(performance.now() - before);
+        expect(response.status).toBe(200);
+        await response.arrayBuffer();
+        if (!complete) {
+          complete = (application.longitudinal.progress()?.completed ?? 0) >= 1;
+          if (complete) publishedAfterMs = performance.now() - started;
+        }
+        if (performance.now() - started > 600_000) throw new Error("80-ply arm did not publish within 10 minutes");
+        await new Promise((resolveWait) => setTimeout(resolveWait, Math.max(0, 1_000 / BUDGET.probeHz - (performance.now() - before))));
+        const durationMs = performance.now() - before;
+        if (durationMs > longestProbeCycle.durationMs) {
+          const cpu = process.threadCpuUsage(cpuBefore);
+          longestProbeCycle = { startMs: before - started, durationMs, threadCpuMs: (cpu.user + cpu.system) / 1_000, jobComplete: completeBefore };
+        }
       }
-      if (performance.now() - started > 600_000) throw new Error("80-ply arm did not publish within 10 minutes");
-      await new Promise((resolveWait) => setTimeout(resolveWait, Math.max(0, 1_000 / BUDGET.probeHz - (performance.now() - before))));
+    } finally {
+      histogram.disable();
+      observeGc(gcObserver.takeRecords());
+      gcObserver.disconnect();
     }
-    histogram.disable();
     const p95 = histogram.percentile(95) / 1e6;
     const max = histogram.max / 1e6;
     const progress = application.longitudinal.progress()!;
@@ -103,7 +127,7 @@ describe("longitudinal worker responsiveness and lease liveness", () => {
     const job = database.prepare("SELECT state, completed_seq FROM learner_observation_jobs WHERE run_id='eighty'").get() as { state: string; completed_seq: number };
     const denominators = database.prepare("SELECT sum(decisions) AS n FROM learner_observation_denominators WHERE run_id='eighty'").get() as { n: number };
     database.close();
-    const receipt = { event: "longitudinal_worker_performance", probes: probes.length, elapsedMs: Math.round(performance.now() - started), p95DelayMs: p95, maxDelayMs: max, maxProbeMs: Math.max(...probes), renewals: progress.renewals, publishedAfterMs: Math.round(publishedAfterMs) };
+    const receipt = { event: "longitudinal_worker_performance", probes: probes.length, elapsedMs: Math.round(performance.now() - started), p95DelayMs: p95, maxDelayMs: max, maxProbeMs: Math.max(...probes), renewals: progress.renewals, publishedAfterMs: Math.round(publishedAfterMs), longestGc, longestProbeCycle };
     console.info(JSON.stringify(receipt));
     mkdirSync(new URL("../../../.cache/", import.meta.url), { recursive: true });
     writeFileSync(new URL("../../../.cache/longitudinal-worker-performance.json", import.meta.url), `${JSON.stringify(receipt, null, 2)}\n`);

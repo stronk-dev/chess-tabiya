@@ -73,6 +73,12 @@ warm samples exceed the written 250 ms budget (median 331.2 ms, p95 373.6 ms), w
 test checks samples rather than enforcing that budget. Neither cause is diagnosed and neither
 failure is erased by a later green assertion. No readiness-to-push, GitHub or release proof follows.
 
+The subsequent diagnostic-only `make typecheck test-performance` passes clean types and all seven
+isolated cases. Maximum loop delay is 59.736063 ms, p95 12.959743 ms and maximum HTTP probe
+59.254583 ms. The existing test now includes bounded GC and main-thread CPU/cycle context;
+the original stall did not recur and its cause remains unlocated. [[D3591]] stays open, the earlier
+full-run failure remains recorded, and [[D3592]] is unchanged. No production repair is claimed.
+
 Previous engine checkpoint ([[D3588]]/[[D3589]]): failed engine children can no longer supply a
 replacement's identity/options/search or be reused by queued work. Shutdown retains its
 one-second graceful bound, then force-terminates and observes exit. Four observed predecessor
@@ -263,7 +269,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
 (271 completed, 24 retired, 274 live); **3,341 ledger rows** (1,472 done, 161 refused, 1,708 live,
-zero untriaged). Of the live ledger, 630 are todo, twelve doing and 1,066 blocked. The 462 historical
+zero untriaged). Of the live ledger, 629 are todo, thirteen doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

@@ -29713,11 +29713,12 @@
     },
     {
       "id": "D3591",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ae75e3f4b6c478d084d7377c7082b5e4581f195cc31e880f163b3820c4011cdb",
+      "sourceDigest": "sha256:f32fb7533fbe33fd44e3ab761ac4e8d9104cc9d04878e06747266f3d74a38559",
       "uxItems": [],
-      "owner": "release-engineering"
+      "owner": "release-engineering",
+      "since": "2026-10-08"
     },
     {
       "id": "D3592",

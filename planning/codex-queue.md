@@ -17,6 +17,9 @@ longitudinal worker maximum event-loop delay is 328.466431 ms against 250 ms, de
 11.796479 ms and maximum HTTP probe 40.247959 ms. The full run stops after 3,672 software
 passes and six of seven performance passes. Locate the synchronous-work/GC/scheduling cause;
 keep the budget and main-thread negative unchanged. A subsequent green replay cannot close it.
+The diagnostic-only replay of normal `make typecheck test-performance` passes clean types and
+all seven performance cases. Maximum delay is 59.736063 ms; the original cause is still unlocated.
+The existing test now reports bounded GC and main-thread CPU/cycle context, not raw captures.
 [[D3592]] records a separate browser measurement/coverage gap: every warm ARR-a9 sample is
 above the written 250 ms budget (median 331.2 ms, p95 373.6 ms), while the report test checks
 only completeness and finite nonnegative values. Locate the latency boundary and reconcile
