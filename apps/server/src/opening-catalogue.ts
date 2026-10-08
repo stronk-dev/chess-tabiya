@@ -175,19 +175,23 @@ function hasExactKeys(value: Record<string, unknown>, keys: readonly string[]): 
   return Object.keys(value).sort().join("\0") === [...keys].sort().join("\0");
 }
 
+function isSha256(value: unknown): value is string {
+  return typeof value === "string" && /^sha256:[a-f0-9]{64}$/u.test(value);
+}
+
 export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCatalogue {
   // A validated caller-owned row is not durable authority: the caller could mutate it later.
   // Take ownership before validation, then freeze every artifact layer before exposing the maps.
   const value: unknown = structuredClone(input);
-  if (!isRecord(value) || !hasExactKeys(value, ["source", "namedEndpoints", "pathMembership", "digest"]) || !isRecord(value.source) || !hasExactKeys(value.source, ["id", "commit", "retrievedAt", "licence", "files", "compilerFiles", "compilerDigest"]) || !Array.isArray(value.namedEndpoints) || !Array.isArray(value.pathMembership) || !Array.isArray(value.source.files) || !Array.isArray(value.source.compilerFiles) || typeof value.digest !== "string" || !/^sha256:[a-f0-9]{64}$/.test(value.digest) || typeof value.source.compilerDigest !== "string") throw new TypeError("Opening catalogue artifact shape is invalid");
+  if (!isRecord(value) || !hasExactKeys(value, ["source", "namedEndpoints", "pathMembership", "digest"]) || !isRecord(value.source) || !hasExactKeys(value.source, ["id", "commit", "retrievedAt", "licence", "files", "compilerFiles", "compilerDigest"]) || !Array.isArray(value.namedEndpoints) || !Array.isArray(value.pathMembership) || !Array.isArray(value.source.files) || !Array.isArray(value.source.compilerFiles) || !isSha256(value.digest) || !isSha256(value.source.compilerDigest)) throw new TypeError("Opening catalogue artifact shape is invalid");
   const { digest, ...withoutDigest } = value;
   if (sha256(canonicalizeJson(withoutDigest)) !== digest) throw new RangeError("Opening catalogue artifact digest does not match its bytes");
   if (value.source.id !== OPENING_SOURCE_ID || value.source.commit !== CHESS_OPENINGS_COMMIT || value.source.retrievedAt !== CHESS_OPENINGS_RETRIEVED_AT || value.source.licence !== "CC0-1.0") throw new TypeError("Opening catalogue source identity is invalid");
-  if (value.source.files.length !== OPENING_CATALOGUE_FILES.length || value.source.files.some((item, index) => !isRecord(item) || !hasExactKeys(item, ["name", "bytes", "sha256"]) || item.name !== OPENING_CATALOGUE_FILES[index] || !Number.isSafeInteger(item.bytes) || Number(item.bytes) < 1 || typeof item.sha256 !== "string")) throw new TypeError("Opening catalogue source-file provenance is invalid");
-  if (value.source.compilerFiles.length !== OPENING_CATALOGUE_COMPILER_FILES.length || value.source.compilerFiles.some((item, index) => !isRecord(item) || !hasExactKeys(item, ["path", "sha256"]) || item.path !== [...OPENING_CATALOGUE_COMPILER_FILES].sort()[index] || typeof item.sha256 !== "string")) throw new TypeError("Opening catalogue compiler provenance is invalid");
+  if (value.source.files.length !== OPENING_CATALOGUE_FILES.length || value.source.files.some((item, index) => !isRecord(item) || !hasExactKeys(item, ["name", "bytes", "sha256"]) || item.name !== OPENING_CATALOGUE_FILES[index] || !Number.isSafeInteger(item.bytes) || Number(item.bytes) < 1 || !isSha256(item.sha256))) throw new TypeError("Opening catalogue source-file provenance is invalid");
+  if (value.source.compilerFiles.length !== OPENING_CATALOGUE_COMPILER_FILES.length || value.source.compilerFiles.some((item, index) => !isRecord(item) || !hasExactKeys(item, ["path", "sha256"]) || item.path !== [...OPENING_CATALOGUE_COMPILER_FILES].sort()[index] || !isSha256(item.sha256))) throw new TypeError("Opening catalogue compiler provenance is invalid");
   const endpoints = new Map<string, RuntimeOpeningCatalogue["namedEndpoints"][number]>();
   for (const item of value.namedEndpoints) {
-    if (!isRecord(item) || !hasExactKeys(item, ["key", "eco", "name", "sourcePly", "sourceFile", "sourceRow"]) || typeof item.key !== "string" || typeof item.eco !== "string" || typeof item.name !== "string" || !Number.isSafeInteger(item.sourcePly) || Number(item.sourcePly) < 1 || !(OPENING_CATALOGUE_FILES as readonly string[]).includes(String(item.sourceFile)) || !Number.isSafeInteger(item.sourceRow) || Number(item.sourceRow) < 2 || endpoints.has(item.key)) throw new TypeError("Opening catalogue endpoint is invalid");
+    if (!isRecord(item) || !hasExactKeys(item, ["key", "eco", "name", "sourcePly", "sourceFile", "sourceRow"]) || typeof item.key !== "string" || typeof item.eco !== "string" || item.eco.trim() === "" || typeof item.name !== "string" || item.name.trim() === "" || !Number.isSafeInteger(item.sourcePly) || Number(item.sourcePly) < 1 || !(OPENING_CATALOGUE_FILES as readonly string[]).includes(String(item.sourceFile)) || !Number.isSafeInteger(item.sourceRow) || Number(item.sourceRow) < 2 || endpoints.has(item.key)) throw new TypeError("Opening catalogue endpoint is invalid");
     endpoints.set(item.key, item as unknown as RuntimeOpeningCatalogue["namedEndpoints"][number]);
   }
   const members = new Map<string, number>();

@@ -31,6 +31,25 @@ const IMPORTED = new URL("../../../tools/r2-selection-harness/imported-sample.pg
 const E4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
 
 describe("runtime opening catalogue", () => {
+  it.each([
+    ["empty name", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.namedEndpoints[0]!, { name: "" })],
+    ["blank name", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.namedEndpoints[0]!, { name: " \t " })],
+    ["empty ECO", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.namedEndpoints[0]!, { eco: "" })],
+    ["source-file digest", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.source.files[0]!, { sha256: "not-a-digest" })],
+    ["compiler-file digest", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.source.compilerFiles[0]!, { sha256: "not-a-digest" })],
+    ["compiler digest", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.source, { compilerDigest: "not-a-digest" })],
+  ] as const)("refuses malformed %s even with a valid outer digest", async (_description, mutate) => {
+    const raw = JSON.parse(await readFile(ARTIFACT, "utf8")) as RuntimeOpeningCatalogue;
+    mutate(raw);
+    const { digest: _oldDigest, ...material } = raw;
+    const malformed = { ...material, digest: `sha256:${createHash("sha256").update(canonicalizeJson(material)).digest("hex")}` };
+    expect(() => compileLoadedOpeningCatalogue(malformed)).toThrow(TypeError);
+    const directory = await mkdtemp(join(tmpdir(), "tabiya-opening-invalid-"));
+    const path = join(directory, "catalogue.json");
+    await writeFile(path, JSON.stringify(malformed));
+    expect(await loadOpeningCatalogue(path)).toEqual({ kind: "unavailable", reason: "artifact_invalid" });
+  });
+
   it("owns a detached snapshot instead of trusting later mutations of the validated input", async () => {
     const raw = JSON.parse(await readFile(ARTIFACT, "utf8")) as RuntimeOpeningCatalogue;
     const catalogue = compileLoadedOpeningCatalogue(raw);

@@ -25,7 +25,13 @@
   operand wrapper, truncated legal set, new detector, preset or ranking is authorized by this return.
 
 - **[[D3376]] — installed opening source → sole factories → actual Review.** The server
-  catalogue is present, but both point factories always return `artifact_missing`, the
+  source/consumer contract is now drafted in `rfc/installed-opening-evidence.md`; independently
+  review it before implementation. It specifies the shared schema, one package-owned registration,
+  genuine source admission, all three factories and all four consumer operations. The actual audit
+  also locates the missing membership proof, Inspector history fallthrough and incompatible Review
+  placeholder parser. D3590 strict-loader repair is independent, not that integration's closeout.
+  The following original requirements remain acceptance obligations, not a second implementation:
+  the server catalogue is present, but both point factories always return `artifact_missing`, the
   history factory always returns `input_abstained`, and Review's opening adapter always
   returns `provider_off`. Author and review the bounded source-authority amendment before
   learner bindings. Specify one installed-source authority, its cross-package data contract

@@ -12,6 +12,26 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3591]] is a newly observed local verification failure, not a ready-to-push result:
+longitudinal worker maximum event-loop delay is 328.466431 ms against 250 ms, despite p95
+11.796479 ms and maximum HTTP probe 40.247959 ms. The full run stops after 3,672 software
+passes and six of seven performance passes. Locate the synchronous-work/GC/scheduling cause;
+keep the budget and main-thread negative unchanged. A subsequent green replay cannot close it.
+[[D3592]] records a separate browser measurement/coverage gap: every warm ARR-a9 sample is
+above the written 250 ms budget (median 331.2 ms, p95 373.6 ms), while the report test checks
+only completeness and finite nonnegative values. Locate the latency boundary and reconcile
+that existing budget with executable coverage; do not present a report-only pass as speed proof
+or invent a cold threshold from the measured cold median 894.7 ms.
+
+[[D3590]] is **closed locally**: six predecessor-red malformed-name/ECO/digest controls now refuse
+despite a correct outer digest. All 38 focused cases, clean types, 3,672 software cases, the opening
+performance cases and actual build/catalogue check pass. The full run still fails at D3591, and
+D3592's arrival budget/coverage gap remains open. [[D3376]] separately needs its bounded
+installed-source/factory/Review contract; loader hardening does not supply that authority.
+That contract is now drafted in `rfc/installed-opening-evidence.md` and awaits independent
+buildability review. It covers the shared schema, source registration, all three factories and
+actual Theory Breadcrumb/Inspector/Review operations; it is not implementation authorization.
+
 [[D3588]]/[[D3589]] are **closed locally**: failed children detach their streams and retire readiness
 before the serialized lane releases; replacement output is child-scoped. Shutdown retains its
 one-second grace, then force-terminates and observes exit. Four observed predecessor failures

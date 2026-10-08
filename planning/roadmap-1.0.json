@@ -75,6 +75,7 @@
         "durable-stockfish-source.md",
         "provider-protocol-register.md",
         "runtime-opening-identity.md",
+        "installed-opening-evidence.md",
         "exact-legal-mobility.md",
         "breadth-collectors.md",
         "evidence-move-selector.md",
@@ -685,11 +686,11 @@
           "operations"
         ],
         "dependsOn": [],
-        "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+        "nextAction": "Diagnose D3591's longitudinal-worker maximum delay failure without changing its 250 ms budget or closing it on a green replay. Diagnose D3592's warm arrival excursion and reconcile the written budget with executable coverage. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "Current sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3666 software cases/354 files, seven isolated unchanged-budget performance and 228 content cases/23 files plus downstream software/governance checks. Browser tiers pass 124 smoke, five real-content, 59 matrix and one packaged-default case (189 total), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3588/D3589 repair failed engine-child isolation, queued generation reuse and real forced termination; all 91 focused engine/provider cases pass. Prior Campaign, classroom, Review, account/Profile/bot repairs stand. D3580 tablebase and D3578 selected-square contracts remain author-blocked; historical intermittent causes remain unlocated. All 1706 remaining live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, capability/milestone or release promotion.",
-          "impact": "advanced",
+          "summary": "The current normal full run is not green: clean types and all 3672 software cases/354 files pass, then isolated performance stops with six passes and D3591's maximum delay 328.466431 ms against 250 ms. Its cause is unlocated. Separate build/catalogue, corrected governance, 228 content and 189 browser cases pass: 124 smoke, five content, 59 matrix and one packaged-default, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3592's five warm arrival samples exceed 250 ms (median 331.2 ms, p95 373.6 ms), while its test checks completeness rather than the budget. Neither finding is closed on passing assertions. D3590 is locally repaired; D3376 remains draft/blocked. All 1708 live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. No full-run pass, ready-to-push claim, push, paired GitHub proof or release promotion.",
+          "impact": "held",
           "evidence": [
             "rfc/concept-registry.md",
             "apps/server/src/concept-registry-closure.test.ts",
@@ -701,6 +702,7 @@
             "tools/verify-scaffold.test.mjs",
             "tools/capability-history.mjs",
             "docs/testing.md",
+            "apps/server/src/longitudinal-worker-performance.test.ts",
             "docs/engine-workers.md",
             "apps/server/src/application.ts",
             "apps/server/src/application-startup-cleanup.test.ts",
@@ -799,18 +801,22 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Review D3564's narrow exact-input mirror-rule amendment before admitting orientation authorities; real retained FEN/UCI operands cannot use the current five transforms. Fresh-review D3373's durable-stockfish-source draft before implementing its same-task selected-move/PV/MultiPV source, exact v1/v2 job/batch/settlement compatibility and provisional migration order. Complete accepted evidence/source contracts without filtering remaining refusals. D3429's numerical calibration contract and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+        "nextAction": "Independently review D3376's installed-opening-evidence draft: shared schema, package-owned installed source, three sole factories and actual module/Review joins. D3590's strict-loader repair is locally closed, not that integration. Review D3564's exact-input orientation amendment and D3373's durable Stockfish draft before their implementation; preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3588/D3589 close the accepted provider-runtime child-isolation and real forced-termination repairs: four observed predecessor failures, five new permanent actual-child cases and all 91 focused engine/provider cases pass. Failed streams/readiness retire before lane release; replacement handlers are child-scoped; shutdown preserves its one-second grace before SIGKILL and observed exit. Full sequential normal gates pass clean types/build, 3666 software, seven unchanged-budget performance, 228 content and 189 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. D3566 mirror preflight and D3563 cited resolver remain delivered; D3564's retained-input orientation amendment, D3373 durable Stockfish draft, D3376 opening authority, D3580 tablebase projection and D3578 selected-square delivery remain held. Semantic validation stays at 81 subjects, forty passing cases and zero fully validated subjects. D3429 bot calibration, D3430 historical roots and D3410 opening-source repair remain independent; historical D3518 is not diagnosed. No whole capability, milestone, remote CI or 1.0 completion.",
+          "summary": "D3590 is closed locally: six predecessor-red malformed-opening-leaf controls now refuse through compilation and file loading. All 38 focused opening/phase/manifest cases, clean types, 3672 software cases, the opening performance cases and actual build/catalogue check pass. The full run is not green because D3591's longitudinal delay fails; D3592 separately exposes warm arrival over budget with report-only coverage. The artifact source pin and lookup meanings are unchanged. D3376 now has draft installed-opening-evidence.md covering three sole factories and four consumer operations, including membership proof, Inspector history and real Review parsing; it awaits independent review, not implementation completion. D3564 orientation, D3373 Stockfish, D3580 tablebase, D3578 selected-square and bot calibration remain held. Semantic validation stays at 81 subjects and zero fully validated subjects. No whole capability, milestone, remote CI or 1.0 completion.",
           "impact": "advanced",
           "evidence": [
+            "rfc/installed-opening-evidence.md",
             "rfc/durable-stockfish-source.md",
             "apps/server/src/engine-supervisor.ts",
             "apps/server/src/engine-supervisor-exchange.test.ts",
             "apps/server/src/engine-supervisor.test.ts",
             "docs/engine-workers.md",
             "planning/exploration/log.md",
+            "apps/server/src/opening-catalogue.ts",
+            "apps/server/src/opening-catalogue.test.ts",
+            "docs/runtime-opening-identity.md",
             "rfc/semantic-validation-authority.md",
             "packages/runtime/src/semantic-validation-authorities.ts",
             "packages/runtime/src/semantic-validation-cited-sources.ts",
@@ -843,6 +849,11 @@
             "tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "installed-opening-evidence.md",
+              "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
+            },
             {
               "kind": "rfc",
               "id": "durable-stockfish-source.md",
@@ -1412,7 +1423,7 @@
             {
               "kind": "work_state",
               "id": "D3376",
-              "digest": "sha256:61dce8b3bca7ec1b0e2a20086919f5afc167c96728602dac613360ae7d54a340"
+              "digest": "sha256:153adc57b16cfc8b532e675e12b792fa2745ad97d05c5e36a79b1f7ce42ef912"
             },
             {
               "kind": "rfc",

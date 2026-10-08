@@ -27782,10 +27782,10 @@
       "id": "D3376",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:61dce8b3bca7ec1b0e2a20086919f5afc167c96728602dac613360ae7d54a340",
+      "sourceDigest": "sha256:153adc57b16cfc8b532e675e12b792fa2745ad97d05c5e36a79b1f7ce42ef912",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:runtime-opening-identity.md"
+      "blocker": "rfc:installed-opening-evidence.md"
     },
     {
       "id": "D3377",
@@ -29701,6 +29701,31 @@
       "uxItems": [],
       "evidence": "apps/server/src/engine-supervisor-exchange.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3590",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b7006f8572fdbae821874b54a4c64cf949499211700660b97b9233e6b36a9126",
+      "uxItems": [],
+      "evidence": "apps/server/src/opening-catalogue.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3591",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ae75e3f4b6c478d084d7377c7082b5e4581f195cc31e880f163b3820c4011cdb",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3592",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:187017c422d830bc6c73eb52e2cd2c9ed804c527b6526959d40477bf06369831",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

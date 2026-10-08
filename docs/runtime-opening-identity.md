@@ -52,6 +52,12 @@ subsequent lookup; returned artifact objects cannot be edited in place. `make op
 exercises those boundaries and the existing phase-source and manifest consumers. This does not
 supply the separate cross-package evidence authority still required by D3376.
 
+The loader also rejects blank endpoint names/ECO and malformed source/compiler SHA-256 values,
+even when the outer document digest has been recomputed. These are invalid artifacts, not missing
+files or successful unnamed lookups. Six permanent controls exercise direct compilation and actual
+file loading; valid installed data and the original latency budgets remain unchanged. This checks
+the declared field formats, not authenticity of arbitrary caller-rewritten source documents.
+
 The required performance test keeps catalogue load below 250 ms wall time and production lookup
 work below 50 µs CPU time per position at the p95 of bounded batches over all 6,991 recorded sample
 positions. CPU time deliberately excludes periods when a shared CI runner has descheduled the Node

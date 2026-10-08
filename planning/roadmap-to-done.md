@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3589]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3592]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,7 +58,22 @@ across the platform**. Deeper “why this engine move?” search remains researc
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 
-Latest completed repair ([[D3588]]/[[D3589]]): failed engine children can no longer supply a
+Latest completed repair ([[D3590]]): the opening loader refuses blank endpoint fields and malformed
+source/compiler digest leaves even when the outer digest is valid. Six observed predecessor failures,
+38 focused opening/phase/manifest cases, clean types, all 3,672 software cases, the opening performance
+tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
+module/Review contract is now drafted, **not accepted or implemented**.
+
+**Current verification is not fully green.** The normal full run stops after software on
+[[D3591]]: longitudinal worker maximum event-loop delay is 328.466431 ms against its unchanged
+250 ms limit (six performance passes, one failure). Separate governance, all 228 content cases
+and 189 browser cases pass (one existing optional Maia skip, zero retries, all 150 input and 112
+composition cells). The arrival report exposes [[D3592]]: all five
+warm samples exceed the written 250 ms budget (median 331.2 ms, p95 373.6 ms), while the report
+test checks samples rather than enforcing that budget. Neither cause is diagnosed and neither
+failure is erased by a later green assertion. No readiness-to-push, GitHub or release proof follows.
+
+Previous engine checkpoint ([[D3588]]/[[D3589]]): failed engine children can no longer supply a
 replacement's identity/options/search or be reused by queued work. Shutdown retains its
 one-second graceful bound, then force-terminates and observes exit. Four observed predecessor
 failures and five new permanent actual-child cases cover both defects; all 91 focused cases pass.
@@ -245,23 +260,28 @@ permission verdict or full release follows. Clearing only old rebuildable Tabiya
 release-policy/storage/schema checks pass 122 policy, 33 wrapper, 47 native storage and fifteen
 scaffold cases plus actual Compose packaging. No new GitHub result or milestone completion.
 
-Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
+Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,338 ledger rows** (1,471 done, 161 refused, 1,706 live,
-zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,066 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,341 ledger rows** (1,472 done, 161 refused, 1,708 live,
+zero untriaged). Of the live ledger, 630 are todo, twelve doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
 capabilities. Counts of documents, routes, tests or closed rows are not a percentage-complete
 estimate. Concrete delivery is recorded below without promoting a whole release gate.
 
-The current foundation handoff is `rfc/durable-stockfish-source.md` for [[D3373]]. It proposes
+The opening handoff is now `rfc/installed-opening-evidence.md` for [[D3376]]: three real factories
+and four consumer operations, including exact membership proof, Inspector history and Review's
+actual payload parsing. It needs independent review; the loader repair does not complete it.
+
+The engine foundation handoff is `rfc/durable-stockfish-source.md` for [[D3373]]. It proposes
 retaining the engine's actual selected move separately from its main line, preserving configured
 MultiPV and historical durable jobs. It remains **draft**, including a provisional storage
 migration order that fresh review must settle. No new provider operation or saved-job format is
 implemented by that document, and no milestone advances to complete.
 
-The next delivery priorities are: close source/operand gaps; finish existing module and
+The next delivery priorities are: locate [[D3591]] and [[D3592]] and reconcile real performance
+with executable coverage; close source/operand gaps; finish existing module and
 Review→theory→rehearsal→return journeys; complete training progression and calibrated bot/profile
 behavior; deliver the campaign curriculum/reward loop and representative grounded content; then
 prove the complete release/operator journeys. Independent authorised work can proceed together;
