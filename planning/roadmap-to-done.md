@@ -84,7 +84,7 @@ The missing required arms, including independent orientation authority, are a fo
 not evidence that all predicates are wrong. Registered tactics and research selection must not
 be described as fully validated learner guidance. `docs/semantic-evidence.md` explains that boundary.
 
-Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
+Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
 (271 completed, 24 retired, 274 live); **3,308 ledger rows** (1,446 done, 161 refused, 1,701 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
@@ -93,6 +93,12 @@ milestones remain four active and five blocked; none is fully complete. Across 1
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
 capabilities. Counts of documents, routes, tests or closed rows are not a percentage-complete
 estimate. Concrete delivery is recorded below without promoting a whole release gate.
+
+The current foundation handoff is `rfc/durable-stockfish-source.md` for [[D3373]]. It proposes
+retaining the engine's actual selected move separately from its main line, preserving configured
+MultiPV and historical durable jobs. It remains **draft**, including a provisional storage
+migration order that fresh review must settle. No new provider operation or saved-job format is
+implemented by that document, and no milestone advances to complete.
 
 The next delivery priorities are: close source/operand gaps; finish existing module and
 Review→theory→rehearsal→return journeys; complete training progression and calibrated bot/profile

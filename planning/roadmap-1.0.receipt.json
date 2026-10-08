@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:56738c82c39c48305f89adad7edad07085e7f69b5503dc8ea9dbd2d86153945f",
+    "roadmap": "sha256:13143f5a49509193e910856e5bfde3f543014b02ab8fc2169368723b912c4c49",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:d2bf13497d7eb27d5338eb6bb3bd81e0a7cc692c44bbc74d335f7578e74c2135",
-    "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
+    "workState": "sha256:6468fb8c0b0377c8e9d9b8f66624fc95fe8b5f54262d35a5fec326dd07588f23",
+    "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
     "application": "sha256:0c8a9cfb0a33ba89fc65f4213b5cbbe359ee21d2cb3505792dc2918b1dfe8642",
@@ -18,9 +18,9 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 71,
+    "assignedRfcs": 72,
     "activeRfcLifecycle": {
-      "draft": 19,
+      "draft": 20,
       "accepted": 0,
       "implementing": 42,
       "awaiting": 10,
@@ -178,12 +178,16 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Complete accepted evidence/source contracts without filtering remaining refusals. Use D3429's primary-source inputs and nine numerical examples to select/cite model/mapping/fitter version, score/mate membership, convergence, whole-game resampling, degeneracy and actual hypothesis/adjusted-test construction before comparative verdicts. D3430 preserves the historical source; D3410 independently holds opening-source repair. Frozen reference, thresholds, production sampler and native ladder remain unchanged/open.",
+      "nextAction": "Fresh-review D3373's durable-stockfish-source draft before implementing its same-task selected-move/PV/MultiPV source, exact v1/v2 job/batch/settlement compatibility and provisional migration order. Complete accepted evidence/source contracts without filtering remaining refusals. D3429's numerical calibration contract and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-07",
-        "summary": "D3429 has specific primary-source model/mapping/fitter author inputs and nine synthetic controls for differences, coincidences and flat-root non-identifiability. Complete numerical contract remains held, not adopted. D3430's 24,000 roots retain mixed/mate and game clusters; D3410 separately holds opening-source repair. No source, threshold, policy, fitted/calibrated label, RFC/capability/milestone promotion.",
+        "at": "2026-10-08",
+        "summary": "D3373 now has a registered follow-up draft for one whole same-task Stockfish source, independent terminal selection and PV, configured MultiPV, narrow packet compatibility and durable v1/v2 job/batch/settlement reading. The proposed stamp-only migration retains historical rows and requires fresh review of its provisional ordering. This is authoring progress only: no runtime operation, migration, source adoption or acceptance. D3429 numerical calibration, D3430 historical roots and D3410 opening-source repair remain independently held. No capability/milestone or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
+          "rfc/durable-stockfish-source.md",
+          "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
+          "apps/server/src/evidence-queue.test.ts",
+          "apps/server/src/evidence-jobs.ts",
           "planning/semantic-convention-provenance/implementation-2026-09-24.md",
           "rfc/evidence-value-authority.md",
           "rfc/semantic-convention-register.md",
@@ -206,6 +210,11 @@
           "tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "durable-stockfish-source.md",
+            "digest": "sha256:2af278a1d4ffa243d490bf8850d6673fc0527cfe4752a30daeaec01c6342e37d"
+          },
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
@@ -738,7 +747,7 @@
           {
             "kind": "work_state",
             "id": "D3373",
-            "digest": "sha256:8e74d39966d609d00bf7bd83e649e2b02f7ecc7846203977fcce8afb365a2b11"
+            "digest": "sha256:34426efd01e7de6cdecbcefe565100a4ec768c213776f3c9c1f79bf9fb6974d1"
           },
           {
             "kind": "work_state",
@@ -2283,7 +2292,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 24,
+      "rfcCount": 25,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

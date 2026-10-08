@@ -27755,10 +27755,10 @@
       "id": "D3373",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8e74d39966d609d00bf7bd83e649e2b02f7ecc7846203977fcce8afb365a2b11",
+      "sourceDigest": "sha256:34426efd01e7de6cdecbcefe565100a4ec768c213776f3c9c1f79bf9fb6974d1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-exchange-and-execution.md"
+      "blocker": "rfc:durable-stockfish-source.md"
     },
     {
       "id": "D3374",

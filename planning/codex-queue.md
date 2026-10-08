@@ -60,7 +60,11 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    retry, forced gesture, population or application-input change. Latest local tiers
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
-2. Evidence-to-learner delivery: [[D3373]]'s source-contract repair, [[D3376]]'s
+2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   Fresh review must settle same-task selected-move/PV separation, configured MultiPV,
+   frozen v1 versus modern job/batch/settlement replay and the provisional storage
+   migration order. This is authoring progress, not a source implementation or an
+   accepted contract; do not retire the queued caller yet. [[D3376]]'s
    opening authority and [[D3309]]'s Inspector operands retain their own reviewed
    contract gates. Finish the existing Support/Review/theory joins rather than
    inventing producer data at the UI boundary. [[D3540]] still blocks treating an
