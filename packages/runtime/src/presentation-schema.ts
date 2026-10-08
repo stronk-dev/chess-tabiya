@@ -120,6 +120,9 @@ export const otherSide = (color: Color): string => SIDE_NAMES[color === "white" 
 /** "White's knight on f3". */
 export const pieceOn = (piece: SchemaPiece, square: string): string => `${SIDE_NAMES[piece.color]}'s ${ROLE_NAMES[piece.role]} on ${square}`;
 export const plural = (count: number, noun: string, many = `${noun}s`): string => `${count} ${count === 1 ? noun : many}`;
+/** All-square maps retain empty cells; only populated target cells contribute to control totals. */
+export const controlledSquareCount = (squares: readonly { readonly controllers: readonly unknown[] }[]): number =>
+  squares.filter(square => square.controllers.length > 0).length;
 /** "a, b and c". */
 export function listPhrase(items: readonly string[]): string {
   if (items.length === 0) return "";

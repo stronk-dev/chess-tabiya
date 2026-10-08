@@ -17,6 +17,7 @@ import {
 import type { PresentationKit } from "./presentation-contract.js";
 import { INSPECTOR_FACT_RENDERERS, inspectorAdapterSpecs } from "./presentation-inspector-adapters.js";
 import { inspectorFixtureEvidence } from "./testing/inspector-presentation-fixture.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 const CONSUMERS = ["module.full_inspector", "module.postcommit_nudge", "module.review_map"] as const;
 const key = (consumer: { readonly id: string; readonly version: number }, projection: { readonly id: string; readonly version: number }) => `${consumer.id}@${consumer.version}\u0000${projection.id}@${projection.version}`;
@@ -24,6 +25,38 @@ const bindingsOf = (consumer: string) => PRIMARY_EVIDENCE_MANIFEST.bindings.filt
 /** The pairs this group registers (constructs read the kit only when invoked). */
 const OWN = new Set(inspectorAdapterSpecs({} as PresentationKit).map((spec) => key(spec.consumer, spec.projection)));
 const FORBIDDEN = [/Tabiya's/u, /detector/iu, /phase bands/iu, /recorded mass/iu, /evidence recorded\./iu, /@\d/u, /\bbest\b/iu, /\bshould\b/iu, /\bwins\b/iu, /\b[a-h][1-8][a-h][1-8][qrbn]?\b/u, /_/u, /sha256/u];
+
+describe("D3579: square-control captions count populated targets, not the 64-cell map", () => {
+  it.each(["module.sight_on_request", "module.full_inspector"])("%s retains distinct controlled-square totals", (consumer) => {
+    const evidence = invokeEvidenceValueRoute("rules.square.reading.control@1", { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [evidence]));
+    const parsed = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
+    const caption = parsed.find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.square_control@1")!;
+    expect(caption).toBeDefined();
+    if (caption.component.id !== "fact_statement" || caption.component.operand.rendererId !== "play.square_control@1") throw new Error("Expected square-control caption");
+    // Initial-position targets: all rank-three squares, all rank-two squares and b1–g1
+    // (22 pseudo); legal destinations are the sixteen rank-three/rank-four squares.
+    // Multiple controllers for one target must not increase either count.
+    expect(caption.component.operand.operands).toEqual({ colors: [
+      { color: "white", pseudo: 22, legal: 16 }, { color: "black", pseudo: 22, legal: 16 },
+    ] });
+    expect(presentedSentence(caption)).toBe("Square control: White attacks 22 squares (16 with legal moves); Black attacks 22 squares (16 with legal moves).");
+  });
+
+  it.each(["module.sight_on_request", "module.full_inspector"])("%s preserves unavailable legal sets and distinguishes check-restricted moves", (consumer) => {
+    const evidence = invokeEvidenceValueRoute("rules.square.reading.control@1", { fen: "4k3/8/8/8/8/4q3/8/4K3 w - - 0 1" });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [evidence]));
+    const caption = items.find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.square_control@1")!;
+    if (caption.component.id !== "fact_statement" || caption.component.operand.rendererId !== "play.square_control@1") throw new Error("Expected square-control caption");
+    // White's king attacks five neighbours, but only d1/f1 are legal destinations.
+    // Passing the turn to Black is invalid while White is in check: not zero moves.
+    expect(caption.component.operand.operands.colors).toEqual([
+      { color: "white", pseudo: 5, legal: 2 }, { color: "black", pseudo: expect.any(Number), legal: null },
+    ]);
+    expect(presentedSentence(caption)).not.toContain("64");
+    expect(presentedSentence(caption)).not.toContain("0 with legal moves");
+  });
+});
 
 describe("inspector / post-commit nudge / review map adapters: exact pair population", () => {
   it.each(CONSUMERS)("%s: every binding has exactly one adapter whose forms equal its non-machine forms", (consumer) => {

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3577]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3579]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -57,6 +57,17 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+[[D3579]] corrects false square-control captions in both Sight and Inspector: only populated
+target cells count, rather than all 64 retained board cells. Four predecessor-red controls,
+eighteen focused cases, the real REST query and desktop/phone Inspector reload/return journeys
+pass. Full sequential normal verification exits zero: clean types/build, 3,614 software,
+seven unchanged-budget performance, 228 content and 181 browser cases, one optional Maia skip,
+zero retries, all 150 input and 112 composition cells. [[D3578]] remains blocked on the existing
+module-registration amendment: four collected sources never reach a selected square, the selected
+frame stops before rendering, and a complete 27-destination queen set conflicts with six marks.
+Six disposable controls prove those gaps; they do not complete Sight or exact-mobility D1.
+No new collector, semantic-validation verdict, pack graduation or release milestone follows.
+
 [[D3576]] closes a reproduced opening-loader mutation bug: validated input and exposed source
 metadata can no longer change the retained lookup. Two predecessor-red controls, all 32 focused
 source/consumer cases and full sequential normal verification pass: clean types, 3,594 software,
@@ -205,8 +216,8 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,326 ledger rows** (1,461 done, 161 refused, 1,704 live,
-zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,064 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,328 ledger rows** (1,462 done, 161 refused, 1,705 live,
+zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,065 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

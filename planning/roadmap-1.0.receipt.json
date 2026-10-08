@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7d7e3b41f416101113f1283b592c77c095f03268d2d3c3e8c36d0ed4eb6f465e",
+    "roadmap": "sha256:911a3a02e7f6eae59d134461e62a726bc583831abfbe0e970b86905c394765f7",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:c017d40dc4aa8cec384200a4430d2b3510efed673db5c672c6c5a4e0f859c3ec",
+    "workState": "sha256:3d14ce0d75f6ba9704413660d64b875b306b2bfe439f34b849f9c9c4a92c655c",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 628,
       "doing": 12,
-      "blocked": 1064,
-      "done": 1461,
+      "blocked": 1065,
+      "done": 1462,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "Current full sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3609 software, seven isolated unchanged-budget performance and 228 content cases plus downstream software/governance checks. Complete browser tiers pass 114 smoke, five real-content, 59 matrix and one packaged-default case (179 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3577's exact Campaign-to-Game-Review-to-map journey passes on desktop and actual-touch phone, including selected-node reload, retained moves and deleted/withheld-abandonment controls. D3576's immutable opening loader, account portability, bot replay, Review navigation and warning-actor controls also pass. No missing source, calibration or official content is inferred. Prior failures remain in the append-only log; D3558 and historical engine/application causes remain unlocated. All 1704 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
+        "summary": "Current full sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3614 software, seven isolated unchanged-budget performance and 228 content cases plus downstream software/governance checks. Complete browser tiers pass 116 smoke, five real-content, 59 matrix and one packaged-default case (181 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3579's actual Inspector query and desktop/phone reload/return show corrected populated-square totals; the four predecessor-red adapter controls preserve unavailable legal readings. The first full sequence correctly refused the out-of-date generated semantic-validation receipt; normal regeneration and the complete rerun pass without changing any subject verdict. D3577 Campaign-to-Review-to-map, D3576 immutable opening source, account portability, bot replay, Review navigation and warning-actor controls stand. D3578 selected-square delivery remains author-blocked. Prior failures remain in the append-only log; D3558 and historical engine/application causes remain unlocated. All 1705 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -115,7 +115,9 @@
           "apps/server/src/graduation-clearance-corpus.test.ts",
           "planning/codex-queue.md",
           "apps/web/src/lib/campaign-history.test.ts",
-          "tests/browser/campaign.spec.ts"
+          "tests/browser/campaign.spec.ts",
+          "packages/runtime/src/presentation-inspector-adapters.test.ts",
+          "apps/server/src/module-query.test.ts"
         ],
         "anchors": [
           {
@@ -318,12 +320,19 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
+      "nextAction": "D3579's false square-control captions are repaired. D3578 needs the narrow existing module-registration amendment for the selected frame, complete legal destinations versus six marks and exact move identity before useful selected-square delivery can land. Continue source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine generated metadata maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3576 reproduces mutable opening source admission: a caller can change the validated endpoint name/ECO/ply without changing its recorded artifact identity. The loader now takes and validates a detached snapshot, then freezes every table, row and source-metadata layer. Two predecessor-red controls now pass alongside all 32 focused opening/phase-source/manifest cases, clean types and build; the compiled catalogue is regenerated by its normal existing command without changing catalogue data. Full sequential normal local verification passes clean types, 3594 software, seven unchanged-budget performance, 227 content and 179 browser cases, one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3560/D3561 recorded-game and Review lifecycle repairs stand. D3376's cross-package opening authority and runtime/Review bindings, D3373's draft Stockfish source, D3309 Inspector operands and remaining provider/consumer joins stay open; the existing author queue explicitly carries the source amendments. No factory is newly available, no new source protocol or content is introduced, and no semantic-validation, whole capability, milestone, historical timeout diagnosis, remote CI or 1.0 promotion follows.",
+        "summary": "D3579 repairs false square-control totals in both exact Sight/Inspector adapters: only populated target cells count; pseudolegal and legal sets stay distinct and unavailable legal readings stay unavailable. Four predecessor-red controls, eighteen focused cases, the actual REST query and desktop/phone Inspector reload/return journeys pass. Full sequential normal local verification passes clean types/build, 3614 software, seven unchanged-budget performance, 228 content and 181 browser cases, one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3578 remains author-blocked: four acquired sources have no selected-square scope, adapters lack the selected frame and complete queen mobility can require 27 marks against six allowed. Six disposable controls prove those gaps, not useful delivery. The existing registry return and author queue own the narrow amendment; no whole-board admission or silent truncation is implemented. D3576 immutable opening sources and D3560/D3561 recorded-game/Review lifecycle repairs stand. D3376 runtime opening authority, D3373's draft Stockfish source, D3309 Inspector operands and other source/consumer joins remain open. No new collector, semantic-validation verdict, pack, complete capability, milestone, historical timeout diagnosis, remote CI or 1.0 promotion follows.",
         "impact": "advanced",
         "evidence": [
+          "packages/runtime/src/presentation-schema.ts",
+          "packages/runtime/src/presentation-play-adapters.ts",
+          "packages/runtime/src/presentation-inspector-adapters.ts",
+          "packages/runtime/src/presentation-inspector-adapters.test.ts",
+          "apps/server/src/module-query.test.ts",
+          "planning/learner-modules/registry-return.md",
+          "tools/d2120-module-registration-author-contract/selected-sight.test.ts",
           "apps/server/src/opening-catalogue.ts",
           "apps/server/src/opening-catalogue.test.ts",
           "docs/runtime-opening-identity.md",

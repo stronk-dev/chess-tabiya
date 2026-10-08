@@ -29596,11 +29596,21 @@
     },
     {
       "id": "D3578",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:87186b2b9b4dc17ece736779c0d52007ce7f41ab48146f864c2fea40bb82da6b",
+      "sourceDigest": "sha256:056f695f037286a6664f29dac08719c5442382947245b3c5894185a6616298be",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D3579",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:afec7cbb680a723c42f3c4194463f4e00f472e43b0190aadabe803405a23336d",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/presentation-inspector-adapters.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

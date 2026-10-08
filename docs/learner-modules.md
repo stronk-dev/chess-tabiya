@@ -38,6 +38,14 @@ Every compiled pair is either `executable` or `blocked_dependencies` with its bl
 (`MODULE_PAIR_EXECUTION`). A pair is executable exactly when a production operation acquires its
 sealed source **and** an exact pair-keyed presentation adapter presents it.
 
+That table establishes acquisition and adapter registration, not useful delivery at every requested
+square. D3578 records four Sight sources excluded by the current selected-square scope and a
+complete legal-destination set that can exceed the six-mark budget. The narrow contract return is
+in `planning/learner-modules/registry-return.md`; this remains unfinished, not a new collector need.
+Square-control captions count only target cells with nonempty controller lists, not all 64 retained
+map cells. Pseudolegal control and legal destinations retain separate counts; an unavailable legal
+turn clone stays unavailable. Large relation overlays remain subject to unchanged atomic budgets.
+
 - **The module query** (`queryModules`, `packages/runtime/src/module-query.ts`, served at
   `POST /runs/:id/modules/query`): the browser sends its requested-assistance receipt and one closed
   timing request (`pre_commit` with an optional selected square, `at_commit` with a staged UCI and

@@ -2,6 +2,15 @@
 
 ## Current narrow author handoff — 2026-10-08
 
+- **[[D3578]] — selected-square evidence frame and complete legal-mobility delivery.** The current
+  return in `planning/learner-modules/registry-return.md` identifies four acquired sources that
+  cannot survive scope filtering, a selected frame that never reaches the adapter and a measured
+  27-destination versus six-mark conflict. `make requested-sight-contract-check` executes six
+  disposable controls over real source values; a green diagnostic means these gaps still exist.
+  Amend the existing module-registration/presentation boundary and legality-overlay budget,
+  preserving complete identities and unchanged position-wide Inspector meaning. No arbitrary
+  operand wrapper, truncated legal set, new detector, preset or ranking is authorized by this return.
+
 - **[[D3376]] — installed opening source → sole factories → actual Review.** The server
   catalogue is present, but both point factories always return `artifact_missing`, the
   history factory always returns `input_abstained`, and Review's opening adapter always

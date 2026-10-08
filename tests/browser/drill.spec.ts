@@ -1031,6 +1031,35 @@ test("Just Play explicitly reveals evidence and the next move closes the window"
   await expect(page.getByRole("button", { name: "Load model candidates" })).toHaveCount(0);
 });
 
+for (const label of ["desktop", "@mobile touch phone"]) {
+  test(`D3579 square-control totals reach the actual Inspector and survive reload: ${label}`, async ({ page }) => {
+    await page.getByRole("button", { name: "Start from a FEN" }).click();
+    await page.getByLabel("Position FEN").fill("7k/8/8/8/8/8/P7/K7 w - - 0 1");
+    await chooseRawRung(page);
+    await page.getByRole("button", { name: "Start and keep the game" }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await choosePreset(page, /Analyze/u);
+    await showSupportTools(page);
+    await page.getByRole("button", { name: "Show support for this position" }).click();
+    const runId = page.url().split("/").at(-1)!;
+    const before = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    for (const reload of [false, true]) {
+      if (reload) await page.reload();
+      const companion = page.getByRole("dialog", { name: "Run companion", exact: true });
+      if (await companion.isVisible()) await companion.getByRole("button", { name: "Collapse companion", exact: true }).click();
+      await page.getByRole("button", { name: "Inspector", exact: true }).click();
+      const inspector = page.getByRole("region", { name: "Evidence inspector: full inspector", exact: true });
+      await expect(inspector).toBeVisible();
+      await expect(inspector.getByText("Square control: White attacks 4 squares (4 with legal moves); Black attacks 3 squares (3 with legal moves).", { exact: true })).toBeVisible();
+      await expect(inspector).not.toContainText("64 squares");
+      await page.getByRole("button", { name: "Return to play", exact: true }).click();
+    }
+    const after = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    expect(after.nodes).toEqual(before.nodes);
+    expect(after.activeCursor).toEqual(before.activeCursor);
+  });
+}
+
 test("Support calculation follows its admitted job through polling and becomes usable again after each exact result", async ({ page }) => {
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();

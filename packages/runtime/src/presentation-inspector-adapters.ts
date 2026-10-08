@@ -22,7 +22,8 @@ import { parseUci } from "chessops/util";
 
 import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
-import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import type { SquareControlReading } from "./square-control.js";
 
 // ---------------------------------------------------------------------------------------------
 // Shared phrasing
@@ -644,7 +645,7 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     };
   });
   const squareControl = relationList(["colors"], (evidence) => {
-    const reading = payloadOf(evidence);
+    const reading = evidence.payload as SquareControlReading;
     const nodes: RelationOverlayOperand["nodes"][number][] = [];
     const edges: RelationOverlayOperand["edges"][number][] = [];
     for (const entry of reading.colors) for (const controlled of entry.pseudo) for (const controller of controlled.controllers) {
@@ -654,7 +655,7 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const ordered = [...nodes.filter((entry) => entry.emphasis === "source"), ...nodes.filter((entry) => entry.emphasis !== "source")];
     return {
       relation: relation(evidence, ordered, edges, "fact"),
-      statement: statement("play.square_control@1", "piece-geometry@1", { colors: reading.colors.map((entry: Payload) => ({ color: entry.color, pseudo: entry.pseudo.length, legal: entry.legal.kind === "available" ? entry.legal.squares.length : null })) }),
+      statement: statement("play.square_control@1", "piece-geometry@1", { colors: reading.colors.map(entry => ({ color: entry.color, pseudo: controlledSquareCount(entry.pseudo), legal: entry.legal.kind === "available" ? controlledSquareCount(entry.legal.squares) : null })) }),
     };
   });
   const kingZone = relationList(["kings"], (evidence) => {

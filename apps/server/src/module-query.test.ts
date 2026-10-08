@@ -20,15 +20,39 @@ describe("POST /runs/:id/modules/query", () => {
   const stores: SQLiteRunStorage[] = [];
   afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
 
-  async function setup() {
+  async function setup(fen = MAROCZY) {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
     const service = new RunService(storage, { evidenceQueue: new EvidenceJobQueue(executor) });
-    await service.create({ id: "modules", session: { kind: "position", start: { fen: MAROCZY, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at }, "writer");
+    await service.create({ id: "modules", session: { kind: "position", start: { fen, side: fen.split(" ")[1] === "b" ? "black" : "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at }, "writer");
     return { service, storage, handler: createRestHandler(service) };
   }
 
   const finalizedFor = async (handler: ReturnType<typeof createRestHandler>, preset: "quiet" | "support") =>
     parseFinalizedAssistanceV1(((await (await handler(post("/runs/modules/assistance", compileAssistanceRequest({ contextHint: "position", preference: named(preset) })))).json()) as { assistance: unknown }).assistance);
+
+  it.each([
+    // Seven total controller edges fit the Inspector's unchanged eight-arrow budget.
+    // The pawn keeps this a non-terminal start rather than a bare-kings draw.
+    { fen: "7k/8/8/8/8/8/P7/K7 w - - 0 1", pseudo: 4, legal: 4 },
+  ])("D3579: the actual Inspector query returns populated control totals ($pseudo/$legal)", async ({ fen, pseudo, legal }) => {
+    const { service, storage, handler } = await setup(fen);
+    service.reveal("modules", "writer", at);
+    const run = storage.read("modules")!.run;
+    const response = await handler(post("/runs/modules/modules/query", {
+      assistance: compileAssistanceRequest({ contextHint: "position", preference: named("analysis") }),
+      query: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] },
+    }));
+    expect(response.status).toBe(200);
+    const { page } = await response.json() as { page: ModuleQueryPage };
+    const packet = page.packets.find(item => item.module === "full_inspector")!;
+    expect(packet).toBeDefined();
+    const caption = parsePresentationReceipt(packet.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.square_control@1")!;
+    expect(caption).toBeDefined();
+    if (caption.component.id !== "fact_statement" || caption.component.operand.rendererId !== "play.square_control@1") throw new Error("Expected square-control caption");
+    expect(caption.component.operand.operands.colors).toContainEqual({ color: "white", pseudo, legal });
+    expect(presentedSentence(caption)).toContain(`White attacks ${pseudo} squares (${legal} with legal moves)`);
+    expect(presentedSentence(caption)).not.toContain("64");
+  });
 
   it("delivers the Support seats the preset compiled, each bound to the same final digest", async () => {
     const { storage, handler } = await setup();

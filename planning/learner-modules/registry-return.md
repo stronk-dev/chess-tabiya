@@ -1,5 +1,49 @@
 # Learner-module registry implementation return
 
+## Current return — 2026-10-08: D3578 selected-square delivery
+
+The registry now exists; the 2026-08-23 findings below are historical, not today's
+implementation blockers. This return concerns the actual registered query and adapters.
+
+`make requested-sight-contract-check` is a disposable code-backed diagnostic, not a software
+completion gate. Its passing preimage assertions mean the defect remains. `[V]`
+
+1. **Acquisition is not selected-square consumption.** Four real sealed readings—castling rights,
+   square control, pawn contacts and legal moves—have no branch in `sightScope`. Every possible
+   selected square is excluded. The current adapters consume entire populations, so making their
+   scope all-board would expose unrelated pieces/relations rather than answer the selection.
+   Sources: `module-query-sources.ts`, `module-query.ts` and `presentation-play-adapters.ts`. `[V]`
+2. **The selected frame stops before rendering.** `ProjectionPresentationAdapter.construct`
+   receives only the admitted reading; it does not receive the validated selected square in
+   `ModuleSubject`. Specify the exact boundary at which the requested subset is constructed and
+   retained. Do not mutate sealed evidence, relabel a partial population as a complete source,
+   pass arbitrary prose/callbacks to renderers or infer the selected origin from array order.
+   The unchanged position-wide Inspector must retain its own meaning. `[V]`
+3. **The completeness and budget requirements conflict.** `exact-legal-mobility.md` §3 requires the
+   selected origin's complete destination set; `module-policy.ts` allows Sight six marks and the
+   fitter drops an entire over-budget fact. A legal queen on d4 in the diagnostic has 27 distinct
+   destinations. Truncating that to six would falsely narrow legal mobility. Resolve the actual
+   legality-overlay budget/placement in the author contract before implementing the full binding;
+   do not increase unrelated structural output or quietly weaken complete-set retention. `[V]`
+4. **Destinations are not move identities.** The diagnostic promotion pawn has one destination and
+   four legal UCI identities. Preserve all choices through controller and non-square forms;
+   preserve the king's landing square separately from its castling move identity. Keep pseudolegal
+   control, actual legal destinations and quality/risk evidence distinct. The exact-mobility
+   contract already requires these distinctions. `[V]`
+
+The narrow amendment must specify those boundaries for each of the four existing sources,
+including occupied-piece versus empty-target selection, turn/availability and explicit no-witness
+behavior. It must not add collectors, presets or rankings. Require real query → mounted/native
+pointer, touch and keyboard controls for populated and unrelated squares; full legal queen sets;
+promotion choices; unavailable turn clones; changing selection/position/help; unchanged original
+source receipts and effective assistance ceilings. Registration-only witnesses are insufficient.
+
+**Independent executable repair:** D3579 corrects square-control summary arithmetic in the existing
+adapters (nonempty controller cells rather than array length). It does not supply this missing
+selected-square contract or discharge exact-legal-mobility D1.
+
+## Historical return — 2026-08-23
+
 **Date:** 2026-08-23
 **RFC:** `rfc/learner-modules.md` §1, §4, §6, Appendix B / A1–A3
 **Ledger:** D1205, D1206

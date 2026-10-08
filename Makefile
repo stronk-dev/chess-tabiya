@@ -1595,6 +1595,10 @@ module-registration-author-contract-update:
 module-registration-author-contract:
 	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts --reporter=verbose
 
+.PHONY: requested-sight-contract-check
+requested-sight-contract-check:
+	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts tools/d2120-module-registration-author-contract/selected-sight.test.ts
+
 .PHONY: wave-c-module-amendment
 wave-c-module-amendment: module-evidence-assembly module-registration-author-contract
 	node --test tools/d3129-wave-c-module-amendment/contract.test.mjs
@@ -1767,6 +1771,14 @@ application-fixture-check:
 local-module-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-fixture.test.ts apps/server/src/http-response.test.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
 	$(MAKE) typecheck
+
+.PHONY: square-control-presentation-check
+square-control-presentation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/square-control.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/server/src/module-query.test.ts
+
+.PHONY: square-control-browser-check
+square-control-browser-check:
+	./node_modules/.bin/playwright test --grep "D3579 square-control totals"
 
 .PHONY: hint-empty-response-check
 hint-empty-response-check:

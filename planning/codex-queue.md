@@ -94,13 +94,21 @@ not the separate complete whole-game Review journey or an official educational c
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
 2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   [[D3579]] is **closed locally**: both Sight/Inspector adapters count populated targets rather
+   than all 64 retained cells and preserve unavailable legal readings. Four predecessor-red
+   controls, eighteen focused cases, actual REST Inspector delivery and desktop/phone reload
+   journeys pass. Full normal gates pass 3,614 software, seven performance, 228 content and
+   181 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells.
    [[D3578]] is a reproduced-by-code consumer omission, not a missing collector: requested
    sight acquires four registered sources but maps none to a selected square. Complete
    square-aware legal destinations, pawn contacts, control and castling delivery under
    the existing learner-module/exact-mobility contracts, with exact query and mounted
    gesture proof. Do not repair it by admitting a whole-board population or relabelling
    an aggregate as the selected piece's answer. Carry any genuinely missing presentation
-   authority to the existing author lane before implementing that part.
+   authority to the existing author lane before implementing that part. The actual return now
+   measures the selected frame/adapter boundary and 27 legal queen destinations versus six marks;
+   `planning/learner-modules/registry-return.md` and `planning/rfc-drafting-queue.md` own the narrow
+   amendment. Do not call it an implementation-ready switch fix or discharge mobility D1 yet.
    [[D3576]] closes the already-specified immutable opening loader with a detached validated
    snapshot, frozen source metadata and predecessor-red mutation controls. Full sequential
    local gates pass. [[D3376]]'s cross-package source-authority amendment and runtime/Review

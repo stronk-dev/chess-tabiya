@@ -4,6 +4,15 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make square-control-presentation-check` verifies populated-target arithmetic through both exact
+Sight/Inspector adapters, receipt parsing and the real REST module query. Initial-position control
+and check-restricted destinations are distinct; an invalid turn clone stays unavailable.
+`make square-control-browser-check` checks the actual desktop and touch-phone Inspector, reload and
+unchanged recorded play. These permanent tests also run in their normal software/browser tiers.
+`make requested-sight-contract-check` is different: six disposable D3578 research controls expose
+the current missing square scopes and complete-set/budget conflict. A passing diagnostic means
+those gaps still exist; it is excluded from ordinary software CI and proves no feature completion.
+
 `make play-composition-max-load-check` exercises all eight play seats through the real assistance
 compiler, domain branches, requests and sealed receipts at seven viewports. It includes held-cue
 priority, every badge, native swaps/hits, compact tokens and board stability; no packet fixtures or

@@ -14,7 +14,8 @@ import type { Color, Role, SquareName } from "chessops/types";
 
 import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
-import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import type { SquareControlReading } from "./square-control.js";
 import { hintSentence, type HintDisclosurePayload } from "./hint-horizon.js";
 import { HINT_FAMILIES, HINT_RELATIONS, HINT_RUNGS, hintDisclosureProjectionId, type HintFamily, type HintRelation, type HintRung } from "./hint-registry.js";
 import { CORPUS_GUARD } from "./population-guard.js";
@@ -300,7 +301,7 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     return [relation(evidence, contactNodes, reading.contacts.map((contact) => ({ from: contact.attacker.square, to: contact.target.square, relation: "attacks" as const, sign: "state" as const })), "fact"), summary];
   }, relationWithStatement("pawn_contacts_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]));
   add("sight_on_request", V1("rules.square.reading.control"), "relation_overlay", ["arrows", "list", "lit_squares", "panel", "piece_halo"], ["colors"], ["mechanical_transform"], (evidence) => {
-    const reading = evidence.payload as { readonly colors: readonly { readonly color: Color; readonly pseudo: readonly { readonly target: SquareName; readonly controllers: readonly { readonly square: SquareName; readonly piece: SchemaPiece }[] }[]; readonly legal: { readonly kind: "available" | "unavailable"; readonly squares: readonly unknown[] } }[] };
+    const reading = evidence.payload as SquareControlReading;
     const nodes: RelationOverlayOperand["nodes"][number][] = [];
     const edges: RelationOverlayOperand["edges"][number][] = [];
     for (const entry of reading.colors) for (const controlled of entry.pseudo) {
@@ -312,7 +313,7 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     }
     const controllerNodes = nodes.filter((node) => node.emphasis === "source");
     const ordered = [...controllerNodes, ...nodes.filter((node) => node.emphasis !== "source")];
-    const summary = statement("play.square_control@1", "piece-geometry@1", { colors: reading.colors.map((entry) => ({ color: entry.color, pseudo: entry.pseudo.length, legal: entry.legal.kind === "available" ? entry.legal.squares.length : null })) });
+    const summary = statement("play.square_control@1", "piece-geometry@1", { colors: reading.colors.map((entry) => ({ color: entry.color, pseudo: controlledSquareCount(entry.pseudo), legal: entry.legal.kind === "available" ? controlledSquareCount(entry.legal.squares) : null })) });
     return [relation(evidence, ordered, edges.filter((edge) => edge.from !== edge.to), "fact"), summary];
   }, relationWithStatement("square_control_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]));
 
