@@ -136,7 +136,7 @@ export class ProviderBackoffCoordinator {
   #blockedUntilMonotonic = Number.NEGATIVE_INFINITY;
   #sequence = 0;
   #claim: GroupClaim | undefined;
-  #waiters: (() => void)[] = [];
+  readonly #waiters = new Set<() => void>();
 
   constructor(group: ProviderBackoffGroupId, owner: object) {
     this.group = group;
@@ -164,8 +164,8 @@ export class ProviderBackoffCoordinator {
   }
 
   #wake(): void {
-    const waiters = this.#waiters;
-    this.#waiters = [];
+    const waiters = [...this.#waiters];
+    this.#waiters.clear();
     for (const waiter of waiters) waiter();
   }
 
@@ -181,16 +181,25 @@ export class ProviderBackoffCoordinator {
   }
 
   /** Waits (FIFO, bounded by the caller's deadline) while another member holds the group. */
-  async acquireWithin(now: () => number, image: string, deadlineMonotonic: number, timers: RegistryTimers): Promise<GroupAcquire> {
+  async acquireWithin(now: () => number, image: string, deadlineMonotonic: number, timers: RegistryTimers, signal?: AbortSignal): Promise<GroupAcquire> {
     for (;;) {
+      signal?.throwIfAborted();
       const current = now();
-      const result = this.acquire(current, image, Math.max(1, deadlineMonotonic - current));
-      if (result.kind !== "claimed") return result;
       const remaining = deadlineMonotonic - current;
-      if (remaining <= 0) return result;
+      if (remaining <= 0) throw Object.assign(new Error("provider admission deadline elapsed"), { name: "TimeoutError" });
+      const result = this.acquire(current, image, remaining);
+      if (result.kind !== "claimed") return result;
       await new Promise<void>((resolve) => {
-        const handle = timers.set(() => resolve(), Math.min(remaining, result.retryAfterMs + 1));
-        this.#waiters.push(() => { timers.clear(handle); resolve(); });
+        let handle: unknown;
+        const wake = (): void => {
+          timers.clear(handle);
+          this.#waiters.delete(wake);
+          signal?.removeEventListener("abort", wake);
+          resolve();
+        };
+        this.#waiters.add(wake);
+        signal?.addEventListener("abort", wake, { once: true });
+        handle = timers.set(wake, Math.min(remaining, result.retryAfterMs + 1));
       });
     }
   }
@@ -377,6 +386,7 @@ export class ProviderRegistry {
   #revision = 0;
   #lastMonotonic = Number.NEGATIVE_INFINITY;
   #shutdown = false;
+  readonly #admissionShutdown = new AbortController();
 
   constructor(options: ProviderRegistryOptions) {
     const configured = parseConfiguration(options.configured);
@@ -619,7 +629,7 @@ export class ProviderRegistry {
    * Admits one live request for `operation`, or throws the typed unavailable outcome. Grouped
    * instances also acquire their group's single-flight claim, waiting FIFO within the deadline.
    */
-  async admit(operation: ApplicationProviderOperationId, options: { readonly deadlineMonotonic?: number; readonly operatorRetry?: boolean } = {}): Promise<ProviderTicket> {
+  async admit(operation: ApplicationProviderOperationId, options: { readonly deadlineMonotonic?: number; readonly operatorRetry?: boolean; readonly signal?: AbortSignal } = {}): Promise<ProviderTicket> {
     const execution = applicationProviderExecution(operation);
     const now = this.#now();
     const deadline = options.deadlineMonotonic ?? now + execution.consumerBudgetMs;
@@ -631,7 +641,13 @@ export class ProviderRegistry {
       const retry = availability.state === "temporarily_blocked" ? availability.retryAfterMs : "retryAfterMs" in instance ? instance.retryAfterMs : null;
       throw new ProviderUnavailableError(operation, availability, retry, message);
     };
+    const expired = (): never => {
+      throw new ProviderUnavailableError(operation, Object.freeze({ state: "unavailable", instanceIds: Object.freeze([execution.instanceId]), reason: "timeout" }), null, "the operation deadline was consumed before the provider could be asked");
+    };
+    options.signal?.throwIfAborted();
     if (this.#shutdown) refuse("the server is shutting down");
+    if (now >= deadline) expired();
+    const signal = options.signal === undefined ? this.#admissionShutdown.signal : AbortSignal.any([options.signal, this.#admissionShutdown.signal]);
     if (state.config === null || state.generation === null) refuse();
     let halfOpenToken: string | null = null;
     if (state.arm === "failed") {
@@ -643,24 +659,35 @@ export class ProviderRegistry {
     }
     const groupId = providerInstanceDeclaration(execution.instanceId).backoffGroup;
     let group: TicketRecord["group"] = null;
-    if (groupId !== null) {
-      const coordinator = this.#coordinators.get(groupId)!;
-      const image = this.#groupImage(groupId);
-      const acquired = await coordinator.acquireWithin(() => this.#now(), image, deadline, this.#timers);
-      if (acquired.kind !== "claim") {
-        if (halfOpenToken !== null && state.halfOpenToken === halfOpenToken) state.halfOpenToken = null;
-        const availability: ProviderOperationAvailability = Object.freeze({ state: "temporarily_blocked", instanceIds: Object.freeze([execution.instanceId]), reason: acquired.kind === "blocked" ? "upstream_backoff" : "group_claimed", retryAfterMs: Math.ceil(acquired.retryAfterMs) });
-        throw new ProviderUnavailableError(operation, availability, Math.ceil(acquired.retryAfterMs));
+    try {
+      if (groupId !== null) {
+        const coordinator = this.#coordinators.get(groupId)!;
+        const image = this.#groupImage(groupId);
+        const acquired = await coordinator.acquireWithin(() => this.#now(), image, deadline, this.#timers, signal);
+        if (acquired.kind !== "claim") {
+          const availability: ProviderOperationAvailability = Object.freeze({ state: "temporarily_blocked", instanceIds: Object.freeze([execution.instanceId]), reason: acquired.kind === "blocked" ? "upstream_backoff" : "group_claimed", retryAfterMs: Math.ceil(acquired.retryAfterMs) });
+          throw new ProviderUnavailableError(operation, availability, Math.ceil(acquired.retryAfterMs));
+        }
+        group = Object.freeze({ coordinator, token: acquired.token, image: acquired.image });
+        if (image !== this.#groupImage(groupId)) refuse("the provider generation changed during admission");
       }
-      if (state.generation !== null && image !== this.#groupImage(groupId)) {
-        coordinator.settle(acquired.token, acquired.image, this.#now(), { kind: "cancelled" });
-        refuse("the provider generation changed during admission");
+      options.signal?.throwIfAborted();
+      if (this.#shutdown) refuse("the server is shutting down");
+      if (this.#now() >= deadline) expired();
+      if (state.arm === "failed" && (halfOpenToken === null || state.halfOpenToken !== halfOpenToken)) refuse("the provider circuit changed during admission");
+      const ticket: ProviderTicket = Object.freeze({ operation, instanceId: execution.instanceId, generation: state.generation!, admittedAtMonotonic: now, deadlineMonotonic: deadline });
+      this.#tickets.set(ticket, { registry: this, halfOpenToken, group, settled: false });
+      return ticket;
+    } catch (error) {
+      if (group !== null) {
+        try { group.coordinator.settle(group.token, group.image, this.#now(), { kind: "cancelled" }); }
+        catch { /* An expired or invalidated claim cannot clear its successor. */ }
       }
-      group = Object.freeze({ coordinator, token: acquired.token, image: acquired.image });
+      if (halfOpenToken !== null && state.halfOpenToken === halfOpenToken) state.halfOpenToken = null;
+      if (this.#shutdown) refuse("the server is shutting down");
+      if (error instanceof Error && error.name === "TimeoutError") expired();
+      throw error;
     }
-    const ticket: ProviderTicket = Object.freeze({ operation, instanceId: execution.instanceId, generation: state.generation!, admittedAtMonotonic: now, deadlineMonotonic: deadline });
-    this.#tickets.set(ticket, { registry: this, halfOpenToken, group, settled: false });
-    return ticket;
   }
 
   #groupImage(group: ProviderBackoffGroupId): string {
@@ -807,6 +834,7 @@ export class ProviderRegistry {
   /** Server shutdown: outstanding and later work is `cancelled_by_shutdown`, with no restart storm. */
   shutdown(): void {
     this.#shutdown = true;
+    this.#admissionShutdown.abort();
   }
 
   /** Runs one admitted request under one deadline: admit → execute → settle, typed on refusal. */
@@ -817,7 +845,7 @@ export class ProviderRegistry {
     options: { readonly deadlineMonotonic?: number; readonly signal?: AbortSignal } = {},
   ): Promise<T> {
     if (options.signal?.aborted === true) throw Object.assign(new Error("the caller cancelled before admission"), { name: "AbortError" });
-    const ticket = await this.admit(operation, options.deadlineMonotonic === undefined ? {} : { deadlineMonotonic: options.deadlineMonotonic });
+    const ticket = await this.admit(operation, options);
     // Admission can await persistence/coordinator work. Cancellation in that gap must release
     // the ticket without starting a provider or changing its health.
     if (callerAborted(options.signal)) {

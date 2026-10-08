@@ -280,6 +280,51 @@ async function applicationControl() {
 }
 
 describe("authenticated Hint → application → health → external HTTP voice cancellation", () => {
+  it("DELETE detaches queued voice admission while the first rung keeps its upstream slot", { timeout: 30_000 }, async () => {
+    const app = await applicationControl();
+    const coordinator = app.application.providerHealth.coordinator("external-voice-api")!;
+    const acquire = coordinator.acquireWithin.bind(coordinator);
+    const admissions: { settled: boolean; signal: AbortSignal | undefined }[] = [];
+    const observed = vi.spyOn(coordinator, "acquireWithin").mockImplementation(async (...args) => {
+      const admission = { settled: false, signal: args[4] };
+      admissions.push(admission);
+      try { return await acquire(...args); }
+      finally { admission.settled = true; }
+    });
+    try {
+      const first = id(await app.ask("pattern"));
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      const before = app.state();
+      const queued = id(await app.ask("square"));
+      await vi.waitFor(() => expect(admissions).toHaveLength(2));
+      expect(admissions[1]!.settled).toBe(false);
+      expect((await app.cancel(queued)).status).toBe(200);
+      await vi.waitFor(() => expect(admissions[1]!.settled).toBe(true));
+      expect(admissions[1]!.signal!.aborted).toBe(true);
+      expect(app.exchanges).toHaveLength(1);
+      expect(app.exchanges[0]!.signal.aborted).toBe(false);
+      expect(app.state()).toEqual(before);
+      expect((await app.poll(queued)).status).toBe(404);
+      // A new explicit request still queues behind the original; the cancelled one cannot run.
+      expect(id(await app.ask("square"))).toBe(queued);
+      await vi.waitFor(() => expect(admissions).toHaveLength(3));
+      expect(admissions[2]!.settled).toBe(false);
+      app.exchanges[0]!.reply.resolve(Response.json({ text: app.exchanges[0]!.sentence }));
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(2));
+      expect(admissions[2]!.settled).toBe(true);
+      app.exchanges[1]!.reply.resolve(Response.json({ text: app.exchanges[1]!.sentence }));
+      for (const requestId of [first, queued]) await vi.waitFor(async () => {
+        const response = await app.poll(requestId);
+        expect(parseHintResponse((await response.json() as { hint: unknown }).hint)).toMatchObject({ state: "available", delivery: { rendered: { voice: { state: "rendered" } } } });
+      });
+      expect(app.exchanges).toHaveLength(2);
+    } finally {
+      observed.mockRestore();
+      for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed"));
+      await app.application.close();
+    }
+  });
+
   it("a real failed analysis start recovers on authenticated DELETE/re-POST of the same decision", { timeout: 30_000 }, async () => {
     const app = await applicationControl();
     const start = vi.spyOn(MockProviderEngineClient.prototype, "start").mockRejectedValueOnce(new Error("startup failed"));

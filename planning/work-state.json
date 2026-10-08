@@ -29737,6 +29737,15 @@
       "uxItems": [],
       "evidence": "tests/browser/arrival-latency.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3594",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:31d24139cc0d470a5c221069477bbede1526dbbda82a1cfe212c64b89ce87268",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

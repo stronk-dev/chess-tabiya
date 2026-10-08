@@ -135,6 +135,139 @@ describe("state machine (criterion 2)", () => {
     expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
   });
 
+  it("detaches cancellation while waiting for a shared upstream slot without disturbing its owner", async () => {
+    const callbacks = new Map<number, () => void>();
+    let next = 0;
+    const registry = new ProviderRegistry({ configured: [{ instanceId: "external-voice", implementation: "external_http", endpoint: "voice", identity: "voice" }], timers: {
+      set(callback) { const id = ++next; callbacks.set(id, callback); return id; },
+      clear(handle) { callbacks.delete(handle as number); },
+    } });
+    const owner = await registry.admit("render.voice");
+    const caller = new AbortController();
+    let calls = 0;
+    let result = "pending";
+    const pending = registry.run("render.voice_compare", async () => { calls += 1; return "unwanted"; }, () => classifyHttpStatus(503), { signal: caller.signal })
+      .then(() => { result = "success"; }, error => { result = error.name; });
+    try {
+      expect(callbacks.size).toBe(1);
+      caller.abort();
+      await new Promise<void>(resolve => setImmediate(resolve));
+      expect(result).toBe("AbortError");
+      expect(callbacks.size).toBe(0);
+      expect(calls).toBe(0);
+      expect(registry.coordinator("external-voice-api")!.claimed(registry.monotonicNow())).toBe(true);
+      expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+    } finally {
+      registry.settle(owner, { kind: "cancelled", by: "caller" });
+      await pending;
+    }
+    expect(await registry.run("render.voice_story", async () => "sibling", () => classifyHttpStatus(503))).toBe("sibling");
+  });
+
+  it("refuses an already elapsed admission deadline before claiming a free upstream slot", async () => {
+    const clock = testClock();
+    const registry = await testRegistry({ "external-voice": "unverified" }, { clock });
+    let issued: Awaited<ReturnType<ProviderRegistry["admit"]>> | undefined;
+    const admission = registry.admit("render.voice", { deadlineMonotonic: clock.now }).then(ticket => { issued = ticket; return ticket; });
+    try {
+      await expect(admission).rejects.toMatchObject({ code: "PROVIDER_UNAVAILABLE", availability: { state: "unavailable", reason: "timeout" } });
+      expect(registry.coordinator("external-voice-api")!.claimed(clock.now)).toBe(false);
+      expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+    } finally { if (issued !== undefined) registry.settle(issued, { kind: "cancelled", by: "caller" }); }
+  });
+
+  it("rechecks a queued deadline when the owner releases before the timer is delivered", async () => {
+    const clock = testClock();
+    const registry = await testRegistry({ "external-voice": "unverified" }, { clock });
+    const owner = await registry.admit("render.voice");
+    let issued: Awaited<ReturnType<ProviderRegistry["admit"]>> | undefined;
+    const admission = registry.admit("render.voice_compare", { deadlineMonotonic: clock.now + 100 }).then(ticket => { issued = ticket; return ticket; });
+    clock.advance(100);
+    registry.settle(owner, { kind: "cancelled", by: "caller" });
+    try {
+      await expect(admission).rejects.toMatchObject({ code: "PROVIDER_UNAVAILABLE", availability: { state: "unavailable", reason: "timeout" } });
+      expect(registry.coordinator("external-voice-api")!.claimed(clock.now)).toBe(false);
+      expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+    } finally { if (issued !== undefined) registry.settle(issued, { kind: "cancelled", by: "caller" }); }
+  });
+
+  it("does not start queued provider work after application shutdown", async () => {
+    const registry = await testRegistry({ "external-voice": "unverified" });
+    const owner = await registry.admit("render.voice");
+    let calls = 0;
+    let failure: unknown;
+    const pending = registry.run("render.voice_compare", async () => { calls += 1; return "unwanted"; }, () => classifyHttpStatus(503));
+    const settled = pending.catch(error => { failure = error; });
+    try {
+      registry.shutdown();
+      await new Promise<void>(resolve => setImmediate(resolve));
+      expect(failure).toMatchObject({ code: "PROVIDER_UNAVAILABLE" });
+      expect(registry.coordinator("external-voice-api")!.claimed(registry.monotonicNow())).toBe(true);
+    } finally { registry.settle(owner, { kind: "cancelled", by: "caller" }); await settled; }
+    expect(calls).toBe(0);
+    expect(registry.coordinator("external-voice-api")!.claimed(registry.monotonicNow())).toBe(false);
+    expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+  });
+
+  it("cleans each expired wait timer while preserving the shared owner and provider health", async () => {
+    const clock = testClock();
+    const callbacks = new Map<number, () => void>();
+    let next = 0;
+    const registry = new ProviderRegistry({ configured: [{ instanceId: "external-voice", implementation: "external_http", endpoint: "voice", identity: "voice" }], monotonicNowMs: () => clock.now, timers: {
+      set(callback) { const id = ++next; callbacks.set(id, callback); return id; },
+      clear(handle) { callbacks.delete(handle as number); },
+    } });
+    const owner = await registry.admit("render.voice");
+    try {
+      for (let index = 0; index < 3; index += 1) {
+        const pending = registry.admit("render.voice_compare", { deadlineMonotonic: clock.now + 100 });
+        const refusal = expect(pending).rejects.toMatchObject({ availability: { reason: "timeout" } });
+        expect(callbacks.size).toBe(1);
+        // An early callback re-arms against the same absolute deadline, not a new budget.
+        [...callbacks.values()][0]!();
+        await new Promise<void>(resolve => setImmediate(resolve));
+        expect(callbacks.size).toBe(1);
+        clock.advance(100);
+        [...callbacks.values()][0]!();
+        await refusal;
+        expect(callbacks.size).toBe(0);
+        expect(registry.coordinator("external-voice-api")!.claimed(clock.now)).toBe(true);
+        expect(snapshotOf(registry, "external-voice").state).toBe("unverified");
+      }
+    } finally { registry.settle(owner, { kind: "cancelled", by: "caller" }); }
+  });
+
+  it("releases a cancelled half-open admission without clearing the other upstream member's claim", async () => {
+    const clock = testClock();
+    const registry = await testRegistry({ "tablebase-primary": { failed: "network" }, "explorer-primary": "unverified" }, { clock });
+    clock.advance(5_000);
+    const owner = await registry.admit("evidence.explorer_query");
+    const caller = new AbortController();
+    const pending = registry.admit("evidence.tablebase_probe", { signal: caller.signal });
+    const refusal = expect(pending).rejects.toMatchObject({ name: "AbortError" });
+    try {
+      caller.abort();
+      await refusal;
+      expect(registry.coordinator("lichess-api")!.claimed(clock.now)).toBe(true);
+      expect(snapshotOf(registry, "tablebase-primary")).toMatchObject({ state: "unavailable", reason: "network" });
+    } finally { registry.settle(owner, { kind: "cancelled", by: "caller" }); }
+    const retry = await registry.admit("evidence.tablebase_probe");
+    registry.settle(retry, { kind: "cancelled", by: "caller" });
+  });
+
+  it("rechecks a circuit opened by the owner before dispatching its queued peer", async () => {
+    const registry = await testRegistry({ "external-voice": "unverified" });
+    const owner = await registry.admit("render.voice");
+    let calls = 0;
+    const pending = registry.run("render.voice_compare", async () => { calls += 1; return "unwanted"; }, () => classifyHttpStatus(503));
+    const refusal = expect(pending).rejects.toMatchObject({ availability: { state: "unavailable", reason: "authentication" } });
+    registry.settle(owner, { kind: "failure", reason: "authentication" });
+    await refusal;
+    expect(calls).toBe(0);
+    expect(registry.coordinator("external-voice-api")!.claimed(registry.monotonicNow())).toBe(false);
+    expect(snapshotOf(registry, "external-voice")).toMatchObject({ state: "unavailable", reason: "authentication" });
+  });
+
   it("releases a cancelled ticket even when execution ignores abort and its deadline passes", async () => {
     const callbacks = new Map<number, () => void>();
     let next = 0;

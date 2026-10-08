@@ -103,6 +103,15 @@ request cancellation. The registry checks again after awaited admission and prov
 so an ignored abort cannot heal provider health or publish success. Permanent controls run with
 `make opponent-cancellation-check` and in the ordinary software tier.
 
+Upstream admission is cancellable too: a request waiting for a shared group slot detaches its
+wake callback and timer on caller cancellation or application shutdown. It never releases the
+current owner's claim. Admission checks the original monotonic deadline before claiming and
+again after the wait, and rechecks the provider circuit/generation before dispatch. Expiry before
+provider work returns typed unavailability without damaging health; a cancelled half-open waiter
+releases only its own recovery token. Permanent controls run in
+`make provider-scheduler-lifetime-check guided-hint-lifetime-check`, including authenticated Hint
+DELETE/retry while another rung keeps its upstream slot.
+
 ## `/capabilities`, `/healthz`
 
 `/capabilities` returns `providerHealth: { generatedAt, providers[7], operations[10],

@@ -12,6 +12,14 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3594]] is closed locally under accepted provider-health §§5–6: cancelled admission detaches,
+expired callers cannot acquire a claim, and queued work refuses shutdown or a changed circuit.
+Four predecessor-red controls, seven new provider controls and actual authenticated Hint
+DELETE/retry retain the sibling's upstream slot and release only owned recovery claims.
+Final source passes clean types/build, 3,686 software, seven performance, 228 content and
+191 browser cases, one existing optional Maia skip and zero retries. Corrected governance
+passes after removing one duplicate checkpoint reference; no budget or source semantics change.
+
 [[D3591]] is a newly observed local verification failure, not a ready-to-push result:
 longitudinal worker maximum event-loop delay is 328.466431 ms against 250 ms, despite p95
 11.796479 ms and maximum HTTP probe 40.247959 ms. The full run stops after 3,672 software
@@ -20,9 +28,9 @@ keep the budget and main-thread negative unchanged. A subsequent green replay ca
 The diagnostic-only replay of normal `make typecheck test-performance` passes clean types and
 all seven performance cases. Maximum delay is 59.736063 ms; the original cause is still unlocated.
 The existing test now reports bounded GC and main-thread CPU/cycle context, not raw captures.
-The final sequential normal run passes clean types/build, 3,678 software, seven performance,
+The latest normal gates pass clean types/build, 3,686 software, seven performance,
 228 content and 191 browser cases, one optional Maia skip and zero retries. D3591's maximum
-delay is 21.413887 ms this replay; its original 328.466431 ms stall remains unlocated and open.
+delay is 18.169855 ms this replay; its original 328.466431 ms stall remains unlocated and open.
 
 [[D3592]]/[[D3593]] are closed locally. Paired timing locates 89–142 ms of automation
 overhead; the actual native-click readiness gate preserves the 250 ms budget and includes

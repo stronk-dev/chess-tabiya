@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3593]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3594]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,6 +58,14 @@ across the platform**. Deeper “why this engine move?” search remains researc
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 
+Latest provider repair ([[D3594]]) is closed locally: cancelled requests waiting for an upstream
+slot detach without disturbing its owner, elapsed admission cannot acquire a slot, and current
+circuit/generation/shutdown authority is rechecked before dispatch. Four predecessor-red controls,
+seven new provider controls and actual authenticated Hint DELETE/retry establish those boundaries.
+Clean types and all normal local software/performance/content/governance/browser gates pass;
+the first run's duplicate roadmap reference was corrected before the remaining gates passed.
+No source migration, whole module, milestone or release completion is claimed.
+
 Latest completed repairs ([[D3592]]/[[D3593]]): warm arrival measures the real native click
 through a complete playable board and two further frames, enforcing the unchanged 250 ms
 budget with invalid/over-budget controls. The old automation envelope is retained separately;
@@ -74,16 +82,19 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal run passes:** clean types/build, 3,678 software cases / 354 files,
+**The final local normal gates pass:** clean types/build, 3,686 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
 191 browser cases (126 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-This is local verification, not a new GitHub or native release-image result.
+Software/performance passed in the first command; after correcting a duplicate roadmap reference,
+the remaining governance/content/browser command exits zero. Warm native arrival in this replay
+is median 88.5 ms / p95 113 ms against the unchanged 250 ms budget. This is local verification,
+not a new GitHub or native release-image result.
 
 [[D3591]] remains open: the earlier full run measured 328.466431 ms maximum event-loop
 delay against the unchanged 250 ms limit. Its diagnostic replay measured 59.736063 ms;
-this final full run measures 21.413887 ms, p95 11.509759 ms and maximum HTTP probe
-15.599625 ms, with three renewals and publication at 4,145 ms. Bounded GC and main-thread
+the latest full performance tier measures 18.169855 ms, p95 11.296767 ms and maximum HTTP probe
+16.514125 ms, with four renewals and publication at 4,159 ms. Bounded GC and main-thread
 CPU/cycle context is available, but the original stall has not recurred or been attributed.
 A green replay does not establish its cause or close it. Earlier failures remain in the log;
 no release promotion or readiness-to-push claim follows.
@@ -277,7 +288,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,342 ledger rows** (1,474 done, 161 refused, 1,707 live,
+(271 completed, 24 retired, 274 live); **3,343 ledger rows** (1,475 done, 161 refused, 1,707 live,
 zero untriaged). Of the live ledger, 628 are todo, thirteen doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
