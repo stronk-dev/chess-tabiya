@@ -1,5 +1,15 @@
 # RFC drafting queue — the unowned NEEDS-RFC rows, collapsed into documents
 
+## Current narrow author handoff — 2026-10-08
+
+- **D3564 — semantic-validation-authority §4.1 input operands.** Review the measured
+  proposal in `design/research/semantic-validation-closure.md` before adding orientation
+  authorities. Three closed input-relative rules must bind retained FEN/UCI leaves to each
+  side's exact legal input, without deleting operands or weakening the total walk. Both
+  real castling directions and corruption controls pass the disposable model. This does
+  not authorize production changes or supply independent chess-semantic authority. The
+  separate already-specified preflight ordering repair is D3566, not an amendment request.
+
 ## 2026-08-26 live amendment queue
 
 - **D428 — authoring issue-code successor.** The archived `dead-vocabulary` RFC explicitly

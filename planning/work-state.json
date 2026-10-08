@@ -29466,6 +29466,33 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3564",
+      "state": "blocked",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:517a1460ee9ec27cae7c4add2970baccef2858b1950b8a4ea889647bdd03139b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D3565",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4cba75126e906cf05e8431b51404df757021496e8468b4b33c836dff3af478ab",
+      "uxItems": [],
+      "evidence": "tools/d1713-semantic-validation-matrix/validation-matrix.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3566",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:57c67147a6510ca580b43d66aec1541b5b6c02279df9ead494c136a723bfe348",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

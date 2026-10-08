@@ -14,7 +14,7 @@ import {
   semanticValidationImportClosure,
 } from "./semantic-validation-authorities.js";
 import { semanticValidationLawProfile } from "./semantic-validation-law.js";
-import { SEMANTIC_VALIDATION_OPERATIONS, type SemanticValidationOperationResult } from "./semantic-validation-operations.js";
+import { SEMANTIC_VALIDATION_OPERATIONS, canonicalSemanticEdge, type SemanticValidationOperationResult } from "./semantic-validation-operations.js";
 import { executeSemanticValidationOracle, type SemanticValidationOracleWitness } from "./semantic-validation-oracles.js";
 import { SEMANTIC_VALIDATION_PROFILES, SEMANTIC_VALIDATION_ROOTS, admitValidatedSemanticInstance, semanticValidationSummary, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { SEMANTIC_VALIDATION_RECEIPT } from "./semantic-validation-receipt.generated.js";
@@ -402,16 +402,27 @@ describe("semantic-validation orientation", () => {
     expect(mirrorSemanticFen("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1", "horizontal")).toBe("3k4/8/8/3Pp3/8/8/8/3K4 w - e6 0 1");
   });
 
-  it("[7] fails a one-sided orientation case and a crossed partner before any comparison", async () => {
+  it("[7][D3566] rejects a missing or crossed mirror partner before either collector runs", async () => {
     const base = rawCase("transition.short-castle.castled");
     const oneSided = parseSemanticValidationCase({ ...base, id: "castled.one-sided", arm: "orientation", expectation: { kind: "mirrors", partnerCase: { kind: "case", id: "castled.missing-partner", version: 1, subject: base.subject, arm: "orientation" }, geometry: "color_and_vertical", targetEvents: { nonEmpty: true, pairing: "canonical_subject_sign_operands" }, operandRules: [{ sourcePath: ["move_uci"], partnerPath: ["move_uci"], value: "identity", collection: "scalar" }] } });
     const resolvers = { ...SEMANTIC_VALIDATION_RESOLVERS, resolveProposition: (value: SemanticValidationCase) => ({ subject: value.subject, case: { id: value.id, version: 1 as const }, factConstraint: [], factConstraintSha256: semanticFactConstraintSha256([]), expectation: value.expectation }) };
-    expect((await executeSemanticValidationCase(oneSided, resolvers, CASE_MAP)).failure?.code).toBe("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE");
+    expect(await executeSemanticValidationCase(oneSided, resolvers, CASE_MAP)).toMatchObject({ status: "failed", invocations: 0, resultKind: "not_run", targetCount: 0, failure: { code: "SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE" } });
     // A partner that is a registered orientation case but not the transformed edge is crossed.
     const crossedPartner = parseSemanticValidationCase({ ...base, id: "castled.crossed-partner", arm: "orientation", expectation: { ...oneSided.expectation, partnerCase: { kind: "case", id: "castled.one-sided", version: 1, subject: base.subject, arm: "orientation" } } });
     const map = new Map([...CASE_MAP, [oneSided.id, oneSided], [crossedPartner.id, crossedPartner]]);
     const crossedSource = parseSemanticValidationCase({ ...base, id: "castled.crossed-source", arm: "orientation", expectation: { ...oneSided.expectation, partnerCase: { kind: "case", id: "castled.crossed-partner", version: 1, subject: base.subject, arm: "orientation" } } });
-    expect((await executeSemanticValidationCase(crossedSource, resolvers, map)).failure?.code).toBe("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA");
+    expect(await executeSemanticValidationCase(crossedSource, resolvers, map)).toMatchObject({ status: "failed", invocations: 0, resultKind: "not_run", targetCount: 0, failure: { code: "SEMANTIC_VALIDATION_ORIENTATION_SCHEMA" } });
+    if (crossedSource.input.kind !== "edge") throw new Error("expected an edge fixture");
+    const partnerInput = canonicalSemanticEdge({ kind: "edge", beforeFen: mirrorSemanticFen(crossedSource.input.beforeFen, "color_and_vertical"), moveUci: mirrorSemanticUci(crossedSource.input.moveUci, "color_and_vertical"), afterFen: crossedSource.input.afterFen });
+    const legalPartner = parseSemanticValidationCase({ ...crossedPartner, input: partnerInput });
+    map.set(legalPartner.id, legalPartner);
+    // A genuinely transformed edge gets past preflight and invokes both collectors. Its
+    // deliberately incomplete operand rules still fail the separate total comparison (D3564).
+    expect(await executeSemanticValidationCase(crossedSource, resolvers, map)).toMatchObject({ status: "failed", invocations: 2, resultKind: "completed", targetCount: 1, failure: { code: "SEMANTIC_VALIDATION_ORIENTATION_SCHEMA" } });
+    for (const change of [{ beforeFen: crossedSource.input.beforeFen }, { moveUci: crossedSource.input.moveUci }, { afterFen: crossedSource.input.afterFen }]) {
+      map.set(legalPartner.id, parseSemanticValidationCase({ ...legalPartner, input: { ...partnerInput, ...change } }));
+      expect(await executeSemanticValidationCase(crossedSource, resolvers, map)).toMatchObject({ status: "failed", invocations: 0, resultKind: "not_run", targetCount: 0, failure: { code: "SEMANTIC_VALIDATION_ORIENTATION_SCHEMA" } });
+    }
   });
 });
 

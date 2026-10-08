@@ -220,6 +220,15 @@ land; the eleven v1 multi-edge window events have no production operation (their
 do). Validation never transfers from inputs to a derived event, and a new projection version
 starts with no verdict.
 
+The real-payload orientation check has a measured contract gap (D3564): thirteen kinds
+within thirty migrated positive edge cases retain FEN/UCI operands that none of the five
+closed mirror rules can compare. Exact-input-binding rules are a research proposal awaiting
+author/cross-review, not shipping behavior. The suspected fullmove-counter input defect is
+refuted by legal castling, en-passant and promotion controls. D3566 separately implements
+the already-required missing/crossed-partner preflight before either collector invocation;
+valid pairs still reach the total operand comparison. See
+`design/research/semantic-validation-closure.md` for the bounded experiment and handoff.
+
 ## Adding a product module
 
 F5 must add a named consumer, literal eligibility rows, exact bindings, a versioned production

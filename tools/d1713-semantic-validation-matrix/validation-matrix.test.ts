@@ -104,7 +104,7 @@ const ORIENTATION: Readonly<Record<string, readonly Authority[]>> = Object.freez
 });
 
 const COUNTERFACTUAL: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
-  "derived.semantic_avoidance.open_file": [a("packages/runtime/src/semantic-evidence.test.ts", "constructs avoided only from a complete retained numerator and denominator", "composition")],
+  "derived.semantic_avoidance.open_file": [a("packages/runtime/src/semantic-evidence.test.ts", "constructs avoided only from the packet's complete retained numerator and denominator", "composition")],
   "derived.semantic_avoidance.loose_piece": [a("packages/runtime/src/semantic-evidence.test.ts", "constructs loose-piece avoidance through the same complete-population path", "composition")],
   "rules.tactic.consequence.reply_breadth": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
   "rules.tactic.event.defender_removed": [d872("counterfactual.test.ts", "pins a named target that survives every reply and one that can escape", "source_predicate")],

@@ -61,6 +61,18 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
 2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   [[D3564]] measures an orientation contract gap on real retained FEN/UCI operands;
+   the narrow author/review handoff is in `design/research/semantic-validation-closure.md`
+   and `planning/rfc-drafting-queue.md`. Do not register more orientation authorities on
+   an unrepresentable comparison or silently omit input fields. The suspected counter
+   bug is refuted. [[D3566]] separately repairs already-specified input preflight before
+   either collector, with predecessor-red zero-invocation controls. [[D3565]] repairs
+   the opt-in matrix's stale reference without promoting composition-level authority.
+   All 158 focused foundation and thirteen opt-in research checks pass. Final normal
+   `make roadmap-receipt verify-awake` exits zero: clean types, 3,568 software cases,
+   seven isolated performance cases, 227 content cases and all downstream/governance
+   checks. Browser sources are unchanged; the prior 175-pass browser checkpoint is
+   not represented as a new run. No remote CI or release verdict is claimed.
    [[D3563]] implements the existing `rfc/semantic-validation-authority.md` cited-source
    resolver rather than its unconditional refusal. A fixed six-line primary-source excerpt
    supports two legal castling cases, with exact reference/input/operation mismatch controls; all 158

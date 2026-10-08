@@ -273,6 +273,11 @@ export async function executeSemanticValidationCase(value: SemanticValidationCas
   });
   try {
     assertSemanticValidationFixture(value);
+    const mirrorPartner = value.expectation.kind === "mirrors" ? cases.get(value.expectation.partnerCase.id) : undefined;
+    if (value.expectation.kind === "mirrors") {
+      if (mirrorPartner === undefined || mirrorPartner.arm !== "orientation" || semanticValidationSubjectKey(mirrorPartner.subject) !== base.subject) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE", `mirror partner ${value.expectation.partnerCase.id} is not a registered same-subject orientation case`);
+      assertSemanticMirrorPartnerInput(value, mirrorPartner, value.expectation.geometry);
+    }
     // Authority: proposition first (the one closed record), then the neutral oracle when rules-backed.
     const proposition = resolvers.resolveProposition(value);
     if (semanticValidationSubjectKey(proposition.subject) !== semanticValidationSubjectKey(value.subject) || proposition.case.id !== value.id || proposition.case.version !== value.version || evidenceDigest(proposition.expectation) !== evidenceDigest(value.expectation)) {
@@ -322,10 +327,9 @@ export async function executeSemanticValidationCase(value: SemanticValidationCas
         if (result.kind !== "unavailable" || result.reason !== expectation.reason) throw new SemanticValidationError("SEMANTIC_VALIDATION_EXPECTATION_UNMET", `expected abstention ${expectation.reason}`);
         break;
       case "mirrors": {
-        const partner = cases.get(expectation.partnerCase.id);
-        if (partner === undefined || partner.arm !== "orientation" || semanticValidationSubjectKey(partner.subject) !== base.subject) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE", `mirror partner ${expectation.partnerCase.id} is not a registered same-subject orientation case`);
-        assertSemanticMirrorPartnerInput(value, partner, expectation.geometry);
-        const partnerResult = subjectSemanticResult(await invoke(partner), value.subject);
+        // The preflight above rejects a missing/crossed partner before either collector runs.
+        if (mirrorPartner === undefined) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE", "mirror partner preflight did not resolve a case");
+        const partnerResult = subjectSemanticResult(await invoke(mirrorPartner), value.subject);
         invocations += 1;
         const partnerTargets = selectSemanticTargets(partnerResult, value.subject);
         partnerTargets.forEach(assertSemanticTargetValueAuthority);

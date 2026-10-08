@@ -1,5 +1,12 @@
 # Semantic validation closure — the manifest validates shapes, not chess semantics
 
+**Current boundary — 2026-10-08:** the August findings below are historical, not a claim
+that the resolver still does not exist. The shipped runner now executes forty cases over
+81 subjects; zero subjects satisfy every required arm. D3563 added independently cited
+castling positives/negatives. The measured remaining orientation obstruction and a narrow
+review-only proposal are at the end of this dossier. `[V]` (`docs/semantic-evidence.md`,
+`packages/runtime/src/semantic-validation-receipt.generated.ts`, `make semantic-validation-check`)
+
 **Question:** Do the 67 semantic-event declarations' `validation` fields bind independent,
 executable evidence that each named chess predicate can both fire and refuse?
 
@@ -160,3 +167,56 @@ multiplication the owner asked the foundation to survive.
 - External Lichess puzzle themes are incomplete labels and cannot be the sole ground truth; D872's
   disagreement posture remains. `[V]` (`basic-semantic-tactics-stage-0.md`)
 - No learner UX, module default, pack content or collector implementation changes in this pass.
+
+## 2026-10-08 — actual orientation payload boundary (D3564)
+
+**Reproduction:** `make semantic-validation-matrix` runs the existing opt-in instrument,
+including `tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts`. It invokes real
+production operations without registering cases or admitting chess authority. Thirteen
+checks pass: ten boundary/proposal checks and three existing migration-matrix checks. D3565
+corrects one stale counterfactual test title, preserving its composition-only classification.
+No raw recording, new controller or canonical CI dependency is introduced. `[V]`
+
+Four legal color/vertical mirror controls cover White castling, Black castling, en passant
+and promotion in both directions. The existing input helper recomputes the legal successor,
+including the changed fullmove progression. The suspected counter defect is therefore
+**refuted**, not queued as another bug. `[V]` (research fixture controls;
+`packages/runtime/src/semantic-validation-runner.ts`, `assertSemanticMirrorPartnerInput`)
+
+The actual castling observations retain `before_fen`, `move_uci` and `after_fen`, alongside
+their semantic operands. Neither real castling direction can pass the total operand walk:
+leaving these fields uncovered fails; declaring identity still fails; isolating each leaf
+against each of the five allowed value rules cannot compare it. Removing those three fields
+in a disposable diagnostic copy makes the semantic fields compare, but **dropping input
+fields is not the proposed product repair**. The bounded census finds the same retained
+input fields on thirteen projection kinds within thirty migrated positive edge cases. This
+is a measured sample, not a census of all 81 subjects. `[V]` (research tests;
+`packages/runtime/src/semantic-validation.ts`, `compareSemanticMirror`)
+
+### Narrow amendment proposal — not accepted behavior
+
+Extend §4.1's closed value vocabulary with `input_before_fen`, `input_move_uci` and
+`input_after_fen`. Require a legal, canonical source/partner input pair first. Each raw
+operand leaf must exactly equal its own side's declared input field, clocks included;
+comparison then uses the same relative input-field identity. Retain every operand key
+and continue comparing every other semantic leaf with the existing total walk. `[M]`
+
+The disposable model succeeds in both real castling directions. It refuses corruption of
+any input field on either side, clock-only changes, missing or extra operands, a changed
+semantic destination or sign, and a crossed partner. These are feasibility controls,
+**not independent orientation authority**. No production adapter, arbitrary callback,
+ignored field, weakened exactness or new admitted case follows from them. Author amendment
+and separate review must settle the closed rules before production parser/runner changes.
+After that repair, independent required-arm fixtures are still needed. `[V]` (research
+`proposedCompare` controls; `[M]` for the proposed production contract)
+
+### Separately specified repair (D3566)
+
+The accepted RFC already requires partner input checks before either operation. A
+predecessor-red permanent test observed one invocation and a target on a missing partner.
+The runner now preflights missing/crossed partners and independently corrupted input
+fields before either collector. A valid pair still reaches both collectors and the
+separate total comparison. All 158 focused foundation tests pass. This closes execution
+ordering only; it does not implement the D3564 vocabulary proposal or promote a semantic
+verdict. `[V]` (`packages/runtime/src/semantic-validation.test.ts`,
+`packages/runtime/src/semantic-validation-runner.ts`, `make evidence-foundation-check`)

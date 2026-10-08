@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3563]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3566]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -107,14 +107,27 @@ full run stopped on this change's missing roadmap RFC anchor; the corrected
 governance/content/browser sequence exits zero on unchanged product/test sources.
 This is working validation
 infrastructure and two independently grounded examples, not completed semantic coverage.
+[[D3564]] now identifies a concrete orientation contract gap: thirteen kinds in thirty
+sampled positive edge cases retain input operands that none of the five mirror rules can
+compare. The narrow exact-input-binding proposal is tested but awaits author/cross-review.
+The suspected counter defect is refuted. [[D3566]] separately repairs the accepted input
+preflight before either collector, with predecessor-red permanent controls; [[D3565]] fixes
+the opt-in matrix's stale reference without changing its authority classification. All 158
+focused foundation and thirteen research checks pass; generated subject verdicts do not move.
+Final normal `make roadmap-receipt verify-awake` exits zero with clean types, 3,568 software
+cases, seven isolated performance cases, 227 content cases and all downstream/governance
+checks. Browser sources are unchanged; the preceding 175-pass browser checkpoint is historical,
+not rerun for this build-only validation repair. This is local verification, not a new
+GitHub or release verdict. Both repairs and the remaining narrow author/review blocker are
+recorded in the existing trackers; no new tracking system or bulk capture is added.
 The missing required arms, including independent orientation authority, are a foundation gate,
 not evidence that all predicates are wrong. Registered tactics and research selection must not
 be described as fully validated learner guidance. `docs/semantic-evidence.md` explains that boundary.
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,312 ledger rows** (1,450 done, 161 refused, 1,701 live,
-zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,315 ledger rows** (1,452 done, 161 refused, 1,702 live,
+zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,062 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

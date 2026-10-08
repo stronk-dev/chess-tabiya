@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8ffbcacdf7ea459fec78af049d37f946eda100c079465511641fbd4d7c44a4c4",
+    "roadmap": "sha256:a0764add12bea9ce541fdeec057c33959790803a85ef63f24cd7cf0856b68f4c",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:e6c8bc8298b7a86c3ca2f30d7247fdee2901c0d4270262680dc97469ec5b91e3",
+    "workState": "sha256:275f869d30c38aa48eb0f4d291fe89b290917f9d675efcd75fd1dc4eccaee977",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 628,
       "doing": 12,
-      "blocked": 1061,
-      "done": 1450,
+      "blocked": 1062,
+      "done": 1452,
       "refused": 161
     },
     "workItems": {
@@ -178,10 +178,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Fresh-review D3373's durable-stockfish-source draft before implementing its same-task selected-move/PV/MultiPV source, exact v1/v2 job/batch/settlement compatibility and provisional migration order. Complete accepted evidence/source contracts without filtering remaining refusals. D3429's numerical calibration contract and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Review D3564's narrow exact-input mirror-rule amendment before admitting orientation authorities; real retained FEN/UCI operands cannot use the current five transforms. Fresh-review D3373's durable-stockfish-source draft before implementing its same-task selected-move/PV/MultiPV source, exact v1/v2 job/batch/settlement compatibility and provisional migration order. Complete accepted evidence/source contracts without filtering remaining refusals. D3429's numerical calibration contract and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3563 implements semantic-validation-authority's cited-source resolver using a fixed six-line python-chess excerpt and exact source/revision/licence/span/proposition/case/subject/expectation/input/operation/arm checks. Two predecessor-red cases now execute the production transition emitter; all 158 focused foundation tests pass. Forty cases still yield zero fully validated subjects; remaining required arms and D0 stay open. Types, 3568 software, seven performance, 227 content and 175 browser cases pass, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. The first full run stopped on this change's missing roadmap RFC anchor; corrected governance/content/browser verification exits zero with product/test sources unchanged. D3373 whole Stockfish source remains draft; D3429 numerical calibration, D3430 historical roots and D3410 opening-source repair remain independently held. No whole capability, milestone, remote CI or 1.0 completion.",
+        "summary": "D3566 repairs the accepted mirror input preflight before either collector, with predecessor-red zero-invocation controls and a valid-pair continuation control. D3565 corrects a stale opt-in matrix reference without promoting composition authority. D3564 establishes an unrepresentable retained-input operand comparison on real castling pairs and thirteen sampled kinds; the exact-input-binding prototype passes corruption controls but its contract amendment awaits author/cross-review. All 158 focused foundation tests, thirteen opt-in research checks and clean types pass; generated validation remains current at 81 subjects, forty passing cases and zero fully validated subjects. D3563's independently cited resolver remains delivered. Final normal make roadmap-receipt verify-awake exits zero: 3568 software, seven performance, 227 content and all downstream/governance checks. The prior 175 browser passes are not a new run for this build-only repair. D3373 whole Stockfish source remains draft; D3429 numerical calibration, D3430 historical roots and D3410 opening-source repair remain independently held. No whole capability, milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/durable-stockfish-source.md",
@@ -189,6 +189,9 @@
           "packages/runtime/src/semantic-validation-authorities.ts",
           "packages/runtime/src/semantic-validation-cited-sources.ts",
           "packages/runtime/src/semantic-validation.test.ts",
+          "packages/runtime/src/semantic-validation-runner.ts",
+          "design/research/semantic-validation-closure.md",
+          "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
           "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
           "apps/server/src/evidence-queue.test.ts",
           "apps/server/src/evidence-jobs.ts",
