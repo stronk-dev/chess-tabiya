@@ -1,7 +1,8 @@
 // rfc/module-registration.md A5/§2.5.2/§5.1, rfc/evidence-presentation.md Checkpoint B and
 // rfc/intent-presets.md Checkpoint B: the one module query operation delivers exactly the modules
 // the finalized preset compiled, through sealed presentation receipts bound to that digest.
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import * as execution from "./evidence-binding-execution.js";
 
 import {
   MODULE_SOURCE_AUTHORITY,
@@ -38,6 +39,7 @@ const ORIGINS: Readonly<Record<"onramp" | "position", OrdinaryWorkflowContextOri
   onramp: { kind: "run", sessionKind: "pack", feedbackPolicy: "immediate_guard" },
   position: { kind: "run", sessionKind: "position", feedbackPolicy: "attempt_end" },
 };
+afterEach(() => vi.restoreAllMocks());
 
 function finalized(context: "onramp" | "position", preset: PresetId, only?: ModuleId): FinalizedAssistanceV1 {
   const request = compileAssistanceRequest({ contextHint: context as OrdinaryWorkflowContextId, preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: only === undefined ? [] : MODULE_IDS.filter((id): id is Exclude<ModuleId, "rules_floor"> => id !== only && id !== "rules_floor") } } });
@@ -231,6 +233,30 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
 
 describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb and compare coach", () => {
   const assistance = finalized("onramp", "guided");
+
+  it.each(["missing_policy", "impossible_latency", "extra_raw_binding"] as const)("Theory rejects %s before even local source access", fault => {
+    const run = packRun(ITALIAN, ["e1g1"]);
+    const compile = execution.compileEvidenceConsumerExecution;
+    vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
+      if (consumer.id !== "module.theory_breadcrumb") return compile(manifest, consumer);
+      const first = manifest.bindings.find(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version)!;
+      const { sourceAbsence: _originalPolicy, ...base } = first;
+      const extra = { ...base, adapter: { id: "adapter.fixture.theory_execution", version: 1 }, producer: { id: "live.stockfish", version: 1 },
+        projection: { id: fault === "extra_raw_binding" ? "live.stockfish.uci_response" : "live.stockfish.position_eval", version: 1 },
+        latency: { mode: fault === "impossible_latency" ? "sync" as const : "interactive" as const, maxMs: 1000 },
+        ...(fault === "missing_policy" ? {} : { sourceAbsence: { necessity: "required" as const, whenNoPath: "operation_unavailable" as const } }),
+      };
+      return compile({ ...manifest, bindings: [...manifest.bindings, extra] }, consumer);
+    });
+    const sources = {
+      get shapes(): never { throw new Error("shape acquisition before preflight"); },
+      get authoredAt(): never { throw new Error("authored acquisition before preflight"); },
+      get explorerSummary(): never { throw new Error("Explorer consumption before preflight"); },
+    };
+    expect(() => queryModules({ run, assistance: finalized("onramp", "guided", "theory_breadcrumb"), role: "learner", session: "onramp",
+      request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb"] }, sources,
+    })).toThrow(fault === "extra_raw_binding" ? "EXECUTION_SOURCE_UNREGISTERED" : fault === "impossible_latency" ? "BINDING_EXECUTION_LATENCY" : "BINDING_SOURCE_ABSENCE");
+  });
 
   it.each(["postcommit_nudge", "compare_coach", "full_inspector"] as const)("%s reads recorded/local facts without catalogue or Explorer dependencies", module => {
     let run = module === "full_inspector" ? positionRun(ITALIAN, ["e1g1", "e8g8"]) : packRun(ITALIAN, ["e1g1", "e8g8"]);

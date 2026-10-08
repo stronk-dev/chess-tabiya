@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3601]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3602]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -28,13 +28,19 @@ is **partial**, not complete. Official content, remaining workflows and release
 proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
-## Product inventory — 2026-10-08
+## Product inventory — 2026-10-09
 
 The product is a substantial development build, **not a finished 1.0 or release candidate**.
 The core rehearsal loop is the most mature journey. Major surfaces now execute real backend
 operations; registration, a passing unit suite, or a visible page is not full feature completion.
 This dated inventory is grounded in the production composition and the implemented-system docs;
 the machine map above remains the current assignment/status source.
+
+At this checkpoint all fourteen whole capability areas remain incomplete; four milestones
+are active and five blocked. The RFC register records 75 archived implementations, with
+42 current RFCs implementing, ten awaiting discharge and 21 draft. Of 569 UX items,
+271 are complete, 274 remain live and 24 are retired. These are counts, not a delivery
+percentage: completed components do not establish a complete learner journey.
 
 | Area | Implemented | Still required for full 1.0 |
 |---|---|---|
@@ -57,6 +63,15 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+
+[[D3602]] is closed locally: Theory's complete execution contract is checked before
+its local preview can read shapes, authored claims or any factory. All selected
+migrated consumers pass before the first acquisition; broken bindings return the
+existing generic 503. Quiet, closed disclosure, optional Explorer omission and
+the separate before/after-provider checks remain. Nine predecessor-red controls,
+131 focused Support and 198 Theory/source cases, clean types and the complete normal
+gates below pass. This is a bounded integration repair, not a new source, semantic
+validation verdict, selected-square feature or complete evidence foundation.
 
 [[D3601]] is closed locally: local Sight, threats, staged risk checks, Nudge,
 Compare and Inspector no longer acquire unrelated theory inputs. Structure reads
@@ -120,12 +135,12 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,743 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,754 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
 203 browser cases (138 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
 Normal `make roadmap-receipt verify-awake test-browser-ci-awake` exits zero in one sequence
-on final product/test sources. Warm native arrival measures median 88.3 ms / p95 114.1 ms,
+on final product/test sources. Warm native arrival measures median 97.2 ms / p95 116.4 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
 No product/test source or budget changed during this complete run. This is local verification,

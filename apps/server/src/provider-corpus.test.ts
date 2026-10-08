@@ -2,6 +2,8 @@ import type { AddressInfo } from "node:net";
 import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import { compileAssistanceRequest, createRun, parsePresentationReceipt, presentedSentence, providerSourceEvidence, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import * as runtime from "@chess-tabiya/runtime";
+import * as execution from "../../../packages/runtime/src/evidence-binding-execution.js";
+import * as valueRoutes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { corpusPopulation, corpusSamplePolicy, type CorpusQuery, type CorpusRequestOptions, type CorpusSource } from "./corpus.js";
 import { ExchangeCorpusSource, corpusPageRequest, healthAdmittedExplorerOperation } from "./provider-corpus.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
@@ -529,8 +531,8 @@ describe("learner Explorer shared exchange", () => {
     const supplied = new SuppliedSource();
     boundary = "application composition";
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
-    const originalCompile = runtime.compileEvidenceConsumerExecution;
-    const compileConsumer = vi.spyOn(runtime, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
+    const originalCompile = execution.compileEvidenceConsumerExecution;
+    const compileConsumer = vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
       if (consumer.id !== "module.theory_breadcrumb" || !["missing_binding_policy", "non_executable_binding"].includes(arm)) return originalCompile(manifest, consumer);
       // Fault injection at the compiled contract, not source evidence. A valid single
       // projection must not conceal an absent policy or a non-executable binding.
@@ -587,14 +589,17 @@ describe("learner Explorer shared exchange", () => {
       expect(supplied.calls).toBe(0);
       expect(compileConsumer).not.toHaveBeenCalled();
       boundary = "Theory request";
+      const localAcquisition = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
       const pending = ask("theory_only");
       if (["missing_binding_policy", "non_executable_binding"].includes(arm)) {
         const refusal = await pending;
         const refusedText = await refusal.text();
-        expect(refusal.status, refusedText).toBe(500);
+        expect(refusal.status, refusedText).toBe(503);
+        expect(JSON.parse(refusedText)).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Module execution contract is unavailable" } });
         expect(supplied.calls).toBe(0);
         expect(stats).not.toHaveBeenCalled();
         expect(compileConsumer).toHaveBeenCalledOnce();
+        expect(localAcquisition).not.toHaveBeenCalled();
         expect(refusedText).not.toMatch(/MOVE_ROW_SENTINEL|RAW_FALLBACK|\d+ games/u);
         return;
       }
@@ -626,7 +631,9 @@ describe("learner Explorer shared exchange", () => {
       const response = await pending;
       boundary = "Theory response validation";
       const responseText = await response.text();
-      expect(compileConsumer).toHaveBeenCalledOnce();
+      // Preview, pre-provider check, and the authorized post-I/O query each recheck.
+      // Revocation refuses before that last query can begin.
+      expect(compileConsumer).toHaveBeenCalledTimes(arm === "revoked" ? 2 : 3);
       const [manifest, consumer] = compileConsumer.mock.calls[0]!;
       expect(consumer).toEqual({ id: "module.theory_breadcrumb", version: 1 });
       expect(manifest.bindings.filter(binding => binding.consumer.id === consumer.id)).toHaveLength(4);

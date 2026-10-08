@@ -12,6 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3602]] is closed locally under the existing module/provider contracts: complete
+Theory bindings compile before its local preview and before any selected migrated
+module acquires evidence. Nine predecessor-red authenticated/runtime controls pass,
+including mixed-module ordering and repeated requests. Finalized demand, disclosure,
+Quiet suppression and optional Explorer omission remain. Focused gates pass 131 Support
+and 198 Theory/source cases plus clean types; complete normal gates pass 3,754 software,
+seven unchanged-budget performance, 228 content and 203 browser cases, one existing
+optional Maia skip, zero retries and all 150 input/112 composition cells. No filtered
+binding image, new source/preset/permission or whole-manifest promotion; existing source
+contracts, selected-square delivery and D3591/D3600 remain open.
+
 [[D3601]] is closed locally under the existing module/provider execution contracts:
 local position and recorded-run modules no longer acquire unrelated shape/authored
 inputs or validate unused Explorer evidence. Structure retains its independently

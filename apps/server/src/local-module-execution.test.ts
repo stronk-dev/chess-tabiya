@@ -15,7 +15,7 @@ import { CampaignRegistry } from "./campaign-registry.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
 
 const FEN = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
-const modules = ["sight_on_request", "threat_radar", "blunder_prevention", "structure_nudge"] as const;
+const modules = ["sight_on_request", "threat_radar", "blunder_prevention", "structure_nudge", "theory_breadcrumb"] as const;
 type LocalModule = typeof modules[number];
 const faults = ["missing_policy", "impossible_latency", "extra_raw_binding"] as const;
 type Fault = typeof faults[number];
@@ -99,7 +99,7 @@ async function control(module: LocalModule, fault?: Fault, disclose = true, pack
       ? { kind: "pack", packId: "carlsbad-minority-attack" }
       : { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
     expect(created.status, await created.text()).toBe(201);
-    if (module === "structure_nudge") {
+    if (module === "structure_nudge" || module === "theory_breadcrumb") {
       const moved = await post("/runs/local-module/moves", { uci: moveUci });
       expect(moved.status, await moved.text()).toBe(200);
       if (disclose) expect(await responseStatus(post("/runs/local-module/reveal", {}))).toBe(200);
@@ -118,9 +118,10 @@ async function control(module: LocalModule, fault?: Fault, disclose = true, pack
       if (consumer.id !== `module.${module}` || fault === undefined) return originalCompile(manifest, consumer);
       const first = manifest.bindings.find(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version)!;
       expect(first).toBeDefined();
+      const { sourceAbsence: _originalPolicy, ...base } = first;
       // Add a genuine provider requirement to the complete consumer. The real compiler,
       // not a stubbed rejection, must detect its missing policy/latency/source contract.
-      const extra = { ...first, adapter: { id: "adapter.fixture.local_execution", version: 1 }, producer: { id: "live.stockfish", version: 1 },
+      const extra = { ...base, adapter: { id: "adapter.fixture.local_execution", version: 1 }, producer: { id: "live.stockfish", version: 1 },
         projection: { id: fault === "extra_raw_binding" ? "live.stockfish.uci_response" : "live.stockfish.position_eval", version: 1 },
         latency: { mode: fault === "impossible_latency" ? "sync" as const : "interactive" as const, maxMs: 1000 },
         ...(fault === "missing_policy" ? {} : { sourceAbsence: { necessity: "required" as const, whenNoPath: "operation_unavailable" as const } }),
@@ -131,11 +132,11 @@ async function control(module: LocalModule, fault?: Fault, disclose = true, pack
       trace.push(`collect:${args[0]}`);
       return originalRoute(...args);
     });
-    const query: runtime.ModuleQueryRequest = module === "structure_nudge"
-      ? { timing: "post_commit", subjectNodeId: nodeId, requested: [] }
+    const query: runtime.ModuleQueryRequest = module === "structure_nudge" || module === "theory_breadcrumb"
+      ? { timing: "post_commit", subjectNodeId: nodeId, requested: module === "theory_breadcrumb" ? [module] : [] }
       : module === "blunder_prevention" ? { timing: "at_commit", nodeId, candidateUci: moveUci, generation: 1 }
         : { timing: "pre_commit", nodeId, selectedSquare: "c6", requested: [module] };
-    const ask = (preset: "quiet" | "support" | "guided" = pack || module === "structure_nudge" ? "guided" : "support", overrideQuery: runtime.ModuleQueryRequest = query, isolate = true) => post("/runs/local-module/modules/query", {
+    const ask = (preset: "quiet" | "support" | "guided" = pack || module === "structure_nudge" || module === "theory_breadcrumb" ? "guided" : "support", overrideQuery: runtime.ModuleQueryRequest = query, isolate = true) => post("/runs/local-module/modules/query", {
       assistance: runtime.compileAssistanceRequest({ contextHint: pack ? "pack" : "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: pack ? [module] : [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
       query: overrideQuery,
     });
@@ -168,7 +169,7 @@ describe("authenticated complete local Support execution", () => {
         expect(page.packets.map(packet => packet.module)).toEqual([module]);
         expect(app.trace[0]).toBe(`compile:module.${module}@1`);
         expect(app.collect).toHaveBeenCalled();
-        expect(app.prepare).toHaveBeenCalledTimes(module === "structure_nudge" ? 1 : 0);
+        expect(app.prepare).toHaveBeenCalledTimes(module === "structure_nudge" ? 1 : module === "theory_breadcrumb" ? 2 : 0);
         for (const packet of page.packets) {
           const { digest, ...body } = packet.disclosure;
           expect(runtime.moduleDisclosureDigest(body)).toBe(digest);
@@ -241,6 +242,32 @@ describe("authenticated complete local Support execution", () => {
     } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
+  it("preflights Theory before an earlier selected Structure module can acquire shapes", async () => {
+    const app = await control("theory_breadcrumb", "missing_policy");
+    try {
+      const response = await app.ask("guided", app.query, false);
+      const body = await response.text();
+      expect(response.status, body).toBe(503);
+      expect(app.trace.filter(entry => entry.startsWith("compile:"))).toEqual([
+        "compile:module.structure_nudge@1", "compile:module.theory_breadcrumb@1",
+      ]);
+      expect(app.collect).not.toHaveBeenCalled();
+      expect(app.prepare).not.toHaveBeenCalled();
+    } finally { vi.restoreAllMocks(); await app.close(); }
+  });
+
+  it("rechecks Theory's local preview on every repeated request", async () => {
+    const app = await control("theory_breadcrumb");
+    try {
+      expect(await responseStatus(app.ask())).toBe(200);
+      app.trace.length = 0; app.collect.mockClear(); app.prepare.mockClear(); app.fault("extra_raw_binding");
+      expect(await responseStatus(app.ask())).toBe(503);
+      expect(app.trace).toEqual(["compile:module.theory_breadcrumb@1"]);
+      expect(app.collect).not.toHaveBeenCalled();
+      expect(app.prepare).not.toHaveBeenCalled();
+    } finally { vi.restoreAllMocks(); await app.close(); }
+  });
+
   it("does not prepare or compile Sight without a selected square", async () => {
     const app = await control("sight_on_request", "missing_policy");
     try {
@@ -279,8 +306,8 @@ describe("authenticated complete local Support execution", () => {
     } finally { vi.restoreAllMocks(); await app.close(); }
   });
 
-  it("keeps post-commit disclosure closed even when its module contract is broken", async () => {
-    const app = await control("structure_nudge", "missing_policy", false);
+  it.each(["structure_nudge", "theory_breadcrumb"] as const)("keeps %s disclosure closed even when its module contract is broken", async module => {
+    const app = await control(module, "missing_policy", false);
     try {
       const response = await app.ask();
       const body = await response.json() as { error: { code: string } };

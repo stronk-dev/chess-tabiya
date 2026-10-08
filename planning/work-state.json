@@ -29809,6 +29809,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/local-module-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3602",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c0f38c05b0e05a7548887dbd3e087b232a89f442abacba2f7c57e4d2ff9e9435",
+      "uxItems": [],
+      "evidence": "apps/server/src/local-module-execution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

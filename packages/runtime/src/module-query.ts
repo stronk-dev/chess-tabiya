@@ -671,11 +671,13 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
     if (module === "sight_on_request" && subject.square === undefined) { suppressions.push({ module, reason: "no_square" }); continue; }
     selected.push({ module, declared });
   }
-  // Validate every effective local consumer before the first selected module reads sources.
+  // Validate every migrated effective consumer before the first selected module reads sources.
+  // Theory's local preview is acquisition too: its complete optional-provider binding must
+  // compile before shape/authored reads, not only before the later online request.
   // Other consumers retain their explicit source-migration obligations; a successful local
   // preflight is not a filtered whole-manifest execution image or a provider satisfaction claim.
   for (const { module } of selected) {
-    if (module === "sight_on_request" || module === "threat_radar" || module === "blunder_prevention" || module === "structure_nudge") {
+    if (module === "sight_on_request" || module === "threat_radar" || module === "blunder_prevention" || module === "structure_nudge" || module === "theory_breadcrumb") {
       compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 });
     }
   }

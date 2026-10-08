@@ -60,9 +60,11 @@ turn clone stays unavailable. Large relation overlays remain subject to unchange
   including the legacy Nudge operation. For example, 1.e4 does not fill the Nudge with
   unchanged king-edge facts; its real line-opening consequences remain eligible. Actual king-location/zone changes remain eligible;
   the raw collector evidence is not deleted or rewritten.
-  Sight, Threat Radar, Blunder Prevention and Structure Nudge now preflight their complete
+  Sight, Threat Radar, Blunder Prevention, Structure Nudge and Theory Pointer preflight their complete
   execution bindings after finalized demand/timing/square/disclosure checks, before any selected
-  module collects. All effective local consumers pass before the first source read. Server pack
+  module collects. Theory's local preview is covered too, before shapes/authored claims
+  are read; its online path still rechecks before acquisition and after I/O. All these
+  effective consumers pass before the first source read. Server pack
   and shape inputs are prepared independently on demand, once per runtime query:
   only Structure and Theory read the shape catalogue, and only Theory projects
   released authored claims or validates Explorer summaries. Sight, Threat Radar,
