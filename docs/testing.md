@@ -52,6 +52,12 @@ shared-runner scheduler or garbage-collection pause from becoming a false produc
 budgets and sample populations remain explicit in the tests. User-perceived tail latency belongs to the
 browser and owner-use instruments, not a lucky or unlucky single Node timer observation.
 
+All three verification jobs fetch two commits, not checkout's default one. The content
+job's graduation sweep distinguishes a previously committed cited line from one added
+in the commit under review; a depth-one clone incorrectly blames both to HEAD. A real
+shallow-clone regression covers depth one, depth two and a genuine same-commit refusal.
+This requires a parent, not a full-history checkout, and changes no graduation criterion.
+
 For the registered-bot completed-game replay, `make bot-rematch-check` covers exact duplicate
 admission, one pending owner, result-modal actions, failure/departure and a real SQLite/HTTP
 response through the web validator. `make bot-rematch-browser-check` rebuilds the application and

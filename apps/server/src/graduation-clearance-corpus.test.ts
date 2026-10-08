@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
@@ -39,5 +40,23 @@ describe("graduation ruling admission sweep", () => {
     git(root, "add", "later");
     git(root, "commit", "--quiet", "-m", "later");
     expect(auditGraduationRulingLine(root, ref, "fixture ruling", "out_of_scope", git(root, "rev-parse", "HEAD"))).toEqual([]);
+
+    // Actions' default one-commit clone attributes this old line to the shallow
+    // boundary (HEAD). One parent is sufficient to distinguish prior content;
+    // fetching the whole history is not necessary for this admission rule.
+    const oneCommit = resolve(root, "shallow-one");
+    git(root, "clone", "--quiet", "--depth=1", pathToFileURL(root).href, oneCommit);
+    expect(git(oneCommit, "rev-parse", "--is-shallow-repository")).toBe("true");
+    expect(auditGraduationRulingLine(oneCommit, ref, "fixture ruling", "out_of_scope", git(oneCommit, "rev-parse", "HEAD")))
+      .toContainEqual(expect.stringContaining("GRADUATION_RULING_SELF_MINTED"));
+
+    const twoCommits = resolve(root, "shallow-two");
+    git(root, "clone", "--quiet", "--depth=2", pathToFileURL(root).href, twoCommits);
+    expect(git(twoCommits, "rev-parse", "--is-shallow-repository")).toBe("true");
+    expect(auditGraduationRulingLine(twoCommits, ref, "fixture ruling", "out_of_scope", git(twoCommits, "rev-parse", "HEAD"))).toEqual([]);
+    // A genuine same-commit ruling must still fail in that bounded checkout.
+    git(twoCommits, "checkout", "--quiet", "--detach", "HEAD^1");
+    expect(auditGraduationRulingLine(twoCommits, ref, "fixture ruling", "out_of_scope", git(twoCommits, "rev-parse", "HEAD")))
+      .toContainEqual(expect.stringContaining("GRADUATION_RULING_SELF_MINTED"));
   });
 });

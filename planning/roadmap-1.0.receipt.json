@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:53a80973e3b3c0ca6a32d654a9e7f17e4d8f0316f819679ea46c624ad6477578",
+    "roadmap": "sha256:86956079b9f76d4c7132326d91dc6d259d0e4a86be4f1e9e46ad5d06a75db8f3",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:3c969b6c0bfd1564e8ae6e37df8438f2ce4a53f13b0ce4b7d97f8c71ab98c7be",
+    "workState": "sha256:a89c805f9d8d7c93010fe278339bff2cd8edbc8f637a34a027e25eaa94268768",
     "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 11,
       "blocked": 1061,
-      "done": 1439,
+      "done": 1441,
       "refused": 161
     },
     "workItems": {
@@ -73,10 +73,10 @@
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "Keep every new live row assigned at creation, diagnose D3543/D3510/D3532 without relaxed gates, and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; complete operator/release journeys belong to release-candidate-proof.",
+      "nextAction": "D3552 reconciles the active delivery queue; D3553 fixes the content CI missing-parent checkout locally. Keep every new live row assigned, diagnose the remaining intermittent failures without relaxed gates, and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; complete operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3545 closes failed production startup ownership: four native predecessor controls fail, then five repaired controls prove actual Stockfish shutdown, exact valence/Campaign errors, continued cleanup after a release error, worker refusal and same-database restart. Successful application close is unchanged. D3544 owns late Support test construction; D3511 owns original Theory response bodies. Current normal verify-awake passes clean types, 3,485 software / seven performance / 227 content tests and downstream contracts/governance; sequential rebuilt browser CI passes 159 journeys, one existing optional Maia skip, zero retries, all 150 exact-input and 112 composition cells. D3549 reconciles stale operations state/API/default/content descriptions against actual implementation and provider-off browser proof without requalifying historical native appliance measurements. D3543/D3510/D3532 remain open because their original intermittent causes are not located. All 1,701 live rows are assigned; 462 historical prose-only closeouts remain. No pack graduates, full milestone/capability/RFC completes, or remote CI/release result is claimed. Exact pushed-revision GitHub verify/browser and complete operator journeys remain separate obligations.",
+        "summary": "D3552 reconciles current delivery order with closed KISS/Support repairs and actual Profile/bot/pack journeys; historical failures remain in the log. D3553 locates GitHub verify 37641922404's real-content failure at pushed d1310090: the default depth-one checkout attributes old graduation ruling lines to HEAD. That job now fetches one parent, like the other verification jobs. The scaffold regression is red before the fix; real depth-one/depth-two clones prove prior-content admission and same-commit refusal. All 22 graduation contract cases, 15 scaffold controls, 227 content cases, actual 92-document clearance and 104-document capability checks pass locally. No graduation criterion or runtime behavior changes. Browser run 37641922913 passed on the same older pushed revision; no new push or remote pass is claimed. Latest implementation verification is recorded under complete-learner-journeys, not rerun or substituted by this inventory. All 1,700 live ledger rows remain assigned; 462 historical prose-only closeouts and intermittent failure causes stay qualified. No official pack, full RFC/capability/milestone or release completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -102,7 +102,9 @@
           "planning/provider-exchange-and-execution/theory-http-body-ownership-2026-10-07.md",
           "apps/server/src/provider-corpus.test.ts",
           "apps/server/src/http-response.test-support.ts",
-          "apps/server/src/http-response.test.ts"
+          "apps/server/src/http-response.test.ts",
+          "apps/server/src/graduation-clearance-corpus.test.ts",
+          "planning/codex-queue.md"
         ],
         "anchors": [
           {

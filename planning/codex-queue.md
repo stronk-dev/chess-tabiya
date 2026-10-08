@@ -10,18 +10,22 @@ collection or tracking-system expansion follows from this cleanup. Product progr
 be established by implemented user journeys and their software tests; research remains
 explicitly separate, with future large captures outside ordinary Git.
 
-## Active delivery order — 2026-10-07
+## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
-0. [[D3528]] blocks committing the current verified Support repairs: normal software
-   verification and the independent capability gate reject seven unrelated compatibility
-   digests after a receipt-only hash refresh. Runtime verdicts are byte-equal and the changed
-   receipt hash has no runtime value reader; the AST closure nevertheless hashes the entire
-   declaration. Existing lifecycle versions 22/24 already include repeated wording/source-
-   receipt bumps. Resolve this contract boundary first: explicit public semantics and contract
-   tests should govern pack compatibility; build/source freshness should remain a separate
-   provenance check. This is proposed for owner approval, not an implemented guard removal.
-   Do not rewrite committed declarations, add seven reflexive versions, change authored packs,
-   suppress the failing test or claim a passing browser run makes the software gate green.
+This is the current order, not a replay of an earlier red checkpoint. D3528 is
+closed on the owner's KISS ruling: explicit public versions and behavior contracts
+replace transitive source hashes without changing authored packs. D3521/D3523/D3524,
+D3525/D3527 and D3533 are also closed. Their original red outcomes and scoped
+closeouts remain in the ledger and append-only log; they are not active blockers.
+
+0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
+   37641922404 at d1310090 fails the graduation ruling sweep because depth-one
+   blame attributes prior rulings to HEAD; browser run 37641922913 passes at that
+   same revision. Depth two is now required for this job just as for the other
+   verification jobs; real shallow-checkout controls retain same-commit refusal.
+   The 22 graduation contract cases, 15 scaffold controls and 227 content cases
+   pass. No ruling assertion, corpus threshold or
+   remote result is changed; a local pass is not a new GitHub pass.
 1. [[D3518]], [[D3514]], [[D3510]]: locate the intermittent software failures before
    declaring release readiness. Passing replays leave these findings open.
    [[D3529]]/[[D3530]] are diagnosed host interruptions: exact trace timestamps match
@@ -33,28 +37,31 @@ explicitly separate, with future large captures outside ordinary Git.
    one packaged-default, retaining all 150 exact input cells and 112 unretried composition
    cells. D3531 stays open: the original timeout's cause and deliberate failure trace
    retention are not proven. Host load 192 remains context, not a cause. No deadline,
-   retry, forced gesture, population or application-input change; software is still red.
-2. [[D3521]], [[D3523]], [[D3524]] are in final verification: a grounded filled Threat
-   Radar caption, loose-piece readings for the learner rather than the opponent, and a
-   compact registered capture warning within the unchanged staged-cue budget. Both-colour
-   software controls are green; native desktop/phone warning → Revise → stage again →
-   explicit confirm and the complete normal gates must pass before closeout.
-3. [[D3522]] is closed independently: the local Support fixture now owns each response
-   body before teardown. The focused gate passes 100 tests / seven files and clean types;
-   exact-index make staged-software-contracts passes 3,426 software tests / 345 files,
-   seven performance tests, clean types and all downstream contracts, excluding unstaged
-   Support changes. Existing unfinished-stream/body-failure/real-HTTP controls remain.
-   This is not the established cause or repair of the earlier composition timeout and
-   does not make the pending working-source Support gate green.
-   [[D3525]] corrects the maximum-load fixture's false warning expectation on a defensive
-   pawn move, retaining its later genuine mate warning. [[D3527]] waits for the recorded
-   opponent reply before the read-only baseline, then checks the complete unchanged journal
-   and zero Inspector move writes. Their full gates and closeout remain behind D3528.
+   retry, forced gesture, population or application-input change. Latest local tiers
+   pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
+   performance excursion and [[D3543]]'s startup/load failures remain separate.
+2. Evidence-to-learner delivery: [[D3373]]'s source-contract repair, [[D3376]]'s
+   opening authority and [[D3309]]'s Inspector operands retain their own reviewed
+   contract gates. Finish the existing Support/Review/theory joins rather than
+   inventing producer data at the UI boundary. [[D3540]] still blocks treating an
+   installed Library badge as reviewed explanatory content.
+3. [[D3535]]: training-set execution-context author amendment, then the remaining
+   [[D3318]] member progression/repeat/re-offer journey. The installed catalogue/API
+   is delivered; durable cycle identity is not. Preserve the existing migration
+   order and do not group unrelated historical attempts in the client.
 4. [[D3526]]: the real phone Threat Radar still duplicates one mate across two producers.
    Exact witness-level subsumption must preserve distinct capture facts and both provenance
    chains. Its next author action is a narrow module-registration selection amendment with
    exact witness equality; [[D3309]]'s structural-operand scope does not own this tactical
    composition rule. Do not delete a whole multi-threat source or treat wording as full UX.
+
+Latest completed product wave: Profile references open the exact recorded move;
+Support shapes open their actual Library entry; completed bots have recoverable
+same-bot replay; resume/duplicate attach retained pack bytes; private digests no
+longer authorise fresh starts; failed application construction releases acquired
+services. These are real production-boundary repairs, not full capability completion.
+The total fourteen-area inventory and subsequent bot/profile/campaign/content/release
+work remain in `planning/roadmap-to-done.md`, not another competing roadmap.
 
 Delivered [[D3517]]/[[D3519]]: Nudge → rewind before the learner move → different move
 → Compare → enter the other recorded attempt at the common fork → keep playing. Native

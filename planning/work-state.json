@@ -29358,6 +29358,24 @@
       "uxItems": [],
       "evidence": "docs/pack-studio.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3552",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b34f5c0d21ddf29c71a0a004add169ad9d1b6210d7ed17c2595281603707c8e0",
+      "uxItems": [],
+      "evidence": "planning/codex-queue.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3553",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d592e289d9928c806a341d187c2d3fd18546579f964bc54d024753c33c38b915",
+      "uxItems": [],
+      "evidence": "apps/server/src/graduation-clearance-corpus.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

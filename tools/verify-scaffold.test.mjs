@@ -97,7 +97,7 @@ test("workflow job extraction does not borrow checkout policy from another job",
 
 test("each history-consuming verification job fetches its own parent", async () => {
   const { readFile } = await import("node:fs/promises");
-  for (const [path, jobs] of [["../.github/workflows/verify.yml", ["software-contracts", "repository-governance"]], ["../.github/workflows/release.yml", ["verify"]]]) {
+  for (const [path, jobs] of [["../.github/workflows/verify.yml", ["software-contracts", "repository-governance", "real-content-contracts"]], ["../.github/workflows/release.yml", ["verify"]]]) {
     const text = await readFile(new URL(path, import.meta.url), "utf8");
     for (const name of jobs) {
       const depth = checkoutFetchDepth(workflowJob(text, name) ?? "");

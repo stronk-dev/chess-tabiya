@@ -207,7 +207,7 @@ const missingVerifyTiers = missingRequiredText(workflow, [
 if (!workflow.includes("pnpm install --frozen-lockfile") || missingVerifyTiers.length > 0) {
   failures.push(`CI workflow: missing named verification tiers: ${missingVerifyTiers.join(", ")}`);
 }
-for (const name of ["software-contracts", "repository-governance"]) {
+for (const name of ["software-contracts", "repository-governance", "real-content-contracts"]) {
   const depth = checkoutFetchDepth(workflowJob(workflow, name) ?? "");
   if (depth === undefined || (depth !== 0 && depth < 2)) failures.push(`CI workflow: ${name} needs its first parent for history checks (fetch-depth >= 2 or 0)`);
 }

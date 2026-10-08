@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3551]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3553]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -78,7 +78,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,300 ledger rows** (1,439 done, 161 refused, 1,700 live,
+(271 completed, 24 retired, 274 live); **3,302 ledger rows** (1,441 done, 161 refused, 1,700 live,
 zero untriaged). Of the live ledger, 628 are todo, eleven doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
@@ -93,6 +93,19 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 inventory closeout (D3552/D3553): the current delivery order is
+reconciled with already recorded repairs rather than commissioning them again.
+GitHub's latest pushed d1310090 has a passed browser run (37641922913) and failed
+verify run (37641922404). Its content job uses a depth-one checkout, causing the
+existing graduation blame check to misclassify old cited rulings as self-minted.
+The job now fetches a parent, with a scaffold regression that fails before the
+change and real shallow-clone prior/same-commit controls. All 22 graduation
+contract cases, 15 scaffold controls and 227 content cases pass locally; no
+graduation rule, corpus threshold, runtime behavior or remote result is weakened
+or promoted. The latest implementation remains verified as recorded below,
+not a new full-suite or exact-revision GitHub proof from this inventory pass.
+The remaining source, workflow, official-content and release obligations stand.
 
 2026-10-08 private-source admission closeout (D3550/D3551): six native negative
 starts reproduce the old 201/owned-graph bypass. Fresh requests now resolve
