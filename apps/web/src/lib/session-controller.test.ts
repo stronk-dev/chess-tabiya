@@ -205,6 +205,10 @@ class FakeApi implements DrillClientApi {
     return { document: this.document, digest };
   }
 
+  async runPack(): Promise<{ readonly document: DrillPackDefinition; readonly digest: string }> {
+    return { document: this.document, digest };
+  }
+
   async shapes(): Promise<readonly import("./api.js").ShapeSummary[]> { return []; }
   async shape(): Promise<import("./api.js").ShapeDocument> { throw new Error("no shapes in fake"); }
   async humanSplit(_runId: string, nodeId: string): Promise<import("./api.js").HumanSplitPage> { return { nodeId, engine: { id: "maia", name: "Maia", version: "3", seedHonored: true }, targetElo: 1800, candidates: [] }; }
@@ -475,6 +479,68 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
+  describe("pinned pack attachment", () => {
+    it.each(["resume", "duplicate"] as const)("uses retained run bytes for %s after catalogue replacement or withdrawal", async (operation) => {
+      const environment = controller();
+      await environment.controller.startPack(pack.id);
+      const source = environment.api.requiredRun();
+      const client = operation === "resume" ? environment.controller : new DrillSessionController(environment.api, {
+        storage: new MemoryStorage(), scheduler: new FakeScheduler(), runId: () => "copy-run", seed: () => 29,
+      });
+      if (operation === "duplicate") await client.resume(source.id);
+      const retained = vi.spyOn(environment.api, "runPack");
+      const current = vi.spyOn(environment.api, "pack").mockRejectedValue(new Error("withdrawn from catalogue"));
+      if (operation === "resume") await client.resume(source.id);
+      else expect(await client.startDuplicate(source.id)).toBe(true);
+      expect(current).not.toHaveBeenCalled();
+      expect(retained).toHaveBeenCalledWith(environment.api.requiredRun().id, pack.id, digest);
+      expect(client.state.pack).toEqual(pack);
+      expect(client.state.packDigest).toBe(digest);
+      expect(client.state.error).toBeUndefined();
+    });
+
+    it("attaches the created run's document when the catalogue changes after preview", async () => {
+      const environment = controller();
+      const changed = { ...pack, title: "Retained instructions", objective: { ...pack.objective, summary: "The run's recorded objective" } };
+      vi.spyOn(environment.api, "runPack").mockResolvedValue({ document: changed, digest });
+      await environment.controller.startPack(pack.id);
+      expect(environment.controller.state.pack).toEqual(changed);
+      expect(environment.controller.state.error).toBeUndefined();
+    });
+
+    it.each(["identity", "digest"] as const)("refuses a crossed %s before attachment, shapes or feedback", async (field) => {
+      const environment = controller();
+      vi.spyOn(environment.api, "runPack").mockResolvedValue({
+        document: field === "identity" ? { ...pack, id: "unrelated-pack" } : pack,
+        digest: field === "digest" ? `sha256:${"b".repeat(64)}` : digest,
+      });
+      const shapes = vi.spyOn(environment.api, "shapes");
+      await environment.controller.startPack(pack.id);
+      expect(environment.controller.state.runState).toBeUndefined();
+      expect(environment.controller.state.error).toBeDefined();
+      expect(shapes).not.toHaveBeenCalled();
+      expect(environment.api.authoredFeedbackCalls).toBe(0);
+      expect(environment.api.selected).toBeUndefined();
+    });
+
+    it("retires a delayed retained-document read when the learner leaves", async () => {
+      const environment = controller();
+      const pending = deferred<{ document: DrillPackDefinition; digest: string }>();
+      const reached = deferred<void>();
+      vi.spyOn(environment.api, "runPack").mockImplementation(() => { reached.resolve(); return pending.promise; });
+      const shapes = vi.spyOn(environment.api, "shapes");
+      const starting = environment.controller.startPack(pack.id);
+      await reached.promise;
+      environment.controller.stopSession();
+      pending.resolve({ document: pack, digest });
+      await starting;
+      expect(environment.controller.state).toEqual({ busy: false });
+      expect(shapes).not.toHaveBeenCalled();
+      expect(environment.api.authoredFeedbackCalls).toBe(0);
+      expect(environment.started).toEqual([]);
+    });
+  });
+
   it("turns terminal and live-match conflicts into recovery instructions", () => {
     expect(sessionErrorMessage(new ApiError(409, "RUN_TERMINATED", "Run is terminal at node: opaque-id"))).toBe(
       "This attempt is complete. Rewind to an earlier move to try another branch.",

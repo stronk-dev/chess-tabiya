@@ -3544,6 +3544,16 @@ bot-rematch-check:
 bot-rematch-browser-check:
 	./node_modules/.bin/playwright test --grep "completed bot game rematches"
 
+.PHONY: pinned-pack-check pinned-pack-regression-check pinned-pack-browser-check
+pinned-pack-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/run-pack-application.test.ts apps/server/src/pack-studio.test.ts apps/server/src/capability-operations.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts
+
+pinned-pack-regression-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/session-controller.test.ts -t "pinned pack attachment"
+
+pinned-pack-browser-check:
+	./node_modules/.bin/playwright test tests/browser/pinned-pack.spec.ts
+
 .PHONY: application-security-check application-security-browser
 application-security-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-security.test.ts apps/server/src/http-representation.test.ts apps/server/src/http-streaming.test.ts apps/server/src/http-ingress.test.ts apps/server/src/live-session.test.ts apps/server/src/config.test.ts

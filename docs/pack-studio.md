@@ -84,6 +84,16 @@ Playtest documents are digest-resolvable but never listable, so saving a draft c
 an earlier playtest and playtesting cannot publish it accidentally. Registry hydration on
 startup restores both registered and playtest digest resolution from SQLite.
 
+Saved-run clients use authenticated `GET /runs/:id/pack`, which derives the digest
+from the authorised run and returns the same answer-free learner projection as
+the public catalogue reader, with `Cache-Control: no-store` and `X-Pack-Digest`.
+It is not a public digest lookup or an author-document export. Run grants are
+checked on every read, including after revocation; genuinely missing retained
+bytes return `PACK_UNRESOLVABLE`, never the latest version. Resume, duplicate
+and fresh creation attach only a document matching the run's pack ID and digest.
+The catalogue preview is used to configure a fresh request, not as authority for
+the document attached after creation.
+
 ## HTTP and client
 
 The Studio surface supports listing, creating, reading, replacing, linting,

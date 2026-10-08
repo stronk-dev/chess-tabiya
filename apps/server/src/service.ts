@@ -2103,6 +2103,13 @@ export class RunService {
     return this.#requiredPackRegistry().required(packId);
   }
 
+  runPack(runId: string, principal: Principal): PackRecord {
+    const run = requireRead(this.#storage, runId, principal).stored.run;
+    const pack = this.#requiredRegisteredPack(run);
+    if (pack === undefined) throw new ServerError("PACK_NOT_FOUND", "This run has no drill pack");
+    return pack;
+  }
+
   /**
    * The `explicit_analysis` enqueue owner (rfc/evidence-job-durability.md §2): validates every
    * node and job, then admits one whole batch under the caller's idempotency key. 202 means only

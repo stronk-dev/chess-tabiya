@@ -34,6 +34,33 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("resolves a pinned pack only through its authorised run and checks its identity and digest", async () => {
+    const document = {
+      id: "pack-one", version: "0.29", title: "Retained pack", mode: "plan", phase: "middlegame",
+      provenance: { reviewStatus: "draft", sources: [] }, channel: "community",
+      start: { fen: run.nodes[0]!.fen, side: "white" },
+      objective: { type: "play_until_checkpoint", summary: "Play the consequence." },
+      feedbackPolicy: "delayed_checkpoint", opponentPolicy: { mode: "human_common" }, spine: [], checkpoints: [],
+    };
+    const calls: string[] = [];
+    let responseId = document.id;
+    const expectedDigest = run.packDigest!;
+    let responseDigest: string | undefined = expectedDigest;
+    const api = new DrillApi("http://tabiya.test", async (input) => {
+      calls.push(String(input));
+      return json({ ...document, id: responseId }, { headers: responseDigest === undefined ? {} : { "x-pack-digest": responseDigest } });
+    });
+    expect((await api.runPack(run.id, document.id, expectedDigest)).document.title).toBe("Retained pack");
+    responseDigest = `sha256:${"b".repeat(64)}`;
+    await expect(api.runPack(run.id, document.id, expectedDigest)).rejects.toThrow("saved attempt");
+    responseDigest = undefined;
+    await expect(api.runPack(run.id, document.id, expectedDigest)).rejects.toThrow("valid digest");
+    responseDigest = expectedDigest;
+    responseId = "another-pack";
+    await expect(api.runPack(run.id, document.id, expectedDigest)).rejects.toThrow();
+    expect(calls).toEqual(Array(4).fill("http://tabiya.test/runs/run%20%2F%20one/pack"));
+  });
+
   it("admits only the requested fresh duplicate before returning it to a caller", async () => {
     const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
     const api = new DrillApi("http://tabiya.test", async (input, init) => {

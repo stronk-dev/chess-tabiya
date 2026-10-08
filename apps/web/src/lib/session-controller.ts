@@ -10,6 +10,7 @@ import {
   type BotProfileReference,
   type BranchComparison,
   type DrillRunEvent,
+  type DrillRun,
   type PolicyConfig,
   type BranchGroup,
   capabilityModeAvailability,
@@ -361,7 +362,8 @@ export class DrillSessionController {
       } else {
         const packId = started.data.packId;
         if (packId === null) throw new TypeError("Pack run is missing its pack id");
-        const { document, digest } = await this.#api.pack(packId);
+        const { document, digest } = await this.#runPack(run);
+        if (!this.#attachmentIsCurrent(generation)) return;
         const shapes = await this.#loadShapes(document.shapes);
         if (!this.#attachmentIsCurrent(generation)) return;
         this.#capabilities = capabilities;
@@ -384,12 +386,12 @@ export class DrillSessionController {
     this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined, simulation: undefined });
     try {
-      const [{ document, digest }, capabilities] = await Promise.all([
+      const [{ document: preview }, capabilities] = await Promise.all([
         this.#api.pack(packId),
         this.#api.capabilities(),
       ]);
       if (!this.#attachmentIsCurrent(generation)) return;
-      selectorMode(document, capabilities);
+      selectorMode(preview, capabilities);
       const runId = this.#runId();
       const seed = this.#seed();
       const session = WriterSession.claimFor(runId, this.#storage);
@@ -397,13 +399,16 @@ export class DrillSessionController {
         {
           id: runId,
           session: { kind: "pack", packId },
-          policyConfig: policyConfig(document, capabilities),
+          policyConfig: policyConfig(preview, capabilities),
           seed,
           ...(scheduleId === undefined ? {} : { intent: { origin: "fresh" as const, scheduleId } }),
         },
         session.writerId,
       );
       if (!this.#attachmentIsCurrent(generation)) return;
+      const { document, digest } = await this.#runPack(run);
+      if (!this.#attachmentIsCurrent(generation)) return;
+      selectorMode(document, capabilities);
       const shapes = await this.#loadShapes(document.shapes);
       if (!this.#attachmentIsCurrent(generation)) return;
       this.#capabilities = capabilities;
@@ -444,7 +449,8 @@ export class DrillSessionController {
       assertDuplicateRunResponse(run, { id: runId, seed, source });
       if (run.sessionKind === "pack") {
         if (run.packId === null) throw new TypeError("Duplicated pack run is missing its pack id");
-        const { document, digest } = await this.#api.pack(run.packId);
+        const { document, digest } = await this.#runPack(run);
+        if (!this.#attachmentIsCurrent(generation)) return false;
         const shapes = await this.#loadShapes(document.shapes);
         if (!this.#attachmentIsCurrent(generation)) return false;
         this.#capabilities = capabilities;
@@ -1248,6 +1254,15 @@ export class DrillSessionController {
   #requiredPack(): DrillPackDefinition {
     if (this.#state.pack === undefined) throw new Error("No drill pack is active");
     return this.#state.pack;
+  }
+
+  async #runPack(run: DrillRun) {
+    if (run.sessionKind !== "pack" || run.packId === null || run.packDigest === null) throw new TypeError("Pack run is missing its pack identity");
+    const pack = await this.#api.runPack(run.id, run.packId, run.packDigest);
+    if (pack.document.id !== run.packId || pack.digest !== run.packDigest) {
+      throw new TypeError("Pack response does not match the saved attempt");
+    }
+    return pack;
   }
 
   #requiredRun(): RunStateSnapshot {

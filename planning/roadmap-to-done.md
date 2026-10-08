@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3547]] and [[D3549]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3550]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -44,13 +44,13 @@ the machine map above remains the current assignment/status source.
 | Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content, fix official-versus-installed disclosure, implement durable training-set progression/repeat/tempo and graduate the official corpus |
-| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows; bind pack replay to retained document bytes |
+| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results and resume | Official educational progression, consumed theory unlocks, complete boss/reward/failure paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, submissions, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, submission review, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
-| Account/data | Authentication, authorization, writer leases, export/delete and implemented maintenance operations | Complete portable account round-trip, guest/claim, future-object coverage and native recovery/isolation journeys |
+| Account/data | Authentication, authorization, writer leases, export/delete and implemented maintenance operations | Audit private-source admission at run creation (D3550); complete portable account round-trip, guest/claim, future-object coverage and native recovery/isolation journeys |
 | Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations and official bundled content |
 
 The evidence-versus-guidance split is implemented in meaningful production paths, **not complete
@@ -59,6 +59,11 @@ shipping coaching or bot capability. Profile observations are not personality ve
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 There are **zero graduated official packs**. In particular, an installed Library item's Official
 badge does not by itself establish source review ([[D3540]]).
+The retained pack reader now checks the authorised run and its recorded document identity
+([[D3548]]); the separate known-digest private-source creation question is assigned to account/data
+([[D3550]]), not represented as resolved by that reader. The repository's Maia weight-rights entry
+(`release/maia-weight-rights.v1.json`) still records `unresolved`, which refuses a 1.0 publication;
+this is the local release state, not a new upstream licensing determination.
 
 The current semantic validation instrument checks **81 subjects, 38 passing migrated cases,
 53 population receipts and eight external receipts, but zero fully validated subjects**.
@@ -68,7 +73,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,298 ledger rows** (1,436 done, 161 refused, 1,701 live,
+(271 completed, 24 retired, 274 live); **3,299 ledger rows** (1,437 done, 161 refused, 1,701 live,
 zero untriaged). Of the live ledger, 629 are todo, eleven doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
@@ -83,6 +88,22 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 retained-pack attachment closeout (D3548): resume, duplicate and fresh
+creation now attach the exact retained document selected by the saved run. The
+authenticated run reader applies current grants, projects no authored answers,
+and refuses missing bytes without catalogue fallback. Five controls fail with
+the old catalogue-only behavior; 171 focused checks pass. Native HTTP/SQLite
+and desktop/touch reload proof covers private edits/withdrawal, duplicate,
+restart, grants/revocation and missing bytes. Clean types, 3,493 software /
+seven performance cases and downstream software contracts pass; the newly
+covered PACK_UNRESOLVABLE debt entry is removed, then all 227 content cases and
+normal content/governance gates pass. Full rebuilt browser tiers pass 161
+journeys, one existing optional Maia skip, zero retries, all 150 input and
+112 composition cells. D3550 separately owns the source-inspected known-digest
+private-source creation question; it is not a measured cross-account leak or
+an access-policy ruling. No official pack, calibrated bot, full capability,
+RFC or strict milestone is promoted. Existing intermittent causes remain open.
 
 2026-10-08 completed-bot replay closeout (D3546/D3547): the result sheet offers
 same-bot replay inside its focus boundary, with one pending owner, safe retry and

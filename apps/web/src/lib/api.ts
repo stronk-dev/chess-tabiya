@@ -1093,6 +1093,8 @@ export interface DrillClientApi extends RunApi {
   capabilities(): Promise<Capabilities>;
   packs(): Promise<readonly PackSummary[]>;
   pack(packId: string): Promise<PackDocument>;
+  /** Resolve the authorised run's retained pack, never the current catalogue entry. */
+  runPack(runId: string, packId: string, expectedDigest: string): Promise<PackDocument>;
   shapes(): Promise<readonly ShapeSummary[]>;
   principles?(): Promise<readonly PrincipleSummary[]>;
   conceptCatalogue?(): Promise<ConceptCatalogueView>;
@@ -1367,10 +1369,19 @@ export class DrillApi implements DrillClientApi {
   }
 
   async pack(packId: string): Promise<PackDocument> {
-    const response = await this.#response(`/packs/${encoded(packId)}`);
+    return this.#packDocument(`/packs/${encoded(packId)}`, packId);
+  }
+
+  async runPack(runId: string, packId: string, expectedDigest: string): Promise<PackDocument> {
+    return this.#packDocument(`/runs/${encoded(runId)}/pack`, packId, expectedDigest);
+  }
+
+  async #packDocument(path: string, packId: string, expectedDigest?: string): Promise<PackDocument> {
+    const response = await this.#response(path);
     const document = parsePackDocument(await response.json(), packId);
     const digest = response.headers.get("x-pack-digest");
     if (digest === null || !/^sha256:[a-f0-9]{64}$/u.test(digest)) throw new ApiError(502, "INVALID_RESPONSE", "Pack response omitted a valid digest");
+    if (expectedDigest !== undefined && digest !== expectedDigest) throw new ApiError(502, "INVALID_RESPONSE", "Pack response does not match the saved attempt");
     return Object.freeze({ document, digest });
   }
 

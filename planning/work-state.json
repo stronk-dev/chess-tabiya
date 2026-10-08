@@ -29325,11 +29325,12 @@
     },
     {
       "id": "D3548",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:29c633f707498bbce12965b9a776070496d63db24547718ef6c6720fc4a43789",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e7e5c23b197611d015c00383c5bf5b3198238da29f565b4f08a6935a248f4484",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "apps/server/src/run-pack-application.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3549",
@@ -29339,6 +29340,14 @@
       "uxItems": [],
       "evidence": "apps/server/src/capabilities.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3550",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4bf56b599bf9a42bc52b6665b6eafb15ff058e0b989017d1bf1eb1134fe5cc38",
+      "uxItems": [],
+      "owner": "account-and-data"
     }
   ]
 }

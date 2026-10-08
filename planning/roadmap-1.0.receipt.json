@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8eb6ac9f6911128f95923498d71b757ae4520ba14385fa34dc9ac23a5458c4c6",
+    "roadmap": "sha256:289cd9948df59afbb32a25b39b8eabc3545498e582fdc1cb427ff6264d3f811e",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:27ecf504c3327ee8617358a12562b960a805580397c554f7508ed7334d24aef2",
+    "workState": "sha256:cdcbc67b153ec620bfd150bf5f87ac96bb3aa5712f47c71ef011a3eafac2585c",
     "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
     "application": "sha256:0c8a9cfb0a33ba89fc65f4213b5cbbe359ee21d2cb3505792dc2918b1dfe8642",
-    "rest": "sha256:76c8ad546e1bec84a672d8d2bdedacfc6d69658973370756699b6f31ed22ac44"
+    "rest": "sha256:c542f4d23f7f5772d921d749ea96970e4a69e145b8dac66c4058bd2a0533d67e"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 11,
       "blocked": 1061,
-      "done": 1436,
+      "done": 1437,
       "refused": 161
     },
     "workItems": {
@@ -1699,13 +1699,21 @@
         "stable-board-and-presets",
         "production-api-closure"
       ],
-      "nextAction": "D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry are closed. Reproduce and repair D3548's pinned-pack client source mismatch under read/disclosure authority. Continue complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional and account journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+      "nextAction": "D3548's retained-pack attachment, D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry are closed. Reproduce D3550's separate known-digest private-source creation question and resolve its accepted admission contract before changing policy. Continue complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional and account journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3546/D3547 close the registered-bot completed-result action and exact fresh-attempt admission. One generation-owned pending operation spans setup; refused substitutions and retry preserve the source, a repeated seed changes, and departure cannot attach or navigate. Fourteen permanent focused controls pass; eight predecessor failures expose seed/profile/start/played substitution, duplicate overlap, the missing result action and return-contract differences, not a previously admitted crossed id. Actual desktop/touch-phone HTTP journeys prove failure, retry, exact canonical profile/new seed, unchanged original, reload and late departure. Current normal gates pass clean types, 3,485 software / seven performance / 227 content cases and downstream contracts/governance; rebuilt browser tiers pass 159 journeys, one existing optional Maia skip, zero retries, 150 input and 112 composition cells. D3541/D3542's paginated exact Profile-to-Review entry remains delivered with disclosure/contest restrictions. D3548's pinned pack retrieval and D3543's initial startup cause remain open. No calibration, personality, skill credit, schema change, official content, full RFC/capability/milestone or remote release completion.",
+        "summary": "D3548 closes retained-pack attachment for resume, duplicate and fresh creation. The run-scoped reader derives the saved digest under current run grants, reuses the answer-free projection and refuses missing bytes without catalogue substitution. Client admission checks exact ID/digest and retires departed reads. Five controls fail with the old catalogue-only behavior; 171 focused checks and native HTTP/SQLite edited/withdrawn playtest, duplicate, restart, grant/revoke and missing-byte controls pass. Real desktop/touch private-pack reload journeys pass. The full repeat passes clean types, 3,493 software / seven performance cases and downstream software/governance. Content initially goes red because PACK_UNRESOLVABLE is newly covered; its missing-test debt entry is removed, then normal verify-content/verify-governance pass all 227 content cases and current contracts. Sequential rebuilt browser CI passes 161 journeys, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. The earlier full software's seven shell-double and one undeclared-route failures are repaired, not weakened; the browser's invalid generated pack ID is corrected before the full repeat. D3550 records the separate source-inspected private-digest creation admission question; no cross-account leak or ACL ruling is claimed. Prior bot replay and Profile-to-Review deliveries stand; D3543/D3510/D3532's intermittent causes remain open. No calibration, personality, skill credit, schema change, official content, full RFC/capability/milestone or remote release completion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
+          "apps/server/src/run-pack-application.test.ts",
+          "apps/server/src/capability-operations.ts",
+          "apps/server/src/rest.ts",
+          "apps/server/src/service.ts",
+          "apps/server/src/fixtures/refusal-debt.fixture.json",
+          "tests/browser/pinned-pack.spec.ts",
+          "docs/pack-studio.md",
+          "docs/drill-client.md",
           "apps/web/src/lib/session-controller.ts",
           "apps/web/src/lib/session-controller.test.ts",
           "apps/web/src/lib/duplicate-response.ts",
@@ -1750,6 +1758,16 @@
             "kind": "work_state",
             "id": "D3546",
             "digest": "sha256:88cecc812c62cb4da9677c95a1695a75b54d6b72ab6b7bd3c1f57e496961ec75"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3548",
+            "digest": "sha256:e7e5c23b197611d015c00383c5bf5b3198238da29f565b4f08a6935a248f4484"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3550",
+            "digest": "sha256:4bf56b599bf9a42bc52b6665b6eafb15ff058e0b989017d1bf1eb1134fe5cc38"
           },
           {
             "kind": "work_state",
@@ -2569,7 +2587,7 @@
         ],
         "experience": [
           "partial",
-          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Names/assets, measured personality, opening routes, per-bot history/Review, pack-source retrieval and local bot events remain."
+          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Pack attachment now resolves the saved run's retained document under its read grants. Names/assets, measured personality, opening routes, per-bot history/Review and local bot events remain."
         ],
         "defaults": [
           "blocked",
@@ -2935,7 +2953,7 @@
         ],
         "verification": [
           "partial",
-          "Lifecycle tests exist; full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
+          "Lifecycle tests exist; D3550's known-digest private-source creation question needs cross-account proof and accepted-contract resolution. Full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
         ],
         "release": [
           "blocked",

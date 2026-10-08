@@ -130,6 +130,13 @@ function json(status: number, value: unknown): Response {
   });
 }
 
+function packResponse(pack: PackRecord): Response {
+  return Response.json(projectPackDocument(pack.document, pack.assessmentGrounding, pack.channel, pack.publisherHandle), {
+    status: 200,
+    headers: { "cache-control": "no-store", "x-pack-digest": pack.digest },
+  });
+}
+
 function jsonWithCookie(status: number, value: unknown, cookie: string): Response {
   return Response.json(value, {
     status,
@@ -805,7 +812,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|modules\/query|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(pack|moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|nudge|modules\/query|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1399,25 +1406,7 @@ export function createRestHandler(
             error: { code: "NOT_FOUND", message: "Route not found" },
           });
         }
-        const pack = service.pack(packId);
-        return new Response(
-          JSON.stringify(
-            projectPackDocument(
-              pack.document,
-              pack.assessmentGrounding,
-              pack.channel,
-              pack.publisherHandle,
-            ),
-          ),
-          {
-          status: 200,
-          headers: {
-            "cache-control": "no-store",
-            "content-type": "application/json",
-            "x-pack-digest": pack.digest,
-          },
-          },
-        );
+        return packResponse(service.pack(packId));
       }
       if (request.method === "POST" && url.pathname === "/runs") {
         const principal = authenticate();
@@ -1676,6 +1665,9 @@ export function createRestHandler(
         });
       }
       const principal = authenticate();
+      if (request.method === "GET" && route.action === "pack") {
+        return packResponse(service.runPack(route.runId, principal));
+      }
       if (request.method === "GET" && route.action === "graph") {
         return json(200, {
           graph: service.graph(

@@ -5,6 +5,13 @@ transport and run projection, and the playable Svelte episode screens. It is a
 REST-driven client: the server remains authoritative for run semantics,
 checkpoint and objective evaluation, feedback timing, and opponent selection.
 
+Pack attachment is run-scoped: after creation, duplication or resume, the client
+reads `/runs/:id/pack` and checks its pack ID and digest against the saved run.
+Current catalogue bytes are only a fresh-start preview. Replaced or withdrawn
+packs and private playtests keep their retained learner instructions; no current
+catalogue fallback can silently change a saved attempt. Stale reads after departure
+cannot attach a board or start feedback/opponent work.
+
 ## Pack registry and routes
 
 `PackRegistry.loadDefault()` loads pack documents below `content/packs/` and

@@ -76,6 +76,7 @@ export const RUN_ROUTE_OPERATIONS: readonly CapabilityRouteBranch[] = Object.fre
   run("POST", "rewind", none("run.rewind")),
   run("POST", "fork", none("run.fork")),
   run("GET", "graph", none("run.graph")),
+  run("GET", "pack", none("run.pack")),
   run("POST", "compare", none("run.compare")),
   run("POST", "branch-decidedness", session("run.branch_decidedness", "runtime.branch_decidedness")),
   run("GET", "events", none("run.events")),
