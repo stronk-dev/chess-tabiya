@@ -3396,6 +3396,42 @@ async function startSupportFromFen(page: Page, fen: string, side: "white" | "bla
 }
 
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
+test(`Empty Support returns to playable board without changing the recorded game (${viewport.width}px)`, async ({ page }) => {
+  await page.setViewportSize(viewport);
+  await startSupportFromFen(page, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "white");
+  await move(page, "e2", "e4");
+  const runId = page.url().split("/").at(-1)!;
+  const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+  await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
+  await showSupportTools(page);
+  await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+  const theory = page.locator('[data-module="theory_breadcrumb"]');
+  await theory.locator(".seat-row").click();
+  const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().postDataJSON()?.query?.requested?.includes("theory_breadcrumb"));
+  await theory.getByRole("button", { name: "Show", exact: true }).click();
+  const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(item => item.module === "theory_breadcrumb")!;
+  expect(packet.receipt.items).toHaveLength(0);
+  expect(packet.empty?.kind).toBe("stated_absence");
+  await expect(theory.locator("[data-empty]")).toHaveText(packet.empty!.sentence!);
+  const before = await graph();
+  const events = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json();
+  const board = await page.getByLabel("Chessboard", { exact: true }).boundingBox();
+  await theory.getByRole("button", { name: "Keep playing", exact: true }).click();
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+  await expect(page.locator(".workspace")).not.toHaveAttribute("inert", "");
+  if (viewport.width < 720) await expect(page.locator(".rail-stack")).not.toHaveAttribute("role", "dialog");
+  expect(await graph()).toEqual(before);
+  expect(await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).toEqual(events);
+  expect(await page.getByLabel("Chessboard", { exact: true }).boundingBox()).toEqual(board);
+  await assertRunViewport(page, viewport);
+  // The handoff genuinely releases board input, not just a focus assertion.
+  await move(page, "g1", "f3");
+  await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === "g1f3")).toBe(true);
+  await assertRunViewport(page, viewport);
+});
+}
+
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
 test(`Support opens the exact recognized Library pattern and preserves the recorded run on return (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
   await startSupportFromFen(page, "r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", "white");

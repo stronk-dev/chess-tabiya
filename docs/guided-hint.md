@@ -22,6 +22,11 @@ The row counts the one delivered disclosure, not the number of rungs. Available 
 fact; explicit empty or unavailable-source answers show zero. An unasked/pending/failed/refused
 request has no count. Identical snapshots preserve the answer; an actual decision-digest change
 retires it. A held staged-move warning temporarily displaces the card without requesting again.
+Empty and unavailable-source answers offer **Keep playing**, returning to the same
+board without requesting a hint, advancing the ladder, or changing the answer. The
+handoff waits for the current decision and help settings, respects write access,
+and closes the phone companion before focusing the board. It does not imply that
+the position is safe or that a missing source has been consulted.
 
 The seat never asks on its own. The learner has to press the button, and the request only runs when
 the run's disclosure boundary is open, for example after **Show support for this position** in Just

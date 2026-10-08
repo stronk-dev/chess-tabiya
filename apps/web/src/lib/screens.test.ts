@@ -1403,15 +1403,16 @@ describe("Layer 3 screens", () => {
         return true;
       });
       const onSwitchBranch = vi.fn((nodeId: string, branchId: string) => { replace(rewind(snapshots.get("current")!.run, nodeId, at, undefined, branchId).run); return true; });
+      const onModuleQuery = vi.fn((body: Parameters<ReturnType<typeof testModuleQuery>>[0]) => testModuleQuery(snapshots.get("current")!.run)(body));
       const component = mount(DrillScreen, { target: target(), props: {
         onAssistanceQuery: testAssistanceAuthority,
-        onModuleQuery: body => testModuleQuery(snapshots.get("current")!.run)(body),
+        onModuleQuery,
         assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
         onMove: vi.fn(), onFork: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
         onRewind, onSwitchBranch, ...callbacks,
         get snapshot() { return snapshots.get("current")!; },
       } });
-      return { component, snapshots, replace, onRewind, onSwitchBranch };
+      return { component, snapshots, replace, onRewind, onSwitchBranch, onModuleQuery };
     }
     const action = (module: string) => document.querySelector<HTMLButtonElement>(`[data-module="${module}"] [data-rehearsal-action]`);
     async function openComparison(): Promise<HTMLButtonElement> {
@@ -1422,6 +1423,58 @@ describe("Layer 3 screens", () => {
       await vi.waitFor(() => expect(action("compare_coach")).not.toBeNull());
       return action("compare_coach")!;
     }
+
+    async function openEmptyTheory() {
+      const seat = document.querySelector('[data-module="theory_breadcrumb"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click();
+      await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(seat.querySelector("[data-empty]")).not.toBeNull());
+      return seat;
+    }
+
+    it("returns from an actual empty Theory receipt to the board without a move, rewind, or new query", async () => {
+      const original = actionRun();
+      const screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = await openEmptyTheory();
+      const sentence = seat.querySelector("[data-empty]")!.textContent;
+      const requests = screen.onModuleQuery.mock.calls.length;
+      const button = seat.querySelector<HTMLButtonElement>("[data-keep-playing]");
+      expect(button).not.toBeNull();
+      button!.click();
+      await tick();
+      expect(document.activeElement).toBe(document.querySelector("[data-board-input-grid]"));
+      expect(seat.querySelector("[data-empty]")!.textContent).toBe(sentence);
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      expect(screen.onSwitchBranch).not.toHaveBeenCalled();
+      expect(screen.onModuleQuery).toHaveBeenCalledTimes(requests);
+      expect(screen.snapshots.get("current")!.run.events).toEqual(original.events);
+      await unmount(screen.component);
+    });
+
+    it.each(["read_only", "decision", "unmount"] as const)("refuses the empty-card handoff after %s", async change => {
+      const original = actionRun();
+      const screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = await openEmptyTheory();
+      const button = seat.querySelector<HTMLButtonElement>("[data-keep-playing]");
+      expect(button).not.toBeNull();
+      if (change === "read_only") screen.replace(original, "read_only");
+      if (change === "decision") screen.replace(revealFeedback(commitMove(original, "g1f3", { at }).run, at).run);
+      if (change === "unmount") await unmount(screen.component);
+      await tick();
+      const focus = vi.spyOn(HTMLElement.prototype, "focus");
+      button!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(focus).not.toHaveBeenCalled();
+      if (change === "read_only") {
+        expect(button!.disabled).toBe(true);
+        expectDisabledControlsExplained();
+      }
+      focus.mockRestore();
+      if (change !== "unmount") await unmount(screen.component);
+    });
 
     it("rewinds the Nudge's learner move, preserves its reply, and enters the other attempt at the divergence", async () => {
       const original = actionRun();

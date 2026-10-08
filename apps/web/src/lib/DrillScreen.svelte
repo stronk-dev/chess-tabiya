@@ -1062,6 +1062,19 @@
     return undefined;
   }
 
+  const keepPlayingBlocked = $derived.by(() => seatActionBlock()
+    ?? (assistanceQueryState !== "ready" ? "Wait for this position and its help settings to finish updating."
+      : stagedCue !== undefined ? "Revise or confirm the staged move before continuing."
+      : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : undefined));
+
+  function keepPlayingFromSeat(module: PlaySeatModule, packet: ParsedModulePacket): void {
+    if (!seatAlive || keepPlayingBlocked !== undefined || seatPackets.get(module) !== packet
+      || packet.disclosure.decisionDigest !== seatDecisionDigest
+      || packet.disclosure.effectiveConfigDigest !== compiledAssistance?.finalDigest
+      || packet.items.length !== 0 || (packet.empty?.kind !== "stated_absence" && packet.empty?.kind !== "unavailable_source")) return;
+    void focusBoardFromSupport();
+  }
+
   let seatActions: ModuleSeatActions = $derived.by(() => {
     const actions: Partial<Record<"postcommit_nudge" | "compare_coach", ModuleSeatAction>> = {};
     for (const module of ["postcommit_nudge", "compare_coach"] as const) {
@@ -1890,7 +1903,7 @@
   }
 
   async function focusBoardFromSupport(): Promise<void> {
-    const runId = run.id, nodeId = run.activeCursor.nodeId, branchId = run.activeCursor.branchId;
+    const runId = run.id, nodeId = run.activeCursor.nodeId, branchId = run.activeCursor.branchId, authority = seatAuthority;
     if (compactViewport) {
       // The phone companion owns modal inertness. Release it before focusing the board, and
       // do not restore the obsolete card button that navigation may just have removed.
@@ -1898,7 +1911,9 @@
       companionInvoker = undefined;
       await tick();
     }
-    if (seatAlive && run.id === runId && run.activeCursor.nodeId === nodeId && run.activeCursor.branchId === branchId)
+    if (seatAlive && canWrite && !busy && !rewindBusy && branchSwitchBusy === undefined && previewNodeId === undefined
+      && stagedCue === undefined && terminalEvent === undefined && seatAuthority === authority
+      && run.id === runId && run.activeCursor.nodeId === nodeId && run.activeCursor.branchId === branchId)
       mainElement?.querySelector<HTMLElement>("[data-board-input-grid]")?.focus();
   }
 
@@ -2516,6 +2531,8 @@
                 doorBlocked={seatDoorReasons}
                 staged={stagedCue}
                 actions={seatActions}
+                onKeepPlaying={keepPlayingFromSeat}
+                {keepPlayingBlocked}
                 onToggle={toggleSeat}
                 onRequest={requestSeat}
                 onConfirmStaged={() => void confirmStagedMove()}
@@ -2524,7 +2541,8 @@
               />
             {/if}
             {#if hints !== undefined && hintSeatPresent}
-              <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} decisionReady={hintDecisionReady} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")} />
+              <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} decisionReady={hintDecisionReady} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")}
+                {keepPlayingBlocked} onKeepPlaying={() => { if (seatAlive && keepPlayingBlocked === undefined) void focusBoardFromSupport(); }} />
             {/if}
               <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"
                 band={tabletViewport} tools open={stagedCue === undefined && (seatExpanded === undefined || seatExpanded === "support_tools")}

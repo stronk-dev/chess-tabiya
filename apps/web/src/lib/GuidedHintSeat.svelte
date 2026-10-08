@@ -31,9 +31,11 @@
     expanded?: boolean;
     onToggle?: (() => void) | undefined;
     band?: boolean;
+    onKeepPlaying?: (() => void) | undefined;
+    keepPlayingBlocked?: string | undefined;
   }
 
-  let { run, ceiling, canWrite, decisionReady = true, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false }: Props = $props();
+  let { run, ceiling, canWrite, decisionReady = true, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false, onKeepPlaying, keepPlayingBlocked }: Props = $props();
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -51,6 +53,7 @@
   let activeRequestId: string | undefined;
   let retryRequestId: string | undefined;
   let generation = 0;
+  let alive = true;
 
   let next = $derived(nextHintRung(progress, decisionDigest, ceiling));
   let revealed = $derived(progress?.decisionDigest === decisionDigest ? progress.revealed : null);
@@ -96,7 +99,13 @@
     void decisionDigest;
     untrack(reset);
   });
-  onDestroy(() => { generation += 1; const pending = activeRequestId ?? retryRequestId; if (pending !== undefined) void client.cancel(pending).catch(() => undefined); onMarks?.(undefined); });
+  onDestroy(() => { alive = false; generation += 1; const pending = activeRequestId ?? retryRequestId; if (pending !== undefined) void client.cancel(pending).catch(() => undefined); onMarks?.(undefined); });
+
+  function keepPlaying(delivered: HintResponse): void {
+    if (!alive || !canWrite || !decisionReady || busy || keepPlayingBlocked !== undefined || response !== delivered
+      || (delivered.state !== "honest_empty" && delivered.state !== "source_unavailable")) return;
+    onKeepPlaying?.();
+  }
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -190,6 +199,13 @@
     <button type="button" disabled={!canWrite || !decisionReady || busy || next === undefined} aria-describedby={!decisionReady && canWrite ? "guided-hint-wait" : next === undefined && revealed !== null ? "guided-hint-limit" : undefined} onclick={() => void ask()}>
       {busy ? "Looking…" : revealed === null ? "Hint" : "A little more"}
     </button>
+    {#if onKeepPlaying !== undefined && response !== undefined && (response.state === "honest_empty" || response.state === "source_unavailable")}
+      {@const delivered = response}
+      <button type="button" data-keep-playing disabled={!canWrite || !decisionReady || busy || keepPlayingBlocked !== undefined}
+        aria-describedby={keepPlayingBlocked !== undefined ? "guided-hint-keep-playing-status" : !decisionReady && canWrite ? "guided-hint-wait" : undefined}
+        onclick={() => keepPlaying(delivered)}>Keep playing</button>
+      {#if keepPlayingBlocked !== undefined}<span id="guided-hint-keep-playing-status" class="honest">{keepPlayingBlocked}</span>{/if}
+    {/if}
     {#if decisionReady && next === undefined && revealed !== null}<span id="guided-hint-limit" class="honest">That is as far as this help style goes here.</span>{/if}
     {#if !canWrite}<span class="honest">This read-only view cannot ask for hints.</span>{/if}
     {#if !decisionReady && canWrite}<span id="guided-hint-wait" class="honest" role="status">Wait for this position and its help settings to finish updating.</span>{/if}

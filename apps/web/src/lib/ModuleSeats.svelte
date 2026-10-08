@@ -21,13 +21,15 @@
     doorBlocked: Readonly<Partial<Record<PlaySeatModule, string>>>;
     staged: StagedCue | undefined;
     actions?: ModuleSeatActions;
+    onKeepPlaying?: ((module: PlaySeatModule, packet: ParsedModulePacket) => void) | undefined;
+    keepPlayingBlocked?: string | undefined;
     onToggle: (module: PlaySeatModule) => void;
     onRequest: (module: PlaySeatModule) => void;
     onConfirmStaged: () => void;
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, band = false, doorBlocked, staged, actions = {}, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, band = false, doorBlocked, staged, actions = {}, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
@@ -84,6 +86,14 @@
               <p class="stated-empty" data-empty={packet.empty.kind}>{packet.empty.sentence}</p>
             {/if}
             {#each unavailableSentences(packet) as sentence}<p class="unavailable">{sentence}</p>{/each}
+            {#if onKeepPlaying !== undefined && packet.items.length === 0 && packet.empty !== null && (packet.empty.kind === "stated_absence" || packet.empty.kind === "unavailable_source")}
+              <div class="seat-actions">
+                <button type="button" data-keep-playing disabled={keepPlayingBlocked !== undefined}
+                  aria-describedby={keepPlayingBlocked === undefined ? undefined : `${seat.module}-keep-playing-status`}
+                  onclick={() => onKeepPlaying?.(seat.module, packet)}>Keep playing</button>
+              </div>
+              {#if keepPlayingBlocked !== undefined}<p id={`${seat.module}-keep-playing-status`} class="door-reason">{keepPlayingBlocked}</p>{/if}
+            {/if}
             {#if seat.module === "postcommit_nudge" && packet.items.length > 0}<p>{NUDGE_CLOSING}</p>{/if}
             {#if packet.items.length > 0 && (seat.module === "postcommit_nudge" || seat.module === "compare_coach")}
               {@const action = actions[seat.module]}

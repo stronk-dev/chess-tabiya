@@ -45,6 +45,10 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    contract gates. Finish the existing Support/Review/theory joins rather than
    inventing producer data at the UI boundary. [[D3540]] still blocks treating an
    installed Library badge as reviewed explanatory content.
+   Delivered [[D3554]] adds the passive Keep playing handoff to real empty/source-unavailable
+   module and Hint cards, using the existing modal/focus controller. No new evidence,
+   recommended move or Compare defect is claimed; the wider empty-loop and hint-default
+   obligations remain open.
 3. [[D3535]]: training-set execution-context author amendment, then the remaining
    [[D3318]] member progression/repeat/re-offer journey. The installed catalogue/API
    is delivered; durable cycle identity is not. Preserve the existing migration

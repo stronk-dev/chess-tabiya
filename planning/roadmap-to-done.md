@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3553]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3554]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -57,6 +57,10 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+Empty/source-unavailable Support and Hint cards now return directly to the board
+([[D3554]]), with the same answer and recorded line preserved. Desktop/phone native
+journeys verify that focus releases and a subsequent move succeeds. This closes a
+specific dead-end interaction, not the remaining evidence, hint-default or whole-UX work.
 There are **zero graduated official packs**. In particular, an installed Library item's Official
 badge does not by itself establish source review ([[D3540]]).
 The retained pack reader checks the authorised run and its recorded document identity
@@ -78,7 +82,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,302 ledger rows** (1,441 done, 161 refused, 1,700 live,
+(271 completed, 24 retired, 274 live); **3,303 ledger rows** (1,442 done, 161 refused, 1,700 live,
 zero untriaged). Of the live ledger, 628 are todo, eleven doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

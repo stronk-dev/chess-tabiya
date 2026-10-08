@@ -83,6 +83,35 @@ describe("DrillApi Guided Hint wire", () => {
 });
 
 describe("GuidedHintSeat", () => {
+  it.each(["honest_empty", "source_unavailable"] as const)("offers a passive board handoff for %s without requesting another rung", async state => {
+    const run = revealedRun();
+    const client = fakeClient((body): HintResponse => state === "honest_empty"
+      ? { state, requestId: "f".repeat(32), rung: body.rung, reason: "no_admitted_occurrence" }
+      : { state, requestId: "f".repeat(32), rung: body.rung, reason: "provider_unavailable" });
+    const onKeepPlaying = vi.fn();
+    const states = new SvelteMap([["ready", true]]);
+    const component = mount(GuidedHintSeat, { target: target(), props: {
+      run, ceiling: "square", canWrite: true, client, assistanceRequest, onKeepPlaying,
+      get decisionReady() { return states.get("ready")!; },
+    } });
+    await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+    await settle();
+    const button = document.querySelector<HTMLButtonElement>("[data-keep-playing]");
+    expect(button).not.toBeNull();
+    const message = document.querySelector(".hint-message")!.textContent;
+    button!.click(); await settle();
+    expect(onKeepPlaying).toHaveBeenCalledOnce();
+    expect(client.bodies).toHaveLength(1);
+    expect(document.querySelector(".hint-message")!.textContent).toBe(message);
+    states.set("ready", false); await settle();
+    button!.dispatchEvent(new MouseEvent("click", { bubbles: true })); await settle();
+    expect(onKeepPlaying).toHaveBeenCalledOnce();
+    await unmount(component);
+    button!.dispatchEvent(new MouseEvent("click", { bubbles: true })); await settle();
+    expect(onKeepPlaying).toHaveBeenCalledOnce();
+  });
+
   it.each([true, false])("does not request until the current decision is ready (expanded %s)", async expanded => {
     const states = new SvelteMap<string, boolean>([["ready", false]]);
     const run = revealedRun();

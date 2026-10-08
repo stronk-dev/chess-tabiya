@@ -181,6 +181,10 @@ play-composition-vocabulary-check:
 play-composition-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/Chessboard.test.ts apps/web/src/lib/CreateSeedChooser.test.ts apps/web/src/lib/BoardNotation.test.ts
 
+.PHONY: support-empty-browser-check
+support-empty-browser-check:
+	./node_modules/.bin/playwright test --grep "Empty Support returns"
+
 .PHONY: inspector-subject-check inspector-subject-browser-check inspector-corpus-subject-check inspector-corpus-browser-check
 inspector-subject-check:
 	pnpm exec vitest run apps/web/src/lib/screens.test.ts -t "historical and current Inspector subjects|previewed position attachments|concurrent revoicing|current-position endgame evidence"

@@ -90,6 +90,11 @@ sealed source **and** an exact pair-keyed presentation adapter presents it.
   Exact disclosure/run/decision/configuration checks refuse stale actions; read-only and busy
   actions have visible explanations, requests are single-flight, and failures retain an exact
   retry. Leaving the screen or switching runs retires pending navigation.
+  Empty or source-unavailable cards also offer **Keep playing**. This is a passive
+  handoff to the same board, not another query, a move suggestion, or an all-clear.
+  The delivered packet must still be current; read-only, pending, previewed, staged
+  and ended positions cannot use it to bypass the normal play controls. Phone
+  modal inertness is released before board focus, without changing recorded events.
   The ordinary bot's phone rematch action lives in Support tools instead of wrapping over
   the board. Desktop rematch remains in the header; its noninteractive context is bounded
   within its own wrapping column while the full status announcement remains available to assistive technology.
