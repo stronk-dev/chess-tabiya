@@ -7,7 +7,7 @@ import type { DrillRun } from "@chess-tabiya/runtime";
 const fixture = JSON.parse(readFileSync(new URL("../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
 
 for (const mobile of [false, true]) {
-  test(`private pinned pack survives editing, withdrawal, resume and copied-run reload${mobile ? " @mobile" : ""}`, async ({ page }) => {
+  test(`private pinned pack survives editing, withdrawal, resume and copied-run reload${mobile ? " @mobile" : ""}`, async ({ page, playwright }) => {
     const handle = `pinned_${randomUUID().slice(0, 8)}`;
     expect((await page.request.post("/auth/register", { data: { handle, password: "browser-pinned-pack-password" } })).status()).toBe(201);
     const document = { ...structuredClone(fixture), id: `private-${randomUUID()}`, title: `Retained ${handle}`, provenance: { reviewStatus: "draft", sources: [] } };
@@ -17,6 +17,19 @@ for (const mobile of [false, true]) {
     const played = await page.request.post(`/packs/drafts/${draft.id}/playtest`, { data: {}, headers: { "x-writer-id": "browser-pinned-writer" } });
     expect(played.status()).toBe(201);
     const { run } = await played.json() as { run: DrillRun };
+    const stranger = await playwright.request.newContext({ baseURL: new URL(played.url()).origin });
+    try {
+      expect((await stranger.post("/auth/register", { data: { handle: `stranger_${randomUUID().slice(0, 8)}`, password: "browser-stranger-pack-password" } })).status()).toBe(201);
+      const forbiddenId = randomUUID();
+      const forbidden = await stranger.post("/runs", {
+        data: { id: forbiddenId, session: { kind: "pack", packId: run.packId, packDigest: run.packDigest }, policyConfig: run.policyConfig, seed: 23, intent: { origin: "duplicate", derivedFromRunId: run.id } },
+        headers: { "x-writer-id": "browser-stranger-writer" },
+      });
+      expect(forbidden.status()).toBe(404);
+      expect((await forbidden.json()).error.code).toBe("PACK_NOT_FOUND");
+      expect((await stranger.get(`/runs/${forbiddenId}/graph`)).status()).toBe(404);
+      expect((await stranger.get(`/runs/${run.id}/pack`)).status()).toBe(404);
+    } finally { await stranger.dispose(); }
     const edited = await page.request.put(`/packs/drafts/${draft.id}`, {
       data: { document: { ...document, title: "Changed instructions must not appear" } }, headers: { "if-match": draft.digest },
     });

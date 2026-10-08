@@ -121,7 +121,7 @@ import {
   ratedOpponentRung,
   type PublishedBandValue,
 } from "@chess-tabiya/runtime/rating";
-import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomInt, randomUUID } from "node:crypto";
 import { canonicalizeJson, normalizeShapeReferences } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -668,14 +668,25 @@ export class RunService {
   }
 
   async create(input: CreateRunRequest, leaseInput: LeaseHolder | string, options: { readonly persist?: (run: DrillRun, title: string) => void } = {}): Promise<DrillRun> {
+    // Fresh requests resolve public catalogue identity; a digest is an assertion, not access.
+    const pack = input.session.kind === "pack" ? this.#requiredPackRegistry().required(input.session.packId) : undefined;
+    return this.#create(input, leaseInput, pack, options);
+  }
+
+  /** Internal Studio path: its owner-only draft reader has already resolved these bytes. */
+  async createPlaytestRun(record: PackRecord, lease: LeaseHolder): Promise<DrillRun> {
+    return this.#create({
+      id: randomUUID(),
+      session: { kind: "pack", packId: record.document.id, packDigest: record.digest },
+      policyConfig: { seedMode: "per_run", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: randomInt(0, 0x7fffffff),
+    }, lease, record);
+  }
+
+  async #create(input: CreateRunRequest, leaseInput: LeaseHolder | string, pack: PackRecord | undefined, options: { readonly persist?: (run: DrillRun, title: string) => void } = {}): Promise<DrillRun> {
     const lease = this.#lease(leaseInput);
     if (lease.learnerId === "__legacy") this.#principal("legacy-create");
     const packRequest = input.session.kind === "pack" ? input.session : undefined;
-    const pack = packRequest !== undefined
-      ? packRequest.packDigest === undefined
-        ? this.#requiredPackRegistry().required(packRequest.packId)
-        : this.#requiredPackRegistry().byDigest(packRequest.packDigest)
-      : undefined;
     if (packRequest !== undefined && pack === undefined) {
       throw new ServerError("PACK_NOT_FOUND", `Unknown pack bytes: ${packRequest.packId}`);
     }
@@ -2737,7 +2748,7 @@ export class RunService {
         derivedFromRunId: sourceRunId,
       },
     };
-    return this.create(request, { writerId: input.writerId, learnerId: principal.learnerId });
+    return this.#create(request, { writerId: input.writerId, learnerId: principal.learnerId }, this.#requiredRegisteredPack(source));
   }
 
   schedule(

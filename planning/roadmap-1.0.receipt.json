@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:289cd9948df59afbb32a25b39b8eabc3545498e582fdc1cb427ff6264d3f811e",
+    "roadmap": "sha256:53a80973e3b3c0ca6a32d654a9e7f17e4d8f0316f819679ea46c624ad6477578",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:cdcbc67b153ec620bfd150bf5f87ac96bb3aa5712f47c71ef011a3eafac2585c",
+    "workState": "sha256:3c969b6c0bfd1564e8ae6e37df8438f2ce4a53f13b0ce4b7d97f8c71ab98c7be",
     "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
     "application": "sha256:0c8a9cfb0a33ba89fc65f4213b5cbbe359ee21d2cb3505792dc2918b1dfe8642",
-    "rest": "sha256:c542f4d23f7f5772d921d749ea96970e4a69e145b8dac66c4058bd2a0533d67e"
+    "rest": "sha256:335b9ec025ff6422e526cbef50020c457e497ca9daf2c008bb8a7a102060a28c"
   },
   "summary": {
     "capabilities": 14,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 628,
       "doing": 11,
       "blocked": 1061,
-      "done": 1437,
+      "done": 1439,
       "refused": 161
     },
     "workItems": {
@@ -1699,10 +1699,10 @@
         "stable-board-and-presets",
         "production-api-closure"
       ],
-      "nextAction": "D3548's retained-pack attachment, D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry are closed. Reproduce D3550's separate known-digest private-source creation question and resolve its accepted admission contract before changing policy. Continue complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional and account journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+      "nextAction": "D3550's private-source admission repair, D3548's retained-pack attachment, D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry are closed. Continue module-critical source/operand validation, complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional and account journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3548 closes retained-pack attachment for resume, duplicate and fresh creation. The run-scoped reader derives the saved digest under current run grants, reuses the answer-free projection and refuses missing bytes without catalogue substitution. Client admission checks exact ID/digest and retires departed reads. Five controls fail with the old catalogue-only behavior; 171 focused checks and native HTTP/SQLite edited/withdrawn playtest, duplicate, restart, grant/revoke and missing-byte controls pass. Real desktop/touch private-pack reload journeys pass. The full repeat passes clean types, 3,493 software / seven performance cases and downstream software/governance. Content initially goes red because PACK_UNRESOLVABLE is newly covered; its missing-test debt entry is removed, then normal verify-content/verify-governance pass all 227 content cases and current contracts. Sequential rebuilt browser CI passes 161 journeys, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. The earlier full software's seven shell-double and one undeclared-route failures are repaired, not weakened; the browser's invalid generated pack ID is corrected before the full repeat. D3550 records the separate source-inspected private-digest creation admission question; no cross-account leak or ACL ruling is claimed. Prior bot replay and Profile-to-Review deliveries stand; D3543/D3510/D3532's intermittent causes remain open. No calibration, personality, skill credit, schema change, official content, full RFC/capability/milestone or remote release completion.",
+        "summary": "D3550 closes a measured private-source admission bypass under the existing pack-studio contract: six native negative starts previously returned 201 and readable graphs, including forged lineage, read-granted callers and withdrawn/restarted private bytes. Fresh creation resolves current public identity and treats a supplied digest only as an assertion; owner-only Studio playtests pass their resolved record internally; explicit duplication checks the readable source run and derives its retained document. Shared validation, orchestration and persistence remain; no new ACL or schema. 172 focused cases, clean types, 3,494 software / seven performance cases and downstream software contracts pass. Native controls preserve grants/revocation, spectator copies, public/private shadow IDs, stale/current public versions, historical replay, restart and missing-byte refusal. Content initially fails because PACK_NOT_FOUND is newly covered; only its missing-test debt entry is removed, then all 227 content cases and normal governance pass. Rebuilt browser tiers pass 161 journeys, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells; actual desktop/touch cross-account refusal and private reload pass. D3551 corrects Studio deletion/attribution documentation against the existing portable-account-data policy, with no deletion or archive changes. D3548's retained attachment, bot replay and Profile-to-Review deliveries stand. 3,300 ledger rows now have 1,439 done, 161 refused and 1,700 live, zero untriaged; 462 historical prose-only closeouts and D3543/D3510/D3532's intermittent causes remain qualified. No calibration, personality, skill credit, official content, full RFC/capability/milestone or remote release completion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1713,6 +1713,9 @@
           "apps/server/src/fixtures/refusal-debt.fixture.json",
           "tests/browser/pinned-pack.spec.ts",
           "docs/pack-studio.md",
+          "docs/account-data-lifecycle.md",
+          "rfc/archive/pack-studio.md",
+          "rfc/archive/portable-account-data.md",
           "docs/drill-client.md",
           "apps/web/src/lib/session-controller.ts",
           "apps/web/src/lib/session-controller.test.ts",
@@ -1767,7 +1770,12 @@
           {
             "kind": "work_state",
             "id": "D3550",
-            "digest": "sha256:4bf56b599bf9a42bc52b6665b6eafb15ff058e0b989017d1bf1eb1134fe5cc38"
+            "digest": "sha256:d2a8eae0cd1a10ccb2f46130778e71239346c1977d5d099718433e9d255e9957"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3551",
+            "digest": "sha256:6291441d0d3106fb5253ee38aae43a4808fbbf1df5a07ec0564e8c05ce7ef1e1"
           },
           {
             "kind": "work_state",
@@ -2953,7 +2961,7 @@
         ],
         "verification": [
           "partial",
-          "Lifecycle tests exist; D3550's known-digest private-source creation question needs cross-account proof and accepted-contract resolution. Full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
+          "D3550 closes the measured private-digest creation bypass: fresh public admission, owner-only playtests and authorised retained-run replay share the same validated creation body. Native cross-account/restart and actual desktop/touch refusal/reload pass. D3551 reconciles Studio deletion documentation with existing storage policy. Full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
         ],
         "release": [
           "blocked",

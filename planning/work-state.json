@@ -29343,11 +29343,21 @@
     },
     {
       "id": "D3550",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4bf56b599bf9a42bc52b6665b6eafb15ff058e0b989017d1bf1eb1134fe5cc38",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d2a8eae0cd1a10ccb2f46130778e71239346c1977d5d099718433e9d255e9957",
       "uxItems": [],
-      "owner": "account-and-data"
+      "evidence": "apps/server/src/run-pack-application.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3551",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6291441d0d3106fb5253ee38aae43a4808fbbf1df5a07ec0564e8c05ce7ef1e1",
+      "uxItems": [],
+      "evidence": "docs/pack-studio.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -64,8 +64,11 @@ proved their chess claims.
 Migration 7 adds durable `pack_drafts`, `playtest_documents`, and `registered_packs` tables.
 Drafts are learner-private and use digest-based optimistic concurrency. Invalid documents
 can be saved and inspected but cannot be playtested or registered. Account deletion
-withdraws mutable drafts and tombstones ownership to the existing legacy learner; published
-bytes and the historical publisher handle remain.
+hard-deletes unpublished drafts and their playtest documents. Published bytes, versions
+and digests remain immutable; registered ownership is tombstoned to the legacy learner,
+publisher display metadata becomes `deleted account`, and the published IDs remain
+unclaimable. The account-data lifecycle and its confirmed deletion preview govern this
+behavior, including installation-owned backup retention.
 
 Registration changes `provenance.reviewStatus` from `draft` to `published`, requires a
 validation-clean document, sources, and no declared graduation blockers. `(pack_id, version)`
@@ -83,6 +86,16 @@ silently degrading into a pack-free run.
 Playtest documents are digest-resolvable but never listable, so saving a draft cannot orphan
 an earlier playtest and playtesting cannot publish it accidentally. Registry hydration on
 startup restores both registered and playtest digest resolution from SQLite.
+
+Digest resolution is not permission to start an unpublished draft. Fresh
+`POST /runs` requests resolve the public catalogue by pack ID; an optional
+`packDigest` must match that current entry or the request is refused before a
+run is persisted. The owner-only Studio playtest route passes its resolved
+record through `createPlaytestRun`, not the public creation path. Explicit
+`POST /runs/:id/duplicate` checks current source-run read access and derives the
+retained document server-side. A spectator may duplicate a readable saved run;
+client-supplied lineage or knowledge of its digest does not grant that access.
+These paths share the same run validation, orchestration and persistence body.
 
 Saved-run clients use authenticated `GET /runs/:id/pack`, which derives the digest
 from the authorised run and returns the same answer-free learner projection as

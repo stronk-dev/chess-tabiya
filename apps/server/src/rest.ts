@@ -4,7 +4,7 @@ import {
   type Server,
   type ServerResponse,
 } from "node:http";
-import { randomInt, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import type { ReadableStream as NodeReadableStream } from "node:stream/web";
@@ -1365,15 +1365,7 @@ export function createRestHandler(
         if (request.method === "POST" && action === "playtest") {
           closedRecord(body, "/", []);
           const record = studio.playtest(draftId, principal);
-          const run = await service.create({
-            id: randomUUID(),
-            session: { kind: "pack", packId: record.document.id, packDigest: record.digest },
-            policyConfig: {
-              seedMode: "per_run",
-              locus: { executedAt: "server", engineIds: [], modelIds: [] },
-            },
-            seed: randomInt(0, 0x7fffffff),
-          }, { writerId: writerId(request), learnerId: principal.learnerId });
+          const run = await service.createPlaytestRun(record, { writerId: writerId(request), learnerId: principal.learnerId });
           return json(201, { run, url: `/play/run/${encodeURIComponent(run.id)}` });
         }
         if (request.method === "POST" && action === "register") return json(201, { pack: studio.register(draftId, principal) });

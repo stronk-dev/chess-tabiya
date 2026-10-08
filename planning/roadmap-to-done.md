@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3550]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3551]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -50,7 +50,7 @@ the machine map above remains the current assignment/status source.
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, submissions, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, submission review, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
-| Account/data | Authentication, authorization, writer leases, export/delete and implemented maintenance operations | Audit private-source admission at run creation (D3550); complete portable account round-trip, guest/claim, future-object coverage and native recovery/isolation journeys |
+| Account/data | Authentication, authorization, source-scoped pack creation/replay, writer leases, export/delete and implemented maintenance operations | Complete portable account round-trip, guest/claim, future-object coverage and native recovery/isolation journeys |
 | Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations and official bundled content |
 
 The evidence-versus-guidance split is implemented in meaningful production paths, **not complete
@@ -59,9 +59,14 @@ shipping coaching or bot capability. Profile observations are not personality ve
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 There are **zero graduated official packs**. In particular, an installed Library item's Official
 badge does not by itself establish source review ([[D3540]]).
-The retained pack reader now checks the authorised run and its recorded document identity
-([[D3548]]); the separate known-digest private-source creation question is assigned to account/data
-([[D3550]]), not represented as resolved by that reader. The repository's Maia weight-rights entry
+The retained pack reader checks the authorised run and its recorded document identity
+([[D3548]]). The separately measured creation bypass is now repaired ([[D3550]]): fresh
+starts resolve the current public catalogue, owner-only Studio playtests use an internal
+resolved-record path, and explicit saved-run replay derives retained bytes under source
+read access. Knowing a private digest or supplying lineage is not admission authority.
+Studio deletion documentation also now matches the existing account policy ([[D3551]]).
+These scoped repairs do not complete account portability or multi-user lifecycle proof.
+The repository's Maia weight-rights entry
 (`release/maia-weight-rights.v1.json`) still records `unresolved`, which refuses a 1.0 publication;
 this is the local release state, not a new upstream licensing determination.
 
@@ -73,8 +78,8 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,299 ledger rows** (1,437 done, 161 refused, 1,701 live,
-zero untriaged). Of the live ledger, 629 are todo, eleven doing and 1,061 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,300 ledger rows** (1,439 done, 161 refused, 1,700 live,
+zero untriaged). Of the live ledger, 628 are todo, eleven doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
@@ -88,6 +93,23 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 private-source admission closeout (D3550/D3551): six native negative
+starts reproduce the old 201/owned-graph bypass. Fresh requests now resolve
+current public catalogue identity; private Studio playtests and authorised
+saved-run replay pass their resolved document to one shared creation body.
+Native HTTP/SQLite proves owner/spectator boundaries, forged lineage refusal,
+withdrawal/restart, current/stale public versions, private shadow IDs and missing
+bytes. All 172 focused cases pass. Normal full verification passes clean types,
+3,494 software / seven isolated performance cases and downstream software checks;
+its content tier flags newly covered PACK_NOT_FOUND as stale test debt. Only
+that covered entry is removed, then all 227 content cases and normal governance
+pass. Full rebuilt browser tiers pass 161 journeys, one existing optional Maia
+skip, zero retries, all 150 input and 112 composition cells, including actual
+desktop/touch cross-account refusal and authorised private-pack reload. Studio
+deletion documentation is reconciled with existing storage and portable-account-data
+policy; no deletion behavior, ACL, schema, archive or numerical contract changes.
+No full account, capability, milestone, official pack or remote release is promoted.
 
 2026-10-08 retained-pack attachment closeout (D3548): resume, duplicate and fresh
 creation now attach the exact retained document selected by the saved run. The
