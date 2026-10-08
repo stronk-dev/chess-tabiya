@@ -294,6 +294,9 @@ class ManagedUciEngine {
   #identity: EngineIdentity | undefined;
   #options: readonly EngineOption[] | undefined;
   #startPromise: Promise<EngineIdentity> | undefined;
+  #cancelStart: (() => void) | undefined;
+  #shutdownPromise: Promise<void> | undefined;
+  #lifecycle = 0;
   #requestQueue: Promise<void> = Promise.resolve();
   #restartTimer: ReturnType<typeof setTimeout> | undefined;
   #restartAttempt = 0;
@@ -358,22 +361,44 @@ class ManagedUciEngine {
   }
 
   async start(): Promise<EngineIdentity> {
+    if (this.#shutdownPromise !== undefined || this.#status === "shutting_down") throw engineUnavailable(this.#spec.id, this.#nextBackoffMs());
     if (this.#status === "ready" && this.#identity !== undefined) return this.#identity;
     if (this.#startPromise !== undefined) return this.#startPromise;
     this.#closing = false;
-    this.#startPromise = this.#spawnAndHandshake().finally(() => {
-      this.#startPromise = undefined;
+    const lifecycle = this.#lifecycle;
+    const cancelled = new Promise<never>((_, reject) => {
+      this.#cancelStart = () => reject(engineUnavailable(this.#spec.id, this.#nextBackoffMs(), new Error("Engine supervisor is shutting down")));
     });
-    return this.#startPromise;
+    // Publish the shared promise before callbacks or asynchronous probes can invoke shutdown.
+    const started = Promise.race([
+      Promise.resolve().then(() => this.#spawnAndHandshake(lifecycle)), cancelled,
+    ]).finally(() => {
+      if (this.#startPromise === started) {
+        this.#startPromise = undefined;
+        this.#cancelStart = undefined;
+      }
+    });
+    this.#startPromise = started;
+    return started;
   }
 
-  async #spawnAndHandshake(): Promise<EngineIdentity> {
+  #assertLifecycle(lifecycle: number): void {
+    if (lifecycle !== this.#lifecycle || this.#status === "shutting_down") {
+      throw engineUnavailable(this.#spec.id, this.#nextBackoffMs(), new Error("Engine supervisor is shutting down"));
+    }
+  }
+
+  async #spawnAndHandshake(lifecycle: number): Promise<EngineIdentity> {
+    this.#assertLifecycle(lifecycle);
     this.#clearRestartTimer();
     this.#status = "starting";
     this.#optionImage = undefined;
     this.#emit({ engineId: this.#spec.id, kind: "starting" });
+    this.#assertLifecycle(lifecycle);
     // The launched artifact is captured immediately before this generation's spawn.
-    this.#artifact = this.#artifactProbe === undefined ? null : await this.#artifactProbe(this.#spec).catch(() => null);
+    const artifact = this.#artifactProbe === undefined ? null : await this.#artifactProbe(this.#spec).catch(() => null);
+    this.#assertLifecycle(lifecycle);
+    this.#artifact = artifact;
     this.#transcript.push(
       "lifecycle",
       `spawn ${this.#spec.command} ${(this.#spec.args ?? []).join(" ")}`.trim(),
@@ -400,6 +425,7 @@ class ManagedUciEngine {
     try {
       const timeout = this.#spec.handshakeTimeoutMs ?? DEFAULT_TIMEOUT_MS;
       const uciLines = await this.#exchange("uci", (line) => line === "uciok", timeout);
+      this.#assertLifecycle(lifecycle);
       const parsedOptions = parseEngineOptions(uciLines);
       const parsedIdentity = parseIdentity(this.#spec, uciLines, parsedOptions);
       this.#identity = parsedIdentity.identity;
@@ -428,6 +454,7 @@ class ManagedUciEngine {
         this.#send(command);
       }
       await this.#exchange("isready", (line) => line === "readyok", timeout);
+      this.#assertLifecycle(lifecycle);
       this.#optionImage = Object.freeze({
         advertisedUciOptionLines: Object.freeze(uciLines.filter((line) => line.startsWith("option name "))),
         appliedSetoptionCommands: Object.freeze(applied),
@@ -440,6 +467,8 @@ class ManagedUciEngine {
       this.#emit({ engineId: this.#spec.id, kind: "ready" });
       return this.#identity;
     } catch (error) {
+      // Shutdown owns this child; an obsolete continuation must not change a successor.
+      this.#assertLifecycle(lifecycle);
       this.#lastError = error instanceof Error ? error.message : String(error);
       this.#status = "unavailable";
       this.#emit({ engineId: this.#spec.id, kind: "failed", reason: this.#closing ? "cancelled_by_shutdown" : "startup" });
@@ -455,11 +484,15 @@ class ManagedUciEngine {
   }
 
   async execute(request: EngineRequest): Promise<readonly string[]> {
+    const lifecycle = this.#lifecycle;
     const task = this.#requestQueue.then(async () => {
       if (request.signal?.aborted) throw abortError();
+      this.#assertLifecycle(lifecycle);
       await this.start();
+      this.#assertLifecycle(lifecycle);
       if (request.signal?.aborted) throw abortError();
       const onAbort = (): void => {
+        if (lifecycle !== this.#lifecycle) return;
         try {
           this.#send("stop");
         } catch {
@@ -482,6 +515,7 @@ class ManagedUciEngine {
             (line) => line === "readyok",
             Math.min(request.timeoutMs ?? DEFAULT_TIMEOUT_MS, 5_000),
           );
+          this.#assertLifecycle(lifecycle);
           if (request.signal?.aborted) throw abortError();
         }
         const response = this.#waitFor(
@@ -490,12 +524,13 @@ class ManagedUciEngine {
         );
         for (const command of request.commands) this.#send(command);
         const lines = await response;
+        this.#assertLifecycle(lifecycle);
         if (request.signal?.aborted) throw abortError();
         for (const command of request.afterCommands ?? []) this.#send(command);
         return lines;
       } catch (error) {
         if (isAbortError(error)) throw error;
-        this.#process?.kill();
+        if (lifecycle === this.#lifecycle) this.#process?.kill();
         throw error instanceof Error && "code" in error
           ? error
           : engineUnavailable(
@@ -532,9 +567,12 @@ class ManagedUciEngine {
    * change is refused rather than stamped with the later identity.
    */
   async exchange(request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
+    const lifecycle = this.#lifecycle;
     const task = this.#requestQueue.then(async (): Promise<EngineExchangeCapture> => {
       if (request.signal?.aborted) throw abortError();
+      this.#assertLifecycle(lifecycle);
       await this.start();
+      this.#assertLifecycle(lifecycle);
       if (request.signal?.aborted) throw abortError();
       const generation = this.#generation;
       const identity = this.#identity;
@@ -544,6 +582,7 @@ class ManagedUciEngine {
       if (identity === undefined || optionImage === undefined || generation < 1) throw engineUnavailable(this.#spec.id, this.#nextBackoffMs());
       const transcript: string[] = [];
       const onAbort = (): void => {
+        if (lifecycle !== this.#lifecycle) return;
         try {
           this.#send("stop");
         } catch {
@@ -559,20 +598,22 @@ class ManagedUciEngine {
           this.#send(command);
         }
         const lines = await response;
+        this.#assertLifecycle(lifecycle);
         for (const line of lines) transcript.push(`< ${line}`);
         completed = true;
       } catch (error) {
-        if (!isAbortError(error)) this.#process?.kill();
+        if (!isAbortError(error) && lifecycle === this.#lifecycle) this.#process?.kill();
         throw error instanceof Error && "code" in error
           ? error
           : isAbortError(error) ? error : engineUnavailable(this.#spec.id, this.#nextBackoffMs(), error instanceof Error ? error : undefined);
       } finally {
         request.signal?.removeEventListener("abort", onAbort);
-        if (this.#process !== undefined && this.#generation === generation) {
+        if (lifecycle === this.#lifecycle && this.#process !== undefined && this.#generation === generation) {
           try {
             for (const command of request.resetCommands) this.#send(command);
             await this.#exchange("isready", (line) => line === "readyok", 5_000);
           } catch {
+            this.#assertLifecycle(lifecycle);
             // A generation that cannot be reset may not serve another task.
             completed = false;
             this.#lastError = "provider exchange reset failed";
@@ -582,6 +623,7 @@ class ManagedUciEngine {
         }
       }
       if (!completed) throw engineUnavailable(this.#spec.id, this.#nextBackoffMs(), new Error("provider exchange reset failed"));
+      this.#assertLifecycle(lifecycle);
       if (request.signal?.aborted) throw abortError();
       if (this.#generation !== generation || this.#status !== "ready") {
         throw engineUnavailable(this.#spec.id, this.#nextBackoffMs(), new Error("engine generation changed during the exchange"));
@@ -605,24 +647,38 @@ class ManagedUciEngine {
     return this.health();
   }
 
-  async shutdown(): Promise<void> {
+  shutdown(): Promise<void> {
+    if (this.#shutdownPromise !== undefined) return this.#shutdownPromise;
+    this.#lifecycle += 1;
     this.#closing = true;
     this.#clearRestartTimer();
     this.#status = "shutting_down";
+    if (this.#cancelStart !== undefined) {
+      this.#cancelStart();
+      this.#cancelStart = undefined;
+      this.#startPromise = undefined;
+      this.#emit({ engineId: this.#spec.id, kind: "failed", reason: "cancelled_by_shutdown" });
+    }
     this.#rejectWaiters(new Error("Engine supervisor is shutting down"));
     const child = this.#process;
-    if (child !== undefined && child.exitCode === null && child.signalCode === null) {
-      const exited = new Promise<void>((resolve) => child.once("exit", () => resolve()));
-      this.#send("quit");
-      await Promise.race([
-        exited,
-        new Promise<void>((resolve) => setTimeout(resolve, 1_000)),
-      ]);
-      if (child.exitCode === null && child.signalCode === null) child.kill();
-    }
-    this.#disposeProcess(child);
-    this.#status = "stopped";
-    this.#transcript.push("lifecycle", "stopped");
+    const stopped = Promise.resolve().then(async () => {
+      if (child !== undefined && child.exitCode === null && child.signalCode === null) {
+        const exited = new Promise<void>((resolve) => child.once("exit", () => resolve()));
+        if (child === this.#process && child.stdin.writable) this.#send("quit");
+        await Promise.race([
+          exited,
+          new Promise<void>((resolve) => setTimeout(resolve, 1_000)),
+        ]);
+        if (child.exitCode === null && child.signalCode === null) child.kill();
+      }
+      this.#disposeProcess(child);
+      this.#status = "stopped";
+      this.#transcript.push("lifecycle", "stopped");
+    }).finally(() => {
+      if (this.#shutdownPromise === stopped) this.#shutdownPromise = undefined;
+    });
+    this.#shutdownPromise = stopped;
+    return stopped;
   }
 
   #send(line: string): void {

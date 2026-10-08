@@ -28,6 +28,22 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    remote result is changed; a local pass is not a new GitHub pass.
 1. [[D3518]], [[D3514]], [[D3510]]: locate the intermittent software failures before
    declaring release readiness. Passing replays leave these findings open.
+   [[D3557]] is the current rebuilt browser failure: cold/warm arrival hits the
+   unchanged 30-second whole-test deadline waiting for Chessboard while the
+   snapshot still shows Loading Tabiya. Desktop Nudge equality rejects newly
+   attached background engine refs, as does completed-bot replay; repair the
+   assertion class with meaningful play-state negatives, not a blanket wait.
+   Phone cited Profile→Review instead renders the
+   starting-position line and misses the requested move. Local traces are retained;
+   locate each boundary without guessed load causes or extended timeouts.
+   [[D3556]] adds the current full-gate failure: the Theory Library real-corpus
+   setup times out at its unchanged ten-second hook; 210 other content cases pass.
+   Locate the shapes/principles/packs/opening-catalogue stage without increasing
+   the deadline or treating a green replay as a cause. This gate is currently red.
+   [[D3555]] closes a separately reproduced shutdown race: late binary probes and
+   pre-shutdown queued work cannot spawn after stop or corrupt a successor. Real
+   Stockfish and controlled active/queued regressions pass; this does not locate
+   the historical handshake or application-load timeout causes.
    [[D3529]]/[[D3530]] are diagnosed host interruptions: exact trace timestamps match
    clamshell/maintenance sleep, and both unchanged awake journeys pass. No application
    geometry/auth repair is claimed. [[D3531]] repairs fixture ownership/diagnostics:

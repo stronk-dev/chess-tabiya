@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3554]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3557]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -82,8 +82,8 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,303 ledger rows** (1,442 done, 161 refused, 1,700 live,
-zero untriaged). Of the live ledger, 628 are todo, eleven doing and 1,061 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,306 ledger rows** (1,443 done, 161 refused, 1,702 live,
+zero untriaged). Of the live ledger, 628 are todo, thirteen doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
@@ -97,6 +97,34 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+Current verification qualification (D3556/D3557): the current local full gate
+and browser gate are **red**, superseding any implication of readiness from the
+earlier green checkpoints below. Content setup times out before 17 Theory
+Library assertions. Rebuilt browser smoke completes with 94 passed, four failed,
+one existing optional Maia skip and zero retries; the content/matrix/packaged-default
+browser tiers do not run after smoke fails. Arrival's warm sample hits the
+whole-test deadline while still loading. Phone cited Profile→Review renders a
+starting-position line instead of its cited move. Desktop Nudge and completed-bot
+replay fail snapshot assertions only on permitted background engine references;
+that assertion class is not evidence of lost moves. Each trace is retained
+locally, with exact boundaries and further repair owned by the current queue.
+No timeout is increased, control removed or passing replay substituted for diagnosis.
+The scoped engine repair is not a clean full-suite or ready-to-push claim.
+
+2026-10-08 engine-lifecycle closeout (D3555): permanent controls reproduce
+startup after completed shutdown, queued-command resurrection and concurrent
+shutdown/start failure, including a delayed real Stockfish binary probe. One
+lifecycle fence now cancels obsolete startup/requests and coalesces physical
+shutdown without changing deadlines or retries. Explicit fresh startup and new
+requests after shutdown remain supported. Normal focused gates pass 86
+engine/provider cases, five application-cleanup cases and clean types. This
+does not diagnose the earlier intermittent UCI/application failures or promote
+release readiness. The current normal full verification passes 3,509 software
+cases, seven performance cases and downstream software/governance checks, then
+fails at Theory Library's unchanged ten-second real-corpus setup hook. The other
+210 content cases pass; 17 Theory cases never run. D3556 owns locating that stage;
+the current full gate is red, not a clean ready-to-push checkpoint.
 
 2026-10-08 inventory closeout (D3552/D3553): the current delivery order is
 reconciled with already recorded repairs rather than commissioning them again.

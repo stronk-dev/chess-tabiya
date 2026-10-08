@@ -49,10 +49,18 @@ startup error. Success clears this list and transfers ownership to the existing 
 Campaign documents, a failed worker, cleanup failure and successful restart on the same database.
 The explicitly unavailable Maia arm is not model-play or bot-calibration proof.
 
+Shutdown also fences pending binary probes, handshakes and queued requests. They reject with
+`ENGINE_UNAVAILABLE` instead of spawning or resetting a process after shutdown. Concurrent
+shutdown callers share one physical drain; startup is refused while it drains. After shutdown
+completes, an explicit new start or newly submitted request can establish a fresh generation.
+Late continuations cannot change that generation's readiness, artifact or request lane. Permanent
+controls include a delayed real Stockfish binary probe and active/queued exchange cancellation;
+this closes D3555, not the separately unlocated intermittent UCI timeout D3518.
+
 Application startup reads the resolved launched binary in 64 KiB chunks through the server's
 standard-library SHA-256 adapter. Permanent tests compare it with the unchanged runtime
 `digestEngineBinary` fixed-domain authority, including chunk/padding boundaries and failed reads.
-The frozen base supervisor is unchanged; the sharing adapter delegates to its existing queue,
+The sharing adapter delegates to the supervisor's queue,
 restart and exchange machinery. The runtime parser/semantic source closure, capability declarations and authored pack digests are
 not rewritten by this allocation repair. Run `make engine-sharing-check` for these contracts.
 

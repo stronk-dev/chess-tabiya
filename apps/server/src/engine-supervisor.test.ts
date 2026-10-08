@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { EngineSupervisor, parseEngineOptions, type EngineSupervisorOptions } from "./engine-supervisor.js";
+import { binaryArtifactProbe, EngineSupervisor, parseEngineOptions, type EngineSupervisorOptions } from "./engine-supervisor.js";
 import { SharedEngineSupervisor } from "./shared-engine-supervisor.js";
 import { assertAdvertisedCapabilityDispositions } from "./capabilities.js";
 import { OpponentSelector } from "./opponent-selector.js";
@@ -122,6 +122,41 @@ describe("UCI engine supervisor", () => {
 
   afterEach(async () => {
     await Promise.all(supervisors.splice(0).map((supervisor) => supervisor.shutdown()));
+  });
+
+  stockfishIt("fences a late real-binary probe at shutdown, then explicitly starts a fresh Stockfish generation", async () => {
+    if (stockfish === undefined) throw new Error("Stockfish test was not skipped");
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => { release = resolve; });
+    let calls = 0;
+    let entered!: () => void;
+    const probing = new Promise<void>((resolve) => { entered = resolve; });
+    let completed!: () => void;
+    const probed = new Promise<void>((resolve) => { completed = resolve; });
+    const supervisor = new EngineSupervisor([{
+      id: "stockfish-analysis", kind: "judge", command: stockfish.command, args: stockfish.args,
+      options: { Threads: 1, Hash: 16 },
+    }], { artifactProbe: async (spec) => {
+      entered();
+      if (++calls === 1) await gate;
+      const artifact = await binaryArtifactProbe(spec);
+      completed();
+      return artifact;
+    } });
+    supervisors.push(supervisor);
+    const started = supervisor.start("stockfish-analysis").then(() => "ready", () => "cancelled");
+    await probing;
+    await supervisor.shutdown();
+    release();
+    expect(await started).toBe("cancelled");
+    await probed;
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    expect(supervisor.health("stockfish-analysis").status).toBe("stopped");
+    await supervisor.start("stockfish-analysis");
+    expect(supervisor.artifact("stockfish-analysis")).toMatchObject({ kind: "binary" });
+    expect(supervisor.establishedGeneration("stockfish-analysis")).toBe(1);
+    expect(supervisor.transcript("stockfish-analysis").filter(({ line }) => line.startsWith("spawn "))).toHaveLength(1);
+    expect(await supervisor.execute("stockfish-analysis", { commands: ["position startpos", "go depth 1"], until: (line) => line.startsWith("bestmove ") })).toEqual(expect.arrayContaining([expect.stringMatching(/^bestmove /)]));
   });
 
   function sharedSupervisor(onLifecycle?: EngineSupervisorOptions["onLifecycle"]): EngineSupervisor {

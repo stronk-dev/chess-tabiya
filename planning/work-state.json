@@ -29385,6 +29385,33 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/screens.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3555",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ca8ee431f4010e12ec67a6422180069a9540e4ba277b455104be13b95ed5cfca",
+      "uxItems": [],
+      "evidence": "apps/server/src/engine-supervisor-exchange.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3556",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:746bc932e7a2e5825e7d499f4488c623a8163e38f9b1c54164b39c37cc1a1980",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-08"
+    },
+    {
+      "id": "D3557",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3279ec746a206fd1d1e5fc9e4299a6a7195f4e8e1a7a6a980e79d2e3fb29cfb7",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-08"
     }
   ]
 }

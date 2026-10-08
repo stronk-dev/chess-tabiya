@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { digestEngineBinary, digestEngineOptionImage, providerUtf8 } from "@chess-tabiya/runtime";
 
@@ -33,6 +33,118 @@ describe("engine supervisor provider exchange (§3 same-exchange capture)", () =
     supervisors.push(value);
     return value;
   };
+
+  it("does not spawn when an artifact probe completes after shutdown", async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => { release = resolve; });
+    let entered!: () => void;
+    const probing = new Promise<void>((resolve) => { entered = resolve; });
+    const engines = supervisor(engineScript(), async (spec) => { entered(); await gate; return probe(spec); });
+    const started = engines.start("stockfish-analysis").then(() => "ready", () => "cancelled");
+    await probing;
+    await engines.shutdown();
+    release();
+    expect(await started).toBe("cancelled");
+    // Let the released probe's continuation run before asserting absence of a late spawn.
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    expect(engines.health("stockfish-analysis").status).toBe("stopped");
+    expect(engines.establishedGeneration("stockfish-analysis")).toBeNull();
+    expect(engines.transcript("stockfish-analysis").some(({ line }) => line.startsWith("spawn "))).toBe(false);
+  });
+
+  it("settles cancellation without waiting for a stalled probe and isolates a new startup", async () => {
+    let releaseFirst!: () => void;
+    let releaseSecond!: () => void;
+    const first = new Promise<void>((resolve) => { releaseFirst = resolve; });
+    const second = new Promise<void>((resolve) => { releaseSecond = resolve; });
+    let calls = 0;
+    let entered!: () => void;
+    const probing = new Promise<void>((resolve) => { entered = resolve; });
+    const engines = supervisor(engineScript(), async (spec) => {
+      entered();
+      await (++calls === 1 ? first : second);
+      return probe(spec);
+    });
+    let cancelled = false;
+    const old = engines.start("stockfish-analysis").then(() => false, (error: unknown) => {
+      expect(error).toMatchObject({ code: "ENGINE_UNAVAILABLE" });
+      cancelled = true;
+      return true;
+    });
+    try {
+      await probing;
+      await engines.shutdown();
+      expect(cancelled).toBe(true);
+      const next = engines.start("stockfish-analysis");
+      releaseFirst();
+      expect(await old).toBe(true);
+      await new Promise<void>((resolve) => setImmediate(resolve));
+      const shared = engines.start("stockfish-analysis");
+      releaseSecond();
+      const [a, b] = await Promise.all([next, shared]);
+      expect(a).toEqual(b);
+      expect(calls).toBe(2);
+      expect(engines.establishedGeneration("stockfish-analysis")).toBe(1);
+      expect(engines.transcript("stockfish-analysis").filter(({ line }) => line.startsWith("spawn "))).toHaveLength(1);
+    } finally {
+      releaseFirst();
+      releaseSecond();
+      await old;
+    }
+  });
+
+  it.each(["execute", "exchange"] as const)("refuses a queued %s accepted before shutdown without respawning", async (operation) => {
+    const engines = supervisor(engineScript());
+    const request = { commands: ["go depth 3"], resetCommands: ["ucinewgame"], until: (line: string) => line.startsWith("bestmove"), timeoutMs: 1_000 };
+    const result = engines[operation]("stockfish-analysis", request).then(() => "completed", () => "cancelled");
+    await engines.shutdown();
+    expect(await result).toBe("cancelled");
+    expect(engines.health("stockfish-analysis").status).toBe("stopped");
+    expect(engines.transcript("stockfish-analysis").some(({ line }) => line.startsWith("spawn "))).toBe(false);
+  });
+
+  it.each(["execute", "exchange"] as const)("cancels an active and queued %s without resetting or restarting the stopped child", async (operation) => {
+    const engines = supervisor(engineScript().replace("console.log('bestmove e2e4')", "console.log('search-held')"));
+    await engines.start("stockfish-analysis");
+    const request = { commands: ["go depth 3"], resetCommands: ["ucinewgame"], until: (line: string) => line.startsWith("bestmove"), timeoutMs: 1_000 };
+    const active = engines[operation]("stockfish-analysis", request).then(() => "completed", () => "cancelled");
+    const queued = engines[operation]("stockfish-analysis", request).then(() => "completed", () => "cancelled");
+    await vi.waitFor(() => expect(engines.transcript("stockfish-analysis").some(({ line }) => line === "search-held")).toBe(true));
+    await engines.shutdown();
+    expect(await Promise.all([active, queued])).toEqual(["cancelled", "cancelled"]);
+    expect(engines.health("stockfish-analysis").status).toBe("stopped");
+    expect(engines.transcript("stockfish-analysis").filter(({ direction }) => direction === "sent").map(({ line }) => line)).toEqual(["uci", "setoption name Threads value 1", "isready", "go depth 3", "quit"]);
+    expect(engines.transcript("stockfish-analysis").some(({ line }) => line.startsWith("restart scheduled"))).toBe(false);
+  });
+
+  it("coalesces shutdown and refuses startup while the child is draining", async () => {
+    // The engine deliberately retains the pipe after quit until the test's next event turn.
+    const engines = supervisor(engineScript().replace("process.exit(0)", "setTimeout(()=>process.exit(0),20)"));
+    await engines.start("stockfish-analysis");
+    const a = engines.shutdown();
+    const b = engines.shutdown();
+    const during = engines.start("stockfish-analysis").then(() => "ready", () => "cancelled");
+    expect(await during).toBe("cancelled");
+    await Promise.all([a, b]);
+    expect(engines.health("stockfish-analysis").status).toBe("stopped");
+    expect(engines.transcript("stockfish-analysis").filter(({ line }) => line === "quit")).toHaveLength(1);
+    await engines.start("stockfish-analysis");
+    expect(engines.establishedGeneration("stockfish-analysis")).toBe(2);
+    await engines.shutdown();
+    expect(await engines.execute("stockfish-analysis", { commands: ["isready"], until: (line) => line === "readyok" })).toEqual(["readyok"]);
+    expect(engines.establishedGeneration("stockfish-analysis")).toBe(3);
+  });
+
+  it("cancels an in-flight handshake without publishing ready or scheduling a restart", async () => {
+    const engines = supervisor(engineScript().replace("console.log('uciok')", "console.log('handshake-held')"));
+    const result = engines.start("stockfish-analysis").then(() => "ready", () => "cancelled");
+    await vi.waitFor(() => expect(engines.transcript("stockfish-analysis").some(({ line }) => line === "handshake-held")).toBe(true));
+    await engines.shutdown();
+    expect(await result).toBe("cancelled");
+    expect(engines.health("stockfish-analysis").status).toBe("stopped");
+    expect(engines.establishedGeneration("stockfish-analysis")).toBeNull();
+    expect(engines.transcript("stockfish-analysis").some(({ line }) => line.startsWith("restart scheduled"))).toBe(false);
+  });
 
   it("captures generation, identity, handshake option image, artifact and the task transcript in one task", async () => {
     const engines = supervisor(engineScript());
