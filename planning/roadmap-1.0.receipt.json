@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f64ead7c99d9fd3b5b9d955fe539ef98cd32c2654906c3142ac44b2a3a842535",
+    "roadmap": "sha256:1486e2b0d64f57f69e5baf03a6ef1fb44e37b40be88ccd6005a2dfa54cbce6ef",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:765d1047ebe2e955d6ae2bee542dfab7576dc2f4ea743b776e3ea247a6e22b20",
+    "workState": "sha256:fcceff910d9f5bd8347475bf7672c6868aa97fc19f01e79631479a1eff35ac61",
     "rfcRegister": "sha256:b9dcd58bbb92816a3576bf032d2051085e96f0e488774e8fc67e9c6544655400",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1066,
-      "done": 1482,
+      "done": 1484,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "One complete normal sequence passes final product/test sources: clean types/build, 3754 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 203 browser passes (138 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. Warm native arrival is median 97.2 ms/p95 116.4 ms with one pack read/26 shape requests; the earlier 253.8 ms failure remains open as D3600. D3602 checks Theory's complete bindings before local acquisition, preserving disclosure and optional Explorer; D3601's independent lazy inputs remain. D3598 due-intake replenishment and D3599 read-only uncertain-dismissal recovery remain closed locally. D3591's original 328.466431 ms stall remains unlocated. All live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. No new exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
+        "summary": "One complete normal sequence passes final product/test sources: clean types/build, 3762 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 207 browser passes (142 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. Warm native arrival is median 104.4 ms/p95 236.9 ms with one pack read/26 shape requests; the earlier 253.8 ms failure remains open as D3600. D3603 adds bounded Campaign preparation, server kit revision ordering and accepted-start resume after dismissal. D3604 corrects root agent navigation without changing workflow laws. D3602's Theory preflight, D3601's independent lazy inputs and D3598/D3599 due-return recovery remain. D3591's original 328.466431 ms stall remains unlocated. All live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. No new exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
         "impact": "held",
         "evidence": [
           "rfc/concept-registry.md",
@@ -119,7 +119,10 @@
           "apps/web/src/lib/campaign-history.test.ts",
           "tests/browser/campaign.spec.ts",
           "packages/runtime/src/presentation-inspector-adapters.test.ts",
-          "apps/server/src/module-query.test.ts"
+          "apps/server/src/module-query.test.ts",
+          "apps/web/src/lib/CampaignPreparation.svelte",
+          "apps/web/src/lib/modal-boundary.test.ts",
+          "AGENTS.md"
         ],
         "anchors": [
           {
@@ -1787,8 +1790,8 @@
       ],
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-10-08",
-        "summary": "D3599 is closed locally under accepted return-scheduling sections 4/6: uncertain dismissal responses read the existing intake before another mutation, without automatic POST replay or inferring storage success from bounded-page absence. Seven predecessor-red mounted controls and six predecessor-red real desktop/touch-phone cases establish the defect. All 120 focused return cases, clean workspace types and eleven authenticated browser journeys pass. Complete normal gates pass 3730 software, seven performance, 228 content and 203 browser cases, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3598 replenishment, current-view/focus and exact-source controls remain. Prior Profile, Campaign and classroom repairs stand; D3591/D3600 timing failures remain unlocated. No scheduling rule, source, endpoint, schema, official content, whole capability, milestone or release completion is claimed.",
+        "at": "2026-10-09",
+        "summary": "D3603 closes bounded Campaign preparation under implementing campaign-core section 7.1: the dialog owns focus and shell shortcuts, edits the server kit in place, waits for its returned revision and retains an accepted encounter after pending Start dismissal without late navigation. Six mounted Campaign and two shared heading controls pass within 65 focused cases, alongside four real desktop/touch-phone preparation journeys and three existing action/retry journeys. Complete normal gates pass 3762 software, seven performance, 228 content and 207 browser cases, one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3604 corrects factual agent navigation only. D3598/D3599 due-return recovery, private Profile and classroom repairs remain. D3591/D3600 timing failures remain unlocated. Official Campaign curriculum, theory rewards, calibrated bots, full source coverage and release journeys remain incomplete; no whole capability, milestone or release completion is claimed.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1855,6 +1858,8 @@
           "apps/web/src/lib/review-map-screen.test.ts",
           "apps/web/src/lib/review-response.ts",
           "apps/web/src/lib/CampaignScreen.svelte",
+          "apps/web/src/lib/CampaignPreparation.svelte",
+          "apps/web/src/lib/modal-boundary.test.ts",
           "apps/web/src/lib/CampaignStrip.svelte",
           "apps/web/src/lib/campaign-api.ts",
           "apps/web/src/lib/campaign-history.test.ts",
@@ -2861,7 +2866,7 @@
         ],
         "experience": [
           "partial",
-          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. D3587 retires departed action completion while preserving accepted work and writer resume, exact response-loss retries and separate abandonment-result recovery. Deleted or feedback-withheld recordings explain their unavailable actions. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
+          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. D3587 retires departed action completion while preserving accepted work and writer resume, exact response-loss retries and separate abandonment-result recovery. D3603 bounds preparation in a focus-owned dialog with in-place server kit edits, suppression/cost disclosure and exact returned-revision ordering; dismissing a pending Start retains its accepted encounter on the map without late navigation. Deleted or feedback-withheld recordings explain their unavailable actions. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
         ],
         "defaults": [
           "blocked",
@@ -2873,7 +2878,7 @@
         ],
         "verification": [
           "partial",
-          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575 preserves sealed/abandoned/deleted recordings; D3577 adds exact Game Review, reload and map return. D3587 adds 54 focused cases and three built-app desktop/touch-phone departure/resume and exact lost-declaration replay journeys. Complete official-run, reward conservation, crash/upgrade, failure, accessibility, missing Review sources and release-image journeys remain."
+          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575 preserves sealed/abandoned/deleted recordings; D3577 adds exact Game Review, reload and map return. D3587 adds 54 focused cases and three built-app desktop/touch-phone departure/resume and exact lost-declaration replay journeys. D3603 adds six mounted Campaign and two shared heading controls, with 65 focused cases and four built-app desktop/touch-phone preparation, kit persistence and dismissed-start journeys passing. Complete official-run, reward conservation, crash/upgrade, failure, owner-device accessibility, missing Review sources and release-image journeys remain."
         ],
         "release": [
           "blocked",

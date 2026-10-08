@@ -130,6 +130,14 @@ and touchscreen-phone journeys resume accepted create/start/seal/loadout/abandon
 a lost declaration response replays identical input without another reward. These permanent
 cases also run in the normal software/browser tiers; they do not graduate the draft curriculum.
 
+`make campaign-preparation-browser-check` exercises the actual built desktop/touchscreen-phone
+preparation workflow: modal focus/Tab/Escape, inert background and shell-shortcut ownership,
+bounded phone and 640×360 layout, server-persisted kit edits/reload, and dismissal after the real
+server accepts Start but before its response arrives. Mounted Campaign checks additionally cover
+suppressed tools, refusal rollback, revision ordering and closing a pending kit edit. These cases
+run in ordinary CI too; the reduced viewport is a layout projection, not an owner-device zoom
+discharge.
+
 `make campaign-history-check` runs mounted campaign-history controls in the software tier
 and the actual campaign application contracts in the real-content tier.
 `make campaign-history-browser-check` runs the built desktop/touchscreen-phone history journeys:

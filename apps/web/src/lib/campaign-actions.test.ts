@@ -42,12 +42,12 @@ function deferred<T>() {
 const button = (text: string) => [...document.querySelectorAll<HTMLButtonElement>("button")].find(item => item.textContent?.trim() === text)!;
 async function settle() { await Promise.resolve(); await tick(); await Promise.resolve(); await tick(); }
 
-async function screen(action: Action, mutation: () => Promise<Response>, resultRead?: () => Promise<Response>) {
+async function screen(action: Action, mutation: () => Promise<Response>, resultRead?: () => Promise<Response>, projection = fixture()) {
   const fetcher = vi.fn(async (path: string, init?: RequestInit): Promise<Response> => {
     if (init?.method !== "GET") return mutation();
     if (path === "/campaigns") return Response.json({ campaigns: [{ id: "fixture", version: 1, title: "First campaign", channel: "community", nodeCount: 9, available: true, unavailablePacks: [], activeRunId: null, completedRuns: 0, marks: [] }] });
     if (path.endsWith("/result")) return resultRead?.() ?? Response.json({ campaign: response("abandon").campaign, path: [], prestigeEligible: false, awards: [] });
-    return Response.json(fixture(path.endsWith(RUN) ? RUN : "next-campaign"));
+    return Response.json(path.endsWith(RUN) ? projection : fixture("next-campaign"));
   });
   const onNavigate = vi.fn(), rememberWriter = vi.fn();
   const component = createClassComponent({ component: CampaignScreen, target: document.body, props: { campaigns: new CampaignApi(fetcher), campaignRunId: action === "create" ? undefined : RUN, onNavigate, rememberWriter } });
@@ -66,6 +66,94 @@ async function screen(action: Action, mutation: () => Promise<Response>, resultR
 }
 
 describe("Campaign action ownership", () => {
+  it("owns preparation focus and returns it to the exact map choice on Escape", async () => {
+    await screen("start", async () => Response.json(response("start")));
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog).not.toBeNull();
+    expect(dialog!.getAttribute("aria-modal")).toBe("true");
+    expect(document.activeElement).toBe(dialog!.querySelector("h2"));
+    dialog!.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await settle();
+    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    expect(document.activeElement).toBe(button("Prepare"));
+  });
+
+  it("edits the server-owned kit inside preparation before starting with its new revision", async () => {
+    const late = deferred<Response>();
+    let calls = 0;
+    const started = response("start");
+    const view = await screen("start", () => ++calls === 1 ? late.promise : Promise.resolve(Response.json({
+      ...started, result: { ...started.result, campaignRevision: 3 },
+      campaign: { ...started.campaign, campaignRun: { ...started.campaign.campaignRun, revision: 3 }, kit: { ...started.campaign.kit, equipped: [] } },
+    })));
+    const input = document.querySelector<HTMLInputElement>('[role="dialog"] input[type="checkbox"]');
+    expect(input).not.toBeNull();
+    input!.checked = false; input!.dispatchEvent(new Event("change", { bubbles: true })); await tick();
+    expect(button("Start encounter").disabled).toBe(true);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "PUT")).toHaveLength(1);
+    late.resolve(Response.json(response("loadout"))); await settle();
+    expect(input!.checked).toBe(false);
+    view.activate(); await tick();
+    const call = view.fetcher.mock.calls.find(([path]) => path.endsWith("/start"))!;
+    expect(JSON.parse(call[1]!.body as string).expectedRevision).toBe(2);
+    await vi.waitFor(() => expect(view.onNavigate).toHaveBeenCalledWith(`/play/run/${PLAY}`));
+  });
+
+  it("keeps a suppressed tool owned and equipped without offering an ineffective toggle", async () => {
+    const projection = fixture();
+    const card = projection.acts[0]!.layers[0]!.choices[0]!;
+    const view = await screen("start", async () => Response.json(response("start")), undefined, {
+      ...projection, acts: [{ id: "act1", layers: [{ layer: 1, state: "current", choices: [{ ...card, boss: true, suppress: ["postcommit_nudge"] }] }] }],
+    });
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    const input = dialog.querySelector<HTMLInputElement>("input")!;
+    expect(input.checked).toBe(true);
+    expect(input.disabled).toBe(true);
+    expect(dialog.textContent).toContain("These tools stay in your kit");
+    expect(dialog.textContent).toContain("Set aside for this encounter, even if equipped");
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "PUT")).toHaveLength(0);
+    button("Back to map").click(); await settle();
+    expect(document.querySelector<HTMLInputElement>(".kit input")!.checked).toBe(true);
+  });
+
+  it("shows loadout refusal inside preparation and restores the server's checkbox state", async () => {
+    const view = await screen("start", async () => Response.json({ error: { code: "CAMPAIGN_LOADOUT_INVALID", message: "The kit was not changed." } }, { status: 409 }));
+    const input = document.querySelector<HTMLInputElement>('[role="dialog"] input')!;
+    input.checked = false; input.dispatchEvent(new Event("change", { bubbles: true }));
+    await vi.waitFor(() => expect(document.querySelector('[role="dialog"] [role="alert"]')?.textContent).toContain("The kit was not changed"));
+    expect(document.querySelectorAll('[role="alert"]')).toHaveLength(1);
+    expect(input.checked).toBe(true);
+    expect(input.disabled).toBe(false);
+    expect(view.onNavigate).not.toHaveBeenCalled();
+  });
+
+  it("allows a pending kit edit to settle on the map after preparation closes", async () => {
+    const late = deferred<Response>();
+    const view = await screen("start", () => late.promise);
+    const input = document.querySelector<HTMLInputElement>('[role="dialog"] input')!;
+    input.checked = false; input.dispatchEvent(new Event("change", { bubbles: true })); await tick();
+    button("Back to map").click(); await settle();
+    expect(document.activeElement).toBe(document.querySelector("h1"));
+    late.resolve(Response.json(response("loadout"))); await settle();
+    expect(document.querySelector<HTMLInputElement>(".kit input")!.checked).toBe(false);
+    expect(view.onNavigate).not.toHaveBeenCalled();
+    button("Prepare").click(); await tick();
+    expect(document.querySelector<HTMLInputElement>('[role="dialog"] input')!.checked).toBe(false);
+  });
+
+  it("keeps an accepted start resumable after closing preparation, without navigating", async () => {
+    const late = deferred<Response>();
+    const view = await screen("start", () => late.promise);
+    view.activate(); await tick();
+    button("Back to map").click(); await settle();
+    late.resolve(Response.json(response("start"))); await settle();
+    expect(view.rememberWriter).toHaveBeenCalledWith(PLAY, expect.stringMatching(/^writer-/u));
+    expect(view.onNavigate).not.toHaveBeenCalled();
+    expect(button("Continue encounter")).toBeDefined();
+    button("Continue encounter").click();
+    expect(view.onNavigate).toHaveBeenCalledWith(`/play/run/${PLAY}`);
+  });
+
   it.each(actions)("retires late %s completion after departure", async action => {
     const late = deferred<Response>();
     const view = await screen(action, () => late.promise);

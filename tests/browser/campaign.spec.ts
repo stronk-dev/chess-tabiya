@@ -82,6 +82,8 @@ async function holdCampaignAction(page: Page, path: RegExp) {
   });
   return { get campaignId() { return body!.campaign.campaignRun.id; }, async leaveAndDeliver() {
     await expect.poll(() => body !== undefined).toBe(true);
+    // Preparation is modal: return to its map before using shell navigation.
+    if (await page.getByRole("dialog").isVisible()) await page.getByRole("button", { name: "Back to map", exact: true }).click();
     if (new URL(page.url()).pathname.startsWith("/play/run/")) {
       await page.getByRole("button", { name: "Tabiya", exact: true }).click();
       await expect(page).toHaveURL(/\/play$/u);
@@ -93,6 +95,92 @@ async function holdCampaignAction(page: Page, path: RegExp) {
     await expect(page).toHaveURL(/\/library$/u);
     await page.unroute(path);
   } };
+}
+
+for (const mobile of [false, true]) {
+  test(`Campaign preparation owns focus and persists kit choices before entry${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    test.setTimeout(90_000);
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const mapPath = new URL(page.url()).pathname;
+    const first = page.locator('[data-node="f1-a"]').getByRole("button", { name: "Prepare", exact: true });
+    await first.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByRole("heading", { level: 2 })).toBeFocused();
+    await expect(dialog).toContainText("Legal moves only — no tools earned yet");
+    await page.keyboard.press("g"); await page.keyboard.press("l"); await page.keyboard.press("?");
+    await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    await expect(dialog).toHaveCount(1);
+    expect(await page.locator("#primary-navigation").evaluate(element => element.closest("[inert]") !== null)).toBe(true);
+    await page.keyboard.press("Shift+Tab");
+    await expect(dialog.getByRole("button", { name: "Back to map", exact: true })).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(dialog.getByRole("button", { name: "Start encounter", exact: true })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+    await expect(first).toBeFocused();
+    expect(await page.locator("#primary-navigation").evaluate(element => element.closest("[inert]") !== null)).toBe(false);
+    await playPackNode(page, "f1-a");
+
+    const prepare = page.locator('[data-node="f2-a"]').getByRole("button", { name: "Prepare", exact: true });
+    await prepare.click();
+    const kit = dialog.getByRole("checkbox", { name: "After-move nudge" });
+    await expect(kit).toBeChecked();
+    await kit.uncheck();
+    await expect(dialog.getByText("Not equipped — select to equip.", { exact: true })).toBeVisible();
+    await expect(kit).toBeEnabled();
+    await dialog.getByRole("button", { name: "Back to map", exact: true }).click();
+    await expect(prepare).toBeFocused();
+    await page.reload();
+    await prepare.click();
+    await expect(kit).not.toBeChecked();
+    await kit.check();
+    await expect(dialog.getByText("Equipped", { exact: true })).toBeVisible();
+    await expect(kit).toBeEnabled();
+    if (!mobile) await page.setViewportSize({ width: 640, height: 360 });
+    const bounds = await dialog.evaluate(element => {
+      const box = element.getBoundingClientRect();
+      return { x: box.x, y: box.y, right: box.right, bottom: box.bottom, width: innerWidth, height: innerHeight, overflow: element.scrollWidth > element.clientWidth };
+    });
+    expect(bounds.x).toBeGreaterThanOrEqual(0); expect(bounds.y).toBeGreaterThanOrEqual(0);
+    expect(bounds.right).toBeLessThanOrEqual(bounds.width); expect(bounds.bottom).toBeLessThanOrEqual(bounds.height);
+    expect(bounds.overflow).toBe(false);
+    await dialog.getByRole("button", { name: "Start encounter", exact: true }).click();
+    await expect(page).toHaveURL(/\/play\/run\//u);
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    // A fresh map read proves this was the recorded server kit, not just checkbox paint.
+    const projection = await (await page.request.get(`/campaign-runs/${mapPath.split("/").at(-1)}`)).json();
+    expect(projection.kit.equipped).toEqual(["postcommit_nudge"]);
+    expect(projection.activeEncounter.nodeId).toBe("f2-a");
+  });
+
+  test(`Campaign preparation dismissal keeps an accepted pending start on the map${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const mapPath = new URL(page.url()).pathname;
+    let release!: () => void;
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    let accepted = false;
+    await page.route(/\/campaign-runs\/[^/]+\/nodes\/f1-a\/start$/u, async route => {
+      const response = await route.fetch();
+      expect(response.ok()).toBe(true); accepted = true;
+      await gate; await route.fulfill({ response });
+    });
+    await page.locator('[data-node="f1-a"]').getByRole("button", { name: "Prepare", exact: true }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Start encounter", exact: true }).click();
+    await expect.poll(() => accepted).toBe(true);
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+    release();
+    await expect(page.getByRole("button", { name: "Continue encounter", exact: true })).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    await page.getByRole("button", { name: "Continue encounter", exact: true }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Take control", exact: true })).toHaveCount(0);
+  });
 }
 
 for (const mobile of [false, true]) {

@@ -37,6 +37,33 @@ function pressTab(target: HTMLElement, shiftKey = false): KeyboardEvent {
 }
 
 describe("modal boundary", () => {
+  it("preserves native reverse Tab from a non-tab-stop heading between controls", () => {
+    const { dialog, first, last } = fixture();
+    const heading = document.createElement("h2");
+    heading.tabIndex = -1;
+    dialog.insertBefore(heading, last);
+    const boundary = modalBoundary(dialog);
+    heading.focus();
+    expect(pressTab(heading, true).defaultPrevented).toBe(false);
+    expect(document.activeElement).not.toBe(last);
+    expect(first.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+    boundary.destroy();
+  });
+
+  it("wraps reverse Tab from the initially focused non-tab-stop heading", () => {
+    const { dialog, first, last } = fixture();
+    const heading = document.createElement("h2");
+    heading.tabIndex = -1;
+    dialog.prepend(heading);
+    const boundary = modalBoundary(dialog);
+    heading.focus();
+    expect(pressTab(heading, true).defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(last);
+    expect(pressTab(last).defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(first);
+    boundary.destroy();
+  });
+
   it("makes the background inert and owns Tab in both directions", () => {
     const { background, dialog, first, last } = fixture();
     const boundary = modalBoundary(dialog);

@@ -55,7 +55,10 @@ export function modalBoundary(node: HTMLElement, initiallyActive = true): { upda
     const first = candidates[0]!;
     const last = candidates.at(-1)!;
     const active = document.activeElement;
-    if (event.shiftKey && (active === first || !node.contains(active))) {
+    // An initially focused heading before the first control has no preceding tab stop.
+    // A heading between controls does: leave its native reverse-Tab order intact.
+    const beforeFirst = active !== null && (active.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+    if (event.shiftKey && (active === first || !node.contains(active) || beforeFirst)) {
       event.preventDefault();
       last.focus();
     } else if (!event.shiftKey && (active === last || !node.contains(active))) {

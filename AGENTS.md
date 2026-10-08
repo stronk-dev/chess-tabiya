@@ -18,13 +18,17 @@ Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
 sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.
 
+For current 1.0 delivery status, start at `planning/WORK.md` and
+`planning/roadmap-to-done.md`. The implemented-subsystem summary above is not a
+whole-product completion claim; `make roadmap-progress` reports current checkpoints.
+
 ## Repo structure
 
 | Tier | Directory | Current state |
 |---|---|---|
-| Design | `design/` | 6 living docs (including the breadth/IA and in-run-experience contracts) + `BACKLOG.md` topic ledger + `research/` coverage matrix |
-| RFC | `rfc/` | No active product RFC; 23 implemented RFCs frozen in `rfc/archive/` |
-| Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
+| Design | `design/` | Living intent `00`–`06` + `BACKLOG.md` topic ledger + `research/` coverage matrix |
+| RFC | `rfc/` | Current lifecycle/resource register in `rfc/README.md`; frozen implementation records in `rfc/archive/` |
+| Planning | `planning/` | `WORK.md` entry point and the full 1.0 roadmap; exploration retains its question ledger, gates and append-only log |
 | Docs | `docs/` | Canonical description of what exists; development foundation now documented |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |
 

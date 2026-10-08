@@ -29818,6 +29818,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/local-module-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3603",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5df9fa9af47b4eeff1fd6a3301f1b015b7956041c0e1be250b1c6a57e292db29",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3604",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:584a2615603abcc462a6049e3d5641077d96df174085c6d7facbfb8d141ce0b1",
+      "uxItems": [],
+      "evidence": "AGENTS.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3602]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3604]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -52,7 +52,7 @@ percentage: completed components do not establish a complete learner journey.
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, explicit source-versus-review disclosure, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content and establish actual review authority, implement durable training-set progression/repeat/tempo and graduate the official corpus |
 | Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
-| Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
+| Campaign | Durable draft pilot, map, kit, bounded preparation with in-place tool choices, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, completed/incomplete submission read-only inspection/revocation, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
@@ -63,6 +63,22 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+
+[[D3603]] implements bounded Campaign preparation under the existing campaign-core
+contract: the dialog owns focus/keyboard input, shows copied briefing/reward/cost and
+suppression, and edits the server-owned kit in place before Start uses its new revision.
+Closing a pending Start preserves the accepted encounter on the map without late navigation.
+Six new mounted Campaign controls, two predecessor-red modal heading controls and four actual
+desktop/touch-phone preparation journeys pass; all 65 focused cases and the three existing action/retry journeys
+also pass. Complete normal verification passes clean types/build, 3,762 software,
+seven unchanged-budget performance, 228 content and 207 browser cases, one optional
+Maia skip, zero retries and all 150 input/112 composition cells. Official curriculum,
+reward authorities and whole-Campaign completion remain open; D3591/D3600 timing
+failures are not diagnosed by this passing run.
+
+[[D3604]] closes the root agent guide's stale no-active-RFC/23-archive snapshot and
+exploration-only navigation by linking the existing work, roadmap and lifecycle register.
+Workflow laws and protected intent are unchanged; no new tracking framework is introduced.
 
 [[D3602]] is closed locally: Theory's complete execution contract is checked before
 its local preview can read shapes, authored claims or any factory. All selected

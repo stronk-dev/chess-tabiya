@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
   import { ApiError } from "./api.js";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
+  import CampaignPreparation from "./CampaignPreparation.svelte";
   import {
     ACT_LABELS,
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
     assertCampaignCommand,
-    SHELF_REASON_TEXT,
     campaignBotLabel,
     newCampaignCommandId,
     rewardText,
@@ -38,7 +38,10 @@
   let loading = $state(true);
   let busy: string | undefined = $state();
   let error: string | undefined = $state();
-  let preparing: CampaignNodeCard | undefined = $state();
+  let preparingNodeId: string | undefined = $state();
+  const preparing = $derived(campaign?.acts.flatMap(act => act.layers.flatMap(layer => layer.choices)).find(card => card.nodeId === preparingNodeId));
+  let preparationVersion = 0;
+  let preparationOpener: HTMLButtonElement | undefined;
   let confirmAbandon = $state(false);
   let generation = 0;
   let resultError = $state(false);
@@ -61,6 +64,23 @@
     return "The campaign could not be loaded. Try again.";
   }
 
+  function prepare(card: CampaignNodeCard, opener: HTMLButtonElement): void {
+    if (busy !== undefined) return;
+    preparationVersion += 1;
+    preparationOpener = opener;
+    error = undefined;
+    preparingNodeId = card.nodeId;
+  }
+
+  async function closePreparation(): Promise<void> {
+    const current = generation, version = ++preparationVersion, opener = preparationOpener;
+    preparingNodeId = undefined;
+    await tick();
+    if (current !== generation || version !== preparationVersion) return;
+    if (opener?.isConnected && !opener.disabled) opener.focus();
+    else document.getElementById("campaign-title")?.focus();
+  }
+
   onMount(() => () => { generation += 1; });
 
   // Loads on mount and whenever the route's campaign run changes.
@@ -79,7 +99,8 @@
     result = undefined;
     resultError = false;
     resultLoading = false;
-    preparing = undefined;
+    preparingNodeId = undefined;
+    preparationVersion += 1;
     confirmAbandon = false;
     try {
       if (requestedRunId === undefined) {
@@ -131,6 +152,7 @@
     const requested = campaign, current = generation, requestedRoute = campaignRunId;
     const ownsView = () => current === generation && requestedRoute === campaignRunId;
     const intent = `start:${requested.campaignRun.id}:${card.nodeId}:${requested.campaignRun.revision}`;
+    const preparation = preparationVersion;
     busy = intent;
     error = undefined;
     const writerKey = `writer:${intent}`;
@@ -145,6 +167,10 @@
       if (!ownsView()) return;
       pending.delete(intent);
       pending.delete(writerKey);
+      if (preparation !== preparationVersion) {
+        campaign = started.campaign;
+        return;
+      }
       onNavigate(`/play/run/${encodeURIComponent(playRunId)}`);
     } catch (caught) {
       if (!ownsView()) return;
@@ -242,7 +268,7 @@
       <p class="honest">A campaign strings rehearsals into a map. Playing a node unlocks tools for this run; winning only adds a prestige mark. Every pack stays open in Play and the Library — nothing here is locked behind a campaign or sold.</p>
     </header>
     {#if loading}<p role="status">Loading campaigns…</p>{/if}
-    {#if error}<p role="alert">{error}</p>{/if}
+    {#if error && !preparing}<p role="alert">{error}</p>{/if}
     <div class="catalogue">
       {#each catalogue as entry (`${entry.id}@${entry.version}`)}
         <article class="campaign-card" data-campaign={entry.id}>
@@ -262,14 +288,14 @@
     <header class="map-header">
       <div>
         <p class="eyebrow">Campaign · {campaign.campaignRun.channel === "official" ? "Official" : "Community draft"}</p>
-        <h1 id="campaign-title">{campaign.campaignRun.title}</h1>
+        <h1 id="campaign-title" tabindex="-1">{campaign.campaignRun.title}</h1>
       </div>
       <p class="charges" data-testid="campaign-charges" aria-label={`Earned rewinds: ${campaign.charges.balance} remaining this campaign`}>
         <span aria-hidden="true">⟲ {campaign.charges.balance}</span>
         <span class="charges-copy">Earned rewinds: {campaign.charges.balance} remaining this campaign</span>
       </p>
     </header>
-    {#if error}<p role="alert">{error}</p>{/if}
+    {#if error && !preparing}<p role="alert">{error}</p>{/if}
     {#if resultError}
       <p role="alert">The campaign was {campaign.campaignRun.status === "completed" ? "completed" : "abandoned"}. Its result could not be loaded; the recorded campaign and encounters are kept.</p>
       <button type="button" disabled={busy !== undefined || resultLoading} onclick={() => void readResult(campaign!)}>Reload result</button>
@@ -324,7 +350,7 @@
                   {#if card.active}
                     <button type="button" onclick={() => onNavigate(`/play/run/${encodeURIComponent(campaign!.activeEncounter!.playRunId)}`)}>Continue</button>
                   {:else if card.selectable}
-                    <button type="button" onclick={() => { preparing = card; }}>Prepare</button>
+                    <button type="button" disabled={busy !== undefined} onclick={(event) => prepare(card, event.currentTarget)}>Prepare</button>
                   {:else if locked}
                     <p class="honest">{locked}</p>
                   {/if}
@@ -350,28 +376,7 @@
     </section>
 
     {#if preparing}
-      <section class="prep" aria-labelledby="prep-title">
-        <h2 id="prep-title">{preparing.boss ? "Boss · " : ""}{preparing.title}</h2>
-        {#if preparing.objectiveSummary}<p>{preparing.objectiveSummary}</p>{/if}
-        {#if preparing.opponent}<p>You play a full game from the authored start against {campaignBotLabel(preparing.opponent.profileId)}. Only the rules end it.</p>{/if}
-        <p>{rewardText(preparing.reward)} — earned when you declare the encounter done, whatever the outcome.</p>
-        {#if preparing.suppress.length > 0}<p class="suppress">This boss sets aside: {preparing.suppress.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}.</p>{/if}
-        <h3>Tools for this encounter</h3>
-        <ul class="shelf">
-          {#each campaign.kit.owned as moduleId (moduleId)}
-            {@const suppressed = preparing.suppress.includes(moduleId)}
-            {@const equipped = campaign.kit.equipped.includes(moduleId)}
-            <li>{CAMPAIGN_MODULE_LABELS[moduleId]}: {suppressed ? SHELF_REASON_TEXT.boss_suppressed : equipped ? "ready" : SHELF_REASON_TEXT.not_equipped}</li>
-          {:else}
-            <li>Legal moves only — no tools earned yet.</li>
-          {/each}
-        </ul>
-        <p class="honest">Rewinds and branches inside the encounter spend earned rewinds ({campaign.charges.balance} left). Comparing lines is free.</p>
-        <div class="row-actions">
-          <button type="button" disabled={busy !== undefined} onclick={() => void startEncounter(preparing!)}>{busy?.startsWith("start:") ? "Starting…" : "Start encounter"}</button>
-          <button type="button" onclick={() => { preparing = undefined; }}>Back to map</button>
-        </div>
-      </section>
+      <CampaignPreparation {campaign} card={preparing} {busy} {error} onEquip={toggleEquip} onStart={() => void startEncounter(preparing!)} onClose={() => void closePreparation()} />
     {/if}
 
     {#if campaign.campaignRun.status === "active"}
@@ -402,7 +407,7 @@
   .eyebrow { color: var(--muted); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
   .honest, .meta { color: var(--muted); }
   .catalogue { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1rem; }
-  .campaign-card, .node-card, .resume, .result, .prep, .kit { padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--panel); min-width: 0; }
+  .campaign-card, .node-card, .resume, .result, .kit { padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--panel); min-width: 0; }
   .map-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: end; }
   .charges { display: grid; gap: .2rem; justify-items: end; font-variant-numeric: tabular-nums; }
   .charges span:first-child { font-size: 1.6rem; font-weight: 700; }
@@ -416,8 +421,7 @@
   .node-card.boss { border-width: 2px; }
   .node-card.sealed { background: color-mix(in srgb, var(--accent) 7%, var(--panel)); }
   .suppress { color: var(--warning, var(--muted)); }
-  .kit ul, .shelf { padding-left: 1.2rem; }
-  .prep { position: sticky; bottom: 0; margin-top: 1rem; }
+  .kit ul { padding-left: 1.2rem; }
   .row-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
   button { min-height: 2.75rem; padding: .55rem .9rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--accent); color: var(--on-accent); font-weight: 700; cursor: pointer; }
   button:disabled { opacity: .55; cursor: not-allowed; }

@@ -12,6 +12,19 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3604]] is closed locally: the agent guide's stale RFC/archive counts and exploration-only
+navigation are corrected by linking the existing live work, roadmap and lifecycle authorities.
+This is a factual handoff correction; workflow laws and protected intent are unchanged.
+
+[[D3603]] is closed locally under implementing `campaign-core` §7.1: bounded,
+keyboard-owned encounter preparation and in-place server-owned kit choices replace the
+sticky map appendix. Suppression, earned-rewind economy and accepted-start resume survive
+closing preparation. All 65 focused cases, four new desktop/touch-phone preparation journeys
+and three existing action/retry journeys pass. Complete normal gates pass 3,762 software,
+seven unchanged-budget performance, 228 content and 207 browser cases; one existing optional
+Maia skip, zero retries, all 150 input/112 composition cells. No new recommendation algorithm,
+official curriculum, Campaign completion or release claim; D3591/D3600 remain open.
+
 [[D3602]] is closed locally under the existing module/provider contracts: complete
 Theory bindings compile before its local preview and before any selected migrated
 module acquires evidence. Nine predecessor-red authenticated/runtime controls pass,
