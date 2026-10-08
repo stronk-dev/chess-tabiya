@@ -69,7 +69,7 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    [[D3561]] also releases Review on shutdown and failed startup, with three pending/late-result
    controls and six real-engine application-cleanup cases. The complete focused Review gate
    now passes 67 cases. Retry history and shared provider ownership remain unchanged.
-   Final normal tiers also pass 3,551 software, seven performance, 227 content and 173 browser
+   Final normal tiers also pass 3,555 software, seven performance, 227 content and 173 browser
    cases, with one existing optional Maia skip and zero retries; all input/composition cells remain.
    Fresh review must settle same-task selected-move/PV separation, configured MultiPV,
    frozen v1 versus modern job/batch/settlement replay and the provisional storage
