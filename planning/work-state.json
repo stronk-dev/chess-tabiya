@@ -27093,11 +27093,11 @@
       "id": "D3299",
       "state": "blocked",
       "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:aef1a0543640205e0917746c47bc7f213b87d41c138a6b876af74ac7af83995f",
+      "sourceDigest": "sha256:2c8b2b2ea801f12870f90ca115b61c8ede74ee31b21a576fa2a163175be2cb56",
       "uxItems": [],
       "owner": "OWNER",
       "blocker": "owner-ruling",
-      "question": "Accept D921 and the candidate packet, and adopt the boundary-finding review convergence rule with delegated register-owner acceptance?"
+      "question": "Adopt boundary-only RFC returns, numbered tests for other findings, repair-scoped repeat reviews and delegated register-owner acceptance under owner veto? D921 and the shared candidate packet already landed; their acceptance is no longer requested."
     },
     {
       "id": "D3300",
@@ -29429,6 +29429,15 @@
       "sourceDigest": "sha256:564dc52487e418a54626d0a5d83e9c29e2b4ee8a6ff72aa056ad472956a4ef6a",
       "uxItems": [],
       "evidence": "apps/web/src/lib/theory-library.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3560",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3e97dda052effdd4517a01cc21d1adf8dd611c8cb9db7da1e6852a85f55f8f5a",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/review-evidence.test.ts",
       "evidenceKind": "path"
     }
   ]

@@ -61,6 +61,13 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
 2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   Delivered [[D3560]] enforces the existing recorded-game boundary at actual Review
+   entry points: retained packets cannot compile/present after a storage change.
+   Nine predecessor-red controls, seven identity changes and a native SQLite write/rebuild
+   are covered by 64 focused passing cases and clean types. Identity checks do not replay
+   collectors. This does not locate historical timeouts or complete missing source families.
+   Final normal tiers also pass 3,551 software, seven performance, 227 content and 173 browser
+   cases, with one existing optional Maia skip and zero retries; all input/composition cells remain.
    Fresh review must settle same-task selected-move/PV separation, configured MultiPV,
    frozen v1 versus modern job/batch/settlement replay and the provisional storage
    migration order. This is authoring progress, not a source implementation or an

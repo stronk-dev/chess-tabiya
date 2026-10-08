@@ -1,7 +1,9 @@
 // rfc/review-evidence-compiler.md acceptance criteria 1–18, 21 over the production compiler.
 import { readFileSync } from "node:fs";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+import * as recordedPath from "./recorded-semantic-path.js";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
@@ -14,6 +16,7 @@ import {
   assertReviewEvidencePacket,
   assertReviewRecordedPrefixReceipt,
   compileReviewEvidence,
+  compileReviewPacketForSubject,
   createReviewPrefixAuthority,
   foldReviewCompletion,
   foldReviewFamilyState,
@@ -48,6 +51,75 @@ const pointOf = (run: DrillRun, nodeIndex: number): DeclaredEvidence<ReviewEngin
 };
 
 describe("review evidence compiler: typed shared delivery and Review projections", () => {
+  it.each(["path", "plan", "sources", "compile", "convenience", "aggregate", "story", "wire"] as const)("refuses stale stored prefixes at the %s entry point", boundary => {
+    let run = evaluatedGame(["cp 20", "cp 35"]);
+    const authorize = createReviewPrefixAuthority({ loadRun: () => run, loadImportRecord: () => importRecord(run, "*") });
+    const subject = authorize({ runId: run.id, branchId: run.activeCursor.branchId });
+    const context = { engine: reviewDurableEngineStates(run, mainPath(run)), shapes: [] };
+    const sources = runReviewPacketSources(subject, context);
+    const packet = compileReviewEvidence({ subject, sources });
+    run = play(run, ["d2d3"]);
+    const actions = {
+      path: () => reviewSubjectPath(subject),
+      plan: () => reviewPacketSourcePlan(subject, { windowNodes: 1 }),
+      sources: () => runReviewPacketSources(subject, context),
+      compile: () => compileReviewEvidence({ subject, sources }),
+      convenience: () => compileReviewPacketForSubject(subject, context),
+      aggregate: () => assertReviewEvidencePacket(packet),
+      story: () => reviewStoryMoments(packet),
+      wire: () => renderReviewStoryReceipt(packet),
+    };
+    expect(actions[boundary]).toThrow(/REVIEW_PREFIX_REFUSED/u);
+  });
+
+  it("rechecks current stored identity without minting prefixes or replaying semantic collectors", () => {
+    const run = evaluatedGame(["cp 20", "cp 35"]);
+    // SQLite can reconstruct a new parsed object on each read: no reference-identity cache.
+    const loadRun = vi.fn(() => structuredClone(run));
+    const authorize = createReviewPrefixAuthority({ loadRun, loadImportRecord: () => importRecord(run, "*") });
+    const collect = vi.spyOn(recordedPath, "recordedSemanticPath");
+    try {
+      const subject = authorize({ runId: run.id, branchId: run.activeCursor.branchId });
+      const readsAtIssue = loadRun.mock.calls.length;
+      const callsAtIssue = collect.mock.calls.length;
+      expect(callsAtIssue).toBe(1);
+      assertReviewRecordedPrefixReceipt(subject);
+      reviewSubjectPath(subject);
+      const packet = compileReviewPacketForSubject(subject, { engine: reviewDurableEngineStates(run, mainPath(run)), shapes: [] });
+      assertReviewEvidencePacket(packet);
+      reviewStoryMoments(packet);
+      renderReviewStoryReceipt(packet);
+      expect(loadRun.mock.calls.length).toBeGreaterThan(readsAtIssue);
+      expect(collect).toHaveBeenCalledTimes(callsAtIssue);
+      // A new issuance still executes its own collector, even for identical storage bytes.
+      const again = authorize({ runId: run.id, branchId: run.activeCursor.branchId });
+      expect(again).not.toBe(subject);
+      expect(again).toEqual(subject);
+      expect(collect).toHaveBeenCalledTimes(callsAtIssue + 1);
+    } finally { collect.mockRestore(); }
+  });
+
+  it.each(["missing_run", "side", "path", "result", "missing_import", "crossed_import", "event_gap"] as const)("refuses a retained packet after stored %s changes", change => {
+    const original = evaluatedGame(["cp 20", "cp 35"]);
+    let stored: DrillRun | undefined = original;
+    let record: ReturnType<typeof importRecord> | undefined = importRecord(original, "*");
+    const authorize = createReviewPrefixAuthority({ loadRun: () => stored, loadImportRecord: () => record });
+    const subject = authorize({ runId: original.id, branchId: original.activeCursor.branchId });
+    const packet = compileReviewPacketForSubject(subject, { engine: reviewDurableEngineStates(original, mainPath(original)), shapes: [] });
+    expect(() => assertReviewEvidencePacket(packet)).not.toThrow();
+    switch (change) {
+      case "missing_run": stored = undefined; break;
+      case "side": stored = { ...original, start: { ...original.start, side: "black" } }; break;
+      // Keep the event head unchanged: the complete recorded path must still be checked.
+      case "path": stored = { ...original, nodes: original.nodes.map(node => node.id === subject.tipNodeId ? { ...node, fen: node.fen.replace(/ \d+ \d+$/u, " 99 99") } : node) }; break;
+      case "result": record = importRecord(original, "0-1"); break;
+      case "missing_import": record = undefined; break;
+      case "crossed_import": record = { ...record!, runId: "other" }; break;
+      case "event_gap": stored = { ...original, events: [...original.events.slice(0, 2), ...original.events.slice(3)] }; break;
+    }
+    expect(() => assertReviewEvidencePacket(packet)).toThrow(/REVIEW_PREFIX_REFUSED/u);
+  });
+
   it("normalizes White/Black cp and mate once, and the eval point joins only by exact canonical FEN (criteria 1, 3, 21)", () => {
     const run = evaluatedGame(["cp 20", "cp 35", "mate 3"]);
     const path = mainPath(run);

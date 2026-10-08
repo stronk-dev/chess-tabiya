@@ -3,7 +3,7 @@
 // closed story receipt on the production `story()` route.
 import { readFileSync } from "node:fs";
 
-import { commitMove, parseReviewStoryReceipt, presentedSentence } from "@chess-tabiya/runtime";
+import { assertReviewEvidencePacket, commitMove, compileReviewPacketForSubject, createReviewPrefixAuthority, parseReviewStoryReceipt, presentedSentence, renderReviewStoryReceipt } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
@@ -115,6 +115,36 @@ describe("ReviewAttemptOutcomeStore (criterion 13)", () => {
 });
 
 describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)", () => {
+  it("rejects a retained packet after a real service write and rebuilds Review from SQLite (D3560)", async () => {
+    const { service, storage, coordinator, gets } = harness({ providerOff: true });
+    const imported = await service.importGame({ id: "review-stored-prefix", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const branchId = imported.run.branches[0]!.id;
+    const authorize = createReviewPrefixAuthority({
+      loadRun: id => storage.read(id)?.run,
+      loadImportRecord: id => {
+        const record = storage.importedGame(id);
+        return record === undefined ? undefined : { runId: record.runId, result: record.result, movetextDigest: record.movetextDigest };
+      },
+    });
+    const subject = authorize({ runId: imported.run.id, branchId });
+    const packet = compileReviewPacketForSubject(subject, { engine: new Map(), shapes: [] });
+    expect(() => assertReviewEvidencePacket(packet)).not.toThrow();
+    // Reveal writes a real event through RunService and native SQLite, without changing the moves.
+    service.reveal(imported.run.id, "writer");
+    expect(storage.read(imported.run.id)!.run.events.at(-1)!.seq).toBeGreaterThan(subject.eventHead.seq);
+    expect(() => assertReviewEvidencePacket(packet)).toThrow(/REVIEW_PREFIX_REFUSED/u);
+    expect(() => renderReviewStoryReceipt(packet)).toThrow(/REVIEW_PREFIX_REFUSED/u);
+    const fresh = authorize({ runId: imported.run.id, branchId });
+    const rebuilt = compileReviewPacketForSubject(fresh, { engine: new Map(), shapes: [] });
+    expect(() => assertReviewEvidencePacket(rebuilt)).not.toThrow();
+    expect(fresh.pathNodeIds).toEqual(subject.pathNodeIds);
+    expect(fresh.subjectDigest).not.toBe(subject.subjectDigest);
+    const review = await service.review(imported.run.id, principal, branchId);
+    expect(review).toMatchObject({ runId: imported.run.id, branchId });
+    expect(gets()).toBe(0);
+  });
+
   it("reserves exact nodes before discovery and does not oversubscribe on repeated page reads (D3422)", async () => {
     const identity = deferred<{ id: string; version: string } | null>();
     const { service, coordinator, storage, gets } = harness({ windowNodes: 1, maxOutstandingPerRun: 1, requestedEngine: () => identity.promise });

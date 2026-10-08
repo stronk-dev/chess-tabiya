@@ -37,6 +37,14 @@ set-equal to that plan, sorts, links, folds every adapter row per family (`foldR
 and derives orthogonal `progress` and `degradation` (`foldReviewCompletion`) before sealing the
 packet. `assertReviewEvidencePacket` is the trust boundary.
 
+Every subject-reading entry point and packet assertion rechecks the recorded game against
+current storage. A packet retained across a write cannot be compiled or presented as the
+current Review. Missing runs/import records, changed event heads, paths, learner sides or
+results are refused. This uses the existing recorded-prefix identity, not a new freshness
+system or cache: only issuing a new subject runs the semantic collectors. Rechecking one
+reads storage and compares its identity without minting another subject or replaying collectors.
+The PhaseArc compiler retains its independent recorded-path contract.
+
 Families: `engine_eval`, `engine_wdl`, `tablebase`, `semantic`, `opening`, `human_model`,
 `human_corpus`, `authored`, `recorded`. At this landing the baseline pass requests only the shared
 Stockfish position evaluation; tablebase is `not_requested` inside its seven-piece domain and

@@ -136,7 +136,7 @@ export interface ReviewStorageAuthority {
 export interface ReviewPrefixAuthorizationInput { readonly runId: string; readonly branchId: string }
 
 interface PrefixSnapshot {
-  readonly authority: (input: ReviewPrefixAuthorizationInput) => ReviewRecordedPrefixReceipt;
+  readonly currentSubjectDigest: () => string;
   readonly run: DrillRun;
   readonly path: readonly Node[];
   readonly semantic: RecordedSemanticPathResult;
@@ -156,7 +156,9 @@ function learnerResult(result: "1-0" | "0-1" | "1/2-1/2", side: "white" | "black
  * records.
  */
 export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (input: ReviewPrefixAuthorizationInput) => ReviewRecordedPrefixReceipt {
-  const authorizeReviewRecordedPrefix = (input: ReviewPrefixAuthorizationInput): ReviewRecordedPrefixReceipt => {
+  // Identity replay reads storage again. Issuance alone computes semantic evidence; checking a
+  // receipt must neither mint another receipt nor rerun the chess collectors.
+  const readPrefix = (input: ReviewPrefixAuthorizationInput) => {
     if (typeof input !== "object" || input === null || Object.keys(input).sort().join("|") !== "branchId|runId" || typeof input.runId !== "string" || typeof input.branchId !== "string") refuse("REVIEW_PREFIX_REFUSED", "prefix input is exactly { runId, branchId }");
     const run = storage.loadRun(input.runId) ?? refuse("REVIEW_PREFIX_REFUSED", `run ${input.runId} is not stored`);
     if (run.id !== input.runId) refuse("REVIEW_PREFIX_REFUSED", "stored run identity differs from the requested run");
@@ -165,8 +167,6 @@ export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (i
     for (let index = 1; index < events.length; index += 1) if (events[index]!.seq !== events[index - 1]!.seq + 1) refuse("REVIEW_PREFIX_REFUSED", `event sequence is not contiguous at ${events[index]!.seq}`);
     let path: readonly Node[];
     try { path = branchPath(run, input.branchId); } catch (error) { return refuse("REVIEW_PREFIX_REFUSED", error instanceof Error ? error.message : String(error)); }
-    const semantic = recordedSemanticPath(run, input.branchId);
-    if (semantic.kind === "available" && semantic.pathNodeIds.join("\u0000") !== path.map((node) => node.id).join("\u0000")) refuse("REVIEW_PREFIX_REFUSED", "recorded semantic path disagrees with the branch path");
     const pathIds = new Set(path.map((node) => node.id));
     const record = storage.loadImportRecord(run.id);
     if (record !== undefined && record.runId !== run.id) refuse("REVIEW_PREFIX_REFUSED", "import record belongs to another run");
@@ -187,8 +187,15 @@ export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (i
     const pathNodeIds = path.map((node) => node.id);
     const prefixDigest = presentationDigest("review.prefix@1", { eventHead, path: path.map((node) => ({ id: node.id, parentId: node.parentId, ply: node.ply, fen: node.fen, moveUci: node.moveUci })) });
     const body = { protocol: "review-recorded-prefix@1" as const, runId: run.id, branchId: input.branchId, eventHead, tipNodeId: pathNodeIds.at(-1)!, pathNodeIds, prefixDigest, learnerSide: run.start.side, outcome };
+    return { run, path, body };
+  };
+  const authorizeReviewRecordedPrefix = (input: ReviewPrefixAuthorizationInput): ReviewRecordedPrefixReceipt => {
+    const { run, path, body } = readPrefix(input);
+    const semantic = recordedSemanticPath(run, body.branchId);
+    if (semantic.kind === "available" && semantic.pathNodeIds.join("\u0000") !== path.map((node) => node.id).join("\u0000")) refuse("REVIEW_PREFIX_REFUSED", "recorded semantic path disagrees with the branch path");
     const receipt = deepFreeze({ ...body, subjectDigest: presentationDigest("review.subject@1", body) });
-    PREFIXES.set(receipt, Object.freeze({ authority: authorizeReviewRecordedPrefix, run, path: Object.freeze([...path]), semantic }));
+    const address = Object.freeze({ runId: body.runId, branchId: body.branchId });
+    PREFIXES.set(receipt, Object.freeze({ currentSubjectDigest: () => presentationDigest("review.subject@1", readPrefix(address).body), run, path: Object.freeze([...path]), semantic }));
     return receipt;
   };
   return authorizeReviewRecordedPrefix;
@@ -202,11 +209,11 @@ export function assertReviewRecordedPrefixReceipt(value: unknown): asserts value
   const snapshot = typeof value === "object" && value !== null ? PREFIXES.get(value) : undefined;
   if (snapshot === undefined || !Object.isFrozen(value)) refuse("REVIEW_PREFIX_REFUSED", "prefix receipt was not issued by authorizeReviewRecordedPrefix");
   const receipt = value as ReviewRecordedPrefixReceipt;
-  const replay = snapshot!.authority({ runId: receipt.runId, branchId: receipt.branchId });
-  if (replay.subjectDigest !== receipt.subjectDigest) refuse("REVIEW_PREFIX_REFUSED", "prefix receipt no longer matches its storage authority");
+  if (snapshot!.currentSubjectDigest() !== receipt.subjectDigest) refuse("REVIEW_PREFIX_REFUSED", "prefix receipt no longer matches its storage authority");
 }
 
 function snapshotOf(subject: ReviewRecordedPrefixReceipt): PrefixSnapshot {
+  assertReviewRecordedPrefixReceipt(subject);
   const snapshot = PREFIXES.get(subject);
   if (snapshot === undefined) refuse("REVIEW_PREFIX_REFUSED", "subject was not issued by authorizeReviewRecordedPrefix");
   return snapshot!;
@@ -747,6 +754,7 @@ export function assertReviewEvidencePacket(value: unknown): asserts value is Rev
   if (sealed === undefined) throw new ReviewEvidenceError("REVIEW_PACKET_INVALID", "packet was not constructed by compileReviewEvidence");
   const packet = value as ReviewEvidencePacket;
   if (packet.subject !== sealed.subject) throw new ReviewEvidenceError("REVIEW_PACKET_INVALID", "packet subject was replaced");
+  assertReviewRecordedPrefixReceipt(packet.subject);
   if (presentationDigest("review.packet@1", packetImage(packet)) !== packet.packetDigest || packet.packetDigest !== sealed.image) throw new ReviewEvidenceError("REVIEW_PACKET_INVALID", "packet digest mismatch");
   if (packet.manifestDigest !== PRIMARY_EVIDENCE_MANIFEST.digest) throw new ReviewEvidenceError("REVIEW_PACKET_INVALID", "packet names another manifest");
 }

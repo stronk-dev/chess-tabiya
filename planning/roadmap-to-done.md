@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3559]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3560]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -86,7 +86,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,308 ledger rows** (1,446 done, 161 refused, 1,701 live,
+(271 completed, 24 retired, 274 live); **3,309 ledger rows** (1,447 done, 161 refused, 1,701 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
@@ -107,6 +107,25 @@ prove the complete release/operator journeys. Independent authorised work can pr
 unaccepted numerical, source or durable-state contracts cannot be guessed around.
 
 ## Detailed checkpoint history
+
+2026-10-08 Review boundary checkpoint (D3560): nine controls fail before the repair,
+including actual compile and presentation entry points that accept retained subjects after
+stored game changes. These boundaries now reject stale packets without re-running chess
+collectors for identity validation. Seven identity-change controls and native RunService/SQLite
+write-and-rebuild proof bring the focused gate to 64 passing cases / three files, with clean types.
+The existing packet format and PhaseArc contract are unchanged. No missing provider family,
+historical intermittent cause, capability or release milestone is completed by this repair.
+Final normal verification passes clean types, 3,551 software cases / 351 files, seven isolated
+performance cases / four files, downstream software/build checks and governance. Content passes
+227 cases / 23 files. All rebuilt browser tiers pass: 108 smoke, five content, 59 matrix and one
+packaged-default, totaling 173 passes with one existing optional Maia skip and zero retries;
+all 150 exact-input and 112 composition cells remain. The initial full run stopped on generated
+validation outputs; regenerating them changed no detector verdict. The next run passed software
+but caught two duplicate checkpoint paths; after removing those document-only duplicates,
+`make verify-governance verify-content test-browser-ci-awake` exits zero. No combined full-run
+exit-zero or new GitHub result is invented. D3299/O15 is reconciled separately: the Wave-C module
+amendment and shared candidate packet already landed on September 24; only the review-convergence
+and delegated-acceptance proposal still requests a ruling. The process contract is unchanged.
 
 2026-10-08 current Library checkpoint (D3559): normal sequential
 `make verify-awake test-browser-ci-awake` exits zero with clean types,
