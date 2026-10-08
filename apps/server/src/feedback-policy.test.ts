@@ -1,6 +1,7 @@
 import {
   attachEvidence,
   createRun,
+  revealFeedback,
   type DrillRun,
   type DrillRunEvent,
   type SelectionCandidate,
@@ -28,6 +29,37 @@ function run(): DrillRun {
 }
 
 describe("machine-evidence withholding", () => {
+  it.each(["events", "snapshot", "mutation"] as const)("keeps provider save/reload images private in %s while retaining disclosed readings", (surface) => {
+    const base = revealFeedback(run(), at).run;
+    const values = Object.freeze({
+      centipawns: 32, perspective: "white", engineId: "stockfish-analysis", bestMoveUci: "e1d1",
+      providerDelivery: { response: { bodyBase64: Buffer.from("info score cp 32 pv e1d1\nbestmove e1d1").toString("base64") } },
+      providerLineDelivery: { response: { bodyBase64: Buffer.from("info pv e1d1 e8d8\nbestmove e1d1").toString("base64") } },
+    });
+    const attached = attachEvidence(base, base.activeCursor.nodeId, ["engine:private-captures"], { kind: "eval", source: "engine_validated", values }, at);
+    const projected = surface === "events" ? publicEvents(attached.run, 0)
+      : surface === "snapshot" ? publicRunSnapshot(attached.run)
+        : publicMutationPayload(attached);
+    const wire = JSON.stringify(projected);
+    expect(wire.match(/providerDelivery|providerLineDelivery|bodyBase64|bestMoveUci/u)?.[0]).toBeUndefined();
+    expect(wire).toContain('"centipawns":32');
+    expect(wire).toContain('"engineId":"stockfish-analysis"');
+    expect(attached.run.events.at(-1)).toMatchObject({ data: { payload: { values } } });
+    expect(Object.keys(values)).toContain("providerLineDelivery");
+  });
+
+  it("preserves explicitly recorded bestline and other disclosed evidence fields", () => {
+    let recorded = revealFeedback(run(), at).run;
+    for (const payload of [
+      { kind: "bestline" as const, source: "engine_validated" as const, values: { movesUci: ["e1d1", "e8d8"], depth: 12 } },
+      { kind: "wdl" as const, source: "engine_validated" as const, values: { win: 100, draw: 800, loss: 100 } },
+      { kind: "tablebase" as const, source: "tablebase_exact" as const, values: { category: "draw", dtz: 0 } },
+    ]) {
+      recorded = attachEvidence(recorded, recorded.activeCursor.nodeId, ["engine:retained-" + payload.kind], payload, at).run;
+      expect(publicRunSnapshot(recorded).events.at(-1)).toMatchObject({ data: { payload } });
+    }
+  });
+
   it("projects event envelopes and data fields instead of forwarding future internals", () => {
     const base = run();
     const event = Object.freeze({

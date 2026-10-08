@@ -2,6 +2,19 @@
 
 ## Current narrow author handoff — 2026-10-08
 
+- **[[D3580]] — Review tablebase acquisition, narrow output and durable source handoff.**
+  The current packet placeholder names operator-only `live.syzygy.position_result@1`;
+  its full delivery contains candidate moves and has no `module.review_map` binding.
+  Specify a declared move-free category/distance projection over the existing shared
+  source, its exact recorded-node join and truthful source-family states before automatic
+  acquisition. The worker's exact v1 tablebase settlement allows only six narrow fields;
+  preserve old jobs rather than adding `providerDelivery` to that retained format in place.
+  State whether the successor durable handoff belongs alongside the existing Stockfish
+  migration or a separate bounded successor, including replay and operation identity.
+  Require genuine source/save/restart/reload controls, old-job compatibility, crossed clocks,
+  corrupt capture refusal and no candidate/PV bytes in ordinary learner responses. No new
+  provider queue, raw-source learner binding or implied tablebase-to-cp conversion.
+
 - **[[D3578]] — selected-square evidence frame and complete legal-mobility delivery.** The current
   return in `planning/learner-modules/registry-return.md` identifies four acquired sources that
   cannot survive scope filtering, a selected frame that never reaches the adapter and a measured

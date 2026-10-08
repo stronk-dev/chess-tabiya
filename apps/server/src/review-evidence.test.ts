@@ -12,6 +12,7 @@ import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator, type ReviewEvidenceCoordinatorOptions } from "./review-evidence.js";
 import { RunService } from "./service.js";
+import { createRestHandler } from "./rest.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 const PGN = `[Event "Review evidence"]
@@ -593,6 +594,45 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
     expect(receipt.families.engine_eval.unavailable).toEqual([]);
     const secondMove = run.nodes.find((node) => node.branchId === imported.run.branches[0]!.id && node.ply === 3)!;
     expect(service.reviewAnalysis(imported.run.id, principal, secondMove.id)).toMatchObject({ kind: "none", sentence: "No engine line is recorded for the position before 2. Nf3." });
+  });
+
+  it("keeps actual durable provider captures out of ordinary HTTP responses without disabling explicit Analyze", async () => {
+    const { service, coordinator, storage, gets, lineGets } = harness();
+    const imported = await service.importGame({ id: "review-private-captures", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await coordinator.whenIdle();
+    const run = storage.read(imported.run.id)!.run;
+    const attached = run.events.filter(event => event.type === "evidence.attached");
+    expect(attached).toHaveLength(run.nodes.length);
+    for (const event of attached) {
+      if (event.type !== "evidence.attached") throw new Error("attachment expected");
+      for (const key of ["providerDelivery", "providerLineDelivery"]) {
+        const image = event.data.payload.values[key] as { response: { bodyBase64: string } };
+        expect(Buffer.from(image.response.bodyBase64, "base64").toString("utf8")).toMatch(/bestmove|\bpv\b/u);
+      }
+    }
+    const handler = createRestHandler(service);
+    const response = await handler(new Request(`http://tabiya.test/runs/${run.id}/reveal`, { method: "POST", headers: { "x-writer-id": "writer", "content-type": "application/json" }, body: JSON.stringify({ at: "2026-10-08T12:00:00.000Z" }) }));
+    expect(response.status).toBe(200);
+    const mutation = await response.json();
+    const callsBefore = gets() + lineGets();
+    const eventsBefore = storage.read(run.id)!.run.events;
+    for (const [surface, body] of [
+      ["mutation", mutation],
+      ["graph", await (await handler(new Request(`http://tabiya.test/runs/${run.id}/graph`, { headers: { "x-writer-id": "writer" } }))).json()],
+      ["events", await (await handler(new Request(`http://tabiya.test/runs/${run.id}/events?sinceSeq=0`, { headers: { "x-writer-id": "writer" } }))).json()],
+    ] as const) {
+      const wire = JSON.stringify(body);
+      if (surface !== "graph") expect(wire, surface).toContain('"centipawns"');
+      else expect(body).toMatchObject({ graph: { id: run.id, nodes: expect.any(Array) } });
+      expect(wire.match(/providerDelivery|providerLineDelivery|bodyBase64/u)?.[0], surface).toBeUndefined();
+    }
+    const node = run.nodes.find(candidate => candidate.ply === 3)!;
+    const analysis = await handler(new Request(`http://tabiya.test/runs/${run.id}/review-analysis?node=${encodeURIComponent(node.id)}`, { headers: { "x-writer-id": "writer" } }));
+    expect(analysis.status).toBe(200);
+    expect(await analysis.json()).toMatchObject({ kind: "line", source: "bestline" });
+    expect(storage.read(run.id)!.run.events).toEqual(eventsBefore);
+    expect(gets() + lineGets()).toBe(callsBefore);
+    expect(storage.read(run.id)!.run.events.filter(event => event.type === "evidence.attached")).toEqual(attached);
   });
 
   it("keeps outstanding work within the per-run bound and evicts idle trackers above maxTrackedRuns", async () => {

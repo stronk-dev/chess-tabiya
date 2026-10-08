@@ -222,6 +222,43 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect((await read()).rows).toHaveLength(PLIES);
   });
 
+  it("retains exact Review captures across an application restart without publishing them in ordinary events", async () => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "review_capture_owner");
+    const runId = await importReviewedGame(origin, cookie, "writer-captures");
+    const review = await (await fetch(origin + "/runs/" + runId + "/review", { headers: { cookie } })).json() as ReviewPayload;
+    const target = review.rows[2]!;
+    const readSnapshot = (): string => {
+      const database = new DatabaseSync(databasePath, { readOnly: true });
+      try {
+        return (database.prepare("SELECT snapshot_json FROM drill_runs WHERE id=?").get(runId) as { snapshot_json: string }).snapshot_json;
+      } finally { database.close(); }
+    };
+    const stored = readSnapshot();
+    expect(stored).toContain('"providerDelivery"');
+    expect(stored).toContain('"providerLineDelivery"');
+    const privateEvents = JSON.parse(stored).events.filter((event: { type: string }) => event.type === "evidence.attached");
+    expect(privateEvents).toHaveLength(PLIES + 1);
+    await application!.close();
+    application = undefined;
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+    const restartedOrigin = "http://127.0.0.1:" + (application.server.address() as AddressInfo).port;
+    const get = vi.spyOn(application.providers.scheduler, "get");
+    const eventsResponse = await fetch(restartedOrigin + "/runs/" + runId + "/events?sinceSeq=0", { headers: { cookie } });
+    expect(eventsResponse.status).toBe(200);
+    const page = await eventsResponse.json() as { events: { type: string; data: { payload?: { values: Record<string, unknown> } } }[] };
+    const publicEvents = page.events.filter(event => event.type === "evidence.attached");
+    expect(publicEvents).toHaveLength(privateEvents.length);
+    expect(publicEvents.every(event => typeof event.data.payload?.values.centipawns === "number")).toBe(true);
+    expect(JSON.stringify(page).match(/providerDelivery|providerLineDelivery|bodyBase64|bestMoveUci/u)?.[0]).toBeUndefined();
+    const analyze = await fetch(restartedOrigin + "/runs/" + runId + "/review-analysis?node=" + encodeURIComponent(target.nodeId), { headers: { cookie } });
+    expect(analyze.status).toBe(200);
+    expect(await analyze.json()).toMatchObject({ kind: "line", source: "bestline", entryNodeId: target.entryNodeId });
+    expect(get).not.toHaveBeenCalled();
+    expect(readSnapshot()).toBe(stored);
+  });
+
   it("[module-registration §4.5] serves Post-commit Nudge through module.postcommit_nudge@1 without writing", async () => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "nudge_owner");

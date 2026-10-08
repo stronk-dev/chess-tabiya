@@ -525,7 +525,11 @@ for (const projection of ["desktop", "@mobile phone"]) {
     await expect(moves.nth(2)).toBeFocused();
     await page.keyboard.press("Tab");
     await expect(page.getByRole("button", { name: "Retry from before move 2 (Nf3)" })).toBeFocused();
+    const retryResponse = page.waitForResponse(response => new URL(response.url()).pathname === "/runs/" + runId + "/fork" && response.request().method() === "POST");
     await page.keyboard.press("Enter");
+    const retriedPayload = await (await retryResponse).json() as { run: DrillRun };
+    expect(retriedPayload.run.events.some(event => event.type === "evidence.attached")).toBe(true);
+    expect(JSON.stringify(retriedPayload).match(/providerDelivery|providerLineDelivery|bodyBase64|bestMoveUci/u)?.[0]).toBeUndefined();
     await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
     const board = page.locator(".board-frame").getByLabel("Chessboard", { exact: true });
     await expect(board).toBeVisible();

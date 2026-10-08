@@ -126,6 +126,13 @@ attached and Analyze says that no engine line is recorded. The packet, Story and
 read the line, so the evaluation delivery and its projections still carry no best move or PV
 (refusal 7).
 
+Ordinary event pages, run snapshots and mutation responses omit both private provider
+save/reload images, including their encoded UCI captures. Legacy eval `bestMoveUci` is
+also omitted; scalar scores, engine attribution and bounds remain. Explicit bestline
+events retain their existing disclosure behavior. This projection does not rewrite
+stored events: the server still reconstructs Review and the explicit Analyze line from
+the exact saved deliveries, including after restart. Account archives are unchanged.
+
 `reviewDurableEngineLine(run, node)` re-derives the recorded bytes through
 `parsePersistedProviderDelivery` and seals them as `live.stockfish.principal_variation@1`. A line
 whose bytes no longer re-derive is not a line. `reviewAnalysis` turns it into the attributed

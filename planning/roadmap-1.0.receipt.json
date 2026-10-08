@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:911a3a02e7f6eae59d134461e62a726bc583831abfbe0e970b86905c394765f7",
+    "roadmap": "sha256:ed1cefbfd72db33b421d569332c1d5656f3fe5617f02d9df97093ff0667707d5",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:3d14ce0d75f6ba9704413660d64b875b306b2bfe439f34b849f9c9c4a92c655c",
+    "workState": "sha256:174a25f3a5636cc6e7a094bfc018011a3e1577d682e9c9184ec484a77044204a",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 628,
       "doing": 12,
-      "blocked": 1065,
-      "done": 1462,
+      "blocked": 1066,
+      "done": 1463,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "Current full sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3614 software, seven isolated unchanged-budget performance and 228 content cases plus downstream software/governance checks. Complete browser tiers pass 116 smoke, five real-content, 59 matrix and one packaged-default case (181 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3579's actual Inspector query and desktop/phone reload/return show corrected populated-square totals; the four predecessor-red adapter controls preserve unavailable legal readings. The first full sequence correctly refused the out-of-date generated semantic-validation receipt; normal regeneration and the complete rerun pass without changing any subject verdict. D3577 Campaign-to-Review-to-map, D3576 immutable opening source, account portability, bot replay, Review navigation and warning-actor controls stand. D3578 selected-square delivery remains author-blocked. Prior failures remain in the append-only log; D3558 and historical engine/application causes remain unlocated. All 1705 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
+        "summary": "Current sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3620 software cases/353 files, seven isolated unchanged-budget performance and 228 content cases/23 files plus downstream software/governance checks. Complete browser tiers pass 116 smoke, five real-content, 59 matrix and one packaged-default case (181 total), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3581's ordinary response boundary and saved Analyze restart are verified; D3579 arithmetic and the earlier Campaign, account, Profile and bot-replay journeys stand. D3580 tablebase and D3578 selected-square contracts remain author-blocked; historical intermittent causes remain unlocated. All 1706 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, capability/milestone or release promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -1762,7 +1762,7 @@
       "nextAction": "D3577's exact Campaign-to-Game-Review-to-map handoff is closed locally; preserve D3575's retained/deleted/abandoned history, and do not equate this navigation with complete Review evidence. D3567/D3568 account restore/retry, D3550 private-source admission, D3548 retained-pack attachment, D3546/D3547 completed-bot replay and D3541/D3542 Profile-to-Review entry stand. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3577 connects Campaign history to Game Review at the exact submitted branch and consequence node, including inherited nodes, and provides the owner's durable map return. Declare done admits only the submitted consequence; other/extended lines follow ordinary feedback disclosure. Deleted destinations and closed-feedback abandonment stay explicit. Nine predecessor-red controls, 55 focused client/router cases and four actual application cases pass. Native desktop/touch-phone journeys select the exact move, retain it through reload and return to the map without changing recorded moves. Full sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3609 software, seven unchanged-budget performance, 228 content and 179 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. Existing account, bot replay, Profile-to-Review and retained/deleted/abandoned history journeys also pass. Providers are labelled development mocks, not live Maia/calibration or release-image proof. Missing Review sources, official curriculum, theory/reward/catalogue progression and wider learner/social/professional/operator journeys remain. No capability, milestone, pushed-revision CI or release completion.",
+        "summary": "D3581 closes ordinary run-response disclosure of private provider captures and legacy eval move answers. Four corrected predecessor-red controls, all 77 focused Review cases and desktop/phone Retry-response to alternate-move/Compare journeys pass. Actual authenticated application/SQLite restart retains exact capture bytes and reconstructs explicit Analyze without new provider work or event writes. Scalar readings and explicit bestline compatibility remain; no stored format or account archive changes. D3580 records the separate author-blocked narrow tablebase projection and versioned durable handoff. D3577's Campaign-to-Review/map return, account portability, Profile references and bot replay stand. Missing source coverage, official curriculum, training progression and wider learner/social/professional/operator journeys remain. Full sequential normal gates pass clean types/build, 3620 software cases/353 files, seven isolated unchanged-budget performance, 228 content cases/23 files and 181 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. No capability, milestone, pushed-revision CI or release completion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1830,7 +1830,9 @@
           "apps/server/src/campaign-core.test.ts",
           "tests/browser/campaign.spec.ts",
           "docs/campaign.md",
-          "rfc/campaign-core.md"
+          "rfc/campaign-core.md",
+          "apps/server/src/feedback-policy.ts",
+          "apps/server/src/feedback-policy.test.ts"
         ],
         "anchors": [
           {
@@ -2575,7 +2577,7 @@
         ],
         "experience": [
           "partial",
-          "The mounted Review Map has a move timeline, grounded grades, moments, eval graph, Analyze, retry and compare doors. Whole-game cross-source explanation and every origin's complete review-and-return journey remain."
+          "The mounted Review Map has a move timeline, grounded grades, moments, eval graph, Analyze, retry and compare doors. Ordinary run responses exclude saved provider captures and eval move answers; explicit Analyze reconstructs after restart. Whole-game cross-source explanation and every origin's complete review-and-return journey remain."
         ],
         "defaults": [
           "blocked",

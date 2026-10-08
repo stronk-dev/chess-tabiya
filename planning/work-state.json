@@ -29611,6 +29611,24 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/presentation-inspector-adapters.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3580",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b31b5601a1f4e4f15320032ef16bc3acac0981e0ce02aad4fea7d39d9f7bb2de",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3581",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:add55caf2f105bfeb66f7c0b92c5a260567bcc64bdb5f23fb7a32180fe976af5",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+Delivered Review boundary repair: [[D3581]] removes private provider save/reload images and legacy
+eval move answers from ordinary run projections while retaining exact storage and explicit Analyze.
+All 77 focused cases, authenticated restart and desktop/phone Retry/Compare proof pass. Full normal
+gates pass 3,620 software, seven performance, 228 content and 181 browser cases, one optional Maia
+skip, zero retries and all 150 input/112 composition cells. [[D3580]] is author-blocked:
+the raw Syzygy placeholder is operator-only and the frozen durable tablebase settlement has no
+whole-delivery field. Its narrow projection/versioned handoff is routed to the existing RFC
+drafting queue; do not widen a historical parser or expose full candidate rows to close it.
+
 This is the current order, not a replay of an earlier red checkpoint. D3528 is
 closed on the owner's KISS ruling: explicit public versions and behavior contracts
 replace transitive source hashes without changing authored packs. D3521/D3523/D3524,

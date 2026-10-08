@@ -71,6 +71,14 @@ in the commit under review; a depth-one clone incorrectly blames both to HEAD. A
 shallow-clone regression covers depth one, depth two and a genuine same-commit refusal.
 This requires a parent, not a full-history checkout, and changes no graduation criterion.
 
+`make review-evidence-runtime-check` includes the shared ordinary-response projection:
+private provider captures and eval move answers stay out of event pages, run snapshots and
+mutation replies. Actual coordinator/HTTP and authenticated application/SQLite-restart
+cases retain scalar evidence and the explicit read-only Analyze line. Desktop/phone
+`make review-navigation-browser-check` additionally inspects the real Retry response and
+continues the alternate move through Compare. These are disclosure and recovery checks,
+not new tablebase coverage or completed Review.
+
 For the registered-bot completed-game replay, `make bot-rematch-check` covers exact duplicate
 admission, one pending owner, result-modal actions, failure/departure and a real SQLite/HTTP
 response through the web validator. `make bot-rematch-browser-check` rebuilds the application and

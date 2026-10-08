@@ -4,8 +4,11 @@ import {
   feedbackDeliveryOpen,
   feedbackDisclosed,
   isMachineEvidenceRef,
+  REVIEW_PROVIDER_DELIVERY_KEY,
+  REVIEW_PROVIDER_LINE_KEY,
   type DrillRun,
   type DrillRunEvent,
+  type EvidencePayload,
   type Node,
   type OpponentSelection,
   type SelectionCandidate,
@@ -13,6 +16,17 @@ import {
 
 function eventEnvelope<TEvent extends DrillRunEvent>(event: TEvent, data: TEvent["data"]): TEvent {
   return Object.freeze({ seq: event.seq, type: event.type, at: event.at, data: Object.freeze(data) }) as TEvent;
+}
+
+/** Saved captures are reconstruction inputs, not ordinary learner responses (Review refusal 7). */
+function publicEvidenceValues(payload: EvidencePayload): EvidencePayload["values"] {
+  const values = { ...payload.values };
+  delete values[REVIEW_PROVIDER_DELIVERY_KEY];
+  delete values[REVIEW_PROVIDER_LINE_KEY];
+  // Legacy queued evaluations may retain the terminating move beside their scalar score.
+  // An eval response is not the explicit bestline/Analyze disclosure.
+  if (payload.kind === "eval") delete values.bestMoveUci;
+  return Object.freeze(values);
 }
 
 function publicNode(node: Node): Node {
@@ -113,7 +127,7 @@ function projectPublicEvent(event: DrillRunEvent): DrillRunEvent {
     case "objective.state_changed":
       return eventEnvelope(event, { nodeId: event.data.nodeId, from: event.data.from, to: event.data.to, evidenceRefs: Object.freeze([...event.data.evidenceRefs]) });
     case "evidence.attached":
-      return eventEnvelope(event, { nodeId: event.data.nodeId, evidenceRefs: Object.freeze([...event.data.evidenceRefs]), payload: Object.freeze({ kind: event.data.payload.kind, source: event.data.payload.source, values: Object.freeze({ ...event.data.payload.values }) }) });
+      return eventEnvelope(event, { nodeId: event.data.nodeId, evidenceRefs: Object.freeze([...event.data.evidenceRefs]), payload: Object.freeze({ kind: event.data.payload.kind, source: event.data.payload.source, values: publicEvidenceValues(event.data.payload) }) });
     case "branch.forked":
       return eventEnvelope(event, { branch: Object.freeze({ id: event.data.branch.id, forkNodeId: event.data.branch.forkNodeId, label: event.data.branch.label, ...(event.data.branch.intent === undefined ? {} : { intent: event.data.branch.intent }), seed: event.data.branch.seed, origin: event.data.branch.origin }) });
     case "run.rewound":
