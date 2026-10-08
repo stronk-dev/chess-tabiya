@@ -261,6 +261,15 @@ export function parseProfileHistory(value: unknown): ProfilePage<ProfileHistoryR
 export function parseSharedCard(value: unknown): SharedHabitCard {
   const share = object(object(value, "$").share, "$.share");
   for (const key of ["metric", "title", "sentence", "scope", "text"]) text(share[key], `$.share.${key}`);
-  for (const key of ["runId", "nodeId", "contributors"]) if (key in share) throw new ProfileResponseError(`$.share.${key}`);
+  const allowed = ["metric", "title", "sentence", "scope", "text", "games", "decisions", "floor", "interval", "window"];
+  for (const key of Object.keys(share)) if (!allowed.includes(key)) throw new ProfileResponseError(`$.share.${key}`);
+  for (const key of ["games", "decisions", "floor"]) count(share[key], `$.share.${key}`);
+  if ((share.games as number) < (share.floor as number)) throw new ProfileResponseError("$.share.games");
+  const interval = object(share.interval, "$.share.interval");
+  for (const key of Object.keys(interval)) if (!["lower", "upper", "level"].includes(key)) throw new ProfileResponseError(`$.share.interval.${key}`);
+  if (finite(interval.lower, "$.share.interval.lower") > finite(interval.upper, "$.share.interval.upper") || interval.level !== 0.95) throw new ProfileResponseError("$.share.interval");
+  const window = object(share.window, "$.share.window");
+  for (const key of Object.keys(window)) if (!["from", "to"].includes(key)) throw new ProfileResponseError(`$.share.window.${key}`);
+  text(window.from, "$.share.window.from"); text(window.to, "$.share.window.to");
   return share as unknown as SharedHabitCard;
 }

@@ -37,10 +37,12 @@ All routes authenticate and read only the caller's own rows; no route names anot
 
 ## What counts
 
-Opening and observation details offer **Show more** until all counted references are visible.
-Loading is per detail; a failed or changed page keeps the existing list and offers retry/reload.
-A profile refresh discards pending responses from the previous population. The UI checks page
-offsets, totals and duplicate identities before appending; these checks do not certify a habit.
+History, habit-card, opening and observation details offer **Show more** until all counted
+references are visible. Loading is per detail; a failed, overlapping or inconsistent page keeps
+the existing list and offers retry or **Refresh profile**. Continuations check offsets, totals
+and duplicate identities; habit details also retain the displayed card's measured operands.
+Refresh clears drill-downs and discards pending responses from the previous view. These checks
+do not certify a habit or promise a transactional snapshot across requests.
 
 Move-level references open `/review/game/:runId?node=:nodeId`. Review resolves the node's actual
 stored branch, selects that move and retains it on reload. Inspecting a reference does not commit,
@@ -99,3 +101,8 @@ The profile is private and stores nothing of its own. Export and deletion cover 
 rows (`account-data-lifecycle.md`). Sharing is per card and explicit: the request must carry
 `consent: true`, only a measured card can be shared, and the result is text with the card's sentence
 and numbers — no run, position, type or composite. Nothing is published or persisted.
+The client validates the complete numeric share image and compares it with the card the learner
+consented to share. Cancel, a new card, consent withdrawal, refresh and departure retire that
+preparation; an obsolete success or failure cannot modify its successor. Copying is explicit and
+single-flight. A departed copy completion is ignored, although a clipboard write already issued
+cannot be retracted. Withdrawing consent clears the prepared text and requires fresh consent.

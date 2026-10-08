@@ -40,8 +40,9 @@
   let observationError: Record<string, string | undefined> = $state({});
   let cardBusy: Record<string, boolean> = $state({});
   let drillError: string | undefined = $state();
-  let historyRows: readonly ProfileHistoryRow[] = $state([]);
-  let historyHidden = $state(0);
+  let historyPage: ProfilePage<ProfileHistoryRow> | undefined = $state();
+  let historyRows = $derived(historyPage?.items ?? []);
+  let historyHidden = $derived(historyPage?.hiddenCount ?? 0);
   let historyBusy = $state(false);
   let shareIntent: string | undefined = $state();
   let shareConsent = $state(false);
@@ -49,6 +50,8 @@
   let shareError: string | undefined = $state();
   let shared: SharedHabitCard | undefined = $state();
   let copied = $state(false);
+  let copyBusy = $state(false);
+  let shareGeneration = 0;
   let attached = false;
   let generation = 0;
 
@@ -60,6 +63,7 @@
 
   async function load(): Promise<void> {
     const current = ++generation;
+    resetShare();
     loading = true;
     error = undefined;
     cardDrill = {}; cardDrillError = {}; cardBusy = {};
@@ -70,9 +74,9 @@
       if (api.learnerProfile === undefined) throw new Error("The profile is unavailable.");
       const next = await api.learnerProfile();
       if (!attached || current !== generation) return;
+      const history = appendPage(next.history, undefined, 0, (row) => row.runId);
       profile = next;
-      historyRows = next.history.items;
-      historyHidden = next.history.hiddenCount;
+      historyPage = history;
     } catch {
       if (!attached || current !== generation) return;
       error = "Your profile could not be loaded. Nothing has been changed; try again.";
@@ -129,11 +133,14 @@
     try {
       const page = await api.learnerProfileStyle(metricId, offset, 25);
       if (!attached || current !== generation) return;
-      if (page.card.metricId !== metricId) throw new Error("Different card");
-      const previous = offset === 0 ? [] : cardDrill[metricId]?.contributors.shown ?? [];
-      cardDrill = { ...cardDrill, [metricId]: { offset, contributors: { ...page.contributors, shown: [...previous, ...page.contributors.shown] } } };
+      const visible = profile?.style.cards.find((card) => card.metricId === metricId);
+      if (visible === undefined || !sameCard(visible, page.card)) throw new Error("Changed card");
+      const previous = cardDrill[metricId]?.contributors;
+      // The existing contributor image encodes its offset as total - shown - remaining.
+      const next = appendPage({ total: page.contributors.total, items: page.contributors.shown, hiddenCount: page.contributors.hiddenCount, offset: page.contributors.total - page.contributors.shown.length - page.contributors.hiddenCount }, previous === undefined ? undefined : { total: previous.total, items: previous.shown, hiddenCount: previous.hiddenCount, offset: 0 }, offset, (ref) => JSON.stringify([ref.runId, ref.nodeId]), 25);
+      cardDrill = { ...cardDrill, [metricId]: { offset, contributors: { total: next.total, shown: next.items, hiddenCount: next.hiddenCount } } };
     } catch {
-      if (attached && current === generation) cardDrillError = { ...cardDrillError, [metricId]: "The games behind this card could not be loaded. Try again." };
+      if (attached && current === generation) cardDrillError = { ...cardDrillError, [metricId]: "These moves could not be loaded. Your current list is unchanged. Try again, or refresh the profile." };
     } finally {
       if (attached && current === generation) cardBusy = { ...cardBusy, [metricId]: false };
     }
@@ -141,12 +148,26 @@
 
   // Page offsets/counts and identities belong to the response. Refuse overlap or a changed
   // population instead of silently blending two reads; the first-page action remains a reload.
-  function appendPage<T>(page: ProfilePage<T>, previous: ProfilePage<T> | undefined, offset: number, identity: (item: T) => string): ProfilePage<T> {
+  function appendPage<T>(page: ProfilePage<T>, previous: ProfilePage<T> | undefined, offset: number, identity: (item: T) => string, limit = 100): ProfilePage<T> {
     const before = offset === 0 ? [] : previous?.items ?? [];
-    if (page.offset !== offset || before.length !== offset || page.items.length > 100 || offset + page.items.length + page.hiddenCount !== page.total || (offset > 0 && previous?.total !== page.total) || (page.items.length === 0 && page.hiddenCount > 0)) throw new Error("Changed page");
+    if (page.offset !== offset || before.length !== offset || page.items.length > limit || offset + page.items.length + page.hiddenCount !== page.total || (offset > 0 && previous?.total !== page.total) || (page.items.length === 0 && page.hiddenCount > 0)) throw new Error("Changed page");
     const items = [...before, ...page.items];
     if (new Set(items.map(identity)).size !== items.length) throw new Error("Repeated item");
     return { ...page, offset: 0, items };
+  }
+
+  // Compare the existing JSON operands, not property order or a new snapshot/hash protocol.
+  function sameRead(left: unknown, right: unknown): boolean {
+    if (Object.is(left, right)) return true;
+    if (left === null || right === null || typeof left !== "object" || typeof right !== "object" || Array.isArray(left) !== Array.isArray(right)) return false;
+    const a = left as Record<string, unknown>, b = right as Record<string, unknown>;
+    return Object.keys(a).length === Object.keys(b).length && Object.keys(a).every((key) => Object.hasOwn(b, key) && sameRead(a[key], b[key]));
+  }
+
+  function sameCard(left: HabitCard, right: HabitCard): boolean {
+    const { contributors: _left, ...a } = left;
+    const { contributors: _right, ...b } = right;
+    return sameRead(a, b) && left.contributors.total === right.contributors.total;
   }
 
   async function openOpening(key: string, offset = 0): Promise<void> {
@@ -158,7 +179,7 @@
       const detail = await api.learnerProfileOpening(key, offset, 100);
       if (!attached || current !== generation) return;
       const previous = openingDrill[key];
-      if (detail.row.key !== key || (offset > 0 && JSON.stringify(previous?.row) !== JSON.stringify(detail.row))) throw new Error("Changed opening");
+      if (detail.row.key !== key || (offset > 0 && !sameRead(previous?.row, detail.row))) throw new Error("Changed opening");
       const games = appendPage(detail.games, previous?.games, offset, (game) => game.runId);
       openingDrill = { ...openingDrill, [key]: { ...detail, games } };
     } catch {
@@ -177,7 +198,7 @@
       const detail = await api.learnerProfileObservation(key, offset, 100);
       if (!attached || current !== generation) return;
       const previous = observationDrill[key];
-      if (detail.row.key !== key || (offset > 0 && JSON.stringify(previous?.row) !== JSON.stringify(detail.row))) throw new Error("Changed observation");
+      if (detail.row.key !== key || (offset > 0 && !sameRead(previous?.row, detail.row))) throw new Error("Changed observation");
       const occurred = appendPage(detail.occurred, previous?.occurred, offset, (ref) => JSON.stringify([ref.runId, ref.nodeId]));
       observationDrill = { ...observationDrill, [key]: { ...detail, occurred } };
     } catch {
@@ -191,47 +212,70 @@
     if (api.learnerProfileHistory === undefined || historyBusy) return;
     const current = generation;
     historyBusy = true;
+    drillError = undefined;
     try {
       const page = await api.learnerProfileHistory(historyRows.length, 50);
       if (!attached || current !== generation) return;
-      historyRows = [...historyRows, ...page.items];
-      historyHidden = page.hiddenCount;
+      historyPage = appendPage(page, historyPage, historyRows.length, (row) => row.runId, 50);
     } catch {
-      if (attached && current === generation) drillError = "More history could not be loaded. Try again.";
+      if (attached && current === generation) drillError = "More history could not be loaded. Your current list is unchanged. Try again, or refresh the profile.";
     } finally {
       if (attached && current === generation) historyBusy = false;
     }
   }
 
   function beginShare(metricId: string): void {
+    resetShare(metricId);
+  }
+
+  function resetShare(metricId?: string): void {
+    shareGeneration += 1;
     shareIntent = metricId;
     shareConsent = false;
+    shareBusy = false;
+    copyBusy = false;
     shareError = undefined;
     shared = undefined;
     copied = false;
   }
 
   async function confirmShare(): Promise<void> {
-    if (shareIntent === undefined || !shareConsent || api.shareProfileCard === undefined) return;
+    if (shareIntent === undefined || !shareConsent || shareBusy || api.shareProfileCard === undefined) return;
+    const metricId = shareIntent;
+    const card = profile?.style.cards.find((row) => row.metricId === metricId);
+    if (card?.state !== "measured") return;
+    const current = generation, request = ++shareGeneration;
+    const active = () => attached && generation === current && shareGeneration === request && shareIntent === metricId && shareConsent;
     shareBusy = true;
+    copyBusy = false;
     shareError = undefined;
+    shared = undefined;
+    copied = false;
     try {
-      shared = await api.shareProfileCard(shareIntent, true);
+      const next = await api.shareProfileCard(metricId, true);
+      if (!active()) return;
+      if (next.metric !== `${card.metricId}@${card.version}` || next.title !== card.title || next.sentence !== card.sentence || next.games !== card.games || next.decisions !== card.decisions || next.floor !== card.floor || !sameRead(next.window, card.window) || next.interval.level !== card.interval.level || next.interval.lower !== card.interval.lower || next.interval.upper !== card.interval.upper) throw new Error("Changed card");
+      shared = next;
     } catch {
-      shareError = "This card could not be prepared for sharing. Nothing was shared.";
+      if (active()) shareError = "This card could not be prepared for sharing. Nothing was shared. Refresh the profile and try again.";
     } finally {
-      shareBusy = false;
+      if (active()) shareBusy = false;
     }
   }
 
   async function copyShare(): Promise<void> {
-    if (shared === undefined) return;
+    if (shared === undefined || !shareConsent || copyBusy) return;
+    const value = shared, current = generation, request = shareGeneration;
+    const active = () => attached && generation === current && shareGeneration === request && shareConsent && shared === value;
+    copyBusy = true;
+    shareError = undefined;
     try {
-      await navigator.clipboard.writeText(shared.text);
-      copied = true;
+      await navigator.clipboard.writeText(value.text);
+      if (active()) copied = true;
     } catch {
-      copied = false;
-      shareError = "Copying failed. Select the text and copy it yourself.";
+      if (active()) { copied = false; shareError = "Copying failed. Select the text and copy it yourself."; }
+    } finally {
+      if (active()) copyBusy = false;
     }
   }
 
@@ -259,6 +303,7 @@
     <p class="eyebrow">Your profile · private</p>
     <h1 id="profile-title">What your recorded games show</h1>
     <p>Counts from your own saved games, each shown with what it was counted out of. Open any number to see the games and moves behind it.</p>
+    {#if profile}<button type="button" disabled={loading} onclick={() => void load()}>Refresh profile</button>{/if}
   </header>
 
   {#if loading}
@@ -330,14 +375,14 @@
                 <h4 id={`share-${card.metricId}`}>Share this card?</h4>
                 <p>You receive this card's sentence and numbers as text. Tabiya stores nothing and publishes nothing; the text leaves Tabiya only if you paste it somewhere.</p>
                 <p class="honest">The text carries no game, move or label about you — only the measured numbers shown above.</p>
-                <label><input type="checkbox" bind:checked={shareConsent} disabled={shareBusy} /> I choose to share this card's numbers</label>
+                <label><input type="checkbox" bind:checked={shareConsent} onchange={(event) => { if (!event.currentTarget.checked) resetShare(shareIntent); }} disabled={shareBusy} /> I choose to share this card's numbers</label>
                 <div class="row-actions">
                   <button type="button" disabled={!shareConsent || shareBusy} onclick={() => void confirmShare()}>{shareBusy ? "Preparing…" : "Prepare text"}</button>
-                  <button type="button" onclick={() => { shareIntent = undefined; shared = undefined; }}>Cancel</button>
+                  <button type="button" onclick={() => resetShare()}>Cancel</button>
                 </div>
                 {#if shared}
                   <label>Text to share <textarea readonly rows="4">{shared.text}</textarea></label>
-                  <button type="button" onclick={() => void copyShare()}>{copied ? "Copied" : "Copy text"}</button>
+                  <button type="button" disabled={!shareConsent || copyBusy} onclick={() => void copyShare()}>{copyBusy ? "Copying…" : copied ? "Copied" : "Copy text"}</button>
                 {/if}
                 {#if shareError}<p role="alert">{shareError}</p>{/if}
               </aside>

@@ -29746,6 +29746,33 @@
       "uxItems": [],
       "evidence": "apps/server/src/hint-lifetime.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3595",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9009e8cabf67d506f4e993767a368b0b6e476c44890509bb5a0ed6edf36ac42c",
+      "uxItems": [],
+      "evidence": "tests/browser/profile.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3596",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9d0c235a5f5af368306032b37aad5526e76b848cb1b356eb8b1385b9b017c17b",
+      "uxItems": [],
+      "evidence": "tests/browser/profile.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3597",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b7db9fd6e0838f826f3c1f77b23a4c2fed4e2772ffdd0172fb3793b749c3dabb",
+      "uxItems": [],
+      "evidence": "docs/engine-workers.md",
+      "evidenceKind": "path"
     }
   ]
 }

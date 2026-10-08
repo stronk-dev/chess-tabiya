@@ -12,6 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3595]]/[[D3596]] are closed locally under accepted player-style §8: history and habit
+continuations preserve displayed operands and exact contributing moves, refuse changed or
+overlapping reads and offer explicit refresh/retry. Per-card preparation/copy retains current
+consent/card/view lifetime and complete numeric response validation. Twelve predecessor-red
+controls, 123 focused cases and five authenticated browser journeys pass. Final normal gates
+pass clean types/build, 3,717 software, seven performance, 228 content and 193 browser cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. No new metric,
+floor, publication, snapshot protocol or source-authority substitution. [[D3597]] reconciles
+two stale canonical bot notes against the existing native Maia closeout/current opponent-ply
+route; calibration, personality and release obligations remain open.
+
 [[D3594]] is closed locally under accepted provider-health §§5–6: cancelled admission detaches,
 expired callers cannot acquire a claim, and queued work refuses shutdown or a changed circuit.
 Four predecessor-red controls, seven new provider controls and actual authenticated Hint

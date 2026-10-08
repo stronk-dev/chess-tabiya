@@ -320,7 +320,7 @@ learner-profile-check:
 
 .PHONY: learner-profile-browser-check
 learner-profile-browser-check:
-	./node_modules/.bin/playwright test --grep "private profile opens|cited profile move"
+	./node_modules/.bin/playwright test --grep "private profile opens|cited profile move|profile evidence and sharing"
 
 roadmap-receipt:
 	node tools/roadmap-receipt.mjs --write

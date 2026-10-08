@@ -75,11 +75,13 @@ The sharing adapter delegates to the supervisor's queue,
 restart and exchange machinery. The runtime parser/semantic source closure, capability declarations and authored pack digests are
 not rewritten by this allocation repair. Run `make engine-sharing-check` for these contracts.
 
-Actual model compatibility is a separate unresolved boundary: pinned Maia3 advertises Temperature
-and TopP as decimal UCI string options, while the current provider-exchange admission requires
-numeric spin bounds. D3349 owns this mismatch; `readyok` and a healthy container do not prove a
-registered profile can play through that exchange. The current refusal remains in place pending
-acceptance of the measured decimal-option amendment.
+Pinned Maia3 advertises Temperature and TopP as decimal UCI string options. The owner-approved
+D3349 admission repair accepts those pinned advertisements with strict finite request/bound and
+source/model/container checks; D3352 preserves reported policy precision. The October 1
+[native appliance journey](../planning/provider-exchange-and-execution/maia-resume-shutdown-2026-10-01.md)
+passes registered model replies, retry, branching/comparison and another bot reply after server
+restart under unchanged memory limits. This is actual model compatibility for that journey,
+not strength calibration, personality proof or the remaining release-concurrency/memory gates.
 
 Real-engine application startup also checks every ready engine's retained UCI
 option table against the published capability-disposition register. Coverage is

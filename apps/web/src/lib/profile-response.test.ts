@@ -4,6 +4,25 @@ import { profileFixture } from "./profile-fixture.test-support.js";
 import { parseLearnerProfile, parseSharedCard, parseStyleCardPage } from "./profile-response.js";
 
 describe("learner profile response parser", () => {
+  it.each(["games", "decisions", "floor", "interval", "window"])("refuses a share with missing %s instead of asserting an incomplete numeric image", (field) => {
+    const share: Record<string, unknown> = { metric: "m@1", title: "t", sentence: "s", scope: "x", text: "y", games: 25, decisions: 1, floor: 25, interval: { lower: 0, upper: 1, level: 0.95 }, window: { from: "a", to: "b" } };
+    delete share[field];
+    expect(() => parseSharedCard({ share })).toThrow();
+  });
+
+  it.each([
+    { games: -1 }, { decisions: 0.5 }, { games: 24 },
+    { interval: { lower: Number.NaN, upper: 1, level: 0.95 } },
+    { interval: { lower: 1, upper: 0, level: 0.95 } },
+    { interval: { lower: 0, upper: 1, level: 0.5 } },
+    { interval: { lower: 0, upper: 1, level: 0.95, runId: "private" } },
+    { window: { from: "a", to: "b", nodeId: "private" } },
+    { composite: "player type" },
+  ])("refuses invalid or widened measured share operands: %j", (change) => {
+    const share = { metric: "m@1", title: "t", sentence: "s", scope: "x", text: "y", games: 25, decisions: 1, floor: 25, interval: { lower: 0, upper: 1, level: 0.95 }, window: { from: "a", to: "b" }, ...change };
+    expect(() => parseSharedCard({ share })).toThrow();
+  });
+
   it("accepts the server's profile shape", () => {
     const profile = parseLearnerProfile(profileFixture());
     expect(profile.style.cards).toHaveLength(3);

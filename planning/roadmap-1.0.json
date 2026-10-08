@@ -689,7 +689,7 @@
         "nextAction": "Locate D3591's original longitudinal-worker stall without changing its 250 ms budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "Final source passes clean types/build, 3686 software cases/354 files and seven unchanged-budget performance cases/four files. The first command stops on one duplicate roadmap reference; after its correction, normal governance/content/browser exits zero: 228 content cases/23 files, 191 browser cases (126 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3592's native-click readiness replay passes at median 88.5 ms/p95 113 ms below unchanged 250 ms; D3593 retains one pack read and 26 shape requests with authoritative access/reasoning and saved-pack reload. D3594's queued-admission cancellation/deadline/shutdown repair closes locally. D3591's maximum delay replay is 18.169855 ms, but the original 328.466431 ms stall remains unlocated and open. All 1707 live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. No new exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
+          "summary": "Final sequential normal gates exit zero: clean types/build, 3717 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 193 browser cases (128 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3592's native-click readiness replay passes at median 90.8 ms/p95 115.5 ms below unchanged 250 ms; D3593 retains one pack read and 26 shape requests with authoritative access/reasoning and saved-pack reload. D3594 queued admission and D3595/D3596 private Profile pagination/consent lifetimes are closed locally; D3597 corrects two stale canonical bot notes. All 1707 live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. D3591's original 328.466431 ms stall remains unlocated despite passing replays. No new exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
           "impact": "held",
           "evidence": [
             "rfc/concept-registry.md",
@@ -698,6 +698,7 @@
             ".github/workflows/verify.yml",
             ".github/workflows/release.yml",
             "tests/browser/drill.spec.ts",
+            "tests/browser/profile.spec.ts",
             "tools/verify-scaffold.mjs",
             "tools/verify-scaffold.test.mjs",
             "tools/capability-history.mjs",
@@ -2396,10 +2397,10 @@
           "stable-board-and-presets",
           "production-api-closure"
         ],
-        "nextAction": "D3587's Campaign action departure/resume and exact retry repair and D3582-D3586's classroom inspection repairs are closed locally. Preserve the learner's pause/closed rail and exact Campaign-to-Review/map and account/Profile/bot handoffs without equating navigation with complete source coverage. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+        "nextAction": "D3595/D3596 Profile pagination and per-card consent/lifetime repairs are closed locally with focused, actual authenticated desktop/touch-phone journeys and complete normal gates. D3597 corrects stale bot compatibility/browser documentation, not calibration. Prior D3587 Campaign action departure/resume and D3582-D3586 classroom repairs stand. Preserve exact Campaign-to-Review/map and account/Profile/bot handoffs without equating navigation with complete source coverage. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3587 completes Campaign command lifecycle safety: accepted create/start/seal/loadout/abandon survives departure without late navigation or replacement-view corruption; validated writer credentials preserve playable resume; exact lost-response replay grants no second reward. Twenty-two predecessor-red controls, 54 focused cases and three actual desktop/touch-phone journeys pass. Prior completed/incomplete classroom inspection, Review boundary and account/Profile/bot repairs stand. Source-authority holds, missing Review evidence, official curriculum, training progression and wider learner/social/professional/operator journeys remain. Full sequential normal gates pass clean types/build, 3661 software cases/354 files, seven isolated unchanged-budget performance, 228 content cases/23 files and 189 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. No capability, milestone, pushed-revision CI or release completion.",
+          "summary": "D3595/D3596 close locally under accepted player-style §8: history and habit continuations check offsets, counts, distinct move identities and displayed card operands; explicit refresh recovers without blending inconsistent reads. Share preparation and clipboard completion retain current card/consent/view lifetime, and the parser validates existing numeric fields. Twelve predecessor controls fail; 123 focused cases and five actual authenticated browser cases pass, including real twenty-six-game desktop/touch-phone pagination and delayed cancelled share completion. Final sequential normal gates pass clean types/build, 3717 software cases/354 files, seven unchanged-budget performance, 228 content cases/23 files and 193 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. D3597 corrects two stale bot notes against prior native proof/current routes, not calibration. Prior Campaign/classroom/Review repairs stand; source authority, official curriculum, training progression and wider journeys remain held. No new metric, floor, publication, snapshot protocol, whole capability, milestone, remote CI or release completion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -2427,6 +2428,8 @@
             "rfc/bot-policy.md",
             "rfc/opponent-experience.md",
             "apps/web/src/lib/ProfileScreen.test.ts",
+            "apps/web/src/lib/profile-response.test.ts",
+            "tests/browser/profile.spec.ts",
             "apps/web/src/lib/review-target.ts",
             "apps/web/src/lib/router.test.ts",
             "apps/server/src/live-session.test.ts",

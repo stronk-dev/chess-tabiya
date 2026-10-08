@@ -222,6 +222,7 @@ Receipt: `planning/bot-roster/calibration-opening-capacity.json`.
   ([[D3082]]); Stage B trait consumption, owner names/art (D1610) and the first-use default (D1611)
   remain open.
 
-The legacy `BOT_POLICY_PROFILES` behind public `/select-move` stays empty, so no profile can be
-played through the browser-authoritative path. The old caller-fed `composeBotPolicySelection`
-(bare guard losses and trait strings) is deleted.
+The legacy `BOT_POLICY_PROFILES` behind public `/select-move` stays empty. Registered profiles
+instead use the writer-scoped `/runs/:id/opponent-ply` operation described above, including the
+browser client; an empty legacy selector does not mean profile play is absent. The old caller-fed
+`composeBotPolicySelection` (bare guard losses and trait strings) is deleted.

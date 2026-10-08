@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3594]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3597]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,7 +58,17 @@ across the platform**. Deeper “why this engine move?” search remains researc
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 
-Latest provider repair ([[D3594]]) is closed locally: cancelled requests waiting for an upstream
+Profile repairs ([[D3595]]/[[D3596]]) are closed locally: history and habit drill-downs refuse changed
+or overlapping pages without losing their existing list; explicit refresh resets the view.
+Per-card preparation/copy respects current consent, the displayed measured operands and view
+lifetime. Twelve predecessor-red controls, 123 focused cases, clean types and five actual
+authenticated browser cases pass, including real twenty-six-game desktop/touch-phone pagination
+and delayed cancelled share completion. Complete normal gates pass on final product/test sources.
+No new style judgement, public share, snapshot protocol or whole learner-model promotion is claimed.
+[[D3597]] reconciles stale engine/bot documentation with the existing actual Maia appliance
+closeout and current browser opponent-ply route; calibration and personality proof remain open.
+
+Previous provider repair ([[D3594]]) is closed locally: cancelled requests waiting for an upstream
 slot detach without disturbing its owner, elapsed admission cannot acquire a slot, and current
 circuit/generation/shutdown authority is rechecked before dispatch. Four predecessor-red controls,
 seven new provider controls and actual authenticated Hint DELETE/retry establish those boundaries.
@@ -82,13 +92,12 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal gates pass:** clean types/build, 3,686 software cases / 354 files,
+**The final local normal gates pass:** clean types/build, 3,717 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-191 browser cases (126 smoke, five content, 59 matrix, one packaged-default). One existing
+193 browser cases (128 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-Software/performance passed in the first command; after correcting a duplicate roadmap reference,
-the remaining governance/content/browser command exits zero. Warm native arrival in this replay
-is median 88.5 ms / p95 113 ms against the unchanged 250 ms budget. This is local verification,
+The complete sequential normal command exits zero. Warm native arrival in this replay
+is median 90.8 ms / p95 115.5 ms against the unchanged 250 ms budget. This is local verification,
 not a new GitHub or native release-image result.
 
 [[D3591]] remains open: the earlier full run measured 328.466431 ms maximum event-loop
