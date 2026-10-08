@@ -65,6 +65,13 @@ exercises recovery, retained original moves, exact opponent/seed, reload and dep
 and touch-enabled phone. These cases also remain in the ordinary software/browser tiers; the
 focused commands are not substitute release gates or bot-calibration tests.
 
+`make review-route-check` covers route-generation/cited-branch polling and recorded-play
+assertion controls; `make pack-loading-check` covers single-pass catalogue admission and
+unchanged sibling refusals. `make review-arrival-browser-check` runs all ten arrival samples
+plus desktop/phone Nudge, cited Review and same-bot replay. Browser preservation assertions
+permit additive background evidence, but reject changed play fields, lost evidence and
+non-evidence event writes. These focused checks supplement the complete gates above.
+
 `make test-browser` remains a convenient single Playwright invocation with the complete screenshot
 artifact check for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core

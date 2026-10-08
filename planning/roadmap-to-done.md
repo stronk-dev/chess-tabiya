@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3557]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3558]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -82,8 +82,8 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,306 ledger rows** (1,443 done, 161 refused, 1,702 live,
-zero untriaged). Of the live ledger, 628 are todo, thirteen doing and 1,061 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,307 ledger rows** (1,445 done, 161 refused, 1,701 live,
+zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
@@ -98,19 +98,28 @@ unaccepted numerical, source or durable-state contracts cannot be guessed around
 
 ## Detailed checkpoint history
 
-Current verification qualification (D3556/D3557): the current local full gate
-and browser gate are **red**, superseding any implication of readiness from the
-earlier green checkpoints below. Content setup times out before 17 Theory
-Library assertions. Rebuilt browser smoke completes with 94 passed, four failed,
-one existing optional Maia skip and zero retries; the content/matrix/packaged-default
-browser tiers do not run after smoke fails. Arrival's warm sample hits the
-whole-test deadline while still loading. Phone cited Profile→Review renders a
-starting-position line instead of its cited move. Desktop Nudge and completed-bot
-replay fail snapshot assertions only on permitted background engine references;
-that assertion class is not evidence of lost moves. Each trace is retained
-locally, with exact boundaries and further repair owned by the current queue.
-No timeout is increased, control removed or passing replay substituted for diagnosis.
-The scoped engine repair is not a clean full-suite or ready-to-push claim.
+Current verification qualification (D3556–D3558): normal sequential
+`make verify-awake test-browser-ci-awake` exits zero after the repairs below.
+Clean types, 3,529 software cases / 351 files, seven isolated performance cases /
+four files, 227 content cases / 23 files, build and downstream software/governance
+checks pass. All four rebuilt browser tiers pass: 108 smoke, five content,
+59 matrix and one packaged-default, totaling 173 passes, one existing optional
+Maia skip and zero retries. All 150 exact input and 112 composition cells remain.
+D3556 locates the setup timeout inside pack loading and removes proven duplicate
+full validation while preserving sibling refusals; all 227 content cases now pass.
+D3557's predecessor-red control proves initial polling can supersede a cited
+Review load with the active branch; polling now waits for the resolved line.
+Sixteen play-preservation controls distinguish additive evidence from changed
+moves or event writes. The arrival trace completed five cold and one warm sample
+before its aggregate deadline, so all ten samples now have separate normal
+deadlines. Types, 112 focused software and 17 affected browser cases also pass.
+The complete smoke run records warm arrival n=5 at 154.8 ms median / 193.0 ms
+p95 and cold n=5 at 515.2 / 937.3 ms. These are local mock-provider measurements,
+not calibrated bot strength or manual device/release proof.
+D3558 records existing UI failures in an overlapping focused run; the subsequent
+sequential passes do not diagnose them. Historical intermittent causes and
+remote/release proof remain open. No deadline increase,
+hidden retry, population reduction or ready-to-push claim.
 
 2026-10-08 engine-lifecycle closeout (D3555): permanent controls reproduce
 startup after completed shutdown, queued-command resurrection and concurrent

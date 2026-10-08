@@ -22,7 +22,7 @@ import { capabilityKey, type CapabilityId } from "@chess-tabiya/schema";
 import { runtimeSupportedCapabilities, unmetRequirements, type RuntimeCapabilitySupport } from "./capability/pack-capabilities.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { ServerError } from "./errors.js";
-import { validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
+import { packVariantIssues, validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
 import { buildPositionEvidenceIndex } from "./position-evidence.js";
 import { assessmentGrounding } from "./sourcing/ledger-validation.js";
 import { validateLedger } from "./sourcing/ledger-validation.js";
@@ -362,12 +362,13 @@ export class PackRegistry {
       objective: { type: document.objective.type },
     }]));
     for (const entry of validated) {
-      const checked = validatePackDocument(entry.document, { ...(options.shapes === undefined ? {} : { shapes: options.shapes }), ...(options.principles === undefined ? {} : { principles: options.principles }), packs: siblings, concepts });
-      if (!checked.valid || checked.document === undefined) {
-        const errors = checked.issues.filter((issue) => issue.severity === "error");
+      // Every document is fully validated above. Only sibling relations need the completed
+      // catalogue; replaying schema/lint/objectives and the entire authored line here doubled boot work.
+      const errors = packVariantIssues(entry.document, siblings).filter(issue => issue.severity === "error");
+      if (errors.length > 0) {
         throw new ServerError("PACK_INVALID", `Pack ${entry.source} is invalid: ${errors.map((issue) => issue.message).join("; ")}`, { details: { source: entry.source, issues: errors } });
       }
-      const document = freeze(checked.document);
+      const document = freeze(entry.document);
       const { source, ledger, manifest, channel } = entry;
       // §4.3 / [[D1077]]: an `unsupported` requirement is a static deployment fact. The pack is
       // excluded from the listing and named in the startup report; the boot survives it ([[D468]]).

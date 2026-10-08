@@ -265,6 +265,11 @@ conditions. These checks are shared by `make pack-check` and registry loading,
 so an authoring no-op cannot validate locally and then enter the served
 catalogue.
 
+Catalogue loading fully validates each document once, then checks sibling
+`variantOf` relations against the completed validated set. That second pass
+does not replay schema, lint, objectives or authored lines. Unknown siblings,
+self-reference and unproven root relations remain admission errors.
+
 Objective validation is compiler-backed and total. It compiles the root
 objective and every trajectory-leg objective before admission, using the same
 rule compiler play uses. Compiler failures become pointed validation issues,

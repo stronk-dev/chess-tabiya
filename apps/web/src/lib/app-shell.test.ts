@@ -4,7 +4,8 @@ import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { REVIEW_MAP_CONVENTION, commitMove, createRun, fork as forkRun, rewind as rewindRun } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_CONVENTION, commitMove, createRun, fork as forkRun, rewind as rewindRun, reviewMapProjection, storyMomentsForRun } from "@chess-tabiya/runtime";
+import { reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -393,6 +394,41 @@ describe("application shell", () => {
     expect(document.body.textContent).not.toContain("Older – Black");
     await unmount(component);
     vi.useRealTimers();
+  });
+
+  it("does not let polling replace a slow cited Review load with the active branch", async () => {
+    vi.useFakeTimers();
+    const recorded = reviewFixtureRun({ id: "cited-run", plies: 2 });
+    const node = recorded.nodes[1]!;
+    const branchId = node.branchId;
+    const graph = deferred<Awaited<ReturnType<DrillClientApi["graph"]>>>();
+    const cited = {
+      ...reviewPayload({ runId: recorded.id, branchId, source: { kind: "native" }, ready: false }),
+      ...reviewMapProjection({ run: recorded, branchId, story: storyMomentsForRun(recorded, branchId), context: "review", viewer: { role: "learner", session: "pack" } }),
+    };
+    const review = vi.fn(async (_runId: string, requestedBranch?: string) => requestedBranch === branchId
+      ? cited
+      : reviewPayload({ runId: recorded.id, branchId: "empty-active-branch", source: { kind: "native" } }));
+    history.replaceState(null, "", `/review/game/${recorded.id}?node=${encodeURIComponent(node.id)}`);
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), graph: () => graph.promise, review },
+      router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    try {
+      await vi.advanceTimersByTimeAsync(2_000);
+      expect(review).not.toHaveBeenCalled();
+      graph.resolve({ ...(await api().graph(recorded.id)), id: recorded.id, nodes: recorded.nodes, branches: recorded.branches, activeCursor: recorded.activeCursor });
+      await vi.advanceTimersByTimeAsync(0);
+      await tick();
+      expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(node.id);
+      await vi.advanceTimersByTimeAsync(1_000);
+      expect(review).toHaveBeenCalledTimes(2);
+      expect(review.mock.calls.every(([id, branch]) => id === recorded.id && branch === branchId)).toBe(true);
+      expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(node.id);
+    } finally {
+      await unmount(component);
+      vi.useRealTimers();
+    }
   });
 
   it("does not publish a departed Story share into the next game", async () => {

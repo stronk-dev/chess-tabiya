@@ -61,6 +61,11 @@ older snapshot cannot regress a newer one. Refresh failures retain the last
 good projection and are contained by the polling boundary; initial-load
 failures still use the route's visible error path.
 
+Story polling waits for the initial route load to succeed. A cited move first
+resolves its recorded branch; subsequent polls read that exact branch and must
+retain the cited row. A slow initial lookup cannot be superseded by a poll of
+the active branch or an earlier visit's line.
+
 Story sharing follows that same lifetime instead of treating the shell's
 mutable Story fields as request authority. Create and revoke capture the exact
 run, branch and route generation, and link-list refreshes are
@@ -287,6 +292,11 @@ visible board geometry and the enabled 64-cell semantic input surface after two
 animation frames; it is not merely a mounted board element. The instrument is
 `tests/browser/arrival-latency.spec.ts`, and the warm result is inside the
 research protocol's <250 ms budget.
+
+The ten arrival samples now run as separate serial tests, each with the normal
+test deadline, and share one complete five-cold/five-warm report. Registration
+and ten browser journeys no longer compete for one 30-second deadline. These
+historical latency figures are not a current release-performance claim.
 
 `/settings` is the learner-facing Settings surface, with a sticky section index
 for Appearance, Playing, Account, and About. It edits the same per-browser

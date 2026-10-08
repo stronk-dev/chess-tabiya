@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { performance } from "node:perf_hooks";
 import { randomUUID } from "node:crypto";
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 
 const SAMPLES = 5;
 
@@ -66,63 +66,80 @@ async function waitForPlayableBoard(page: Page): Promise<void> {
   expect(geometry?.height).toBe(geometry?.width);
 }
 
-test("measures cold arrival and warm catalogue-to-board readiness without UI-tour work", async ({
-  browser,
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop-chromium", "the recorded ARR-a9 arm is desktop Chromium");
-  await register(page);
-
-  const baseURL = testInfo.project.use.baseURL;
-  if (typeof baseURL !== "string") throw new Error("ARR-a9 requires Playwright baseURL");
-  const storageState = await page.context().storageState();
+test.describe.serial("arrival readiness measurements", () => {
+  let warmContext: BrowserContext;
+  let warmPage: Page;
+  let storageState: Awaited<ReturnType<BrowserContext["storageState"]>>;
   const coldValues: number[] = [];
-
-  for (let sample = 0; sample < SAMPLES; sample += 1) {
-    const context = await browser.newContext({
-      baseURL,
-      storageState,
-      viewport: { width: 1440, height: 1000 },
-    });
-    try {
-      const coldPage = await context.newPage();
-      const started = performance.now();
-      await coldPage.goto("/play");
-      await openFirstPosition(coldPage);
-      await waitForPlayableBoard(coldPage);
-      coldValues.push(performance.now() - started);
-    } finally {
-      await context.close();
-    }
-  }
-
   const warmValues: number[] = [];
-  for (let sample = 0; sample < SAMPLES; sample += 1) {
-    await page.goto("/play");
-    const open = page.getByRole("button", { name: /Rehearse this position:/ }).first();
-    await expect(open).toBeVisible();
-    const started = await page.evaluate(() => performance.now());
-    await open.click();
-    await waitForPlayableBoard(page);
-    warmValues.push((await page.evaluate(() => performance.now())) - started);
-  }
 
-  const report: ArrivalLatencyReport = Object.freeze({
-    measuredAt: new Date().toISOString(),
-    browser: "chromium",
-    viewport: Object.freeze({ width: 1440, height: 1000 }),
-    samples: SAMPLES,
-    coldUrlToPlayableBoardMs: distribution(coldValues),
-    warmCatalogueToPlayableBoardMs: distribution(warmValues),
+  test.beforeAll(async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop-chromium", "the recorded ARR-a9 arm is desktop Chromium");
+    const baseURL = testInfo.project.use.baseURL;
+    if (typeof baseURL !== "string") throw new Error("ARR-a9 requires Playwright baseURL");
+    warmContext = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    warmPage = await warmContext.newPage();
+    await register(warmPage);
+    storageState = await warmContext.storageState();
   });
-  await mkdir("test-results", { recursive: true });
-  await writeFile("test-results/arrival-latency.json", `${JSON.stringify(report, null, 2)}\n`);
-  console.log(`ARRIVAL_LATENCY ${JSON.stringify(report)}`);
 
-  expect(report.coldUrlToPlayableBoardMs.n).toBe(SAMPLES);
-  expect(report.warmCatalogueToPlayableBoardMs.n).toBe(SAMPLES);
-  for (const value of [...coldValues, ...warmValues]) {
-    expect(Number.isFinite(value)).toBe(true);
-    expect(value).toBeGreaterThanOrEqual(0);
+  test.afterAll(async () => { await warmContext?.close(); });
+
+  // Each actual arrival has the normal 30-second test deadline. The previous single test
+  // spent that deadline on registration, five fresh contexts and five warm arrivals combined.
+  // Keep all samples and board-readiness assertions; do not widen the product/test budget.
+  for (let sample = 0; sample < SAMPLES; sample += 1) {
+    test(`cold arrival sample ${sample + 1}`, async ({ browser }, testInfo) => {
+      const context = await browser.newContext({
+        baseURL: testInfo.project.use.baseURL,
+        storageState,
+        viewport: { width: 1440, height: 1000 },
+      });
+      try {
+        const coldPage = await context.newPage();
+        const started = performance.now();
+        await coldPage.goto("/play");
+        await openFirstPosition(coldPage);
+        await waitForPlayableBoard(coldPage);
+        coldValues.push(performance.now() - started);
+      } finally {
+        await context.close();
+      }
+    });
   }
+
+  for (let sample = 0; sample < SAMPLES; sample += 1) {
+    test(`warm catalogue-to-board sample ${sample + 1}`, async () => {
+      await warmPage.goto("/play");
+      const open = warmPage.getByRole("button", { name: /Rehearse this position:/ }).first();
+      await expect(open).toBeVisible();
+      const started = await warmPage.evaluate(() => performance.now());
+      await open.click();
+      await waitForPlayableBoard(warmPage);
+      warmValues.push((await warmPage.evaluate(() => performance.now())) - started);
+    });
+  }
+
+  test("reports every cold and warm sample without UI-tour work", async () => {
+    expect(coldValues).toHaveLength(SAMPLES);
+    expect(warmValues).toHaveLength(SAMPLES);
+    const report: ArrivalLatencyReport = Object.freeze({
+      measuredAt: new Date().toISOString(),
+      browser: "chromium",
+      viewport: Object.freeze({ width: 1440, height: 1000 }),
+      samples: SAMPLES,
+      coldUrlToPlayableBoardMs: distribution(coldValues),
+      warmCatalogueToPlayableBoardMs: distribution(warmValues),
+    });
+    await mkdir("test-results", { recursive: true });
+    await writeFile("test-results/arrival-latency.json", `${JSON.stringify(report, null, 2)}\n`);
+    console.log(`ARRIVAL_LATENCY ${JSON.stringify(report)}`);
+
+    expect(report.coldUrlToPlayableBoardMs.n).toBe(SAMPLES);
+    expect(report.warmCatalogueToPlayableBoardMs.n).toBe(SAMPLES);
+    for (const value of [...coldValues, ...warmValues]) {
+      expect(Number.isFinite(value)).toBe(true);
+      expect(value).toBeGreaterThanOrEqual(0);
+    }
+  });
 });

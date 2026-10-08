@@ -34,15 +34,30 @@ const UNNAMED_MEMBER_KEY = "1nbqkb1r/1ppp1ppp/4pn2/1P6/8/8/1BPPPPPP/rN1QKBNR w K
 
 let sources: TheoryLibrarySources;
 let library: TheoryLibrary;
+let setupStage = "not started";
+const setupTimings: { stage: string; ms: number }[] = [];
+
+async function setupStep<T>(stage: string, load: () => Promise<T>): Promise<T> {
+  setupStage = stage;
+  const started = performance.now();
+  const value = await load();
+  setupTimings.push({ stage, ms: Math.round(performance.now() - started) });
+  return value;
+}
 
 beforeAll(async () => {
-  const shapes = await ShapeRegistry.loadDefault();
-  const principles = await PrincipleRegistry.loadDefault();
-  const packs = await PackRegistry.loadDefault({ shapes, principles });
-  const openingCatalogue = await loadOpeningCatalogue(join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json"));
+  const shapes = await setupStep("shapes", () => ShapeRegistry.loadDefault());
+  const principles = await setupStep("principles", () => PrincipleRegistry.loadDefault());
+  const packs = await setupStep("packs", () => PackRegistry.loadDefault({ shapes, principles }));
+  const openingCatalogue = await setupStep("opening catalogue", () => loadOpeningCatalogue(join(process.cwd(), "apps", "server", "artifacts", "runtime-opening-catalogue.json")));
   sources = { packs, shapes, principles, openingCatalogue };
   library = new TheoryLibrary(sources);
+  setupStage = "ready";
 });
+
+// Keep the actual corpus and hook deadline. A failed hook must identify which awaited
+// loader was still active; a green replay alone cannot locate the original timeout.
+afterAll(() => console.info("THEORY_LIBRARY_SETUP", JSON.stringify({ stage: setupStage, completed: setupTimings })));
 
 function packTargets(result: ReturnType<typeof shapeApplicability>): readonly string[] {
   return result.targets.flatMap((target) => target.kind === "pack" ? [target.packId] : []);

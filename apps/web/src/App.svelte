@@ -1153,11 +1153,16 @@
   }
 
   async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
+    // Initial loading resolves a cited move's exact branch. A poll must not default to the
+    // active branch (or reuse an earlier visit's branch) and supersede that route load.
+    if (routeLoading || routeError !== undefined || route.name !== "story" || route.runId !== runId || story?.runId !== runId) return;
     const generation=loadGeneration;
     const refresh=++storyRefreshGeneration;
     try{
-      const nextStory=await fetchStory(runId,allowReveal,story?.runId === runId ? story.branchId : undefined);
+      const nextStory=await fetchStory(runId,allowReveal,story.branchId);
       if(generation!==loadGeneration||refresh!==storyRefreshGeneration||route.name!=="story"||route.runId!==runId)return;
+      const citedNodeId = route.nodeId;
+      if (citedNodeId !== undefined && !nextStory.rows.some(row => row.nodeId === citedNodeId)) return;
       story=nextStory;
       if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
     }catch{

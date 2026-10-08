@@ -3548,6 +3548,18 @@ bot-rematch-check:
 bot-rematch-browser-check:
 	./node_modules/.bin/playwright test --grep "completed bot game rematches"
 
+.PHONY: review-route-check
+review-route-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts
+
+.PHONY: review-arrival-browser-check
+review-arrival-browser-check:
+	./node_modules/.bin/playwright test --grep "arrival readiness measurements|Guided Nudge branches|cited profile move|completed bot game rematches"
+
+.PHONY: pack-loading-check
+pack-loading-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/pack-registry-validation.test.ts apps/server/src/pack-studio.test.ts
+
 .PHONY: pinned-pack-check pinned-pack-regression-check pinned-pack-browser-check
 pinned-pack-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/run-pack-application.test.ts apps/server/src/pack-studio.test.ts apps/server/src/capability-operations.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts

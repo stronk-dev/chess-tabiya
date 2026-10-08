@@ -29397,18 +29397,27 @@
     },
     {
       "id": "D3556",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:746bc932e7a2e5825e7d499f4488c623a8163e38f9b1c54164b39c37cc1a1980",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cda7fa54575752dfab5fc1caf39360758bf69b8fe948b3c7f62947cbdd326dc0",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-10-08"
+      "evidence": "apps/server/src/pack-registry-validation.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3557",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:45bf1b92e042c81b459f68f863353f74b426fce72cb1783f22c48e974d5f1625",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3558",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3279ec746a206fd1d1e5fc9e4299a6a7195f4e8e1a7a6a980e79d2e3fb29cfb7",
+      "sourceDigest": "sha256:964b017c7a5fd9dcb796094fe431ea51a5b022abd17175cd406940f85dbf4df7",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-08"

@@ -12,7 +12,7 @@ import { describe, expect, it } from "vitest";
 
 import { objectiveRules } from "./pack-orchestrator.js";
 import { PackRegistry } from "./pack-registry.js";
-import { validatePackDocument } from "./pack-validation.js";
+import { objectiveIssues, validatePackDocument } from "./pack-validation.js";
 
 const example = JSON.parse(
   readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"),
@@ -154,9 +154,17 @@ describe("validator integrity", () => {
   });
 
   it("keeps objectiveIssues rebased on its argument rather than pack.objective", () => {
-    const source = readFileSync(new URL("./pack-validation.ts", import.meta.url), "utf8");
-    const body = source.slice(source.indexOf("export function objectiveIssues"), source.indexOf("function runtimeIssues"));
-    expect(body).not.toContain("pack.objective");
+    const supplied = structuredClone(objectiveDocument("win").objective) as any;
+    delete supplied.grading;
+    const checkpoints = new Set(example.checkpoints.map(checkpoint => checkpoint.id));
+    const validateLeg = (rootType: ObjectiveType) => objectiveIssues(
+      objectiveDocument(rootType), supplied, "/legs/0/objective", checkpoints,
+      (_pack, objective) => { expect(objective).toBe(supplied); return []; },
+      undefined, "leg",
+    );
+    const issues = validateLeg("hold");
+    expect(issues).toContainEqual(expect.objectContaining({ code: "OBJECTIVE_GRADING_REQUIRED", path: "/legs/0/objective/grading", message: "win objectives require grading" }));
+    expect(validateLeg("follow_theory")).toEqual(issues);
   });
 
   it("admits only terminal root grounding for trajectories and checks the effective final leg", () => {

@@ -13,6 +13,7 @@ import { BOT_PROFILE_CATALOG } from "../../packages/runtime/src/bot-profile-cata
 import { hintDecisionStamp } from "../../packages/runtime/src/hint-exchange.js";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import type { HumanSplitPage } from "../../apps/web/src/lib/api.js";
+import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
 
@@ -521,7 +522,7 @@ test(`Guided Nudge branches into another move and Compare reopens the preserved 
   await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
   const alternate = await graph();
   expect(alternate.branches).toHaveLength(2);
-  expect(alternate.nodes.slice(0, original.nodes.length)).toEqual(original.nodes);
+  assertRecordedNodesPreserved(original.nodes, alternate.nodes.slice(0, original.nodes.length));
   expect(alternate.activeCursor.branchId).not.toBe(originalBranch);
   await showSupport(page);
   await page.getByRole("button", { name: "Attempt comparison", exact: true }).click();
@@ -534,14 +535,14 @@ test(`Guided Nudge branches into another move and Compare reopens the preserved 
   await expect.poll(async () => (await graph()).activeCursor).toEqual({ nodeId: e4.parentId, branchId: originalBranch });
   await expect(page.locator("[data-board-input-grid]")).toBeFocused();
   const reopened = await graph();
-  expect(reopened.nodes).toEqual(alternate.nodes);
+  assertRecordedNodesPreserved(alternate.nodes, reopened.nodes);
   expect(reopened.branches).toEqual(alternate.branches);
   await assertRunViewport(page, page.viewportSize()!);
   // The learner can play on immediately; merely entering Compare added no move or branch.
   await move(page, "g1", "f3");
   await expect.poll(async () => (await graph()).branches.length).toBe(3);
   const continued = await graph();
-  expect(continued.nodes.slice(0, reopened.nodes.length)).toEqual(reopened.nodes);
+  assertRecordedNodesPreserved(reopened.nodes, continued.nodes.slice(0, reopened.nodes.length));
   expect(continued.nodes.some(node => node.moveUci === "g1f3")).toBe(true);
   await assertRunViewport(page, page.viewportSize()!);
 });
@@ -659,8 +660,8 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await panel.getByRole("button", { name: "Inspect trigger and sources" }).click();
   await expect(page.getByRole("region", { name: "Named structure evidence" })).toContainText("CC-BY-SA-4.0");
   await page.getByRole("button", { name: "Return to play" }).click();
-  const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
-  expect(after.events).toEqual(before.events);
+  const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] };
+  assertOnlyEvidenceAppended(before.events as DrillRun["events"], after.events);
   expect(inspectionMoveWrites).toBe(0);
   await expect(page.getByText("Commentary opens at a checkpoint", { exact: true })).toHaveCount(0);
 });
@@ -1174,7 +1175,7 @@ test("previewed position keeps its own attached evidence", async ({ page }) => {
   expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBefore);
   const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
   expect(after.activeCursor).toEqual(before.activeCursor);
-  expect(after.nodes).toEqual(before.nodes);
+  assertRecordedNodesPreserved(before.nodes, after.nodes);
 });
 
 test("endgame evidence is inspectable without a pivotal marker", async ({ page }) => {
@@ -1267,7 +1268,7 @@ test("corpus ancestry follows historical opponent and learner previews without r
   expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBefore);
   const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
   expect(after.activeCursor).toEqual(graph.activeCursor);
-  expect(after.nodes).toEqual(graph.nodes);
+  assertRecordedNodesPreserved(graph.nodes, after.nodes);
 });
 
 test("corpus preview discards a real delayed response after leave-and-return to the same predecessor", async ({ page }) => {
@@ -2982,14 +2983,14 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       await expect(cue.locator("[data-presented]")).toHaveText(sentence);
       expect(writes).toBe(0);
       expect((await graph()).activeCursor).toEqual(before.activeCursor);
-      expect((await graph()).nodes).toEqual(before.nodes);
+      assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
       await assertRunViewport(page, viewport);
       await testInfo.attach("concrete-queen-warning", { body: await page.screenshot(), contentType: "image/png" });
       await cue.getByRole("button", { name: "Revise", exact: true }).click();
       await expect(cue).toHaveCount(0);
       expect(writes).toBe(0);
-      expect((await graph()).nodes).toEqual(before.nodes);
+      assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
       if (viewport.width < 720) await page.getByRole("button", { name: "Collapse companion", exact: true }).click();
       const again = stagedResponse();
       await move(page, fixture.from, fixture.to, fixture.side);
@@ -4125,7 +4126,8 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: 
       await expect(result).not.toContainText("private provider failure");
       await expect(page).toHaveURL(new RegExp(`/play/run/${id}$`));
       await expect(again).toBeEnabled();
-      expect(await (await page.request.get(`/runs/${id}/events`)).json()).toEqual(originalEvents);
+      const afterFailure = await (await page.request.get(`/runs/${id}/events`)).json() as { events: DrillRun["events"] };
+      assertOnlyEvidenceAppended(originalEvents.events, afterFailure.events);
       await again.click();
       await expect(result.getByRole("button", { name: "Opening new game…" })).toBeDisabled();
       await expect(result.getByRole("button", { name: "Play it again from here" })).toBeDisabled();
@@ -4141,7 +4143,7 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: 
       await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1000");
       const boardAfter = (await (await page.request.get(`/runs/${id}/graph`)).json()) as { graph: RunGraph };
       expect(boardAfter.graph.activeCursor).toEqual(boardBefore.graph.activeCursor);
-      expect(boardAfter.graph.nodes).toEqual(boardBefore.graph.nodes);
+      assertRecordedNodesPreserved(boardBefore.graph.nodes, boardAfter.graph.nodes);
       expect(boardAfter.graph.branches).toEqual(boardBefore.graph.branches);
       await page.reload();
       await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1000");

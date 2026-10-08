@@ -837,6 +837,31 @@ function absorbingAuthoredContinuationIssues(
   return Object.freeze(issues);
 }
 
+/** Cross-document checks run after all siblings have passed full document validation. */
+export function packVariantIssues(pack: DrillPackDefinition, packs?: PackSiblingLookup): readonly PackValidationIssue[] {
+  if (pack.variantOf === undefined) return [];
+  const path = "/variantOf";
+  if (pack.variantOf.packId === pack.id) return [runtimeIssue("VARIANT_SELF_REFERENCE", `${path}/packId`, "a pack cannot be a variant of itself")];
+  if (packs === undefined) return [];
+  const sibling = packs.get(pack.variantOf.packId);
+  if (sibling === undefined) return [runtimeIssue("VARIANT_PACK_UNKNOWN", `${path}/packId`, `unknown sibling pack ${pack.variantOf.packId}`)];
+  const relation = pack.variantOf.relation;
+  let proven = false;
+  if (relation.kind === "root_after_move") {
+    const position = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
+    const move = parseUci(relation.moveUci);
+    if (move !== undefined && position.isLegal(move)) {
+      position.play(move);
+      proven = transposeKey(makeFen(position.toSetup())) === transposeKey(pack.start.fen);
+    }
+  } else if (relation.kind === "same_root_other_side") {
+    proven = transposeKey(sibling.start.fen) === transposeKey(pack.start.fen) && sibling.start.side !== pack.start.side;
+  } else {
+    proven = transposeKey(sibling.start.fen) === transposeKey(pack.start.fen) && sibling.start.side === pack.start.side && sibling.objective.type !== pack.objective.type;
+  }
+  return proven ? [] : [runtimeIssue("VARIANT_RELATION_UNPROVEN", `${path}/relation`, `relation ${relation.kind} is not proven by the two pack roots`)];
+}
+
 function runtimeIssues(
   pack: DrillPackDefinition,
   shapes?: PackShapeLookup,
@@ -1010,33 +1035,7 @@ function runtimeIssues(
       issues.push(runtimeIssue("TIMING_WINDOW_UNKNOWN", path, `unknown timing window ${deviation.timingWindowId}`));
     }
   }
-  if (pack.variantOf !== undefined) {
-    const path = "/variantOf";
-    if (pack.variantOf.packId === pack.id) {
-      issues.push(runtimeIssue("VARIANT_SELF_REFERENCE", `${path}/packId`, "a pack cannot be a variant of itself"));
-    } else if (packs !== undefined) {
-      const sibling = packs.get(pack.variantOf.packId);
-      if (sibling === undefined) {
-        issues.push(runtimeIssue("VARIANT_PACK_UNKNOWN", `${path}/packId`, `unknown sibling pack ${pack.variantOf.packId}`));
-      } else {
-        const relation = pack.variantOf.relation;
-        let proven = false;
-        if (relation.kind === "root_after_move") {
-          const position = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
-          const move = parseUci(relation.moveUci);
-          if (move !== undefined && position.isLegal(move)) {
-            position.play(move);
-            proven = transposeKey(makeFen(position.toSetup())) === transposeKey(pack.start.fen);
-          }
-        } else if (relation.kind === "same_root_other_side") {
-          proven = transposeKey(sibling.start.fen) === transposeKey(pack.start.fen) && sibling.start.side !== pack.start.side;
-        } else {
-          proven = transposeKey(sibling.start.fen) === transposeKey(pack.start.fen) && sibling.start.side === pack.start.side && sibling.objective.type !== pack.objective.type;
-        }
-        if (!proven) issues.push(runtimeIssue("VARIANT_RELATION_UNPROVEN", `${path}/relation`, `relation ${relation.kind} is not proven by the two pack roots`));
-      }
-    }
-  }
+  issues.push(...packVariantIssues(pack, packs));
   const claimIds = new Set((pack.feedbackClaims ?? []).map((claim) => claim.id));
   if (claimIds.size !== (pack.feedbackClaims ?? []).length) {
     const seen = new Set<string>();
