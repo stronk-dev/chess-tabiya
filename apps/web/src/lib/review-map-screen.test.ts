@@ -61,6 +61,20 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it("offers an exact campaign-map return only for a retained campaign origin", async () => {
+    const review = { ...payload(), campaignOrigin: { campaignRunId: "campaign/run one", nodeId: "node-one", campaignDocumentDigest: `sha256:${"a".repeat(64)}` } };
+    const component = render(review);
+    expect(document.querySelector<HTMLAnchorElement>('a[href="/campaign/campaign%2Frun%20one"]')?.textContent).toBe("Return to campaign map");
+    await unmount(component);
+    const ordinary = render(payload());
+    expect(document.querySelector('a[href^="/campaign/"]')).toBeNull();
+    await unmount(ordinary);
+  });
+
+  it.each([{}, { campaignRunId: "other" }, { campaignRunId: "id", nodeId: "node", campaignDocumentDigest: "not-a-digest" }])("rejects malformed campaign origins before rendering %j", origin => {
+    expect(() => assertReviewMapResponse({ ...payload(), campaignOrigin: origin }, { runId: "web-review" })).toThrow(/campaign origin/u);
+  });
+
   it("moves keyboard focus with the selected move, supports first/last, and does not retry while browsing", async () => {
     const review = payload({ plies: 20 });
     const onRetry = vi.fn(async () => {});

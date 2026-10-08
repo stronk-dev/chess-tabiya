@@ -12,7 +12,8 @@
   }
   let { campaigns, campaignRunId, nodeId, runId, campaignDocumentDigest, abandoned = false, onNavigate }: Props = $props();
   type Subject = { campaignRunId: string; nodeId: string; runId: string; campaignDocumentDigest: string; abandoned: boolean };
-  let state = $state<{ kind: "loading"; opening: boolean } | { kind: "ready"; review: CampaignEncounterReview } | { kind: "failed" }>({ kind: "loading", opening: false });
+  type Destination = "play" | "review" | false;
+  let state = $state<{ kind: "loading"; opening: Destination } | { kind: "ready"; review: CampaignEncounterReview } | { kind: "failed" }>({ kind: "loading", opening: false });
   let generation = 0;
 
   $effect(() => {
@@ -23,18 +24,21 @@
     return () => { generation += 1; };
   });
 
-  async function read(subject: Subject, current: number, opening: boolean): Promise<void> {
+  async function read(subject: Subject, current: number, opening: Destination): Promise<void> {
     try {
       const resolved = parseCampaignEncounterReview(await campaigns.review(subject.campaignRunId, subject.nodeId), subject);
       if (current !== generation) return;
       state = { kind: "ready", review: resolved };
-      if (opening && resolved.kind !== "unavailable") onNavigate(resolved.route);
+      if (opening && resolved.kind !== "unavailable") {
+        const route = opening === "review" ? resolved.reviewRoute : resolved.route;
+        if (route !== null) onNavigate(route);
+      }
     } catch {
       if (current === generation) state = { kind: "failed" };
     }
   }
 
-  function check(opening: boolean): void {
+  function check(opening: Destination): void {
     if (state.kind === "loading") return;
     const current = ++generation;
     state = { kind: "loading", opening };
@@ -45,7 +49,7 @@
 
 <div class="encounter-history" data-history-node={nodeId}>
   {#if state.kind === "loading"}
-    <p class="honest" role="status">{state.opening ? "Opening the recorded encounter…" : "Checking recorded encounter…"}</p>
+    <p class="honest" role="status">{state.opening === "review" ? "Opening Game Review…" : state.opening ? "Opening the recorded encounter…" : "Checking recorded encounter…"}</p>
   {:else if state.kind === "failed"}
     <p role="alert">The recorded encounter could not be checked. Your campaign history is unchanged.</p>
     <button type="button" onclick={() => check(false)}>Try again</button>
@@ -55,7 +59,12 @@
       : "This abandoned attempt's recorded game was deleted. Its abandonment remains in campaign history."}</p>
     <button type="button" onclick={() => check(false)}>Check again</button>
   {:else}
-    <button type="button" onclick={() => check(true)}>Open recorded encounter</button>
+    {#if state.review.reviewRoute === null}
+      <p class="honest" role="note">Game Review is withheld until this rehearsal opens feedback. You can still open the recorded encounter.</p>
+    {:else}
+      <button type="button" onclick={() => check("review")}>Review encounter</button>
+    {/if}
+    <button type="button" onclick={() => check("play")}>Open recorded encounter</button>
   {/if}
 </div>
 

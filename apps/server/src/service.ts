@@ -456,6 +456,8 @@ export interface CampaignChargeGate {
   assistanceReceipt(runId: string, learnerId: string): CampaignEncounterReceipt | undefined;
   /** The durable campaign origin join for a play run, if it was a campaign encounter. */
   origin(runId: string): { readonly campaignRunId: string; readonly nodeId: string; readonly campaignDocumentDigest: string } | undefined;
+  /** The declared-done consequence on this exact branch, not a live assistance grant. */
+  reviewBoundary(runId: string, learnerId: string, branchId: string): string | undefined;
 }
 
 export interface CreateRunRequest {
@@ -1149,6 +1151,8 @@ export class RunService {
       source: context.source,
       outcome: context.outcome,
       storyTitle: context.projection.title.text,
+      // The durable campaign join is navigation context, not a caller-supplied return URL.
+      campaignOrigin: this.#storage.ownerLearnerId?.(runId) === principal.learnerId ? this.#campaignGate?.origin(runId) ?? null : null,
       viewer: Object.freeze({ mayWrite: mayWrite(context.role) }),
       semanticPath: Object.freeze(semanticPath.kind === "available" ? { kind: "available" as const, events: semanticPath.events.length } : { kind: "refused" as const, reason: semanticPath.reason }),
       ...projection,
@@ -1190,7 +1194,9 @@ export class RunService {
     }
     // An unfinished line is still live: its explicit reveal closes on the next move.
     // Completed/imported review retains the existing recorded-result disclosure rule.
-    if (!(completedLine ? feedbackDisclosed(run) : feedbackDeliveryOpen(run))) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal this recorded line before opening its review");
+    const campaignBoundary = this.#campaignGate?.reviewBoundary(runId, principal.learnerId, branchId);
+    const declaredConsequence = campaignBoundary !== undefined && branchPath(run, branchId).at(-1)?.id === campaignBoundary;
+    if (!(completedLine ? feedbackDisclosed(run) : feedbackDeliveryOpen(run)) && !declaredConsequence) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal this recorded line before opening its review");
     const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
     // rfc/review-evidence-compiler.md §4: the subject is derived from parsed storage only.
     const authorize = createReviewPrefixAuthority({

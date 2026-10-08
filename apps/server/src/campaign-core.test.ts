@@ -74,6 +74,39 @@ async function sealPackNode(client: Client, campaignRunId: string, nodeId: strin
 }
 
 describe("campaign core through the application (rfc/campaign-core.md)", () => {
+  it("reviews the submitted branch when its consequence node belongs to an ancestor branch", async () => {
+    const { learner } = await boot();
+    const alice = await learner("campaign_review_branch");
+    const created = await alice.call("POST", "/campaigns/browser-fixture-campaign/runs", { campaignVersion: 1, commandId: commandId() });
+    const campaignRunId = created.body.result.campaignRunId as string;
+    const started = await startNode(alice, campaignRunId, "f1-a", 1);
+    const playRunId = started.result.response.playRunId as string;
+    await playToBoundary(alice, playRunId);
+    const before = await run(alice, playRunId);
+    const tip = before.nodes.find(node => node.id === before.activeCursor.nodeId)!;
+    const forked = await alice.call("POST", `/runs/${playRunId}/fork`, { nodeId: tip.id, campaignCommand: { commandId: commandId(), expectedCampaignRevision: 2, expectedPlayRevision: before.events.at(-1)!.seq } });
+    expect(forked.status, JSON.stringify(forked.body)).toBe(200);
+    const submitted = await run(alice, playRunId);
+    expect(submitted.activeCursor.branchId).not.toBe(tip.branchId);
+    const sealed = await alice.call("POST", `/campaign-runs/${campaignRunId}/nodes/f1-a/submit`, { runId: playRunId, branchId: submitted.activeCursor.branchId, expectedRevision: 3, commandId: commandId() });
+    expect(sealed.status, JSON.stringify(sealed.body)).toBe(200);
+    const history = await alice.call("GET", `/campaign-runs/${campaignRunId}/nodes/f1-a/review`);
+    expect(history.body).toMatchObject({ reviewNodeId: tip.id, reviewBranchId: submitted.activeCursor.branchId });
+    const review = await alice.call("GET", `/runs/${playRunId}/review?branch=${encodeURIComponent(submitted.activeCursor.branchId)}`);
+    expect(review.status, JSON.stringify(review.body)).toBe(200);
+    expect(review.body.branchId).toBe(submitted.activeCursor.branchId);
+    expect(review.body.rows.at(-1).nodeId).toBe(tip.id);
+    expect((await run(alice, playRunId)).events).toEqual(submitted.events);
+    // The next authored move crosses this pack's feedback checkpoint. Ordinary disclosure
+    // still works, but campaign history must never move its retained target to the new tip.
+    const extended = await alice.call("POST", `/runs/${playRunId}/moves`, { uci: "f2f3" });
+    expect(extended.status, JSON.stringify(extended.body)).toBe(200);
+    const extendedReview = await alice.call("GET", `/runs/${playRunId}/review?branch=${encodeURIComponent(submitted.activeCursor.branchId)}`);
+    expect(extendedReview.status, JSON.stringify(extendedReview.body)).toBe(200);
+    expect((await run(alice, playRunId)).events.some(event => event.type === "checkpoint.reached")).toBe(true);
+    expect((await alice.call("GET", `/campaign-runs/${campaignRunId}/nodes/f1-a/review`)).body).toMatchObject({ reviewNodeId: tip.id, reviewBranchId: submitted.activeCursor.branchId, reviewRoute: history.body.reviewRoute });
+  }, 60_000);
+
   it("lists the installed campaigns, including the draft pilot, without locking the library", async () => {
     const { learner } = await boot();
     const alice = await learner("campaign_alice");
@@ -186,6 +219,22 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     const unequipped = await alice.call("PUT", `/campaign-runs/${campaignRunId}/loadout`, { equippedModuleIds: [], expectedRevision: 4, commandId: commandId() });
     expect(unequipped.body.campaign.kit).toMatchObject({ owned: ["postcommit_nudge"], equipped: [] });
 
+    // Review stays on the submitted consequence even after the saved play cursor enters a new fork.
+    const sealedRun = await run(alice, playRunId);
+    const sealedTip = sealedRun.activeCursor.nodeId;
+    const newLine = await alice.call("POST", `/runs/${playRunId}/fork`, { nodeId: sealedRun.nodes[0]!.id });
+    expect(newLine.status, JSON.stringify(newLine.body)).toBe(200);
+    expect((await run(alice, playRunId)).activeCursor.branchId).not.toBe(sealedRun.activeCursor.branchId);
+    const history = await alice.call("GET", `/campaign-runs/${campaignRunId}/nodes/f1-a/review`);
+    expect(history.body).toMatchObject({ reviewNodeId: sealedTip, reviewBranchId: sealedRun.activeCursor.branchId, reviewRoute: `/review/game/${encodeURIComponent(playRunId)}?branch=${encodeURIComponent(sealedRun.activeCursor.branchId)}&node=${encodeURIComponent(sealedTip)}` });
+    const reviewPath = `/runs/${playRunId}/review?branch=${encodeURIComponent(sealedRun.activeCursor.branchId)}`;
+    // Declaring done revealed this exact consequence, never the new live fork.
+    expect((await alice.call("GET", `/runs/${playRunId}/review`)).body.error.code).toBe("ASSISTANCE_WITHHELD");
+    const gameReview = await alice.call("GET", reviewPath);
+    expect(gameReview.status, JSON.stringify(gameReview.body)).toBe(200);
+    expect(gameReview.body.campaignOrigin).toEqual({ campaignRunId, nodeId: "f1-a", campaignDocumentDigest: campaign.campaignRun.documentDigest });
+    expect(gameReview.body.rows.some((row: { nodeId: string }) => row.nodeId === sealedTip)).toBe(true);
+
     // Sealed-run deletion keeps progression and projects the explicit unavailable Review.
     const sealedPreview = await alice.call("POST", `/runs/${playRunId}/deletion-preview`, {});
     expect((await alice.call("POST", `/runs/${playRunId}/delete`, { previewDigest: sealedPreview.body.digest })).status).toBe(200);
@@ -221,6 +270,10 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     const bossSealed = await alice.call("POST", `/campaign-runs/${campaignRunId}/nodes/f6-boss/submit`, { runId: bossRunId, expectedRevision: boss!.campaign.campaignRun.revision, commandId: commandId() });
     expect(bossSealed.status, JSON.stringify(bossSealed.body)).toBe(200);
     expect(bossSealed.body.result.response).toMatchObject({ kind: "boss_game", outcome: "win", reason: "checkmate" });
+    const bossTip = (await run(alice, bossRunId)).activeCursor.nodeId;
+    const bossHistory = await alice.call("GET", `/campaign-runs/${campaignRunId}/nodes/f6-boss/review`);
+    const bossBranch = (await run(alice, bossRunId)).activeCursor.branchId;
+    expect(bossHistory.body).toMatchObject({ reviewNodeId: bossTip, reviewBranchId: bossBranch, reviewRoute: `/review/game/${encodeURIComponent(bossRunId)}?branch=${encodeURIComponent(bossBranch)}&node=${encodeURIComponent(bossTip)}` });
 
     for (const nodeId of ["f7-a", "f8-a"]) await sealPackNode(alice, campaignRunId, nodeId);
     const final = await sealPackNode(alice, campaignRunId, "f9-boss");
@@ -254,6 +307,7 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     expect((await alice.call("POST", `/campaign-runs/${campaignRunId}/abandon`, { expectedRevision: 2, commandId: abandonCommand })).body.replayed).toBe(true);
     const review = await alice.call("GET", `/campaign-runs/${campaignRunId}/nodes/f1-b/review`);
     expect(review.body).toMatchObject({ kind: "abandoned", reason: "campaign_encounter_abandoned" });
+    expect(review.body).toMatchObject({ reviewNodeId: null, reviewRoute: null });
     // The abandoned run is no longer charged: an ordinary rewind passes the guard.
     expect((await alice.call("POST", "/campaigns/browser-fixture-campaign/runs", { campaignVersion: 1, commandId: commandId() })).status).toBe(201);
     expect((await alice.call("GET", "/campaigns/active")).body.runs).toHaveLength(1);

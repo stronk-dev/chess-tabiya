@@ -427,7 +427,7 @@
         ],
         "experience": [
           "partial",
-          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recorded encounters to the node-history API, with deleted-game explanations and activation rechecks. Complete official progression, rewards and whole-game Review/boss/failure journeys remain."
+          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. Deleted or feedback-withheld recordings explain their unavailable actions. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
         ],
         "defaults": [
           "blocked",
@@ -439,7 +439,7 @@
         ],
         "verification": [
           "partial",
-          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575 adds fifteen mounted history/race/refusal controls, three actual campaign application contracts and native desktop/touchscreen-phone sealed/abandoned/deleted-recording journeys. Complete official-run, reward conservation, crash/upgrade, failure, accessibility and campaign-to-Review release journeys remain."
+          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575 preserves sealed/abandoned/deleted recordings; D3577 adds 55 focused client/router cases, four actual application cases and desktop/touch-phone exact Game Review, reload and map return. Full local gates pass. Complete official-run, reward conservation, crash/upgrade, failure, accessibility, missing Review sources and release-image journeys remain."
         ],
         "release": [
           "blocked",
@@ -688,7 +688,7 @@
         "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "Current full sequential normal local verification passes clean types, 3594 software, seven isolated unchanged-budget performance and 227 content cases plus downstream software/governance checks. Complete browser tiers pass 114 smoke, five real-content, 59 matrix and one packaged-default case (179 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3576's detached immutable opening source and predecessor-red mutation controls pass without supplying D3376's missing source authority. D3575's Campaign sealed/abandoned/deleted-recording journeys pass on desktop and actual-touch phone. Existing account portability, bot replay, Review navigation and warning-actor controls also pass in this run. The first governance refusal caught D3575's missing queue route; the corrected remaining sequence and final closeout governance pass on unchanged product/test code. Prior fixes and failures remain in the append-only log. D3558 and historical engine/application causes remain unlocated. All 1704 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
+          "summary": "Current full sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3609 software, seven isolated unchanged-budget performance and 228 content cases plus downstream software/governance checks. Complete browser tiers pass 114 smoke, five real-content, 59 matrix and one packaged-default case (179 total), one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3577's exact Campaign-to-Game-Review-to-map journey passes on desktop and actual-touch phone, including selected-node reload, retained moves and deleted/withheld-abandonment controls. D3576's immutable opening loader, account portability, bot replay, Review navigation and warning-actor controls also pass. No missing source, calibration or official content is inferred. Prior failures remain in the append-only log; D3558 and historical engine/application causes remain unlocated. All 1704 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -2362,10 +2362,10 @@
           "stable-board-and-presets",
           "production-api-closure"
         ],
-        "nextAction": "D3575's exact retained/deleted/abandoned Campaign-history handoff is closed; the preserved-play door is not the complete whole-game Review journey. D3567/D3568 account restore/retry, D3550 private-source admission, D3548 retained-pack attachment, D3546/D3547 completed-bot replay and D3541/D3542 Profile-to-Review entry stand. Continue module-critical source/operand validation, complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+        "nextAction": "D3577's exact Campaign-to-Game-Review-to-map handoff is closed locally; preserve D3575's retained/deleted/abandoned history, and do not equate this navigation with complete Review evidence. D3567/D3568 account restore/retry, D3550 private-source admission, D3548 retained-pack attachment, D3546/D3547 completed-bot replay and D3541/D3542 Profile-to-Review entry stand. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review/events; complete Campaign curriculum/theory/reward/catalogue, social/professional, guest/claim and broader account/operator journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3575 binds Campaign map, fresh-seal strip and result history to the existing node-review operation. Exact game/node/document checks, activation rechecks and late-response/route-replacement guards refuse crossed or deleted targets. Abandoned unfinished attempts remain separate from earned seals/rewards. Fifteen mounted controls, three actual campaign application cases and desktop/touchscreen-phone journeys preserve recorded moves and the complete campaign projection through deletion. Normal verification passes clean types, 3592 software and seven performance cases; after repairing the missing queue route, normal governance/content/browser exits zero with 227 content and 179 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. Existing account portability, source admission, bot replay and Profile-to-Review deliveries stand; their native cases also pass in this full browser run. Providers are the labelled development mocks, not live Maia/calibration or release-image proof. The preserved-play door does not complete whole-game Review, official curriculum, theory/reward/catalogue progression or wider learner/social/professional/operator journeys. No capability, milestone, pushed-revision CI or release completion.",
+          "summary": "D3577 connects Campaign history to Game Review at the exact submitted branch and consequence node, including inherited nodes, and provides the owner's durable map return. Declare done admits only the submitted consequence; other/extended lines follow ordinary feedback disclosure. Deleted destinations and closed-feedback abandonment stay explicit. Nine predecessor-red controls, 55 focused client/router cases and four actual application cases pass. Native desktop/touch-phone journeys select the exact move, retain it through reload and return to the map without changing recorded moves. Full sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3609 software, seven unchanged-budget performance, 228 content and 179 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. Existing account, bot replay, Profile-to-Review and retained/deleted/abandoned history journeys also pass. Providers are labelled development mocks, not live Maia/calibration or release-image proof. Missing Review sources, official curriculum, theory/reward/catalogue progression and wider learner/social/professional/operator journeys remain. No capability, milestone, pushed-revision CI or release completion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -2422,6 +2422,10 @@
             "apps/server/src/longitudinal-membership-cache.test.ts",
             "planning/longitudinal-store/prefix-reuse-software-2026-10-06.json",
             "apps/web/src/lib/CampaignEncounterHistory.svelte",
+            "apps/server/src/campaign-service.ts",
+            "apps/web/src/lib/ReviewMapScreen.svelte",
+            "apps/web/src/lib/review-map-screen.test.ts",
+            "apps/web/src/lib/review-response.ts",
             "apps/web/src/lib/CampaignScreen.svelte",
             "apps/web/src/lib/CampaignStrip.svelte",
             "apps/web/src/lib/campaign-api.ts",

@@ -12,6 +12,9 @@ const RUN = "campaign-history";
 const NODE = "node-one";
 const PLAY = "recorded game/one";
 const ROUTE = `/play/run/${encodeURIComponent(PLAY)}`;
+const REVIEW_NODE = "sealed consequence/one";
+const REVIEW_BRANCH = "sealed branch/one";
+const REVIEW_ROUTE = `/review/game/${encodeURIComponent(PLAY)}?branch=${encodeURIComponent(REVIEW_BRANCH)}&node=${encodeURIComponent(REVIEW_NODE)}`;
 
 afterEach(() => document.body.replaceChildren());
 
@@ -29,8 +32,8 @@ function fixture(abandoned = false): CampaignProjection {
 function review(kind: "available" | "abandoned" | "unavailable" = "available", abandoned = false) {
   const base = { runId: PLAY, nodeId: NODE, campaignDocumentDigest: DIGEST };
   return kind === "unavailable" ? { ...base, kind, reason: abandoned ? "campaign_abandoned_run_deleted" : "campaign_encounter_run_deleted" }
-    : kind === "abandoned" ? { ...base, kind, reason: "campaign_encounter_abandoned", route: ROUTE }
-      : { ...base, kind, route: ROUTE };
+    : kind === "abandoned" ? { ...base, kind, reason: "campaign_encounter_abandoned", route: ROUTE, reviewNodeId: REVIEW_NODE, reviewBranchId: REVIEW_BRANCH, reviewRoute: REVIEW_ROUTE }
+      : { ...base, kind, route: ROUTE, reviewNodeId: REVIEW_NODE, reviewBranchId: REVIEW_BRANCH, reviewRoute: REVIEW_ROUTE };
 }
 
 const buttons = (label: string) => [...document.querySelectorAll<HTMLButtonElement>("button")].filter(button => button.textContent?.trim() === label);
@@ -56,6 +59,42 @@ async function render(resolveReview: () => Promise<Response>, abandoned = false)
 }
 
 describe("campaign recorded encounter handoff", () => {
+  it("opens the exact sealed Game Review through a fresh history read, not the saved Play route", async () => {
+    const { component, onNavigate, fetcher } = await render(async () => Response.json({ ...review(), reviewNodeId: REVIEW_NODE, reviewRoute: REVIEW_ROUTE }));
+    await vi.waitFor(() => expect(buttons("Review encounter")).toHaveLength(2));
+    expect(buttons("Open recorded encounter")).toHaveLength(2);
+    buttons("Review encounter")[0]!.click();
+    await vi.waitFor(() => expect(onNavigate).toHaveBeenCalledWith(REVIEW_ROUTE));
+    expect(fetcher.mock.calls.filter(([path]) => path.endsWith("/review"))).toHaveLength(3);
+    await unmount(component);
+  });
+
+  it.each([
+    { reviewRoute: "https://example.com/" },
+    { reviewRoute: "/review/game/another-game?node=sealed" },
+    { reviewRoute: `/review/game/${encodeURIComponent(PLAY)}?node=another-node` },
+    { reviewNodeId: "" },
+    { reviewNodeId: undefined, reviewRoute: undefined },
+    { reviewBranchId: "another-branch" },
+    { reviewBranchId: "" },
+  ])("refuses a crossed or invalid Game Review target %j", async changed => {
+    const { component, onNavigate } = await render(async () => Response.json({ ...review(), reviewNodeId: REVIEW_NODE, reviewRoute: REVIEW_ROUTE, ...changed }));
+    await vi.waitFor(() => expect(document.querySelectorAll(".encounter-history [role=alert]")).toHaveLength(2));
+    expect(buttons("Review encounter")).toHaveLength(0);
+    expect(onNavigate).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("states withheld feedback without losing the saved encounter or inventing a Review URL", async () => {
+    const { component, onNavigate } = await render(async () => Response.json({ ...review("abandoned"), reviewNodeId: null, reviewRoute: null }), true);
+    await vi.waitFor(() => expect(buttons("Open recorded encounter")).toHaveLength(1));
+    expect(buttons("Review encounter")).toHaveLength(0);
+    expect(document.querySelector(".encounter-history [role=note]")?.textContent).toContain("Game Review is withheld until this rehearsal opens feedback.");
+    buttons("Open recorded encounter")[0]!.click();
+    await vi.waitFor(() => expect(onNavigate).toHaveBeenCalledWith(ROUTE));
+    await unmount(component);
+  });
+
   it("gives both the sealed map and result a source-resolved action, without any write", async () => {
     const { component, onNavigate, fetcher, campaign } = await render(async () => Response.json(review()));
     const original = JSON.stringify(campaign);
@@ -102,12 +141,12 @@ describe("campaign recorded encounter handoff", () => {
     await unmount(component);
   });
 
-  it("rechecks at activation so deletion after map loading cannot navigate to the old game", async () => {
+  it.each(["Open recorded encounter", "Review encounter"])("rechecks %s so deletion after map loading cannot navigate to the old game", async label => {
     let deleted = false;
     const { component, onNavigate } = await render(async () => Response.json(review(deleted ? "unavailable" : "available")));
     await vi.waitFor(() => expect(buttons("Open recorded encounter")).toHaveLength(2));
     deleted = true;
-    buttons("Open recorded encounter")[0]!.click();
+    buttons(label)[0]!.click();
     await vi.waitFor(() => expect(document.querySelector('[data-history-reason="campaign_encounter_run_deleted"]')).not.toBeNull());
     expect(onNavigate).not.toHaveBeenCalled();
     await unmount(component);

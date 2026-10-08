@@ -29584,6 +29584,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/opening-catalogue.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3577",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9eb5f323e05ddd9b845013304273b87bf0f795da550da81e63c22ea9df12d48e",
+      "uxItems": [],
+      "evidence": "apps/server/src/campaign-core.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

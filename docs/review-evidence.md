@@ -4,6 +4,13 @@
 post-game packet. Runtime: `packages/runtime/src/review-points.ts`, `review-evidence.ts` and
 `story.ts`; server: `apps/server/src/review-evidence.ts`.
 
+Campaign history opens Review at the recorded submitted consequence or boss terminal node and
+branch, rather than the mutable Play cursor. Declaring done admits only that exact submitted
+consequence: a different live branch or an extended line still requires ordinary feedback
+disclosure. The owner's Review carries its durable campaign origin for returning to the map;
+request parameters cannot supply a return URL. See `docs/campaign.md` for retained, abandoned
+and deleted-recording behavior. This navigation does not supply missing evidence sources.
+
 ## One engine source, five Review projections
 
 The only engine source is the shared node-free `live.stockfish.position_eval@1` delivery from the

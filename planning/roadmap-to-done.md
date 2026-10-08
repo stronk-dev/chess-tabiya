@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3576]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3577]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -65,6 +65,18 @@ zero retries, all 150 input and 112 composition cells. [[D3376]]'s missing cross
 authority and runtime/Review bindings remain open, now explicitly in the existing author queue.
 No new collector, semantic-validation verdict, official pack or release milestone is claimed.
 
+[[D3577]] now connects Campaign history to Game Review at the submitted branch/consequence
+or boss terminal node, with a durable owner map return and exact selection after reload.
+Declaring done reveals the submitted consequence only; other/extended lines follow ordinary
+feedback rules. Saved Play remains separate, with explicit deleted and withheld-abandonment
+states. Nine predecessor-red controls, 55 focused client/router cases, four actual application
+cases and native desktop/touch-phone journeys pass. Full sequential normal
+`make roadmap-receipt verify-awake test-browser-ci-awake` exits zero: clean types/build,
+3,609 software, seven unchanged-budget performance, 228 content and 179 browser cases,
+one optional Maia skip, zero retries, all 150 exact-input and 112 composition cells.
+This closes the navigation/disclosure gap, not missing Review evidence, official curriculum,
+theory rewards, complete Campaign or release-image proof. No new GitHub result is claimed.
+
 Campaign history now uses the existing node-history API from sealed map cards, the fresh-seal
 strip and results ([[D3575]]), with a separate unfinished entry after abandonment. Activation
 rechecks and exact response identity prevent dead or crossed navigation; deleted recordings
@@ -73,8 +85,9 @@ campaign application cases and desktop/touchscreen-phone journeys pass. That Cam
 local verification passed clean types, 3,592 software, seven performance, 227 content and 179 browser
 cases, one optional Maia skip, zero retries, all 150 input cells and 112 composition cells.
 The first governance run correctly refused this item's missing queue route; the corrected
-governance/content/browser sequence exits zero on unchanged product code. This opens the
-existing recorded-play route, not a completed whole-game Review or official Campaign.
+governance/content/browser sequence exits zero on unchanged product code. That checkpoint opened
+only recorded Play; D3577 above adds the Game Review/map handoff without completing Review
+evidence or official Campaign.
 No new pushed-revision GitHub or release-image verdict follows.
 Review browsing now keeps the selected move and keyboard focus together ([[D3562]]), with
 first/last navigation and list-local visibility that does not move the page or take graph/control
@@ -192,7 +205,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,325 ledger rows** (1,460 done, 161 refused, 1,704 live,
+(271 completed, 24 retired, 274 live); **3,326 ledger rows** (1,461 done, 161 refused, 1,704 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,064 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

@@ -88,14 +88,23 @@ encounter-preparation panel, abandon with confirmation, and the run result. Insi
 run page shows the campaign strip (node, `⟲ N` before any spend, kit, **Declare done**); when the
 rules end a boss game, the terminal sheet carries “Declare done and return to the campaign map”.
 
-Sealed map cards, the fresh-seal strip and result entries offer **Open recorded encounter**.
+Sealed map cards, the fresh-seal strip and result entries offer **Review encounter** and
+**Open recorded encounter**.
 They use the node-history operation above, check its exact game/node/document identity and
 recheck on activation rather than guessing a saved-game URL. Deleted recordings explain that
 the seal and earned rewards remain. Abandoned results separately retain the unfinished attempt,
 without awarding a seal or reward; deletion of that recording does not erase its abandonment.
 Failed checks offer retry, and responses arriving after departure cannot navigate the learner.
-This opens the existing preserved-play route; it does not complete the separate whole-game
-Review journey or reconstruct moves from a campaign seal.
+Game Review selects the submitted consequence's recorded node and exact branch, not today's
+Play cursor. Boss history selects its recorded rules-terminal node. The Review URL retains both
+identities across reload; the owner's Review has a **Return to campaign map** link derived from
+the stored campaign join. It never reconstructs moves from a seal.
+
+**Declare done** opens Review for that submitted consequence only. A new live fork or later play
+appended to the same branch cannot inherit this disclosure; ordinary feedback rules still apply.
+An abandoned recording with closed feedback explains why Review is withheld while keeping its
+Play action. Deleted recordings expose neither destination. These paths do not establish an
+official curriculum, complete Review evidence coverage or the remaining Campaign release journeys.
 
 ## Not yet
 

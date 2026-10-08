@@ -25,6 +25,7 @@ export const REVIEW_MAP_TEMPLATES = Object.freeze({
   "header.pending": "Evaluation pending for {pending} positions. Grades and accuracy update when the recorded pass completes.",
   "header.story_title": "Story title: {title}",
   "action.back": "Back to review",
+  "action.campaign": "Return to campaign map",
   "action.export": "Export game + branches",
   "action.exporting": "Preparing export…",
   "action.exporting.status": "Preparing the recorded game and its branches.",

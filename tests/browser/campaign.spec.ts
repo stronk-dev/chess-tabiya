@@ -162,6 +162,16 @@ for (const mobile of [false, true]) {
     };
     const originalMoves = await recordedMoves(firstRun);
     const sealedCard = page.locator('[data-node="f1-a"]');
+    const history = await (await page.request.get(`/campaign-runs/${campaignId}/nodes/f1-a/review`)).json();
+    await sealedCard.getByRole("button", { name: "Review encounter", exact: true }).click();
+    await expect(page).toHaveURL(new URL(history.reviewRoute, mapUrl).href);
+    await expect(page.getByRole("heading", { name: "Review of this run", exact: true })).toBeVisible();
+    await expect(page.locator(".move-row.selected")).toHaveAttribute("data-node-id", history.reviewNodeId);
+    await page.reload();
+    await expect(page.locator(".move-row.selected")).toHaveAttribute("data-node-id", history.reviewNodeId);
+    await page.getByRole("link", { name: "Return to campaign map", exact: true }).click();
+    await expect(page).toHaveURL(mapUrl);
+    expect(await recordedMoves(firstRun)).toEqual(originalMoves);
     await sealedCard.getByRole("button", { name: "Open recorded encounter" }).click();
     await expect(page).toHaveURL(new RegExp(`/play/run/${firstRun}$`, "u"));
     await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -193,6 +203,8 @@ for (const mobile of [false, true]) {
     const result = page.getByRole("region", { name: "Campaign abandoned" });
     await expect(result).toContainText("No seal or encounter reward was earned for this attempt.");
     const unfinished = result.locator(".abandoned-encounter");
+    await expect(unfinished.getByRole("note")).toContainText("Game Review is withheld until this rehearsal opens feedback.");
+    await expect(unfinished.getByRole("button", { name: "Review encounter", exact: true })).toHaveCount(0);
     await unfinished.getByRole("button", { name: "Open recorded encounter" }).click();
     await expect(page).toHaveURL(new RegExp(`/play/run/${unfinishedRun}$`, "u"));
     await expect(page.getByLabel("Chessboard")).toBeVisible();

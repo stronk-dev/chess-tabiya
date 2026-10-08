@@ -104,20 +104,24 @@ interface CampaignEncounterIdentity {
 
 /** campaign-core §6.3: a retained game, an unsealed abandoned attempt, or a deleted game. */
 export type CampaignEncounterReview = CampaignEncounterIdentity & (
-  | { readonly kind: "available"; readonly route: string }
-  | { readonly kind: "abandoned"; readonly reason: "campaign_encounter_abandoned"; readonly route: string }
+  | { readonly kind: "available"; readonly route: string; readonly reviewNodeId: string | null; readonly reviewBranchId: string; readonly reviewRoute: string | null }
+  | { readonly kind: "abandoned"; readonly reason: "campaign_encounter_abandoned"; readonly route: string; readonly reviewNodeId: string | null; readonly reviewBranchId: string; readonly reviewRoute: string | null }
   | { readonly kind: "unavailable"; readonly reason: "campaign_encounter_run_deleted" | "campaign_abandoned_run_deleted" }
 );
 
-/** The route is the server's existing preserved-play door, not an invented Review Map or chess result. */
+/** Play and Game Review targets come from the server's recorded subject, never the current cursor. */
 export function parseCampaignEncounterReview(value: unknown, expected: CampaignEncounterIdentity & { readonly abandoned: boolean }): CampaignEncounterReview {
   if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error("Invalid campaign encounter history");
   const row = value as Record<string, unknown>;
   if (row.runId !== expected.runId || row.nodeId !== expected.nodeId || row.campaignDocumentDigest !== expected.campaignDocumentDigest) throw new Error("Crossed campaign encounter history");
   const kind = expected.abandoned ? "abandoned" : "available";
   const reason = expected.abandoned ? "campaign_abandoned_run_deleted" : "campaign_encounter_run_deleted";
-  const unavailable = row.kind === "unavailable" && row.reason === reason && row.route === undefined;
+  const unavailable = row.kind === "unavailable" && row.reason === reason && row.route === undefined && row.reviewRoute === undefined && row.reviewNodeId === undefined && row.reviewBranchId === undefined;
+  const reviewTarget = (row.reviewNodeId === null || (typeof row.reviewNodeId === "string" && row.reviewNodeId.trim() !== ""))
+    && typeof row.reviewBranchId === "string" && row.reviewBranchId.trim() !== ""
+    && (row.reviewRoute === null || row.reviewRoute === `/review/game/${encodeURIComponent(expected.runId)}?branch=${encodeURIComponent(row.reviewBranchId)}${row.reviewNodeId === null ? "" : `&node=${encodeURIComponent(row.reviewNodeId as string)}`}`);
   const retained = row.kind === kind && row.route === `/play/run/${encodeURIComponent(expected.runId)}`
+    && reviewTarget
     && (expected.abandoned ? row.reason === "campaign_encounter_abandoned" : row.reason === undefined);
   if (!unavailable && !retained) throw new Error("Invalid campaign encounter history state or route");
   return value as CampaignEncounterReview;

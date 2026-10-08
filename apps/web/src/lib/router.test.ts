@@ -88,6 +88,15 @@ describe("application router", () => {
     expect(JSON.stringify(branched.events)).toBe(before);
   });
 
+  it("preserves an explicit Review branch even when its cited node belongs to an ancestor branch", () => {
+    const target = { name: "story", runId: "campaign / game", branchId: "submitted / branch", nodeId: "ancestor / node" } as const;
+    const url = new URL(routePath(target), "https://tabiya.test");
+    expect(parseRoute(url)).toEqual(target);
+    for (const search of ["?branch=", "?branch=%20", "?branch=one&branch=two"]) {
+      expect(parseRoute({ pathname: "/review/game/a", search }).name).toBe("not-found");
+    }
+  });
+
   it("gives every route family a page title", () => {
     expect(routeTitle({ name: "home" })).toBe("Home · Tabiya");
     expect(routeTitle({ name: "run", runId: "one" })).toBe("Rehearsal · Tabiya");

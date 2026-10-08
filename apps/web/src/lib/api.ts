@@ -701,6 +701,7 @@ export type ReviewOutcomeSummary =
 export type GameStory = ReviewStoryReceipt;
 /** rfc/review-map.md: the whole-game Review Map payload from `GET /runs/:id/review`. */
 export type ReviewMap = ReviewMapProjection & {
+  readonly campaignOrigin?: { readonly campaignRunId: string; readonly nodeId: string; readonly campaignDocumentDigest: string } | null;
   readonly runId: string;
   readonly branchId: string;
   readonly side: "white" | "black";

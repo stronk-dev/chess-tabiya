@@ -14,7 +14,7 @@ export type StaticRouteName =
 export type AppRoute =
   | { readonly name: StaticRouteName }
   | { readonly name: "run"; readonly runId: string }
-  | { readonly name: "story"; readonly runId: string; readonly nodeId?: string }
+  | { readonly name: "story"; readonly runId: string; readonly nodeId?: string; readonly branchId?: string }
   | { readonly name: "live-session"; readonly sessionId: string }
   | { readonly name: "live-overlay"; readonly runId: string }
   /** rfc/theory-drill-current-joins.md §2.1: an exact pack target and the three theory entries. */
@@ -92,7 +92,8 @@ export function parseRoute(location: Pick<Location, "pathname"> & Partial<Pick<L
     try {
       const runId = decodeURIComponent(story[1]!);
       const nodes = new URLSearchParams(location.search ?? "").getAll("node");
-      if (runId.trim() !== "" && nodes.length <= 1 && (nodes[0] === undefined || nodes[0].trim() !== "")) return Object.freeze({ name: "story", runId, ...(nodes[0] === undefined ? {} : { nodeId: nodes[0] }) });
+      const branches = new URLSearchParams(location.search ?? "").getAll("branch");
+      if (runId.trim() !== "" && nodes.length <= 1 && (nodes[0] === undefined || nodes[0].trim() !== "") && branches.length <= 1 && (branches[0] === undefined || branches[0].trim() !== "")) return Object.freeze({ name: "story", runId, ...(nodes[0] === undefined ? {} : { nodeId: nodes[0] }), ...(branches[0] === undefined ? {} : { branchId: branches[0] }) });
     } catch { /* malformed story ids route to not-found */ }
   }
   const live = /^\/live\/(session|overlay)\/([^/]+)$/.exec(pathname);
@@ -128,7 +129,10 @@ export function parseRoute(location: Pick<Location, "pathname"> & Partial<Pick<L
 
 export function routePath(route: Exclude<AppRoute, { name: "not-found" }>): string {
   if(route.name==="run")return `/play/run/${encodeURIComponent(route.runId)}`;
-  if(route.name==="story")return `/review/game/${encodeURIComponent(route.runId)}${route.nodeId === undefined ? "" : `?node=${encodeURIComponent(route.nodeId)}`}`;
+  if(route.name==="story") {
+    const query = [route.branchId === undefined ? undefined : `branch=${encodeURIComponent(route.branchId)}`, route.nodeId === undefined ? undefined : `node=${encodeURIComponent(route.nodeId)}`].filter(value => value !== undefined).join("&");
+    return `/review/game/${encodeURIComponent(route.runId)}${query === "" ? "" : `?${query}`}`;
+  }
   if(route.name==="live-session")return `/live/session/${encodeURIComponent(route.sessionId)}`;
   if(route.name==="live-overlay")return `/live/overlay/${encodeURIComponent(route.runId)}`;
   if(route.name==="pack")return `/play/pack/${encodeURIComponent(route.packId)}`;

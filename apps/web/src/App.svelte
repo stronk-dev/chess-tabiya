@@ -879,8 +879,8 @@
       } else if (next.name === "story") {
         const refresh=++storyRefreshGeneration;
         const shareRefresh=++storyShareGeneration;
-        let targetBranch: string | undefined;
-        if (next.nodeId !== undefined) {
+        let targetBranch: string | undefined = next.branchId;
+        if (next.nodeId !== undefined && targetBranch === undefined) {
           try { targetBranch = await reviewTargetBranch(api, next.runId, next.nodeId); }
           catch { throw new LearnerRouteError("The cited move could not be opened. Check that this saved game is still available, then try again."); }
           if (generation !== loadGeneration) return;

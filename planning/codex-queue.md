@@ -160,6 +160,13 @@ not the separate complete whole-game Review journey or an official educational c
    browser tiers exit zero: 112 smoke / five content / 59 matrix / one packaged-default,
    one existing optional Maia skip, zero retries; all 150 input and 112 composition cells.
    This does not complete guest claim, all object/schema lifecycle or the account capability.
+   Independent [[D3577]] is **closed locally**: Campaign → Game Review → map retains the submitted
+   branch/consequence or boss-terminal node instead of the mutable Play cursor, including after
+   reload. Declare done reveals only its submitted consequence; normal feedback rules still apply
+   to other/extended lines. Saved Play and deletion/withheld-abandonment explanations remain.
+   All 55 focused client/router, four application and two native desktop/touch-phone cases pass;
+   full normal gates pass 3,609 software, seven performance, 228 content and 179 browser cases,
+   one optional Maia skip, zero retries. No missing Review source or official Campaign is completed.
 3. [[D3535]]: training-set execution-context author amendment, then the remaining
    [[D3318]] member progression/repeat/re-offer journey. The installed catalogue/API
    is delivered; durable cycle identity is not. Preserve the existing migration

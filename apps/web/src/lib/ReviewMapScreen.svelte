@@ -301,6 +301,7 @@
       <button type="button" disabled={exportBusy} onclick={() => void exportGame()}>{exportBusy ? reviewText("action.exporting") : reviewText("action.export")}</button>
       {#if onShare}<button type="button" disabled={shareBusy} aria-describedby="review-share-lifetime" onclick={() => void createShare()}>{reviewText("share.action")}</button>{/if}
       <a href="/review">{reviewText("action.back")}</a>
+      {#if review.campaignOrigin}<a href={`/campaign/${encodeURIComponent(review.campaignOrigin.campaignRunId)}`}>{reviewText("action.campaign")}</a>{/if}
     </div>
   </header>
   {#if exportBusy}<p role="status">{reviewText("action.exporting.status")}</p>{/if}

@@ -35,6 +35,10 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
   if (subject.branchId !== undefined && body.branchId !== subject.branchId) fail("branchId mismatch");
   if (!text(body.branchId) || !SIDES.has(body.side as string) || typeof body.ready !== "boolean" || !natural(body.pendingEvidence)) fail("header fields");
   if (!text(body.storyTitle)) fail("storyTitle");
+  if (body.campaignOrigin !== undefined && body.campaignOrigin !== null) {
+    const origin = record(body.campaignOrigin);
+    if (origin === undefined || !text(origin.campaignRunId) || !text(origin.nodeId) || typeof origin.campaignDocumentDigest !== "string" || !/^sha256:[a-f0-9]{64}$/u.test(origin.campaignDocumentDigest)) fail("campaign origin");
+  }
   const viewer = record(body.viewer);
   if (viewer === undefined || typeof viewer.mayWrite !== "boolean") fail("viewer");
   if (!Array.isArray(body.rows)) fail("rows");

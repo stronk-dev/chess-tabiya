@@ -2,11 +2,13 @@ import { randomUUID } from "node:crypto";
 
 import {
   MODULE_IDS,
+  branchPath,
   campaignModuleCeiling,
   campaignModuleShelf,
   campaignPrestigeEligible,
   campaignRunState,
   deriveCampaignParticipationWitness,
+  feedbackDeliveryOpen,
   issueCampaignEncounterReceipt,
   locateCampaignNodes,
   resolveBotProfileReference,
@@ -346,12 +348,51 @@ export class CampaignService implements CampaignChargeGate {
     const abandoned = loaded.state.abandonedEncounter?.nodeId === nodeId ? loaded.state.abandonedEncounter : null;
     const runId = seal?.playRunId ?? abandoned?.playRunId;
     if (runId === undefined) fail("CAMPAIGN_NODE_UNAVAILABLE", "This node has no sealed or abandoned encounter to review");
-    const exists = this.#storage.read(runId!) !== undefined && this.#storage.ownerLearnerId(runId!) === principal.learnerId;
+    const stored = this.#storage.ownerLearnerId(runId!) === principal.learnerId ? this.#storage.read(runId!) : undefined;
     const base = { runId: runId!, nodeId, campaignDocumentDigest: loaded.row.documentDigest };
-    if (seal !== undefined) {
-      return deepFreeze(exists ? { kind: "available" as const, ...base, route: `/play/run/${encodeURIComponent(runId!)}` } : { kind: "unavailable" as const, reason: "campaign_encounter_run_deleted" as const, ...base });
+    if (stored === undefined) {
+      return deepFreeze({ kind: "unavailable" as const, reason: seal === undefined ? "campaign_abandoned_run_deleted" as const : "campaign_encounter_run_deleted" as const, ...base });
     }
-    return deepFreeze(exists ? { kind: "abandoned" as const, reason: "campaign_encounter_abandoned" as const, ...base, route: `/play/run/${encodeURIComponent(runId!)}` } : { kind: "unavailable" as const, reason: "campaign_abandoned_run_deleted" as const, ...base });
+    const origin = this.origin(runId!);
+    if (origin?.campaignRunId !== campaignRunId || origin.nodeId !== nodeId || origin.campaignDocumentDigest !== loaded.row.documentDigest) {
+      fail("CAMPAIGN_SOURCE_UNAVAILABLE", "The recorded encounter's campaign origin does not match");
+    }
+    let targetNodeId = stored.run.activeCursor.nodeId;
+    let reviewBranchId = stored.run.activeCursor.branchId;
+    if (seal !== undefined) {
+      const event = loaded.events.find((item) => item.event.seq === seal.seq)?.event;
+      if (seal.kind === "pack" && event?.kind === "node_committed") {
+        targetNodeId = event.payload.participation.consequenceTipNodeId;
+        reviewBranchId = seal.branchId;
+        if (!branchPath(stored.run, seal.branchId).some((node) => node.id === targetNodeId)) {
+          fail("CAMPAIGN_SOURCE_UNAVAILABLE", "The submitted consequence is not on its recorded branch");
+        }
+      } else if (seal.kind === "boss_game" && event?.kind === "boss_game_committed") {
+        targetNodeId = event.payload.terminal.terminalNodeId;
+        const terminal = stored.run.events.find((candidate) => candidate.seq === event.payload.terminal.terminalEventSeq);
+        if (terminal?.type !== "outcome.reached" || terminal.data.nodeId !== targetNodeId || terminal.data.outcome !== seal.outcome) {
+          fail("CAMPAIGN_SOURCE_UNAVAILABLE", "The boss result does not match its recorded terminal event");
+        }
+      } else {
+        fail("CAMPAIGN_SOURCE_UNAVAILABLE", "The encounter seal has no matching recorded result");
+      }
+    }
+    const target = stored.run.nodes.find((node) => node.id === targetNodeId);
+    if (target === undefined) fail("CAMPAIGN_SOURCE_UNAVAILABLE", "The recorded encounter's review position is missing");
+    if (seal?.kind === "boss_game") reviewBranchId = target!.branchId;
+    // Root-only abandoned games have no move row; never manufacture a cited move.
+    const reviewNodeId = target!.parentId === null ? null : targetNodeId;
+    const declaredConsequence = seal?.kind === "pack" && branchPath(stored.run, reviewBranchId).at(-1)?.id === targetNodeId;
+    const reviewOpen = declaredConsequence || feedbackDeliveryOpen(stored.run) || stored.run.feedbackPolicy === "attempt_end";
+    const routes = {
+      route: `/play/run/${encodeURIComponent(runId!)}`,
+      reviewNodeId,
+      reviewBranchId,
+      reviewRoute: reviewOpen ? `/review/game/${encodeURIComponent(runId!)}?branch=${encodeURIComponent(reviewBranchId)}${reviewNodeId === null ? "" : `&node=${encodeURIComponent(reviewNodeId)}`}` : null,
+    };
+    return deepFreeze(seal === undefined
+      ? { kind: "abandoned" as const, reason: "campaign_encounter_abandoned" as const, ...base, ...routes }
+      : { kind: "available" as const, ...base, ...routes });
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -787,6 +828,21 @@ export class CampaignService implements CampaignChargeGate {
     const entered = this.#store.events(row.id).find((item) => item.event.seq === origin.seq)?.event;
     if (entered?.kind !== "node_entered") return undefined;
     return Object.freeze({ campaignRunId: row.id, nodeId: entered.payload.nodeId, campaignDocumentDigest: row.documentDigest });
+  }
+
+  /** §4.1: declaring done reveals the submitted consequence, never another or extended line. */
+  reviewBoundary(runId: string, learnerId: string, branchId: string): string | undefined {
+    const origin = this.#store.originForPlayRun(runId);
+    if (origin === undefined) return undefined;
+    const row = this.#store.run(origin.campaignRunId);
+    if (row === undefined || row.learnerId !== learnerId) return undefined;
+    const loaded = this.#load(row);
+    const entered = loaded.events.find((item) => item.event.seq === origin.seq)?.event;
+    if (entered?.kind !== "node_entered" || entered.payload.playRunId !== runId) return undefined;
+    const seal = loaded.state.nodes[entered.payload.nodeId];
+    if (seal?.kind !== "pack" || seal.playRunId !== runId || seal.branchId !== branchId) return undefined;
+    const event = loaded.events.find((item) => item.event.seq === seal.seq)?.event;
+    return event?.kind === "node_committed" ? event.payload.participation.consequenceTipNodeId : undefined;
   }
 
   assistanceReceipt(runId: string, learnerId: string): CampaignEncounterReceipt | undefined {
