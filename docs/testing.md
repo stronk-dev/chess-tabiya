@@ -113,6 +113,15 @@ plus desktop/phone Nudge, cited Review and same-bot replay. Browser preservation
 permit additive background evidence, but reject changed play fields, lost evidence and
 non-evidence event writes. These focused checks supplement the complete gates above.
 
+ARR-a9 measures warm arrival inside the browser, from the native catalogue click through an
+enabled 8×8/64-cell square board and two further animation frames. It gates the unrounded
+five-sample p95 against the unchanged 250 ms limit. The former automation envelope is retained
+separately, alongside bounded request counts, so click preparation and assertion polling cannot
+be mistaken for application latency. Calibration refuses disabled, incomplete, hidden, zero-size
+and non-square boards and retains a deliberately slow arrival above the limit. Real creation
+asserts one saved-pack hydration; reload preserves recorded nodes, branches and cursor. Cold
+URL-to-board remains the separately named automation envelope, with no invented cold threshold.
+
 `make campaign-actions-check` exercises the mounted campaign map and encounter strip: departure,
 replacement, double activation, crossed responses, exact response-loss retries and independent
 abandonment-result recovery. `make campaign-actions-browser-check` uses the real built app/server

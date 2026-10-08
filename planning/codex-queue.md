@@ -20,16 +20,23 @@ keep the budget and main-thread negative unchanged. A subsequent green replay ca
 The diagnostic-only replay of normal `make typecheck test-performance` passes clean types and
 all seven performance cases. Maximum delay is 59.736063 ms; the original cause is still unlocated.
 The existing test now reports bounded GC and main-thread CPU/cycle context, not raw captures.
-[[D3592]] records a separate browser measurement/coverage gap: every warm ARR-a9 sample is
-above the written 250 ms budget (median 331.2 ms, p95 373.6 ms), while the report test checks
-only completeness and finite nonnegative values. Locate the latency boundary and reconcile
-that existing budget with executable coverage; do not present a report-only pass as speed proof
-or invent a cold threshold from the measured cold median 894.7 ms.
+The final sequential normal run passes clean types/build, 3,678 software, seven performance,
+228 content and 191 browser cases, one optional Maia skip and zero retries. D3591's maximum
+delay is 21.413887 ms this replay; its original 328.466431 ms stall remains unlocated and open.
+
+[[D3592]]/[[D3593]] are closed locally. Paired timing locates 89–142 ms of automation
+overhead; the actual native-click readiness gate preserves the 250 ms budget and includes
+invalid/over-budget controls. Final warm median is 93.5 ms / p95 150.8 ms. Immediate local
+navigation retains its exact saved attachment once, reducing pack/shape hydration from two
+sets to one, while still reading server-owned access/origin and pending reasoning. Deep links,
+reloads, later returns, replacement/non-writer/live states, owner sharing and lost leases retain
+their proper behavior. No permission/source/provider cache or budget bypass is introduced.
 
 [[D3590]] is **closed locally**: six predecessor-red malformed-name/ECO/digest controls now refuse
 despite a correct outer digest. All 38 focused cases, clean types, 3,672 software cases, the opening
-performance cases and actual build/catalogue check pass. The full run still fails at D3591, and
-D3592's arrival budget/coverage gap remains open. [[D3376]] separately needs its bounded
+performance cases and actual build/catalogue check pass. That checkpoint's full run failed D3591;
+D3592's original automation measurement is preserved in the log, not treated as application
+latency. [[D3376]] separately needs its bounded
 installed-source/factory/Review contract; loader hardening does not supply that authority.
 That contract is now drafted in `rfc/installed-opening-evidence.md` and awaits independent
 buildability review. It covers the shared schema, source registration, all three factories and

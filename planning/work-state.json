@@ -29706,7 +29706,7 @@
       "id": "D3590",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:b7006f8572fdbae821874b54a4c64cf949499211700660b97b9233e6b36a9126",
+      "sourceDigest": "sha256:ae1ac905d7eb37a8058517c4cca92de6f2ad52de3c580f558bdaee1736c8ed8d",
       "uxItems": [],
       "evidence": "apps/server/src/opening-catalogue.test.ts",
       "evidenceKind": "path"
@@ -29722,11 +29722,21 @@
     },
     {
       "id": "D3592",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:187017c422d830bc6c73eb52e2cd2c9ed804c527b6526959d40477bf06369831",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:40f51f5fac3e7da64e6e939a02c0373f280653ac98d7596158e52a85de7c865b",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "tests/browser/arrival-latency.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3593",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e6bc8a693720df426c62a7664fcc0e992571db72fc1a70851ccfe0e4e31cd570",
+      "uxItems": [],
+      "evidence": "tests/browser/arrival-latency.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3592]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3593]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,26 +58,35 @@ across the platform**. Deeper “why this engine move?” search remains researc
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 
-Latest completed repair ([[D3590]]): the opening loader refuses blank endpoint fields and malformed
+Latest completed repairs ([[D3592]]/[[D3593]]): warm arrival measures the real native click
+through a complete playable board and two further frames, enforcing the unchanged 250 ms
+budget with invalid/over-budget controls. The old automation envelope is retained separately;
+paired observation shows 89–142 ms of preparation/assertion overhead. Immediate local
+navigation no longer hydrates the saved pack/shapes twice. Its one-shot handoff preserves
+authoritative access/origin and pending reasoning; reload and later returns still resume.
+Final five-sample native median is 93.5 ms / p95 150.8 ms, with one saved-pack read and 26
+shape requests per start rather than two/52. This is measured default arrival, not a universal
+speed verdict or completion of the whole arrival/preset journey.
+
+Previous opening repair ([[D3590]]): the opening loader refuses blank endpoint fields and malformed
 source/compiler digest leaves even when the outer digest is valid. Six observed predecessor failures,
 38 focused opening/phase/manifest cases, clean types, all 3,672 software cases, the opening performance
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**Current verification is not fully green.** The normal full run stops after software on
-[[D3591]]: longitudinal worker maximum event-loop delay is 328.466431 ms against its unchanged
-250 ms limit (six performance passes, one failure). Separate governance, all 228 content cases
-and 189 browser cases pass (one existing optional Maia skip, zero retries, all 150 input and 112
-composition cells). The arrival report exposes [[D3592]]: all five
-warm samples exceed the written 250 ms budget (median 331.2 ms, p95 373.6 ms), while the report
-test checks samples rather than enforcing that budget. Neither cause is diagnosed and neither
-failure is erased by a later green assertion. No readiness-to-push, GitHub or release proof follows.
+**The final local normal run passes:** clean types/build, 3,678 software cases / 354 files,
+seven isolated performance cases / four files, governance, 228 content cases / 23 files and
+191 browser cases (126 smoke, five content, 59 matrix, one packaged-default). One existing
+optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
+This is local verification, not a new GitHub or native release-image result.
 
-The subsequent diagnostic-only `make typecheck test-performance` passes clean types and all seven
-isolated cases. Maximum loop delay is 59.736063 ms, p95 12.959743 ms and maximum HTTP probe
-59.254583 ms. The existing test now includes bounded GC and main-thread CPU/cycle context;
-the original stall did not recur and its cause remains unlocated. [[D3591]] stays open, the earlier
-full-run failure remains recorded, and [[D3592]] is unchanged. No production repair is claimed.
+[[D3591]] remains open: the earlier full run measured 328.466431 ms maximum event-loop
+delay against the unchanged 250 ms limit. Its diagnostic replay measured 59.736063 ms;
+this final full run measures 21.413887 ms, p95 11.509759 ms and maximum HTTP probe
+15.599625 ms, with three renewals and publication at 4,145 ms. Bounded GC and main-thread
+CPU/cycle context is available, but the original stall has not recurred or been attributed.
+A green replay does not establish its cause or close it. Earlier failures remain in the log;
+no release promotion or readiness-to-push claim follows.
 
 Previous engine checkpoint ([[D3588]]/[[D3589]]): failed engine children can no longer supply a
 replacement's identity/options/search or be reused by queued work. Shutdown retains its
@@ -268,8 +277,8 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,341 ledger rows** (1,472 done, 161 refused, 1,708 live,
-zero untriaged). Of the live ledger, 629 are todo, thirteen doing and 1,066 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,342 ledger rows** (1,474 done, 161 refused, 1,707 live,
+zero untriaged). Of the live ledger, 628 are todo, thirteen doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete
@@ -286,8 +295,8 @@ MultiPV and historical durable jobs. It remains **draft**, including a provision
 migration order that fresh review must settle. No new provider operation or saved-job format is
 implemented by that document, and no milestone advances to complete.
 
-The next delivery priorities are: locate [[D3591]] and [[D3592]] and reconcile real performance
-with executable coverage; close source/operand gaps; finish existing module and
+The next delivery priorities are: retain bounded diagnostics for [[D3591]] and locate its cause
+without substituting green replays for a repair; close source/operand gaps; finish existing module and
 Review→theory→rehearsal→return journeys; complete training progression and calibrated bot/profile
 behavior; deliver the campaign curriculum/reward loop and representative grounded content; then
 prove the complete release/operator journeys. Independent authorised work can proceed together;

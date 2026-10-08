@@ -797,6 +797,60 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it.each([false, true])("keeps a local start one-shot and hydrates a later return (departure during handoff: %s)", async (departDuringHandoff) => {
+    history.replaceState(null, "", "/play");
+    const base = api();
+    let created: ReturnType<typeof createRun> | undefined;
+    const runPack = vi.fn(base.runPack);
+    const graph = vi.fn(async () => ({
+      ...await base.graph(created!.id), id: created!.id,
+      nodes: created!.nodes, branches: created!.branches, activeCursor: created!.activeCursor,
+    }));
+    const events = vi.fn(async (_runId: string, sinceSeq = 0) => ({
+      events: created!.events.filter((event) => event.seq > sinceSeq),
+      nextSeq: created!.events.at(-1)!.seq,
+    }));
+    const contextRead = deferred<readonly LiveSessionSummary[]>();
+    let contextReads = 0;
+    const startedApi: DrillClientApi = {
+      ...base, runPack, graph, events,
+      async liveSessions() { return departDuringHandoff && ++contextReads === 1 ? contextRead.promise : []; },
+      async createRun(input) {
+        created = createRun({
+          id: input.id, packId: pack.id, packDigest: digest, policyConfig: input.policyConfig,
+          startFen: pack.start.fen, seed: input.seed, createdAt: "2026-10-08T19:00:00.000Z",
+        });
+        return created;
+      },
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: startedApi, router, storage: new MemoryStorage() } });
+    try {
+      await vi.waitFor(() => expect(document.querySelector(".open-pack")).not.toBeNull());
+      document.querySelector<HTMLButtonElement>(".open-pack")!.click();
+      await vi.waitFor(() => expect(location.pathname).toBe(`/play/run/${created!.id}`));
+      if (departDuringHandoff) {
+        router.navigate("/review");
+        await vi.waitFor(() => expect(document.body.textContent).toContain("Your games and rehearsals"));
+        contextRead.resolve([]);
+        await tick();
+      } else {
+        await vi.waitFor(() => expect(document.querySelector("[data-board-input-grid]")).not.toBeNull());
+      }
+      expect(runPack).toHaveBeenCalledTimes(1);
+      expect(graph).toHaveBeenCalledTimes(departDuringHandoff ? 0 : 1);
+      expect(events).not.toHaveBeenCalled();
+
+      router.navigate("/review");
+      await vi.waitFor(() => expect(document.body.textContent).toContain("Your games and rehearsals"));
+      router.navigate(`/play/run/${created!.id}`);
+      await vi.waitFor(() => expect(document.querySelector("[data-board-input-grid]")).not.toBeNull());
+      expect(graph).toHaveBeenCalledTimes(departDuringHandoff ? 1 : 2);
+      expect(events).toHaveBeenCalledTimes(1);
+      expect(runPack).toHaveBeenCalledTimes(2);
+    } finally { await unmount(component); }
+  });
+
   it("shows the public catalogue and resumes the chosen rehearsal after registration", async () => {
     history.replaceState(null, "", "/play");
     let authenticated = false;

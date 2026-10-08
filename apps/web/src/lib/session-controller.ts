@@ -328,10 +328,27 @@ export class DrillSessionController {
     return this.#state;
   }
 
+  /** Changes on start/resume/stop, not on evidence updates to the current attachment. */
+  get attachmentGeneration(): number {
+    return this.#attachmentGeneration;
+  }
+
   subscribe(subscriber: Subscriber): () => void {
     this.#subscribers.add(subscriber);
     subscriber(this.#state);
     return () => this.#subscribers.delete(subscriber);
+  }
+
+  /** Refresh server-owned route metadata without rebuilding an already attached local start. */
+  async refreshRouteContext(): Promise<void> {
+    const operation = this.#sessionOperation();
+    const runId = operation.store.snapshot.run.id;
+    const claimed = WriterSession.peek(runId, this.#storage);
+    const graph = await this.#api.graph(runId, claimed?.writerId);
+    if (!this.#sessionOperationIsCurrent(operation)) return;
+    this.#patch({ viewer: graph.viewer, campaignOrigin: graph.campaignOrigin ?? null });
+    if (!graph.viewer.holdsLease) operation.store.follow();
+    await this.#refreshReasoning();
   }
 
   async resume(runId: string, options: { readonly matchMode?: MatchMode; readonly projectionOnly?: boolean } = {}): Promise<void> {
@@ -1213,6 +1230,8 @@ export class DrillSessionController {
     this.#patch({
       pack,
       packDigest: digest,
+      viewer: undefined,
+      campaignOrigin: undefined,
       shapes,
       runState: store.snapshot,
       busy: false,

@@ -479,6 +479,62 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
+  it.each([true, false])("refreshes fresh-run access without loading its content again (holds lease: %s)", async (holdsLease) => {
+    const environment = controller();
+    await environment.controller.startPack(pack.id);
+    const graph = {
+      ...await environment.api.graph("screen-run", environment.api.activeWriterId),
+      campaignOrigin: null,
+    };
+    graph.viewer.holdsLease = holdsLease;
+    vi.spyOn(environment.api, "graph").mockResolvedValue(graph);
+    const runPack = vi.spyOn(environment.api, "runPack");
+    const events = vi.spyOn(environment.api, "events");
+    await environment.controller.refreshRouteContext();
+    expect(environment.api.graph).toHaveBeenCalledWith("screen-run", environment.api.activeWriterId);
+    expect(environment.controller.state.viewer).toEqual(graph.viewer);
+    expect(environment.controller.state.campaignOrigin).toBeNull();
+    expect(environment.controller.state.runState?.access).toBe(holdsLease ? "writer" : "read_only");
+    expect(runPack).not.toHaveBeenCalled();
+    expect(events).not.toHaveBeenCalled();
+    environment.controller.destroy();
+  });
+
+  it("clears the previous viewer and campaign origin when a fresh run attaches", async () => {
+    const environment = controller();
+    await environment.controller.startPack(pack.id);
+    const previousGraph = {
+      ...await environment.api.graph("screen-run", environment.api.activeWriterId),
+      campaignOrigin: { campaignRunId: "previous-campaign", nodeId: "previous-node", campaignDocumentDigest: digest },
+    };
+    vi.spyOn(environment.api, "graph").mockResolvedValue(previousGraph);
+    await environment.controller.resume("screen-run");
+    expect(environment.controller.state.viewer).toEqual(previousGraph.viewer);
+    expect(environment.controller.state.campaignOrigin).toEqual(previousGraph.campaignOrigin);
+    const resumedAttachment = environment.controller.attachmentGeneration;
+    await environment.controller.startPack(pack.id);
+    expect(environment.controller.attachmentGeneration).toBeGreaterThan(resumedAttachment);
+    expect(environment.controller.state.error).toBeUndefined();
+    expect(environment.controller.state.viewer).toBeUndefined();
+    expect(environment.controller.state.campaignOrigin).toBeUndefined();
+    environment.controller.destroy();
+  });
+
+  it("ignores fresh-route access that arrives after departure", async () => {
+    const environment = controller();
+    await environment.controller.startPack(pack.id);
+    const graph = await environment.api.graph("screen-run", environment.api.activeWriterId);
+    const pending = deferred<typeof graph>();
+    vi.spyOn(environment.api, "graph").mockReturnValueOnce(pending.promise);
+    const refreshing = environment.controller.refreshRouteContext();
+    environment.controller.stopSession();
+    pending.resolve(graph);
+    await refreshing;
+    expect(environment.controller.state.viewer).toBeUndefined();
+    expect(environment.controller.state.runState).toBeUndefined();
+    environment.controller.destroy();
+  });
+
   describe("pinned pack attachment", () => {
     it.each(["resume", "duplicate"] as const)("uses retained run bytes for %s after catalogue replacement or withdrawal", async (operation) => {
       const environment = controller();

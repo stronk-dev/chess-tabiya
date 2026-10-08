@@ -42,6 +42,15 @@ phase machine; it owns only an optional active drill session. A deep link to a
 run reconstructs its pack ID from the authoritative `run.started` event, so
 reload does not depend on query-string pack metadata.
 
+A completed local pack/position/duplicate start already owns an attached server-created run.
+Its immediate navigation consumes a one-shot handoff bound to that controller's attachment
+generation, keeping the exact saved pack and shapes rather than hydrating them twice. Route
+context still loads. A different attachment, live match, error or lost writer access falls back
+to ordinary resume; deep links, reloads and later returns always resume from the server. New
+attachments clear the previous viewer and Campaign origin before applying their own metadata.
+The retained attachment still reads authoritative access/Campaign metadata and pending checkpoint
+reasoning; losing the server lease makes it a follower without reloading its pack or shapes.
+
 Route data follows the same authority rule. Every route load captures one shell
 generation, stages fetched packs, runs, progress, live state, Story and
 capabilities locally, and publishes only if that route generation remains

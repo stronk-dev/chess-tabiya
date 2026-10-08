@@ -202,9 +202,13 @@
 
   class LearnerRouteError extends Error {}
 
+  // A completed local create already attached the exact saved run/pack. Consume this once,
+  // at its navigation, rather than treating later returns or deep links as cached sessions.
+  let freshlyStartedRun: { readonly runId: string; readonly attachmentGeneration: number } | undefined;
   const controller = new DrillSessionController(api, {
     ...(storage === undefined ? {} : { storage }),
     onRunStarted: ({ runId }) => {
+      freshlyStartedRun = { runId, attachmentGeneration: controller.attachmentGeneration };
       if (startingFirstRehearsal) {
         firstRehearsalRunId = runId;
         applicationStorage()?.setItem(FIRST_REHEARSAL_RUN_KEY, runId);
@@ -850,6 +854,8 @@
   }
 
   async function loadRoute(next: AppRoute): Promise<void> {
+    const startedHere = next.name === "run" && freshlyStartedRun?.runId === next.runId ? freshlyStartedRun : undefined;
+    freshlyStartedRun = undefined;
     const generation = ++loadGeneration;
     campaignSheetBusy = false;
     campaignSheetError = undefined;
@@ -1021,7 +1027,16 @@
         repertoirePages=nextRepertoirePages;
         if(refresh===liveRefreshGeneration)activeLiveDetail=nextLiveDetail;
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
-        await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
+        // Retain only the controller that just completed creation. Background route context
+        // still load above; live matches, replacement/error state and every later entry resume.
+        const attached = controller.state;
+        if (startedHere === undefined || startedHere.attachmentGeneration !== controller.attachmentGeneration ||
+          attached.runState?.run.id !== next.runId || attached.runState.access !== "writer" ||
+          attached.busy || attached.error !== undefined || matchMode !== undefined) {
+          await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
+        } else {
+          await controller.refreshRouteContext();
+        }
         if(generation!==loadGeneration)return;
         const handoff = pendingReviewCompare?.runId === next.runId ? pendingReviewCompare : undefined;
         pendingReviewCompare = undefined;
@@ -1068,6 +1083,7 @@
   }
 
   async function loadPublicRoute(_next: AppRoute): Promise<void> {
+    freshlyStartedRun = undefined;
     const generation = ++loadGeneration;
     routeLoading = true;
     routeError = undefined;
