@@ -74,6 +74,18 @@ export interface CampaignCommandResult {
   readonly campaign: CampaignProjection;
 }
 
+/** A replay keeps its original command result but may carry a newer canonical map (§6.0). */
+export function assertCampaignCommand(result: CampaignCommandResult, requested: CampaignProjection, kind: string): void {
+  const actual = result?.campaign?.campaignRun;
+  const expected = requested.campaignRun;
+  const revision = result?.result?.campaignRevision;
+  if (actual?.id !== expected.id || actual.campaignId !== expected.campaignId || actual.campaignVersion !== expected.campaignVersion
+    || actual.documentDigest !== expected.documentDigest || result?.result?.kind !== kind
+    || typeof revision !== "number" || revision !== expected.revision + 1 || !Number.isSafeInteger(actual.revision) || actual.revision < revision) {
+    throw new Error("Crossed campaign command response");
+  }
+}
+
 export interface CampaignCatalogueEntry {
   readonly id: string;
   readonly version: number;

@@ -158,14 +158,18 @@
   let campaignSheetError: string | undefined = $state();
   async function declareFromTerminalSheet(): Promise<void> {
     const origin = session.campaignOrigin;
-    if (campaignStrip === undefined || origin == null) return;
+    const strip = campaignStrip, generation = loadGeneration, runId = session.runState?.run.id;
+    if (strip === undefined || origin == null || campaignSheetBusy) return;
+    const ownsView = () => appMounted && generation === loadGeneration && campaignStrip === strip && route.name === "run" && route.runId === runId;
     campaignSheetBusy = true;
     campaignSheetError = undefined;
     try {
-      if (await campaignStrip.declareDone()) navigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`);
-      else campaignSheetError = campaignStrip.declareError();
+      const declared = await strip.declareDone();
+      if (!ownsView()) return;
+      if (declared) navigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`);
+      else campaignSheetError = strip.declareError();
     } finally {
-      campaignSheetBusy = false;
+      if (ownsView()) campaignSheetBusy = false;
     }
   }
   $effect(() => {
@@ -847,6 +851,8 @@
 
   async function loadRoute(next: AppRoute): Promise<void> {
     const generation = ++loadGeneration;
+    campaignSheetBusy = false;
+    campaignSheetError = undefined;
     routeLoading = true;
     routeError = undefined;
     runPageError = undefined;

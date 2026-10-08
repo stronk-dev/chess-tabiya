@@ -7,6 +7,7 @@
     ACT_LABELS,
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
+    assertCampaignCommand,
     SHELF_REASON_TEXT,
     campaignBotLabel,
     newCampaignCommandId,
@@ -26,7 +27,7 @@
     campaigns: CampaignApi;
     campaignRunId?: string | undefined;
     onNavigate: (path: string) => void;
-    /** Persists the writer id this browser used to start an encounter, keyed by its play run. */
+    /** Storage only: preserves this browser's writer id for resume, even after navigation. */
     rememberWriter: (runId: string, writerId: string) => void;
   }
   let { campaigns, campaignRunId, onNavigate, rememberWriter }: Props = $props();
@@ -40,6 +41,8 @@
   let preparing: CampaignNodeCard | undefined = $state();
   let confirmAbandon = $state(false);
   let generation = 0;
+  let resultError = $state(false);
+  let resultLoading = $state(false);
   const abandonedCard = $derived(campaign?.acts.flatMap(act => act.layers.flatMap(layer => layer.choices)).find(card => card.nodeId === campaign?.abandonedEncounter?.nodeId));
   // One command id per intent, retained until it settles, so a retried click replays instead of repeating.
   const pending = new Map<string, string>();
@@ -70,9 +73,12 @@
     const current = ++generation;
     const requestedRunId = campaignRunId;
     loading = true;
+    busy = undefined;
     error = undefined;
     campaign = undefined;
     result = undefined;
+    resultError = false;
+    resultLoading = false;
     preparing = undefined;
     confirmAbandon = false;
     try {
@@ -84,14 +90,10 @@
         result = undefined;
       } else {
         const next = await campaigns.read(requestedRunId);
-        const nextResult = next.campaignRun.status === "active" ? undefined : await campaigns.result(requestedRunId);
         if (current !== generation) return;
-        if (next.campaignRun.id !== requestedRunId || (nextResult !== undefined &&
-          (nextResult.campaign.campaignRun.id !== requestedRunId || nextResult.campaign.campaignRun.documentDigest !== next.campaignRun.documentDigest))) {
-          throw new Error("Crossed campaign result");
-        }
+        if (next.campaignRun.id !== requestedRunId) throw new Error("Crossed campaign read");
         campaign = next;
-        result = nextResult;
+        if (next.campaignRun.status !== "active") await readResult(next, current);
       }
     } catch (caught) {
       if (current === generation) error = message(caught);
@@ -101,77 +103,119 @@
   }
 
   async function begin(entry: CampaignCatalogueEntry): Promise<void> {
+    if (busy !== undefined) return;
     if (entry.activeRunId !== null) { onNavigate(`/campaign/${encodeURIComponent(entry.activeRunId)}`); return; }
+    const current = generation, requestedRoute = campaignRunId;
+    const ownsView = () => current === generation && requestedRoute === campaignRunId;
     const intent = `create:${entry.id}@${entry.version}`;
     busy = intent;
     error = undefined;
     try {
       const created = await campaigns.create(entry.id, entry.version, commandFor(intent));
+      if (!ownsView()) return;
+      const actual = created?.campaign?.campaignRun;
+      if (actual?.campaignId !== entry.id || actual.campaignVersion !== entry.version || typeof actual.id !== "string" || actual.id.trim() === ""
+        || created.result?.kind !== "campaign_created" || created.result.campaignRunId !== actual.id
+        || created.result.campaignId !== entry.id || created.result.campaignVersion !== entry.version || created.result.documentDigest !== actual.documentDigest) throw new Error("Crossed campaign creation");
       pending.delete(intent);
       onNavigate(`/campaign/${encodeURIComponent(created.campaign.campaignRun.id)}`);
     } catch (caught) {
-      error = message(caught);
+      if (ownsView()) error = message(caught);
     } finally {
-      busy = undefined;
+      if (ownsView()) busy = undefined;
     }
   }
 
   async function startEncounter(card: CampaignNodeCard): Promise<void> {
-    if (campaign === undefined) return;
-    const intent = `start:${campaign.campaignRun.id}:${card.nodeId}:${campaign.campaignRun.revision}`;
+    if (campaign === undefined || busy !== undefined) return;
+    const requested = campaign, current = generation, requestedRoute = campaignRunId;
+    const ownsView = () => current === generation && requestedRoute === campaignRunId;
+    const intent = `start:${requested.campaignRun.id}:${card.nodeId}:${requested.campaignRun.revision}`;
     busy = intent;
     error = undefined;
     const writerKey = `writer:${intent}`;
     let writerId = pending.get(writerKey);
     if (writerId === undefined) { writerId = `writer-${globalThis.crypto.randomUUID()}`; pending.set(writerKey, writerId); }
     try {
-      const started = await campaigns.start(campaign.campaignRun.id, card.nodeId, campaign.campaignRun.revision, commandFor(intent), writerId);
-      const playRunId = String(started.result.response?.playRunId);
+      const started = await campaigns.start(requested.campaignRun.id, card.nodeId, requested.campaignRun.revision, commandFor(intent), writerId);
+      assertCampaignCommand(started, requested, "encounter_started");
+      const playRunId = started.result.response?.playRunId;
+      if (started.result.response?.nodeId !== card.nodeId || typeof playRunId !== "string" || playRunId.trim() === "") throw new Error("Crossed encounter start");
       rememberWriter(playRunId, writerId);
+      if (!ownsView()) return;
       pending.delete(intent);
       pending.delete(writerKey);
       onNavigate(`/play/run/${encodeURIComponent(playRunId)}`);
     } catch (caught) {
+      if (!ownsView()) return;
       error = message(caught);
-      if (caught instanceof ApiError && caught.code === "CAMPAIGN_REVISION_STALE") await load();
+      if (caught instanceof ApiError && caught.code === "CAMPAIGN_REVISION_STALE") { const reload = generation + 1; await load(); if (generation === reload && requestedRoute === campaignRunId) error = "The campaign changed in another tab. Check the reloaded map before starting an encounter."; }
     } finally {
-      busy = undefined;
+      if (ownsView()) busy = undefined;
     }
   }
 
   async function toggleEquip(moduleId: CampaignModuleId, equip: boolean): Promise<void> {
-    if (campaign === undefined) return;
-    const next = equip ? [...campaign.kit.equipped, moduleId] : campaign.kit.equipped.filter((id) => id !== moduleId);
-    const intent = `loadout:${campaign.campaignRun.revision}:${[...next].sort().join(",")}`;
+    if (campaign === undefined || busy !== undefined) return;
+    const requested = campaign, current = generation, requestedRoute = campaignRunId;
+    const ownsView = () => current === generation && requestedRoute === campaignRunId;
+    const next = equip ? [...requested.kit.equipped, moduleId] : requested.kit.equipped.filter((id) => id !== moduleId);
+    const intent = `loadout:${requested.campaignRun.id}:${requested.campaignRun.revision}:${[...next].sort().join(",")}`;
     busy = intent;
     error = undefined;
     try {
-      const changed = await campaigns.loadout(campaign.campaignRun.id, next, campaign.campaignRun.revision, commandFor(intent));
+      const changed = await campaigns.loadout(requested.campaignRun.id, next, requested.campaignRun.revision, commandFor(intent));
+      if (!ownsView()) return;
+      assertCampaignCommand(changed, requested, "loadout_changed");
       pending.delete(intent);
       campaign = changed.campaign;
     } catch (caught) {
+      if (!ownsView()) return;
       error = message(caught);
-      await load();
+      if (caught instanceof ApiError && caught.code === "CAMPAIGN_REVISION_STALE") { const reload = generation + 1; await load(); if (generation === reload && requestedRoute === campaignRunId) error = "The campaign changed in another tab. Check the reloaded kit before changing it."; }
     } finally {
-      busy = undefined;
+      if (ownsView()) busy = undefined;
     }
   }
 
   async function abandon(): Promise<void> {
-    if (campaign === undefined) return;
-    const intent = `abandon:${campaign.campaignRun.id}:${campaign.campaignRun.revision}`;
+    if (campaign === undefined || busy !== undefined) return;
+    const requested = campaign, current = generation, requestedRoute = campaignRunId;
+    const ownsView = () => current === generation && requestedRoute === campaignRunId;
+    const intent = `abandon:${requested.campaignRun.id}:${requested.campaignRun.revision}`;
     busy = intent;
     error = undefined;
     try {
-      const abandoned = await campaigns.abandon(campaign.campaignRun.id, campaign.campaignRun.revision, commandFor(intent));
+      const abandoned = await campaigns.abandon(requested.campaignRun.id, requested.campaignRun.revision, commandFor(intent));
+      if (!ownsView()) return;
+      assertCampaignCommand(abandoned, requested, "campaign_abandoned");
+      if (abandoned.campaign.campaignRun.status !== "abandoned") throw new Error("Invalid abandonment state");
       pending.delete(intent);
       confirmAbandon = false;
       campaign = abandoned.campaign;
-      result = await campaigns.result(campaign.campaignRun.id);
+      await readResult(abandoned.campaign, current);
     } catch (caught) {
-      error = message(caught);
+      if (ownsView()) error = message(caught);
     } finally {
-      busy = undefined;
+      if (ownsView()) busy = undefined;
+    }
+  }
+
+  async function readResult(requested: CampaignProjection, current = generation): Promise<void> {
+    if (resultLoading || (busy !== undefined && !busy.startsWith("abandon:"))) return;
+    resultLoading = true;
+    resultError = false;
+    try {
+      const next = await campaigns.result(requested.campaignRun.id);
+      if (current !== generation || campaignRunId !== requested.campaignRun.id) return;
+      if (next.campaign.campaignRun.id !== requested.campaignRun.id || next.campaign.campaignRun.documentDigest !== requested.campaignRun.documentDigest
+        || next.campaign.campaignRun.status !== requested.campaignRun.status) throw new Error("Crossed campaign result");
+      result = next;
+    } catch {
+      if (current !== generation || campaignRunId !== requested.campaignRun.id) return;
+      resultError = true;
+    } finally {
+      if (current === generation && campaignRunId === requested.campaignRun.id) resultLoading = false;
     }
   }
 
@@ -226,6 +270,10 @@
       </p>
     </header>
     {#if error}<p role="alert">{error}</p>{/if}
+    {#if resultError}
+      <p role="alert">The campaign was {campaign.campaignRun.status === "completed" ? "completed" : "abandoned"}. Its result could not be loaded; the recorded campaign and encounters are kept.</p>
+      <button type="button" disabled={busy !== undefined || resultLoading} onclick={() => void readResult(campaign!)}>Reload result</button>
+    {/if}
     {#if campaign.activeEncounter}
       <aside class="resume" aria-label="Active encounter">
         <p>Encounter in progress: <strong>{campaign.activeEncounter.title}</strong></p>
@@ -295,7 +343,7 @@
       {:else}
         <ul>
           {#each campaign.kit.owned as moduleId (moduleId)}
-            <li><label><input type="checkbox" checked={campaign.kit.equipped.includes(moduleId)} disabled={busy !== undefined || campaign.campaignRun.status !== "active"} onchange={(event) => void toggleEquip(moduleId, event.currentTarget.checked)} /> {CAMPAIGN_MODULE_LABELS[moduleId]}</label></li>
+            <li><label><input type="checkbox" checked={campaign.kit.equipped.includes(moduleId)} disabled={busy !== undefined || campaign.campaignRun.status !== "active"} onchange={(event) => { const input = event.currentTarget; void toggleEquip(moduleId, input.checked).then(() => { if (input.isConnected) input.checked = campaign?.kit.equipped.includes(moduleId) ?? false; }); }} /> {CAMPAIGN_MODULE_LABELS[moduleId]}</label></li>
           {/each}
         </ul>
       {/if}

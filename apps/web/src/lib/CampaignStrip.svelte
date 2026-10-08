@@ -1,14 +1,16 @@
 <script lang="ts">
+  import { onMount, untrack } from "svelte";
   import { ApiError } from "./api.js";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
     newCampaignCommandId,
+    assertCampaignCommand,
     rewardText,
+    verdictText,
     type CampaignProjection,
     type CampaignRunReward,
-    type CampaignVerdict,
   } from "./campaign-api.js";
 
   // rfc/campaign-core.md §7.1 "In-run context": the campaign rail seat beside the board. It renders
@@ -32,35 +34,49 @@
   let error: string | undefined = $state();
   let busy = $state(false);
   let sealed: { readonly verdict: string; readonly reward: CampaignRunReward | null; readonly completed: boolean } | undefined = $state();
-  let submitCommand: string | undefined;
+  let submission: { campaign: CampaignProjection; campaignRunId: string; nodeId: string; input: { runId: string; branchId: string; expectedRevision: number; commandId: string } } | undefined;
   let generation = 0;
+  let readGeneration = 0;
+  let subject: string | undefined;
 
-  let active = $derived(campaign?.activeEncounter?.playRunId === runId);
+  let active = $derived(campaign?.activeEncounter?.playRunId === runId && campaign.activeEncounter.nodeId === origin.nodeId);
   let nodeTitle = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId)?.title ?? origin.nodeId);
   let suppressed = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId)?.suppress ?? []);
 
   $effect(() => {
     void runRevision;
-    void origin.campaignRunId;
-    void refresh();
+    const nextSubject = JSON.stringify([origin.campaignRunId, origin.nodeId, runId, branchId]);
+    untrack(() => {
+      if (subject !== nextSubject) {
+        subject = nextSubject;
+        generation++;
+        campaign = undefined;
+        sealed = undefined;
+        submission = undefined;
+        busy = false;
+        error = undefined;
+      }
+      void refresh();
+    });
   });
+  onMount(() => () => { generation++; readGeneration++; });
 
-  async function refresh(): Promise<void> {
-    const current = ++generation;
-    try {
-      const next = await campaigns.read(origin.campaignRunId);
-      if (current !== generation) return;
-      campaign = next;
-      onRevision(next.activeEncounter?.playRunId === runId ? { campaignRevision: next.campaignRun.revision, active: true } : null);
-    } catch (caught) {
-      if (current === generation) error = caught instanceof ApiError ? caught.message : "Campaign state could not be loaded.";
-    }
+  function ownsView(current: number, requestedSubject: string | undefined): boolean {
+    return current === generation && requestedSubject === JSON.stringify([origin.campaignRunId, origin.nodeId, runId, branchId]);
   }
 
-  function verdictCopy(response: Readonly<Record<string, unknown>>): string {
-    if (response.kind === "boss_game") return response.outcome === "win" ? "Game won" : response.outcome === "loss" ? "Game lost" : "Game drawn";
-    const verdict = response.verdict as CampaignVerdict;
-    return verdict === "achieved" ? "Objective reached" : verdict === "failed" ? "Objective not reached" : verdict === "transitioned" ? "Objective transitioned" : "Played to the authored boundary";
+  async function refresh(): Promise<void> {
+    const current = generation, requestedSubject = subject, reading = ++readGeneration;
+    const requestedId = origin.campaignRunId;
+    try {
+      const next = await campaigns.read(requestedId);
+      if (!ownsView(current, requestedSubject) || reading !== readGeneration) return;
+      if (next.campaignRun.id !== requestedId || (campaign !== undefined && next.campaignRun.documentDigest !== campaign.campaignRun.documentDigest)) throw new Error("Crossed campaign read");
+      campaign = next;
+      onRevision(next.activeEncounter?.playRunId === runId && next.activeEncounter.nodeId === origin.nodeId ? { campaignRevision: next.campaignRun.revision, active: true } : null);
+    } catch (caught) {
+      if (ownsView(current, requestedSubject) && reading === readGeneration) error = caught instanceof ApiError ? caught.message : "Campaign state could not be loaded.";
+    }
   }
 
   export function declareError(): string | undefined {
@@ -68,23 +84,32 @@
   }
 
   export async function declareDone(): Promise<boolean> {
-    if (campaign === undefined) return false;
+    if (busy || campaign === undefined || (!active && submission === undefined)) return false;
+    if (sealed !== undefined) return true;
+    const current = generation, requestedSubject = subject;
     busy = true;
     error = undefined;
-    submitCommand ??= newCampaignCommandId();
+    submission ??= { campaign, campaignRunId: origin.campaignRunId, nodeId: origin.nodeId, input: { runId, branchId, expectedRevision: campaign.campaignRun.revision, commandId: newCampaignCommandId() } };
+    const requested = submission;
     try {
-      const done = await campaigns.submit(origin.campaignRunId, origin.nodeId, { runId, branchId, expectedRevision: campaign.campaignRun.revision, commandId: submitCommand });
-      submitCommand = undefined;
-      const response = done.result.response ?? {};
-      sealed = { verdict: verdictCopy(response), reward: (response.reward ?? null) as CampaignRunReward | null, completed: response.terminal === "completed" || response.campaignTerminal === "completed" };
+      const done = await campaigns.submit(requested.campaignRunId, requested.nodeId, requested.input);
+      if (!ownsView(current, requestedSubject)) return false;
+      const originalCard = requested.campaign.acts.flatMap(act => act.layers.flatMap(layer => layer.choices)).find(card => card.nodeId === requested.nodeId);
+      assertCampaignCommand(done, requested.campaign, originalCard?.kind === "boss_game" ? "boss_game_committed" : "node_committed");
+      const card = done.campaign.acts.flatMap(act => act.layers.flatMap(layer => layer.choices)).find(card => card.nodeId === requested.nodeId);
+      if (done.result.response?.nodeId !== requested.nodeId || card?.seal == null || card.seal.kind !== originalCard?.kind || card.seal.playRunId !== requested.input.runId) throw new Error("Crossed encounter seal");
+      readGeneration++;
+      submission = undefined;
+      sealed = { verdict: verdictText(card.seal), reward: card.reward, completed: done.campaign.campaignRun.status === "completed" };
       campaign = done.campaign;
       onRevision(null);
       return true;
     } catch (caught) {
+      if (!ownsView(current, requestedSubject)) return false;
       error = caught instanceof ApiError ? caught.message : "The encounter could not be declared done. Try again.";
-      if (caught instanceof ApiError && caught.code === "CAMPAIGN_REVISION_STALE") { submitCommand = undefined; await refresh(); }
+      if (caught instanceof ApiError && caught.code === "CAMPAIGN_REVISION_STALE") { submission = undefined; await refresh(); }
     } finally {
-      busy = false;
+      if (ownsView(current, requestedSubject)) busy = false;
     }
     return false;
   }

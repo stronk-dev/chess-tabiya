@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+Independent accepted Campaign repair [[D3587]] is **closed locally**: create/start/loadout/abandon
+and encounter declaration retire departed/replaced view completion while retaining server-accepted
+work and validated writer credentials for resume. Retries keep exact command operands; crossed
+responses and duplicate activation are refused. Abandonment and result recovery are separate.
+All 54 focused cases and three built-app desktop/touch-phone delayed-response/resume and lost-response
+journeys pass. Full normal gates pass clean types/build, 3,661 software, seven performance, 228 content
+and 189 browser cases, one optional Maia skip, zero retries and all 112 composition cells. The first
+browser failure exposed discarded writer credentials; the repair preserves resume rather than
+masking the read-only board with a test takeover. No whole Campaign or official content promotion.
+
 Delivered Review boundary repair: [[D3581]] removes private provider save/reload images and legacy
 eval move answers from ordinary run projections while retaining exact storage and explicit Analyze.
 All 77 focused cases, authenticated restart and desktop/phone Retry/Compare proof pass. Full normal

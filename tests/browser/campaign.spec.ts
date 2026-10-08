@@ -65,6 +65,118 @@ async function playPackNode(page: Page, nodeId: string): Promise<void> {
   await expect(page).toHaveURL(/\/campaign\//u);
 }
 
+/** The real server accepts the mutation before we hold only its HTTP delivery. */
+async function holdCampaignAction(page: Page, path: RegExp) {
+  let release!: () => void, delivered!: () => void;
+  let body: { campaign: { campaignRun: { id: string } } } | undefined;
+  const delivery = new Promise<void>(resolve => { delivered = resolve; });
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route(path, async route => {
+    if (!["POST", "PUT"].includes(route.request().method())) { await route.continue(); return; }
+    const response = await route.fetch();
+    expect(response.ok()).toBe(true);
+    body = await response.json();
+    await gate;
+    await route.fulfill({ response });
+    delivered();
+  });
+  return { get campaignId() { return body!.campaign.campaignRun.id; }, async leaveAndDeliver() {
+    await expect.poll(() => body !== undefined).toBe(true);
+    if (new URL(page.url()).pathname.startsWith("/play/run/")) {
+      await page.getByRole("button", { name: "Tabiya", exact: true }).click();
+      await expect(page).toHaveURL(/\/play$/u);
+    }
+    await page.locator('#primary-navigation a[href="/library"]').click();
+    await expect(page).toHaveURL(/\/library$/u);
+    release(); await delivery;
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    await expect(page).toHaveURL(/\/library$/u);
+    await page.unroute(path);
+  } };
+}
+
+for (const mobile of [false, true]) {
+  test(`Campaign actions stay on the new page while accepted work resumes${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await register(page);
+    const created = await holdCampaignAction(page, /\/campaigns\/[^/]+\/runs$/u);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await created.leaveAndDeliver();
+    const campaignId = created.campaignId, mapPath = `/campaign/${campaignId}`;
+    const resume = async () => {
+      await page.locator('#primary-navigation a[href="/campaign"]').click();
+      await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Resume run" }).click();
+      await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    };
+    await resume();
+    const started = await holdCampaignAction(page, /\/campaign-runs\/[^/]+\/nodes\/f1-a\/start$/u);
+    await page.locator('[data-node="f1-a"]').getByRole("button", { name: "Prepare", exact: true }).click();
+    await page.getByRole("button", { name: "Start encounter", exact: true }).click();
+    await started.leaveAndDeliver();
+    await resume();
+    await page.getByRole("button", { name: "Continue encounter", exact: true }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    const runId = currentRunId(page);
+    if (mobile) {
+      const board = page.getByLabel("Chessboard"), box = await board.boundingBox();
+      if (box === null) throw new Error("board has no box");
+      for (const square of ["c1", "e3"]) await page.touchscreen.tap(box.x + (square.charCodeAt(0) - 97 + .5) * box.width / 8, box.y + (8 - Number(square[1]) + .5) * box.height / 8);
+    } else await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, runId)).toBeGreaterThanOrEqual(2);
+    const sealed = await holdCampaignAction(page, /\/campaign-runs\/[^/]+\/nodes\/f1-a\/submit$/u);
+    await page.getByRole("complementary", { name: "Campaign encounter" }).getByRole("button", { name: "Declare done", exact: true }).click();
+    await sealed.leaveAndDeliver();
+    await resume();
+    await expect(page.locator('[data-node="f1-a"]')).toContainText("Played to the authored boundary");
+    await expect(page.getByTestId("campaign-charges")).toContainText("⟲ 2");
+    const kit = page.getByRole("region", { name: "Your campaign kit" }).getByRole("checkbox", { name: "After-move nudge" });
+    const loadout = await holdCampaignAction(page, /\/campaign-runs\/[^/]+\/loadout$/u);
+    await expect(kit).toBeChecked();
+    await kit.uncheck();
+    await loadout.leaveAndDeliver();
+    await resume(); await expect(kit).not.toBeChecked();
+    const abandoned = await holdCampaignAction(page, /\/campaign-runs\/[^/]+\/abandon$/u);
+    await page.getByRole("button", { name: "Abandon this run…" }).click();
+    await page.getByRole("button", { name: "Confirm abandon", exact: true }).click();
+    await abandoned.leaveAndDeliver();
+    await page.goto(mapPath);
+    await expect(page.getByRole("heading", { name: "Campaign abandoned" })).toBeVisible();
+    await expect(page.locator('[data-node="f1-a"]')).toContainText("Played to the authored boundary");
+  });
+}
+
+test("Campaign actions replay a lost declaration response without a second reward", async ({ page }) => {
+  test.setTimeout(90_000);
+  await register(page);
+  await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+  await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+  const campaignId = currentRunId(page);
+  const runId = await startNode(page, "f1-a");
+  await move(page, "c1", "e3");
+  await expect.poll(() => moveCount(page, runId)).toBeGreaterThanOrEqual(2);
+  const inputs: string[] = [], replays: boolean[] = [];
+  await page.route(/\/campaign-runs\/[^/]+\/nodes\/f1-a\/submit$/u, async route => {
+    inputs.push(route.request().postData()!);
+    const response = await route.fetch();
+    expect(response.ok()).toBe(true);
+    replays.push((await response.json()).replayed === true);
+    if (inputs.length === 1) { await route.abort("failed"); return; }
+    await route.fulfill({ response });
+  });
+  const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+  await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+  await expect(strip.getByRole("alert")).toContainText("could not be declared done");
+  await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+  await expect(strip.locator(".node-result")).toContainText("Played to the authored boundary");
+  expect(inputs).toHaveLength(2); expect(inputs[1]).toBe(inputs[0]); expect(replays).toEqual([false, true]);
+  const projection = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+  expect(projection.charges.balance).toBe(2);
+  expect(projection.kit.owned).toEqual(["postcommit_nudge"]);
+  await strip.getByRole("button", { name: "Continue to the map" }).click();
+  await page.reload();
+  await expect(page.getByTestId("campaign-charges")).toContainText("⟲ 2");
+});
+
 test("Campaign: enter, play encounters and a registered-bot boss, see results, resume after reload", async ({ page }) => {
   test.setTimeout(240_000);
   await register(page);

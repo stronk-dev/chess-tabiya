@@ -3600,7 +3600,13 @@ submission-review-check:
 submission-review-browser-check:
 	./node_modules/.bin/playwright test --grep "completed assigned attempt|submitted review"
 
-.PHONY: campaign-history-check campaign-history-browser-check
+.PHONY: campaign-actions-check campaign-actions-browser-check campaign-history-check campaign-history-browser-check
+campaign-actions-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/campaign-history.test.ts
+
+campaign-actions-browser-check:
+	./node_modules/.bin/playwright test --grep "Campaign actions"
+
 campaign-history-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/router.test.ts
 	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/campaign-core.test.ts

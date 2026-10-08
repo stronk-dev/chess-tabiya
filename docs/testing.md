@@ -113,6 +113,14 @@ plus desktop/phone Nudge, cited Review and same-bot replay. Browser preservation
 permit additive background evidence, but reject changed play fields, lost evidence and
 non-evidence event writes. These focused checks supplement the complete gates above.
 
+`make campaign-actions-check` exercises the mounted campaign map and encounter strip: departure,
+replacement, double activation, crossed responses, exact response-loss retries and independent
+abandonment-result recovery. `make campaign-actions-browser-check` uses the real built app/server
+to accept a command, hold its response, navigate through the shell and then deliver it. Desktop
+and touchscreen-phone journeys resume accepted create/start/seal/loadout/abandon operations;
+a lost declaration response replays identical input without another reward. These permanent
+cases also run in the normal software/browser tiers; they do not graduate the draft curriculum.
+
 `make campaign-history-check` runs mounted campaign-history controls in the software tier
 and the actual campaign application contracts in the real-content tier.
 `make campaign-history-browser-check` runs the built desktop/touchscreen-phone history journeys:

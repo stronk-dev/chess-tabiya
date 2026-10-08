@@ -6,6 +6,19 @@ only changes what the learner carries *inside that run*. Implemented 2026-09-24 
 `rfc/campaign-core.md` (foundation) and `rfc/campaign-boss-games.md` (the Act-II full-game boss),
 storage migration 30, campaign-schema lanes 2 and 3.
 
+## Leaving a pending action
+
+Create, encounter start, kit changes, abandonment and Declare done have one pending command
+per action. Leaving or switching campaigns/branches retires the old view's completion: it cannot
+navigate you back, replace the new map, clear its controls or publish an old encounter revision.
+An accepted command still belongs to the server and appears when the campaign is resumed.
+An accepted encounter start also preserves this browser's writer ID for resume; that storage-only
+step does not navigate or attach the departed view.
+Retried requests after a lost response keep their original command, revision, branch and writer
+operands; a server replay is not another encounter or reward. The returned campaign and encounter
+are checked before displaying a result. A failed abandonment result read offers Reload result
+while retaining the confirmed abandoned map; it is not reported as a failed abandonment.
+
 ## Documents
 
 A campaign is a closed JSON document (`schemas/campaign.schema.json`, lane 3) with exactly three

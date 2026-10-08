@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3586]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3587]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -2908,6 +2908,14 @@ campaign runs/events/awards; production endpoints and `/campaign` provide map, p
 kit, encounters, earned rewinds, result and resume. The draft pilot includes an unrated Act-II
 boss. Official content, catalogue/theory rewards, rated-boss composition, accessibility and
 release-image proof remain open. [[D1514]] made Campaign first-class.
+
+[[D3587]] repairs client action ownership: leaving or replacing a campaign/branch retires late
+view completion without cancelling accepted server work. Validated starts preserve the device's
+writer ID for later resume, not navigation back to the departed game. Exact retries cannot change
+the original command operands or duplicate a reward. Abandonment remains confirmed if its result
+read fails and exposes a separate Reload result. All 54 focused cases and three actual built-app
+journeys pass, including delayed delivery on desktop/touch phone and lost-response replay. This
+is lifecycle correctness for the draft pilot, not official progression or whole Campaign completion.
 
 **1.0 exit:** versioned campaigns compose registered packs, bots, modules, skills/rating, variants,
 rewards, earned rewinds and a researched consequential-but-non-punitive failure economy; state

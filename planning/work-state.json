@@ -29674,6 +29674,15 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3587",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:51e9a51d812e1a61a22e2baaeaed4903b6cceb3d9f8b83840ffb7cba1c12cc60",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/campaign-actions.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
