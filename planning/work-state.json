@@ -29800,6 +29800,15 @@
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-08"
+    },
+    {
+      "id": "D3601",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:df3cb647bbab40fea1fd2cbd349366c3f0b74a9b5041008961cd680b76d4543f",
+      "uxItems": [],
+      "evidence": "apps/server/src/local-module-execution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

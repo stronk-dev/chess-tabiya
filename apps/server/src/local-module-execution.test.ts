@@ -2,6 +2,7 @@ import type { AddressInfo } from "node:net";
 import * as runtime from "@chess-tabiya/runtime";
 import * as execution from "../../../packages/runtime/src/evidence-binding-execution.js";
 import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import * as authored from "./authored-feedback.js";
 import { afterEach, beforeEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
@@ -62,7 +63,7 @@ afterEach(async () => {
   await owned?.close();
 });
 
-async function control(module: LocalModule, fault?: Fault, disclose = true) {
+async function control(module: LocalModule, fault?: Fault, disclose = true, pack = false) {
   const started = performance.now();
   const boundaries: string[] = [];
   const boundary = (stage: string) => boundaries.push(`${Math.round(performance.now() - started)}ms ${stage}`);
@@ -93,10 +94,13 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
     expect(await responseStatus(registered)).toBe(201);
     const headers = { "content-type": "application/json", cookie: registered.headers.get("set-cookie")!.split(";", 1)[0]!, "x-writer-id": "local-module-writer" };
     const post = (path: string, body: unknown) => request(path, { method: "POST", headers, body: JSON.stringify(body) });
-    const created = await post("/runs", { id: "local-module", session: { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
+    const moveUci = pack ? "a7a6" : "g8f6";
+    const created = await post("/runs", { id: "local-module", session: pack
+      ? { kind: "pack", packId: "carlsbad-minority-attack" }
+      : { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
     expect(created.status, await created.text()).toBe(201);
     if (module === "structure_nudge") {
-      const moved = await post("/runs/local-module/moves", { uci: "g8f6" });
+      const moved = await post("/runs/local-module/moves", { uci: moveUci });
       expect(moved.status, await moved.text()).toBe(200);
       if (disclose) expect(await responseStatus(post("/runs/local-module/reveal", {}))).toBe(200);
     }
@@ -129,10 +133,10 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
     });
     const query: runtime.ModuleQueryRequest = module === "structure_nudge"
       ? { timing: "post_commit", subjectNodeId: nodeId, requested: [] }
-      : module === "blunder_prevention" ? { timing: "at_commit", nodeId, candidateUci: "g8f6", generation: 1 }
+      : module === "blunder_prevention" ? { timing: "at_commit", nodeId, candidateUci: moveUci, generation: 1 }
         : { timing: "pre_commit", nodeId, selectedSquare: "c6", requested: [module] };
-    const ask = (preset: "quiet" | "support" | "guided" = module === "structure_nudge" ? "guided" : "support", overrideQuery: runtime.ModuleQueryRequest = query, isolate = true) => post("/runs/local-module/modules/query", {
-      assistance: runtime.compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
+    const ask = (preset: "quiet" | "support" | "guided" = pack || module === "structure_nudge" ? "guided" : "support", overrideQuery: runtime.ModuleQueryRequest = query, isolate = true) => post("/runs/local-module/modules/query", {
+      assistance: runtime.compileAssistanceRequest({ contextHint: pack ? "pack" : "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: pack ? [module] : [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
       query: overrideQuery,
     });
     return { application, close, ask, query, trace, compile, collect, prepare, fault(value?: Fault) { fault = value; } };
@@ -164,7 +168,7 @@ describe("authenticated complete local Support execution", () => {
         expect(page.packets.map(packet => packet.module)).toEqual([module]);
         expect(app.trace[0]).toBe(`compile:module.${module}@1`);
         expect(app.collect).toHaveBeenCalled();
-        expect(app.prepare).toHaveBeenCalledTimes(1);
+        expect(app.prepare).toHaveBeenCalledTimes(module === "structure_nudge" ? 1 : 0);
         for (const packet of page.packets) {
           const { digest, ...body } = packet.disclosure;
           expect(runtime.moduleDisclosureDigest(body)).toBe(digest);
@@ -181,6 +185,37 @@ describe("authenticated complete local Support execution", () => {
         expect(response.status).toBe(200);
         expect(body.page.packets).toEqual([]);
         expect(app.trace).toEqual([]);
+      } finally { vi.restoreAllMocks(); await app.close(); }
+    });
+  }
+
+  for (const module of ["sight_on_request", "threat_radar", "blunder_prevention"] as const) {
+    it(`${module}: unrelated shape catalogue failure cannot break local help`, async () => {
+      const app = await control(module);
+      try {
+        app.prepare.mockImplementation(() => { throw new Error("unrelated shape catalogue unavailable"); });
+        const response = await app.ask();
+        const body = await response.text();
+        expect(response.status, body).toBe(200);
+        expect((JSON.parse(body) as { page: runtime.ModuleQueryPage }).page.packets.map(packet => packet.module)).toEqual([module]);
+        expect(app.trace[0]).toBe(`compile:module.${module}@1`);
+        expect(app.collect).toHaveBeenCalled();
+        expect(app.prepare).not.toHaveBeenCalled();
+      } finally { vi.restoreAllMocks(); await app.close(); }
+    });
+  }
+
+  for (const module of ["sight_on_request", "threat_radar"] as const) {
+    it(`${module}: a real installed pack does not project unrelated authored feedback`, async () => {
+      const app = await control(module, undefined, true, true);
+      try {
+        const project = vi.spyOn(authored, "projectAuthoredFeedback").mockImplementation(() => { throw new Error("unrelated authored feedback unavailable"); });
+        const response = await app.ask();
+        const body = await response.text();
+        expect(response.status, body).toBe(200);
+        expect((JSON.parse(body) as { page: runtime.ModuleQueryPage }).page.packets.map(packet => packet.module)).toEqual([module]);
+        expect(project).not.toHaveBeenCalled();
+        expect(app.prepare).not.toHaveBeenCalled();
       } finally { vi.restoreAllMocks(); await app.close(); }
     });
   }

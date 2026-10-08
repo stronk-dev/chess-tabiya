@@ -2886,31 +2886,37 @@ export class RunService {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
-    // The runtime first derives finalized demand and checks every effective local contract.
-    // Prepare pack/shape evidence lazily, after that preflight, and at most once per query.
-    let prepared: ModuleSourceContext | undefined;
-    const prepare = (): ModuleSourceContext => {
-      if (prepared !== undefined) return prepared;
-      const pack = isPackSession(run) ? this.#requiredRegisteredPack(run) : undefined;
-      const shapes = this.#shapes?.list().map((summary) => {
-        const document = this.#shapes!.required(summary.id).document;
-        return { id: document.id, trigger: document.trigger };
-      }) ?? [];
-      const authored = pack === undefined ? [] : projectAuthoredFeedback(pack, run, this.#shapes).items;
-      const boundaryNodes = new Map<number, string>();
-      for (const event of run.events) {
-        if (event.type === "checkpoint.reached" || event.type === "outcome.reached") boundaryNodes.set(event.seq, event.data.nodeId);
-      }
-      prepared = {
-        ...explorer, shapes,
-        authoredAt: (nodeId: string) => authored.filter((item) => boundaryNodes.get(item.revealedBy.eventSeq) === nodeId) as never,
-      };
-      return prepared;
+    // Each input is lazy independently: local position/recorded-run modules do not need
+    // catalogue reads; Structure needs shapes, while Theory also needs released claims.
+    // The runtime still preflights every effective local consumer before acquiring either.
+    let shapes: ModuleSourceContext["shapes"];
+    let authoredAt: ModuleSourceContext["authoredAt"];
+    const service = this;
+    const sources: ModuleSourceContext = {
+      ...explorer,
+      get shapes() {
+        return shapes ??= service.#shapes?.list().map((summary) => {
+          const document = service.#shapes!.required(summary.id).document;
+          return { id: document.id, trigger: document.trigger };
+        }) ?? [];
+      },
+      get authoredAt() {
+        if (authoredAt === undefined) {
+          const pack = isPackSession(run) ? service.#requiredRegisteredPack(run) : undefined;
+          const authored = pack === undefined ? [] : projectAuthoredFeedback(pack, run, service.#shapes).items;
+          const boundaryNodes = new Map<number, string>();
+          for (const event of run.events) {
+            if (event.type === "checkpoint.reached" || event.type === "outcome.reached") boundaryNodes.set(event.seq, event.data.nodeId);
+          }
+          authoredAt = (nodeId: string) => authored.filter((item) => boundaryNodes.get(item.revealedBy.eventSeq) === nodeId) as never;
+        }
+        return authoredAt;
+      },
     };
     try {
       return queryModules({
         run, assistance, request, ...this.#moduleViewer(runId, principal, run, role),
-        get sources() { return prepare(); },
+        sources,
       }).page;
     } catch (error) {
       if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) {

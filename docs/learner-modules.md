@@ -63,7 +63,11 @@ turn clone stays unavailable. Large relation overlays remain subject to unchange
   Sight, Threat Radar, Blunder Prevention and Structure Nudge now preflight their complete
   execution bindings after finalized demand/timing/square/disclosure checks, before any selected
   module collects. All effective local consumers pass before the first source read. Server pack
-  and shape inputs are prepared lazily, once per query; suppressed modules prepare nothing.
+  and shape inputs are prepared independently on demand, once per runtime query:
+  only Structure and Theory read the shape catalogue, and only Theory projects
+  released authored claims or validates Explorer summaries. Sight, Threat Radar,
+  staged risk checks, Post-commit Nudge, Compare and Inspector do not depend on
+  those unrelated inputs. Suppressed modules prepare nothing.
   A broken execution contract returns generic `EVIDENCE_UNAVAILABLE` (503), not partial output
   or source diagnostics. Every repeated request preflights again. This is local production
   adoption, not complete manifest execution or request-specific provider satisfaction.

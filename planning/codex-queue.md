@@ -12,6 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3601]] is closed locally under the existing module/provider execution contracts:
+local position and recorded-run modules no longer acquire unrelated shape/authored
+inputs or validate unused Explorer evidence. Structure retains its independently
+cached shapes; Theory retains released claims and exact Explorer validation.
+Nine predecessor-red controls and authenticated position/installed-pack requests
+establish the repair. Focused gates pass 120 Support and 195 Theory cases plus
+clean types. Complete normal gates pass 3,743 software, seven performance, 228
+content and 203 browser cases, one existing optional Maia skip and zero retries;
+all 150 input/112 composition cells pass. This does not resolve the held
+selected-square, opening or Inspector contracts or D3591/D3600 timing failures.
+
 [[D3600]] remains open from an earlier full browser gate: actual warm native readiness reached
 253.8 ms against the unchanged 250 ms budget. One pack read and 26 shape requests
 remain; no duplicate hydration regression is established. Preserve the failure,

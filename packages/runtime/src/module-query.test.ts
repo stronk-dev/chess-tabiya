@@ -28,6 +28,7 @@ import {
 import { assertPresentationText, parsePresentationReceipt, presentedSentence } from "./presentation-contract.js";
 import type { OrdinaryWorkflowContextId, OrdinaryWorkflowContextOrigin, PresetId } from "./presets.js";
 import type { DrillRun } from "./types.js";
+import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 
 const at = "2026-09-24T00:00:00.000Z";
 const policyConfig = { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } as const;
@@ -38,8 +39,8 @@ const ORIGINS: Readonly<Record<"onramp" | "position", OrdinaryWorkflowContextOri
   position: { kind: "run", sessionKind: "position", feedbackPolicy: "attempt_end" },
 };
 
-function finalized(context: "onramp" | "position", preset: PresetId): FinalizedAssistanceV1 {
-  const request = compileAssistanceRequest({ contextHint: context as OrdinaryWorkflowContextId, preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+function finalized(context: "onramp" | "position", preset: PresetId, only?: ModuleId): FinalizedAssistanceV1 {
+  const request = compileAssistanceRequest({ contextHint: context as OrdinaryWorkflowContextId, preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: only === undefined ? [] : MODULE_IDS.filter((id): id is Exclude<ModuleId, "rules_floor"> => id !== only && id !== "rules_floor") } } });
   const authoritative = compileAuthoritativeAssistance(request, { origin: ORIGINS[context], access: { deliveryOpen: true, role: "solo", seatedInContest: false, reviewing: false }, availability: ALL_AVAILABLE });
   return finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability: ALL_AVAILABLE });
 }
@@ -98,6 +99,21 @@ describe("the module query request boundary", () => {
 
 describe("Support (position context): sight, threat radar and the at-commit cue", () => {
   const assistance = finalized("position", "support");
+
+  it.each(["sight_on_request", "threat_radar", "blunder_prevention"] as const)("%s does not inspect unrelated external/content sources", module => {
+    const run = positionRun(MAROCZY);
+    const request: ModuleQueryRequest = module === "blunder_prevention"
+      ? { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci: "g8f6", generation: 1 }
+      : { timing: "pre_commit", nodeId: run.activeCursor.nodeId, selectedSquare: "c6", requested: [module] };
+    const sources = {
+      get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
+      get shapes(): never { throw new Error("unrelated shape source read"); },
+      get authoredAt(): never { throw new Error("unrelated authored source read"); },
+    };
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position", request, sources });
+    expect(page.packets.map(packet => packet.module)).toEqual([module]);
+    assertDelivered(page.packets[0]!, assistance);
+  });
 
   it("sight delivers one square-scoped fact through a sealed square_set", () => {
     const run = positionRun(MAROCZY);
@@ -215,6 +231,55 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
 
 describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb and compare coach", () => {
   const assistance = finalized("onramp", "guided");
+
+  it.each(["postcommit_nudge", "compare_coach", "full_inspector"] as const)("%s reads recorded/local facts without catalogue or Explorer dependencies", module => {
+    let run = module === "full_inspector" ? positionRun(ITALIAN, ["e1g1", "e8g8"]) : packRun(ITALIAN, ["e1g1", "e8g8"]);
+    run = fork(rewind(run, run.nodes[0]!.id, at).run, run.nodes[0]!.id, { at }).run;
+    run = commitMove(run, "a2a3", { at }).run;
+    if (module === "full_inspector") run = revealFeedback(run, at).run;
+    const context = module === "full_inspector" ? "position" : "onramp";
+    const assistance = finalized(context, module === "full_inspector" ? "analysis" : "guided", module);
+    const request: ModuleQueryRequest = module === "postcommit_nudge"
+      ? { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] }
+      : { timing: module === "full_inspector" ? "review" : "checkpoint", nodeId: run.activeCursor.nodeId, requested: [module] };
+    const { page } = queryModules({ run, assistance, role: "learner", session: context, request, sources: {
+      get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
+      get shapes(): never { throw new Error("unrelated shape source read"); },
+      get authoredAt(): never { throw new Error("unrelated authored source read"); },
+    } });
+    expect(page.packets.map(packet => packet.module)).toEqual([module]);
+    expect(assertDelivered(page.packets[0]!, assistance).length).toBeGreaterThan(0);
+  });
+
+  it("Structure retains its shape evidence without reading authored claims or Explorer", () => {
+    const run = packRun("r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", ["b1c3"]);
+    let shapeReads = 0;
+    const { page } = queryModules({ run, assistance: finalized("onramp", "guided", "structure_nudge"), role: "learner", session: "onramp",
+      request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] },
+      sources: {
+        get shapes() { shapeReads += 1; return [{ id: "maroczy-bind", trigger: { kind: "feature" as const, feature: { kind: "named_structure" as const, id: "maroczy-bind" as const } } }]; },
+        get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
+        get authoredAt(): never { throw new Error("unrelated authored source read"); },
+      },
+    });
+    expect(shapeReads).toBeGreaterThan(0);
+    expect(page.packets.map(packet => packet.module)).toEqual(["structure_nudge"]);
+    expect(assertDelivered(page.packets[0]!, finalized("onramp", "guided", "structure_nudge")).length).toBeGreaterThan(0);
+  });
+
+  it("Theory still reads authored claims and rejects invalid Explorer authority", () => {
+    const run = packRun(ITALIAN, ["e1g1"]);
+    const input = { run, assistance: finalized("onramp", "guided", "theory_breadcrumb"), role: "learner" as const, session: "onramp",
+      request: { timing: "post_commit" as const, subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb" as const] },
+    };
+    let authoredReads = 0;
+    const { page } = queryModules({ ...input, sources: { authoredAt: () => { authoredReads += 1; return []; }, shapes: [] } });
+    expect(authoredReads).toBe(1);
+    expect(page.packets.map(packet => packet.module)).toEqual(["theory_breadcrumb"]);
+    expect(() => queryModules({ ...input, sources: {
+      explorerSummary: {} as NonNullable<import("./module-query.js").ModuleSourceContext["explorerSummary"]>,
+    } })).toThrow(TypeError);
+  });
 
   it("does not present the unchanged kings as consequences of 1.e4", () => {
     const run = packRun("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", ["e2e4"]);

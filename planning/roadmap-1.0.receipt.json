@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3224678efea5451319f1992333022fe4aaf927f23ecded7101f8554c8de71c79",
+    "roadmap": "sha256:8a1effecd1bbe964583b4957dff869c87644ab4adb32bf43e9145766f590639c",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:ec356941a7f267c6c43fbc6bc45dda68c49d8008209093c9c037e9b0614f4463",
+    "workState": "sha256:1dcfa98efb08a76b74e21f071510b7bd02766e42acc3cb55f0ea66dd96e5c089",
     "rfcRegister": "sha256:b9dcd58bbb92816a3576bf032d2051085e96f0e488774e8fc67e9c6544655400",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1066,
-      "done": 1480,
+      "done": 1481,
       "refused": 161
     },
     "workItems": {
@@ -75,8 +75,8 @@
       "dependsOn": [],
       "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
-        "at": "2026-10-08",
-        "summary": "One complete normal sequence passes final product/test sources: clean types/build, 3730 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 203 browser passes (138 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. Warm native arrival is median 104.1 ms/p95 119.2 ms with one pack read/26 shape requests; the earlier 253.8 ms failure remains open as D3600. D3598 due-intake replenishment and D3599 read-only uncertain-dismissal recovery are closed locally. D3591's original 328.466431 ms stall remains unlocated. All live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. No new exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
+        "at": "2026-10-09",
+        "summary": "One complete normal sequence passes final product/test sources: clean types/build, 3743 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 203 browser passes (138 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. Warm native arrival is median 88.3 ms/p95 114.1 ms with one pack read/26 shape requests; the earlier 253.8 ms failure remains open as D3600. D3601 closes unrelated content acquisition by local/recorded Support while preserving Structure/Theory inputs. D3598 due-intake replenishment and D3599 read-only uncertain-dismissal recovery remain closed locally. D3591's original 328.466431 ms stall remains unlocated. All live ledger rows are assigned; 462 prose-only closures remain qualified and zero official packs graduate. No new exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
         "impact": "held",
         "evidence": [
           "rfc/concept-registry.md",
@@ -338,8 +338,8 @@
       ],
       "nextAction": "D3579's false square-control captions are repaired. D3578 needs the narrow existing module-registration amendment for the selected frame, complete legal destinations versus six marks and exact move identity before useful selected-square delivery can land. Continue source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine generated metadata maintenance is automatic.",
       "latestCheckpoint": {
-        "at": "2026-10-08",
-        "summary": "D3594 closes locally under accepted provider-health-degradation §§5–6: four predecessor-red controls, seven new provider controls and actual authenticated Hint DELETE/retry prove queued cancellation, absolute deadlines, shutdown/current-circuit checks and owned claim/recovery cleanup without disturbing siblings. Focused Hint/type checks pass 95 cases; final source passes clean types/build, 3686 software, seven performance, 228 content and 191 browser cases, one existing optional Maia skip and zero retries. Corrected governance passes after removing one duplicate checkpoint reference. D3579 square captions and prior recorded-game/Review lifecycle repairs remain closed. D3578 selected-square presentation, D3376 opening authority, D3373 durable Stockfish, D3363/D3370 Maia, D3309 Inspector operands and other source/consumer joins remain held. No new collector, semantic-validation verdict, official pack, complete capability, milestone, historical stall diagnosis, remote CI or 1.0 promotion follows.",
+        "at": "2026-10-09",
+        "summary": "D3601 closes locally under module-registration section 2.5 and the implementing provider-exchange-and-execution contract: local/recorded Support acquires only its consumed inputs, Structure retains cached shapes and Theory retains authored disclosure and exact Explorer authority. Nine predecessor-red controls establish unrelated shape/Explorer failures; authenticated position/installed-pack isolation and all six local/recorded paths pass. Normal focused gates pass 120 Support and 195 Theory/source cases plus clean types. Complete normal gates pass clean types/build, 3743 software, seven unchanged-budget performance, 228 content and 203 browser cases, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. D3594 provider lifetime, D3579 captions and earlier lifecycle repairs remain closed. D3578 selected-square presentation, D3376 opening authority, D3373 durable Stockfish, D3363/D3370 Maia, D3309 Inspector operands and other source/consumer joins remain held. No new collector, permission, semantic-validation verdict, official pack, whole capability, milestone, historical timing diagnosis, remote CI or 1.0 promotion follows.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/provider-health.ts",
@@ -525,6 +525,7 @@
           "planning/provider-exchange-and-execution/execution-frontier-2026-10-05.md",
           "planning/provider-exchange-and-execution/execution-frontier.json",
           "packages/runtime/src/module-query.ts",
+          "packages/runtime/src/module-query.test.ts",
           "apps/server/src/service.ts",
           "apps/server/src/local-module-execution.test.ts",
           "docs/learner-modules.md",

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3600]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3601]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,6 +58,15 @@ across the platform**. Deeper “why this engine move?” search remains researc
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 
+[[D3601]] is closed locally: local Sight, threats, staged risk checks, Nudge,
+Compare and Inspector no longer acquire unrelated theory inputs. Structure reads
+its independently cached shape catalogue; Theory still reads released authored
+claims and validates exact Explorer authority. Nine predecessor-red controls,
+authenticated position/installed-pack requests, 120 focused Support and 195
+Theory/source cases and clean types establish the repair. Complete normal gates
+below pass on final product/test sources. No new collector, permission, selected-square
+presentation, source-contract or whole-capability completion is claimed.
+
 Profile repairs ([[D3595]]/[[D3596]]) are closed locally: history and habit drill-downs refuse changed
 or overlapping pages without losing their existing list; explicit refresh resets the view.
 Per-card preparation/copy respects current consent, the displayed measured operands and view
@@ -111,12 +120,12 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,730 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,743 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
 203 browser cases (138 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
 Normal `make roadmap-receipt verify-awake test-browser-ci-awake` exits zero in one sequence
-on final product/test sources. Warm native arrival measures median 104.1 ms / p95 119.2 ms,
+on final product/test sources. Warm native arrival measures median 88.3 ms / p95 114.1 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
 No product/test source or budget changed during this complete run. This is local verification,

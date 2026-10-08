@@ -252,10 +252,6 @@ export interface ModuleSubject {
 
 function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, context: ModuleSourceContext): readonly ModuleSourceResult[] {
   const fen = subject.fen;
-  if (context.explorerSummary !== undefined) {
-    assertDeclaredEvidence(context.explorerSummary);
-    if (context.explorerSummary.projection.id !== "derived.explorer.population_summary" || context.explorerSummary.projection.version !== 1) throw new TypeError("Expected exact Explorer summary authority");
-  }
   // "What can the opponent do to me": the threat convention reads the position with the learner to
   // move (it passes the turn itself); mate/loose readings need the opponent to move.
   // loosePieceReading reports victims opposite the side to move, i.e. the learner here.
@@ -287,16 +283,23 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       ...ENDGAME_SETUP_CONVENTIONS.map((convention) => route("theory.endgame.setup_match@1", { fen, convention: { id: convention.id, version: convention.version } })),
       ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
     ];
-    case "theory_breadcrumb": return [
-      ...(context.authoredAt?.(subject.node.id) ?? []).map((item) => route("pack.authored.claim@1", { item })),
-      ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
-      route("theory.opening.current_endpoint@1", { fen }),
-      ...(context.explorerSummary === undefined
-        ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: context.explorerUnavailable ?? "not_requested" })]
-        : context.explorerSummary.payload.position.positionFen4 !== transposeKey(fen)
-          ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: "position_mismatch" })]
-          : [route("derived.explorer.population_summary@1", { page: context.explorerSummary.payload.page })]),
-    ];
+    case "theory_breadcrumb": {
+      const explorer = context.explorerSummary;
+      if (explorer !== undefined) {
+        assertDeclaredEvidence(explorer);
+        if (explorer.projection.id !== "derived.explorer.population_summary" || explorer.projection.version !== 1) throw new TypeError("Expected exact Explorer summary authority");
+      }
+      return [
+        ...(context.authoredAt?.(subject.node.id) ?? []).map((item) => route("pack.authored.claim@1", { item })),
+        ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
+        route("theory.opening.current_endpoint@1", { fen }),
+        ...(explorer === undefined
+          ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: context.explorerUnavailable ?? "not_requested" })]
+          : explorer.payload.position.positionFen4 !== transposeKey(fen)
+            ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: "position_mismatch" })]
+            : [route("derived.explorer.population_summary@1", { page: explorer.payload.page })]),
+      ];
+    }
     case "compare_coach": return compareSources(run, subject);
     case "postcommit_nudge": {
       const parent = subject.node.parentId === null ? undefined : run.nodes.find((candidate) => candidate.id === subject.node.parentId);
