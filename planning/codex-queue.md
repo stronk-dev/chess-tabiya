@@ -12,7 +12,7 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
-[[D3600]] holds the latest full browser gate: actual warm native readiness reaches
+[[D3600]] remains open from an earlier full browser gate: actual warm native readiness reached
 253.8 ms against the unchanged 250 ms budget. One pack read and 26 shape requests
 remain; no duplicate hydration regression is established. Preserve the failure,
 inspect the bounded request/frame timing and do not call a passing replay a diagnosis.
@@ -27,11 +27,16 @@ Maia skip, zero retries and all 150 input/112 composition cells. The earlier ful
 browser arrival failure remains open as D3600; replay success is not diagnosis.
 No scheduling rule, source, endpoint, mastery or release change.
 
-Next independent boundary [[D3599]]: the dismissal POST can commit before its
-response is lost. Current failure copy then wrongly claims the card remains
-pending, and a second POST cannot dismiss a non-pending schedule. Use the existing
-read-only intake to reconcile before retrying a mutation; prove committed-response
-loss through the real authenticated endpoint. Preserve pending-only storage behavior.
+[[D3599]] is closed locally: an unconfirmed dismissal now reconciles through the existing
+read-only intake before another mutation. It neither repeats the POST nor treats
+absence from a bounded page as proof of dismissal. Failed/invalid reads retain
+the cards with mutation controls disabled and explicit read-only retry. Seven
+predecessor-red mounted controls and six predecessor-red real desktop/touch-phone
+journeys establish the defect. All 120 focused cases, clean workspace types and
+eleven actual authenticated browser journeys pass. Complete normal gates pass
+3,730 software, seven performance, 228 content and 203 browser cases, one existing
+optional Maia skip, zero retries, all 150 input and 112 composition cells. Pending-only
+storage behavior is unchanged. D3591/D3600 remain unlocated; no release promotion.
 
 [[D3595]]/[[D3596]] are closed locally under accepted player-style §8: history and habit
 continuations preserve displayed operands and exact contributing moves, refuse changed or

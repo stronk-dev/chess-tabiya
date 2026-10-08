@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 import type { DrillRun } from "@chess-tabiya/runtime";
 import { commitMove, createRun } from "../../packages/runtime/src/runtime.js";
@@ -50,6 +50,8 @@ async function waitingReturns(page: Page) {
 
 for (const suffix of ["desktop", "@mobile touch phone"]) {
   test.describe(`due intake replenishment ${suffix}`, () => {
+    const activate = (button: Locator) => suffix.includes("@mobile") ? button.tap() : button.click();
+
     test("serves the waiting return after dismissal and starts its exact preserved position", async ({ page }) => {
       const { hidden, firstId } = await waitingReturns(page);
       await page.goto("/learn");
@@ -122,6 +124,96 @@ for (const suffix of ["desktop", "@mobile touch phone"]) {
       expect(dismissals).toBe(1);
       const refreshed = await (await page.request.get("/progress/due")).json() as { schedules: { id: string }[] };
       expect(refreshed.schedules.some((item) => item.id === hidden.scheduleId)).toBe(true);
+    });
+
+    for (const committed of [true, false]) {
+      test(`reconciles an unconfirmed dismissal before another mutation (committed=${committed})`, async ({ page }) => {
+        const { firstId } = await waitingReturns(page);
+        await page.goto("/learn");
+        const due = page.getByRole("region", { name: "Due now", exact: true });
+        await expect(due.getByRole("article")).toHaveCount(20);
+        let dismissals = 0;
+        page.on("request", (request) => {
+          if (request.method() === "POST" && /\/progress\/schedules\/[^/]+$/u.test(new URL(request.url()).pathname)) dismissals += 1;
+        });
+        await page.route(`**/progress/schedules/${firstId}`, async (route) => {
+          if (committed) {
+            const response = await route.fetch();
+            expect(response.ok(), await response.text()).toBe(true);
+          }
+          // The first arm loses a real accepted response; the other never reaches storage.
+          await route.abort("failed");
+        }, { times: 1 });
+        let release!: () => void;
+        const held = new Promise<void>((resolve) => { release = resolve; });
+        let responseReady!: () => void;
+        const ready = new Promise<void>((resolve) => { responseReady = resolve; });
+        await page.route("**/progress/due", async (route) => {
+          const response = await route.fetch();
+          expect(response.ok(), await response.text()).toBe(true);
+          responseReady();
+          await held;
+          await route.fulfill({ response });
+        }, { times: 1 });
+        const dismiss = due.getByRole("article").first().getByRole("button", { name: "Dismiss", exact: true });
+        if (!suffix.includes("@mobile")) await dismiss.focus();
+        await activate(dismiss);
+        await expect(due.getByRole("status").filter({ hasText: /^Checking your due returns…$/u })).toHaveText("Checking your due returns…");
+        await ready;
+        await expect(due.getByRole("article")).toHaveCount(20);
+        await expect(dismiss).toBeDisabled();
+        expect(dismissals).toBe(1);
+        release();
+        await expect(due).toContainText("We couldn't confirm the dismissal. Your due list is up to date.");
+        await expect(due.getByRole("alert")).toHaveCount(0);
+        await expect(due).not.toContainText("The return was dismissed");
+        await expect(due).not.toContainText("It remains in your queue");
+        if (!suffix.includes("@mobile")) await expect(due.getByRole("heading", { name: "Due now", exact: true })).toBeFocused();
+        const refreshed = await (await page.request.get("/progress/due")).json() as { schedules: { id: string }[]; waiting: number };
+        expect(refreshed.schedules.some((item) => item.id === firstId)).toBe(!committed);
+        expect(refreshed.waiting).toBe(committed ? 0 : 1);
+        expect(dismissals).toBe(1);
+        if (!committed) {
+          await activate(due.getByRole("article").first().getByRole("button", { name: "Dismiss", exact: true }));
+          await expect(due).not.toContainText("couldn't confirm");
+          await expect(due).not.toContainText("waiting");
+          await expect(due.getByRole("article")).toHaveCount(20);
+          const retried = await (await page.request.get("/progress/due")).json() as { schedules: { id: string }[] };
+          expect(retried.schedules.some((item) => item.id === firstId)).toBe(false);
+          expect(dismissals).toBe(2);
+        }
+        await page.unrouteAll({ behavior: "wait" });
+      });
+    }
+
+    test("retries only the due read when both a committed response and its reconciliation are lost", async ({ page }) => {
+      const { firstId } = await waitingReturns(page);
+      await page.goto("/learn");
+      const due = page.getByRole("region", { name: "Due now", exact: true });
+      await expect(due.getByRole("article")).toHaveCount(20);
+      let dismissals = 0;
+      page.on("request", (request) => {
+        if (request.method() === "POST" && /\/progress\/schedules\/[^/]+$/u.test(new URL(request.url()).pathname)) dismissals += 1;
+      });
+      await page.route(`**/progress/schedules/${firstId}`, async (route) => {
+        const response = await route.fetch();
+        expect(response.ok(), await response.text()).toBe(true);
+        await route.abort("failed");
+      }, { times: 1 });
+      await page.route("**/progress/due", (route) => route.abort("failed"), { times: 1 });
+      await activate(due.getByRole("article").first().getByRole("button", { name: "Dismiss", exact: true }));
+      await expect(due.getByRole("alert")).toContainText("We couldn't confirm whether this return was dismissed, and your due returns could not be refreshed.");
+      await expect(due.getByRole("article")).toHaveCount(20);
+      await expect(due.getByRole("button", { name: "Dismiss", exact: true }).first()).toBeDisabled();
+      await expect(due.getByRole("button", { name: "Start due attempt", exact: true }).first()).toBeDisabled();
+      await expect(due.getByRole("button", { name: "Open source", exact: true }).first()).toBeEnabled();
+      await activate(due.getByRole("button", { name: "Retry loading returns", exact: true }));
+      await expect(due.getByRole("alert")).toHaveCount(0);
+      await expect(due).toContainText("We couldn't confirm the dismissal. Your due list is up to date.");
+      await expect(due).not.toContainText("waiting");
+      const refreshed = await (await page.request.get("/progress/due")).json() as { schedules: { id: string }[] };
+      expect(refreshed.schedules.some((item) => item.id === firstId)).toBe(false);
+      expect(dismissals).toBe(1);
     });
   });
 }

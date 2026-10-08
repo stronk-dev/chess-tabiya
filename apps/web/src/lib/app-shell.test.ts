@@ -2873,7 +2873,7 @@ describe("application shell", () => {
     let dueReads = 0;
     const learnApi: DrillClientApi = {
       ...api(),
-      async dueProgress() { return dueQueue(++dueReads === 1 ? [retrySchedule, departedSchedule] : [departedSchedule]); },
+      async dueProgress() { return dueQueue(++dueReads <= 2 ? [retrySchedule, departedSchedule] : [departedSchedule]); },
       dismissSchedule,
     };
     const router = new HistoryRouter(window);
@@ -2895,7 +2895,8 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(dismiss.disabled).toBe(true));
     expect(dismiss.getAttribute("aria-describedby")).toBe(`schedule-dismiss-busy-${retrySchedule.id}`);
     firstDismiss.reject(new Error("private dismissal detail"));
-    await vi.waitFor(() => expect(document.body.textContent).toContain("This return could not be dismissed. It remains in your queue; try again."));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("We couldn't confirm the dismissal. Your due list is up to date."));
+    expect(dueReads).toBe(2);
     expect(document.body.textContent).not.toContain("private dismissal detail");
     expect(document.body.textContent).toContain(dueLabel(retrySchedule.dueAt));
 
@@ -3002,6 +3003,116 @@ describe("application shell", () => {
     expect(section().textContent).toContain(new Date(next.dueAt).toLocaleString());
     expect(section().querySelector('[role="alert"]')).toBeNull();
     expect(section().textContent).not.toContain("Updating your due returns");
+    await unmount(component);
+  });
+
+  it.each([true, false])("reconciles an unconfirmed dismissal by read before another mutation (committed=%s)", async (committed) => {
+    history.replaceState(null, "", "/learn");
+    const first = { id: "uncertain-first", sessionKind: "position" as const, packId: null, kind: "blocked" as const, variant: null, dueAt: "2026-09-13T21:00:00.000Z", sourceRunId: run.id };
+    const next = { ...first, id: "uncertain-next", dueAt: "2026-09-13T21:10:00.000Z" };
+    const reconciliation = deferred<import("./api.js").DueQueuePage>();
+    const dueProgress = vi.fn().mockResolvedValueOnce(dueQueue([first, next]))
+      .mockImplementationOnce(() => reconciliation.promise).mockResolvedValue(dueQueue([next]));
+    const dismissSchedule = vi.fn().mockRejectedValueOnce(new Error("private unconfirmed dismissal"))
+      .mockResolvedValue(undefined);
+    const component = mount(App, { target: target(), props: { api: { ...api(), dueProgress, dismissSchedule }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    const section = () => document.querySelector<HTMLElement>('section[aria-labelledby="due-title"]')!;
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(2));
+    const dismiss = [...section().querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Dismiss")!;
+    dismiss.focus(); dismiss.click(); dismiss.click();
+    await vi.waitFor(() => expect(dueProgress).toHaveBeenCalledTimes(2));
+    expect(section().textContent).toContain("Checking your due returns…");
+    expect(section().querySelectorAll("article")).toHaveLength(2);
+    expect(dismiss.disabled).toBe(true);
+    expect(dismiss.getAttribute("aria-describedby")).toBe("due-refresh-busy");
+    dismiss.click();
+    expect(dismissSchedule).toHaveBeenCalledExactlyOnceWith(first.id);
+    reconciliation.resolve(dueQueue(committed ? [next] : [first, next]));
+    await vi.waitFor(() => expect(section().textContent).toContain("We couldn't confirm the dismissal. Your due list is up to date."));
+    expect(section().textContent).not.toContain("The return was dismissed");
+    expect(section().textContent).not.toContain("It remains in your queue");
+    expect(section().textContent).not.toContain("private unconfirmed dismissal");
+    if (committed) expect(document.activeElement?.id).toBe("due-title");
+    else expect([dismiss, section().querySelector("#due-title")]).toContain(document.activeElement);
+    expect(section().querySelectorAll("article")).toHaveLength(committed ? 1 : 2);
+    expect(dismissSchedule).toHaveBeenCalledTimes(1);
+    if (!committed) {
+      [...section().querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Dismiss")!.click();
+      await vi.waitFor(() => expect(section().querySelectorAll("article")).toHaveLength(1));
+      expect(dismissSchedule).toHaveBeenNthCalledWith(2, first.id);
+      expect(dueProgress).toHaveBeenCalledTimes(3);
+      expect(section().textContent).not.toContain("couldn't confirm");
+    }
+    await unmount(component);
+  });
+
+  it.each(["unavailable", "crossed", "malformed"] as const)("requires read-only recovery after an unconfirmed dismissal and %s reconciliation", async (failure) => {
+    history.replaceState(null, "", "/learn");
+    const first = { id: "uncertain-read", sessionKind: "position" as const, packId: null, kind: "blocked" as const, variant: null, dueAt: "2026-09-13T21:00:00.000Z", sourceRunId: run.id };
+    const removed = { ...first, id: "confirmed-before", dueAt: "2026-09-13T20:00:00.000Z" };
+    const dueProgress = vi.fn().mockResolvedValueOnce(dueQueue([removed, first])).mockResolvedValueOnce(dueQueue([first]));
+    if (failure === "unavailable") dueProgress.mockRejectedValueOnce(new Error("private reconciliation detail"));
+    else if (failure === "crossed") dueProgress.mockResolvedValueOnce(dueQueue([removed, first]));
+    else dueProgress.mockResolvedValueOnce(dueQueue([first], 1));
+    dueProgress.mockResolvedValueOnce(dueQueue([]));
+    const dismissSchedule = vi.fn().mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error("private dismissal detail"));
+    const component = mount(App, { target: target(), props: { api: { ...api(), dueProgress, dismissSchedule }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    const section = () => document.querySelector<HTMLElement>('section[aria-labelledby="due-title"]')!;
+    const dismiss = () => [...section().querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Dismiss")!;
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(2));
+    dismiss().click();
+    await vi.waitFor(() => expect(section().querySelectorAll("article")).toHaveLength(1));
+    await vi.waitFor(() => expect(dismiss().disabled).toBe(false));
+    dismiss().click();
+    await vi.waitFor(() => expect(section().textContent).toContain("We couldn't confirm whether this return was dismissed, and your due returns could not be refreshed."));
+    expect(section().querySelectorAll("article")).toHaveLength(1);
+    expect(dismiss().disabled).toBe(true);
+    expect(dismiss().getAttribute("aria-describedby")).toBe("due-refresh-error");
+    expect(section().textContent).not.toContain("It remains in your queue");
+    expect(section().textContent).not.toContain("The return was dismissed");
+    expect(section().textContent).not.toContain("private");
+    dismiss().click();
+    const retry = [...section().querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Retry loading returns")!;
+    retry.focus(); retry.click(); retry.click();
+    await vi.waitFor(() => expect(section().textContent).toContain("We couldn't confirm the dismissal. Your due list is up to date."));
+    expect(section().querySelectorAll("article")).toHaveLength(0);
+    expect(section().textContent).toContain("Nothing is due yet");
+    expect(section().querySelector('[role="alert"]')).toBeNull();
+    expect(document.activeElement?.id).toBe("due-title");
+    expect(dismissSchedule).toHaveBeenCalledTimes(2);
+    expect(dueProgress).toHaveBeenCalledTimes(4);
+    await unmount(component);
+  });
+
+  it.each(["resolve", "reject"] as const)("retires an uncertain dismissal read's late %s after Learn reentry", async (settlement) => {
+    history.replaceState(null, "", "/learn");
+    const first = { id: "uncertain-departed", sessionKind: "position" as const, packId: null, kind: "blocked" as const, variant: null, dueAt: "2026-09-13T21:00:00.000Z", sourceRunId: run.id };
+    const next = { ...first, id: "current-after-return", dueAt: "2026-09-13T21:10:00.000Z" };
+    const reconciliation = deferred<import("./api.js").DueQueuePage>();
+    const dueProgress = vi.fn().mockResolvedValueOnce(dueQueue([first])).mockImplementationOnce(() => reconciliation.promise)
+      .mockResolvedValue(dueQueue([next]));
+    const dismissSchedule = vi.fn().mockRejectedValue(new Error("private unconfirmed dismissal"));
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: { ...api(), dueProgress, dismissSchedule }, router, storage: new MemoryStorage() } });
+    const section = () => document.querySelector<HTMLElement>('section[aria-labelledby="due-title"]')!;
+    await vi.waitFor(() => expect(section()?.querySelectorAll("article")).toHaveLength(1));
+    [...section().querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Dismiss")!.click();
+    await vi.waitFor(() => expect(dueProgress).toHaveBeenCalledTimes(2));
+    router.navigate("/");
+    await vi.waitFor(() => expect(location.pathname).toBe("/"));
+    router.navigate("/learn");
+    await vi.waitFor(() => expect(section()?.textContent).toContain(new Date(next.dueAt).toLocaleString()));
+    const source = [...section().querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Open source")!;
+    source.focus();
+    if (settlement === "resolve") reconciliation.resolve(dueQueue([first]));
+    else reconciliation.reject(new Error("private departed read"));
+    await tick(); await Promise.resolve();
+    expect(section().textContent).not.toContain("couldn't confirm");
+    expect(section().textContent).not.toContain("Checking your due returns");
+    expect(section().textContent).not.toContain(new Date(first.dueAt).toLocaleString());
+    expect(section().querySelector('[role="alert"]')).toBeNull();
+    expect(document.activeElement).toBe(source);
+    expect(dismissSchedule).toHaveBeenCalledTimes(1);
     await unmount(component);
   });
 

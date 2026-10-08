@@ -75,8 +75,17 @@ stranding hidden returns; keyed cards preserve keyboard focus and departed reads
 a later view. Five predecessor-red controls, all 113 focused return cases and four actual
 desktop/touch-phone twenty-one-position journeys pass, including exact-source start and failed-read
 recovery without another dismissal. Final normal tiers pass as recorded below. [[D3599]] separately
-owns a lost dismissal response; it is not covered by successful-dismissal replenishment.
+covers a lost dismissal response; it is not inferred from successful-dismissal replenishment.
 No scheduling rule, source, schema, official content or whole journey milestone is promoted.
+
+[[D3599]] is closed locally: an unconfirmed dismissal now reads the current intake before
+allowing another mutation, without replaying the POST or inferring success from a missing
+bounded-page card. A failed read keeps the displayed cards and offers read-only retry;
+departed completions remain retired. Seven predecessor-red mounted controls and six
+predecessor-red actual desktop/touch-phone cases establish the defect. All 120 focused
+return cases, clean types and eleven actual authenticated browser journeys pass. The complete
+normal gates below pass on final product/test sources. No storage, scheduling, endpoint or
+whole-capability change is claimed.
 
 Previous provider repair ([[D3594]]) is closed locally: cancelled requests waiting for an upstream
 slot detach without disturbing its owner, elapsed admission cannot acquire a slot, and current
@@ -102,15 +111,15 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,723 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,730 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-197 browser cases (132 smoke, five content, 59 matrix, one packaged-default). One existing
+203 browser cases (138 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-The first sequence stopped at this batch's missing roadmap RFC anchor, corrected before normal
-governance/content passed. The first full browser run then failed warm native arrival at 253.8 ms
-against 250 ms ([[D3600]]). An unchanged-source complete browser replay exits zero, with native
-median 104.0 ms / p95 131.3 ms; that is not a diagnosis or repair of the original failure.
-No product/test source or budget changed between those browser runs. This is local verification,
+Normal `make roadmap-receipt verify-awake test-browser-ci-awake` exits zero in one sequence
+on final product/test sources. Warm native arrival measures median 104.1 ms / p95 119.2 ms,
+with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
+against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
+No product/test source or budget changed during this complete run. This is local verification,
 not a new GitHub, native release-image or readiness-to-push result.
 
 [[D3591]] remains open: the earlier full run measured 328.466431 ms maximum event-loop

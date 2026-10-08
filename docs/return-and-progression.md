@@ -115,8 +115,9 @@ Learn owns related-attempt lookup and due dismissal as retained client actions. 
 related lookup invalidates its request, so a late result cannot reopen it; a failed lookup stays open
 as an explicit retry and never exposes provider diagnostics. The client verifies the requested run
 graph and the bounded three-item related projection before rendering it. Dismissal captures one
-schedule id, refuses duplicates, removes the card only after server success, keeps a failed card for
-retry, and cannot mutate a newly loaded Learn route after departure. Due and retry starts continue
+schedule id, refuses duplicates, and reconciles an unconfirmed response by reading the current due
+list before offering another mutation. It cannot mutate a newly loaded Learn route after departure.
+Due and retry starts continue
 through the run controller's single-flight lifecycle and now expose its pending state to assistive
 technology while their controls are disabled.
 
@@ -128,6 +129,14 @@ and the remaining cards, with **Retry loading returns** rather than another dism
 is read-only. Changed-route and unmounted completions cannot install cards or errors. Cards are
 keyed by their schedule identities; removing a keyboard-focused card or retry button returns focus
 to the Due now heading without taking focus from another control the learner has selected.
+
+A lost dismissal response does not establish whether storage accepted the request. Learn says it
+is checking the queue and performs the same read-only refresh, without repeating the POST. A valid
+page replaces the intake and allows another explicit dismissal only on a still-listed card; absence
+from the bounded page is not presented as proof of dismissal. If that read fails or is invalid,
+the existing cards remain, Start and Dismiss stay disabled, and **Retry loading returns** retries
+only the read. Open source remains available. A later valid read clears the uncertainty with an
+honest status message, without inventing a storage result.
 
 Due cards name the variation (the pack's retry-variant kind in words, or a fresh opponent seed),
 the due date with the root's standing word beside it and the fixed explanation *"based on how many

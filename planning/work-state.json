@@ -29778,18 +29778,19 @@
       "id": "D3598",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:d5e1f2960b70fa1b05b55bc4f5511cf0b3d16527a4c1915ebc3c5eb67931afe1",
+      "sourceDigest": "sha256:a767fb8c8d91cb66720a46760ae433ea631211f3d3ea1a98c585b5da667c42bb",
       "uxItems": [],
       "evidence": "tests/browser/return.spec.ts",
       "evidenceKind": "path"
     },
     {
       "id": "D3599",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1fea97bd4871dcd190094681470d0c98cd58b3313661614496c73b139166112e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:74bf2edb40312b87804e0619cc10432532c756f58216d52c791c1e48b7e0f618",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "tests/browser/return.spec.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3600",
