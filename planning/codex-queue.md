@@ -65,6 +65,12 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    contract gates. Finish the existing Support/Review/theory joins rather than
    inventing producer data at the UI boundary. [[D3540]] still blocks treating an
    installed Library badge as reviewed explanatory content.
+   [[D3559]] repairs the visible origin/review confusion: Library cards and all entry
+   kinds identify the source without implying review, and filtered results no longer
+   assert global graduation or call publications drafts. Eleven focused and three built
+   browser controls pass. Full sequential normal verification also passes 3,534 software,
+   seven performance, 227 content and 173 browser cases, with one existing optional
+   Maia skip and zero retries. D3540's actual grounding and entry-state contract remain held.
    Delivered [[D3554]] adds the passive Keep playing handoff to real empty/source-unavailable
    module and Hint cards, using the existing modal/focus controller. No new evidence,
    recommended move or Compare defect is claimed; the wider empty-loop and hint-default

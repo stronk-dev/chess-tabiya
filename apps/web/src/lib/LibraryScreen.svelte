@@ -8,6 +8,7 @@
     LIBRARY_KINDS,
     LIBRARY_PHASE_COPY,
     LIBRARY_PHASES,
+    LIBRARY_SOURCE_NOTICE,
     disclosureCopy,
     type LibraryItem,
     type LibraryKind,
@@ -107,7 +108,8 @@
   <header>
     <p class="eyebrow">Library</p>
     <h1 id="library-title">Find it, understand it, rehearse it, come back to it.</h1>
-    <p class="lede">Search packs, principles, shapes, concepts and named openings. Official material is listed first; community drafts say so.</p>
+    <p class="lede">Search packs, principles, shapes, concepts and named openings. Material from the official source is listed first; community drafts and publications are labelled.</p>
+    <p class="honest source-notice">{LIBRARY_SOURCE_NOTICE}</p>
   </header>
 
   <section class="controls" aria-label="Search and filter the library">
@@ -146,7 +148,7 @@
           <p class="honest">{result.totals[group.kind].shown < result.totals[group.kind].total ? `Showing ${result.totals[group.kind].shown} of ${result.totals[group.kind].total}. Narrow the search to see the rest.` : `${result.totals[group.kind].total} found`}</p>
         </div>
         {#if group.kind === "pack" && officialPacks === 0}
-          <p class="honest">No official pack has graduated yet. Every pack below is a community draft and is labelled as one.</p>
+          <p class="honest">None of the matching packs comes from the official source.</p>
         {/if}
         {#if group.kind === "opening" && result.query.tokens.length === 0}
           <p class="honest">Search by name to browse the named-opening catalogue.</p>

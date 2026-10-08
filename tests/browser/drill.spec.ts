@@ -1784,22 +1784,25 @@ test("Library search opens a principle, understands its basis, and rehearses an 
   const packTitles = await page.locator('.item[data-kind="pack"] h3').allTextContents();
   expect(packTitles.length).toBeGreaterThan(0);
   expect(new Set(packTitles).size).toBe(packTitles.length);
-  await expect(page.getByText("No official pack has graduated yet.", { exact: false })).toBeVisible();
-  await expect(page.locator('.item[data-kind="pack"] .origin').first()).toHaveText(/Community draft · not yet reviewed/u);
+  await expect(page.getByText("None of the matching packs comes from the official source.", { exact: true })).toBeVisible();
+  await expect(page.locator('.item[data-kind="pack"] .origin').first()).toHaveText("Community draft");
+  await expect(page.locator(".source-notice")).toHaveText("Source labels identify who supplied the material, not whether its chess claims have been reviewed. A licence describes reuse rights, not chess accuracy.");
 
   await page.getByRole("group", { name: "Chess phase" }).getByRole("button", { name: "Every phase" }).click();
   await page.getByLabel("Search the library").fill("tempo currency");
   const principle = page.locator('.item[data-kind="principle"]').filter({ hasText: "Tempo is the currency" });
   await expect(principle).toHaveCount(1);
-  await expect(principle.locator(".origin")).toHaveText("Official");
+  await expect(principle.locator(".origin")).toHaveText("Official source");
   await principle.getByRole("link", { name: "Tempo is the currency", exact: true }).click();
 
   await expect(page).toHaveURL(/\/library\/principle\/tempo-is-the-currency$/u);
   await expect(page.getByRole("heading", { level: 1, name: "Tempo is the currency" })).toBeVisible();
+  await expect(page.locator(".origin-line")).toContainText("Official source");
+  await expect(page.locator(".source-notice")).toContainText("not whether its chess claims have been reviewed");
   await expect(page.getByText("Stands on the authors' practice. No external source is cited for it.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Where it stops holding" })).toBeVisible();
   const anchored = page.locator("section").filter({ has: page.getByRole("heading", { name: "Rehearse it" }) }).locator("li");
-  await expect(anchored.first()).toContainText("Community draft · not yet reviewed");
+  await expect(anchored.first()).toContainText("Community draft");
   const title = (await anchored.first().locator("a").textContent())!.trim();
   await anchored.first().getByRole("button", { name: `Rehearse: ${title}` }).click();
 
@@ -3457,6 +3460,9 @@ test(`Support opens the exact recognized Library pattern and preserves the recor
   await link.click();
   await expect(page).toHaveURL(/\/library\/shape\/maroczy-bind$/u);
   await expect(page.getByRole("heading", { name: "Maroczy Bind", exact: true })).toBeVisible();
+  await expect(page.locator(".origin-line")).toContainText("Official source");
+  await expect(page.locator(".source-notice")).toContainText("A licence describes reuse rights, not chess accuracy.");
+  await expect(page.getByText("UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; standard Maroczy doctrine rendered from model knowledge.", { exact: true })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(runUrl);
   await expect(page.getByLabel("Chessboard")).toBeVisible();

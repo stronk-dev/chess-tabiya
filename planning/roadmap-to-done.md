@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3558]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3559]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -43,7 +43,7 @@ the machine map above remains the current assignment/status source.
 | Rehearsal | Start, commit, opponent consequence, rewind, fork, compare, replay, resume and multiple drill forms | Complete opinionated arrival/return paths and official examples for each form |
 | Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
-| Theory and packs | Searchable phase-first Library, entry/rehearsal doors, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content, fix official-versus-installed disclosure, implement durable training-set progression/repeat/tempo and graduate the official corpus |
+| Theory and packs | Searchable phase-first Library, entry/rehearsal doors, explicit source-versus-review disclosure, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content and establish actual review authority, implement durable training-set progression/repeat/tempo and graduate the official corpus |
 | Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results and resume | Official educational progression, consumed theory unlocks, complete boss/reward/failure paths, catalogue progression and meaningful long-term rewards |
@@ -62,7 +62,11 @@ Empty/source-unavailable Support and Hint cards now return directly to the board
 journeys verify that focus releases and a subsequent move succeeds. This closes a
 specific dead-end interaction, not the remaining evidence, hint-default or whole-UX work.
 There are **zero graduated official packs**. In particular, an installed Library item's Official
-badge does not by itself establish source review ([[D3540]]).
+source label does not by itself establish chess review ([[D3540]]).
+The Library now explicitly labels source origin and separates licences from chess accuracy
+([[D3559]]). All four entry kinds retain their source notes; community publication is not
+called a pending review, and filtered matches cannot assert global pack graduation. This is
+a display-truth repair, not grounded content or an entry-review authority.
 The retained pack reader checks the authorised run and its recorded document identity
 ([[D3548]]). The separately measured creation bypass is now repaired ([[D3550]]): fresh
 starts resolve the current public catalogue, owner-only Studio playtests use an internal
@@ -82,7 +86,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **71 active product RFCs** (19 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,307 ledger rows** (1,445 done, 161 refused, 1,701 live,
+(271 completed, 24 retired, 274 live); **3,308 ledger rows** (1,446 done, 161 refused, 1,701 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,061 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
@@ -98,7 +102,21 @@ unaccepted numerical, source or durable-state contracts cannot be guessed around
 
 ## Detailed checkpoint history
 
-Current verification qualification (D3556–D3558): normal sequential
+2026-10-08 current Library checkpoint (D3559): normal sequential
+`make verify-awake test-browser-ci-awake` exits zero with clean types,
+3,534 software cases / 351 files, seven isolated performance cases / four files,
+227 content cases / 23 files, build and downstream software/governance checks.
+All four rebuilt browser tiers pass: 108 smoke, five content, 59 matrix and one
+packaged-default; 173 passes, one existing optional Maia skip, zero retries,
+all 150 exact input and 112 composition cells. Seven predecessor-red controls
+prove the old review implication and filtered-result overclaim; eleven focused
+cases and three built Library/Support journeys pass. The real ungrounded source
+note stays visible. D3540's content grounding and source/review contract remain
+blocked; source labels, licences and successful navigation do not endorse chess
+claims. Historical intermittent failures remain open. This is local product
+proof, not remote GitHub, real Maia calibration or full release readiness.
+
+Prior verification checkpoint (D3556–D3558): normal sequential
 `make verify-awake test-browser-ci-awake` exits zero after the repairs below.
 Clean types, 3,529 software cases / 351 files, seven isolated performance cases /
 four files, 227 content cases / 23 files, build and downstream software/governance

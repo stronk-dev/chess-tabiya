@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:94cc86244c21c68f0dfb267bb6e9c7dd8acb7fbe6d63981ac0cd5dcd19453d4a",
+    "roadmap": "sha256:56738c82c39c48305f89adad7edad07085e7f69b5503dc8ea9dbd2d86153945f",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:15acaf03f63ba7693ca8cb1e36f93d11213d3960abb23624ee3345225651cb51",
+    "workState": "sha256:d2bf13497d7eb27d5338eb6bb3bd81e0a7cc692c44bbc74d335f7578e74c2135",
     "rfcRegister": "sha256:69a4cc1464effa6938b182a526271d8d0644fbd4a01ceef25b0c0eb02442c709",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 12,
       "blocked": 1061,
-      "done": 1445,
+      "done": 1446,
       "refused": 161
     },
     "workItems": {
@@ -1883,11 +1883,17 @@
       ],
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
-        "at": "2026-09-24",
-        "summary": "The theory/library workflow exists: a phase-first Library searches packs, principles, shapes, concepts and named openings with one row per item, official material first and drafts labelled; entry pages join each item to rehearse, understand and return doors over GET /theory; principles gain a pinned, rights-reviewed citation register; pasted games are stripped of third-party annotations. No official pack has graduated and no principle cites a source yet — authored content remains the gate.",
+        "at": "2026-10-08",
+        "summary": "The phase-first Library and entry/rehearsal/return doors remain implemented. D3559 now distinguishes source channel and reuse licence from chess review on every Library entry/card, preserves citations/source notes, and refuses global graduation or draft-status conclusions from a filtered page. Seven predecessor-red controls become eleven passing focused tests; three actual built Library/Support desktop/phone journeys pass. Full sequential make verify-awake test-browser-ci-awake passes clean types, 3534 software cases, seven performance cases, 227 content cases and all four browser tiers: 173 passes, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3540 remains blocked on the source/review contract and actual content grounding; the legacy wire field is unchanged. Zero official packs graduate. Historical intermittent failures remain open. This is no content endorsement, whole capability/milestone, remote CI or release promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/theory-library.test.ts",
+          "apps/web/src/lib/theory-library.test.ts",
+          "apps/web/src/lib/theory-library.ts",
+          "apps/web/src/lib/LibraryScreen.svelte",
+          "apps/web/src/lib/TheoryEntryScreen.svelte",
+          "tests/browser/drill.spec.ts",
+          "docs/shape-library.md",
           "rfc/theory-knowledge-pipeline.md",
           "rfc/theory-drill-current-joins.md",
           "rfc/import-source-protocol-register.md"

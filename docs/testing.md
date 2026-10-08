@@ -12,6 +12,10 @@ These focused commands do not replace the full CI tiers or remaining complete UX
 `make support-theory-navigation-check` checks strict shape receipt rendering and the actual
 desktop/phone Support → Library → saved-run return, including unchanged recorded events.
 It is a focused development check; the same journeys also run in the browser smoke tier.
+`make library-disclosure-check` checks channel-versus-review labels on the catalogue and all four
+entry kinds, including filtered publications. `make library-disclosure-browser-check` exercises
+the built Library → principle → rehearsal and desktop/phone Support → shape → saved-run return,
+retaining source notes and recorded events. Neither check establishes content review or graduation.
 `make play-composition-tablet-check` additionally runs final Hint resize/retention, every compact
 head swap, staged/empty/consequence states and four independent header separation checks with an
 overlap negative control. Native matrix actions have a finite fail-fast timeout, not forced clicks.

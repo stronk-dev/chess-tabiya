@@ -29255,7 +29255,7 @@
       "id": "D3540",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:91e9920a01155306fddc5bc4f1a895fb91335b0c2639d46484e46f4b06d613cb",
+      "sourceDigest": "sha256:4b65c60b01fee527320f445d19b336ab403435fe44df401f777e619f4affbaf5",
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:theory-drill-current-joins.md"
@@ -29421,6 +29421,15 @@
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-08"
+    },
+    {
+      "id": "D3559",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:564dc52487e418a54626d0a5d83e9c29e2b4ee8a6ff72aa056ad472956a4ef6a",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/theory-library.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

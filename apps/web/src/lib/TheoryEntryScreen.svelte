@@ -5,6 +5,7 @@
   import { routePath, type AppRoute } from "./router.js";
   import {
     LIBRARY_PHASE_COPY,
+    LIBRARY_SOURCE_NOTICE,
     STANDS_ON_COPY,
     citationAttribution,
     disclosureCopy,
@@ -134,6 +135,7 @@
   <p class="crumb"><a href="/library" onclick={go("/library")}>← Library</a></p>
   <p class="eyebrow">{eyebrow}</p>
   <h1 id="entry-title">{heading}</h1>
+  {#if loaded !== undefined}<p class="honest source-notice">{LIBRARY_SOURCE_NOTICE}</p>{/if}
   {#if error}
     <p role="alert">{error}</p>
   {:else if loaded === undefined}

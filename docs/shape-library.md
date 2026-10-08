@@ -33,6 +33,15 @@ versions from Shape Studio. Channel is derived from the resolving source and is 
 author-writable field. The server projects an allow-list and exposes provenance, licence,
 attribution, channel, and community publisher beside the authored claims.
 
+Library cards and entries label this as **Official source**, **Community draft** or
+**Community publication**, not a chess review result. Every Library entry and the search
+page explains that source labels identify who supplied material, while licences describe
+reuse rights rather than chess accuracy. Existing source notes and citations remain visible
+unchanged. A filtered page with no official-source packs describes only those matches;
+it does not infer global graduation or call community publications drafts. The legacy
+`reviewStatus` wire field remains unchanged; this display correction adds no review
+workflow, endorsement or content graduation authority.
+
 ## Pack references
 
 Pack schema v0.11 adds optional top-level `shapes` ids and optional

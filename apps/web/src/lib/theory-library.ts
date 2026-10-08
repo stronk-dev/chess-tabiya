@@ -242,13 +242,15 @@ export function librarySearchPath(query: LibrarySearchQuery): string {
 // Learner copy — fixed product strings about origin and availability, never chess claims.
 // ---------------------------------------------------------------------------------------------
 
+export const LIBRARY_SOURCE_NOTICE = "Source labels identify who supplied the material, not whether its chess claims have been reviewed. A licence describes reuse rights, not chess accuracy.";
+
 export function disclosureCopy(value: LibraryDisclosure): string {
   const publisher = value.publisherHandle === undefined ? "" : ` · @${value.publisherHandle}`;
-  if (value.channel === "official") return "Official";
+  if (value.channel === "official") return "Official source";
   if (value.channel === "catalogue") return "Opening catalogue · Lichess chess-openings (CC0)";
   if (value.reviewStatus === "published") return `Community publication${publisher}`;
   if (value.reviewStatus === "schema_example") return "Example content";
-  return `Community draft · not yet reviewed${publisher}`;
+  return `Community draft${publisher}`;
 }
 
 export const STANDS_ON_COPY: Readonly<Record<PrincipleEntryView["standsOn"], string>> = Object.freeze({

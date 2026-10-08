@@ -370,6 +370,13 @@ evidence-components-check:
 support-theory-navigation-check: evidence-components-check
 	./node_modules/.bin/playwright test --grep "Support opens the exact recognized Library pattern"
 
+.PHONY: library-disclosure-check library-disclosure-browser-check
+library-disclosure-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/theory-library.test.ts
+
+library-disclosure-browser-check:
+	./node_modules/.bin/playwright test --grep "Library search opens a principle|Support opens the exact recognized Library pattern"
+
 .PHONY: http-streaming-check
 http-streaming-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/http-streaming.test.ts
