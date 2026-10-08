@@ -29493,6 +29493,33 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3567",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bb75558ae4fe41cc74879394008cec3be90886a7dd90910502666a539e8ec2ed",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3568",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:55129329842ade2d1c45995ddb4196b79f143d176d5d9742a0d93f0f1ef43717",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3569",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:54be1eba30f3d13301545904bb82a59dca228f64208f1275b2419f80ef25948b",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

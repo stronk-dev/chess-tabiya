@@ -109,6 +109,19 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    module and Hint cards, using the existing modal/focus controller. No new evidence,
    recommended move or Compare defect is claimed; the wider empty-loop and hint-default
    obligations remain open.
+   Independent account delivery [[D3567]]/[[D3568]] is closed locally: actual
+   desktop/phone play → branch → download → source-account deletion → new-account
+   import → normal device claim → continued bot play. Wrong-password and collision
+   arms preserve data. Eight predecessor-red transport controls fix import/export/delete
+   confirmation signing out valid sessions while retaining real expiry. All 24 focused
+   cases and both native journeys pass. Full normal software/performance/content and
+   governance pass. The first full smoke run finds [[D3569]]: the existing warning test
+   mistakes one learner payload plus one opponent selection for two learner submissions.
+   Actual trace bodies establish the cause; all four repaired fixtures require both exact
+   actor populations and retain zero pre-confirm writes. Final normal governance and all
+   browser tiers exit zero: 112 smoke / five content / 59 matrix / one packaged-default,
+   one existing optional Maia skip, zero retries; all 150 input and 112 composition cells.
+   This does not complete guest claim, all object/schema lifecycle or the account capability.
 3. [[D3535]]: training-set execution-context author amendment, then the remaining
    [[D3318]] member progression/repeat/re-offer journey. The installed catalogue/API
    is delivered; durable cycle identity is not. Preserve the existing migration
@@ -119,7 +132,7 @@ closeouts remain in the ledger and append-only log; they are not active blockers
    exact witness equality; [[D3309]]'s structural-operand scope does not own this tactical
    composition rule. Do not delete a whole multi-threat source or treat wording as full UX.
 
-Latest completed product wave: Profile references open the exact recorded move;
+Earlier completed product waves (preceding measurements retained): Profile references open the exact recorded move;
 Support shapes open their actual Library entry; completed bots have recoverable
 same-bot replay; resume/duplicate attach retained pack bytes; private digests no
 longer authorise fresh starts; failed application construction releases acquired

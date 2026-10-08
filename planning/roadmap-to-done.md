@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3566]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3569]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -50,7 +50,7 @@ the machine map above remains the current assignment/status source.
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, submissions, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, submission review, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
-| Account/data | Authentication, authorization, source-scoped pack creation/replay, writer leases, export/delete and implemented maintenance operations | Complete portable account round-trip, guest/claim, future-object coverage and native recovery/isolation journeys |
+| Account/data | Authentication, authorization, source-scoped pack creation/replay, writer leases, versioned export/import/delete and populated native restore/resume | Guest/claim, complete future-object/schema and shared-link lifecycle, broader recovery/isolation and integrated operator journeys |
 | Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations and official bundled content |
 
 The evidence-versus-guidance split is implemented in meaningful production paths, **not complete
@@ -91,7 +91,32 @@ starts resolve the current public catalogue, owner-only Studio playtests use an 
 resolved-record path, and explicit saved-run replay derives retained bytes under source
 read access. Knowing a private digest or supplying lineage is not admission authority.
 Studio deletion documentation also now matches the existing account policy ([[D3551]]).
-These scoped repairs do not complete account portability or multi-user lifecycle proof.
+These scoped repairs do not alone complete account portability or multi-user lifecycle proof.
+[[D3567]] now adds the actual desktop/phone account journey: branch and play, download the
+real archive, delete its source account, register another account, preview and import,
+find the restored game in Library, claim the device lease and continue the same branch
+against its bot. Both attempts and recorded cursor survive. Wrong passwords write nothing;
+duplicate imports refuse without changing history. [[D3568]] fixes the real transport bug
+those journeys found: rejected password confirmations no longer unmount the error and
+sign out a valid session. Import/export/delete still announce actual session expiry;
+network/proxy failures cannot prove it. All 24 focused software cases and two native browser
+journeys pass. The phone journey uses the shared pointer helper, not a touch-input claim.
+The existing server suite separately covers private-class round trips and multi-user
+isolation. Guest/claim, full future-object coverage and operator recovery remain; no whole
+capability or milestone is promoted. Full normal software, performance, content and
+governance pass. The first complete browser smoke run exposes [[D3569]]: both white-queen
+warning fixtures count a legitimate opponent reply as another learner submission.
+Actual trace bodies establish the cause. The four repaired fixtures retain zero-write
+staging/revise controls and require exactly one learner payload, one opponent selection
+and the corresponding recorded moves after confirmation. All four pass. Final normal
+`make roadmap-receipt verify-governance test-browser-ci-awake` exits zero: 112 smoke,
+five content, 59 matrix and one packaged-default browser passes (177 total), one existing
+optional Maia skip, zero retries, all 150 exact-input cells and 112 composition cells.
+The preceding full normal verification passes clean types, 3,577 software cases, seven
+isolated performance cases and 227 content cases on the same product implementation;
+the diagnosed repair changes only the browser fixture. No new pushed-revision CI or
+release verdict is claimed. No application change, retry or deadline increase is used
+for the warning-counter repair.
 The repository's Maia weight-rights entry
 (`release/maia-weight-rights.v1.json`) still records `unresolved`, which refuses a 1.0 publication;
 this is the local release state, not a new upstream licensing determination.
@@ -126,7 +151,7 @@ be described as fully validated learner guidance. `docs/semantic-evidence.md` ex
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,315 ledger rows** (1,452 done, 161 refused, 1,702 live,
+(271 completed, 24 retired, 274 live); **3,318 ledger rows** (1,455 done, 161 refused, 1,702 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,062 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

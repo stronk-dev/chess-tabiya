@@ -597,15 +597,15 @@
         ],
         "state": [
           "partial",
-          "Identity, authorization, account export/delete, and writer leases exist; guest/claim, complete bundle, and future profile/social coverage remain."
+          "Identity, authorization, versioned private account export/import/delete and writer leases exist. Restore reassigns ownership and rederives statistics; guest/claim and complete future profile/social object coverage remain."
         ],
         "api": [
           "partial",
-          "Auth/export/delete work; account-level import, portability versioning, backup/restore, and complete object coverage remain."
+          "Auth, export, import preview/password-confirmed commit, inventory and deletion work. Version 1 has bounded closed-shape validation and atomic collision refusal. Complete object coverage and integrated operator backup/restore remain; account import is not installation backup or merge."
         ],
         "experience": [
           "partial",
-          "Login, destructive previews, and a standing read-only account-data summary exist; first-run account timing, twelve-class inventory copy, download progress, import conflicts, and recovery remain unfinished."
+          "Login, destructive previews, twelve-class inventory, download progress and file-preview/password-confirmed import exist. D3567 proves native desktop/phone restore and resumed branched play; D3568 preserves retry after a rejected password. Guest/claim, first-run timing and broader recovery journeys remain unfinished."
         ],
         "defaults": [
           "blocked",
@@ -617,7 +617,7 @@
         ],
         "verification": [
           "partial",
-          "D3550 closes the measured private-digest creation bypass: fresh public admission, owner-only playtests and authorised retained-run replay share the same validated creation body. Native cross-account/restart and actual desktop/touch refusal/reload pass. D3551 reconciles Studio deletion documentation with existing storage policy. Full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."
+          "D3567 adds permanent native desktop/phone actual archive download, source-account deletion, new-account preview/password refusal/import, preserved branches/cursor, explicit device claim, resumed play and duplicate refusal. D3568 has eight predecessor-red transport controls plus ordinary expiry. Native SQLite tests separately cover private-class round trips and multi-user isolation. D3550's cross-account private-pack admission/restart controls stand. Shared-link lifecycle, guest claim, every future object/schema and complete operator recovery still need proof."
         ],
         "release": [
           "blocked",
@@ -688,7 +688,7 @@
         "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3556 locates the setup timeout inside pack loading; a predecessor-red count proves duplicate full validation, now replaced with one full pass plus unchanged sibling checks. D3557 reproduces initial cited-branch polling loss, gates refresh on successful initial loading, and repairs play snapshots with 16 mutation controls. Its arrival trace locates aggregate sample-budget exhaustion; all ten samples retain separate normal deadlines. Final sequential make verify-awake test-browser-ci-awake passes clean types, 3529 software cases, seven performance cases, 227 content cases and all four browser tiers: 173 passes, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3558 retains existing UI failures seen in an overlapping run despite later sequential passes. Historical engine/application failures remain unlocated. D3555 engine shutdown and D3553 CI checkout fixes stand. All 1701 live rows are assigned; 462 prose-only closeouts stay qualified; zero official packs graduate. No full capability/milestone, push, remote CI or release promotion.",
+          "summary": "Current normal verification passes clean types, 3577 software cases, seven isolated performance cases, 227 content cases and downstream software/governance checks. The initial full browser run exposes D3569's total-one counter race in two warning fixtures; exact trace bodies prove one learner move followed by one legitimate opponent selection. Four repaired fixtures retain zero staging/revise writes and require exactly one payload and recorded move per actor after confirmation. Final normal governance and all browser tiers exit zero: 112 smoke, five content, 59 matrix and one packaged-default pass, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3567's populated account restore/resume and D3568's confirmation/session repair are verified. D3553/D3555/D3556/D3557's prior repairs stand with their evidence retained in the append-only log; D3558 and historical engine/application causes remain unlocated. All 1702 live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, whole capability/milestone or release promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -2352,10 +2352,10 @@
           "stable-board-and-presets",
           "production-api-closure"
         ],
-        "nextAction": "D3550's private-source admission repair, D3548's retained-pack attachment, D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry are closed. Continue module-critical source/operand validation, complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional and account journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+        "nextAction": "D3567's populated native account restore/resume and D3568's password-confirmation retry repair are closed. D3550's private-source admission, D3548's retained-pack attachment, D3546/D3547's completed-bot replay and D3541/D3542's exact Profile-to-Review evidence entry stand. Continue module-critical source/operand validation, complete Review/theory/rehearsal return, valid skill credit, profile lifecycle and per-bot history/Review/events; complete independent Campaign, social/professional, guest/claim and broader account/operator lifecycle journeys. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-08",
-          "summary": "D3550 closes a measured private-source admission bypass under the existing pack-studio contract: six native negative starts previously returned 201 and readable graphs, including forged lineage, read-granted callers and withdrawn/restarted private bytes. Fresh creation resolves current public identity and treats a supplied digest only as an assertion; owner-only Studio playtests pass their resolved record internally; explicit duplication checks the readable source run and derives its retained document. Shared validation, orchestration and persistence remain; no new ACL or schema. 172 focused cases, clean types, 3,494 software / seven performance cases and downstream software contracts pass. Native controls preserve grants/revocation, spectator copies, public/private shadow IDs, stale/current public versions, historical replay, restart and missing-byte refusal. Content initially fails because PACK_NOT_FOUND is newly covered; only its missing-test debt entry is removed, then all 227 content cases and normal governance pass. Rebuilt browser tiers pass 161 journeys, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells; actual desktop/touch cross-account refusal and private reload pass. D3551 corrects Studio deletion/attribution documentation against the existing portable-account-data policy, with no deletion or archive changes. D3548's retained attachment, bot replay and Profile-to-Review deliveries stand. 3,300 ledger rows now have 1,439 done, 161 refused and 1,700 live, zero untriaged; 462 historical prose-only closeouts and D3543/D3510/D3532's intermittent causes remain qualified. No calibration, personality, skill credit, official content, full RFC/capability/milestone or remote release completion.",
+          "summary": "D3567 proves populated native desktop/phone account portability: two actual play alternatives and opponent replies, real archive download, source-account deletion, new-account preview/password refusal/import, preserved nodes/branches/cursor, Library entry, normal device claim, continued bot play and duplicate refusal without mutation. D3568 repairs confirmation signing out valid sessions; eight predecessor-red transport controls plus ordinary protected-resource expiry pass. All 24 focused cases and both native journeys pass. The phone case uses the shared pointer helper and normal mock providers, not touch-input or live Maia/calibration proof. Native SQLite private-class round trips and multi-user isolation remain separately covered. Normal verification passes clean types, 3577 software, seven performance and 227 content cases plus downstream checks. D3569 diagnoses and repairs a browser-only actor-counter race; final normal governance and browser tiers exit zero with 177 passes, one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. Prior private-source admission/deletion truth, retained replay, completed-bot replay and Profile-to-Review deliveries stand with historical measurements in the append-only log. Guest/claim, future-object/shared-link/operator lifecycle and wider evidence, Review, theory, bot, learner, Campaign and release obligations remain. No whole capability, milestone, pushed-revision CI or release completion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -2367,6 +2367,9 @@
             "tests/browser/pinned-pack.spec.ts",
             "docs/pack-studio.md",
             "docs/account-data-lifecycle.md",
+            "apps/server/src/account-import.test.ts",
+            "apps/web/src/lib/account-data-panels.test.ts",
+            "apps/web/src/lib/api-auth.test.ts",
             "rfc/archive/pack-studio.md",
             "rfc/archive/portable-account-data.md",
             "docs/drill-client.md",

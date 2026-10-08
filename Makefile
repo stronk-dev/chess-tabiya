@@ -1931,6 +1931,17 @@ opening-catalogue-check: build
 account-data-lifecycle-check:
 	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
 
+.PHONY: account-portability-check account-portability-browser-check
+account-portability-check:
+	./node_modules/.bin/vitest run apps/server/src/account-import.test.ts apps/web/src/lib/account-data-panels.test.ts apps/web/src/lib/api-auth.test.ts
+
+account-portability-browser-check:
+	./node_modules/.bin/playwright test --grep "portable account round trip"
+
+.PHONY: support-staged-browser-check
+support-staged-browser-check:
+	./node_modules/.bin/playwright test --grep "Support staged warning protects"
+
 # rfc/concept-registry.md: `census` prints the pack-reference census and fails on any reference the
 # installed registry does not carry (criterion 3; the content tier asserts the same set-equality).
 # `revise` writes the next immutable revision adding every unregistered reference with its seed label;

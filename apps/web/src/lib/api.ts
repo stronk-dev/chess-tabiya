@@ -1977,9 +1977,7 @@ export class DrillApi implements DrillClientApi {
       credentials: "same-origin",
     });
     if (response.ok) return response;
-    if (response.status === 401 && typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("tabiya:unauthenticated"));
-    }
+    if (response.status === 401) await this.#announceSessionExpiry(path);
 
     let envelope: ErrorEnvelope = {};
     try {
@@ -1993,6 +1991,24 @@ export class DrillApi implements DrillClientApi {
       typeof error?.message === "string" ? error.message : `HTTP ${response.status}`;
     const { code: _code, message: _message, ...details } = error ?? {};
     throw new ApiError(response.status, code, message, details);
+  }
+
+  async #announceSessionExpiry(path: string): Promise<void> {
+    if (typeof window === "undefined") return;
+    if (path === "/auth/import" || path === "/auth/export" || path === "/auth/delete") {
+      // These endpoints return the same 401 for a rejected password confirmation and
+      // an expired session. Check the existing session before unmounting the retry UI.
+      try {
+        const session = await this.#fetch(`${this.#baseUrl}/auth/session`, {
+          method: "GET", credentials: "same-origin",
+        });
+        if (session.status !== 401) return;
+      } catch {
+        // A failed check is not evidence of expiry. Preserve the original refusal.
+        return;
+      }
+    }
+    window.dispatchEvent(new CustomEvent("tabiya:unauthenticated"));
   }
 
   async #json<T>(

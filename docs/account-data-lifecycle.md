@@ -124,6 +124,25 @@ The Account region offers the import as a file choice that previews first — wh
 be added, what would not and why, and any collisions — and asks for the password only
 when the preview has no conflicts.
 
+Password-confirmed import, export and deletion retain their retry UI when the password
+is rejected. These operations share HTTP 401 with session expiry, so the client checks
+the existing session endpoint before announcing a global sign-out. An actual expired
+session still signs out; an unavailable session check does not prove expiry and leaves
+the original operation refusal intact. No server authorization or password rules change.
+
+`make account-portability-check` runs the native-storage round trips, mounted account
+panels and transport expiry controls. `make account-portability-browser-check` runs
+permanent desktop and phone browser journeys: play and branch, download the actual
+archive, delete the source account, register another account, preview, reject a wrong
+password, import, find the restored game in Library, take the board on this device and
+continue playing against its bot. Recorded play, branches and cursor are checked before
+continuation; reimport conflicts leave history unchanged. The phone case uses the phone
+browser/viewport with the shared pointer helper, not a claim of touch-input coverage.
+This proves a populated game round trip, not every object class or the complete account
+capability. Browser journeys use the normal development/mock-provider suite; they do not
+establish live Maia behavior or bot calibration. The server tests separately cover private
+classes and multi-user isolation.
+
 ## Deletion
 
 Deletion has preview and commit phases. The preview categorizes permanent deletion,

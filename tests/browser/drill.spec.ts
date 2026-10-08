@@ -689,6 +689,114 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith("tabiya") || key.startsWith("chess-tabiya:")))).toEqual([]);
 });
 
+for (const mobile of [false, true]) {
+test(`portable account round trip preserves both attempts and resumes real play${mobile ? " @mobile" : ""}`, async ({ page }) => {
+  const password = "browser-test-password";
+  let runId: string;
+  let recorded: RunGraph;
+  const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+
+  await test.step("Play two alternatives and wait for both actual opponent replies", async () => {
+    await chooseBot(page, "human-baseline.1400@1");
+    await page.getByRole("button", { name: "Start and keep the game" }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    runId = page.url().split("/").at(-1)!;
+    await choosePreset(page, /^Guide me/u);
+    await move(page, "e2", "e4");
+    await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
+    await showSupportTools(page);
+    await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+    const selector = page.getByRole("button", { name: "After-move nudge", exact: true });
+    if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
+    await page.locator('[data-module="postcommit_nudge"]').getByRole("button", { name: "Try another move", exact: true }).click();
+    await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+    await move(page, "d2", "d4");
+    await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(2);
+    recorded = await graph();
+    expect(recorded.branches).toHaveLength(2);
+    expect(recorded.nodes.filter(node => node.actor === "user").map(node => node.moveUci)).toEqual(["e2e4", "d2d4"]);
+  });
+
+  const archive = await test.step("Download the actual archive, then delete its source account", async () => {
+    await page.goto("/settings");
+    await page.getByLabel("Current password").fill(password);
+    const downloading = page.waitForEvent("download");
+    await page.getByRole("button", { name: "Download my data", exact: true }).click();
+    const download = await downloading;
+    expect(download.suggestedFilename()).toMatch(/^tabiya-account-[a-z0-9_]+\.json$/u);
+    const path = await download.path();
+    if (path === null) throw new Error("Account download has no local file");
+    await expect(page.locator(".deletion-preview")).toBeVisible();
+    await page.getByLabel("Re-enter password").fill(password);
+    await page.getByRole("button", { name: "Delete account", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
+    expect(await page.evaluate(() => Object.keys(localStorage).filter(key => key.startsWith("tabiya") || key.startsWith("chess-tabiya:")))).toEqual([]);
+    return path;
+  });
+
+  await test.step("Preview in a new account and prove a wrong password writes nothing", async () => {
+    expect(await register(page)).not.toBe("existing");
+    expect((await page.request.get(`/runs/${runId}/graph`)).status()).toBe(404);
+    await page.goto("/settings");
+    await page.getByLabel("Account download file", { exact: true }).setInputFiles(archive);
+    await expect(page.locator("[data-import-preview]")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Import into this account", exact: true })).toBeVisible();
+    await page.getByLabel("Password to confirm import", { exact: true }).fill("wrong-password");
+    await page.getByRole("button", { name: "Import into this account", exact: true }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "That password was not accepted. Nothing was imported." })).toBeVisible();
+    await expect(page.getByLabel("Password to confirm import", { exact: true })).toHaveValue("");
+    expect((await page.request.get(`/runs/${runId}/graph`)).status()).toBe(404);
+  });
+
+  await test.step("Import, find the saved game in Library, and continue the retained branch", async () => {
+    await page.getByLabel("Password to confirm import", { exact: true }).fill(password);
+    await page.getByRole("button", { name: "Import into this account", exact: true }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Imported 1 run and the records that belong to them into this account." })).toBeVisible();
+    const restored = await graph();
+    expect(restored.branches).toEqual(recorded.branches);
+    expect(restored.activeCursor).toEqual(recorded.activeCursor);
+    assertRecordedNodesPreserved(recorded.nodes, restored.nodes);
+    await page.goto("/library");
+    const games = page.getByRole("region", { name: "My games", exact: true });
+    await expect(games.getByRole("button", { name: "Download PGN", exact: true })).toHaveCount(1);
+    await games.locator("button.link-button").click();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`, "u"));
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await expect(page.locator(".topbar").getByRole("status")).toContainText("Human baseline · model band 1400");
+    // Restoration does not revive the deleted account's device lease. Use the
+    // ordinary ownership door instead of bypassing it with a fabricated writer id.
+    await page.getByRole("button", { name: "Take the board on this device", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Take the board on this device", exact: true })).toHaveCount(0);
+    await expect(page.locator(".topbar").getByRole("status")).toContainText("Your move");
+    await move(page, "g1", "f3");
+    await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(3);
+    const continued = await graph();
+    assertRecordedNodesPreserved(restored.nodes, continued.nodes.slice(0, restored.nodes.length));
+    expect(continued.branches).toHaveLength(2);
+    expect(continued.activeCursor.branchId).toBe(recorded.activeCursor.branchId);
+    expect(continued.nodes.some(node => node.moveUci === "g1f3")).toBe(true);
+  });
+
+  await test.step("Reimport refuses the collision without changing either attempt", async () => {
+    const before = await graph();
+    const beforeEvents = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] }).events;
+    await page.goto("/settings");
+    await page.getByLabel("Account download file", { exact: true }).setInputFiles(archive);
+    const preview = page.locator("[data-import-preview]");
+    await expect(preview.getByRole("alert")).toContainText("Nothing was changed.");
+    await expect(page.getByRole("button", { name: "Import into this account", exact: true })).toHaveCount(0);
+    const after = await graph();
+    expect(after.branches).toEqual(before.branches);
+    expect(after.activeCursor).toEqual(before.activeCursor);
+    assertRecordedNodesPreserved(before.nodes, after.nodes);
+    const afterEvents = (await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: DrillRun["events"] }).events;
+    assertOnlyEvidenceAppended(beforeEvents, afterEvents);
+    await page.goto("/library");
+    await expect(page.getByRole("region", { name: "My games", exact: true }).getByRole("button", { name: "Download PGN", exact: true })).toHaveCount(1);
+  });
+});
+}
+
 test("Just Play reaches a Carlsbad and opens a guided shape marker without mutating the run", async ({ page }) => {
   await page.evaluate(() => localStorage.setItem("tabiya.assistance.v1.position", JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" })));
   await page.getByLabel("Your side").selectOption("black");
@@ -3052,8 +3160,10 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       const learner = fixture.side === "black" ? "Black" : "White";
       const sentence = `If ${fixture.opponent} moves next: ${fixture.opponent}'s bishop on ${fixture.attacker} could capture ${learner}'s queen on ${fixture.to}.`;
       const stagedResponse = () => page.waitForResponse(response => response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.candidateUci === uci);
-      let writes = 0;
-      page.on("request", request => { if (request.method() === "POST" && request.url().endsWith("/moves")) writes++; });
+      const writes: Record<string, unknown>[] = [];
+      page.on("request", request => {
+        if (request.method() === "POST" && request.url().endsWith("/moves")) writes.push(request.postDataJSON() as Record<string, unknown>);
+      });
       const response = stagedResponse();
       await move(page, fixture.from, fixture.to, fixture.side);
       const delivered = (await (await response).json() as { page: ModuleQueryPage }).page;
@@ -3071,7 +3181,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       const cue = page.locator('[data-module="blunder_prevention"]');
       await expect(cue).toHaveAttribute("data-seat-state", "warning");
       await expect(cue.locator("[data-presented]")).toHaveText(sentence);
-      expect(writes).toBe(0);
+      expect(writes).toHaveLength(0);
       expect((await graph()).activeCursor).toEqual(before.activeCursor);
       assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
@@ -3079,7 +3189,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       await testInfo.attach("concrete-queen-warning", { body: await page.screenshot(), contentType: "image/png" });
       await cue.getByRole("button", { name: "Revise", exact: true }).click();
       await expect(cue).toHaveCount(0);
-      expect(writes).toBe(0);
+      expect(writes).toHaveLength(0);
       assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
       if (viewport.width < 720) await page.getByRole("button", { name: "Collapse companion", exact: true }).click();
       const again = stagedResponse();
@@ -3090,8 +3200,13 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       const committed = page.waitForRequest(request => request.method() === "POST" && request.url().endsWith("/moves"));
       await cue.getByRole("button", { name: /^Play .+ anyway$/u }).click();
       expect((await committed).postDataJSON()).toMatchObject({ uci });
-      await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === uci)).toBe(true);
-      expect(writes).toBe(1);
+      // Both actors use /moves in this legacy human-model run. Observe the settled
+      // consequence rather than racing the valid opponent request against a total of one.
+      await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
+      expect((await graph()).nodes.filter(node => node.actor === "user").map(node => node.moveUci)).toEqual([uci]);
+      expect(writes).toHaveLength(2);
+      expect(writes.filter(input => "uci" in input).map(input => input.uci)).toEqual([uci]);
+      expect(writes.filter(input => "selection" in input)).toHaveLength(1);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     });
   }
