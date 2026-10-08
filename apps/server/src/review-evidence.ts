@@ -248,6 +248,8 @@ export class ReviewEvidenceCoordinator {
   readonly #options: ReviewEvidenceCoordinatorOptions;
   readonly #trackers = new Map<string, BranchTracker>();
   readonly #inflight = new Set<Promise<void>>();
+  #closed = false;
+  #closing: Promise<void> | undefined;
   #clock = 0;
   #engine: Promise<{ readonly id: string; readonly version: string } | null> | undefined;
 
@@ -266,6 +268,19 @@ export class ReviewEvidenceCoordinator {
   /** Resolves when no provider work is in flight (tests and graceful shutdown). */
   async whenIdle(): Promise<void> {
     while (this.#inflight.size > 0) await Promise.allSettled([...this.#inflight]);
+  }
+
+  /** Stop admission and detach this application's subscribers before its storage closes. */
+  close(): Promise<void> {
+    if (this.#closing !== undefined) return this.#closing;
+    this.#closed = true;
+    for (const tracker of this.#trackers.values()) {
+      for (const job of tracker.active.values()) job.controller.abort();
+    }
+    this.#trackers.clear();
+    this.#engine = undefined;
+    this.#closing = this.whenIdle();
+    return this.#closing;
   }
 
   #requestedEngine(): Promise<{ readonly id: string; readonly version: string } | null> {
@@ -308,7 +323,9 @@ export class ReviewEvidenceCoordinator {
   /** The bounded engine line for a delivered position, or undefined when it cannot be obtained. */
   async #line(runId: string, request: ReviewPositionRequest, signal: AbortSignal): Promise<StockfishPrincipalVariation | undefined> {
     try {
-      const result = await this.#options.scheduler!.get(this.#lineRequest(request), { id: `review:${runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, signal);
+      const completed = await untilCancelled(this.#options.scheduler!.get(this.#lineRequest(request), { id: `review:${runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, signal), signal);
+      if (completed.kind === "cancelled") return undefined;
+      const result = completed.value;
       return result.kind === "success" ? result.delivery as StockfishPrincipalVariation : undefined;
     } catch {
       return undefined;
@@ -346,6 +363,7 @@ export class ReviewEvidenceCoordinator {
    * first window; callers that need the settled first window may await `pump`.
    */
   ensureBranch(runId: string, branchId: string): { readonly states: ReadonlyMap<string, ReviewProviderNodeState>; readonly pump: Promise<void> } {
+    if (this.#closed) throw new TypeError("Review coordinator is closed");
     const stored = this.#options.storage.read(runId);
     if (stored === undefined) throw new TypeError(`Review coordinator: unknown run ${runId}`);
     const path = branchPath(stored.run, branchId);
@@ -406,6 +424,7 @@ export class ReviewEvidenceCoordinator {
   }
 
   #resumeRun(runId: string): void {
+    if (this.#closed) return;
     // Wake every previously requested branch: capacity is shared across the run, not per branch.
     for (const tracker of [...this.#trackers.values()].filter((candidate) => candidate.runId === runId).sort((a, b) => a.lastUsed - b.lastUsed)) {
       if (this.#trackers.get(tracker.key) !== tracker || tracker.identityUnavailable) continue;
@@ -460,7 +479,9 @@ export class ReviewEvidenceCoordinator {
     try {
       if (!this.#owns(tracker, node.id, job)) return owner.cancel();
       owner.start();
-      const result = await scheduler.get(request, { id: `review:${tracker.runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, controller.signal);
+      const completed = await untilCancelled(scheduler.get(request, { id: `review:${tracker.runId}`, budgetMs: this.#options.timeoutMs + 1_000 }, controller.signal), controller.signal);
+      if (completed.kind === "cancelled") return owner.cancel();
+      const result = completed.value;
       if (!this.#owns(tracker, node.id, job)) return owner.cancel();
       if (result.kind === "success") {
         const line = await this.#line(tracker.runId, request, controller.signal);

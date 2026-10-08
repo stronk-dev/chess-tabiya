@@ -39,22 +39,85 @@ const swinging = (fen: string) => {
   return { score: `cp ${whiteToMove ? white : -white}`, wdl: [300, 400, 300] as const };
 };
 
-function harness(options: { readonly engine?: MockProviderEngineClient; readonly providerOff?: boolean; readonly requestedEngine?: ReviewEvidenceCoordinatorOptions["requestedEngine"]; readonly windowNodes?: number; readonly maxOutstandingPerRun?: number; readonly maxTrackedRuns?: number; readonly attempts?: ReviewAttemptOutcomeStore; readonly queue?: EvidenceJobQueue } = {}) {
+function harness(options: { readonly engine?: MockProviderEngineClient; readonly providerOff?: boolean; readonly requestedEngine?: ReviewEvidenceCoordinatorOptions["requestedEngine"]; readonly windowNodes?: number; readonly maxOutstandingPerRun?: number; readonly maxTrackedRuns?: number; readonly attempts?: ReviewAttemptOutcomeStore; readonly queue?: EvidenceJobQueue; readonly holdOperation?: "stockfish.position_evaluation@1" | "stockfish.principal_variation@1" } = {}) {
   const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
   stores.push(storage);
   const engine = options.engine ?? new MockProviderEngineClient({ score: swinging });
   const { scheduler } = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null });
   let gets = 0;
   let lineGets = 0;
-  const counting = { get: ((...args: Parameters<typeof scheduler.get>) => { if (args[0].operation === "stockfish.principal_variation@1") lineGets += 1; else gets += 1; return scheduler.get(...args); }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
+  const entered = deferred<void>();
+  const release = deferred<void>();
+  let heldKey: string | undefined;
+  const counting = { get: (async (...args: Parameters<typeof scheduler.get>) => {
+    if (args[0].operation === "stockfish.principal_variation@1") lineGets += 1; else gets += 1;
+    if (args[0].operation === "stockfish.position_evaluation@1" && options.holdOperation !== undefined) {
+      heldKey = `${scheduler.normalizedRequestDigest(args[0])}\u0000stockfish-analysis\u0000mock-1\u0000movetime:50`;
+    }
+    const result = await scheduler.get(...args);
+    if (args[0].operation === options.holdOperation) {
+      entered.resolve();
+      await release.promise; // Deliberately ignores abort; a genuine completed delivery returns late.
+    }
+    return result;
+  }) as typeof scheduler.get, normalizedRequestDigest: scheduler.normalizedRequestDigest.bind(scheduler) };
   const attempts = options.attempts ?? new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: 64, maxAttemptsPerRequest: 2 });
   const coordinator = new ReviewEvidenceCoordinator({
     scheduler: options.providerOff === true ? null : counting as never, requestedEngine: options.requestedEngine ?? (async () => ({ id: "stockfish-analysis", version: "mock-1" })), storage, attempts,
     windowNodes: options.windowNodes ?? 3, maxOutstandingPerRun: options.maxOutstandingPerRun ?? 2, maxTrackedRuns: options.maxTrackedRuns ?? 4, maxAttemptsPerRequest: 2, movetimeMs: 50, linePlies: 8, timeoutMs: 2_000,
   });
   const service = new RunService(storage, { reviewEvidence: coordinator, ...(options.queue === undefined ? {} : { evidenceQueue: options.queue }) });
-  return { storage, service, coordinator, attempts, gets: () => gets, lineGets: () => lineGets };
+  return { storage, service, coordinator, attempts, gets: () => gets, lineGets: () => lineGets, entered: entered.promise, release: () => release.resolve(), heldKey: () => heldKey };
 }
+
+describe("Review coordinator application lifetime (D3561)", () => {
+  it("stops pending discovery without starting attempts or resurrecting work", async () => {
+    const identity = deferred<{ id: string; version: string } | null>();
+    const { service, coordinator, storage, attempts, gets } = harness({ requestedEngine: () => identity.promise, windowNodes: 1, maxOutstandingPerRun: 1 });
+    const imported = await service.importGame({ id: "review-stop-discovery", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    const branchId = imported.run.branches[0]!.id;
+    expect(coordinator.outstanding(imported.run.id, branchId)).toBe(1);
+    const events = storage.read(imported.run.id)!.run.events;
+    try {
+      await Promise.all([coordinator.close(), coordinator.close()]);
+      expect(coordinator.trackedBranches).toBe(0);
+      expect(attempts.size).toBe(0);
+      expect(() => coordinator.ensureBranch(imported.run.id, branchId)).toThrow(/closed/u);
+    } finally {
+      identity.resolve({ id: "stockfish-analysis", version: "mock-1" });
+      await coordinator.whenIdle();
+    }
+    expect(gets()).toBe(0);
+    expect(storage.read(imported.run.id)!.run.events).toEqual(events);
+  });
+
+  it.each(["stockfish.position_evaluation@1", "stockfish.principal_variation@1"] as const)("detaches late %s completion, retains the started attempt and never repumps", async (operation) => {
+    const h = harness({ holdOperation: operation, windowNodes: 1, maxOutstandingPerRun: 1 });
+    const imported = await h.service.importGame({ id: `review-stop-${operation}`, side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
+    await h.entered;
+    const events = h.storage.read(imported.run.id)!.run.events;
+    let closed = false;
+    const closing = h.coordinator.close().then(() => { closed = true; });
+    try {
+      await new Promise<void>((resolve) => setImmediate(resolve));
+      expect(closed).toBe(true); // No need to release an abort-ignoring provider to stop the owner.
+      expect(h.coordinator.trackedBranches).toBe(0);
+      expect(h.attempts.outcome(h.heldKey()!)).toMatchObject({ kind: "retryable_failure", attempts: 1 });
+      const resumed = h.attempts.acquire(h.heldKey()!);
+      expect(resumed.kind).toBe("owner");
+      if (resumed.kind !== "owner") throw new Error("resumable cancellation expected");
+      expect(resumed.cancel()).toEqual({ kind: "released", attempts: 1 });
+    } finally {
+      h.release();
+      await closing;
+      await h.coordinator.whenIdle();
+      await new Promise<void>((resolve) => setImmediate(resolve));
+    }
+    expect(h.gets()).toBe(1);
+    expect(h.lineGets()).toBe(operation === "stockfish.principal_variation@1" ? 1 : 0);
+    expect(h.storage.read(imported.run.id)!.run.events).toEqual(events);
+  });
+});
 
 describe("ReviewAttemptOutcomeStore (criterion 13)", () => {
   it("shares one completion between concurrent equal requests; only the owner settles", async () => {

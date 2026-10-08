@@ -2,13 +2,13 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2f7844b6bc988921e09376fc95c34169fd4c1415d903784ca7cf1b01e1da1b52",
+    "roadmap": "sha256:443bda41c3dfa96a3cf30777054898af37c90ccdb83d9b7daacd6f5dc010aa59",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:c8a9d571856d07505a89ce2d4ca01c56a2aca21f78119a6bae8c070475848811",
+    "workState": "sha256:3f829a2969aec363adc789322bd3d3cdba8d79e457406e15b1af2bd1c84fa9dd",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
-    "application": "sha256:0c8a9cfb0a33ba89fc65f4213b5cbbe359ee21d2cb3505792dc2918b1dfe8642",
+    "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
     "rest": "sha256:335b9ec025ff6422e526cbef50020c457e497ca9daf2c008bb8a7a102060a28c"
   },
   "summary": {
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 12,
       "blocked": 1061,
-      "done": 1447,
+      "done": 1448,
       "refused": 161
     },
     "workItems": {
@@ -302,10 +302,11 @@
       "nextAction": "D3404 complete Guided Hint preflight and D3405 exact-version capability joins are verified. Continue remaining source migrations and complete consumer contracts without filtering raw bindings, then full manifest execution/digest, exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine metadata/hash maintenance is automatic.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3560 now enforces current stored-game identity at all subject-reading and packet assertion boundaries, including actual source planning, compilation and Story presentation. Nine predecessor-red controls plus seven identity changes and native RunService/SQLite write-and-rebuild proof pass in the 64-case Review gate with clean types. Identity validation does not mint another subject or replay semantic collectors; new issuance still collects, and the PhaseArc contract is unchanged. This is an implemented Review repair, not a new source, measured speedup or diagnosis of historical timeouts. D3373's whole Stockfish source remains draft; D3376 opening authority, D3309 Inspector operands and remaining provider/consumer joins stay open. Earlier D3262 research and D3512 lifecycle qualifications remain recorded in the append-only log and cited research summaries; no new capture or research completion is claimed. Final normal tiers pass clean types, 3551 software, seven performance and 227 content cases, downstream software/build and governance checks, and all four rebuilt browser tiers: 173 passes, one existing optional Maia skip, zero retries, 150 input and 112 composition cells. D3299 no longer requests acceptance of already-landed D921/candidate contracts; the separate process proposal stays unruled. No full capability, milestone, remote CI or 1.0 promotion.",
+        "summary": "D3561 closes the omitted Review lifecycle release: application shutdown and failed startup cancel and drain the coordinator before storage closes. Pending discovery and late evaluation/line results cannot attach or repump; started attempt counts remain retained. Six predecessor-red native application controls now pass, along with 67 focused Review cases and clean types. D3560's live stored-game boundary remains implemented without replaying collectors during identity checks. D3373's whole Stockfish source remains draft; D3376 opening authority, D3309 Inspector operands and remaining provider/consumer joins stay open. Earlier D3262 research and D3512 lifecycle qualifications remain recorded in the append-only log and cited summaries; no new capture or research completion is claimed. Final sequential normal verification passes clean types, build, governance, 3555 software, seven performance, 227 content and 173 browser cases with one existing optional Maia skip and zero retries; all 150 exact-input and 112 composition cells remain. D3299 no longer requests acceptance of already-landed D921/candidate contracts; the separate process proposal stays unruled. No historical timeout diagnosis, full capability, milestone, remote CI or 1.0 promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/review-evidence.test.ts",
+          "apps/server/src/application-startup-cleanup.test.ts",
           "planning/semantic-consequence-search/d3262-cost-live-recursive-depth8-2026-10-07.md",
           "planning/semantic-consequence-search/d3262-live-weighted-target-preregistration-2026-10-07.md",
           "planning/semantic-consequence-search/d3262-source-lifecycle-2026-10-07.md",

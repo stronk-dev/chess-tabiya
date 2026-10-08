@@ -12,6 +12,7 @@ import { CampaignRegistry } from "./campaign-registry.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { ProviderRegistry } from "./provider-health.js";
+import { ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { SharedEngineSupervisor } from "./shared-engine-supervisor.js";
 import { SQLiteRunStorage } from "./storage.js";
 
@@ -21,6 +22,7 @@ if (!stockfish) throw new Error("Run this native startup contract through Make w
 const originalStart = SharedEngineSupervisor.prototype.start;
 const originalStorageClose = SQLiteRunStorage.prototype.close;
 const originalQueueClose = EvidenceJobQueue.prototype.close;
+const originalReviewIdle = ReviewEvidenceCoordinator.prototype.whenIdle;
 const originalCampaignLoad = CampaignRegistry.loadDefault;
 type OwnedApplication = ReturnType<typeof applicationFixture<ChessTabiyaApplication>>;
 let directory: string;
@@ -52,6 +54,10 @@ beforeEach(() => {
   vi.spyOn(EvidenceJobQueue.prototype, "close").mockImplementation(async function (this: EvidenceJobQueue) {
     await originalQueueClose.call(this);
     released.push("evidence queue");
+  });
+  vi.spyOn(ReviewEvidenceCoordinator.prototype, "whenIdle").mockImplementation(async function (this: ReviewEvidenceCoordinator) {
+    await originalReviewIdle.call(this);
+    released.push("review");
   });
   vi.spyOn(SharedEngineSupervisor.prototype, "start").mockImplementation(async function (this: SharedEngineSupervisor, id) {
     supervisors.add(this);
@@ -107,6 +113,7 @@ function assertReleased() {
   expect(closedStorage.size).toBe(1);
   for (const storage of closedStorage) expect(() => storage.list(1, 0)).toThrow();
   expect(released.filter(name => name === "provider health")).toHaveLength(1);
+  expect(released.filter(name => name === "review")).toHaveLength(1);
   expect(released.at(-1)).toBe("database");
 }
 
@@ -143,7 +150,15 @@ describe("production startup owns acquired resources", { timeout: 15_000 }, () =
     await expect(start({ longitudinalWorkerEntry: new URL("./fixtures/nonexistent-startup-thread.js", import.meta.url) }))
       .rejects.toMatchObject({ name: "LongitudinalWorkerStartError", reason: "worker_start_failed" });
     assertReleased();
-    expect(released).toEqual(["evidence queue", "provider health", "database"]);
+    expect(released).toEqual(["review", "evidence queue", "provider health", "database"]);
+  });
+
+  it("drains Review once before closing the real application's database", async () => {
+    const application = await start();
+    await owners.at(-1)!.close();
+    expect(application.server.listening).toBe(false);
+    expect(released.filter(name => name === "review")).toEqual(["review"]);
+    expect(released.indexOf("review")).toBeLessThan(released.indexOf("database"));
   });
 
   it("starts the same native deployment and database successfully after a refused startup", async () => {

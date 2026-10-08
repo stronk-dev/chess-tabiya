@@ -801,6 +801,7 @@ async function composeServices(
     attempts: new ReviewAttemptOutcomeStore({ maxTerminalAttemptOutcomes: REVIEW_EVIDENCE_PROFILE.maxTerminalAttemptOutcomes, maxAttemptsPerRequest: REVIEW_EVIDENCE_PROFILE.maxAttemptsPerRequest }),
     ...REVIEW_EVIDENCE_PROFILE,
   });
+  startupCleanups.push({ name: "review evidence", release: () => reviewEvidence.close() });
   const service = new RunService(storage, {
     evidenceQueue,
     reviewEvidence,
@@ -1015,6 +1016,7 @@ async function composeServices(
         if (!server.listening) { resolveClose(); return; }
         server.close((error) => (error === undefined ? resolveClose() : reject(error)));
       });
+      await reviewEvidence.close();
       storage.setLongitudinalWakeListener(undefined);
       await worker?.drain();
       // In-flight evidence leases return to retry_wait with a shutdown basis; nothing is lost.

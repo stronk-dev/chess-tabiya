@@ -80,6 +80,13 @@ cancel it. Eviction detaches pending discovery/subscribers without cancelling sh
 different run's owner. Tracker and reservation ownership are checked before provider execution
 and attachment, and late completion cannot retire a replacement reservation.
 
+Application close and failed-startup unwind stop this coordinator before releasing storage.
+`close()` stops admission, aborts every reservation and drains the logical subscribers once,
+including pending identity discovery and late evaluation/line results. It does not wait for
+an abort-ignoring provider to finish or replace the shared scheduler's physical shutdown.
+Started cancellations retain their attempt count; late completion cannot attach evidence or
+pump another window. A stopped coordinator cannot be restarted by `ensureBranch`.
+
 Only the scalar attempt owner calls the scheduler. Other occurrences wait for that owner's
 completion, retaining the same failure ceiling. After successful durable attachment releases the
 scalar slot, a surviving occurrence acquires ownership and obtains the scheduler's exact retained

@@ -29439,6 +29439,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/review-evidence.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3561",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a3b833d13ce722068028aecfad24cf2694b66159208072bb81352afbe90255e7",
+      "uxItems": [],
+      "evidence": "apps/server/src/application-startup-cleanup.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
