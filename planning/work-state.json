@@ -29566,6 +29566,15 @@
       "owner": "OWNER",
       "blocker": "owner-ruling",
       "question": "Approve clearing only old rebuildable cache in the verified tabiya-source-v1 builder, or free Docker space separately?"
+    },
+    {
+      "id": "D3575",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c5e768d100cdfa789fded5ff729d444c54c44e755bfc3454964e459683f55608",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/campaign-history.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

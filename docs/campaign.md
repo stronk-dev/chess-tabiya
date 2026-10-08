@@ -88,6 +88,15 @@ encounter-preparation panel, abandon with confirmation, and the run result. Insi
 run page shows the campaign strip (node, `⟲ N` before any spend, kit, **Declare done**); when the
 rules end a boss game, the terminal sheet carries “Declare done and return to the campaign map”.
 
+Sealed map cards, the fresh-seal strip and result entries offer **Open recorded encounter**.
+They use the node-history operation above, check its exact game/node/document identity and
+recheck on activation rather than guessing a saved-game URL. Deleted recordings explain that
+the seal and earned rewards remain. Abandoned results separately retain the unfinished attempt,
+without awarding a seal or reward; deletion of that recording does not erase its abandonment.
+Failed checks offer retry, and responses arriving after departure cannot navigate the learner.
+This opens the existing preserved-play route; it does not complete the separate whole-game
+Review journey or reconstruct moves from a campaign seal.
+
 ## Not yet
 
 Catalogue progression (`rfc/campaign-catalogue-progression.md`), rated bosses and `use-support`,

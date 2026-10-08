@@ -3577,6 +3577,14 @@ bot-rematch-browser-check:
 review-route-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts
 
+.PHONY: campaign-history-check campaign-history-browser-check
+campaign-history-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-history.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/campaign-core.test.ts
+
+campaign-history-browser-check:
+	./node_modules/.bin/playwright test --grep "Campaign history"
+
 .PHONY: review-navigation-browser-check
 review-navigation-browser-check:
 	./node_modules/.bin/playwright test --grep "Review navigation keeps"

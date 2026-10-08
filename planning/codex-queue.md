@@ -40,6 +40,17 @@ actual backup/mutation/fresh restore/rehearsal/replacement/exact rollback/reboot
 measure private-root permissions. No live operator deployment is a test target; no
 full release-candidate-proof or remote CI completion is claimed.
 
+[[D3575]] is **closed locally** in the independent Campaign lane: sealed map cards, the fresh-seal
+strip and results now resolve recorded encounters through the existing node-history API.
+Abandoned unfinished attempts have their own entry; deleted games preserve seal/reward/history
+explanations. Exact response identity, activation rechecks, retry and departure guards pass
+fifteen mounted controls, three actual campaign application cases and two native desktop/touch
+phone journeys. Local types, 3,592 software, seven performance, 227 content and 179 browser
+cases pass, with one optional Maia skip, zero retries and all 112 composition cells.
+The first governance refusal caught this item's missing queue route; the corrected
+governance/content/browser sequence passes. This is the preserved-play door,
+not the separate complete whole-game Review journey or an official educational campaign.
+
 0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
    37641922404 at d1310090 fails the graduation ruling sweep because depth-one
    blame attributes prior rulings to HEAD; browser run 37641922913 passes at that

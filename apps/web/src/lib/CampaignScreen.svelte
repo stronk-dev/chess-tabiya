@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
 
   import { ApiError } from "./api.js";
+  import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
     ACT_LABELS,
     CAMPAIGN_MODULE_LABELS,
@@ -39,6 +40,7 @@
   let preparing: CampaignNodeCard | undefined = $state();
   let confirmAbandon = $state(false);
   let generation = 0;
+  const abandonedCard = $derived(campaign?.acts.flatMap(act => act.layers.flatMap(layer => layer.choices)).find(card => card.nodeId === campaign?.abandonedEncounter?.nodeId));
   // One command id per intent, retained until it settles, so a retried click replays instead of repeating.
   const pending = new Map<string, string>();
 
@@ -66,20 +68,30 @@
 
   async function load(): Promise<void> {
     const current = ++generation;
+    const requestedRunId = campaignRunId;
     loading = true;
     error = undefined;
+    campaign = undefined;
+    result = undefined;
+    preparing = undefined;
+    confirmAbandon = false;
     try {
-      if (campaignRunId === undefined) {
+      if (requestedRunId === undefined) {
         const next = await campaigns.catalogue();
         if (current !== generation) return;
         catalogue = next.campaigns;
         campaign = undefined;
         result = undefined;
       } else {
-        const next = await campaigns.read(campaignRunId);
+        const next = await campaigns.read(requestedRunId);
+        const nextResult = next.campaignRun.status === "active" ? undefined : await campaigns.result(requestedRunId);
         if (current !== generation) return;
+        if (next.campaignRun.id !== requestedRunId || (nextResult !== undefined &&
+          (nextResult.campaign.campaignRun.id !== requestedRunId || nextResult.campaign.campaignRun.documentDigest !== next.campaignRun.documentDigest))) {
+          throw new Error("Crossed campaign result");
+        }
         campaign = next;
-        result = next.campaignRun.status === "active" ? undefined : await campaigns.result(campaignRunId);
+        result = nextResult;
       }
     } catch (caught) {
       if (current === generation) error = message(caught);
@@ -229,9 +241,16 @@
         <ol class="path">
           {#each result.path as step (step.nodeId)}
             <li>{ACT_LABELS[step.act as "act1"]} · {step.title} — {step.kind === "pack" ? verdictText({ kind: "pack", verdict: step.verdict, playRunId: step.playRunId }) : verdictText({ kind: "boss_game", outcome: step.outcome, reason: step.reason, playRunId: step.playRunId })}
-              <button type="button" class="link" onclick={() => onNavigate(`/play/run/${encodeURIComponent(step.playRunId)}`)}>Review</button></li>
+              <CampaignEncounterHistory {campaigns} campaignRunId={campaign.campaignRun.id} nodeId={step.nodeId} runId={step.playRunId} campaignDocumentDigest={campaign.campaignRun.documentDigest} {onNavigate} /></li>
           {/each}
         </ol>
+        {#if campaign.abandonedEncounter}
+          <section class="abandoned-encounter" aria-labelledby="abandoned-encounter-title">
+            <h3 id="abandoned-encounter-title">Unfinished encounter: {abandonedCard?.title ?? "Recorded attempt"}</h3>
+            <p>This encounter was left unfinished when the campaign was abandoned. No seal or encounter reward was earned for this attempt.</p>
+            <CampaignEncounterHistory {campaigns} campaignRunId={campaign.campaignRun.id} nodeId={campaign.abandonedEncounter.nodeId} runId={campaign.abandonedEncounter.playRunId} campaignDocumentDigest={campaign.campaignRun.documentDigest} abandoned {onNavigate} />
+          </section>
+        {/if}
         <button type="button" onclick={() => onNavigate("/campaign")}>Start another run</button>
       </section>
     {/if}
@@ -250,7 +269,10 @@
                   {#if card.opponent}<p class="meta">Opponent: {campaignBotLabel(card.opponent.profileId)} · {card.rating === "unrated" ? "unrated" : "rated when clean"}</p>{/if}
                   <p>{rewardText(card.reward)}</p>
                   {#if card.suppress.length > 0}<p class="suppress">Sets aside: {card.suppress.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}</p>{/if}
-                  {#if card.seal !== null}<p class="seal">{verdictText(card.seal)}</p>{/if}
+                  {#if card.seal !== null}
+                    <p class="seal">{verdictText(card.seal)}</p>
+                    <CampaignEncounterHistory {campaigns} campaignRunId={campaign.campaignRun.id} nodeId={card.nodeId} runId={card.seal.playRunId} campaignDocumentDigest={campaign.campaignRun.documentDigest} {onNavigate} />
+                  {/if}
                   {#if card.active}
                     <button type="button" onclick={() => onNavigate(`/play/run/${encodeURIComponent(campaign!.activeEncounter!.playRunId)}`)}>Continue</button>
                   {:else if card.selectable}
@@ -351,8 +373,7 @@
   .row-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
   button { min-height: 2.75rem; padding: .55rem .9rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--accent); color: var(--on-accent); font-weight: 700; cursor: pointer; }
   button:disabled { opacity: .55; cursor: not-allowed; }
-  button.quiet, button.link { background: var(--paper); color: var(--ink); font-weight: 500; }
-  button.link { min-height: 2rem; padding: .2rem .5rem; margin-left: .4rem; }
+  button.quiet { background: var(--paper); color: var(--ink); font-weight: 500; }
   .abandon { margin-top: 1.5rem; }
   .path { padding-left: 1.2rem; }
   .resume, .result { margin-top: 1rem; }

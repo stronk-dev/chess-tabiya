@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ApiError } from "./api.js";
+  import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
@@ -98,6 +99,7 @@
     </div>
     <div class="row-actions">
       <button type="button" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>{sealed.completed ? "See the run result" : "Continue to the map"}</button>
+      {#if campaign}<CampaignEncounterHistory {campaigns} campaignRunId={origin.campaignRunId} nodeId={origin.nodeId} {runId} campaignDocumentDigest={campaign.campaignRun.documentDigest} {onNavigate} />{/if}
     </div>
   {:else if campaign}
     <strong>Campaign · {nodeTitle}</strong>

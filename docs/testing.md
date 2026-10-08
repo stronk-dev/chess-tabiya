@@ -76,6 +76,13 @@ plus desktop/phone Nudge, cited Review and same-bot replay. Browser preservation
 permit additive background evidence, but reject changed play fields, lost evidence and
 non-evidence event writes. These focused checks supplement the complete gates above.
 
+`make campaign-history-check` runs mounted campaign-history controls in the software tier
+and the actual campaign application contracts in the real-content tier.
+`make campaign-history-browser-check` runs the built desktop/touchscreen-phone history journeys:
+sealed and abandoned recordings, deletion after loading, preserved progress and recorded moves.
+These cases also run in the ordinary CI tiers; opening a recorded encounter is not proof of
+the separate complete campaign-to-Review journey.
+
 `make test-browser` remains a convenient single Playwright invocation with the complete screenshot
 artifact check for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core

@@ -96,6 +96,33 @@ export interface CampaignRunResult {
   readonly awards: readonly { readonly durableRewardId: string; readonly awardedAt: string }[];
 }
 
+interface CampaignEncounterIdentity {
+  readonly runId: string;
+  readonly nodeId: string;
+  readonly campaignDocumentDigest: string;
+}
+
+/** campaign-core §6.3: a retained game, an unsealed abandoned attempt, or a deleted game. */
+export type CampaignEncounterReview = CampaignEncounterIdentity & (
+  | { readonly kind: "available"; readonly route: string }
+  | { readonly kind: "abandoned"; readonly reason: "campaign_encounter_abandoned"; readonly route: string }
+  | { readonly kind: "unavailable"; readonly reason: "campaign_encounter_run_deleted" | "campaign_abandoned_run_deleted" }
+);
+
+/** The route is the server's existing preserved-play door, not an invented Review Map or chess result. */
+export function parseCampaignEncounterReview(value: unknown, expected: CampaignEncounterIdentity & { readonly abandoned: boolean }): CampaignEncounterReview {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error("Invalid campaign encounter history");
+  const row = value as Record<string, unknown>;
+  if (row.runId !== expected.runId || row.nodeId !== expected.nodeId || row.campaignDocumentDigest !== expected.campaignDocumentDigest) throw new Error("Crossed campaign encounter history");
+  const kind = expected.abandoned ? "abandoned" : "available";
+  const reason = expected.abandoned ? "campaign_abandoned_run_deleted" : "campaign_encounter_run_deleted";
+  const unavailable = row.kind === "unavailable" && row.reason === reason && row.route === undefined;
+  const retained = row.kind === kind && row.route === `/play/run/${encodeURIComponent(expected.runId)}`
+    && (expected.abandoned ? row.reason === "campaign_encounter_abandoned" : row.reason === undefined);
+  if (!unavailable && !retained) throw new Error("Invalid campaign encounter history state or route");
+  return value as CampaignEncounterReview;
+}
+
 export function newCampaignCommandId(): string {
   return `cmd-${globalThis.crypto.randomUUID()}`;
 }
@@ -148,7 +175,7 @@ export class CampaignApi {
   abandon(campaignRunId: string, expectedRevision: number, commandId: string): Promise<CampaignCommandResult> {
     return this.#json(`/campaign-runs/${encodeURIComponent(campaignRunId)}/abandon`, "POST", { expectedRevision, commandId });
   }
-  review(campaignRunId: string, nodeId: string): Promise<{ readonly kind: "available" | "abandoned" | "unavailable"; readonly route?: string; readonly reason?: string }> {
+  review(campaignRunId: string, nodeId: string): Promise<CampaignEncounterReview> {
     return this.#json(`/campaign-runs/${encodeURIComponent(campaignRunId)}/nodes/${encodeURIComponent(nodeId)}/review`);
   }
 }

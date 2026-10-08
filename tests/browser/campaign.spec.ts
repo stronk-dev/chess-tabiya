@@ -131,3 +131,80 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   await expect(page.getByRole("heading", { name: "Campaign abandoned" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Start another run" })).toBeVisible();
 });
+
+for (const mobile of [false, true]) {
+  test(`Campaign history preserves seals and abandoned attempts through deletion${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const mapUrl = page.url();
+    const campaignId = currentRunId(page);
+    const firstRun = await startNode(page, "f1-a");
+    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    if (mobile) {
+      const tapSquare = async (square: string) => {
+        const box = await page.getByLabel("Chessboard").boundingBox();
+        if (box === null) throw new Error("board has no box");
+        await page.touchscreen.tap(box.x + (square.charCodeAt(0) - 97 + .5) * box.width / 8, box.y + (8 - Number(square[1]) + .5) * box.height / 8);
+      };
+      await tapSquare("c1");
+      await tapSquare("e3");
+    } else await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, firstRun)).toBeGreaterThanOrEqual(2);
+    await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+    await expect(strip.getByRole("button", { name: "Open recorded encounter" })).toBeVisible();
+    await strip.getByRole("button", { name: "Continue to the map" }).click();
+    const recordedMoves = async (runId: string) => {
+      const response = await page.request.get(`/runs/${encodeURIComponent(runId)}/events`);
+      expect(response.ok()).toBe(true);
+      return (await response.json()).events.filter((event: { type: string }) => event.type === "move.committed" || event.type === "opponent.move_selected");
+    };
+    const originalMoves = await recordedMoves(firstRun);
+    const sealedCard = page.locator('[data-node="f1-a"]');
+    await sealedCard.getByRole("button", { name: "Open recorded encounter" }).click();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${firstRun}$`, "u"));
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    expect(await recordedMoves(firstRun)).toEqual(originalMoves);
+    await page.goto(mapUrl);
+    await expect(sealedCard.getByRole("button", { name: "Open recorded encounter" })).toBeVisible();
+    const before = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+    const deleteRecordedGame = async (runId: string) => {
+      const preview = await page.request.post(`/runs/${runId}/deletion-preview`, { data: {} });
+      expect(preview.ok()).toBe(true);
+      const deleted = await page.request.post(`/runs/${runId}/delete`, { data: { previewDigest: (await preview.json()).digest } });
+      expect(deleted.ok()).toBe(true);
+    };
+    await deleteRecordedGame(firstRun);
+    // The map was loaded before deletion: activation must resolve again, not trust its old URL.
+    await sealedCard.getByRole("button", { name: "Open recorded encounter" }).click();
+    await expect(sealedCard.locator('[data-history-reason="campaign_encounter_run_deleted"]')).toBeVisible();
+    await expect(page).toHaveURL(mapUrl);
+    await page.reload();
+    await expect(sealedCard).toContainText("Its campaign seal and earned rewards are kept.");
+    const after = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+    expect(after).toEqual(before);
+
+    const unfinishedRun = await startNode(page, "f2-b");
+    const untouchedMoves = await recordedMoves(unfinishedRun);
+    await strip.getByRole("button", { name: "Map", exact: true }).click();
+    await page.getByRole("button", { name: "Abandon this run…" }).click();
+    await page.getByRole("button", { name: "Confirm abandon" }).click();
+    const result = page.getByRole("region", { name: "Campaign abandoned" });
+    await expect(result).toContainText("No seal or encounter reward was earned for this attempt.");
+    const unfinished = result.locator(".abandoned-encounter");
+    await unfinished.getByRole("button", { name: "Open recorded encounter" }).click();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${unfinishedRun}$`, "u"));
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    expect(await recordedMoves(unfinishedRun)).toEqual(untouchedMoves);
+    await page.goto(mapUrl);
+    await expect(unfinished.getByRole("button", { name: "Open recorded encounter" })).toBeVisible();
+    await deleteRecordedGame(unfinishedRun);
+    await page.reload();
+    await expect(unfinished.locator('[data-history-reason="campaign_abandoned_run_deleted"]')).toBeVisible();
+    await expect(result).toContainText("no completion mark is awarded");
+    await expect(sealedCard).toContainText("Played to the authored boundary");
+    const viewportWidth = await page.evaluate(() => innerWidth);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewportWidth);
+  });
+}

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3574]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3575]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -46,7 +46,7 @@ the machine map above remains the current assignment/status source.
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, explicit source-versus-review disclosure, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content and establish actual review authority, implement durable training-set progression/repeat/tempo and graduate the official corpus |
 | Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
-| Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results and resume | Official educational progression, consumed theory unlocks, complete boss/reward/failure paths, catalogue progression and meaningful long-term rewards |
+| Campaign | Durable draft pilot, map, kit, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, submissions, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, submission review, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
@@ -57,6 +57,17 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+Campaign history now uses the existing node-history API from sealed map cards, the fresh-seal
+strip and results ([[D3575]]), with a separate unfinished entry after abandonment. Activation
+rechecks and exact response identity prevent dead or crossed navigation; deleted recordings
+leave seals, rewards and abandonment history intact. Fifteen mounted cases, three actual
+campaign application cases and desktop/touchscreen-phone journeys pass. Current local
+verification passes clean types, 3,592 software, seven performance, 227 content and 179 browser
+cases, one optional Maia skip, zero retries, all 150 input cells and 112 composition cells.
+The first governance run correctly refused this item's missing queue route; the corrected
+governance/content/browser sequence exits zero on unchanged product code. This opens the
+existing recorded-play route, not a completed whole-game Review or official Campaign.
+No new pushed-revision GitHub or release-image verdict follows.
 Review browsing now keeps the selected move and keyboard focus together ([[D3562]]), with
 first/last navigation and list-local visibility that does not move the page or take graph/control
 focus. All 115 focused cases and both native desktop/phone browse→Retry→different move→Compare
@@ -173,7 +184,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,323 ledger rows** (1,458 done, 161 refused, 1,704 live,
+(271 completed, 24 retired, 274 live); **3,324 ledger rows** (1,459 done, 161 refused, 1,704 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,064 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
