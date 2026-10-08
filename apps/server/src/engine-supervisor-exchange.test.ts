@@ -34,6 +34,90 @@ describe("engine supervisor provider exchange (§3 same-exchange capture)", () =
     return value;
   };
 
+  it("actually terminates a child that ignores quit and SIGTERM before reporting stopped", async () => {
+    const engines = supervisor("process.on('SIGTERM',()=>{});console.log('owned-pid '+process.pid);" + engineScript().replace("process.exit(0)", "console.log('quit-ignored')"));
+    await engines.start("stockfish-analysis");
+    const pid = Number(engines.transcript("stockfish-analysis").find(({ line }) => line.startsWith("owned-pid "))!.line.slice("owned-pid ".length));
+    expect(Number.isSafeInteger(pid) && pid > 0).toBe(true);
+    try {
+      await engines.shutdown();
+      expect(engines.health("stockfish-analysis").status).toBe("stopped");
+      await vi.waitFor(() => expect(() => process.kill(pid, 0)).toThrow());
+    } finally {
+      try { process.kill(pid, "SIGKILL"); } catch { /* Already exited. */ }
+    }
+  });
+
+  it.each(["handshake", "search"] as const)("does not accept a failed child's late %s or stderr as a replacement generation", async (stage) => {
+    // SIGTERM is deliberately acknowledged but not immediately obeyed: real engines can drain
+    // buffered output after kill(). The test owns and force-cleans this exact fixture child.
+    const args = ["-e", [
+      "const r=require('readline').createInterface({input:process.stdin});",
+      "process.on('SIGTERM',()=>console.log('retired-held'));",
+      stage === "handshake"
+        ? "process.on('SIGUSR1',()=>{console.log('id name Retired 99');console.log('option name Poison type spin default 7 min 1 max 9');console.error('retired-stderr');console.log('uciok')});"
+        : "process.on('SIGUSR1',()=>{console.log('info depth 3 multipv 1 score cp 999 pv d2d4');console.error('retired-stderr');console.log('bestmove d2d4')});",
+      "r.on('line',l=>{if(l==='uci'){console.log('fixture-pid '+process.pid);console.log('option name Broken type spin min NaN');console.log('uciok')}else if(l==='quit'){process.exit(0)}});",
+    ].join("")];
+    const engines = new EngineSupervisor([{ id: "stockfish-analysis", kind: "judge", command: process.execPath, args, restartBackoff: { initialMs: 60_000, maximumMs: 60_000, maximumAttempts: 1 } }], { artifactProbe: probe });
+    supervisors.push(engines);
+    let retiredPid: number | undefined;
+    try {
+      await expect(engines.start("stockfish-analysis")).rejects.toMatchObject({ code: "ENGINE_UNAVAILABLE" });
+      retiredPid = Number(engines.transcript("stockfish-analysis").find(({ line }) => line.startsWith("fixture-pid "))!.line.slice("fixture-pid ".length));
+      expect(Number.isSafeInteger(retiredPid) && retiredPid > 0).toBe(true);
+      const deliverRetiredOutput = (): void => {
+        try { process.kill(retiredPid!, "SIGUSR1"); }
+        catch (error) { expect(error).toMatchObject({ code: "ESRCH" }); }
+      };
+      args[1] = [
+        "const r=require('readline').createInterface({input:process.stdin});",
+        `r.on('line',l=>{if(l==='uci'){console.log('replacement-waiting');setTimeout(()=>{console.log('id name Fresh 2');console.log('option name MultiPV type spin default 1 min 1 max 500');console.log('uciok')},${stage === "handshake" ? 200 : 0})}else if(l==='isready'){console.log('readyok')}else if(l.startsWith('go')){console.log('replacement-search-waiting');setTimeout(()=>{console.log('info depth 3 multipv 1 score cp 12 pv e2e4');console.log('bestmove e2e4')},200)}else if(l==='quit'){process.exit(0)}});`,
+      ].join("");
+      const replacement = engines.start("stockfish-analysis");
+      if (stage === "handshake") {
+        await vi.waitFor(() => expect(engines.transcript("stockfish-analysis").some(({ line }) => line === "replacement-waiting")).toBe(true));
+        deliverRetiredOutput();
+      }
+      expect(await replacement).toMatchObject({ name: "Fresh", version: "2" });
+      if (stage === "search") {
+        const search = engines.exchange("stockfish-analysis", { commands: ["go depth 3"], resetCommands: [], until: (line) => line.startsWith("bestmove"), timeoutMs: 1_000 });
+        await vi.waitFor(() => expect(engines.transcript("stockfish-analysis").some(({ line }) => line === "replacement-search-waiting")).toBe(true));
+        deliverRetiredOutput();
+        const capture = await search;
+        expect(capture.transcript).toContain("< info depth 3 multipv 1 score cp 12 pv e2e4");
+        expect(capture.transcript).toContain("< bestmove e2e4");
+        expect(capture.transcript.some((line) => line.includes("d2d4"))).toBe(false);
+      }
+      expect(engines.health("stockfish-analysis").options?.map(({ name }) => name)).toEqual(["MultiPV"]);
+      expect(engines.transcript("stockfish-analysis").some(({ line }) => line === "retired-stderr" || line === "id name Retired 99")).toBe(false);
+      expect(engines.establishedGeneration("stockfish-analysis")).toBe(1);
+      await vi.waitFor(() => expect(() => process.kill(retiredPid!, 0)).toThrow());
+    } finally {
+      if (retiredPid !== undefined) {
+        try { process.kill(retiredPid, "SIGKILL"); } catch { /* Already exited. */ }
+      }
+      await engines.shutdown();
+    }
+  });
+
+  it.each(["execute", "exchange"] as const)("retires a failed %s before a queued task can reuse its process", async (operation) => {
+    const script = engineScript().replace(
+      "console.log('bestmove e2e4')",
+      "console.log('reject-search')",
+    );
+    const engines = supervisor("process.on('SIGTERM',()=>setTimeout(()=>process.exit(0),500));" + script);
+    await engines.start("stockfish-analysis");
+    const request = { commands: ["go depth 3"], resetCommands: [], until: (line: string) => {
+      if (line === "reject-search") throw new Error("invalid search response");
+      return line.startsWith("bestmove");
+    }, timeoutMs: 1_000 };
+    const failed = engines[operation]("stockfish-analysis", request).then(() => "completed", () => "refused");
+    const next = engines.exchange("stockfish-analysis", { commands: ["isready"], resetCommands: [], until: (line) => line === "readyok", timeoutMs: 1_000 });
+    expect(await failed).toBe("refused");
+    expect((await next).generation).toBe(2);
+  });
+
   it("does not spawn when an artifact probe completes after shutdown", async () => {
     let release!: () => void;
     const gate = new Promise<void>((resolve) => { release = resolve; });

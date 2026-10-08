@@ -57,6 +57,17 @@ Late continuations cannot change that generation's readiness, artifact or reques
 controls include a delayed real Stockfish binary probe and active/queued exchange cancellation;
 this closes D3555, not the separately unlocated intermittent UCI timeout D3518.
 
+Failure also retires the current child before releasing its request lane. A failed handshake,
+search or reset cannot leave a ready process available to the next request: streams detach,
+waiters fail and the replacement establishes its own generation. Both stream handlers check the
+owning child, so buffered stdout/stderr from an obsolete child cannot provide a replacement's
+identity, options or search result. Failed children receive SIGKILL rather than an ignorable
+SIGTERM. Normal shutdown still first sends `quit` and permits the existing one-second grace;
+if forced termination is necessary it sends SIGKILL and observes exit before reporting stopped.
+The permanent `make engine-sharing-check` cases include late handshake/search injection,
+queued generation non-reuse and a test-owned child that ignores both quit and SIGTERM.
+These D3588/D3589 repairs do not establish missing evidence-source contracts or diagnose D3518.
+
 Application startup reads the resolved launched binary in 64 KiB chunks through the server's
 standard-library SHA-256 adapter. Permanent tests compare it with the unchanged runtime
 `digestEngineBinary` fixed-domain authority, including chunk/padding boundaries and failed reads.

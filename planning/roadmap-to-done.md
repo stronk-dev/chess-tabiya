@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3587]] · **Machine map:**
+2026-10-08 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3589]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -57,6 +57,16 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+
+Latest completed repair ([[D3588]]/[[D3589]]): failed engine children can no longer supply a
+replacement's identity/options/search or be reused by queued work. Shutdown retains its
+one-second graceful bound, then force-terminates and observes exit. Four observed predecessor
+failures and five new permanent actual-child cases cover both defects; all 91 focused cases pass.
+Full sequential normal verification passes clean types/build, 3,666 software, seven unchanged-budget
+performance, 228 content and 189 browser cases, one optional Maia skip, zero retries, all 150 input
+and 112 composition cells. Missing source contracts and historical intermittent causes stay open.
+This advances runtime reliability, not a whole capability, official pack or release milestone.
+
 [[D3582]]–[[D3586]] complete local teacher inspection of finished and incomplete submissions
 and repair stale checkpoint restoration, misleading sharing copy and race-prone browser assertions.
 Readers cannot enter predictions/reasoning, continue the learner or request new reasoning review;
@@ -237,7 +247,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **72 active product RFCs** (20 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,330 ledger rows** (1,463 done, 161 refused, 1,706 live,
+(271 completed, 24 retired, 274 live); **3,338 ledger rows** (1,471 done, 161 refused, 1,706 live,
 zero untriaged). Of the live ledger, 628 are todo, twelve doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

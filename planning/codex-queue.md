@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3588]]/[[D3589]] are **closed locally**: failed children detach their streams and retire readiness
+before the serialized lane releases; replacement output is child-scoped. Shutdown retains its
+one-second grace, then force-terminates and observes exit. Four observed predecessor failures
+and five new permanent cases cover retired handshake/search output, queued generation reuse and
+an owned child ignoring quit/SIGTERM. All 91 focused engine/provider cases pass. Full normal gates
+pass clean types/build, 3,666 software, seven performance, 228 content and 189 browser cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. The held source-format
+amendments and independently unlocated D3518 handshake timeout remain open; no release promotion.
+
 Independent accepted Campaign repair [[D3587]] is **closed locally**: create/start/loadout/abandon
 and encounter declaration retire departed/replaced view completion while retaining server-accepted
 work and validated writer credentials for resume. Retries keep exact command operands; crossed

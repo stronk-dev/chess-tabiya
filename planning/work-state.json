@@ -29683,6 +29683,24 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/campaign-actions.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3588",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5706894574c3a2a39c169c9d990b6c7ede6509def584222e8ee57fcf110700c3",
+      "uxItems": [],
+      "evidence": "apps/server/src/engine-supervisor-exchange.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3589",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2967c893e36fb6d49e2190d7311ed935a25a3f6a0563e71c45e3ec591958df2f",
+      "uxItems": [],
+      "evidence": "apps/server/src/engine-supervisor-exchange.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

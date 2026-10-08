@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8d1eee6a2a951ad03fc673c64ced20d90a71b9e0a0e7367fc62dcccf4d04ca0a",
+    "roadmap": "sha256:71d9cdc852774ac21fee46fb5bd1c4f7949fe8c889202173ac948f2b9cb5af4a",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:69857c7ae340bbf25d87a92d6235c09e53ba24e52a999e03d053bb271096972f",
+    "workState": "sha256:393a46c2c608c3e487c071e088d8d489b5c899f7406ab8b7faf62ef475d6eedd",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 12,
       "blocked": 1066,
-      "done": 1469,
+      "done": 1471,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Diagnose D3558's Review render deadlines/Studio action failure and historical intermittent causes; a green replay does not explain them. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "Current sequential normal make campaign-actions-check roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3661 software cases/354 files, seven isolated unchanged-budget performance and 228 content cases/23 files plus downstream software/governance checks. Browser tiers pass 124 smoke, five real-content, 59 matrix and one packaged-default case (189 total), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3587 adds exact Campaign action departure/resume and response-loss safety; prior classroom, Review, account/Profile/bot repairs stand. D3580 tablebase and D3578 selected-square contracts remain author-blocked; historical intermittent causes remain unlocated. All 1706 remaining live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, capability/milestone or release promotion.",
+        "summary": "Current sequential normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean types/build, 3666 software cases/354 files, seven isolated unchanged-budget performance and 228 content cases/23 files plus downstream software/governance checks. Browser tiers pass 124 smoke, five real-content, 59 matrix and one packaged-default case (189 total), one existing optional Maia skip, zero retries, all 150 input and 112 composition cells. D3588/D3589 repair failed engine-child isolation, queued generation reuse and real forced termination; all 91 focused engine/provider cases pass. Prior Campaign, classroom, Review, account/Profile/bot repairs stand. D3580 tablebase and D3578 selected-square contracts remain author-blocked; historical intermittent causes remain unlocated. All 1706 remaining live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No push, paired pushed-revision GitHub proof, capability/milestone or release promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -190,10 +190,15 @@
       "nextAction": "Review D3564's narrow exact-input mirror-rule amendment before admitting orientation authorities; real retained FEN/UCI operands cannot use the current five transforms. Fresh-review D3373's durable-stockfish-source draft before implementing its same-task selected-move/PV/MultiPV source, exact v1/v2 job/batch/settlement compatibility and provisional migration order. Complete accepted evidence/source contracts without filtering remaining refusals. D3429's numerical calibration contract and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3566 repairs the accepted mirror input preflight before either collector, with predecessor-red zero-invocation controls and a valid-pair continuation control. D3565 corrects a stale opt-in matrix reference without promoting composition authority. D3564 establishes an unrepresentable retained-input operand comparison on real castling pairs and thirteen sampled kinds; the exact-input-binding prototype passes corruption controls but its contract amendment awaits author/cross-review. All 158 focused foundation tests, thirteen opt-in research checks and clean types pass; generated validation remains current at 81 subjects, forty passing cases and zero fully validated subjects. D3563's independently cited resolver remains delivered. Final normal make roadmap-receipt verify-awake exits zero: 3568 software, seven performance, 227 content and all downstream/governance checks. The prior 175 browser passes are not a new run for this build-only repair. D3373 whole Stockfish source remains draft; D3429 numerical calibration, D3430 historical roots and D3410 opening-source repair remain independently held. No whole capability, milestone, remote CI or 1.0 completion.",
+        "summary": "D3588/D3589 close the accepted provider-runtime child-isolation and real forced-termination repairs: four observed predecessor failures, five new permanent actual-child cases and all 91 focused engine/provider cases pass. Failed streams/readiness retire before lane release; replacement handlers are child-scoped; shutdown preserves its one-second grace before SIGKILL and observed exit. Full sequential normal gates pass clean types/build, 3666 software, seven unchanged-budget performance, 228 content and 189 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. D3566 mirror preflight and D3563 cited resolver remain delivered; D3564's retained-input orientation amendment, D3373 durable Stockfish draft, D3376 opening authority, D3580 tablebase projection and D3578 selected-square delivery remain held. Semantic validation stays at 81 subjects, forty passing cases and zero fully validated subjects. D3429 bot calibration, D3430 historical roots and D3410 opening-source repair remain independent; historical D3518 is not diagnosed. No whole capability, milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/durable-stockfish-source.md",
+          "apps/server/src/engine-supervisor.ts",
+          "apps/server/src/engine-supervisor-exchange.test.ts",
+          "apps/server/src/engine-supervisor.test.ts",
+          "docs/engine-workers.md",
+          "planning/exploration/log.md",
           "rfc/semantic-validation-authority.md",
           "packages/runtime/src/semantic-validation-authorities.ts",
           "packages/runtime/src/semantic-validation-cited-sources.ts",

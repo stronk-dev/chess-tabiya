@@ -410,8 +410,12 @@ class ManagedUciEngine {
     this.#process = child;
     this.#stdout = createInterface({ input: child.stdout });
     this.#stderr = createInterface({ input: child.stderr });
-    this.#stdout.on("line", (line) => this.#receive(line));
-    this.#stderr.on("line", (line) => this.#transcript.push("stderr", line));
+    this.#stdout.on("line", (line) => {
+      if (child === this.#process) this.#receive(line);
+    });
+    this.#stderr.on("line", (line) => {
+      if (child === this.#process) this.#transcript.push("stderr", line);
+    });
     child.once("error", (error) => this.#failed(child, error));
     // A write racing a dying process is reported through its exit, not an unhandled EPIPE.
     child.stdin.on("error", () => undefined);
@@ -471,8 +475,11 @@ class ManagedUciEngine {
       this.#assertLifecycle(lifecycle);
       this.#lastError = error instanceof Error ? error.message : String(error);
       this.#status = "unavailable";
+      // kill() requests termination; it does not detach buffered output or wait for exit.
+      // Retire this child's streams before a caller or restart can establish its successor.
+      this.#disposeProcess(child);
       this.#emit({ engineId: this.#spec.id, kind: "failed", reason: this.#closing ? "cancelled_by_shutdown" : "startup" });
-      child.kill();
+      child.kill("SIGKILL");
       this.#scheduleRestart();
       if (error instanceof Error && "code" in error) throw error;
       throw engineUnavailable(
@@ -530,7 +537,11 @@ class ManagedUciEngine {
         return lines;
       } catch (error) {
         if (isAbortError(error)) throw error;
-        if (lifecycle === this.#lifecycle) this.#process?.kill();
+        if (lifecycle === this.#lifecycle && this.#process !== undefined) {
+          const child = this.#process;
+          this.#failed(child, error instanceof Error ? error : new Error(String(error)));
+          child.kill("SIGKILL");
+        }
         throw error instanceof Error && "code" in error
           ? error
           : engineUnavailable(
@@ -602,7 +613,11 @@ class ManagedUciEngine {
         for (const line of lines) transcript.push(`< ${line}`);
         completed = true;
       } catch (error) {
-        if (!isAbortError(error) && lifecycle === this.#lifecycle) this.#process?.kill();
+        if (!isAbortError(error) && lifecycle === this.#lifecycle && this.#process !== undefined) {
+          const child = this.#process;
+          this.#failed(child, error instanceof Error ? error : new Error(String(error)));
+          child.kill("SIGKILL");
+        }
         throw error instanceof Error && "code" in error
           ? error
           : isAbortError(error) ? error : engineUnavailable(this.#spec.id, this.#nextBackoffMs(), error instanceof Error ? error : undefined);
@@ -616,9 +631,11 @@ class ManagedUciEngine {
             this.#assertLifecycle(lifecycle);
             // A generation that cannot be reset may not serve another task.
             completed = false;
-            this.#lastError = "provider exchange reset failed";
-            this.#status = "unavailable";
-            this.#process?.kill();
+            if (this.#process !== undefined) {
+              const child = this.#process;
+              this.#failed(child, new Error("provider exchange reset failed"));
+              child.kill("SIGKILL");
+            }
           }
         }
       }
@@ -669,7 +686,10 @@ class ManagedUciEngine {
           exited,
           new Promise<void>((resolve) => setTimeout(resolve, 1_000)),
         ]);
-        if (child.exitCode === null && child.signalCode === null) child.kill();
+        if (child.exitCode === null && child.signalCode === null) {
+          child.kill("SIGKILL");
+          await exited;
+        }
       }
       this.#disposeProcess(child);
       this.#status = "stopped";
@@ -759,7 +779,8 @@ class ManagedUciEngine {
   }
 
   #disposeProcess(child: ChildProcessWithoutNullStreams | undefined): void {
-    if (child !== undefined && child === this.#process) this.#process = undefined;
+    if (child !== this.#process) return;
+    this.#process = undefined;
     this.#stdout?.close();
     this.#stderr?.close();
     this.#stdout = undefined;
