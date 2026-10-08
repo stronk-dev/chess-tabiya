@@ -29593,6 +29593,14 @@
       "uxItems": [],
       "evidence": "apps/server/src/campaign-core.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3578",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:87186b2b9b4dc17ece736779c0d52007ce7f41ab48146f864c2fea40bb82da6b",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

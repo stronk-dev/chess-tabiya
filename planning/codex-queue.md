@@ -94,6 +94,13 @@ not the separate complete whole-game Review journey or an official educational c
    pass, but these earlier failure causes remain open. [[D3532]]'s recorded-path
    performance excursion and [[D3543]]'s startup/load failures remain separate.
 2. Evidence-to-learner delivery: [[D3373]] now has draft `rfc/durable-stockfish-source.md`.
+   [[D3578]] is a reproduced-by-code consumer omission, not a missing collector: requested
+   sight acquires four registered sources but maps none to a selected square. Complete
+   square-aware legal destinations, pawn contacts, control and castling delivery under
+   the existing learner-module/exact-mobility contracts, with exact query and mounted
+   gesture proof. Do not repair it by admitting a whole-board population or relabelling
+   an aggregate as the selected piece's answer. Carry any genuinely missing presentation
+   authority to the existing author lane before implementing that part.
    [[D3576]] closes the already-specified immutable opening loader with a detached validated
    snapshot, frozen source metadata and predecessor-red mutation controls. Full sequential
    local gates pass. [[D3376]]'s cross-package source-authority amendment and runtime/Review
