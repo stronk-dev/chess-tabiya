@@ -1,7 +1,28 @@
 #!/usr/bin/env node
 // Thin argument adapter for the maintenance overlay. Storage and locking stay in the image.
 import { spawnSync } from "node:child_process";
-import { delimiter, dirname, join } from "node:path";
+import { lstatSync, realpathSync } from "node:fs";
+import { basename, delimiter, dirname, isAbsolute, join, posix, resolve } from "node:path";
+
+if (process.argv.length === 3 && process.argv[2] === "--bundle-path") {
+  try {
+    const configured = process.env.TABIYA_BACKUP_DIRECTORY;
+    const requested = process.env.BACKUP;
+    if (!configured || !isAbsolute(configured) || !requested) throw new Error("missing path");
+    const root = resolve(configured);
+    const bundle = resolve(requested);
+    // The mounted root and bundle must be real directories. Canonical parents also catch an
+    // escaping intermediate symlink without rejecting ordinary /tmp or /var path aliases.
+    if (!lstatSync(root).isDirectory() || !lstatSync(bundle).isDirectory()) throw new Error("not a real directory");
+    const actual = realpathSync(bundle);
+    if (dirname(actual) !== realpathSync(root)) throw new Error("outside the mounted root");
+    console.log(posix.join("/backup", basename(actual)));
+  } catch {
+    console.error("storage maintenance: BACKUP must name an existing, non-symlink bundle directly inside TABIYA_BACKUP_DIRECTORY");
+    process.exit(2);
+  }
+  process.exit(0);
+}
 
 const files = (process.env.COMPOSE_FILE ?? "compose.yaml").split(process.env.COMPOSE_PATH_SEPARATOR || delimiter);
 if (files.some(file => file.length === 0)) {

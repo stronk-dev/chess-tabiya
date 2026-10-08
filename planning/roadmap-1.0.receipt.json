@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1e9e66cbcec27575ff74fe0234653d94dd9c0a94164b098fba5889f6a526ff0a",
+    "roadmap": "sha256:776b42d73129ecd9dcb07efcefbcd5e2b3d575240f275b0e9fa270a9cf99e1eb",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:cc7095a40ee52566952c372da3d9a473d23b650f36003cb57ee9946719cf1e93",
+    "workState": "sha256:c582a1a756d98a0524b22c0987a59e5753c197d87baa0980171004a556bc7fb6",
     "rfcRegister": "sha256:3add3daa15de6b1ff338208851ff5dee0b6fce908b9b36eb0251350b10ccaa48",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:c9930218bceddd8ba2aa7f8f7b3a0635d46441f926485a8be4892633180387e9",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 12,
       "blocked": 1062,
-      "done": 1457,
+      "done": 1458,
       "refused": 161
     },
     "workItems": {
@@ -1982,7 +1982,7 @@
       "nextAction": "Fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual generated reader/dispatcher and proxy limits; the 112-id source census is not protection. Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
         "at": "2026-10-08",
-        "summary": "D3570/D3571 complete the selected-deployment maintenance boundary: ten predecessor-red controls become eighteen passing actual-Make process cases, covering server state/stop/backup/restart failures and all seven maintenance targets with retained project/volume/arguments. A thin adapter selects the existing sibling maintenance overlay from COMPOSE_FILE, including spaces and alternate separators. Actual Compose packaging validates matching server/admin images, data volumes and isolation across development plus all six source/release profiles. All 47 native storage/CLI/replacement cases, fifteen scaffold cases, schema/packaging and 85 release-policy cases pass. D3572 remains executable: exact BACKUP path validation must precede stop/restore instead of discarding the requested parent. This is not a full native image recovery drill, published release or remote CI proof. The prior D3334/D3335 112-id source census and 127 authoring checks remain draft rather than ingress enforcement. CSP/probe contracts, deployment image/privacy/operator receipts, rights/resource proof, owner-device use and official content still block this milestone; prior evidence remains in the append-only log.",
+        "summary": "D3572 closes exact host-bundle selection across all five consumers before server stop, volume lookup or maintenance. Ten predecessor-red controls and all 33 wrapper cases pass, including outside same-name, missing, nested and final/intermediate-symlink refusals plus relative/dot/trailing-slash/space-root positives. Native bundle verification, SQLite locking and explicit replacement confirmation remain unchanged. Normal storage-recovery-check schema-check release-policy-check exits zero with 47 native storage/CLI/replacement cases, fifteen scaffold cases, actual Compose packaging and 100 release-policy cases. D3570/D3571's lifecycle and selected-deployment repairs remain verified. D3573 now owns routing the built-image drill through these actual Make commands and measuring the drill's 777-versus-Make-700 host/container permission interaction; no native image or permission verdict is claimed here. D3334/D3335 ingress repair remains draft, and CSP/probe contracts, deployment/privacy/operator receipts, rights/resource proof, owner-device use and official content still block the milestone. No push or remote CI result is claimed.",
         "impact": "held",
         "evidence": [
           "Makefile",
@@ -3074,7 +3074,7 @@
         ],
         "verification": [
           "partial",
-          "D3570/D3571 add eighteen actual-Make process cases, 47 passing native SQLite/CLI/replacement cases and actual Compose packaging for development plus all six source/release profiles; all 85 release-policy cases pass. Exact bundle-path validation remains D3572. Unit/content/browser/accessibility/native release tiers stay separate; this selected-deployment boundary repair is not full image recovery, multi-architecture release or remote CI proof."
+          "D3570/D3571/D3572 have 33 passing actual-Make process cases, 47 native SQLite/CLI/replacement cases and actual Compose packaging for development plus all six source/release profiles; all 100 release-policy cases pass. Exact bundle selection now refuses outside/missing/nested/symlink paths before any Docker call. D3573 owns native image execution through the actual Make commands, including the unmeasured host/container permission interaction. Unit/content/browser/accessibility/native release tiers stay separate; this is not full image recovery, multi-architecture release or remote CI proof."
         ],
         "release": [
           "blocked",

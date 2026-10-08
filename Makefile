@@ -3460,6 +3460,7 @@ DEPLOY_TIER ?= core
 deployment_compose = docker compose $(if $(COMPOSE_FILE),,-f "$(DEPLOY_RENDER_DIR)/$(1)")
 MAINTENANCE_COMPOSE := $(CI_NODE) tools/storage-compose.mjs
 STORAGE_ADMIN := $(MAINTENANCE_COMPOSE) run --rm storage-admin
+export BACKUP TABIYA_BACKUP_DIRECTORY
 
 .PHONY: up up-engines down deployment-render deployment-check up-appliance up-hosted appliance-ca-export verify-deployment
 .PHONY: storage-maintenance-check storage-backup storage-verify storage-restore storage-restore-replace storage-rollback storage-upgrade-rehearsal storage-recover
@@ -3753,8 +3754,6 @@ storage-maintenance-check:
 	@case "$(TABIYA_BACKUP_DIRECTORY)" in /*) ;; *) echo "Set TABIYA_BACKUP_DIRECTORY to an absolute host directory (e.g. TABIYA_BACKUP_DIRECTORY=$$HOME/tabiya-backups)" >&2; exit 2;; esac
 	@mkdir -p "$(TABIYA_BACKUP_DIRECTORY)" && chmod 700 "$(TABIYA_BACKUP_DIRECTORY)"
 
-bundle_id = $(notdir $(patsubst %/,%,$(BACKUP)))
-
 # Manual backup: stops the server (backup needs a quiesced database), backs up, restarts it if it was running.
 storage-backup: storage-maintenance-check
 	@running=$$(docker compose ps --quiet --status running server) || exit $$?; \
@@ -3770,30 +3769,35 @@ storage-backup: storage-maintenance-check
 
 storage-verify: storage-maintenance-check
 	@test -n "$(BACKUP)" || { echo "Usage: make storage-verify BACKUP=<bundle-directory>" >&2; exit 2; }
-	$(STORAGE_ADMIN) verify /backup/$(bundle_id)
+	@bundle=$$($(CI_NODE) tools/storage-compose.mjs --bundle-path) || exit $$?; \
+	$(STORAGE_ADMIN) verify "$$bundle"
 
 # Restore into a fresh named volume; start it with TABIYA_DATA_VOLUME=<volume> make up.
 storage-restore: storage-maintenance-check
 	@test -n "$(BACKUP)" -a -n "$(RESTORE_VOLUME)" || { echo "Usage: make storage-restore BACKUP=<bundle-directory> RESTORE_VOLUME=<fresh-volume>" >&2; exit 2; }
-	@if docker volume inspect "$(RESTORE_VOLUME)" >/dev/null 2>&1; then echo "RESTORE_VOLUME $(RESTORE_VOLUME) already exists; choose a fresh name" >&2; exit 2; fi
-	TABIYA_DATA_VOLUME="$(RESTORE_VOLUME)" $(STORAGE_ADMIN) restore /backup/$(bundle_id)
+	@bundle=$$($(CI_NODE) tools/storage-compose.mjs --bundle-path) || exit $$?; \
+	if docker volume inspect "$(RESTORE_VOLUME)" >/dev/null 2>&1; then echo "RESTORE_VOLUME $(RESTORE_VOLUME) already exists; choose a fresh name" >&2; exit 2; fi; \
+	TABIYA_DATA_VOLUME="$(RESTORE_VOLUME)" $(STORAGE_ADMIN) restore "$$bundle"
 	@echo "Start the restored installation with: TABIYA_DATA_VOLUME=$(RESTORE_VOLUME) make up"
 
 storage-restore-replace: storage-maintenance-check
 	@test -n "$(BACKUP)" -a -n "$(CONFIRM_DATABASE)" || { echo "Usage: make storage-restore-replace BACKUP=<bundle-directory> CONFIRM_DATABASE=/data/chess-tabiya.sqlite" >&2; exit 2; }
-	docker compose stop server
-	$(STORAGE_ADMIN) restore /backup/$(bundle_id) --replace-existing --confirm-database "$(CONFIRM_DATABASE)"
+	@bundle=$$($(CI_NODE) tools/storage-compose.mjs --bundle-path) || exit $$?; \
+	docker compose stop server || exit $$?; \
+	$(STORAGE_ADMIN) restore "$$bundle" --replace-existing --confirm-database "$(CONFIRM_DATABASE)"
 
 # Last-known-good: installs a (pre_upgrade) bundle's bytes unchanged; then start the PRIOR release.
 storage-rollback: storage-maintenance-check
 	@test -n "$(BACKUP)" -a -n "$(CONFIRM_DATABASE)" || { echo "Usage: make storage-rollback BACKUP=<bundle-directory> CONFIRM_DATABASE=/data/chess-tabiya.sqlite" >&2; exit 2; }
-	docker compose stop server
-	$(STORAGE_ADMIN) rollback /backup/$(bundle_id) --confirm-database "$(CONFIRM_DATABASE)"
+	@bundle=$$($(CI_NODE) tools/storage-compose.mjs --bundle-path) || exit $$?; \
+	docker compose stop server || exit $$?; \
+	$(STORAGE_ADMIN) rollback "$$bundle" --confirm-database "$(CONFIRM_DATABASE)"
 	@echo "Now start the release named by compatibleApplicationRevision above; this release would upgrade the database again."
 
 storage-upgrade-rehearsal: storage-maintenance-check
 	@test -n "$(BACKUP)" || { echo "Usage: make storage-upgrade-rehearsal BACKUP=<bundle-directory>" >&2; exit 2; }
-	$(STORAGE_ADMIN) rehearsal /backup/$(bundle_id)
+	@bundle=$$($(CI_NODE) tools/storage-compose.mjs --bundle-path) || exit $$?; \
+	$(STORAGE_ADMIN) rehearsal "$$bundle"
 
 storage-recover: storage-maintenance-check
 	docker compose stop server

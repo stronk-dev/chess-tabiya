@@ -51,7 +51,13 @@ disk fails.
 ## Commands
 
 All commands need `TABIYA_BACKUP_DIRECTORY=<absolute host directory>`, which is mounted at
-`/backup`. `BACKUP=` takes a bundle directory under that path. Storage-admin prints exactly one
+`/backup`. `BACKUP=` names an existing bundle directory directly inside that host directory,
+using an absolute path or a filesystem path relative to the directory where Make runs. A bare
+name is not a search instruction. Paths outside the mounted root, nested paths, missing directories
+and symlinked bundles refuse before any server stop, volume lookup or maintenance command. A
+trailing slash and ordinary path aliases such as `/tmp` are resolved without changing which
+directory is selected. Storage-admin still validates the bundle's name, manifest and database;
+the host-side check only binds that selection to the mounted directory. Storage-admin prints exactly one
 JSON receipt on stdout; Make may also echo commands and next-step instructions. Exit codes:
 `0` succeeded, `2` refused, `3` failed, `4` internal error.
 These are storage-admin exit codes; Make itself returns nonzero when any step fails. The backup
@@ -175,6 +181,8 @@ recovers readiness without a server restart.
   selected source/release profiles and project/volume preservation. It does not touch an operator's
   deployment or replace the native SQLite/image recovery proof below. These process tests also
   run in the ordinary software tier through `release-policy-check`.
+  Exact bundle controls cover all five consumers, with zero Docker commands on path refusal;
+  relative/dot/trailing-slash paths and backup directories containing spaces retain passing controls.
 - `make storage-recovery-check` adds the native SQLite backup/restore, bundled CLI/server and
   replacement crash-recovery tests to those wrapper controls.
 - `make test-software` covers the unit tier, the process boundary (bundled `main.js` with its

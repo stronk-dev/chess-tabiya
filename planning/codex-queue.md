@@ -24,10 +24,15 @@ restarts only a previously running server. Maintenance uses the selected Compose
 profile's matching overlay, project and volume. Ten predecessor-red controls,
 eighteen passing process cases, 47 native storage/CLI/replacement cases, actual
 Compose packaging for seven profiles and all 85 release-policy cases pass.
-[[D3572]] remains executable next: refuse a requested BACKUP outside the configured
-mount instead of silently rewriting its basename; verify before stopping a server.
-Do not claim this fixes exact bundle identity, performs a native image drill or
-completes release-candidate-proof. No live operator deployment is a test target.
+[[D3572]] is now closed locally: ten predecessor-red controls prove basename
+rewriting; all five bundle consumers check the actual mounted directory before
+stop, volume lookup or maintenance. All 33 wrapper controls, 47 native recovery
+and 100 release-policy cases pass, alongside actual Compose packaging.
+[[D3573]] is the next independent operator delivery: the built-image storage drill
+still bypasses these Make commands. Route its test-owned journey through the
+supported commands, preserving direct native CLI refusal controls and proving
+project/volume isolation before start/cleanup. No live operator deployment is a
+test target; no full release-candidate-proof or remote CI completion is claimed.
 
 0. [[D3553]] is **closed locally**: repaired the content CI checkout's missing parent. GitHub verify
    37641922404 at d1310090 fails the graduation ruling sweep because depth-one

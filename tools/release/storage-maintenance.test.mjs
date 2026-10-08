@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
@@ -17,7 +17,11 @@ function backup(context, plan, composeEnv = {}, target = "storage-backup", varia
   copyFileSync(new URL("./fixtures/storage-compose.mjs", import.meta.url), docker);
   chmodSync(docker, 0o700);
   const log = join(directory, "docker.jsonl");
-  const result = spawnSync("make", ["--no-print-directory", "--silent", "-f", join(root, "Makefile"), target, "TABIYA_APPLICATION_REVISION=dev+dirty", `TABIYA_BACKUP_DIRECTORY=${join(directory, "backups")}`, ...variables], {
+  const backups = join(directory, "backups");
+  const bundle = join(backups, "fixture-bundle");
+  mkdirSync(bundle, { recursive: true });
+  const supplied = typeof variables === "function" ? variables({ directory, backups, bundle }) : variables;
+  const result = spawnSync("make", ["--no-print-directory", "--silent", "-f", join(root, "Makefile"), target, "TABIYA_APPLICATION_REVISION=dev+dirty", `TABIYA_BACKUP_DIRECTORY=${backups}`, `BACKUP=${bundle}`, ...supplied], {
     cwd: root,
     encoding: "utf8",
     timeout: 10_000,
@@ -55,11 +59,62 @@ for (const [target, operation, before, variables] of [
       COMPOSE_FILE: "release install/compose.hosted.yaml",
       COMPOSE_PROJECT_NAME: "operator-selected-project",
       TABIYA_DATA_VOLUME: "operator-selected-data",
-    }, target, ["BACKUP=/configured/backups/fixture-bundle", ...variables]);
+    }, target, variables);
     assert.equal(result.status, 0, result.stderr);
     assert.deepEqual(result.stages, [...before, operation[0]]);
     assert.ok(result.calls.every(call => call.project === "operator-selected-project"));
     assert.equal(result.calls.at(-1).volume, target === "storage-restore" ? "restored-fresh-volume" : "operator-selected-data");
+  });
+}
+
+const bundleTargets = [
+  ["storage-verify", "verify", []],
+  ["storage-restore", "restore", ["RESTORE_VOLUME=restored-fresh-volume"]],
+  ["storage-restore-replace", "restore", ["CONFIRM_DATABASE=/data/chess-tabiya.sqlite"]],
+  ["storage-rollback", "rollback", ["CONFIRM_DATABASE=/data/chess-tabiya.sqlite"]],
+  ["storage-upgrade-rehearsal", "rehearsal", []],
+];
+
+for (const [target, operation, variables] of bundleTargets) {
+  test(`${target} refuses a different directory's same-named bundle before any Docker command`, context => {
+    const result = backup(context, { operation: [operation, "/backup/fixture-bundle", ...(target === "storage-restore-replace" ? ["--replace-existing", "--confirm-database", "/data/chess-tabiya.sqlite"] : target === "storage-rollback" ? ["--confirm-database", "/data/chess-tabiya.sqlite"] : [])] }, {}, target, ({ directory }) => {
+      const outside = join(directory, "other-backups", "fixture-bundle");
+      mkdirSync(outside, { recursive: true });
+      return [`BACKUP=${outside}`, ...variables];
+    });
+    assert.equal(result.status, 2);
+    assert.deepEqual(result.calls, [], "path refusal must precede stop, volume lookup and maintenance");
+    assert.match(result.stderr, /BACKUP must name/);
+  });
+}
+
+for (const [name, setup] of [
+  ["missing bundle", ({ backups }) => join(backups, "missing")],
+  ["backup root itself", ({ backups }) => backups],
+  ["nested bundle", ({ backups }) => { const nested = join(backups, "nested", "fixture-bundle"); mkdirSync(nested, { recursive: true }); return nested; }],
+  ["bundle symlink within the root", ({ backups, bundle }) => { const link = join(backups, "link"); symlinkSync(bundle, link); return link; }],
+  ["symlink escaping the root", ({ directory, backups }) => { const outside = join(directory, "outside"); mkdirSync(outside); const link = join(backups, "escape"); symlinkSync(outside, link); return link; }],
+  ["intermediate symlink escaping the root", ({ directory, backups }) => { const outside = join(directory, "outside"); mkdirSync(join(outside, "fixture-bundle"), { recursive: true }); const link = join(backups, "escape"); symlinkSync(outside, link); return join(link, "fixture-bundle"); }],
+]) {
+  test(`replacement refuses ${name} before stopping the server`, context => {
+    const result = backup(context, { operation: ["restore", "/backup/fixture-bundle", "--replace-existing", "--confirm-database", "/data/chess-tabiya.sqlite"] }, {}, "storage-restore-replace", state => [`BACKUP=${setup(state)}`, "CONFIRM_DATABASE=/data/chess-tabiya.sqlite"]);
+    assert.equal(result.status, 2);
+    assert.deepEqual(result.calls, []);
+    assert.match(result.stderr, /BACKUP must name/);
+  });
+}
+
+for (const [name, variables] of [
+  ["trailing slash", ({ bundle }) => [`BACKUP=${bundle}/`]],
+  ["relative filesystem path", ({ bundle }) => [`BACKUP=${relative(root, bundle)}`]],
+  ["normalized dot path", ({ backups }) => [`BACKUP=${backups}/./fixture-bundle`]],
+  ["backup root containing spaces", ({ directory }) => { const backups = join(directory, "backup copies"); const bundle = join(backups, "fixture-bundle"); mkdirSync(bundle, { recursive: true }); return [`TABIYA_BACKUP_DIRECTORY=${backups}`, `BACKUP=${bundle}`]; }],
+]) {
+  test(`verification accepts the exact mounted bundle via ${name}`, context => {
+    const result = backup(context, { operation: ["verify", "/backup/fixture-bundle"] }, {}, "storage-verify", variables);
+    assert.equal(result.status, 0, result.stderr);
+    assert.deepEqual(result.stages, ["verify"]);
+    assert.deepEqual(JSON.parse(result.stdout), { operation: "verify", result: "succeeded" });
   });
 }
 

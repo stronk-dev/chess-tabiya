@@ -29541,9 +29541,18 @@
     },
     {
       "id": "D3572",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:67fedcf9d0fd67cd6bb8b3621150d7013a0ff3940714052ef39da7c0275d27e3",
+      "uxItems": [],
+      "evidence": "tools/release/storage-maintenance.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3573",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8b16e55c3b034635f9d529241ba71c12beb76c61594a1eef4d9e8b5f811e00ab",
+      "sourceDigest": "sha256:c4cd1fa3f86342763194b05500ed60a498fa6d982c4e58013fb013da72dbd46f",
       "uxItems": [],
       "owner": "release-engineering"
     }
