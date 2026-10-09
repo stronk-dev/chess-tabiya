@@ -1,5 +1,7 @@
 # RFC: Provider exchange and projection execution
 
+- **2026-10-09 local delivery checkpoint:** D3618 adds complete exact-consumer admission before evidence factories in production structural Inspector, board sight, played-edge reading, shape-firing and authored-claim wrappers. Thirty-six predecessor refusal/ordering controls fail; all 285 focused foundation cases and clean workspace types pass after repair. Empty shape paths cannot skip admission, and repeated calls retain current payloads and learner copy. No source/declaration/permission migration or whole availability/execution promotion. Complete normal verification and closeout remain recorded in the append-only log.
+
 - **2026-10-05 Inspector client checkpoint:** D3421 closes the modern corpus wire/client
   mismatch: exact `inspector.corpus@2` receipts now survive the actual web parser and render
   through the registered component. Standalone `@1` tuples, source/population attribution,

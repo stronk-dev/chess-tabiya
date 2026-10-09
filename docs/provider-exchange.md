@@ -78,6 +78,21 @@ malformed versions, callable drift and non-callable forgeries. This is a prerequ
 separating modern Explorer execution from standalone compatibility, not a completed migration
 of Inspector, repertoire or return-frequency binding contracts.
 
+## Local board and authored delivery admission
+
+The production structural Inspector, selected-square sight, played-edge reading,
+shape-firing and authored-claim presentation wrappers compile their complete exact
+consumer contract before invoking any evidence factory. An invalid additional binding
+cannot be ignored because the current position still has a locally usable subset.
+Empty shape paths also preflight; each invocation checks the current contract.
+
+This uses the existing compiler and preserves detector payloads, registered leaf ordering,
+claim copy, assistance ceilings and source versions. It does not migrate the held
+structural operands, add the four proposed Sight views, establish request-specific
+source availability or make the full manifest executable. Permanent refusal/ordering
+controls live in `packages/runtime/src/reading-execution.test.ts` and
+`apps/web/src/lib/claim-presentation.test.ts`; `make evidence-foundation-check` includes them.
+
 ## Inspector population
 
 Inspector uses `derived.explorer.inspector_population@1`: canonical move rows, WDL counts,

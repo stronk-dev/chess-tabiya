@@ -29946,12 +29946,21 @@
       "id": "D3617",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:595f69a4d9c9e78cdd9485807d73bf2d80324db748cf0dde329171f3d8147bab",
+      "sourceDigest": "sha256:12f95d67d3ae0071d2b5de234344e1b3af561687180333e74327c82c59027615",
       "uxItems": [
         "CMP-a1",
         "CMP-a26"
       ],
       "owner": "coordinator"
+    },
+    {
+      "id": "D3618",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a4ee899c7925e34a59cf3019ea579d5d7497b869aa35f30cfcbed08486c6d391",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/reading-execution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

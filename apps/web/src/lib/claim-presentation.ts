@@ -1,5 +1,5 @@
 import type { AuthoredFeedbackItem } from "./api.js";
-import { PRIMARY_EVIDENCE_MANIFEST, assertConsumerEvidenceView, claimDeliveryEvidence, evidenceForConsumer, presentEvidenceItems, presentedSentence, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { PRIMARY_EVIDENCE_MANIFEST, assertConsumerEvidenceView, claimDeliveryEvidence, compileEvidenceConsumerExecution, evidenceForConsumer, presentEvidenceItems, presentedSentence, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 type ClaimItem = Extract<AuthoredFeedbackItem, { readonly kind: "claim" }>;
 
@@ -20,6 +20,7 @@ export function claimProvenanceDeclared(view: ConsumerEvidenceView<ClaimItem>): 
 }
 
 export function claimProvenance(item: ClaimItem): string {
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "guidance.authored_claim", version: 1 });
   const declared = claimDeliveryEvidence(item);
   return claimProvenanceDeclared(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,

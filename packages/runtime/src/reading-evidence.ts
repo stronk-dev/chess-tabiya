@@ -7,6 +7,7 @@ import {
 import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import type { StructuralObservation, StructuralReading, StructureMatch } from "./structure.js";
 import type { TransitionObservation, TransitionReading } from "./transition.js";
@@ -90,6 +91,7 @@ export function consumeMoveTransition(
 }
 
 export function positionStructureEvidence(reading: Pick<StructuralReading, "fen">): readonly StructuralObservation[] {
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, ref("inspector.position_structure"));
   return consumePositionStructure(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     ref("inspector.position_structure"),
@@ -98,6 +100,7 @@ export function positionStructureEvidence(reading: Pick<StructuralReading, "fen"
 }
 
 export function selectedSquareSightEvidence(reading: Pick<StructuralReading, "fen">): readonly StructuralObservation[] {
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, ref("board.selected_square_sight"));
   return consumeSelectedSquareSight(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     ref("board.selected_square_sight"),
@@ -106,6 +109,7 @@ export function selectedSquareSightEvidence(reading: Pick<StructuralReading, "fe
 }
 
 export function moveTransitionEvidence(reading: Pick<TransitionReading, "before" | "moveUci" | "after">): readonly TransitionObservation[] {
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, ref("inspector.move_transition"));
   return consumeMoveTransition(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     ref("inspector.move_transition"),

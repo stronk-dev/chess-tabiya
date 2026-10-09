@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8cf89b2a6398bd9fde2e2edc23993eac61144e2e29a86baa3a434ae67da9c772",
+    "roadmap": "sha256:ec2620f86a7d62d78990541ca2de965e258135ad04bda7bd86e946553726f294",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:034e524dee76eb32413fb1efd0e3767748486cc325cf22ab5744b89d2dfcaa5b",
+    "workState": "sha256:7aba4b388af364b19b20d00f6a67914c0e086ddfd95b21c4c65634fbd13a3ccd",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 14,
       "blocked": 1066,
-      "done": 1496,
+      "done": 1497,
       "refused": 161
     },
     "workItems": {
@@ -348,10 +348,14 @@
       "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3615 binds structural authoring and claim-ledger validation to their complete execution contracts before factory work. Sixteen predecessor controls fail; all 215 focused foundation cases pass, including authenticated Shape Studio refusal/recovery, unchanged saved/publication state and empty-ledger admission. Shape creation validates before storing, and HTTP execution failures use generic EVIDENCE_UNAVAILABLE. Complete normal gates pass clean types/build, 3857 software cases/355 files, seven unchanged-budget performance cases/four files, governance/packaging, 228 content cases/23 files and 225 browser passes, one optional Maia skip, zero retries, all 150 input/112 composition cells. Generated semantic outputs are current with unchanged coverage, authored packs and capability declarations. D3613 bounded-target, D3607 landing and D3601/D3602 lazy-input/Theory repairs remain delivered. Held source migrations, exact availability, semantic validation, whole capabilities/milestones and release remain open.",
+        "summary": "D3618 binds five production local board/Inspector/shape/claim wrappers to complete exact-consumer admission before factories, including empty shape paths. Thirty-six predecessor refusal/ordering controls fail; all 285 focused cases and clean types pass. Final normal tiers pass clean types/build, 3912 software cases/357 files, seven unchanged-budget performance cases/four files, governance/packaging, 228 content cases/23 files and 225 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. Chess payloads, learner copy, source versions, authored packs and capability declarations are unchanged. Semantic coverage remains 81 subjects / 42 passing cases / zero fully validated subjects. D3615 authoring/storage, D3613 bounded-target and earlier local module/Hint/Explorer preflights remain delivered. Held source migrations, exact availability, complete integration, semantic qualification, whole capabilities/milestones and release remain open.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/authoring-execution.test.ts",
+          "packages/runtime/src/reading-execution.test.ts",
+          "packages/runtime/src/reading-evidence.ts",
+          "packages/runtime/src/shape-firing.ts",
+          "apps/web/src/lib/claim-presentation.test.ts",
           "packages/runtime/src/structural-evidence.ts",
           "apps/server/src/sourcing/claim-binding.ts",
           "apps/server/src/shape-studio.ts",

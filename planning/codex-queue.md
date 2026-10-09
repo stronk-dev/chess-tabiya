@@ -12,10 +12,19 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3618]] is closed locally under implementing provider-exchange §§1–2: complete exact
+consumer admission now precedes local board/Inspector readings, shape-firing and authored-claim
+factories. Thirty-six predecessor controls fail; 285 focused cases and clean types pass.
+Normal tiers pass clean types/build, 3,912 software, seven unchanged-budget performance,
+228 content and 225 browser cases, one optional Maia skip, zero retries and all 150 input/112
+composition cells. Closeout uses permanent tests; held source migrations, exact availability,
+semantic qualification, official content and whole foundation remain open.
+
 [[D3617]] is coordinator-owned reconciliation debt: structural checks leave historical UX
 descriptions/states semantically stale. CMP-a1's no-content/no-consumer claim and CMP-a26's
 unread Campaign preference are refuted by existing installed-pilot and native encounter tests.
-Update these exact entries and their completion evidence; audit remaining stale candidates
+Both exact entries and their completion evidence were corrected at 3445dc18;
+audit remaining stale candidates
 against production/test paths without treating an aggregate ledger row as wholly closed.
 No new checker framework, bulk snapshot or whole-capability promotion.
 

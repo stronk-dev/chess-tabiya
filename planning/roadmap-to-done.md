@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3617]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3618]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,16 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3618]] closes another bounded execution gap: five production board/Inspector/shape/claim
+wrappers compile their complete exact consumer before factories, including empty shape paths.
+Thirty-six predecessor controls fail; all 285 focused cases and clean types pass. Normal
+verification passes clean types/build, 3,912 software, seven unchanged-budget performance,
+228 content and 225 browser cases, one optional Maia skip, zero retries and all 150 input/112
+composition cells. Current chess payloads, learner copy, source versions, authored packs and
+capability declarations are unchanged. Semantic coverage remains 81 subjects / 42 passing
+cases / zero fully qualified subjects. Source migration, exact availability, whole consumer
+integration and complete learner capabilities remain open; this is not a new UX feature.
 
 [[D3616]] repairs the shared castling identity for legal adjacent-rook and stationary-king
 cases. The actual event factory, pack predicate and committed-run marker pass eighteen

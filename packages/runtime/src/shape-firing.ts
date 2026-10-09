@@ -1,5 +1,6 @@
 import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
@@ -73,6 +74,7 @@ export function shapeFiringEvidence(
   entries: readonly ShapeTriggerSource[],
   path: readonly { readonly id: string; readonly fen: string }[],
 ): readonly ShapeFiring[] {
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 });
   return consumeShapeFiring(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "theory.shape_firing", version: 1 },
