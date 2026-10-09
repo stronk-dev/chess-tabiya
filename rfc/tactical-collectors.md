@@ -1074,6 +1074,17 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-10-09: D3619 repairs the existing physical-mover operands without changing projection
+  identities or accepted predicates. Castling king/rook relocations use the rules destinations;
+  loose-piece deltas retain the relocated rook, double attacks and mate-in-one retain the primary
+  mover's actual landing, and fork-survival and serialized Post-commit Nudge captions retain the
+  post-promotion role. Twenty controls fail on their predecessors; all 25 permanent special-move
+  controls and 329 focused cases/types pass. The existing loose-piece behavioral profile keeps its original
+  unchanged-rook item and adds the previously omitted relocated-rook item; no authored pack or
+  source migration is accepted. Final normal tiers pass 3,937 software, seven unchanged-budget
+  performance, 228 content and 225 browser cases, one optional Maia skip, zero retries and all
+  112 composition cells. This closes D3619, not the RFC's remaining discharges.
+
 - 2026-09-07: narrowed D1 from the mechanically over-broad *every §3 collector* to every
   learner-facing collector. `rules.exchange.predicate.legal_exchange@1` is the one explicit
   internal-machine-predicate refusal; `derived.tactic.fork_survives_reply@1` remains learner-facing

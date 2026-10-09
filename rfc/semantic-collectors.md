@@ -1769,6 +1769,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-10-09: D3619 repairs §3.1's same-defender relocation through existing king/rook rules
+  destinations, including the secondary castling rook and stationary-piece negatives. Every
+  event retains its canonical played edge and exact surviving target; the defender coordinates
+  are independent of the primary mover. No deflection/attraction alias, new projection,
+  semantic qualification or held amendment is introduced. All 329 focused cases/types and final
+  normal tiers pass: 3,937 software, seven unchanged-budget performance, 228 content and 225
+  browser cases, one optional Maia skip, zero retries and all 112 composition cells. D3619
+  closes locally; the RFC's remaining discharges and semantic qualification remain open.
+
 - 2026-09-24 — Discharge D2 recorded as discharged by the `rfc/review-evidence-compiler.md` implementation (typed eval-delta/mate-transition rows, Story mate-type repair, multi-source packet).
 - 2026-09-06: sixteenth fresh promotion review returns the fifteenth repair on [[D3018]]–[[D3024]].
   Caller-selected paths still mint application authority; geometry/no-race and the recorded/live/

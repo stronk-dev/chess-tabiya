@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ec2620f86a7d62d78990541ca2de965e258135ad04bda7bd86e946553726f294",
+    "roadmap": "sha256:2591ade8764f500f9f65d82be3979e17c88b99b23d4cdc6d916bebf8a8860b41",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:7aba4b388af364b19b20d00f6a67914c0e086ddfd95b21c4c65634fbd13a3ccd",
+    "workState": "sha256:d581db0a82ecfbdd45cb199250afc3068ee06bafdb81e09d0f5d93f341e74b9a",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 630,
       "doing": 14,
       "blocked": 1066,
-      "done": 1497,
+      "done": 1498,
       "refused": 161
     },
     "workItems": {
@@ -196,10 +196,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Reproduce the queued D3620 en-passant victim-versus-landing audit at the existing loose-piece factory boundary before choosing a repair. Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3616's shared castling collector repair is closed locally: legal adjacent-rook/stationary-king identities reach the real event factory, pack predicate and recorded-run marker, with nearby king-move negatives. All 239 focused cases/types pass. Two independently cited production cases bring the current register to 42 passing cases over 81 subjects; zero subjects are fully validated. Final normal tiers pass clean types/build, 3875 software, seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. D3564 orientation, D3376 installed-opening and D3373 durable Stockfish drafts remain held for independent review. D3590 strict loading is closed, not source integration. D3580 tablebase, D3578 selected-square, bot calibration and original timing failures remain open. No new source, variant workflow, capability, milestone, remote CI or 1.0 completion.",
+        "summary": "D3619 closes locally: tactical identities retain both physical castling king/rook destinations and the post-promotion attacker across defender relocation, loose-piece deltas, double attacks, fork survival, mate-in-one and serialized Post-commit Nudge captions. Twenty predecessor controls fail; all 329 focused foundation cases/types and final normal tiers pass: 3937 software cases/358 files, seven unchanged-budget performance cases, 228 content cases and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. The existing profile retains its old item and adds the omitted relocated rook; authored packs and 984 capability declarations are unchanged. Semantic coverage remains 81 subjects / 42 passing cases / zero fully qualified. D3620 is a separate queued audit. Held source/orientation contracts, calibrated bots, official content, whole capabilities/milestones and release remain open; no push or remote CI claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/installed-opening-evidence.md",
@@ -217,6 +217,11 @@
           "packages/runtime/src/semantic-validation-cited-sources.ts",
           "packages/runtime/src/semantic-validation.test.ts",
           "packages/runtime/src/castling-evidence.test.ts",
+          "packages/runtime/src/special-move-tactics.test.ts",
+          "rfc/tactical-collectors.md",
+          "rfc/semantic-collectors.md",
+          "packages/runtime/src/tactics.ts",
+          "docs/semantic-evidence.md",
           "packages/runtime/src/transition.ts",
           "packages/runtime/src/semantic-validation-runner.ts",
           "design/research/semantic-validation-closure.md",
@@ -250,6 +255,16 @@
             "kind": "rfc",
             "id": "installed-opening-evidence.md",
             "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
+          },
+          {
+            "kind": "rfc",
+            "id": "tactical-collectors.md",
+            "digest": "sha256:a5ce11ada5223c74703ef300e97975b805a8f96155d11e83ed520984e4ca54f6"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-collectors.md",
+            "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"
           },
           {
             "kind": "rfc",

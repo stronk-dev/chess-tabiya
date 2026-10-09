@@ -1,8 +1,8 @@
-import { Chess, normalizeMove } from "chessops/chess";
+import { castlingSide, Chess, normalizeMove } from "chessops/chess";
 import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
 import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "chessops/types";
-import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
+import { kingCastlesTo, makeSquare, makeUci, opposite, parseSquare, parseUci, rookCastlesTo } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
@@ -108,15 +108,25 @@ function retainedTarget(after: ReturnType<typeof positionFromFen>, duty: Defende
   return piece !== undefined && samePiece(piece, duty.target.piece);
 }
 
+/** Physical piece relocations for an already normalized legal move, not its UCI encoding. */
+function pieceRelocations(position: Chess, move: NormalMove): readonly Pick<NormalMove, "from" | "to">[] {
+  const castle = castlingSide(position, move);
+  return castle === undefined ? [move] : [
+    { from: move.from, to: kingCastlesTo(position.turn, castle) },
+    { from: move.to, to: rookCastlesTo(position.turn, castle) },
+  ];
+}
+
 function exactEdge(beforeFen: string, moveUci: string, afterFen: string) {
   const before = positionFromFen(beforeFen);
   const move = played(before, moveUci);
   const canonicalBefore = canonicalFen(before);
   const moving = before.board.get(move.from)!;
+  const relocations = pieceRelocations(before, move);
   before.play(move);
   const canonicalAfter = canonicalFen(before);
   if (canonicalAfter !== canonicalFen(positionFromFen(afterFen))) throw new TypeError(`After FEN does not match ${moveUci}`);
-  return { beforeFen: canonicalBefore, moveUci: makeUci(move), afterFen: canonicalAfter, move, moving, after: before };
+  return { beforeFen: canonicalBefore, moveUci: makeUci(move), afterFen: canonicalAfter, move, moving, relocations, after: before };
 }
 
 /** Captured defenders joined to the already-produced exact capture identity. */
@@ -145,21 +155,26 @@ export function defenderRemovedEvents(beforeFen: string, moveUci: string, afterF
 /** Same-piece relocations that lose a named current-occupancy defence duty. */
 export function defenderDutyRelocatedEvents(beforeFen: string, moveUci: string, afterFen: string): readonly DefenderDutyRelocatedEvent[] {
   const edge = exactEdge(beforeFen, moveUci, afterFen);
-  const from = makeSquare(edge.move.from), to = makeSquare(edge.move.to);
-  const current = edge.after.board.get(edge.move.to);
-  if (current === undefined || !samePiece(edge.moving, current)) return Object.freeze([]);
+  const move = Object.freeze({ from: makeSquare(edge.move.from), to: makeSquare(edge.relocations[0]!.to) });
   const afterDuties = new Set(defenderDutyReading(edge.afterFen).duties.map((duty) => `${duty.defender.square}:${duty.target.square}:${duty.target.piece.color}:${duty.target.piece.role}`));
-  const beforeDuties = defenderDutyReading(edge.beforeFen).duties.filter((duty) => duty.defender.square === from);
-  return Object.freeze(beforeDuties.filter((duty) => retainedTarget(edge.after, duty) && !afterDuties.has(`${to}:${duty.target.square}:${duty.target.piece.color}:${duty.target.piece.role}`)).map((lostDuty) => Object.freeze({
-    beforeFen: edge.beforeFen,
-    moveUci: edge.moveUci,
-    afterFen: edge.afterFen,
-    move: Object.freeze({ from, to }),
-    defenderBefore: lostDuty.defender,
-    defenderAfter: Object.freeze({ square: to, piece: current }),
-    target: lostDuty.target,
-    lostDuty,
-  })));
+  return Object.freeze(defenderDutyReading(edge.beforeFen).duties.flatMap((lostDuty) => {
+    const relocation = edge.relocations.find(value => value.from !== value.to && makeSquare(value.from) === lostDuty.defender.square);
+    if (relocation === undefined) return [];
+    const to = makeSquare(relocation.to);
+    const current = edge.after.board.get(relocation.to);
+    if (current === undefined || !samePiece(lostDuty.defender.piece, current) || !retainedTarget(edge.after, lostDuty)
+      || afterDuties.has(`${to}:${lostDuty.target.square}:${lostDuty.target.piece.color}:${lostDuty.target.piece.role}`)) return [];
+    return [Object.freeze({
+      beforeFen: edge.beforeFen,
+      moveUci: edge.moveUci,
+      afterFen: edge.afterFen,
+      move,
+      defenderBefore: lostDuty.defender,
+      defenderAfter: Object.freeze({ square: to, piece: current }),
+      target: lostDuty.target,
+      lostDuty,
+    })];
+  }));
 }
 
 /** Candidate-time four-clause overload response conflict. It does not grade the candidate. */
@@ -445,6 +460,7 @@ export function loosePieceEvents(beforeFen: string, moveUci: string): LoosePiece
   const mover = beforePosition.turn;
   const canonicalBefore = canonicalFen(beforePosition);
   const canonicalMove = makeUci(move);
+  const relocations = pieceRelocations(beforePosition, move);
   const baseline = loosePieceReadingForColor(canonicalBefore, mover);
   beforePosition.play(move);
   const afterFen = canonicalFen(beforePosition);
@@ -454,7 +470,8 @@ export function loosePieceEvents(beforeFen: string, moveUci: string): LoosePiece
   const events: LoosePieceEvent[] = [];
   for (const prior of baseline.pieces) {
     const beforeSquare = prior.piece.square;
-    const afterSquare = beforeSquare === makeSquare(move.from) ? makeSquare(move.to) : beforeSquare;
+    const relocation = relocations.find(value => makeSquare(value.from) === beforeSquare);
+    const afterSquare = relocation === undefined ? beforeSquare : makeSquare(relocation.to);
     const current = currentBySquare.get(afterSquare);
     if (current === undefined || current.piece.occupant.color !== mover) continue;
     const sign = !prior.enPrise && current.enPrise ? "gained" : prior.enPrise && !current.enPrise ? "lost" : prior.enPrise && current.enPrise ? "preserved" : undefined;
@@ -875,6 +892,7 @@ export function mateInOne(fen: string): MateInOneReading {
   const mates: MateInOneReading["mates"][number][] = [];
   for (const move of legalMoves(position)) {
     const mover = position.board.get(move.from)!;
+    const destination = pieceRelocations(position, move)[0]!.to;
     const next = position.clone();
     next.play(move);
     if (!next.isCheckmate()) continue;
@@ -882,7 +900,7 @@ export function mateInOne(fen: string): MateInOneReading {
     if (kingSquare === undefined) continue;
     mates.push(Object.freeze({
       moveUci: makeUci(move),
-      mover: Object.freeze({ piece: mover, from: makeSquare(move.from), to: makeSquare(move.to) }),
+      mover: Object.freeze({ piece: mover, from: makeSquare(move.from), to: makeSquare(destination) }),
       matedKing: Object.freeze({ piece: next.board.get(kingSquare)!, square: makeSquare(kingSquare) }),
     }));
   }
@@ -928,6 +946,7 @@ export interface DoubleAttackEvent {
   readonly beforeFen: string;
   readonly moveUci: string;
   readonly afterFen: string;
+  /** The attacker occupying `after`, including its promoted role. */
   readonly mover: { readonly piece: Piece; readonly before: SquareName; readonly after: SquareName };
   readonly targets: readonly DoubleAttackTarget[];
 }
@@ -936,21 +955,22 @@ export function doubleAttackEvent(beforeFen: string, moveUci: string): DoubleAtt
   const before = positionFromFen(beforeFen);
   const move = played(before, moveUci);
   const mover = before.board.get(move.from)!;
+  const destination = pieceRelocations(before, move)[0]!.to;
   before.play(move);
   const after = before;
-  const movedPiece = after.board.get(move.to);
+  const movedPiece = after.board.get(destination);
   if (movedPiece === undefined || movedPiece.color !== mover.color) return undefined;
   const capturePosition = after.clone();
   capturePosition.turn = mover.color;
   capturePosition.epSquare = undefined;
   const targets: DoubleAttackTarget[] = [];
-  for (const target of attacks(movedPiece, move.to, after.board.occupied).intersect(after.board[opposite(movedPiece.color)])) {
+  for (const target of attacks(movedPiece, destination, after.board.occupied).intersect(after.board[opposite(movedPiece.color)])) {
     const occupant = after.board.get(target)!;
     if (occupant.role === "king") {
       targets.push({ square: makeSquare(target), occupant, king: true });
       continue;
     }
-    const capture = legalCaptureMovesTo(capturePosition, target, move.to)[0];
+    const capture = legalCaptureMovesTo(capturePosition, target, destination)[0];
     if (capture === undefined) continue;
     const exchange = legalExchangeForMove(capturePosition, capture);
     if (exchange !== undefined && exchange.resultUnits > 0) targets.push({ square: makeSquare(target), occupant, king: false, captureUci: makeUci(capture), exchange });
@@ -960,7 +980,7 @@ export function doubleAttackEvent(beforeFen: string, moveUci: string): DoubleAtt
     beforeFen: makeFen(positionFromFen(beforeFen).toSetup()),
     moveUci: makeUci(move),
     afterFen: canonicalFen(after),
-    mover: Object.freeze({ piece: mover, before: makeSquare(move.from), after: makeSquare(move.to) }),
+    mover: Object.freeze({ piece: movedPiece, before: makeSquare(move.from), after: makeSquare(destination) }),
     targets: Object.freeze(targets.sort((left, right) => left.square.localeCompare(right.square))),
   });
 }
@@ -974,20 +994,21 @@ export interface ForkSurvivalResult {
 
 export function forkSurvivesReply(event: DoubleAttackEvent, breadth: ReplyBreadth): ForkSurvivalResult {
   if (event.afterFen !== breadth.afterFen || event.moveUci !== breadth.triggeringMove) throw new TypeError("Fork and reply-breadth anchors differ");
+  const movedSquare = parseSquare(event.mover.after)!;
+  const retainedMover = positionFromFen(event.afterFen).board.get(movedSquare);
   const targetKeys = new Set(event.targets.map((target) => `${target.square}:${target.occupant.color}:${target.occupant.role}`));
   const refutingReplies: string[] = [];
   for (const replyUci of breadth.replies) {
     const position = positionFromFen(event.afterFen);
     const reply = played(position, replyUci);
     position.play(reply);
-    const movedSquare = parseUci(event.moveUci)! as NormalMove;
-    const forker = position.board.get(movedSquare.to);
-    const survives = forker?.color === event.mover.piece.color && forker.role === event.mover.piece.role;
+    const forker = position.board.get(movedSquare);
+    const survives = forker !== undefined && retainedMover !== undefined && samePiece(forker, retainedMover);
     const retainsCapture = survives && event.targets.some((target) => {
       const occupant = position.board.get(("abcdefgh".indexOf(target.square[0]!) + (Number(target.square[1]) - 1) * 8) as Square);
       if (occupant === undefined || !targetKeys.has(`${target.square}:${occupant.color}:${occupant.role}`) || occupant.role === "king") return false;
       const targetSquare = ("abcdefgh".indexOf(target.square[0]!) + (Number(target.square[1]) - 1) * 8) as Square;
-      return legalCaptureMovesTo(position, targetSquare, movedSquare.to).some((capture) => (legalExchangeForMove(position, capture)?.resultUnits ?? 0) > 0);
+      return legalCaptureMovesTo(position, targetSquare, movedSquare).some((capture) => (legalExchangeForMove(position, capture)?.resultUnits ?? 0) > 0);
     });
     if (!retainsCapture) refutingReplies.push(replyUci);
   }

@@ -12,6 +12,22 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3620]] is next source-boundary audit under tactical-collectors §3.4: reproduce the
+loose-piece caller's victim-square versus capture-landing mismatch for en passant. Require
+both colors, actual double-push deltas, sealed factories and pinned/expired-right negatives.
+Do not silently change legalCaptureMovesTo's landing semantics or manufacture a second
+capture source. Source inspection is not yet a measured failure or completed repair.
+
+[[D3619]] is closed locally under tactical-collectors §§3.4/3.7 and semantic-collectors §3.1:
+physical king/rook relocation and promotion-role retention are repaired in the existing tactical
+factories. Twenty predecessor controls fail; 25 permanent special-move controls cover
+sealed factories, whole legal candidate packets, committed-run reconstruction and actual
+serialized Post-commit Nudge captions. All 329 focused cases and clean types pass. Final normal
+tiers pass 3,937 software, seven unchanged-budget performance, 228 content and 225 browser
+cases, one optional Maia skip, zero retries and all 112 composition cells. Conservative
+predicates, projection identities, authored packs and held source/module contracts are unchanged.
+Semantic qualification and whole foundation remain open; D3620 above is a separate queued audit.
+
 [[D3618]] is closed locally under implementing provider-exchange §§1–2: complete exact
 consumer admission now precedes local board/Inspector readings, shape-firing and authored-claim
 factories. Thirty-six predecessor controls fail; 285 focused cases and clean types pass.

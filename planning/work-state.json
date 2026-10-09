@@ -29961,6 +29961,23 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/reading-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3619",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:58b1718f662a8ab97f680e40a755c3756a2a283d63a01d9eb270cc2d992a40f9",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/special-move-tactics.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3620",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7f32864ab809f1232811eb7908a9926730dd480f0d13a4c961c0f2edb6d0f1b9",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

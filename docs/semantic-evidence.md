@@ -11,8 +11,20 @@ before/after FENs, canonical UCI, a declared sign, and the pieces, squares, rays
 that make the relation true. F2 registered 22 direct event projections and eleven derived
 counterfactual-absence projections.
 The tactical foundation adds four direct research events: identity-retaining capture,
-exchange-filtered double attack, complete one-reply breadth, and exact check. Its threat and fork-survival projections remain
-inspector/machine evidence rather than learner modules.
+exchange-filtered double attack, complete one-reply breadth, and exact check. Module admission
+comes from the exact consumer table: fork survival is also accepted by Post-commit Nudge and
+Review Map, not exclusively Inspector/machine evidence.
+
+Tactical identities follow physical piece destinations, not encoded UCI endpoints. Castling
+retains its canonical king-to-rook move identity while resolving both the king's landing and
+the rook's relocation, including stationary cases. Defender-duty events can retain either
+relocated defender; loose-piece deltas follow the rook as well as other retained non-king
+pieces. Double attacks belong to the primary mover, not a rook found at its encoded endpoint;
+their attacker operand carries the post-move role so promotion captions name the actual piece.
+Fork-survival checks the actual post-move occupant, including a promoted role, against every
+legal reply; capture, movement of original targets and legal check parries still refute it.
+Mate-in-one operands likewise separate the primary mover's landing from the actual checking
+pieces. These are identity repairs, not move grades or new learner-module admissions.
 
 The breadth foundation adds twelve event projections over exact control, mobility, pawn, material,
 king, defender and open-file operands. Recorded two-/three-edge events preserve every node/FEN

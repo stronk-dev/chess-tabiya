@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3618]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3619]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,17 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3619]] is closed locally: existing tactical factories now follow both physical castling
+relocations and the post-promotion mover role, rather than encoded UCI endpoints or an obsolete
+pawn role. Twenty predecessor controls fail; all 329 focused foundation cases and clean types
+pass, including sealed factories, complete legal candidate packets and committed-run
+reconstruction and actual serialized Post-commit Nudge captions. The existing behavioral profile
+adds the previously omitted relocated-rook event, retaining its original item. Final normal
+tiers pass clean types/build, 3,937 software, seven unchanged-budget performance, 228 content
+and 225 browser cases, one optional Maia skip, zero retries and all 112 composition cells.
+The separate en-passant victim-identity audit D3620 remains queued, not reproduced or repaired.
+No new source, projection, permission, semantic qualification or whole capability is claimed.
 
 [[D3618]] closes another bounded execution gap: five production board/Inspector/shape/claim
 wrappers compile their complete exact consumer before factories, including empty shape paths.

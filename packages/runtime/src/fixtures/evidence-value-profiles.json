@@ -1829,9 +1829,10 @@
   },
   "rules.tactic.event.loose_piece@1": {
     "availability": "available",
-    "cardinality": 1,
+    "cardinality": 2,
     "payloadDigests": [
-      "b74d0acaee86b7406928c1de32bafabd4c239a1ee6d6bc2016ecab6c0bc43ac2"
+      "b74d0acaee86b7406928c1de32bafabd4c239a1ee6d6bc2016ecab6c0bc43ac2",
+      "c2e34e0eeb6eec6d653245d941878917bd6c859a53baa81dbf2ccab32e22b7fa"
     ]
   },
   "rules.tactic.reading.back_rank@1": {
