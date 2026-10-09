@@ -3,6 +3,7 @@
   // surface is a registered template (`reviewText`); everything else is payload data rendered as is.
   import { parsePresentationReceipt, reviewText } from "@chess-tabiya/runtime";
   import { onDestroy, tick } from "svelte";
+  import type { DrawShape } from "@lichess-org/chessground/draw";
 
   import type { ReviewAnalysisPage, ReviewMap, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
@@ -59,6 +60,17 @@
   const initial = $derived(review.rows.find((row) => row.nodeId === initialNodeId)?.nodeId ?? review.moments.find((moment) => review.rows.some((row) => row.nodeId === moment.nodeId))?.nodeId ?? review.rows[0]?.nodeId);
   const selectedIndex = $derived(review.rows.findIndex((row) => row.nodeId === (selectedId ?? initial)));
   const selected = $derived(selectedIndex < 0 ? undefined : review.rows[selectedIndex]);
+  let focusedFact = $state.raw<{ readonly row: ReviewMap["rows"][number]; readonly squares: readonly string[] } | undefined>();
+  const factOverlays: readonly DrawShape[] = $derived(focusedFact !== undefined && focusedFact.row === selected
+    ? focusedFact.squares.map(square => ({ orig: square as DrawShape["orig"], brush: "blue" })) : []);
+  const focusFactSquares = $derived.by(() => {
+    const owner = selected;
+    return (squares: readonly string[] | undefined): void => {
+      if (owner === undefined || owner !== selected) return;
+      if (squares !== undefined) focusedFact = { row: owner, squares };
+      else if (focusedFact?.row === owner) focusedFact = undefined;
+    };
+  });
   const selectedNodeId = $derived(selected?.nodeId);
   const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));
   /** rfc/review-evidence-compiler.md: the typed packet components, re-sealed client-side by the exact parser. */
@@ -83,7 +95,10 @@
   }
 
   function select(nodeId: string): void {
-    if (nodeId !== selected?.nodeId) hideAnalysis();
+    if (nodeId !== selected?.nodeId) {
+      hideAnalysis();
+      focusedFact = undefined;
+    }
     selectedId = nodeId;
   }
 
@@ -343,7 +358,7 @@
 
     <section class="stage" aria-label={reviewText("board.label")}>
       <p class="eyebrow">{selected ? reviewText("board.after", { move: selected.label }) : reviewText("board.start")}</p>
-      {#if selected}<div class="board"><Chessboard fen={selected.fen} startSide={review.side} lastMove={selected.moveUci} disabled={true} onMove={() => {}} /></div>{/if}
+      {#if selected}<div class="board"><Chessboard fen={selected.fen} startSide={review.side} lastMove={selected.moveUci} overlays={factOverlays} disabled={true} onMove={() => {}} /></div>{/if}
       <div class="nav">
         <button type="button" disabled={selectedIndex <= 0} onclick={() => step(-1)}>{reviewText("nav.previous")}</button>
         <button type="button" disabled={selectedIndex >= review.rows.length - 1} onclick={() => step(1)}>{reviewText("nav.next")}</button>
@@ -353,7 +368,7 @@
         <article class="evidence" aria-labelledby="review-evidence-title">
           <h2 id="review-evidence-title">{reviewText("evidence.title")}</h2>
           {#each plainFacts as fact}<p>{fact}</p>{/each}
-          <PresentedEvidence items={packetItems} />
+          <PresentedEvidence items={packetItems} onFocusSquares={focusFactSquares} />
         </article>
         {#if onAnalyze && retrying === undefined}
           <section class="analysis" aria-labelledby="review-analysis-title" data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.kind ?? "closed"}>

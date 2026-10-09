@@ -427,7 +427,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
   const notesByNode = new Map<string, string[]>();
   for (const moment of input.story.moments) notesByNode.set(moment.nodeId, [...(notesByNode.get(moment.nodeId) ?? []), ...moment.sentences]);
   const semantic = input.semanticPath;
-  const relationsByNode = new Map<string, string[]>();
+  const relationsByNode = new Map<string, readonly PresentedEvidenceItem[]>();
   const relationLabels = new Set<string>();
   // Recorded-path events are exact v2 refs; module.review_map@1 admits each before it renders.
   const relationAdmission = semantic?.kind === "available" ? admitForReview(input.viewer, semantic.events.map((event) => event.evidence)) : undefined;
@@ -435,10 +435,12 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     const admitted = semantic.events.filter((event) => relationAdmission.admitted.has(event.evidence) && event.anchor.nodeId !== undefined);
     // module-registration A5: each admitted recorded-path event renders through its registered
     // module.review_map@1 adapter — a labelled relation, never a raw projection id.
-    const presented = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 1 }, admitted.map((event) => event.evidence)));
-    admitted.forEach((event, index) => {
+    admitted.forEach((event) => {
+      // One event may own several components. Keep the whole composition with its end node;
+      // indexing a flattened component array by event index crosses those ownership boundaries.
+      const presented = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 1 }, [event.evidence]));
       relationLabels.add(evidenceGroundingLabel(event.basis.grounding));
-      relationsByNode.set(event.anchor.nodeId!, [...(relationsByNode.get(event.anchor.nodeId!) ?? []), presentedSentence(presented[index]!)]);
+      relationsByNode.set(event.anchor.nodeId!, Object.freeze([...(relationsByNode.get(event.anchor.nodeId!) ?? []), ...presented]));
     });
   }
   const decisions: Record<GradeSide, Decision[]> = { white: [], black: [] };
@@ -470,18 +472,20 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
         ? [reviewText("evidence.relation.refused", { reason: semantic.reason })]
         : relationAdmission !== undefined && "refused" in relationAdmission
           ? [withheld(relationAdmission.refused)]
-          : relationsByNode.get(node.id) ?? [reviewText("evidence.relation.none")];
+          : relationsByNode.has(node.id) ? [] : [reviewText("evidence.relation.none")];
     const packetItems = input.packet === undefined ? undefined : packetComponents(input.viewer, input.packet, node.id);
     const packetPresented = packetItems === undefined || "refused" in packetItems ? Object.freeze([]) : packetItems;
     const packetFacts = packetItems === undefined
       ? [reviewText("evidence.packet.absent")]
-      : "refused" in packetItems ? [withheld(packetItems.refused)] : packetItems.map(presentedSentence);
+      : "refused" in packetItems ? [withheld(packetItems.refused)] : [];
+    const presented = Object.freeze([...(relationsByNode.get(node.id) ?? []), ...packetPresented]);
     const facts = Object.freeze([
       gradeFact,
       evaluationSentence(input.viewer, packets.get(node.id), side === "white" ? "black" : "white"),
       ...(notesByNode.get(node.id) ?? []),
       ...relationFacts,
       ...packetFacts,
+      ...presented.map(presentedSentence),
     ]);
     return Object.freeze({
       nodeId: node.id, entryNodeId: parent.id, ply: node.ply, moveNumber, side, san,
@@ -489,7 +493,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
       fen: node.fen, moveUci: node.moveUci, moment: selected.has(node.id),
       ...(grade === undefined ? {} : { grade }),
       facts,
-      packet: serializePresentedEvidence(packetPresented),
+      packet: serializePresentedEvidence(presented),
     });
   });
   const moments = selection.moments.map((moment) => {

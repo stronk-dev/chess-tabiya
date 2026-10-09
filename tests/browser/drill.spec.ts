@@ -461,6 +461,62 @@ test("review map remainder: eval graph by keyboard, explicit Analyze withheld du
 });
 
 for (const projection of ["desktop", "@mobile phone"]) {
+  for (const value of [
+    { side: "white", fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: "1. d3 Bf3 *" },
+    { side: "black", fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: "1... d6 Bf6 *" },
+  ]) {
+  test(`${projection} ${value.side} recorded Review evidence paints only its selected move without changing the game`, async ({ page }) => {
+    await page.getByRole("link", { name: "Review" }).click();
+    await page.getByLabel("PGN").fill(`[Event "Recorded Review evidence"]
+[White "White"]
+[Black "Black"]
+[Result "*"]
+[SetUp "1"]
+[FEN "${value.fen}"]
+
+${value.moves}`);
+    await page.getByRole("button", { name: "Build game story" }).click();
+    await expect(page).toHaveURL(/\/review\/game\/import-/u);
+    const runId = page.url().split("/").at(-1)!;
+    const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+    const original = await graph();
+    const moves = page.getByRole("list", { name: "Move list", exact: true }).locator(".move-select");
+    await moves.last().click();
+    const caption = page.locator('.evidence [data-component="square_set"] .caption').first();
+    await expect(caption).toBeVisible();
+    await expect(page.locator('.evidence [data-component="move_path"] .plies li')).toHaveCount(2);
+    const paint = page.locator('.stage .cg-shapes circle');
+    await expect(paint).toHaveCount(0);
+    const board = page.locator('.stage cg-board');
+    const geometry = () => board.evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      let x = rect.x + window.scrollX, y = rect.y + window.scrollY;
+      for (let parent = element.parentElement; parent !== null && parent !== document.documentElement; parent = parent.parentElement) {
+        x += parent.scrollLeft;
+        y += parent.scrollTop;
+      }
+      return { x, y, width: rect.width, height: rect.height };
+    });
+    const bounds = await geometry();
+    await caption.focus();
+    await expect(paint).toHaveCount(2);
+    expect(await geometry()).toEqual(bounds);
+    await moves.first().click();
+    await expect(paint).toHaveCount(0);
+    await moves.last().click();
+    await expect(paint).toHaveCount(0);
+    await caption.click();
+    await expect(paint).toHaveCount(2);
+    await page.locator('.evidence [data-component="square_set"] .chip').first().click();
+    await expect(paint).toHaveCount(1);
+    await moves.last().focus();
+    await expect(paint).toHaveCount(0);
+    expect(await graph()).toEqual(original);
+  });
+  }
+}
+
+for (const projection of ["desktop", "@mobile phone"]) {
   test(`${projection} Review navigation keeps keyboard focus, list visibility and the original game through Retry and Compare`, async ({ page }) => {
     await page.getByRole("link", { name: "Review" }).click();
     await page.getByLabel("PGN").fill(`[Event "Review navigation"]

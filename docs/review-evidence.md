@@ -52,6 +52,13 @@ system or cache: only issuing a new subject runs the semantic collectors. Rechec
 reads storage and compares its identity without minting another subject or replaying collectors.
 The PhaseArc compiler retains its independent recorded-path contract.
 
+Review Map retains each admitted recorded event's complete registered component composition
+in its existing row receipt, alongside engine components. An event can own several components;
+their captions and operands stay attached to that event's exact ending move. Focusing a square
+caption or chip paints neutral evidence squares on the read-only board, without collecting again
+or changing the game. Changing the selected move clears the paint; a departed caption cannot
+paint the next move. This is recorded evidence, not a move recommendation or motif-intent claim.
+
 Families: `engine_eval`, `engine_wdl`, `tablebase`, `semantic`, `opening`, `human_model`,
 `human_corpus`, `authored`, `recorded`. At this landing the baseline pass requests only the shared
 Stockfish position evaluation; tablebase is `not_requested` inside its seven-piece domain and

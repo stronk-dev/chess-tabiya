@@ -7,6 +7,7 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { parsePresentationReceipt, type PresentationReceipt } from "@chess-tabiya/runtime";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -34,7 +35,7 @@ interface ReviewPayload {
   readonly ready: boolean;
   readonly viewer: { readonly mayWrite: boolean };
   readonly semanticPath: { readonly kind: string };
-  readonly rows: readonly { readonly nodeId: string; readonly entryNodeId: string; readonly san: string; readonly ply: number; readonly grade?: { readonly sentence: string }; readonly facts: readonly string[] }[];
+  readonly rows: readonly { readonly nodeId: string; readonly entryNodeId: string; readonly san: string; readonly ply: number; readonly grade?: { readonly sentence: string }; readonly facts: readonly string[]; readonly packet: PresentationReceipt }[];
   readonly moments: readonly { readonly nodeId: string; readonly entryNodeId: string }[];
   readonly accuracy: { readonly white: { readonly kind: string; readonly sentence: string; readonly value?: number }; readonly black: { readonly kind: string } };
   readonly footer: { readonly sentence: string };
@@ -93,9 +94,9 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     return response.headers.get("set-cookie")!.split(";", 1)[0]!;
   }
 
-  async function importReviewedGame(origin: string, cookie: string, writer: string): Promise<string> {
+  async function importReviewedGame(origin: string, cookie: string, writer: string, pgn = GLYPHED_PGN): Promise<string> {
     const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": writer }, body: JSON.stringify(body) });
-    const imported = await post("/runs/import", { id: "review-import", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn: GLYPHED_PGN } });
+    const imported = await post("/runs/import", { id: "review-import", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn } });
     expect(imported.status, await imported.clone().text()).toBe(201);
     const runId = "review-import";
     expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
@@ -111,6 +112,30 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(ready).toBe(true);
     return runId;
   }
+
+  it.each([
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", line: "1. d3 Bf3 *", squares: ["d3", "f3"] },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", line: "1... d6 Bf6 *", squares: ["d6", "f6"] },
+  ])("D3632/D3633 reaches Review's recorded consumer and keeps its complete presentation ($line)", async value => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "review_relation_owner");
+    const pgn = `[Event "Recorded pressure"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${value.fen}"]\n\n${value.line}`;
+    const runId = await importReviewedGame(origin, cookie, "writer-relation", pgn);
+    const before = tableSnapshot(databasePath);
+    const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const review = await response.json() as ReviewPayload;
+    expect(review.rows).toHaveLength(2);
+    const items = parsePresentationReceipt(review.rows[1]!.packet).filter(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure");
+    expect(items.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
+    expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
+    expect(items[1]!.component).toMatchObject({ operand: { plies: [{}, {}] } });
+    expect(review.rows[0]!.packet.items.some(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toBe(false);
+    expect(tableSnapshot(databasePath)).toEqual(before);
+    expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
+    const stranger = await register(origin, "review_relation_stranger");
+    expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
+  });
 
   it("finishes concurrent imports from shared completion without story polling, through authenticated HTTP and durable SQLite (D3422/D3423)", async () => {
     const { origin, databasePath } = await start();

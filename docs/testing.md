@@ -11,6 +11,14 @@ retry/fallback and rejected voice-cache reuse. These permanent cases also run in
 software/content CI. Controlled providers test the application's delivery boundary, not the
 quality or availability of an external LLM/TTS service.
 
+`make review-route-check review-evidence-runtime-check` covers complete recorded-event components
+through runtime projection, receipt parsing, mounted Review and authenticated application HTTP.
+`make review-navigation-browser-check` checks both-color recorded evidence on desktop and phone:
+caption/chip paint, navigation cleanup, stable scroll-independent board geometry and unchanged
+saved play, alongside the existing keyboard/Retry/Compare journey. DOM-only tests supply explicit
+board bounds because happy-dom has no layout; native Playwright owns the geometry proof.
+All these cases also run in the ordinary software and browser CI tiers.
+
 `make studio-publication-check` covers mounted Studio publication, JSON-content equality, both
 graduation blocker grammars, structured publication-error parsing and the server's existing
 immutable community-version contract, then checks workspace types. `make studio-publication-browser-check`

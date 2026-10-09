@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3632]]/[[D3633]] are closed locally under the existing Review/presentation contracts. Current
+documentation acknowledges Review's shipped recorded-path consumer. Each event retains its complete
+typed composition at its own ending move; caption/chip focus paints only that selected board and
+navigation clears it. Seven predecessor controls fail, 251 focused cases and clean types pass,
+and both-color desktop/phone journeys retain geometry and saved play. Complete normal local gates
+pass 4,189 software, seven unchanged-budget performance, 239 content and 235 browser cases,
+one optional Maia skip, zero retries and 150 input/112 composition cells. Source, longitudinal,
+eligibility, usefulness and whole-Review discharges remain open; no remote CI or release claim.
+
 [[D3631]] is closed locally: harassment-pressure identity follows accepted breadth-collectors §3.4.
 The actual consecutive reply selects its bishop from the complete newly attacked minor
 population. Permanent both-color controls cover competing targets, knight replies and

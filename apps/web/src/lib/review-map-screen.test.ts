@@ -4,18 +4,19 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { REVIEW_MAP_TEMPLATES, judgementWordsOutsideGrounding, reviewMapProjection, reviewPacketForRun, reviewText, storyMomentsForRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_TEMPLATES, judgementWordsOutsideGrounding, recordedSemanticPath, reviewMapProjection, reviewPacketForRun, reviewText, storyMomentsForRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
+import { importedRun, play } from "../../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { ReviewMap } from "./api.js";
 import ReviewMapScreen from "./ReviewMapScreen.svelte";
 import { assertReviewMapResponse, isGroundedGradeSentence } from "./review-response.js";
 import { storyCardDocument } from "./story-card.js";
 
 const ROOT = `${process.cwd()}/`;
-afterEach(() => document.body.replaceChildren());
+afterEach(() => { document.body.replaceChildren(); vi.restoreAllMocks(); });
 
 function payload(options: { readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number; readonly packet?: boolean } = {}): ReviewMap {
   const run = reviewFixtureRun({ id: "web-review", ...(options.evaluated === undefined ? {} : { evaluated: options.evaluated }), ...(options.plies === undefined ? {} : { plies: options.plies }) });
@@ -61,6 +62,58 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it("D3633 keeps a root-only Review free of absent-owner paint", async () => {
+    const component = render(payload({ plies: 0, noMoments: true }));
+    expect(document.querySelector('.stage .board')).toBeNull();
+    expect(document.querySelectorAll('.stage .cg-shapes circle')).toHaveLength(0);
+    await unmount(component);
+  });
+
+  it.each([
+    { side: "white" as const, fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"] },
+    { side: "black" as const, fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"] },
+  ])("D3633 renders $side's recorded components and retires caption paint on navigation", async value => {
+    // happy-dom has no layout. Supply board bounds so Chessground does not interpret
+    // NaN square coordinates as arrows; real geometry is checked in Playwright.
+    const bounds = HTMLElement.prototype.getBoundingClientRect;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      return this.tagName === "CG-BOARD" ? new DOMRect(0, 0, 400, 400) : bounds.call(this);
+    });
+    const run = play(importedRun("web-harassment", value.side, value.fen), value.moves);
+    const branchId = run.activeCursor.branchId;
+    const projection = reviewMapProjection({ run, branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, semanticPath: recordedSemanticPath(run, branchId) });
+    const review = JSON.parse(JSON.stringify({ ...payload({ noMoments: true }), ...projection, runId: run.id, branchId, side: value.side })) as ReviewMap;
+    const component = render(review, vi.fn(), review.rows.at(-1)!.nodeId);
+    await tick();
+    const caption = document.querySelector<HTMLButtonElement>('.evidence [data-component="square_set"] .caption')!;
+    expect(caption).not.toBeNull();
+    expect(document.querySelector('.evidence [data-component="move_path"] .plies')?.children).toHaveLength(2);
+    expect(document.querySelectorAll('.stage .cg-shapes circle')).toHaveLength(0);
+    caption.focus();
+    await tick();
+    expect(document.querySelector('.stage cg-board')).not.toBeNull();
+    expect(document.querySelector('.stage .cg-shapes')).not.toBeNull();
+    await expect.poll(() => document.querySelectorAll('.stage .cg-shapes circle').length).toBe(2);
+    document.querySelector<HTMLButtonElement>('.nav button')!.click();
+    await tick();
+    await expect.poll(() => document.querySelectorAll('.stage .cg-shapes circle').length).toBe(0);
+    expect(document.querySelector('.evidence [data-component="square_set"]')).toBeNull();
+    // A departed caption cannot paint the new row, even if a retained DOM reference dispatches.
+    caption.dispatchEvent(new FocusEvent("focus"));
+    await tick();
+    expect(document.querySelectorAll('.stage .cg-shapes circle')).toHaveLength(0);
+    document.querySelectorAll<HTMLButtonElement>('.nav button')[1]!.click();
+    await tick();
+    expect(document.querySelectorAll('.stage .cg-shapes circle')).toHaveLength(0);
+    const fresh = document.querySelector<HTMLButtonElement>('.evidence [data-component="square_set"] .caption')!;
+    fresh.click();
+    await expect.poll(() => document.querySelectorAll('.stage .cg-shapes circle').length).toBe(2);
+    fresh.dispatchEvent(new FocusEvent("blur"));
+    await expect.poll(() => document.querySelectorAll('.stage .cg-shapes circle').length).toBe(0);
+    expect(run.nodes).toHaveLength(3);
+    await unmount(component);
+  });
+
   it("offers an exact campaign-map return only for a retained campaign origin", async () => {
     const review = { ...payload(), campaignOrigin: { campaignRunId: "campaign/run one", nodeId: "node-one", campaignDocumentDigest: `sha256:${"a".repeat(64)}` } };
     const component = render(review);

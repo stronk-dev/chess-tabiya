@@ -193,8 +193,12 @@ engine principal variation.
   receipts. The result's `conventionReceipt` (`status: "registered"`) names the registry digest, the
   union of the emitted events' convention refs and each event's receipt digest in emission order.
 - **Server.** `apps/server/src/recorded-semantic-path.ts` exposes the injected, read-authorised
-  `compileRecordedSemanticPath`; there is no public raw-evidence route. No Review, module or
-  longitudinal application operation consumes it yet, so the RFC stays `awaiting` (criterion 13).
+  `compileRecordedSemanticPath`; there is no public raw-evidence route. Review consumes the same
+  runtime authority through its `compilePhaseArc` path and storage-authorised Review prefix.
+  Registered event compositions retain their own end-node identity through the row's presentation
+  receipt, including caption-owned squares and recorded moves. Review paints only the focused
+  fact's squares, retiring paint on navigation or replacement. Longitudinal and remaining execution/
+  eligibility discharges stay open; the RFC remains `awaiting D2`, not helper-only or complete.
 
 `make recorded-semantic-path-check` runs the fixtures, the imported-sample census, eager parity and
 the 20/40/80-ply timing arms; the pinned performance tier enforces total p95 ≤ 500 ms.

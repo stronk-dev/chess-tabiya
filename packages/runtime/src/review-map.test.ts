@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { branchPath } from "./branch-path.js";
+import { evidenceValueReceipt } from "./evidence-contract.js";
 import { GRADE_CONVENTION, assertMoveQualityGradeSentence, moveQualityGrade, winPercentFromCp } from "./grade.js";
 import { recordedSemanticPath } from "./recorded-semantic-path.js";
 import { REVIEW_MOMENT_BUDGET, reviewMapProjection, selectReviewMoments, type ReviewMapProjection } from "./review-map.js";
@@ -53,6 +54,42 @@ describe("review map projection (rfc/review-map.md)", () => {
   const run = reviewFixtureRun();
   const path = branchPath(run, run.activeCursor.branchId);
   const projection = projectionOf(run, "imported_analysis", true);
+
+  it("D3633 retains every recorded event's complete components at its own end node", () => {
+    const semantic = recordedSemanticPath(run, run.activeCursor.branchId);
+    if (semantic.kind !== "available") throw new Error("fixture path unavailable");
+    expect(semantic.events.length).toBeGreaterThan(1);
+    for (const event of semantic.events) {
+      const row = projection.rows.find(row => row.nodeId === event.anchor.nodeId)!;
+      const components = parsePresentationReceipt(JSON.parse(JSON.stringify(row.packet))).filter(item =>
+        item.evidenceRef?.evidenceDigest === `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`);
+      expect(components.length, `${event.projection.id} at ${event.anchor.nodeId}`).toBeGreaterThan(0);
+      for (const item of components) {
+        expect(item.adapter.projection).toEqual(event.projection);
+        expect(item.adapter.consumer).toEqual({ id: "module.review_map", version: 1 });
+      }
+      const packet = parsePresentationReceipt(row.packet);
+      expect(row.facts.slice(-packet.length)).toEqual(packet.map(presentedSentence));
+    }
+  });
+
+  it.each([
+    { side: "white" as const, fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], squares: ["d3", "f3"] },
+    { side: "black" as const, fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], squares: ["d6", "f6"] },
+  ])("D3633 preserves $side's harassment caption, squares and exact recorded line", value => {
+    const recorded = play(importedRun("review-harassment", value.side, value.fen), value.moves);
+    const map = projectionOf(recorded, "imported_analysis", true);
+    const items = parsePresentationReceipt(map.rows.at(-1)!.packet).filter(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure");
+    expect(items.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
+    expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
+    expect(items[1]!.component).toMatchObject({ operand: { plies: value.moves.map(uci => ({ uci })) } });
+    expect(map.rows[0]!.packet.items.some(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toBe(false);
+    const packet = reviewPacketForRun(recorded, recorded.activeCursor.branchId, { importRecord: importRecord(recorded, "*"), engine: new Map() });
+    const withPacket = reviewMapProjection({ run: recorded, branchId: recorded.activeCursor.branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: VIEWER, semanticPath: recordedSemanticPath(recorded, recorded.activeCursor.branchId), packet });
+    expect(parsePresentationReceipt(withPacket.rows.at(-1)!.packet).filter(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toEqual(items);
+    const forbidden = reviewMapProjection({ run: recorded, branchId: recorded.activeCursor.branchId, story: { moments: [], rank: [] }, context: "review", viewer: { role: "author", session: "imported" }, semanticPath: recordedSemanticPath(recorded, recorded.activeCursor.branchId), packet });
+    expect(forbidden.rows.every(row => row.packet.items.length === 0)).toBe(true);
+  });
 
   it("[criterion 1] lists every ply of the mainline with SAN, ply and side — no cap, slice or moment filter", () => {
     expect(path.length - 1).toBeGreaterThan(40);

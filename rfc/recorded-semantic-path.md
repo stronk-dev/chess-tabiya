@@ -2,10 +2,17 @@
 
 - **Status:** awaiting D2 — implemented 2026-09-24 at the owner's direction to implement ready RFCs; D1 discharged the same day when the Review Map became the first production caller
   (compiler, exact edge source, v2 successors, exact ref inventory, server operation, checker);
-  criterion 13's production consumer (D1 via [[D1870]]/[[D1710]]) remains open; the [[D1921]]/[[D1929]]
+  D2's complete execution disposition and the downstream longitudinal/eligibility discharges
+  remain open; the [[D1921]]/[[D1929]]
   convention predecessor landed the same day and the result now carries a registered receipt. Receipt:
   `planning/recorded-semantic-path/implementation-2026-09-24.md`
 - **Author:** codex
+- **Current consumer checkpoint (2026-10-09, D3632/D3633):** Review uses the runtime compiler
+  through its PhaseArc and storage-authorised prefix rather than the original direct helper call.
+  Each admitted event retains its full registered component group at its own end node. Actual
+  authenticated Review tests witness that output; the historical helper-only summary below is
+  the pre-implementation motivation, not current execution state. No outstanding discharge or
+  lifecycle state is promoted by this repair.
 - **Created:** 2026-08-27
 - **Design refs:** `design/05-in-run-experience.md` §5 (detection is cheap; significance is not),
   §3b-i (the LLM is the voice, never the source); `design/03-product-breadth.md` Review and
