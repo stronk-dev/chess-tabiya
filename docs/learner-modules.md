@@ -56,6 +56,11 @@ turn clone stays unavailable. Large relation overlays remain subject to unchange
   budget over whole fact bundles (`fitModulePresentation`) and returns a `presentation.receipt@1`
   plus a `ModuleDisclosureReceipt` bound to the decision stamp and to the finalized digest.
   Post-commit output waits for `feedbackDeliveryOpen`. Empty is the module's declared state.
+  At-commit candidates must belong to the subject position's exact legal-move set before any
+  collector runs. Promotion requires an explicit legal piece, while ordinary moves cannot carry
+  a promotion suffix; castling uses the shared king-to-rook identity. The child position is played
+  from that validated move, never from a from/to-only approximation. Refused queries return
+  `INVALID_REQUEST` (400) and do not change saved play or produce warning evidence.
   Post-commit and ancestor subjects resolve the moving piece's actual landing from the parent
   position with `exactMoveDestination`, not by slicing its recorded move identity. Castling's
   king-to-rook encoding therefore scopes Sight to the king's c/g landing, including Chess960

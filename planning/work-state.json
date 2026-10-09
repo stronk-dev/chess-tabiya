@@ -30034,6 +30034,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/special-move-tactics.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3627",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5ba0152ae8619b9e0a5c2252da8b83829c6367383479726a55210ac51e5297a6",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/module-query.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

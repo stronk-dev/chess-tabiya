@@ -12,6 +12,18 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3627]] is closed locally under module-registration §2.5.2's existing exact candidate
+admission. Staged Support uses the shared full legal-move identity rather than a from/to
+approximation before collecting. Twelve predecessor failures establish missing promotions
+and illegal suffixes at runtime/REST; seven full legal populations retain promotions,
+ordinary and Chess960 castling, en passant, exact child reads and unchanged saved play.
+All 161 focused local-module cases and workspace types pass. Eight native desktop/phone
+warning/promotion journeys pass, including refusal → picker → warning → revise → confirm.
+Complete normal gates pass clean types/build, 4,105 software, seven unchanged-budget
+performance, 239 content and 231 browser cases, one optional Maia skip, zero retries
+and all 112 composition cells.
+No source/amendment acceptance, new primitive, permission or whole Support promotion.
+
 [[D3626]] is closed locally under the existing breadth/longitudinal contracts.
 Mobility follows the physical castling rook; stationary negatives, sealed factories,
 complete candidates, saved runs and serialized Inspector retain the exact identity.

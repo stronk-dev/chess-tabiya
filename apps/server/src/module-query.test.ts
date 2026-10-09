@@ -30,6 +30,30 @@ describe("POST /runs/:id/modules/query", () => {
   const finalizedFor = async (handler: ReturnType<typeof createRestHandler>, preset: "quiet" | "support") =>
     parseFinalizedAssistanceV1(((await (await handler(post("/runs/modules/assistance", compileAssistanceRequest({ contextHint: "position", preference: named(preset) })))).json()) as { assistance: unknown }).assistance);
 
+  it.each([
+    ["3r3k/2P5/8/8/8/8/8/K7 w - - 0 1", "c7c8", "c7c8n"],
+    ["3r3k/2P5/8/8/8/8/8/K7 w - - 0 1", "c7d8", "c7d8q"],
+    ["k7/8/8/8/8/8/2p5/3R3K b - - 0 1", "c2c1", "c2c1b"],
+    ["k7/8/8/8/8/8/2p5/3R3K b - - 0 1", "c2d1", "c2d1r"],
+    [MAROCZY, "g8f6q", "g8f6"],
+  ])("D3627: refuses illegal promotion %s / %s, then accepts the exact legal move", async (fen, invalid, valid) => {
+    const { storage, handler } = await setup(fen);
+    const before = JSON.stringify(storage.read("modules")!.run);
+    const nodeId = storage.read("modules")!.run.activeCursor.nodeId;
+    const assistance = compileAssistanceRequest({ contextHint: "position", preference: named("support") });
+    const ask = (candidateUci: string) => handler(post("/runs/modules/modules/query", { assistance,
+      query: { timing: "at_commit", nodeId, candidateUci, generation: 1 } }));
+    const refused = await ask(invalid);
+    expect(refused.status).toBe(400);
+    expect(await refused.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+    expect(JSON.stringify(storage.read("modules")!.run)).toBe(before);
+    const accepted = await ask(valid);
+    expect(accepted.status).toBe(200);
+    const page = ((await accepted.json()) as { page: ModuleQueryPage }).page;
+    expect(page.packets.find(packet => packet.module === "blunder_prevention")?.disclosure.subject).toEqual({ nodeId, candidateUci: valid, generation: 1, selectedSquare: null });
+    expect(JSON.stringify(storage.read("modules")!.run)).toBe(before);
+  });
+
   it("D3607: the API delivers castled-king Sight without changing the recorded game or disclosure gate", async () => {
     const { service, storage, handler } = await setup("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
     service.move("modules", "writer", "e1g1");

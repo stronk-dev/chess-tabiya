@@ -9,6 +9,7 @@ import { inspectComposition, type CompositionConformance } from "./composition-c
 import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 import type { DrillRun, ModuleQueryPage } from "@chess-tabiya/runtime";
+import { compileAssistanceRequest } from "../../packages/runtime/src/assistance-exchange.js";
 import { BOT_PROFILE_CATALOG } from "../../packages/runtime/src/bot-profile-catalog.js";
 import { hintDecisionStamp } from "../../packages/runtime/src/hint-exchange.js";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
@@ -3398,6 +3399,60 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       expect(writes.filter(input => "uci" in input).map(input => input.uci)).toEqual([uci]);
       expect(writes.filter(input => "selection" in input)).toHaveLength(1);
       expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+    });
+  }
+}
+
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  for (const fixture of [
+    { fen: "3r3k/2P5/8/8/8/8/8/K7 w - - 0 1", side: "white", from: "c7", to: "c8" },
+    { fen: "k7/8/8/8/8/8/2p5/3R3K b - - 0 1", side: "black", from: "c2", to: "c1" },
+  ] as const) {
+    test(`Support staged promotion validates the ${fixture.side} move before warning or commit (${viewport.width}px)`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await startSupportFromFen(page, fixture.fen, fixture.side);
+      const runId = page.url().split("/").at(-1)!;
+      const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+      const before = await graph(), calm = await page.getByLabel("Chessboard").boundingBox();
+      const bare = `${fixture.from}${fixture.to}`, uci = `${bare}q`;
+      const refused = await page.request.post(`/runs/${runId}/modules/query`, { data: {
+        assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }),
+        query: { timing: "at_commit", nodeId: before.activeCursor.nodeId, candidateUci: bare, generation: 0 },
+      } });
+      expect(refused.status()).toBe(400);
+      expect(await refused.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+      assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
+      const staged = () => page.waitForResponse(response => response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.candidateUci === uci);
+      const choose = async () => {
+        const response = staged();
+        await move(page, fixture.from, fixture.to, fixture.side);
+        const picker = page.getByRole("dialog", { name: "Choose promotion piece" });
+        await expect(picker).toBeVisible();
+        expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+        await picker.getByRole("button", { name: "queen", exact: true }).click();
+        const delivered = await response;
+        expect(delivered.status()).toBe(200);
+        const packet = ((await delivered.json()) as { page: ModuleQueryPage }).page.packets.find(packet => packet.module === "blunder_prevention")!;
+        expect(packet.disclosure.subject.candidateUci).toBe(uci);
+        await showSupport(page);
+        const cue = page.locator('[data-module="blunder_prevention"]');
+        await expect(cue).toHaveAttribute("data-seat-state", "warning");
+        await expect(cue.locator("[data-presented]")).toContainText(`queen on ${fixture.to}`);
+        expect((await graph()).activeCursor).toEqual(before.activeCursor);
+        assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
+        expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+        return cue;
+      };
+      const cue = await choose();
+      await cue.getByRole("button", { name: "Revise", exact: true }).click();
+      if (viewport.width < 720) await page.getByRole("button", { name: "Collapse companion", exact: true }).click();
+      const again = await choose();
+      const committed = page.waitForRequest(request => request.method() === "POST" && request.url().endsWith("/moves") && request.postDataJSON().uci === uci);
+      await again.getByRole("button", { name: /^Play .+ anyway$/u }).click();
+      expect((await committed).postDataJSON()).toMatchObject({ uci });
+      await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "user").map(node => node.moveUci)).toEqual([uci]);
+      assertRecordedNodesPreserved(before.nodes, (await graph()).nodes.slice(0, before.nodes.length));
+      await assertRunViewport(page, viewport);
     });
   }
 }

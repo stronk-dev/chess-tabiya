@@ -27,6 +27,11 @@
   `planning/learner-modules/author-repair-and-review-chain.md`; no further round of self-review is
   commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
+- **Implementation correction 2026-10-09 — D3627:** the existing §2.5.2 at-commit
+  admission now checks the whole shared exact legal-move identity before deriving a child
+  or collecting evidence. Missing promotion roles and suffixes on ordinary moves are typed
+  refusals; legal underpromotions and king-to-rook castling identities remain admitted.
+  This repairs the accepted boundary, not the unaccepted selected-square amendment below.
 - **Created:** 2026-08-24
 - **Draft amendment 2026-10-09 — D3578, §4.2a:** selected-square source projections,
   request-local views and a complete-legality envelope are authored for independent review.

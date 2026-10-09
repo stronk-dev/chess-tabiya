@@ -1977,7 +1977,7 @@ account-portability-browser-check:
 
 .PHONY: support-staged-browser-check
 support-staged-browser-check:
-	./node_modules/.bin/playwright test --grep "Support staged warning protects"
+	./node_modules/.bin/playwright test --grep "Support staged (warning protects|promotion validates)"
 
 # rfc/concept-registry.md: `census` prints the pack-reference census and fails on any reference the
 # installed registry does not carry (criterion 3; the content tier asserts the same set-equality).

@@ -3,6 +3,8 @@
 // the finalized preset compiled, through sealed presentation receipts bound to that digest.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as execution from "./evidence-binding-execution.js";
+import * as routes from "./internal/evidence-value-routes.js";
+import { exactLegalMoves } from "./legal-moves.js";
 
 import {
   MODULE_SOURCE_AUTHORITY,
@@ -75,6 +77,51 @@ function assertDelivered(packet: ModuleQueryPacket, assistance: FinalizedAssista
 
 const ITALIAN = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 4 5";
 const MAROCZY = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
+
+describe("D3627: exact staged-move admission", () => {
+  const whitePromotion = "3r3k/2P5/8/8/8/8/8/K7 w - - 0 1";
+  const blackPromotion = "k7/8/8/8/8/8/2p5/3R3K b - - 0 1";
+  it.each([
+    [whitePromotion, "c7c8"], [whitePromotion, "c7d8"],
+    [blackPromotion, "c2c1"], [blackPromotion, "c2d1"],
+    [ITALIAN, "d3d4q"], [ITALIAN, "f3g5n"], [ITALIAN, "e1d2r"],
+    [ITALIAN, "e1g1"], [ITALIAN, "c2c4b"],
+  ])("rejects %s / %s before collection and preserves the run", (fen, candidateUci) => {
+    const run = positionRun(fen), before = JSON.stringify(run);
+    const collect = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    expect(() => queryModules({ run, assistance: finalized("position", "support", "blunder_prevention"), role: "learner", session: "position",
+      request: { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci, generation: 1 } })).toThrow(/MODULE_QUERY_CANDIDATE/u);
+    expect(collect).not.toHaveBeenCalled();
+    expect(JSON.stringify(run)).toBe(before);
+  });
+
+  it.each([
+    whitePromotion, blackPromotion,
+    "4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1",
+    "r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1",
+    "4k3/8/8/8/8/8/8/6KR w H - 0 1",
+    "4k3/8/8/8/8/8/8/5KR1 w G - 0 1",
+    "7k/8/8/3pP3/8/8/8/K7 w - d6 0 1",
+  ])("every exact legal candidate reads its actual child: %s", fen => {
+    const run = positionRun(fen), before = JSON.stringify(run);
+    const assistance = finalized("position", "support", "blunder_prevention");
+    const collect = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    const legal = exactLegalMoves(run.nodes[0]!.fen);
+    expect(legal.length).toBeGreaterThan(0);
+    for (const [generation, move] of legal.entries()) {
+      collect.mockClear();
+      const expected = commitMove(run, move.uci, { at }).run.nodes.at(-1)!.fen;
+      const { page } = queryModules({ run, assistance, role: "learner", session: "position",
+        request: { timing: "at_commit", nodeId: run.activeCursor.nodeId, candidateUci: move.uci, generation } });
+      const packet = packetOf(page, "blunder_prevention")!;
+      expect(packet.disclosure.subject).toEqual({ nodeId: run.activeCursor.nodeId, selectedSquare: null, candidateUci: move.uci, generation });
+      const read = collect.mock.calls.find(([route]) => route === "rules.tactic.consequence.mate_in_one@1");
+      expect(read?.[1]).toEqual({ fen: expected });
+      assertDelivered(packet, assistance);
+      expect(JSON.stringify(run)).toBe(before);
+    }
+  });
+});
 
 describe("the module query request boundary", () => {
   it("parses the closed union and refuses crossed, malformed and extra fields", () => {

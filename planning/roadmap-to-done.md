@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3626]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3627]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,7 +53,16 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest batch: [[D3626]] retains the castling rook in mobility evidence through sealed factories,
+Latest completed batch: [[D3627]] repairs staged Support's exact legal-move admission before child
+construction or collection. Twelve predecessor failures reproduce missing promotions and illegal
+suffixes; seven complete legal populations, 161 focused cases/types and eight desktop/phone
+warning/promotion journeys pass. Complete normal local gates pass clean types/build, 4,105 software,
+seven unchanged-budget performance, 239 content and 231 browser cases, one optional Maia skip,
+zero retries and all 112 composition cells. Current ledger: 3,376 rows, 1,506 done, 161 refused
+and 1,709 live; zero untriaged. No new source, permission, pack bytes, whole Support completion
+or remote CI result.
+
+Previous batch: [[D3626]] retains the castling rook in mobility evidence through sealed factories,
 complete candidates, saved runs and serialized Inspector. Existing derivation revision 3 automatically
 rebuilds prior learner histories without changing recorded play or authored packs. All 407 foundation
 and 65 longitudinal cases/types pass; complete normal local tiers pass 4,084 software, seven

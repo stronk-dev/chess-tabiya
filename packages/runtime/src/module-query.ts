@@ -19,6 +19,7 @@
 import type { Color, SquareName } from "chessops/types";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 
 import type { FinalizedAssistanceV1 } from "./assistance-exchange.js";
 import { branchPath } from "./branch-path.js";
@@ -29,7 +30,7 @@ import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.j
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
-import { exactMoveDestination } from "./legal-moves.js";
+import { exactLegalMoves, exactMoveDestination } from "./legal-moves.js";
 import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { MODULE_QUERY_OPERATION, PACKET_ROUTE_KINDS, SIGHT_SOURCE_ROUTES, moduleQuerySourceRoutes, routeReads } from "./module-query-sources.js";
 import { MODULE_IDS, type InspectorFamilyId, type ModuleId, type ModuleTiming } from "./module-contract.js";
@@ -546,15 +547,14 @@ function subjectFor(run: DrillRun, request: ModuleQueryRequest): ModuleSubject {
     }
     case "at_commit": {
       const at = node(request.nodeId);
+      // A legal square pair is not a legal move: promotions require the exact role,
+      // and the shared move authority owns Chess960-safe castling identities too.
+      if (!exactLegalMoves(at.fen).some(move => move.uci === request.candidateUci)) {
+        throw new ModuleQueryError("MODULE_QUERY_CANDIDATE", "candidateUci is not legal in the subject position");
+      }
       const position = Chess.fromSetup(parseFen(at.fen).unwrap()).unwrap();
-      const legal = [...position.allDests()].flatMap(([from, destinations]) => [...destinations].map((to) => [from, to] as const));
-      const [from, to] = [request.candidateUci.slice(0, 2), request.candidateUci.slice(2, 4)];
-      const squareIndex = (name: string): number => "abcdefgh".indexOf(name[0]!) + (Number(name[1]) - 1) * 8;
-      if (!legal.some(([origin, destination]) => origin === squareIndex(from) && destination === squareIndex(to))) throw new ModuleQueryError("MODULE_QUERY_CANDIDATE", "candidateUci is not legal in the subject position");
       const child = position.clone();
-      const promotion = request.candidateUci[4] as "q" | "r" | "b" | "n" | undefined;
-      const roles = { q: "queen", r: "rook", b: "bishop", n: "knight" } as const;
-      child.play({ from: squareIndex(from), to: squareIndex(to), ...(promotion === undefined ? {} : { promotion: roles[promotion] }) });
+      child.play(parseUci(request.candidateUci)!);
       const afterFen = makeFen(child.toSetup());
       return { node: at, fen: afterFen, learner: turnOf(at.fen), edge: { beforeFen: at.fen, moveUci: request.candidateUci, afterFen } };
     }
