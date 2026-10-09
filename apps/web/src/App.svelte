@@ -26,7 +26,7 @@
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
-  import { validPackDraftIdentity } from "./lib/pack-draft-response.js";
+  import { packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./lib/pack-draft-response.js";
   import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
   import { parseDueQueue, progressRecommendationSentence } from "./lib/progress-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
@@ -112,7 +112,7 @@
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { loadWorkflowPreference, requestedAssistanceConfig } from "./lib/assistance-preference.js";
-  import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
+  import { graduationEntries, requiredFieldStates, splitValidationIssues, type PresentedValidationIssue } from "./lib/pack-validation-presentation.js";
   import { importFailureCopy, pgnSideHint, REPERTOIRE_IMPORT_POINTER } from "./lib/import-presentation.js";
   import { assertFlipResponse } from "./lib/flip-response.js";
   import { LIVE_SESSION_CREATE_ACTIONS, glossOrFallback, labelFor, labelOrFallback, learnerProse } from "./lib/labels/index.js";
@@ -263,6 +263,7 @@
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
   let studioActionError: string | undefined = $state();
+  let studioPublicationFailure: { readonly draftId: string; readonly digest: string; readonly documentText: string; readonly issues: readonly PresentedValidationIssue[] } | undefined = $state();
   let studioMutationBusy: { readonly kind: "create" | "save" | "playtest" | "register" | "withdraw"; readonly draftId?: string } | undefined = $state();
   let studioMutationGeneration = 0;
   let packBufferValidation: PackValidation | undefined = $state();
@@ -493,7 +494,13 @@
   let packValidationSections = $derived(splitValidationIssues(displayedPackValidation?.issues ?? []));
   let packGraduationEntries = $derived(graduationEntries(studioJson));
   let blockingGraduationEntries = $derived(packGraduationEntries?.filter((entry) => entry.state === "blocking") ?? []);
-  let selectedPackRegistrationBlock = $derived(registrationBlockReason(selectedPackDraft));
+  let selectedPackRegistrationBlock = $derived(packRegistrationBlockReason(selectedPackDraft, studioJson));
+  let currentPublicationIssues = $derived(
+    studioPublicationFailure?.draftId === selectedPackDraft?.id
+      && studioPublicationFailure?.digest === selectedPackDraft?.digest
+      && studioPublicationFailure?.documentText === studioJson
+      ? studioPublicationFailure?.issues : undefined,
+  );
   let runContext = $derived(
     route.name === "run" && session.runState
       ? {
@@ -1038,6 +1045,7 @@
         recommendationSelection = loaded[4].selection;
         repertoirePages=nextRepertoirePages;
       } else if (next.name === "create") {
+        studioPublicationFailure = undefined;
         const loaded = await Promise.all([
           api.packDrafts?.() ?? Promise.resolve([]),
           api.shapeDrafts?.() ?? Promise.resolve([]),
@@ -1868,11 +1876,13 @@
   async function registerDraft(): Promise<void> {
     if (studioMutationBusy !== undefined) return;
     const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
-    if (draft === undefined || registrationBlockReason(draft) !== undefined || api.registerPackDraft === undefined) return;
+    if (draft === undefined || packRegistrationBlockReason(draft, studioJson) !== undefined || api.registerPackDraft === undefined) return;
     const action = ++studioMutationGeneration;
     const generation = loadGeneration;
+    const documentText = studioJson;
     studioMutationBusy = { kind: "register", draftId: draft.id };
     studioActionError = undefined;
+    studioPublicationFailure = undefined;
     let registered = false;
     try {
       const summary = await api.registerPackDraft(draft.id);
@@ -1888,8 +1898,12 @@
           if (studioActionIsCurrent(action, generation)) studioActionError = "The pack was registered, but the draft list could not refresh. Reload Create to see its current state.";
         }
       }
-    } catch {
+    } catch (error) {
       if (studioActionIsCurrent(action, generation)) {
+        if (!registered && error instanceof ApiError && error.status === 422 && error.code === "PACK_INVALID") {
+          const issues = parsePackPublicationIssues(error.details.issues);
+          if (issues !== undefined) studioPublicationFailure = { draftId: draft.id, digest: draft.digest, documentText, issues };
+        }
         studioActionError = registered
           ? "The pack was registered, but its response could not be matched. Reload Create before acting on it again."
           : "This pack could not be registered. The draft remains private; check its blockers and try again.";
@@ -1986,20 +2000,6 @@
       const document = clonePackForAuthoring(exported.document, suffix);
       return api.createPackDraft(document);
     });
-  }
-
-
-  function registrationBlockReason(draft: PackDraft | undefined): string | undefined {
-    if (draft === undefined) return "Select a draft first.";
-    if (draft.state !== "draft") return `This draft is ${draft.state} and cannot be changed.`;
-    if (!draft.validation.valid) return "Fix the validation errors first.";
-    const document = draft.document as Record<string, unknown>;
-    const provenance = document.provenance as Record<string, unknown> | undefined;
-    const blockers = provenance?.graduationBlockers;
-    if (Array.isArray(blockers) && blockers.some((entry) => typeof entry === "object" && entry !== null && (entry as Record<string, unknown>).state === "blocking")) {
-      return "Resolve the declared graduation blockers first.";
-    }
-    return undefined;
   }
 
 
@@ -3105,9 +3105,16 @@
           {#if selectedPackDraft?.state !== "draft"}<p id="draft-action-disabled" class="honest">{selectedPackDraft ? `This draft is ${labelFor("pack_draft_state", selectedPackDraft.state)}; its saved bytes remain read-only.` : "Select or create a draft first."}</p>{/if}
           {#if selectedPackDraft?.state === "draft" && (packLintState !== "ready" || !packBufferValidation?.valid)}<p id="playtest-disabled" class="honest">{packLintState === "waiting" ? "Waiting for you to pause typing…" : packLintState === "checking" ? "Checking these unsaved bytes…" : packLintState === "unavailable" ? "Live validation is unavailable; saving remains possible." : "Fix the listed validation errors before the real run can start."}</p>{/if}
           {#if selectedPackRegistrationBlock !== undefined}<p id="register-disabled" class="honest">{selectedPackRegistrationBlock}</p>{/if}
-          {#if selectedPackDraft}<p id="pack-publication-retention" class="honest">Playtesting stays private and preserves the tested bytes. Registration publishes immutable document bytes, authored prose, licence, and attribution; those remain available with “deleted account” attribution if you later delete your account.</p>{/if}
+          {#if selectedPackDraft}<p id="pack-publication-retention" class="honest">Playtesting stays private and preserves the tested bytes. Save any changes before registering the document shown above. Registration publishes immutable document bytes, authored prose, licence, and attribution; those remain available with “deleted account” attribution if you later delete your account.</p>{/if}
           {#if selectedPackDraft && withdrawConfirmId === selectedPackDraft.id}<aside class="deletion-card"><h3>Withdraw this draft?</h3><p>It becomes read-only and cannot be registered. Existing private playtest runs keep their exact tested bytes.</p><div class="row-actions"><button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => void withdrawDraft(selectedPackDraft.id)}>Confirm withdrawal</button><button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => withdrawConfirmId = undefined}>Cancel</button></div></aside>{/if}
           {#if studioActionError}<p role="alert">{studioActionError}</p>{/if}
+          {#if currentPublicationIssues}
+            <section role="alert" aria-label="Publication needs changes">
+              <h3>Publication needs changes</h3>
+              <p>The server refused to publish this saved draft. It remains private; correct these fields, save, then try registration again.</p>
+              <ul>{#each currentPublicationIssues as issue}<li><code>{issue.path || "/"}</code> — {issue.message}</li>{/each}</ul>
+            </section>
+          {/if}
           {#if packLintError}<p role="alert">{packLintError}</p>{/if}
           <section class="validation-summary" aria-labelledby="required-pack-fields">
             <h3 id="required-pack-fields">Required fields</h3>

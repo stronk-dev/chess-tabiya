@@ -29863,6 +29863,24 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/module-query.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3608",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5789eab22d079d248c67ade45b080753301b479791ac078b9bb6bb1416bf9802",
+      "uxItems": [],
+      "evidence": "tests/browser/studio-publication.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3609",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c99a63f27757c19c6c17a67dbfbbfa899094ce5c4bfbe01e48defd3a6ebc1039",
+      "uxItems": [],
+      "evidence": "tests/browser/studio-publication.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

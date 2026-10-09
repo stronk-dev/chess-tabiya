@@ -3641,6 +3641,14 @@ review-arrival-browser-check:
 pack-loading-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/pack-registry-validation.test.ts apps/server/src/pack-studio.test.ts
 
+.PHONY: studio-publication-check studio-publication-browser-check
+studio-publication-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/pack-draft-response.test.ts apps/web/src/lib/pack-validation-presentation.test.ts apps/server/src/pack-studio.test.ts
+	$(MAKE) typecheck
+
+studio-publication-browser-check:
+	./node_modules/.bin/playwright test tests/browser/studio-publication.spec.ts
+
 .PHONY: pinned-pack-check pinned-pack-regression-check pinned-pack-browser-check
 pinned-pack-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/run-pack-application.test.ts apps/server/src/pack-studio.test.ts apps/server/src/capability-operations.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts

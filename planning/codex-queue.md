@@ -12,6 +12,18 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3608]]/[[D3609]] are closed locally under the existing pack-studio contract:
+Register requires the saved document to match the editor, retains both blocker grammars
+and shows structured server publication errors only for the attempted draft/revision/editor.
+All 132 focused cases/types and actual desktop/phone create → failed Save → retry → reload →
+private playtest/checkpoint → publication refusal → correction → community Library → rehearsal
+pass, preserving the earlier playtest. Complete normal gates pass 3,803 software, seven
+unchanged-budget performance, 228 content and 211 browser cases, one optional Maia skip,
+zero retries and all 150 input/112 composition cells. This does not graduate content,
+add a cross-tab registration protocol or complete the Theory capability.
+Native recovery remains separately blocked: current non-root Docker capacity is still
+zero available bytes; no pruning or failed recovery replay is authorized by that reading.
+
 [[D3607]] repairs post-commit/ancestor square resolution under the existing exact-legal-mobility
 contract, independently of D3578's draft: castling scopes to the king's actual landing rather than
 the encoded rook square. Eight runtime and one sealed REST-query control pass within 140 focused

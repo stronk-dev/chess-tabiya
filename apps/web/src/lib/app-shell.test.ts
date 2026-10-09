@@ -17,6 +17,7 @@ vi.mock("@lichess-org/chessground", () => ({
 }));
 
 import App from "../App.svelte";
+import { ApiError } from "./api.js";
 import type {
   Capabilities,
   AssignedPack,
@@ -3301,6 +3302,95 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(updatePackDraft).toHaveBeenCalledTimes(2));
     second.resolve({ ...draft, digest: `sha256:${"b".repeat(64)}` });
     await vi.waitFor(() => expect(document.body.textContent).not.toContain("Saving the retained draft…"));
+    await unmount(component);
+  });
+
+  it.each([
+    ["changed valid content", (document: typeof pack) => JSON.stringify({ ...document, title: "Visible new title" })],
+    ["malformed JSON", () => "{"],
+    ["an unsaved blocking condition", (document: typeof pack) => JSON.stringify({ ...document, provenance: { ...document.provenance, graduationBlockers: ["Unresolved source"] } })],
+  ])("refuses Studio publication of saved bytes behind %s", async (_name, edit) => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "publication-current-editor", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const registerPackDraft = vi.fn(async () => packSummary);
+    const component = mount(App, { target: target(), props: { api: { ...api(), async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; }, registerPackDraft }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await tick();
+    const editor = document.querySelector<HTMLTextAreaElement>("#studio-json")!;
+    editor.value = edit(pack);
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+    const register = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Register community pack")!;
+    expect(register.disabled).toBe(true);
+    expect(document.querySelector("#register-disabled")?.textContent).toMatch(/Save|JSON/);
+    register.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await tick();
+    expect(registerPackDraft).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("refuses Studio publication with saved legacy string blockers", async () => {
+    history.replaceState(null, "", "/create");
+    const blocked = { ...pack, provenance: { ...pack.provenance, graduationBlockers: ["Cite this source before publication."] } };
+    const draft = { id: "publication-legacy-blocker", packId: pack.id, document: blocked, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const registerPackDraft = vi.fn(async () => packSummary);
+    const component = mount(App, { target: target(), props: { api: { ...api(), async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; }, registerPackDraft }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await tick();
+    const register = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Register community pack")!;
+    expect(register.disabled).toBe(true);
+    expect(document.querySelector("#register-disabled")?.textContent).toContain("Resolve the declared graduation blockers");
+    register.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await tick();
+    expect(registerPackDraft).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("shows publication-only validation errors for the exact Studio editor and retires them on edit", async () => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "publication-refusal", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const registerPackDraft = vi.fn(async () => { throw new ApiError(422, "PACK_INVALID", "private top-level diagnostic", { issues: [
+      { severity: "error", code: "GRADUATION_REQUIRES_SOURCES", path: "/provenance/sources", message: "Attach a source before publication." },
+      { severity: "warning", code: "TEST_WARNING", path: "/concepts", message: "Not a publication error" },
+    ] }); });
+    const component = mount(App, { target: target(), props: { api: { ...api(), async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; }, registerPackDraft }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await tick();
+    const register = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Register community pack")!;
+    register.click();
+    await vi.waitFor(() => expect(document.querySelector("[aria-label='Publication needs changes']")?.textContent).toContain("Attach a source before publication."));
+    expect(document.querySelector("[aria-label='Publication needs changes']")?.textContent).toContain("/provenance/sources");
+    expect(document.body.textContent).not.toContain("private top-level diagnostic");
+    expect(document.querySelector("[aria-label='Publication needs changes']")?.textContent).not.toContain("Not a publication error");
+    const editor = document.querySelector<HTMLTextAreaElement>("#studio-json")!;
+    editor.value = JSON.stringify({ ...pack, title: "Different editor subject" });
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+    await tick();
+    expect(document.querySelector("[aria-label='Publication needs changes']")).toBeNull();
+    expect(register.disabled).toBe(true);
+    await unmount(component);
+  });
+
+  it.each([
+    new Error("private transport diagnostic"),
+    new ApiError(503, "PACK_INVALID", "private service diagnostic", { issues: [{ code: "X", path: "/private", message: "private issue" }] }),
+    new ApiError(422, "OTHER_ERROR", "private other diagnostic", { issues: [{ code: "X", path: "/private", message: "private issue" }] }),
+    new ApiError(422, "PACK_INVALID", "private malformed diagnostic", { issues: [{ code: "X", path: "/private", message: 3 }] }),
+  ])("keeps non-validator or malformed publication failures generic %#", async error => {
+    history.replaceState(null, "", "/create");
+    const draft = { id: "publication-generic-refusal", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const component = mount(App, { target: target(), props: { api: { ...api(), async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; }, async registerPackDraft() { throw error; } }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.title as string} · draft`));
+    document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
+    await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Register community pack")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This pack could not be registered."));
+    expect(document.querySelector("[aria-label='Publication needs changes']")).toBeNull();
+    expect(document.body.textContent).not.toContain("private issue");
+    expect(document.body.textContent).not.toContain(error.message);
     await unmount(component);
   });
 

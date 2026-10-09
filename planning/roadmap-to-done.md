@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3607]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3609]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -69,6 +69,17 @@ authority: castling resolves to the king's actual landing, not the encoded rook 
 runtime controls plus a sealed REST query pass within 140 focused cases and clean types, retaining
 feedback withholding, budgets and recorded play. This does not accept D3578 or add its four
 selected-source views; complete normal verification is recorded in the exploration log.
+
+[[D3608]]/[[D3609]] are closed locally under the existing pack-studio contract:
+Register requires the saved document to match the visible editor, retains legacy/typed
+blockers and renders validated server publication errors for their exact attempted editor.
+Actual desktop/phone create → failed Save → retry → reload → private playtest/checkpoint →
+publication refusal → correction → community Library → rehearsal journeys pass, preserving
+the earlier private playtest. This is mechanical publication proof, not official content
+grounding, a cross-tab registration protocol or whole Theory capability completion.
+All 132 focused cases/types and complete normal gates pass on final product/test sources.
+The current compatibility census covers 86 production pack documents, not 86 graduated
+official packs; the official graduation count remains zero.
 
 [[D3578]] now has an authored **draft**, not a shipped feature: module-registration §4.2a and
 the presentation companion specify four selected-source views, full legal identities and a
@@ -174,14 +185,15 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,779 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,803 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-209 browser cases (144 smoke, five content, 59 matrix, one packaged-default). One existing
+211 browser cases (146 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
 Normal `make roadmap-receipt verify-awake test-browser-ci-awake` passes on final product/test
-sources for D3607. The preceding Campaign run's post-seal assertion correction from Unlocks to
+sources for D3608/D3609, including their complete private authoring/publication journeys.
+The preceding Campaign run's post-seal assertion correction from Unlocks to
 Unlocked and first smoke failure remain recorded in the log. Warm native
-arrival measures median 103 ms / p95 110.5 ms,
+arrival measures median 100 ms / p95 109.1 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
 No production source or budget changed after the software/content pass. This is local verification,
@@ -3178,10 +3190,13 @@ without assuming a social-network moderation stack or assuming chess-only play h
 
 <!-- roadmap-capability: professional -->
 
-**State: backend primitives, missing composition.** Classrooms, assignments, submissions,
-Academy/Stream, overlay, marks, proposals and votes exist unevenly. Finished Teach Live, Review
-Submission, audience preview, streamer chrome, simul wall, provider bridge, and complete
-role/consent/error workflows do not.
+**State: classroom submission review is live; full professional composition is incomplete.**
+Classrooms, assignments, consent-based submissions, read-only inspection of finished and incomplete
+attempts, revocation, proposals, marks, votes, overlays and streamer chrome exist. The actual
+two-account desktop/phone submission journeys are recorded under D3582–D3586 and in
+`docs/classrooms.md`. Complete Teach Live, guided role presets, audience preview/delay, simul wall,
+provider bridge and reconnect/error workflows remain; an implemented submission flow is not a
+complete coach/streamer product.
 
 **1.0 exit:** Academy/Stream are explicit presets over the sealed evidence rail; coaches
 assign/review with per-run consent and no ambient weakness dashboard; streamers get documented
@@ -3239,8 +3254,10 @@ scoped links and object exports exist. Registration and the durable-record bound
 games, classroom membership, public story links, and PGN import now disclose what starts being kept
 and its lifecycle at the action itself. The primary navigation names import instead of hiding it
 under an internal “run history” label. Explicit Chess960 PGNs are regression-bound to refuse before
-standard-chess state can be persisted. Guest claim, complete inventory-derived labels, portable
-account import, conflicts, profile/social coverage, backup/restore and recovery UX remain.
+standard-chess state can be persisted. D3567/D3568's actual desktop/phone export → source-account
+deletion → new-account import → device claim → continued bot play passes, with wrong-password and
+collision refusal controls. Guest claim, complete inventory-derived labels, future-object/schema
+coverage, shared-link lifecycle and the broader account/operator recovery journeys remain.
 
 **1.0 exit:** learners understand stored/shared data and can export, import, delete and verify it;
 links/teacher access are explicit and revocable; isolation/destructive previews pass; self-hosts
@@ -3258,10 +3275,14 @@ UX owner: IMP items.
 repository governance, real-content compatibility, browser journeys and interaction matrices are
 separate named gates; Node/pnpm/Stockfish are pinned and local parity runs the same required tiers.
 The mutable graduation-plan census is now a manual authoring instrument rather than a software
-gate. Missing: release-container production-boundary coverage, Compose smoke and prior-schema
-migration, live degradation health, safe profiles, runtime content allow-list, backup/restore/
-update/rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture
-proof.
+gate. Provider-health/degradation, local/appliance/hosted profiles, the runtime content allow-list,
+storage backup/verify/restore/upgrade/rollback machinery and the SBOM/notices/signing pipeline are
+implemented; `docs/deployment.md`, `docs/storage-backup-and-recovery.md` and `docs/release.md`
+describe their current contracts. Native source-appliance play/restart is demonstrated, not a
+complete release install. Exact pushed-revision CI, remaining ingress/probe/operator obligations,
+complete prior-release recovery and multi-architecture release journeys, model/runtime rights,
+resource proof and the official content bundle still block completion. D3573's complete native
+Make recovery journey is presently blocked by D3574's measured Docker capacity exhaustion.
 
 The 2026-09-05 fifth provider-health author repair closes [[D2753]]–[[D2760]] and self-audit
 [[D2762]]–[[D2764]] at contract tier. Exact named checkpoint exports, separate consumer

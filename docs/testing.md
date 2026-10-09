@@ -4,6 +4,17 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make studio-publication-check` covers mounted Studio publication, JSON-content equality, both
+graduation blocker grammars, structured publication-error parsing and the server's existing
+immutable community-version contract, then checks workspace types. `make studio-publication-browser-check`
+executes actual desktop and phone authoring: Position seed → edit → blocked/failed Save → retry →
+reload → private playtest/checkpoint → edit/save → server publication refusal → corrected source
+declarations → community Library entry → rehearsal. It verifies that private drafts are not served,
+the exact edited title is published and the earlier playtest's pinned document and recorded graph
+are unchanged. The fixture reuses existing schema-example chess bytes in an isolated test database;
+it is not an authored or graduated official pack. These permanent tests run in normal software and
+browser smoke CI, not only through the focused commands.
+
 `make local-module-execution-check` includes D3607's eight runtime landing-square cases and
 REST-query control: standard castling from both colors, stationary-king Chess960, ordinary moves,
 promotion and en passant. Sealed post-commit Sight matches an explicit query at the actual landing;

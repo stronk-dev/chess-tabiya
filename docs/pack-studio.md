@@ -17,6 +17,22 @@ shape, principle, and sibling-pack lookups. Unknown or off-phase principles and 
 unproven `variantOf` relations therefore fail in Studio instead of appearing clean until a later
 CLI check.
 
+Registration publishes the saved document. The editor must match that document before Register
+is offered: changed or malformed JSON requires an explicit Save first. Formatting and object-key
+order alone do not count as changed content. Both legacy string graduation conditions and typed
+blocking entries prevent registration; resolved/accepted entries retain their existing meaning.
+A failed Save preserves the editor and cannot make those unsaved changes publishable.
+
+Publication has stricter validation than saving or private playtesting. If the server refuses
+publication with structured validation errors, Studio shows their field paths and explanations
+under “Publication needs changes”. These are the last attempt's errors for that exact saved
+draft/editor, not a new chess review or a replacement for draft lint. The issues are shown only
+while the selected draft, saved revision and editor match the attempted publication; reloading
+Create or attempting publication again clears the previous result. Transport,
+malformed and unrelated errors retain generic retry copy; private exception diagnostics are not
+shown. Publication itself remains subject to the existing server validation and immutable-version
+rules; this client repair does not add a cross-tab registration precondition.
+
 Studio also projects the vocabulary's current reach instead of making an author discover dead
 entries by reading registries. `GET /shapes` and `GET /principles` derive `usedByPacks` from the
 documents served by the run service, counting each reference at most once per pack. The Create
