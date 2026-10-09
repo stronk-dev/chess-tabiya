@@ -191,6 +191,100 @@ describe("D3619 special-move identities at the production tactical boundary", ()
   });
 });
 
+const promotionDuties = [
+  { name: "white quiet", fen: "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1", from: "b7", to: "b8", target: "c8", color: "white" },
+  { name: "black quiet", fen: "k7/8/8/8/8/7K/1p6/2r4R b - - 0 1", from: "b2", to: "b1", target: "c1", color: "black" },
+  { name: "white capture", fen: "r1R4r/1P6/7k/8/8/8/5K2/8 w - - 0 1", from: "b7", to: "a8", target: "c8", color: "white" },
+  { name: "black capture", fen: "8/5k2/8/8/8/7K/1p6/R1r4R b - - 0 1", from: "b2", to: "a1", target: "c1", color: "black" },
+] as const;
+const promotionDutyCases = promotionDuties.flatMap(fixture => [
+  { ...fixture, promotion: "n", role: "knight", losesDuty: true },
+  { ...fixture, promotion: "b", role: "bishop", losesDuty: true },
+  { ...fixture, promotion: "q", role: "queen", losesDuty: false },
+  { ...fixture, promotion: "r", role: "rook", losesDuty: false },
+] as const);
+
+function expectedPromotionDuty(fixture: typeof promotionDutyCases[number]) {
+  return {
+    move: { from: fixture.from, to: fixture.to },
+    defenderBefore: { square: fixture.from, piece: expect.objectContaining({ role: "pawn", color: fixture.color }) },
+    defenderAfter: { square: fixture.to, piece: expect.objectContaining({ role: fixture.role, color: fixture.color }) },
+    target: { square: fixture.target, piece: expect.objectContaining({ role: "rook", color: fixture.color }) },
+  };
+}
+
+describe("D3622 promotion defender identity at the production boundary", () => {
+  it.each(promotionDutyCases)("retains the exact $name $role duty outcome", fixture => {
+    const input = edge(fixture.fen, `${fixture.from}${fixture.to}${fixture.promotion}`);
+    const events = defenderDutyRelocatedEvents(input.beforeFen, input.moveUci, input.afterFen);
+    const sealed = invokeEvidenceValueRoute("rules.tactic.event.defender_duty_relocated@1", input);
+    const semantic = localSemanticEvents(input.beforeFen, input.moveUci, input.afterFen)
+      .filter(event => event.projection.id === "rules.tactic.event.defender_duty_relocated");
+    if (!fixture.losesDuty) {
+      expect(events).toEqual([]);
+      expect(sealed).toEqual([]);
+      expect(semantic).toEqual([]);
+      return;
+    }
+    const expected = expectedPromotionDuty(fixture);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject(expected);
+    expect(sealed).toHaveLength(1);
+    expect(sealed[0]!.payload).toMatchObject(expected);
+    expect(evidenceValueReceipt(sealed[0]!).factory).toBe("createRulesTacticEventDefenderDutyRelocatedV1Evidence");
+    expect(semantic.map(event => event.operands)).toEqual([expect.objectContaining(expected)]);
+  });
+
+  it.each(promotionDutyCases.filter(fixture => fixture.losesDuty))("presents the $name $role's lost defence in Inspector, not Nudge", fixture => {
+    const input = edge(fixture.fen, `${fixture.from}${fixture.to}${fixture.promotion}`);
+    const evidence = invokeEvidenceValueRoute("rules.tactic.event.defender_duty_relocated@1", input);
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, evidence).items).toEqual([]);
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, evidence));
+    const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
+    const statements = wire.filter(item => item.component.id === "fact_statement");
+    expect(statements).toHaveLength(1);
+    const caption = presentedSentence(statements[0]!);
+    expect(caption).toContain(fixture.from);
+    expect(caption).toContain(fixture.to);
+    expect(caption).toContain(fixture.target);
+    expect(caption).not.toMatch(/deflection|attraction/iu);
+  });
+
+  it.each(promotionDuties)("retains every $name promotion in the complete candidate packet", fixture => {
+    const compiled = compileCandidatePopulation({ beforeFen: fixture.fen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+    expect(compiled.kind).toBe("ready");
+    if (compiled.kind !== "ready") throw new Error(JSON.stringify(compiled.error));
+    expect(compiled.receipt.packet.candidates).toHaveLength(compiled.receipt.packet.legalMoves.length);
+    for (const choice of promotionDutyCases.filter(item => item.name === fixture.name)) {
+      const row = compiled.receipt.packet.candidates.find(item => item.moveUci === `${choice.from}${choice.to}${choice.promotion}`)!;
+      expect(row).toBeDefined();
+      const events = row.events.filter(item => item.projection.id === "rules.tactic.event.defender_duty_relocated");
+      expect(events.map(item => item.operands)).toEqual(choice.losesDuty ? [expect.objectContaining(expectedPromotionDuty(choice))] : []);
+    }
+  });
+
+  it.each(promotionDutyCases.filter(fixture => fixture.losesDuty))("reconstructs the saved $name $role transition without altering play", fixture => {
+    const at = "2026-10-09T00:00:00.000Z";
+    const initial = createRun({ id: `${fixture.name}-${fixture.role}`, packId: "special-move-boundary", packDigest: `sha256:${"0".repeat(64)}`, startFen: fixture.fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    const run = commitMove(initial, `${fixture.from}${fixture.to}${fixture.promotion}`, { at }).run;
+    const saved = JSON.parse(JSON.stringify(run)) as typeof run;
+    const child = saved.nodes.at(-1)!;
+    const parent = saved.nodes.find(node => node.id === child.parentId)!;
+    expect(localSemanticEvents(parent.fen, child.moveUci!, child.fen)
+      .filter(item => item.projection.id === "rules.tactic.event.defender_duty_relocated")
+      .map(item => item.operands)).toEqual([expect.objectContaining(expectedPromotionDuty(fixture))]);
+    expect(saved).toEqual(run);
+  });
+
+  it("refuses a promoted after-position that does not follow the legal edge", () => {
+    const fixture = promotionDuties[0]!;
+    const knight = edge(fixture.fen, "b7b8n");
+    const bishop = edge(fixture.fen, "b7b8b");
+    expect(() => defenderDutyRelocatedEvents(knight.beforeFen, knight.moveUci, bishop.afterFen)).toThrow("After FEN does not match");
+    expect(() => invokeEvidenceValueRoute("rules.tactic.event.defender_duty_relocated@1", { ...knight, afterFen: bishop.afterFen })).toThrow();
+  });
+});
+
 const enPassantPushes = [
   { name: "black", fen: "4k3/3p4/8/4P3/8/8/8/4K3 b - - 0 1", move: "d7d5", victim: "d5", capturer: "e5", capture: "e5d6", landing: "d6" },
   { name: "white", fen: "4k3/8/8/8/4p3/8/3P4/4K3 w - - 0 1", move: "d2d4", victim: "d4", capturer: "e4", capture: "e4d3", landing: "d3" },

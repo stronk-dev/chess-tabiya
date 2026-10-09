@@ -12,6 +12,14 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3622]] is closed locally under the existing semantic-collectors §3.1: legal promotion
+retains a defender's identity while testing its actual after-state duty. Quiet/capture,
+both-color, all-role, sealed-factory, Inspector, candidate and saved-run controls pass
+within 386 focused cases. Complete normal local gates pass clean types/build, 4,059 software,
+seven unchanged-budget performance, 237 content and 225 browser cases, one optional Maia skip,
+zero retries and all 112 composition cells. Source/consumer integration remains next;
+Nudge admission, new motifs, sources and whole-foundation completion are unchanged.
+
 [[D3621]] is closed locally: existing voice, speech and reasoning-review doors recheck current
 read/grant/disclosure/subject and cancellation after provider I/O. Authorization cannot become
 retry/fallback or successful empty review; rejected late voice text cannot enter the speech cache.

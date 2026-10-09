@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3621]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3622]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,17 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+Latest batch: [[D3622]] closes the promotion defender-duty omission under the existing
+collector contract, including both colors, capture/quiet promotion, retained-defence negatives,
+factories, candidate packets, saved runs and Inspector. All 386 focused cases/types and complete
+normal local gates pass: 4,059 software, seven unchanged-budget performance, 237 content and
+225 browser cases, one optional Maia skip, zero retries and all 112 composition cells.
+Current ledger: 3,371 rows, 1,501 done, 161 refused and 1,709 live; zero untriaged.
+The fourteen whole capabilities, nine milestones, UX/RFC states and zero official graduates
+remain unchanged. This is a correctness repair, not another whole capability or remote CI pass.
+
+The preceding checkpoints below retain their own dated measurements.
 
 [[D3621]] repairs late voice, speech and reasoning-review delivery after a grant,
 disclosure or captured subject changes. Cancellation reaches providers; authority failure

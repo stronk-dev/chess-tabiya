@@ -162,7 +162,13 @@ export function defenderDutyRelocatedEvents(beforeFen: string, moveUci: string, 
     if (relocation === undefined) return [];
     const to = makeSquare(relocation.to);
     const current = edge.after.board.get(relocation.to);
-    if (current === undefined || !samePiece(lostDuty.defender.piece, current) || !retainedTarget(edge.after, lostDuty)
+    if (current === undefined) return [];
+    // The validated legal edge establishes promotion identity; role equality would
+    // discard the same pawn's lost duty. Other relocations and targets stay exact.
+    const retainedDefender = edge.move.promotion !== undefined && relocation.from === edge.move.from
+      ? lostDuty.defender.piece.role === "pawn" && current.color === lostDuty.defender.piece.color && current.role === edge.move.promotion
+      : samePiece(lostDuty.defender.piece, current);
+    if (!retainedDefender || !retainedTarget(edge.after, lostDuty)
       || afterDuties.has(`${to}:${lostDuty.target.square}:${lostDuty.target.piece.color}:${lostDuty.target.piece.role}`)) return [];
     return [Object.freeze({
       beforeFen: edge.beforeFen,

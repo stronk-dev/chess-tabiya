@@ -26,6 +26,11 @@ legal reply; capture, movement of original targets and legal check parries still
 Mate-in-one operands likewise separate the primary mover's landing from the actual checking
 pieces. These are identity repairs, not move grades or new learner-module admissions.
 
+Defender relocation also follows a legally promoted pawn into its new role. A lost-duty
+event requires the same surviving target and an actually absent after-state defence;
+promotion alone is not enough. Its existing Inspector binding remains unchanged, and
+Post-commit Nudge does not admit this event.
+
 Loose-piece readings retain en-passant captures against the occupied victim square, separately
 from the empty capture landing. The existing legal capture/exchange authority supplies both;
 pinned captures and expired rights are excluded. A legal equal exchange remains a capturer
