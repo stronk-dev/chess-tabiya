@@ -174,14 +174,14 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,770 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,779 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
 209 browser cases (144 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-Normal `make roadmap-receipt verify-awake` passes on final product sources. Complete
-`make test-browser-ci-awake` passes after correcting the existing post-seal assertion from
-Unlocks to Unlocked; the first smoke run's failure is retained in the log. Warm native
-arrival measures median 101.5 ms / p95 112.1 ms,
+Normal `make roadmap-receipt verify-awake test-browser-ci-awake` passes on final product/test
+sources for D3607. The preceding Campaign run's post-seal assertion correction from Unlocks to
+Unlocked and first smoke failure remain recorded in the log. Warm native
+arrival measures median 103 ms / p95 110.5 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
 No production source or budget changed after the software/content pass. This is local verification,
