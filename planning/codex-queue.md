@@ -184,7 +184,13 @@ the complete browser rerun passes after adapting tests to the actual Actions reg
 
 Remaining [[D1700]]/[[D1701]] work belongs to implementing `provider-exchange-and-execution`:
 source migrations, complete consumer execution, exact source-occurrence resolution and
-authenticated availability. The retained frontier compiles 262/285 projections, 495/556 isolated
+authenticated availability. [[D3630]] records the inspected recorded-guidance preflight gap:
+packet construction and reading rendering do not compile the complete exact consumer; cached
+voice reuse also skips the reading renderer. First reproduce malformed-binding refusal/ordering
+through packet, renderer and authenticated voice/speech paths, including remembered text, then
+implement the existing contract without widening held sources or changing reading copy. This is
+queued work, not a reproduced provider leak or a completed integration. The retained frontier
+compiles 262/285 projections, 495/556 isolated
 bindings and 21/42 complete consumers with fourteen refused provider declarations; those counts
 are compilation, not measured runtime adoption. The
 execution compiler and individual preflights already ship; D3403's census and D3404's Guided
