@@ -201,6 +201,16 @@ story reads, rendered at `/review/game/:runId` by `ReviewMapScreen`. It is a rea
 projection (`reviewMapProjection` in `packages/runtime/src/review-map.ts`): the read enqueues no
 evaluation job, writes no event and persists no grade.
 
+- **Refresh and recovery.** Pending evidence reads are single-flight, including their existing
+  coordinator request, so a slow response is not superseded by every one-second poll. Explicit
+  Refresh joins any current read instead of duplicating it. Automatic polls are quiet; only an
+  explicit refresh announces its busy state. Refresh reads the confirmed branch, not a later
+  active cursor. A failure, crossed branch or missing cited
+  move retains the last confirmed review and stops automatic polling with a stated failure and
+  Retry loading review. The explicit refresh control preserves selection and keyboard focus;
+  departure/re-entry retires old success/failure without locking the new view. It never reveals,
+  claims a lease, rewinds or forks. Normal evidence coordination remains unchanged. These controls
+  do not confer stronger source, grade, usefulness or whole-Review completion claims.
 - **Move list.** Every ply of the line, with number, SAN and side. SAN is regenerated from the
   legal move, so third-party annotation glyphs, NAGs and comments never reach this surface (the
   import record has not stored them since [[D959]]; a record imported before that fix may still carry

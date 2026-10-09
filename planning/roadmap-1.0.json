@@ -1761,221 +1761,28 @@
         "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3634 completes in-game Campaign read recovery under campaign-core section 7.1. Failed/pending reads withdraw command revision authority and pause Declare done; single-flight read-only retry restores the same encounter or recorded seal without replaying commands. Crossed/departed replies and retired focus cannot attach; unresolved submit identity remains separate. Four predecessor controls fail; 93 focused cases and seven desktop/phone Campaign action journeys pass. Complete normal local gates pass clean types/build, 4194 software cases/361 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 237 browser passes (172 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. Earlier Review, Profile, Studio, account, Support and Campaign repairs stand. Skills credit, calibrated bots, complete sources/modules, official content, curriculum/progression/rewards/boss and release proof remain open; no whole capability, milestone or remote CI promotion.",
+          "summary": "D3638 completes the existing Review read/recovery journey. Single-flight automatic polls stay quiet and publish slow responses; deliberate Refresh joins an existing read. Failed, crossed or cited-node-missing replies preserve the last confirmed exact branch and selected move with visible retry. Departed completions cannot attach, keyboard focus and geometry survive recovery, and no game commands are replayed. Two predecessor controls fail; mounted controls and four actual desktop/phone recovery journeys pass. Final local gates pass clean types/build, 4232 software cases/362 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 241 browser passes (176 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. The first browser run suffered coordinator-induced concurrent rebuilding; the complete sequential rerun passes unchanged. Earlier Review, Profile, Studio, account, Support and Campaign repairs stand. Complete sources/modules, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and release proof remain open; no whole capability, milestone or remote CI promotion.",
           "impact": "advanced",
           "evidence": [
-            "apps/server/src/learner-profile-application.test.ts",
-            "rfc/return-scheduling.md",
-            "docs/return-and-progression.md",
-            "tests/browser/return.spec.ts",
-            "apps/server/src/run-pack-application.test.ts",
-            "apps/server/src/capability-operations.ts",
-            "apps/server/src/rest.ts",
-            "apps/server/src/service.ts",
-            "apps/server/src/fixtures/refusal-debt.fixture.json",
-            "tests/browser/pinned-pack.spec.ts",
-            "docs/pack-studio.md",
-            "docs/account-data-lifecycle.md",
-            "apps/server/src/account-import.test.ts",
-            "apps/web/src/lib/account-data-panels.test.ts",
-            "apps/web/src/lib/api-auth.test.ts",
-            "rfc/archive/pack-studio.md",
-            "rfc/archive/portable-account-data.md",
-            "docs/drill-client.md",
-            "apps/web/src/lib/session-controller.ts",
-            "apps/web/src/lib/session-controller.test.ts",
-            "apps/web/src/lib/duplicate-response.ts",
-            "apps/web/src/lib/api.test.ts",
-            "apps/web/src/lib/screens.test.ts",
-            "apps/server/src/bot-opponent-ply.test.ts",
-            "docs/bot-policy.md",
-            "rfc/bot-policy.md",
-            "rfc/opponent-experience.md",
-            "apps/web/src/lib/ProfileScreen.test.ts",
-            "apps/web/src/lib/profile-response.test.ts",
-            "tests/browser/profile.spec.ts",
-            "apps/web/src/lib/review-target.ts",
-            "apps/web/src/lib/router.test.ts",
-            "apps/server/src/live-session.test.ts",
-            "apps/server/src/rating-service.test.ts",
-            "tests/browser/drill.spec.ts",
-            "rfc/review-map.md",
-            "docs/learner-profile.md",
-            "planning/style/implementation-2026-09-24.md",
-            "rfc/player-style.md",
-            "rfc/skills.md",
-            "rfc/longitudinal-store.md",
-            "apps/server/src/longitudinal-registry.ts",
-            "apps/server/src/longitudinal-contract.test.ts",
-            "apps/server/src/longitudinal-store.test.ts",
-            "apps/server/src/longitudinal-worker.test.ts",
-            "docs/longitudinal-store.md",
-            "planning/safe-deployment-profiles/application-security-2026-10-05.md",
-            "planning/safe-deployment-profiles/application-security-software-2026-10-05.json",
-            "planning/safe-deployment-profiles/application-security-negatives-2026-10-05.json",
-            "rfc/learner-rating.md",
-            "apps/server/src/application-security.test.ts",
-            "tests/browser/security.spec.ts",
-            "docs/app-shell.md",
-            "apps/server/src/review-evidence.ts",
-            "apps/server/src/review-evidence.test.ts",
-            "apps/server/src/review-map.test.ts",
-            "docs/review-evidence.md",
-            "rfc/review-evidence-compiler.md",
-            "planning/review/reservation-completion-2026-10-05.md",
-            "planning/longitudinal-store/prefix-reuse-2026-10-06.md",
-            "apps/server/src/longitudinal-projector-cache.test.ts",
-            "apps/server/src/longitudinal-membership-cache.test.ts",
-            "planning/longitudinal-store/prefix-reuse-software-2026-10-06.json",
-            "apps/web/src/lib/CampaignEncounterHistory.svelte",
-            "apps/server/src/campaign-service.ts",
-            "apps/web/src/lib/ReviewMapScreen.svelte",
-            "apps/web/src/lib/review-map-screen.test.ts",
-            "apps/web/src/lib/review-response.ts",
-            "apps/web/src/lib/CampaignScreen.svelte",
-            "apps/web/src/lib/CampaignPreparation.svelte",
-            "apps/web/src/lib/modal-boundary.test.ts",
-            "apps/web/src/lib/CampaignStrip.svelte",
-            "apps/web/src/lib/campaign-api.ts",
-            "apps/web/src/lib/campaign-history.test.ts",
-            "apps/web/src/lib/campaign-actions.test.ts",
-            "apps/server/src/campaign-core.test.ts",
-            "tests/browser/campaign.spec.ts",
-            "docs/campaign.md",
-            "rfc/campaign-core.md",
-            "apps/server/src/feedback-policy.ts",
-            "apps/server/src/feedback-policy.test.ts",
-            "apps/web/src/lib/DrillScreen.svelte",
-            "apps/web/src/lib/TerminalSheet.svelte",
-            "apps/web/src/lib/CheckpointSheet.svelte",
             "apps/web/src/App.svelte",
+            "apps/web/src/lib/ReviewMapScreen.svelte",
             "apps/web/src/lib/app-shell.test.ts",
-            "packages/runtime/src/testing/recorded-play.ts",
-            "apps/web/src/lib/screen-model.ts",
-            "apps/web/src/lib/screen-model.test.ts",
-            "apps/server/src/teacher-surface.test.ts",
-            "docs/classrooms.md",
-            "rfc/archive/teacher-surface.md",
-            "apps/web/src/lib/pack-draft-response.test.ts",
-            "tests/browser/studio-publication.spec.ts",
-            "tests/browser/review-export.spec.ts",
-            "tests/browser/play-export.spec.ts"
+            "packages/runtime/src/review-map-templates.ts",
+            "tests/browser/review-refresh.spec.ts",
+            "docs/game-import-and-story.md",
+            "rfc/review-map.md",
+            "planning/exploration/log.md"
           ],
           "anchors": [
             {
               "kind": "work_state",
-              "id": "D3546",
-              "digest": "sha256:88cecc812c62cb4da9677c95a1695a75b54d6b72ab6b7bd3c1f57e496961ec75"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3575",
-              "digest": "sha256:c5e768d100cdfa789fded5ff729d444c54c44e755bfc3454964e459683f55608"
-            },
-            {
-              "kind": "rfc",
-              "id": "campaign-core.md",
-              "digest": "sha256:d9b7f08ab1d65857b881d97f766e84bd1ff8e08989ed33458c163401d16160cd"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3548",
-              "digest": "sha256:e7e5c23b197611d015c00383c5bf5b3198238da29f565b4f08a6935a248f4484"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3550",
-              "digest": "sha256:d2a8eae0cd1a10ccb2f46130778e71239346c1977d5d099718433e9d255e9957"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3551",
-              "digest": "sha256:6291441d0d3106fb5253ee38aae43a4808fbbf1df5a07ec0564e8c05ce7ef1e1"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3547",
-              "digest": "sha256:b745bf6044984b7b120879fd83ba45d9238553f688ded1d4afb5b8fe1af874d9"
-            },
-            {
-              "kind": "rfc",
-              "id": "bot-policy.md",
-              "digest": "sha256:8170db8a7d61f5ccbb251bf995eeb8b30280370481d758333d5f00bde370c1bc"
-            },
-            {
-              "kind": "rfc",
-              "id": "opponent-experience.md",
-              "digest": "sha256:84f2bc773bfa7fd5af4f1417ea670f876d8b1c630dd5625f404967f83e7c6876"
-            },
-            {
-              "kind": "rfc",
-              "id": "player-style.md",
-              "digest": "sha256:9939e4a13fd7b1b6a1c6ebc52d43f58f82ae3399c9f1af4fcd37a500e231a347"
+              "id": "D3638",
+              "digest": "sha256:b8b08659ac4430f47147dd15bbe68d10c3404631e87403bff58d5fe2d2384d6c"
             },
             {
               "kind": "rfc",
               "id": "review-map.md",
               "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
-            },
-            {
-              "kind": "rfc",
-              "id": "skills.md",
-              "digest": "sha256:9d58a2decab24038dcda1daf29b090b9634aaa61eed220994251dfaf29407359"
-            },
-            {
-              "kind": "rfc",
-              "id": "longitudinal-store.md",
-              "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3623",
-              "digest": "sha256:a9e109e20902078fc410d65ca8479be1780ce6bf6c93d19f0e19a5ed608bffcc"
-            },
-            {
-              "kind": "work_state",
-              "id": "D1467",
-              "digest": "sha256:da350aa968f6d7aa9bd3506c1fe5e83af8f163bf532bf89be787ed5b6f14d6dc"
-            },
-            {
-              "kind": "rfc",
-              "id": "learner-rating.md",
-              "digest": "sha256:3189387e5bb418f5da499f93a2e674aac1cff6ca253bf5a51e17926d9833424a"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3399",
-              "digest": "sha256:77f2314f320cf9bdfc6b5e0d13e69bbcfe3156d22f3f67260d89773307e94906"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3422",
-              "digest": "sha256:fb6da41611d5fdf5b20a080e6dc0bccb110570cc43b0399542ca09e8483c170c"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3423",
-              "digest": "sha256:1fcf3693de92d6cca0fd6a6da0f1c9186487740738684eb91630a4c7de38533d"
-            },
-            {
-              "kind": "rfc",
-              "id": "review-evidence-compiler.md",
-              "digest": "sha256:5efaf3f84ef03c1b984dae8c564227bf0f3ae7e0f3b855e135d47efad48cbe3d"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3431",
-              "digest": "sha256:44e0185e353ce6d4ff1b3aebfc678d9f3e2dbe73adda47455151e10a18f64a36"
-            },
-            {
-              "kind": "rfc",
-              "id": "return-scheduling.md",
-              "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3634",
-              "digest": "sha256:b9f6f3ceba36518a8418ef5039eea675db37100ad169d48b6f87c4006364b8e1"
             }
           ]
         },

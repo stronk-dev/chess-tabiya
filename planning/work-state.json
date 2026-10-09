@@ -30133,6 +30133,15 @@
       "uxItems": [],
       "evidence": "planning/roadmap-1.0.json",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3638",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b8b08659ac4430f47147dd15bbe68d10c3404631e87403bff58d5fe2d2384d6c",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

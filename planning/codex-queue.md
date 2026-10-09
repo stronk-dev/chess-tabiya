@@ -12,6 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3638]] is closed locally under the accepted Review read/recovery contract. Single-flight
+automatic reads stay quiet; deliberate Refresh joins an existing read without another request.
+Failed, crossed and cited-node-missing replies retain the confirmed exact branch/selected move
+with visible retry; departed completions cannot attach. Two predecessor controls fail; mounted
+controls and four native desktop/phone journeys retain focus, geometry and unchanged saved play.
+Final local gates pass clean types/build, 4,232 software, seven unchanged-budget performance,
+239 content and 241 browser cases, one optional Maia skip, zero retries and 150 input/112
+composition cells. The first browser run hit coordinator-induced simultaneous web rebuilding;
+the full sequential rerun passes unchanged. Source/selection/permission, complete Review,
+official content and release obligations remain; no remote CI or readiness-to-push claim.
+
 [[D3637]] corrects the durable-state inventory's blanket recovery claim: migration landing
 does not prove all five subsystems' complete backup/restore and upgrade/rollback journeys.
 The current longitudinal revision-4 worker proof is narrower; D3574 and all remaining

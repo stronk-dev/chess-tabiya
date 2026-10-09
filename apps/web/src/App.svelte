@@ -369,6 +369,9 @@
   let importPreparation: { readonly runId: string; readonly writerId: string } | undefined = $state();
   let importGeneration = 0;
   let story: ReviewMap | undefined = $state();
+  let storyRefreshBusy = $state(false);
+  let storyRefreshFailed = $state(false);
+  let storyRefreshExplicit = $state(false);
   let storyShares: readonly StoryShare[] = $state([]);
   // rfc/review-map.md §4: a Compare handoff from the review, opened by the shipped N-way compare once
   // the run screen has loaded that run. Consumed exactly once.
@@ -939,6 +942,9 @@
     campaignSheetError = undefined;
     routeLoading = true;
     routeError = undefined;
+    storyRefreshBusy = false;
+    storyRefreshFailed = false;
+    storyRefreshExplicit = false;
     runPageError = undefined;
     runPageBusy = false;
     relatedPack = undefined;
@@ -1230,7 +1236,7 @@
   function syncStoryPolling(next: AppRoute): void {
     if (storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
     if (next.name !== "story") return;
-    storyPoll = setInterval(() => void refreshStory(next.runId, false), 1_000);
+    storyPoll = setInterval(() => void refreshStory(next.runId), 1_000);
   }
 
   async function fetchStory(runId: string, allowReveal: boolean, branchId?: string): Promise<ReviewMap> {
@@ -1258,26 +1264,45 @@
     return nextReview;
   }
 
-  async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
+  async function refreshStory(runId: string, explicit = false): Promise<void> {
     // Initial loading resolves a cited move's exact branch. A poll must not default to the
     // active branch (or reuse an earlier visit's branch) and supersede that route load.
-    if (routeLoading || routeError !== undefined || route.name !== "story" || route.runId !== runId || story?.runId !== runId) return;
+    if (!appMounted || routeLoading || routeError !== undefined ||
+      (storyRefreshFailed && !explicit) || route.name !== "story" || route.runId !== runId || story?.runId !== runId) return;
+    if(storyRefreshBusy){
+      if(explicit)storyRefreshExplicit=true;
+      return;
+    }
     const generation=loadGeneration;
     const refresh=++storyRefreshGeneration;
+    const branchId=story.branchId;
+    storyRefreshBusy=true;
+    storyRefreshExplicit=explicit;
     try{
-      const nextStory=await fetchStory(runId,allowReveal,story.branchId);
-      if(generation!==loadGeneration||refresh!==storyRefreshGeneration||route.name!=="story"||route.runId!==runId)return;
+      // Refresh never reveals, takes a lease, rewinds or forks. It reads the confirmed line,
+      // even if another device has since changed the game's active cursor.
+      const nextStory=await fetchStory(runId,false,branchId);
+      if(!storyRouteIsCurrent(runId,generation)||refresh!==storyRefreshGeneration)return;
       const citedNodeId = route.nodeId;
-      if (citedNodeId !== undefined && !nextStory.rows.some(row => row.nodeId === citedNodeId)) return;
+      if (citedNodeId !== undefined && !nextStory.rows.some(row => row.nodeId === citedNodeId)) throw new Error("Cited move missing from refreshed review");
       story=nextStory;
+      storyRefreshFailed=false;
       if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+      else if (!story.ready && storyPoll === undefined) syncStoryPolling(route);
     }catch{
-      // Background refresh retains the last good Story. Initial load failures use routeError.
+      // Retain the last confirmed review and selection, but don't disguise an unsuccessful
+      // refresh as current data or hammer a failing service with another poll every second.
+      if(storyRouteIsCurrent(runId,generation)&&refresh===storyRefreshGeneration){
+        storyRefreshFailed=true;
+        if(storyPoll!==undefined){clearInterval(storyPoll);storyPoll=undefined;}
+      }
+    }finally{
+      if(storyRouteIsCurrent(runId,generation)&&refresh===storyRefreshGeneration)storyRefreshBusy=false;
     }
   }
 
   function storyRouteIsCurrent(runId: string, generation: number): boolean {
-    return generation === loadGeneration && route.name === "story" && route.runId === runId;
+    return appMounted && generation === loadGeneration && route.name === "story" && route.runId === runId;
   }
 
   async function refreshStoryShares(runId: string, generation: number, refresh: number): Promise<void> {
@@ -2877,7 +2902,7 @@
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}{#key `${story.runId}:${story.branchId}:${route.name === 'story' ? route.nodeId ?? '' : ''}`}<ReviewMapScreen review={story} initialNodeId={route.name === 'story' ? route.nodeId : undefined} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />{/key}
+    {#if story}{#key `${story.runId}:${story.branchId}:${route.name === 'story' ? route.nodeId ?? '' : ''}`}<ReviewMapScreen review={story} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />{/key}
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">

@@ -3655,6 +3655,10 @@ review-navigation-browser-check:
 review-export-browser-check:
 	./node_modules/.bin/playwright test tests/browser/review-export.spec.ts
 
+.PHONY: review-refresh-browser-check
+review-refresh-browser-check:
+	./node_modules/.bin/playwright test tests/browser/review-refresh.spec.ts
+
 .PHONY: play-export-check play-export-browser-check
 play-export-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/app-shell.test.ts

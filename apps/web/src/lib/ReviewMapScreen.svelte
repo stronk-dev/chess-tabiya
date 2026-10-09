@@ -15,6 +15,9 @@
     review: ReviewMap;
     /** player-style §8: select the cited recorded move without changing the game. */
     initialNodeId?: string | undefined;
+    refreshBusy?: boolean;
+    refreshFailed?: boolean;
+    onRefresh?: (() => Promise<void>) | undefined;
     onRetry: (entryNodeId: string) => void | Promise<void>;
     onExport: () => void | Promise<void>;
     onVoice?: ((nodeId: string) => Promise<string>) | undefined;
@@ -26,7 +29,7 @@
     /** §7 / O7.3: the explicit, secondary Analyze reveal for one reviewed move. */
     onAnalyze?: ((nodeId: string) => Promise<ReviewAnalysisPage>) | undefined;
   }
-  let { review, initialNodeId, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze }: Props = $props();
+  let { review, initialNodeId, refreshBusy = false, refreshFailed = false, onRefresh, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze }: Props = $props();
 
   type RetryFailure = "retry.failed.board_held" | "retry.failed.forbidden" | "retry.failed.other";
   let selectedId = $state<string | undefined>();
@@ -313,12 +316,20 @@
       {#if !review.ready}<p class="pending" role="status">{reviewText("header.pending", { pending: review.pendingEvidence })}</p>{/if}
     </div>
     <div class="actions">
+      {#if onRefresh}<button type="button" data-review-refresh aria-disabled={refreshBusy} aria-describedby={refreshBusy || refreshFailed ? "review-refresh-message" : undefined} onclick={() => { if (!refreshBusy) void onRefresh(); }}>{refreshBusy ? reviewText("refresh.busy") : refreshFailed ? reviewText("refresh.retry") : reviewText("refresh.action")}</button>{/if}
       <button type="button" disabled={exportBusy} aria-describedby={exportBusy ? "review-export-status" : undefined} onclick={() => void exportGame()}>{exportBusy ? reviewText("action.exporting") : reviewText("action.export")}</button>
       {#if onShare}<button type="button" disabled={shareBusy} aria-describedby="review-share-lifetime" onclick={() => void createShare()}>{reviewText("share.action")}</button>{/if}
       <a href="/review">{reviewText("action.back")}</a>
       {#if review.campaignOrigin}<a href={`/campaign/${encodeURIComponent(review.campaignOrigin.campaignRunId)}`}>{reviewText("action.campaign")}</a>{/if}
     </div>
   </header>
+  {#if onRefresh}
+    <div class="review-refresh-status">
+      {#if refreshBusy}<p id="review-refresh-message" role="status">{reviewText("refresh.status")}</p>
+      {:else if refreshFailed}<p id="review-refresh-message" role="alert">{reviewText("refresh.failed")}</p>
+      {:else}<p>{reviewText("refresh.hint")}</p>{/if}
+    </div>
+  {/if}
   {#if exportBusy}<p id="review-export-status" role="status">{reviewText("action.exporting.status")}</p>{/if}
   {#if exportFailed}<p role="alert">{reviewText("action.export.failed")}</p>{/if}
 
@@ -447,6 +458,9 @@
   .muted,.provenance{color:var(--muted);font-size:.85rem}
   .review-header{display:flex;justify-content:space-between;align-items:start;gap:1rem}
   .actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  .review-refresh-status{min-height:3.9em;font-size:.85rem;color:var(--muted)}
+  [data-review-refresh]{min-inline-size:12rem}
+  [data-review-refresh][aria-disabled="true"]{opacity:.65;cursor:wait}
   .pending,.retry-unavailable{padding:.5rem .7rem;border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:.5rem}
   .accuracy{display:grid;gap:.25rem;padding:.7rem;border:1px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:.6rem;background:var(--panel)}
   .review-body{display:grid;grid-template-columns:minmax(16rem,22rem) minmax(18rem,1fr) minmax(16rem,22rem);gap:1rem;align-items:start}

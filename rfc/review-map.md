@@ -419,6 +419,13 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
 
 ## Changelog
 
+- 2026-10-09 — D3638 read/recovery repair: pending reads are single-flight rather than superseded
+  each second. Failed/crossed refreshes keep the last confirmed exact branch and selected move,
+  stop polling and expose deliberate retry; departed responses cannot publish or clear a new
+  view's pending state. Refresh never reveals, claims, rewinds or forks; current evidence
+  coordination, selection, source, permission and discharge obligations are unchanged. Automatic
+  polling is quiet; explicit Refresh joins any in-flight read and announces its busy state once.
+
 - 2026-10-07 — D3541/D3542 recorded-move entry repair: an optional exact node selects its stored branch and row without board mutation; missing nodes/branches and mismatched branch responses fail rather than selecting another move. `RunService.#storyContext` now admits the accepted unfinished recorded prefix. Its current reveal window must be open and live/rated contest restrictions still apply; completed/imported review preserves existing disclosure. Actual application, mounted and native browser checks cover the path. This changes no chess judgement or accepted packet vocabulary and does not complete all Review sources/return workflows.
 
 - **2026-09-24 (Analyze line restored)** — after the Review evidence compiler landed, Analyze always

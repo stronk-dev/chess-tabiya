@@ -359,7 +359,7 @@ describe("application shell", () => {
     await unmount(component);
   });
 
-  it("keeps the newest Story poll when an older refresh resolves last", async () => {
+  it("keeps the newest Story view when a departed refresh resolves last", async () => {
     vi.useFakeTimers();
     history.replaceState(null, "", "/review/game/route-run");
     const storyWith = (white: string, ready: boolean): ReviewMap => reviewPayload({ runId: "route-run", branchId: "main", ready, source: { kind: "pgn_paste", headers: { White: white, Black: "Black" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" } });
@@ -375,14 +375,18 @@ describe("application shell", () => {
         return newer.promise;
       },
     };
-    const component = mount(App, { target: target(), props: { api: storyApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: storyApi, router, storage: new MemoryStorage() } });
     await vi.advanceTimersByTimeAsync(0);
     await tick();
     expect(document.body.textContent).toContain("Initial – Black");
 
     await vi.advanceTimersByTimeAsync(1_000);
     expect(storyCalls).toBe(2);
-    await vi.advanceTimersByTimeAsync(1_000);
+    router.navigate("/review");
+    await vi.advanceTimersByTimeAsync(0);
+    router.navigate("/review/game/route-run");
+    await vi.advanceTimersByTimeAsync(0);
     expect(storyCalls).toBe(3);
     newer.resolve(storyWith("Newer", true));
     await vi.advanceTimersByTimeAsync(0);
@@ -396,6 +400,112 @@ describe("application shell", () => {
     expect(document.body.textContent).not.toContain("Older – Black");
     await unmount(component);
     vi.useRealTimers();
+  });
+
+  it("publishes a slow Review poll without overlapping or starving it", async () => {
+    vi.useFakeTimers();
+    history.replaceState(null, "", "/review/game/route-run");
+    const initial = reviewPayload({ runId: "route-run", branchId: "confirmed-line", source: { kind: "native" }, ready: false });
+    const slow = deferred<ReviewMap>();
+    const review = vi.fn(async (): Promise<ReviewMap> => review.mock.calls.length === 1 ? initial : slow.promise);
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), review }, router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    try {
+      await vi.advanceTimersByTimeAsync(1_000);
+      expect(review).toHaveBeenCalledTimes(2);
+      expect(document.querySelector(".review-refresh-status [role='status']")).toBeNull();
+      document.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+      await tick();
+      expect(document.querySelector(".review-refresh-status [role='status']")?.textContent).toContain("Reading this recorded line again");
+      expect(review).toHaveBeenCalledTimes(2);
+      await vi.advanceTimersByTimeAsync(4_000);
+      expect(review).toHaveBeenCalledTimes(2);
+      slow.resolve({ ...initial, ready: true, pendingEvidence: 0 });
+      await vi.advanceTimersByTimeAsync(0);
+      await tick();
+      expect(document.querySelector(".review-header [role='status']")).toBeNull();
+      expect(document.body.textContent).not.toContain("Evaluation pending for");
+      await vi.advanceTimersByTimeAsync(2_000);
+      expect(review).toHaveBeenCalledTimes(2);
+      expect(review.mock.calls[1]).toEqual(["route-run", "confirmed-line"]);
+    } finally { await unmount(component); vi.useRealTimers(); }
+  });
+
+  it("shows failed/crossed Review refreshes and retries the same selected line without replaying writes", async () => {
+    history.replaceState(null, "", "/review/game/recover-review");
+    const recorded = reviewFixtureRun({ id: "recover-review", plies: 4 });
+    const branchId = recorded.branches[0]!.id;
+    const confirmed: ReviewMap = { ...reviewPayload({ runId: recorded.id, branchId, source: { kind: "native" } }), ...reviewMapProjection({
+      run: recorded, branchId, story: storyMomentsForRun(recorded, branchId), context: "review",
+      viewer: { role: "learner", session: "pack" },
+    }), ready: true, pendingEvidence: 0 };
+    const pending = deferred<ReviewMap>();
+    const review = vi.fn(async (): Promise<ReviewMap> => {
+      if (review.mock.calls.length === 2) throw new Error("private transport details");
+      if (review.mock.calls.length === 3) return { ...confirmed, branchId: "crossed-line" };
+      if (review.mock.calls.length === 4) return pending.promise;
+      return confirmed;
+    });
+    const commands = { reveal: vi.fn(api().reveal), rewind: vi.fn(api().rewind), fork: vi.fn(api().fork), claimLease: vi.fn() };
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), ...commands, review }, router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    const refresh = (): HTMLButtonElement => document.querySelector<HTMLButtonElement>('[data-review-refresh]')!;
+    try {
+      await vi.waitFor(() => expect(document.querySelectorAll(".move-select")).toHaveLength(4));
+      document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
+      await tick();
+      refresh().click();
+      await vi.waitFor(() => expect(document.querySelector(".review-refresh-status [role='alert']")?.textContent).toContain("last confirmed review"));
+      expect(document.body.textContent).not.toContain("private transport details");
+      expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(confirmed.rows[2]!.nodeId);
+      refresh().click();
+      await vi.waitFor(() => expect(review).toHaveBeenCalledTimes(3));
+      await vi.waitFor(() => expect(refresh().getAttribute("aria-disabled")).not.toBe("true"));
+      expect(document.querySelector(".review-refresh-status [role='alert']")).not.toBeNull();
+      expect(document.querySelectorAll(".move-select")).toHaveLength(4);
+      refresh().focus();
+      refresh().click();
+      await vi.waitFor(() => expect(refresh().getAttribute("aria-disabled")).toBe("true"));
+      refresh().click();
+      expect(review).toHaveBeenCalledTimes(4);
+      expect(document.activeElement).toBe(refresh());
+      pending.resolve(confirmed);
+      await vi.waitFor(() => expect(refresh().getAttribute("aria-disabled")).not.toBe("true"));
+      expect(document.querySelector(".review-refresh-status [role='alert']")).toBeNull();
+      expect(document.activeElement).toBe(refresh());
+      expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(confirmed.rows[2]!.nodeId);
+      expect(review.mock.calls.slice(1)).toEqual(Array.from({ length: 3 }, () => [recorded.id, branchId]));
+      for (const command of Object.values(commands)) expect(command).not.toHaveBeenCalled();
+    } finally { pending.resolve(confirmed); await unmount(component); }
+  });
+
+  it("makes a failed automatic Review poll explicit and waits for deliberate recovery", async () => {
+    vi.useFakeTimers();
+    history.replaceState(null, "", "/review/game/route-run");
+    const initial = reviewPayload({ runId: "route-run", branchId: "confirmed-line", source: { kind: "native" }, ready: false });
+    const review = vi.fn(async (): Promise<ReviewMap> => {
+      if (review.mock.calls.length === 2) throw new Error("private polling error");
+      return { ...initial, ...(review.mock.calls.length > 2 ? { ready: true, pendingEvidence: 0 } : {}) };
+    });
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), review }, router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    try {
+      await vi.advanceTimersByTimeAsync(1_000);
+      await tick();
+      expect(document.querySelector(".review-refresh-status [role='alert']")?.textContent).toContain("last confirmed review");
+      expect(document.querySelector(".review-map")).not.toBeNull();
+      await vi.advanceTimersByTimeAsync(4_000);
+      expect(review).toHaveBeenCalledTimes(2);
+      document.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+      await vi.advanceTimersByTimeAsync(0);
+      await tick();
+      expect(review).toHaveBeenCalledTimes(3);
+      expect(document.querySelector(".review-refresh-status [role='alert']")).toBeNull();
+      expect(document.body.textContent).not.toContain("Evaluation pending for");
+    } finally { await unmount(component); vi.useRealTimers(); }
   });
 
   it("does not let polling replace a slow cited Review load with the active branch", async () => {
@@ -431,6 +541,65 @@ describe("application shell", () => {
       await unmount(component);
       vi.useRealTimers();
     }
+  });
+
+  it.each(["success", "failure"] as const)("retires a departed Review refresh's %s without locking the replacement view", async (settlement) => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const old = deferred<ReviewMap>();
+    const initial = reviewPayload({ runId: "route-run", branchId: "old-line", source: { kind: "native" } });
+    const replacement = reviewPayload({ runId: "replacement-review", branchId: "new-line", source: { kind: "native" } });
+    const review = vi.fn(async (id: string): Promise<ReviewMap> => id !== initial.runId ? replacement
+      : review.mock.calls.length === 1 ? initial : old.promise);
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: { ...api(), review }, router, storage: new MemoryStorage() } });
+    try {
+      await vi.waitFor(() => expect(document.querySelector('[data-review-refresh]')).not.toBeNull());
+      document.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+      await vi.waitFor(() => expect(review).toHaveBeenCalledTimes(2));
+      router.navigate(`/review/game/${replacement.runId}`);
+      await vi.waitFor(() => expect(review).toHaveBeenCalledTimes(3));
+      await vi.waitFor(() => expect(document.querySelector('[data-review-refresh]')).not.toBeNull());
+      await tick();
+      if (settlement === "success") old.resolve({ ...initial, storyTitle: "Departed response" });
+      else old.reject(new Error("departed failure"));
+      await tick();
+      await tick();
+      const refresh = document.querySelector<HTMLButtonElement>('[data-review-refresh]')!;
+      expect(refresh.getAttribute("aria-disabled")).not.toBe("true");
+      expect(document.querySelector(".review-refresh-status [role='alert']")).toBeNull();
+      expect(document.body.textContent).not.toContain("Departed response");
+      refresh.click();
+      await vi.waitFor(() => expect(review).toHaveBeenCalledTimes(4));
+      expect(review.mock.calls[3]).toEqual([replacement.runId, replacement.branchId]);
+    } finally { old.resolve(initial); await unmount(component); }
+  });
+
+  it("does not silently drop a cited move when a refreshed line omits it", async () => {
+    const recorded = reviewFixtureRun({ id: "cited-refresh", plies: 4 });
+    const branchId = recorded.branches[0]!.id;
+    const node = recorded.nodes[3]!;
+    const empty = reviewPayload({ runId: recorded.id, branchId, source: { kind: "native" } });
+    const confirmed: ReviewMap = { ...empty, ...reviewMapProjection({ run: recorded, branchId,
+      story: storyMomentsForRun(recorded, branchId), context: "review", viewer: { role: "learner", session: "pack" } }) };
+    const review = vi.fn(async (_id: string, _branchId?: string): Promise<ReviewMap> => review.mock.calls.length === 2 ? empty : confirmed);
+    history.replaceState(null, "", `/review/game/${recorded.id}?node=${encodeURIComponent(node.id)}`);
+    const component = mount(App, { target: target(), props: { api: { ...api(), review,
+      async graph() { return { ...(await api().graph(recorded.id)), id: recorded.id, nodes: recorded.nodes,
+        branches: recorded.branches, activeCursor: recorded.activeCursor }; },
+    }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    try {
+      await vi.waitFor(() => expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(node.id));
+      document.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+      await vi.waitFor(() => expect(document.querySelector(".review-refresh-status [role='alert']")?.textContent).toContain("last confirmed review"));
+      expect(document.querySelectorAll(".move-select")).toHaveLength(4);
+      expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(node.id);
+      document.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+      await vi.waitFor(() => expect(review).toHaveBeenCalledTimes(3));
+      await vi.waitFor(() => expect(document.querySelector('[data-review-refresh]')?.getAttribute("aria-disabled")).not.toBe("true"));
+      expect(document.querySelector(".review-refresh-status [role='alert']")).toBeNull();
+      expect(document.querySelector(".move-row.selected")?.getAttribute("data-node-id")).toBe(node.id);
+      expect(review.mock.calls.every(call => call[0] === recorded.id && call[1] === branchId)).toBe(true);
+    } finally { await unmount(component); }
   });
 
   it("does not publish a departed Story share into the next game", async () => {

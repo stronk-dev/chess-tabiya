@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3637]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3638]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,7 +53,29 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3636]] follows the exact moved pawn and unordered connected-pair
+Latest completed batch: [[D3638]] finishes Review read recovery. Single-flight automatic polling
+stays quiet and publishes slow replies; deliberate Refresh joins an existing read. Failed,
+crossed or cited-node-missing replies keep the last confirmed exact branch and selected move
+with visible retry. Departed replies cannot attach; desktop/phone recovery preserves focus,
+geometry and saved play without replaying game commands. Two predecessor controls fail;
+permanent mounted controls and four native recovery journeys pass. Final normal local gates
+pass clean types/build, 4,232 software / 362 files, seven unchanged-budget performance cases,
+239 content cases and 241 browser passes (176 smoke, five content, 59 matrix, one packaged-default),
+one optional Maia skip, zero retries and 150 input/112 composition cells. The first browser
+attempt hit my simultaneous web rebuilding; the complete sequential rerun passes unchanged.
+The ledger now has 3,387 rows: 1,516 done, 161 refused and 1,710 live (628 todo, fourteen doing,
+1,068 blocked), zero untriaged. Of the historical closures, 462 still have prose-only evidence;
+they are not fresh delivery proof. UX remains 273 complete / 272 live / 24 retired. Product
+RFCs remain 42 implementing / ten awaiting / 22 draft; the archive records 75 implemented and
+one superseded, not 75 freshly re-audited complete product features. All fourteen whole
+capabilities remain incomplete; milestones four active/five blocked. There are 86 production
+pack documents but zero official graduates. Canonical validation remains 63 passing cases over
+81 subjects, zero fully qualified subjects. The product inventory above names delivered web
+journeys and remaining release obligations; green tracking/tests alone do not prove their
+usefulness, complete semantic coverage or deployment. No whole Review, milestone, remote CI,
+native release or readiness-to-push promotion.
+
+Previous completed batch: [[D3636]] follows the exact moved pawn and unordered connected-pair
 identity: advancing an existing protected/connected passer no longer manufactures new gains.
 Genuine new protection and separate advancement survive sealed factories, complete candidates
 and unchanged saved play. Four predecessor controls fail; 501 foundation/65 longitudinal cases
@@ -76,7 +98,7 @@ in `rfc/semantic-validation-authority.md` §4.3a and 63 disposable counterexampl
 total matrix checks). The current production adapter is still broken; independent review,
 implementation and permanent runner tests remain. `make semantic-validation-check` confirms
 the same 63 passing canonical cases and zero fully qualified subjects. This advances a contract,
-not a feature or milestone. The latest completed production batch is D3636 above.
+not a feature or milestone. The latest completed production batch is D3638 above.
 
 Previous completed batch: [[D3634]] completes in-game Campaign failed/pending read recovery.
 Read-only retry restores the same saved encounter or confirmed seal without repeating commands;

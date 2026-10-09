@@ -30,6 +30,12 @@ export const REVIEW_MAP_TEMPLATES = Object.freeze({
   "action.exporting": "Preparing export…",
   "action.exporting.status": "Preparing the recorded game and its branches.",
   "action.export.failed": "The game export could not be prepared. Try again.",
+  "refresh.action": "Refresh review",
+  "refresh.retry": "Retry loading review",
+  "refresh.busy": "Refreshing review…",
+  "refresh.status": "Reading this recorded line again. Your selected move stays here.",
+  "refresh.hint": "Refresh checks this recorded line without playing any moves.",
+  "refresh.failed": "Review refresh failed. Showing the last confirmed review; try loading it again.",
   // Accuracy (§6)
   "accuracy.title": "Accuracy",
   "accuracy.rendered": "{side}: {value}% under {convention} — 100 minus the mean win-point drop across all {decisions} of {side}'s evaluated decisions. It is not comparable to another site's accuracy figure.",
