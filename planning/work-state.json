@@ -30115,6 +30115,24 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/king-state.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3636",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d2567aabe5a56328328bcf5a59ef156781f7c99a4a84486273b03db684e28f9c",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/pawn-dynamics.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3637",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9765339354ce3b5c22ae8eddb04d7fc7f98d1fcb4202c3efdde35131c04b25b6",
+      "uxItems": [],
+      "evidence": "planning/roadmap-1.0.json",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -6,6 +6,10 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
+import { CANDIDATE_EVENTS_SCOPE, compileCandidatePopulation } from "./candidate-population.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { localSemanticEvents } from "./semantic-evidence.js";
+import { commitMove, createRun } from "./runtime.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactTimingSequence, pawnContactsReading, pawnDynamicsEvents, pawnTransitionEvents, promotionRaceGeometry, promotionRaceTablebase, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 
 function after(fen: string, uci: string): string {
@@ -115,6 +119,68 @@ describe("identity-retaining pawn dynamics", () => {
       kind: "candidate_majority_gained",
       subjects: expect.objectContaining({ pawn: expect.objectContaining({ square: "e5" }) }),
     }));
+  });
+
+  it.each([
+    { side: "white", fen: "4k3/8/8/3P4/2P5/8/8/4K3 w - - 0 1", move: "d5d6" },
+    { side: "black", fen: "4k3/8/8/2p5/3p4/8/8/4K3 b - - 0 1", move: "d4d3" },
+  ])("does not create an existing connected $side pair again when its pawn advances", ({ fen, move }) => {
+    const before = pawnContactsReading(fen), next = after(fen, move), current = pawnContactsReading(next);
+    expect(before.connectedPassedPairs).toHaveLength(1);
+    expect(current.connectedPassedPairs).toHaveLength(1);
+    expect(pawnDynamicsEvents(fen, move, next).filter(event => event.kind === "connected_passer_pair_gained")).toEqual([]);
+    expect(pawnTransitionEvents(fen, move, next).map(event => event.kind)).toContain("passed_pawn_advanced");
+  });
+
+  it.each([
+    { side: "white", fen: "4k3/8/8/2PP4/2P5/8/8/4K3 w - - 0 1", move: "d5d6", from: "d5", to: "d6" },
+    { side: "black", fen: "4k3/8/8/2p5/2pp4/8/8/4K3 b - - 0 1", move: "d4d3", from: "d4", to: "d3" },
+  ])("does not create retained protection or connected $side pairs again across an advance", ({ fen, move, from, to }) => {
+    const next = after(fen, move), before = pawnContactsReading(fen), current = pawnContactsReading(next);
+    expect(before.passed.find(entry => entry.pawn.square === from)).toMatchObject({ passed: true, protectedBy: [expect.anything()] });
+    expect(current.passed.find(entry => entry.pawn.square === to)).toMatchObject({ passed: true, protectedBy: [expect.anything()] });
+    expect(before.connectedPassedPairs).toHaveLength(2);
+    expect(current.connectedPassedPairs).toHaveLength(2);
+    expect(pawnDynamicsEvents(fen, move, next).filter(event => event.kind === "protected_passer_gained" || event.kind === "connected_passer_pair_gained")).toEqual([]);
+  });
+
+  it.each([
+    { side: "white", fen: "4k3/8/8/2PP4/8/8/8/4K3 w - - 0 1", move: "d5d6", to: "d6" },
+    { side: "black", fen: "4k3/8/8/8/2pp4/8/8/4K3 b - - 0 1", move: "d4d3", to: "d3" },
+  ])("retains a genuinely new $side protection gain while the connected pair persists", ({ fen, move, to }) => {
+    const next = after(fen, move), events = pawnDynamicsEvents(fen, move, next);
+    expect(events.filter(event => event.kind === "protected_passer_gained")).toEqual([expect.objectContaining({ subjects: expect.objectContaining({ pawn: expect.objectContaining({ square: to }) }) })]);
+    expect(events.filter(event => event.kind === "connected_passer_pair_gained")).toEqual([]);
+  });
+
+  it.each([
+    { side: "white", fen: "4k3/8/8/2PP4/2P5/8/8/4K3 w - - 0 1", move: "d5d6" },
+    { side: "black", fen: "4k3/8/8/2p5/2pp4/8/8/4K3 b - - 0 1", move: "d4d3" },
+    { side: "white double advance", fen: "4k3/8/8/3P4/8/8/2P5/4K3 w - - 0 1", move: "c2c4" },
+    { side: "black double advance", fen: "4k3/2p5/8/8/3p4/8/8/4K3 b - - 0 1", move: "c7c5" },
+  ])("retains $side pawn identity through sealed factories, complete candidates and saved play", ({ side, fen, move }) => {
+    const next = after(fen, move);
+    const gains = (events: readonly { kind: string }[]) => events.filter(event => event.kind === "protected_passer_gained" || event.kind === "connected_passer_pair_gained");
+    // Double advances protect the stationary passer for the first time, but do not create
+    // the already-connected pair again. Single advances retain both properties.
+    const expected = side.includes("double") ? ["protected_passer_gained"] : [];
+    const sealed = invokeEvidenceValueRoute("rules.pawn.event.dynamics@1", { beforeFen: fen, moveUci: move, afterFen: next });
+    expect(gains(sealed.map(item => item.payload)).map(item => item.kind)).toEqual(expected);
+    const population = compileCandidatePopulation({ beforeFen: fen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+    if (population.kind !== "ready") throw new Error(JSON.stringify(population.error));
+    expect(population.receipt.packet.candidates).toHaveLength(population.receipt.packet.legalMoves.length);
+    const candidate = population.receipt.packet.candidates.find(item => item.moveUci === move)!;
+    expect(gains(candidate.events.filter(item => item.projection.id === "rules.pawn.event.dynamics").map(item => item.operands as { kind: string })).map(item => item.kind)).toEqual(expected);
+    const at = "2026-10-09T00:00:00.000Z";
+    const initial = createRun({ id: `pawn-${side}`, packId: "pawn-boundary", packDigest: `sha256:${"0".repeat(64)}`, startFen: fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    const run = commitMove(initial, move, { at }).run;
+    const saved = JSON.parse(JSON.stringify(run)) as typeof run;
+    const child = saved.nodes.at(-1)!, parent = saved.nodes.find(node => node.id === child.parentId)!;
+    expect(child.fen).toBe(next);
+    const events = localSemanticEvents(parent.fen, child.moveUci!, child.fen);
+    expect(gains(events.filter(item => item.projection.id === "rules.pawn.event.dynamics").map(item => item.operands as { kind: string })).map(item => item.kind)).toEqual(expected);
+    expect(events.some(item => item.projection.id === "derived.pawn.event.transitions" && (item.operands as { kind: string }).kind === "passed_pawn_advanced")).toBe(true);
+    expect(saved).toEqual(run);
   });
 
   it("joins contact execution and passed-pawn transitions to exact move identity", () => {

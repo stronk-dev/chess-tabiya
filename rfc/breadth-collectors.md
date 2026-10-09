@@ -1,5 +1,11 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
+- **Implementation correction (2026-10-09, D3636):** §3.3's protected-passer and connected-pair
+  gains retain the exact moving pawn's identity; unordered pair identity survives enumeration
+  changes. Advancing an existing property is not a new gain. Genuine creation and separate
+  advancement remain, through factories, complete candidates and saved play; the existing
+  longitudinal revision-4 rebuild updates prior histories. No new projection, eligibility or judgement.
+
 - **Implementation correction (2026-10-09, D3635):** §3.7's adjacent king escapes use physical
   castling landing squares, not friendly-rook UCI addresses. Stationary/distant landings do not
   enter the set; adjacent ordinary/castling landings deduplicate. Both-color reading, factory,

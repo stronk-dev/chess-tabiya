@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3635]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3637]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,26 +53,30 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3635]] repairs physical king escapes: castling's friendly-rook UCI
-address no longer becomes a highlighted escape. Stationary/distant king landings are excluded;
-adjacent landings are deduplicated. Eighteen corrected predecessor controls fail; 491 focused
-foundation cases/types pass, including sealed factories/events, complete candidates, unchanged
-saved play and actual authenticated Inspector output. Complete normal local gates pass clean
-types/build, 4,216 software / 362 files, seven unchanged-budget performance, 239 content and 237
-browser cases, one optional Maia skip, zero retries and 150 input/112 composition cells. Current
-ledger: 3,384 rows, 1,513 done, 161 refused, 1,710 live and zero untriaged. All fourteen whole
-capabilities remain incomplete, four milestones active/five blocked, zero official graduates and
-UX 273 complete/272 live/24 retired. All 63 canonical validation cases pass over 81 subjects;
-zero subjects are fully qualified and D3629's recorded-sequence adapter remains held. This is
-a collector correctness repair, not a new judgement, source, permission, calibrated bot,
-skill credit, content graduation, whole feature, remote CI or release proof.
+Latest completed batch: [[D3636]] follows the exact moved pawn and unordered connected-pair
+identity: advancing an existing protected/connected passer no longer manufactures new gains.
+Genuine new protection and separate advancement survive sealed factories, complete candidates
+and unchanged saved play. Four predecessor controls fail; 501 foundation/65 longitudinal cases
+and clean types pass. Existing revision 4 rebuilds old histories through the real application
+worker without changing the 67-member registry or attribution. Complete normal local gates pass
+clean types/build, 4,226 software / 362 files, seven unchanged-budget performance, 239 content
+and 237 browser cases, one optional Maia skip, zero retries and 150 input/112 composition cells.
+[[D3637]] separately corrects the durable-state checkpoint's blanket recovery claim; migration
+landing is not all-family backup/restore and upgrade/rollback proof. D3574 and all remaining
+cross-system lifecycle/release obligations remain. Current ledger: 3,386 rows, 1,515 done,
+161 refused, 1,710 live and zero untriaged. All fourteen whole capabilities remain incomplete,
+four milestones active/five blocked, zero official graduates and UX 273 complete/272 live/24
+retired. All 63 canonical validation cases pass over 81 subjects; zero subjects are fully
+qualified and D3629's recorded-sequence adapter remains held. D3635's physical king-escape
+repair stands. No new judgement, source, permission, calibrated bot, skill credit, authored pack,
+content graduation, whole feature, remote CI or release proof.
 
 In-flight authoring is now finished: D3629 has a draft exact recorded-window reach amendment
 in `rfc/semantic-validation-authority.md` §4.3a and 63 disposable counterexample checks (79
 total matrix checks). The current production adapter is still broken; independent review,
 implementation and permanent runner tests remain. `make semantic-validation-check` confirms
 the same 63 passing canonical cases and zero fully qualified subjects. This advances a contract,
-not a feature or milestone. The latest completed production batch remains D3635 above.
+not a feature or milestone. The latest completed production batch is D3636 above.
 
 Previous completed batch: [[D3634]] completes in-game Campaign failed/pending read recovery.
 Read-only retry restores the same saved encounter or confirmed seal without repeating commands;

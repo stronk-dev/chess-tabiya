@@ -47,7 +47,13 @@ Retained-piece mobility follows the physical castling rook as well as ordinary B
 The rook's before/after squares and legal/local-non-losing destination changes survive factories,
 candidate packets and Inspector serialization. A stationary castling rook remains `moved: false`;
 changed destinations do not imply relocation. Existing saved histories rebuild through longitudinal
-derivation revision 3 without changing recorded play, projection membership or learner permissions.
+derivation revision 4 without changing recorded play, projection membership or learner permissions.
+
+Pawn protection and connected-pair gains follow the exact moved pawn across its legal edge;
+an advance does not create an existing property again. Pair identity is unordered, so a changed
+enumeration order also cannot become a gain. Genuine newly protected passers remain gains and
+passed-pawn advancement remains a separate fact. The same repair reaches sealed factories,
+complete candidate packets, saved-run reconstruction and revision-4 learner-history rebuilds.
 
 The current semantic-collector checkpoint adds the exact defender-duty reading, defender
 removal/relocation events, the four-clause overload-response predicate, a bounded forced-mate proof,

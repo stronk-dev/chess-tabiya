@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:361d221f48bcc92f797bd644f027539bf43ecc18b8904f2b087decb4f5b5c7f7",
+    "roadmap": "sha256:d49e3dc423f154b70329d0c72afdfaee4ccefd43c353007ec13335195b19deb6",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:cc9c496da5a846318cffd881bdac72065751d76da64a2dac788857321bddae53",
+    "workState": "sha256:c5743c12dff952aac3057c1e95f4501cd8b47d5309983f9e2d8b4aaeb4d924e3",
     "rfcRegister": "sha256:208918383a6b01ffad033b6584fa50e16c908669d0597405bd64968d11509e72",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1068,
-      "done": 1513,
+      "done": 1515,
       "refused": 161
     },
     "workItems": {
@@ -201,7 +201,7 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3635 repairs king-escape evidence by resolving legal castling to the physical king landing before adjacency and deduplication, excluding phantom friendly-rook addresses and stationary/distant landings. Eighteen corrected predecessor controls fail; 491 focused foundation cases and clean types pass, including sealed readings/events, complete candidates, unchanged saved play and actual authenticated Inspector output. Complete normal local gates pass clean types/build, 4216 software cases/362 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 237 browser passes (172 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3631's consecutive-reply harassment repair stands. D3628's 63 canonical cases over 81 subjects remain passing with zero fully qualified subjects; D3629's sequence-parent adapter is not certified. No new source, motif, safety judgement, learner eligibility, official content, whole capability, milestone, native release or remote CI claim.",
+        "summary": "D3636 repairs existing pawn-gain identity under breadth-collectors section 3.3: advancing an already protected or connected passer does not create its properties again, including reordered pairs and both colors. Four predecessor controls fail; genuine protection and separate advancement survive sealed factories, complete candidates and unchanged saved play. All 501 foundation/65 longitudinal cases and clean types pass; current revision 4 rebuilds old histories through the real startup worker without changing the 67-member registry or attribution. Complete normal local gates pass clean types/build, 4226 software cases/362 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 237 browser passes (172 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3635's physical king-escape and D3631's consecutive-reply repairs stand. All 63 canonical cases over 81 subjects pass with zero fully qualified subjects; D3629's sequence-parent adapter remains held. No new source, motif, judgement, eligibility, official content, whole capability, milestone, native release or remote CI claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/installed-opening-evidence.md",
@@ -313,8 +313,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D3635",
-            "digest": "sha256:05e93a6765f660c344916dc0571b8ed0026d69cf9b2f755c4bf22f70512cb556"
+            "id": "D3636",
+            "digest": "sha256:d2567aabe5a56328328bcf5a59ef156781f7c99a4a84486273b03db684e28f9c"
           },
           {
             "kind": "rfc",
@@ -1005,12 +1005,17 @@
       ],
       "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
       "latestCheckpoint": {
-        "at": "2026-09-24",
-        "summary": "Five durable migrations landed in register order today — longitudinal store (26), evidence jobs (27), concept registry (28), bot run lane (29) and campaign-core (30) — so learner history, queued evidence, concept identity, chosen bots and campaign runs all survive restart, backup/restore and upgrade/rollback. Catalogue progression (31) and the social/clock lanes remain.",
+        "at": "2026-10-09",
+        "summary": "D3637 corrects the blanket all-family recovery claim. Five migrations landed on September 24: longitudinal store (26), evidence jobs (27), concept registry (28), bot run lane (29) and campaign-core (30). Their durable implementations exist; landing migrations does not establish complete integrated backup/restore or upgrade/rollback. D3636's current longitudinal revision 4 rebuilds completed revision-1/2/3 histories through the actual file-backed application worker, retaining both-color pawn advancement while removing false gained properties; 65 longitudinal cases and clean types pass. Catalogue progression, social/clock contracts, complete cross-system lifecycle/recovery and D3574's native appliance capacity hold remain. No whole milestone or release promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
           "planning/campaign/implementation-receipt-2026-09-24.md",
+          "apps/server/src/longitudinal-registry.ts",
+          "apps/server/src/longitudinal-contract.test.ts",
+          "apps/server/src/longitudinal-worker.test.ts",
+          "docs/longitudinal-store.md",
+          "rfc/longitudinal-store.md",
           "rfc/campaign-core.md",
           "rfc/campaign-boss-games.md",
           "rfc/intent-presets.md"
@@ -1035,6 +1040,21 @@
             "kind": "work_state",
             "id": "D2991",
             "digest": "sha256:0538e872b3ef7b98b15ef22efb071daccd9b5c0334f643cc815d163e4a786f92"
+          },
+          {
+            "kind": "rfc",
+            "id": "longitudinal-store.md",
+            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3636",
+            "digest": "sha256:d2567aabe5a56328328bcf5a59ef156781f7c99a4a84486273b03db684e28f9c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3637",
+            "digest": "sha256:9765339354ce3b5c22ae8eddb04d7fc7f98d1fcb4202c3efdde35131c04b25b6"
           }
         ]
       },

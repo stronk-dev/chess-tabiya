@@ -228,11 +228,18 @@ export function pawnDynamicsEvents(beforeFen: string, moveUci: string, afterFen:
       if (!existedBefore) add("minor_harassed", { pawn: identity(afterPosition, edge.move.to), minor: identity(afterPosition, target) });
     }
   }
-  const priorProtected = keys(before.passed.filter((value) => value.passed && value.protectedBy.length > 0), (value) => `${value.pawn.piece.color}:${value.pawn.square}`);
-  for (const value of after.passed.filter((entry) => entry.passed && entry.protectedBy.length > 0)) if (!priorProtected.has(`${value.pawn.piece.color}:${value.pawn.square}`)) add("protected_passer_gained", value);
-  const pairKey = (value: PawnContactsReading["connectedPassedPairs"][number]) => `${value.first.piece.color}:${value.first.square}:${value.second.square}`;
-  const priorPairs = keys(before.connectedPassedPairs, pairKey);
-  for (const value of after.connectedPassedPairs) if (!priorPairs.has(pairKey(value))) add("connected_passer_pair_gained", value);
+  const pawnKey = (pawn: PawnIdentity, previous = false): string => {
+    // Only this legal edge's pawn changes address. Its existing properties are not new gains.
+    const square = previous && edge.moving.role === "pawn" && pawn.piece.color === edge.moving.color && pawn.square === makeSquare(edge.move.to)
+      ? makeSquare(edge.move.from) : pawn.square;
+    return `${pawn.piece.color}:${square}`;
+  };
+  const priorProtected = keys(before.passed.filter((value) => value.passed && value.protectedBy.length > 0), (value) => pawnKey(value.pawn));
+  for (const value of after.passed.filter((entry) => entry.passed && entry.protectedBy.length > 0)) if (!priorProtected.has(pawnKey(value.pawn, true))) add("protected_passer_gained", value);
+  // The same unordered pair can change display order after either pawn advances.
+  const pairKey = (value: PawnContactsReading["connectedPassedPairs"][number], previous = false) => [pawnKey(value.first, previous), pawnKey(value.second, previous)].sort().join(":");
+  const priorPairs = keys(before.connectedPassedPairs, (value) => pairKey(value));
+  for (const value of after.connectedPassedPairs) if (!priorPairs.has(pairKey(value, true))) add("connected_passer_pair_gained", value);
   const candidateKey = (value: CandidateMajorityReading["candidates"][number]) => `${value.pawn.piece.color}:${value.pawn.square}`;
   const priorCandidates = keys(beforeCandidates.candidates, candidateKey);
   if (edge.moving.role === "pawn") {

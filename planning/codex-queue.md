@@ -12,6 +12,21 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3637]] corrects the durable-state inventory's blanket recovery claim: migration landing
+does not prove all five subsystems' complete backup/restore and upgrade/rollback journeys.
+The current longitudinal revision-4 worker proof is narrower; D3574 and all remaining
+cross-system lifecycle/release obligations remain open. No milestone promotion.
+
+[[D3636]] is closed locally under the accepted breadth-collectors §3.3 contract. Pawn-gain
+comparison follows the legal mover and unordered pair identity instead of square-only keys.
+Four predecessor controls reproduce false retained gains; genuine protection and separate
+advancement survive sealed factories, complete candidates and saved play. Existing longitudinal
+revision 4 rebuilds prior histories without changing registry membership or attribution.
+All 501 foundation/65 longitudinal cases and clean types pass; complete normal local gates
+pass 4,226 software, seven unchanged-budget performance, 239 content and 237 browser cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. No source,
+permission, authored content, full qualification, whole capability or release claim.
+
 [[D3635]] is closed locally under the accepted breadth-collectors §3.7 contract. King escape
 sets resolve castling to the physical king landing before adjacency and deduplication, rather
 than highlighting a friendly rook. Eighteen corrected permanent controls fail on the original

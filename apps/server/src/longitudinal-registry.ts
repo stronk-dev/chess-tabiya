@@ -21,10 +21,10 @@ import {
 } from "@chess-tabiya/runtime";
 import { canonicalizeJson, type JsonValue } from "@chess-tabiya/schema/drill-pack";
 
-/** Existing longitudinal-store §D/§4.4 rebuild obligation: retained castling-rook mobility (D3626).
+/** Existing longitudinal-store §D/§4.4 rebuild obligation: retained pawn-gain identity (D3636).
  * Registry/projection membership and attribution remain unchanged; startup requeues old history.
  */
-export const OBSERVATION_DERIVATION_REV = 3 as const;
+export const OBSERVATION_DERIVATION_REV = 4 as const;
 
 export const LONGITUDINAL_SEMANTIC_SIGNS = Object.freeze([
   "state", "gained", "lost", "preserved", "removed", "avoided", "enabled", "threatened",
