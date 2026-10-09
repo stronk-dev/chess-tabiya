@@ -8,13 +8,13 @@ re-derivable byte-for-byte and never a second source of truth. Contract: `rfc/lo
 Its first consumer is the private [learner profile](learner-profile.md) (`/learner-profile`, client
 route `/profile`); the store itself still has no route of its own.
 
-Current derivation revision is **2** (D3623, 2026-10-09). This recomputes the existing
-67-member registry after the special-move collector repairs; it admits no new family or
+Current derivation revision is **3** (D3626, 2026-10-09). This recomputes the existing
+67-member registry after the castling-rook mobility repair and preceding special-move corrections; it admits no new family or
 personal attribution. On upgrade, normal application startup atomically removes old derived
-rows and requeues untouched revision-1 histories. The existing background worker rebuilds
+rows and requeues untouched revision-1/2 histories. The existing background worker rebuilds
 them; Profile reports incomplete/rebuilding until the current cut completes. No manual rebuild
 is required, and saved moves are unchanged. Permanent file-backed and real-worker startup tests
-cover the corrected promotion duty, exact current-revision reads and idempotent restart.
+cover corrected promotion duty and castling-rook mobility, exact current-revision reads and idempotent restart.
 
 ## Storage (migration 26)
 

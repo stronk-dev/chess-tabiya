@@ -9,6 +9,7 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { legalCaptureMovesTo } from "./exchange.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { localSemanticEvents } from "./semantic-evidence.js";
+import { pieceDestinationEvents } from "./mobility.js";
 import { commitMove, createRun } from "./runtime.js";
 import { parsePresentationReceipt, presentEvidenceItems, presentedSentence, serializePresentedEvidence } from "./presentation-contract.js";
 import { checkEvent, defenderDutyRelocatedEvents, doubleAttackEvent, forkSurvivesReply, loosePieceEvents, loosePieceReading, mateInOne, replyBreadth } from "./tactics.js";
@@ -40,6 +41,54 @@ const promotionForks = [
   { name: "black queen", fen: "4k3/8/8/8/8/8/6pR/K7 b - - 0 1", move: "g2g1q", landing: "g1", role: "queen" },
   { name: "white underpromotion", fen: "8/4k1P1/7r/8/8/8/8/4K3 w - - 0 1", move: "g7g8n", landing: "g8", role: "knight" },
 ] as const;
+
+describe("D3626 castling-rook mobility at production boundaries", () => {
+  it.each(rescuedCastleRooks)("retains $name mobility through factory and semantic-event collection", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const expected = { moved: true, piece: { before: { square: fixture.from, role: "rook" }, after: { square: fixture.to, role: "rook" } } };
+    expect(pieceDestinationEvents(input.beforeFen, input.moveUci, input.afterFen).events).toContainEqual(expect.objectContaining(expected));
+    const declared = invokeEvidenceValueRoute("rules.mobility.event.piece_destinations@1", input);
+    expect(declared.map(item => item.payload)).toContainEqual(expect.objectContaining(expected));
+    expect(evidenceValueReceipt(declared[0]!)).toMatchObject({ factory: "createRulesMobilityEventPieceDestinationsV1Evidence" });
+    expect(localSemanticEvents(input.beforeFen, input.moveUci, input.afterFen).filter(item => item.projection.id === "rules.mobility.event.piece_destinations").map(item => item.operands)).toContainEqual(expect.objectContaining(expected));
+  });
+
+  it.each([rescuedCastleRooks[0], rescuedCastleRooks[2]])("presents $name mobility through the serialized Inspector", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const declared = invokeEvidenceValueRoute("rules.mobility.event.piece_destinations@1", input).filter(item => item.payload.piece.before.square === fixture.from);
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, declared));
+    const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
+    expect(wire).toHaveLength(2); // The registered Inspector retains its square caption and recorded line.
+    const squares = wire.find(item => item.component.id === "square_set")!;
+    expect(squares).toBeDefined();
+    expect(presentedSentence(squares)).toContain(`rook on ${fixture.to}`);
+    if (squares.component.id !== "square_set") throw new Error("Expected mobility squares");
+    expect(squares.component.operand.squares).toContain(fixture.to);
+    const line = wire.find(item => item.component.id === "move_path")!;
+    expect(line).toBeDefined();
+    expect(presentedSentence(line)).toContain("O-O");
+    for (const item of wire) {
+      expect(item.evidenceRef?.projection).toMatchObject({ id: "rules.mobility.event.piece_destinations", version: 1 });
+    }
+  });
+
+  it.each([rescuedCastleRooks[0], rescuedCastleRooks[2]])("retains $name mobility through complete candidates and saved runs", fixture => {
+    const compiled = compileCandidatePopulation({ beforeFen: fixture.fen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+    if (compiled.kind !== "ready") throw new Error(JSON.stringify(compiled.error));
+    expect(compiled.receipt.packet.candidates).toHaveLength(compiled.receipt.packet.legalMoves.length);
+    const expected = { moved: true, piece: { before: { square: fixture.from, role: "rook" }, after: { square: fixture.to, role: "rook" } } };
+    const candidate = compiled.receipt.packet.candidates.find(item => item.moveUci === fixture.move)!;
+    expect(candidate.events.filter(item => item.projection.id === "rules.mobility.event.piece_destinations").map(item => item.operands)).toContainEqual(expect.objectContaining(expected));
+    const at = "2026-10-09T00:00:00.000Z";
+    const initial = createRun({ id: `mobility-${fixture.name}`, packId: "special-move-boundary", packDigest: `sha256:${"0".repeat(64)}`, startFen: fixture.fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    const run = commitMove(initial, fixture.move, { at }).run;
+    const saved = JSON.parse(JSON.stringify(run)) as typeof run;
+    const child = saved.nodes.at(-1)!;
+    const parent = saved.nodes.find(node => node.id === child.parentId)!;
+    expect(localSemanticEvents(parent.fen, child.moveUci!, child.fen).filter(item => item.projection.id === "rules.mobility.event.piece_destinations").map(item => item.operands)).toContainEqual(expect.objectContaining(expected));
+    expect(saved).toEqual(run);
+  });
+});
 
 describe("D3619 special-move identities at the production tactical boundary", () => {
   it.each(lostKingDuties)("retains $name king relocation and exact lost duty", fixture => {

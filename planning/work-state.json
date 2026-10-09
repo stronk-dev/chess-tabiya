@@ -30025,6 +30025,15 @@
       "uxItems": [],
       "evidence": "tools/test-tier-check.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3626",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:586f17f06891fe21b2536e2c4fe825101cba36d79dad86df1c6f5fb645988f1d",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/special-move-tactics.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

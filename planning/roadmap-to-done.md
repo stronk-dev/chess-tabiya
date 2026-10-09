@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3625]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3626]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -30,14 +30,47 @@ they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
 
-Latest batch: [[D3624]] restores failed Campaign catalogue/map reads with explicit single-flight
+### At a glance
+
+This is an integrated development platform, not a release candidate. No whole 1.0 capability is
+complete. The rehearsal loop is the most mature part; existing screens and APIs are delivery, but
+they do not close their missing defaults, evidence, content or release obligations.
+
+| Area | Delivered | Still required for full 1.0 |
+|---|---|---|
+| Evidence | Typed collectors, exact events, candidate packets, shared provider execution and grounded presentation | Remaining real source/consumer bindings, semantic qualification, selection/usefulness and truthful availability |
+| Rehearsal | Commit, consequence, rewind, branch, compare, replay and durable resume | Complete first-run/return flows, all-context defaults, official examples and release-image proof |
+| Support | Registered modules, preset/ceiling composition, Guided Hint, theory navigation and board evidence | Selected-piece/square source integration, useful quiet/theory/prevention defaults, Inspector fidelity and owner-use discharge |
+| Review | Timeline, move grades, moments, graph, Analyze, retry, Compare and Story/share paths | Full cross-source explanation, missing opening/human/tablebase joins and every game's review-to-rehearsal return |
+| Theory/content | Searchable Library; principle/shape/pack entries; persistent authoring, validation, playtest and community publication | Grounded theory population, training-set progression and a varied graduated official corpus; currently zero official graduates |
+| Bots | Twelve persistent, selectable, uncalibrated configurations across three families/four bands; exact replay/rematch | Measured strength/human likeness, richer observable personality, repertoire, phase/endgame/clock behavior and bot history |
+| Learner model | Rating, durable observations/opportunities, private floor-gated habit cards, opening counts and drill-down | Valid skill credit, comparative style references, opening performance and grounded recommendations; no skill marks yet |
+| Campaign | Exposed draft-pilot map, kit/help, preparation, resource-charged actions, encounters, unrated boss, results, resume and Review | Official curriculum, theory/catalogue progression, full reward/long-term collection loop and complete boss/failure journeys |
+| Social play | Live sessions, imports, invitations and native match foundations | Coherent pairing/clock/result/rematch/provider-follow workflows and supported variant journeys |
+| Coach/streamer | Classrooms, assignments and actual consented completed/incomplete submission inspection/revocation | Guided setup, complete Academy/Stream compositions, audience preview/voting/delay and broader multi-user journeys |
+| Accessibility | Shared board input, permanent cells, responsive in-run shell, themes and evidence paint | Route-wide post-gesture/zoom/focus/device checks, owner screen-reader use and PWA install/update/offline behavior |
+| Account/data | Authorization, private export/import/delete and native restored branched-play journeys | Guest/claim, complete object/lifecycle coverage and integrated operator recovery |
+| Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
+| Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
+
+Latest batch: [[D3626]] retains the castling rook in mobility evidence through sealed factories,
+complete candidates, saved runs and serialized Inspector. Existing derivation revision 3 automatically
+rebuilds prior learner histories without changing recorded play or authored packs. All 407 foundation
+and 65 longitudinal cases/types pass; complete normal local tiers pass 4,084 software, seven
+unchanged-budget performance, 239 content and 227 browser cases, one optional Maia skip, zero retries
+and all 112 composition cells. The first full run stops on two omitted roadmap references; correcting
+those bookkeeping references leaves product/test bytes unchanged before the remaining tiers pass.
+Current ledger: 3,375 rows, 1,505 done, 161 refused and 1,709 live; zero untriaged.
+Whole capabilities/milestones, official content and remote CI are not promoted.
+
+The preceding batch: [[D3624]] restores failed Campaign catalogue/map reads with explicit single-flight
 retry and focus recovery, resuming the exact saved encounter without repeating commands or changing
 recorded play. [[D3625]] moves two unchanged installed-corpus checks to existing content suites and
 extends the existing tier guard; their complete populations and five-/fifteen-second limits remain.
 Complete normal gates pass clean types/build, 4,064 software, seven unchanged-budget performance,
 239 content and 227 browser tests, one optional Maia skip, zero retries and 112 composition cells.
 The first full run's loading timeout remains open under D3543; the passing rerun is not a diagnosis.
-Current ledger: 3,374 rows, 1,504 done, 161 refused and 1,709 live; zero untriaged.
+That checkpoint's ledger: 3,374 rows, 1,504 done, 161 refused and 1,709 live; zero untriaged.
 No whole capability, milestone, official graduation or remote CI result is promoted.
 
 The preceding batch: [[D3623]] makes collector repairs reach untouched saved learner histories through
@@ -552,7 +585,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **74 active product RFCs** (22 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(273 completed, 24 retired, 272 live); **3,369 ledger rows** (1,499 done, 161 refused, 1,709 live,
+(273 completed, 24 retired, 272 live); **3,375 ledger rows** (1,505 done, 161 refused, 1,709 live,
 zero untriaged). Of the live ledger, 628 are todo, fourteen doing and 1,067 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

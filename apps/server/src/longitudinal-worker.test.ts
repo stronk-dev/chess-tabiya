@@ -77,13 +77,14 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const owner = learner(seed, "owner");
     seed.create(play(positionRun("preexisting"), "e2e4"), owner);
     seed.create(play(positionRun("legacy-promotion", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n"), owner);
+    seed.create(play(positionRun("legacy-castling", "4k3/8/8/8/8/8/8/4K2R w K - 0 1"), "e1h1"), owner);
     const raw = new DatabaseSync(databasePath);
-    raw.exec("DELETE FROM learner_observation_jobs WHERE run_id='preexisting'; UPDATE learner_observation_jobs SET derived_rev=1, state='complete', completed_seq=requested_seq WHERE run_id='legacy-promotion'");
+    raw.exec("DELETE FROM learner_observation_jobs WHERE run_id='preexisting'; UPDATE learner_observation_jobs SET derived_rev=1, state='complete', completed_seq=requested_seq WHERE run_id='legacy-promotion'; UPDATE learner_observation_jobs SET derived_rev=2, state='complete', completed_seq=requested_seq WHERE run_id='legacy-castling'");
     raw.close();
     seed.close();
 
     application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
-    expect(application.startupReceipt).toMatchObject({ storageVersion: STORAGE_VERSION, databasePath, longitudinal: { scanned: 2, created: 1, revisionReset: 1 } });
+    expect(application.startupReceipt).toMatchObject({ storageVersion: STORAGE_VERSION, databasePath, longitudinal: { scanned: 3, created: 1, revisionReset: 2 } });
     const origin = await listen(application);
     const health = await fetch(`${origin}/healthz`);
     expect(health.status).toBe(200);
@@ -112,7 +113,8 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
       const result = application!.longitudinal.read("owner", parseLongitudinalReadQuery({ learnerId: "owner", derivationRev: OBSERVATION_DERIVATION_REV, through: { kind: "all_complete" }, filter: {} }));
       return result.kind === "complete" ? result : undefined;
     });
-    expect(preexisting.cuts).toEqual(["legacy-promotion", "preexisting"].map(runId => ({ kind: "complete", runId, requestedSeq: 2, completedSeq: 2, derivedRev: OBSERVATION_DERIVATION_REV })));
+    expect(preexisting.cuts).toEqual(["legacy-castling", "legacy-promotion", "preexisting"].map(runId => ({ kind: "complete", runId, requestedSeq: 2, completedSeq: 2, derivedRev: OBSERVATION_DERIVATION_REV })));
+    expect(preexisting.observations).toContainEqual(expect.objectContaining({ runId: "legacy-castling", projectionId: "rules.mobility.event.piece_destinations", occurred: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
     expect(preexisting.observations).toContainEqual(expect.objectContaining({ runId: "legacy-promotion", projectionId: "rules.tactic.event.defender_duty_relocated", occurred: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
     expect(preexisting.observations.every(row => row.learnerId === "owner")).toBe(true);
     // Worker totals cross the thread boundary in their own message, which may trail the published
@@ -121,19 +123,19 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
       const progress = application!.longitudinal.progress();
       return progress !== undefined && progress.completed >= 3 ? progress : undefined;
     });
-    expect(totals.completed).toBeGreaterThanOrEqual(3);
+    expect(totals.completed).toBeGreaterThanOrEqual(4);
 
     const closing = application;
     application = undefined;
     await closing.close();
     expect(closing.longitudinal.health()).toEqual({ status: "draining" });
     const after = new DatabaseSync(databasePath);
-    expect(after.prepare("SELECT state, count(*) AS n FROM learner_observation_jobs GROUP BY state").all()).toEqual([{ state: "complete", n: 3 }]);
+    expect(after.prepare("SELECT state, count(*) AS n FROM learner_observation_jobs GROUP BY state").all()).toEqual([{ state: "complete", n: 4 }]);
     after.close();
 
     // Rerun: startup reconciliation is idempotent across restart.
     application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
-    expect(application.startupReceipt.longitudinal).toMatchObject({ scanned: 3, created: 0, advanced: 0, revisionReset: 0 });
+    expect(application.startupReceipt.longitudinal).toMatchObject({ scanned: 4, created: 0, advanced: 0, revisionReset: 0 });
   });
 
   it("degrades /healthz to 503 on unexpected thread exit and never lets the main process renew", async () => {

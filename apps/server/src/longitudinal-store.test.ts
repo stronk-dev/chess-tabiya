@@ -501,6 +501,34 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     expect(storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 0, created: 0, advanced: 0 });
   });
 
+  it.each([
+    { name: "white", side: "white" as const, fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", move: "e1h1" },
+    { name: "black", side: "black" as const, fen: "4k2r/8/8/8/8/8/8/4K3 b k - 0 1", move: "e8h8" },
+  ])("rebuilds untouched revision-2 $name history with retained castling-rook mobility", fixtureRow => {
+    const value = fixture();
+    const owner = learner(value.storage, "mobility-owner");
+    const run = play(positionRun("mobility-history", fixtureRow.fen, fixtureRow.side), fixtureRow.move);
+    value.storage.create(run, owner);
+    const source = value.storage.longitudinalSourceImageV4(run.id, run.events.length);
+    const expected = projectObservations(source);
+    expect(expected.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    const store = value.workerStore();
+    expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "before-upgrade").completed).toBe(1);
+    const database = raw(value.path);
+    database.exec("UPDATE learner_observation_denominators SET derived_rev=2; UPDATE learner_observations SET derived_rev=2; UPDATE learner_structure_stats SET derived_rev=2; UPDATE learner_observation_jobs SET derived_rev=2");
+    database.prepare("DELETE FROM learner_observations WHERE run_id=? AND projection_id=?").run(run.id, "rules.mobility.event.piece_destinations");
+    database.close();
+    expect(value.storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 1, advanced: 0, created: 0 });
+    expect(value.storage.readLongitudinalSnapshot(owner.learnerId!, query(owner.learnerId!)).kind).toBe("incomplete");
+    expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "after-upgrade").completed).toBe(1);
+    const rebuilt = value.storage.readLongitudinalSnapshot(owner.learnerId!, query(owner.learnerId!));
+    if (rebuilt.kind !== "complete") throw new Error("rebuild did not complete");
+    expect(rebuilt.observations).toEqual(expected.observations);
+    expect(rebuilt.denominators).toEqual(expected.denominators);
+    expect(value.storage.longitudinalSourceImageV4(run.id, run.events.length)).toEqual(source);
+    expect(value.storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 0, advanced: 0, created: 0 });
+  });
+
   it("rebuilds untouched revision-1 history with repaired promotion evidence without rewriting play", () => {
     const value = fixture();
     const owner = learner(value.storage, "promotion-owner");

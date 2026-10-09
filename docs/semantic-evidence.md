@@ -43,6 +43,12 @@ boundary and piece identity; they report observed order only. They deliberately 
 overload, deflection, removal, force, success, king exposure, activity, or a plan. Those names and
 their able-to-fail consequence requirements belong to the semantic-collector successor.
 
+Retained-piece mobility follows the physical castling rook as well as ordinary B/N/R/Q movers.
+The rook's before/after squares and legal/local-non-losing destination changes survive factories,
+candidate packets and Inspector serialization. A stationary castling rook remains `moved: false`;
+changed destinations do not imply relocation. Existing saved histories rebuild through longitudinal
+derivation revision 3 without changing recorded play, projection membership or learner permissions.
+
 The current semantic-collector checkpoint adds the exact defender-duty reading, defender
 removal/relocation events, the four-clause overload-response predicate, a bounded forced-mate proof,
 and seven observed tactic events: deflection, attraction, line-blocker clearance, square clearance,

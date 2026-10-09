@@ -277,7 +277,7 @@ describe("criterion 10 — observed import boundary", () => {
 
 describe("criterion 12 — revision pair", () => {
   it("pairs OBSERVATION_DERIVATION_REV with the registry digest and a fixture-output digest", () => {
-    expect(OBSERVATION_DERIVATION_REV).toBe(2);
+    expect(OBSERVATION_DERIVATION_REV).toBe(3);
     expect(ingestRegistryDigest(LONGITUDINAL_INGEST_REGISTRY)).toBe(LONGITUDINAL_REGISTRY_DIGEST);
     // A zero-incidence registry addition moves the registry digest even though no fixture row changes.
     const addition = [...LONGITUDINAL_INGEST_REGISTRY, { projection: { id: "rules.zero.incidence", version: 1 }, signs: ["gained"], kind: "edge", adapter: "local_semantic_event" }];
@@ -294,6 +294,7 @@ describe("criterion 12 — revision pair", () => {
     expect(retained.observations.filter(row => row.projectionId === dutyId && row.occurred > 0)).toEqual([]);
     const castling = projectObservations(image(play(positionRun("revision-castling", "4k3/8/8/8/8/8/3P4/4K2R w K - 0 1"), "e1h1")));
     expect(castling.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    expect(castling.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
     const enPassant = projectObservations(image(play(positionRun("revision-en-passant", "4k3/8/8/8/4p3/8/3P4/4K3 w - - 0 1"), "d2d4")));
     expect(enPassant.observations.find(row => row.projectionId === "rules.tactic.event.loose_piece" && row.semanticSign === "gained" && row.occurred > 0)).toMatchObject({ occurred: 1 });
     const output = [projectObservations(image(fixture)), promotion, retained, castling, enPassant];
@@ -307,7 +308,7 @@ describe("criterion 12 — revision pair", () => {
  * Any semantic change to the projector, adapters or admitted registry moves this literal; the RFC that
  * owns that change owns the revision bump and the rebuild discharge in the same diff.
  */
-const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:b76fecf27787d0990a400b0dedf8660bcc528b132746ab6273ef8e839ebd44a0";
+const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:5f910ce72530c76911188f80fa6331eb124070e4f0002be557a1a613efa4bc26";
 
 describe("criteria 13, 28 — branded query parser and sealed V4 source identity", () => {
   it("rejects empty, duplicate, unknown and contradictory filters and orders bytewise", () => {

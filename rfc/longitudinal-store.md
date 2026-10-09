@@ -10,6 +10,10 @@
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
 - **Author:** claude
+- **Implementation follow-up (2026-10-09, D3626):** derivation revision 3 carries the existing
+  retained-piece mobility repair into untouched revision-2 histories. Registry membership,
+  attribution and saved play stay unchanged; normal startup/worker reconciliation is exercised
+  with both prior revisions. This is the existing rebuild obligation, not a new contract.
 - **Implementation follow-up (2026-10-09, D3623):** existing §C/§D/§4.4 recomputation obligation
   advances `OBSERVATION_DERIVATION_REV` to 2 for the special-move collector corrections.
   The 67-member ingest registry, projection versions and attribution policy are unchanged.

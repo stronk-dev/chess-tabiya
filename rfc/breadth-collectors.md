@@ -1,5 +1,11 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
+- **Implementation correction (2026-10-09, D3626):** §3.2's retained-piece join follows the
+  physical secondary castling rook for both colors and castling geometries. Stationary rooks
+  remain unmoved while their changed destination sets can still emit; invalid-color clone
+  abstention and B/N/R/Q scope are unchanged. Factory, candidate, saved-run/Inspector and
+  longitudinal rebuild controls retain the existing meaning, with no new projection or eligibility.
+
 - **Status:** awaiting D1 — implementation complete 2026-08-22; all 18 projections compile, including B15's closed alternative derivations, and only the separately owned production-module eligibility discharge remains. Accepted 2026-08-22 by claude as register owner on the buildability test, after the independent acceptance review (five convention repairs applied in place, [[D895]]). *(Previous line for history: draft 2026-08-22 — author amendment repairs D851–D859 after the Codex-side)*
   buildability return; the independent Claude acceptance review ran 2026-08-22, verified the
   D851–D859 repairs at the harness symbols and applied five blocker corrections in place

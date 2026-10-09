@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3626]] is closed locally under the existing breadth/longitudinal contracts.
+Mobility follows the physical castling rook; stationary negatives, sealed factories,
+complete candidates, saved runs and serialized Inspector retain the exact identity.
+Derivation revision 3 rebuilds prior histories automatically without editing play or packs.
+All 407 foundation/65 longitudinal cases and types pass; complete normal local tiers pass
+4,084 software, seven unchanged-budget performance, 239 content and 227 browser cases,
+one optional Maia skip, zero retries and all 112 composition cells. The first full run's
+missing roadmap references are corrected before remaining tiers pass. Source/consumer
+integration, semantic qualification, official content and whole 1.0 remain open.
+
 [[D3624]]/[[D3625]] are closed locally. Campaign catalogue/map arrival now offers
 single-flight read retry with failed-versus-empty, departed/crossed-response and
 focus recovery. Six mounted cases and actual desktop/phone failure → retry →

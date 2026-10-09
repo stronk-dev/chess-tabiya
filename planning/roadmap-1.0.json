@@ -815,10 +815,19 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3622 closes the existing promotion defender-duty omission: the legal edge retains physical identity through role change and checks actual after-state defence of the same surviving target. Twenty correctly targeted predecessor failures and 37 permanent controls cover quiet/capture, both colors, all roles, sealed factories, complete candidates, saved runs and serialized Inspector; Nudge withholding stays unchanged. All 386 focused cases/types and complete normal local gates pass: clean types/build, 4059 software cases/359 files, seven unchanged-budget performance cases, 237 content cases and 225 browser passes, one optional Maia skip, zero retries and 112 composition cells. Semantic qualification remains 81 subjects / 42 passing cases / zero fully qualified. Maia, installed-opening and durable Stockfish source drafts still require independent acceptance; remaining consumer execution/availability, official content and whole capabilities stay open. No new source, projection, pack edit, permission or remote CI claim.",
+          "summary": "D3626 repairs retained castling-rook mobility under the existing breadth collector contract: both physical relocations survive exact destination deltas, sealed factories, full candidate populations, recorded runs and Inspector squares/line serialization. Eight direct predecessor controls fail; stationary-rook and ordinary-move negatives remain. Existing longitudinal derivation revision 3 rebuilds revision-1/2 histories through startup and the background worker without editing play or registry membership. All 407 foundation/65 longitudinal cases and types pass. Complete normal local tiers pass clean types/build, 4084 software/359 files, seven unchanged-budget performance cases, 239 content and 227 browser passes, one optional Maia skip, zero retries and 112 composition cells. The first full run's missing roadmap references are corrected before remaining tiers pass. Maia, installed-opening and durable Stockfish source drafts still require independent acceptance; remaining consumer execution/availability, official content and whole capabilities stay open. No new projection, motif, permission, pack edit or remote CI claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/installed-opening-evidence.md",
+            "rfc/breadth-collectors.md",
+            "rfc/longitudinal-store.md",
+            "packages/runtime/src/mobility.ts",
+            "packages/runtime/src/mobility.test.ts",
+            "apps/server/src/longitudinal-registry.ts",
+            "apps/server/src/longitudinal-contract.test.ts",
+            "apps/server/src/longitudinal-store.test.ts",
+            "apps/server/src/longitudinal-worker.test.ts",
+            "docs/longitudinal-store.md",
             "rfc/durable-stockfish-source.md",
             "rfc/maia-task-source.md",
             "apps/server/src/opponent-selector.test.ts",
@@ -873,6 +882,16 @@
               "kind": "rfc",
               "id": "installed-opening-evidence.md",
               "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
+            },
+            {
+              "kind": "rfc",
+              "id": "breadth-collectors.md",
+              "digest": "sha256:2781c2d6957ba49fbe31da98a21362395045d591f5b961d505b6fbba4c5f1f56"
+            },
+            {
+              "kind": "rfc",
+              "id": "longitudinal-store.md",
+              "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
             },
             {
               "kind": "rfc",

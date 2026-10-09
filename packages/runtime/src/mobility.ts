@@ -1,6 +1,6 @@
-import { Chess, normalizeMove } from "chessops/chess";
+import { castlingSide, Chess, normalizeMove } from "chessops/chess";
 import type { Color, Move, Piece, Role, Square, SquareName } from "chessops/types";
-import { makeSquare, makeUci, parseUci } from "chessops/util";
+import { makeSquare, makeUci, parseUci, rookCastlesTo } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { legalCaptureMovesTo, legalExchangeForMove } from "./exchange.js";
@@ -121,6 +121,10 @@ export function pieceDestinationEvents(beforeFen: string, moveUci: string, after
   if (parsed === undefined || !("from" in parsed)) throw new TypeError(`Invalid move UCI ${moveUci}`);
   const normalized = normalizeMove(position, parsed);
   if (!("from" in normalized) || !position.isLegal(normalized)) throw new TypeError(`Illegal move UCI ${moveUci}`);
+  const castle = castlingSide(position, normalized);
+  // B/N/R/Q mobility tracks physical identity. Castling's secondary rook is not
+  // the UCI primary mover; the normalized destination names its original square.
+  const relocatedRook = castle === undefined ? undefined : { from: normalized.to, to: rookCastlesTo(position.turn, castle) };
   const replay = position.clone();
   replay.play(normalized);
   if (canonicalFen(replay) !== after.fen) throw new TypeError(`After FEN does not match ${moveUci}`);
@@ -135,8 +139,11 @@ export function pieceDestinationEvents(beforeFen: string, moveUci: string, after
     }
     const rightBySquare = new Map(right.pieces.map((piece) => [piece.piece.square, piece]));
     for (const prior of left.pieces) {
-      const moved = prior.piece.square === makeSquare(normalized.from);
-      const nextSquare = moved ? makeSquare(normalized.to) : prior.piece.square;
+      const square = prior.piece.square;
+      const nextSquare = relocatedRook !== undefined && square === makeSquare(relocatedRook.from)
+        ? makeSquare(relocatedRook.to)
+        : square === makeSquare(normalized.from) ? makeSquare(normalized.to) : square;
+      const moved = square !== nextSquare;
       const current = rightBySquare.get(nextSquare);
       if (current === undefined || current.piece.occupant.color !== color || current.piece.occupant.role !== prior.piece.occupant.role) continue;
       const legalGained = difference(current.legal, prior.legal), legalLost = difference(prior.legal, current.legal);
