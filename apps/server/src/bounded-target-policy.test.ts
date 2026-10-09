@@ -2,7 +2,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import * as runtime from "@chess-tabiya/runtime";
 
 import {
   PRIMARY_EVIDENCE_MANIFEST,
@@ -19,8 +20,13 @@ import { BoundedTargetPolicyCompositionOperation, type BoundedTargetPolicyCompos
 import { MockProviderEngineClient, type MockProviderEngineOptions } from "./mock-provider-engine.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
+import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { applicationFixture } from "./application-fixture.test-support.js";
+import type { ChessTabiyaApplication } from "./application.js";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
+afterEach(() => vi.restoreAllMocks());
+const compileExecution = runtime.compileProjectionExecution;
 // Bc2 attacks the loose Na4 (black to move). h5g5 leaves it (preserved); a4b2 moves it away (removed).
 const SOURCE = "8/8/8/7k/n7/8/2B5/4K3 b - - 0 1";
 const base = (overrides: Partial<BoundedTargetPolicyRequest> = {}): BoundedTargetPolicyRequest => {
@@ -36,13 +42,14 @@ function compose(options: MockProviderEngineOptions = {}, bounds: { readonly max
     maxActive: 1, maxQueued: bounds.maxQueued ?? 16, maxRetainedEntries: 64, maxRetainedWeight: 4_096, retentionTtlMs: 600_000,
     monotonicNowMs: () => performance.now(), wallNow: () => new Date().toISOString(),
   });
+  const targets = createBoundedTargetBackgroundService();
   const operation = new BoundedTargetPolicyCompositionOperation({
-    targets: createBoundedTargetBackgroundService(),
+    targets,
     scheduler,
     requestedEngine: bounds.requestedEngine ?? (async () => { const identity = await engines.start("stockfish-analysis"); return { id: identity.id, version: identity.version }; }),
     providerTimeoutMs: 20_000,
   });
-  return { operation, scheduler };
+  return { operation, scheduler, targets };
 }
 
 const scope = { id: "test:bounded-target-policy", budgetMs: 60_000 };
@@ -77,6 +84,126 @@ describe("F1 declarations (criterion 1)", () => {
     const fake = { ...PRIMARY_EVIDENCE_MANIFEST, bindings: [...PRIMARY_EVIDENCE_MANIFEST.bindings, { ...PRIMARY_EVIDENCE_MANIFEST.bindings[0]!, projection: { id: "derived.bounded_target.engine_target_policy", version: 1 }, latency: { mode: "sync" as const, maxMs: 10 } }] };
     expect(() => assertPathEffectiveExecution(fake, [{ id: "derived.bounded_target.engine_target_policy", version: 1 }])).toThrow(/sync satisfaction/u);
     expect(() => assertPathEffectiveExecution(PRIMARY_EVIDENCE_MANIFEST, [{ id: "derived.bounded_target.engine_target_policy", version: 1 }])).not.toThrow();
+  });
+});
+
+describe("production execution preflight (D3613)", () => {
+  const outputs = {
+    stockfish: "derived.bounded_target.engine_target_policy",
+    maia: "derived.bounded_target.policy_bounds",
+  } as const;
+
+  it.each((["stockfish", "maia"] as const).flatMap(arm => ([0, 1] as const).map(member => [arm, member] as const)))("refuses every invalid %s source contract in alternative %s before work", async (arm, member) => {
+    for (const fault of ["raw_source", "missing_source", "crossed_source", "source_order"] as const) {
+      const identity = vi.fn(async () => ({ id: "stockfish-analysis", version: "mock-1" }));
+      const { operation, scheduler, targets } = compose({}, { requestedEngine: identity });
+      const local = vi.spyOn(targets, "submit");
+      const acquire = vi.spyOn(scheduler, "get");
+      const compile = vi.spyOn(runtime, "compileProjectionExecution").mockImplementation((manifest, projection) => {
+        if (projection.id !== outputs[arm]) return compileExecution(manifest, projection);
+        const projections = manifest.projections.map(row => {
+          if (row.id !== projection.id || row.version !== projection.version) return row;
+          const changed = fault === "raw_source" ? { id: "live.stockfish.eval", version: 1 }
+            : arm === "stockfish" ? { id: "human.maia.policy_page", version: 1 } : { id: "live.stockfish.legal_root_table", version: 1 };
+          return { ...row, derivation: { anyOf: row.derivation!.anyOf!.map((inputs, index) => index !== member ? inputs : fault === "missing_source" ? inputs.slice(1)
+            : fault === "source_order" ? [...inputs.slice(1), inputs[0]!]
+            : [changed, ...inputs.slice(1)]) } };
+        });
+        return compileExecution({ ...manifest, projections }, projection);
+      });
+      try {
+        const outcome = await run(operation, base()).then(() => "resolved", error => error instanceof Error ? error.message : String(error));
+        expect(outcome).toMatch(/EXECUTION_/u);
+        expect(compile).toHaveBeenCalled();
+        expect(local).not.toHaveBeenCalled();
+        expect(identity).not.toHaveBeenCalled();
+        expect(acquire).not.toHaveBeenCalled();
+      } finally {
+        vi.restoreAllMocks();
+        await targets.close();
+      }
+    }
+  });
+
+  it.each(["stockfish", "maia", "both"] as const)("preflights every demanded arm before first work, on repeated %s calls", async arms => {
+    const trace: string[] = [];
+    const { operation, scheduler, targets } = compose({}, { requestedEngine: async () => {
+      trace.push("identity");
+      return { id: "stockfish-analysis", version: "mock-1" };
+    } });
+    const submit = targets.submit.bind(targets);
+    vi.spyOn(targets, "submit").mockImplementation((...args) => { trace.push("local"); return submit(...args); });
+    const get = scheduler.get.bind(scheduler);
+    vi.spyOn(scheduler, "get").mockImplementation((...args) => { trace.push(`acquire:${args[0].operation}`); return get(...args); });
+    vi.spyOn(runtime, "compileProjectionExecution").mockImplementation((manifest, projection) => {
+      trace.push(`compile:${projection.id}`);
+      return compileExecution(manifest, projection);
+    });
+    const wanted = arms === "both" ? [outputs.stockfish, outputs.maia] : [outputs[arms]];
+    try {
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        trace.length = 0;
+        const result = completed(await run(operation, base({ arms })));
+        expect(trace.slice(0, wanted.length)).toEqual(wanted.map(id => `compile:${id}`));
+        expect(trace[wanted.length]).toBe("local");
+        expect(trace.filter(value => value.startsWith("compile:"))).toHaveLength(wanted.length);
+        expect(result.stockfish === null).toBe(arms === "maia");
+        expect(result.maia === null).toBe(arms === "stockfish");
+        expect(trace.some(value => value === "acquire:stockfish.legal_root_table@1")).toBe(arms !== "maia");
+        expect(trace.some(value => value === "acquire:maia.policy_page@1")).toBe(arms !== "stockfish");
+      }
+    } finally { await targets.close(); }
+  });
+
+  it("invalid or already-cancelled requests do not compile or acquire", async () => {
+    const { operation, targets } = compose();
+    const compile = vi.spyOn(runtime, "compileProjectionExecution");
+    const local = vi.spyOn(targets, "submit");
+    const controller = new AbortController();
+    controller.abort();
+    try {
+      expect(await run(operation, base({ counterfactualUci: "h5g5" }))).toMatchObject({ kind: "refused", reason: "invalid_request" });
+      expect(await run(operation, base(), controller.signal)).toEqual({ kind: "refused", reason: "cancelled" });
+      expect(compile).not.toHaveBeenCalled();
+      expect(local).not.toHaveBeenCalled();
+    } finally { await targets.close(); }
+  });
+});
+
+describe("application execution boundary (D3613)", () => {
+  let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>>;
+  beforeAll(async () => {
+    fixture = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
+    await fixture.ready;
+  });
+  afterAll(async () => { await fixture?.close(); });
+
+  it("the real application compiles both outputs before its shared scheduler acquires", async () => {
+    const application = fixture.current()!;
+    const trace: string[] = [];
+    vi.spyOn(runtime, "compileProjectionExecution").mockImplementation((manifest, projection) => {
+      trace.push(projection.id);
+      return compileExecution(manifest, projection);
+    });
+    const get = application.providers.scheduler.get.bind(application.providers.scheduler);
+    vi.spyOn(application.providers.scheduler, "get").mockImplementation((...args) => { trace.push(args[0].operation); return get(...args); });
+    const result = completed(await run(application.boundedTargetPolicy, base()));
+    expect(trace.slice(0, 2)).toEqual(["derived.bounded_target.engine_target_policy", "derived.bounded_target.policy_bounds"]);
+    expect(trace).toContain("stockfish.legal_root_table@1");
+    expect(trace).toContain("maia.policy_page@1");
+    expect(result.stockfish).not.toBeNull();
+    expect(result.maia).not.toBeNull();
+  });
+
+  it("a failing second output prevents both provider arms even after a successful call", async () => {
+    const application = fixture.current()!;
+    const acquire = vi.spyOn(application.providers.scheduler, "get");
+    vi.spyOn(runtime, "compileProjectionExecution").mockImplementation((manifest, projection) => {
+      if (projection.id === "derived.bounded_target.policy_bounds") throw new runtime.EvidenceExecutionError("EXECUTION_GRAPH_INVALID", "second arm control");
+      return compileExecution(manifest, projection);
+    });
+    await expect(run(application.boundedTargetPolicy, base())).rejects.toThrow("EXECUTION_GRAPH_INVALID: second arm control");
+    expect(acquire).not.toHaveBeenCalled();
   });
 });
 

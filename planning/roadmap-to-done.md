@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3612]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3613]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,15 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3613]] adds execution preflight to the actual bounded-target policy composition:
+all demanded outputs are checked before local derivation, engine identity or scheduler work.
+Both preserved/removed alternatives reject malformed provider operands. All 168 focused
+foundation cases and complete normal non-browser verification pass: clean types/build,
+3,825 software, seven unchanged-budget performance and 228 content cases, governance/packaging.
+Actual application construction and scheduler boundaries are exercised. This remains operator-only: complete manifest
+execution, exact-subject availability and learner bindings are still open. The browser
+result below belongs to the preceding UI commit, not a fresh run of this server change.
 
 Play/Compare export and contextual-banner repairs ([[D3611]]/[[D3612]]) are closed
 locally: 274 mounted cases, clean types and six actual desktop/phone journeys pass.
@@ -204,7 +213,7 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,815 software cases / 354 files,
+**The preceding UI repair's complete local normal tiers passed:** clean types/build, 3,815 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
 221 browser cases (156 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
@@ -424,7 +433,7 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,361 ledger rows** (1,492 done, 161 refused, 1,708 live,
+(271 completed, 24 retired, 274 live); **3,362 ledger rows** (1,493 done, 161 refused, 1,708 live,
 zero untriaged). Of the live ledger, 628 are todo, fourteen doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,

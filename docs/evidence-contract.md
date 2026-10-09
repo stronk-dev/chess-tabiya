@@ -240,6 +240,12 @@ and `reported`:
 `apps/server/src/bounded-target-policy.ts#BoundedTargetPolicyCompositionOperation` (composed in
 `application.ts` over the bounded-target service and the one shared provider scheduler) is the only
 production operation; it keeps no cache or queue of its own and propagates cancellation.
+It compiles every demanded output before local derivation, engine identity or scheduler work.
+Every preserved/removed execution alternative must retain the exact registered provider source
+as its first literal input. A malformed contract throws an execution error before either arm
+starts; it is not reported as provider unavailability or a negative chess observation. An
+undemanded arm is neither compiled nor acquired. This operator-only adoption does not establish
+whole-manifest execution or add a learner binding.
 Stockfish identity/startup failure returns the engine arm's existing `input_abstained` result,
 not an exception for the whole composition. Valid local facts and an independently successful
 Maia arm remain available. Cancellation remains the total operation's `cancelled` refusal; no

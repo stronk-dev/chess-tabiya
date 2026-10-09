@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3613]] is closed locally: both demanded bounded-target policy outputs now compile before
+local target work, engine identity or shared-scheduler acquisition. Sixteen malformed-source
+controls cover each provider and preserved/removed alternative; repeated single/both-arm calls,
+undemanded-arm suppression and actual application/scheduler boundaries pass. All 168 focused
+cases and complete normal non-browser verification pass: clean types/build, 3,825 software,
+seven unchanged-budget performance and 228 content cases, governance/packaging. This remains
+operator integration, not a new learner binding or whole-manifest closure. The next foundation
+work below remains open; the preceding 221-browser UI checkpoint was not rerun for this change.
+
 [[D3611]]/[[D3612]] are closed locally: Play/Compare share one PGN export action with
 captured branch selection, explained pending state, safe retry and retired departed downloads.
 Existing contextual run notices use scrollable Actions/Compare flow rather than fixed overlapping
@@ -22,8 +31,11 @@ recorded play. Complete normal tiers pass 3,815 software, seven unchanged-budget
 composition cells. The first browser run's six classroom navigation failures remain recorded;
 the complete browser rerun passes after adapting tests to the actual Actions region.
 
-Next accepted foundation work: re-derive [[D1700]]/[[D1701]] against implementing
-`provider-exchange-and-execution` and the actual mixed local/provider consumer paths. The
+Remaining [[D1700]]/[[D1701]] work belongs to implementing `provider-exchange-and-execution`:
+source migrations, complete consumer execution, exact source-occurrence resolution and
+authenticated availability. The retained frontier compiles 262/285 projections, 495/556 isolated
+bindings and 21/42 complete consumers with fourteen refused provider declarations; those counts
+are compilation, not measured runtime adoption. The
 execution compiler and individual preflights already ship; D3403's census and D3404's Guided
 Hint preflight are closed, not new implementation jobs. Locate remaining runtime joins and
 implement only admitted work; distinguish compiled declarations, actual adoption and exact-subject

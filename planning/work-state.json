@@ -29908,6 +29908,15 @@
       "uxItems": [],
       "evidence": "tests/browser/play-export.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3613",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3dc64d21460b7e7ceec77bcf05a534e6f0c6a806575bfa5bf03c7a73d8d63390",
+      "uxItems": [],
+      "evidence": "apps/server/src/bounded-target-policy.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

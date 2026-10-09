@@ -19,11 +19,15 @@ import { parseUci } from "chessops/util";
 import {
   BOT_MAIA_MODEL,
   MAIA_POLICY_PARAMETERS,
+  PRIMARY_EVIDENCE_MANIFEST,
+  EvidenceExecutionError,
   boundedTargetSourceEvidence,
+  compileProjectionExecution,
   derivedBoundedTargetPolicyEvidence,
   maiaExpansionMoves,
   maiaRequestedWidth,
   providerSourceEvidence,
+  providerProtocolRow,
   type BoundedTargetBackgroundService,
   type BoundedTargetBatchResult,
   type BoundedTargetImmediateEvidence,
@@ -85,6 +89,21 @@ export interface BoundedTargetPolicyCompositionDependencies {
 
 const ENGINE_DEPTHS = Object.freeze([8, 10] as const);
 
+/** Check the actual operation's literal provider operand, not just its own local producer. */
+function preflightPolicy(projection: "derived.bounded_target.engine_target_policy" | "derived.bounded_target.policy_bounds", operation: "stockfish.legal_root_table@1" | "maia.policy_page@1"): void {
+  const execution = compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, { id: projection, version: 1 });
+  // Preserved targets omit boundedReturn; removed targets retain it. Both declared paths
+  // must keep the same provider operand, including when one path is unused by this request.
+  if (execution.paths.length === 0 || execution.paths.some(path => {
+    const source = path.sourceRequirements[0];
+    return path.sourceRequirements.length !== 1 || source?.availability !== "provider"
+      || source.providerOperation !== operation || source.occurrence.length !== 1 || source.occurrence[0] !== 0
+      || `${source.projection.id}@${source.projection.version}` !== providerProtocolRow(operation).sourceProjection;
+  })) {
+    throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `${projection}@1 must retain ${operation} as its first literal input`);
+  }
+}
+
 type EngineAbstention = Extract<EngineTargetPolicyFactoryResult, { readonly kind: "abstained" }>;
 type MaiaAbstention = Extract<BoundedTargetPolicyBoundsFactoryResult, { readonly kind: "abstained" }>;
 
@@ -114,6 +133,10 @@ export class BoundedTargetPolicyCompositionOperation {
   async evaluate(request: BoundedTargetPolicyRequest, scope: ProviderRequestScope, signal: AbortSignal): Promise<BoundedTargetPolicyResult> {
     if (!isRequest(request)) return Object.freeze({ kind: "refused", reason: "invalid_request" });
     if (signal.aborted) return Object.freeze({ kind: "refused", reason: "cancelled" });
+    // Compile every demanded output before local work or either provider acquisition starts.
+    // Contract failures are programming errors, never a provider abstention or chess fact.
+    if (request.arms !== "maia") preflightPolicy("derived.bounded_target.engine_target_policy", "stockfish.legal_root_table@1");
+    if (request.arms !== "stockfish") preflightPolicy("derived.bounded_target.policy_bounds", "maia.policy_page@1");
     let source;
     try {
       source = boundedTargetSourceEvidence(request.sourceFen);
