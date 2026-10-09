@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3635]] is closed locally under the accepted breadth-collectors §3.7 contract. King escape
+sets resolve castling to the physical king landing before adjacency and deduplication, rather
+than highlighting a friendly rook. Eighteen corrected permanent controls fail on the original
+implementation; 491 focused foundation cases and clean types pass the repair, including actual
+authenticated Inspector output and unchanged saved play. Complete normal local gates pass clean
+types/build, 4,216 software, seven unchanged-budget performance, 239 content and 237 browser cases,
+one optional Maia skip, zero retries and 150 input/112 composition cells. No new source, judgement,
+permission, semantic qualification, whole capability, remote CI or release claim.
+
 [[D3634]] is closed locally under campaign-core §7.1. In-game failed/pending reads withdraw
 the published campaign revision and pause Declare done; single-flight read-only retry restores
 the same encounter or its recorded seal without replaying commands. Four predecessor controls

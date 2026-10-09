@@ -407,6 +407,11 @@ material-role vectors; king zone/shelter/escape sets; defender-exposure/conseque
 zone-defender identity; and moved heavy-piece open-file occupancy. All events are eligible only for
 `research.semantic_selection@1`; all five readings are `inspector_only`.
 
+King escapes are adjacent physical king destinations. Castling's friendly-rook UCI address is
+never an escape square; stationary/distant king landings are excluded and shared adjacent
+landings deduplicate. The same corrected sets reach event deltas, candidate packets, saved-run
+reconstruction and serialized Inspector relations without adding a safety judgement (D3635).
+
 Six named conventions are literal manifest bytes (`local-non-losing@1`,
 `candidate-majority@1`, `king-zone@1`, `king-shelter@1`,
 `material-role-signature@1`, and `pressure-line@1`). They expose their operands and ceilings; none

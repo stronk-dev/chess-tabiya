@@ -30105,6 +30105,15 @@
       "uxItems": [],
       "evidence": "tests/browser/campaign.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3635",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:05e93a6765f660c344916dc0571b8ed0026d69cf9b2f755c4bf22f70512cb556",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/king-state.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

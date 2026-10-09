@@ -815,12 +815,15 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3631 repairs harassment pressure by joining the actual consecutive reply against every newly harassed minor, retaining the exact bishop/screen/target relation. Ten positive controls fail on the predecessor; eighteen permanent controls cover both colors, competing knights/bishops, knight replies, broken pressure, sealed recorded factories and read-authorised saved play. All 466 focused foundation cases and clean types pass. Complete normal local gates pass clean types/build, 4181 software cases/361 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 231 browser passes (166 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3628's 63 canonical cases over 81 subjects remain passing with zero fully qualified subjects; D3629's sequence-parent adapter is not certified. No new source, motif, causal judgement, learner eligibility, application consumer, official content, whole capability, milestone or remote CI claim.",
+          "summary": "D3635 repairs king-escape evidence by resolving legal castling to the physical king landing before adjacency and deduplication, excluding phantom friendly-rook addresses and stationary/distant landings. Eighteen corrected predecessor controls fail; 491 focused foundation cases and clean types pass, including sealed readings/events, complete candidates, unchanged saved play and actual authenticated Inspector output. Complete normal local gates pass clean types/build, 4216 software cases/362 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 237 browser passes (172 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3631's consecutive-reply harassment repair stands. D3628's 63 canonical cases over 81 subjects remain passing with zero fully qualified subjects; D3629's sequence-parent adapter is not certified. No new source, motif, safety judgement, learner eligibility, official content, whole capability, milestone, native release or remote CI claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/installed-opening-evidence.md",
             "rfc/breadth-collectors.md",
             "rfc/recorded-semantic-path.md",
+            "packages/runtime/src/king-state.ts",
+            "packages/runtime/src/king-state.test.ts",
+            "apps/server/src/king-evidence.test.ts",
             "packages/runtime/src/pawn-dynamics.ts",
             "packages/runtime/src/pawn-dynamics.test.ts",
             "packages/runtime/src/recorded-semantic-path.test.ts",
@@ -921,6 +924,11 @@
               "kind": "work_state",
               "id": "D3631",
               "digest": "sha256:c9633e5eaee757a6fc7a6d23becba2791bc07e8d15717a374fa369638011a3f1"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3635",
+              "digest": "sha256:05e93a6765f660c344916dc0571b8ed0026d69cf9b2f755c4bf22f70512cb556"
             },
             {
               "kind": "rfc",

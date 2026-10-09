@@ -1,5 +1,11 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
+- **Implementation correction (2026-10-09, D3635):** §3.7's adjacent king escapes use physical
+  castling landing squares, not friendly-rook UCI addresses. Stationary/distant landings do not
+  enter the set; adjacent ordinary/castling landings deduplicate. Both-color reading, factory,
+  candidate, saved-run and actual authenticated Inspector controls preserve invalid-clone
+  abstention, conventions, display budgets and saved play. No safety verdict or eligibility change.
+
 - **Implementation correction (2026-10-09, D3631):** §3.4 joins the actual consecutive
   reply against all newly harassed minors, rather than selecting the first attacked minor.
   Both-color competing-knight/bishop controls retain the exact pressure relation through

@@ -1,6 +1,6 @@
-import { Chess, normalizeMove } from "chessops/chess";
+import { castlingSide, Chess, normalizeMove } from "chessops/chess";
 import type { Color, Piece, Square, SquareName } from "chessops/types";
-import { makeSquare, makeUci, opposite, parseUci } from "chessops/util";
+import { kingCastlesTo, makeSquare, makeUci, opposite, parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { squareControlReading, type SquareController } from "./square-control.js";
@@ -98,7 +98,13 @@ function escapes(fen: string, color: Color, kingSquare: Square): KingEscapeSet {
   const clone = Chess.fromSetup({ ...original.toSetup(), turn: color, epSquare: undefined });
   if (!clone.isOk) return Object.freeze({ kind: "unavailable", reason: "invalid_turn_clone", squares: Object.freeze([] as const) });
   const adjacent = new Set(adjacentSquares(kingSquare));
-  const squares = [...(clone.value.allDests().get(kingSquare) ?? [])].filter((square) => adjacent.has(square)).map(makeSquare).sort();
+  // allDests encodes castling at the friendly rook, not the king's physical landing.
+  // Resolve first: stationary kings and distant landings are not adjacent escapes.
+  // A legal adjacent castle and an ordinary step may share a landing; this is a set.
+  const squares = [...new Set([...clone.value.dests(kingSquare)].map(to => {
+    const side = castlingSide(clone.value, { from: kingSquare, to });
+    return side === undefined ? to : kingCastlesTo(color, side);
+  }).filter(square => adjacent.has(square)).map(makeSquare))].sort();
   return Object.freeze({ kind: "available", squares: Object.freeze(squares) });
 }
 
