@@ -277,6 +277,14 @@ population is planning evidence, not a software regression. Run it while working
 content-wave planning. `make test-tier-check` prevents a test that reads real corpus bytes from
 silently entering the software-contract suite.
 
+Campaign registry identity/refusal fixtures run in software. The installed-pilot compatibility
+case lives in `campaign-core.test.ts` in the content tier because `PackRegistry.loadDefault()`
+loads the whole committed corpus. It retains its own five-second timeout, complete pack
+population and community/node-count assertions; moving it does not diagnose loading stalls.
+The installed pack-list case similarly lives in `evidence-at-runtime.test.ts`, retaining its
+fifteen-second limit and every fixture-exclusion assertion. The existing tier guard now also
+recognizes the default PackRegistry loader; fixture-only `fromDocuments` tests remain software.
+
 `make docs-check` is a deliberately narrow navigation contract. It requires every Markdown file
 directly under `docs/` to appear exactly once in `docs/README.md` and requires the root README to
 link the architecture, feature map, extension guide, contributor guide and complete docs index. It

@@ -6,6 +6,15 @@ only changes what the learner carries *inside that run*. Implemented 2026-09-24 
 `rfc/campaign-core.md` (foundation) and `rfc/campaign-boss-games.md` (the Act-II full-game boss),
 storage migration 30, campaign-schema lanes 2 and 3.
 
+## Recovering a failed read
+
+Campaign home and a saved map offer **Retry loading campaigns** / **Retry loading campaign**
+after a failed read. Failure never renders as an empty installed catalogue. Retry rereads only
+the original route, is single-flight, clears obsolete content and returns focus to the page
+heading after settlement. Repeated failure stays retryable; leaving or switching campaigns
+retires the old response and focus change. No create/start/loadout/submit command is repeated.
+The recovered map resumes its existing encounter with this browser's retained writer.
+
 ## Leaving a pending action
 
 Create, encounter start, kit changes, abandonment and Declare done have one pending command

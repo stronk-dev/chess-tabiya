@@ -101,6 +101,24 @@ describe("recorded evidence at runtime", () => {
     expect(evidencePacket({ run, node, pack: record.document, packEvidence: record.positionEvidence, authored: { items: [], hasWithheldAuthoredContent: false } }).readings).toEqual([]);
   });
 
+  // Real installed-catalogue behavior belongs beside the other corpus integrations;
+  // preserve the original drill-client-server test's population and own deadlock limit.
+  it("serves committed drafts and never serves the schema fixture", async () => {
+    const registry = await PackRegistry.loadDefault();
+    expect(registry.list()).not.toContainEqual(expect.objectContaining({ reviewStatus: "schema_example" }));
+    expect(registry.list()).toContainEqual(expect.objectContaining({ reviewStatus: "draft", channel: "community" }));
+    expect(registry.list().map((entry) => entry.id)).not.toEqual(
+      expect.arrayContaining([
+        "immediate-guard-browser",
+        "line-boundary-browser",
+        "outcome-hold-browser",
+        "outcome-resist-browser",
+        "stated-reasoning-browser",
+        "trajectory-legs-browser",
+      ]),
+    );
+  }, 15_000);
+
   it("keeps the new PackRecord field out of pack wire projections", async () => {
     const registry = await PackRegistry.loadDefault({ development: true });
     const record = registry.required("anti-caro-advance-c5-race");

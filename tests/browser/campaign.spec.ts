@@ -121,6 +121,65 @@ async function holdCampaignAction(page: Page, path: RegExp) {
 }
 
 for (const mobile of [false, true]) {
+  test(`Campaign actions recover catalogue and map reads without repeating saved work${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const mapPath = new URL(page.url()).pathname;
+    const campaignId = mapPath.split("/").at(-1)!;
+    const runId = await startNode(page, "f1-a");
+    const before = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graphBefore = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    const savedMap = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+    const writes: string[] = [];
+    page.on("request", request => {
+      const path = new URL(request.url()).pathname;
+      if (path.startsWith("/campaign-runs") && request.method() !== "GET") writes.push(`${request.method()} ${path}`);
+    });
+
+    let catalogueReads = 0;
+    await page.route("**/campaigns", async route => {
+      if (++catalogueReads === 1) await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "HTTP_ERROR", message: "Temporary catalogue failure" } }) });
+      else await route.continue();
+    });
+    await page.goto("/campaign");
+    await expect(page.getByRole("alert")).toContainText("Temporary catalogue failure");
+    await expect(page.getByText("No campaigns are installed here.", { exact: true })).not.toBeVisible();
+    await page.getByRole("button", { name: "Retry loading campaigns", exact: true }).click();
+    await expect(page.getByRole("alert")).not.toBeVisible();
+    await expect(page.getByRole("heading", { name: "Campaign", exact: true })).toBeFocused();
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Resume run", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    await expect(page.getByRole("button", { name: "Continue encounter", exact: true })).toBeVisible();
+    expect(catalogueReads).toBe(2);
+
+    let mapReads = 0;
+    await page.route(`**/campaign-runs/${campaignId}`, async route => {
+      if (route.request().method() !== "GET") { await route.continue(); return; }
+      if (++mapReads === 1) await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "HTTP_ERROR", message: "Temporary map failure" } }) });
+      else await route.continue();
+    });
+    await page.reload();
+    await expect(page.getByRole("alert")).toContainText("Temporary map failure");
+    await expect(page.getByRole("button", { name: "Start a run", exact: true })).not.toBeVisible();
+    await page.getByRole("button", { name: "Retry loading campaign", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Continue encounter", exact: true })).toBeVisible();
+    await expect(page.locator("#campaign-title")).toBeFocused();
+    expect(mapReads).toBe(2);
+    expect(await (await page.request.get(`/campaign-runs/${campaignId}`)).json()).toEqual(savedMap);
+    await page.getByRole("button", { name: "Continue encounter", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`, "u"));
+    await playableBoard(page);
+    await expect(page.getByRole("button", { name: "Take this board", exact: true })).not.toBeVisible();
+    const after = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graphAfter = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    assertOnlyEvidenceAppended(before.events, after.events);
+    assertRecordedNodesPreserved(graphBefore.nodes, graphAfter.nodes);
+    expect(graphAfter.branches).toEqual(graphBefore.branches);
+    expect(graphAfter.activeCursor).toEqual(graphBefore.activeCursor);
+    expect(writes).toEqual([]);
+  });
+
   test(`Campaign encounter result explains earned rewards and survives reload${mobile ? " @mobile" : ""}`, async ({ page }) => {
     test.setTimeout(90_000);
     await register(page);

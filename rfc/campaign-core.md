@@ -1,5 +1,12 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
+- **2026-10-09 implementation checkpoint:** D3624 supplies explicit single-flight catalogue/map
+  read recovery under §7.1, distinguishes failed from empty arrival and retains exact saved
+  encounter/command identity. Departed/crossed reads cannot replace the new map or move its focus.
+  Permanent mounted and actual desktop/phone controls are part of the normal Campaign gates;
+  complete local verification is recorded in the exploration log. No new command, reward,
+  source, curriculum, independent acceptance or whole-Campaign completion is claimed.
+
 - **Status:** implementing — **foundation landed 2026-09-24 by owner direction (implement directly,
   no review rounds): storage migration 30, campaign-schema lanes 2 (+ boss-games lane 3), the
   `/campaign` API family, the encounter receipt (intent-presets D6), the web Campaign route and a

@@ -29278,7 +29278,7 @@
       "id": "D3543",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4678a08b250672137889e461bc5c2e4d53be1faec45bd1afb653919fdb060b78",
+      "sourceDigest": "sha256:fb892e42adc44001d58b67dc666c522e78522b6323ee75e56e0e484cd2e32614",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-10-07"
@@ -30006,6 +30006,24 @@
       "sourceDigest": "sha256:a9e109e20902078fc410d65ca8479be1780ce6bf6c93d19f0e19a5ed608bffcc",
       "uxItems": [],
       "evidence": "apps/server/src/longitudinal-store.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3624",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:aecb3f2558a3b157c38669c61533c4e4c1d45e9172e29c45a0eb0107feaff115",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/campaign-actions.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3625",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:550c18a58a5442ff36ced0b0fa8ed72b596255863d3c187054a5a6b76b95edaa",
+      "uxItems": [],
+      "evidence": "tools/test-tier-check.test.mjs",
       "evidenceKind": "path"
     }
   ]

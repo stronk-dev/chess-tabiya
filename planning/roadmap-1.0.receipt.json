@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8cdc9247ceff0d59565cf3619e3cd7cf9d85179412b951e7da7e433c7a403dd6",
+    "roadmap": "sha256:85d9610fe018e882abb8ca7335302b9646b2ef3890ac5acf7fd4a8a2bb64ae49",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:62b36ee84ffc8618bba1163b5b1c9a5a5e33bfce36438dc97e199ac6c91c1a8b",
+    "workState": "sha256:89a1bdd7cd8e8bf9a76c71269315fc6c9672f0311a0c5efe2f43046700a8118a",
     "rfcRegister": "sha256:b1156361941ec577a07d9118312c75c896d04783c9bb1f015d924d736d228f5e",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1067,
-      "done": 1502,
+      "done": 1504,
       "refused": 161
     },
     "workItems": {
@@ -1854,7 +1854,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3623 makes recent collector repairs reach untouched saved learner histories: derivation revision 2 activates the existing atomic startup reset and background worker without changing saved play, the 67-member registry or attribution. The predecessor test reproduces zero resets instead of one. Corrected promotion observations, incomplete rebuild reads, old-revision refusal and actual application/worker restart pass. All 186 focused cases/types and complete normal local gates pass: 4060 software/359 files, seven unchanged-budget performance cases, 237 content and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. Earlier Campaign preparation/results, bot replay, private Profile, Review/Play/Compare export, Studio publication, due-return and classroom repairs remain delivered. Skills still credits no marks and bot configurations are uncalibrated; complete source/module integration, official content, full Campaign and release journeys remain open. No whole capability, milestone or remote CI result is promoted.",
+        "summary": "D3624 adds single-flight Campaign catalogue/map read retry and focus recovery; six mounted cases and actual desktop/phone failure-to-resume journeys retain saved encounters and recorded play without repeating commands. D3625 moves two unchanged installed-corpus cases to existing content suites, retaining every assertion and five-/fifteen-second limits, with a predecessor-red indirect-loader guard. Complete normal local gates pass clean types/build, 4064 software/359 files, seven unchanged-budget performance cases, 239 content and 227 browser passes, one optional Maia skip, zero retries and 112 composition cells. The first full run's loading timeout remains open under D3543; a passing rerun does not diagnose it. D3623's saved-history recomputation and earlier delivered journeys stand. Skills credit, calibrated bots, complete source/module integration, official content, full Campaign and release proof remain open; no whole capability, milestone or remote CI result is promoted.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",

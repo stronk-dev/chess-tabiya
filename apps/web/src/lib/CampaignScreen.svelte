@@ -38,6 +38,7 @@
   let campaign: CampaignProjection | undefined = $state();
   let result: CampaignRunResult | undefined = $state();
   let loading = $state(true);
+  let loadFailed = $state(false);
   let busy: string | undefined = $state();
   let error: string | undefined = $state();
   let preparingNodeId: string | undefined = $state();
@@ -91,13 +92,15 @@
     void load();
   });
 
-  async function load(): Promise<void> {
+  async function load(restoreFocus = false): Promise<void> {
     const current = ++generation;
     const requestedRunId = campaignRunId;
     loading = true;
+    loadFailed = false;
     busy = undefined;
     error = undefined;
     campaign = undefined;
+    catalogue = [];
     result = undefined;
     resultError = false;
     resultLoading = false;
@@ -119,10 +122,21 @@
         if (next.campaignRun.status !== "active") await readResult(next, current);
       }
     } catch (caught) {
-      if (current === generation) error = message(caught);
+      if (current === generation) { error = message(caught); loadFailed = true; }
     } finally {
-      if (current === generation) loading = false;
+      if (current === generation) {
+        loading = false;
+        if (restoreFocus) {
+          await tick();
+          if (current === generation && requestedRunId === campaignRunId) document.getElementById("campaign-title")?.focus();
+        }
+      }
     }
+  }
+
+  function retryLoad(): void {
+    if (loading || busy !== undefined) return;
+    void load(true);
   }
 
   async function begin(entry: CampaignCatalogueEntry): Promise<void> {
@@ -266,11 +280,15 @@
   {#if campaignRunId === undefined}
     <header>
       <p class="eyebrow">Campaign</p>
-      <h1 id="campaign-title">Campaign</h1>
+      <h1 id="campaign-title" tabindex="-1">Campaign</h1>
       <p class="honest">A campaign strings rehearsals into a map. Playing a node unlocks tools for this run; winning only adds a prestige mark. Every pack stays open in Play and the Library — nothing here is locked behind a campaign or sold.</p>
     </header>
     {#if loading}<p role="status">Loading campaigns…</p>{/if}
     {#if error && !preparing}<p role="alert">{error}</p>{/if}
+    {#if loadFailed}
+      <p>Your saved campaigns are unchanged. Retry to load them.</p>
+      <button type="button" disabled={loading} onclick={retryLoad}>Retry loading campaigns</button>
+    {/if}
     <div class="catalogue">
       {#each catalogue as entry (`${entry.id}@${entry.version}`)}
         <article class="campaign-card" data-campaign={entry.id}>
@@ -283,7 +301,7 @@
           </button>
         </article>
       {:else}
-        {#if !loading}<p class="honest">No campaigns are installed here.</p>{/if}
+        {#if !loading && !loadFailed}<p class="honest">No campaigns are installed here.</p>{/if}
       {/each}
     </div>
   {:else if campaign}
@@ -399,7 +417,12 @@
   {:else if loading}
     <p role="status">Loading the campaign…</p>
   {:else if error}
+    <h1 id="campaign-title" tabindex="-1">Campaign unavailable</h1>
     <p role="alert">{error}</p>
+    {#if loadFailed}
+      <p>Your saved campaign and encounters are unchanged. Retry to load this map.</p>
+      <button type="button" disabled={loading} onclick={retryLoad}>Retry loading campaign</button>
+    {/if}
   {/if}
 </section>
 

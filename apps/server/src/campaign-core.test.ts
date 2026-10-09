@@ -3,10 +3,12 @@ import type { AddressInfo } from "node:net";
 import { fileURLToPath } from "node:url";
 
 import { runEventHeadDigest, type DrillRun } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, onTestFailed } from "vitest";
 
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import type { ChessTabiyaApplication } from "./application.js";
+import { CampaignRegistry } from "./campaign-registry.js";
+import { PackRegistry } from "./pack-registry.js";
 
 // rfc/campaign-core.md criteria 2, 3, 8, 20, 21, 24(API half), 26, 27, 28, 32 and
 // rfc/campaign-boss-games.md criteria 4, 8, 10 — exercised through createApplication's /campaign family.
@@ -74,6 +76,20 @@ async function sealPackNode(client: Client, campaignRunId: string, nodeId: strin
 }
 
 describe("campaign core through the application (rfc/campaign-core.md)", () => {
+  // Whole installed-corpus compatibility belongs to the content tier, not the fixture-only
+  // registry suite. Preserve the predecessor's own limit; moving tiers is not a latency fix.
+  it("the installed draft pilot validates against the installed packs and is community, never official", async () => {
+    const started = performance.now();
+    const phases = ["0ms installed packs start"];
+    onTestFailed(() => console.error(`Installed Campaign lifecycle: ${phases.join(" → ")}`));
+    const installed = await PackRegistry.loadDefault();
+    phases.push(`${Math.round(performance.now() - started)}ms installed packs ready; campaigns start`);
+    const registry = await CampaignRegistry.loadDefault(Object.freeze({ get: (id: string) => installed.get(id)?.document }));
+    phases.push(`${Math.round(performance.now() - started)}ms campaigns ready`);
+    const pilot = registry.list().find((entry) => entry.id === "draft-pilot-three-phases");
+    expect(pilot).toMatchObject({ channel: "community", nodeCount: 21 });
+  }, 5_000);
+
   it("reviews the submitted branch when its consequence node belongs to an ancestor branch", async () => {
     const { learner } = await boot();
     const alice = await learner("campaign_review_branch");

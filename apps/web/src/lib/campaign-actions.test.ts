@@ -2,7 +2,7 @@
 // campaign-core §§6.0/7.1: command completion belongs to its originating view, not the next one.
 import { tick } from "svelte";
 import { createClassComponent } from "svelte/legacy";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi, type Mock } from "vitest";
 import { presetDeclaration, selectNamedPreset, workflowContextPolicy } from "@chess-tabiya/runtime";
 import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
 import CampaignScreen from "./CampaignScreen.svelte";
@@ -66,6 +66,104 @@ async function screen(action: Action, mutation: () => Promise<Response>, resultR
   }
   return { component, fetcher, onNavigate, rememberWriter, activate };
 }
+
+describe("Campaign arrival read recovery", () => {
+  async function arrival(runId?: string, fetcher: Mock<(path: string, init?: RequestInit) => Promise<Response>> = vi.fn(async () => Response.json({}))) {
+    const onNavigate = vi.fn(), rememberWriter = vi.fn();
+    const component = createClassComponent({ component: CampaignScreen, target: document.body,
+      props: { campaigns: new CampaignApi(fetcher), campaignRunId: runId, onNavigate, rememberWriter } });
+    cleanup.push(() => component.$destroy());
+    return { component, fetcher, onNavigate, rememberWriter };
+  }
+
+  const catalogueResponse = () => Response.json({ campaigns: [{ id: "fixture", version: 1, title: "First campaign", channel: "community", nodeCount: 9, available: true, unavailablePacks: [], activeRunId: RUN, completedRuns: 0, marks: [] }] });
+  const failedRead = () => Response.json({ error: { code: "HTTP_ERROR", message: "Temporary read failure" } }, { status: 503 });
+
+  it("distinguishes a failed catalogue from empty and retries the read without creating a campaign", async () => {
+    let failed = true;
+    const fetcher = vi.fn(async () => failed ? failedRead() : catalogueResponse());
+    const view = await arrival(undefined, fetcher);
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')).not.toBeNull());
+    expect(document.body.textContent).not.toContain("No campaigns are installed here");
+    expect(button("Retry loading campaigns")).toBeDefined();
+    failed = false; button("Retry loading campaigns").click();
+    await vi.waitFor(() => expect(button("Resume run")).toBeDefined());
+    await vi.waitFor(() => expect(document.activeElement).toBe(document.querySelector("h1")));
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+    expect(fetcher.mock.calls).toHaveLength(2);
+    expect(view.onNavigate).not.toHaveBeenCalled();
+    expect(view.rememberWriter).not.toHaveBeenCalled();
+    button("Resume run").click();
+    expect(view.onNavigate).toHaveBeenCalledWith(`/campaign/${RUN}`);
+    expect(fetcher.mock.calls).toHaveLength(2);
+  });
+
+  it("retries the exact saved map once while loading and preserves its active encounter", async () => {
+    const late = deferred<Response>();
+    const fetcher = vi.fn().mockResolvedValueOnce(failedRead()).mockImplementation(() => late.promise);
+    const view = await arrival(RUN, fetcher);
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')).not.toBeNull());
+    const retry = button("Retry loading campaign");
+    expect(retry).toBeDefined();
+    retry.click(); retry.click(); await settle();
+    expect(fetcher.mock.calls).toHaveLength(2);
+    const map = fixture();
+    late.resolve(Response.json({ ...map, activeEncounter: { nodeId: NODE, playRunId: PLAY, title: "First encounter" } }));
+    await vi.waitFor(() => expect(button("Continue encounter")).toBeDefined());
+    await vi.waitFor(() => expect(document.activeElement).toBe(document.querySelector("h1")));
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+    expect(fetcher.mock.calls.map(([path, init]) => [path, init?.method])).toEqual([[`/campaign-runs/${RUN}`, "GET"], [`/campaign-runs/${RUN}`, "GET"]]);
+    expect(view.onNavigate).not.toHaveBeenCalled();
+    button("Continue encounter").click();
+    expect(view.onNavigate).toHaveBeenCalledWith(`/play/run/${PLAY}`);
+    expect(view.rememberWriter).not.toHaveBeenCalled();
+  });
+
+  it("keeps repeated read failure retryable and returns focus to its explanation", async () => {
+    const fetcher = vi.fn().mockResolvedValueOnce(failedRead()).mockResolvedValueOnce(failedRead()).mockResolvedValueOnce(Response.json(fixture()));
+    await arrival(RUN, fetcher);
+    await vi.waitFor(() => expect(button("Retry loading campaign")).toBeDefined());
+    button("Retry loading campaign").click();
+    await vi.waitFor(() => expect(fetcher.mock.calls).toHaveLength(2));
+    await vi.waitFor(() => expect(button("Retry loading campaign")).toBeDefined());
+    await vi.waitFor(() => expect(document.activeElement).toBe(document.querySelector("h1")));
+    button("Retry loading campaign").click();
+    await vi.waitFor(() => expect(document.querySelector("h1")?.textContent).toBe("First campaign"));
+    expect(fetcher.mock.calls).toHaveLength(3);
+  });
+
+  it("retires a retried map response after navigation to another campaign", async () => {
+    const late = deferred<Response>();
+    let attempts = 0;
+    const fetcher = vi.fn(async (path: string) => path.endsWith("next-campaign") ? Response.json(fixture("next-campaign")) : ++attempts === 1 ? failedRead() : late.promise);
+    const view = await arrival(RUN, fetcher);
+    await vi.waitFor(() => expect(button("Retry loading campaign")).toBeDefined());
+    button("Retry loading campaign").click(); await settle();
+    view.component.$set({ campaignRunId: "next-campaign" });
+    await vi.waitFor(() => expect(document.querySelector("h1")?.textContent).toBe("Next campaign"));
+    late.resolve(Response.json(fixture())); await settle();
+    expect(document.querySelector("h1")?.textContent).toBe("Next campaign");
+    expect(view.onNavigate).not.toHaveBeenCalled();
+    expect(view.rememberWriter).not.toHaveBeenCalled();
+  });
+
+  it("keeps a crossed map refusal recoverable and permits another exact read", async () => {
+    const fetcher = vi.fn().mockResolvedValueOnce(Response.json(fixture("next-campaign"))).mockResolvedValueOnce(Response.json(fixture()));
+    await arrival(RUN, fetcher);
+    await vi.waitFor(() => expect(button("Retry loading campaign")).toBeDefined());
+    expect(document.querySelector("h1")?.textContent).not.toBe("Next campaign");
+    button("Retry loading campaign").click();
+    await vi.waitFor(() => expect(document.querySelector("h1")?.textContent).toBe("First campaign"));
+    expect(fetcher.mock.calls).toHaveLength(2);
+  });
+
+  it("renders empty only after a successful catalogue read", async () => {
+    await arrival(undefined, vi.fn(async () => Response.json({ campaigns: [] })));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No campaigns are installed here"));
+    expect(button("Retry loading campaigns")).toBeUndefined();
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+  });
+});
 
 describe("Campaign action ownership", () => {
   function preferenceStore() {

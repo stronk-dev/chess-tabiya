@@ -12,6 +12,19 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3624]]/[[D3625]] are closed locally. Campaign catalogue/map arrival now offers
+single-flight read retry with failed-versus-empty, departed/crossed-response and
+focus recovery. Six mounted cases and actual desktop/phone failure → retry →
+saved encounter resume retain Campaign bytes and recorded play without mutation.
+Two indirect whole-corpus cases move unchanged to existing content suites with
+their original five-/fifteen-second limits; fixture-only tests stay software and
+the existing guard has a predecessor-red default-loader control.
+Complete normal gates pass clean types/build, 4,064 software, seven unchanged-budget
+performance, 239 content and 227 browser tests, one optional Maia skip, zero retries
+and all 112 composition cells. The first full run's 4,065 passes/one loading timeout
+remain recorded under D3543; the rerun does not diagnose that stall. No new API,
+reward, curriculum, whole capability or remote CI result is claimed.
+
 [[D3623]] is closed locally: the existing longitudinal-store §C/§D/§4.4
 upgrade obligation advances the derivation revision so already-completed saved histories
 receive the special-move collector repairs. The predecessor permanent test reproduces zero

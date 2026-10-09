@@ -76,3 +76,21 @@ test("a whole-corpus census cannot silently enter the software tier", (t) => {
     "real-content test is not assigned to the content tier: apps/example/reach.test.ts",
   ]);
 });
+
+test("indirect installed-pack loads belong to content even without a literal corpus path", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "tabiya-test-tier-"));
+  t.after(() => rmSync(root, { recursive: true }));
+  mkdirSync(join(root, "apps/example"), { recursive: true });
+  mkdirSync(join(root, "packages/example"), { recursive: true });
+  for (const [name, source] of [
+    ["default", "await PackRegistry.loadDefault()"],
+    ["options", "await PackRegistry.loadDefault({ development: true })"],
+  ]) {
+    writeFileSync(join(root, `apps/example/${name}.test.ts`), source);
+    assert.deepEqual(validateTestTiers(root).filter(error => error.includes(`${name}.test.ts`)), [
+      `real-content test is not assigned to the content tier: apps/example/${name}.test.ts`,
+    ]);
+  }
+  writeFileSync(join(root, "apps/example/fixture.test.ts"), "await PackRegistry.fromDocuments([{ value: fixture }])");
+  assert.deepEqual(validateTestTiers(root).filter(error => error.includes("fixture.test.ts")), []);
+});

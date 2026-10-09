@@ -1,10 +1,9 @@
 import { readFileSync } from "node:fs";
 
-import { describe, expect, it, onTestFailed } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { CampaignRegistry } from "./campaign-registry.js";
 import type { CampaignPackLookup } from "./campaign-validation.js";
-import { PackRegistry } from "./pack-registry.js";
 
 // rfc/campaign-core.md §6.0: {id, version, digest} identity; a second byte image at one id/version refuses.
 
@@ -49,15 +48,4 @@ describe("campaign registry", () => {
     expect(registry.list()).toEqual([]);
   });
 
-  it("the installed draft pilot validates against the installed packs and is community, never official", async () => {
-    const started = performance.now();
-    const phases = ["0ms installed packs start"];
-    onTestFailed(() => console.error(`Installed Campaign lifecycle: ${phases.join(" → ")}`));
-    const installed = await PackRegistry.loadDefault();
-    phases.push(`${Math.round(performance.now() - started)}ms installed packs ready; campaigns start`);
-    const registry = await CampaignRegistry.loadDefault(Object.freeze({ get: (id: string) => installed.get(id)?.document }));
-    phases.push(`${Math.round(performance.now() - started)}ms campaigns ready`);
-    const pilot = registry.list().find((entry) => entry.id === "draft-pilot-three-phases");
-    expect(pilot).toMatchObject({ channel: "community", nodeCount: 21 });
-  });
 });
