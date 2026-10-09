@@ -2,6 +2,1155 @@
   "schemaVersion": 1,
   "cases": [
     {
+      "id": "migration.exposure.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.defender_exposure",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "3rk3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "3rk3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.defender_exposure",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 exposure: completes the legal edge without a positive target capture",
+        "sourceSha256": "c10af6f718e7f479b2876f6c840b0d62ba77e78f12cdbe08871cff990c0a5b8a",
+        "frozenExpectationSha256": "0d349825de4d3158733324cf5387fa1031053015eba4ceac09a90ed94a76c77b"
+      }
+    },
+    {
+      "id": "migration.open-file.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.activity.event.open_file_occupancy",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/1p6/P7/R3K3 w - - 0 1",
+        "moveUci": "a2b3",
+        "afterFen": "4k3/8/8/8/8/1P6/8/R3K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.activity.event.open_file_occupancy",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 open file: a stationary rook is not an occupancy move",
+        "sourceSha256": "e29235e4e20bd142517f347ae1fdcb06c11f2a69f82d07ee2378f2ac462f4436",
+        "frozenExpectationSha256": "0250fc1951e678a227240a061c2805eea1acdf2c6cdbe3147b633e184ab3eb4b"
+      }
+    },
+    {
+      "id": "migration.relocation.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.defender_duty_relocated",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.duty_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/1n6/8/8/8/8/4K3 b - - 0 1",
+        "moveUci": "b6c8",
+        "afterFen": "2n1k3/8/8/8/8/8/8/4K3 w - - 1 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.tactic.event.defender_duty_relocated",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 relocation: a knight move without a retained target loses no duty",
+        "sourceSha256": "33c1906b38c54f83b1f9cd1c692bba09a961ecd416605c69e660399e5d03c14f",
+        "frozenExpectationSha256": "3ea9450a5dbf17ce58a3972b2277f3244ff96f464cd4cd22f1ef6742f7063702"
+      }
+    },
+    {
+      "id": "migration.harassment.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.pawn.sequence.harassment_pressure",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "moveUci": "d2d4",
+            "afterFen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1",
+            "moveUci": "d7d5",
+            "afterFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+            "moveUci": "g1f3",
+            "afterFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+            "moveUci": "g8f6",
+            "afterFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 2 3"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+            "moveUci": "e2e3",
+            "afterFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+            "moveUci": "c8g4",
+            "afterFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN2/PPP2PPP/RNBQKB1R w KQkq - 1 4"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+            "moveUci": "h2h3",
+            "afterFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN1P/PPP2PP1/RNBQKB1R b KQkq - 0 4"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN1P/PPP2PP1/RNBQKB1R b KQkq - 0 4",
+            "moveUci": "g4h5",
+            "afterFen": "rn1qkb1r/ppp1pppp/5n2/3p3b/3P4/4PN1P/PPP2PP1/RNBQKB1R w KQkq - 1 5"
+          }
+        ],
+        "pathDigest": "b674d28c1b100599f24b38cf119386ad0b9ae8291921460b821e08a4248ff856"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.pawn.sequence.harassment_pressure",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 harassment: a completed retreat must retain the pressure",
+        "sourceSha256": "95b39558a0d61214eeaa353295626a2276c5478f878b8092f2dcc689c5978aeb",
+        "frozenExpectationSha256": "2fdc26e1cef05d5be30ae743481c05010b5de67401700cc69f180d027267aec9"
+      }
+    },
+    {
+      "id": "migration.harassment.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.pawn.sequence.harassment_pressure",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "moveUci": "d2d4",
+            "afterFen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1",
+            "moveUci": "d7d5",
+            "afterFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+            "moveUci": "g1f3",
+            "afterFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+            "moveUci": "g8f6",
+            "afterFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 2 3"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+            "moveUci": "e2e3",
+            "afterFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+            "moveUci": "c8g4",
+            "afterFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN2/PPP2PPP/RNBQKB1R w KQkq - 1 4"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+            "moveUci": "h2h3",
+            "afterFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN1P/PPP2PP1/RNBQKB1R b KQkq - 0 4"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/4PN1P/PPP2PP1/RNBQKB1R b KQkq - 0 4",
+            "moveUci": "g4f5",
+            "afterFen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/4PN1P/PPP2PP1/RNBQKB1R w KQkq - 1 5"
+          }
+        ],
+        "pathDigest": "e44dd2f15558798993c2787be924d9c90c1efa1b06de0056d791edd1450d873c"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.pawn.sequence.harassment_pressure",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 harassment: a completed retreat must retain the pressure",
+        "sourceSha256": "95b39558a0d61214eeaa353295626a2276c5478f878b8092f2dcc689c5978aeb",
+        "frozenExpectationSha256": "932eb68cd11544d5d4c2db9e9c259a5bff183995338c5eb973b1034986cdbb87"
+      }
+    },
+    {
+      "id": "migration.defender-consequence.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.sequence.defender_consequence",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+            "moveUci": "c5b6",
+            "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1",
+            "moveUci": "e8d7",
+            "afterFen": "r7/3k4/1B6/8/8/8/8/R3K3 w - - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r7/3k4/1B6/8/8/8/8/R3K3 w - - 1 2",
+            "moveUci": "a1a8",
+            "afterFen": "R7/3k4/1B6/8/8/8/8/4K3 b - - 0 2"
+          }
+        ],
+        "pathDigest": "23c92b811af0fb7a627c494469640a5229a35cc94a83555370a30cec0565e7ac"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.sequence.defender_consequence",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 defender consequence: a moved target is not the retained target",
+        "sourceSha256": "5a71ffd3e22b1c00e2fee64f12860a5f458a01d3b01587982e223bd6f72fef7c",
+        "frozenExpectationSha256": "b2658418d55114ce8ac3532eb135f55053ea5765b546a12ae26e7b77404028ae"
+      }
+    },
+    {
+      "id": "migration.defender-consequence.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.sequence.defender_consequence",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+            "moveUci": "c5b6",
+            "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1",
+            "moveUci": "a8a7",
+            "afterFen": "4k3/r7/1B6/8/8/8/8/R3K3 w - - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/r7/1B6/8/8/8/8/R3K3 w - - 1 2",
+            "moveUci": "a1a7",
+            "afterFen": "4k3/R7/1B6/8/8/8/8/4K3 b - - 0 2"
+          }
+        ],
+        "pathDigest": "f1ab8dbb86d032234e7a5668f1bf7bf05d7de800eef7c28e7784795a1f74c341"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.sequence.defender_consequence",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 defender consequence: a moved target is not the retained target",
+        "sourceSha256": "5a71ffd3e22b1c00e2fee64f12860a5f458a01d3b01587982e223bd6f72fef7c",
+        "frozenExpectationSha256": "3edeb5ac47a5b648ab3503e19d1a443408243dc108ebb564d384c2f26eaf2cd7"
+      }
+    },
+    {
+      "id": "migration.deflection.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.deflection_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1",
+            "moveUci": "b8a7",
+            "afterFen": "7k/B3q3/2n5/8/8/8/8/4R1K1 b - - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/B3q3/2n5/8/8/8/8/4R1K1 b - - 0 1",
+            "moveUci": "c6a7",
+            "afterFen": "7k/n3q3/8/8/8/8/8/4R1K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/n3q3/8/8/8/8/8/4R1K1 w - - 0 2",
+            "moveUci": "e1e7",
+            "afterFen": "7k/n3R3/8/8/8/8/8/6K1 b - - 0 2"
+          }
+        ],
+        "pathDigest": "7a5323337a6ccc327344c7078092a4c700f111ce3ae67957ae3e3b06045bc266"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.deflection_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 deflection: the later capture must join the displaced defender's duty",
+        "sourceSha256": "43ce70b6bae5057dab93aa15666bc9aba3168e1301450e5cdadeb52bdc7d2a0b",
+        "frozenExpectationSha256": "d016883a7a771861f349d5dafa99aad12c7bead74d7daffd0f116d0b53ce5a54"
+      }
+    },
+    {
+      "id": "migration.deflection.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.deflection_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "1B5k/r7/2n1q3/8/8/8/8/4R1K1 w - - 0 1",
+            "moveUci": "b8a7",
+            "afterFen": "7k/B7/2n1q3/8/8/8/8/4R1K1 b - - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/B7/2n1q3/8/8/8/8/4R1K1 b - - 0 1",
+            "moveUci": "c6a7",
+            "afterFen": "7k/n7/4q3/8/8/8/8/4R1K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/n7/4q3/8/8/8/8/4R1K1 w - - 0 2",
+            "moveUci": "e1e6",
+            "afterFen": "7k/n7/4R3/8/8/8/8/6K1 b - - 0 2"
+          }
+        ],
+        "pathDigest": "47abdc3603b6fe0edb093f9e7f526f44d8b9e275f1fd54eefd92316322f291df"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.deflection_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 deflection: the later capture must join the displaced defender's duty",
+        "sourceSha256": "43ce70b6bae5057dab93aa15666bc9aba3168e1301450e5cdadeb52bdc7d2a0b",
+        "frozenExpectationSha256": "ee024a60447b0bc3344f2a7551b6d0c4c103a8fab7ebbd82f7386714cf8b58b3"
+      }
+    },
+    {
+      "id": "migration.attraction.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.attraction_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/4B3/8/8/8/8/R5K1 w - - 0 1",
+            "moveUci": "e6d7",
+            "afterFen": "4k3/3B4/8/8/8/8/8/R5K1 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/3B4/8/8/8/8/8/R5K1 b - - 1 1",
+            "moveUci": "e8d7",
+            "afterFen": "8/3k4/8/8/8/8/8/R5K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "8/3k4/8/8/8/8/8/R5K1 w - - 0 2",
+            "moveUci": "a1d1",
+            "afterFen": "8/3k4/8/8/8/8/8/3R2K1 b - - 1 2"
+          }
+        ],
+        "pathDigest": "2c6d763d754c6bb1ecef7372bb542365c7f21857bf38eb192ff4fbbda735afe5"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.attraction_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 attraction: the minor-piece sequence does not meet the retained role rule",
+        "sourceSha256": "9b6957647abfb0f5c24b5e039df43cf2581443f4eae69b3ed5a8db1732050ce0",
+        "frozenExpectationSha256": "82f3b4a24d2535e00e6c5177da09f9923dc1b757047f0f01a82d81d34cad87e9"
+      }
+    },
+    {
+      "id": "migration.attraction.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.attraction_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/1n6/8/2B5/8/8/R5K1 w - - 0 1",
+            "moveUci": "c4d5",
+            "afterFen": "4k3/8/1n6/3B4/8/8/8/R5K1 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/1n6/3B4/8/8/8/R5K1 b - - 1 1",
+            "moveUci": "b6d5",
+            "afterFen": "4k3/8/8/3n4/8/8/8/R5K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/3n4/8/8/8/R5K1 w - - 0 2",
+            "moveUci": "a1d1",
+            "afterFen": "4k3/8/8/3n4/8/8/8/3R2K1 b - - 1 2"
+          }
+        ],
+        "pathDigest": "6514d9f9b9e591f77687a48de87f16785b57110dc3a3a61b97626647c98a5ab0"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.attraction_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 attraction: the minor-piece sequence does not meet the retained role rule",
+        "sourceSha256": "9b6957647abfb0f5c24b5e039df43cf2581443f4eae69b3ed5a8db1732050ce0",
+        "frozenExpectationSha256": "90a0a4d021e2377b28adcc1da5b5c5d3d913a10f41bebd45958a302734475da4"
+      }
+    },
+    {
+      "id": "migration.ray-clearance.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.line_blocker_clearance_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "q3k3/8/8/8/N7/8/8/R3K3 w - - 0 1",
+            "moveUci": "a4b6",
+            "afterFen": "q3k3/8/1N6/8/8/8/8/R3K3 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "q3k3/8/1N6/8/8/8/8/R3K3 b - - 1 1",
+            "moveUci": "e8f7",
+            "afterFen": "q7/5k2/1N6/8/8/8/8/R3K3 w - - 2 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "q7/5k2/1N6/8/8/8/8/R3K3 w - - 2 2",
+            "moveUci": "a1a8",
+            "afterFen": "R7/5k2/1N6/8/8/8/8/4K3 b - - 0 2"
+          }
+        ],
+        "pathDigest": "95a0912c73b5e1d037d5c34c88226d9e83a566e147868978c6fccf5369df873f"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.line_blocker_clearance_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 ray clearance: square reuse does not create the captured-ray motif",
+        "sourceSha256": "525cd2ceb13bb18580185f1d61ce9219bb058eb4823fa04634f12bb6d43aa900",
+        "frozenExpectationSha256": "0e346c90d245510c136655ffcf3fc520ab3f0885b6acc03f11c4ce7eda88fdcd"
+      }
+    },
+    {
+      "id": "migration.ray-clearance.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.line_blocker_clearance_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/8/8/8/RN2K3 w - - 0 1",
+            "moveUci": "b1c3",
+            "afterFen": "4k3/8/8/8/8/2N5/8/R3K3 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/8/2N5/8/R3K3 b - - 1 1",
+            "moveUci": "e8d7",
+            "afterFen": "8/3k4/8/8/8/2N5/8/R3K3 w - - 2 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "8/3k4/8/8/8/2N5/8/R3K3 w - - 2 2",
+            "moveUci": "a1b1",
+            "afterFen": "8/3k4/8/8/8/2N5/8/1R2K3 b - - 3 2"
+          }
+        ],
+        "pathDigest": "114068dbb86a755c99da4d6ce613b0ba3f1f29448e099eb37fc759831151ce64"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.line_blocker_clearance_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 ray clearance: square reuse does not create the captured-ray motif",
+        "sourceSha256": "525cd2ceb13bb18580185f1d61ce9219bb058eb4823fa04634f12bb6d43aa900",
+        "frozenExpectationSha256": "4c3751700d19d6e82c2cb681babd36e1b57ceea03cb1d68c3061cecbad80d615"
+      }
+    },
+    {
+      "id": "migration.square-clearance.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.square_clearance_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/8/8/8/RN2K3 w - - 0 1",
+            "moveUci": "b1c3",
+            "afterFen": "4k3/8/8/8/8/2N5/8/R3K3 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/8/2N5/8/R3K3 b - - 1 1",
+            "moveUci": "e8d7",
+            "afterFen": "8/3k4/8/8/8/2N5/8/R3K3 w - - 2 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "8/3k4/8/8/8/2N5/8/R3K3 w - - 2 2",
+            "moveUci": "a1b1",
+            "afterFen": "8/3k4/8/8/8/2N5/8/1R2K3 b - - 3 2"
+          }
+        ],
+        "pathDigest": "114068dbb86a755c99da4d6ce613b0ba3f1f29448e099eb37fc759831151ce64"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.square_clearance_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 square clearance: the ray capture does not reuse the vacated square",
+        "sourceSha256": "f3de1b8122f8f73dda04dbb42833d5ec94efbf157ad2b3894b841d4b76aa4928",
+        "frozenExpectationSha256": "e70c1b18a91cfc507706bd92344c70ccac6599b3773a06898254841e5c7e987b"
+      }
+    },
+    {
+      "id": "migration.square-clearance.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.square_clearance_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "q3k3/8/8/8/N7/8/8/R3K3 w - - 0 1",
+            "moveUci": "a4b6",
+            "afterFen": "q3k3/8/1N6/8/8/8/8/R3K3 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "q3k3/8/1N6/8/8/8/8/R3K3 b - - 1 1",
+            "moveUci": "e8f7",
+            "afterFen": "q7/5k2/1N6/8/8/8/8/R3K3 w - - 2 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "q7/5k2/1N6/8/8/8/8/R3K3 w - - 2 2",
+            "moveUci": "a1a8",
+            "afterFen": "R7/5k2/1N6/8/8/8/8/4K3 b - - 0 2"
+          }
+        ],
+        "pathDigest": "95a0912c73b5e1d037d5c34c88226d9e83a566e147868978c6fccf5369df873f"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.square_clearance_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 square clearance: the ray capture does not reuse the vacated square",
+        "sourceSha256": "f3de1b8122f8f73dda04dbb42833d5ec94efbf157ad2b3894b841d4b76aa4928",
+        "frozenExpectationSha256": "ec69cc2c8a7608366aec7272b035d5b595f6c2e345a2f0ec83522822e83fee8c"
+      }
+    },
+    {
+      "id": "migration.interference.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.interference_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/1R6/q7/8/8/8/6K1 w - - 0 1",
+            "moveUci": "b6a6",
+            "afterFen": "r3k3/8/R7/q7/8/8/8/6K1 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/R7/q7/8/8/8/6K1 b - - 1 1",
+            "moveUci": "e8d7",
+            "afterFen": "r7/3k4/R7/q7/8/8/8/6K1 w - - 2 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r7/3k4/R7/q7/8/8/8/6K1 w - - 2 2",
+            "moveUci": "a6a5",
+            "afterFen": "r7/3k4/8/R7/8/8/8/6K1 b - - 0 2"
+          }
+        ],
+        "pathDigest": "a1694d6d259db3aa494534a7edbb346fad3949cc53d65ccd8d3f41e0024abdb8"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.interference_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 interference: an unrelated rook capture does not break the slider duty",
+        "sourceSha256": "467a96b77146c9da4c9dd918fc883e09fa0634b5ef3d860b8ca37a5b3273d322",
+        "frozenExpectationSha256": "7efa33c4ca5a234c24b4a2250f528317d72c709b058561fa6ff2fb31107a63c0"
+      }
+    },
+    {
+      "id": "migration.interference.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.interference_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/1R6/q7/8/8/8/6K1 w - - 0 1",
+            "moveUci": "b6b5",
+            "afterFen": "r3k3/8/8/qR6/8/8/8/6K1 b - - 1 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r3k3/8/8/qR6/8/8/8/6K1 b - - 1 1",
+            "moveUci": "e8d7",
+            "afterFen": "r7/3k4/8/qR6/8/8/8/6K1 w - - 2 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "r7/3k4/8/qR6/8/8/8/6K1 w - - 2 2",
+            "moveUci": "b5a5",
+            "afterFen": "r7/3k4/8/R7/8/8/8/6K1 b - - 0 2"
+          }
+        ],
+        "pathDigest": "a22201818c6e7198b54d31c31cb548c4f79f31bd37eb2efbd00b5973737424b2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.interference_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 interference: an unrelated rook capture does not break the slider duty",
+        "sourceSha256": "467a96b77146c9da4c9dd918fc883e09fa0634b5ef3d860b8ca37a5b3273d322",
+        "frozenExpectationSha256": "77d01e86a66679c2833b0199bb5683b9dad97fa6e089fb4b5af9a2916b373602"
+      }
+    },
+    {
+      "id": "migration.overload.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.overload_exploitation_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1",
+            "moveUci": "b8a7",
+            "afterFen": "7k/B3q3/2n5/8/8/8/8/4R1K1 b - - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/B3q3/2n5/8/8/8/8/4R1K1 b - - 0 1",
+            "moveUci": "c6a7",
+            "afterFen": "7k/n3q3/8/8/8/8/8/4R1K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/n3q3/8/8/8/8/8/4R1K1 w - - 0 2",
+            "moveUci": "e1e7",
+            "afterFen": "7k/n3R3/8/8/8/8/8/6K1 b - - 0 2"
+          }
+        ],
+        "pathDigest": "7a5323337a6ccc327344c7078092a4c700f111ce3ae67957ae3e3b06045bc266"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.overload_exploitation_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 overload: the later capture alone does not establish multiple retained duties",
+        "sourceSha256": "1d13b84969cbd4f5eb949dfa666bd4471405ae37fff4a2ffbc51e483ba015054",
+        "frozenExpectationSha256": "a9a717a64a9dca1f990a9ebdaf7b63f2bd093e1d7b0f13fd7fada31db83676e4"
+      }
+    },
+    {
+      "id": "migration.overload.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.overload_exploitation_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "1B5k/r3q3/1n6/8/8/8/8/4R1K1 w - - 0 1",
+            "moveUci": "b8a7",
+            "afterFen": "7k/B3q3/1n6/8/8/8/8/4R1K1 b - - 0 1"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "7k/B3q3/1n6/8/8/8/8/4R1K1 b - - 0 1",
+            "moveUci": "b6a8",
+            "afterFen": "n6k/B3q3/8/8/8/8/8/4R1K1 w - - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "n6k/B3q3/8/8/8/8/8/4R1K1 w - - 1 2",
+            "moveUci": "e1e7",
+            "afterFen": "n6k/B3R3/8/8/8/8/8/6K1 b - - 0 2"
+          }
+        ],
+        "pathDigest": "4d028d9c5fb16800f88b7666bdfcc9064f18a2db86c843147ff83cb7302dffeb"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.overload_exploitation_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 overload: the later capture alone does not establish multiple retained duties",
+        "sourceSha256": "1d13b84969cbd4f5eb949dfa666bd4471405ae37fff4a2ffbc51e483ba015054",
+        "frozenExpectationSha256": "e47a3e0c708a71d01b110c58220337bdf3ed0a90535c10060325d891be70a4c3"
+      }
+    },
+    {
+      "id": "migration.zwischenzug.positive",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.check_zwischenzug_observed",
+          "version": 2
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/1b6/2N5/1P6/3Q2K1 b - - 0 1",
+            "moveUci": "b4c3",
+            "afterFen": "4k3/8/8/8/8/2b5/1P6/3Q2K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/8/2b5/1P6/3Q2K1 w - - 0 2",
+            "moveUci": "d1h5",
+            "afterFen": "4k3/8/8/7Q/8/2b5/1P6/6K1 b - - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/7Q/8/2b5/1P6/6K1 b - - 1 2",
+            "moveUci": "e8f8",
+            "afterFen": "5k2/8/8/7Q/8/2b5/1P6/6K1 w - - 2 3"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "5k2/8/8/7Q/8/2b5/1P6/6K1 w - - 2 3",
+            "moveUci": "b2c3",
+            "afterFen": "5k2/8/8/7Q/8/2P5/8/6K1 b - - 0 3"
+          }
+        ],
+        "pathDigest": "a8219eb652ff82f9d396303ac548b93b841e2742b46ba4caa3200565c78c1864"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.check_zwischenzug_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 zwischenzug: a quiet intervening move is not an intervening check",
+        "sourceSha256": "f0b91a3756a5e59384c3050c60a56566e2e7b519d015485e56474d3344abccf5",
+        "frozenExpectationSha256": "e2a52c3333bdd0006564f34dbc6e8e99fdce4e70802657998a28ced44f6bb2aa"
+      }
+    },
+    {
+      "id": "migration.zwischenzug.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.check_zwischenzug_observed",
+          "version": 2
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.recorded_path",
+        "version": 1
+      },
+      "input": {
+        "kind": "recorded_path",
+        "pathReceipt": {
+          "id": "run.record.edge",
+          "version": 1
+        },
+        "edges": [
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/1b6/2N5/1P6/3Q2K1 b - - 0 1",
+            "moveUci": "b4c3",
+            "afterFen": "4k3/8/8/8/8/2b5/1P6/3Q2K1 w - - 0 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/8/2b5/1P6/3Q2K1 w - - 0 2",
+            "moveUci": "d1g4",
+            "afterFen": "4k3/8/8/8/6Q1/2b5/1P6/6K1 b - - 1 2"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "4k3/8/8/8/6Q1/2b5/1P6/6K1 b - - 1 2",
+            "moveUci": "e8f8",
+            "afterFen": "5k2/8/8/8/6Q1/2b5/1P6/6K1 w - - 2 3"
+          },
+          {
+            "kind": "edge",
+            "beforeFen": "5k2/8/8/8/6Q1/2b5/1P6/6K1 w - - 2 3",
+            "moveUci": "b2c3",
+            "afterFen": "5k2/8/8/8/6Q1/2P5/8/6K1 b - - 0 3"
+          }
+        ],
+        "pathDigest": "b58b9246e64d8a74f2a1dceea23974293562226470440418a11254d7d67a30f0"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.check_zwischenzug_observed",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 zwischenzug: a quiet intervening move is not an intervening check",
+        "sourceSha256": "f0b91a3756a5e59384c3050c60a56566e2e7b519d015485e56474d3344abccf5",
+        "frozenExpectationSha256": "a870afb0d2bbab330dc4f2a6ba41e1fcbb403fba99f5d06373d190736970f8b7"
+      }
+    },
+    {
       "id": "cited.python-chess.adjacent-rook.castled",
       "version": 1,
       "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },

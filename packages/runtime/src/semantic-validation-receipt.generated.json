@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "73f98ced63559d58d87c22f40b421f2a80035b236205db3a8ae3b4fefc75421b",
-  "caseDigest": "e546c3a1cd139bf78b5d58bc1c3a55e390cc2af95a3c22bb29bdf86a4152d3d7",
+  "profileDigest": "d5f28b5f40fb43a9b3794d088b0ca11ef20d99e9067abc9d40770a522ad8b7e1",
+  "caseDigest": "1d7c6c41849e4f213d194dfbea1c6a93edf0436256a0fa87c08c585afcb7f20d",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -2515,6 +2515,603 @@
       "failure": null
     },
     {
+      "case": "migration.attraction.negative",
+      "subject": "event:derived.tactic.attraction_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "95161e8647c27c3708afe7a13482e5721299812813321eeea384d5ff60299753",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "919d840d00921074a447899e73e29a16c85afcb3f3dfa2465212a9266af18ae0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.attraction.positive",
+      "subject": "event:derived.tactic.attraction_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "07e4b667e9603f352eed1ae52ff6a3305ef854c901aa8421a5c0772ad4e4eadf",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.tactic.attraction_observed@2",
+          "operandDigest": "6110946112599b3919b6906d90ef2aa183a015caa18bfe85b5a689f01fcb681f",
+          "factory": "createDerivedTacticAttractionObservedV2Evidence",
+          "inputDigest": "625370590dccfe77c972354c12bcb1cd7639e76b0ff7ee8a04b3c87ec8510822",
+          "payloadDigest": "6110946112599b3919b6906d90ef2aa183a015caa18bfe85b5a689f01fcb681f",
+          "sourceDigests": [
+            "26eaf6ba992cef0528342aaa651bc67c1964a1afa3a0e429a6615e4e62148e7c",
+            "3cadb761f073f384e66729c88c683a460bceb00f392f0ac16bc04506184e80d1",
+            "5235ce7f3c59a0f62c6f1d756ef735787ada025f6aa3dcf3b323e06feb72c2e8",
+            "3b89274cd61f2eb282bc8cbff7f645af10dd5d10da3a06c073ed973b95616ab1",
+            "fbf717706fbf5ccc3151c69de7c70509e329844e04c4459ff4cf1e9cf4ddbb20"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "5877f9db18942386082c49417c60c84c4ac461384c4b90d16a5560368ef9bca0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.defender-consequence.negative",
+      "subject": "event:derived.tactic.sequence.defender_consequence@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "080817c9259106040e44116fc6de2e17615f2c94e1af0f1e6631e92bd2fdd29b",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "73cbe660c6aaaf04c7f76d992ceed7a83c3b1eab666b09210c3be8528f00e923",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.defender-consequence.positive",
+      "subject": "event:derived.tactic.sequence.defender_consequence@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "d7d7059eb2afb7227e2eeb40d9b6c54901e8c1b03435f6f35fcb9848310bcfc2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.tactic.sequence.defender_consequence@2",
+          "operandDigest": "6009a7b1b6c50a698ecc6498763c3c70103ce284eb8bdeb4cef994029826c60c",
+          "factory": "createDerivedTacticSequenceDefenderConsequenceV2Evidence",
+          "inputDigest": "b4297b4524f8563ec5e7f0962bf031712c1d1e76734bc7e3a4092afd8e62dda6",
+          "payloadDigest": "6009a7b1b6c50a698ecc6498763c3c70103ce284eb8bdeb4cef994029826c60c",
+          "sourceDigests": [
+            "f76f3de1fbbb6f6f19f20b430602cc022280165d18cc19cd9b1d5c0b9fc9312a",
+            "f3182b69d6ebe3a439e78df6a96916c60742a8221013bebcf66db8bdd7c5c4b3",
+            "6e5d176e802682f176dcc4c5376f45df80194331ab5309ceb4efdfc0028a085b"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "467a4d2eb9c7cb2f326a33bdb734f902c63c588c926df97439b41191993b2f27",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.deflection.negative",
+      "subject": "event:derived.tactic.deflection_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "63f28943acfe6987aa6104a589311e6759d434527d44472757d3c161d7bbc028",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 1,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "e50d955a0eea8263680965b93b9ec228156b70582dfec792e2e6c85029180e55",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.deflection.positive",
+      "subject": "event:derived.tactic.deflection_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "7d505052fc83cc690297fc95d520d041a9d4b275c7f782b087fe30b4adc3379a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 3,
+      "targets": [
+        {
+          "projection": "derived.tactic.deflection_observed@2",
+          "operandDigest": "84d568e2309b099de027fd44fc2413dd2fdc4652295191a160b284dae4b7c9b4",
+          "factory": "createDerivedTacticDeflectionObservedV2Evidence",
+          "inputDigest": "8c14900fdc1b9d4240ba0bd6465f7b19d4245b79eaa5e832f9b6c1ab08adc119",
+          "payloadDigest": "84d568e2309b099de027fd44fc2413dd2fdc4652295191a160b284dae4b7c9b4",
+          "sourceDigests": [
+            "c6df37b023b7fadbe841cdf6e51c6160b37b38699be492fbf8ff02efce8c3c5d",
+            "f11f4aafa7b645811cba0bb966ca8bbe38a2edecf2949113cf69f56f57e698e3",
+            "45782887ece054411dfed0ce308b9f7bf5876e1a335b38d2f486129689ea0929",
+            "62e02681224281803af05c563ff18b2f407307964d710c1dc5b64fe10f704c1c",
+            "c3449a23add7a331713246efd2db1972a067d6e9e11eb05a79f849c2afb59218",
+            "2f88ae9222dd6454f6f2d1f3c3ce4b25c4e1b37467cedfe0cde97968f03c4b6b",
+            "19410edc41ceb678363133c5a6a22ad0c99305b2cc43f538da21688bc37ff216",
+            "4b3fca8af50dc0c598339c91a3ac26ad2110b805af14ac54ad5ea10829a51a6e"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "a1c2e08b88a8f6e35bd82cc3c96edaeb4873a1048c3dd4b550e8137423b80a40",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.exposure.negative",
+      "subject": "event:derived.tactic.defender_exposure@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.breadth_edge",
+      "inputDigest": "fece5a27180335f44fee2fe152af26e170f257ba4cc4579988c0977e096172e4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 59,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "377351e95ea032e0a2e0349272363c8d221cba4de9c0cd253bb5c1a71a3f3efc",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.harassment.negative",
+      "subject": "event:derived.pawn.sequence.harassment_pressure@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "feae67935c3b77d43be6395bf96334acfb5f8d740b4705527616eb3e4a625c04",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "c16976cf9aee49eebf8a2156681a5bcc11fbead04296653ca9e5b3cad384c058",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.harassment.positive",
+      "subject": "event:derived.pawn.sequence.harassment_pressure@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "e506babe3e7ef573cca06bed29b7bd7cd408665ec907712b9a325049ae6a9203",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.pawn.sequence.harassment_pressure@2",
+          "operandDigest": "adbd28441fa08e3d3c77b911f7ddcd0a51f32cf66eaf9e5cf6a5a80ea5cf85b7",
+          "factory": "createDerivedPawnSequenceHarassmentPressureV2Evidence",
+          "inputDigest": "946e52232e33aae2fbf80bebc76a591a203992d0f99bd04f69374e8b20062b65",
+          "payloadDigest": "adbd28441fa08e3d3c77b911f7ddcd0a51f32cf66eaf9e5cf6a5a80ea5cf85b7",
+          "sourceDigests": [
+            "ae039471ce1e3c58004ea9864c1a93f01fa21229b100d2701b24a7193d0c2207",
+            "0c6ae84a157162b715d213f5d3bf8f9d08e556f8e183ce31d346d2fa2b6a8b39"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "5f5412ae1c7a037171650807f26c7cc0f84710f7443cb14c337873b3a0996227",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.interference.negative",
+      "subject": "event:derived.tactic.interference_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "c7df1152ae35b7d3a8097531ea5ccf4535f40e75411df5e2ad99f2a0caf35efa",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "3a62c0eee562894c63062fe2eaaa26e1750f4c6cafceb844f72264a7a8b1d607",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.interference.positive",
+      "subject": "event:derived.tactic.interference_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "7a1077ce05eb033ecda354c5c23c4485597b8f8df9e6d215a5022407e688f9b2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "derived.tactic.interference_observed@2",
+          "operandDigest": "0d932f0452007c241d55275c28db525c452bb3828ae0df127e97d97ce5638c07",
+          "factory": "createDerivedTacticInterferenceObservedV2Evidence",
+          "inputDigest": "0b6582e99ad184e22fa8907bf66d64e0bbfc1dc36469051cc3e73ce11a2d028b",
+          "payloadDigest": "0d932f0452007c241d55275c28db525c452bb3828ae0df127e97d97ce5638c07",
+          "sourceDigests": [
+            "7765a681d368841e0da66d1aef44762dda7cdc318d0d19a7caf739cf9c9521ab",
+            "17f26d6edd324cbe29e9b189234b1f6a3f33ff6438f9b2a95aeffa2a1eb319e2",
+            "a091b7464868788fa1c2adfa6ac007163946e60248caafb09c4b49bca92a60ea",
+            "4eba9d5e36ee7389f1e3f4cfe289b59e0fa54c4a3a1b53e1835ae6e29614ecf6",
+            "901bbb95e7d2ef69c2528e557564ff1f76d9f53b115a6cfceff25236f1111b8a"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "6e439376e8f994a2213eafe90b0b10d955cb265ce1aa631af1a4907347c3b732",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.open-file.negative",
+      "subject": "event:derived.activity.event.open_file_occupancy@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.breadth_edge",
+      "inputDigest": "1f0cd4ae442a2519bee52ed268ce0c6efd51841d27c071c84daba585fe81e6fe",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 31,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "b6d6a1c9ea31c18dd3039bac806a49e50a0064caa53b78fbe1501e8a824d6d88",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.overload.negative",
+      "subject": "event:derived.tactic.overload_exploitation_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "951a7b449575e60eeb2e5d15f7c55e781da865a89a16e2f1753e8e3428beb9a9",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 1,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "dc04553da0c8619a573d4d13a398dd955ca4bfa4f901f2749f7d25c536b3940b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.overload.positive",
+      "subject": "event:derived.tactic.overload_exploitation_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "7d505052fc83cc690297fc95d520d041a9d4b275c7f782b087fe30b4adc3379a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 3,
+      "targets": [
+        {
+          "projection": "derived.tactic.overload_exploitation_observed@2",
+          "operandDigest": "57346904cd9f532e16a9d77572ee321ec9b6e40eb99a0b92b844a6cfaa035240",
+          "factory": "createDerivedTacticOverloadExploitationObservedV2Evidence",
+          "inputDigest": "8c14900fdc1b9d4240ba0bd6465f7b19d4245b79eaa5e832f9b6c1ab08adc119",
+          "payloadDigest": "57346904cd9f532e16a9d77572ee321ec9b6e40eb99a0b92b844a6cfaa035240",
+          "sourceDigests": [
+            "c6df37b023b7fadbe841cdf6e51c6160b37b38699be492fbf8ff02efce8c3c5d",
+            "f11f4aafa7b645811cba0bb966ca8bbe38a2edecf2949113cf69f56f57e698e3",
+            "45782887ece054411dfed0ce308b9f7bf5876e1a335b38d2f486129689ea0929",
+            "62e02681224281803af05c563ff18b2f407307964d710c1dc5b64fe10f704c1c",
+            "c3449a23add7a331713246efd2db1972a067d6e9e11eb05a79f849c2afb59218",
+            "2f88ae9222dd6454f6f2d1f3c3ce4b25c4e1b37467cedfe0cde97968f03c4b6b",
+            "19410edc41ceb678363133c5a6a22ad0c99305b2cc43f538da21688bc37ff216",
+            "4b3fca8af50dc0c598339c91a3ac26ad2110b805af14ac54ad5ea10829a51a6e"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "4f400c195efbc205b70d5e56604b04645c350b4056cf26cca032f3aa5373c18e",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.ray-clearance.negative",
+      "subject": "event:derived.tactic.line_blocker_clearance_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "3e15d02ff2a1095557a1c62c8fbbab1a5276f1a7863e1e910fdbcfb765afdb54",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 1,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "c6a1163804b49602676d6936b5c7090a1ac0b06943b44fd2ec8a0cc30539a653",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.ray-clearance.positive",
+      "subject": "event:derived.tactic.line_blocker_clearance_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "c3415426d756bd87795963e76a67d3c7f4e6e7880bdfe82d44c0e6d1fc544513",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.tactic.line_blocker_clearance_observed@2",
+          "operandDigest": "4602053029c0f405b76ed3f952decbdda91c48adfc0dd080cda8071ee56fd372",
+          "factory": "createDerivedTacticLineBlockerClearanceObservedV2Evidence",
+          "inputDigest": "3e45f574dd030fc156529f2e5995e3d0c68b4068dc906c2820ad1f2cb0d8ca1f",
+          "payloadDigest": "4602053029c0f405b76ed3f952decbdda91c48adfc0dd080cda8071ee56fd372",
+          "sourceDigests": [
+            "0568587778e05932355fb0e49342641673512d0a52d222f0dd8f1e16836cb332",
+            "5b888eb31ceadc75978ec67140336dc300d9f8038629aa9fc17a046f99a53a37",
+            "e3751043e26276cd13306ddd29da3810163f48b1c3ab8bc2b71e9bef8f865255",
+            "43c9e1daaf0308b27a0fa2582cb8a6679fce23a24d8d32ff547a76e3d685933a"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "f179f5cb2bb8afb49080ab23d089243d6294d91fd01cdb3d3449e14a92666bde",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.relocation.negative",
+      "subject": "event:rules.tactic.event.defender_duty_relocated@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.duty_edge",
+      "inputDigest": "fbdfd2ec33433601cce6dfff4954a0ae8c3cb66d6f1bee8e90aea78472d136d3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "1c206d12dd6057689612deec2af9d32dcc1530f0c715c5601546963dab05fef2",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.square-clearance.negative",
+      "subject": "event:derived.tactic.square_clearance_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "c3415426d756bd87795963e76a67d3c7f4e6e7880bdfe82d44c0e6d1fc544513",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 1,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "c673ae2c9854bd3b0736d5b7c4aa7b7a64027bf8df0f89a13701ccce92caa6b9",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.square-clearance.positive",
+      "subject": "event:derived.tactic.square_clearance_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "3e15d02ff2a1095557a1c62c8fbbab1a5276f1a7863e1e910fdbcfb765afdb54",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.tactic.square_clearance_observed@2",
+          "operandDigest": "9bac59d00e93c84f3243ff2d1a733f55d97bf157f6f02e439a092ef4716c485e",
+          "factory": "createDerivedTacticSquareClearanceObservedV2Evidence",
+          "inputDigest": "d74b49e97b866a2da92ffacea4d06a7e42c191878874638f05e44b3bbdf4434f",
+          "payloadDigest": "9bac59d00e93c84f3243ff2d1a733f55d97bf157f6f02e439a092ef4716c485e",
+          "sourceDigests": [
+            "a9475477c2fd1986f3bf9d834895859f8354fc93507143111638dea8309d40da",
+            "37e87614bb53eaa038556eb97b3ad81666c39b02343b9ba3c1a0a5e2a93a3e69",
+            "b9cdd0b9b17841a61265f28eec26ccbc8c2aa7a78a56f6c7ab4ec67cb3a2cd0f"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "5274b51d1610d81332f78b4d3e2731f293ff25290d86c22d30e319a05e5006de",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.zwischenzug.negative",
+      "subject": "event:derived.tactic.check_zwischenzug_observed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "99771582c5b8df23e076a102463eff59e0c6c64a0cec4985aae89e5468a1ae6c",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "4e4ccf6f991970fc524224780ac787e62ea134220b3f1825be5813aed65a7c25",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "migration.zwischenzug.positive",
+      "subject": "event:derived.tactic.check_zwischenzug_observed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "29d95a53fc8890e124379f385889516434845465e40166c5a18947301e464bd8",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.tactic.check_zwischenzug_observed@2",
+          "operandDigest": "f2db2086139f4f1f082d9493925fa73a4830cd8888bca705cdc11e53eb949c2b",
+          "factory": "createDerivedTacticCheckZwischenzugObservedV2Evidence",
+          "inputDigest": "d155114e430c952891c4f53b6dc5ee7dc49fe0f9516ba76067dddf9e9f1a8755",
+          "payloadDigest": "f2db2086139f4f1f082d9493925fa73a4830cd8888bca705cdc11e53eb949c2b",
+          "sourceDigests": [
+            "15548bba5710f21b3b8df0789eb6da0ed51f0d233b96ecf8e54f54f432f6dfe1",
+            "cbc0e70e700cfd365696edfd21e11bdffa3c66715e6e281548775ee0b78f84b9",
+            "7d6aa6c46d88e63de43dc6324f3e5625779b26117889c2cf373abd0802b15f2e",
+            "c60afb616f838b220b9f0980ee137cabed05ba9f2c7b1b1236f43487b60e0adc",
+            "0689e60a0c7d2c80e4cc081d1e24d3338f7a5768d22170dca36130860717905f",
+            "594fbca366bd4a1d34c9c9992899859242f5f33a19e5d57e3a097d16e1fad7c2",
+            "97faa57efa0769173ebca97afaded0791a3f5f0dcd3c47bc50cd9f005b4e5ec1"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "existing_assertion",
+        "propositionSha256": "d03d3ea6915be4fb294351fa6c7a59d23494e349c9c419dec7444fa240d3593f",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "structural.b-pawn-double.islands",
       "subject": "event:rules.structural.event.pawn_islands@1",
       "arm": "positive",
@@ -4219,9 +4816,10 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.open-file.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -4248,7 +4846,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -4784,15 +5381,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.harassment.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.harassment.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -4819,8 +5418,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -5592,15 +6189,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.attraction.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.attraction.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -5628,8 +6227,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -5700,15 +6297,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.zwischenzug.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.zwischenzug.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -5736,8 +6335,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -5761,9 +6358,10 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.exposure.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -5790,7 +6388,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -5860,15 +6457,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.deflection.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.deflection.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -5896,8 +6495,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -6020,15 +6617,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.interference.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.interference.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -6056,8 +6655,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -6128,15 +6725,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.ray-clearance.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.ray-clearance.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -6164,8 +6763,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -6236,15 +6833,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.overload.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.overload.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -6272,8 +6871,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -6342,15 +6939,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.defender-consequence.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.defender-consequence.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -6377,8 +6976,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -6448,15 +7045,17 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "migration.square-clearance.positive"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.square-clearance.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -6484,8 +7083,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation",
         "external_label"
       ]
@@ -7499,9 +8096,10 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "migration.relocation.negative"
+          ]
         },
         {
           "arm": "orientation",
@@ -7528,7 +8126,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },

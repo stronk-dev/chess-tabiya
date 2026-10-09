@@ -233,7 +233,12 @@ with four independent authorities:
 
 The current register has 81 subjects. The 38 migrated cases remain, D3563 adds the independent
 standard castling positive/nearby negative, and D3616 adds adjacent-rook and stationary-king
-positives, giving 42 cases (32 positives, 10 negatives). The build-only cited-source store retains six lines / 385 bytes
+positives. D3628 adds twelve legal nearby negatives and nine v2 recorded-path positives,
+giving 63 cases (41 positives, 22 negatives). Each sequence fixture also checks its completed
+production window; canonical qualification invokes the complete recorded application path,
+not the broken sequence-to-parent reach adapter tracked as D3629. The original 42 cases
+remain, one missing-capture-operand predicate is not promoted to a legal chess negative,
+and orientation/eligibility rules are unchanged. The build-only cited-source store retains six lines / 385 bytes
 from python-chess 1.11.2 at a fixed commit, with attribution and licence. Resolution checks the
 exact source, revision, licence, excerpt and proposition, then binds its case, subject,
 expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network

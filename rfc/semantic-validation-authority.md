@@ -11,6 +11,12 @@
   avoidance family (D1716) and king opposition (D1717) abstain on every arm, named. **D0 is not
   discharged:** the protected owner store is absent (implementers may not write `design/`), so the
   owner arm fails closed. Receipt: `planning/semantic-validation-authority/implementation-2026-09-24.md`
+  **2026-10-09 Slice B/C checkpoint (D3628):** the original 42 cases remain; twelve nearby
+  legal negatives and nine v2 recorded-path positives bring the register to 63 cases
+  (41 positive / 22 negative). Complete production paths and exact completed windows execute;
+  none of this qualifies legacy v1 events, missing-capture injection, orientation or new learner
+  eligibility. D3629 retains the sequence-wrapper/parent-reach defect; full-path qualification
+  does not certify that adapter. **Zero subjects remain fully validated.**
   **2026-10-09 draft amendment:** §4.1a below specifies D3564's retained-input comparison.
   It requires independent review and acceptance before production changes; Slice A's existing
   parser, runner, authority and learner-eligibility rules remain in force.

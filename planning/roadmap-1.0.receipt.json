@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5915d1553c1ab6eabee5f77c1bfb26b98bd762e97ca96e0d85d7afb6e5b1a97e",
+    "roadmap": "sha256:d758dfca60ede9ce6072cc9ddd0f1da2baf13f2f0953b1de66a2b85424a3060c",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:acee6770c964fcf1dd4663875e0927d6ddb240c6ddc6fca1bc9469e62e1e5844",
+    "workState": "sha256:6e0a590c8f51dd4cc042f46a2a90c49db20b6d6d0af4dd75591daa9265c71a0e",
     "rfcRegister": "sha256:b1156361941ec577a07d9118312c75c896d04783c9bb1f015d924d736d228f5e",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 14,
       "blocked": 1067,
-      "done": 1506,
+      "done": 1507,
       "refused": 161
     },
     "workItems": {
@@ -201,7 +201,7 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3626 repairs retained castling-rook mobility under the existing breadth collector contract: both physical relocations survive exact destination deltas, sealed factories, full candidate populations, recorded runs and Inspector squares/line serialization. Eight direct predecessor controls fail; stationary-rook and ordinary-move negatives remain. Existing longitudinal derivation revision 3 rebuilds revision-1/2 histories through startup and the background worker without editing play or registry membership. All 407 foundation/65 longitudinal cases and types pass. Complete normal local tiers pass clean types/build, 4084 software/359 files, seven unchanged-budget performance cases, 239 content and 227 browser passes, one optional Maia skip, zero retries and 112 composition cells. The first full run's missing roadmap references are corrected before remaining tiers pass. Maia, installed-opening and durable Stockfish source drafts still require independent acceptance; remaining consumer execution/availability, official content and whole capabilities stay open. No new projection, motif, permission, pack edit or remote CI claim.",
+        "summary": "D3628 migrates twelve grounded nearby negatives and nine v2 recorded-path positives through actual production operations, retaining all 42 earlier cases. Canonical coverage is 63 cases (41 positive, 22 negative) over 81 subjects; all focused foundation cases pass. Complete windows are checked separately, while canonical receipts execute the whole recorded application path. D3629 records the broken sequence-wrapper/parent-multiset binding and is not certified by these path cases. Missing capture injection remains a lower-level input refusal; legacy v1, orientation, held sources, learner eligibility, official content and zero fully validated subjects remain unchanged. Complete normal local gates pass clean types/build, 4118 software cases/360 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 231 browser passes (166 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 112 composition cells; no whole capability, milestone or remote CI claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/installed-opening-evidence.md",
@@ -229,6 +229,10 @@
           "packages/runtime/src/semantic-validation-authorities.ts",
           "packages/runtime/src/semantic-validation-cited-sources.ts",
           "packages/runtime/src/semantic-validation.test.ts",
+          "packages/runtime/src/semantic-validation-migration.test.ts",
+          "packages/runtime/src/semantic-validation-cases.json",
+          "packages/runtime/src/semantic-validation-profiles.json",
+          "tools/d1713-semantic-validation-matrix/validation-matrix.test.ts",
           "packages/runtime/src/castling-evidence.test.ts",
           "packages/runtime/src/special-move-tactics.test.ts",
           "rfc/tactical-collectors.md",

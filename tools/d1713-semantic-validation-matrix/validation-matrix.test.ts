@@ -28,7 +28,10 @@ const sequences = (test: string, level: Level = "event_emitter") => a("packages/
 const d872 = (file: string, test: string, level: Level) => a(`tools/d872-semantic-tactics-harness/${file}`, test, level);
 const d1714 = (test: string, level: Level) => a("tools/d1714-authority-empty-harness/authority-empty.test.ts", test, level);
 
+const migration = (test: string) => a("packages/runtime/src/semantic-validation-migration.test.ts", test, "event_emitter");
+
 const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
+  "derived.tactic.check_zwischenzug_observed": [migration("D3628 zwischenzug: a quiet intervening move is not an intervening check")],
   "rules.structural.event.piece_count": [runtime("emits identity-preserving structural relations while leaving raw readings independent")],
   "rules.structural.event.line_blockers": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
   "rules.structural.event.pawn_islands": [runtime("emits pawn-island and mover-relative loose-piece events through the compiled path")],
@@ -53,21 +56,21 @@ const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.mobility.event.piece_destinations": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
   "derived.pawn.sequence.contact_timing": [breadth("seals a retained contact sequence only with the required recorded-move evidence")],
   "derived.pawn.event.transitions": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
-  "derived.pawn.sequence.harassment_pressure": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "event_emitter")],
+  "derived.pawn.sequence.harassment_pressure": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "event_emitter"), migration("D3628 harassment: a completed retreat must retain the pressure")],
   "derived.tactic.defender_exposure": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
-  "derived.tactic.sequence.defender_consequence": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "event_emitter")],
+  "derived.tactic.sequence.defender_consequence": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "event_emitter"), migration("D3628 defender consequence: a moved target is not the retained target")],
   "derived.material.event.role_asymmetry": [breadth("retains promotion-only and capture-promotion authorities for material-role events")],
   "rules.king.event.zone_state": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
   "derived.activity.event.open_file_occupancy": [breadth("routes one-edge breadth facts through the compiled semantic-event authority")],
   "derived.king.captured_zone_defender": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
   "rules.tactic.event.defender_removed": [anchors("joins defender removal to the exact capture and retained target")],
   "rules.tactic.event.defender_duty_relocated": [anchors("distinguishes a same-piece relocation that loses its duty")],
-  "derived.tactic.deflection_observed": [sequences("requires defender displacement and a later positive target capture")],
-  "derived.tactic.attraction_observed": [sequences("restricts attraction to the retained king/queen/rook consequence")],
-  "derived.tactic.line_blocker_clearance_observed": [sequences("keeps ray clearance and square clearance as distinct observed events")],
-  "derived.tactic.square_clearance_observed": [sequences("keeps ray clearance and square clearance as distinct observed events")],
-  "derived.tactic.interference_observed": [sequences("retains the broken slider duty for interference")],
-  "derived.tactic.overload_exploitation_observed": [sequences("requires more than one retained duty for observed overload exploitation")],
+  "derived.tactic.deflection_observed": [sequences("requires defender displacement and a later positive target capture"), migration("D3628 deflection: the later capture must join the displaced defender's duty")],
+  "derived.tactic.attraction_observed": [sequences("restricts attraction to the retained king/queen/rook consequence"), migration("D3628 attraction: the minor-piece sequence does not meet the retained role rule")],
+  "derived.tactic.line_blocker_clearance_observed": [sequences("keeps ray clearance and square clearance as distinct observed events"), migration("D3628 ray clearance: square reuse does not create the captured-ray motif")],
+  "derived.tactic.square_clearance_observed": [sequences("keeps ray clearance and square clearance as distinct observed events"), migration("D3628 square clearance: the ray capture does not reuse the vacated square")],
+  "derived.tactic.interference_observed": [sequences("retains the broken slider duty for interference"), migration("D3628 interference: an unrelated rook capture does not break the slider duty")],
+  "derived.tactic.overload_exploitation_observed": [sequences("requires more than one retained duty for observed overload exploitation"), migration("D3628 overload: the later capture alone does not establish multiple retained duties")],
 });
 
 const NEGATIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
@@ -80,20 +83,20 @@ const NEGATIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.transition.event.piece_escape": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
   "rules.transition.event.developed": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
   "derived.pawn.event.transitions": [d1714("checks an explicit pawn-transition positive and a quiet negative through breadth emission", "event_emitter")],
-  "derived.pawn.sequence.harassment_pressure": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "source_predicate")],
-  "derived.tactic.sequence.defender_consequence": [d1714("reaches the two isolated sequence constructors from real predicate outputs", "source_predicate")],
+  "derived.pawn.sequence.harassment_pressure": [migration("D3628 harassment: a completed retreat must retain the pressure")],
+  "derived.tactic.sequence.defender_consequence": [migration("D3628 defender consequence: a moved target is not the retained target")],
   "derived.king.captured_zone_defender": [d1714("reaches nearby legal local-emitter negatives without corrupting an operand", "event_emitter")],
-  "derived.tactic.defender_exposure": [breadth("requires both an exact lost enemy defence edge and a positive local capture", "source_predicate")],
-  "derived.activity.event.open_file_occupancy": [breadth("requires the heavy piece itself to move from a closed source file onto a declared open file", "source_predicate")],
+  "derived.tactic.defender_exposure": [migration("D3628 exposure: completes the legal edge without a positive target capture")],
+  "derived.activity.event.open_file_occupancy": [migration("D3628 open file: a stationary rook is not an occupancy move")],
   "rules.tactic.event.defender_removed": [anchors("joins defender removal to the exact capture and retained target", "source_predicate")],
-  "rules.tactic.event.defender_duty_relocated": [anchors("distinguishes a same-piece relocation that loses its duty", "source_predicate")],
-  "derived.tactic.deflection_observed": [sequences("requires defender displacement and a later positive target capture", "source_predicate")],
-  "derived.tactic.attraction_observed": [sequences("restricts attraction to the retained king/queen/rook consequence", "source_predicate")],
-  "derived.tactic.line_blocker_clearance_observed": [sequences("keeps ray clearance and square clearance as distinct observed events", "source_predicate")],
-  "derived.tactic.square_clearance_observed": [sequences("keeps ray clearance and square clearance as distinct observed events", "source_predicate")],
-  "derived.tactic.interference_observed": [sequences("retains the broken slider duty for interference", "source_predicate")],
-  "derived.tactic.overload_exploitation_observed": [sequences("requires more than one retained duty for observed overload exploitation", "source_predicate")],
-  "derived.tactic.check_zwischenzug_observed": [d872("sequence.test.ts", "admits a check zwischenzug while rejecting a merely delayed recapture", "source_predicate")],
+  "rules.tactic.event.defender_duty_relocated": [migration("D3628 relocation: a knight move without a retained target loses no duty")],
+  "derived.tactic.deflection_observed": [migration("D3628 deflection: the later capture must join the displaced defender's duty")],
+  "derived.tactic.attraction_observed": [migration("D3628 attraction: the minor-piece sequence does not meet the retained role rule")],
+  "derived.tactic.line_blocker_clearance_observed": [migration("D3628 ray clearance: square reuse does not create the captured-ray motif")],
+  "derived.tactic.square_clearance_observed": [migration("D3628 square clearance: the ray capture does not reuse the vacated square")],
+  "derived.tactic.interference_observed": [migration("D3628 interference: an unrelated rook capture does not break the slider duty")],
+  "derived.tactic.overload_exploitation_observed": [migration("D3628 overload: the later capture alone does not establish multiple retained duties")],
+  "derived.tactic.check_zwischenzug_observed": [migration("D3628 zwischenzug: a quiet intervening move is not an intervening check")],
 });
 
 const ORIENTATION: Readonly<Record<string, readonly Authority[]>> = Object.freeze({

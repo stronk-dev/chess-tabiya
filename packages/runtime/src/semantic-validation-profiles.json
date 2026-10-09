@@ -28,9 +28,22 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.open-file.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.activity.event.open_file_occupancy",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -606,14 +619,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.harassment.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.harassment.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1203,14 +1242,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.attraction.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.attraction_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.attraction.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.attraction_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1307,14 +1372,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.zwischenzug.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.check_zwischenzug_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.zwischenzug.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.check_zwischenzug_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1377,9 +1468,22 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.exposure.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.defender_exposure",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1475,14 +1579,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.deflection.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.deflection_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.deflection.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.deflection_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1643,14 +1773,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.interference.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.interference_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.interference.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.interference_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1747,14 +1903,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.ray-clearance.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.line_blocker_clearance_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.ray-clearance.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.line_blocker_clearance_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1851,14 +2033,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.overload.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.overload_exploitation_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.overload.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.overload_exploitation_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -1940,14 +2148,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.defender-consequence.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.sequence.defender_consequence",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.defender-consequence.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.sequence.defender_consequence",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -2043,14 +2277,40 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.square-clearance.positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.square_clearance_observed",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.square-clearance.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.square_clearance_observed",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -3199,9 +3459,22 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "migration.relocation.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.defender_duty_relocated",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",

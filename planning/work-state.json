@@ -30043,6 +30043,23 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/module-query.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3628",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:861a913eb2aec100248328d6f68fdd95d008102fb890b175258e80538a02d2eb",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-migration.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3629",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0586568242c6369fd199fae108c793120acde00be40b4146ba87abd016c4498d",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

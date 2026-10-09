@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3627]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3629]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,7 +53,21 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3627]] repairs staged Support's exact legal-move admission before child
+Latest completed batch: [[D3628]] moves twelve grounded nearby negatives and nine v2 recorded-path
+positives through actual production operations, retaining all 42 prior cases. The register now has
+63 passing cases (41 positive / 22 negative) over 81 subjects; full qualification remains zero.
+Complete-window controls, 420 focused foundation cases and sixteen migration-matrix controls pass.
+Complete normal local gates pass clean types/build, 4,118 software cases / 360 files, seven
+unchanged-budget performance, 239 content and 231 browser cases, one optional Maia skip, zero
+retries and all 112 composition cells. Current ledger: 3,378 rows, 1,507 done, 161 refused and
+1,710 live; zero untriaged. [[D3629]] separately retains the broken sequence-to-parent validation
+adapter; these full-path cases do not certify it. No new collector output, learner permission,
+pack content, whole capability or remote CI result. The product inventory above is unchanged:
+four milestones active, five blocked; UX 273 complete / 272 live / 24 retired; product RFCs
+42 implementing / ten awaiting / 22 draft. Historical archive records 75 implemented RFCs and
+one superseded RFC, not a fresh audit of every historical completion claim.
+
+Previous batch: [[D3627]] repairs staged Support's exact legal-move admission before child
 construction or collection. Twelve predecessor failures reproduce missing promotions and illegal
 suffixes; seven complete legal populations, 161 focused cases/types and eight desktop/phone
 warning/promotion journeys pass. Complete normal local gates pass clean types/build, 4,105 software,

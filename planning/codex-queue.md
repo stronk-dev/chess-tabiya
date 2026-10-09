@@ -12,6 +12,18 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3628]] is closed locally under semantic-validation-authority slices B/C. Twelve legal
+nearby negatives and nine v2 recorded-path positives execute actual production operations,
+retaining all 42 original cases. The register has 63 passing cases (41 positive / 22 negative);
+selected complete windows are checked independently. All 420 focused foundation cases,
+sixteen matrix controls and complete normal gates pass: clean types/build, 4,118 software,
+seven unchanged-budget performance, 239 content and 231 browser cases, one optional Maia skip,
+zero retries and 112 composition cells. Missing capture injection remains unpromoted;
+orientation, held sources, learner eligibility and official content remain separate.
+[[D3629]] separately owns the broken sequence-to-parent validation reach: its wrapper is
+not a path and one selected window is not the entire parent multiset. Author/review that
+exact binding before changing the reach contract; this wave cannot certify it.
+
 [[D3627]] is closed locally under module-registration §2.5.2's existing exact candidate
 admission. Staged Support uses the shared full legal-move identity rather than a from/to
 approximation before collecting. Twelve predecessor failures establish missing promotions
