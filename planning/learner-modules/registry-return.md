@@ -8,6 +8,27 @@ implementation blockers. This return concerns the actual registered query and ad
 `make requested-sight-contract-check` is a disposable code-backed diagnostic, not a software
 completion gate. Its passing preimage assertions mean the defect remains. `[V]`
 
+### Author checkpoint — 2026-10-09, not acceptance
+
+`rfc/module-registration.md` §4.2a and the companion note in `rfc/evidence-presentation.md`
+now specify four exact selected derivations over the unchanged admitted sources. The draft
+chooses request-local views, literal source/FEN/square retention and a sole-pair complete
+legal-set envelope; ordinary Sight budgets and position-wide Inspector remain unchanged.
+Independent review must precede production factory/query/receipt/client changes. No collector,
+binding, default, semantic verdict or exact-mobility D1 is discharged by this author checkpoint.
+
+The normal opt-in target now runs strict TypeScript, the six original preimage controls and
+26 proposed-model controls over genuine sources. Full queen/promotion/castling lists fit the
+proposed envelope without exposing UCI in learner prose. Control keeps pawn advances separate
+from geometric attacks; pawn state survives with no contacts; invalid clones stay unavailable.
+The model does not mint any production value or exercise the future API/renderer/gesture path.
+The proposed automatic view choices need independent review and later owner-use evidence.
+
+The draft also names the current post-commit and ancestor `moveUci.slice(2, 4)` scope problem:
+castling uses a rook-form identity, so the selected subject must come from the shared semantic
+landing authority. Do not carry that slice into the new projection. All four original findings
+below still apply to production. `[V]` (`module-query.ts`; the opt-in controls named above.)
+
 1. **Acquisition is not selected-square consumption.** Four real sealed readings—castling rights,
    square control, pawn contacts and legal moves—have no branch in `sightScope`. Every possible
    selected square is excluded. The current adapters consume entire populations, so making their

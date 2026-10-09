@@ -279,7 +279,11 @@ source-authority hold, official content or release gate is promoted by this scop
    authority to the existing author lane before implementing that part. The actual return now
    measures the selected frame/adapter boundary and 27 legal queen destinations versus six marks;
    `planning/learner-modules/registry-return.md` and `planning/rfc-drafting-queue.md` own the narrow
-   amendment. Do not call it an implementation-ready switch fix or discharge mobility D1 yet.
+   amendment. The 2026-10-09 draft is now authored in module-registration §4.2a and mirrored
+   in evidence-presentation: four selected derivations, request-local views and a sole-pair
+   complete legal-set envelope. Strict types plus six preimage/26 real-source model controls
+   pass. Independently review before factory/query/receipt/client implementation; production
+   scopes and mobility D1 remain open. Do not treat this as a switch fix or self-accept it.
    [[D3576]] closes the already-specified immutable opening loader with a detached validated
    snapshot, frozen source metadata and predecessor-red mutation controls. Full sequential
    local gates pass. [[D3376]]'s cross-package source-authority amendment and runtime/Review

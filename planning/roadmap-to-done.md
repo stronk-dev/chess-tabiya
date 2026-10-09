@@ -64,6 +64,14 @@ across the platform**. Deeper “why this engine move?” search remains researc
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
 
+[[D3578]] now has an authored **draft**, not a shipped feature: module-registration §4.2a and
+the presentation companion specify four selected-source views, full legal identities and a
+complete-legality envelope without widening other Sight output or replacing Inspector populations.
+Strict TypeScript and 32 opt-in checks pass (six current-gap controls plus 26 source/model checks).
+Independent acceptance and actual factory/query/receipt/client/native-input implementation remain
+open, as does exact-mobility D1. The earlier full product verification below was not rerun for
+this author-only change; no whole capability, milestone or official pack is promoted.
+
 [[D3606]] is closed locally: Campaign encounter results now distinguish act income
 from extra rewind rewards/tool unlocks, show current equipment without promising active
 help, and reconstruct after reload without another submit. Exact replay can carry a later

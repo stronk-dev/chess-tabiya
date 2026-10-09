@@ -8,6 +8,13 @@ Status cells and RFC body Status lines begin with one of the seven lifecycle tok
 emphasis is stripped. Dates and text after the first separator are prose; only an `awaiting` cell's
 first `D<n>` token is machine-read as its discharge pointer.
 
+**Selected-Sight draft amendment, 2026-10-09:** `module-registration.md` §4.2a owns D3578's
+four selected-source derivations, request-local views and sole-pair complete-legality envelope.
+It remains **unaccepted**, despite the parent's implementing lifecycle. The opt-in real-value
+model is not a production mint, binding, gesture proof or discharge of exact-mobility D1.
+Independent review must precede source/operation/receipt/client changes; Inspector populations
+and other Sight budgets stay unchanged. Handoff: `planning/learner-modules/registry-return.md`.
+
 **Safe-deployment draft amendment, 2026-10-07:** the implementing document's §8 is repaired in
 draft, not newly accepted: 112 literal unsafe identities, transport admission before bounded
 body-selector dispatch, existing account32m ceiling, actual selection-presence move dispatch,

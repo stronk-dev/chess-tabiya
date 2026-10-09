@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "paths": {
+      "chessops": ["../../packages/runtime/node_modules/chessops/dist/types/index.d.ts"],
+      "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
+    }
+  },
+  "include": ["selected-sight-model.ts", "selected-sight-model.test.ts"]
+}

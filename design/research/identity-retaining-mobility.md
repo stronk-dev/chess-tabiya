@@ -57,3 +57,35 @@ capture identity and the exact affected piece/squares rather than minting an ind
 
 No content was relabelled. Production collectors must preserve the square sets; a count-only event
 would discard the very evidence needed by the board overlay and by later tactical joins.
+
+## 4. Selected-square delivery boundary — 2026-10-09, D3578
+
+The shipping Sight query acquires exact legal moves, square control, pawn contacts and castling
+rights but `sightScope` excludes every value of these four projections. The existing adapters
+render whole-position populations; extending their scope to every square would not answer the
+selected origin/target. The selected square does not reach `ProjectionPresentationAdapter.construct`.
+`[V]` (`packages/runtime/src/module-query.ts`; `presentation-contract.ts`;
+`presentation-play-adapters.ts`; six preimage controls in `make requested-sight-contract-check`.)
+
+The same opt-in command now runs strict types plus 26 disposable model controls over genuine
+unchanged source values. A queen on d4 retains 27 destinations; a promotion pawn retains four
+identities for one square; standard and non-a/h/degenerate Chess960 preserve king landing versus
+rook-form identity. Full SAN/promotion lists fit the proposed 96-word/64-mark legal envelope;
+the queen's list exceeds the existing 30-word explanatory ceiling. This checks these concrete
+lists, not every legal position or a production renderer. `[V]`
+(`tools/d2120-module-registration-author-contract/selected-sight-model*.ts`.)
+
+An initial-position e4 target has no geometric controller but does have a legal e2–e4 pawn
+destination under the control source's clone convention. The initial model's empty-set expectation
+failed and was corrected to preserve this difference. Pinned geometry, invalid clones, a genuinely
+uncontrolled target, direct pawn contacts/locks and passer state without contacts stay distinct;
+all four original source payloads and receipts remain unchanged. `[V]` (the same model controls;
+`packages/runtime/src/square-control.ts`, `pawn-dynamics.ts`, `legal-moves.ts`, `castling.ts`.)
+
+`rfc/module-registration.md` §4.2a proposes explicit selected derivations, request-local views and
+the sole legal-pair envelope rather than changing parent readings or adding arbitrary adapter
+context. The view defaults are **unvalidated product proposals**, not measured usefulness. The
+model does not mint shipping evidence or validate the collectors independently. Independent
+acceptance, actual source/query/parser/renderer/native gestures and owner use remain open;
+exact-mobility D1 and D3578 are not discharged. `[M]` (proposal); `[V]` (current boundary and
+absence of production changes, as recorded in `planning/learner-modules/registry-return.md`).

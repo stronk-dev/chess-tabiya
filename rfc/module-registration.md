@@ -28,6 +28,10 @@
   commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
 - **Created:** 2026-08-24
+- **Draft amendment 2026-10-09 — D3578, §4.2a:** selected-square source projections,
+  request-local views and a complete-legality envelope are authored for independent review.
+  This amendment is **not accepted** by this RFC's existing implementing status. No production
+  binding, permission, default, source or exact-mobility discharge changes until acceptance.
 - **Implementation checkpoint 2026-10-07, shape-backed learner actions:** D3538 retains
   the exact fired shape entry ID through the registered presenter and the parsed
   module receipt. Named-structure and Theory pointer cards can open the existing Library
@@ -1327,6 +1331,226 @@ Repaired: the shipped trigger is pointer-only — chessground's `select` event s
 as amended requires *"input semantics must be equivalent for touch, hover/pointer and
 keyboard/assistive use"*, so the keyboard activation path sets the same state. Criterion A11.
 
+#### 4.2a Draft D3578 amendment — selected-square views, not whole-board populations
+
+**Author: codex, 2026-10-09. Independent acceptance required before implementation.** This
+section proposes the narrow repair requested by `planning/learner-modules/registry-return.md`.
+The six predecessor controls still pass because production still has the gap. The additional
+disposable model checks proposed selection over real sealed readings; it is neither a new source
+authority nor proof of the shipping query, parser, renderer or input journey.
+
+**Boundary choice.** Do not add an arbitrary `context` argument to every presentation adapter.
+Do not change a sealed position reading's payload or advertise a partial reading under its old ID.
+Create four explicit selected-square derivations through the existing sole value-factory/route
+boundary. Their payload owns the selected square, exact full FEN, literal admitted source and the
+computed selected result. Adapters continue to accept one admitted value; the selection now exists
+*inside that value*, rather than being inferred from array order or supplied as prose.
+
+| New independently versioned projection | Its single declared input | Selected meaning |
+|---|---|---|
+| `derived.sight.legal_moves@1` | `rules.mobility.reading.legal_moves@1` | Complete exact move rows and distinct semantic destinations of this actual-turn origin |
+| `derived.sight.square_control@1` | `rules.square.reading.control@1` | Both colors' inbound controller identities at this target, separating geometric and clone-legal modes |
+| `derived.sight.pawn_contacts@1` | `rules.pawn.reading.contacts@1` | This pawn's retained state and directly incident contacts, locks and connected-passer pairs |
+| `derived.sight.castling_rights@1` | `rules.castling.reading.rights@1` | Rights of this king, or the current right carried by this exact castling rook |
+
+Each declaration has exactly that input in `dependsOn` and `derivation.inputs`, and retains the
+actual source item, not a caller-labelled reference. Grounding, exactness, confidence and conventions
+inherit the input without promotion; in particular, square control does not become exact
+actual-turn mobility. Use one catalog-local derived producer for these four operations; no new
+collector, provider, global version head, schema or database migration is claimed. This amendment
+retains `tabiya-claims: none`. The new projection IDs are proposed, not registered at this checkpoint.
+
+**Factory inputs and refusal.** Each sole route accepts exactly `{source, fen, selectedSquare}`.
+`source` must be a genuine value-authority-sealed item of the row's exact input projection/version.
+The factory canonicalizes the full supplied FEN, requires exact equality with `source.payload.fen`
+(including turn, rights, en-passant and clocks), validates `[a-h][1-8]`, computes the result itself,
+and mints through the existing `evidence-factories.ts` authority. It accepts no output operands,
+ancestry, caption, callback, renderer or caller-selected strength. Copied/forged source objects,
+wrong input families, cross-position inputs and invalid selections fail before construction.
+Original source payloads/receipts remain byte-identical. Full Inspector keeps its original
+position-wide input, bindings, adapters and meaning; selected slices do not replace its populations.
+
+Declare `fen`, `selectedSquare` and `result` as selected projection operands; the full input is
+literal derivation ancestry, not a competing square-selection authority. For these four facts,
+`ModuleFact.subjectSquare` is exactly `payload.selectedSquare`; never use the generic
+`firstSquare` walk through a retained parent population. Identity retains the frame and selected
+result, so different selections or positions cannot deduplicate as the same requested answer.
+
+The four available payloads share only this frame; the result type is projection-specific,
+not `unknown`, a generic operand dictionary or an arbitrary member list:
+
+```ts
+type SelectedSight<S, R> = Readonly<{
+  fen: string;
+  selectedSquare: SquareName;
+  source: DeclaredEvidence<S>;
+  result: R;
+}>;
+// Types on the right are the existing runtime interfaces, not rewritten source schemas.
+type SelectedMoves = Readonly<{
+  turn: Color;
+  piece: ExactLegalMoveMap["pieces"][number]["piece"];
+  moves: readonly ExactLegalMove[];
+  destinations: readonly SquareName[];
+}>;
+type SelectedControl = readonly Readonly<{
+  color: Color;
+  pseudo: readonly SquareController[];
+  legal: { readonly kind: "available"; readonly controllers: readonly SquareController[] }
+    | { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" };
+}>[];
+type SelectedPawns = Readonly<{
+  state: PawnContactsReading["passed"][number];
+  contacts: PawnContactsReading["contacts"];
+  locks: PawnContactsReading["locks"];
+  connectedPassedPairs: PawnContactsReading["connectedPassedPairs"];
+}>;
+type SelectedRights = Readonly<{
+  color: Color;
+  wings: readonly Readonly<{
+    wing: "kingside" | "queenside";
+    retained: boolean;
+    rookSquare: SquareName | null;
+  }>[];
+}>;
+```
+
+Unavailable/inapplicable route results are closed factory result arms, not newly minted chess
+facts: use exactly the reasons below, retaining control-family availability even for no witness.
+The sole factory returns these arms; adapters cannot manufacture empty/availability verdicts.
+`no_witness` below names the module state, not a new dispatcher token: use the existing
+`not_matched` route arm. The control absence reason is `no_available_controller` and retains a
+closed per-color `legalAvailability` array (`available`, or `unavailable/invalid_turn_clone`).
+Carry that typed metadata through source flattening and the exact module-empty parser instead
+of discarding it. Only available selected values are minted; an unavailable calculation is not
+a derived fact asserting zero controllers. These absence arms retain the same selected request
+and disclosure lifetime as an available answer.
+
+**Selection semantics, closed per family:**
+
+- **Moves:** an empty origin is `no_witness(empty_square)`; an opponent origin is
+  `unavailable(not_side_to_move)`, not a turn-flipped legal map. An actual-turn piece retains its
+  *whole* row, including zero moves. Every `uci`, `from`, `to`, `role` and optional `promotion`
+  survives. Destinations are the sorted unique `to` values, never origins or UCI suffixes.
+  Four promotions to one square remain four choices. Castling retains king-to-rook UCI separately
+  from the king landing square, including a Chess960 landing equal to its origin. An available
+  empty row means “no legal moves for this piece”; it is not a safety verdict or missing evidence.
+- **Control:** the selection is always a **target**, empty or occupied. Retain exactly that
+  cell's complete controller list from each color's pseudolegal map and, independently, its
+  clone-legal map or `invalid_turn_clone` state. Never flatten the two modes or render a missing
+  clone as zero. No controllers gives `no_witness` with the availability states retained, not
+  “safe”. The ordinary label is control/geometry; clone-legal detail discloses the supplied
+  convention (color-flipped turn, en-passant cleared), not actual-turn move legality.
+- **Pawns:** an empty/non-pawn selection is `no_witness(not_a_pawn)`. A pawn retains its own
+  `passed` row, including the boolean, blockers and `protectedBy`; contacts retain either endpoint
+  equal to the selected square, locks retain either endpoint, and connected pairs retain either
+  member. Do not recursively pull in another pawn's population or discard a passer because it
+  has no contact. These facts assert relations, not strength, profitable capture or strategy.
+- **Castling:** a selected king retains both rights of its color, including `false`; the source
+  FEN supplies exact current king/rook identities. A selected rook retains only wings whose
+  current castling rook equals that square. Do not assume a/h rook origins in Chess960, or assign
+  a rook a historical right after that right has disappeared. Other selections are
+  `no_witness(not_castling_piece)`. A retained right does not mean castling is legal now; the
+  existing legality reading remains separately scoped. A rights snapshot supplies no cause of loss.
+
+**Query and learner choice.** Extend only the selected Sight request with an optional, closed
+`sightFacet: auto | patterns | moves | control | pawns | castling`. It is invalid without requested
+Sight and a valid selected square, and at timings without a selected-square subject. This is a
+request-local view, not a persistent preference, preset, permission or relevance ranking. Omission
+means `auto`: a pawn selects Pawns, a king Castling, another actual-turn piece Moves, otherwise
+Control. Patterns explicitly retains the existing bounded structural selection. These defaults
+are part of this **draft proposal**, not a new owner ruling or an implemented default.
+
+An opened Sight card offers the same compact view chooser on desktop and phone; ordinary entry
+does not require configuring producers. A view change asks the existing query for that family
+only, with the same finalized assistance and exact decision/subject. It never accumulates facts
+from the previous view or opens a whole-board census. Explain an inapplicable view instead of
+silently substituting another family. Withheld/unavailable/no-witness remain distinct.
+
+Extend the closed request parser, request identity/current-response comparisons, disclosure
+subject and exact client parser together to retain the **requested and resolved facet**. The
+server resolves against the authorized `ModuleSubject.fen`, not a client board snapshot. Its
+selected derivation FEN/square must match that subject before reduction/admission. Existing
+post-commit requests use the incoming move's **semantic landing square** from the shared exact
+move authority, not `moveUci.slice(2, 4)` (which names the rook on castling). The current
+`subjectFor` and ancestor-square slices require this repair; the existing exact-mobility
+identity/destination distinction already specifies it. A client cannot add a different square
+under that timing. Pre-commit uses the validated requested square. Changing facet,
+selection, position, access, role, help or leaving/closing retires pending and delivered output.
+Facet does not change the decision's assistance ceiling or grant a module/form.
+
+The exact source/operation image must now declare original acquisition **and** selected
+derivation; preflight all required bindings before reading either. Update the module accepts,
+source routes, operation resolution and pair execution from that one image. The four whole-board
+bindings leave **Sight only** in favor of their selected successors; their Inspector use remains.
+Do not add `sightScope` branches returning every square for the original populations.
+
+**Complete legality versus bounded explanations.** There is still at most **one fact** in Sight.
+For the exact `module.sight_on_request@1 × derived.sight.legal_moves@1` pair only, use a declared
+complete-legality envelope `{maxFacts: 1, maxWords: 96, maxMarks: 64, maxArrows: 0}`. All other
+Sight pairs retain `{1, 30, 6, 1}`. This is an explicit per-pair exception, not a raised module-wide
+setting, wildcard, a caller-selected budget or a rules-floor permission bypass.
+
+The legal adapter constructs the complete destination `square_set` and its registered caption
+from the same selected evidence. Its caption operands retain all move rows, and its equivalent
+accessible list names every destination, promotion choice and castling choice; a count alone
+is insufficient. Render human SAN/from-to/promotion labels mechanically from the retained FEN
+and exact move identity; do not expose raw UCI strings in learner prose. The canonical UCI remains
+in the parsed operand for exact controller correspondence, distinct from the displayed landing.
+Neutral legality marks do not encode good/bad/safe/risky or human popularity.
+Do not convert this set into recommendation arrows. The existing controller owns move submission,
+promotion and castling choice; a hint never submits or auto-selects a move. The input dots remain
+owned by `rules_floor`: coalesce identical visible destinations without a second board layer and
+without replacing the controller's complete set. A discrepancy fails rather than hiding moves.
+
+Use the pair envelope in both pre-adapter and post-adapter backstops. The budget receipt retains
+the applied envelope identity/limits, actual counts and kept/dropped evidence; the strict parser
+recomputes which envelope applies from the exact consumer/projection, never from a supplied flag.
+Only a sole complete legal bundle may use this envelope; mixtures and different versions refuse.
+The 64-mark bound comes from the board size. The 96-word bound is a proposed complete-list
+envelope checked on the model's queen/promotion/castling examples, not a universal proof;
+the implementation must test its actual longest rendered list rather than trust the number.
+If the declared envelope cannot contain that whole set, return a typed budget-limited
+answer and reopen the envelope—never take the first six moves or silently increase the limit.
+
+For other families, retain whole atomic bundles under the existing bounded budgets. Do not
+truncate a controller/contact population and call it complete. If evidence exists but its complete
+bundle cannot fit, state that this view's display limit withheld it; do not reuse “No rung-0
+observation is scoped to that square.” Offer Inspector only when the current role/help permits
+it. No-witness, unavailable, budget-withheld and permission-withheld have separate explanations.
+The request-local view chooser must not become an unfiltered fallback around this rule.
+
+**Forms and permission.** Every selected successor has an explicit answer-content image no wider
+than its parent; the legal set remains `fact | candidate_moves`, never a best move or evaluation.
+Each registered renderer/parser consumes only its declared selected payload. Visible board forms
+and the semantic board obey effective assistance/form limits; hidden legal destinations must not
+remain in square labels or announcements. A deliberately permitted list can expose only the
+same admitted set, with full identities. The complete-legality budget is not permission to render
+disabled board forms, activate `showDests`, expose an opponent turn clone or bypass Match roles.
+
+**Implementation acceptance (all still open):**
+
+1. Genuine original source → sole selected factory/route → actual authenticated query → exact
+   client parser → mounted Sight, not only a declaration/adapter census. Test all four families,
+   auto and every explicit view, plus retained Patterns. No unrelated populations or source reads.
+2. Complete 27-destination queen, immobile piece, empty/opponent selections, check evasion,
+   en-passant, four promotions, standard castling and degenerate/non-a/h Chess960. Compare full
+   lists to the original authority; prove actual controller promotion/castling submissions.
+3. Empty and occupied control targets, pinned pseudolegal controller versus legal set,
+   invalid-turn-clone preservation, both contact directions, locks, passer without contacts and
+   both king-rights-false/rook-inapplicable outcomes. No safety, quality or strategic inference.
+4. Source payloads/receipts and position-wide Inspector bytes remain unchanged. Forged/copied,
+   wrong-source/FEN/clock/selection inputs fail. Genuine derived objects retain literal ancestry;
+   no registered factory may accept a caller's selected output, text or arbitrary input list.
+5. Old/current envelope checks, wrong version/consumer/mixture, full rendered move-list word
+   counts, atomic overflow and truthful budget-limited display. Other Sight pairs still overflow
+   at their existing limits. Receipt tampering and widened limits fail the real client parser.
+6. Real native pointer, touch and keyboard select/request/view-change journeys on desktop and
+   phone, including unrelated squares, changed position/help/role and departed delayed responses.
+   Confirm no stale marks/prose, extra moves, board shrink/overflow or semantic assistance bypass.
+7. Update the operation/adapter closure and normal permanent software/browser gates. Keep this
+   disposable model opt-in; its green result does not discharge any item above or mobility D1.
+
 #### 4.3 `blunder_prevention` — **no precursor; nothing to retire**
 
 There is no staged-move warning anywhere. `Chessboard.svelte:165-185` commits straight from
@@ -1977,6 +2201,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-09 — **Draft D3578 selected-square amendment (§4.2a), not accepted.** Chooses explicit
+  four-source selected derivations instead of a generic adapter-context escape hatch; proposes
+  request-local views and a sole-pair complete legal-set budget while preserving other ceilings
+  and Inspector populations. Six existing preimage controls remain; opt-in real-value model
+  checks selection, full identities, turn/clone absence and source immutability. Production
+  query/presentation/gesture proof and independent acceptance remain open.
 
 - 2026-09-24 — **Checkpoint B: the seats render.** Receipt: `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`. `queryModules` is the one
   module operation (sources → `compileModulePacket` → `presentEvidenceItems` → `fitModulePresentation` →

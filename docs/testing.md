@@ -29,9 +29,11 @@ Sight/Inspector adapters, receipt parsing and the real REST module query. Initia
 and check-restricted destinations are distinct; an invalid turn clone stays unavailable.
 `make square-control-browser-check` checks the actual desktop and touch-phone Inspector, reload and
 unchanged recorded play. These permanent tests also run in their normal software/browser tiers.
-`make requested-sight-contract-check` is different: six disposable D3578 research controls expose
-the current missing square scopes and complete-set/budget conflict. A passing diagnostic means
-those gaps still exist; it is excluded from ordinary software CI and proves no feature completion.
+`make requested-sight-contract-check` is different: strict TypeScript, six disposable D3578
+preimage controls and 26 proposed-model controls over genuine sources. The first six expose
+current missing square scopes and the complete-set/budget conflict; the others check the authored
+selection/identity/availability proposal and full human-readable legal lists. It is excluded from
+ordinary software CI and proves no production binding, gesture, acceptance or feature completion.
 
 `make play-composition-max-load-check` exercises all eight play seats through the real assistance
 compiler, domain branches, requests and sealed receipts at seven viewports. It includes held-cue

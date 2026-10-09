@@ -17,6 +17,16 @@
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
+- **Draft companion amendment 2026-10-09 — D3578:** `rfc/module-registration.md` §4.2a
+  owns selected-square context as four explicit derived payloads, not a generic adapter callback
+  or a changed parent reading. Once independently accepted, register exact successor adapters
+  using the existing `square_set`, `relation_overlay` and `fact_statement` components, literal
+  source operands and registered human-readable renderers. Their current meaning/seal/parser
+  requirements remain; no new component or bypass is proposed. Full legal rows and promotion/
+  castling identities survive the selected legal caption/list while canonical UCI stays out of
+  learner prose. Selected view/limit identity belongs to the module disclosure/budget owner,
+  not caller-supplied component text. Original position-wide Inspector adapters remain unchanged.
+  This paragraph and §4.2a are **draft, not implementation authorization** or new acceptance.
 - **Implementation checkpoint 2026-10-06, explicit Inspector lifetime:** D3472/D3473
   fences pending/completed human-model/narration/speech across current decision,
   subject, help/access and close/destroy epochs; no consumption/audio follows a

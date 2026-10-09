@@ -1604,7 +1604,8 @@ module-registration-author-contract:
 
 .PHONY: requested-sight-contract-check
 requested-sight-contract-check:
-	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts tools/d2120-module-registration-author-contract/selected-sight.test.ts
+	./node_modules/.bin/tsc -p tools/d2120-module-registration-author-contract/tsconfig.selected-sight.json --noEmit
+	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts tools/d2120-module-registration-author-contract/selected-sight.test.ts tools/d2120-module-registration-author-contract/selected-sight-model.test.ts
 
 .PHONY: wave-c-module-amendment
 wave-c-module-amendment: module-evidence-assembly module-registration-author-contract

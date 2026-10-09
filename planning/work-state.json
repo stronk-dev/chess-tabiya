@@ -29598,7 +29598,7 @@
       "id": "D3578",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:056f695f037286a6664f29dac08719c5442382947245b3c5894185a6616298be",
+      "sourceDigest": "sha256:3a006c9c107f71a3c71bf756ca8fec6cf408cfb4a466a4257c3c2a909ce68b46",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"

@@ -15,13 +15,19 @@
   corrupt capture refusal and no candidate/PV bytes in ordinary learner responses. No new
   provider queue, raw-source learner binding or implied tablebase-to-cp conversion.
 
-- **[[D3578]] — selected-square evidence frame and complete legal-mobility delivery.** The current
+- **[[D3578]] — independently review the authored selected-square amendment.** The 2026-10-09
+  draft in `rfc/module-registration.md` §4.2a, mirrored by `rfc/evidence-presentation.md`, chooses
+  four selected-source derivations, request-local views and a sole-pair complete-legality envelope.
+  Strict TypeScript and 32 disposable checks pass (six unchanged production-gap controls plus
+  26 model controls); they are not production bindings, gesture proof or acceptance. Review the
+  actual source/operation closure, default view proposal, full legal-list/other-pair budgets,
+  unavailable versus absent/withheld states, post-commit castling landing, receipt lifetime and
+  unchanged Inspector before implementation. The current
   return in `planning/learner-modules/registry-return.md` identifies four acquired sources that
   cannot survive scope filtering, a selected frame that never reaches the adapter and a measured
-  27-destination versus six-mark conflict. `make requested-sight-contract-check` executes six
-  disposable controls over real source values; a green diagnostic means these gaps still exist.
-  Amend the existing module-registration/presentation boundary and legality-overlay budget,
-  preserving complete identities and unchanged position-wide Inspector meaning. No arbitrary
+  27-destination versus six-mark conflict. `make requested-sight-contract-check` preserves those
+  six preimage controls: production gaps still exist. The authored boundary and budget proposal
+  remain unaccepted, preserving complete identities and unchanged Inspector meaning. No arbitrary
   operand wrapper, truncated legal set, new detector, preset or ranking is authorized by this return.
 
 - **[[D3376]] — installed opening source → sole factories → actual Review.** The server

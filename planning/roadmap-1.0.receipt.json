@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:6db85c9debffecbd67760ec32c48a7f217181ad455a2d207b522eba636abf109",
+    "roadmap": "sha256:66235464b9abd6bc71559cc855407de979305a52faaf8d17a37bfce21e951df0",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:91fd065ba1b7f3713130706e3f7cfbc3f370af9e8d0a60d40a7718c26c8a8497",
-    "rfcRegister": "sha256:875938b014efa72b1186b4b564d7f9cc163e24d1141ab37573e99ef5e2e02b92",
+    "workState": "sha256:9a54727cb6d87b9122564718babf754b5ef974f19d6ad55da9f1332e0360e376",
+    "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -339,10 +339,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D3579's false square-control captions are repaired. D3578 needs the narrow existing module-registration amendment for the selected frame, complete legal destinations versus six marks and exact move identity before useful selected-square delivery can land. Continue source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open. Routine generated metadata maintenance is automatic.",
+      "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention, castling semantic landing and exact native gesture acceptance. D3579 caption arithmetic is independently closed. Continue source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3602 closes locally under module-registration section 2.5 and the implementing provider-exchange-and-execution contract: Theory joins the all-selected-before-first-source preflight, including its local preview. Nine predecessor-red authenticated/runtime controls establish generic 503 before shape/authored/factory reads, mixed-module ordering and repeated checks; Quiet, disclosure and optional Explorer behavior remain. Focused gates pass 131 Support and 198 Theory/source cases plus clean types. Complete normal gates pass clean types/build, 3754 software, seven unchanged-budget performance, 228 content and 203 browser cases, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. D3601's independent lazy inputs, D3594 provider lifetime, D3579 captions and earlier lifecycle repairs remain closed. D3578 selected-square presentation, D3376 opening authority, D3373 durable Stockfish, D3363/D3370 Maia, D3309 Inspector operands and other source/consumer joins remain held. No new collector, permission, semantic-validation verdict, official pack, whole capability, milestone, historical timing diagnosis, remote CI or 1.0 promotion follows.",
+        "summary": "D3578's narrow draft is authored for independent review in module-registration section 4.2a and evidence-presentation: four selected-source derivations, request-local views and a sole-pair complete-legality envelope, preserving other budgets and Inspector populations. Strict TypeScript plus six unchanged production-gap controls and 26 real-source model controls pass, including full human-readable legal lists. Production factories, bindings, query/receipt/client paths and native gestures remain unimplemented; no self-acceptance or exact-mobility D1 discharge. D3601/D3602 independent lazy inputs and Theory preflight, D3594 provider lifetime and D3579 captions remain closed. D3376 opening, D3373 durable Stockfish, D3363/D3370 Maia, D3309 Inspector and semantic validation remain held. Latest full product verification is recorded in release-truth, not rerun for this author-only change. No whole capability, milestone, official pack, remote CI or 1.0 promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/provider-health.ts",
@@ -356,6 +356,9 @@
           "apps/server/src/module-query.test.ts",
           "planning/learner-modules/registry-return.md",
           "tools/d2120-module-registration-author-contract/selected-sight.test.ts",
+          "tools/d2120-module-registration-author-contract/selected-sight-model.ts",
+          "tools/d2120-module-registration-author-contract/selected-sight-model.test.ts",
+          "rfc/module-registration.md",
           "apps/server/src/opening-catalogue.ts",
           "apps/server/src/opening-catalogue.test.ts",
           "docs/runtime-opening-identity.md",
@@ -635,6 +638,16 @@
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
             "digest": "sha256:a933d5e33d0ef6eac21cdba22a44287ae09b45c8f17054affb0ee67c1afd8a7e"
+          },
+          {
+            "kind": "rfc",
+            "id": "module-registration.md",
+            "digest": "sha256:f829923970114538d86b62039d2acc8a357a716920b32a5d2fb109c4267f4fe0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3578",
+            "digest": "sha256:3a006c9c107f71a3c71bf756ca8fec6cf408cfb4a466a4257c3c2a909ce68b46"
           },
           {
             "kind": "rfc",
