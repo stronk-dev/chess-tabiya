@@ -167,6 +167,13 @@ headers, restores the original White, Black, Date, and Result, records the origi
 Event/Site as `SourceEvent`/`SourceSite`, and writes rehearsal branches as legal PGN
 variations with their `Tabiya branch` comments.
 
+Review's export is single-flight, with an associated pending explanation and an in-place
+retry after failure; private server diagnostics are not shown. A download starts only
+while the app and the originating Review view are still current. Leaving, opening another
+game, or leaving and returning retires the earlier completion without creating a download;
+the current view can still request a fresh export. Export neither claims the writer lease
+nor changes recorded moves, branches or the cursor.
+
 The client surfaces are an import form on `/review`, the story at
 `/review/game/:runId`, a Story control on imported run screens, and export from the
 run or Library. Import currently admits Standard and From Position games only. The

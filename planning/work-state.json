@@ -29881,6 +29881,23 @@
       "uxItems": [],
       "evidence": "tests/browser/studio-publication.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3610",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1e0cd783b8c8571cc3adbf32d15a07e5aa28c203e1f0e776bf1ba2f99ec37408",
+      "uxItems": [],
+      "evidence": "tests/browser/review-export.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3611",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:82051dfcbb6486595d53802eba72c854adae14f41b7e6c60c6e6e72061b65bfe",
+      "uxItems": [],
+      "owner": "core-loop"
     }
   ]
 }

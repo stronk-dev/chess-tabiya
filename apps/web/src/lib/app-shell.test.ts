@@ -272,6 +272,7 @@ function expectDisabledControlsExplained(): void {
 }
 
 afterEach(() => {
+  vi.restoreAllMocks();
   document.body.replaceChildren();
   history.replaceState(null, "", "/");
 });
@@ -556,6 +557,73 @@ describe("application shell", () => {
     ));
     expect(window.location.pathname).toBe("/review");
     await unmount(component);
+  });
+
+  it("owns one Review PGN download and recovers without leaking private failures", async () => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const pending = deferred<{ readonly filename: string; readonly text: string }>();
+    const pgn = vi.fn().mockImplementationOnce(() => pending.promise)
+      .mockResolvedValueOnce({ filename: "reviewed-game.pgn", text: "[Event \"Reviewed game\"]\n" });
+    const createObjectURL = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:review-export");
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), async review() { return reviewPayload({ runId: run.id, branchId: run.branches[0]!.id, source: { kind: "native" } }); }, pgn },
+      router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    const download = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find(candidate => candidate.textContent === "Export game + branches");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    download.click();
+    await vi.waitFor(() => expect(download.disabled).toBe(true));
+    expect(download.getAttribute("aria-describedby")).toBe("review-export-status");
+    expect(document.getElementById("review-export-status")?.textContent).toContain("Preparing the recorded game");
+    download.click();
+    expect(pgn).toHaveBeenCalledTimes(1);
+    pending.reject(new Error("private export storage detail"));
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("could not"));
+    expect(document.body.textContent).not.toContain("private export storage detail");
+    expect(download.disabled).toBe(false);
+    download.click();
+    await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1));
+    expect(pgn.mock.calls.map(([id]) => id)).toEqual([run.id, run.id]);
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(click.mock.instances[0]).toMatchObject({ download: "reviewed-game.pgn" });
+    await unmount(component);
+  });
+
+  it.each(["leave", "return", "replace", "teardown"] as const)("retires Review PGN completion after %s", async departure => {
+    history.replaceState(null, "", "/review/game/route-run");
+    const pending = deferred<{ readonly filename: string; readonly text: string }>();
+    const createObjectURL = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:departed-review-export");
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    const router = new HistoryRouter(window);
+    const pgn = vi.fn(() => pending.promise);
+    const review = vi.fn(async (id: string) => reviewPayload({ runId: id, branchId: `branch-${id}`, source: { kind: "native" } }));
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), review, pgn }, router, storage: new MemoryStorage(),
+    } });
+    const download = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find(candidate => candidate.textContent === "Export game + branches");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    download.click();
+    await vi.waitFor(() => expect(pgn).toHaveBeenCalledTimes(1));
+    if (departure === "teardown") await unmount(component);
+    else {
+      router.navigate(departure === "replace" ? "/review/game/other-run" : "/review");
+      await tick();
+      if (departure === "return") { router.navigate("/review/game/route-run"); await tick(); }
+      if (departure !== "leave") await vi.waitFor(() => expect(review).toHaveBeenCalledTimes(2));
+    }
+    pending.resolve({ filename: "departed.pgn", text: "[Event \"Departed\"]\n" });
+    await pending.promise;
+    await tick();
+    expect(createObjectURL).not.toHaveBeenCalled();
+    expect(click).not.toHaveBeenCalled();
+    if (departure !== "teardown") await unmount(component);
   });
 
   it("owns one Library PGN download and keeps provider failures out of learner copy", async () => {

@@ -1426,9 +1426,11 @@
   }
 
   async function exportStory(runId: string): Promise<void> {
+    const generation = loadGeneration;
     const download = await api.pgn(runId);
-    const url = URL.createObjectURL(new Blob([download.text], { type: "text/x-chess-pgn;charset=utf-8" }));
-    const anchor = document.createElement("a"); anchor.href = url; anchor.download = download.filename; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 0);
+    if (appMounted && generation === loadGeneration && route.name === "story" && route.runId === runId) {
+      savePgn(download);
+    }
   }
 
   async function flipRun(runId: string, nodeId: string): Promise<void> {

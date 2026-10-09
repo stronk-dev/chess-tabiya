@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3609]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3611]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,15 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+Current bounded Review repair ([[D3610]]) is closed locally: a pending PGN export
+cannot start a download after its originating view is departed/replaced, including return
+to the same game. Four predecessor-red mounted controls and actual desktop/phone failure,
+retry, delayed completion and fresh export journeys establish the boundary while preserving
+recorded play. All 148 focused cases/types and complete normal verification pass: 3,808
+software, seven unchanged-budget performance, 228 content and 215 browser cases, one optional
+Maia skip, zero retries, all 150 input/112 composition cells. Play/Compare's separate pending,
+failure and departed-export gap is now assigned as D3611. No whole capability is promoted.
 
 The product is a substantial development build, **not a finished 1.0 or release candidate**.
 The core rehearsal loop is the most mature journey. Major surfaces now execute real backend
@@ -185,15 +194,16 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,803 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,808 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-211 browser cases (146 smoke, five content, 59 matrix, one packaged-default). One existing
+215 browser cases (150 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
 Normal `make roadmap-receipt verify-awake test-browser-ci-awake` passes on final product/test
-sources for D3608/D3609, including their complete private authoring/publication journeys.
+sources for D3610, including actual Review export failure/retry and delayed-completion recovery;
+the complete D3608/D3609 private authoring/publication journeys also pass.
 The preceding Campaign run's post-seal assertion correction from Unlocks to
 Unlocked and first smoke failure remain recorded in the log. Warm native
-arrival measures median 100 ms / p95 109.1 ms,
+arrival measures median 89.1 ms / p95 105.1 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
 No production source or budget changed after the software/content pass. This is local verification,

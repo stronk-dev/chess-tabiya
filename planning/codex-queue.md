@@ -12,6 +12,23 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+Next accepted-workflow repair: [[D3611]] completes the same existing PGN action in Play/Compare,
+where the button and E shortcut still lack a pending owner, handled failure and departed-download
+guard. Capture the exact run/branch selection, reproduce the failure/duplicate/lifetime cases,
+then prove retry and unchanged recorded play through the actual desktop/phone board. D3610's
+Review repair does not close this separate caller; do not treat the shared saver as lifecycle proof.
+
+[[D3610]] is closed locally under the existing Review/import export contract:
+Review PGN completion belongs to its original app/view lifetime, including leave-and-return.
+Four mounted predecessor controls reproduce downloads after departure, replacement and teardown;
+the repaired route reuses the existing saver and links the busy control to its status explanation.
+Actual desktop/phone failure → retry → download and delayed-completion → leave/return → fresh
+download journeys pass, retaining the exported player headers and all recorded play. All 148
+focused cases/types and complete normal gates pass: clean types/build, 3,808 software, seven
+unchanged-budget performance, 228 content and 215 browser cases, one optional Maia skip, zero
+retries, all 150 input/112 composition cells. No new export format or whole Review completion;
+D3611 remains a separate next implementation, and D3591/D3600 timing causes remain open.
+
 [[D3608]]/[[D3609]] are closed locally under the existing pack-studio contract:
 Register requires the saved document to match the editor, retains both blocker grammars
 and shows structured server publication errors only for the attempted draft/revision/editor.

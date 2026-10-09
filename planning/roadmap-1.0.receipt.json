@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3ec523028bc02e24a4f547453ac32d98d1a958bbffb2fa3df680021d732edfb3",
+    "roadmap": "sha256:0487572ac4365c07958fdd7e4b2a2b8226b44f526eb7ce46ca4382339edefd41",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:0ce558a134aee10ef0e678e6756216c2198d32d475bf31d2ac16490dee1f5565",
+    "workState": "sha256:ffa44863ca0741a9d9d99d8b69ca6ef3519c6969850b121622e39f1e5daf7697",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 14,
       "blocked": 1066,
-      "done": 1489,
+      "done": 1490,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "Final normal local tiers pass clean types/build, 3803 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 211 browser passes (146 smoke, five content, 59 matrix, one packaged-default), one optional browser Maia skip, zero retries and all 150 input/112 composition cells. D3608/D3609 complete saved-visible Studio publication and actionable refusal recovery through real desktop/phone private authoring, playtest, community Library and rehearsal. D3607 semantic landing and preceding Campaign/Profile/return repairs remain delivered; D3578 remains draft. Warm native arrival is median 100 ms/p95 109.1 ms with one pack read/26 shape requests. D3600's original 253.8 ms failure and D3591's original 328.466431 ms stall remain unlocated, not closed by green replays. All live rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No exact-pushed-revision GitHub, native release-image, readiness-to-push, whole capability or milestone completion claim.",
+        "summary": "Final normal local tiers pass clean types/build, 3808 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 215 browser passes (150 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3610 retires departed Review PGN downloads and preserves failure/retry and exact recorded play through actual desktop/phone journeys. Prior Studio, Campaign, Profile, return and semantic-landing repairs remain delivered; D3611's separate Play/Compare export workflow is queued. Warm native arrival is median 89.1 ms/p95 105.1 ms with one pack read/26 shape requests. Original D3591/D3600 timing causes remain unlocated; all live rows are assigned, 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
         "impact": "held",
         "evidence": [
           "rfc/concept-registry.md",
@@ -124,7 +124,8 @@
           "apps/web/src/lib/modal-boundary.test.ts",
           "AGENTS.md",
           "apps/web/src/lib/pack-draft-response.test.ts",
-          "tests/browser/studio-publication.spec.ts"
+          "tests/browser/studio-publication.spec.ts",
+          "tests/browser/review-export.spec.ts"
         ],
         "anchors": [
           {
@@ -1806,7 +1807,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3608/D3609 close saved-visible Studio publication and refusal recovery under the archived pack-studio contract. All 132 focused cases/types and actual desktop/phone create/edit, failed-Save retry, reload, private playtest/checkpoint, publication refusal/correction, community Library and rehearsal journeys pass, preserving the earlier playtest's pinned document and recorded graph. Legacy/typed blockers remain; malformed/transport errors stay generic. Final normal tiers pass clean types/build, 3803 software, seven unchanged-budget performance, 228 content and 211 browser cases, one optional browser Maia skip, zero retries, all 150 input and 112 composition cells. Campaign preparation/results, due-return recovery, private Profile and classroom inspection remain delivered. Current detailed overview paragraphs now acknowledge implemented classroom inspection, portable account import and deployment/storage mechanisms without promoting their whole capabilities. D3591/D3600 timing causes remain unlocated. Official content, complete source coverage, calibrated bots, full Campaign and release journeys remain incomplete; no whole capability or milestone is promoted.",
+        "summary": "D3610 closes Review PGN download lifetime under the existing Review/import contract. Four predecessor-red mounted controls, all 148 focused cases/types and actual desktop/phone failure/retry/download plus delayed-completion/leave/return/fresh-export journeys pass, preserving recorded play and original player headers/movetext. Final normal tiers pass clean types/build, 3808 software, seven unchanged-budget performance, 228 content and 215 browser cases, one optional Maia skip, zero retries, all 150 input and 112 composition cells. Studio publication, Campaign preparation/results, due-return recovery, private Profile and classroom inspection remain delivered. D3611 assigns the separate incomplete Play/Compare export workflow rather than claiming that all callers are repaired. Original D3591/D3600 timing causes, official content, source coverage, calibrated bots, full Campaign and release journeys remain open; no whole capability or milestone is promoted.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1897,7 +1898,8 @@
           "docs/classrooms.md",
           "rfc/archive/teacher-surface.md",
           "apps/web/src/lib/pack-draft-response.test.ts",
-          "tests/browser/studio-publication.spec.ts"
+          "tests/browser/studio-publication.spec.ts",
+          "tests/browser/review-export.spec.ts"
         ],
         "anchors": [
           {

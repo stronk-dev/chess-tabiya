@@ -3629,9 +3629,12 @@ campaign-history-check:
 campaign-history-browser-check:
 	./node_modules/.bin/playwright test --grep "Campaign history"
 
-.PHONY: review-navigation-browser-check
+.PHONY: review-navigation-browser-check review-export-browser-check
 review-navigation-browser-check:
 	./node_modules/.bin/playwright test --grep "Review navigation keeps"
+
+review-export-browser-check:
+	./node_modules/.bin/playwright test tests/browser/review-export.spec.ts
 
 .PHONY: review-arrival-browser-check
 review-arrival-browser-check:

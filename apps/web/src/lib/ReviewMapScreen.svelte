@@ -298,13 +298,13 @@
       {#if !review.ready}<p class="pending" role="status">{reviewText("header.pending", { pending: review.pendingEvidence })}</p>{/if}
     </div>
     <div class="actions">
-      <button type="button" disabled={exportBusy} onclick={() => void exportGame()}>{exportBusy ? reviewText("action.exporting") : reviewText("action.export")}</button>
+      <button type="button" disabled={exportBusy} aria-describedby={exportBusy ? "review-export-status" : undefined} onclick={() => void exportGame()}>{exportBusy ? reviewText("action.exporting") : reviewText("action.export")}</button>
       {#if onShare}<button type="button" disabled={shareBusy} aria-describedby="review-share-lifetime" onclick={() => void createShare()}>{reviewText("share.action")}</button>{/if}
       <a href="/review">{reviewText("action.back")}</a>
       {#if review.campaignOrigin}<a href={`/campaign/${encodeURIComponent(review.campaignOrigin.campaignRunId)}`}>{reviewText("action.campaign")}</a>{/if}
     </div>
   </header>
-  {#if exportBusy}<p role="status">{reviewText("action.exporting.status")}</p>{/if}
+  {#if exportBusy}<p id="review-export-status" role="status">{reviewText("action.exporting.status")}</p>{/if}
   {#if exportFailed}<p role="alert">{reviewText("action.export.failed")}</p>{/if}
 
   <section class="accuracy" aria-labelledby="review-accuracy-title">
