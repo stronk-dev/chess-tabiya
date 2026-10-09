@@ -12,6 +12,22 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3617]] is coordinator-owned reconciliation debt: structural checks leave historical UX
+descriptions/states semantically stale. CMP-a1's no-content/no-consumer claim and CMP-a26's
+unread Campaign preference are refuted by existing installed-pilot and native encounter tests.
+Update these exact entries and their completion evidence; audit remaining stale candidates
+against production/test paths without treating an aggregate ledger row as wholly closed.
+No new checker framework, bulk snapshot or whole-capability promotion.
+
+[[D3616]] is closed locally: both shared castling paths reuse the rules authority rather than
+file displacement. Eighteen permanent factory/pack/recorded-run and nearby-negative controls
+pass within 239 focused foundation cases, plus two independently cited production cases.
+Normal tiers pass clean types/build, 3,875 software, seven unchanged-budget performance,
+228 content and 225 browser cases, one optional Maia skip, zero retries and all 150 input/112
+composition cells. The generated register is current at 81 subjects / 42 passing cases / zero
+fully validated subjects. Authored packs and 984 capability declarations are unchanged.
+Held source/orientation contracts, complete availability/execution and whole foundation remain open.
+
 [[D3615]] is closed locally under the existing provider execution/authoring contracts:
 structural predicates and claim-ledger admission preflight their complete consumer before
 factory work. All 215 focused foundation cases pass, including real authenticated Shape Studio

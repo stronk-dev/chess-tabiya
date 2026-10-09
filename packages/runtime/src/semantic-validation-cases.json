@@ -2,6 +2,50 @@
   "schemaVersion": 1,
   "cases": [
     {
+      "id": "cited.python-chess.adjacent-rook.castled",
+      "version": 1,
+      "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+      "arm": "positive",
+      "operation": { "id": "runtime.semantic.transition_edge", "version": 1 },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/8/4KR2 w K - 0 1",
+        "moveUci": "e1f1",
+        "afterFen": "4k3/8/8/8/8/8/8/5RK1 b - - 1 1"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.castling",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": { "start": 0, "end": 385, "textSha256": "2053e402dfeba29ec24cec387308af4d6b03507a5a3545f5df1a08efc326b650" },
+        "propositionSha256": "7a4802010341802a0df4f7f0bd9c3e058957a93f11759789bcd7a7894bf37e48"
+      },
+      "expectation": { "kind": "emits", "minimum": 1 }
+    },
+    {
+      "id": "cited.python-chess.stationary-king.castled",
+      "version": 1,
+      "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+      "arm": "positive",
+      "operation": { "id": "runtime.semantic.transition_edge", "version": 1 },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "6kr/8/8/8/8/8/8/4K3 b k - 0 1",
+        "moveUci": "g8h8",
+        "afterFen": "5rk1/8/8/8/8/8/8/4K3 w - - 1 2"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.castling",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": { "start": 0, "end": 385, "textSha256": "2053e402dfeba29ec24cec387308af4d6b03507a5a3545f5df1a08efc326b650" },
+        "propositionSha256": "84e11576371893fcd2ed495b3b48f1110ee73f6341f8eaa5c422f1d4f6f84d1c"
+      },
+      "expectation": { "kind": "emits", "minimum": 1 }
+    },
+    {
       "id": "cited.python-chess.king-to-rook.castled",
       "version": 1,
       "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },

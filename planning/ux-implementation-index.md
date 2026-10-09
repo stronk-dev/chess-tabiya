@@ -434,7 +434,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 
 | id | § | what it is | queued? | note | 🏆 |
 |---|---|---|---|---|---|
-| CMP-a1 | §0.2 | The campaign mechanism is fully built with **zero consumers**: `content/campaigns/` does not exist and zero campaigns are authored | ledger | [[D1497]]; the door is ruled ([[D1514]]) and opens onto nothing | |
+| CMP-a1 | §0.2 | Closed mechanical door: the installed community draft pilot is reachable through Campaign list/map and playable encounters; this is not official curriculum | ledger | [[D3617]] corrects the historical zero-consumer claim; docs/campaign.md and tests/browser/campaign.spec.ts. D1497's other residuals remain separate | |
 | CMP-a2 | §2 Rec 1 | State the run's length before it starts — in plies now, in minutes only after one owner run with a clock | none | no per-attempt timing telemetry exists | |
 | CMP-a3 | §2.4-3 | **One owner run with a clock** — the cheapest `[M]`→`[V]` upgrade in the dossier, converting §2.3, §7.5 and §9.3a at once | none | | |
 | CMP-a4 | §3.3c | Say the act ladder in one sentence: escalation in **decidability**, not in numbers | none | | |
@@ -459,7 +459,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | CMP-a23 | §9.2 | The return loop and the campaign do not touch, and there is zero outbound notification capability | none | `return-scheduling` §12 refuses repetition inside a campaign node | |
 | CMP-a24 | §9.3b | Do not build a campaign streak — the map is already the progress display | none | | |
 | CMP-a25 | §9.3c | **A campaign surface will attract the refused progression denomination (d), *another person's expectation*.** [[D1151]] ruled (c), the catalogue, is the answer — and [[D1416]] *defers* leagues and tournaments rather than refusing them, so the pressure is scheduled, not closed | ledger | this is the campaign dossier's explicit tournament hook | 🏆 |
-| CMP-a26 | §1.6a/b | [[D1437]] correction: the campaign context is byte-identical to `pack` except for its default preset and storage key. The real harm is that a campaign starts **Quiet** rather than Guide-me and writes a preference key no run reads | ledger | [[D1500]] | |
+| CMP-a26 | §1.6a/b | Closed preference wiring: Campaign kit is the default; preparation and Settings share the persisted named help style, and compiled encounters narrow it by earned/equipped tools | ledger | [[D3614]], [[D3617]]; tests/browser/campaign.spec.ts. Requested help is not proof of source availability or owner-use approval | |
 | CMP-a27 | §1.2 | Every pack a campaign could reference today is an ungraduated draft: 55 of 56 carry blocking `graduationBlockers` and `content/packs/` is empty | ledger | [[D1504]] | |
 | CMP-a28 | §1.3 | The shipped exhaustion string is an internal error id plus a bare shortage, with no income statement | ledger | | |
 | CMP-a29 | §10 res-9/10 | Two bounded evidence limits recorded: some prior art came via search-index snapshots (Fandom HTTP 402), and two claims are unverifiable anywhere (Chessable's *"up to 95%"*, the *Chess Life* Solitaire table) — used for nothing | none | | |

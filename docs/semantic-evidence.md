@@ -202,13 +202,13 @@ with four independent authorities:
    subject verdict is `passed` *and* the instance carries the sole-factory value receipt with a
    reproduced payload digest. A missing, alternate or swapped receipt is `event_value_unverified`.
 
-The current register has 81 subjects. The 38 migrated cases remain, and D3563 adds two
-independently cited castling cases (one positive and one nearby negative), giving 40 cases
-(30 positives, 10 negatives). The build-only cited-source store retains six lines / 385 bytes
+The current register has 81 subjects. The 38 migrated cases remain, D3563 adds the independent
+standard castling positive/nearby negative, and D3616 adds adjacent-rook and stationary-king
+positives, giving 42 cases (32 positives, 10 negatives). The build-only cited-source store retains six lines / 385 bytes
 from python-chess 1.11.2 at a fixed commit, with attribution and licence. Resolution checks the
 exact source, revision, licence, excerpt and proposition, then binds its case, subject,
 expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
-lookup, caller-provided source or protected owner-store bootstrap is involved. Both cases run
+lookup, caller-provided source or protected owner-store bootstrap is involved. All four cited cases run
 through the actual transition emitter. This is not independent strategic judgement or a new
 learner permission. The source store is excluded from the production runtime import closure.
 

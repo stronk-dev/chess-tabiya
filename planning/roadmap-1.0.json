@@ -812,7 +812,7 @@
         "nextAction": "Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3564's draft RFC section 4.1a is authored for independent review: three exact retained-input rules, legal source/partner preflight, total comparison and immutable originals. Sixteen disposable research checks pass, including a predecessor-red self-consistent illegal-successor case. Production parser/comparator/runner changes and independently grounded orientation cases remain held, not self-accepted. D3590's strict-loader repair is locally closed; D3376 installed opening evidence, D3373 durable Stockfish, D3580 tablebase, D3578 selected-square and bot calibration remain open. Semantic validation stays at 81 subjects, 40 passing registered cases and zero fully validated subjects. D3591/D3600 historical timing failures remain unresolved despite the latest full local green sequence recorded in release-truth and stable-board-and-presets. No whole capability, milestone, remote CI or 1.0 completion.",
+          "summary": "D3616's shared castling collector repair is closed locally: legal adjacent-rook/stationary-king identities reach the real event factory, pack predicate and recorded-run marker, with nearby king-move negatives. All 239 focused cases/types pass. Two independently cited production cases bring the current register to 42 passing cases over 81 subjects; zero subjects are fully validated. Final normal tiers pass clean types/build, 3875 software, seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. D3564 orientation, D3376 installed-opening and D3373 durable Stockfish drafts remain held for independent review. D3590 strict loading is closed, not source integration. D3580 tablebase, D3578 selected-square, bot calibration and original timing failures remain open. No new source, variant workflow, capability, milestone, remote CI or 1.0 completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/installed-opening-evidence.md",
@@ -829,6 +829,8 @@
             "packages/runtime/src/semantic-validation-authorities.ts",
             "packages/runtime/src/semantic-validation-cited-sources.ts",
             "packages/runtime/src/semantic-validation.test.ts",
+            "packages/runtime/src/castling-evidence.test.ts",
+            "packages/runtime/src/transition.ts",
             "packages/runtime/src/semantic-validation-runner.ts",
             "design/research/semantic-validation-closure.md",
             "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",

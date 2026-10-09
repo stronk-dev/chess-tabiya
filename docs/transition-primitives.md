@@ -35,6 +35,13 @@ coverage.
 
 ## Landing measurement
 
+Castling identity comes from the rules library, not king/rook file displacement. Legal
+adjacent-rook Chess960 castling and a stationary king therefore retain the castling event and
+pack irreversibility fact. The event records canonical king-to-rook UCI separately from the
+king's actual c/g landing. Permanent white/black, both-side controls exercise the real event
+factory, pack predicate and committed-run marker, alongside ordinary king-move negatives
+(`packages/runtime/src/castling-evidence.test.ts`). This does not add a variant-selection workflow.
+
 The production evaluator was checked against the independent R1/R2 harness over 634 committed
 spine transitions. The harness’s old defensive-duty calculation counted a moved piece at its new
 square; the shipped leaf follows the RFC’s stricter same-square pairing, and the landing oracle

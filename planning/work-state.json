@@ -10925,7 +10925,6 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:9007de8307ee9da44a83dd0afc11685ef2eb244c354dd6fcb91eb7f1c1638e90",
       "uxItems": [
-        "CMP-a26",
         "CMP-e2"
       ],
       "state": "todo",
@@ -11539,9 +11538,7 @@
       "id": "D1497",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:7a0420ec7cb426205b0d63db8e038cf0fedb2635c3aea872e07ef716c5be2638",
-      "uxItems": [
-        "CMP-a1"
-      ],
+      "uxItems": [],
       "state": "todo",
       "owner": "campaign"
     },
@@ -11566,7 +11563,6 @@
       "sourceGlyph": "📊",
       "sourceDigest": "sha256:d4647cfa910d050c7d8c08f6320f3ee4848d2ba02b837c6947e5db12e69fff3d",
       "uxItems": [
-        "CMP-a26",
         "CMP-e2"
       ],
       "state": "todo",
@@ -11703,7 +11699,6 @@
       "sourceGlyph": "⚖️",
       "sourceDigest": "sha256:44f78289cb93d227ceaeed24d905e6c7145d5ab90d7ca311ddd7545e6f1366ca",
       "uxItems": [
-        "CMP-a1",
         "CMP-e3"
       ],
       "state": "todo",
@@ -29923,7 +29918,9 @@
       "state": "done",
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:c74b9dc6e552231d35aaae4ac6bb81eb841260abdc7552dec7bda98a613f3fd2",
-      "uxItems": [],
+      "uxItems": [
+        "CMP-a26"
+      ],
       "evidence": "apps/web/src/lib/campaign-actions.test.ts",
       "evidenceKind": "path"
     },
@@ -29935,6 +29932,26 @@
       "uxItems": [],
       "evidence": "apps/server/src/authoring-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3616",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:99af5505ced973da7f8d9d645412c37e0896776fd8dbe32eca3e8bc4099de4d2",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/castling-evidence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3617",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:595f69a4d9c9e78cdd9485807d73bf2d80324db748cf0dde329171f3d8147bab",
+      "uxItems": [
+        "CMP-a1",
+        "CMP-a26"
+      ],
+      "owner": "coordinator"
     }
   ]
 }

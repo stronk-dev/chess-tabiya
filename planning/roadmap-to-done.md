@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3615]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3617]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,22 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3616]] repairs the shared castling identity for legal adjacent-rook and stationary-king
+cases. The actual event factory, pack predicate and committed-run marker pass eighteen
+permanent controls alongside ordinary king-move negatives. All 239 focused foundation cases
+and workspace types pass; two independently cited production cases bring the validation
+register to 42 passing cases over 81 subjects, still zero fully validated subjects.
+Authored packs and all 984 capability declarations remain unchanged. Final normal tiers pass
+clean types/build, 3,875 software, seven unchanged-budget performance, 228 content and 225
+browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells.
+No new source, permission, variant workflow or whole capability is claimed.
+
+[[D3617]] records a remaining tracking limitation: structural checks do not prove old UX
+descriptions still describe the product. CMP-a1's absent Campaign door/content and CMP-a26's
+unread preference are corrected and completed against the existing production/native tests.
+The community draft pilot is not official curriculum. Reconciliation of other stale candidates
+remains coordinator-owned; historical aggregate ledger residuals are not closed wholesale.
 
 [[D3615]] is closed locally: complete execution preflight precedes structural predicate and
 claim-ledger factories in the real authoring operations. Sixteen predecessor controls fail;
@@ -87,7 +103,7 @@ the machine map above remains the current assignment/status source.
 At this checkpoint all fourteen whole capability areas remain incomplete; four milestones
 are active and five blocked. The RFC register records 75 archived implementations, with
 42 current RFCs implementing, ten awaiting discharge and 21 draft. Of 569 UX items,
-271 are complete, 274 remain live and 24 are retired. These are counts, not a delivery
+273 are complete, 272 remain live and 24 are retired. These are counts, not a delivery
 percentage: completed components do not establish a complete learner journey.
 
 | Area | Implemented | Still required for full 1.0 |

@@ -2,11 +2,11 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9652c70eed888a77dac1b4ec388a16d4352fe5737b975884a2da395aa1a7ab73",
-    "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:6fca694170c84342b77437fa9cbf9d13571b54053c9e5306ee2ac534486c4ddf",
+    "roadmap": "sha256:8cf89b2a6398bd9fde2e2edc23993eac61144e2e29a86baa3a434ae67da9c772",
+    "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
+    "workState": "sha256:034e524dee76eb32413fb1efd0e3767748486cc325cf22ab5744b89d2dfcaa5b",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
-    "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
+    "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
     "rest": "sha256:3e9d1c0425ba2ebc76840d7229cca7a1155200817b192d92353af433c2fc2bc8"
@@ -30,17 +30,17 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 629,
       "doing": 14,
       "blocked": 1066,
-      "done": 1495,
+      "done": 1496,
       "refused": 161
     },
     "workItems": {
-      "queued": 90,
+      "queued": 88,
       "blocked_owner": 62,
       "blocked_rfc": 122,
-      "completed": 271,
+      "completed": 273,
       "retired": 24
     },
     "dimensionStates": {
@@ -199,7 +199,7 @@
       "nextAction": "Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3564's draft RFC section 4.1a is authored for independent review: three exact retained-input rules, legal source/partner preflight, total comparison and immutable originals. Sixteen disposable research checks pass, including a predecessor-red self-consistent illegal-successor case. Production parser/comparator/runner changes and independently grounded orientation cases remain held, not self-accepted. D3590's strict-loader repair is locally closed; D3376 installed opening evidence, D3373 durable Stockfish, D3580 tablebase, D3578 selected-square and bot calibration remain open. Semantic validation stays at 81 subjects, 40 passing registered cases and zero fully validated subjects. D3591/D3600 historical timing failures remain unresolved despite the latest full local green sequence recorded in release-truth and stable-board-and-presets. No whole capability, milestone, remote CI or 1.0 completion.",
+        "summary": "D3616's shared castling collector repair is closed locally: legal adjacent-rook/stationary-king identities reach the real event factory, pack predicate and recorded-run marker, with nearby king-move negatives. All 239 focused cases/types pass. Two independently cited production cases bring the current register to 42 passing cases over 81 subjects; zero subjects are fully validated. Final normal tiers pass clean types/build, 3875 software, seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. D3564 orientation, D3376 installed-opening and D3373 durable Stockfish drafts remain held for independent review. D3590 strict loading is closed, not source integration. D3580 tablebase, D3578 selected-square, bot calibration and original timing failures remain open. No new source, variant workflow, capability, milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/installed-opening-evidence.md",
@@ -216,6 +216,8 @@
           "packages/runtime/src/semantic-validation-authorities.ts",
           "packages/runtime/src/semantic-validation-cited-sources.ts",
           "packages/runtime/src/semantic-validation.test.ts",
+          "packages/runtime/src/castling-evidence.test.ts",
+          "packages/runtime/src/transition.ts",
           "packages/runtime/src/semantic-validation-runner.ts",
           "design/research/semantic-validation-closure.md",
           "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
@@ -2867,10 +2869,10 @@
       "owner": "campaign",
       "rfcCount": 4,
       "workItems": {
-        "queued": 30,
+        "queued": 28,
         "blocked_owner": 6,
         "blocked_rfc": 19,
-        "completed": 4,
+        "completed": 6,
         "retired": 4
       },
       "routes": {

@@ -3533,6 +3533,20 @@
         "refs": [
           {
             "kind": "case",
+            "id": "cited.python-chess.adjacent-rook.castled",
+            "version": 1,
+            "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.stationary-king.castled",
+            "version": 1,
+            "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
             "id": "cited.python-chess.king-to-rook.castled",
             "version": 1,
             "subject": { "kind": "event", "projection": { "id": "rules.transition.event.castled", "version": 1 } },

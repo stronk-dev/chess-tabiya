@@ -177,7 +177,7 @@ function readProfile(id: string): unknown {
 
 describe("semantic-validation cases and execution", () => {
   it("resolves pinned independent castling positives and nearby negatives through the production emitter", async () => {
-    for (const id of ["cited.python-chess.king-to-rook.castled", "cited.python-chess.king-step.no-castle"]) {
+    for (const id of ["cited.python-chess.king-to-rook.castled", "cited.python-chess.king-step.no-castle", "cited.python-chess.adjacent-rook.castled", "cited.python-chess.stationary-king.castled"]) {
       const value = CASE_MAP.get(id)!;
       expect(value, id).toBeDefined();
       expect(resolveSemanticValidationProposition(value)).toMatchObject({ subject: value.subject, case: { id, version: 1 }, expectation: value.expectation });
@@ -235,7 +235,7 @@ describe("semantic-validation cases and execution", () => {
       else expect(receipt.targetCount).toBe(0);
       for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
     }
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(30);
+    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(32);
     expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(10);
   });
 

@@ -5,8 +5,8 @@ import type { SemanticEdgeInput, SemanticValidationCase, SemanticValidationPropo
 // Copyright Niklas Fiekas; GPL-3.0-or-later. Licence and full corresponding source:
 // https://github.com/niklasf/python-chess/tree/3516d7c6c0879af724c2855fac5a304a4ef40949
 // https://github.com/niklasf/python-chess/blob/3516d7c6c0879af724c2855fac5a304a4ef40949/LICENSE.txt
-// The two legal fixtures below instantiate its king/rook-destination test and its
-// ordinary one-file king-step negative. They do not assert strategic value.
+// These legal fixtures instantiate its king/rook-destination test (including an
+// adjacent rook and stationary king) and ordinary king-step negative. No value judgement.
 const text = `    def is_castling(self, move: Move) -> bool:
         """Checks if the given pseudo-legal move is a castling move."""
         if self.kings & BB_SQUARES[move.from_square]:
@@ -29,6 +29,36 @@ export const SEMANTIC_VALIDATION_CITED_SOURCES = Object.freeze([{
   text,
   operation: { id: "runtime.semantic.transition_edge", version: 1 },
   cases: [
+    {
+      arm: "positive",
+      input: {
+        kind: "edge",
+        beforeFen: "4k3/8/8/8/8/8/8/4KR2 w K - 0 1",
+        moveUci: "e1f1",
+        afterFen: "4k3/8/8/8/8/8/8/5RK1 b - - 1 1",
+      },
+      proposition: {
+        subject: { kind: "event", projection: { id: "rules.transition.event.castled", version: 1 } },
+        case: { id: "cited.python-chess.adjacent-rook.castled", version: 1 },
+        factConstraint: [],
+        expectation: { kind: "emits", minimum: 1 },
+      },
+    },
+    {
+      arm: "positive",
+      input: {
+        kind: "edge",
+        beforeFen: "6kr/8/8/8/8/8/8/4K3 b k - 0 1",
+        moveUci: "g8h8",
+        afterFen: "5rk1/8/8/8/8/8/8/4K3 w - - 1 2",
+      },
+      proposition: {
+        subject: { kind: "event", projection: { id: "rules.transition.event.castled", version: 1 } },
+        case: { id: "cited.python-chess.stationary-king.castled", version: 1 },
+        factConstraint: [],
+        expectation: { kind: "emits", minimum: 1 },
+      },
+    },
     {
       arm: "positive",
       input: {

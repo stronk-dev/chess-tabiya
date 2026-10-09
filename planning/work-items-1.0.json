@@ -1306,7 +1306,7 @@
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "A suggestion rail ranked on facts about the learner's own runs (permitted by `03` §Learn and return; nowhere near the rejected v1 identity)",
       "legacyRoute": "none",
-      "note": "Ranked only on recorded host-owned run facts; D3312 keeps objective labels non-terminal and limits phase denominators to the loaded host-owned history.",
+      "note": "needs a law-8-honest ranking rule",
       "sourceDigest": "sha256:fa2a19078c9c3e92a799fd5572908ce5c987d132177e48dccad2bbde1f0d1bcd",
       "completion": {
         "completedOn": "2026-09-24",
@@ -3984,17 +3984,21 @@
     {
       "id": "CMP-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§0.2",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
-      "summary": "The campaign mechanism is fully built with **zero consumers**: `content/campaigns/` does not exist and zero campaigns are authored",
+      "summary": "Closed mechanical door: the installed community draft pilot is reachable through Campaign list/map and playable encounters; this is not official curriculum",
       "legacyRoute": "ledger",
-      "note": "[[D1497]]; the door is ruled ([[D1514]]) and opens onto nothing",
-      "sourceDigest": "sha256:5585adff233a5b341d3e5d5b7235741edaee9f9c94ba60eaa22073f66eca84db"
+      "note": "[[D3617]] corrects the historical zero-consumer claim; docs/campaign.md and tests/browser/campaign.spec.ts. D1497's other residuals remain separate",
+      "sourceDigest": "sha256:207fabf292895fa6bb95e62d35410596dd519e2deff43986e97ba153da8ddb72",
+      "completion": {
+        "completedOn": "2026-10-09",
+        "evidence": "tests/browser/campaign.spec.ts"
+      }
     },
     {
       "id": "CMP-a10",
@@ -4253,17 +4257,21 @@
     {
       "id": "CMP-a26",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§1.6a/b",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
-      "summary": "[[D1437]] correction: the campaign context is byte-identical to `pack` except for its default preset and storage key. The real harm is that a campaign starts **Quiet** rather than Guide-me and writes a preference key no run reads",
+      "summary": "Closed preference wiring: Campaign kit is the default; preparation and Settings share the persisted named help style, and compiled encounters narrow it by earned/equipped tools",
       "legacyRoute": "ledger",
-      "note": "[[D1500]]",
-      "sourceDigest": "sha256:6c450157e9e72ae991bc4e9b7b77961c612fca9db8b10e7c9daaa4673bdf537e"
+      "note": "[[D3614]], [[D3617]]; tests/browser/campaign.spec.ts. Requested help is not proof of source availability or owner-use approval",
+      "sourceDigest": "sha256:e0a66272f6daf4812fc7fd50d5921eb1a031fce48bb0125ca4a97a85d6cc0b83",
+      "completion": {
+        "completedOn": "2026-10-09",
+        "evidence": "tests/browser/campaign.spec.ts"
+      }
     },
     {
       "id": "CMP-a27",
@@ -8611,7 +8619,8 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Give `abandoned` its own third toggle — a **conduct signal** currently rides the control labelled *\"Show my record\"*",
       "legacyRoute": "ledger",
-      "note": "[[D1482]]; needs no owner ruling, but the third consent toggle requires a learner-rating amendment covering storage, service projection, API operations, migration, and the web control",
+      "note": "[[D1482]]; needs no ruling",
+      "tournamentReady": true,
       "sourceDigest": "sha256:73fa4efe1cb0e63657e8323c190f7e454b24b67c062064ca17a9d188e4368e76"
     },
     {
@@ -8866,7 +8875,7 @@
       "sourceHeading": "Teacher and classroom — `ux-teacher-and-classroom.md`",
       "summary": "Write the law-8 fence into the row: **the wall may order by elapsed time and never by evaluation**",
       "legacyRoute": "ledger",
-      "note": "[[D1479]] still requires the owner's elapsed-time ordering ruling. The implementation is retained at 26186a13 on the Claude UX branch; the active main tree preserves the existing session order until that ruling lands.",
+      "note": "[[D1479]] — a doctrine sharpening, not a repair",
       "tournamentReady": true,
       "sourceDigest": "sha256:448fe426f60c542c7ad4a18ff73b5c3a5bf19ff09711a057653475cac7da499d"
     },
