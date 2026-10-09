@@ -54,11 +54,15 @@
   before implementation; the current position behind native ratings is a draft claim, not
   a demonstrated technical dependency or permission to reorder other claims silently.
 
-- **D3564 — semantic-validation-authority §4.1 input operands.** Review the measured
-  proposal in `design/research/semantic-validation-closure.md` before adding orientation
+- **D3564 — independently review the authored §4.1a amendment.** The 2026-10-09 draft in
+  `rfc/semantic-validation-authority.md` now formalizes the measured proposal in
+  `design/research/semantic-validation-closure.md` before adding orientation
   authorities. Three closed input-relative rules must bind retained FEN/UCI leaves to each
   side's exact legal input, without deleting operands or weakening the total walk. Both
-  real castling directions and corruption controls pass the disposable model. This does
+  real castling directions and corruption controls pass the disposable model: sixteen
+  research checks, including a predecessor-red self-consistent illegal-successor case,
+  closed grammar and immutable payloads. Independent acceptance must precede the production
+  parser/comparator/runner repair and permanent tests. This does
   not authorize production changes or supply independent chess-semantic authority. The
   separate already-specified preflight ordering repair is D3566, not an amendment request.
 

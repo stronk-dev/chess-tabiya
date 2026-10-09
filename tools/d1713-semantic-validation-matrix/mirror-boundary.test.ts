@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { SEMANTIC_VALIDATION_OPERATIONS, canonicalSemanticEdge } from "../../packages/runtime/src/semantic-validation-operations.js";
-import { assertSemanticMirrorPartnerInput, selectSemanticTargets } from "../../packages/runtime/src/semantic-validation-runner.js";
+import { assertSemanticMirrorPartnerInput, assertSemanticValidationFixture, selectSemanticTargets } from "../../packages/runtime/src/semantic-validation-runner.js";
 import {
   compareSemanticMirror,
   mirrorSemanticFen,
@@ -28,6 +28,38 @@ const semanticRules = [
   geometricalRule(["detail", "resultingKingSquare"], "square"),
 ];
 const inputFields = ["before_fen", "move_uci", "after_fen"] as const;
+const proposedFields = {
+  input_before_fen: { operand: "before_fen", input: "beforeFen" },
+  input_move_uci: { operand: "move_uci", input: "moveUci" },
+  input_after_fen: { operand: "after_fen", input: "afterFen" },
+} as const;
+type ProposedInputRule = {
+  readonly value: keyof typeof proposedFields;
+  readonly sourcePath: readonly string[];
+  readonly partnerPath: readonly string[];
+  readonly collection: "scalar";
+};
+const proposedInputRules: readonly ProposedInputRule[] = Object.entries(proposedFields).map(([value, field]) => ({
+  value: value as ProposedInputRule["value"], sourcePath: [field.operand], partnerPath: [field.operand], collection: "scalar",
+}));
+
+// DISPOSABLE parser for the draft amendment only; production still rejects these value rules.
+function parseProposedInputRules(raw: unknown): readonly ProposedInputRule[] {
+  if (!Array.isArray(raw)) throw new Error("input rule list required");
+  const seen = new Set<string>();
+  return raw.map((entry: unknown) => {
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) throw new Error("input rule record required");
+    const row = entry as Record<string, unknown>;
+    if (Object.keys(row).sort().join() !== "collection,partnerPath,sourcePath,value") throw new Error("input rule keys differ");
+    if (typeof row.value !== "string" || !Object.hasOwn(proposedFields, row.value)) throw new Error("unknown input rule");
+    const value = row.value as ProposedInputRule["value"];
+    const field = proposedFields[value];
+    if (row.collection !== "scalar" || !Array.isArray(row.sourcePath) || !Array.isArray(row.partnerPath) || row.sourcePath.length !== 1 || row.partnerPath.length !== 1 || row.sourcePath[0] !== field.operand || row.partnerPath[0] !== field.operand) throw new Error("input rule must bind its exact top-level scalar");
+    if (seen.has(value)) throw new Error("duplicate input rule");
+    seen.add(value);
+    return { value, sourcePath: [field.operand], partnerPath: [field.operand], collection: "scalar" };
+  });
+}
 const fixtures = [
   ["white-castle", "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "e1h1"],
   ["black-castle", "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "e8h8"],
@@ -68,18 +100,23 @@ async function observation(input: SemanticEdgeInput) {
 // DISPOSABLE proposed-input-rule model. It retains every operand key and checks each raw input
 // leaf against that side's complete legal edge before replacing its comparison value with the
 // field's relative identity. Production needs reviewed closed rules, not this research adapter.
-function proposedCompare(source: Awaited<ReturnType<typeof observation>>, partner: Awaited<ReturnType<typeof observation>>, input: SemanticEdgeInput, partnerInput: SemanticEdgeInput) {
-  assertSemanticMirrorPartnerInput(mirrorCase("research.source", "research.partner", input), mirrorCase("research.partner", "research.source", partnerInput), "color_and_vertical");
+function proposedCompare(source: Awaited<ReturnType<typeof observation>>, partner: Awaited<ReturnType<typeof observation>>, input: SemanticEdgeInput, partnerInput: SemanticEdgeInput, rawRules: unknown = proposedInputRules) {
+  if (input?.kind !== "edge" || partnerInput?.kind !== "edge") throw new Error("exact edge input context required");
+  const rules = parseProposedInputRules(rawRules);
+  const sourceCase = mirrorCase("research.source", "research.partner", input), partnerCase = mirrorCase("research.partner", "research.source", partnerInput);
+  assertSemanticValidationFixture(sourceCase);
+  assertSemanticValidationFixture(partnerCase);
+  assertSemanticMirrorPartnerInput(sourceCase, partnerCase, "color_and_vertical");
   const bind = (item: typeof source, declared: SemanticEdgeInput) => {
     const operands = { ...item.operands };
-    const fields = { before_fen: "beforeFen", move_uci: "moveUci", after_fen: "afterFen" } as const;
-    for (const key of inputFields) {
-      if (operands[key] !== declared[fields[key]]) throw new Error(`input binding mismatch: ${key}`);
-      operands[key] = `input.${fields[key]}`;
+    for (const rule of rules) {
+      const field = proposedFields[rule.value];
+      if (typeof operands[field.operand] !== "string" || operands[field.operand] !== declared[field.input]) throw new Error(`input binding mismatch: ${field.operand}`);
+      operands[field.operand] = `input.${field.input}`;
     }
     return { ...item, operands };
   };
-  compareSemanticMirror([bind(source, input)], [bind(partner, partnerInput)], "color_and_vertical", [...semanticRules, ...inputFields.map(field => geometricalRule([field], "identity"))]);
+  compareSemanticMirror([bind(source, input)], [bind(partner, partnerInput)], "color_and_vertical", [...semanticRules, ...rules.map(rule => geometricalRule([...rule.sourcePath], "identity"))]);
 }
 
 describe("D3564 actual orientation boundary — research only", () => {
@@ -160,5 +197,43 @@ describe("D3564 actual orientation boundary — research only", () => {
     expect(() => proposedCompare(changed(source, { to: "f1" }), partner, input, partnerInput)).toThrow(/has no partner/u);
     expect(() => proposedCompare(source, { ...partner, sign: "gained" }, input, partnerInput)).toThrow(/has no partner/u);
     expect(() => proposedCompare(source, partner, input, input)).toThrow(/not the color_and_vertical transform/u);
+  });
+
+  it("a self-consistent source operand and input cannot hide an illegal successor", async () => {
+    const input = edge(fixtures[0][1], fixtures[0][2]), partnerInput = pair(input);
+    const source = await observation(input), partner = await observation(partnerInput);
+    const afterFen = input.afterFen.replace(/ \d+$/u, " 99");
+    expect(() => proposedCompare({ ...source, operands: { ...source.operands, after_fen: afterFen } }, partner, { ...input, afterFen }, partnerInput)).toThrow(/exact successor/u);
+  });
+
+  it("the draft rule grammar refuses aliases, wildcards, collections, duplicates and unknown fields", () => {
+    const base = proposedInputRules[0]!;
+    for (const changed of [
+      { ...base, value: "input_anything" },
+      { ...base, sourcePath: ["anything"] },
+      { ...base, partnerPath: ["after_fen"] },
+      { ...base, sourcePath: ["nested", "before_fen"] },
+      { ...base, sourcePath: ["*"] },
+      { ...base, collection: "ordered" },
+      { ...base, collection: "canonical_set" },
+      { ...base, ignore: true },
+      { sourcePath: base.sourcePath, partnerPath: base.partnerPath, value: base.value },
+    ]) expect(() => parseProposedInputRules([changed])).toThrow();
+    expect(() => parseProposedInputRules([base, base])).toThrow(/duplicate/u);
+    expect(() => parseProposedInputRules(null)).toThrow();
+    expect(parseProposedInputRules(proposedInputRules)).toEqual(proposedInputRules);
+  });
+
+  it("the draft retains total coverage and requires both exact case inputs without mutating payloads", async () => {
+    const input = edge(fixtures[0][1], fixtures[0][2]), partnerInput = pair(input);
+    const source = await observation(input), partner = await observation(partnerInput);
+    const original = JSON.stringify({ source, partner, input, partnerInput });
+    Object.freeze(source.operands);
+    Object.freeze(partner.operands);
+    expect(() => proposedCompare(source, partner, undefined as never, partnerInput)).toThrow(/input context/u);
+    expect(() => proposedCompare(source, partner, input, undefined as never)).toThrow(/input context/u);
+    expect(() => proposedCompare(source, partner, input, partnerInput, proposedInputRules.slice(1))).toThrow(/covered by 0 rules/u);
+    expect(() => proposedCompare(source, partner, input, partnerInput)).not.toThrow();
+    expect(JSON.stringify({ source, partner, input, partnerInput })).toBe(original);
   });
 });

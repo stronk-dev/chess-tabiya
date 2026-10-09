@@ -69,3 +69,31 @@ transition guard into governance CI and a narrow staged pre-commit job; no pre-p
 added. The RFC and README now agree on implementing, and the execution plan distinguishes the
 mechanism already landed from the remaining family/consumer work. Full integration receipt:
 `planning/evidence-foundation-ux/integration-2026-09-30.md`.
+
+## 2026-10-09 — D3564 exact-input comparison draft authored
+
+The measured retained-FEN/UCI obstruction now has an independently reviewable RFC §4.1a
+amendment: three closed top-level input rules, both legal-edge preflights, exact same-side
+binding and total comparison without mutating observations. No new receipt, source field,
+hash mechanism or pack migration is proposed. Production remains on the existing five rules.
+
+A new disposable-model control first fails: a source after FEN and its matching operand
+can share an illegal counter while the partner relation alone still passes. Checking both
+fixtures with the existing production validator closes that model omission. The final normal
+`make semantic-validation-matrix` passes sixteen research checks, including strict grammar,
+missing context, retained coverage and immutable originals. This is not a production-runner
+defect or an independently grounded orientation case.
+
+D3564 remains blocked on independent amendment review/acceptance, then implementation and
+permanent production tests. The generated population remains 81 subjects, 40 passing cases
+and zero fully validated subjects. The protected owner store is untouched. No whole-RFC,
+consumer, content or release completion is declared.
+
+Additional ordinary checks: `make semantic-validation-fifth-author-repair
+evidence-foundation-check` passes five historical model cases plus strict TypeScript and
+all 158 current production-foundation cases. The optional
+`make semantic-validation-author-contract` stops at two older D2039 source-regex assertions:
+it expects an inline loose-piece fallback and direct structural calls in `localSemanticEvents`.
+Current unchanged production source delegates to `localSemanticEventClosure`, retains typed
+abstentions and uses `structuralSemanticEventsCached`. That historical author target is not
+required CI (D3057); its red result is retained, not called a successful current contract check.

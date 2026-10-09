@@ -11,6 +11,9 @@
   avoidance family (D1716) and king opposition (D1717) abstain on every arm, named. **D0 is not
   discharged:** the protected owner store is absent (implementers may not write `design/`), so the
   owner arm fails closed. Receipt: `planning/semantic-validation-authority/implementation-2026-09-24.md`
+  **2026-10-09 draft amendment:** §4.1a below specifies D3564's retained-input comparison.
+  It requires independent review and acceptance before production changes; Slice A's existing
+  parser, runner, authority and learner-eligibility rules remain in force.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -655,6 +658,99 @@ Zero/zero fails `SEMANTIC_VALIDATION_MIRROR_EMPTY`; zero/non-zero or unequal car
 `SEMANTIC_VALIDATION_MIRROR_UNMATCHED`. Only then does the runner apply the exhaustive leaf rules
 inside each unique pair. Reordering equal events passes; deleting, duplicating, changing the subject,
 changing a sign field or changing one operand cannot pass by preserving the aggregate count.
+
+### 4.1a Draft amendment — exact retained-input comparison (D3564)
+
+**Not yet accepted.** This bounded amendment changes only the orientation comparator and its
+runner handoff. It does not create a chess proposition, register an orientation case, change a
+collector or admit a learner event. The existing five rules above remain the production contract
+until this amendment receives independent review and acceptance.
+
+**Measured need.** The existing research matrix executes both real castling directions and finds
+retained `before_fen`, `move_uci` and `after_fen` operands on thirteen kinds across thirty migrated
+positive edge cases. None of the five rules can compare those complete strings. Dropping them
+would weaken total coverage. Applying geometry directly to an after FEN is also wrong for its
+fullmove counter: the partner is the legal successor of the transformed **before** position and
+move, not a string transform of the source after FEN. The existing runner already enforces that
+input relation. Evidence: `design/research/semantic-validation-closure.md` §2026-10-08;
+`tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts`.
+
+Add exactly three input-relative value rules to `SemanticMirrorOperandRule`, discriminated by
+`value`. Each has the literal paths and collection below; it is not the unrestricted path shape
+of the five geometric rules.
+
+| value | sourcePath and partnerPath | own case input field | collection |
+|---|---|---|---|
+| `input_before_fen` | `["before_fen"]` | `beforeFen` | `scalar` |
+| `input_move_uci` | `["move_uci"]` | `moveUci` | `scalar` |
+| `input_after_fen` | `["after_fen"]` | `afterFen` | `scalar` |
+
+Unknown values, extra fields, renamed or nested paths, wildcards, another input field's path,
+non-scalar collections and duplicate input-relative rules fail
+`SEMANTIC_VALIDATION_ORIENTATION_SCHEMA`. The existing geometric rule grammar is unchanged.
+No generic `ignore`, input selector, callback, caller-supplied transform or field-exclusion rule
+is introduced. A case need only declare the input-relative rules for leaves its operation really
+emits; every other emitted leaf must still resolve exactly once through the total walk.
+
+The comparator takes an optional fifth argument, only for the runner's actual input pair:
+
+```ts
+interface SemanticMirrorInputContext {
+  readonly source: SemanticEdgeInput;
+  readonly partner: SemanticEdgeInput;
+}
+
+compareSemanticMirror(source, partner, geometry, rules, inputContext?);
+```
+
+This is ordinary process-local context, not a new receipt, hash, cache, durable field or
+permission. The runner constructs it from the two registered cases it is executing, never from
+an observation, payload, oracle result or caller flag. Cases and expectations cannot provide an
+alternate context. Existing four-argument comparisons with only geometric rules remain valid;
+an input-relative rule without both edge inputs fails closed. Recorded-path, sequence,
+complete-alternative and bounded-source inputs do not gain this vocabulary by coercion.
+
+Execution order and comparison are fixed:
+
+1. Parse the closed case/rule grammar. Resolve the same-subject orientation partner. Validate
+   **both** complete, canonical legal edges with `assertSemanticValidationFixture`, then verify
+   their actual geometry with `assertSemanticMirrorPartnerInput`, before either operation runs.
+   An internally consistent but illegal `input.afterFen` and `operands.after_fen` pair fails this
+   first stage. No input is silently canonicalized or repaired for admission.
+2. Keep the existing independent proposition resolution, production-operation execution and
+   sole-factory/value checks. Input context never substitutes for those authorities. Select the
+   exact projection/version and retain the non-empty, equal-cardinality requirement.
+3. For every target observation on each side, an input-relative rule resolves exactly its
+   prescribed scalar leaf. Require a string byte-equal to that **same side's** declared input
+   field, including all FEN clock fields and the canonical UCI dialect. A missing, copied,
+   substituted or clock-only-changed leaf fails `SEMANTIC_VALIDATION_ORIENTATION_SCHEMA`.
+4. Only after that equality, use the rule's fixed relative input-field identity in its comparison
+   slot on both sides. That identity relates already-proved operands; it does not delete a field
+   or replace the original observation. Every other rule retains its existing geometric/identity
+   behavior. Pair on the complete transformed rule values plus exact projection and sign, not
+   an implementer-selected subset. All zero/zero, unequal, duplicate and unmatched refusals remain.
+5. Retain the original complete payload/input digests and sole-factory information in the existing
+   execution receipt. Never mutate a payload or re-mint evidence with comparison tokens. No new
+   receipt schema, production source or authored-pack migration is needed.
+
+**Acceptance additions to criteria 7/10/11/26.** Permanent tests must execute both castling
+directions through the real runner/comparator after acceptance, not only the disposable model.
+They must preserve the existing en-passant/promotion legal-partner controls and independently
+corrupt each retained input field on **each** side; corrupt only a clock; corrupt the input and
+operand together; omit or add an operand; omit context; cross the partner; change sign or a
+semantic destination; and exercise every refused grammar shape above. Invalid case inputs must
+observe zero collector invocations. Valid immutable payloads must compare without mutation.
+Existing geometric comparisons, reordered/multiple-target populations, total coverage and value
+authority negatives must continue to pass. Independent authority-bearing case/profile additions
+are a **separate** family slice; neither a passing model nor this grammar repair can satisfy one.
+
+**Current author checkpoint, not acceptance.** The ordinary opt-in
+`make semantic-validation-matrix` passes sixteen research controls. A new predecessor-red
+control demonstrated that the first disposable adapter accepted a corrupted source after FEN
+when its operand copied that same corruption. The adapter now checks both legal fixtures before
+the already-existing partner relation, and the control refuses. Closed-rule parser and immutable
+payload controls also pass. No production parser, runner, case, profile or generated verdict was
+changed; 81 subjects still have zero fully validated verdicts.
 
 ### 4.2 Closed operation results
 
@@ -1472,6 +1568,11 @@ This remains the durable return record. R1–R4 above are the author's response 
 review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
+
+- 2026-10-09: authored the **draft**, independently reviewable §4.1a amendment for D3564's
+  exact retained-input leaves. The disposable matrix adds closed-rule and immutable-input
+  controls, including a predecessor-red self-consistent illegal successor. No production
+  grammar/runner, independent chess authority or learner eligibility change is authorized.
 
 - 2026-09-30: integrated Slice A and the three bounded-target profile roots with main;
   regenerated receipts report 81 subjects and zero fully validated profiles. [[D3315]] wires

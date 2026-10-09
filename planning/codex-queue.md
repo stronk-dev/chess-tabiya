@@ -274,8 +274,11 @@ source-authority hold, official content or release gate is promoted by this scop
    bindings remain open, explicitly routed in `planning/rfc-drafting-queue.md`; no factory
    becomes newly available from this repair.
    [[D3564]] measures an orientation contract gap on real retained FEN/UCI operands;
-   the narrow author/review handoff is in `design/research/semantic-validation-closure.md`
-   and `planning/rfc-drafting-queue.md`. Do not register more orientation authorities on
+   its 2026-10-09 draft amendment is now authored in RFC §4.1a, with the independent-review
+   handoff in `planning/rfc-drafting-queue.md`. Sixteen disposable research checks pass,
+   including predecessor-red self-consistent input corruption, strict grammar and payload
+   immutability. Production repair remains held for independent acceptance; no registered
+   case or semantic verdict changes. Do not register more orientation authorities on
    an unrepresentable comparison or silently omit input fields. The suspected counter
    bug is refuted. [[D3566]] separately repairs already-specified input preflight before
    either collector, with predecessor-red zero-invocation controls. [[D3565]] repairs

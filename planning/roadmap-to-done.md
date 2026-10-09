@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3604]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3605]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -50,7 +50,7 @@ percentage: completed components do not establish a complete learner journey.
 | Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, explicit source-versus-review disclosure, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content and establish actual review authority, implement durable training-set progression/repeat/tempo and graduate the official corpus |
-| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and bot-event workflows |
+| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and preserve tournament-ready architecture. Bot tournaments/leagues are post-1.0 under D1416/D1520 |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, bounded preparation with in-place tool choices, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
@@ -323,7 +323,10 @@ This is working validation
 infrastructure and two independently grounded examples, not completed semantic coverage.
 [[D3564]] now identifies a concrete orientation contract gap: thirteen kinds in thirty
 sampled positive edge cases retain input operands that none of the five mirror rules can
-compare. The narrow exact-input-binding proposal is tested but awaits author/cross-review.
+compare. The narrow exact-input-binding amendment is authored in RFC §4.1a on 2026-10-09
+and awaits independent review/acceptance before production implementation. Sixteen research
+checks pass, including the predecessor-red illegal-successor case, strict grammar and
+immutability. No registered case, profile, consumer permission or generated verdict changes.
 The suspected counter defect is refuted. [[D3566]] separately repairs the accepted input
 preflight before either collector, with predecessor-red permanent controls; [[D3565]] fixes
 the opt-in matrix's stale reference without changing its authority classification. All 158
@@ -2954,14 +2957,17 @@ storage and predecessor source text, so repairing D2884 invalidated its retained
 reviewed text inputs are now pinned to exact commit `da3fde39`, and the successor asserts the pin;
 the review/repair chain can be green simultaneously without erasing why the repair exists.
 
-### 7. Human-like bots, personalities, roster, and bot events
+### 7. Human-like bots, personalities and roster; deferred bot events
 
 <!-- roadmap-capability: bots -->
 
 **State: twelve registered profiles playable; calibration and personality proof missing.** Runs
 retain the exact selected profile and bot decisions, and the Play picker offers four bands across
 three behavior families. Cards are explicitly uncalibrated; route proposals, observed trait rates,
-strength calibration and the full bot-event/Review journey remain open. Avatars or adjectives do
+strength calibration and the full per-bot history/Review journey remain open. Bot tournaments
+and leagues are explicitly post-1.0 under [[D1416]]; [[D1520]] retains tournament-readiness,
+not event delivery, as a 1.0 constraint. [[D3605]] corrects the rollup's contrary summary.
+Avatars or adjectives do
 not solve that. The 2026-08-26 buildability return added the deeper
 contract blockers: typed shared-probe guard evidence, dependent-trait fallback, compiled trait
 identities, a production composer route, combined selection budget and the owner-ruled picker/card/
@@ -2985,8 +2991,9 @@ provider-health authority and promotes an exact cache entry to global roster ava
 grounded route proposals and guard fallback never throw; repertoire, traits, plausible errors,
 phase/endgame/clock behavior, rematch/history and declared absences appear on honest cards. Names
 may be fun; behavioral claims cite a mechanism or measured rate. Blind human-likeness, strength,
-trait observability, severe-loss, latency, reproducibility and provider-off gates pass. Local bot
-events create ordinary Reviewable games without claiming public-event operations.
+trait observability, severe-loss, latency, reproducibility and provider-off gates pass. Native
+game/result/pairing boundaries preserve the required tournament-readiness invariants without
+implementing deferred bot tournaments or leagues.
 
 Primary RFCs: `bot-policy`, `bot-roster`, `bot-route-source`. UX owner: OPP items.
 Owner ruling [[D1566]] fixes picker placement, persistent persona grain, visible identity,

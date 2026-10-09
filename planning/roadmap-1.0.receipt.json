@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1486e2b0d64f57f69e5baf03a6ef1fb44e37b40be88ccd6005a2dfa54cbce6ef",
+    "roadmap": "sha256:93901acb3b2582dba20faefc6136645660fdacf2f94e005c5bc73aa8e97243eb",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:fcceff910d9f5bd8347475bf7672c6868aa97fc19f01e79631479a1eff35ac61",
-    "rfcRegister": "sha256:b9dcd58bbb92816a3576bf032d2051085e96f0e488774e8fc67e9c6544655400",
+    "workState": "sha256:c68156fd235bd6544f1e899db616984af0685a0d44f7f04c7c53a7ad6192eb08",
+    "rfcRegister": "sha256:875938b014efa72b1186b4b564d7f9cc163e24d1141ab37573e99ef5e2e02b92",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1066,
-      "done": 1484,
+      "done": 1485,
       "refused": 161
     },
     "workItems": {
@@ -192,10 +192,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Independently review D3376's installed-opening-evidence draft: shared schema, package-owned installed source, three sole factories and actual module/Review joins. D3590's strict-loader repair is locally closed, not that integration. Review D3564's exact-input orientation amendment and D3373's durable Stockfish draft before their implementation; preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-08",
-        "summary": "D3590 is closed locally: six predecessor-red malformed-opening-leaf controls now refuse through compilation and file loading. Its 38 focused opening/phase/manifest cases, clean types, 3672 software cases, opening performance cases and actual build/catalogue check pass. That checkpoint's full run failed D3591 and recorded D3592's automation/coverage gap; subsequent arrival correction and current local verification are recorded in release-truth and stable-board-and-presets. The artifact source pin and lookup meanings are unchanged. D3376 has draft installed-opening-evidence.md covering three sole factories and four consumer operations, including membership proof, Inspector history and real Review parsing; it awaits independent review, not implementation completion. D3564 orientation, D3373 Stockfish, D3580 tablebase, D3578 selected-square and bot calibration remain held. Semantic validation stays at 81 subjects and zero fully validated subjects. No whole capability, milestone, remote CI or 1.0 completion.",
+        "at": "2026-10-09",
+        "summary": "D3564's draft RFC section 4.1a is authored for independent review: three exact retained-input rules, legal source/partner preflight, total comparison and immutable originals. Sixteen disposable research checks pass, including a predecessor-red self-consistent illegal-successor case. Production parser/comparator/runner changes and independently grounded orientation cases remain held, not self-accepted. D3590's strict-loader repair is locally closed; D3376 installed opening evidence, D3373 durable Stockfish, D3580 tablebase, D3578 selected-square and bot calibration remain open. Semantic validation stays at 81 subjects, 40 passing registered cases and zero fully validated subjects. D3591/D3600 historical timing failures remain unresolved despite the latest full local green sequence recorded in release-truth and stable-board-and-presets. No whole capability, milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/installed-opening-evidence.md",
@@ -258,7 +258,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:a19391a280d333879d820a4b4a67f243b778c2bec5e7fdf4359e91b8d2ffe41d"
+            "digest": "sha256:a933d5e33d0ef6eac21cdba22a44287ae09b45c8f17054affb0ee67c1afd8a7e"
           },
           {
             "kind": "rfc",
@@ -634,7 +634,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:a19391a280d333879d820a4b4a67f243b778c2bec5e7fdf4359e91b8d2ffe41d"
+            "digest": "sha256:a933d5e33d0ef6eac21cdba22a44287ae09b45c8f17054affb0ee67c1afd8a7e"
           },
           {
             "kind": "rfc",
@@ -2711,7 +2711,7 @@
     },
     {
       "id": "bots",
-      "name": "Human-like opponents, personalities, roster, and bot events",
+      "name": "Human-like opponents, personalities and roster; tournament readiness",
       "release": "core",
       "owner": "bot-play",
       "rfcCount": 4,
@@ -2748,7 +2748,7 @@
         ],
         "experience": [
           "partial",
-          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Pack attachment now resolves the saved run's retained document under its read grants. Names/assets, measured personality, opening routes, per-bot history/Review and local bot events remain."
+          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Pack attachment now resolves the saved run's retained document under its read grants. Names/assets, measured personality, opening routes and per-bot history/Review remain. D1416 defers bot tournaments/leagues past 1.0; D1520 retains tournament-ready architecture, not event delivery, as a 1.0 constraint."
         ],
         "defaults": [
           "blocked",

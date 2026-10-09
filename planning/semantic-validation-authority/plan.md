@@ -3,11 +3,15 @@
 ## State
 
 Implementing: the owner-directed September 24 Slice A is integrated on main on 2026-09-30.
-The generated reading is 81 subjects, 38 passed executable cases and zero fully validated
+The current generated reading is 81 subjects, 40 passed executable cases and zero fully validated
 profiles. [[D2449]] remains the lawful D0 owner bootstrap; absent independent authorities and
 required production reach remain release debt, not waived by mechanism implementation.
 [[D3315]] binds the existing owner-history guard to governance CI and a narrow pre-commit job.
-Current receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.
+Historical integration receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.
+The two subsequent D3563 cited-source castling cases account for the case-count increase;
+they do not complete a profile. D3564's §4.1a amendment is authored on 2026-10-09 and awaits
+independent review. Its sixteen passing disposable research checks are not additional
+registered cases or semantic authority.
 
 ## Order
 
@@ -26,7 +30,11 @@ Current receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.
    able-to-fail fixtures in RFC §10 against that real prior-commit root.
 10. ✅ Owner-directed Slice A integrated; every incomplete event remains research-only.
 11. ✅ Value-authority sole-factory boundary ships; its independent discharges still apply.
-12. Execute authority-bearing family slices B–D, then release exact consumers in Slice E.
+12. Independently review D3564's draft §4.1a exact-input comparison. After acceptance,
+    implement the closed parser/comparator/runner repair and permanent production tests;
+    do not omit retained input fields or manufacture orientation authority.
+13. Execute independently grounded authority-bearing family slices B–D, then release exact
+    consumers in Slice E. The grammar repair alone does not discharge these slices.
 
 ## Boundary
 
