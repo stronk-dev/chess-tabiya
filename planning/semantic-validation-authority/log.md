@@ -115,3 +115,22 @@ Normal `make semantic-validation-check` confirms the unchanged 63 passing canoni
 D3629 remains blocked on independent review/acceptance before production implementation and
 permanent runner tests. No owner authority, orientation case, profile pass, source migration,
 learner eligibility, full-RFC completion, content graduation or release proof is created.
+
+### 2026-10-09 — Slice B literal-rule authority (D3639)
+
+Added 24 pinned-source production-operation cases for capture, clock reset, check and
+castling-rights loss, retaining all 63 prior cases. Both colors gain exact legal positives
+and completed nearby negatives; negative invocations still emit other facts. Source, subject,
+input, expectation and operation joins refuse forgeries before invocation. The four attributed
+python-chess excerpts were independently compared with their fixed upstream bytes.
+
+All 87 cases (57 positive/30 negative) pass over 81 subjects, still zero fully qualified.
+The new permanent cited-case suite passes 29 tests; complete software passes 4,297 / 364 files.
+Broader gates and closeout are still running. D3640/D3641 repair existing castling semantics,
+not a new validation waiver. D0 owner authority, D3564/D3629 independent-review holds,
+orientation, remaining negative/counterfactual arms and learner migration remain open.
+
+Final normal local gates pass clean types/build, 4,297 software / 364 files, seven unchanged-budget
+performance, governance/packaging, 239 content and 241 browser cases, one optional Maia skip,
+zero retries and 150 input/112 composition cells. D3639 closes with its permanent cited-case
+test path; all broader semantic qualification, review/owner and learner-migration holds remain.

@@ -2359,6 +2359,58 @@
         "refs": [
           {
             "kind": "case",
+            "id": "cited.python-chess.rights.rook.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.castling.event.rights_lost",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.rights.rook.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.castling.event.rights_lost",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.rights.king.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.castling.event.rights_lost",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.rights.king.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.castling.event.rights_lost",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
             "id": "local.rook-leaves-h1.rights",
             "version": 1,
             "subject": {
@@ -2373,9 +2425,35 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.rights.absent-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.castling.event.rights_lost",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.rights.absent-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.castling.event.rights_lost",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -3381,6 +3459,58 @@
         "refs": [
           {
             "kind": "case",
+            "id": "cited.python-chess.check.direct.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.check.direct.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.check.discovered.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.check.discovered.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
             "id": "local.knight-fork.check",
             "version": 1,
             "subject": {
@@ -3395,9 +3525,35 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.check.blocked-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.check.blocked-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -3742,6 +3898,58 @@
         "refs": [
           {
             "kind": "case",
+            "id": "cited.python-chess.capture.direct.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.capture.direct.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.capture.en-passant.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.capture.en-passant.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
             "id": "transition.exd5.capture",
             "version": 1,
             "subject": {
@@ -3756,9 +3964,35 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.capture.castle-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.capture.castle-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -3988,6 +4222,58 @@
         "refs": [
           {
             "kind": "case",
+            "id": "cited.python-chess.zeroing.pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.clock_reset",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.zeroing.pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.clock_reset",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.zeroing.capture.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.clock_reset",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.zeroing.capture.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.clock_reset",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
             "id": "transition.pawn-takes-queen.clock",
             "version": 1,
             "subject": {
@@ -4002,9 +4288,35 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.zeroing.castle-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.clock_reset",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.zeroing.castle-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.clock_reset",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",

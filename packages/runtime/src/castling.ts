@@ -1,4 +1,4 @@
-import { normalizeMove } from "chessops/chess";
+import { castlingSide, normalizeMove } from "chessops/chess";
 import type { Color, NormalMove, Square, SquareName } from "chessops/types";
 import { makeSquare, opposite, parseUci } from "chessops/util";
 
@@ -39,6 +39,9 @@ export interface CastlingLegalityIssue {
 
 function kingPath(king: Square, color: Color, wing: CastlingWing): readonly Square[] {
   const target = ((color === "white" ? 0 : 56) + (wing === "kingside" ? 6 : 2)) as Square;
+  // Chess960 permits a stationary king. Its landing must still be checked with
+  // the rook removed; otherwise moving that rook can expose the king's square.
+  if (king === target) return Object.freeze([target]);
   const step = target > king ? 1 : -1;
   const result: Square[] = [];
   for (let square = king + step; ; square += step) {
@@ -94,13 +97,13 @@ export function castlingRightsLost(beforeFen: string, moveUci: string, afterFen:
   replay.play(move);
   if (canonicalFen(replay) !== canonicalFen(after)) return [];
   const moving = before.board.get(move.from)!;
-  const fileDelta = Math.abs((parsed.to % 8) - (parsed.from % 8));
+  const castled = castlingSide(before, move) !== undefined;
   const events: CastlingRightLostEvent[] = [];
   for (const color of ["white", "black"] as const) for (const wing of ["kingside", "queenside"] as const) {
     if (!rightsFor(before, color)[wing] || rightsFor(after, color)[wing]) continue;
     const rook = before.castles.rook[color][sideKey(wing)];
     const cause = moving.color === color && moving.role === "king"
-      ? fileDelta >= 2 ? "castled" : "king_moved"
+      ? castled ? "castled" : "king_moved"
       : moving.color === color && moving.role === "rook" && move.from === rook
         ? "rook_moved"
         : "rook_captured";

@@ -1404,9 +1404,17 @@ foundation-source-author-repair: foundation-source-author-contract foundation-so
 # rfc/semantic-validation-authority.md §6: the generated receipt's only writer and its drift check.
 .PHONY: semantic-validation-update semantic-validation-check semantic-validation-build
 .PHONY: evidence-foundation-check
+.PHONY: semantic-validation-cited-check
+semantic-validation-cited-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts
+
+.PHONY: castling-evidence-check
+castling-evidence-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/castling.test.ts packages/runtime/src/castling-evidence.test.ts apps/server/src/castling-evidence.test.ts
+
 evidence-foundation-check: mobility-check king-state-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/pawn-dynamics.test.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-migration.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-migration.test.ts packages/runtime/src/semantic-validation-cited.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/candidate-population-census.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/structural-evidence.test.ts packages/runtime/src/transition.test.ts packages/runtime/src/castling-evidence.test.ts packages/runtime/src/tactics.test.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts packages/runtime/src/reading-execution.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/shape-firing.test.ts apps/web/src/lib/claim-presentation.test.ts apps/server/src/authoring-execution.test.ts apps/server/src/sourcing/claim-binding.test.ts apps/server/src/shape-validation.test.ts apps/server/src/shape-studio.test.ts apps/server/src/bounded-target-policy.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts
 
 semantic-validation-build:
@@ -1422,6 +1430,7 @@ mobility-check:
 .PHONY: king-state-check
 king-state-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/king-state.test.ts apps/server/src/king-evidence.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/castling-evidence.test.ts
 
 semantic-validation-check: semantic-validation-build
 	node tools/semantic-validation/dist/semantic-validation-build.mjs --check

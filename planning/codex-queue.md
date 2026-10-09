@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3639]]/[[D3640]]/[[D3641]] are closed locally: 24 source-bound literal-rule cases retain
+the original 63, bringing canonical coverage to 87 passing cases over 81 subjects, still zero
+fully qualified. Exact castling causes and finite stationary-king checks reach sealed factories,
+candidates, saved reconstruction, registered Review rendering and actual authenticated Inspector.
+All normal gates pass clean types/build, 4,297 software / 364 files, seven unchanged-budget
+performance, 239 content and 241 browser cases; one optional Maia skip, zero retries and all
+150 input/112 composition cells. Draft orientation/window/source amendments remain held;
+no learner permission, whole milestone, remote CI or release is promoted by these repairs.
+
 [[D3638]] is closed locally under the accepted Review read/recovery contract. Single-flight
 automatic reads stay quiet; deliberate Refresh joins an existing read without another request.
 Failed, crossed and cited-node-missing replies retain the confirmed exact branch/selected move

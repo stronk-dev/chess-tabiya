@@ -49,6 +49,13 @@ candidate packets and Inspector serialization. A stationary castling rook remain
 changed destinations do not imply relocation. Existing saved histories rebuild through longitudinal
 derivation revision 4 without changing recorded play, projection membership or learner permissions.
 
+Castling rights-loss causes use the normalized castling side, not encoded king travel distance:
+adjacent-rook and stationary-king Chess960 moves are `castled`, while ordinary king steps remain
+`king_moved`. Stationary-king legality checks terminate at the actual landing square, including
+attacks exposed when the rook moves away. Permanent controls reach candidate/saved reconstruction,
+registered Review rendering and authenticated Inspector HTTP output; reading evidence does not
+change saved play. Longitudinal membership uses projection/sign, not this cause operand.
+
 Pawn protection and connected-pair gains follow the exact moved pawn across its legal edge;
 an advance does not create an existing property again. Pair identity is unordered, so a changed
 enumeration order also cannot become a gain. Genuine newly protected passers remain gains and
@@ -248,16 +255,21 @@ with four independent authorities:
 The current register has 81 subjects. The 38 migrated cases remain, D3563 adds the independent
 standard castling positive/nearby negative, and D3616 adds adjacent-rook and stationary-king
 positives. D3628 adds twelve legal nearby negatives and nine v2 recorded-path positives,
-giving 63 cases (41 positives, 22 negatives). Each sequence fixture also checks its completed
+giving 63 cases (41 positives, 22 negatives). D3639 adds 24 source-bound literal-rule cases
+for capture, clock reset, check and castling-rights loss, bringing the current total to 87
+(57 positives, 30 negatives). All prior cases remain. Both colors have completed legal hard
+negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
 production window; canonical qualification invokes the complete recorded application path,
 not the broken sequence-to-parent reach adapter tracked as D3629. The original 42 cases
 remain, one missing-capture-operand predicate is not promoted to a legal chess negative,
-and orientation/eligibility rules are unchanged. The build-only cited-source store retains six lines / 385 bytes
-from python-chess 1.11.2 at a fixed commit, with attribution and licence. Resolution checks the
+and orientation/eligibility rules are unchanged. The build-only cited-source store retains the
+original six-line castling excerpt and four small literal-rule excerpts from python-chess 1.11.2
+at a fixed commit, with attribution and licence; the four additions were compared byte-for-byte
+with that pinned upstream source. Resolution checks the
 exact source, revision, licence, excerpt and proposition, then binds its case, subject,
 expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
-lookup, caller-provided source or protected owner-store bootstrap is involved. All four cited cases run
-through the actual transition emitter. This is not independent strategic judgement or a new
+lookup, caller-provided source or protected owner-store bootstrap is involved. All 28 cited cases run
+through actual registered production operations. This is not independent strategic judgement or a new
 learner permission. The source store is excluded from the production runtime import closure.
 
 53 subjects carry an executed population receipt and 8 carry D872 external-disagreement

@@ -23922,3 +23922,29 @@ Campaign was the one capability with no API, route or content. Now:
 - Final-code make verify-software exits zero: clean types/build, 4,232 software cases / 362 files, seven unchanged-budget performance cases / four files and packaging/software contracts. The overlapping broader browser run fails one due-return arrival before its assertions: the captured page is STATIC_NOT_BUILT while this supplemental run replaces the web build. This is coordinator-induced build interference, not evidence against the return reducer or a reason to alter its test. All four new Review cases pass in that run. Rerun the complete normal browser sequence alone on the completed build; do not count the failed run as a complete gate result.
 - The sequential make test-browser-ci-awake rerun exits zero without product/test edits: 241 browser passes (176 smoke, five content, 59 matrix, one packaged-default), one existing optional Maia skip, zero retries and all 150 input/112 composition cells. Final-code software/types/build/performance and the preceding unchanged-code governance/239 content cases complete the local gate evidence. Close only D3638's read/recovery journey; retain source, selection/usefulness, semantic qualification, official content, whole Review/milestone and native release holds. Update the existing ledger/state/queue/docs/RFC/roadmap/receipt, not a new tracker or raw capture. Final closeout governance and scoped ordinary commit follow; no push, remote CI or goal pause.
 - Final make roadmap-receipt verify-governance roadmap-progress exits zero after closeout: 3,387 ledger rows, 1,516 done, 161 refused and 1,710 live (628 todo, fourteen doing, 1,068 blocked), zero untriaged; UX 273 complete/272 live/24 retired; product RFCs 42 implementing/ten awaiting/22 draft; milestones four active/five blocked and all fourteen whole capabilities incomplete. Replace the existing learner-journey latest checkpoint with this batch's eight relevant paths and two anchors, rather than accumulating 96 historical paths there; historical delivery remains in the dated logs. The requested total inventory is reconciled in the existing roadmap. Explicit fifteen-file staging excludes all five pre-existing research/review/scratch paths; ordinary commit hooks follow. No push, release promotion or goal pause.
+
+### 2026-10-09 — literal-rule validation and castling correctness (D3639–D3641)
+
+- D3639 executes 24 new pinned-source cases for capture, clock reset, check and rights loss,
+  including eight completed legal negatives in both colors. The original 63 remain: 87 canonical
+  cases pass (57 positive/30 negative) over 81 subjects; zero subjects are fully qualified.
+  Four small attributed python-chess excerpts match their fixed upstream source byte-for-byte.
+  Crossed input/subject/expectation/operation references fail before production invocation.
+- D3640 repairs castling cause at normalized identity, not encoded king travel. Twelve
+  predecessor controls fail. D3641 repairs an inspected nonterminating stationary-king path;
+  the unbounded predecessor was deliberately not executed. Finite controls retain rook-exposed
+  attack refusal. Fifty-six focused cases include four actual authenticated Inspector HTTP
+  boundaries, unchanged saved play and registered Review rendering. Longitudinal membership
+  persists projection/sign, not the changed cause operand; no revision or registry change.
+- Normal final-code software checks pass clean types and 4,297 tests / 364 files. Performance,
+  full governance/content/browser and same-commit closeout remain in progress. No full-RFC,
+  learner eligibility, source migration, official graduation, whole capability, remote CI,
+  readiness-to-push or release claim. The existing roadmap holds the current checkpoint;
+  no new tracker or raw measurement dump is introduced.
+- Final normal make roadmap-receipt verify-awake test-browser-ci-awake exits zero: clean
+  types/build, 4,297 software / 364 files, seven unchanged-budget performance / four files,
+  governance/packaging, 239 content / 23 files and 241 browser passes (176 smoke, five content,
+  59 matrix, one packaged-default). One existing optional Maia skip, zero retries and all
+  150 input/112 composition cells. Close D3639/D3640/D3641 with permanent source-test paths;
+  retain every larger qualification, source, UX, content, native release and remote-CI hold.
+  The existing overview/checkpoint receives this bounded progress, not a whole milestone.

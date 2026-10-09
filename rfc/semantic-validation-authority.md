@@ -17,6 +17,11 @@
   none of this qualifies legacy v1 events, missing-capture injection, orientation or new learner
   eligibility. D3629 retains the sequence-wrapper/parent-reach defect; full-path qualification
   does not certify that adapter. **Zero subjects remain fully validated.**
+  **2026-10-09 Slice B checkpoint (D3639):** 24 pinned-source literal-rule cases add
+  both-color positives and completed legal negatives for capture, clock reset, check and
+  rights loss. All original 63 remain: 87 canonical cases (57 positive / 30 negative).
+  Source/subject/input/expectation/operation forgeries refuse before production invocation.
+  **Zero subjects remain fully validated; no orientation or learner-permission promotion.**
   **2026-10-09 draft amendment:** §4.1a below specifies D3564's retained-input comparison.
   It requires independent review and acceptance before production changes; Slice A's existing
   parser, runner, authority and learner-eligibility rules remain in force.
@@ -1683,6 +1688,13 @@ This remains the durable return record. R1–R4 above are the author's response 
 review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
+
+- 2026-10-09: implemented [[D3639]] under Slice B: four literal-rule families gain 24
+  independently source-bound canonical cases, including eight completed legal negatives.
+  Four small attributed python-chess excerpts match the fixed upstream revision exactly.
+  Registered operations execute all cases; crossed authority fails before invocation.
+  The register now has 87 passing cases over 81 subjects, still zero fully qualified.
+  Draft D3564/D3629 amendments, owner authority and learner migration remain held.
 
 - 2026-10-09: authored the **draft**, independently reviewable §4.1a amendment for D3564's
   exact retained-input leaves. The disposable matrix adds closed-rule and immutable-input

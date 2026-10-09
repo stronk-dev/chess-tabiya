@@ -30142,6 +30142,33 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/app-shell.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3639",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ead371029e2a8c273c50541b7d0e6cac401b95c2c4eb54e20a60a6198b84f4b6",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3640",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a818b8b0a1a5e157dea4ec4338e9cd9d93eb3c1a7cc64bdef9ae9d759b22effe",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/castling-evidence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3641",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:315440f67326ac3dbd2eca5aaafed22a422ba1299b667e680a9460e08b27e407",
+      "uxItems": [],
+      "evidence": "apps/server/src/castling-evidence.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

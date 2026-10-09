@@ -1,5 +1,6 @@
 /** Build/test-only references, never imported by a collector or the runtime barrel. */
 import type { SemanticEdgeInput, SemanticValidationCase, SemanticValidationPropositionRecord } from "./semantic-validation.js";
+import { SEMANTIC_VALIDATION_LITERAL_SOURCES } from "./semantic-validation-literal-sources.js";
 
 // Retained verbatim from python-chess 1.11.2, chess/__init__.py lines 3341–3346.
 // Copyright Niklas Fiekas; GPL-3.0-or-later. Licence and full corresponding source:
@@ -90,4 +91,4 @@ export const SEMANTIC_VALIDATION_CITED_SOURCES = Object.freeze([{
       },
     },
   ] satisfies readonly CitedCase[],
-}] as const);
+}, ...SEMANTIC_VALIDATION_LITERAL_SOURCES] as const);

@@ -1074,6 +1074,14 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-10-09: repaired [[D3640]]/[[D3641]] under §3.2, without discharging D1.
+  Rights-loss cause follows normalized castling identity even for adjacent-rook or stationary
+  king moves; ordinary king steps remain distinct. Stationary landing checks terminate and
+  retain rook-exposed attack refusal. Twelve predecessor controls reproduce the wrong cause;
+  the unbounded predecessor was not executed. Permanent factory/candidate/saved and registered
+  Review controls plus four actual authenticated Inspector HTTP cases cover both colors,
+  authorization, unchanged saved play and exact legal/attacked output.
+
 - 2026-10-09: D3620 repairs §3.4's omitted en-passant capturers by joining the actual victim
   through the existing exchange capture authority. The shared recapture helper remains
   landing-based. Both colors retain victim/landing identities through sealed readings/events,

@@ -53,7 +53,27 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3638]] finishes Review read recovery. Single-flight automatic polling
+Latest completed batch: [[D3639]]/[[D3640]]/[[D3641]] finish the bounded literal-rule and
+castling repair. Twenty-four source-bound cases retain all 63 prior cases: 87 canonical cases
+pass (57 positive / 30 negative) over 81 subjects, still zero fully qualified. Castling cause
+uses normalized identity, and stationary-king checks terminate without hiding rook-exposed
+attacks. Twelve wrong-cause predecessor controls fail; the unbounded predecessor was not run.
+Permanent factory/candidate/saved/registered-Review controls and four actual authenticated
+Inspector HTTP cases preserve exact facts, authorization and unchanged play.
+
+All normal local gates pass clean types/build, 4,297 software / 364 files, seven unchanged-budget
+performance / four files, governance/packaging, 239 content / 23 files and 241 browser passes;
+one optional Maia skip, zero retries, all 150 input/112 composition cells. Current ledger:
+3,390 rows, 1,519 done, 161 refused and 1,710 live (628 todo, fourteen doing, 1,068 blocked),
+zero untriaged. UX stays 273 complete / 272 live / 24 retired; product RFCs 42 implementing /
+ten awaiting / 22 draft. Milestones remain four active / five blocked, all fourteen whole
+capabilities incomplete. There are 86 production pack documents and zero official graduates.
+The 462 historical prose-only closures are not fresh proof. These repairs do not complete
+source adoption, semantic qualification, useful defaults, any whole capability or native
+release; no remote CI or readiness-to-push claim. The inventory above is delivery accounting,
+not a fresh usability sign-off. A completed defect can leave its larger workflow open.
+
+Previous completed batch: [[D3638]] finishes Review read recovery. Single-flight automatic polling
 stays quiet and publishes slow replies; deliberate Refresh joins an existing read. Failed,
 crossed or cited-node-missing replies keep the last confirmed exact branch and selected move
 with visible retry. Departed replies cannot attach; desktop/phone recovery preserves focus,
@@ -63,7 +83,7 @@ pass clean types/build, 4,232 software / 362 files, seven unchanged-budget perfo
 239 content cases and 241 browser passes (176 smoke, five content, 59 matrix, one packaged-default),
 one optional Maia skip, zero retries and 150 input/112 composition cells. The first browser
 attempt hit my simultaneous web rebuilding; the complete sequential rerun passes unchanged.
-The ledger now has 3,387 rows: 1,516 done, 161 refused and 1,710 live (628 todo, fourteen doing,
+That checkpoint's ledger had 3,387 rows: 1,516 done, 161 refused and 1,710 live (628 todo, fourteen doing,
 1,068 blocked), zero untriaged. Of the historical closures, 462 still have prose-only evidence;
 they are not fresh delivery proof. UX remains 273 complete / 272 live / 24 retired. Product
 RFCs remain 42 implementing / ten awaiting / 22 draft; the archive records 75 implemented and

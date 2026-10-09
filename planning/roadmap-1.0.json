@@ -815,100 +815,28 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3636 repairs existing pawn-gain identity under breadth-collectors section 3.3: advancing an already protected or connected passer does not create its properties again, including reordered pairs and both colors. Four predecessor controls fail; genuine protection and separate advancement survive sealed factories, complete candidates and unchanged saved play. All 501 foundation/65 longitudinal cases and clean types pass; current revision 4 rebuilds old histories through the real startup worker without changing the 67-member registry or attribution. Complete normal local gates pass clean types/build, 4226 software cases/362 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 237 browser passes (172 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3635's physical king-escape and D3631's consecutive-reply repairs stand. All 63 canonical cases over 81 subjects pass with zero fully qualified subjects; D3629's sequence-parent adapter remains held. No new source, motif, judgement, eligibility, official content, whole capability, milestone, native release or remote CI claim.",
+          "summary": "D3639 closes 24 pinned-source literal-rule cases while retaining the original 63: 87 canonical cases (57 positive/30 negative) pass over 81 subjects, still zero fully qualified. D3640 repairs Chess960 castling cause at normalized identity; D3641 terminates stationary-king legality without hiding rook-exposed attacks. Twelve wrong-cause predecessor controls fail; the unbounded predecessor was deliberately not executed. Fifty-six focused castling cases include four actual authenticated Inspector HTTP boundaries, unchanged saved play and registered Review rendering. All normal local gates pass clean types/build, 4297 software tests/364 files, seven unchanged-budget performance/four files, governance/packaging, 239 content/23 files and 241 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. Same-commit closure retains permanent test evidence. No orientation/owner waiver, learner permission, strategic judgement, source adoption, official graduation, whole capability, native release or remote CI promotion.",
           "impact": "advanced",
           "evidence": [
-            "rfc/installed-opening-evidence.md",
-            "rfc/breadth-collectors.md",
-            "rfc/recorded-semantic-path.md",
-            "packages/runtime/src/king-state.ts",
-            "packages/runtime/src/king-state.test.ts",
-            "apps/server/src/king-evidence.test.ts",
-            "packages/runtime/src/pawn-dynamics.ts",
-            "packages/runtime/src/pawn-dynamics.test.ts",
-            "packages/runtime/src/recorded-semantic-path.test.ts",
-            "apps/server/src/recorded-semantic-path.test.ts",
-            "rfc/longitudinal-store.md",
-            "packages/runtime/src/mobility.ts",
-            "packages/runtime/src/mobility.test.ts",
-            "apps/server/src/longitudinal-registry.ts",
-            "apps/server/src/longitudinal-contract.test.ts",
-            "apps/server/src/longitudinal-store.test.ts",
-            "apps/server/src/longitudinal-worker.test.ts",
-            "docs/longitudinal-store.md",
-            "rfc/durable-stockfish-source.md",
-            "rfc/maia-task-source.md",
-            "apps/server/src/opponent-selector.test.ts",
-            "apps/server/src/engine-supervisor.ts",
-            "apps/server/src/engine-supervisor-exchange.test.ts",
-            "apps/server/src/engine-supervisor.test.ts",
-            "docs/engine-workers.md",
-            "planning/exploration/log.md",
-            "apps/server/src/opening-catalogue.ts",
-            "apps/server/src/opening-catalogue.test.ts",
-            "docs/runtime-opening-identity.md",
             "rfc/semantic-validation-authority.md",
-            "packages/runtime/src/semantic-validation-authorities.ts",
-            "packages/runtime/src/semantic-validation-cited-sources.ts",
-            "packages/runtime/src/semantic-validation.test.ts",
-            "packages/runtime/src/semantic-validation-migration.test.ts",
+            "rfc/tactical-collectors.md",
+            "packages/runtime/src/castling.ts",
+            "packages/runtime/src/castling-evidence.test.ts",
+            "apps/server/src/castling-evidence.test.ts",
+            "packages/runtime/src/semantic-validation-cited.test.ts",
+            "packages/runtime/src/semantic-validation-literal-sources.ts",
             "packages/runtime/src/semantic-validation-cases.json",
             "packages/runtime/src/semantic-validation-profiles.json",
-            "tools/d1713-semantic-validation-matrix/validation-matrix.test.ts",
-            "packages/runtime/src/castling-evidence.test.ts",
-            "packages/runtime/src/special-move-tactics.test.ts",
-            "rfc/tactical-collectors.md",
-            "rfc/semantic-collectors.md",
-            "packages/runtime/src/tactics.ts",
             "docs/semantic-evidence.md",
-            "packages/runtime/src/transition.ts",
-            "packages/runtime/src/semantic-validation-runner.ts",
-            "design/research/semantic-validation-closure.md",
-            "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
-            "planning/provider-exchange-and-execution/queued-stockfish-2026-10-04.md",
-            "apps/server/src/evidence-queue.test.ts",
-            "apps/server/src/evidence-jobs.ts",
-            "planning/semantic-convention-provenance/implementation-2026-09-24.md",
-            "rfc/evidence-value-authority.md",
-            "rfc/semantic-convention-register.md",
-            "rfc/semantic-convention-provenance.md",
-            "rfc/assistance-config-register.md",
-            "rfc/bot-roster.md",
-            "tools/d2236-bot-calibration-verdict-contract/population.test.ts",
-            "planning/bot-roster/calibration-human-reference-population.json",
-            "tools/d2236-bot-calibration-verdict-contract/evaluation.test.ts",
-            "tools/d2236-bot-calibration-verdict-contract/evaluation-native.test.ts",
-            "planning/bot-roster/calibration-human-reference-pricing.json",
-            "tools/d2236-bot-calibration-verdict-contract/profile-arm.test.ts",
-            "tools/d2236-bot-calibration-verdict-contract/opening-capacity.test.ts",
-            "planning/bot-roster/calibration-opening-capacity.json",
-            "planning/bot-roster/calibration-score-domains-2026-10-06.md",
-            "planning/bot-roster/calibration-score-domains.json",
-            "tools/d2236-bot-calibration-verdict-contract/score-domain-audit.test.ts",
-            "planning/bot-roster/calibration-score-domains-software-2026-10-06.json",
-            "design/research/bot-calibration-verdict-contract.md",
-            "tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs"
+            "planning/codex-queue.md",
+            "planning/exploration/log.md",
+            "planning/semantic-validation-authority/log.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "installed-opening-evidence.md",
-              "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
-            },
-            {
-              "kind": "rfc",
-              "id": "breadth-collectors.md",
-              "digest": "sha256:2781c2d6957ba49fbe31da98a21362395045d591f5b961d505b6fbba4c5f1f56"
-            },
-            {
-              "kind": "rfc",
-              "id": "longitudinal-store.md",
-              "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
-            },
-            {
-              "kind": "rfc",
-              "id": "maia-task-source.md",
-              "digest": "sha256:cc6f9bc61f7b600618469f928881f46a6e8a888d58b2b5cec814e3a37d1c2bca"
+              "id": "semantic-validation-authority.md",
+              "digest": "sha256:c2c5355ee9dfe9527d0b74578c5e1f5d5d19def11daa6945c89829a7388f5497"
             },
             {
               "kind": "rfc",
@@ -916,99 +844,19 @@
               "digest": "sha256:a5ce11ada5223c74703ef300e97975b805a8f96155d11e83ed520984e4ca54f6"
             },
             {
-              "kind": "rfc",
-              "id": "recorded-semantic-path.md",
-              "digest": "sha256:1765eaffdbe10340c4907d209604074f25985cd500104196fc40927671c0174f"
+              "kind": "work_state",
+              "id": "D3639",
+              "digest": "sha256:ead371029e2a8c273c50541b7d0e6cac401b95c2c4eb54e20a60a6198b84f4b6"
             },
             {
               "kind": "work_state",
-              "id": "D3631",
-              "digest": "sha256:c9633e5eaee757a6fc7a6d23becba2791bc07e8d15717a374fa369638011a3f1"
+              "id": "D3640",
+              "digest": "sha256:a818b8b0a1a5e157dea4ec4338e9cd9d93eb3c1a7cc64bdef9ae9d759b22effe"
             },
             {
               "kind": "work_state",
-              "id": "D3636",
-              "digest": "sha256:d2567aabe5a56328328bcf5a59ef156781f7c99a4a84486273b03db684e28f9c"
-            },
-            {
-              "kind": "rfc",
-              "id": "semantic-collectors.md",
-              "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"
-            },
-            {
-              "kind": "rfc",
-              "id": "durable-stockfish-source.md",
-              "digest": "sha256:2af278a1d4ffa243d490bf8850d6673fc0527cfe4752a30daeaec01c6342e37d"
-            },
-            {
-              "kind": "rfc",
-              "id": "evidence-value-authority.md",
-              "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
-            },
-            {
-              "kind": "rfc",
-              "id": "semantic-validation-authority.md",
-              "digest": "sha256:b319a2a77213b9add7a2daa23b613e8829324b474170043e6a6071fc58cb3c92"
-            },
-            {
-              "kind": "rfc",
-              "id": "semantic-convention-register.md",
-              "digest": "sha256:e587e4114585176b6666aa006691460e7bcce278fd2333c030472a4ced14c8ad"
-            },
-            {
-              "kind": "rfc",
-              "id": "semantic-convention-provenance.md",
-              "digest": "sha256:cd69d2b53499b99274e7bb6e43f306d478d65a816902536401c7df8cfea2bc8d"
-            },
-            {
-              "kind": "rfc",
-              "id": "assistance-config-register.md",
-              "digest": "sha256:7ba5cf434bbb957d4d082e4f1079f872ed6a252b7ebd5f2c499b60acdbaac0d7"
-            },
-            {
-              "kind": "work_state",
-              "id": "D2363",
-              "digest": "sha256:4189ba577880b0e4275efb8af2e515d325c9d9e8083a9d6e19ab8e768b5a8a33"
-            },
-            {
-              "kind": "rfc",
-              "id": "bot-roster.md",
-              "digest": "sha256:f23d25f96d1664a2caa2b8bef7cfe7da2b471ce7f554bd1222be3ab485cd465a"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3406",
-              "digest": "sha256:dd3df7e13bf3a7bab9a3d9768069c8c931ea1b65b32fa0d0b6c4213c82706b33"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3407",
-              "digest": "sha256:a2bf4064fea3fd516d2ef17ef0e70908bd497f12cf2db314e2feb35faaa1b6de"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3408",
-              "digest": "sha256:04c4cc89e16ffa4c6449e2f52f527f524b0e6e0c327afb9c69c1e29b75fd30fe"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3409",
-              "digest": "sha256:430728fdc584869d1c635b75c73e28e9b9e44dc6e657a66f09596f9d6584613c"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3410",
-              "digest": "sha256:1eb5e37a4a5a14b9806b0827d44a9bd7562f571d981d3152ff3dac644bfc696b"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3429",
-              "digest": "sha256:b53996e4b544df980c230e8a6bee1424e1af215410feb032cfd9142c4f413bd1"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3430",
-              "digest": "sha256:f65b45b49abdd22e75074ec80a730949b0b08d5e8b334ca5b7797be5cf8046fe"
+              "id": "D3641",
+              "digest": "sha256:315440f67326ac3dbd2eca5aaafed22a422ba1299b667e680a9460e08b27e407"
             }
           ]
         },
