@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { assertLongitudinalStorePresent, LearnerProfileService } from "./learner-profile.js";
 import { projectObservations } from "./longitudinal-projector.js";
+import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
 import { runLongitudinalBatch } from "./longitudinal-worker-core.js";
 import { LONGITUDINAL_WORKER_DEFAULTS } from "./longitudinal-worker-config.js";
 import { AT, FIXTURE_DEPENDENCIES, fileFixture, importedRun, learner, positionRun, type FileFixture } from "./longitudinal-test-fixtures.js";
@@ -183,7 +184,7 @@ describe("the observation ledger carries occurrence and opportunity denominators
     const ledger = profiles.profile({ learnerId: "owner", handle: "owner" }).observations;
     expect(ledger.statement).toMatch(/No rate, trend or comparison is shown/u);
     const openFile = ledger.rows.find((row) => row.projectionId === "rules.structural.event.open_file")!;
-    expect(openFile).toMatchObject({ occurred: 1, runs: 1, decisions: 4, derivedRev: 1 });
+    expect(openFile).toMatchObject({ occurred: 1, runs: 1, decisions: 4, derivedRev: OBSERVATION_DERIVATION_REV });
     expect(openFile.opportunities).toBeGreaterThanOrEqual(1);
     const detail = profiles.observation({ learnerId: "owner", handle: "owner" }, openFile.key, 0, 50);
     expect(detail.occurred.items).toEqual([expect.objectContaining({ runId: "o1", moveSan: "e4", ply: 1 })]);

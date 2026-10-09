@@ -11,6 +11,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { parseLongitudinalReadQuery, type LongitudinalReadQuery } from "./longitudinal-contract.js";
 import { assertLongitudinalMutationCensus, compileLongitudinalMutationCensus } from "./longitudinal-mutation-census.js";
 import { projectObservations } from "./longitudinal-projector.js";
+import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
 import { LONGITUDINAL_INDEXES, LONGITUDINAL_SOURCE_MUTATION_OPERATIONS, LONGITUDINAL_TABLES, LongitudinalStore, type LongitudinalClaim } from "./longitudinal-store.js";
 import { runLongitudinalBatch } from "./longitudinal-worker-core.js";
 import { LONGITUDINAL_WORKER_DEFAULTS } from "./longitudinal-worker-config.js";
@@ -37,7 +38,7 @@ function fixture(): FileFixture {
 const FAST = { project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void) => projectObservations(image, { checkpoint, dependencies: FIXTURE_DEPENDENCIES }) };
 
 function query(learnerId: string, through: LongitudinalReadQuery["through"] = { kind: "all_complete" }, filter: LongitudinalReadQuery["filter"] = {}) {
-  return parseLongitudinalReadQuery({ learnerId, derivationRev: 1, through, filter });
+  return parseLongitudinalReadQuery({ learnerId, derivationRev: OBSERVATION_DERIVATION_REV, through, filter });
 }
 
 function raw(path: string): DatabaseSync {
@@ -476,7 +477,7 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
       const image = value.storage.longitudinalSourceImageV4(run.id, 3);
       expect(jobRow(value.path, run.id)).toEqual({
         run_id: run.id, learner_id: "o", requested_seq: 3, requested_source_digest: value.storage.longitudinalSourceDigestV4(image),
-        completed_seq: 0, derived_rev: 1, state: "pending", claim_generation: Number(prior.claim_generation) + 1,
+        completed_seq: 0, derived_rev: OBSERVATION_DERIVATION_REV, state: "pending", claim_generation: Number(prior.claim_generation) + 1,
         claimed_requested_seq: null, claimed_source_digest: null, claim_token: null, claimed_by: null, lease_expires_at: null,
         retry_count: 0, next_attempt_at: null, failure_code: null, updated_at: new Date(value.clock.now).toISOString(),
       });
@@ -496,8 +497,43 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     const receipt = storage.reconcileLongitudinalJobs();
     expect(receipt).toMatchObject({ revisionReset: 1, created: 0 });
     expect(count(path, "learner_observation_denominators", "run_id='job'")).toBe(0);
-    expect(jobRow(path, "job")).toMatchObject({ derived_rev: 1, state: "pending", completed_seq: 0 });
+    expect(jobRow(path, "job")).toMatchObject({ derived_rev: OBSERVATION_DERIVATION_REV, state: "pending", completed_seq: 0 });
     expect(storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 0, created: 0, advanced: 0 });
+  });
+
+  it("rebuilds untouched revision-1 history with repaired promotion evidence without rewriting play", () => {
+    const value = fixture();
+    const owner = learner(value.storage, "promotion-owner");
+    const run = play(positionRun("promotion-history", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n");
+    value.storage.create(run, owner);
+    const store = value.workerStore();
+    const source = value.storage.longitudinalSourceImageV4(run.id, run.events.length);
+    const expected = projectObservations(source);
+    const duty = expected.observations.find(row => row.projectionId === "rules.tactic.event.defender_duty_relocated" && row.occurred > 0);
+    expect(duty).toMatchObject({ occurred: 1, decisionClass: "played" });
+    expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "before-upgrade").completed).toBe(1);
+
+    // Exact prior representation: the same completed cut, but no promoted defender-duty row.
+    // Only this test-owned database is edited; source history and source identity stay unchanged.
+    const database = raw(value.path);
+    database.exec("UPDATE learner_observation_denominators SET derived_rev=1; UPDATE learner_observations SET derived_rev=1; UPDATE learner_structure_stats SET derived_rev=1; UPDATE learner_observation_jobs SET derived_rev=1");
+    database.prepare("DELETE FROM learner_observations WHERE run_id=? AND projection_id=?").run(run.id, duty!.projectionId);
+    database.close();
+    const prior = jobRow(value.path, run.id)!;
+    expect(prior).toMatchObject({ state: "complete", completed_seq: run.events.length, derived_rev: 1 });
+    expect(value.storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 1, advanced: 0, created: 0 });
+    expect(count(value.path, "learner_observations", "run_id=?", run.id)).toBe(0);
+    expect(jobRow(value.path, run.id)).toMatchObject({ state: "pending", completed_seq: 0, claim_generation: Number(prior.claim_generation) + 1 });
+    expect(value.storage.readLongitudinalSnapshot(owner.learnerId!, query(owner.learnerId!)).kind).toBe("incomplete");
+    expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "after-upgrade").completed).toBe(1);
+    const rebuilt = value.storage.readLongitudinalSnapshot(owner.learnerId!, query(owner.learnerId!));
+    expect(rebuilt.kind).toBe("complete");
+    if (rebuilt.kind !== "complete") throw new Error("rebuild did not complete");
+    expect(rebuilt.observations).toEqual(expected.observations);
+    expect(rebuilt.denominators).toEqual(expected.denominators);
+    expect(value.storage.readLongitudinalSnapshot(owner.learnerId!, parseLongitudinalReadQuery({ learnerId: owner.learnerId!, derivationRev: 1, through: { kind: "all_complete" }, filter: {} }))).toMatchObject({ kind: "incomplete", cuts: [{ kind: "unavailable", reason: "revision_mismatch" }] });
+    expect(value.storage.longitudinalSourceImageV4(run.id, run.events.length)).toEqual(source);
+    expect(value.storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 0, advanced: 0, created: 0 });
   });
 });
 
@@ -586,16 +622,16 @@ describe("criteria 13, 21, 26 — read honesty, eligible history and per-cut gra
     set("q-derive", "state='quarantined', failure_code='derivation_failed', retry_count=3");
     set("retry-a", "state='retry_wait', failure_code='derivation_failed', retry_count=1, next_attempt_at=?", "2026-09-24T11:00:00.000Z");
     set("retry-b", "state='retry_wait', failure_code='publication_conflict', retry_count=2, next_attempt_at=?", "2026-09-24T12:00:00.000Z");
-    set("revision", "derived_rev=2");
+    set("revision", `derived_rev=${OBSERVATION_DERIVATION_REV + 1}`);
     database.close();
     const cuts = [...ids.map((runId) => ({ runId, requestedSeq: runId === "superseded" ? 1 : runId === "not-mine" ? 1 : 2 }))];
     const read = value.storage.readLongitudinalSnapshot("o", query("o", { kind: "runs", cuts }));
     expect(read).toEqual({ kind: "incomplete", cuts: [
       { kind: "unavailable", runId: "not-mine", requestedSeq: 1, reason: "not_requested" },
-      { kind: "failed", runId: "q-derive", requestedSeq: 2, completedSeq: 0, derivedRev: 1, failureCode: "derivation_failed", attempts: 3 },
-      { kind: "failed", runId: "q-snap", requestedSeq: 2, completedSeq: 0, derivedRev: 1, failureCode: "snapshot_invalid", attempts: 1 },
-      { kind: "pending", runId: "retry-a", requestedSeq: 2, completedSeq: 0, derivedRev: 1, retryAt: "2026-09-24T11:00:00.000Z" },
-      { kind: "pending", runId: "retry-b", requestedSeq: 2, completedSeq: 0, derivedRev: 1, retryAt: "2026-09-24T12:00:00.000Z" },
+      { kind: "failed", runId: "q-derive", requestedSeq: 2, completedSeq: 0, derivedRev: OBSERVATION_DERIVATION_REV, failureCode: "derivation_failed", attempts: 3 },
+      { kind: "failed", runId: "q-snap", requestedSeq: 2, completedSeq: 0, derivedRev: OBSERVATION_DERIVATION_REV, failureCode: "snapshot_invalid", attempts: 1 },
+      { kind: "pending", runId: "retry-a", requestedSeq: 2, completedSeq: 0, derivedRev: OBSERVATION_DERIVATION_REV, retryAt: "2026-09-24T11:00:00.000Z" },
+      { kind: "pending", runId: "retry-b", requestedSeq: 2, completedSeq: 0, derivedRev: OBSERVATION_DERIVATION_REV, retryAt: "2026-09-24T12:00:00.000Z" },
       { kind: "unavailable", runId: "revision", requestedSeq: 2, reason: "revision_mismatch" },
       { kind: "unavailable", runId: "superseded", requestedSeq: 1, reason: "cut_superseded" },
       { kind: "unavailable", runId: "unknown", requestedSeq: 2, reason: "not_requested" },

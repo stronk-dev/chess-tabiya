@@ -21,8 +21,10 @@ import {
 } from "@chess-tabiya/runtime";
 import { canonicalizeJson, type JsonValue } from "@chess-tabiya/schema/drill-pack";
 
-/** The one derivation revision. Any accepted RFC changing an admitted adapter/member owns the bump. */
-export const OBSERVATION_DERIVATION_REV = 1 as const;
+/** Existing longitudinal-store §D/§4.4 rebuild obligation: special-move collector repairs (D3623).
+ * Registry/projection membership and attribution remain unchanged; startup requeues old history.
+ */
+export const OBSERVATION_DERIVATION_REV = 2 as const;
 
 export const LONGITUDINAL_SEMANTIC_SIGNS = Object.freeze([
   "state", "gained", "lost", "preserved", "removed", "avoided", "enabled", "threatened",

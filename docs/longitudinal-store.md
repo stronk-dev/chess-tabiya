@@ -8,6 +8,14 @@ re-derivable byte-for-byte and never a second source of truth. Contract: `rfc/lo
 Its first consumer is the private [learner profile](learner-profile.md) (`/learner-profile`, client
 route `/profile`); the store itself still has no route of its own.
 
+Current derivation revision is **2** (D3623, 2026-10-09). This recomputes the existing
+67-member registry after the special-move collector repairs; it admits no new family or
+personal attribution. On upgrade, normal application startup atomically removes old derived
+rows and requeues untouched revision-1 histories. The existing background worker rebuilds
+them; Profile reports incomplete/rebuilding until the current cut completes. No manual rebuild
+is required, and saved moves are unchanged. Permanent file-backed and real-worker startup tests
+cover the corrected promotion duty, exact current-revision reads and idempotent restart.
+
 ## Storage (migration 26)
 
 | Object | Meaning |
@@ -66,7 +74,7 @@ place by a full-tuple CAS, which fences the claim and lets the next start re-lea
 with no failure counted — closes its connection and exits. A thread that has not reported drained
 when the grace elapses is terminated and lease expiry recovers its claim.
 
-A 78-ply imported game projects in about 5 s on a heavily loaded development host (it took about
+A historical revision-1 measurement: a 78-ply imported game projects in about 5 s on a heavily loaded development host (it took about
 32 s before D3300); the per-edge cost is dominated by sealing ~200 evidence values per legal
 candidate. Output bytes are unchanged at `OBSERVATION_DERIVATION_REV = 1`
 (`planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md`).

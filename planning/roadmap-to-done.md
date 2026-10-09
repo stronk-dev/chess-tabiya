@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3622]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3623]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -30,12 +30,20 @@ they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
 
-Latest batch: [[D3622]] closes the promotion defender-duty omission under the existing
+Latest batch: [[D3623]] makes collector repairs reach untouched saved learner histories through
+the existing revision-2 startup reconciliation and background worker. The predecessor control
+reproduces the stale complete-job defect; corrected stored promotion observations, incomplete
+rebuild reads, old-revision refusal and real application/worker restart pass without changing
+saved play, registry membership or attribution. All 186 focused cases/types and complete normal
+local gates pass: 4,060 software, seven unchanged-budget performance, 237 content and 225 browser
+cases, one optional Maia skip, zero retries and all 112 composition cells.
+
+The preceding batch: [[D3622]] closes the promotion defender-duty omission under the existing
 collector contract, including both colors, capture/quiet promotion, retained-defence negatives,
 factories, candidate packets, saved runs and Inspector. All 386 focused cases/types and complete
 normal local gates pass: 4,059 software, seven unchanged-budget performance, 237 content and
 225 browser cases, one optional Maia skip, zero retries and all 112 composition cells.
-Current ledger: 3,371 rows, 1,501 done, 161 refused and 1,709 live; zero untriaged.
+Current ledger: 3,372 rows, 1,502 done, 161 refused and 1,709 live; zero untriaged.
 The fourteen whole capabilities, nine milestones, UX/RFC states and zero official graduates
 remain unchanged. This is a correctness repair, not another whole capability or remote CI pass.
 
@@ -179,8 +187,8 @@ percentage: completed components do not establish a complete learner journey.
 | Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, explicit source-versus-review disclosure, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content and establish actual review authority, implement durable training-set progression/repeat/tempo and graduate the official corpus |
-| Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and preserve tournament-ready architecture. Bot tournaments/leagues are post-1.0 under D1416/D1520 |
-| Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
+| Bots | Three behavior families across twelve registered uncalibrated configurations, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result; this is not twelve proven personalities | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and preserve tournament-ready architecture. Bot tournaments/leagues are post-1.0 under D1416/D1520 |
+| Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, opening result counts, paginated evidence and exact recorded-move Review entry; Skills currently credits no marks | Populate valid skill credit; complete opening accuracy/performance, grounded comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
 | Campaign | Durable draft pilot, map, kit, bounded preparation with in-place tool and named help-style choices, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, completed/incomplete submission read-only inspection/revocation, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, audience/consent/delay and reconnect workflows |

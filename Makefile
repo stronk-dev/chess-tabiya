@@ -2005,7 +2005,7 @@ learner-rating-isolation-check:
 	./node_modules/.bin/vitest run --config tools/learner-rating-isolation-harness/vitest.config.ts
 
 longitudinal-projector-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-contract.test.ts apps/server/src/longitudinal-projector-cache.test.ts apps/server/src/longitudinal-membership-cache.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-contract.test.ts apps/server/src/longitudinal-projector-cache.test.ts apps/server/src/longitudinal-membership-cache.test.ts apps/server/src/longitudinal-store.test.ts apps/server/src/longitudinal-worker.test.ts
 
 longitudinal-store-author-contract:
 	./node_modules/.bin/vitest run --config tools/d1612-longitudinal-contract-harness/vitest.config.ts --reporter=verbose

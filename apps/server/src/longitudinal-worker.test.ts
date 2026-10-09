@@ -16,6 +16,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { parseLongitudinalReadQuery } from "./longitudinal-contract.js";
+import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { LONGITUDINAL_WORKER_DEFAULTS, fileBackedDatabaseIdentity, validateLongitudinalWorkerConfig } from "./longitudinal-worker-config.js";
 import { LONGITUDINAL_DRAIN_GRACE_MS, LongitudinalProjectionWorker } from "./longitudinal-worker.js";
@@ -75,13 +76,14 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const seed = new SQLiteRunStorage(databasePath, { onMigration: () => {} });
     const owner = learner(seed, "owner");
     seed.create(play(positionRun("preexisting"), "e2e4"), owner);
+    seed.create(play(positionRun("legacy-promotion", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n"), owner);
     const raw = new DatabaseSync(databasePath);
-    raw.exec("DELETE FROM learner_observation_jobs");
+    raw.exec("DELETE FROM learner_observation_jobs WHERE run_id='preexisting'; UPDATE learner_observation_jobs SET derived_rev=1, state='complete', completed_seq=requested_seq WHERE run_id='legacy-promotion'");
     raw.close();
     seed.close();
 
     application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
-    expect(application.startupReceipt).toMatchObject({ storageVersion: STORAGE_VERSION, databasePath, longitudinal: { scanned: 1, created: 1 } });
+    expect(application.startupReceipt).toMatchObject({ storageVersion: STORAGE_VERSION, databasePath, longitudinal: { scanned: 2, created: 1, revisionReset: 1 } });
     const origin = await listen(application);
     const health = await fetch(`${origin}/healthz`);
     expect(health.status).toBe(200);
@@ -100,36 +102,38 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const learnerId = String((inspection.prepare("SELECT id FROM learners WHERE handle = 'importer'").get() as { id: string }).id);
     inspection.close();
     const read = await until(() => {
-      const result = application!.longitudinal.read(learnerId, parseLongitudinalReadQuery({ learnerId, derivationRev: 1, through: { kind: "all_complete" }, filter: {} }));
+      const result = application!.longitudinal.read(learnerId, parseLongitudinalReadQuery({ learnerId, derivationRev: OBSERVATION_DERIVATION_REV, through: { kind: "all_complete" }, filter: {} }));
       return result.kind === "complete" ? result : undefined;
     });
     expect(read.cuts.map((cut) => cut.runId)).toEqual(["imported-game"]);
     expect(read.denominators.map((row) => [row.decisionClass, row.decisions])).toEqual([["game", 2]]);
     expect(read.observations.length).toBeGreaterThan(0);
     const preexisting = await until(() => {
-      const result = application!.longitudinal.read("owner", parseLongitudinalReadQuery({ learnerId: "owner", derivationRev: 1, through: { kind: "all_complete" }, filter: {} }));
+      const result = application!.longitudinal.read("owner", parseLongitudinalReadQuery({ learnerId: "owner", derivationRev: OBSERVATION_DERIVATION_REV, through: { kind: "all_complete" }, filter: {} }));
       return result.kind === "complete" ? result : undefined;
     });
-    expect(preexisting.cuts).toEqual([{ kind: "complete", runId: "preexisting", requestedSeq: 2, completedSeq: 2, derivedRev: 1 }]);
+    expect(preexisting.cuts).toEqual(["legacy-promotion", "preexisting"].map(runId => ({ kind: "complete", runId, requestedSeq: 2, completedSeq: 2, derivedRev: OBSERVATION_DERIVATION_REV })));
+    expect(preexisting.observations).toContainEqual(expect.objectContaining({ runId: "legacy-promotion", projectionId: "rules.tactic.event.defender_duty_relocated", occurred: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
+    expect(preexisting.observations.every(row => row.learnerId === "owner")).toBe(true);
     // Worker totals cross the thread boundary in their own message, which may trail the published
     // rows the reads above already observe; wait for it rather than racing it.
     const totals = await until(() => {
       const progress = application!.longitudinal.progress();
-      return progress !== undefined && progress.completed >= 2 ? progress : undefined;
+      return progress !== undefined && progress.completed >= 3 ? progress : undefined;
     });
-    expect(totals.completed).toBeGreaterThanOrEqual(2);
+    expect(totals.completed).toBeGreaterThanOrEqual(3);
 
     const closing = application;
     application = undefined;
     await closing.close();
     expect(closing.longitudinal.health()).toEqual({ status: "draining" });
     const after = new DatabaseSync(databasePath);
-    expect(after.prepare("SELECT state, count(*) AS n FROM learner_observation_jobs GROUP BY state").all()).toEqual([{ state: "complete", n: 2 }]);
+    expect(after.prepare("SELECT state, count(*) AS n FROM learner_observation_jobs GROUP BY state").all()).toEqual([{ state: "complete", n: 3 }]);
     after.close();
 
     // Rerun: startup reconciliation is idempotent across restart.
     application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
-    expect(application.startupReceipt.longitudinal).toMatchObject({ scanned: 2, created: 0, advanced: 0, revisionReset: 0 });
+    expect(application.startupReceipt.longitudinal).toMatchObject({ scanned: 3, created: 0, advanced: 0, revisionReset: 0 });
   });
 
   it("degrades /healthz to 503 on unexpected thread exit and never lets the main process renew", async () => {

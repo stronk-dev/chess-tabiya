@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3623]] is closed locally: the existing longitudinal-store §C/§D/§4.4
+upgrade obligation advances the derivation revision so already-completed saved histories
+receive the special-move collector repairs. The predecessor permanent test reproduces zero
+revision resets; corrected file-backed publication and actual application/worker restart pass.
+All 63 longitudinal and 123 Profile/Review cases plus workspace types pass. Complete normal
+gates pass 4,060 software, seven unchanged-budget performance, 237 content and 225 browser
+cases, one optional Maia skip, zero retries and all 112 composition cells. Registry membership, attribution and saved play remain
+unchanged; this is not new skill credit, comparative style or whole learner-model completion.
+
 [[D3622]] is closed locally under the existing semantic-collectors §3.1: legal promotion
 retains a defender's identity while testing its actual after-state duty. Quiet/capture,
 both-color, all-role, sealed-factory, Inspector, candidate and saved-run controls pass

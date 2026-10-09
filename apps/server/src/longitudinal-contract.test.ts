@@ -277,27 +277,37 @@ describe("criterion 10 — observed import boundary", () => {
 
 describe("criterion 12 — revision pair", () => {
   it("pairs OBSERVATION_DERIVATION_REV with the registry digest and a fixture-output digest", () => {
-    expect(OBSERVATION_DERIVATION_REV).toBe(1);
+    expect(OBSERVATION_DERIVATION_REV).toBe(2);
     expect(ingestRegistryDigest(LONGITUDINAL_INGEST_REGISTRY)).toBe(LONGITUDINAL_REGISTRY_DIGEST);
     // A zero-incidence registry addition moves the registry digest even though no fixture row changes.
     const addition = [...LONGITUDINAL_INGEST_REGISTRY, { projection: { id: "rules.zero.incidence", version: 1 }, signs: ["gained"], kind: "edge", adapter: "local_semantic_event" }];
     const raw = `sha256:${createHash("sha256").update(canonicalizeJson(addition as unknown as JsonValue)).digest("hex")}`;
     expect(raw).not.toBe(LONGITUDINAL_REGISTRY_DIGEST);
     expect(() => ingestRegistryDigest(addition as readonly LongitudinalConstructor[])).toThrow(/SET_MISMATCH/u);
-    // Digest 1: the canonical derivation-fixture output over the real semantic boundary.
+    // Actual corrected collector outputs, including a nearby retained-defence negative, are
+    // included in the revision pair. Ordinary opening moves alone miss special-move repairs.
     const fixture = play(positionRun("revision-fixture"), "e2e4", "e7e5", "g1f3");
-    const output = projectObservations(image(fixture));
+    const promotion = projectObservations(image(play(positionRun("revision-promotion", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n")));
+    const retained = projectObservations(image(play(positionRun("revision-retained", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8r")));
+    const dutyId = "rules.tactic.event.defender_duty_relocated";
+    expect(promotion.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    expect(retained.observations.filter(row => row.projectionId === dutyId && row.occurred > 0)).toEqual([]);
+    const castling = projectObservations(image(play(positionRun("revision-castling", "4k3/8/8/8/8/8/3P4/4K2R w K - 0 1"), "e1h1")));
+    expect(castling.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    const enPassant = projectObservations(image(play(positionRun("revision-en-passant", "4k3/8/8/8/4p3/8/3P4/4K3 w - - 0 1"), "d2d4")));
+    expect(enPassant.observations.find(row => row.projectionId === "rules.tactic.event.loose_piece" && row.semanticSign === "gained" && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    const output = [projectObservations(image(fixture)), promotion, retained, castling, enPassant];
     const digest = `sha256:${createHash("sha256").update(canonicalizeJson(output as unknown as JsonValue)).digest("hex")}`;
     expect(digest).toBe(LONGITUDINAL_FIXTURE_OUTPUT_DIGEST);
   }, 60_000);
 });
 
 /**
- * §D revision pair, digest 1: the canonical derivation-fixture output at OBSERVATION_DERIVATION_REV.
+ * §D revision pair: opening, promoted/lost duty, retained duty, castling and en-passant outputs.
  * Any semantic change to the projector, adapters or admitted registry moves this literal; the RFC that
  * owns that change owns the revision bump and the rebuild discharge in the same diff.
  */
-const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:8ef1f076c157f90dbb54663ec01e877579b94f29acd8bb7bfa62c75930919484";
+const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:b76fecf27787d0990a400b0dedf8660bcc528b132746ab6273ef8e839ebd44a0";
 
 describe("criteria 13, 28 — branded query parser and sealed V4 source identity", () => {
   it("rejects empty, duplicate, unknown and contradictory filters and orders bytewise", () => {

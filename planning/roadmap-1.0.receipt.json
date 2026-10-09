@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:aec54049001042d9f14dd95e7bc05dbbc3648b6c968cd80b54a635a707eaeb3c",
+    "roadmap": "sha256:8cdc9247ceff0d59565cf3619e3cd7cf9d85179412b951e7da7e433c7a403dd6",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:fd3afdfab0edac1ee68c2b9f92e75477d684ac5b51b5ac04e576c100bf56d237",
+    "workState": "sha256:62b36ee84ffc8618bba1163b5b1c9a5a5e33bfce36438dc97e199ac6c91c1a8b",
     "rfcRegister": "sha256:b1156361941ec577a07d9118312c75c896d04783c9bb1f015d924d736d228f5e",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1067,
-      "done": 1501,
+      "done": 1502,
       "refused": 161
     },
     "workItems": {
@@ -1854,7 +1854,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3614 closes Campaign's existing preparation-to-help choice under campaign-core and intent-presets: canonical allowed presets, Custom/recovery, failed-save retry and preset-excluded equipment without changing ownership/loadout/revision or claiming source availability. Nine new mounted controls pass within 82 Campaign/modal cases and all eight actual desktop/phone preparation journeys pass, including saved choice to compiled encounter, reload/Settings and unchanged recorded nodes/branches/cursor. Complete normal tiers pass clean types/build, 3834 software, seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. Failed probes remain logged without weakened checks or budgets. Play/Compare and Review exports, Studio publication, Campaign preparation/results, due-return recovery, private Profile and classroom inspection remain delivered. Original D3591/D3600 timing causes, official content, source coverage, calibrated bots, full Campaign and release journeys remain open; no whole capability or milestone is promoted.",
+        "summary": "D3623 makes recent collector repairs reach untouched saved learner histories: derivation revision 2 activates the existing atomic startup reset and background worker without changing saved play, the 67-member registry or attribution. The predecessor test reproduces zero resets instead of one. Corrected promotion observations, incomplete rebuild reads, old-revision refusal and actual application/worker restart pass. All 186 focused cases/types and complete normal local gates pass: 4060 software/359 files, seven unchanged-budget performance cases, 237 content and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. Earlier Campaign preparation/results, bot replay, private Profile, Review/Play/Compare export, Studio publication, due-return and classroom repairs remain delivered. Skills still credits no marks and bot configurations are uncalibrated; complete source/module integration, official content, full Campaign and release journeys remain open. No whole capability, milestone or remote CI result is promoted.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -1898,6 +1898,11 @@
           "rfc/player-style.md",
           "rfc/skills.md",
           "rfc/longitudinal-store.md",
+          "apps/server/src/longitudinal-registry.ts",
+          "apps/server/src/longitudinal-contract.test.ts",
+          "apps/server/src/longitudinal-store.test.ts",
+          "apps/server/src/longitudinal-worker.test.ts",
+          "docs/longitudinal-store.md",
           "planning/safe-deployment-profiles/application-security-2026-10-05.md",
           "planning/safe-deployment-profiles/application-security-software-2026-10-05.json",
           "planning/safe-deployment-profiles/application-security-negatives-2026-10-05.json",
@@ -2014,6 +2019,11 @@
             "kind": "rfc",
             "id": "longitudinal-store.md",
             "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3623",
+            "digest": "sha256:a9e109e20902078fc410d65ca8479be1780ce6bf6c93d19f0e19a5ed608bffcc"
           },
           {
             "kind": "work_state",

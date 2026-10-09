@@ -10,6 +10,13 @@
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
 - **Author:** claude
+- **Implementation follow-up (2026-10-09, D3623):** existing §C/§D/§4.4 recomputation obligation
+  advances `OBSERVATION_DERIVATION_REV` to 2 for the special-move collector corrections.
+  The 67-member ingest registry, projection versions and attribution policy are unchanged.
+  Startup reconciliation and the existing worker rebuild untouched old histories automatically;
+  permanent store/worker and revision-pair tests include corrected promotion, retained-defence
+  negative, castling and en-passant outputs. This records implementation, not a new contract,
+  RFC acceptance or whole learner-model completion.
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` §Learn and return;
   `design/06-campaign.md` §3 law 2 (ADR-0007 — progression unlocked by playing, never
