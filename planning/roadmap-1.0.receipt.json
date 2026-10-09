@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:66235464b9abd6bc71559cc855407de979305a52faaf8d17a37bfce21e951df0",
+    "roadmap": "sha256:d5bb0eb356f2e62798dfff064f63d3063ca16a12368349ba4c969c0ed33f7824",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:9a54727cb6d87b9122564718babf754b5ef974f19d6ad55da9f1332e0360e376",
+    "workState": "sha256:3b82766b2a345d66c10125bc1625673fe25539ac32647e466702baf3a57cf84c",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1066,
-      "done": 1486,
+      "done": 1487,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "Final normal local tiers pass clean types/build, 3770 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 209 browser passes (144 smoke, five content, 59 matrix, one packaged-default), one optional browser Maia skip, zero retries, all 150 input and 112 composition cells. The first browser run caught an obsolete post-seal Unlocks assertion; it now checks Unlocked and the complete browser tiers pass without production, reward, deadline or budget changes. Warm native arrival is median 101.5 ms/p95 112.1 ms with one pack read/26 shape requests; D3600's original 253.8 ms failure stays open. D3606 adds retained earned encounter results; D3603 preparation, D3602 Theory preflight, D3601 independent lazy inputs and due-return recovery remain. D3591's original 328.466431 ms stall is unlocated. All live ledger rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No exact-pushed-revision GitHub, native release-image, readiness-to-push or milestone completion claim.",
+        "summary": "Final normal local tiers pass clean types/build, 3779 software cases/354 files, seven unchanged-budget performance cases/four files, governance, 228 content cases/23 files and 209 browser passes (144 smoke, five content, 59 matrix, one packaged-default), one optional browser Maia skip, zero retries and all 150 input/112 composition cells. D3607 repairs castling's post-commit/ancestor landing; the broader D3578 selected-source upgrade remains draft. Campaign preparation/results, independent lazy inputs, Theory preflight and due-return recovery remain delivered. Warm native arrival is median 103 ms/p95 110.5 ms with one pack read/26 shape requests; D3600's original 253.8 ms failure and D3591's original 328.466431 ms stall remain unlocated, not closed by green replays. All live rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No exact-pushed-revision GitHub, native release-image, readiness-to-push, whole capability or milestone completion claim.",
         "impact": "held",
         "evidence": [
           "rfc/concept-registry.md",
@@ -342,7 +342,7 @@
       "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention, castling semantic landing and exact native gesture acceptance. D3579 caption arithmetic is independently closed. Continue source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The current diagnostic census retains 14 unsupported provider declarations, 50 binding source refusals and 11 missing policies; these are not runtime-adoption percentages. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3578's narrow draft is authored for independent review in module-registration section 4.2a and evidence-presentation: four selected-source derivations, request-local views and a sole-pair complete-legality envelope, preserving other budgets and Inspector populations. Strict TypeScript plus six unchanged production-gap controls and 26 real-source model controls pass, including full human-readable legal lists. Production factories, bindings, query/receipt/client paths and native gestures remain unimplemented; no self-acceptance or exact-mobility D1 discharge. D3601/D3602 independent lazy inputs and Theory preflight, D3594 provider lifetime and D3579 captions remain closed. D3376 opening, D3373 durable Stockfish, D3363/D3370 Maia, D3309 Inspector and semantic validation remain held. Latest full product verification is recorded in release-truth, not rerun for this author-only change. No whole capability, milestone, official pack, remote CI or 1.0 promotion.",
+        "summary": "D3607 locally repairs post-commit/ancestor subjects using the existing semantic landing authority, including castling with a stationary Chess960 king. Eight runtime and one sealed REST-query controls pass within 140 focused cases and clean types; permissions, budgets and recorded play remain intact. D3578's four selected-source views and complete-legality envelope remain draft: strict TypeScript and 32 disposable controls establish an author checkpoint, not production factories, bindings, queries, receipts, native gestures or exact-mobility D1 discharge. D3601/D3602 lazy inputs and Theory preflight, D3594 provider lifetime and D3579 captions remain closed. Opening, durable Stockfish, Maia, Inspector and semantic validation contracts remain held. Complete normal verification is recorded in release-truth and the exploration log. No whole capability, milestone, official pack, remote CI or 1.0 promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/provider-health.ts",

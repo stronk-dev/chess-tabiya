@@ -29854,6 +29854,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/CampaignStrip.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3607",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9ad86dba4abf5fc3c1f06ed8b273cab861f54e297583776f05ed32f8cf129057",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/module-query.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

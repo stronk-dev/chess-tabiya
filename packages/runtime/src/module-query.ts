@@ -29,6 +29,7 @@ import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.j
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
+import { exactMoveDestination } from "./legal-moves.js";
 import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { MODULE_QUERY_OPERATION, PACKET_ROUTE_KINDS, SIGHT_SOURCE_ROUTES, moduleQuerySourceRoutes, routeReads } from "./module-query-sources.js";
 import { MODULE_IDS, type InspectorFamilyId, type ModuleId, type ModuleTiming } from "./module-contract.js";
@@ -561,7 +562,7 @@ function subjectFor(run: DrillRun, request: ModuleQueryRequest): ModuleSubject {
       const at = node(request.subjectNodeId);
       const parent = at.parentId === null ? undefined : node(at.parentId);
       if (parent === undefined || at.moveUci === null || at.actor !== "user") throw new ModuleQueryError("MODULE_QUERY_SUBJECT", "the post-commit subject is not a learner move");
-      return { node: at, fen: at.fen, learner: turnOf(parent.fen), edge: { beforeFen: parent.fen, moveUci: at.moveUci, afterFen: at.fen }, square: at.moveUci.slice(2, 4) as SquareName };
+      return { node: at, fen: at.fen, learner: turnOf(parent.fen), edge: { beforeFen: parent.fen, moveUci: at.moveUci, afterFen: at.fen }, square: exactMoveDestination(parent.fen, at.moveUci) };
     }
     case "checkpoint":
     case "review": {
@@ -591,7 +592,7 @@ function ancestorFacts(run: DrillRun, module: ModuleId, subject: ModuleSubject, 
     const node = path[cursor]!;
     const parent = path[cursor - 1]!;
     if (node.actor !== "user" || node.moveUci === null) continue;
-    const prior: ModuleSubject = { node, fen: node.fen, learner: subject.learner, edge: { beforeFen: parent.fen, moveUci: node.moveUci, afterFen: node.fen }, square: node.moveUci.slice(2, 4) as SquareName };
+    const prior: ModuleSubject = { node, fen: node.fen, learner: subject.learner, edge: { beforeFen: parent.fen, moveUci: node.moveUci, afterFen: node.fen }, square: exactMoveDestination(parent.fen, node.moveUci) };
     const evidence = sources(module, prior, run, input.sources ?? {}).flatMap((result) => result.kind === "available" ? result.items.filter(witnessed) : []);
     const packet = compileModulePacket({ module, timing: "post_commit", role: input.role, session: input.session, evidence, mode: "admit" });
     result.push(packet.kind === "packet" ? packet.facts : Object.freeze([]));

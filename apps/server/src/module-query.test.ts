@@ -30,6 +30,27 @@ describe("POST /runs/:id/modules/query", () => {
   const finalizedFor = async (handler: ReturnType<typeof createRestHandler>, preset: "quiet" | "support") =>
     parseFinalizedAssistanceV1(((await (await handler(post("/runs/modules/assistance", compileAssistanceRequest({ contextHint: "position", preference: named(preset) })))).json()) as { assistance: unknown }).assistance);
 
+  it("D3607: the API delivers castled-king Sight without changing the recorded game or disclosure gate", async () => {
+    const { service, storage, handler } = await setup("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
+    service.move("modules", "writer", "e1g1");
+    const nodeId = storage.read("modules")!.run.activeCursor.nodeId;
+    const assistance = compileAssistanceRequest({ contextHint: "position", preference: named("support") });
+    const request = { assistance, query: { timing: "post_commit", subjectNodeId: nodeId, requested: ["sight_on_request"] } };
+    expect((await handler(post("/runs/modules/modules/query", request))).status).toBe(409);
+    service.reveal("modules", "writer", at);
+    const recorded = JSON.stringify(storage.read("modules")!.run);
+    const after = await handler(post("/runs/modules/modules/query", request));
+    expect(after.status).toBe(200);
+    const selected = await handler(post("/runs/modules/modules/query", { assistance, query: { timing: "pre_commit", nodeId, selectedSquare: "g1", requested: ["sight_on_request"] } }));
+    expect(selected.status).toBe(200);
+    const packet = (await after.json() as { page: ModuleQueryPage }).page.packets.find(item => item.module === "sight_on_request")!;
+    const expected = (await selected.json() as { page: ModuleQueryPage }).page.packets.find(item => item.module === "sight_on_request")!;
+    expect(parsePresentationReceipt(packet.receipt).map(presentedSentence)).toEqual(parsePresentationReceipt(expected.receipt).map(presentedSentence));
+    expect(packet.receipt.items).toEqual(expected.receipt.items);
+    expect(packet.budget).toEqual(expected.budget);
+    expect(JSON.stringify(storage.read("modules")!.run)).toBe(recorded);
+  });
+
   it.each([
     // Seven total controller edges fit the Inspector's unchanged eight-arrow budget.
     // The pawn keeps this a non-terminal start rather than a bare-kings draw.

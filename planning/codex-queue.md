@@ -12,6 +12,12 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3607]] repairs post-commit/ancestor square resolution under the existing exact-legal-mobility
+contract, independently of D3578's draft: castling scopes to the king's actual landing rather than
+the encoded rook square. Eight runtime and one sealed REST-query control pass within 140 focused
+cases and clean types, preserving feedback withholding, budgets and recorded play. Complete normal
+verification is recorded in the exploration log; no new selected-source/native-gesture completion.
+
 [[D3606]] is closed locally under implementing `campaign-core` §§2.1/7.1:
 encounter results distinguish act income, resource rewards and module unlocks, show the
 current kit and reconstruct from the retained seal after reload. No additional submit,

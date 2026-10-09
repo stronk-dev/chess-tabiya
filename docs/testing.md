@@ -4,6 +4,12 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make local-module-execution-check` includes D3607's eight runtime landing-square cases and
+REST-query control: standard castling from both colors, stationary-king Chess960, ordinary moves,
+promotion and en passant. Sealed post-commit Sight matches an explicit query at the actual landing;
+feedback withholding, budgets and recorded play remain intact. This repair does not establish the
+draft selected-source/native-gesture integration or complete Sight usefulness.
+
 `make submission-review-check` covers the mounted run/result components, classroom shell
 and teacher consent/access boundaries. `make submission-review-browser-check` executes
 the actual two-account completed assignment → share → teacher inspect → learner revoke

@@ -24,10 +24,15 @@ from geometric attacks; pawn state survives with no contacts; invalid clones sta
 The model does not mint any production value or exercise the future API/renderer/gesture path.
 The proposed automatic view choices need independent review and later owner-use evidence.
 
-The draft also names the current post-commit and ancestor `moveUci.slice(2, 4)` scope problem:
-castling uses a rook-form identity, so the selected subject must come from the shared semantic
-landing authority. Do not carry that slice into the new projection. All four original findings
-below still apply to production. `[V]` (`module-query.ts`; the opt-in controls named above.)
+The separately authorized [[D3607]] repair now resolves post-commit and ancestor squares through
+`exactMoveDestination(parent.fen, moveUci)`. Eight runtime cases and the actual REST query cover
+castling, both colors, Chess960's stationary king, ordinary moves, promotion and en passant;
+the sealed post-commit result equals the same-position explicit landing-square query. The REST
+control retains closed-feedback refusal, budgets and the recorded run. All 140 focused checks
+and clean types pass. Complete normal verification also passes 3,779 software, seven performance,
+228 content and 209 browser cases, one optional Maia skip and zero retries. This is not acceptance
+of the draft or a new selected-source/native-gesture feature. All four original findings below still apply
+to production. `[V]` (`module-query.ts`, `module-query.test.ts`; server `module-query.test.ts`.)
 
 1. **Acquisition is not selected-square consumption.** Four real sealed readings—castling rights,
    square control, pawn contacts and legal moves—have no branch in `sightScope`. Every possible

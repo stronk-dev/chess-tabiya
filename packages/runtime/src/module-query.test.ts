@@ -102,6 +102,29 @@ describe("the module query request boundary", () => {
 describe("Support (position context): sight, threat radar and the at-commit cue", () => {
   const assistance = finalized("position", "support");
 
+  it.each([
+    { fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", move: "e1g1", landing: "g1" },
+    { fen: "4k3/8/8/8/8/8/8/R3K3 w Q - 0 1", move: "e1c1", landing: "c1" },
+    { fen: "4k2r/8/8/8/8/8/8/4K3 b k - 0 1", move: "e8g8", landing: "g8" },
+    { fen: "r3k3/8/8/8/8/8/8/4K3 b q - 0 1", move: "e8c8", landing: "c8" },
+    { fen: "4k3/8/8/8/8/8/8/6KR w H - 0 1", move: "g1h1", landing: "g1" },
+    { fen: "4k3/8/8/8/8/8/P7/4K3 w - - 0 1", move: "a2a3", landing: "a3" },
+    { fen: "4k3/P7/8/8/8/8/8/4K3 w - - 0 1", move: "a7a8q", landing: "a8" },
+    { fen: "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1", move: "e5d6", landing: "d6" },
+  ])("D3607: post-commit Sight uses the mover's landing ($move)", ({ fen, move, landing }) => {
+    const run = revealFeedback(positionRun(fen, [move]), at).run;
+    const recorded = JSON.stringify(run);
+    const query = (request: ModuleQueryRequest) => packetOf(queryModules({ run, assistance, role: "learner", session: "position", request }).page, "sight_on_request")!;
+    const post = query({ timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["sight_on_request"] });
+    const selected = query({ timing: "pre_commit", nodeId: run.activeCursor.nodeId, selectedSquare: landing, requested: ["sight_on_request"] });
+    if (move.includes("e1") || move.includes("e8") || move === "g1h1") expect(selected.receipt.items.length).toBeGreaterThan(0);
+    expect(post.receipt.items).toEqual(selected.receipt.items);
+    expect(assertDelivered(post, assistance)).toEqual(assertDelivered(selected, assistance));
+    expect(post.budget).toEqual(selected.budget);
+    expect(post.disclosure.boundary.kind).toBe("durable_event");
+    expect(JSON.stringify(run)).toBe(recorded);
+  });
+
   it.each(["sight_on_request", "threat_radar", "blunder_prevention"] as const)("%s does not inspect unrelated external/content sources", module => {
     const run = positionRun(MAROCZY);
     const request: ModuleQueryRequest = module === "blunder_prevention"

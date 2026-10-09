@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3606]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3607]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -63,6 +63,12 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+
+[[D3607]] repairs post-commit/ancestor subject squares under the existing exact-legal-mobility
+authority: castling resolves to the king's actual landing, not the encoded rook square. Eight
+runtime controls plus a sealed REST query pass within 140 focused cases and clean types, retaining
+feedback withholding, budgets and recorded play. This does not accept D3578 or add its four
+selected-source views; complete normal verification is recorded in the exploration log.
 
 [[D3578]] now has an authored **draft**, not a shipped feature: module-registration §4.2a and
 the presentation companion specify four selected-source views, full legal identities and a
@@ -3523,7 +3529,8 @@ Run the release artifact through:
 1. First run → Just Play → nudge → consequence → rewind → compare → replay.
 2. All training forms across opening, middlegame, endgame and trajectory.
 3. Finish/import → full Review → retry/branch → theory/drill return → schedule.
-4. Distinct bots → play/rematch → behavior record → Review → local bot event.
+4. Distinct bots → play/rematch → behavior record → Review; retain tournament-ready state without
+   requiring deferred bot events/leagues (D1416/D1520).
 5. Rating/history → style/skill/opening drill-down → grounded recommendation.
 6. Complete campaign with spend, failure, boss, Review and resume.
 7. Two-device human game with clocks/result, plus provider/manual import/return.

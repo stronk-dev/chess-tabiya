@@ -56,6 +56,10 @@ turn clone stays unavailable. Large relation overlays remain subject to unchange
   budget over whole fact bundles (`fitModulePresentation`) and returns a `presentation.receipt@1`
   plus a `ModuleDisclosureReceipt` bound to the decision stamp and to the finalized digest.
   Post-commit output waits for `feedbackDeliveryOpen`. Empty is the module's declared state.
+  Post-commit and ancestor subjects resolve the moving piece's actual landing from the parent
+  position with `exactMoveDestination`, not by slicing its recorded move identity. Castling's
+  king-to-rook encoding therefore scopes Sight to the king's c/g landing, including Chess960
+  castling where the king stays on its original square. Sources and output budgets are unchanged.
   Both king-event vocabularies exclude unchanged king observations before packet reduction,
   including the legacy Nudge operation. For example, 1.e4 does not fill the Nudge with
   unchanged king-edge facts; its real line-opening consequences remain eligible. Actual king-location/zone changes remain eligible;
