@@ -815,11 +815,16 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3628 migrates twelve grounded nearby negatives and nine v2 recorded-path positives through actual production operations, retaining all 42 earlier cases. Canonical coverage is 63 cases (41 positive, 22 negative) over 81 subjects; all focused foundation cases pass. Complete windows are checked separately, while canonical receipts execute the whole recorded application path. D3629 records the broken sequence-wrapper/parent-multiset binding and is not certified by these path cases. Missing capture injection remains a lower-level input refusal; legacy v1, orientation, held sources, learner eligibility, official content and zero fully validated subjects remain unchanged. Complete normal local gates pass clean types/build, 4118 software cases/360 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 231 browser passes (166 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 112 composition cells; no whole capability, milestone or remote CI claim.",
+          "summary": "D3631 repairs harassment pressure by joining the actual consecutive reply against every newly harassed minor, retaining the exact bishop/screen/target relation. Ten positive controls fail on the predecessor; eighteen permanent controls cover both colors, competing knights/bishops, knight replies, broken pressure, sealed recorded factories and read-authorised saved play. All 466 focused foundation cases and clean types pass. Complete normal local gates pass clean types/build, 4181 software cases/361 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 231 browser passes (166 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3628's 63 canonical cases over 81 subjects remain passing with zero fully qualified subjects; D3629's sequence-parent adapter is not certified. No new source, motif, causal judgement, learner eligibility, application consumer, official content, whole capability, milestone or remote CI claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/installed-opening-evidence.md",
             "rfc/breadth-collectors.md",
+            "rfc/recorded-semantic-path.md",
+            "packages/runtime/src/pawn-dynamics.ts",
+            "packages/runtime/src/pawn-dynamics.test.ts",
+            "packages/runtime/src/recorded-semantic-path.test.ts",
+            "apps/server/src/recorded-semantic-path.test.ts",
             "rfc/longitudinal-store.md",
             "packages/runtime/src/mobility.ts",
             "packages/runtime/src/mobility.test.ts",
@@ -906,6 +911,16 @@
               "kind": "rfc",
               "id": "tactical-collectors.md",
               "digest": "sha256:a5ce11ada5223c74703ef300e97975b805a8f96155d11e83ed520984e4ca54f6"
+            },
+            {
+              "kind": "rfc",
+              "id": "recorded-semantic-path.md",
+              "digest": "sha256:1765eaffdbe10340c4907d209604074f25985cd500104196fc40927671c0174f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3631",
+              "digest": "sha256:c9633e5eaee757a6fc7a6d23becba2791bc07e8d15717a374fa369638011a3f1"
             },
             {
               "kind": "rfc",

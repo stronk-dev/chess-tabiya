@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3630]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3631]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,7 +53,20 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3630]] adds complete execution admission before recorded-guidance packet
+Latest completed batch: [[D3631]] repairs the pawn-push/bishop-retreat sequence when a pawn
+newly attacks multiple minors. The actual consecutive reply, not the first attacked piece,
+identifies the bishop; only its unchanged slider/screen/target relation emits. Ten predecessor
+positives fail; eighteen permanent controls cover both colors, competing targets, completed
+negatives, sealed recorded factories and authorised saved play. All 466 focused foundation
+cases/types and complete normal local gates pass: 4,181 software / 361 files, seven unchanged-budget
+performance, 239 content and 231 browser cases, one optional Maia skip, zero retries and all
+150 input/112 composition cells. Ledger: 3,380 rows, 1,509 done, 161 refused and 1,710 live;
+zero untriaged. Four milestones remain active/five blocked, all fourteen whole capabilities
+incomplete, zero official graduates and UX 273 complete/272 live/24 retired. This repairs the
+collector, not application adoption or full semantic qualification. No new source, judgement,
+permission, authored pack, remote CI or release completion.
+
+Previous completed batch: [[D3630]] adds complete execution admission before recorded-guidance packet
 preparation and at its registered renderer. Empty/previously assembled/cached paths cannot skip
 the check; actual REST/composed HTTP refuse invalid bindings before voice/TTS work, and permission
 checks remain first. Thirty-eight predecessor controls fail; all 144 focused software/39 content
@@ -65,7 +78,7 @@ permissions and authored packs remain unchanged. Four milestones remain active/f
 zero official packs graduate. This is runtime integration, not whole-manifest availability,
 whole capability, release or remote CI completion.
 
-Previous completed batch: [[D3628]] moves twelve grounded nearby negatives and nine v2 recorded-path
+Prior foundation batch: [[D3628]] moves twelve grounded nearby negatives and nine v2 recorded-path
 positives through actual production operations, retaining all 42 prior cases. The register now has
 63 passing cases (41 positive / 22 negative) over 81 subjects; full qualification remains zero.
 Complete-window controls, 420 focused foundation cases and sixteen migration-matrix controls pass.

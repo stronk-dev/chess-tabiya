@@ -167,6 +167,37 @@ describe("identity-retaining pawn dynamics", () => {
     expect(harassmentPressureSequence(broken.slice(6, 8))).toBeUndefined();
   });
 
+  it.each([
+    { color: "white", fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], first: "c4", before: "e4", after: "f3", screen: "d5", target: "c6" },
+    { color: "white", fen: "7k/8/2Q5/3N4/2b1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], first: "c4", before: "e4", after: "f3", screen: "d5", target: "c6" },
+    { color: "black", fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], first: "c5", before: "e5", after: "f6", screen: "d4", target: "c3" },
+    { color: "black", fen: "k7/3p4/8/2B1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], first: "c5", before: "e5", after: "f6", screen: "d4", target: "c3" },
+  ])("D3631 joins $color's actual bishop reply, not an earlier attacked minor ($fen)", fixture => {
+    const path = anchors(fixture.fen, fixture.moves);
+    const first = path[0]!;
+    const harassed = pawnDynamicsEvents(first.beforeFen, first.moveUci, first.afterFen).filter(event => event.kind === "minor_harassed");
+    expect(harassed.map(event => (event.subjects.minor as { square: string }).square)).toEqual([fixture.first, fixture.before]);
+    const result = harassmentPressureSequence(path);
+    expect(result).toMatchObject({
+      kind: "harassment_pressure_retained",
+      minor: { before: { square: fixture.before, piece: { role: "bishop" } }, after: { square: fixture.after, piece: { role: "bishop" } } },
+      pressure: {
+        before: { slider: { square: fixture.before }, screen: { square: fixture.screen }, target: { square: fixture.target } },
+        after: { slider: { square: fixture.after }, screen: { square: fixture.screen }, target: { square: fixture.target } },
+      },
+    });
+    expect(result!.anchors).toEqual(path);
+  });
+
+  it.each([
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "c4b6"] },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "c5b3"] },
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f5"] },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f4"] },
+  ])("D3631 keeps knight replies and broken bishop pressure negative ($moves)", fixture => {
+    expect(harassmentPressureSequence(anchors(fixture.fen, fixture.moves))).toBeUndefined();
+  });
+
   it("orders unblocked promotion arrivals without turning geometry into an outcome", () => {
     const fen = "4k3/7p/8/8/8/8/P7/4K3 w - - 0 1";
     const result = promotionRaceGeometry(fen);

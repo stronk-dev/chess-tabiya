@@ -367,13 +367,15 @@ function samePiece(left: BoardPieceIdentity, right: BoardPieceIdentity): boolean
 /** Pawn harassment followed immediately by relocation of the same bishop while one pressure line survives. */
 export function harassmentPressureSequence(values: readonly RecordedMoveAnchor[]): HarassmentPressureSequence | undefined {
   const anchors = recordedPath(values, 2) as readonly [RecordedMoveAnchor, RecordedMoveAnchor];
-  const harassment = pawnDynamicsEvents(anchors[0].beforeFen, anchors[0].moveUci, anchors[0].afterFen).find((event) => event.kind === "minor_harassed");
+  const reply = parseUci(anchors[1].moveUci);
+  if (reply === undefined || !("from" in reply)) return undefined;
+  const harassment = pawnDynamicsEvents(anchors[0].beforeFen, anchors[0].moveUci, anchors[0].afterFen).find((event) =>
+    event.kind === "minor_harassed"
+      && (event.subjects.minor as BoardPieceIdentity).square === makeSquare(reply.from));
   if (harassment === undefined) return undefined;
   const pawn = harassment.subjects.pawn as PawnIdentity;
   const minorBefore = harassment.subjects.minor as BoardPieceIdentity;
   if (minorBefore.piece.role !== "bishop") return undefined;
-  const reply = parseUci(anchors[1].moveUci);
-  if (reply === undefined || !("from" in reply) || makeSquare(reply.from) !== minorBefore.square) return undefined;
   const afterPosition = positionFromFen(anchors[1].afterFen);
   const minorAfter = identity(afterPosition, reply.to);
   if (minorAfter.piece.color !== minorBefore.piece.color || minorAfter.piece.role !== minorBefore.piece.role) return undefined;

@@ -177,6 +177,10 @@ engine principal variation.
   constructors bind every edge value-for-value to the operand anchors and refuse edges not minted
   from an actual run (the edge's value receipt names `createRunRecordEdgeV1Evidence`). v1 declarations
   and factories remain and have no production caller.
+- **Harassment pressure.** The consecutive recorded reply identifies the harassed bishop from
+  the complete newly attacked minor population, including competing knights or bishops. Only
+  relocation preserving the exact slider/screen/target relation emits; a knight reply or a broken
+  pressure line remains a completed negative. This describes the sequence, not intent or quality.
 - **Receipts.** Every edge start receives exactly one receipt per evaluator row (eleven projections,
   thirteen rows): `emitted`, `no_witness` (an evaluated negative) or `insufficient_continuation`
   (not a negative). Any path or edge corruption refuses the whole path before any detector runs.

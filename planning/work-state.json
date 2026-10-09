@@ -30069,6 +30069,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/guidance-reading-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3631",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c9633e5eaee757a6fc7a6d23becba2791bc07e8d15717a374fa369638011a3f1",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

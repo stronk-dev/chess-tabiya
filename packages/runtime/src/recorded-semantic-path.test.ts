@@ -113,6 +113,38 @@ function forkedRun(): { readonly run: DrillRun; readonly main: string; readonly 
 }
 
 describe("recorded semantic path compiler", () => {
+  it.each([
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], before: "e4", after: "f3", screen: "d5", target: "c6" },
+    { fen: "7k/8/2Q5/3N4/2b1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], before: "e4", after: "f3", screen: "d5", target: "c6" },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], before: "e5", after: "f6", screen: "d4", target: "c3" },
+    { fen: "k7/3p4/8/2B1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], before: "e5", after: "f6", screen: "d4", target: "c3" },
+  ])("D3631 emits the exact competing-target bishop sequence through its recorded factory ($fen)", fixture => {
+    const run = recordedRun("harassment-competition", fixture.fen, fixture.moves);
+    const saved = JSON.stringify(run);
+    const result = compileMain(run);
+    const emitted = result.events.filter(event => exact(event.projection) === "derived.pawn.sequence.harassment_pressure@2");
+    expect(emitted).toHaveLength(1);
+    expect(emitted[0]!.evidence.payload).toMatchObject({
+      minor: { before: { square: fixture.before }, after: { square: fixture.after } },
+      pressure: { before: { screen: { square: fixture.screen }, target: { square: fixture.target } }, after: { screen: { square: fixture.screen }, target: { square: fixture.target } } },
+    });
+    expect(emitted[0]!.derivationInputs.map(item => exact(item.projection))).toEqual(["run.record.edge@1", "run.record.edge@1"]);
+    assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, emitted[0]);
+    expect(result.windows.filter(window => exact(window.projection) === "derived.pawn.sequence.harassment_pressure@2" && window.status === "emitted")).toHaveLength(1);
+    expect(JSON.stringify(run)).toBe(saved);
+  });
+
+  it.each([
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "c4b6"] },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "c5b3"] },
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f5"] },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f4"] },
+  ])("D3631 completes nearby recorded windows without inventing retained bishop pressure ($moves)", fixture => {
+    const result = compileMain(recordedRun("harassment-negative", fixture.fen, fixture.moves));
+    expect(result.events.filter(event => exact(event.projection) === "derived.pawn.sequence.harassment_pressure@2")).toEqual([]);
+    expect(result.windows.filter(window => exact(window.projection) === "derived.pawn.sequence.harassment_pressure@2" && window.status === "no_witness")).toHaveLength(1);
+  });
+
   it("[criterion 1] resolves only through the total branchPath and ignores node-array order", () => {
     const { run, main, alternative } = forkedRun();
     const shuffled = Object.freeze({ ...run, nodes: Object.freeze([...run.nodes].reverse()) });

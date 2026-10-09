@@ -1,5 +1,11 @@
 # RFC: Breadth collectors — exact middlegame operands after Wave A
 
+- **Implementation correction (2026-10-09, D3631):** §3.4 joins the actual consecutive
+  reply against all newly harassed minors, rather than selecting the first attacked minor.
+  Both-color competing-knight/bishop controls retain the exact pressure relation through
+  recorded factories and the read-authorised saved-run operation. No new motif, cause,
+  eligibility, consumer adoption or lifecycle promotion is implied.
+
 - **Implementation correction (2026-10-09, D3626):** §3.2's retained-piece join follows the
   physical secondary castling rook for both colors and castling geometries. Stationary rooks
   remain unmoved while their changed destination sets can still emit; invalid-color clone

@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3631]] is closed locally: harassment-pressure identity follows accepted breadth-collectors §3.4.
+The actual consecutive reply selects its bishop from the complete newly attacked minor
+population. Permanent both-color controls cover competing targets, knight replies and
+broken pressure through the detector, recorded factory and authorised saved-run operation.
+All 466 foundation cases/types and complete normal local gates pass: 4,181 software,
+seven unchanged-budget performance, 239 content and 231 browser cases, one optional Maia
+skip, zero retries and 150 input/112 composition cells. Review/module/longitudinal
+consumption, semantic qualification and source-contract holds remain separate.
+
 [[D3630]] is closed locally under provider-exchange-and-execution's existing complete-consumer
 contract. Recorded guidance preflights before packet source preparation and at the registered
 renderer; empty/previously assembled/cached paths cannot bypass it. Thirty-eight predecessor

@@ -17,13 +17,13 @@ afterEach(() => {
   for (const storage of storages.splice(0)) storage.close();
 });
 
-function fixture(): { readonly storage: SQLiteRunStorage; readonly run: DrillRun } {
+function fixture(fen = "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", moves: readonly string[] = ["b8a7", "c6a7", "e1e7"]): { readonly storage: SQLiteRunStorage; readonly run: DrillRun } {
   const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {}, now: () => at });
   storages.push(storage);
   storage.createLearner({ id: owner.learnerId, handle: owner.handle, passwordHash: "!", createdAt: at });
   storage.createLearner({ id: stranger.learnerId, handle: stranger.handle, passwordHash: "!", createdAt: at });
-  let run = createRun({ id: "recorded-path-run", packId: "fixture", packDigest: `sha256:${"d".repeat(64)}`, startFen: "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
-  for (const move of ["b8a7", "c6a7", "e1e7"]) run = commitMove(run, move, { at }).run;
+  let run = createRun({ id: "recorded-path-run", packId: "fixture", packDigest: `sha256:${"d".repeat(64)}`, startFen: fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+  for (const move of moves) run = commitMove(run, move, { at }).run;
   storage.create(run, { writerId: "writer-owner", learnerId: owner.learnerId }, "Recorded path");
   return { storage, run };
 }
@@ -48,6 +48,24 @@ function productionSources(directory: URL): readonly { readonly path: string; re
 }
 
 describe("recorded semantic path server operation", () => {
+  it.each([
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], before: "e4", after: "f3" },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], before: "e5", after: "f6" },
+  ])("D3631 reconstructs the actual bishop reply from owned saved play ($moves)", async value => {
+    const { storage, run } = fixture(value.fen, value.moves);
+    const compile = recordedSemanticPathOperation(storage);
+    const input = { principal: owner, runId: run.id, branchId: run.activeCursor.branchId };
+    const saved = JSON.stringify(storage.read(run.id));
+    const result = await compile(input);
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("recorded harassment path refused");
+    const events = result.events.filter(event => event.projection.id === "derived.pawn.sequence.harassment_pressure" && event.projection.version === 2);
+    expect(events).toHaveLength(1);
+    expect(events[0]!.evidence.payload).toMatchObject({ minor: { before: { square: value.before }, after: { square: value.after } } });
+    expect(await compile(input)).toEqual(result);
+    await expect(compile({ ...input, principal: stranger })).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+    expect(JSON.stringify(storage.read(run.id))).toBe(saved);
+  });
   it("[criterion 12] enforces read authority and delegates unchanged to the runtime compiler", async () => {
     const { storage, run } = fixture();
     const compile = recordedSemanticPathOperation(storage);
