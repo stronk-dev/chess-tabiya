@@ -3611,9 +3611,12 @@ submission-review-browser-check:
 campaign-actions-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/modal-boundary.test.ts
 
-.PHONY: campaign-preparation-browser-check
+.PHONY: campaign-preparation-browser-check campaign-result-browser-check
 campaign-preparation-browser-check:
 	./node_modules/.bin/playwright test --grep "Campaign preparation"
+
+campaign-result-browser-check:
+	./node_modules/.bin/playwright test --grep "Campaign encounter result"
 
 campaign-actions-browser-check:
 	./node_modules/.bin/playwright test --grep "Campaign actions"

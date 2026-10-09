@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3605]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3606]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -63,6 +63,15 @@ The evidence-versus-guidance split is implemented in meaningful production paths
 across the platform**. Deeper “why this engine move?” search remains research rather than a
 shipping coaching or bot capability. Profile observations are not personality verdicts; bot
 profiles are not calibrated ratings; the Campaign pilot is not an official curriculum.
+
+[[D3606]] is closed locally: Campaign encounter results now distinguish act income
+from extra rewind rewards/tool unlocks, show current equipment without promising active
+help, and reconstruct after reload without another submit. Exact replay can carry a later
+map's balance/kit without changing this seal's income. All 73 focused Campaign/modal cases
+and actual desktop/touch-phone result → reload → Review → map → next unlock pass, including
+board hit-testing and preserved recorded play. Final normal tiers pass 3,770 software,
+seven performance, 228 content and 209 browser cases, one optional browser Maia skip,
+zero retries and all 150 input/112 composition cells. No whole capability or milestone is promoted.
 
 [[D3603]] implements bounded Campaign preparation under the existing campaign-core
 contract: the dialog owns focus/keyboard input, shows copied briefing/reward/cost and
@@ -151,15 +160,17 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,754 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,770 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-203 browser cases (138 smoke, five content, 59 matrix, one packaged-default). One existing
+209 browser cases (144 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-Normal `make roadmap-receipt verify-awake test-browser-ci-awake` exits zero in one sequence
-on final product/test sources. Warm native arrival measures median 97.2 ms / p95 116.4 ms,
+Normal `make roadmap-receipt verify-awake` passes on final product sources. Complete
+`make test-browser-ci-awake` passes after correcting the existing post-seal assertion from
+Unlocks to Unlocked; the first smoke run's failure is retained in the log. Warm native
+arrival measures median 101.5 ms / p95 112.1 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
-No product/test source or budget changed during this complete run. This is local verification,
+No production source or budget changed after the software/content pass. This is local verification,
 not a new GitHub, native release-image or readiness-to-push result.
 
 [[D3591]] remains open: the earlier full run measured 328.466431 ms maximum event-loop
@@ -3053,6 +3064,11 @@ the original command operands or duplicate a reward. Abandonment remains confirm
 read fails and exposes a separate Reload result. All 54 focused cases and three actual built-app
 journeys pass, including delayed delivery on desktop/touch phone and lost-response replay. This
 is lifecycle correctness for the draft pilot, not official progression or whole Campaign completion.
+
+[[D3606]] completes the retained encounter-result view: distinct act/reward income, current
+kit/equipment and ended restriction copy survive reload and later-map command replay. It adds
+no economy, schema or reward authority. Recorded-play and board checks accompany the actual
+result/Review/map/next-unlock journey; official curriculum and whole Campaign remain open.
 
 **1.0 exit:** versioned campaigns compose registered packs, bots, modules, skills/rating, variants,
 rewards, earned rewinds and a researched consequential-but-non-punitive failure economy; state

@@ -138,6 +138,15 @@ suppressed tools, refusal rollback, revision ordering and closing a pending kit 
 run in ordinary CI too; the reduced viewport is a layout projection, not an owner-device zoom
 discharge.
 
+`make campaign-result-browser-check` exercises actual desktop/touchscreen-phone
+seal → reload → Review → map → next encounter/tool unlock. It checks separate act/reward
+income, current kit, unchanged board size, all 64 square centres remaining hittable, and no
+horizontal overflow after sealing/reload. Reload preserves the recorded event prefix, nodes,
+branches and cursor; only new evidence attachments are permitted. Eight mounted result controls
+cover no reward, zero income, equipment/restriction copy, malformed unlocks and a replay with
+a later map. These checks also run in ordinary software/browser CI; they do not establish
+official content or complete Campaign accessibility/release proof.
+
 `make campaign-history-check` runs mounted campaign-history controls in the software tier
 and the actual campaign application contracts in the real-content tier.
 `make campaign-history-browser-check` runs the built desktop/touchscreen-phone history journeys:

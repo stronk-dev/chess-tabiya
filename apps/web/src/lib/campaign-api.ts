@@ -213,6 +213,39 @@ export function rewardText(reward: CampaignRunReward | null): string {
   return "Unlocks a theory passage";
 }
 
+/** Node-result copy comes from its retained seal and pinned economy, not balance differences.
+ * A command replay may carry a later map: the income stays this node's, kit/balance stay current.
+ * The same view can be rebuilt after reload without a second submit or another durable record.
+ */
+export function campaignEncounterResult(campaign: CampaignProjection, nodeId: string, runId: string) {
+  for (const act of campaign.acts) for (const layer of act.layers) {
+    const card = layer.choices.find(item => item.nodeId === nodeId);
+    if (card?.seal == null || card.seal.playRunId !== runId) continue;
+    const actIncome = campaign.economy.actGrants[act.id];
+    if (!Number.isSafeInteger(actIncome) || actIncome < 0 || !Number.isSafeInteger(campaign.charges.balance) || campaign.charges.balance < 0) throw new Error("Invalid campaign result income");
+    const reward = card.reward;
+    if (reward?.kind === "module_unlock" && !campaign.kit.owned.includes(reward.moduleId)) throw new Error("Unlocked tool missing from campaign kit");
+    if (reward?.kind === "resource_grant" && (!Number.isSafeInteger(reward.amount) || reward.amount < 1)) throw new Error("Invalid campaign result reward");
+    const tools = campaign.kit.owned.map(id => {
+      if (!Object.hasOwn(CAMPAIGN_MODULE_LABELS, id)) throw new Error("Unknown campaign tool");
+      return { label: CAMPAIGN_MODULE_LABELS[id], equipped: campaign.kit.equipped.includes(id) };
+    });
+    return {
+      title: card.title,
+      verdict: verdictText(card.seal),
+      act: ACT_LABELS[act.id],
+      actIncome,
+      resourceIncome: reward?.kind === "resource_grant" ? reward.amount : 0,
+      reward: reward?.kind === "module_unlock" ? `Unlocked ${CAMPAIGN_MODULE_LABELS[reward.moduleId]}` : reward?.kind === "theory_unlock" ? "Unlocked a theory passage" : undefined,
+      tools,
+      endedRestrictions: card.suppress.map(id => CAMPAIGN_MODULE_LABELS[id]),
+      balance: campaign.charges.balance,
+      completed: campaign.campaignRun.status === "completed",
+    };
+  }
+  return undefined;
+}
+
 /** Learner copy for the rules result that ended a boss game; an unlisted reason is not shown raw. */
 const GAME_END_TEXT: Readonly<Record<string, string>> = Object.freeze({
   checkmate: "checkmate",

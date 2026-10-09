@@ -29845,6 +29845,15 @@
       "uxItems": [],
       "evidence": "planning/roadmap-to-done.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3606",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d0f0e78382c32bfa9cdb3e921e9ccec46118e0bbc516862dd18b76a3311aa394",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/CampaignStrip.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

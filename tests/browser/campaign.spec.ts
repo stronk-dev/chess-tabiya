@@ -1,6 +1,9 @@
 import { randomUUID } from "node:crypto";
 
 import { expect, test, type Page } from "@playwright/test";
+import type { DrillRun } from "../../packages/runtime/src/types.js";
+import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
+import type { RunGraph } from "../../apps/web/src/lib/api.js";
 
 // rfc/campaign-core.md criterion 4/24 (foundation journey) and rfc/campaign-boss-games.md criterion 13:
 // enter the campaign, play pack encounters, play the Act-II boss against a registered bot, see each
@@ -35,6 +38,26 @@ async function move(page: Page, from: string, to: string): Promise<void> {
 
 function currentRunId(page: Page): string {
   return decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);
+}
+
+async function playableBoard(page: Page, expectedEdge?: number): Promise<number> {
+  const board = page.getByLabel("Chessboard");
+  await board.scrollIntoViewIfNeeded();
+  const geometry = await board.evaluate(element => {
+    const box = element.getBoundingClientRect();
+    let hits = 0;
+    for (let file = 0; file < 8; file++) for (let rank = 0; rank < 8; rank++) {
+      const target = document.elementFromPoint(box.x + (file + .5) * box.width / 8, box.y + (rank + .5) * box.height / 8);
+      if (target !== null && element.contains(target)) hits++;
+    }
+    return { width: box.width, height: box.height, hits, overflow: document.documentElement.scrollWidth > innerWidth + 1 };
+  });
+  expect(geometry.width).toBeGreaterThan(0);
+  expect(geometry.width).toBeCloseTo(geometry.height, 1);
+  if (expectedEdge !== undefined) expect(geometry.width).toBeCloseTo(expectedEdge, 1);
+  expect(geometry.hits).toBe(64);
+  expect(geometry.overflow).toBe(false);
+  return geometry.width;
 }
 
 async function moveCount(page: Page, runId: string): Promise<number> {
@@ -98,6 +121,59 @@ async function holdCampaignAction(page: Page, path: RegExp) {
 }
 
 for (const mobile of [false, true]) {
+  test(`Campaign encounter result explains earned rewards and survives reload${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    test.setTimeout(90_000);
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const mapPath = new URL(page.url()).pathname;
+    const runId = await startNode(page, "f1-b");
+    await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, runId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const edge = await playableBoard(page);
+    await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+    const result = strip.locator(".node-result");
+    await expect(result).toContainText("Your recorded attempts are kept");
+    const projection = await (await page.request.get(`/campaign-runs/${mapPath.split("/").at(-1)}`)).json();
+    const grant = projection.economy.actGrants.act1;
+    await expect(result).toContainText(`${grant} earned ${grant === 1 ? "rewind" : "rewinds"} for finishing this encounter in Act I, win or lose`);
+    await expect(result).toContainText("1 earned rewind from this encounter’s reward");
+    await expect(result).toContainText(`Current campaign balance: ${projection.charges.balance} earned rewinds`);
+    await expect(result).toContainText("No tools earned yet");
+    await expect(result).not.toContainText("now in your campaign kit");
+    await playableBoard(page, edge);
+    const before = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graphBefore = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    await page.reload();
+    await expect(result).toContainText("1 earned rewind from this encounter’s reward");
+    await playableBoard(page, edge);
+    const after = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graphAfter = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    // Background evidence may attach on reload; recorded play may not change.
+    assertOnlyEvidenceAppended(before.events, after.events);
+    assertRecordedNodesPreserved(graphBefore.nodes, graphAfter.nodes);
+    expect(graphAfter.branches).toEqual(graphBefore.branches);
+    expect(graphAfter.activeCursor).toEqual(graphBefore.activeCursor);
+    await strip.getByRole("button", { name: "Review encounter", exact: true }).click();
+    await expect(page).toHaveURL(/\/review\/game\//u);
+    await page.getByRole("link", { name: "Return to campaign map", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    const secondRun = await startNode(page, "f2-a");
+    await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, secondRun), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+    await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+    await expect(result).toContainText("Unlocked Square facts on request");
+    await expect(result).toContainText("Square facts on request — equipped");
+    await expect(result).toContainText("available evidence still determine what appears");
+    await page.reload();
+    await expect(result).toContainText("Square facts on request — equipped");
+    await playableBoard(page, edge);
+    await strip.getByRole("button", { name: "Continue to the map", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    await expect(page.getByRole("checkbox", { name: "Square facts on request" })).toBeChecked();
+  });
+
   test(`Campaign preparation owns focus and persists kit choices before entry${mobile ? " @mobile" : ""}`, async ({ page }) => {
     test.setTimeout(90_000);
     await register(page);
@@ -290,7 +366,7 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   await expect.poll(() => moveCount(page, firstRunId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
   await strip.getByRole("button", { name: "Declare done" }).click();
   await expect(strip.getByText("Played to the authored boundary", { exact: false })).toBeVisible();
-  await expect(strip.getByText("Unlocks After-move nudge", { exact: false })).toBeVisible();
+  await expect(strip.getByText("Unlocked After-move nudge", { exact: false })).toBeVisible();
   await strip.getByRole("button", { name: "Continue to the map" }).click();
 
   // Resume after reload: the map is server state, not tab state.

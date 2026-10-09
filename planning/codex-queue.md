@@ -12,6 +12,18 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3606]] is closed locally under implementing `campaign-core` §§2.1/7.1:
+encounter results distinguish act income, resource rewards and module unlocks, show the
+current kit and reconstruct from the retained seal after reload. No additional submit,
+balance-difference inference or new durable result record. The mounted gate passes 73
+Campaign/modal cases; actual desktop/touch-phone result → reload → Review → map → next
+unlock preserves recorded play and the board. Final normal tiers pass clean types/build,
+3,770 software, seven unchanged-budget performance, 228 content and 209 browser cases;
+one optional browser Maia skip, zero retries, all 150 input/112 composition cells. The
+existing boss journey's post-seal assertion now requires Unlocked, not future-tense Unlocks;
+no reward check, timeout or budget was weakened. Official progression, reward authorities,
+whole Campaign and historical D3591/D3600 timing causes remain open.
+
 [[D3604]] is closed locally: the agent guide's stale RFC/archive counts and exploration-only
 navigation are corrected by linking the existing live work, roadmap and lifecycle authorities.
 This is a factual handoff correction; workflow laws and protected intent are unchanged.

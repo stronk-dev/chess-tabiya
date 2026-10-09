@@ -264,6 +264,91 @@ async function strip(submit: () => Promise<Response>, read: () => Promise<Respon
   return { component, fetcher, onRevision };
 }
 
+describe("Campaign earned encounter results", () => {
+  function withReward(reward: CampaignProjection["acts"][number]["layers"][number]["choices"][number]["reward"], options: { equipped?: boolean; suppressed?: boolean } = {}) {
+    const done = sealResponse(), card = done.campaign.acts[0]!.layers[0]!.choices[0]!;
+    return { ...done, campaign: { ...done.campaign,
+      charges: { ...done.campaign.charges, balance: 5, actIncome: 1, rewardIncome: reward?.kind === "resource_grant" ? reward.amount : 0 },
+      kit: { ...done.campaign.kit, equipped: options.equipped === false ? [] : ["postcommit_nudge"] },
+      acts: [{ id: "act1" as const, layers: [{ layer: 1 as const, state: "sealed" as const, choices: [{ ...card, reward, suppress: options.suppressed ? ["postcommit_nudge" as const] : [] }] }] }],
+    } };
+  }
+
+  it("separates a resource reward from act income instead of claiming a tool unlock", async () => {
+    const view = await strip(async () => Response.json(withReward({ kind: "resource_grant", resourceId: "campaign_rewind_charge", amount: 3 })));
+    expect(await view.component.declareDone()).toBe(true);
+    const text = document.querySelector(".node-result")!.textContent!;
+    expect(text).toContain("1 earned rewind for finishing this encounter in Act I");
+    expect(text).toContain("3 earned rewinds from this encounter’s reward");
+    expect(text).toContain("Current campaign balance: 5 earned rewinds");
+    expect(text).not.toContain("now in your campaign kit");
+    expect(text).toContain("win or lose");
+  });
+
+  it.each([true, false])("shows a module unlock and its current equipment state (%s)", async equipped => {
+    const view = await strip(async () => Response.json(withReward({ kind: "module_unlock", moduleId: "postcommit_nudge" }, { equipped })));
+    expect(await view.component.declareDone()).toBe(true);
+    const result = document.querySelector(".node-result")!;
+    expect(result.textContent).toContain("Unlocked After-move nudge");
+    expect(result.textContent).toContain(equipped ? "After-move nudge — equipped" : "After-move nudge — not equipped");
+    expect(result.textContent).toContain("Your help style, the next encounter and available evidence still determine what appears");
+    expect(result.textContent).toContain("Your recorded attempts are kept");
+  });
+
+  it("ends an encounter restriction without promising that a tool is now active", async () => {
+    const view = await strip(async () => Response.json(withReward(null, { suppressed: true })));
+    expect(await view.component.declareDone()).toBe(true);
+    expect(document.querySelector(".node-result")!.textContent).toContain("This encounter’s restriction ended for: After-move nudge");
+    expect(document.querySelector(".node-result")!.textContent).not.toContain("now active");
+  });
+
+  it("reconstructs the earned result after a reload from the recorded seal", async () => {
+    const done = withReward({ kind: "resource_grant", resourceId: "campaign_rewind_charge", amount: 3 });
+    const fetcher = vi.fn(async (path: string, _init?: RequestInit) => Response.json(path.endsWith("/review")
+      ? { kind: "available", runId: PLAY, nodeId: NODE, campaignDocumentDigest: DIGEST, route: `/play/run/${PLAY}`, reviewNodeId: "recorded-tip", reviewBranchId: "main", reviewRoute: `/review/game/${PLAY}?branch=main&node=recorded-tip` }
+      : done.campaign));
+    const component = createClassComponent({ component: CampaignStrip, target: document.body, props: {
+      campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate: vi.fn(), onRevision: vi.fn(),
+    } });
+    cleanup.push(() => component.$destroy());
+    await vi.waitFor(() => expect(document.querySelector(".node-result")?.textContent).toContain("3 earned rewinds from this encounter’s reward"));
+    expect(button("Continue to the map")).toBeDefined();
+    expect(fetcher.mock.calls.map(([path]) => path)).toEqual([`/campaign-runs/${RUN}`, `/campaign-runs/${RUN}/nodes/${NODE}/review`]);
+    expect(fetcher.mock.calls.every(([, init]) => init?.method === "GET")).toBe(true);
+  });
+
+  it("does not call a tool earned when the canonical kit does not own it", async () => {
+    const done = withReward({ kind: "module_unlock", moduleId: "postcommit_nudge" });
+    const view = await strip(async () => Response.json({ ...done, campaign: { ...done.campaign, kit: { ...done.campaign.kit, owned: [], equipped: [] } } }));
+    expect(await view.component.declareDone()).toBe(false);
+    expect(document.querySelector(".node-result")).toBeNull();
+    expect(view.onRevision).not.toHaveBeenLastCalledWith(null);
+  });
+
+  it("shows zero act income and no extra reward without inventing a kit grant", async () => {
+    const done = withReward(null);
+    const campaign = { ...done.campaign, economy: { ...done.campaign.economy, actGrants: { act1: 0, act2: 0, act3: 0 } } };
+    const view = await strip(async () => Response.json({ ...done, campaign }));
+    expect(await view.component.declareDone()).toBe(true);
+    const text = document.querySelector(".node-result")!.textContent!;
+    expect(text).toContain("0 earned rewinds for finishing this encounter in Act I");
+    expect(text).toContain("No additional encounter reward");
+    expect(text).not.toContain("Unlocked");
+  });
+
+  it("keeps this seal's income distinct from a later replay map's current balance", async () => {
+    const done = withReward({ kind: "resource_grant", resourceId: "campaign_rewind_charge", amount: 3 });
+    const campaign = { ...done.campaign, campaignRun: { ...done.campaign.campaignRun, revision: 12 }, charges: { startingIncome: 1, actIncome: 100, rewardIncome: 4, spent: 50, balance: 55 } };
+    const view = await strip(async () => Response.json({ ...done, replayed: true, campaign }));
+    expect(await view.component.declareDone()).toBe(true);
+    const text = document.querySelector(".node-result")!.textContent!;
+    expect(text).toContain("1 earned rewind for finishing this encounter in Act I");
+    expect(text).toContain("3 earned rewinds from this encounter’s reward");
+    expect(text).toContain("Current campaign balance: 55 earned rewinds");
+    expect(text).not.toContain("100 earned");
+  });
+});
+
 describe("Campaign encounter declaration ownership", () => {
   it("cannot report successful declaration or publish a revision after departure", async () => {
     const late = deferred<Response>();

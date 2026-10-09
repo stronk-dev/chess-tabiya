@@ -110,7 +110,18 @@ Tab stays inside, and Escape/Back returns to the map choice (or map heading whil
 pending). Closing a pending Start does not cancel a server-accepted encounter or navigate later:
 the map offers Continue encounter and the saved writer remains usable.
 
-Sealed map cards, the fresh-seal strip and result entries offer **Review encounter** and
+The encounter result separates the act's seal income (earned win or lose) from a node's extra
+rewind reward or tool unlock. It shows the current balance and owned/equipped tools, and names
+the encounter restrictions that ended without promising those tools are now active. The next
+encounter, selected help style and available evidence still determine what appears. Continue
+returns to the map; a completed campaign instead offers its run result.
+
+Reload reconstructs this result from the retained seal and pinned campaign economy; it does not
+submit again. On an exact command replay, a later canonical map may show a newer balance/kit,
+but this encounter's income remains its own. No cumulative-balance subtraction or extra durable
+result record is needed. Recorded moves, branches and cursor remain unchanged by reload.
+
+Sealed map cards, the seal strip (including after reload) and result entries offer **Review encounter** and
 **Open recorded encounter**.
 They use the node-history operation above, check its exact game/node/document identity and
 recheck on activation rather than guessing a saved-game URL. Deleted recordings explain that

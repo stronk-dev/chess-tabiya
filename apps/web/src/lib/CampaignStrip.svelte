@@ -5,12 +5,10 @@
   import {
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
+    campaignEncounterResult,
     newCampaignCommandId,
     assertCampaignCommand,
-    rewardText,
-    verdictText,
     type CampaignProjection,
-    type CampaignRunReward,
   } from "./campaign-api.js";
 
   // rfc/campaign-core.md §7.1 "In-run context": the campaign rail seat beside the board. It renders
@@ -33,7 +31,7 @@
   let campaign: CampaignProjection | undefined = $state();
   let error: string | undefined = $state();
   let busy = $state(false);
-  let sealed: { readonly verdict: string; readonly reward: CampaignRunReward | null; readonly completed: boolean } | undefined = $state();
+  let sealed: ReturnType<typeof campaignEncounterResult> = $state();
   let submission: { campaign: CampaignProjection; campaignRunId: string; nodeId: string; input: { runId: string; branchId: string; expectedRevision: number; commandId: string } } | undefined;
   let generation = 0;
   let readGeneration = 0;
@@ -72,7 +70,9 @@
       const next = await campaigns.read(requestedId);
       if (!ownsView(current, requestedSubject) || reading !== readGeneration) return;
       if (next.campaignRun.id !== requestedId || (campaign !== undefined && next.campaignRun.documentDigest !== campaign.campaignRun.documentDigest)) throw new Error("Crossed campaign read");
+      const result = campaignEncounterResult(next, origin.nodeId, runId);
       campaign = next;
+      sealed = result;
       onRevision(next.activeEncounter?.playRunId === runId && next.activeEncounter.nodeId === origin.nodeId ? { campaignRevision: next.campaignRun.revision, active: true } : null);
     } catch (caught) {
       if (ownsView(current, requestedSubject) && reading === readGeneration) error = caught instanceof ApiError ? caught.message : "Campaign state could not be loaded.";
@@ -84,8 +84,9 @@
   }
 
   export async function declareDone(): Promise<boolean> {
-    if (busy || campaign === undefined || (!active && submission === undefined)) return false;
+    if (busy || campaign === undefined) return false;
     if (sealed !== undefined) return true;
+    if (!active && submission === undefined) return false;
     const current = generation, requestedSubject = subject;
     busy = true;
     error = undefined;
@@ -98,9 +99,11 @@
       assertCampaignCommand(done, requested.campaign, originalCard?.kind === "boss_game" ? "boss_game_committed" : "node_committed");
       const card = done.campaign.acts.flatMap(act => act.layers.flatMap(layer => layer.choices)).find(card => card.nodeId === requested.nodeId);
       if (done.result.response?.nodeId !== requested.nodeId || card?.seal == null || card.seal.kind !== originalCard?.kind || card.seal.playRunId !== requested.input.runId) throw new Error("Crossed encounter seal");
+      const result = campaignEncounterResult(done.campaign, requested.nodeId, requested.input.runId);
+      if (result === undefined) throw new Error("Missing encounter result");
       readGeneration++;
       submission = undefined;
-      sealed = { verdict: verdictText(card.seal), reward: card.reward, completed: done.campaign.campaignRun.status === "completed" };
+      sealed = result;
       campaign = done.campaign;
       onRevision(null);
       return true;
@@ -118,8 +121,21 @@
 <aside class="session-banner campaign-strip" aria-label="Campaign encounter">
   {#if sealed}
     <div class="node-result" role="status">
-      <strong>{nodeTitle}: {sealed.verdict}</strong>
-      <span>{sealed.reward === null ? "No reward on this node." : `${rewardText(sealed.reward)} — now in your campaign kit for later encounters.`}</span>
+      <strong>{sealed.title}: {sealed.verdict}</strong>
+      <p>This choice is sealed. Your recorded attempts are kept; continue on the map.</p>
+      <p>{sealed.actIncome} earned {sealed.actIncome === 1 ? "rewind" : "rewinds"} for finishing this encounter in {sealed.act}, win or lose.</p>
+      {#if sealed.resourceIncome > 0}<p>{sealed.resourceIncome} earned {sealed.resourceIncome === 1 ? "rewind" : "rewinds"} from this encounter’s reward.</p>{/if}
+      {#if sealed.reward}<p>{sealed.reward}.</p>{/if}
+      {#if sealed.reward === undefined && sealed.resourceIncome === 0}<p>No additional encounter reward.</p>{/if}
+      <p>Current campaign balance: {sealed.balance} earned {sealed.balance === 1 ? "rewind" : "rewinds"}.</p>
+      {#if sealed.endedRestrictions.length > 0}<p>This encounter’s restriction ended for: {sealed.endedRestrictions.join(", ")}.</p>{/if}
+      <div class="result-kit">
+        <strong>Your current campaign kit</strong>
+        {#if sealed.tools.length > 0}
+          <ul>{#each sealed.tools as tool (tool.label)}<li>{tool.label} — {tool.equipped ? "equipped" : "not equipped"}</li>{/each}</ul>
+        {:else}<p>No tools earned yet.</p>{/if}
+        <p>Your help style, the next encounter and available evidence still determine what appears. Change equipment on the map.</p>
+      </div>
       {#if sealed.completed}<span>The campaign run is complete.</span>{/if}
     </div>
     <div class="row-actions">
@@ -147,6 +163,9 @@
   .campaign-strip { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
   .campaign-strip .charges { font-variant-numeric: tabular-nums; }
   .campaign-strip .kit { color: var(--muted); }
-  .node-result { display: grid; gap: .25rem; }
+  .node-result { display: grid; gap: .4rem; min-width: 0; flex-basis: 100%; overflow-wrap: anywhere; }
+  .node-result p { margin: 0; }
+  .result-kit { padding: .6rem; border: 1px solid var(--line); border-radius: .4rem; }
+  .result-kit ul { margin: .4rem 0; padding-left: 1.25rem; }
   .row-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 </style>
