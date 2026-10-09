@@ -45,6 +45,7 @@ including 112 composition cells. Hint remains implementing with the above holds.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `maia-task-source.md` | draft — D3370 sampled-task and D3363 exact-node distribution migration; independent review required, no implementation authorization | `provider-exchange-and-execution.md` §6/10; `archive/engine-request-contract.md` §10 | claims `provider-protocol` member `maia_inference_task_v1`; preserves terminal sample separately from reported window, existing retries/modes and explicit Inspector disclosure; no run/pack/storage lane, new sampler, calibrated personality or whole-source retirement |
 | `installed-opening-evidence.md` | draft — D3376 installed-source and real module/Review binding contract; independent buildability review required | `runtime-opening-identity.md` D1; `evidence-value-authority.md`; `module-registration.md`; `review-evidence-compiler.md` | **claims none from existing resources** — introduces absent `opening-catalogue-schema` at first version 1 through the existing bootstrap; one package-owned installed-content registration, three sole factories and four actual consumer operations; no migration, pack/run lane, bot book or new theory prose |
 | `durable-stockfish-source.md` | draft — D3373 source/adoption repair; fresh contract review required, no implementation authorization | `provider-exchange-and-execution.md`; `evidence-job-durability.md` | claims `provider-protocol` member `stockfish_analysis_task_v1` and provisional migration position behind `native-ratings`; same-task terminating selection/mainline under exact MultiPV, v2 job/batch/settlement with frozen v1 replay and stamp-only storage upgrade; no new SQL column/run/pack lane |
 | `import-source-protocol-register.md` | **implementing — landed 2026-09-24 at the owner's direction; archival deferred to consolidation.** `import-source-protocol` is a catalogue `members` resource over `packages/runtime/src/import-source-protocol.ts` (four present members), the single source for server, storage CHECK and web import unions ([[D2278]]); `live-sources.md` now claims only the broadcast pair. Pasted PGN is capped at 64 KiB and stripped of third-party annotations at the record boundary ([[D959]]). Receipt: `planning/import-source-protocol-register/implementation-2026-09-24.md` | `planning/import-source-protocol-register/catalogue-additions.v1.json`; `live-sources.md` | **claims none** — introduces absent `import-source-protocol`; product version 1 belongs to `live-sources.md` |
@@ -407,6 +408,7 @@ payloads still refuse whole-image execution; retained history adds no new member
 | claim | claimant RFC | changes | declared at |
 |---|---|---|---|
 | members stockfish_analysis_task_v1 | `durable-stockfish-source.md` | same-task mainline, actual terminating selection and configured MultiPV for durable jobs | 2026-10-08 |
+| members maia_inference_task_v1 | `maia-task-source.md` | same-task sampled selection and reported candidate window; exact Inspector distribution without a fabricated played move | 2026-10-09 |
 
 ## Semantic-conventions register
 

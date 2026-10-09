@@ -72,6 +72,7 @@
         "semantic-convention-register.md",
         "semantic-convention-provenance.md",
         "provider-exchange-and-execution.md",
+        "maia-task-source.md",
         "durable-stockfish-source.md",
         "provider-protocol-register.md",
         "runtime-opening-identity.md",
@@ -809,14 +810,16 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Complete the admitted D1700/D1701 consumer execution, source resolution and exact availability runtime joins without treating compilation as adoption. Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+        "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3620 closes locally: loose-piece evidence retains legal en-passant capturers against the actual pawn victim, separately from the capture landing, through sealed readings/events, double-push deltas, serialized Post-commit Nudge captions, complete candidate packets and committed-run reconstruction. Fifteen predecessor controls fail; all 349 focused foundation cases/types and complete normal tiers pass: 3957 software cases/358 files, seven unchanged-budget performance cases, 228 content cases and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. Pinned/expired rights, equal exchanges and ordinary capture controls pass; the shared recapture helper remains landing-based. Authored packs and source/projection identities are unchanged. Semantic coverage remains 81 subjects / 42 passing cases / zero fully qualified. Remaining D1700/D1701 runtime joins, held source/orientation contracts, calibrated bots, official content, whole capabilities/milestones and release remain open; no push or remote CI claim.",
+          "summary": "D3370/D3363 advance to a bounded maia-task-source draft: separate actual sampled selection/reported window, independent draw identities, current retries/width/history/cache/modes and exact-node Inspector receipt. Four permanent selector compatibility controls pass in the 244-case opponent/provider gate; final normal verification passes clean types, 3961 software cases/358 files, seven unchanged-budget performance cases, 228 content cases, governance and build. Two stale work references are corrected before the remaining gates pass. Independent parser/wire review and acceptance precede source/consumer changes. No modern Maia adoption or calibrated bot is claimed. Browser/client/product bytes are unchanged by this author/test batch; the preceding D3620 product checkpoint passed 225 browser cases, one optional skip, zero retries, not a fresh run here. Semantic coverage stays 81 subjects / 42 passing cases / zero fully qualified. Remaining source/availability, official content, whole capabilities/milestones and release stay open; no push or remote CI claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/installed-opening-evidence.md",
             "rfc/durable-stockfish-source.md",
+            "rfc/maia-task-source.md",
+            "apps/server/src/opponent-selector.test.ts",
             "apps/server/src/engine-supervisor.ts",
             "apps/server/src/engine-supervisor-exchange.test.ts",
             "apps/server/src/engine-supervisor.test.ts",
@@ -868,6 +871,11 @@
               "kind": "rfc",
               "id": "installed-opening-evidence.md",
               "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
+            },
+            {
+              "kind": "rfc",
+              "id": "maia-task-source.md",
+              "digest": "sha256:cc6f9bc61f7b600618469f928881f46a6e8a888d58b2b5cec814e3a37d1c2bca"
             },
             {
               "kind": "rfc",
@@ -1397,7 +1405,7 @@
             {
               "kind": "work_state",
               "id": "D3363",
-              "digest": "sha256:e33330262e49b9d3750dba198bbd0fc7bea6fb1887145a5bb1194a25ffa610d0"
+              "digest": "sha256:1a0e45b91d7af06c56fa505c7c4a7bdb4567924171143f3a5dcae99a4fafdaf2"
             },
             {
               "kind": "work_state",
@@ -1437,7 +1445,7 @@
             {
               "kind": "work_state",
               "id": "D3370",
-              "digest": "sha256:47c0f7adb4067c11b0f9498316ad29ce39f5cd69574ebdb854f73e90f4b7c1b4"
+              "digest": "sha256:0badfe9df45ae521ff17838a892976d776751ebd0f78bc417df698d66356b51a"
             },
             {
               "kind": "rfc",

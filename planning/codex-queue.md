@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+2026-10-09 authoring advance: [[D3370]] and [[D3363]] now have one bounded draft,
+`rfc/maia-task-source.md`, rather than an unowned instruction to invent sampler semantics.
+It retains actual terminal selection separately from reported rows, current retry/width/history
+and theory/practical behavior, then gives Inspector an exact requested-node distribution.
+Four permanent selector controls pin those compatibility facts. Independent review must resolve
+the parser/wire questions and accept the contract before modern source/consumer implementation.
+Do not choose a first candidate, manufacture an observed move, accept the author's own draft,
+or retire legacy Compare/Story bindings. The provider member is claimed once in the live register;
+there is no new queue, content wave, sampler, storage format or whole-capability completion.
+
 [[D3620]] is closed locally under tactical-collectors §3.4. Fifteen predecessor
 controls reproduce the omitted en-passant capturer; five nearby controls already pass.
 The existing legal capture/exchange authority now joins the actual victim to its distinct

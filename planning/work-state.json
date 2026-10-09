@@ -27659,11 +27659,12 @@
     },
     {
       "id": "D3363",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e33330262e49b9d3750dba198bbd0fc7bea6fb1887145a5bb1194a25ffa610d0",
+      "sourceDigest": "sha256:1a0e45b91d7af06c56fa505c7c4a7bdb4567924171143f3a5dcae99a4fafdaf2",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:maia-task-source.md"
     },
     {
       "id": "D3364",
@@ -27722,11 +27723,11 @@
     {
       "id": "D3370",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-exchange-and-execution.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:47c0f7adb4067c11b0f9498316ad29ce39f5cd69574ebdb854f73e90f4b7c1b4",
-      "uxItems": []
+      "sourceDigest": "sha256:0badfe9df45ae521ff17838a892976d776751ebd0f78bc417df698d66356b51a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:maia-task-source.md"
     },
     {
       "id": "D3371",

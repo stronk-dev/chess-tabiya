@@ -30,6 +30,18 @@ they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
 
+D3370/D3363 now have a bounded source-migration draft, `rfc/maia-task-source.md`:
+actual sampled selection and reported candidate window remain separate, including the
+existing retry, width floor, history identity and Inspector node/disclosure semantics.
+It specifies independent requested draws so source caching cannot replace a retry with the
+first sample. Four permanent production-selector compatibility controls pin the behavior;
+independent parser/wire review and acceptance precede implementation. This is authoring
+progress, not a new bot personality, shipped modern Inspector or whole foundation completion.
+Final normal local checks pass clean types, 3,961 software cases, seven unchanged-budget
+performance cases, 228 content cases, governance and build. Two stale work references are
+corrected before the remaining gates pass. No production/client bytes change in this author/test
+batch; the 225-pass browser result below belongs to the preceding product checkpoint.
+
 [[D3620]] closes the en-passant victim/landing omission in existing loose-piece evidence.
 Fifteen predecessor controls fail; all 349 focused cases pass, including both colors, legal
 negatives, sealed factories, serialized Nudge captions, candidate packets and saved runs.
@@ -132,7 +144,7 @@ the machine map above remains the current assignment/status source.
 
 At this checkpoint all fourteen whole capability areas remain incomplete; four milestones
 are active and five blocked. The RFC register records 75 archived implementations, with
-42 current RFCs implementing, ten awaiting discharge and 21 draft. Of 569 UX items,
+42 current RFCs implementing, ten awaiting discharge and 22 draft. Of 569 UX items,
 273 are complete, 272 remain live and 24 are retired. These are counts, not a delivery
 percentage: completed components do not establish a complete learner journey.
 
@@ -497,10 +509,10 @@ permission verdict or full release follows. Clearing only old rebuildable Tabiya
 release-policy/storage/schema checks pass 122 policy, 33 wrapper, 47 native storage and fifteen
 scaffold cases plus actual Compose packaging. No new GitHub result or milestone completion.
 
-Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
+Current accounting after this closeout: **74 active product RFCs** (22 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,362 ledger rows** (1,493 done, 161 refused, 1,708 live,
-zero untriaged). Of the live ledger, 628 are todo, fourteen doing and 1,066 blocked. The 462 historical
+(273 completed, 24 retired, 272 live); **3,369 ledger rows** (1,499 done, 161 refused, 1,709 live,
+zero untriaged). Of the live ledger, 628 are todo, fourteen doing and 1,067 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

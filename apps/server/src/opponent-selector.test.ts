@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 
-import { INITIAL_FEN } from "chessops/fen";
+import { Chess } from "chessops/chess";
+import { INITIAL_FEN, makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 import {
   exactLegalMoves,
   readBackReplay,
@@ -663,6 +665,68 @@ describe("pure opponent selector", () => {
         { moveUci: "b8c6", rank: 2, offWindow: true },
       ],
     });
+  });
+
+  it("keeps the sampled move distinct from the highest reported probability", async () => {
+    const client = new FakeEngineClient(() => maiaLines("c7c5", [
+      { move: "e7e5", mass: 0.75 },
+      { move: "c7c5", mass: 0.1 },
+    ]));
+    const selection = await new OpponentSelector(client).select(request("human_common"));
+    expect(selection.moveUci).toBe("c7c5");
+    expect(selection.candidates?.map(({ moveUci, mass, rank }) => ({ moveUci, mass, rank }))).toEqual([
+      { moveUci: "e7e5", mass: 0.75, rank: 1 },
+      { moveUci: "c7c5", mass: 0.1, rank: 2 },
+    ]);
+    expect(client.calls).toHaveLength(1);
+  });
+
+  it("uses only the final task's candidate window after a sampled-move retry", async () => {
+    let attempts = 0;
+    const client = new FakeEngineClient(() => ++attempts === 1
+      ? maiaLines("g8f6", [{ move: "e7e5", mass: 0.75 }])
+      : maiaLines("c7c5", [{ move: "c7c5", mass: 0.1 }]));
+    const selection = await new OpponentSelector(client).select(request("human_common"));
+    expect(selection.moveUci).toBe("c7c5");
+    expect(selection.candidates?.map(({ moveUci, mass, rank }) => ({ moveUci, mass, rank }))).toEqual([
+      { moveUci: "c7c5", mass: 0.1, rank: 1 },
+    ]);
+    expect(client.calls).toHaveLength(2);
+    expect(client.calls[1]?.request.commands).toEqual(client.calls[0]?.request.commands);
+  });
+
+  it("preserves the selection width floor in positions with fewer than eight legal moves", async () => {
+    const fen = "7k/7p/8/8/8/8/8/K7 w - - 0 1";
+    const client = new FakeEngineClient(() => maiaLines("a1b1", [{ move: "a1b1", mass: 0.4 }]));
+    const selection = await new OpponentSelector(client).select(request("human_common", {
+      startFen: fen, historyUci: [],
+    }));
+    expect(exactLegalMoves(fen)).toHaveLength(3);
+    expect(client.calls[0]?.request.commands).toContain("setoption name MultiPV value 8");
+    expect(selection.moveUci).toBe("a1b1");
+    expect(selection.candidates?.[0]?.mass).toBe(0.4);
+  });
+
+  it("does not merge distinct histories that reach the same position", async () => {
+    const client = new FakeEngineClient(() => maiaLines("e2e4", [{ move: "e2e4", mass: 0.6 }]));
+    const selector = new OpponentSelector(client);
+    const first = request("human_common", { historyUci: ["g1f3", "g8f6", "g2g3", "g7g6", "h2h3", "h7h6"] });
+    const second = request("human_common", { historyUci: ["g2g3", "g7g6", "g1f3", "g8f6", "h2h3", "h7h6"] });
+    const reached = ({ startFen, historyUci }: SelectMoveRequest): string => {
+      const position = Chess.fromSetup(parseFen(startFen).unwrap()).unwrap();
+      for (const uci of historyUci) {
+        const move = parseUci(uci)!;
+        expect(position.isLegal(move)).toBe(true);
+        position.play(move);
+      }
+      return makeFen(position.toSetup());
+    };
+    expect(reached(first)).toBe(reached(second));
+    await selector.select(first);
+    await selector.select(second);
+    expect(client.calls).toHaveLength(2);
+    expect(client.calls[0]?.request.commands).toContain(`position fen ${INITIAL_FEN} moves ${first.historyUci.join(" ")}`);
+    expect(client.calls[1]?.request.commands).toContain(`position fen ${INITIAL_FEN} moves ${second.historyUci.join(" ")}`);
   });
 
   it("uses movetime-limited Stockfish for strong_engine", async () => {
