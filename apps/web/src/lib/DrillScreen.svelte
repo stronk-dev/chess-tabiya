@@ -3,7 +3,7 @@
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
   import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, PRIMARY_EVIDENCE_MANIFEST, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, declareTransitionReadingEvidence, endgameClassification, endgameSetupMatches, evidenceForConsumer, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presentEvidenceItems, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
-  import { onDestroy, onMount, tick, untrack } from "svelte";
+  import { onDestroy, onMount, tick, untrack, type Snippet } from "svelte";
 
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
   import BranchRail from "./BranchRail.svelte";
@@ -112,6 +112,7 @@
     reasoning?: ReasoningPage | undefined;
     comparison?: BranchComparison | undefined;
     comparisonBranchIds?: readonly string[] | undefined;
+    contextActions?: Snippet | undefined;
     simulation?: SimulationResult | undefined;
     busy?: boolean;
     error?: string | undefined;
@@ -202,6 +203,7 @@
     reasoning,
     comparison,
     comparisonBranchIds,
+    contextActions,
     simulation,
     busy = false,
     error,
@@ -373,6 +375,27 @@
   let compareBusy = $state(false);
   let compareError: string | undefined = $state();
   let compareRequest = 0;
+  let exportBusy = $state(false);
+  let exportError: string | undefined = $state();
+  let exportRequest = 0;
+
+  async function exportGame(): Promise<void> {
+    if (exportBusy) return;
+    const request = ++exportRequest;
+    const runId = run.id;
+    const selected = comparisonBranchIds ?? (compareIds.length > 0 ? compareIds : undefined);
+    exportBusy = true;
+    exportError = undefined;
+    try {
+      await onExport(selected === undefined ? undefined : [...selected]);
+    } catch {
+      if (request === exportRequest && run.id === runId) {
+        exportError = "The game export could not be prepared. Your game is unchanged. Try again.";
+      }
+    } finally {
+      if (request === exportRequest && run.id === runId) exportBusy = false;
+    }
+  }
   let rewindBusy = $state(false);
   let rewindFailure: { readonly targetKey: string; readonly text: string } | undefined = $state();
   let rewindRequest = 0;
@@ -2189,7 +2212,7 @@
       return true;
     } else if (event.key.toLowerCase() === "e") {
       event.preventDefault();
-      void onExport(comparisonBranchIds ?? (compareIds.length > 0 ? compareIds : undefined));
+      void exportGame();
       return true;
     } else if (event.key === "Enter" && previewNodeId !== undefined) {
       event.preventDefault();
@@ -2232,6 +2255,7 @@
     checkpointContinueRequest += 1;
     simulationRequest += 1;
     compareRequest += 1;
+    exportRequest += 1;
     rewindRequest += 1;
     rematchRequest += 1;
     branchSwitchRequest += 1;
@@ -2268,6 +2292,9 @@
   $effect(() => {
     if (boardActiveRunId !== run.id) {
       boardActiveRunId = run.id;
+      exportRequest += 1;
+      exportBusy = false;
+      exportError = undefined;
       // Retire navigation owned by the previous run, including unresolved card callbacks.
       rewindRequest += 1;
       rewindBusy = false;
@@ -2350,6 +2377,12 @@
 
 <div class="drill-region" class:reflow={reflowViewport} data-keyboard-region="drill" tabindex="-1" bind:this={regionElement}>
 
+{#snippet exportAction()}
+  <button type="button" aria-label="Export" disabled={exportBusy} aria-describedby={exportBusy ? "drill-export-status" : exportError !== undefined ? "drill-export-error" : undefined} onclick={() => void exportGame()}>{exportBusy ? "Preparing export…" : "Export"} <kbd>E</kbd></button>
+  {#if exportBusy}<span id="drill-export-status" class="action-state" role="status">Preparing this game's PGN with the selected branches.</span>{/if}
+  {#if exportError !== undefined}<span id="drill-export-error" class="action-state error" role="alert">{exportError}</span>{/if}
+{/snippet}
+
 {#if !viewportSupport.supported}
   <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
     <p>More room needed</p>
@@ -2366,6 +2399,8 @@
     step={compareStep}
     onStep={(step) => (compareStep = step)}
     onClose={closeCompare}
+    {exportAction}
+    {contextActions}
     onReplayResistance={onReplayResistance === undefined || comparisonForkNode === undefined ? undefined : (targetElo) => onReplayResistance({ fen: comparisonForkNode!.fen, side: startSide, targetElo })}
     onVoice={onCompareVoice === undefined ? undefined : async () => (await onCompareVoice()).text}
   />
@@ -2767,8 +2802,9 @@
           <button type="button" aria-label={replaying ? "Pause replay" : "Replay"} aria-pressed={replaying} onclick={toggleReplay}>
             {replaying ? "Pause" : "Replay"} <kbd>Space</kbd>
           </button>
-          <button type="button" aria-label="Export" onclick={() => onExport(compareIds.length > 0 ? compareIds : undefined)}>Export <kbd>E</kbd></button>
+          {@render exportAction()}
         </div>
+          {@render contextActions?.()}
           </section>
         </div>
       </aside>

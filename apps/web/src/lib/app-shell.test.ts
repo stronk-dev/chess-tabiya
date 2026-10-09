@@ -626,6 +626,35 @@ describe("application shell", () => {
     if (departure !== "teardown") await unmount(component);
   });
 
+  it.each(["leave", "return", "replace", "teardown"] as const)("retires Play PGN completion after %s", async departure => {
+    history.replaceState(null, "", "/play/run/route-run");
+    const pending = deferred<{ readonly filename: string; readonly text: string }>();
+    const createObjectURL = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:departed-play-export");
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    const router = new HistoryRouter(window);
+    const pgn = vi.fn(() => pending.promise);
+    const component = mount(App, { target: target(), props: { api: { ...api(), pgn }, router, storage: new MemoryStorage() } });
+    const download = await vi.waitFor(() => {
+      const button = document.querySelector<HTMLButtonElement>('button[aria-label="Export"]');
+      expect(button).not.toBeNull();
+      return button!;
+    });
+    download.click();
+    await vi.waitFor(() => expect(pgn).toHaveBeenCalledTimes(1));
+    if (departure === "teardown") await unmount(component);
+    else {
+      router.navigate(departure === "replace" ? "/play/run/other-run" : "/play");
+      await tick();
+      if (departure === "return") { router.navigate("/play/run/route-run"); await tick(); }
+    }
+    pending.resolve({ filename: "departed.pgn", text: "[Event \"Departed\"]\n" });
+    await pending.promise;
+    await tick();
+    expect(createObjectURL).not.toHaveBeenCalled();
+    expect(click).not.toHaveBeenCalled();
+    if (departure !== "teardown") await unmount(component);
+  });
+
   it("owns one Library PGN download and keeps provider failures out of learner copy", async () => {
     history.replaceState(null, "", "/library");
     const failed = deferred<{ readonly filename: string; readonly text: string }>();

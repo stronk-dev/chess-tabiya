@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test";
 
-import { chooseRawRung } from "./play-helpers.js";
+import { chooseRawRung, returnFromRunActions, showRunActions } from "./play-helpers.js";
 
 const PASSWORD = "browser-test-password";
 
@@ -120,10 +120,14 @@ test("two learners alternate a native match, pause to branch, and return to the 
     expect(liveReveal.status()).toBe(409);
     expect((await liveReveal.json()).error.code).toBe("MATCH_LIVE");
 
+    await showRunActions(white.page);
     await white.page.getByRole("button", { name: "Propose pause" }).click();
+    await showRunActions(black.page);
     await expect(black.page.getByRole("button", { name: "Accept pause" })).toBeVisible({ timeout: 4_000 });
     await black.page.getByRole("button", { name: "Accept pause" }).click();
     await expect(white.page.getByLabel("Live session rail")).toContainText("Paused — rehearsal is open", { timeout: 4_000 });
+    await returnFromRunActions(white.page);
+    await returnFromRunActions(black.page);
 
     const graphResponse = await (await white.page.request.get(`/runs/${encodeURIComponent(runId)}/graph`)).json() as { readonly graph: {
       readonly nodes: readonly { readonly id: string; readonly parentId: string | null }[];
@@ -138,7 +142,9 @@ test("two learners alternate a native match, pause to branch, and return to the 
     });
     expect(rewind.ok(), await rewind.text()).toBe(true);
     await white.page.reload();
+    await showRunActions(white.page);
     await expect(white.page.getByLabel("Live session rail")).toContainText("Paused — rehearsal is open");
+    await returnFromRunActions(white.page);
     await play(white.page, "d2", "d4", "white");
     await white.page.getByRole("button", { name: "Branches", exact: true }).click();
     await expect(white.page.getByRole("button", { name: /Switch to branch/ })).toHaveCount(2);
@@ -147,6 +153,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     });
     expect(reveal.ok(), await reveal.text()).toBe(true);
 
+    await showRunActions(white.page);
     await white.page.getByRole("button", { name: "Resume main line" }).click();
     await expect(white.page.getByText("Active line 2 turns")).toBeVisible();
     await expect(white.page.getByLabel("Live session rail")).toContainText("Your move");

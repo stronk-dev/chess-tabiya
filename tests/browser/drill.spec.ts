@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type APIResponse, type Locator, type Page, type TestInfo } from "@playwright/test";
 
-import { chooseBot, chooseRawRung } from "./play-helpers.js";
+import { chooseBot, chooseRawRung, returnFromRunActions, showRunActions } from "./play-helpers.js";
 import { inspectComposition, type CompositionConformance } from "./composition-conformance.js";
 import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
@@ -1957,7 +1957,9 @@ test(`incomplete submitted review inspects a ${fixture.interaction} checkpoint w
   await sheet.getByRole("button", { name: "Inspect recorded moves" }).click();
   await expect(sheet).toHaveCount(0);
   await expect(page.locator(".timeline [aria-current='step']")).toBeFocused();
+  await showRunActions(page);
   await expect(page.getByRole("complementary", { name: "Review access" })).toContainText("Review tools open after this attempt reaches its recorded outcome");
+  await returnFromRunActions(page);
   await page.locator("[data-timeline-node]").first().click();
   await expect(page.locator(".preview-label")).toHaveText("Preview");
   await assertRunViewport(page, viewport);
@@ -2073,7 +2075,9 @@ test(`a completed assigned attempt offers hand-in inside the outcome sheet and r
   await teacherResult.getByRole("button", { name: "Inspect recorded moves" }).click();
   await expect(teacherResult).toHaveCount(0);
   await expect(page.locator(".timeline [aria-current='step']")).toBeFocused();
+  await showRunActions(page);
   await expect(page.getByRole("complementary", { name: "Review access" })).toContainText("Submitted review access");
+  await returnFromRunActions(page);
   const firstRecordedMove = page.locator("[data-timeline-node]").first();
   await firstRecordedMove.click();
   await expect(page.locator(".preview-label")).toHaveText("Preview");
@@ -2977,13 +2981,14 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await spectator.goto(`/play/run/${encodeURIComponent(runId)}`);
   await expect(spectator.getByLabel("Chessboard")).toBeVisible();
   await expect(spectator.getByText("Watching", { exact: true })).toBeVisible();
+  await showRunActions(spectator);
   const reviewAccess = spectator.getByRole("complementary", { name: "Review access" });
   await expect(reviewAccess).toContainText("Review tools open after this attempt reaches its recorded outcome");
   await expect(reviewAccess).toContainText("Read access remains available now");
   await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
-  await spectator.getByRole("button", { name: "Actions", exact: true }).click();
   await expect(spectator.getByRole("button", { name: /^Fork/ })).toBeDisabled();
   await expect(spectator.getByRole("button", { name: "Branch group" })).toBeDisabled();
+  await returnFromRunActions(spectator);
 
   await move(page, "g1", "f3");
   await expect(page.getByText("Active line 3 turns")).toBeVisible();

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3611]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3612]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -30,14 +30,24 @@ they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
 
-Current bounded Review repair ([[D3610]]) is closed locally: a pending PGN export
+Play/Compare export and contextual-banner repairs ([[D3611]]/[[D3612]]) are closed
+locally: 274 mounted cases, clean types and six actual desktop/phone journeys pass.
+Play and Compare share pending/failure/retry, exact branch selection and retired-download
+handling; existing run notices use scrollable Actions/Compare instead of fixed overlapping
+banners. Native pointer access and recorded play remain intact. Complete normal tiers pass
+3,815 software, seven unchanged-budget performance, 228 content and 221 browser cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. The initial
+browser failures and corrected actual Actions navigation remain recorded in the log.
+No whole capability is promoted.
+
+The preceding bounded Review repair ([[D3610]]) is closed locally: a pending PGN export
 cannot start a download after its originating view is departed/replaced, including return
 to the same game. Four predecessor-red mounted controls and actual desktop/phone failure,
 retry, delayed completion and fresh export journeys establish the boundary while preserving
 recorded play. All 148 focused cases/types and complete normal verification pass: 3,808
 software, seven unchanged-budget performance, 228 content and 215 browser cases, one optional
-Maia skip, zero retries, all 150 input/112 composition cells. Play/Compare's separate pending,
-failure and departed-export gap is now assigned as D3611. No whole capability is promoted.
+Maia skip, zero retries, all 150 input/112 composition cells. D3611 above subsequently closes
+the separate Play/Compare pending, failure and departed-export gap. No whole capability is promoted.
 
 The product is a substantial development build, **not a finished 1.0 or release candidate**.
 The core rehearsal loop is the most mature journey. Major surfaces now execute real backend
@@ -54,7 +64,7 @@ percentage: completed components do not establish a complete learner journey.
 | Area | Implemented | Still required for full 1.0 |
 |---|---|---|
 | Work tracking | Durable states, named owners, executable queues and checked roadmap joins | Keep completion tied to product proof; repair weak historical closeouts and stale narrative, not just consistent registers |
-| Evidence foundation | Typed rules, structural/tactical/recorded-window facts; provider exchange; candidate population; exact presentation bindings | Complete source authority and consumer execution, runtime opening evidence, remaining operand fidelity and validated deeper consequence search |
+| Evidence foundation | Typed rules, structural/tactical/recorded-window facts; provider exchange; candidate population; exact presentation bindings | Complete source authority and consumer execution, runtime opening adoption in modules/Review, remaining operand fidelity and validated deeper consequence search |
 | Rehearsal | Start, commit, opponent consequence, rewind, fork, compare, replay, resume and multiple drill forms | Complete opinionated arrival/return paths and official examples for each form |
 | Support | Eleven registered modules; real module queries; named help styles; staged-risk warning, threat cards, progressive Hint and explicit Inspector | Finish all source/module joins, ceiling/default discharges, Inspector migrations and all-context usefulness/latency/device proof |
 | Review | Move timeline, grounded grades, moments, eval graph, explicit Analyze, retry, compare, Story and sharing | Complete cross-source explanation, missing source families, theory/drill connections and the same review/return journey from every game origin |
@@ -194,16 +204,18 @@ source/compiler digest leaves even when the outer digest is valid. Six observed 
 tests and the actual build/catalogue check establish that repair. [[D3376]]'s installed-source/factory/
 module/Review contract is now drafted, **not accepted or implemented**.
 
-**The final local normal tiers pass:** clean types/build, 3,808 software cases / 354 files,
+**The final local normal tiers pass:** clean types/build, 3,815 software cases / 354 files,
 seven isolated performance cases / four files, governance, 228 content cases / 23 files and
-215 browser cases (150 smoke, five content, 59 matrix, one packaged-default). One existing
+221 browser cases (156 smoke, five content, 59 matrix, one packaged-default). One existing
 optional Maia case is skipped; zero retries; all 150 input and 112 composition cells pass.
-Normal `make roadmap-receipt verify-awake test-browser-ci-awake` passes on final product/test
-sources for D3610, including actual Review export failure/retry and delayed-completion recovery;
-the complete D3608/D3609 private authoring/publication journeys also pass.
+Normal `make roadmap-receipt verify-awake test-browser-ci-awake` passes types/build,
+software/performance/content/governance on final product/software-test sources for D3611/D3612.
+Its first browser run is stopped after six classroom navigation failures; browser-only adaptations
+then pass the complete `make test-browser-ci-awake` rerun. Play/Compare exports, prior Review
+exports and complete D3608/D3609 private authoring/publication journeys pass.
 The preceding Campaign run's post-seal assertion correction from Unlocks to
 Unlocked and first smoke failure remain recorded in the log. Warm native
-arrival measures median 89.1 ms / p95 105.1 ms,
+arrival measures median 90.7 ms / p95 110.6 ms,
 with one saved-pack read and 26 shape requests. The earlier D3598 run's 253.8 ms arrival failure
 against 250 ms ([[D3600]]) remains open; this pass does not diagnose or repair it.
 No production source or budget changed after the software/content pass. This is local verification,
@@ -412,8 +424,8 @@ scaffold cases plus actual Compose packaging. No new GitHub result or milestone 
 
 Current accounting after this closeout: **73 active product RFCs** (21 draft, 42 implementing,
 10 awaiting); **75 archived implemented RFCs** and one archived superseded RFC; **569 UX items**
-(271 completed, 24 retired, 274 live); **3,343 ledger rows** (1,475 done, 161 refused, 1,707 live,
-zero untriaged). Of the live ledger, 628 are todo, thirteen doing and 1,066 blocked. The 462 historical
+(271 completed, 24 retired, 274 live); **3,361 ledger rows** (1,492 done, 161 refused, 1,708 live,
+zero untriaged). Of the live ledger, 628 are todo, fourteen doing and 1,066 blocked. The 462 historical
 prose-only closeouts remain weaker evidence, not newly reverified delivery. The nine strict 1.0
 milestones remain four active and five blocked; none is fully complete. Across 14 capabilities,
 only two of 112 dimensions are proven (tracking state and rehearsal state), not two complete

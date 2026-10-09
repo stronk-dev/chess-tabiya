@@ -2,7 +2,7 @@
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import { comparisonPresentedEngineTrajectory, comparisonNarrative, comparisonStrips, declareStructuralReadingEvidence, evidenceForConsumer, materialBalanceAt, packAbsentEvidenceRef, presentEvidenceItems, PRIMARY_EVIDENCE_MANIFEST, type BranchComparison, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
-  import { onDestroy, onMount } from "svelte";
+  import { onDestroy, onMount, type Snippet } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
   import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
@@ -31,11 +31,13 @@
     step: number;
     onStep: (step: number) => void;
     onClose: () => void;
+    exportAction?: Snippet | undefined;
+    contextActions?: Snippet | undefined;
     onVoice?: (() => Promise<string>) | undefined;
     onReplayResistance?: ((targetElo: 1000 | 1400 | 1800 | 2200) => void | Promise<void>) | undefined;
   }
   const CANDIDATE_BRUSHES = ["green", "blue", "yellow", "red"] as const;
-  let { run, pack, comparison, startSide, step, onStep, onClose, onVoice, onReplayResistance }: Props = $props();
+  let { run, pack, comparison, startSide, step, onStep, onClose, exportAction, contextActions, onVoice, onReplayResistance }: Props = $props();
   let maxStep = $derived(comparison.rows.length);
   let heading: HTMLHeadingElement;
   let inspectorOpen = $state(false);
@@ -256,10 +258,13 @@
   <header>
     <div><p>Branch comparison</p><h2 id="compare-title" tabindex="-1" bind:this={heading}>Same decision, {comparison.columns.length === 2 ? "two" : comparison.columns.length} consequences.</h2></div>
     <div class="header-actions">
+      {@render exportAction?.()}
       <button type="button" onclick={openInspector}>Evidence inspector</button>
       <button type="button" onclick={onClose}>Close comparison</button>
     </div>
   </header>
+
+  {@render contextActions?.()}
 
   <div class="zoom-control" aria-label="Comparison detail">
     <button type="button" aria-pressed={zoom === "far"} onclick={() => (zoom = "far")}>Overview</button>

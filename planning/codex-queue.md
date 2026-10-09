@@ -12,11 +12,24 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
-Next accepted-workflow repair: [[D3611]] completes the same existing PGN action in Play/Compare,
-where the button and E shortcut still lack a pending owner, handled failure and departed-download
-guard. Capture the exact run/branch selection, reproduce the failure/duplicate/lifetime cases,
-then prove retry and unchanged recorded play through the actual desktop/phone board. D3610's
-Review repair does not close this separate caller; do not treat the shared saver as lifecycle proof.
+[[D3611]]/[[D3612]] are closed locally: Play/Compare share one PGN export action with
+captured branch selection, explained pending state, safe retry and retired departed downloads.
+Existing contextual run notices use scrollable Actions/Compare flow rather than fixed overlapping
+banners; Campaign's strip is unchanged. All 274 focused mounted cases/types and six actual
+desktop/phone export journeys pass, with legal exported movetext/player headers and unchanged
+recorded play. Complete normal tiers pass 3,815 software, seven unchanged-budget performance,
+228 content and 221 browser cases, one optional Maia skip, zero retries, all 150 input/112
+composition cells. The first browser run's six classroom navigation failures remain recorded;
+the complete browser rerun passes after adapting tests to the actual Actions region.
+
+Next accepted foundation work: re-derive [[D1700]]/[[D1701]] against implementing
+`provider-exchange-and-execution` and the actual mixed local/provider consumer paths. The
+execution compiler and individual preflights already ship; D3403's census and D3404's Guided
+Hint preflight are closed, not new implementation jobs. Locate remaining runtime joins and
+implement only admitted work; distinguish compiled declarations, actual adoption and exact-subject
+availability. Do not launder held opening/Stockfish/Maia/Inspector sources, accept a draft or
+declare whole-manifest completion from a passing census. Official content, calibrated bots,
+full Campaign and release-image proof remain the broader critical path.
 
 [[D3610]] is closed locally under the existing Review/import export contract:
 Review PGN completion belongs to its original app/view lifetime, including leave-and-return.
@@ -27,7 +40,7 @@ download journeys pass, retaining the exported player headers and all recorded p
 focused cases/types and complete normal gates pass: clean types/build, 3,808 software, seven
 unchanged-budget performance, 228 content and 215 browser cases, one optional Maia skip, zero
 retries, all 150 input/112 composition cells. No new export format or whole Review completion;
-D3611 remains a separate next implementation, and D3591/D3600 timing causes remain open.
+D3611's subsequent repair is recorded above, and D3591/D3600 timing causes remain open.
 
 [[D3608]]/[[D3609]] are closed locally under the existing pack-studio contract:
 Register requires the saved document to match the editor, retains both blocker grammars

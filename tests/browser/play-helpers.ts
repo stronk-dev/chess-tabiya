@@ -1,4 +1,17 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+
+/** Contextual run actions live in the companion, never over the board. */
+export async function showRunActions(page: Page): Promise<void> {
+  await expect(page.getByLabel("Chessboard").first()).toBeVisible();
+  const actions = page.getByRole("region", { name: "Run actions", exact: true });
+  if (!await actions.isVisible()) await page.getByRole("button", { name: "Actions", exact: true }).click();
+  await expect(actions).toBeVisible();
+}
+
+export async function returnFromRunActions(page: Page): Promise<void> {
+  const collapse = page.getByRole("button", { name: "Collapse companion", exact: true });
+  if (await collapse.isVisible()) await collapse.click();
+}
 
 /**
  * Play preselects no opponent (the first-use default is the owner's D1611 decision), and raw Maia

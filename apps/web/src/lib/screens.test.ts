@@ -279,6 +279,58 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it.each(["button", "shortcut"] as const)("exports the displayed comparison selection through the %s", async input => {
+    const run = branchedRun();
+    const selected = run.branches.map(branch => branch.id).reverse();
+    const onExport = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      pack, snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      comparison: compareBranches(run, selected), comparisonBranchIds: selected,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport, onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    if (input === "button") {
+      const button = document.querySelector<HTMLButtonElement>('button[aria-label="Export"]');
+      expect(button).not.toBeNull();
+      button!.click();
+    }
+    else key("e");
+    expect(onExport).toHaveBeenCalledExactlyOnceWith(selected);
+    await unmount(component);
+  });
+
+  it("owns Play PGN pending, duplicate shortcut, failure and retry without changing play", async () => {
+    const run = branchedRun();
+    const pending = deferred<void>();
+    const onExport = vi.fn().mockImplementationOnce(() => pending.promise).mockResolvedValueOnce(undefined);
+    const onMove = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      pack, snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove, onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport, onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    try {
+      await tick();
+      const button = document.querySelector<HTMLButtonElement>('button[aria-label="Export"]')!;
+      button.click();
+      await tick();
+      expect(button.disabled).toBe(true);
+      expect(document.getElementById(button.getAttribute("aria-describedby")!)?.textContent).toContain("Preparing");
+      key("e");
+      button.click();
+      expect(onExport).toHaveBeenCalledTimes(1);
+      pending.reject(new Error("private export storage detail"));
+      await vi.waitFor(() => expect(document.getElementById("drill-export-error")?.textContent).toContain("Try again"));
+      expect(document.body.textContent).not.toContain("private export storage detail");
+      expect(button.disabled).toBe(false);
+      key("e");
+      await vi.waitFor(() => expect(onExport).toHaveBeenCalledTimes(2));
+      await vi.waitFor(() => expect(document.getElementById("drill-export-error")).toBeNull());
+      expect(onMove).not.toHaveBeenCalled();
+    } finally { pending.resolve(); await unmount(component); }
+  });
+
   it("renders an unresolved checkpoint without exposing its storage id", async () => {
     let run = createRun({
       id: "checkpoint-copy-run",

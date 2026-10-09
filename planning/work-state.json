@@ -29893,11 +29893,21 @@
     },
     {
       "id": "D3611",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:82051dfcbb6486595d53802eba72c854adae14f41b7e6c60c6e6e72061b65bfe",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6134391b78e8c0eaf51a0da390d0e55ad0e1c914935cf262873c783aa86f189b",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "tests/browser/play-export.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3612",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fd2c442c1bb62dcf804c7e208aea2046bbb7f3424024d6ba5b59fe2a0edc63dc",
+      "uxItems": [],
+      "evidence": "tests/browser/play-export.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

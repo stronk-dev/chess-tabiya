@@ -3636,6 +3636,13 @@ review-navigation-browser-check:
 review-export-browser-check:
 	./node_modules/.bin/playwright test tests/browser/review-export.spec.ts
 
+.PHONY: play-export-check play-export-browser-check
+play-export-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/app-shell.test.ts
+
+play-export-browser-check:
+	./node_modules/.bin/playwright test tests/browser/play-export.spec.ts
+
 .PHONY: review-arrival-browser-check
 review-arrival-browser-check:
 	./node_modules/.bin/playwright test --grep "arrival readiness measurements|Guided Nudge branches|cited profile move|completed bot game rematches"

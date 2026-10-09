@@ -349,6 +349,19 @@ digest, export merges authored spine content with the selected played
 branches. Otherwise it uses the runtime's ordinary run export. Unknown branch
 IDs are rejected by the runtime rather than silently omitted.
 
+Play and Compare share one Export action, available by button and `E`. While a
+download is being prepared, the action is disabled with an associated status;
+duplicate button/shortcut requests do not start another read. Compare exports
+its displayed branch selection, captured when the action starts. Failures offer
+a safe retry without exposing private server diagnostics or changing recorded
+play. A completed response cannot start a download after leaving the originating
+run view, including leaving and returning to the same run or app teardown.
+
+Contextual Story, review-access, Live, Distill and opposite-side replay notices
+render in the scrollable Actions region, or in Compare's normal document flow.
+They no longer stack as fixed bottom-right overlays over the board/actions.
+Campaign's separately owned encounter strip is unchanged by this placement.
+
 ## Typed browser transport and writer identity
 
 `DrillApi` is the typed client for the complete v1 surface: capabilities,

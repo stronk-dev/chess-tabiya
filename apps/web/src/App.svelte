@@ -1735,7 +1735,12 @@
   }
 
   async function exportPgn(branchIds?: readonly string[]): Promise<void> {
-    savePgn(await controller.exportPgn(branchIds));
+    const generation = loadGeneration;
+    const runId = session.runState?.run.id;
+    const download = await controller.exportPgn(branchIds);
+    if (appMounted && generation === loadGeneration && route.name === "run" && route.runId === runId && session.runState?.run.id === runId) {
+      savePgn(download);
+    }
   }
 
   async function exportRunPgn(runId: string): Promise<void> {
@@ -2829,24 +2834,14 @@
         repertoireAnswerError={activeRepertoireGap===undefined?undefined:repertoireAnswerErrors[activeRepertoireGap.gap.key]}
         onChooseRepertoireAnswer={chooseRepertoireAnswer}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
-      />
+      >
+      {#snippet contextActions()}
+      {#if session.runState}
       {#if session.viewer?.role === "spectator"}
         <aside class="session-banner" aria-label="Review access"><strong>{session.viewer.reviewRail === "open" ? "Submitted review access" : "Review access limited"}</strong><span>{reviewRailCopy(session.viewer.reviewRail)}</span></aside>
       {/if}
       {#if activeLiveDetail}
         <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong>{#if activeLiveDetail.match}{@const seated=learner?.id===activeLiveDetail.match.whiteLearnerId||learner?.id===activeLiveDetail.match.blackLearnerId}<span>{activeLiveDetail.match.pausedAt?"Paused — rehearsal is open":activeLiveDetail.match.pauseProposedBy?"Pause proposed":learnerOwnsActiveMatchTurn()?"Your move":"Their move"}</span><div class="row-actions">{#if activeLiveDetail.match.pausedAt}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("resume")}>Resume main line</button>{:else if seated}{#if activeLiveDetail.match.pauseProposedBy===learner?.id}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("withdraw_pause")}>Withdraw pause</button>{:else if activeLiveDetail.match.pauseProposedBy}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("accept_pause")}>Accept pause</button>{:else}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("propose_pause")}>Propose pause</button>{/if}{:else if activeLiveDetail.role==="host"}<button type="button" disabled={activeMatchActionBusy!==undefined} aria-describedby={activeMatchActionBusy!==undefined?"active-match-action-busy":undefined} onclick={()=>void operateActiveMatch("pause")}>Pause for coaching</button>{/if}</div>{#if activeMatchActionBusy!==undefined}<span id="active-match-action-busy" role="status">Updating the match…</span>{/if}{#if activeMatchActionError}<span role="alert">{activeMatchActionError}</span>{/if}{:else}<span>{liveRoleLabel(activeLiveDetail.role)} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span>{/if}<button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
-      {/if}
-      {#if session.campaignOrigin}
-        <CampaignStrip
-          bind:this={campaignStrip}
-          campaigns={campaignApi}
-          origin={session.campaignOrigin}
-          runId={session.runState.run.id}
-          branchId={session.runState.run.activeCursor.branchId}
-          runRevision={session.runState.run.events.length}
-          onNavigate={navigate}
-          onRevision={(state) => { campaignCharge = state === null ? undefined : { runId: session.runState!.run.id, campaignRevision: state.campaignRevision }; }}
-        />
       {/if}
       {#if session.runState.run.sessionKind === "imported"}
         <aside class="session-banner" aria-label="Imported game story"><strong>Imported game</strong><span>The original continuation and your branches share one run.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
@@ -2861,6 +2856,21 @@
         <aside class="session-banner" aria-label="Opposite-side replay source"><strong>Opposite-side replay</strong><span>Mirror of the source run from its recorded position.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.source!.sourceRunId }))}>Open source</button></aside>
       {:else if derivations && derivations.derived.length > 0}
         <aside class="session-banner" aria-label="Opposite-side replays"><strong>Mirrored attempts</strong><span>{derivations.derived.length} opposite-side {derivations.derived.length === 1 ? "run" : "runs"}.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.derived[0]!.derivedRunId }))}>Open replay</button></aside>
+      {/if}
+      {/if}
+      {/snippet}
+      </DrillScreen>
+      {#if session.campaignOrigin}
+        <CampaignStrip
+          bind:this={campaignStrip}
+          campaigns={campaignApi}
+          origin={session.campaignOrigin}
+          runId={session.runState.run.id}
+          branchId={session.runState.run.activeCursor.branchId}
+          runRevision={session.runState.run.events.length}
+          onNavigate={navigate}
+          onRevision={(state) => { campaignCharge = state === null ? undefined : { runId: session.runState!.run.id, campaignRevision: state.campaignRevision }; }}
+        />
       {/if}
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
@@ -3490,7 +3500,7 @@
   .auth-notice { max-width: 44rem; color: var(--ink); }
   .public-landing :global(#position-catalogue) { height: auto; min-height: 100%; overflow: visible; }
   .claim-banner { position: fixed; z-index: 20; top: 4rem; right: 1rem; display: flex; gap: 0.7rem; align-items: center; padding: 0.6rem; background: var(--panel); border: 1px solid var(--line); border-radius: 0.7rem; }
-  .session-banner { position: fixed; z-index: 21; right: 1rem; bottom: 1rem; display: grid; gap: 0.25rem; padding: 0.7rem; max-width: 18rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--panel); box-shadow: var(--shadow); font-size: 0.8rem; }
+  .session-banner { display: grid; gap: 0.25rem; min-width: 0; margin-block: 0.5rem; padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--panel); font-size: 0.8rem; overflow-wrap: anywhere; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
   .settings-toc { position: sticky; z-index: 2; top: 0; display: flex; flex-wrap: wrap; gap: .45rem; padding: .65rem; border: 1px solid var(--line); border-radius: .75rem; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(.5rem); }
