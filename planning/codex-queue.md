@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3621]] is closed locally: existing voice, speech and reasoning-review doors recheck current
+read/grant/disclosure/subject and cancellation after provider I/O. Authorization cannot become
+retry/fallback or successful empty review; rejected late voice text cannot enter the speech cache.
+All 99 focused software/39 content cases, clean types/build and complete normal gates pass:
+4,022 software, seven unchanged-budget performance, 237 content and 225 browser cases,
+one optional Maia skip, zero retries and all 112 composition cells. Existing scopes, ceilings,
+two-attempt total budget and independent health remain; held provider/displayed-text contracts
+are not bypassed. D1700/D1701's accepted runtime integration remains next, alongside independent
+review of the already-authored source contracts below. No whole capability or release promotion.
+
 2026-10-09 authoring advance: [[D3370]] and [[D3363]] now have one bounded draft,
 `rfc/maia-task-source.md`, rather than an unowned instruction to invent sampler semantics.
 It retains actual terminal selection separately from reported rows, current retry/width/history

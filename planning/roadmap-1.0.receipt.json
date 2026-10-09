@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bd749cc5d7ef306f39dc15da5d54c61f8248b8e9b2048ddbb617434873fe92a8",
+    "roadmap": "sha256:29761bed6bdda4c153b26aecab6985e43018f9d7516338239856845efbb709f6",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:df2457c9ff43a3cc943383508aae002b7a10e4d9ca9f47366b575735bfaf7773",
+    "workState": "sha256:def8cef99af1133a2ec766b5880a9be20e2f788f1186974b1fe8ab3b8a317e45",
     "rfcRegister": "sha256:b1156361941ec577a07d9118312c75c896d04783c9bb1f015d924d736d228f5e",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
-    "rest": "sha256:3e9d1c0425ba2ebc76840d7229cca7a1155200817b192d92353af433c2fc2bc8"
+    "rest": "sha256:f6e50e9cabfbf4ec9a8302356dbeab1be138559ab0251bdd3144708ad8ec40df"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1067,
-      "done": 1499,
+      "done": 1500,
       "refused": 161
     },
     "workItems": {
@@ -76,10 +76,12 @@
       "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3614's complete normal sequence passes clean types/build, 3834 software cases/354 files, seven unchanged-budget performance cases/four files, governance/packaging, 228 content cases/23 files and 225 browser passes (160 smoke, five content, 59 matrix, one packaged-default). One optional Maia skip, zero retries, all 150 input/112 composition cells. Its 82 focused Campaign/modal cases and eight desktop/phone preparation journeys establish canonical help choice, recovery, unchanged kit/revision and recorded play. D3613 execution preflight, Play/Compare exports, Review, Studio, Campaign, Profile and return repairs remain delivered. Native warm arrival is median 104.9 ms/p95 171.5 ms; original D3591/D3600 timing causes remain unlocated. All live rows are assigned, 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
+        "summary": "D3621's complete normal local sequence passes clean types/build, 4022 software cases/359 files, seven unchanged-budget performance cases/four files, governance/packaging, 237 content cases/23 files and 225 browser passes (160 smoke, five content, 59 matrix, one packaged-default). One optional Maia skip, zero retries, all 150 input/112 composition cells. Actual authenticated narration controls establish refusal after grant/disclosure/subject changes, cancellation and rejected-cache reuse; prior execution preflight, special-move evidence, Play/Compare exports, Review, Studio, Campaign, Profile and return repairs remain delivered. Native warm arrival is median 104 ms/p95 146.8 ms; original D3591/D3600 timing causes remain unlocated. All live rows are assigned, 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
         "impact": "held",
         "evidence": [
           "rfc/concept-registry.md",
+          "apps/server/src/guidance-lifetime.test.ts",
+          "apps/server/src/guidance.test.ts",
           "apps/server/src/concept-registry-closure.test.ts",
           "Makefile",
           ".github/workflows/verify.yml",
@@ -1196,10 +1198,14 @@
       ],
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Preserve D3592/D3593's native readiness, one-shot hydration and authoritative access/reload controls. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-08",
-        "summary": "D3592/D3593 close locally after final sequential normal verification. Native warm arrival is median 93.5 ms/p95 150.8 ms across five samples below unchanged 250 ms; the old automation envelope remains separate and invalid/over-budget controls pass. Local navigation consumes its exact saved attachment once, reducing saved-pack/shape hydration from two sets to one. Server access/origin and pending reasoning still refresh; reload, later returns, changed/non-writer/live contexts, lost leases and departed responses remain safe. Observed predecessor controls, owner sharing and real saved-pack reload pass. Final gates pass clean types/build, 3678 software, seven performance, 228 content and 191 browser cases, one optional Maia skip, zero retries, all 150 input and 112 composition cells. D3591's original stall, source/Inspector/preset/owner-use and historical intermittent holds remain. No whole capability, milestone, remote CI or 1.0 completion.",
+        "at": "2026-10-09",
+        "summary": "D3621 closes locally: asynchronous voice, speech and reasoning review recheck current read grant, role/disclosure and captured subject after provider work; cancellation reaches providers and authority failure cannot become retry, fallback or successful empty output. Rejected late voice text cannot enter the speech cache. All 99 focused software/39 content cases and complete normal gates pass: clean types/build, 4022 software cases/359 files, seven unchanged-budget performance cases, 237 content cases and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. Native warm arrival measures median 104 ms/p95 146.8 ms below the unchanged 250 ms budget; prior one-shot hydration and authoritative return controls remain established. Source/Inspector/preset/owner-use, D3591/D3600's original timing causes and historical intermittent holds remain. No whole capability, milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/guidance-lifetime.test.ts",
+          "apps/server/src/guidance.test.ts",
+          "apps/server/src/rest.ts",
+          "docs/adaptive-guidance.md",
           "apps/web/src/App.svelte",
           "apps/web/src/lib/app-shell.test.ts",
           "apps/web/src/lib/session-controller.ts",

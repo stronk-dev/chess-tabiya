@@ -177,6 +177,14 @@ chess nouns and judgments, and a closed set of prescriptive verbs. One failed re
 retried; a second failure returns the byte-identical deterministic sentence set. Output is
 ephemeral and never becomes evidence.
 
+Voice (including Compare), speech, and reasoning review recheck the current read grant,
+role, disclosure window and captured run/node context after provider work and before delivery.
+A changed context refuses the late answer; rejected voice text is not remembered for speech.
+Request cancellation reaches the provider, and an authorization failure cannot become a retry,
+deterministic fallback or empty successful reasoning review. Voice and reasoning review retain
+their existing two-attempt, four-second total budgets. This does not register new provider
+operations or complete the broader provider/source migration.
+
 The checker is deliberately necessary but insufficient: paraphrased advice can evade any closed
 word list. A known passing leak remains a test fixture so this limit cannot be mistaken for a
 proof. The real safeguards are sparse explicit invocation, a packet-only prompt, a persona with

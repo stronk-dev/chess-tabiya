@@ -105,22 +105,32 @@ export function appendRecordedReadings(text: string, packet: EvidencePacket): st
   return appendReadingSentences(text, recordedReadingSentences(packet));
 }
 
-export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading", extra: readonly DeclaredEvidence<unknown>[] = [], includePacket = true, budgetMs = VOICE_OPERATION_BUDGET_MS): Promise<{ readonly text: string; readonly source: "provider" | "deterministic"; readonly recordedReadingsPresent: boolean }> {
+export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading", extra: readonly DeclaredEvidence<unknown>[] = [], includePacket = true, budgetMs = VOICE_OPERATION_BUDGET_MS, lifetime: { readonly signal?: AbortSignal; readonly recheck?: () => void } = {}): Promise<{ readonly text: string; readonly source: "provider" | "deterministic"; readonly recordedReadingsPresent: boolean }> {
+  const recheck = (): void => { lifetime.signal?.throwIfAborted(); lifetime.recheck?.(); };
+  recheck();
   const view = voiceEvidenceView(packet, scope, extra, includePacket);
   const deterministic = view.rendered.items.flatMap((item) => item.sentences).join("\n");
   const readingSentences = recordedReadingSentences(packet);
   const recordedReadingsPresent = readingSentences.length > 0;
   // One total deadline covers both attempts (rfc/provider-health-degradation.md §5): the second
   // attempt inherits what the first left and never starts a fresh timeout.
-  const deadline = AbortSignal.timeout(Math.max(1, budgetMs));
+  const timeout = AbortSignal.timeout(Math.max(1, budgetMs));
+  const deadline = lifetime.signal === undefined ? timeout : AbortSignal.any([timeout, lifetime.signal]);
   for (let attempt = 0; attempt < 2 && !deadline.aborted; attempt += 1) {
+    recheck();
+    let validOutput: string | undefined;
     try {
       const output = await provider.render(view, persona, deterministic, scope, deadline);
-      if (voiceCheck(view.rendered, output).valid) return Object.freeze({ text: appendReadingSentences(output, readingSentences), source: "provider", recordedReadingsPresent });
+      if (voiceCheck(view.rendered, output).valid) validOutput = output;
     } catch {
       // A provider failure opens its circuit; the next attempt is refused at once, so the
       // deterministic fallback below is reached inside the same budget.
     }
+    // Authority failure is not a provider failure: it must escape before retry, publication or
+    // deterministic fallback, including when the transport ignored cancellation.
+    recheck();
+    if (validOutput !== undefined) return Object.freeze({ text: appendReadingSentences(validOutput, readingSentences), source: "provider", recordedReadingsPresent });
   }
+  recheck();
   return Object.freeze({ text: appendReadingSentences(deterministic, readingSentences), source: "deterministic", recordedReadingsPresent });
 }

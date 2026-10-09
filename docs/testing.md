@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make narration-lifetime-check` checks delayed voice/speech through actual REST authority and
+composed HTTP grants, then reasoning review in the separate content tier and workspace types.
+It covers disclosure/position changes, revocation, demotion, shared-run deletion, cancellation,
+retry/fallback and rejected voice-cache reuse. These permanent cases also run in ordinary
+software/content CI. Controlled providers test the application's delivery boundary, not the
+quality or availability of an external LLM/TTS service.
+
 `make studio-publication-check` covers mounted Studio publication, JSON-content equality, both
 graduation blocker grammars, structured publication-error parsing and the server's existing
 immutable community-version contract, then checks workspace types. `make studio-publication-browser-check`

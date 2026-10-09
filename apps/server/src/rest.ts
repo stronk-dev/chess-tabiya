@@ -194,6 +194,22 @@ function requireGuidanceDisclosure(access: GuidanceAccess): void {
   }
 }
 
+/** Re-read the existing authority; a late answer never belongs to a newer disclosure/subject. */
+function guidanceDeliveryRecheck(request: Request, service: RunService, principal: Principal, access: GuidanceAccess): () => void {
+  const image = (current: GuidanceAccess): string => JSON.stringify([
+    current.node, current.run.sessionDigest, current.run.packDigest,
+    current.run.events.length, current.run.activeCursor, current.historyUci, current.branchSeed,
+    current.role, current.workflowContext, current.seatedInContest, current.reviewing,
+  ]);
+  const original = image(access);
+  return () => {
+    request.signal.throwIfAborted();
+    const current = service.guidanceAccess(access.run.id, principal, access.node.id);
+    requireGuidanceDisclosure(current);
+    if (image(current) !== original) throw new ServerError("ASSISTANCE_WITHHELD", "Guidance no longer matches the current disclosure and position");
+  };
+}
+
 function record(value: unknown, label = "body"): Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw invalid(`${label} must be a JSON object`);
@@ -1903,17 +1919,29 @@ export function createRestHandler(
         if (reasoningReviewProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external reasoning review provider is configured");
         const body = closedRecord(value, "/", ["checkpointEventSeq"]);
         const access = service.reasoningReviewAccess(route.runId, principal, requiredSafeInteger(body.checkpointEventSeq, "checkpointEventSeq"));
-        requireGuidanceDisclosure(service.guidanceAccess(route.runId, principal, access.node.id));
+        const guidance = service.guidanceAccess(route.runId, principal, access.node.id);
+        requireGuidanceDisclosure(guidance);
+        const recheck = guidanceDeliveryRecheck(request, service, principal, guidance);
         const reviewRequest = Object.freeze({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
         // One total deadline for both attempts; a provider failure is the typed unavailable outcome,
         // never rewritten to a valid external empty answer ([[D2575]]).
-        const reviewDeadline = AbortSignal.timeout(4_000);
+        const reviewDeadline = AbortSignal.any([AbortSignal.timeout(4_000), request.signal]);
         let providerAnswered = false;
         let lastFailure: unknown;
         for (let attempt = 0; attempt < 2 && !reviewDeadline.aborted; attempt += 1) {
+          recheck();
+          let raw: string | undefined;
           try {
-            const raw = await reasoningReviewProvider.review(reviewRequest, reviewDeadline);
+            raw = await reasoningReviewProvider.review(reviewRequest, reviewDeadline);
             providerAnswered = true;
+          } catch (error) {
+            if (!(error instanceof SyntaxError) && !(error instanceof ServerError && error.code === "INVALID_REQUEST")) lastFailure = error;
+            else providerAnswered = true;
+          }
+          // Never catch revoked access as malformed/provider output and then retry or return [].
+          recheck();
+          if (raw === undefined) continue;
+          try {
             const parsed = JSON.parse(raw) as unknown;
             if (!Array.isArray(parsed)) continue;
             const proposals = parsed.map((item) => {
@@ -1929,6 +1957,7 @@ export function createRestHandler(
             else providerAnswered = true;
           }
         }
+        recheck();
         if (!providerAnswered) {
           if (lastFailure instanceof ServerError) throw lastFailure;
           throw new ServerError("VOICE_UNAVAILABLE", "The reasoning review provider did not answer", { details: { retryAfterMs: 0 } });
@@ -1946,18 +1975,22 @@ export function createRestHandler(
           const comparison = service.compare(route.runId, principal, body.branches as string[]);
           const access = service.guidanceAccess(route.runId, principal, comparison.forkNodeId);
           requireGuidanceDisclosure(access);
+          const recheck = guidanceDeliveryRecheck(request, service, principal, access);
           const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
           const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
-          const rendered = await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false);
+          const rendered = await renderVoice(voiceProvider, base, voicePersona, "compare", narrative.evidence, false, undefined, { signal: request.signal, recheck });
+          recheck();
           displayedVoice.remember(route.runId, comparison.forkNodeId, "compare", rendered.text);
           return json(200, { ...rendered, scope });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
+        const recheck = guidanceDeliveryRecheck(request, service, principal, access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
-        const rendered = await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra);
+        const rendered = await renderVoice(voiceProvider, basePacket, voicePersona, scope as VoiceScope, extra, true, undefined, { signal: request.signal, recheck });
+        recheck();
         displayedVoice.remember(route.runId, access.node.id, scope, rendered.text);
         return json(200, { ...rendered, scope });
       }
@@ -1969,6 +2002,7 @@ export function createRestHandler(
         if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         requireGuidanceDisclosure(access);
+        const recheck = guidanceDeliveryRecheck(request, service, principal, access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document, packEvidence: access.pack.positionEvidence }), authored: service.authoredFeedback(route.runId, principal), phaseSources: phaseSourcesFor(access.pack), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.storyEvidence(route.runId, principal) : undefined;
         const extra = story === undefined ? [] : storyDeclaredEvidence(story, access.node.id);
@@ -1978,7 +2012,9 @@ export function createRestHandler(
         // it speaks the text this server already rendered and displayed for this run/node/scope,
         // or the deterministic rendering when nothing else was displayed.
         const checkedText = displayedVoice.recall(route.runId, access.node.id, scope) ?? appendRecordedReadings(deterministic, basePacket);
-        const audio = await ttsProvider.synthesize(checkedText);
+        recheck();
+        const audio = await ttsProvider.synthesize(checkedText, request.signal);
+        recheck();
         return new Response(Uint8Array.from(audio.bytes).buffer, { status: 200, headers: { "content-type": audio.contentType, "cache-control": "no-store" } });
       }
       if (route.action === "share") {

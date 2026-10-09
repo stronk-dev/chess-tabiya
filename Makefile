@@ -1772,6 +1772,15 @@ theory-binding-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-execution.test.ts packages/runtime/src/module-query.test.ts apps/server/src/provider-corpus.test.ts apps/server/src/module-query.test.ts apps/server/src/explorer-summary-voice.test.ts
 
 .PHONY: local-module-execution-check
+.PHONY: narration-lifetime-check narration-lifetime-content-check
+narration-lifetime-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/guidance-lifetime.test.ts apps/server/src/provider-health.test.ts apps/server/src/rest-error.test.ts
+	$(MAKE) narration-lifetime-content-check
+	$(MAKE) typecheck
+
+narration-lifetime-content-check:
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/guidance.test.ts
+
 .PHONY: application-fixture-check
 application-fixture-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-fixture.test.ts

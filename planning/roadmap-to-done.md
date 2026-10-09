@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3620]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3621]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,18 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3621]] repairs late voice, speech and reasoning-review delivery after a grant,
+disclosure or captured subject changes. Cancellation reaches providers; authority failure
+cannot become retry/fallback or successful empty review, and rejected voice text cannot
+enter the speech cache. Permanent REST/authentication and composed HTTP controls exercise
+the real boundaries. All 99 focused software/39 content cases and complete local gates pass:
+clean types/build, 4,022 software cases / 359 files, seven unchanged-budget performance cases,
+237 content cases and 225 browser passes, one optional Maia skip, zero retries and all 112
+composition cells. The ledger now has 1,500 done, 161 refused and 1,709 live rows
+(628 todo, fourteen doing, 1,067 blocked), zero untriaged; 462 historical prose-only closures
+remain qualified. Existing source migrations, module usefulness and whole Support remain open.
+This is a correctness repair, not another completed capability or remote CI result.
 
 D3370/D3363 now have a bounded source-migration draft, `rfc/maia-task-source.md`:
 actual sampled selection and reported candidate window remain separate, including the
@@ -163,7 +175,7 @@ percentage: completed components do not establish a complete learner journey.
 | Coach/streamer | Classrooms, assignments, completed/incomplete submission read-only inspection/revocation, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |
 | Account/data | Authentication, authorization, source-scoped pack creation/replay, writer leases, versioned export/import/delete and populated native restore/resume | Guest/claim, complete future-object/schema and shared-link lifecycle, broader recovery/isolation and integrated operator journeys |
-| Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations and official bundled content |
+| Operations/release | Standard Make/Lefthook checks, separate software/performance/content/governance/browser tiers, packaging and deployment/storage implementations | Exact pushed-revision CI, complete native release/install/degradation/upgrade/rollback proof, ingress/security/rights/resource obligations, the explicit Maia-weight licence discharge in verifiable-runtime-distribution D1, and official bundled content |
 
 The evidence-versus-guidance split is implemented in meaningful production paths, **not complete
 across the platform**. Deeper “why this engine move?” search remains research rather than a

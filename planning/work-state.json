@@ -29980,6 +29980,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/special-move-tactics.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3621",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f9ff5b7bb1977017c3995686c6d0826bf27eedf5aea5c47024d6589b37ebada0",
+      "uxItems": [],
+      "evidence": "apps/server/src/guidance-lifetime.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

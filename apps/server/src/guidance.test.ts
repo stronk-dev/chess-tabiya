@@ -527,6 +527,49 @@ describe("adaptive guidance server seams", () => {
     expect(await response.json()).toMatchObject({ error: { code: "VOICE_UNAVAILABLE" } });
   });
 
+  it.each(["revoked", "demoted", "cancelled"].flatMap(change => ["valid", "malformed", "failure"].map(answer => ({ change, answer }))))("reasoning review rechecks $change authority after $answer provider work", async ({ change, answer }) => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const identity = new IdentityService(storage, { cookieSecure: false, derive: async (password, salt) => Buffer.alloc(32, password.length + salt.length) });
+    const host = await identity.register({ handle: "reasoning-owner", password: "narration-lifetime-password" });
+    const guest = await identity.register({ handle: "reasoning-guest", password: "narration-lifetime-password" });
+    const registry = await PackRegistry.fromDocuments([{ source: "reasoning-lifetime", value: reasoningDocument }]);
+    const queue = new EvidenceJobQueue(executor);
+    const service = new RunService(storage, { packRegistry: registry, evidenceQueue: queue });
+    const principal = { learnerId: host.learner.id, handle: host.learner.handle };
+    await service.create({ id: "reasoning-lifetime", session: { kind: "pack", packId: reasoningDocument.id }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at }, { writerId: "host-writer", learnerId: host.learner.id });
+    const moved = service.move("reasoning-lifetime", principal, "host-writer", "h2h3", { at });
+    const checkpoint = moved.run.events.find(event => event.type === "checkpoint.reached")!;
+    service.recordReasoning("reasoning-lifetime", principal, "host-writer", { nodeId: moved.run.activeCursor.nodeId, checkpointEventSeq: checkpoint.seq, transcript: { candidates: ["Keep the queen"], plan: "protect the queen", fears: "rook on the d-file" }, at });
+    await queue.whenIdle();
+    service.updateGrant("reasoning-lifetime", principal, "host-writer", { op: "grant", handle: guest.learner.handle, role: "host" }, at);
+    let calls = 0;
+    const controller = new AbortController();
+    const provider: ReasoningReviewProvider = { async review(_request, signal) {
+      calls += 1;
+      if (change === "cancelled") {
+        expect(signal).toBeDefined();
+        controller.abort();
+        expect(signal?.aborted).toBe(true);
+      } else {
+        service.updateGrant("reasoning-lifetime", principal, "host-writer", change === "revoked" ? { op: "revoke", handle: guest.learner.handle } : { op: "grant", handle: guest.learner.handle, role: "spectator" }, at);
+      }
+      if (answer === "failure") throw new Error("provider failure");
+      return answer === "valid" ? "[]" : "not-json";
+    } };
+    const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, provider);
+    const before = service.events("reasoning-lifetime", principal).events;
+    const response = await handler(new Request(request("/runs/reasoning-lifetime/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, guest.cookie), { signal: controller.signal }));
+    if (change === "cancelled") {
+      expect(response.status).not.toBe(200);
+      expect(await response.text()).not.toContain("proposals");
+    } else {
+      expect(response.status).toBe(change === "revoked" ? 404 : 409);
+      expect(await response.json()).toMatchObject({ error: { code: change === "revoked" ? "RUN_NOT_FOUND" : "ASSISTANCE_WITHHELD" } });
+    }
+    expect(calls).toBe(1);
+    expect(service.events("reasoning-lifetime", principal).events).toEqual(before);
+  });
+
   it("posts only text bytes to the external TTS provider", async () => {
     const bodies: unknown[] = [];
     const provider = new ExternalHttpTtsProvider({ url: "https://tts.test/speak", key: "SENTINEL_SECRET", fetch: async (_input, init) => {
