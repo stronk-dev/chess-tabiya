@@ -67,6 +67,13 @@ zero subjects are fully qualified and D3629's recorded-sequence adapter remains 
 a collector correctness repair, not a new judgement, source, permission, calibrated bot,
 skill credit, content graduation, whole feature, remote CI or release proof.
 
+In-flight authoring is now finished: D3629 has a draft exact recorded-window reach amendment
+in `rfc/semantic-validation-authority.md` §4.3a and 63 disposable counterexample checks (79
+total matrix checks). The current production adapter is still broken; independent review,
+implementation and permanent runner tests remain. `make semantic-validation-check` confirms
+the same 63 passing canonical cases and zero fully qualified subjects. This advances a contract,
+not a feature or milestone. The latest completed production batch remains D3635 above.
+
 Previous completed batch: [[D3634]] completes in-game Campaign failed/pending read recovery.
 Read-only retry restores the same saved encounter or confirmed seal without repeating commands;
 unconfirmed reads withdraw the campaign revision and pause Declare done. Crossed/departed replies

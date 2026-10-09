@@ -66,8 +66,11 @@ seven unchanged-budget performance, 239 content and 231 browser cases, one optio
 zero retries and 112 composition cells. Missing capture injection remains unpromoted;
 orientation, held sources, learner eligibility and official content remain separate.
 [[D3629]] separately owns the broken sequence-to-parent validation reach: its wrapper is
-not a path and one selected window is not the entire parent multiset. Author/review that
-exact binding before changing the reach contract; this wave cannot certify it.
+not a path and one selected window is not the entire parent multiset. The 2026-10-09 draft
+§4.3a now specifies the exact complete-parent/window join, with 63 disposable counterexample
+checks (79 total matrix checks). Independently review/accept that amendment before changing
+the production runner and adding permanent tests. D3629 remains open; this model cannot
+certify it or supply chess-semantic authority.
 
 [[D3627]] is closed locally under module-registration §2.5.2's existing exact candidate
 admission. Staged Support uses the shared full legal-move identity rather than a from/to

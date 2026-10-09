@@ -97,3 +97,21 @@ it expects an inline loose-piece fallback and direct structural calls in `localS
 Current unchanged production source delegates to `localSemanticEventClosure`, retains typed
 abstentions and uses `structuralSemanticEventsCached`. That historical author target is not
 required CI (D3057); its red result is retained, not called a successful current contract check.
+
+## 2026-10-09 — D3629 exact-window reach draft authored
+
+RFC §4.3a replaces neither current production reach nor the canonical cases. It specifies the
+complete same-invocation parent, table-derived family/horizon, exact subject/start/end and an
+unfiltered child multiset, with completed no-witness distinguished from unavailable output.
+The model uses actual existing emitters and canonical inputs, not new chess expectations.
+
+Normal `make semantic-validation-matrix` passes 79 checks: 63 D3629 plus sixteen existing.
+The initial harassment assumption was false: its parent emits only the selected event. Keep
+that wrapper failure separate and use actual deflection for the unequal multiset counterexample.
+Different harassment starts and attraction horizons reject wrong windows within one family.
+Normal `make semantic-validation-check` confirms the unchanged 63 passing canonical cases,
+81 subjects, zero fully qualified subjects and current generated receipts.
+
+D3629 remains blocked on independent review/acceptance before production implementation and
+permanent runner tests. No owner authority, orientation case, profile pass, source migration,
+learner eligibility, full-RFC completion, content graduation or release proof is created.

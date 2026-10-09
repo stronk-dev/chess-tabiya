@@ -72,6 +72,16 @@
   not authorize production changes or supply independent chess-semantic authority. The
   separate already-specified preflight ordering repair is D3566, not an amendment request.
 
+- **[[D3629]] — independently review the authored §4.3a exact-window reach amendment.**
+  `rfc/semantic-validation-authority.md` now binds a selected sequence to its complete
+  same-invocation parent, the actual family/horizon table and exact start/end/event identities.
+  The existing D1713 instrument passes 63 disposable checks, including the wrapper mismatch,
+  unrelated-family output, different starts/horizons within one family and corrupt/missing/
+  duplicate parent/window/child data. The 63 canonical production cases remain unchanged and
+  passing, with zero fully qualified subjects. Review the adapter result seam and runner
+  ordering before acceptance; then production implementation and permanent tests can close
+  D3629. Do not self-accept the amendment or equate model reach with chess qualification.
+
 ## 2026-08-26 live amendment queue
 
 - **D428 — authoring issue-code successor.** The archived `dead-vocabulary` RFC explicitly

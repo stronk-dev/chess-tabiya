@@ -20,6 +20,9 @@
   **2026-10-09 draft amendment:** §4.1a below specifies D3564's retained-input comparison.
   It requires independent review and acceptance before production changes; Slice A's existing
   parser, runner, authority and learner-eligibility rules remain in force.
+  **2026-10-09 D3629 draft amendment:** §4.3a specifies exact recorded-window reach;
+  independent review/acceptance precedes production changes. The current sequence adapter
+  remains broken and the 63 canonical whole-operation cases are not replaced or promoted.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -875,6 +878,112 @@ External package bytes are represented by the lockfile digest plus exact package
 `compileSemanticEvidenceEvent` and `declareEvidence` are explicitly forbidden operation targets.
 They validate sealed payload structure after a predicate has already decided what to emit and
 therefore cannot establish chess semantics.
+
+### 4.3a Draft amendment — exact recorded-window reach (D3629)
+
+**Draft, not implementation authorization.** The current runner passes
+`SemanticRecordedSequenceInput` unchanged to the `recorded_path` parent, whose adapter needs
+`input.edges`. Unwrapping `input.path` alone is insufficient: the child returns one selected
+window, whereas the parent returns every family/window on the complete path. Comparing their
+full family multisets either rejects correct output or tempts the implementer to weaken reach.
+Sources: `semantic-validation-runner.ts`'s exact-multiset branch and
+`semantic-validation-operations.ts`'s `recordedSequenceOperation` / `recordedPathOperation`.
+
+Add one closed reach arm, used only by `runtime.semantic.recorded_sequence@1`:
+
+```ts
+{
+  readonly kind: "exact_recorded_window";
+  readonly through: { readonly id: "runtime.semantic.recorded_path"; readonly version: 1 };
+}
+```
+
+All existing `direct`, `required` and one-edge `exact_projection_multiset` meanings remain.
+No generic input mapper, arbitrary predicate, case-supplied callback, caller event-id allow-list,
+or new persisted digest/receipt scheme is introduced. The sequence input and the production
+recorded-path window table already supply the necessary operands.
+
+The validation-only recorded-path result adapter retains the complete available
+`RecordedSemanticPathResult` from its **same invocation**, alongside its current completed
+observations. Other completed operations need not carry a path result. It does not re-run a
+separate path to manufacture a matching receipt. The runner checks the observation multiset
+against every event in that retained result before selecting any window. Missing, duplicated,
+replaced or unrelated parent observations fail reach. Production recorded-path output, event
+identity, window status, UI/API payloads and canonical whole-path cases are unchanged.
+
+For each sequence case, execute the following total join:
+
+1. Parse the existing sequence input. Invoke the parent with exactly `input.path`, never the
+   wrapper, the current cursor, a sliced path or a reconstructed suffix. The existing path parser
+   and fixture preflight validate every legal contiguous edge and `pathDigest`. Retain its exact input for the join;
+   there is no caller-supplied alternative parent input.
+2. Resolve `input.family` and `input.horizon` to one row of the production
+   `recordedPathEvaluatorRows()` table. Its two existing name differences are literal:
+   `pawn_contact_timing` → `contact_timing` and `checking_zwischenzug` → `check_zwischenzug`.
+   Every other family is identical. Check set equality with the existing closed validation
+   family vocabulary; no ordered-array zip or second copied projection table. An unsupported
+   family/horizon pair is invalid reach, not an empty chess observation. The case subject must
+   be the row's exact event projection/version; a different subject cannot earn a negative by
+   being absent from an unrelated family's dispatcher.
+3. Check that the parent's complete path and node identities belong to this parsed input.
+   The selected start is `pathNodeIds[fromPly]`; the ending node is
+   `pathNodeIds[fromPly + horizon]`. The complete node count is `input.path.edges.length + 1`.
+   Bind the retained path result to the run constructed by the existing recorded-path adapter,
+   including branch/origin. No FEN-only, path-prefix-only or active-cursor substitution is valid.
+4. Find **exactly one** window matching the row's exact projection/version, start and horizon.
+   Check its ending node too. Missing or duplicate receipts fail reach. A legal input with an
+   incomplete source is unavailable; it cannot establish a completed omission. `emitted`
+   requires at least one unique event id, and `no_witness` requires exactly zero. An
+   `insufficient_continuation` window cannot pass either a positive or negative case.
+5. Resolve every selected window event id exactly once in the **complete** parent observation
+   multiset. Each must be the exact selected event projection. Do not recover absent ids by
+   filtering, substitute another window or remove duplicates with a Set. Other families and
+   other windows remain in the parent result and do not enter this selected-window comparison.
+6. Require the **entire child result**, not only its target projection filter, to be the same
+   selected multiset. Compare exact event identities/signs and sole-factory value receipts with
+   their payload/input digests. Existing `assertSemanticTargetValueAuthority` must succeed for
+   every compared observation. Duplicate, foreign-window, extra-family or modified child
+   observations fail. Typed abstention is not an empty result and cannot match `no_witness`.
+7. Record reach as passed only after this join. The ordinary positive/negative and independent
+   proposition/oracle checks still run; successful reach alone supplies no chess expectation,
+   orientation authority, profile qualification or learner eligibility.
+
+Parent source absence cannot be concealed by a completed child. Source/receipt refusal must
+retain the existing failure or unavailable meaning rather than become `completed: []`.
+All malformed-join failures use existing `SEMANTIC_VALIDATION_REACH_INVALID`; this draft adds
+no request route, public result state or catch-and-ignore fallback.
+
+Implementation acceptance after independent review requires permanent runner tests, not only the
+disposable author model:
+
+- Preserve all 63 canonical cases, all existing one-edge multiset negatives and current complete
+  whole-path tests. A representative selected harassment window starts after six opening plies;
+  its full parent may contain other events and remains valid without slicing.
+- Run the nine current D3628 tactical/sequence positive-negative pairs through the actual
+  `runtime.semantic.recorded_sequence` runner with existing independent expectations. Do not
+  replace their whole-path cases or re-label a source-predicate-only result as qualification.
+- Prove failures for wrong parent input/head; wrong subject/family/version/horizon/start/end;
+  missing/duplicate window; insufficient continuation; contradictory window status; missing,
+  duplicate or replaced parent observation; missing/duplicate window event id; and erased,
+  duplicated, altered, foreign-window or extra-family child output. Include completed
+  `no_witness` and extra unrelated parent events as positives so the guard is not blanket refusal.
+- Exercise every one of the thirteen production family/horizon rows, including both contact and
+  attraction horizons, without treating thirteen row fixtures as thirteen new chess authorities.
+- Refresh the existing generated validation receipt with its normal writer, then run normal
+  software/types/content/browser gates. D3629 closes only when the real runner passes; the RFC
+  and full validation milestones remain open while their other discharges remain.
+
+Disposable author evidence lives under `tools/d1713-semantic-validation-matrix/`; its normal
+entry is `make semantic-validation-matrix`. It is excluded from ordinary software/content CI
+and cannot mint an owner/proposition authority or change the canonical registry.
+
+**2026-10-09 author checkpoint:** 63 disposable D3629 checks pass, plus the sixteen existing
+D3564/matrix checks. Existing canonical inputs demonstrate the wrapper failure, unrelated-family
+comparison failure, different starts at the same horizon and different horizons of the same
+family. The initial harassment fixture emitted only its selected event, so it did not demonstrate
+an unequal whole-path multiset; the corrected counterexample uses the real deflection path.
+No production operation, independent authority or canonical case is changed. Independent review
+is still required; these model results do not certify the current broken runner.
 
 ### 4.4 Reach and non-vacuity
 

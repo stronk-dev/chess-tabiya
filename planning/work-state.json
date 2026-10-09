@@ -30055,11 +30055,12 @@
     },
     {
       "id": "D3629",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0586568242c6369fd199fae108c793120acde00be40b4146ba87abd016c4498d",
+      "sourceDigest": "sha256:3f11c037e20ad3dc5aebdeacc9728ab4ec560cc1dc3812bd193cc7bcad58afa2",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
     },
     {
       "id": "D3630",
