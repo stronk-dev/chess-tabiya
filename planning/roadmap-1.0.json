@@ -1009,9 +1009,12 @@
         "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3618 binds five production local board/Inspector/shape/claim wrappers to complete exact-consumer admission before factories, including empty shape paths. Thirty-six predecessor refusal/ordering controls fail; all 285 focused cases and clean types pass. Final normal tiers pass clean types/build, 3912 software cases/357 files, seven unchanged-budget performance cases/four files, governance/packaging, 228 content cases/23 files and 225 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. Chess payloads, learner copy, source versions, authored packs and capability declarations are unchanged. Semantic coverage remains 81 subjects / 42 passing cases / zero fully validated subjects. D3615 authoring/storage, D3613 bounded-target and earlier local module/Hint/Explorer preflights remain delivered. Held source migrations, exact availability, complete integration, semantic qualification, whole capabilities/milestones and release remain open.",
+          "summary": "D3630 adds complete recorded-guidance execution admission before packet source preparation and at the registered renderer, including empty, previously assembled and cached speech paths. Thirty-eight predecessor controls fail; all 144 focused software/39 content cases and clean types pass. Authenticated REST/composed HTTP refuse invalid contracts before collection/provider work while preserving permission precedence, cache recovery, exact attributed suffixes and saved play. Complete normal gates pass clean types/build, 4163 software cases/361 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 231 browser passes (166 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells. D3618 local wrappers, D3615 authoring/storage, D3613 bounded-target and prior module/Hint/Explorer preflights remain delivered. Sources, declarations, permissions and authored packs are unchanged; remaining source migrations, exact occurrence resolution, complete availability, semantic qualification, whole capabilities/milestones and release stay open. No remote CI result.",
           "impact": "advanced",
           "evidence": [
+            "apps/server/src/guidance-reading-execution.test.ts",
+            "apps/server/src/guidance.ts",
+            "docs/recorded-evidence.md",
             "apps/server/src/authoring-execution.test.ts",
             "packages/runtime/src/reading-execution.test.ts",
             "packages/runtime/src/reading-evidence.ts",
@@ -1816,6 +1819,11 @@
               "kind": "work_state",
               "id": "D3615",
               "digest": "sha256:04f75a087301c217fb30064f9cee199653804e0d92f6476f1afb0fd7266ca1ea"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3630",
+              "digest": "sha256:9d8fdc4ab817b3720bb9d6df91b82a3a190f4048cb5d529cee3a77bc99753e80"
             }
           ]
         },

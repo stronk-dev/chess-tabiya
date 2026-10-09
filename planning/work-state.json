@@ -30063,11 +30063,12 @@
     },
     {
       "id": "D3630",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b4c1fb24415ef37ec6d9d638363d4d4184c4bf286f481d128b3a98b2764718f8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9d8fdc4ab817b3720bb9d6df91b82a3a190f4048cb5d529cee3a77bc99753e80",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/guidance-reading-execution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

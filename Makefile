@@ -1779,7 +1779,7 @@ theory-binding-execution-check:
 .PHONY: local-module-execution-check
 .PHONY: narration-lifetime-check narration-lifetime-content-check
 narration-lifetime-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/guidance-lifetime.test.ts apps/server/src/provider-health.test.ts apps/server/src/rest-error.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/guidance-lifetime.test.ts apps/server/src/guidance-reading-execution.test.ts apps/server/src/provider-health.test.ts apps/server/src/rest-error.test.ts
 	$(MAKE) narration-lifetime-content-check
 	$(MAKE) typecheck
 

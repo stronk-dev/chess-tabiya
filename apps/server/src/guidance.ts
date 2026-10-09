@@ -1,5 +1,6 @@
 import {
   assertConsumerEvidenceView,
+  compileEvidenceConsumerExecution,
   invokeRunRecordPosition,
   evidenceForConsumer,
   matchesStructuralExpression,
@@ -50,6 +51,7 @@ export function voiceEvidenceView(packet: EvidencePacket, scope: VoiceScope = "r
 
 /** The unconfigured default: no opening catalogue artifact and no pack evidence snapshot. */
 const DEFAULT_PHASE_SOURCES: PhaseSourceDependencies = Object.freeze({ opening: Object.freeze({ kind: "unavailable" as const, reason: "artifact_missing" as const }), recorded: compileRecordedEvidenceSnapshot({ kind: "no_pack_source" }) });
+const RECORDED_READING_CONSUMER = Object.freeze({ id: "guidance.recorded_reading", version: 1 });
 
 /**
  * Support module assembly (rfc/phase-source-composition.md §5): the current position's phase,
@@ -57,6 +59,9 @@ const DEFAULT_PHASE_SOURCES: PhaseSourceDependencies = Object.freeze({ opening: 
  * performs no ad-hoc phase/endgame join of its own.
  */
 export function evidencePacket(input: { readonly run: DrillRun; readonly node: Node; readonly pack?: DrillPackDefinition; readonly packEvidence?: PositionEvidenceIndex; readonly authored: AuthoredFeedbackPage; readonly shapes?: ShapeRegistry; readonly phaseSources?: PhaseSourceDependencies }): EvidencePacket {
+  // Empty/currently cached readings still belong to the complete declared operation. Check it
+  // before preparing any packet source, including the displayed-voice reuse path in speech.
+  compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, RECORDED_READING_CONSUMER);
   const point = compilePhaseSourcePoint(invokeRunRecordPosition(input.run, input.node.id), input.phaseSources ?? DEFAULT_PHASE_SOURCES);
   const reading = structuralReading(input.node.fen);
   const detected = point.rulesPhase.payload;
@@ -85,13 +90,15 @@ export function renderRecordedReadingEvidence(view: ConsumerEvidenceView<unknown
   if (view.consumer.id !== "guidance.recorded_reading" || view.consumer.version !== 1) {
     throw new TypeError("Expected guidance.recorded_reading@1 consumer view");
   }
+  // A previously assembled packet/view is not an execution permit for a later rendering.
+  compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, RECORDED_READING_CONSUMER);
   // Readings stay post-provider: the external voice never receives a bare engine score. Their
   // suffix now uses the same source-bound component equivalent as the learner presentation.
   return Object.freeze(renderPresentedEvidenceView(view).items.flatMap((item) => item.sentences));
 }
 
 function recordedReadingSentences(packet: EvidencePacket): readonly string[] {
-  const view = evidenceForConsumer(EVIDENCE_MANIFEST, { id: "guidance.recorded_reading", version: 1 }, packet.declared);
+  const view = evidenceForConsumer(EVIDENCE_MANIFEST, RECORDED_READING_CONSUMER, packet.declared);
   return renderRecordedReadingEvidence(view);
 }
 

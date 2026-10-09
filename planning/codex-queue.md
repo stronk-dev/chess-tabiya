@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3630]] is closed locally under provider-exchange-and-execution's existing complete-consumer
+contract. Recorded guidance preflights before packet source preparation and at the registered
+renderer; empty/previously assembled/cached paths cannot bypass it. Thirty-eight predecessor
+controls fail, all 144 focused software/39 content cases and clean types pass, and authenticated
+REST/composed HTTP refuse before providers while preserving permission precedence, exact suffixes
+and saved play. Complete normal gates pass 4,163 software, seven unchanged-budget performance,
+239 content and 231 browser cases, one optional Maia skip, zero retries and 112 composition cells.
+No source/declaration/permission migration, complete availability or whole capability promotion.
+
 [[D3628]] is closed locally under semantic-validation-authority slices B/C. Twelve legal
 nearby negatives and nine v2 recorded-path positives execute actual production operations,
 retaining all 42 original cases. The register has 63 passing cases (41 positive / 22 negative);
@@ -184,12 +193,9 @@ the complete browser rerun passes after adapting tests to the actual Actions reg
 
 Remaining [[D1700]]/[[D1701]] work belongs to implementing `provider-exchange-and-execution`:
 source migrations, complete consumer execution, exact source-occurrence resolution and
-authenticated availability. [[D3630]] records the inspected recorded-guidance preflight gap:
-packet construction and reading rendering do not compile the complete exact consumer; cached
-voice reuse also skips the reading renderer. First reproduce malformed-binding refusal/ordering
-through packet, renderer and authenticated voice/speech paths, including remembered text, then
-implement the existing contract without widening held sources or changing reading copy. This is
-queued work, not a reproduced provider leak or a completed integration. The retained frontier
+authenticated availability. [[D3630]]'s recorded-guidance preflight is closed at packet,
+renderer and authenticated voice/speech boundaries, including remembered text. Do not repeat it
+or confuse that runtime adoption with whole source resolution. The retained frontier
 compiles 262/285 projections, 495/556 isolated
 bindings and 21/42 complete consumers with fourteen refused provider declarations; those counts
 are compilation, not measured runtime adoption. The

@@ -10,7 +10,7 @@ Only `engine_eval` and `tablebase_result` records grounded by machine validation
 The ledger must validate, carry the current pack digest, and already qualify as
 `ledger_verified`. Engine readings must be single-line, White-perspective results with a
 complete engine identity. Tablebase readings must use a determinate category. Template-backed
-move verdicts and the other five evidence kinds are refused by a complete disposition
+move verdicts and the other evidence kinds are refused by a complete disposition
 registry published through `/capabilities`.
 
 The index copies an explicit value allow-list rather than retaining the ledger's open value
@@ -33,18 +33,30 @@ Tablebase prose names Syzygy, piece count, category, any published DTZ/DTM value
 perspective, and authoring date. It names no move or square and computes no cross-node delta,
 rank, or verdict. Absence produces no per-position sentence.
 
-The structured reading never enters `EvidencePacket.sentences`. Voice and reasoning providers
-receive the same closed sentence list as before; after provider rendering, the server appends
-the frozen reading prose. This prevents a provider from paraphrasing the measurement or
-inventing a claim about missing coverage. A client surface that displays a reading also shows
+Packet construction compiles the complete `guidance.recorded_reading@1` execution contract
+before preparing phase, pack or other packet sources, including when no readings are present.
+The registered reading renderer checks that contract again for previously assembled views.
+An invalid contract returns generic `EVIDENCE_UNAVAILABLE` at authenticated voice/speech routes,
+before provider work or fallback. Reusing displayed voice text for speech still constructs the
+packet and cannot skip admission; read/disclosure permission is checked first.
+
+There is no raw packet sentence array. Voice input and its output checker use the same compiled
+rendered view; the bare recorded engine/tablebase readings stay outside that provider input.
+After provider rendering (or deterministic fallback), the server appends the registered reading
+renderer's attributed prose. Reasoning review is a separate learner-transcript task, not this
+chess-evidence voice operation. A client surface that displays a reading also shows
 the single population guard:
 
 > Recorded readings exist only for the positions this pack's author queried. Where none is
 > shown, none was recorded.
 
-## Current measured corpus
+## Historical corpus measurement
 
-The development registry currently loads 57 documents. Thirty-two digest-current pack
+These are the original recorded-evidence measurement's figures, not a current registry census
+or official-content qualification. The current full-product inventory is in
+`planning/roadmap-to-done.md`.
+
+The measured development registry loaded 57 documents. Thirty-two digest-current pack
 ledgers contribute 732 admitted readings (391 Stockfish evaluations and 341 Syzygy results)
 across 731 per-pack index entries and 568 corpus-distinct positions. The same ledgers contain
 32 legality records, which remain refused.

@@ -53,13 +53,25 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3628]] moves twelve grounded nearby negatives and nine v2 recorded-path
+Latest completed batch: [[D3630]] adds complete execution admission before recorded-guidance packet
+preparation and at its registered renderer. Empty/previously assembled/cached paths cannot skip
+the check; actual REST/composed HTTP refuse invalid bindings before voice/TTS work, and permission
+checks remain first. Thirty-eight predecessor controls fail; all 144 focused software/39 content
+cases and clean types pass. Complete normal gates pass 4,163 software cases / 361 files, seven
+unchanged-budget performance, 239 content and 231 browser cases, one optional Maia skip, zero
+retries and all 150 input/112 composition cells. Current ledger: 3,379 rows, 1,508 done,
+161 refused and 1,710 live; zero untriaged. Recorded reading/provider exclusion bytes, sources,
+permissions and authored packs remain unchanged. Four milestones remain active/five blocked;
+zero official packs graduate. This is runtime integration, not whole-manifest availability,
+whole capability, release or remote CI completion.
+
+Previous completed batch: [[D3628]] moves twelve grounded nearby negatives and nine v2 recorded-path
 positives through actual production operations, retaining all 42 prior cases. The register now has
 63 passing cases (41 positive / 22 negative) over 81 subjects; full qualification remains zero.
 Complete-window controls, 420 focused foundation cases and sixteen migration-matrix controls pass.
 Complete normal local gates pass clean types/build, 4,118 software cases / 360 files, seven
 unchanged-budget performance, 239 content and 231 browser cases, one optional Maia skip, zero
-retries and all 112 composition cells. Current ledger after inventory: 3,379 rows, 1,507 done, 161 refused and
+retries and all 112 composition cells. That inventory's ledger: 3,379 rows, 1,507 done, 161 refused and
 1,711 live; zero untriaged. [[D3629]] separately retains the broken sequence-to-parent validation
 adapter; these full-path cases do not certify it. No new collector output, learner permission,
 pack content, whole capability or remote CI result. The product inventory above is unchanged:
@@ -67,11 +79,12 @@ four milestones active, five blocked; UX 273 complete / 272 live / 24 retired; p
 42 implementing / ten awaiting / 22 draft. Historical archive records 75 implemented RFCs and
 one superseded RFC, not a fresh audit of every historical completion claim.
 
-Inventory closeout records [[D3630]] under the existing provider execution remainder: recorded
+Historical inventory closeout recorded [[D3630]] under the existing provider execution remainder: recorded
 guidance packet/rendering paths lack complete-consumer preflight, including cached speech reuse.
-This is a code-inspection finding queued for predecessor controls and repair, not a measured
-provider leak or new implementation. The completed product/test bytes remain at 98c7c3b2;
-the inventory adds no whole capability, release qualification or remote CI result.
+This was a code-inspection finding queued for predecessor controls and repair, not a measured
+provider leak or new implementation. At that closeout, product/test bytes remained at 98c7c3b2;
+the inventory added no whole capability, release qualification or remote CI result. The subsequent
+implementation and verification checkpoint above closes only this recorded-guidance gap.
 
 Previous batch: [[D3627]] repairs staged Support's exact legal-move admission before child
 construction or collection. Twelve predecessor failures reproduce missing promotions and illegal
