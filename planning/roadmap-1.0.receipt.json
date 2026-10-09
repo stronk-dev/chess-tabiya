@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1a9caccbfeab458d11f0d26745f930e441c5d337497372cabd19d2071b9cdbdc",
+    "roadmap": "sha256:198b8c76933ceb89b684ddff8dc7f260cf892d6a5bf4f655d789ff04244e1854",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:0a8937ba91f5d1200cee09015b0310d21f3fd40e98719b9bfba4c8346a5f48ca",
+    "workState": "sha256:4c6b020d1756fc91514dc3234833ad13863c07a6b500d8962e1f0742183f6f96",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1066,
-      "done": 1493,
+      "done": 1494,
       "refused": 161
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3613's final normal non-browser sequence passes clean types/build, 3825 software cases/354 files, seven unchanged-budget performance cases/four files, governance/packaging and 228 content cases/23 files. All 168 focused foundation cases include actual application/scheduler execution preflight; no learner binding changes. The preceding D3611/D3612 UI commit's complete browser sequence passed 221 cases (156 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 150 input/112 composition cells; it was not rerun for this operator-only server repair. Play/Compare exports and scrollable Actions notices, prior Review, Studio, Campaign, Profile, return and semantic-landing repairs remain delivered. Original D3591/D3600 timing causes remain unlocated; all live rows are assigned, 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
+        "summary": "D3614's complete normal sequence passes clean types/build, 3834 software cases/354 files, seven unchanged-budget performance cases/four files, governance/packaging, 228 content cases/23 files and 225 browser passes (160 smoke, five content, 59 matrix, one packaged-default). One optional Maia skip, zero retries, all 150 input/112 composition cells. Its 82 focused Campaign/modal cases and eight desktop/phone preparation journeys establish canonical help choice, recovery, unchanged kit/revision and recorded play. D3613 execution preflight, Play/Compare exports, Review, Studio, Campaign, Profile and return repairs remain delivered. Native warm arrival is median 104.9 ms/p95 171.5 ms; original D3591/D3600 timing causes remain unlocated. All live rows are assigned, 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
         "impact": "held",
         "evidence": [
           "rfc/concept-registry.md",
@@ -1810,7 +1810,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3611/D3612 close Play/Compare PGN action and contextual-banner overlap under existing drill-client/in-run contracts. Pending ownership, copied branch selection, safe retry and current-view download retirement pass 274 focused mounted cases/types and six actual desktop/phone journeys, preserving legal exported movetext/player headers and recorded play. Contextual notices retain callbacks in scrollable Actions/Compare; Campaign's strip is unchanged. Final normal tiers pass clean types/build, 3815 software, seven unchanged-budget performance, 228 content and 221 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. The first browser navigation failures remain recorded; complete browser rerun passes after browser-only Actions navigation corrections. Review exports, Studio publication, Campaign preparation/results, due-return recovery, private Profile and classroom inspection remain delivered. Original D3591/D3600 timing causes, official content, source coverage, calibrated bots, full Campaign and release journeys remain open; no whole capability or milestone is promoted.",
+        "summary": "D3614 closes Campaign's existing preparation-to-help choice under campaign-core and intent-presets: canonical allowed presets, Custom/recovery, failed-save retry and preset-excluded equipment without changing ownership/loadout/revision or claiming source availability. Nine new mounted controls pass within 82 Campaign/modal cases and all eight actual desktop/phone preparation journeys pass, including saved choice to compiled encounter, reload/Settings and unchanged recorded nodes/branches/cursor. Complete normal tiers pass clean types/build, 3834 software, seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. Failed probes remain logged without weakened checks or budgets. Play/Compare and Review exports, Studio publication, Campaign preparation/results, due-return recovery, private Profile and classroom inspection remain delivered. Original D3591/D3600 timing causes, official content, source coverage, calibrated bots, full Campaign and release journeys remain open; no whole capability or milestone is promoted.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/learner-profile-application.test.ts",
@@ -2889,11 +2889,11 @@
         ],
         "experience": [
           "partial",
-          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. D3587 retires departed action completion while preserving accepted work and writer resume, exact response-loss retries and separate abandonment-result recovery. D3603 bounds preparation in a focus-owned dialog with in-place server kit edits, suppression/cost disclosure and exact returned-revision ordering; dismissing a pending Start retains its accepted encounter on the map without late navigation. Deleted or feedback-withheld recordings explain their unavailable actions. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
+          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. D3587 retires departed action completion while preserving accepted work and writer resume, exact response-loss retries and separate abandonment-result recovery. D3603 bounds preparation in a focus-owned dialog with in-place server kit edits, suppression/cost disclosure and exact returned-revision ordering; dismissing a pending Start retains its accepted encounter on the map without late navigation. D3614 adds canonical named help before entry, explains preset-excluded equipment, preserves Custom/recovery and restores refused saves without claiming source-confirmed help or mutating the kit/revision. Deleted or feedback-withheld recordings explain their unavailable actions. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
         ],
         "defaults": [
           "blocked",
-          "Campaign has an opinionated preset and earned modules never disappear because of an unrelated settings choice."
+          "Campaign has an opinionated preset and D3614 exposes its canonical named choice before entry without removing earned equipment. Candidate labels/defaults still need owner-use discharge; actual help remains intersected with kit, encounter restrictions, individual limits and source availability."
         ],
         "content": [
           "missing",
@@ -2901,7 +2901,7 @@
         ],
         "verification": [
           "partial",
-          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575 preserves sealed/abandoned/deleted recordings; D3577 adds exact Game Review, reload and map return. D3587 adds 54 focused cases and three built-app desktop/touch-phone departure/resume and exact lost-declaration replay journeys. D3603 adds six mounted Campaign and two shared heading controls, with 65 focused cases and four built-app desktop/touch-phone preparation, kit persistence and dismissed-start journeys passing. Complete official-run, reward conservation, crash/upgrade, failure, owner-device accessibility, missing Review sources and release-image journeys remain."
+          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575 preserves sealed/abandoned/deleted recordings; D3577 adds exact Game Review, reload and map return. D3587 adds departure/resume and exact lost-declaration replay controls; D3603 adds bounded preparation and canonical kit ordering. D3614 adds nine mounted controls within 82 Campaign/modal cases and eight actual desktop/touch-phone preparation journeys, including saved choice to compiled encounter, reload/Settings, failed-save retry and unchanged recorded play/kit. Complete normal tiers pass 3834 software, seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells. Complete official-run, reward conservation, crash/upgrade, failure, owner-device accessibility, missing Review sources and release-image journeys remain."
         ],
         "release": [
           "blocked",

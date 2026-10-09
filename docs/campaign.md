@@ -90,8 +90,9 @@ The Campaign workflow context is executable (intent-presets Discharge D6): the s
 `CampaignEncounterReceipt` (`packages/runtime/src/campaign-receipt.ts`) folded at the encounter's
 `node_entered` cut, and `compileAuthoritativeAssistance` intersects the preset with the receipt's
 effective kit (owned ∩ equipped − boss suppression). The **Campaign kit** preset is the Campaign
-default: it requests the whole campaign ceiling, so what renders is exactly what was earned and
-equipped. Receipts are identity-verified; JSON copies are refused.
+default: it requests the whole campaign ceiling, narrowed by earned/equipped tools, encounter
+restrictions, individual preferences and actual source availability. A requested or equipped tool
+is not a promise that its evidence is available. Receipts are identity-verified; JSON copies are refused.
 
 ## Web
 
@@ -102,7 +103,13 @@ run page shows the campaign strip (node, `⟲ N` before any spend, kit, **Declar
 rules end a boss game, the terminal sheet carries “Declare done and return to the campaign map”.
 
 Prepare opens a bounded, independently scrolling dialog with the encounter's copied objective,
-reward, suppression preview and earned-rewind cost. Earned tools can be equipped there using the
+reward, suppression preview and earned-rewind cost. Its Help style selector uses the same canonical
+Campaign preference as Settings and the encounter. Only permitted named styles appear; migrated
+or overridden Custom and malformed-preference recovery remain visible. Style changes do not mutate
+the Campaign kit or revision. Equipped tools excluded by the requested style stay on the shelf with
+that explanation; actual help is confirmed server-side when the encounter opens. Refused browser
+writes restore the previous selection, explain the failure and allow retry rather than claiming an
+unsaved choice will survive navigation. Earned tools can be equipped there using the
 same server-owned kit command as the map; Start waits for that command and uses its returned
 revision. Suppressed tools stay owned/equipped but cannot be enabled for that encounter. Equipped
 does not promise available evidence or override the chosen help style. Focus enters the briefing,

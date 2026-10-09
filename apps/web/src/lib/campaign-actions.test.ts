@@ -3,6 +3,8 @@
 import { tick } from "svelte";
 import { createClassComponent } from "svelte/legacy";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { presetDeclaration, selectNamedPreset, workflowContextPolicy } from "@chess-tabiya/runtime";
+import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
 import CampaignScreen from "./CampaignScreen.svelte";
 import CampaignStrip from "./CampaignStrip.svelte";
 import { CampaignApi, type CampaignCommandResult, type CampaignProjection } from "./campaign-api.js";
@@ -42,7 +44,7 @@ function deferred<T>() {
 const button = (text: string) => [...document.querySelectorAll<HTMLButtonElement>("button")].find(item => item.textContent?.trim() === text)!;
 async function settle() { await Promise.resolve(); await tick(); await Promise.resolve(); await tick(); }
 
-async function screen(action: Action, mutation: () => Promise<Response>, resultRead?: () => Promise<Response>, projection = fixture()) {
+async function screen(action: Action, mutation: () => Promise<Response>, resultRead?: () => Promise<Response>, projection = fixture(), assistanceStorage?: PreferenceStorage) {
   const fetcher = vi.fn(async (path: string, init?: RequestInit): Promise<Response> => {
     if (init?.method !== "GET") return mutation();
     if (path === "/campaigns") return Response.json({ campaigns: [{ id: "fixture", version: 1, title: "First campaign", channel: "community", nodeCount: 9, available: true, unavailablePacks: [], activeRunId: null, completedRuns: 0, marks: [] }] });
@@ -50,7 +52,7 @@ async function screen(action: Action, mutation: () => Promise<Response>, resultR
     return Response.json(path.endsWith(RUN) ? projection : fixture("next-campaign"));
   });
   const onNavigate = vi.fn(), rememberWriter = vi.fn();
-  const component = createClassComponent({ component: CampaignScreen, target: document.body, props: { campaigns: new CampaignApi(fetcher), campaignRunId: action === "create" ? undefined : RUN, onNavigate, rememberWriter } });
+  const component = createClassComponent({ component: CampaignScreen, target: document.body, props: { campaigns: new CampaignApi(fetcher), campaignRunId: action === "create" ? undefined : RUN, onNavigate, rememberWriter, assistanceStorage } });
   cleanup.push(() => component.$destroy());
   await vi.waitFor(() => expect(document.querySelector("h1")?.textContent).toBe(action === "create" ? "Campaign" : "First campaign"));
   if (action === "create") await vi.waitFor(() => expect(button("Start a run")).toBeDefined());
@@ -66,6 +68,138 @@ async function screen(action: Action, mutation: () => Promise<Response>, resultR
 }
 
 describe("Campaign action ownership", () => {
+  function preferenceStore() {
+    const bytes = new Map<string, string>();
+    return { bytes, getItem: vi.fn((key: string) => bytes.get(key) ?? null), setItem: vi.fn((key: string, value: string) => { bytes.set(key, value); }) };
+  }
+  function helpStyle() { return document.querySelector<HTMLSelectElement>('[role="dialog"] select[aria-label="Help style"]')!; }
+  async function chooseHelp(preset: string) { const select = helpStyle(); select.value = preset; select.dispatchEvent(new Event("change", { bubbles: true })); await settle(); }
+
+  it("offers only Campaign's named defaults without writing preferences on entry", async () => {
+    const storage = preferenceStore();
+    await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    expect(helpStyle()).not.toBeNull();
+    expect(helpStyle().value).toBe("campaign_kit");
+    expect([...helpStyle().options].map(option => option.value)).toEqual(workflowContextPolicy("campaign").allowedPresets);
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("Help is confirmed when the encounter opens");
+    expect(storage.setItem).not.toHaveBeenCalled();
+  });
+
+  it("keeps an equipped tool visible when saved Quiet does not request it, without a Campaign mutation", async () => {
+    const storage = preferenceStore();
+    saveWorkflowPreference("campaign", selectNamedPreset("campaign", { kind: "unset" }, "quiet"), storage);
+    const view = await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    expect(helpStyle()?.value).toBe("quiet");
+    expect(document.querySelector<HTMLInputElement>('[role="dialog"] input')?.checked).toBe(true);
+    expect(document.querySelector("#prep-tool-postcommit_nudge")?.textContent).toContain("Not requested by Quiet");
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+  });
+
+  it("saves only the canonical Campaign preference before Start and preserves the equipment revision", async () => {
+    const storage = preferenceStore();
+    const view = await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    await chooseHelp("theory_only");
+    expect(loadWorkflowPreference("campaign", storage)).toEqual(selectNamedPreset("campaign", { kind: "unset" }, "theory_only").intent);
+    expect(storage.bytes.has(workflowPreferenceKey("pack"))).toBe(false);
+    expect(document.querySelector("#prep-tool-postcommit_nudge")?.textContent).toContain("Not requested by Theory only");
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+    button("Back to map").click(); await settle(); button("Prepare").click(); await settle();
+    expect(helpStyle().value).toBe("theory_only");
+    view.activate(); await settle();
+    const call = view.fetcher.mock.calls.find(([path]) => path.endsWith("/start"))!;
+    expect(JSON.parse(call[1]!.body as string).expectedRevision).toBe(1);
+    expect(view.onNavigate).toHaveBeenCalledWith(`/play/run/${PLAY}`);
+  });
+
+  it("preserves migrated Custom on entry and applies the existing named-choice transition", async () => {
+    const storage = preferenceStore();
+    storage.bytes.set("tabiya.assistance.v1.campaign", JSON.stringify({ version: 4, ...presetDeclaration("quiet").config }));
+    const prior = loadWorkflowPreference("campaign", storage);
+    expect(prior.kind).toBe("migrated_snapshot");
+    await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    expect(helpStyle()?.value).toBe("custom");
+    expect(helpStyle().selectedOptions[0]?.textContent).toBe("Custom (from Campaign kit)");
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("Choosing a style replaces Custom");
+    await chooseHelp("guided");
+    expect(loadWorkflowPreference("campaign", storage)).toEqual(selectNamedPreset("campaign", prior, "guided").intent);
+    expect(helpStyle().value).toBe("guided");
+  });
+
+  it("explains malformed preference recovery without overwriting bytes until an explicit choice", async () => {
+    const storage = preferenceStore();
+    storage.bytes.set(workflowPreferenceKey("campaign"), "broken");
+    await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    expect(document.querySelector("#prep-help-recovery")?.getAttribute("role")).toBe("status");
+    expect(helpStyle()?.getAttribute("aria-describedby")).toContain("prep-help-recovery");
+    expect(storage.bytes.get(workflowPreferenceKey("campaign"))).toBe("broken");
+    await chooseHelp("quiet");
+    expect(loadWorkflowPreference("campaign", storage).kind).toBe("explicit");
+    expect(document.querySelector("#prep-help-recovery")).toBeNull();
+  });
+
+  it("restores the retained style and explains a refused preference write instead of promising it will start", async () => {
+    const storage = preferenceStore();
+    saveWorkflowPreference("campaign", selectNamedPreset("campaign", { kind: "unset" }, "quiet"), storage);
+    const view = await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    storage.setItem.mockImplementation(() => { throw new Error("private storage detail"); });
+    await chooseHelp("guided");
+    expect(helpStyle().value).toBe("quiet");
+    expect(document.querySelector('[role="dialog"] [role="alert"]')?.textContent).toContain("Could not save your help style");
+    expect(document.body.textContent).not.toContain("private storage detail");
+    expect(loadWorkflowPreference("campaign", storage)).toEqual(selectNamedPreset("campaign", { kind: "unset" }, "quiet").intent);
+    expect(button("Start encounter").disabled).toBe(false);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+    storage.setItem.mockImplementation((key, value) => { storage.bytes.set(key, value); });
+    await chooseHelp("guided");
+    expect(helpStyle().value).toBe("guided");
+    expect(document.querySelector('[role="dialog"] [role="alert"]')).toBeNull();
+  });
+
+  it("refreshes only the canonical Campaign key when another tab changes the saved choice", async () => {
+    const storage = preferenceStore();
+    await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    saveWorkflowPreference("campaign", selectNamedPreset("campaign", { kind: "unset" }, "quiet"), storage);
+    window.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") })); await settle();
+    expect(helpStyle().value).toBe("campaign_kit");
+    window.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("campaign") })); await settle();
+    expect(helpStyle().value).toBe("quiet");
+    expect(document.querySelector("#prep-tool-postcommit_nudge")?.textContent).toContain("Not requested by Quiet");
+    storage.bytes.delete(workflowPreferenceKey("campaign"));
+    window.dispatchEvent(new StorageEvent("storage", { key: null })); await settle();
+    expect(helpStyle().value).toBe("campaign_kit");
+  });
+
+  it("keeps explicit lower limits while clearing Custom module changes through the shared transition", async () => {
+    const storage = preferenceStore();
+    const prior = { kind: "explicit", preset: "campaign_kit", overrides: { guided: "off" }, moduleOverrides: { include: [], exclude: ["postcommit_nudge"] } } as const;
+    saveWorkflowPreference("campaign", { version: 2, assistanceHead: 4, intent: prior }, storage);
+    await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    expect(helpStyle().value).toBe("custom");
+    expect(document.querySelector("#prep-tool-postcommit_nudge")?.textContent).toContain("Not requested by Custom");
+    await chooseHelp("guided");
+    const actual = loadWorkflowPreference("campaign", storage);
+    expect(actual).toEqual(selectNamedPreset("campaign", prior, "guided").intent);
+    expect(actual.kind === "explicit" && actual.overrides.guided).toBe("off");
+    expect(helpStyle().value).toBe("guided");
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("individual limits");
+  });
+
+  it("retains suppression before preset narrowing and disables help changes while Start is pending", async () => {
+    const storage = preferenceStore();
+    saveWorkflowPreference("campaign", selectNamedPreset("campaign", { kind: "unset" }, "quiet"), storage);
+    const projection = fixture(), card = projection.acts[0]!.layers[0]!.choices[0]!;
+    const late = deferred<Response>();
+    const view = await screen("start", () => late.promise, undefined, {
+      ...projection, acts: [{ id: "act1", layers: [{ layer: 1, state: "current", choices: [{ ...card, boss: true, suppress: ["postcommit_nudge"] }] }] }],
+    }, storage);
+    expect(document.querySelector("#prep-tool-postcommit_nudge")?.textContent).toContain("Set aside for this encounter");
+    view.activate(); await settle();
+    expect(helpStyle().disabled).toBe(true);
+    button("Back to map").click(); await settle();
+    late.resolve(Response.json(response("start"))); await settle();
+    expect(view.onNavigate).not.toHaveBeenCalled();
+  });
+
   it("owns preparation focus and returns it to the exact map choice on Escape", async () => {
     await screen("start", async () => Response.json(response("start")));
     const dialog = document.querySelector<HTMLElement>('[role="dialog"]');

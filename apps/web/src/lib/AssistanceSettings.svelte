@@ -224,7 +224,7 @@
       <fieldset data-assistance-context={kind}>
         <legend>{labels[kind]}</legend>
         {#if refusal}<p id={`assistance-profile-refusal-${kind}`} class="honest">{refusal}</p>{/if}
-        {#if kind === "campaign"}<p class="honest">Campaign encounters are not separate yet; this choice is kept for when they are.</p>{/if}
+        {#if kind === "campaign"}<p class="honest">Campaign encounters use this help style. Your earned and equipped tools, encounter restrictions and available evidence still apply.</p>{/if}
         {#if receipt.kind === "invalid_fallback"}
           <p id={`help-recovery-${kind}`} class="honest" role="status">{renderSuppression({ kind: "preference_recovery", reason: receipt.reason }, kind)}</p>
         {/if}

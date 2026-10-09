@@ -29917,6 +29917,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/bounded-target-policy.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3614",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c74b9dc6e552231d35aaae4ac6bb81eb841260abdc7552dec7bda98a613f3fd2",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/campaign-actions.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

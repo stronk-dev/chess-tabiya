@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3614]] is closed locally: Campaign preparation reads and saves the same named help
+preference as Settings/Play, explains preset-excluded equipped tools and preserves Custom,
+recovery and refused-write behavior. All 82 focused Campaign/modal cases and eight actual
+desktop/phone preparation journeys pass, including saved style → compiled encounter → reload
+and unchanged recorded play/kit. Complete normal gates pass clean types/build, 3,834 software,
+seven unchanged-budget performance, 228 content and 225 browser cases; one optional Maia skip,
+zero retries, all 150 input/112 composition cells. No new preset, source, Campaign event,
+owner-use discharge or whole-Campaign promotion. The accepted foundation work below remains next;
+its held source migrations are not authorized by this UI repair.
+
 [[D3613]] is closed locally: both demanded bounded-target policy outputs now compile before
 local target work, engine identity or shared-scheduler acquisition. Sixteen malformed-source
 controls cover each provider and preserved/removed alternative; repeated single/both-arm calls,

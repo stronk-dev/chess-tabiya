@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3613]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3614]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,16 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3614]] closes the existing Campaign preparation-to-help preference gap: named allowed
+styles use the canonical preference, explain preset-excluded equipment and preserve Custom,
+recovery and failed-save retry without changing the kit or server revision. Eight actual
+desktop/phone journeys establish saved choice → compiled encounter → reload/Settings and
+unchanged recorded play. All 82 focused cases and complete normal gates pass: clean types/build,
+3,834 software, seven unchanged-budget performance, 228 content and 225 browser cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. Preset labels
+remain owner-use candidates; source coverage, official curriculum and whole Campaign remain
+open. No new source, event, remote CI or release promotion.
 
 [[D3613]] adds execution preflight to the actual bounded-target policy composition:
 all demanded outputs are checked before local derivation, engine identity or scheduler work.
@@ -80,7 +90,7 @@ percentage: completed components do not establish a complete learner journey.
 | Theory and packs | Searchable phase-first Library, entry/rehearsal doors, explicit source-versus-review disclosure, authoring tools, pack contracts and installed training-set catalogue/API | Ground explanatory content and establish actual review authority, implement durable training-set progression/repeat/tempo and graduate the official corpus |
 | Bots | Twelve registered uncalibrated profiles, real selection/compiler, saved opponent decisions, resume and recoverable same-bot replay from the completed result | Calibrate strength; prove visible traits, repertoire, phase/endgame behavior and recovery; finish per-bot history/Review and preserve tournament-ready architecture. Bot tournaments/leagues are post-1.0 under D1416/D1520 |
 | Learner model | Durable attributed observations with opportunity counts, Rating, private floor-gated profile/history, paginated evidence and exact recorded-move Review entry | Populate valid skill credit; complete opening performance, comparative style, recommendations, lifecycle/rebuild and cold-game cost proof |
-| Campaign | Durable draft pilot, map, kit, bounded preparation with in-place tool choices, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
+| Campaign | Durable draft pilot, map, kit, bounded preparation with in-place tool and named help-style choices, encounters, registered-bot boss, earned rewinds, results, resume and recorded sealed/abandoned encounter history | Official educational progression, consumed theory unlocks, complete boss/reward/failure/whole-game Review paths, catalogue progression and meaningful long-term rewards |
 | Human/social play | Sessions, friend invitations, native alternating play and pause/branch return, imports and live screens | Enforced/recorded clocks, rating/pairing and live-source integration, complete casual/rated/rematch/review flows and truthful deployment scope |
 | Coach/streamer | Classrooms, assignments, completed/incomplete submission read-only inspection/revocation, proposals, marks, votes and casting/streamer chrome | Complete guided setup, role-specific presets, audience/consent/delay and reconnect workflows |
 | Accessibility/client | Stable Play stage, five input modes, semantic board grid, themes and responsive interaction matrices | Route-wide focus/overflow/device proof, owner-device discharge and complete PWA install/update/offline experience |

@@ -4,6 +4,7 @@
   import { ApiError } from "./api.js";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import CampaignPreparation from "./CampaignPreparation.svelte";
+  import type { PreferenceStorage } from "./assistance-preference.js";
   import {
     ACT_LABELS,
     CAMPAIGN_MODULE_LABELS,
@@ -29,8 +30,9 @@
     onNavigate: (path: string) => void;
     /** Storage only: preserves this browser's writer id for resume, even after navigation. */
     rememberWriter: (runId: string, writerId: string) => void;
+    assistanceStorage?: PreferenceStorage | undefined;
   }
-  let { campaigns, campaignRunId, onNavigate, rememberWriter }: Props = $props();
+  let { campaigns, campaignRunId, onNavigate, rememberWriter, assistanceStorage }: Props = $props();
 
   let catalogue: readonly CampaignCatalogueEntry[] = $state([]);
   let campaign: CampaignProjection | undefined = $state();
@@ -376,7 +378,7 @@
     </section>
 
     {#if preparing}
-      <CampaignPreparation {campaign} card={preparing} {busy} {error} onEquip={toggleEquip} onStart={() => void startEncounter(preparing!)} onClose={() => void closePreparation()} />
+      <CampaignPreparation {campaign} card={preparing} {busy} {error} {assistanceStorage} onEquip={toggleEquip} onStart={() => void startEncounter(preparing!)} onClose={() => void closePreparation()} />
     {/if}
 
     {#if campaign.campaignRun.status === "active"}
