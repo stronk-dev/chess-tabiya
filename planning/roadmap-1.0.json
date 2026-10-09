@@ -1733,7 +1733,7 @@
         "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-09",
-          "summary": "D3624 adds single-flight Campaign catalogue/map read retry and focus recovery; six mounted cases and actual desktop/phone failure-to-resume journeys retain saved encounters and recorded play without repeating commands. D3625 moves two unchanged installed-corpus cases to existing content suites, retaining every assertion and five-/fifteen-second limits, with a predecessor-red indirect-loader guard. Complete normal local gates pass clean types/build, 4064 software/359 files, seven unchanged-budget performance cases, 239 content and 227 browser passes, one optional Maia skip, zero retries and 112 composition cells. The first full run's loading timeout remains open under D3543; a passing rerun does not diagnose it. D3623's saved-history recomputation and earlier delivered journeys stand. Skills credit, calibrated bots, complete source/module integration, official content, full Campaign and release proof remain open; no whole capability, milestone or remote CI result is promoted.",
+          "summary": "D3634 completes in-game Campaign read recovery under campaign-core section 7.1. Failed/pending reads withdraw command revision authority and pause Declare done; single-flight read-only retry restores the same encounter or recorded seal without replaying commands. Crossed/departed replies and retired focus cannot attach; unresolved submit identity remains separate. Four predecessor controls fail; 93 focused cases and seven desktop/phone Campaign action journeys pass. Complete normal local gates pass clean types/build, 4194 software cases/361 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 237 browser passes (172 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. Earlier Review, Profile, Studio, account, Support and Campaign repairs stand. Skills credit, calibrated bots, complete sources/modules, official content, curriculum/progression/rewards/boss and release proof remain open; no whole capability, milestone or remote CI promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/learner-profile-application.test.ts",
@@ -1943,6 +1943,11 @@
               "kind": "rfc",
               "id": "return-scheduling.md",
               "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3634",
+              "digest": "sha256:b9f6f3ceba36518a8418ef5039eea675db37100ad169d48b6f87c4006364b8e1"
             }
           ]
         },

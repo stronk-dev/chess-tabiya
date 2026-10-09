@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3633]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3634]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,17 +53,18 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest completed batch: [[D3632]]/[[D3633]] correct stale recorded-path consumer descriptions and
-carry each admitted event's complete typed composition into Review at its exact ending move.
-Caption/chip focus paints only that move's board, with navigation cleanup and unchanged saved play.
-Seven predecessor controls fail; 251 focused cases/types and complete normal local tiers pass:
-4,189 software, seven unchanged-budget performance, 239 content and 235 browser cases, one optional
-Maia skip, zero retries, 150 input/112 composition cells. The first full run refuses two omitted
-queue references; repairing that bookkeeping precedes the remaining green tiers. Current ledger:
-3,382 rows, 1,511 done, 161 refused, 1,710 live and zero untriaged. All fourteen whole capabilities
-remain incomplete, four milestones active/five blocked, zero official graduates and UX
-273 complete/272 live/24 retired. This closes a real Review rendering gap, not source coverage,
-usefulness, semantic qualification, remaining RFC discharges, remote CI or release proof.
+Latest completed batch: [[D3634]] completes in-game Campaign failed/pending read recovery.
+Read-only retry restores the same saved encounter or confirmed seal without repeating commands;
+unconfirmed reads withdraw the campaign revision and pause Declare done. Crossed/departed replies
+cannot restore stale authority or focus. Four predecessor controls fail; 93 focused cases and seven
+desktop/phone Campaign action journeys pass. Complete normal local gates pass clean types/build,
+4,194 software, seven unchanged-budget performance, 239 content and 237 browser cases, one optional
+Maia skip, zero retries and 150 input/112 composition cells. Current ledger: 3,383 rows, 1,512 done,
+161 refused, 1,710 live and zero untriaged. All fourteen whole capabilities remain incomplete,
+four milestones active/five blocked, zero official graduates and UX 273 complete/272 live/24 retired.
+The preceding [[D3632]]/[[D3633]] Review composition/focus repair stands. This closes a recovery
+journey, not curriculum/progression/rewards, source/module coverage, usefulness, semantic
+qualification, remaining RFC discharges, remote CI or release proof.
 
 Previous completed batch: [[D3631]] repairs the pawn-push/bishop-retreat sequence when a pawn
 newly attacks multiple minors. The actual consecutive reply, not the first attacked piece,

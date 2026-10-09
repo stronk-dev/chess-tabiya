@@ -1,5 +1,13 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
+- **2026-10-09 in-game recovery checkpoint:** D3634 completes the §7.1 encounter strip's
+  failed/pending read → explicit read-only retry → same saved encounter/recorded seal journey.
+  Unconfirmed reads withdraw command revision authority and pause Declare done; response-loss
+  submit identity remains separate. Mounted and native desktop/phone controls prove repeated
+  failure, crossed/departed response refusal, focus ownership, stable board and unchanged play
+  without repeating commands. Complete local gates pass; no new API, economy, reward, curriculum,
+  independent acceptance, remote CI, release or whole-Campaign completion is claimed.
+
 - **2026-10-09 implementation checkpoint:** D3624 supplies explicit single-flight catalogue/map
   read recovery under §7.1, distinguishes failed from empty arrival and retains exact saved
   encounter/command identity. Departed/crossed reads cannot replace the new map or move its focus.

@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make campaign-actions-check campaign-actions-browser-check` covers Campaign read/action
+recovery at the mounted boundary and actual desktop/phone HTTP journeys. The in-game strip
+withdraws command authority during failed/pending reads; repeated read-only retries preserve the
+saved encounter, recorded play, keyboard focus ownership and all 64 hittable squares. A confirmed
+seal after a lost submit response does not submit again. These cases run in the normal software
+and browser tiers; they do not establish official curriculum or whole-Campaign completion.
+
 `make narration-lifetime-check` checks delayed voice/speech through actual REST authority and
 composed HTTP grants, then reasoning review in the separate content tier and workspace types.
 It covers disclosure/position changes, revocation, demotion, shared-run deletion, cancellation,

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, untrack } from "svelte";
+  import { onMount, tick, untrack } from "svelte";
   import { ApiError } from "./api.js";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
@@ -30,6 +30,10 @@
 
   let campaign: CampaignProjection | undefined = $state();
   let error: string | undefined = $state();
+  let readError: string | undefined = $state();
+  let reading = $state(false);
+  let title: HTMLElement | undefined = $state();
+  let readNotice: HTMLParagraphElement | undefined = $state();
   let busy = $state(false);
   let sealed: ReturnType<typeof campaignEncounterResult> = $state();
   let submission: { campaign: CampaignProjection; campaignRunId: string; nodeId: string; input: { runId: string; branchId: string; expectedRevision: number; commandId: string } } | undefined;
@@ -53,6 +57,7 @@
         submission = undefined;
         busy = false;
         error = undefined;
+        readError = undefined;
       }
       void refresh();
     });
@@ -63,28 +68,58 @@
     return current === generation && requestedSubject === JSON.stringify([origin.campaignRunId, origin.nodeId, runId, branchId]);
   }
 
-  async function refresh(): Promise<void> {
-    const current = generation, requestedSubject = subject, reading = ++readGeneration;
+  async function refresh(invoker?: HTMLElement): Promise<void> {
+    const current = generation, requestedSubject = subject, request = ++readGeneration;
     const requestedId = origin.campaignRunId;
+    // Disabling the retry button can move native focus to body before the response arrives.
+    // Remember the invoking focus, but retire it if the learner focuses another control.
+    let ownsFocus = invoker !== undefined && document.activeElement === invoker;
+    const focusChanged = (event: FocusEvent): void => {
+      if (event.target !== invoker && event.target !== document.body) ownsFocus = false;
+    };
+    if (ownsFocus) document.addEventListener("focusin", focusChanged);
+    reading = true;
+    readError = undefined;
+    // A retained map is useful context, not authority for another charged or seal command.
+    onRevision(null);
     try {
       const next = await campaigns.read(requestedId);
-      if (!ownsView(current, requestedSubject) || reading !== readGeneration) return;
+      if (!ownsView(current, requestedSubject) || request !== readGeneration) return;
       if (next.campaignRun.id !== requestedId || (campaign !== undefined && next.campaignRun.documentDigest !== campaign.campaignRun.documentDigest)) throw new Error("Crossed campaign read");
       const result = campaignEncounterResult(next, origin.nodeId, runId);
       campaign = next;
       sealed = result;
+      if (result !== undefined) { submission = undefined; error = undefined; }
       onRevision(next.activeEncounter?.playRunId === runId && next.activeEncounter.nodeId === origin.nodeId ? { campaignRevision: next.campaignRun.revision, active: true } : null);
+      if (ownsFocus) {
+        await tick();
+        if (ownsFocus && ownsView(current, requestedSubject) && request === readGeneration && (document.activeElement === invoker || document.activeElement === document.body)) title?.focus();
+      }
     } catch (caught) {
-      if (ownsView(current, requestedSubject) && reading === readGeneration) error = caught instanceof ApiError ? caught.message : "Campaign state could not be loaded.";
+      if (ownsView(current, requestedSubject) && request === readGeneration) {
+        readError = caught instanceof ApiError ? caught.message : "Campaign state could not be loaded.";
+        if (ownsFocus) {
+          await tick();
+          if (ownsFocus && ownsView(current, requestedSubject) && request === readGeneration && (document.activeElement === invoker || document.activeElement === document.body)) readNotice?.focus();
+        }
+      }
+    } finally {
+      document.removeEventListener("focusin", focusChanged);
+      if (ownsView(current, requestedSubject) && request === readGeneration) reading = false;
     }
   }
 
+  function retryRead(): void {
+    if (reading || busy) return;
+    void refresh(document.activeElement instanceof HTMLElement ? document.activeElement : undefined);
+  }
+
   export function declareError(): string | undefined {
-    return error;
+    return readError ?? error;
   }
 
   export async function declareDone(): Promise<boolean> {
-    if (busy || campaign === undefined) return false;
+    if (busy || reading || readError !== undefined || campaign === undefined) return false;
     if (sealed !== undefined) return true;
     if (!active && submission === undefined) return false;
     const current = generation, requestedSubject = subject;
@@ -102,6 +137,8 @@
       const result = campaignEncounterResult(done.campaign, requested.nodeId, requested.input.runId);
       if (result === undefined) throw new Error("Missing encounter result");
       readGeneration++;
+      reading = false;
+      readError = undefined;
       submission = undefined;
       sealed = result;
       campaign = done.campaign;
@@ -121,7 +158,7 @@
 <aside class="session-banner campaign-strip" aria-label="Campaign encounter">
   {#if sealed}
     <div class="node-result" role="status">
-      <strong>{sealed.title}: {sealed.verdict}</strong>
+      <strong class="encounter-title" tabindex="-1" bind:this={title}>{sealed.title}: {sealed.verdict}</strong>
       <p>This choice is sealed. Your recorded attempts are kept; continue on the map.</p>
       <p>{sealed.actIncome} earned {sealed.actIncome === 1 ? "rewind" : "rewinds"} for finishing this encounter in {sealed.act}, win or lose.</p>
       {#if sealed.resourceIncome > 0}<p>{sealed.resourceIncome} earned {sealed.resourceIncome === 1 ? "rewind" : "rewinds"} from this encounter’s reward.</p>{/if}
@@ -143,18 +180,25 @@
       {#if campaign}<CampaignEncounterHistory {campaigns} campaignRunId={origin.campaignRunId} nodeId={origin.nodeId} {runId} campaignDocumentDigest={campaign.campaignRun.documentDigest} {onNavigate} />{/if}
     </div>
   {:else if campaign}
-    <strong>Campaign · {nodeTitle}</strong>
+    <strong class="encounter-title" tabindex="-1" bind:this={title}>Campaign · {nodeTitle}</strong>
     <span class="charges" data-testid="campaign-strip-charges" aria-label={`Earned rewinds: ${campaign.charges.balance} remaining this campaign`}><span aria-hidden="true">⟲ {campaign.charges.balance}</span> Earned rewinds: {campaign.charges.balance} remaining this campaign</span>
     {#if active}
       <span class="kit">Kit: {campaign.kit.equipped.filter((id) => !suppressed.includes(id)).map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ") || "legal moves only"}{suppressed.length > 0 ? ` · set aside: ${suppressed.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}` : ""}</span>
       <div class="row-actions">
-        <button type="button" disabled={busy} onclick={() => void declareDone()}>{busy ? "Declaring…" : "Declare done"}</button>
+        <button type="button" disabled={busy || reading || readError !== undefined} aria-describedby={reading || readError !== undefined ? "campaign-strip-read" : undefined} onclick={() => void declareDone()}>{busy ? "Declaring…" : "Declare done"}</button>
         <button type="button" class="quiet" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Map</button>
       </div>
     {:else}
       <span>This run was a campaign encounter.</span>
       <button type="button" class="quiet" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Open the campaign map</button>
     {/if}
+  {/if}
+  {#if reading}<p id="campaign-strip-read" role="status">Loading encounter state. Campaign commands are paused until this read finishes.</p>{/if}
+  {#if readError !== undefined}
+    <p id="campaign-strip-read" role="alert" tabindex="-1" bind:this={readNotice}>{readError} This read has not changed your encounter; reload its state before using campaign commands.</p>
+  {/if}
+  {#if reading || readError !== undefined}
+    <button type="button" disabled={reading || busy} onclick={retryRead}>{reading ? "Reloading encounter…" : "Retry loading encounter"}</button>
   {/if}
   {#if error}<p role="alert">{error}</p>{/if}
 </aside>

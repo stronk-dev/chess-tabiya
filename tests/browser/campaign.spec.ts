@@ -121,6 +121,62 @@ async function holdCampaignAction(page: Page, path: RegExp) {
 }
 
 for (const mobile of [false, true]) {
+  test(`Campaign actions recover the in-game strip without repeating saved commands${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const campaignId = new URL(page.url()).pathname.split("/").at(-1)!;
+    const runId = await startNode(page, "f1-a");
+    await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, runId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+    const before = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graphBefore = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    const savedMap = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+    const edge = await playableBoard(page);
+    const commands: string[] = [];
+    page.on("request", request => {
+      const path = new URL(request.url()).pathname;
+      if ((path.startsWith("/campaign-runs/") || /\/runs\/[^/]+\/(rewind|fork|groups|simulation\/enter)$/u.test(path)) && request.method() !== "GET") commands.push(`${request.method()} ${path}`);
+    });
+    let fail = true, reads = 0;
+    await page.route(`**/campaign-runs/${campaignId}`, async route => {
+      if (route.request().method() !== "GET") { await route.continue(); return; }
+      reads++;
+      if (fail) await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "HTTP_ERROR", message: "Temporary encounter state failure" } }) });
+      else await route.continue();
+    });
+    await page.reload();
+    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    await expect(strip.getByRole("alert")).toContainText("Temporary encounter state failure");
+    await expect(strip.getByRole("alert")).toContainText("This read has not changed your encounter");
+    await expect(strip.getByRole("button", { name: "Declare done", exact: true })).not.toBeVisible();
+    await playableBoard(page, edge);
+    const retry = strip.getByRole("button", { name: "Retry loading encounter", exact: true });
+    await retry.focus();
+    await retry.press("Enter");
+    await expect(retry).toBeEnabled();
+    await expect(strip.getByRole("alert")).toBeFocused();
+    fail = false;
+    await retry.focus(); await retry.press("Enter");
+    await expect(strip.getByRole("button", { name: "Declare done", exact: true })).toBeEnabled();
+    await expect(strip.locator(".encounter-title")).toBeFocused();
+    await expect(strip.getByRole("alert")).not.toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`, "u"));
+    await playableBoard(page, edge);
+    expect(reads).toBe(3);
+    expect(await (await page.request.get(`/campaign-runs/${campaignId}`)).json()).toEqual(savedMap);
+    const after = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graphAfter = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    assertOnlyEvidenceAppended(before.events, after.events);
+    assertRecordedNodesPreserved(graphBefore.nodes, graphAfter.nodes);
+    expect(graphAfter.branches).toEqual(graphBefore.branches);
+    expect(graphAfter.activeCursor).toEqual(graphBefore.activeCursor);
+    expect(commands).toEqual([]);
+    await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+    await expect(strip.locator(".node-result")).toContainText("Your recorded attempts are kept");
+    expect(commands).toEqual([`POST /campaign-runs/${campaignId}/nodes/f1-a/submit`]);
+  });
+
   test(`Campaign actions recover catalogue and map reads without repeating saved work${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();

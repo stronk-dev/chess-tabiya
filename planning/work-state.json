@@ -30096,6 +30096,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/review-map.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3634",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b9f6f3ceba36518a8418ef5039eea675db37100ad169d48b6f87c4006364b8e1",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

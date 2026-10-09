@@ -15,6 +15,15 @@ heading after settlement. Repeated failure stays retryable; leaving or switching
 retires the old response and focus change. No create/start/loadout/submit command is repeated.
 The recovered map resumes its existing encounter with this browser's retained writer.
 
+The in-game encounter strip also offers **Retry loading encounter**. Pending or failed reads
+withdraw the published campaign revision and pause Declare done; the retained strip is context,
+not command authority. Retry performs only a read, restoring the current revision or a recorded
+seal without repeating start, spend or submit. A lost submit response retains its original command
+identity unless a later read confirms the seal. Crossed definitions and departed responses cannot
+attach to the current encounter. Keyboard retry returns focus to its error or encounter title
+only while the learner has not moved focus elsewhere. Desktop and phone tests verify the saved
+position, branch, campaign state and board geometry through repeated failure and recovery.
+
 ## Leaving a pending action
 
 Create, encounter start, kit changes, abandonment and Declare done have one pending command

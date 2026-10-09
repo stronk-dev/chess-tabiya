@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3634]] is closed locally under campaign-core §7.1. In-game failed/pending reads withdraw
+the published campaign revision and pause Declare done; single-flight read-only retry restores
+the same encounter or its recorded seal without replaying commands. Four predecessor controls
+fail, 93 focused cases and seven desktop/phone Campaign action journeys pass, including native
+focus ownership, unchanged saved play and all 64 hittable squares. Complete normal local gates
+pass 4,194 software, seven unchanged-budget performance, 239 content and 237 browser cases,
+one optional Maia skip, zero retries and 150 input/112 composition cells. Curriculum, remaining
+source/module/progression/boss/reward discharges and whole-Campaign/release proof remain open.
+
 [[D3632]]/[[D3633]] are closed locally under the existing Review/presentation contracts. Current
 documentation acknowledges Review's shipped recorded-path consumer. Each event retains its complete
 typed composition at its own ending move; caption/chip focus paints only that selected board and

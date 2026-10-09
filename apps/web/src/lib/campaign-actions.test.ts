@@ -14,7 +14,7 @@ const DIGEST = `sha256:${"a".repeat(64)}`;
 type Action = "create" | "start" | "loadout" | "abandon";
 const actions: Action[] = ["create", "start", "loadout", "abandon"];
 const cleanup: (() => void)[] = [];
-afterEach(() => { for (const destroy of cleanup.splice(0)) destroy(); document.body.replaceChildren(); });
+afterEach(() => { for (const destroy of cleanup.splice(0)) destroy(); document.body.replaceChildren(); vi.restoreAllMocks(); });
 
 function fixture(id = RUN): CampaignProjection {
   return {
@@ -486,15 +486,120 @@ function sealResponse(): CampaignCommandResult {
   };
 }
 async function strip(submit: () => Promise<Response>, read: () => Promise<Response> = async () => Response.json(encounterFixture())) {
-  const fetcher = vi.fn(async (_path: string, init?: RequestInit) => init?.method === "GET" ? read() : submit());
+  const fetcher = vi.fn(async (path: string, init?: RequestInit) => path.endsWith("/review")
+    ? Response.json({ kind: "available", runId: PLAY, nodeId: NODE, campaignDocumentDigest: DIGEST, route: `/play/run/${PLAY}`, reviewNodeId: "recorded-tip", reviewBranchId: "main", reviewRoute: `/review/game/${PLAY}?branch=main&node=recorded-tip` })
+    : init?.method === "GET" ? read() : submit());
   const onRevision = vi.fn();
   const component = createClassComponent({ component: CampaignStrip, target: document.body, props: {
     campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate: vi.fn(), onRevision,
   } });
   cleanup.push(() => component.$destroy());
-  await vi.waitFor(() => expect(button("Declare done")).toBeDefined());
+  await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
   return { component, fetcher, onRevision };
 }
+
+describe("Campaign in-game read recovery", () => {
+  const failedRead = () => Response.json({ error: { code: "HTTP_ERROR", message: "Temporary encounter read failure" } }, { status: 503 });
+
+  it("offers an initial read-only retry and restores the same encounter's authority and focus", async () => {
+    let failed = true;
+    const fetcher = vi.fn(async () => failed ? failedRead() : Response.json(encounterFixture()));
+    const onRevision = vi.fn(), onNavigate = vi.fn();
+    const component = createClassComponent({ component: CampaignStrip, target: document.body, props: {
+      campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate, onRevision,
+    } });
+    cleanup.push(() => component.$destroy());
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')).not.toBeNull());
+    expect(onRevision).toHaveBeenLastCalledWith(null);
+    expect(await component.declareDone()).toBe(false);
+    const retry = button("Retry loading encounter");
+    expect(retry).toBeDefined();
+    retry.focus(); failed = false; retry.click();
+    await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
+    expect(onRevision).toHaveBeenLastCalledWith({ campaignRevision: 1, active: true });
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+    expect(document.activeElement).toBe(document.querySelector(".campaign-strip .encounter-title"));
+    expect(fetcher.mock.calls).toEqual([[`/campaign-runs/${RUN}`, expect.objectContaining({ method: "GET" })], [`/campaign-runs/${RUN}`, expect.objectContaining({ method: "GET" })]]);
+    expect(onNavigate).not.toHaveBeenCalled();
+  });
+
+  it("revokes old authority while loading and after failure, with one explicit retry", async () => {
+    let next: () => Promise<Response> = async () => Response.json(encounterFixture());
+    const view = await strip(async () => Response.json(sealResponse()), () => next());
+    const pending = deferred<Response>(); next = () => pending.promise;
+    view.component.$set({ runRevision: 2 }); await settle();
+    expect(view.onRevision).toHaveBeenLastCalledWith(null);
+    expect(button("Declare done").disabled).toBe(true);
+    expect(await view.component.declareDone()).toBe(false);
+    pending.resolve(failedRead()); await settle();
+    expect(button("Declare done").disabled).toBe(true);
+    expect(view.onRevision).toHaveBeenLastCalledWith(null);
+    const retryResult = deferred<Response>(); next = () => retryResult.promise;
+    const retry = button("Retry loading encounter");
+    retry.click(); retry.click(); await settle();
+    expect(view.fetcher.mock.calls).toHaveLength(3);
+    expect(button("Reloading encounter…").disabled).toBe(true);
+    const restored = encounterFixture();
+    retryResult.resolve(Response.json({ ...restored, campaignRun: { ...restored.campaignRun, revision: 5 } }));
+    await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
+    expect(view.onRevision).toHaveBeenLastCalledWith({ campaignRevision: 5, active: true });
+    expect(view.fetcher.mock.calls.every(([, init]) => init?.method === "GET")).toBe(true);
+  });
+
+  it("retains retry on repeated failure without stealing focus from another control", async () => {
+    let failed = false;
+    const view = await strip(async () => Response.json(sealResponse()), async () => failed ? failedRead() : Response.json(encounterFixture()));
+    failed = true; view.component.$set({ runRevision: 2 });
+    await vi.waitFor(() => expect(button("Retry loading encounter")).toBeDefined());
+    button("Retry loading encounter").click(); await settle();
+    await vi.waitFor(() => expect(button("Retry loading encounter")).toBeDefined());
+    expect(await view.component.declareDone()).toBe(false);
+    const late = deferred<Response>();
+    const reader = vi.spyOn(CampaignApi.prototype, "read").mockImplementationOnce(async () => { const response = await late.promise; return await response.json(); });
+    const retry = button("Retry loading encounter"); retry.focus(); retry.click();
+    const map = button("Map"); map.focus(); map.blur();
+    late.resolve(Response.json(encounterFixture())); await settle(); reader.mockRestore();
+    expect(document.activeElement).toBe(document.body);
+  });
+
+  it("retires a retry response after replacement and rejects a crossed campaign definition", async () => {
+    let fail = false;
+    const view = await strip(async () => Response.json(sealResponse()), async () => fail ? failedRead() : Response.json(encounterFixture()));
+    fail = true; view.component.$set({ runRevision: 2 });
+    await vi.waitFor(() => expect(button("Retry loading encounter")).toBeDefined());
+    const late = deferred<CampaignProjection>();
+    const reader = vi.spyOn(CampaignApi.prototype, "read").mockImplementationOnce(() => late.promise);
+    button("Retry loading encounter").click();
+    view.component.$set({ runId: "replacement-play", origin: { campaignRunId: "replacement-campaign", nodeId: "replacement-node" } }); await settle();
+    late.resolve(encounterFixture()); await settle(); reader.mockRestore();
+    expect(document.querySelector(".campaign-strip")?.textContent).not.toContain("First encounter");
+    expect(view.onRevision).toHaveBeenLastCalledWith(null);
+
+    fail = false; view.component.$set({ runId: PLAY, origin: { campaignRunId: RUN, nodeId: NODE } });
+    await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
+    const crossed = encounterFixture();
+    const crossing = vi.spyOn(CampaignApi.prototype, "read").mockResolvedValueOnce({ ...crossed, campaignRun: { ...crossed.campaignRun, documentDigest: `sha256:${"b".repeat(64)}` } });
+    view.component.$set({ runRevision: 3 }); await settle(); crossing.mockRestore();
+    expect(view.onRevision).toHaveBeenLastCalledWith(null);
+    expect(button("Declare done").disabled).toBe(true);
+    expect(button("Retry loading encounter")).toBeDefined();
+  });
+
+  it("recovers a durably sealed encounter by reading without repeating a lost submit", async () => {
+    let next: () => Promise<Response> = async () => Response.json(encounterFixture());
+    const view = await strip(async () => { throw new TypeError("Lost submit response"); }, () => next());
+    expect(await view.component.declareDone()).toBe(false);
+    next = async () => failedRead(); view.component.$set({ runRevision: 2 });
+    await vi.waitFor(() => expect(button("Retry loading encounter")).toBeDefined());
+    next = async () => Response.json(sealResponse().campaign);
+    button("Retry loading encounter").click();
+    await vi.waitFor(() => expect(document.querySelector(".node-result")?.textContent).toContain("Played to the authored boundary"));
+    expect(view.onRevision).toHaveBeenLastCalledWith(null);
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+    expect(await view.component.declareDone()).toBe(true);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "POST")).toHaveLength(1);
+  });
+});
 
 describe("Campaign earned encounter results", () => {
   function withReward(reward: CampaignProjection["acts"][number]["layers"][number]["choices"][number]["reward"], options: { equipped?: boolean; suppressed?: boolean } = {}) {
@@ -636,11 +741,13 @@ describe("Campaign encounter declaration ownership", () => {
     expect(view.onRevision.mock.calls).toHaveLength(before);
   });
 
-  it("does not let a pre-declaration refresh reattach the sealed encounter", async () => {
-    const late = deferred<Response>(); let delay = false;
-    const view = await strip(async () => Response.json(sealResponse()), async () => delay ? late.promise : Response.json(encounterFixture()));
+  it("does not let a refresh in flight during a declaration reattach the sealed encounter", async () => {
+    const late = deferred<Response>(), submitted = deferred<Response>(); let delay = false;
+    const view = await strip(() => submitted.promise, async () => delay ? late.promise : Response.json(encounterFixture()));
+    const declaring = view.component.declareDone();
     delay = true; view.component.$set({ runRevision: 2 }); await settle();
-    expect(await view.component.declareDone()).toBe(true);
+    submitted.resolve(Response.json(sealResponse()));
+    expect(await declaring).toBe(true);
     const before = view.onRevision.mock.calls.length;
     late.resolve(Response.json(encounterFixture())); await settle();
     expect(view.onRevision.mock.calls).toHaveLength(before);
