@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2591ade8764f500f9f65d82be3979e17c88b99b23d4cdc6d916bebf8a8860b41",
+    "roadmap": "sha256:508a271ea959581cab0636e601ed43a8e252cb713336eb5237558309f0d7ffc1",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:d581db0a82ecfbdd45cb199250afc3068ee06bafdb81e09d0f5d93f341e74b9a",
+    "workState": "sha256:775bbaba408e495b7788361f8b9f85d3ed951c62ff0565813028c1612b7c0a9c",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 630,
+      "todo": 629,
       "doing": 14,
       "blocked": 1066,
-      "done": 1498,
+      "done": 1499,
       "refused": 161
     },
     "workItems": {
@@ -196,10 +196,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Reproduce the queued D3620 en-passant victim-versus-landing audit at the existing loose-piece factory boundary before choosing a repair. Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Complete the admitted D1700/D1701 consumer execution, source resolution and exact availability runtime joins without treating compilation as adoption. Independently review D3564's authored draft section 4.1a before implementing its exact-input orientation grammar and real-runner tests; independent chess authority remains a separate family slice. Independently review D3376's installed-opening-evidence draft and D3373's durable Stockfish draft before their implementation. D3590's strict-loader repair is locally closed, not the installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and explicit migration order. D3429 numerical calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3619 closes locally: tactical identities retain both physical castling king/rook destinations and the post-promotion attacker across defender relocation, loose-piece deltas, double attacks, fork survival, mate-in-one and serialized Post-commit Nudge captions. Twenty predecessor controls fail; all 329 focused foundation cases/types and final normal tiers pass: 3937 software cases/358 files, seven unchanged-budget performance cases, 228 content cases and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. The existing profile retains its old item and adds the omitted relocated rook; authored packs and 984 capability declarations are unchanged. Semantic coverage remains 81 subjects / 42 passing cases / zero fully qualified. D3620 is a separate queued audit. Held source/orientation contracts, calibrated bots, official content, whole capabilities/milestones and release remain open; no push or remote CI claim.",
+        "summary": "D3620 closes locally: loose-piece evidence retains legal en-passant capturers against the actual pawn victim, separately from the capture landing, through sealed readings/events, double-push deltas, serialized Post-commit Nudge captions, complete candidate packets and committed-run reconstruction. Fifteen predecessor controls fail; all 349 focused foundation cases/types and complete normal tiers pass: 3957 software cases/358 files, seven unchanged-budget performance cases, 228 content cases and 225 browser passes, one optional Maia skip, zero retries and all 112 composition cells. Pinned/expired rights, equal exchanges and ordinary capture controls pass; the shared recapture helper remains landing-based. Authored packs and source/projection identities are unchanged. Semantic coverage remains 81 subjects / 42 passing cases / zero fully qualified. Remaining D1700/D1701 runtime joins, held source/orientation contracts, calibrated bots, official content, whole capabilities/milestones and release remain open; no push or remote CI claim.",
         "impact": "advanced",
         "evidence": [
           "rfc/installed-opening-evidence.md",

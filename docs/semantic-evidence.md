@@ -26,6 +26,12 @@ legal reply; capture, movement of original targets and legal check parries still
 Mate-in-one operands likewise separate the primary mover's landing from the actual checking
 pieces. These are identity repairs, not move grades or new learner-module admissions.
 
+Loose-piece readings retain en-passant captures against the occupied victim square, separately
+from the empty capture landing. The existing legal capture/exchange authority supplies both;
+pinned captures and expired rights are excluded. A legal equal exchange remains a capturer
+without making the victim en prise. Double-push deltas and their Post-commit Nudge captions
+use that same reading, not a renderer-side reconstruction.
+
 The breadth foundation adds twelve event projections over exact control, mobility, pawn, material,
 king, defender and open-file operands. Recorded two-/three-edge events preserve every node/FEN
 boundary and piece identity; they report observed order only. They deliberately do not name

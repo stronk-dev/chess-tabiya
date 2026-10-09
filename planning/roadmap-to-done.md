@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3619]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3620]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -30,6 +30,15 @@ they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
 
+[[D3620]] closes the en-passant victim/landing omission in existing loose-piece evidence.
+Fifteen predecessor controls fail; all 349 focused cases pass, including both colors, legal
+negatives, sealed factories, serialized Nudge captions, candidate packets and saved runs.
+Complete normal tiers pass clean types/build, 3,957 software, seven unchanged-budget
+performance, 228 content and 225 browser cases, one optional Maia skip, zero retries and all
+112 composition cells. Source identities, permissions, authored packs and semantic qualification
+are unchanged. Remaining source/consumer integration, content and complete release journeys
+stay open; this is a correctness repair, not a whole 1.0 capability.
+
 [[D3619]] is closed locally: existing tactical factories now follow both physical castling
 relocations and the post-promotion mover role, rather than encoded UCI endpoints or an obsolete
 pawn role. Twenty predecessor controls fail; all 329 focused foundation cases and clean types
@@ -38,7 +47,7 @@ reconstruction and actual serialized Post-commit Nudge captions. The existing be
 adds the previously omitted relocated-rook event, retaining its original item. Final normal
 tiers pass clean types/build, 3,937 software, seven unchanged-budget performance, 228 content
 and 225 browser cases, one optional Maia skip, zero retries and all 112 composition cells.
-The separate en-passant victim-identity audit D3620 remains queued, not reproduced or repaired.
+The subsequent en-passant victim-identity repair D3620 is recorded above.
 No new source, projection, permission, semantic qualification or whole capability is claimed.
 
 [[D3618]] closes another bounded execution gap: five production board/Inspector/shape/claim

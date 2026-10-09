@@ -12,11 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
-[[D3620]] is next source-boundary audit under tactical-collectors §3.4: reproduce the
-loose-piece caller's victim-square versus capture-landing mismatch for en passant. Require
-both colors, actual double-push deltas, sealed factories and pinned/expired-right negatives.
-Do not silently change legalCaptureMovesTo's landing semantics or manufacture a second
-capture source. Source inspection is not yet a measured failure or completed repair.
+[[D3620]] is closed locally under tactical-collectors §3.4. Fifteen predecessor
+controls reproduce the omitted en-passant capturer; five nearby controls already pass.
+The existing legal capture/exchange authority now joins the actual victim to its distinct
+landing, retaining both colors, double-push events, sealed factories, serialized Post-commit
+Nudge captions, complete candidate packets and saved-run reconstruction. All 349 focused
+foundation cases pass. Pinned/expired rights and equal exchanges retain their negatives;
+the shared landing-based recapture helper is unchanged. Complete normal tiers pass clean
+types/build, 3,957 software, seven unchanged-budget performance, 228 content and 225 browser
+cases, one optional Maia skip, zero retries and all 112 composition cells. No second capture
+source, new permission or semantic qualification. Remaining D1700/D1701 integration below
+is the next admitted foundation work; held source amendments still require review.
 
 [[D3619]] is closed locally under tactical-collectors §§3.4/3.7 and semantic-collectors §3.1:
 physical king/rook relocation and promotion-role retention are repaired in the existing tactical
@@ -26,7 +32,7 @@ serialized Post-commit Nudge captions. All 329 focused cases and clean types pas
 tiers pass 3,937 software, seven unchanged-budget performance, 228 content and 225 browser
 cases, one optional Maia skip, zero retries and all 112 composition cells. Conservative
 predicates, projection identities, authored packs and held source/module contracts are unchanged.
-Semantic qualification and whole foundation remain open; D3620 above is a separate queued audit.
+Semantic qualification and whole foundation remain open; D3620's subsequent repair is above.
 
 [[D3618]] is closed locally under implementing provider-exchange §§1–2: complete exact
 consumer admission now precedes local board/Inspector readings, shape-firing and authored-claim

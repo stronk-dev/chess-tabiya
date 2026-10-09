@@ -29973,11 +29973,12 @@
     },
     {
       "id": "D3620",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7f32864ab809f1232811eb7908a9926730dd480f0d13a4c961c0f2edb6d0f1b9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8029f8cf48b4b4502fa313842d60809af860e42aa39853cf2ea3f161c6793b21",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "packages/runtime/src/special-move-tactics.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -6,11 +6,12 @@ import { CANDIDATE_EVENTS_SCOPE, compileCandidatePopulation } from "./candidate-
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { legalCaptureMovesTo } from "./exchange.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { localSemanticEvents } from "./semantic-evidence.js";
 import { commitMove, createRun } from "./runtime.js";
 import { parsePresentationReceipt, presentEvidenceItems, presentedSentence, serializePresentedEvidence } from "./presentation-contract.js";
-import { checkEvent, defenderDutyRelocatedEvents, doubleAttackEvent, forkSurvivesReply, loosePieceEvents, mateInOne, replyBreadth } from "./tactics.js";
+import { checkEvent, defenderDutyRelocatedEvents, doubleAttackEvent, forkSurvivesReply, loosePieceEvents, loosePieceReading, mateInOne, replyBreadth } from "./tactics.js";
 
 function edge(beforeFen: string, moveUci: string) {
   const position = positionFromFen(beforeFen);
@@ -187,5 +188,131 @@ describe("D3619 special-move identities at the production tactical boundary", ()
       defenderAfter: expect.objectContaining({ square: fixture.to }), target: expect.objectContaining({ square: fixture.target }),
     }));
     expect(saved).toEqual(run);
+  });
+});
+
+const enPassantPushes = [
+  { name: "black", fen: "4k3/3p4/8/4P3/8/8/8/4K3 b - - 0 1", move: "d7d5", victim: "d5", capturer: "e5", capture: "e5d6", landing: "d6" },
+  { name: "white", fen: "4k3/8/8/8/4p3/8/3P4/4K3 w - - 0 1", move: "d2d4", victim: "d4", capturer: "e4", capture: "e4d3", landing: "d3" },
+] as const;
+
+describe("D3620 en-passant victim identity at the production tactical boundary", () => {
+  it.each(enPassantPushes)("reads the legal capturer of the $name pawn on its occupied square", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const reading = loosePieceReading(input.afterFen);
+    const victim = reading.pieces.find(item => item.piece.square === fixture.victim)!;
+    expect(victim).toMatchObject({
+      piece: { occupant: { role: "pawn", color: fixture.name } }, enPrise: true,
+      legalCapturers: [{ square: fixture.capturer, captureUci: fixture.capture, exchange: {
+        captured: { square: fixture.victim }, landingSquare: fixture.landing, resultUnits: 1,
+      } }],
+    });
+  });
+
+  it.each(enPassantPushes)("retains the $name victim/capture/landing through the sealed reading factory", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const reading = invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen: input.afterFen });
+    expect(reading.payload.pieces.find(item => item.piece.square === fixture.victim)).toMatchObject({
+      enPrise: true,
+      legalCapturers: [{ captureUci: fixture.capture, exchange: { captured: { square: fixture.victim }, landingSquare: fixture.landing } }],
+    });
+    expect(evidenceValueReceipt(reading).factory).toBe("createRulesTacticReadingLoosePieceV1Evidence");
+  });
+
+  it.each(enPassantPushes)("emits a gained exposure for the actual $name double-pushed pawn", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const result = loosePieceEvents(input.beforeFen, input.moveUci);
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("a legal double push unexpectedly abstained");
+    expect(result.events).toContainEqual(expect.objectContaining({
+      sign: "gained", mover: expect.objectContaining({ after: { square: fixture.victim, role: "pawn" } }),
+      before: expect.objectContaining({ enPrise: false }), after: expect.objectContaining({ enPrise: true }),
+    }));
+  });
+
+  it.each(enPassantPushes)("presents the $name pawn's actual exposure through serialized Post-commit Nudge", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const result = invokeEvidenceValueRoute("rules.tactic.event.loose_piece@1", input);
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("the legal double push unexpectedly abstained");
+    const values = result.value;
+    expect(values).toHaveLength(1);
+    expect(values[0]!.payload).toMatchObject({ sign: "gained", mover: { after: { square: fixture.victim, role: "pawn" } }, after: { legalCapturers: [{ captureUci: fixture.capture }] } });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, values));
+    const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
+    expect(wire).toHaveLength(1);
+    const caption = presentedSentence(wire[0]!);
+    expect(caption).toContain(`pawn on ${fixture.victim}`);
+    expect(caption).toContain(`capturable from ${fixture.capturer}`);
+    expect(caption).not.toContain(`pawn on ${fixture.landing}`);
+  });
+
+  it.each(enPassantPushes)("retains the $name double-push exposure in the complete legal candidate packet", fixture => {
+    const compiled = compileCandidatePopulation({ beforeFen: fixture.fen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+    expect(compiled.kind).toBe("ready");
+    if (compiled.kind !== "ready") throw new Error(JSON.stringify(compiled.error));
+    const candidate = compiled.receipt.packet.candidates.find(item => item.moveUci === fixture.move)!;
+    expect(candidate.events.filter(item => item.projection.id === "rules.tactic.event.loose_piece").map(item => item.operands)).toContainEqual(expect.objectContaining({
+      sign: "gained", mover: expect.objectContaining({ after: { square: fixture.victim, role: "pawn" } }),
+    }));
+    expect(compiled.receipt.packet.candidates).toHaveLength(compiled.receipt.packet.legalMoves.length);
+  });
+
+  it.each(enPassantPushes)("reconstructs $name en-passant exposure from committed run bytes", fixture => {
+    const at = "2026-10-09T00:00:00.000Z";
+    const initial = createRun({ id: `ep-${fixture.name}`, packId: "special-move-boundary", packDigest: `sha256:${"0".repeat(64)}`, startFen: fixture.fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    const run = commitMove(initial, fixture.move, { at }).run;
+    const saved = JSON.parse(JSON.stringify(run)) as typeof run;
+    const child = saved.nodes.at(-1)!;
+    const parent = saved.nodes.find(node => node.id === child.parentId)!;
+    expect(localSemanticEvents(parent.fen, child.moveUci!, child.fen).filter(item => item.projection.id === "rules.tactic.event.loose_piece").map(item => item.operands)).toContainEqual(expect.objectContaining({
+      sign: "gained", after: expect.objectContaining({ legalCapturers: [expect.objectContaining({ captureUci: fixture.capture })] }),
+    }));
+    expect(saved).toEqual(run);
+  });
+
+  it.each([
+    { name: "white", fen: "4r1k1/8/8/3pP3/8/8/8/4K3 w - d6 0 1", victim: "d5", capture: "e5d6" },
+    { name: "black", fen: "4k3/8/8/8/3Pp3/8/8/4R1K1 b - d3 0 1", victim: "d4", capture: "e4d3" },
+  ])("refuses a king-exposing $name en-passant capture", fixture => {
+    expect(positionFromFen(fixture.fen).isLegal(parseUci(fixture.capture)!)).toBe(false);
+    const value = invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen: fixture.fen });
+    expect(value.payload.pieces.find(item => item.piece.square === fixture.victim)).toMatchObject({ legalCapturers: [], enPrise: false });
+  });
+
+  it.each(enPassantPushes)("does not invent expired rights for the $name victim", fixture => {
+    const input = edge(fixture.fen, fixture.move);
+    const fields = input.afterFen.split(" ");
+    fields[3] = "-";
+    const fen = fields.join(" ");
+    expect(positionFromFen(fen).isLegal(parseUci(fixture.capture)!)).toBe(false);
+    const value = invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen });
+    expect(value.payload.pieces.find(item => item.piece.square === fixture.victim)).toMatchObject({ legalCapturers: [], enPrise: false });
+  });
+
+  it.each([
+    { name: "white", fen: "3rk3/8/8/3pP3/8/8/8/4K3 w - d6 0 1", victim: "d5", capture: "e5d6", landing: "d6" },
+    { name: "black", fen: "4k3/8/8/8/3Pp3/8/8/3RK3 b - d3 0 1", victim: "d4", capture: "e4d3", landing: "d3" },
+  ])("retains an equal $name en-passant exchange without calling the pawn en prise", fixture => {
+    const value = invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen: fixture.fen });
+    expect(value.payload.pieces.find(item => item.piece.square === fixture.victim)).toMatchObject({
+      enPrise: false, underDefended: false,
+      legalCapturers: [{ captureUci: fixture.capture, exchange: { captured: { square: fixture.victim }, landingSquare: fixture.landing, resultUnits: 0 } }],
+    });
+  });
+
+  it("retains ordinary and en-passant captures of one pawn once each", () => {
+    const fen = "4k3/8/8/3pP3/8/8/6B1/4K3 w - d6 0 1";
+    const reading = invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen });
+    const captures = reading.payload.pieces.find(item => item.piece.square === "d5")!.legalCapturers;
+    expect(captures.map(item => item.captureUci)).toEqual(["e5d6", "g2d5"]);
+    expect(captures.map(item => item.exchange.captured.square)).toEqual(["d5", "d5"]);
+    expect(captures.map(item => item.exchange.landingSquare)).toEqual(["d6", "d5"]);
+  });
+
+  it("keeps the shared recapture helper landing-based rather than victim-based", () => {
+    const position = positionFromFen("4k3/8/8/3pP3/8/8/6B1/4K3 w - d6 0 1");
+    expect(legalCaptureMovesTo(position, parseSquare("d5")!).map(move => move.to)).toEqual([parseSquare("d5")]);
+    expect(legalCaptureMovesTo(position, parseSquare("d6")!).map(move => move.to)).toEqual([parseSquare("d6")]);
   });
 });

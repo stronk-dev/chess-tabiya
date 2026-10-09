@@ -1074,6 +1074,17 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-10-09: D3620 repairs §3.4's omitted en-passant capturers by joining the actual victim
+  through the existing exchange capture authority. The shared recapture helper remains
+  landing-based. Both colors retain victim/landing identities through sealed readings/events,
+  double-push deltas, serialized Post-commit Nudge captions, complete legal candidate packets
+  and recorded-run reconstruction. Pinned/expired rights, equal exchanges and simultaneous
+  ordinary captures retain their controls. Fifteen predecessor controls fail; all 349 focused
+  foundation cases pass. Complete normal tiers pass clean types/build, 3,957 software,
+  seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia
+  skip, zero retries and all 112 composition cells. D3620 closes locally; no projection,
+  source, permission or remaining RFC discharge is changed.
+
 - 2026-10-09: D3619 repairs the existing physical-mover operands without changing projection
   identities or accepted predicates. Castling king/rook relocations use the rules destinations;
   loose-piece deltas retain the relocated rook, double attacks and mate-in-one retain the primary

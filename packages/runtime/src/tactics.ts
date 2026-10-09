@@ -5,7 +5,7 @@ import type { Color, Move, NormalMove, Piece, Role, Square, SquareName } from "c
 import { kingCastlesTo, makeSquare, makeUci, opposite, parseSquare, parseUci, rookCastlesTo } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./position-cache.js";
-import { EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
+import { exchangeCaptureAt, EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
 import { matchesStructuralFeature, vacationReading } from "./structure.js";
 import type { TransitionSemanticFact } from "./transition.js";
 import { memoByInput } from "./fen-memo.js";
@@ -408,11 +408,18 @@ export function loosePieceReading(fen: string): LoosePieceReading {
 function computeLoosePieceReading(fen: string): LoosePieceReading {
   const position = positionFromFen(fen);
   const victimColor = opposite(position.turn);
+  const enPassantCaptures = position.epSquare === undefined ? [] : legalCaptureMovesTo(position, position.epSquare);
   const pieces: LoosePieceState[] = [];
   for (const target of position.board[victimColor]) {
     const occupant = position.board.get(target)!;
     if (occupant.role === "king") continue;
-    const legalCapturers = legalCaptureMovesTo(position, target).flatMap((move) => {
+    // Recapture enumeration is landing-based. En passant lands elsewhere, so join its
+    // legal move to this occupied victim through the shared capture identity authority.
+    const captures = [
+      ...legalCaptureMovesTo(position, target),
+      ...enPassantCaptures.filter(move => exchangeCaptureAt(position, move)?.square === target),
+    ];
+    const legalCapturers = captures.flatMap((move) => {
       const exchange = legalExchangeForMove(position, move);
       const piece = position.board.get(move.from);
       return exchange === undefined || piece === undefined ? [] : [{
