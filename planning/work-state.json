@@ -29926,6 +29926,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/campaign-actions.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3615",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:04f75a087301c217fb30064f9cee199653804e0d92f6476f1afb0fd7266ca1ea",
+      "uxItems": [],
+      "evidence": "apps/server/src/authoring-execution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

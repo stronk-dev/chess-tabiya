@@ -11,6 +11,8 @@ import type { ReadableStream as NodeReadableStream } from "node:stream/web";
 
 import {
   BranchQueryError,
+  EvidenceBindingExecutionError,
+  EvidenceExecutionError,
   RuntimeError,
   feedbackDeliveryOpen,
   historyFrom,
@@ -691,12 +693,20 @@ export function errorResponse(error: unknown): Response {
   if (
     !(error instanceof RuntimeError) &&
     !(error instanceof BranchQueryError) &&
+    !(error instanceof EvidenceBindingExecutionError) &&
+    !(error instanceof EvidenceExecutionError) &&
     !(error instanceof ServerError)
   ) {
     console.error("UNHANDLED_SERVER_ERROR", error);
   }
 
-  if (error instanceof RuntimeError) {
+  if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) {
+    // Broken execution declarations are unavailable service authority, not learner input errors.
+    // Never disclose the projection, source, path or compiler diagnostic to the caller.
+    status = 503;
+    code = "EVIDENCE_UNAVAILABLE";
+    message = "Evidence execution contract is unavailable";
+  } else if (error instanceof RuntimeError) {
     code = error.code;
     message = error.message;
     reason = error.reason;

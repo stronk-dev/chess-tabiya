@@ -58,7 +58,7 @@ export class ShapeStudio {
   }
   list(principal: Principal): readonly ShapeDraftView[] { return Object.freeze(this.storage.shapeDrafts(principal.learnerId).map((row)=>this.#view(row))); }
   required(id:string,principal:Principal):ShapeDraftView{const row=this.storage.shapeDraft(id,principal.learnerId);if(row===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown shape draft: ${id}`);return this.#view(row);}
-  async create(principal:Principal,document:unknown,at=new Date().toISOString()):Promise<ShapeDraftView>{const raw=structuredClone(document) as Record<string,unknown>;const row:StoredShapeDraft=Object.freeze({id:randomUUID(),shapeId:String(raw.id??"untitled"),ownerLearnerId:principal.learnerId,document:raw,digest:await digestShapeEntry(raw),state:"draft",createdAt:at,updatedAt:at});this.storage.createShapeDraft(row);return this.#view(row);}
+  async create(principal:Principal,document:unknown,at=new Date().toISOString()):Promise<ShapeDraftView>{const raw=structuredClone(document) as Record<string,unknown>;const row:StoredShapeDraft=Object.freeze({id:randomUUID(),shapeId:String(raw.id??"untitled"),ownerLearnerId:principal.learnerId,document:raw,digest:await digestShapeEntry(raw),state:"draft",createdAt:at,updatedAt:at});const view=this.#view(row);this.storage.createShapeDraft(row);return view;}
   lint(document:unknown,probeFen?:string):ShapeValidationResult{
     const validation=validateShapeEntry(document,{...(probeFen===undefined?{}:{probeFen})});
     if(validation.document===undefined)return validation;

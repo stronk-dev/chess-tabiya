@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3614]] · **Machine map:**
+2026-10-09 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3615]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,16 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-09
+
+[[D3615]] is closed locally: complete execution preflight precedes structural predicate and
+claim-ledger factories in the real authoring operations. Sixteen predecessor controls fail;
+all 215 focused foundation cases pass after repair. Actual authenticated Shape Studio
+create/lint/update/register/read/list refuses broken contracts without changing saved or
+published state; creation validates before storing. Complete normal gates pass clean types/build,
+3,857 software, seven unchanged-budget performance, 228 content and 225 browser cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. Generated
+semantic validation outputs are current with unchanged coverage, authored packs and capability
+declarations. No source, chess semantics, semantic validation or whole capability is promoted.
 
 [[D3614]] closes the existing Campaign preparation-to-help preference gap: named allowed
 styles use the canonical preference, explain preset-excluded equipment and preserve Custom,

@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3615]] is closed locally under the existing provider execution/authoring contracts:
+structural predicates and claim-ledger admission preflight their complete consumer before
+factory work. All 215 focused foundation cases pass, including real authenticated Shape Studio
+refusal/retry and saved/publication-state preservation. Shape creation validates before storing;
+failed execution is a generic 503. Complete normal gates pass clean types/build, 3,857 software,
+seven unchanged-budget performance, 228 content and 225 browser cases, one optional Maia skip,
+zero retries, all 150 input/112 composition cells. The existing generated semantic receipt is
+current with unchanged coverage, pack bytes and capability declarations. Held source drafts,
+whole-manifest execution, exact availability and semantic validation remain open.
+
 [[D3614]] is closed locally: Campaign preparation reads and saves the same named help
 preference as Settings/Play, explains preset-excluded equipped tools and preserves Custom,
 recovery and refused-write behavior. All 82 focused Campaign/modal cases and eight actual

@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:198b8c76933ceb89b684ddff8dc7f260cf892d6a5bf4f655d789ff04244e1854",
+    "roadmap": "sha256:9652c70eed888a77dac1b4ec388a16d4352fe5737b975884a2da395aa1a7ab73",
     "workItems": "sha256:3b3a4f68547bdd87d3352fd40ba004d04a6de830540dfc160772ead3180bd166",
-    "workState": "sha256:4c6b020d1756fc91514dc3234833ad13863c07a6b500d8962e1f0742183f6f96",
+    "workState": "sha256:6fca694170c84342b77437fa9cbf9d13571b54053c9e5306ee2ac534486c4ddf",
     "rfcRegister": "sha256:df7b56265489840b2bd76077c143e09349c60c0174086104eeb569bc8316c942",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
-    "rest": "sha256:335b9ec025ff6422e526cbef50020c457e497ca9daf2c008bb8a7a102060a28c"
+    "rest": "sha256:3e9d1c0425ba2ebc76840d7229cca7a1155200817b192d92353af433c2fc2bc8"
   },
   "summary": {
     "capabilities": 14,
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1066,
-      "done": 1494,
+      "done": 1495,
       "refused": 161
     },
     "workItems": {
@@ -346,9 +346,14 @@
       "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-09",
-        "summary": "D3613 closes locally: strict execution preflight checks all demanded bounded-target policy outputs before local derivation or provider acquisition. Sixteen malformed-source controls cover both providers and both preserved/removed alternatives; repeated single/both-arm calls and actual application/scheduler boundaries pass within 168 focused foundation cases. Complete normal non-browser verification passes clean types/build, 3825 software, seven unchanged-budget performance and 228 content cases, governance/packaging. This remains operator-only, not learner adoption or complete-manifest execution. D3607 semantic landing and D3601/D3602 local lazy-input/Theory preflight repairs remain delivered. D3578 selected-source views, opening, durable Stockfish, Maia, Inspector and semantic validation contracts remain held. No whole capability, milestone, official pack, remote CI or 1.0 promotion.",
+        "summary": "D3615 binds structural authoring and claim-ledger validation to their complete execution contracts before factory work. Sixteen predecessor controls fail; all 215 focused foundation cases pass, including authenticated Shape Studio refusal/recovery, unchanged saved/publication state and empty-ledger admission. Shape creation validates before storing, and HTTP execution failures use generic EVIDENCE_UNAVAILABLE. Complete normal gates pass clean types/build, 3857 software cases/355 files, seven unchanged-budget performance cases/four files, governance/packaging, 228 content cases/23 files and 225 browser passes, one optional Maia skip, zero retries, all 150 input/112 composition cells. Generated semantic outputs are current with unchanged coverage, authored packs and capability declarations. D3613 bounded-target, D3607 landing and D3601/D3602 lazy-input/Theory repairs remain delivered. Held source migrations, exact availability, semantic validation, whole capabilities/milestones and release remain open.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/authoring-execution.test.ts",
+          "packages/runtime/src/structural-evidence.ts",
+          "apps/server/src/sourcing/claim-binding.ts",
+          "apps/server/src/shape-studio.ts",
+          "apps/server/src/rest-error.test.ts",
           "apps/server/src/provider-health.ts",
           "apps/server/src/bounded-target-policy.ts",
           "apps/server/src/bounded-target-policy.test.ts",
@@ -1139,6 +1144,11 @@
             "kind": "work_state",
             "id": "D3495",
             "digest": "sha256:0576ed6f7f91920462f0af8254866fdd04a07b78ce4f8377b56a7fb4d4e75ab1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3615",
+            "digest": "sha256:04f75a087301c217fb30064f9cee199653804e0d92f6476f1afb0fd7266ca1ea"
           }
         ]
       },

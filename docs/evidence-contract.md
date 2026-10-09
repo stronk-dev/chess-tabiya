@@ -341,6 +341,16 @@ before traffic is served.
 
 ## Adding or changing evidence
 
+Structural authoring and claim-ledger validation run the complete registered consumer execution
+check before minting predicate or ledger evidence. The check includes every declared binding,
+not only the feature or record present in this document. Shape Studio prepares its validated
+view before saving a new draft, so an unavailable execution contract leaves no phantom draft.
+Authenticated HTTP reports a generic, retryable `EVIDENCE_UNAVAILABLE` (503); compiler source/path
+diagnostics stay private. Valid and invalid predicate results, authoring issues and authored bytes
+are otherwise unchanged. `make evidence-foundation-check` covers malformed bindings, empty ledgers
+and actual Shape Studio create/lint/update/register/read refusal and recovery. This does not
+complete the held source migrations, whole-manifest execution or semantic validation.
+
 1. Start with the product operation that needs the information. Do not start with a raw toggle.
 2. Add or version the producer projection with its literal semantics, operands, grounding,
    exactness, abstention, answer content, forms, dependencies, and limitations.

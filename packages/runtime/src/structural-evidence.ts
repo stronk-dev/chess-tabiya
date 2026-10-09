@@ -6,6 +6,7 @@ import {
 } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
 import {
   matchesStructuralExpression,
   mirrorExpression,
@@ -169,6 +170,9 @@ export function evaluateAuthoredStructuralPredicate(
   condition: StructuralExpression,
   origin: Omit<AuthoredStructuralCondition, "expression">,
 ): boolean {
+  // Check every declared binding before evaluating or minting any predicate input/result.
+  // A valid requested feature cannot conceal another broken authoring requirement.
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "authoring.predicate", version: 1 });
   const evidence = declareStructuralPredicateEvidence(fen, condition, origin);
   const view = evidenceForConsumer<StructuralPredicateEvidencePayload>(
     PRIMARY_EVIDENCE_MANIFEST,

@@ -2,7 +2,7 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
-import { assertConsumerEvidenceView, sourcingRecordEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { assertConsumerEvidenceView, compileEvidenceConsumerExecution, sourcingRecordEvidence, evidenceForConsumer, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
 
 import type { TablebaseCategory } from "../tablebase.js";
 import { EVIDENCE_MANIFEST } from "../evidence-manifest.js";
@@ -179,6 +179,8 @@ export function consumeClaimBindingRecords(view: ConsumerEvidenceView<EvidenceRe
 }
 
 function claimBindingLedger(ledger: EvidenceLedger): EvidenceLedger {
+  // The complete authoring contract precedes record factories, even for an empty ledger.
+  compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "authoring.claim_binding", version: 1 });
   const declared = ledger.records.flatMap((record) => {
     const projection = CLAIM_RECORD_PROJECTION[record.kind];
     const declared = projection === undefined ? undefined : sourcingRecordEvidence(record);
