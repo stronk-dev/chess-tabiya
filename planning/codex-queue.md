@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-10 — [[D3687]] records a source-verified qualification conflict, not a new
+collector implementation or production measurement. `kingZoneEvents` returns both colours'
+state transitions for every admitted legal edge; its sole factory does not filter empty
+deltas. semantic-validation-authority §3.2 nevertheless requires whole-event omission,
+and the implemented `omits` expectation accepts no property-specific negative. Route to
+that RFC's author for an explicit state-property negative contract or versioned sparse
+event decision. Neither option is approved here. Keep the required cell open, retain v1
+bytes and independently test the chosen contract through the real production operation.
+Do not use invalid inputs, source unavailability or an invented absence as qualification.
+
 2026-10-10 — [[D3686]] closed under theory-drill-current-joins' implemented read-time
 Library journey: bounded history, earlier-page search/retry/refresh, exact current-pack
 attachment and due-only scope. Seven predecessor-red controls, 21 focused controls, clean

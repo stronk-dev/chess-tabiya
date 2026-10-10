@@ -25163,3 +25163,21 @@ Campaign was the one capability with no API, route or content. Now:
   all 150 input and 112 composition cells remain green. The build retains its existing
   chunk-size warning. Close D3686 and update the existing roadmap; no scheduling policy,
   source-bound launch, official content, whole capability, remote CI or release-image claim.
+
+## 2026-10-10 (codex) — D3687 qualification conflict and inventory checkpoint
+
+- Finish D3686 in e226ca89; the tracked tree is clean before this documentation closeout.
+  Its recorded full local verification remains the latest software/build/browser result;
+  this inventory pass does not claim a fresh product test run or remote CI.
+- Source inspection finds a contract mismatch: kingZoneEvents validates a legal edge and
+  returns both colours without a change filter; its sole factory forwards the population.
+  semantic-validation-authority §3.2 requires whole-event omission, and the implemented
+  omits expectation rejects any selected target. Record D3687 with evidence-foundation
+  ownership and the author contract as blocker. This is not a measured production probe.
+- Leave v1, the required negative arm, all 175 cases and all 81 qualification profiles
+  unchanged. The author must specify state-property negatives or a versioned sparse event;
+  invalid input and unavailable sources cannot stand in for a legal semantic negative.
+- Reconcile the existing overview to 1,716 assigned live ledger items. No capability,
+  milestone, official-content or release-readiness state changes.
+- Fresh `make roadmap-receipt verify-governance` exits zero; all 1,716 live items are
+  assigned and routed. No ordinary software/browser rerun is claimed for these doc-only edits.

@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3686]]: 273 UX items complete, 272 live and 24
-retired; 1,715 live ledger items, all assigned, alongside 1,559 done and 161 refused. The 462
+Current checked inventory through [[D3687]]: 273 UX items complete, 272 live and 24
+retired; 1,716 live ledger items, all assigned, alongside 1,559 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -91,6 +91,11 @@ The register has 175 passing cases (109 positive/66 negative), 81 subjects and z
 qualified. Six positive arms close; orientation/window and other required arms remain open.
 No collector, strategic value, learner eligibility, pack bytes, whole capability/milestone,
 official-content, remote-CI or native release-image promotion follows.
+
+[[D3687]] adds a source-verified contract conflict: the king-zone state factory emits both
+colours for every admitted legal edge, while qualification requires whole-event omission.
+Its negative arm remains required pending author clarification; no collector is changed,
+no absence fixture is invented and no new production measurement or qualification is claimed.
 
 Latest classroom consistency repair: [[D3684]] binds initial and post-mutation detail reads to
 their requested classroom and child relationships. Crossed reads explain failure; successful

@@ -30574,6 +30574,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/library-return.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3687",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:692ad1df4386cef1d2fa65dd18594adbf68178ed484b1c51eb42e32a1113197d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
     }
   ]
 }
