@@ -101,6 +101,25 @@ export const CAPTURE_DEPENDENT_NEGATIVE_FAMILIES = Object.freeze([
 ] as const);
 const captureSource = literalSources[0];
 
+// D3676: literal piece-set arithmetic only. With one pawn of each colour on
+// every file at ranks 2/7, no file lacks pawns, no pawn lacks an adjacent
+// friendly pawn, no file has two same-colour pawns, and every pawn faces an
+// opposing pawn ahead. King steps preserve those operands. These cases bind
+// the existing structural vocabulary's absence, not strategic value or a
+// general positive/orientation proof. The two excerpts are labelled separately.
+const pawnAbsenceSources = ["backward_pawn", "isolated_pawn", "doubled_pawn", "passed_pawn", "open_file", "half_open_file"].map(family => ({
+  sourceId: `python-chess.pawn-absence.${family}`,
+  sourceRevision: captureSource.sourceRevision,
+  licence: captureSource.licence,
+  url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+  text: "pieces_mask pawn branch:\n        if piece_type == PAWN:\n            bb = self.pawns\n\npieces_mask colour intersection:\n        return bb & self.occupied_co[color]\n",
+  operation: { id: "runtime.semantic.structural_edge", version: 1 } as const,
+  cases: ([
+    ["white", `rules.structural.event.${family}`, "7k/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 7 1", "h1g1", "7k/pppppppp/8/8/8/8/PPPPPPPP/6K1 b - - 8 1", null],
+    ["black", `rules.structural.event.${family}`, "7k/pppppppp/8/8/8/8/PPPPPPPP/7K b - - 7 1", "h8g8", "6k1/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 8 2", null],
+  ] satisfies readonly RuleFixture[]).map(fixture => ruleCase(`pawn-absence.${family}`, fixture)),
+}));
+
 // D3666: the two labelled excerpts below are separate branches of attacks_mask,
 // not a fabricated contiguous function. A pawn and distant kings have no slider,
 // enemy pawn or occupied attack/defence edge before or after the isolated push.
@@ -146,6 +165,7 @@ const contactTransitionFixtures: readonly RuleFixture[] = [
 ];
 
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  ...pawnAbsenceSources,
   ...literalSources,
   {
     ...contactRules,

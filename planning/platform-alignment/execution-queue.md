@@ -6,6 +6,8 @@
 
 ## Compatibility and Support checkpoint — 2026-10-07
 
+| [[D3676]] | **DONE: populated pawn/file negatives**, evidence-foundation; accepted semantic-validation-authority Slice B | Twelve both-colour legal omissions over full pawn ranks; actual structural operation, nonempty other observations and crossed-authority refusals. Nineteen predecessor-red controls, 102 focused/709 broader checks, clean types and full normal verification/build pass: 4,569 software, seven performance and 246 content cases. All 127 prior records remain unchanged; 139 cases pass over 81 subjects, zero fully qualified. Positive/orientation/reach, source adoption, learner eligibility and official content remain open. No fresh browser, remote CI or release claim. |
+
 | Item | Owning lane / prerequisite | Required exit |
 |---|---|---|
 | [[D3551]] | **DONE: correct Studio deletion documentation**, account-and-data | Current documentation matches portable-account-data and the existing tested storage behavior: hard-delete unpublished drafts/playtests, anonymize published display metadata and retain immutable publication bytes/IDs. Consent, backup policy, lifecycle behavior and archives are unchanged. |

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1b8cb14bc677e72d623aa3d3b1bf98c2dc790b1d42e20fae68af051e054e1f8d",
+    "roadmap": "sha256:c8590b1eebd2e4891e92395a82a41d351131e4c78663d4deb2f4bce0527fa014",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:2e5f299e599e2bfba17f116dd833c24b94f8ea1a1f13dd855f787c6839a16188",
+    "workState": "sha256:79a8f98b7ce3a6fe8ae2cd6f1c336ee9332cb8c60759c7952ddbf3a905f321ee",
     "rfcRegister": "sha256:9aca4967ad4e2d8409c1a74978bdcd3be038b3c9a1deadef375d7408d6ede356",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 14,
       "blocked": 1071,
-      "done": 1549,
+      "done": 1550,
       "refused": 161
     },
     "workItems": {
@@ -224,7 +224,7 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3672 binds semantic validation to the existing exact event wrapper and explicit observation grain before target filtering. Nineteen predecessor-red controls expose copied/edited metadata and event/reading substitutions, including false omission; twenty-one permanent additions and all 690 foundation checks pass with clean types. Genuine one-edge/recorded events and explicit bounded-target readings retain their existing identities and value receipts. The normal writer retains all 127 passing canonical cases, 81 subjects and zero fully qualified subjects. D3671 closes only two disposable model gaps: independently duplicated parent events and crossed constructed-run identity. All 81 research controls pass; the orientation/window drafts still require independent acceptance before production implementation. Complete normal make roadmap-receipt verify-awake build passes 4532 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, types/governance/packaging and build. Ledger/state/docs/queue/roadmap close together without adding a seal, collector, authority, learner permission or content. All whole-capability/milestone states remain unchanged. The preceding 275-browser checkpoint is historical, not rerun for this validation-only batch; no native release-image or remote-CI result is claimed.",
+        "summary": "D3676 adds twelve completed legal pawn/file omission cases, with both colours on populated full pawn ranks. The six negative arms are now present; positive and orientation arms remain required and no learner eligibility changes. All 127 prior canonical records are unchanged; the normal writer reports 139 passing cases (73 positives/66 negatives), 81 subjects and zero fully qualified. Nineteen predecessor-red controls become permanent omission, population-retention and borrowed-authority checks. D3672's exact event-wrapper/observation-grain repair remains delivered. D3671 closes disposable model gaps only; D3564/D3629 orientation and window amendments still need independent acceptance. All 102 focused and 709 foundation checks pass with clean types. Complete normal make roadmap-receipt verify-awake build passes 4569 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance, corpus/capability, packaging and build. The prior 281-browser checkpoint remains historical, not rerun for this validation-only wave. No production collector, source admission, chess strategy claim, content graduation, whole-capability or milestone completion follows.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
@@ -273,8 +273,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D3672",
-            "digest": "sha256:555e6b6f65d8ffcd80a35d0ce858e5e4df3338786e25b91c55230db3ad791dc6"
+            "id": "D3676",
+            "digest": "sha256:48aab75183dac80fa0080e6c88861fe0def012e4f07679b9adcdf140a073e397"
           },
           {
             "kind": "work_state",

@@ -24827,3 +24827,40 @@ Campaign was the one capability with no API, route or content. Now:
 - No push, exact-revision GitHub success, real Maia deployment/calibration, native appliance
   recovery or release readiness is claimed. Existing source, selection, qualification,
   official-content and release holds remain. Only the explicit owned-file list enters this commit.
+
+### 2026-10-10 — D3676: populated legal pawn/file negatives; 1.0 inventory retained
+
+- Record and assign D3676 before adding canonical cases. Structural events include preserved
+  states: an unchanged move is not sufficient evidence for an omitted family. Use legal king
+  steps on full white/black pawn ranks instead. Every file has one pawn of each colour, adjacent
+  friendly support and an opposing pawn ahead. The actual structural operation completes and
+  emits other observations while omitting backward, isolated, doubled and passed pawns and
+  open/half-open files. These are twelve case-specific absences, not strategic judgements.
+- Nineteen new controls fail at the predecessor's missing cases/profiles. Permanent controls
+  execute the real operation, inspect literal pawn populations, retain positive/orientation
+  obligations and refuse borrowed input, expectation, subject and operation before invocation.
+  The source store retains two separately labelled piece-set excerpts from the already pinned
+  GPL python-chess revision, not an external claim about pawn strength. A disposable generator's
+  initial proposition digests omit the existing constraint-domain wrapper and correctly refuse
+  before invocation; use the existing domain, without weakening the resolver.
+- The sole writer reports 139 passing canonical cases (73 positives / 66 negatives), 81
+  subjects and zero fully qualified. A direct predecessor comparison confirms all 127 prior
+  case records unchanged. Six negative arms close; their positive/orientation arms remain
+  required. No draft orientation/window amendment, production collector, source-admission
+  behavior, semantic vocabulary, learner permission, pack content or intent sentence changes.
+- All 102 focused cases pass. The broader check first encounters the sandbox's localhost
+  denial, then the old negative-total assertion (54 versus the expanded 66). Run the ordinary
+  Make target with permitted local-server access and update that exact population assertion;
+  all 709 foundation checks and types pass. No test deadline, assertion of behavior, retry,
+  skip or performance budget is relaxed.
+- Complete ordinary `make roadmap-receipt verify-awake build` passes: 4,569 software cases /
+  365 files, seven unchanged-budget performance cases / four files, 246 real-content cases /
+  25 files, types, governance, corpus/capability, packaging and web/server builds. No fresh
+  browser run is claimed for this validation-only wave; the prior 281-browser checkpoint is
+  retained as historical. No exact-revision GitHub or native release-image success is claimed.
+- Ledger/state/docs/queue/roadmap close together: 3,425 ledger rows, 1,550 done, 161 refused,
+  1,714 assigned live, zero untriaged. UX remains 273 complete / 272 live / 24 retired;
+  four milestones active / five blocked; all fourteen whole capabilities incomplete;
+  86 production pack documents / zero official graduates. The active unlimited 1.0 goal
+  remains accurate and unpaused. Stage only the explicit owned-file list; other visible
+  work and local artifacts are not included or deleted.

@@ -1722,6 +1722,14 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-10: D3676 implements Slice B's twelve populated legal negatives for six
+  pawn/file structural subjects. Actual structural-edge invocation completes and omits the
+  exact subject while emitting other observations. Every prior canonical case is retained:
+  139 passing cases (73 positive / 66 negative), 81 subjects, zero fully qualified.
+  Source-bound case arithmetic is not strategic judgement; positive, orientation, draft
+  window reach and learner eligibility are unchanged. Evidence:
+  `packages/runtime/src/semantic-validation-cited.test.ts`.
+
 - 2026-10-09: implemented [[D3639]] under Slice B: four literal-rule families gain 24
   independently source-bound canonical cases, including eight completed legal negatives.
   Four small attributed python-chess excerpts match the fixed upstream revision exactly.

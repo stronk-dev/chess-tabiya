@@ -19,6 +19,69 @@ const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT
 const cases = raw.map(parseSemanticValidationCase);
 const byId = new Map(cases.map(value => [value.id, value]));
 
+const pawnAbsenceFamilies = ["backward_pawn", "isolated_pawn", "doubled_pawn", "passed_pawn", "open_file", "half_open_file"] as const;
+const pawnAbsenceRows = pawnAbsenceFamilies.flatMap(family => ["white", "black"].map(color => ({
+  family, color, caseId: `cited.python-chess.pawn-absence.${family}.${color}`,
+})));
+
+describe("D3676 populated pawn-structure absence", () => {
+  it.each(pawnAbsenceRows)("$caseId omits the exact family after completed legal play", async row => {
+    const value = byId.get(row.caseId);
+    expect(value, `missing populated canonical negative ${row.caseId}`).toBeDefined();
+    expect(value!.arm).toBe("semantic_negative");
+    expect(value!.subject).toEqual({ kind: "event", projection: { id: `rules.structural.event.${row.family}`, version: 1 } });
+    expect(value!.operation).toEqual({ id: "runtime.semantic.structural_edge", version: 1 });
+    const receipt = await executeSemanticValidationCase(value!, SEMANTIC_VALIDATION_RESOLVERS, byId);
+    expect(receipt).toMatchObject({ status: "passed", resultKind: "completed", invocations: 1, targetCount: 0, failure: null });
+    expect(receipt.otherCount).toBeGreaterThan(0);
+    if (value!.input.kind !== "edge") throw new Error("pawn absence fixture must be a played edge");
+    // Independent literal arithmetic, not the classifier under test: each colour
+    // occupies every file exactly once on its initial pawn rank. Every pawn has
+    // an adjacent friendly pawn, and an opposing pawn further along its file.
+    for (const fen of [value!.input.beforeFen, value!.input.afterFen]) {
+      const position = positionFromFen(fen);
+      for (const color of ["white", "black"] as const) {
+        const own = [...position.board.pawn.intersect(position.board[color])];
+        const enemy = [...position.board.pawn.intersect(position.board[opposite(color)])];
+        expect(own).toHaveLength(8);
+        expect(enemy).toHaveLength(8);
+        expect(new Set(own.map(square => square % 8)).size).toBe(8);
+        for (const square of own) {
+          expect(Math.floor(square / 8)).toBe(color === "white" ? 1 : 6);
+          expect(own.some(other => Math.abs(other % 8 - square % 8) === 1)).toBe(true);
+          expect(enemy.some(other => other % 8 === square % 8 &&
+            (other - square) * (color === "white" ? 1 : -1) > 0)).toBe(true);
+        }
+      }
+    }
+  });
+
+  it.each(pawnAbsenceFamilies)("%s closes only its omission arm and refuses borrowed authority", async family => {
+    const subject = { kind: "event" as const, projection: { id: `rules.structural.event.${family}`, version: 1 } };
+    const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
+    expect(profile.semanticNegative).toMatchObject({ disposition: "present", refs: [
+      { id: `cited.python-chess.pawn-absence.${family}.white` },
+      { id: `cited.python-chess.pawn-absence.${family}.black` },
+    ] });
+    expect(profile.positive.disposition).toBe("required");
+    expect(profile.orientation.disposition).toBe("required");
+    expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
+    const value = byId.get(`cited.python-chess.pawn-absence.${family}.white`)!;
+    const other = byId.get(`cited.python-chess.pawn-absence.${family}.black`)!;
+    for (const edit of [{ input: other.input }, { expectation: { kind: "emits", minimum: 1 }, arm: "positive" },
+      { subject: { kind: "event", projection: { id: "rules.structural.event.piece_count", version: 1 } } },
+      { operation: { id: "runtime.semantic.local_edge", version: 1 } }]) {
+      expect(await executeSemanticValidationCase(parseSemanticValidationCase({ ...value, ...edit }), SEMANTIC_VALIDATION_RESOLVERS, byId))
+        .toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_AUTHORITY_INVALID" } });
+    }
+  });
+
+  it("adds twelve absence cases without retiring any of the 127 prior cases", () => {
+    expect(cases.filter(value => pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(12);
+    expect(cases.filter(value => !pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(127);
+  });
+});
+
 const positiveContacts = ["occupied_attack", "occupied_defence", "slider_ray", "defended_duty"] as const;
 const contactTransitions = positiveContacts.flatMap(family => ["gained", "lost", "populated-negative"].flatMap(sign =>
   ["white", "black"].map(color => ({ family, sign, color,
@@ -119,7 +182,8 @@ describe("D3667 exact contact transitions", () => {
   it("retains every prior canonical case while adding exactly sixteen positives and eight negatives", () => {
     expect(contactTransitions).toHaveLength(24);
     expect(cases.filter(value => contactTransitions.some(row => value.id === row.caseId))).toHaveLength(24);
-    expect(cases.filter(value => !contactTransitions.some(row => value.id === row.caseId))).toHaveLength(103);
+    expect(cases.filter(value => !contactTransitions.some(row => value.id === row.caseId) &&
+      !pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(103);
   });
 });
 
@@ -228,7 +292,8 @@ describe("source-grounded literal event validation", () => {
     expect(cases.filter(value => rows.some(row => row.caseId === value.id))).toHaveLength(24);
     const added = new Set([...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
       ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)),
-      ...contactRows.map(row => row.caseId), ...contactTransitions.map(row => row.caseId)]);
+      ...contactRows.map(row => row.caseId), ...contactTransitions.map(row => row.caseId),
+      ...pawnAbsenceRows.map(row => row.caseId)]);
     expect(cases.filter(value => !rows.some(row => row.caseId === value.id) && !added.has(value.id))).toHaveLength(63);
     for (const family of families) {
       const subject = { kind: "event" as const, projection: { id: family.projection, version: 1 } };

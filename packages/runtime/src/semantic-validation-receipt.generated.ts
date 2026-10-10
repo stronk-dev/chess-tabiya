@@ -5,7 +5,7 @@ import type { SemanticValidationVerdictTable } from "./semantic-validation.js";
 
 export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
   "schemaVersion": 1,
-  "receiptSha256": "6960feb34c8c14b70d4aab23fc3b18cf3c37fa0890a62e5d01ad0abca5715331",
+  "receiptSha256": "caec9694181563c6063ecb362ba5dac7c7acae08940e47066870ea3298fdd7c9",
   "verdicts": [
     {
       "subject": {
@@ -748,7 +748,6 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -778,7 +777,6 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -793,7 +791,6 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -808,7 +805,6 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -867,7 +863,6 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -882,7 +877,6 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },

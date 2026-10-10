@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3675]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3676]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,25 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3675]]: 273 UX items complete, 272 live and 24
-retired; 1,714 live ledger items, all assigned, alongside 1,549 done and 161 refused. The 462
+Current checked inventory through [[D3676]]: 273 UX items complete, 272 live and 24
+retired; 1,714 live ledger items, all assigned, alongside 1,550 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest foundation validation wave: [[D3676]] adds twelve both-colour populated legal
+negatives for six pawn/file families. Real structural operations complete, emit other events
+and omit the exact subject; retained piece-set arithmetic proves only these absences.
+All 127 previous records remain unchanged: 139 canonical cases pass (73 positives/66 negatives).
+The six positive/orientation arms remain required, and all 81 subjects remain unqualified.
+All 102 focused and 709 broader foundation checks pass with clean types. Complete normal
+verification/build passes 4,569 software, seven performance and 246 content cases plus
+governance, corpus/capability and packaging. The preceding 281-browser checkpoint is historical,
+not rerun for this validation-only wave. No production collector, source admission, learner
+permission, content graduation or whole-capability/milestone state changes.
 
 Latest Play start repair: [[D3673]] binds submission to the visible normal/FEN choice,
 current roster and busy state, with same-turn single-flight and explicit recovery. [[D3674]]
@@ -4097,7 +4108,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   127 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   139 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

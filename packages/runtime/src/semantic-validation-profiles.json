@@ -2771,9 +2771,35 @@
         "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.backward_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.backward_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -2873,9 +2899,35 @@
         "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.doubled_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.doubled_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -2924,9 +2976,35 @@
         "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.half_open_file.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.half_open_file.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -2975,9 +3053,35 @@
         "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.isolated_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.isolated_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -3191,9 +3295,35 @@
         "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.open_file.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.open_file.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -3242,9 +3372,35 @@
         "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.passed_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.passed_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.passed_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.passed_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",

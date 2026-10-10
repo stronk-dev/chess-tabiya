@@ -30476,6 +30476,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/predicate-wave-3-validation.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3676",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:48aab75183dac80fa0080e6c88861fe0def012e4f07679b9adcdf140a073e397",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

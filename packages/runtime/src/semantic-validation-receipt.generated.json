@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "72c908897077f58f65129cb012093f1120ac25052e110f0bb861e4371dbd30bc",
-  "caseDigest": "f434c4e9fba387852e170f95bf8f7f6e61cf8e357861da696d8396fa1d23e6dc",
+  "profileDigest": "ee9e61de515274cefdeea53615146396451b0a263cbf2b680c09ec7d77218b5f",
+  "caseDigest": "de6d36bb2c84bf21549e57352b1160312ad28674b5dfdb86da11818d8e3807ce",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -2846,6 +2846,270 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "f7047af1804aeb93c1b9e88e89db192d85031bf449376a3898ec5ea5cd17ba2f",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.backward_pawn.black",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "888e3388861fe8c680ae9901b3c98328d09012ce229dfe483d9bc34f05bf5210",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "910ef342a61d2493fccea11a21678fe9e29dff25f8685116ee5d2cd2ccd975d3",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.backward_pawn.white",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3e9f501405e566ea56fa0314675daafd26ce87805408823ff2c49e8186a14242",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "454c2b6dbc0bf3a741edaf44f334584d9780bfedf2b7a1e83b492cfffd07c623",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.doubled_pawn.black",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "888e3388861fe8c680ae9901b3c98328d09012ce229dfe483d9bc34f05bf5210",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "9221e994fea8974c86541efc51d96a03c6e5cd021493ab026d0a69f2bef81013",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.doubled_pawn.white",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3e9f501405e566ea56fa0314675daafd26ce87805408823ff2c49e8186a14242",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "db3d4ee68b91f1bb9735ab292451e425ccbffa312734b4982aaab047ea8dd0ab",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.half_open_file.black",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "888e3388861fe8c680ae9901b3c98328d09012ce229dfe483d9bc34f05bf5210",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "e11959e0fe2775b2f878a28a6f8bd07004409fcaa59c0c6e2be03abcc2378229",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.half_open_file.white",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3e9f501405e566ea56fa0314675daafd26ce87805408823ff2c49e8186a14242",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "966a7a500590e39578d68217fa545ea37145854f04cb43fdbaa93e87746cbc26",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.isolated_pawn.black",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "888e3388861fe8c680ae9901b3c98328d09012ce229dfe483d9bc34f05bf5210",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "166099e48e36e44838d2cb6c24dff5ea54c5cbed382cea24670c4404b779567b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.isolated_pawn.white",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3e9f501405e566ea56fa0314675daafd26ce87805408823ff2c49e8186a14242",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a8ba7cce3d16f3f72a0140dadc4dd3477fc5f1cb4f5f5026a200d011332bbb9c",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.open_file.black",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "888e3388861fe8c680ae9901b3c98328d09012ce229dfe483d9bc34f05bf5210",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "1b7435264fb2338e31265e2b40d26abff8a39fe7e02dd043eee7e8a88a009511",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.open_file.white",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3e9f501405e566ea56fa0314675daafd26ce87805408823ff2c49e8186a14242",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "65d85962d72ed8bf2c9e0d0870bca50ba1d2c0b4778d655825d4485b746fb2a3",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.passed_pawn.black",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "888e3388861fe8c680ae9901b3c98328d09012ce229dfe483d9bc34f05bf5210",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ef6ec25747ba95257106936a8be33cfc99c1ab6f8ce4497da419d6cfd3bc0cc8",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.pawn-absence.passed_pawn.white",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3e9f501405e566ea56fa0314675daafd26ce87805408823ff2c49e8186a14242",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 18,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "0b668999e04e816ad470b51976e59c5510aad971deeca2ccc7e4fb6391d4d6e0",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -9083,9 +9347,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.pawn-absence.backward_pawn.white",
+            "cited.python-chess.pawn-absence.backward_pawn.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9113,7 +9379,6 @@
       ],
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -9187,9 +9452,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.pawn-absence.doubled_pawn.white",
+            "cited.python-chess.pawn-absence.doubled_pawn.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9217,7 +9484,6 @@
       ],
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -9239,9 +9505,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.pawn-absence.half_open_file.white",
+            "cited.python-chess.pawn-absence.half_open_file.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9269,7 +9537,6 @@
       ],
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -9291,9 +9558,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.pawn-absence.isolated_pawn.white",
+            "cited.python-chess.pawn-absence.isolated_pawn.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9321,7 +9590,6 @@
       ],
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -9499,9 +9767,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.pawn-absence.open_file.white",
+            "cited.python-chess.pawn-absence.open_file.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9529,7 +9799,6 @@
       ],
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -9551,9 +9820,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.pawn-absence.passed_pawn.white",
+            "cited.python-chess.pawn-absence.passed_pawn.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9581,7 +9852,6 @@
       ],
       "open": [
         "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
