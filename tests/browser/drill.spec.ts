@@ -2077,6 +2077,75 @@ test("an academy host can identify and play a participant's proposed move", asyn
   await participantContext.close();
 });
 
+for (const mobile of [false, true]) {
+  test.describe(`classroom detail identity recovery ${mobile ? "@mobile touch phone" : "desktop"}`, () => {
+    test.use({ viewport: mobile ? { width: 390, height: 844 } : { width: 1280, height: 720 }, isMobile: mobile, hasTouch: mobile });
+    test("keeps successful mutations separate from refused detail refreshes", async ({ page, browser }) => {
+      const activate = async (button: Locator) => { if (mobile) await button.tap(); else await button.click(); };
+      await page.goto("/live");
+      const classrooms = page.getByRole("region").filter({ has: page.getByRole("heading", { name: "Classrooms" }) });
+      await classrooms.getByLabel("New classroom").fill("Identity recovery group");
+      const created = page.waitForResponse(response => new URL(response.url()).pathname === "/classrooms" && response.request().method() === "POST");
+      await activate(classrooms.getByRole("button", { name: "Create", exact: true }));
+      const { classroom } = await (await created).json();
+      const id = classroom.id;
+      expect(typeof id).toBe("string");
+      let fault: "membership" | "root" | "assignment" | undefined = "membership";
+      let invitations = 0, assignments = 0;
+      page.on("request", request => {
+        if (request.method() !== "POST") return;
+        const path = new URL(request.url()).pathname;
+        if (path === `/classrooms/${id}/members`) invitations++;
+        if (path === `/classrooms/${id}/assignments`) assignments++;
+      });
+      await page.route(`**/classrooms/${id}`, async route => {
+        if (route.request().method() !== "GET") { await route.continue(); return; }
+        const response = await route.fetch();
+        const body = await response.json();
+        const current = fault;
+        fault = undefined;
+        if (current === "membership") body.membership.classroomId = "foreign-classroom";
+        if (current === "root") body.classroom.id = "foreign-classroom";
+        if (current === "assignment") {
+          expect(body.assignments.length).toBe(1);
+          body.assignments[0].classroomId = "foreign-classroom";
+        }
+        await route.fulfill({ response, json: body });
+      });
+      const open = classrooms.getByRole("button", { name: "Open", exact: true });
+      await activate(open);
+      await expect(classrooms.getByText("That classroom could not be opened. Try again.", { exact: true })).toBeVisible();
+      await expect(classrooms.locator(".classroom-detail")).toHaveCount(0);
+      await activate(open);
+      await expect(classrooms.locator(".classroom-detail h3")).toHaveText("Identity recovery group");
+
+      const learnerContext = await browser.newContext();
+      try {
+        const handle = await register(await learnerContext.newPage());
+        await classrooms.getByLabel("Invite handle").fill(handle);
+        fault = "root";
+        await activate(classrooms.getByRole("button", { name: "Invite", exact: true }));
+        await expect(classrooms.getByText("The invitation was sent, but the classroom could not refresh. Reload to see the new member.", { exact: true })).toBeVisible();
+        await expect(classrooms.locator(".classroom-detail h3")).toHaveText("Identity recovery group");
+        await activate(open);
+        await expect(classrooms.getByText(`@${handle} — Learner, Invitation waiting`)).toBeVisible();
+        expect(invitations).toBe(1);
+
+        await classrooms.getByLabel("Pack").selectOption({ label: SCHEMA_PACK_TITLE });
+        await classrooms.getByLabel("Teacher note").fill("Identity recovery assignment");
+        fault = "assignment";
+        await activate(classrooms.getByRole("button", { name: "Assign", exact: true }));
+        await expect(classrooms.getByText("The pack was assigned, but the classroom could not refresh. Reload to see the assignment.", { exact: true })).toBeVisible();
+        await expect(classrooms.getByText("Identity recovery assignment", { exact: true })).toHaveCount(0);
+        await activate(open);
+        await expect(classrooms.getByText("Identity recovery assignment", { exact: true })).toBeVisible();
+        expect(assignments).toBe(1);
+        await expect(classrooms.getByText("The pack was assigned, but the classroom could not refresh. Reload to see the assignment.", { exact: true })).toHaveCount(0);
+      } finally { await learnerContext.close(); }
+    });
+  });
+}
+
 test("a classroom assignment shows who submitted and makes sharing explicit", async ({ page, browser }) => {
   test.setTimeout(60_000);
   await page.goto("/live");

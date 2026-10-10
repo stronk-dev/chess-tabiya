@@ -324,6 +324,14 @@ training-pass-model-check:
 	$(CI_NODE) --test tools/training-pass-model.test.mjs
 
 .PHONY: learner-profile-check
+.PHONY: classroom-detail-check
+classroom-detail-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/classroom-response.test.ts apps/server/src/teacher-surface.test.ts
+
+.PHONY: classroom-detail-browser-check
+classroom-detail-browser-check:
+	./node_modules/.bin/playwright test --grep "classroom detail identity recovery"
+
 learner-profile-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/ProfileScreen.test.ts apps/web/src/lib/profile-response.test.ts apps/web/src/lib/router.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts apps/server/src/learner-profile.test.ts apps/server/src/learner-profile-application.test.ts apps/server/src/review-map.test.ts apps/server/src/live-session.test.ts apps/server/src/rating-service.test.ts apps/server/src/adoption-wave.test.ts
 

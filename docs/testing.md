@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make classroom-detail-check` checks exact classroom roots and child relationships through the
+HTTP adapter and mounted application, alongside existing server consent/authorization tests.
+`make classroom-detail-browser-check` exercises actual desktop and touch-phone creation,
+detail refusal/retry, invitation and assignment: a deliberately crossed secondary read cannot
+disguise mutation success or cause the retry to repeat the mutation. These permanent tests also
+run in ordinary software/browser CI; they do not complete the broader coach/streamer workflows.
+
 `make longitudinal-worker-start-check` covers real starting-thread ownership on invalid first
 frames, reported refusal, late readiness and startup deadline, including actual application
 SQLite cleanup and immediate reopening. All six controls reproduce the predecessor's early

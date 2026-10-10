@@ -25064,3 +25064,27 @@ Campaign was the one capability with no API, route or content. Now:
   The attempted nonexistent `scaffold-check` target did not run a test; the proper existing
   `schema-check` target above is the recorded verification. No ordinary CI model prerequisite
   remains and no production/browser result or remote run is newly claimed.
+
+## 2026-10-10 (codex) — D3684 classroom detail consistency
+
+- Record and assign the defect before implementation. Under the existing archived teacher
+  contract, reject a crossed classroom root, membership/member/assignment/session parent or
+  submission assignment link before attaching the response. The existing root equality guard
+  already prevented attaching a different root, but silently dropped it; it did not check children.
+  Preserve latest-request/departed-view checks and historical submissions from former members.
+- Six mounted predecessor controls reproduce the missing read explanation/child admission.
+  The HTTP adapter and custom-adapter screen now share one small relationship check; no new
+  permission, grant, endpoint, chess evidence or classroom workflow is introduced.
+- All 150 focused software controls and clean workspace types pass. Two built desktop/touch-phone
+  journeys create a real classroom, refuse/retry crossed HTTP detail, then successfully invite
+  and assign despite crossed secondary reads. Reopening displays persisted results without
+  repeating either mutation. Correct incomplete fixture/selector assertions, not production
+  deadlines: the separate standing panel's missing test API is not this detail error, the real
+  invitation endpoint is `/members`, and the wrapped Pack label uses the existing partial match.
+- Full normal verification/build/browser is in progress before commit. No whole professional
+  capability, milestone, official-content, remote-CI or release-image completion is claimed.
+- The aggregate finishes zero: 4,610 software cases/367 files, seven unchanged-budget performance
+  cases/four files, 247 content cases/25 files and 287 browser cases across all four tiers.
+  One optional Maia measurement is skipped; zero retries and all 112 composition cells pass.
+  Types, governance, packaging and build pass. Close the ledger/state and refresh the existing
+  roadmap/queue checkpoint, without introducing a new progress document or changing a gate.

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ba62ccef909fe605543d84e1196ca31810abec1cd0594932ede393ad9cd75d3e",
+    "roadmap": "sha256:b955544be899ec54ed0d86a8c3a5afe08e988873231e30f532a621c7bde89256",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:649c9a67489fc95a8f6758d8a64947063d27360ab8a357f8d296dc777fb9086a",
+    "workState": "sha256:a88eb22e92cc0d9fb5c2c726c8c00779218c8f34d6fdc2d7990f352e4695add1",
     "rfcRegister": "sha256:5d42097815c9f933c56effc2be0d09ef0347570dcab94c85746d53796c95c200",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 14,
       "blocked": 1071,
-      "done": 1556,
+      "done": 1557,
       "refused": 161
     },
     "workItems": {
@@ -1100,7 +1100,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3680/D3682 close Campaign group replay identity and late-receipt revision ordering under rfc/campaign-core.md §2.2. Replay resolves the saved groupId after a later group is created; malformed or absent identities refuse without provider work or graph mutation. The mounted client preserves a newer confirmed current-run revision when an older immutable receipt settles and refuses crossed-run/invalid revision authority. Six new software cases, one actual content/API case and two desktop/phone two-tab journeys retain both observed predecessor regressions. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4588 software cases/365 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, types/governance/packaging/build and 285 browser cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Prior Campaign costs/lost-response recovery, Play start/profile and Review numbering/Analyze/focus/retry remain delivered. D3681's mandated zero-income wording still needs author amendment. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No source, economy, reward, default, permission, content or whole capability/milestone promotion; no native release-image or remote-CI result.",
+        "summary": "D3684 closes classroom detail consistency under the existing teacher-surface section 7.2 contract: initial and post-mutation reads refuse crossed roots, classroom-child links and submission-assignment links before attachment. Latest-request/departed-view guards and historical submissions remain. Successful invitations/assignments are acknowledged when their secondary read fails; reopening retries only the read. Six mounted predecessor regressions, ten HTTP adapter controls, all 150 focused cases, clean types and two actual desktop/touch-phone creation/refusal/retry/invitation/assignment journeys pass. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4610 software cases/367 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files and 287 browser cases, one optional Maia skip, zero retries, 112 composition cells and clean types/governance/packaging/build. Prior Campaign costs/lost-response recovery/group replay/revision ordering, Play start/profile and Review numbering/Analyze/focus/retry remain delivered. D3681's fixed exhaustion wording still needs author amendment. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards and full release recovery remain open. No new permission, grant, source, full professional capability, milestone, remote-CI or native release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/DrillScreen.svelte",
@@ -1122,7 +1122,10 @@
           "apps/server/src/service.ts",
           "apps/server/src/branch-groups.test.ts",
           "apps/web/src/App.svelte",
-          "apps/web/src/lib/app-shell.test.ts"
+          "apps/web/src/lib/app-shell.test.ts",
+          "apps/web/src/lib/classroom-response.ts",
+          "apps/web/src/lib/classroom-response.test.ts",
+          "docs/classrooms.md"
         ],
         "anchors": [
           {
@@ -1149,6 +1152,11 @@
             "kind": "work_state",
             "id": "D3682",
             "digest": "sha256:b2d71bf24f6e8e36076d5638d7c30b172a9599f83fa74e8bc08dcd458fbf3de6"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3684",
+            "digest": "sha256:4324ebdb0efdc2acb5ec10632468f070f736476a8c1ccbc8d1db2431ba422991"
           }
         ]
       },

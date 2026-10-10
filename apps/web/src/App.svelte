@@ -25,6 +25,7 @@
   import { HOME_RUN_WINDOW, HOME_SUGGESTION_RULE, homeSuggestions } from "./lib/home-suggestions.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
+  import { assertClassroomDetailIdentity } from "./lib/classroom-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
   import { packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./lib/pack-draft-response.js";
   import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
@@ -2223,6 +2224,13 @@
   }
   function classroomRouteIsCurrent(generation:number):boolean{return generation===loadGeneration&&route.name==="live";}
   function classroomIsCurrent(id:string,generation:number):boolean{return classroomRouteIsCurrent(generation)&&classroomDetail?.classroom.id===id;}
+  async function readClassroomDetail(id:string):Promise<ClassroomDetail>{
+    if(api.classroom===undefined)throw new Error("Classroom reads are unavailable");
+    const next=await api.classroom(id);
+    // Custom API adapters must obey the same subject join as the HTTP adapter.
+    assertClassroomDetailIdentity(next,id);
+    return next;
+  }
   async function createClassroom():Promise<void>{
     const name=classroomName.trim();
     if(!name||classroomBusy!==undefined)return;
@@ -2244,8 +2252,7 @@
     const generation=loadGeneration;const request=++classroomDetailGeneration;
     classroomBusy=`open:${id}`;classroomActionError=undefined;
     try{
-      if(api.classroom===undefined)throw new Error("unavailable");
-      const next=await api.classroom(id);
+      const next=await readClassroomDetail(id);
       if(classroomRouteIsCurrent(generation)&&request===classroomDetailGeneration&&next.classroom.id===id)classroomDetail=next;
     }catch{if(classroomRouteIsCurrent(generation)&&request===classroomDetailGeneration)classroomActionError="That classroom could not be opened. Try again.";}
     finally{if(classroomRouteIsCurrent(generation)&&request===classroomDetailGeneration)classroomBusy=undefined;}
@@ -2277,7 +2284,7 @@
       if(classroomInviteHandle.trim()===handle)classroomInviteHandle="";
     }catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The invitation could not be sent. Check the handle and try again.";}
     if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&classroomActionError===undefined){
-      try{const next=await api.classroom!(id);if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&next.classroom.id===id)classroomDetail=next;}
+      try{const next=await readClassroomDetail(id);if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomDetail=next;}
       catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The invitation was sent, but the classroom could not refresh. Reload to see the new member.";}
     }
     if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomBusy=undefined;
@@ -2294,7 +2301,7 @@
       if(assignmentPackId===packId)assignmentPackId="";if(assignmentNote===note)assignmentNote="";if(assignmentDueAt===dueAt)assignmentDueAt="";
     }catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The pack could not be assigned. Keep these details and try again.";}
     if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&classroomActionError===undefined){
-      try{const next=await api.classroom!(id);if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration&&next.classroom.id===id)classroomDetail=next;}
+      try{const next=await readClassroomDetail(id);if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomDetail=next;}
       catch{if(classroomIsCurrent(id,generation)&&action===classroomActionGeneration)classroomActionError="The pack was assigned, but the classroom could not refresh. Reload to see the assignment.";}
     }
     if(classroomRouteIsCurrent(generation)&&action===classroomActionGeneration)classroomBusy=undefined;

@@ -960,6 +960,11 @@ source-authority hold, official content or release gate is promoted by this scop
    [[D3318]] member progression/repeat/re-offer journey. The installed catalogue/API
    is delivered; durable cycle identity is not. Preserve the existing migration
    order and do not group unrelated historical attempts in the client.
+   Independent existing classroom-contract repair [[D3684]] is delivered locally: initial and
+   post-mutation detail reads refuse crossed roots/children, with truthful success/read recovery.
+   All 150 focused cases, clean types and actual desktop/touch-phone journeys pass. Full normal
+   gates pass 4,610 software, seven performance, 247 content and 287 browser cases, one optional
+   Maia skip, zero retries. This does not complete the broader professional workflows.
 4. [[D3526]]: the real phone Threat Radar still duplicates one mate across two producers.
    Exact witness-level subsumption must preserve distinct capture facts and both provenance
    chains. Its next author action is a narrow module-registration selection amendment with

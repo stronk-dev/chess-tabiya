@@ -94,6 +94,7 @@ import {
   type ShapeEntryLibraryView,
 } from "./theory-library.js";
 import { parseVoicePage } from "./voice-response.js";
+import { assertClassroomDetailIdentity } from "./classroom-response.js";
 
 export interface PackSummary {
   readonly id: string;
@@ -1652,7 +1653,11 @@ export class DrillApi implements DrillClientApi {
   liveSession(sessionId:string):Promise<LiveSessionDetail>{return this.#json(`/sessions/${encoded(sessionId)}`);}
   async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly rotationHandles?:readonly string[];readonly matchPlayers?:{readonly white?:string;readonly black?:string};readonly classroomId?:string;readonly scheduledFor?:string}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
   async classrooms():Promise<readonly ClassroomSummary[]>{const body=await this.#json<{classrooms:readonly ClassroomSummary[]}>("/classrooms");return body.classrooms;}
-  classroom(id:string):Promise<ClassroomDetail>{return this.#json(`/classrooms/${encoded(id)}`);}
+  async classroom(id:string):Promise<ClassroomDetail>{
+    const detail=await this.#json<ClassroomDetail>(`/classrooms/${encoded(id)}`);
+    assertClassroomDetailIdentity(detail,id);
+    return detail;
+  }
   async createClassroom(name:string):Promise<ClassroomSummary>{const body=await this.#json<{classroom:ClassroomSummary}>("/classrooms",{method:"POST",body:{name}});return body.classroom;}
   async inviteClassroomMember(id:string,handle:string,role:"teacher"|"learner"):Promise<ClassroomMember>{const body=await this.#json<{member:ClassroomMember}>(`/classrooms/${encoded(id)}/members`,{method:"POST",body:{op:"invite",handle,role}});return body.member;}
   async respondClassroomInvite(id:string,op:"accept"|"decline"|"leave"):Promise<void>{await this.#json(`/classrooms/${encoded(id)}/members`,{method:"POST",body:{op}});}

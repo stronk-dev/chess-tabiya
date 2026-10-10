@@ -55,6 +55,14 @@ transport diagnostics. Mutation success and list/detail refresh are separate fac
 secondary refresh fails, the UI says the action finished and asks for a reload instead of claiming
 that the mutation failed.
 
+Detail reads validate the requested classroom ID and the classroom links on membership,
+members, assignments and sessions; submissions must link to assignments in that same detail.
+A crossed response is a failed read, not a silently ignored success. The HTTP adapter and
+mounted screen enforce the same relationship checks. Failed refreshes preserve the previous
+admitted detail and acknowledge any successful invitation/assignment; reopening retries the
+read without repeating that mutation. Historical submissions do not require a still-active
+roster member. These checks supplement server authorization; they do not replace it.
+
 ## Consent, expiry, and revocation
 
 A learner may submit only a run they host whose `packId` matches the assignment. The

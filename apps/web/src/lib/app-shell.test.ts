@@ -2631,6 +2631,42 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it.each([
+    "root", "membership", "member", "assignment", "submission", "session",
+  ] as const)("refuses crossed classroom detail %s with a retryable read explanation", async (kind) => {
+    history.replaceState(null, "", "/live");
+    const id = "requested-classroom";
+    const membership: ClassroomDetail["membership"] = { classroomId: id, learnerId: "learner-test", handle: "coach", memberRole: "teacher", state: "active", invitedBy: null, invitedAt: "2026-09-13T12:00:00.000Z", joinedAt: "2026-09-13T12:00:00.000Z", leftAt: null };
+    const valid: ClassroomDetail = {
+      classroom: { id, ownerLearnerId: "learner-test", name: "Requested classroom", createdAt: "2026-09-13T12:00:00.000Z", archivedAt: null },
+      membership, members: [membership], assignments: [], submissions: [], upcomingSessions: [],
+    };
+    const crossed = structuredClone({ ...valid });
+    if (kind === "root") crossed.classroom = { ...crossed.classroom, id: "foreign-classroom" };
+    if (kind === "membership") crossed.membership = { ...membership, classroomId: "foreign-classroom" };
+    if (kind === "member") crossed.members = [{ ...membership, classroomId: "foreign-classroom", handle: "foreign-member" }];
+    if (kind === "assignment") crossed.assignments = [{ id: "foreign-assignment", classroomId: "foreign-classroom", packId: pack.id, assignedBy: membership.learnerId, note: "Foreign assignment", dueAt: null, createdAt: membership.invitedAt, withdrawnAt: null }];
+    if (kind === "submission") crossed.submissions = [{ assignmentId: "foreign-assignment", learnerId: membership.learnerId, runId: run.id, grantedLearnerIds: [], submittedAt: membership.invitedAt, accessExpiresAt: "2026-12-13T12:00:00.000Z", withdrawnAt: null }];
+    if (kind === "session") crossed.upcomingSessions = [{ id: "foreign-session", runId: run.id, kind: "academy", title: "Foreign session", classroomId: "foreign-classroom", createdBy: membership.learnerId, createdAt: membership.invitedAt, boardControl: "host_directed", rotationCursor: 0 }];
+    const read = vi.fn().mockResolvedValueOnce(crossed).mockResolvedValue(valid);
+    const classroomApi: DrillClientApi = { ...api(), async classrooms() { return [{ ...valid.classroom, memberRole: "teacher", memberState: "active" }]; }, classroom: read };
+    const component = mount(App, { target: target(), props: { api: classroomApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    try {
+      const region = () => document.querySelector<HTMLElement>("[aria-labelledby='classrooms-title']")!;
+      await vi.waitFor(() => expect(region()?.querySelector("button")?.textContent).toBe("Create"));
+      const open = () => [...region().querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Open")!;
+      await vi.waitFor(() => expect(open()).toBeTruthy());
+      open().click();
+      await vi.waitFor(() => expect(region().querySelector("[role='alert']")?.textContent).toBe("That classroom could not be opened. Try again."));
+      expect(region().querySelector(".classroom-detail")).toBeNull();
+      expect(region().textContent).not.toContain("Foreign assignment");
+      open().click();
+      await vi.waitFor(() => expect(region().querySelector(".classroom-detail h3")?.textContent).toBe("Requested classroom"));
+      expect(region().textContent).not.toContain("That classroom could not be opened. Try again.");
+      expect(read).toHaveBeenCalledTimes(2);
+    } finally { await unmount(component); }
+  });
+
   it("retains assignment consent with a bounded retry after sharing fails", async () => {
     history.replaceState(null, "", "/learn");
     const assignment: AssignedPack = {
