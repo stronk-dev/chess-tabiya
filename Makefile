@@ -224,7 +224,7 @@ postcommit-nudge-browser-check:
 	./node_modules/.bin/playwright test --grep "Guided Nudge (after 1.e4|branches into another move)"
 
 inspector-lifecycle-browser-check:
-	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires)"
+	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires|recovers)"
 
 play-composition-matrix-contract:
 	node --test tools/play-composition-matrix.test.mjs

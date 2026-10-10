@@ -2490,8 +2490,77 @@ describe("Layer 3 screens", () => {
       await open();
       await vi.waitFor(() => expect(inspectorCalls).toHaveLength(1));
       const publish = async (next: DrillRun) => { snapshots.set("current", { run: next, access: "writer", pendingEvidence: 0, withheld: false }); await tick(); await tick(); };
-      return { component, run, open, close, change, section, release, inspectorCalls, publish };
+      return { component, run, open, close, change, section, release, inspectorCalls, publish, onModuleQuery, realQuery };
     }
+
+    it("D3655: retries a failed explicit read once without changing its exact request or recorded play", async () => {
+      const view = await setup(true);
+      const recorded = JSON.stringify(view.run);
+      await view.release("failure");
+      expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded");
+      const retry = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Retry recorded evidence");
+      expect(retry).toBeDefined();
+      retry!.focus(); retry!.click(); retry!.click();
+      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      expect(view.inspectorCalls[1]).toEqual(view.inspectorCalls[0]);
+      expect(document.activeElement).toBe(retry);
+      expect(JSON.stringify(view.run)).toBe(recorded);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await unmount(view.component);
+    });
+
+    it("D3655: a missing demanded packet is a failed read, not a successful empty Inspector", async () => {
+      const view = await setup(true);
+      const complete = await view.realQuery(view.inspectorCalls[0]!) as { page: ReturnType<typeof queryModules>["page"] };
+      const missing = { page: { ...complete.page, packets: [], suppressions: [] } };
+      expect(moduleResponses.parseModuleQueryPage(missing, {
+        runId: complete.page.runId, subjectNodeId: complete.page.subjectNodeId,
+        finalDigest: complete.page.effectiveConfigDigest,
+      }).packets).toEqual([]);
+      // Deliver the actual page through the normal parser, with only the requested packet absent.
+      view.onModuleQuery.mockImplementationOnce(async () => missing);
+      await view.close(); await view.open();
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded"));
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
+      await view.release("success");
+      expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull();
+      await unmount(view.component);
+    });
+
+    it("D3655: failed refresh remains recoverable and never falls back to stale admitted components", async () => {
+      const view = await setup(false);
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      view.onModuleQuery.mockImplementationOnce(() => { throw new Error("PRIVATE_SYNC_FAILURE"); });
+      const refresh = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Refresh recorded evidence");
+      expect(refresh).toBeDefined(); refresh!.click();
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
+      expect(view.section()?.textContent).not.toContain("PRIVATE_SYNC_FAILURE");
+      refresh!.click();
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
+
+    it.each(["success", "failure"] as const)("D3655: manual refresh retires late %s after the Inspector closes", async kind => {
+      const view = await setup(false);
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const pending = deferred<unknown>();
+      view.onModuleQuery.mockImplementationOnce(() => pending.promise);
+      const refresh = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Refresh recorded evidence");
+      expect(refresh).toBeDefined(); refresh!.click(); refresh!.click();
+      await tick();
+      expect(refresh!.getAttribute("aria-disabled")).toBe("true");
+      await view.close();
+      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
+      if (kind === "success") pending.resolve(await view.realQuery(view.inspectorCalls[0]!)); else pending.reject(new Error("PRIVATE_LATE_FAILURE"));
+      await pending.promise.catch(() => undefined); await tick(); await tick();
+      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
+      expect(view.section()).toBeNull();
+      await view.open();
+      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      await unmount(view.component);
+    });
 
     it("keeps identical snapshots but replaces evidence when the recorded decision advances", async () => {
       const view = await setup(false);
@@ -2512,6 +2581,17 @@ describe("Layer 3 screens", () => {
       const view = await setup(false, true);
       await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded"));
       expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
+      await unmount(view.component);
+    });
+
+    it("D3655: retry cannot admit a genuine packet from an older recorded decision", async () => {
+      const view = await setup(false, true);
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      const retry = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Retry recorded evidence")!;
+      expect(retry).toBeDefined(); retry.click();
+      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
+      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
       await unmount(view.component);
     });
 

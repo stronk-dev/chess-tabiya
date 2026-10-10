@@ -36,6 +36,13 @@ dispatched by `PresentedEvidence.svelte`.
 - The Inspector's move-transition section now renders the exact `inspector.move_transition@1`
   admitted reading through `PresentedEvidence`, with an explicit empty state before a recorded
   edge or when no transition fact is emitted. Its collapse control remains a learner choice.
+- The explicit Full Inspector has single-flight **Refresh recorded evidence** and
+  **Retry recorded evidence** controls. Both use the same current run/position/help/decision
+  admission as opening the section. A missing demanded packet is a failed read, not an empty
+  evidence result. Failed refresh clears old components; retry cannot widen help or admit an old
+  decision. Closing, navigation, help changes and destruction retire pending completion. These
+  reads do not change moves, branches or events; source and family availability remain attributed
+  by the same compiled packet. Structural fidelity and legacy source migrations remain open.
 - The corpus section validates the modern `inspector.corpus@2 × derived.explorer.inspector_population@1`
   receipt and both registered standalone `@1` tuples before rendering through `PresentedEvidence`.
   Source/population attribution, population and per-move floors, recency, unlisted counts and

@@ -1243,31 +1243,48 @@
     run.id, displayedNode.id, fullInspectorDecisionDigest, feedbackDeliveryOpen(run),
     compiledAssistance?.finalDigest, assistanceQueryState, viewerRole, seatedInContest, reviewing,
   ]));
+  async function loadFullInspector(): Promise<void> {
+    if (fullInspectorState === "pending" || !inspectorOpen || !fullInspectorActive || assistanceQueryState !== "ready"
+      || !feedbackDeliveryOpen(run) || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) return;
+    const request = ++fullInspectorRequest;
+    const subject = fullInspectorSubject;
+    const node = displayedNode.id;
+    const runId = run.id;
+    const decisionDigest = fullInspectorDecisionDigest;
+    const finalDigest = compiledAssistance.finalDigest;
+    const assistance = requestedAssistance;
+    fullInspector = undefined;
+    fullInspectorPageSubject = undefined;
+    fullInspectorState = "pending";
+    try {
+      const value = await onModuleQuery({ assistance, query: { timing: "review", nodeId: node, requested: ["full_inspector"] } });
+      if (request !== fullInspectorRequest || subject !== fullInspectorSubject || !inspectorOpen || !fullInspectorActive) return;
+      const page = parseModuleQueryPage(value, { runId, subjectNodeId: node, finalDigest });
+      if (page.decisionDigest !== decisionDigest) throw new TypeError("Inspector page answers an obsolete recorded decision");
+      const packet = page.packets.find((packet) => packet.module === "full_inspector");
+      if (packet === undefined) throw new TypeError("Inspector page omits its demanded packet");
+      fullInspector = packet;
+      fullInspectorPageSubject = subject;
+      fullInspectorState = "idle";
+    } catch {
+      if (request === fullInspectorRequest && subject === fullInspectorSubject && inspectorOpen && fullInspectorActive) {
+        fullInspector = undefined;
+        fullInspectorPageSubject = undefined;
+        fullInspectorState = "failed";
+      }
+    }
+  }
   $effect(() => {
     const open = inspectorOpen;
     const active = fullInspectorActive;
     const subject = fullInspectorSubject;
-    const request = ++fullInspectorRequest;
+    ++fullInspectorRequest;
     untrack(() => {
       fullInspector = undefined;
       fullInspectorPageSubject = undefined;
       fullInspectorState = "idle";
       if (!open || !active || assistanceQueryState !== "ready" || !feedbackDeliveryOpen(run) || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) return;
-      const node = displayedNode.id;
-      const runId = run.id;
-      const decisionDigest = fullInspectorDecisionDigest;
-      const finalDigest = compiledAssistance.finalDigest;
-      fullInspectorState = "pending";
-      void onModuleQuery({ assistance: requestedAssistance, query: { timing: "review", nodeId: node, requested: ["full_inspector"] } })
-        .then((value) => {
-          if (request !== fullInspectorRequest || subject !== fullInspectorSubject) return;
-          const page = parseModuleQueryPage(value, { runId, subjectNodeId: node, finalDigest });
-          if (page.decisionDigest !== decisionDigest) throw new TypeError("Inspector page answers an obsolete recorded decision");
-          fullInspector = page.packets.find((packet) => packet.module === "full_inspector");
-          fullInspectorPageSubject = subject;
-          fullInspectorState = "idle";
-        })
-        .catch(() => { if (request === fullInspectorRequest && subject === fullInspectorSubject) { fullInspector = undefined; fullInspectorPageSubject = undefined; fullInspectorState = "failed"; } });
+      void loadFullInspector();
     });
   });
   const INSPECTOR_FAMILY_LABELS: Readonly<Record<string, string>> = Object.freeze({ local_rules: "Local rules", authored_theory: "Authored theory", recorded_run: "Recorded game", stockfish: "Stockfish", syzygy: "Tablebase", maia: "Human-move model", explorer: "Game corpus", derived: "Derived readings" });
@@ -2961,6 +2978,9 @@
         {#if fullInspectorActive}
           <section class="full-inspector" aria-label="Evidence inspector: full inspector" data-module="full_inspector">
             <h3>Everything recorded here, attributed</h3>
+            {#if feedbackDeliveryOpen(run)}
+              <button type="button" aria-disabled={fullInspectorState === "pending"} disabled={assistanceQueryState !== "ready"} onclick={() => void loadFullInspector()}>{fullInspectorState === "failed" ? "Retry recorded evidence" : "Refresh recorded evidence"}</button>
+            {/if}
             {#if fullInspectorState === "pending"}<p role="status">Collecting the recorded evidence…</p>
             {:else if fullInspectorState === "failed"}<p role="alert">The full inspector could not be loaded.</p>
             {:else if fullInspector !== undefined && fullInspectorPageSubject === fullInspectorSubject}

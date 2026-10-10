@@ -24266,3 +24266,42 @@ Campaign was the one capability with no API, route or content. Now:
   195 controls), `make verify-governance`, current generated roadmap receipt and whitespace check.
   Routing covers all 1,711 live ledger items; zero untriaged. No production tests or qualification
   outcome are modified. The owner-requested overview uses that checked inventory, not commit count.
+
+### 2026-10-10 — Full Inspector exact read-only recovery (D3655)
+
+- The prior author checkpoint made progress but did not authorize its held production migration.
+  Continued within implementing module-registration §§2.5.2/4.11/5.2 and evidence-presentation:
+  Full Inspector's failed read had no recovery door and a missing demanded packet became a blank
+  idle section. D3655 was recorded before editing production.
+- Four original missing-control regressions fail on the predecessor. The initial missing-packet
+  test incorrectly mutated the outer response rather than its page; corrected before implementation,
+  it now proves the generic parser accepts a well-formed empty page and the demanded-packet guard
+  refuses it. It is not counted as a measured predecessor failure.
+- Six new permanent mounted controls cover retry/refresh, exact single-flight requests, synchronous
+  failure, missing packets, stale decisions and late success/failure after closing. All 15 Inspector
+  lifecycle cases and clean workspace types pass. Existing current-subject/help/decision admission
+  remains the only path; failed refresh clears old components, not source/family absence states.
+- Four new actual desktop/phone-width network/missing-packet journeys preserve exact typed facts,
+  request bodies and recorded graph/events, then close during explicit refresh and reopen. The first
+  native run fails all four on lost keyboard focus: transient HTML disabling removes browser focus,
+  unlike the mounted DOM. Guarded aria-disabled preserves focus and prevents duplicate work. All six
+  native Inspector lifecycle journeys pass after repair; no budget/retry/forced gesture is weakened.
+- The existing normal Make browser target now includes recovery rather than silently running only
+  the old two cases. Canonical docs, ledger, durable state, existing queue and roadmap carry the
+  bounded production checkpoint. Full normal verification/build and all browser tiers follow before
+  commit; no source-contract acceptance, chess truth, qualification, whole capability or release claim.
+- The aggregate passes all 4,407 software cases/365 files, seven unchanged-budget performance
+  cases/four files and the remaining software contract checks, then stops in governance on two
+  duplicate roadmap references and the pre-transition D3655 anchor. The duplicate references are
+  removed and the current ledger anchor is read from the durable state. Product/test bytes are
+  unchanged; the remaining normal governance/content/build targets are re-run, not a falsely green
+  aggregate or a reason to rerun an unchanged software job as new evidence.
+- The corrected normal governance/content/build targets exit zero, including 241 content cases
+  over 24 files. The complete sequential browser target then exits zero: 200 ordinary journeys,
+  five content integrations, 59 responsive/accessibility cases and one packaged-default journey
+  (265 passing), one existing optional Maia latency skip, zero retries, all 150 exact-input and
+  112 composition cells. No simultaneous rebuild, weakened assertion or additional source is used.
+- Final closeout records this bounded production repair in the existing roadmap and durable state.
+  All fourteen whole capabilities remain incomplete, four milestones active/five blocked and zero
+  official packs graduated. This batch is committed locally only; no remote CI, native appliance
+  recovery, classifier qualification or release readiness is asserted.

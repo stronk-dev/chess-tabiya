@@ -3704,6 +3704,66 @@ test("explicit Inspector human-model retires real completed and delayed pages ac
   expect((await inspectCompositionVocabulary(page, "explicit-human-model-closed")).leaks).toEqual([]);
 });
 
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  for (const failure of ["network", "missing_packet"] as const) {
+    test(`full Inspector recovers a ${failure} read and retires explicit refresh ${viewport.width}`, async ({ page }, testInfo) => {
+      await page.setViewportSize(viewport);
+      await openFullInspectorRun(page);
+      const reads: { assistance: unknown; query: unknown }[] = [];
+      const releases = new Map<number, () => void>();
+      let first: ModuleQueryPage | undefined;
+      await page.route("**/runs/*/modules/query", async route => {
+        const body = route.request().postDataJSON();
+        if (!body.query.requested?.includes("full_inspector")) { await route.continue(); return; }
+        const index = reads.push(body);
+        const response = await route.fetch();
+        const raw = await response.json() as { page: ModuleQueryPage };
+        if (index === 1) {
+          first = raw.page;
+          if (failure === "network") await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "EVIDENCE_UNAVAILABLE", message: "private failure" } }) });
+          else await route.fulfill({ response, json: { page: { ...raw.page, packets: [], suppressions: [] } } });
+          return;
+        }
+        if (index === 2 || index === 3) await new Promise<void>(resolve => { releases.set(index, resolve); });
+        await route.fulfill({ response });
+      });
+      await page.getByRole("checkbox", { name: "Full inspector", exact: true }).check();
+      const inspector = page.locator(".full-inspector");
+      await expect(inspector.getByRole("alert")).toContainText("could not be loaded");
+      await expect(inspector.locator("[data-presented]")).toHaveCount(0);
+      await expect(inspector).not.toContainText("private failure");
+      const before = await (await page.request.get(`/runs/${first!.runId}/graph`)).json();
+      const events = await (await page.request.get(`/runs/${first!.runId}/events?sinceSeq=0`)).json();
+      const retryResponse = page.waitForResponse(isFullInspectorResponse);
+      await inspector.getByRole("button", { name: "Retry recorded evidence", exact: true }).click();
+      await expect.poll(() => releases.has(2)).toBe(true);
+      await expect(inspector.getByRole("button", { name: "Refresh recorded evidence", exact: true })).toBeDisabled();
+      await expect(inspector.getByRole("status")).toContainText("Collecting");
+      expect(reads).toHaveLength(2);
+      expect(reads[1]).toEqual(reads[0]);
+      releases.get(2)!();
+      const retried = (await (await retryResponse).json() as { page: ModuleQueryPage }).page;
+      await assertFullInspectorPacket(page, retried.packets.find(packet => packet.module === "full_inspector")!);
+      const refresh = inspector.getByRole("button", { name: "Refresh recorded evidence", exact: true });
+      await expect(refresh).toBeFocused();
+      const departed = page.waitForResponse(isFullInspectorResponse);
+      await refresh.click();
+      await expect.poll(() => releases.has(3)).toBe(true);
+      await page.getByRole("button", { name: "Return to play", exact: true }).click();
+      releases.get(3)!(); await departed;
+      await expect(inspector).toHaveCount(0);
+      const reopenedResponse = page.waitForResponse(isFullInspectorResponse);
+      await page.locator(".inspector-entry").click();
+      const reopened = (await (await reopenedResponse).json() as { page: ModuleQueryPage }).page;
+      await assertFullInspectorPacket(page, reopened.packets.find(packet => packet.module === "full_inspector")!);
+      expect(reads).toHaveLength(4);
+      expect(await (await page.request.get(`/runs/${first!.runId}/graph`)).json()).toEqual(before);
+      expect(await (await page.request.get(`/runs/${first!.runId}/events?sinceSeq=0`)).json()).toEqual(events);
+      await testInfo.attach("inspector-read-recovery", { body: JSON.stringify({ viewport, failure, requests: reads.length, subject: reopened.subjectNodeId, components: reopened.packets[0]?.receipt.items.length }), contentType: "application/json" });
+    });
+  }
+}
+
 test("full Inspector recompiles its real packet after same-position Advanced settings change", async ({ page }, testInfo) => {
   await openFullInspectorRun(page);
   const firstResponse = page.waitForResponse(isFullInspectorResponse);

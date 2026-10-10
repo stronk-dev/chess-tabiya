@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3655]] closes Full Inspector's failed-read dead end and missing-packet blank success.
+Opening, explicit retry and refresh share one current subject/help/decision path; reads are
+single-flight, stale/absent packets refuse and failed refresh clears old components. Fifteen
+complete lifecycle cases, clean types and six actual desktop/phone journeys pass. Native
+focus survives pending recovery; saved graph/events and exact request bodies are unchanged.
+Normal local tiers pass 4,407 software cases, seven unchanged-budget performance cases,
+241 content cases, types/governance/build and 265 browser cases across all four tiers;
+one optional Maia skip, zero retries, all 150 input/112 composition cells. No
+source migration, new availability, semantic qualification or full capability is claimed.
+
 [[D3309]]/[[D3654]] now have an authored detailed-Inspector amendment in
 `rfc/evidence-presentation.md`: sixteen closed reading successors, a separately versioned
 consumer/operation and both DrillScreen/Compare migrations. The 195-control existing fidelity

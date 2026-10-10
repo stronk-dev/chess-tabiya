@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1cb23af42c779701fc2be4e976539e63a2afe0d9d9570e91984147a8eea164dc",
+    "roadmap": "sha256:06e94ec22bbac572c9f6678a2c5a18053c556ae48090a642efda1c99f8463a1a",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:6b01635639c5bb02146c05c2a1fd3128774d29dfe8bd61694ecc4addb31d7239",
+    "workState": "sha256:5502c126f2614a06c3dafca46993095fd4f7733e27375e7ef7c4083f604ad0fa",
     "rfcRegister": "sha256:f5e30d387e6d4c07a6d5bcca14dacad0ec0341465406e5aa8370ed5b9f87712f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 14,
       "blocked": 1070,
-      "done": 1531,
+      "done": 1532,
       "refused": 161
     },
     "workItems": {
@@ -308,8 +308,8 @@
       ],
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Preserve D3592/D3593's native readiness, one-shot hydration and authoritative access/reload controls. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-09",
-        "summary": "D3627 closes locally under the accepted staged Support boundary: exact legal-move identity replaces square-pair admission before any child or evidence collection. Twelve predecessor failures, seven complete legal candidate populations, all 161 focused cases/types and eight desktop/phone warning/promotion journeys establish refusal, exact child readings, revise/confirm and saved-play preservation. Complete normal local gates pass clean types/build, 4105 software cases/359 files, seven unchanged-budget performance cases, 239 content cases and 231 browser passes (166 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and all 112 composition cells. Source/Inspector/preset/owner-use and historical intermittent holds remain; no new source, permission, pack bytes, whole milestone, remote CI or 1.0 completion.",
+        "at": "2026-10-10",
+        "summary": "D3655 repairs Full Inspector read recovery through the actual compiled packet and mounted/built client. Explicit retry and refresh share opening's single-flight current subject/help/decision admission; missing packets fail instead of becoming blank success, failed refresh clears stale components and departed completion cannot attach. Four original missing-control regressions fail; six new permanent mounted controls, all 15 Inspector lifecycle cases, clean workspace types and six actual desktop/phone-width browser journeys pass. Native focus survives pending recovery, exact request bodies and saved graph/events are unchanged, and the existing normal Make target includes all new recovery cases. D3627's staged legal admission and the prior board controls remain delivered. Normal local tiers pass 4407 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, types/governance/build and 265 browser cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. The first aggregate stops on roadmap metadata; the corrected remaining tiers pass without changing software bytes. Source/Inspector fidelity/preset/owner-use and intermittent holds remain; no new source, permission, pack bytes, whole milestone, remote CI or 1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/guidance-lifetime.test.ts",
@@ -460,6 +460,11 @@
             "kind": "work_state",
             "id": "D3562",
             "digest": "sha256:2f7a87496cd019bce3818e358bbcc3a02f8be436a56bed0388005a9e7eff226f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3655",
+            "digest": "sha256:4632979c4413b3d494f6befcb1bad3c7ec19640e58571a4bb864c96c12e16bab"
           },
           {
             "kind": "work_state",
