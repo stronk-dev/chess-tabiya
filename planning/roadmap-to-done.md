@@ -853,6 +853,10 @@ Full sequential normal verification passes clean types/build, 3,620 software, se
 [[D3580]] records the separate tablebase contract hold in the existing author queue: the raw
 operator source is not an automatic Review binding, and its exact durable v1 packet cannot be
 widened in place. Neither finding supplies missing Review evidence or completes a release gate.
+The 2026-10-10 D3580 draft amendment in `rfc/review-evidence-compiler.md` §4.3 now specifies the
+move-free occurrence and existing Review event/source save/reload path, without changing legacy
+job formats or claiming a new migration. Independent buildability review is next. Acquisition
+and the actual source-to-Review consumer remain unimplemented; no capability state is promoted.
 [[D3579]] corrects false square-control captions in both Sight and Inspector: only populated
 target cells count, rather than all 64 retained board cells. Four predecessor-red controls,
 eighteen focused cases, the real REST query and desktop/phone Inspector reload/return journeys

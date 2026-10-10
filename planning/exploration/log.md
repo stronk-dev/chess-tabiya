@@ -24936,3 +24936,29 @@ Campaign was the one capability with no API, route or content. Now:
   D3681's mandated zero-income wording remains author-held. No economy, source, reward,
   permission, whole Campaign, native release-image or remote-CI promotion. The full 1.0
   goal remains active. Other visible research edits/local artifacts are not included.
+
+## 2026-10-10 — D3580: Review tablebase amendment authored, not implemented
+
+- Finished the source audit against the actual Review coordinator, provider operation/parser,
+  run-event save/reload path, legacy job grammar and ordinary response projection. Review's
+  current adapter still returns not_requested inside the tablebase domain. The queued-worker
+  six-field settlement is not the Review coordinator's persistence boundary.
+- Drafted `rfc/review-evidence-compiler.md` §4.3: reuse the existing scheduler, private run-event
+  delivery key and operation-versioned provider image; derive a move-free exact occurrence.
+  Preserve native category/distance semantics, terminal-position domain, shared mixed-family
+  bounds, exact restart/replay, legacy job compatibility and private capture filtering. No
+  new provider queue, durable format, migration or bulk measurement recording is proposed.
+- Independent buildability acceptance and actual production-boundary controls are next. This
+  is authoring progress, not source acquisition, consumer adoption, full Review or a discharge.
+  D3580 remains blocked; ledger, state, RFC index, author queue and roadmap agree. Normal Make
+  state/receipt/register/status/roadmap checks pass: zero untriaged; all 3,431 rows assigned;
+  1,555 done, 161 refused, 1,715 live; 273 UX complete, 272 live, 24 retired. Four milestones
+  active/five blocked; all fourteen whole capabilities incomplete; zero official graduates.
+- The preceding committed Campaign checkpoint `9000a943` remains the latest full local
+  software/performance/content/browser/build result, not remote CI or a release verdict.
+  No production bytes, protected intent, archived record or separate visible research edit
+  changed in this authoring closeout. No push, publication or deployment is authorized.
+- Post-authoring verification: normal `make review-evidence-runtime-check verify-governance`
+  exits zero. All 87 unchanged Review/runtime/privacy regressions pass, as do repository
+  governance and compact-recording independence controls. These tests preserve the landed
+  implementation; they do not test or accept the new tablebase amendment.

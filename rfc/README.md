@@ -15,6 +15,13 @@ model is not a production mint, binding, gesture proof or discharge of exact-mob
 Independent review must precede source/operation/receipt/client changes; Inspector populations
 and other Sight budgets stay unchanged. Handoff: `planning/learner-modules/registry-return.md`.
 
+**Review tablebase draft amendment, 2026-10-10:** `review-evidence-compiler.md` §4.3 owns
+D3580's move-free occurrence projection and source/save/restart/consumer controls. It proposes
+reusing Review's existing coordinator, run-event storage and operation-versioned provider image;
+legacy evidence-job formats and the separate Stockfish job migration remain unchanged. It is
+**unaccepted**, with independent buildability review next; the parent remains implementing and
+in-domain Review tablebase acquisition remains missing.
+
 **Safe-deployment draft amendment, 2026-10-07:** the implementing document's §8 is repaired in
 draft, not newly accepted: 112 literal unsafe identities, transport admission before bounded
 body-selector dispatch, existing account32m ceiling, actual selection-presence move dispatch,

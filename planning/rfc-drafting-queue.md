@@ -3,6 +3,14 @@
 ## Current narrow author handoff — 2026-10-08
 
 - **[[D3580]] — Review tablebase acquisition, narrow output and durable source handoff.**
+  **2026-10-10 authored, not accepted:** independently review `rfc/review-evidence-compiler.md`
+  §4.3 before production. The actual Review coordinator is not the legacy job worker. The draft
+  therefore reuses its run-event delivery path and the existing operation-versioned save/reload
+  format rather than widening v1 job settlements or waiting for the Stockfish job migration.
+  Verify mixed-family aggregate bounds, exact node/clock joins, restart and legacy compatibility,
+  scalar/image agreement, capture privacy, terminal-position domain and the real Review journey.
+  D3580 remains blocked until acceptance and actual source-to-consumer implementation.
+  Original author requirements, retained as the review checklist:
   The current packet placeholder names operator-only `live.syzygy.position_result@1`;
   its full delivery contains candidate moves and has no `module.review_map` binding.
   Specify a declared move-free category/distance projection over the existing shared

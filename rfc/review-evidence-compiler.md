@@ -1,5 +1,10 @@
 # RFC: Review evidence compiler
 
+- **Draft amendment 2026-10-10 — [[D3580]]:** §4.3 specifies a move-free Review tablebase
+  projection and the existing operation-versioned provider save/reload boundary. It is **not
+  accepted** and authorizes no production acquisition. The parent remains implementing; its
+  existing landed checkpoints are unchanged. Independent buildability review is the next action.
+
 - **Implementation checkpoint 2026-10-05:** D3422/D3423 repair §4.1's synchronous exact-occurrence reservations, aggregate per-run capacity, ownership-fenced cancellation/eviction and scalar shared-attempt completion. Only owners call the existing provider scheduler; completion advances previously requested branches without polling. Permanent predecessor, real scheduler/SQLite and authenticated HTTP controls: `planning/review/reservation-completion-2026-10-05.md`. Full RFC, source coverage and discharges remain open; this is not new acceptance.
 
 - **Implementation checkpoint 2026-10-04:** D3371 closes §3's declaration-cardinality defect through v2 transitions and exact live consumer migration; Story rank/title v2 describe successor dependencies without changing calculations. Permanent execution, frozen-history and calculation-compatibility controls, full exact-index software (2,865 tests plus seven isolated performance tests), content, provider, browser CI and governance pass. Receipt: `planning/review/transition-operands-2026-10-04.md`. This is not full RFC completion or new acceptance.
@@ -688,6 +693,107 @@ events/jobs. Opening, human and tablebase adapters retain their native abstentio
 The learner-modules/Wave-C eligibility amendment must land literal ids before this list can be
 accepted; placeholder forecast ids are forbidden by D921.
 
+### 4.3 Draft amendment: Review tablebase delivery ([[D3580]])
+
+**Scope and authority.** This section is an unaccepted amendment, not a claim that tablebase
+coverage ships. At the 2026-10-10 checkpoint the tablebase adapter always returns
+`not_requested` inside the material domain. The modern source already exists, but the ordinary
+Review consumer has no admitted move-free point. Source references for this amendment are
+`packages/runtime/src/review-evidence.ts`, `provider-exchange.ts`, `provider-parsers.ts` and
+`evidence-catalog.ts`; `apps/server/src/review-evidence.ts`, `provider-operations.ts`,
+`evidence-jobs.ts`, `queued-tablebase.ts` and `feedback-policy.ts`.
+
+**One acquisition path.** Extend the existing `ReviewEvidenceCoordinator`, not the evidence-job
+worker. Review already persists its Stockfish deliveries in run evidence events and calls only
+`ProviderExchangeScheduler.get`. Request the existing `syzygy.position@1` operation with its
+existing standard-chess request and full canonical FEN, including clocks and castling/en-passant
+fields. Admit its result through the sole `live.syzygy.position_result@2` factory. Do not use
+`TablebaseSource.probe`, reconstruct a source from the six-field legacy packet, or introduce a
+Review queue/cache/provider protocol.
+
+**Move-free occurrence projection.** Add `derived.review.tablebase_point@1` as a two-input
+derivation: the admitted `live.syzygy.position_result@2` source and the exact
+`run.record.position@1` occurrence. Its factory verifies the source request/result FEN against
+the recorded occurrence. It emits only the recorded occurrence identity, FEN, side to move,
+native category, `dtz` and `preciseDtz`; it emits neither moves nor a nested provider delivery.
+Declare both inputs and the literal `review.source.tablebase@2` adapter/consumer binding. Keep
+the predecessor adapter/parser meaning frozen for historical records. The source remains
+operator-only; `module.review_map` accepts the narrow point, not the raw source. Factory-private
+inputs remain available for re-derivation, not public packet serialization or voice rendering.
+Retire the live use of the old raw-source placeholder without widening its frozen identity.
+
+The point preserves the existing `SyzygyTablebaseCategory` vocabulary and nullable distances.
+It states whose turn the native category describes. It does not turn `unknown`, `maybe-*`,
+`cursed-win` or `blessed-loss` into an unconditional win/draw/loss, interpret DTZ as mate distance,
+normalize tablebase into cp, grade a move, select a candidate or invent a strategic explanation.
+Use existing registered presentation boundaries for a short attributed category/distance item;
+no new prominence policy, preset, generic LLM instruction or Review moment quota is introduced.
+
+**Durable handoff, without changing job grammars.** Use the existing
+`serializeProviderDelivery("syzygy.position@1", delivery)` image and
+`parsePersistedProviderDelivery("syzygy.position@1", image)` reload boundary. The image already
+carries `tabiya.provider-delivery.v1`, the literal operation and the captured response; no new
+envelope or caller-labelled payload is needed. Save it under the existing private
+`values.providerDelivery` key on an `evidence.attached` tablebase event at the exact node, alongside
+the existing narrow category/distance values. Derive the evidence reference from this admitted
+delivery, and check for an already recorded exact delivery before attachment. Equal delivery
+replay must append nothing. Reload derives the modern source again and checks the occurrence;
+Verify the retained narrow scalars against the re-derived image before making the point;
+disagreement refuses rather than choosing whichever copy is convenient. Legacy six-field events
+remain legacy readings, never silently become modern sources. A missing
+image can report `legacy_provenance_missing`; a present but invalid image must report a typed
+unavailable state and must not become a successful legacy fallback.
+
+This is reuse of the shipped run-event payload and operation-versioned provider-image format,
+not a new evidence-job settlement format. All v1 tablebase jobs/batches/settlements remain exact
+and unchanged. `durable-stockfish-source.md` continues to own its draft job successor and
+stamp-only migration; this amendment neither depends on nor widens that draft. No new SQL
+column/table, storage version, run/pack schema, evidence-kind member or provider operation is
+claimed. Review must return this amendment if the actual event/parser/export compatibility
+controls show that a new durable format or migration is necessary; do not implement one by
+implication.
+
+**Scheduling and state.** Track active occurrences by node **and requested family**, with
+request identity still owned by the shared scheduler/attempt store. Engine and tablebase work
+share the existing aggregate per-run subscriber bound; do not multiply it per source. Admit
+eligible work in recorded-path order, engine then tablebase within a node, and pump from
+completion callbacks. No provider's startup failure blocks the other's request. Preserve
+same-key coalescing, owner-only start/settlement, retry ceilings, cancellation and idle eviction.
+Independent branch subscribers may share one source but must attach only to their current exact
+occurrences. Head changes invalidate only the changed suffix, and shutdown must detach all
+families before storage closes.
+
+The material domain remains at most seven pieces. A terminal board with no legal move is still
+eligible for tablebase: the Stockfish no-legal-move rule is not this provider's domain rule.
+Outside-domain, provider-off, not-yet-scheduled, pending/retrying, delivered and terminal failure
+states remain distinct in node/family and completion folds. Existing facts remain usable while
+tablebase is pending or unavailable. Authorized acquisition may write; ordinary Review/Analyze
+reads only observe/reconstruct recorded sources and never start work implicitly.
+
+**Privacy and actual acceptance controls.** The shared response projection already removes
+`values.providerDelivery`. Prove that it also removes these tablebase captures on every ordinary
+graph/event/mutation/SSE/share path, including nested serialized packet/receipt items; test a
+unique candidate-move sentinel from the captured response. Raw bytes may survive only in the
+authorized exact account/operator storage path, not the learner evidence panel or voice input.
+Acceptance requires production-boundary controls, not a second disposable packet model:
+
+1. Shared acquisition → source factory → narrow point → actual authenticated Review response;
+   White/Black turns, all native categories, null distances, exact clocks and terminal positions.
+2. Real save → process/application restart → reload → Review with provider work disabled;
+   unchanged event count, legacy events/jobs still readable, repeated delivery attached once.
+3. Crossed operation/FEN/clock/node, edited capture/receipt and scalar/image disagreement refuse;
+   a corrupt present image never launders its narrow fields into a valid source.
+4. Mixed-source windows and concurrent branches respect the original aggregate bound, advance
+   without polling, cancel only owned subscribers and stop at the original retry ceiling.
+5. Actual ordinary HTTP/event/share/voice projections contain no candidate/PV sentinel; authorized
+   exact export/restore retains the source and reconstructs the same move-free item.
+6. Actual desktop/phone Review displays available and unavailable tablebase states without moving
+   or covering the board; Analyze remains read-only and Retry/Compare preserves recorded play.
+
+Independent acceptance, these controls and normal affected test tiers precede production.
+[[D3580]] remains open until the real delivery and consumer path pass; writing this section does
+not complete tablebase coverage, full Review, semantic qualification or 1.0.
+
 ## 5. Story compatibility repair
 
 The server-local compatibility compiler consumes typed `ReviewEnginePoint` items and emits only the
@@ -1074,6 +1180,10 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-10-10: D3580 draft §4.3 adds the narrow tablebase occurrence, existing operation-versioned
+  event handoff, mixed-family scheduling, privacy and actual restart/Review controls. It remains
+  unaccepted; no production source acquisition, job-format change, migration or discharge ships.
 
 - 2026-10-05: D3422/D3423 implement the existing reservation/completion contract with exact node/FEN and tracker ownership, bounded aggregate subscribers and completion-driven wakeups; provider/attempt/source semantics and remaining discharges are unchanged.
 
