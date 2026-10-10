@@ -24114,3 +24114,47 @@ Campaign was the one capability with no API, route or content. Now:
 - The existing durable-product-state checkpoint records this scoped boundary repair while
   preserving the earlier migration/recovery caveats and its blocked-contract state. The roadmap
   receipt is refreshed normally; no new progress mechanism or milestone completion is introduced.
+
+### 2026-10-10 — Scheduled returns respect current source-game access (D3649/D3650)
+
+- Finished the in-flight private-data boundary repair before the owner's requested total 1.0
+  inventory. Return-scheduling §4 permits the authored source band; archived progression §4
+  deliberately gives source_run_id no foreign key because returns survive deletion of the game.
+  Removing schedules or importing a new access grant would contradict that existing behavior.
+- Four predecessor controls fail: legacy statistics and sealed Explorer acquisition each forward
+  a foreign source's authored band through an uploaded schedule and after real grant revocation.
+  Current source-game authority now precedes settings reads. Missing/unreadable sources retain
+  their schedules and use the declared default sample; accessible sources retain their exact band.
+- Ten permanent native file-backed controls exercise canonical export, real authenticated REST
+  preview/import/due requests, actual provider scheduler/page/upstream parameters, no modern
+  fallback to bare statistics, retained cache, source deletion, grants/revocation and unchanged
+  private account records. Anonymous requests acquire no evidence. No new provider, chess truth,
+  schema/migration, sample selection, ranking, grade or schedule mutation is introduced.
+- D3650's copy control fails on the universal authored-band promise. The ordering note now refers
+  to the sample displayed on each return; existing exact rating groups/speeds/dates and earlier-day
+  precedence are retained. The focused journey gate passes all 166 controls; the source-frequency
+  gate previously passed 186 controls. Full normal verification/build and relevant native Learn
+  browser journeys are next; no final pass is claimed here.
+- Ledger and existing queue/docs/roadmap/work-state are updated in this batch. The sidecar refuses
+  a partially assigned two-row transition; assigning both together restores zero untriaged.
+  Durable-product-state remains blocked_contract; this does not close all-account/privacy,
+  semantic qualification, whole-product journeys, native image or exact-revision remote CI.
+- D3651 records a separate inventory defect: the lower roadmap's imperative waves recommission
+  already-landed longitudinal/bot/Campaign persistence, theory APIs and board/module/preset
+  composition, while a 2026-09-05 contract paragraph states a missing-store blocker without a
+  historical label. Current RFC records and canonical subsystem docs establish those landings.
+  Reconcile the existing waves to their remaining discharges and label the old paragraph dated
+  history; preserve machine next actions, all full-product obligations and the original evidence.
+  This is a planning correction, not a new tracker or product/milestone promotion.
+- Final sequential `make roadmap-receipt verify-awake build return-journey-browser-check` exits
+  zero: 4,382 software cases/365 files, seven unchanged-budget performance cases/four files,
+  241 content cases/24 files, clean workspace types/build/governance/packaging and eleven actual
+  desktop/phone Learn journeys, zero retries. These are relevant browser journeys, not a new full
+  browser-suite reading. Manifest remains 47 producers/285 projections/42 consumers/556 bindings;
+  canonical semantic validation remains 87 passing cases over 81 subjects, zero fully qualified.
+- The owner's total inventory is reconciled in the existing roadmap: 273 UX items completed,
+  272 live, 24 retired; 3,400 ledger rows, 1,529 done, 161 refused and 1,710 live, zero untriaged.
+  The 462 historical prose-only closures remain qualified. Product RFCs remain 42 implementing,
+  ten awaiting and 22 draft; all fourteen whole capabilities incomplete, four milestones active/
+  five blocked, 86 production pack documents and zero official graduates. No remote CI, native
+  release, push, milestone completion or new tracking system is claimed. Full 1.0 goal stays active.

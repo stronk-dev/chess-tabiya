@@ -324,7 +324,7 @@ learner-profile-browser-check:
 
 .PHONY: return-journey-check return-journey-browser-check
 return-journey-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/progress-response.test.ts apps/server/src/progress.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/progress-response.test.ts apps/web/src/lib/learner-copy.test.ts apps/server/src/progress.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts apps/server/src/return-source-authorization.test.ts
 
 return-journey-browser-check:
 	./node_modules/.bin/playwright test --grep "due intake replenishment|Learn shows each due return"
@@ -1900,7 +1900,7 @@ provider-scheduler-lifetime-check: provider-scheduler-contract-check
 
 .PHONY: repertoire-source-check theory-source-check return-frequency-check
 return-frequency-check: evidence-manifest-check
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-corpus.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts apps/server/src/return-source-authorization.test.ts packages/runtime/src/explorer-summary.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/evidence-value-authority.test.ts
 
 .PHONY: analysis-client-check analysis-browser-check inspector-corpus-client-check inspector-corpus-check human-model-presentation-check human-model-attribution-metadata-check human-model-attribution-metadata-update
 human-model-attribution-metadata-update: semantic-validation-update capability-declarations

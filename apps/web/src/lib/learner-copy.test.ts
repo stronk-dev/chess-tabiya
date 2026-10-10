@@ -125,6 +125,13 @@ describe("return-queue copy (rfc/return-scheduling.md §§3, 4, 7)", () => {
     expect(RETURN_STANDINGS).toEqual(["new", "learning", "established"]);
   });
 
+  it("names the displayed game sample rather than promising an authored band for every return", () => {
+    expect(DUE_FREQUENCY_ORDER_NOTE).toBe("Returns due on the same day list positions reached in more Lichess games first, using the sample shown on each return. Earlier due dates always come first.");
+    const population = { source: "lichess-explorer" as const, ratings: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const, speeds: ["blitz", "rapid", "classical"] as const, since: "2023-11", until: "2026-10" };
+    expect(dueFrequencySentence({ games: 120, population })).toBe("Position reached in 120 games · Lichess games · rating groups 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500 · blitz, rapid, classical · 2023-11 to 2026-10");
+    expect(dueFrequencySentence({ games: 120, population: { ...population, ratings: [1800] } })).toBe("Position reached in 120 games · Lichess games · rating groups 1800 · blitz, rapid, classical · 2023-11 to 2026-10");
+  });
+
   it("renders no comparative-quality term, ratio or mastery word in the return-queue strings", () => {
     for (const sentence of surface) expect(sentence, sentence).not.toMatch(VALENCE);
   });

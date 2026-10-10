@@ -110,6 +110,11 @@ from the file. A missing, quarantined or out-of-file game does not become attach
 its id exists in the destination installation. The preview and commit count these links as
 `orphan_record`; legitimate in-file links retain their exact recorded games.
 
+Schedules deliberately survive a missing source game. A restored schedule's source id is not
+a game-read grant: due-frequency acquisition reads that game's settings only while the importer
+has current access, otherwise using the default population without deleting or rescheduling the
+return. Grant revocation applies on the next request, including when frequency evidence is cached.
+
 **What is not.** Runs that could not be replayed, access previously granted to other
 people, runs owned by other people, published packs and shapes, live sessions,
 classrooms and share links, and ratings, rated-game records, standings and earned marks

@@ -68,8 +68,12 @@ The HTTP surface is:
 - `GET /progress` — learner-scoped attempt history.
 - `GET /progress/due` — the served due queue: blocked first, then by due date. Within one kind and
   one UTC due date only, returns are ordered by how many Lichess games reach the root position at
-  the source run's authored band (`corpusPopulation`); each item carries that population count or
-  `null`. Frequency orders and never grades. At most `DUE_INTAKE_LIMIT` (20) returns are served;
+  the currently readable source run's authored band (`corpusPopulation`), or the default sample
+  when that source is missing, unreadable or has no authored band. Schedule ownership does not
+  grant access to its source game; the current game grant is checked before reading its settings,
+  including after revocation. The schedule survives an unavailable source. Each item carries
+  that sample's population count or `null`, and the client names the sample on the return.
+  Frequency orders and never grades. At most `DUE_INTAKE_LIMIT` (20) returns are served;
   the response counts the rest as `waiting`, which keep their order and pending state (vacation
   safety — nothing is rescheduled and the learner chooses no interval). Each item carries
   `standing`, one of `new`, `learning` or `established`; there is no ladder index, ratio or

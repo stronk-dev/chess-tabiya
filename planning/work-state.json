@@ -30235,11 +30235,30 @@
     },
     {
       "id": "D3649",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d10f898a49f8a82ae228fb2ffdd3191623d32bea342a9bbdda5314cf1f097f2e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:10589eeb82d6560c062a34d93c29f76bed194468d092b7b015be102068e4899a",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "apps/server/src/return-source-authorization.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3650",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7f58d8cfd50bcfcfb0f3c9ac0ff193aae835ecc5e1af42d6fdca88bfaa61336a",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/learner-copy.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3651",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:305638b85524ed82d55540ab51df7e78e73d8d9eff66c5b4fa5809fcdb24ecaa",
+      "uxItems": [],
+      "evidence": "planning/roadmap-to-done.md",
+      "evidenceKind": "path"
     }
   ]
 }

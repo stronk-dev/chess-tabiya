@@ -116,7 +116,7 @@ export function dueVariationSentence(schedule: { readonly kind: "blocked" | "var
  */
 export const RETURN_STANDING_EXPLANATION = "based on how many spaced returns you've held";
 
-export const DUE_FREQUENCY_ORDER_NOTE = "Returns due on the same day list the position reached in more Lichess games at the rehearsal's rating band first. Earlier due dates always come first.";
+export const DUE_FREQUENCY_ORDER_NOTE = "Returns due on the same day list positions reached in more Lichess games first, using the sample shown on each return. Earlier due dates always come first.";
 
 export function dueFrequencySentence(frequency: { readonly games: number; readonly population: CorpusPopulation } | null): string | undefined {
   if (frequency === null) return undefined;

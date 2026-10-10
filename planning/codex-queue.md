@@ -12,10 +12,25 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
-[[D3649]] is the next cross-object privacy check: restored schedule source ids reach
-`RunService#duePopulation` without the current run grant. Reproduce at actual frequency
-source/HTTP boundaries before repairing; retain the specified missing-source/default policy.
-This is distinct from the completed repertoire reader, not a full account/privacy closeout.
+[[D3651]] reconciles the existing roadmap's execution waves during the total progress inventory:
+longitudinal/bot/Campaign persistence, routed theory APIs and board/module/preset composition are
+landed checkpoints with remaining obligations, not green-field jobs. The old 2026-09-05 store
+authoring paragraph is explicitly historical. No milestone is promoted, contract accepted or
+new tracker created; the machine next actions and current inventory remain authoritative.
+
+[[D3649]]/[[D3650]] close the scheduled-return source-policy boundary and its misleading copy.
+Four predecessor controls fail: both legacy and sealed Explorer acquisition forward a foreign
+game's authored band, including after grant revocation. The source's current game grant now
+precedes any settings read. Missing/unreadable sources retain their schedules and use the
+declared default sample; accessible sources keep their authored band. Ten native file-backed
+REST/import/source controls cover actual upstream populations, retained cache, revocation and
+unchanged private data. The copy control fails on the former universal authored-band promise;
+the note now refers to each return's displayed sample. Permanent evidence:
+`apps/server/src/return-source-authorization.test.ts` and `apps/web/src/lib/learner-copy.test.ts`.
+Final sequential normal gates pass 4,382 software cases / 365 files, seven unchanged-budget
+performance cases / four files, 241 content cases / 24 files, clean types/build/governance/
+packaging and eleven native desktop/phone Learn journeys, zero retries. This is not
+whole-account/privacy, full browser-suite, native-image or remote-CI proof.
 
 [[D3647]]/[[D3648]] close the private repertoire link boundary. Actual account upload admits
 a gap link only when both objects are restored from the file and counts omitted links once as
@@ -26,7 +41,8 @@ valid in-file replay retains the exact game without mutation. Permanent evidence
 seven unchanged-budget performance, 241 content,
 clean types/build/governance and both desktop/phone native account-restoration journeys, zero
 retries. These are the relevant browser journeys, not a fresh full browser-suite claim. Full
-account lifecycle, D3649, official content, native image and remote release remain open.
+account lifecycle, official content, native image and remote release remain open. The separate
+D3649 scheduled-return reader is repaired by the checkpoint above.
 
 [[D3645]]/[[D3646]] are closed locally under semantic-collectors and recorded-semantic-path:
 the removed pawn's identity remains distinct from the en-passant landing through overload

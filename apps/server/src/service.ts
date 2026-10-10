@@ -2671,7 +2671,7 @@ export class RunService {
       for (const schedule of all) {
         if (!windowGroups.has(group(schedule)) || lookups >= DUE_FREQUENCY_LOOKUP_LIMIT) continue;
         lookups += 1;
-        const population = this.#duePopulation(schedule);
+        const population = this.#duePopulation(schedule, principal);
         try {
           const frequency = await returnFrequency(corpus, { ...population, fen: `${schedule.rootTransposeKey} 0 1` }, signal === undefined ? {} : { signal });
           if (frequency !== undefined) frequencies.set(schedule.id, frequency);
@@ -2694,8 +2694,12 @@ export class RunService {
     });
   }
 
-  #duePopulation(schedule: ScheduleRow): CorpusPopulation {
-    const source = schedule.sourceRunId === null ? undefined : this.#storage.read(schedule.sourceRunId)?.run;
+  #duePopulation(schedule: ScheduleRow, principal: Principal): CorpusPopulation {
+    // Schedules outlive their source and portable files can name arbitrary source ids.
+    // A schedule's ownership is not a grant to read that game's authored settings.
+    const source = schedule.sourceRunId === null || this.#storage.runRole(schedule.sourceRunId, principal.learnerId) === undefined
+      ? undefined
+      : this.#storage.read(schedule.sourceRunId)?.run;
     const policy = source?.opponentPolicy;
     return corpusPopulation(policy?.mode === "human_common" ? policy.targetElo : undefined);
   }

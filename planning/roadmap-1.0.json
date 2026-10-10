@@ -1464,7 +1464,7 @@
         "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3647/D3648 close private repertoire link admission/read/reuse: both objects must be restored, current game grants precede reads, and revocation takes effect. Eight predecessor controls fail; eleven additions, 35 account cases and both desktop/phone archive/delete/import/continued-play journeys pass without changing recorded history. D3649 separately owns the scheduled-return source-policy reader. D3637's correction stands: migrations 26-30 landed, but migration landing does not prove all-family backup/restore or upgrade/rollback. Current longitudinal revision 4 rebuilds completed earlier histories through the actual file-backed worker. Catalogue progression, social/clock contracts, complete cross-system lifecycle/recovery and D3574's native appliance capacity hold remain. No whole milestone or release promotion.",
+          "summary": "D3649/D3650 close the scheduled-return source-policy boundary and misleading authored-band copy. Current game grants precede settings reads and retained acquisition, including after revocation; missing/unreadable sources keep their schedules and use the declared default sample. Four source controls and one copy control fail on predecessors; ten native file-backed REST/import/source controls pass, preserving exact accessible bands, upstream samples and private data. Final normal local gates pass 4382 software/365 files, seven unchanged-budget performance/four files, 241 content/24 files, types/build/governance/packaging and eleven native desktop/phone Learn journeys, zero retries. D3647/D3648's repertoire repair and native account-restoration journeys stand. D3637's correction stands: migrations 26-30 landed, but migration landing does not prove all-family backup/restore or upgrade/rollback. Current longitudinal revision 4 rebuilds completed earlier histories through the actual file-backed worker. Catalogue progression, social/clock contracts, complete cross-system lifecycle/recovery and D3574's native appliance capacity hold remain. No whole milestone, full browser-suite, native-image or remote-CI promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
@@ -1472,6 +1472,10 @@
             "apps/server/src/account-import.ts",
             "apps/server/src/repertoire.ts",
             "apps/server/src/account-import.test.ts",
+            "apps/server/src/return-source-authorization.test.ts",
+            "apps/web/src/lib/learner-copy.test.ts",
+            "docs/return-and-progression.md",
+            "rfc/return-scheduling.md",
             "docs/account-data-lifecycle.md",
             "apps/server/src/longitudinal-registry.ts",
             "apps/server/src/longitudinal-contract.test.ts",
@@ -1527,6 +1531,21 @@
               "kind": "work_state",
               "id": "D3648",
               "digest": "sha256:92a5b908e8979344e2b7a4497871dcd6f07354e862aa4b22fbb287ce31b53c10"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3649",
+              "digest": "sha256:10589eeb82d6560c062a34d93c29f76bed194468d092b7b015be102068e4899a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3650",
+              "digest": "sha256:7f58d8cfd50bcfcfb0f3c9ac0ff193aae835ecc5e1af42d6fdca88bfaa61336a"
+            },
+            {
+              "kind": "rfc",
+              "id": "return-scheduling.md",
+              "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
             }
           ]
         },

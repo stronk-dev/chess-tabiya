@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3649]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3651]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,13 +58,34 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest account boundary repair: [[D3647]]/[[D3648]] prevent a restored repertoire link from
+Current checked inventory after [[D3649]]–[[D3651]]: 273 UX items complete, 272 live and 24
+retired; 1,710 live ledger items, all assigned, alongside 1,529 done and 161 refused. The 462
+historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
+discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
+75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
+incomplete; the nine milestones remain four active/five blocked. The installed production
+inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
+waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest return boundary repair: [[D3649]]/[[D3650]] prevent a restored schedule from reading a
+foreign game's settings or forwarding its authored rating band to Explorer. Current game grants
+are checked before reading; revocation also applies with retained frequency evidence. Missing or
+unreadable sources retain their schedules and use the declared default sample. The Learn note
+now names the displayed sample rather than promising an authored band. Four source controls and
+one copy control fail on their predecessors; ten permanent native file-backed REST/import/source
+controls pass. Final sequential normal gates pass 4,382 software cases / 365 files, seven
+unchanged-budget performance cases / four files, 241 content cases / 24 files, clean types/build/
+governance/packaging and eleven native desktop/phone Learn journeys, zero retries. This is not
+whole-account privacy, semantic qualification, calibrated bots, a completed milestone, a fresh
+full browser suite, native release-image or exact-revision remote CI.
+
+Previous account boundary repair: [[D3647]]/[[D3648]] prevent a restored repertoire link from
 conveying access to another account's game. Both link endpoints must be restored; gap reads
 and reuse enforce the current game grant, including revocation. Eight predecessor controls
 fail and eleven permanent additions pass. Normal local gates pass 4,371 software, seven
 unchanged-budget performance, 241 content, types/build/governance and both desktop/phone native
-account-restoration journeys, zero retries. D3649 owns the separate scheduled-return source
-reader; this is not whole-account/privacy, full browser-suite, native-image or remote-CI proof.
+account-restoration journeys, zero retries. The separate scheduled-return source reader is now
+repaired above; this is not whole-account/privacy, full browser-suite, native-image or remote-CI proof.
 
 Latest foundation repair: [[D3645]]/[[D3646]] distinguish the removed pawn's square from the
 en-passant landing through overload response conflict, saved overload/defender-consequence
@@ -3809,6 +3830,11 @@ Every link still needs a typed reducer, immutable inputs, idempotent jobs, resum
 owner/actor identity, prior-release migration, account lifecycle, and a production API/client
 consumer.
 
+**Historical contract checkpoint, 2026-09-05:** the paragraph below records authoring before
+the 2026-09-24 implementation. Its missing-store/review claims are not current blockers. The
+store and private Profile now ship; skill credit, reference-based style, source joins and full
+lifecycle proof remain open as stated in the current inventory above.
+
 The longitudinal-store ninth author repair closes [[D2779]]–[[D2788]] at contract tier. One
 file-backed SQLite authority loads replayed source/owner/journal/authorship truth, parses all five
 job states, owns clock and claim capabilities, reloads current source at acquisition/validation and
@@ -3826,7 +3852,7 @@ downstream feature credit is claimed. Receipt:
 |---|---|---|
 | Fast local | Lefthook staged diff/type/process/scaffold selection | Stay fast; no full-suite commit/push hijack |
 | Software contracts | `make verify-software` | Continue replacing real-corpus dependencies with synthetic fixtures where content bytes are not the subject; no direct-handler substitutes for boundaries |
-| Repository governance | `make verify-governance` | Extend persistent assignment beyond UX rows without turning research measurements into product gates |
+| Repository governance | `make verify-governance`; live ledger and UX rows are assigned | Keep assignments and landing evidence current; audit weak historical closures without turning research measurements into product gates |
 | Content acceptance | `make verify-content` owns tests that deliberately read committed corpus bytes | Add per-pack schema/provenance/compatibility diagnostics; keep graduation readiness and authored quality as explicit content-wave instruments |
 | Browser smoke | `make test-browser-smoke` | Stable acceptance fixtures, semantic roles and core journeys only |
 | Accessibility / responsive | `make test-browser-matrix` | Extend post-gesture, input, viewport, zoom and accessibility coverage with useful artifacts |
@@ -3863,19 +3889,24 @@ spine is:
 ### Wave 0 — make “done” enforceable
 
 1. Keep work/status/register/intent/roadmap checks green.
-2. Keep all 569 UX items in `planning/work-items-1.0.json`; a new item must acquire a capability
-   owner and assignment before the guard greens. Extend the same state model to generic queue-only
-   ledger rows as touched; do not make a fifth snapshot.
+2. Keep all 569 UX items in `planning/work-items-1.0.json` and every live ledger row in
+   `planning/work-state.json` assigned. That extension has shipped; a new item must acquire its
+   existing capability owner and durable state before the guard greens. Do not make another tracker.
 3. Preserve the separated test tiers from [[D1533]]/[[D1538]] and finish the remaining
    container/migration/release tiers; preserve [[D1532]]'s production-boundary family test.
 4. Land research coverage and manifest-freshness guards; preserve negative results.
 
 ### Wave 1 — freeze evidence/content contracts before broad authoring
 
-1. Re-review/accept capability, claim-anchor, selector/packet/target, module-registration,
-   longitudinal and other returned/draft foundations in dependency order.
-2. Complete collector discharges and semantic families with non-vacuous validation.
-3. Compile producer → projection → selector → module/bot/Review joins; delete raw text paths.
+1. Complete independent review/acceptance of the remaining source, selected-Sight, validation,
+   candidate-service/collector and semantic-search contracts in register order. Existing manifest,
+   module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
+   foundations to recommission; their explicit remaining discharges still stand.
+2. Complete collector discharges and semantic families with non-vacuous validation. The current
+   87 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
+   many production consumers already ship; missing source acquisition, exact selected-piece
+   delivery and remaining bypasses still require actual application/client proof.
 4. Prove a read-only corpus migration/graduation plan before broad authored-byte changes.
 
 **Gate:** no major pack wave until capability compatibility, claim anchors and event versions are
@@ -3883,18 +3914,25 @@ stable enough that a new primitive does not require blind edits to every pack.
 
 ### Wave 2 — state reducers, persistence, and production APIs
 
-1. Land longitudinal storage/background rebuild.
-2. Land bot persistence, proposals, roster inputs and fallbacks.
-3. Land campaign persistence/rebuild, then API.
-4. Land live/clock/social migrations in register order.
-5. Add principles/theory APIs and close every intercepted API family.
-6. Test all advertised families through `createApplication` and the release container.
+1. Preserve migration-26 longitudinal storage and the current revision-4 background rebuild;
+   complete missing source/consumer discharges and all-object lifecycle/recovery coverage.
+2. Preserve migration-29 bot-profile persistence, source-bound decisions and exact replay;
+   complete native calibration, richer measured policy/repertoire, defaults and remaining journeys.
+3. Preserve migration-30 Campaign persistence, commands, encounters, boss and routed API;
+   complete Catalogue progression, theory/reward consumers and full failure/completion flows.
+4. Land the still-draft live/clock/social migrations only after review/acceptance, in register order.
+5. Principles/theory and the advertised API families have application doors. Complete missing
+   verbs, source joins, authorization/error/recovery behavior and training-set progression.
+6. Retain actual `createApplication`/HTTP tests and complete the same families through the release
+   container, including restart, account lifecycle, upgrade, backup/restore and rollback.
 
 ### Wave 3 — rebuild the client around journeys and presets
 
-1. Establish stable board + scrollable regions + responsive drawers/tabs before adding panels.
-2. Land the sealed projection→component authority, then module registration, preset composition,
-   disclosure, Advanced controls and typed components.
+1. Preserve the viewport-owned board, fixed companion regions and responsive drawers/tabs;
+   complete route-wide zoom/device/focus and owner-use acceptance before calling UX finished.
+2. Preserve the landed sealed projection→component authority, module registration, preset
+   composition, disclosure and collapsed Advanced controls. Complete selected-source delivery,
+   useful quiet/theory/prevention defaults and the remaining emitter/Inspector states.
 3. Deliver ARR → run → consequence → compare → terminal as one first-run flow.
 4. Deliver full Review, Theory/Library, Campaign, bot cards, profile, native/social, Coach and Stream
    as complete vertical journeys.
