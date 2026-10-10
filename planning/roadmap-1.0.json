@@ -687,10 +687,10 @@
           "operations"
         ],
         "dependsOn": [],
-        "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+        "nextAction": "Locate D3692's latest remote branch-group click failure at its original pushed revision; do not infer its cause from newer local passes. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
-          "at": "2026-10-10",
-          "summary": "D3659 fixes standalone Make checker execution through the existing selected Node executable rather than ambient search-path resolution. Three actual Make-boundary predecessor controls and the no-bare-recipe guard pass; all 387 standalone JavaScript recipes now use CI_NODE. The normal recorded-path checker reports Node 24.21.0; caller commands, test tiers, budgets, package-manager selection and runtime versions are unchanged. Focused toolchain, types, Review and foundation gates pass. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Historical D3532/D3543/D3510/D3591/D3600 causes remain open; no remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
+          "at": "2026-10-11",
+          "summary": "D3659 fixes standalone Make checker execution through the existing selected Node executable rather than ambient search-path resolution. Three actual Make-boundary predecessor controls and the no-bare-recipe guard pass; all 387 standalone JavaScript recipes now use CI_NODE. The normal recorded-path checker reports Node 24.21.0; caller commands, test tiers, budgets, package-manager selection and runtime versions are unchanged. Focused toolchain, types, Review and foundation gates pass. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Historical D3532/D3543/D3510/D3591/D3600 causes remain open; no remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim. 2026-10-11 read-only GitHub audit records D3692: latest pushed 75bc8744 has green verify 37795549212 but red browser 37795549157 at its branch-group click. Current local 4734 software/seven performance/247 content and build pass; previous 291-browser result is historical. No paired green remote result or release promotion is claimed.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -835,10 +835,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+        "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
-          "at": "2026-10-10",
-          "summary": "D3688 adds sixteen source-bound legal material/mobility cases through runtime.semantic.local_edge, retaining exact count vectors, rook-ray destinations and pawn-induced knight local-exchange losses without legal-set loss. Independent operands and actual capture continuations agree. All 175 predecessor records remain unchanged; four separately labelled python-chess excerpts match revision 3516d7c6c0879af724c2855fac5a304a4ef40949. Nineteen predecessor-red controls, all 165 focused/772 foundation checks and clean types pass. Complete normal verification/build exits zero: 4683 software cases/369 files, seven unchanged-budget performance cases/four files, content, governance, corpus/capability and packaging/build. 191 canonical cases pass (119 positive/72 negative), 81 subjects, zero fully qualified; two missing negative arms become present. D3687 is confirmed through real quiet edges and remains blocked; orientation/window and other required arms stay open. The prior 289-browser checkpoint is historical, not rerun for this validation-only wave. No collector, strategic value, learner eligibility, pack bytes, source availability, whole capability/milestone, remote CI or native release-image promotion.",
+          "at": "2026-10-11",
+          "summary": "D3691 adds 22 source-bound legal pawn-dynamics cases through runtime.semantic.local_edge: both-colour locks, bishop/knight harassment, pawn-protected passers and adjacent-file passed pairs, with populated retained-property, changed-protector/pair-order and wrong-role negatives. Independent neutral operands agree; all 191 predecessor records remain unchanged and seven labelled Stockfish snippets match the pinned source. Twenty-four predecessor-red controls, all 192 focused/799 foundation checks and clean types pass. Complete normal verification/build exits zero: 4734 software cases/370 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, governance and packaging/build. 213 canonical cases pass (129 positive/84 negative), 81 subjects, zero fully qualified; only this family's positive/negative arms become present. D3690 widens D3687's complete-state omission conflict through actual bare-king/terminal operations; the author handoff retains all four required negative arms and frozen v1. Candidate-majority, orientation/window and other obligations remain open. The previous 291-browser result is historical, not rerun for this validation-only wave. No collector, forced-retreat/strategic claim, learner permission, pack bytes, source availability, whole capability/milestone, remote CI or native release-image promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-validation-authority.md",
@@ -868,7 +868,9 @@
             "packages/runtime/src/semantic-evidence.ts",
             "packages/runtime/src/recorded-semantic-path.test.ts",
             "apps/server/src/review-map.test.ts",
-            "packages/runtime/src/semantic-validation-rule-state.test.ts"
+            "packages/runtime/src/semantic-validation-rule-state.test.ts",
+            "packages/runtime/src/semantic-validation-pawn-dynamics.test.ts",
+            "planning/platform-alignment/semantic-state-negative-contract.md"
           ],
           "anchors": [
             {
@@ -884,7 +886,7 @@
             {
               "kind": "rfc",
               "id": "semantic-validation-authority.md",
-              "digest": "sha256:ed207aa3f9cb2720d6adb3598eb0e025f21e47fd9235d335fc980e0ffba466cc"
+              "digest": "sha256:1d39ca5238d7974e328651b1e373ae030f3cc9c70ea1501839c92ba747c96a4e"
             },
             {
               "kind": "work_state",
@@ -910,7 +912,8 @@
               "kind": "work_state",
               "id": "D3688",
               "digest": "sha256:88075b6126da49ee381db6238ff2da4398179d0f6a28ed216fcc016c00eb1679"
-            }
+            },
+            {"kind":"work_state","id":"D3691","digest":"sha256:3abc0a42a62339c2ea95755113d2df7ffad83fee057aedba8b16dc42b9fa9043"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

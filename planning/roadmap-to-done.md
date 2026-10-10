@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3688]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3692]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,55 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3689]]: 273 UX items complete, 272 live and 24
-retired; 1,716 live ledger items, all assigned, alongside 1,561 done and 161 refused. The 462
+Current checked inventory through [[D3692]]: 273 UX items complete, 272 live and 24
+retired; 1,718 live ledger items, all assigned, alongside 1,562 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+### What still controls the release date
+
+1. Finish the shared sources and consumer bindings: installed opening identity,
+   sampled Maia tasks, durable Stockfish, Review tablebase and selected-piece/square Sight.
+   Their existing draft repairs require independent acceptance, then real API/client proof.
+2. Complete semantic qualification and useful selection, not just emission. The current
+   register has 213 passing cases over 81 subjects: 49 positive cells and 42 negative
+   cells present, but 32 positive, 39 negative and all 81 orientation obligations remain.
+   Four complete-state projections have a genuine omission-contract conflict. “Why this
+   move?” search remains a draft upgrade, not a delivered explanatory engine.
+3. Convert those facts into complete default journeys, calibrated bot behavior, valid
+   skill/style feedback, full training-set execution and Campaign curriculum/rewards.
+   The current modules, roster, profile, set catalogue and draft Campaign are delivery,
+   not completion of those promises.
+4. Graduate a varied official pilot on stable contracts, then complete the curriculum
+   and the ten clean-host release journeys. Zero official graduates remains a release blocker.
+
+Local and remote verification are separate. The latest pushed product revision
+`75bc8744` passes GitHub verify [37795549212](https://github.com/stronk-dev/chess-tabiya/actions/runs/37795549212)
+but fails browser [37795549157](https://github.com/stronk-dev/chess-tabiya/actions/runs/37795549157)
+on the branch-group click ([[D3692]]). Its cause is not established by newer local passes.
+No push, paired green CI at current HEAD, complete image recovery or release is claimed.
+
+Latest foundation validation wave: [[D3691]] adds 22 both-colour source-bound pawn-dynamics
+cases: new locks, pawn harassment of knights/bishops, pawn-protected passers and adjacent-file
+passed pairs. Populated negatives distinguish retention from gain, changed protectors and
+physical-pair display ordering, rook from minor and bishop from pawn protection. Independent
+rank/file/piece operands agree with actual production operations; all 191 predecessor records
+remain unchanged. Seven labelled Stockfish snippets match their pinned source. Twenty-four
+predecessor-red controls, all 192 focused/799 foundation checks and clean types pass.
+Complete normal verification/build exits zero: 4,734 software/370 files, seven unchanged-budget
+performance/four files, 247 content/25 files, governance and packaging/build. The 213 cases
+pass (129 positive/84 negative); only this family's positive/negative cells become present.
+Zero subjects are fully qualified; candidate-majority, orientation/window and other obligations
+remain. [[D3690]] widens [[D3687]]'s complete-state negative conflict to piece counts, pawn islands
+and reply breadth through actual bare-king/terminal operations. The author handoff retains
+required negatives and frozen v1 at `planning/platform-alignment/semantic-state-negative-contract.md`.
+The preceding 291-browser result is historical, not rerun for this validation-only wave.
+No collector, forced-retreat/strategic claim, learner permission, pack bytes, whole
+capability/milestone, official-content, remote-CI or native release-image promotion follows.
 
 Latest Studio route repair: [[D3689]] restores the archived requirement for `/create/new`
 and `/create/draft/:draftId`. Creation and selection open a named private editor; direct entry,
@@ -4227,7 +4268,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   191 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   213 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

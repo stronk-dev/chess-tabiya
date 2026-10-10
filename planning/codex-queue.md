@@ -1,5 +1,28 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3692]] is the latest remote CI failure, not a newly reproduced
+local defect: browser run 37795549157 at 75bc8744 fails the branch-group journey's
+click at its historical drill.spec.ts:2670; paired verify 37795549212 passes.
+Locate the original blocked gesture before closing. Current local browser passes,
+unchanged deadlines and absence of retries remain separate evidence. No push is
+authorized; release-truth still requires paired green workflows on the exact revision.
+
+2026-10-11 — [[D3691]] is closed under accepted semantic-validation Slice B:
+22 both-colour source-bound pawn-dynamics cases preserve exact identities and distinguish
+new lock/harassment/protected/connected-passer facts from retained properties, changed
+protectors/pair order and wrong roles. All 191 predecessor records remain unchanged;
+seven labelled Stockfish snippets match the pinned source. Twenty-four predecessor-red
+controls, all 192 focused/799 foundation checks, clean types and complete normal verification/
+build pass: 4,734 software/370 files, seven unchanged-budget performance/four files,
+247 content/25 files, governance and packaging/build. 213 canonical cases pass (129 positive/
+84 negative), 81 subjects, zero fully qualified; candidate-majority/orientation and other
+debt remain. No collector, strategic judgement, forced retreat, permission, pack bytes,
+fresh browser, whole capability, remote-CI or release-image promotion.
+[[D3690]] widens D3687's state-event omission conflict through actual bare-king and legal
+mate operations. All four negative arms remain required; one coherent author handoff is
+`planning/platform-alignment/semantic-state-negative-contract.md`. No v1 filtering,
+waiver or invalid/unavailable-input absence is admitted.
+
 2026-10-11 — [[D3689]] is closed: Pack Studio's accepted new/named editor routes
 use the existing owner-only single-draft GET on direct entry, reload and history.
 Four original controls reproduce the omission; 200 focused checks, clean types and

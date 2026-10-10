@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "898ce705bd92b068a7f8bc66dbd748296417069a67b834e7088886413a8020bf",
-  "caseDigest": "9ad0103c5e1aa452d5990f2783c8996b5d0d9aea0d3509947676c9ba65fe47c4",
+  "profileDigest": "d79c4a51c24a41bd8b74b2eb893e02d647011178290d41d222180e4e81a8912e",
+  "caseDigest": "431aff529405a98ec9d42cc25a44570f3ddb5703166cd73d9a68185cb7786018",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -4171,6 +4171,596 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "59c01a4aeb2977b1f2e28ef2b6857f6ab1ebda6a5a08d8e447391cdd1161cfeb",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.bishop-not-pawn-protector.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "e6475029309b85559c13063822dcb063592994a0e9cc6b2a60ec74c0c4838463",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 51,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "6d19e9dbc9e6827eeab08fa6aeb7e09f5f41af62ced52c76fc67cf3fb0e49941",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.bishop-not-pawn-protector.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "0ca609839ae85006d0745fa361f23ee53a2a81680541079d9ad9f9393d34fda7",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 51,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "84ebb2f3acc564b18a83b5db63f226f5da023ac28af73fb6b19e9264ab77ac94",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.connected.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "51ccd907b90a122763ad3b680129f5e6566e7d7a5e9db9996de5553d97bfb9de",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 83,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "8171c4c8fe86345810a250101b80c73ba9912e75d9e04060f2379c294c3ca0c8",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "17d3c4c2719a70f812ce85c729b53d8d95938e093f32e55c835b320590904b37",
+          "payloadDigest": "8171c4c8fe86345810a250101b80c73ba9912e75d9e04060f2379c294c3ca0c8",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "6376b1c68b3b060582c75a531dc2d41c9fba92309f52ad6afb494e000ef4fc71",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "17d3c4c2719a70f812ce85c729b53d8d95938e093f32e55c835b320590904b37",
+          "payloadDigest": "6376b1c68b3b060582c75a531dc2d41c9fba92309f52ad6afb494e000ef4fc71",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "844ebd63be485e27276c61b16c1a57aafba996597d98675bfef17c8716b3a0d9",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.connected.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "d051c5e1afe1f04337f68f68c7df8edf074049248f1cd60af3e3c1930024b768",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 83,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "bfba27e68fb49e4a374f0c712a1cc23700305b9c5fb04a433862eae0b37afc7e",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "61d0aa2fb948c3475f409b122071572bb548600d07890da5c6ae41f6e21476c7",
+          "payloadDigest": "bfba27e68fb49e4a374f0c712a1cc23700305b9c5fb04a433862eae0b37afc7e",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "c61b2a23ef97b195b7cd8b5f682e322eb9874f59c58dde4f5a0ac13cca591aee",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "61d0aa2fb948c3475f409b122071572bb548600d07890da5c6ae41f6e21476c7",
+          "payloadDigest": "c61b2a23ef97b195b7cd8b5f682e322eb9874f59c58dde4f5a0ac13cca591aee",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3151580ef93c9b2e040e5ed6f61bbf56e5df11858c986e582793a8943ccca8fc",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.diagonal-not-lock.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "c05b9aabb2d3aafe8dddff7920c775b1529c9a4386d3c284c7e04d8c19a41a7a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 44,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "97e9e795dc8fa58212e50f5ce2dec9c6486fb0a8aa38d8d92ea4fa3ae4460f6e",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.diagonal-not-lock.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "cbcbcbbf04a6cfd5bb6c40a11bf963906e659e213a627e823bf8e03233c67a73",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 44,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "752a82bb1948c6bc6a20cb340c80ff680cd49e98ff9f44da87b815936ffc7dd7",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.harass-bishop.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "b8e7dfbab2851a7992d74379b8da2c4a7b4f6ea65f9e8738deed4a9c24096e7a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 44,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "e6dd04709e812d610de733d706cd9ba21958c6634b59af683600648c965d1447",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "57fd88eabfd69c9ea2e80254d079a23705f378a04f8fc66f102e86b09bd65d44",
+          "payloadDigest": "e6dd04709e812d610de733d706cd9ba21958c6634b59af683600648c965d1447",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "33faecc845c8b1642cedc28caf8a8198633872c3ea1885f6188349b473470779",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.harass-bishop.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "24c64c2b4a86476b41c60d587a337631aaf9772e782cd02401858d48850cd332",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 44,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "55c0d35a5ae8f5fd0e9c222e09f824124d859d0bd5662f4f44ad8bb9f0abed77",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "677fc2a43a0185b0af339b542dcb357216bcfc7a17416e110c7e50be7b1c6dd8",
+          "payloadDigest": "55c0d35a5ae8f5fd0e9c222e09f824124d859d0bd5662f4f44ad8bb9f0abed77",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "b374d75ec6e495ecb7bee677c5eef7263b2a637485768bf00683751997ad75c7",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.harass-knight.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "da4945730d1fcf93b821d6026a0439b28e1de18acb7c08f071fbcf6be026b0aa",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 39,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "03f1c48ca8fc6b7ac6e50997a59dc7dd9b11e96dc10e50278495a53ed66b3ca7",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "fd0df6ba03562105cbbbf637ab67679151e1f24974fff190676437f104bae765",
+          "payloadDigest": "03f1c48ca8fc6b7ac6e50997a59dc7dd9b11e96dc10e50278495a53ed66b3ca7",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "634fd0afd5ccdbc815db6f5ba0d5dc5eb11e8fbd068f19a00bab983c66dd1c02",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.harass-knight.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "076d5ca0d0a2ea3ac5e420d7aea2d5b500191de56c74e4c6ffc83dbae3b84e04",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 39,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "92716584f9873aa25bd4e70d4df659bb99e5b45d0cc81f13b6ec454a36df4244",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "405d42deea08243220109a51d6f20103de99e68e47781be0e65a93825baa47de",
+          "payloadDigest": "92716584f9873aa25bd4e70d4df659bb99e5b45d0cc81f13b6ec454a36df4244",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3e8bed0322c6621f56f1a11d6c74421d2c81403ef2166633fa914c53f8a4ced2",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.lock-retained.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "da440ef50803d634779fe595ed9b276e512935a13782e71ffbe0f24e6d275352",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 46,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "7f06bc99c18dfe5b3b72d86734b1275ab02cb9b7f4b095362032bb443dde7934",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.lock-retained.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "20407cfe56cafef94c2f9a817d27212431081c1e093c12a06e55603dcfa5d7b6",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 46,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "b14a516ae1af465ec57861af62fd6b348660eb3202cd66eccd9f86b20d36c488",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.lock.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "9f88fb6196fc311faaf86a1b8ae22517e450ce70c608916156d1b357c9c89dfd",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 36,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "a035a4e8372d1a7f75e61b4a07f4698135cab839d0c164a9815064b63bce7feb",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "22c3e61ec5fce970ee7e22936eea06dba37461aa7a3f838e88639bf2b4b51af4",
+          "payloadDigest": "a035a4e8372d1a7f75e61b4a07f4698135cab839d0c164a9815064b63bce7feb",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "95151fd435c8ad8d9679090779ad9b083ac92a7b23dc619fc8b1655d64b60d61",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.lock.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "85673b0c261df7e63895d0b2b9984a1441758d860fcd0cd17b33a6b41ba517c0",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 36,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "7411cf0819473c7f771ceb0b6d0ae138ac02072cfa8dea0d9563a97e8db296c1",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "475e2c8715ae4a64be55290fa353f8878599824d41779f3619e949e04fa06dd8",
+          "payloadDigest": "7411cf0819473c7f771ceb0b6d0ae138ac02072cfa8dea0d9563a97e8db296c1",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "55d2f319ff46ca2455529b9165d6e52fb86736ad0af913462373931e1b6a109c",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.pair-reordered.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "c9f32278340cc74bd127c1d87893d4445b5dad025b4ab7949244806cbcc0dab6",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 40,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f7a309b241be19bd52a14f24211e919f77ee7e5ba9dc8066d1ae5a349756ff6c",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.pair-reordered.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "5b55db4f52e246a60689f0675f78ade1ce68a3833bbb6c96c869fbc01544155b",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 40,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "e4f2bd48079ee0832d89fbc5078971d798caaae8dfe2c1fb67c27fad7f2b8288",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.protected.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "4edd8f93cc06cb98f12575a37e9c24aa93804ede33d002f23f5a518690d3ce70",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 39,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "68103df23fe47f4b50993bba0fe37e0937212960e7edbca64aa35257b5972c40",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "8a94ec08d773de6472c2bcc0dcd2901ab3201243db083065319a7e9770c04ce4",
+          "payloadDigest": "68103df23fe47f4b50993bba0fe37e0937212960e7edbca64aa35257b5972c40",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "d9884ba374b8c561f6f875d2abb8360190bc976ee32ae68c9fc75e33cdebf227",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.protected.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "acb8a642273ea0908bbf289bfd63a94c99ffa7cc6091b8eeeefb752219d59ec5",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 39,
+      "targets": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "operandDigest": "ae8b086f3f0bc71d7e8edab76aef0e6711bcf5b1f169e27a6de20fb9f9730ac8",
+          "factory": "createRulesPawnEventDynamicsV1Evidence",
+          "inputDigest": "cedd93e699ca7f18cd376f11029dc25e92f239abd4d8ef0619e2f83f933b9866",
+          "payloadDigest": "ae8b086f3f0bc71d7e8edab76aef0e6711bcf5b1f169e27a6de20fb9f9730ac8",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "fc7736c8054c133f931a381ebd7468fd268c65d606a5a0d6190a03a08f9545be",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.protector-changed.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "4c812244c2bee4de53a2d19d32b4abdcfbfe2bfcd2cb744e49e8423802b18319",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 39,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "fef661517c72f0b2fbe5ee0efc047a3372552fa3dc6607e0cfe6daad1aafb0a3",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.protector-changed.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "153844600bbb215faa4e329be810a204d5d365d58e16426e0aac604913e4222b",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 39,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "45038259415fedd66e3eccd99d4385b3881974f3c012d40e51bb1b3845389d08",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.rook-not-minor.black",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "fa7ed4700a6b81c253ec9d506a14852ea81ad162d4f4567bf83623980b2b7645",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 46,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "d602e318a59949fbd25f7fd3fee04a4396b19c7b1b47b1294552862915bd51ee",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-dynamics.rook-not-minor.white",
+      "subject": "event:rules.pawn.event.dynamics@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "835f4a68e072612a5e3a2859a015b6d54fb8c150b28efae5da34342add299b57",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 46,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3029a23266ef83d901e69ca47682de82c6f6e96c11c0b50985470ff9af7f6668",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -11313,15 +11903,37 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-dynamics.lock.white",
+            "cited.stockfish.pawn-dynamics.lock.black",
+            "cited.stockfish.pawn-dynamics.harass-knight.white",
+            "cited.stockfish.pawn-dynamics.harass-knight.black",
+            "cited.stockfish.pawn-dynamics.harass-bishop.white",
+            "cited.stockfish.pawn-dynamics.harass-bishop.black",
+            "cited.stockfish.pawn-dynamics.protected.white",
+            "cited.stockfish.pawn-dynamics.protected.black",
+            "cited.stockfish.pawn-dynamics.connected.white",
+            "cited.stockfish.pawn-dynamics.connected.black"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-dynamics.lock-retained.white",
+            "cited.stockfish.pawn-dynamics.lock-retained.black",
+            "cited.stockfish.pawn-dynamics.diagonal-not-lock.white",
+            "cited.stockfish.pawn-dynamics.diagonal-not-lock.black",
+            "cited.stockfish.pawn-dynamics.protector-changed.white",
+            "cited.stockfish.pawn-dynamics.protector-changed.black",
+            "cited.stockfish.pawn-dynamics.pair-reordered.white",
+            "cited.stockfish.pawn-dynamics.pair-reordered.black",
+            "cited.stockfish.pawn-dynamics.rook-not-minor.white",
+            "cited.stockfish.pawn-dynamics.rook-not-minor.black",
+            "cited.stockfish.pawn-dynamics.bishop-not-pawn-protector.white",
+            "cited.stockfish.pawn-dynamics.bishop-not-pawn-protector.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -11348,8 +11960,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation"
       ]
     },

@@ -277,8 +277,8 @@ describe("semantic-validation cases and execution", () => {
       else expect(receipt.targetCount).toBe(0);
       for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
     }
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(119);
-    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(72);
+    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(129);
+    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(84);
   });
 
   it("[5][27] refuses callbacks, prebuilt evidence, forged keys, generated ids and @-suffixed dialects", () => {

@@ -279,7 +279,52 @@ const contactTransitionFixtures: readonly RuleFixture[] = [
   ["defended_duty.populated-negative.black", "rules.transition.event.defended_duty", "7k/8/2p5/1n1n4/8/4P3/8/7K w - - 7 1", "e3e4", "7k/8/2p5/1n1n4/4P3/8/8/7K b - - 0 1", null],
 ];
 
+
+const pawnDynamicsFixtures: readonly RuleFixture[] = [
+  ["lock.white", "rules.pawn.event.dynamics", "7k/8/8/4p3/8/8/4P3/7K w - - 7 1", "e2e4", "7k/8/8/4p3/4P3/8/8/7K b - - 0 1", { kind: "locked_pair_gained", subjects: { white: { square: "e4", piece: { color: "white", role: "pawn" } }, black: { square: "e5", piece: { color: "black", role: "pawn" } } } }],
+  ["lock.black", "rules.pawn.event.dynamics", "7k/4p3/8/8/4P3/8/8/7K b - - 7 1", "e7e5", "7k/8/8/4p3/4P3/8/8/7K w - - 0 2", { kind: "locked_pair_gained", subjects: { white: { square: "e4", piece: { color: "white", role: "pawn" } }, black: { square: "e5", piece: { color: "black", role: "pawn" } } } }],
+  ...(["knight", "bishop"] as const).flatMap(role => {
+    const piece = role === "knight" ? "n" : "b";
+    return [
+      [`harass-${role}.white`, "rules.pawn.event.dynamics", `7k/8/8/8/6${piece}1/8/7P/7K w - - 7 1`, "h2h3", `7k/8/8/8/6${piece}1/7P/8/7K b - - 0 1`, { kind: "minor_harassed", subjects: { pawn: { square: "h3", piece: { color: "white", role: "pawn" } }, minor: { square: "g4", piece: { color: "black", role } } } }],
+      [`harass-${role}.black`, "rules.pawn.event.dynamics", `7k/7p/8/6${piece.toUpperCase()}1/8/8/8/7K b - - 7 1`, "h7h6", `7k/8/7p/6${piece.toUpperCase()}1/8/8/8/7K w - - 0 2`, { kind: "minor_harassed", subjects: { pawn: { square: "h6", piece: { color: "black", role: "pawn" } }, minor: { square: "g5", piece: { color: "white", role } } } }],
+    ] satisfies readonly RuleFixture[];
+  }),
+  ["protected.white", "rules.pawn.event.dynamics", "7k/8/8/3P4/8/8/2P5/7K w - - 7 1", "c2c4", "7k/8/8/3P4/2P5/8/8/7K b - - 0 1", { kind: "protected_passer_gained", subjects: { pawn: { square: "d5", piece: { color: "white", role: "pawn" } }, passed: true, blockers: [], protectedBy: [{ square: "c4", piece: { color: "white", role: "pawn" } }] } }],
+  ["protected.black", "rules.pawn.event.dynamics", "7k/2p5/8/8/3p4/8/8/7K b - - 7 1", "c7c5", "7k/8/8/2p5/3p4/8/8/7K w - - 0 2", { kind: "protected_passer_gained", subjects: { pawn: { square: "d4", piece: { color: "black", role: "pawn" } }, passed: true, blockers: [], protectedBy: [{ square: "c5", piece: { color: "black", role: "pawn" } }] } }],
+  ["connected.white", "rules.pawn.event.dynamics", "7k/8/8/3r4/2P1P3/8/8/7K w - - 7 1", "e4d5", "7k/8/8/3P4/2P5/8/8/7K b - - 0 1", { kind: "connected_passer_pair_gained", subjects: { first: { square: "c4", piece: { color: "white", role: "pawn" } }, second: { square: "d5", piece: { color: "white", role: "pawn" } } } }],
+  ["connected.black", "rules.pawn.event.dynamics", "7k/8/8/2p1p3/3R4/8/8/7K b - - 7 1", "e5d4", "7k/8/8/2p5/3p4/8/8/7K w - - 0 2", { kind: "connected_passer_pair_gained", subjects: { first: { square: "d4", piece: { color: "black", role: "pawn" } }, second: { square: "c5", piece: { color: "black", role: "pawn" } } } }],
+  ["lock-retained.white", "rules.pawn.event.dynamics", "7k/8/8/4p3/4P3/8/8/7K w - - 7 1", "h1g1", "7k/8/8/4p3/4P3/8/8/6K1 b - - 8 1", null],
+  ["lock-retained.black", "rules.pawn.event.dynamics", "7k/8/8/4p3/4P3/8/8/7K b - - 7 1", "h8g8", "6k1/8/8/4p3/4P3/8/8/7K w - - 8 2", null],
+  ["diagonal-not-lock.white", "rules.pawn.event.dynamics", "7k/8/8/5p2/8/4P3/8/7K w - - 7 1", "e3e4", "7k/8/8/5p2/4P3/8/8/7K b - - 0 1", null],
+  ["diagonal-not-lock.black", "rules.pawn.event.dynamics", "7k/8/4p3/8/5P2/8/8/7K b - - 7 1", "e6e5", "7k/8/8/4p3/5P2/8/8/7K w - - 0 2", null],
+  ["protector-changed.white", "rules.pawn.event.dynamics", "7k/8/8/8/3PP3/2P5/8/7K w - - 7 1", "d4d5", "7k/8/8/3P4/4P3/2P5/8/7K b - - 0 1", null],
+  ["protector-changed.black", "rules.pawn.event.dynamics", "7k/8/2p5/3pp3/8/8/8/7K b - - 7 1", "d5d4", "7k/8/2p5/4p3/3p4/8/8/7K w - - 0 2", null],
+  ["pair-reordered.white", "rules.pawn.event.dynamics", "7k/8/8/2P5/3P4/8/8/7K w - - 7 1", "d4d5", "7k/8/8/2PP4/8/8/8/7K b - - 0 1", null],
+  ["pair-reordered.black", "rules.pawn.event.dynamics", "7k/8/8/2p5/3p4/8/8/7K b - - 7 1", "c5c4", "7k/8/8/8/2pp4/8/8/7K w - - 0 2", null],
+  ["rook-not-minor.white", "rules.pawn.event.dynamics", "7k/8/8/8/6r1/8/7P/7K w - - 7 1", "h2h3", "7k/8/8/8/6r1/7P/8/7K b - - 0 1", null],
+  ["rook-not-minor.black", "rules.pawn.event.dynamics", "7k/7p/8/6R1/8/8/8/7K b - - 7 1", "h7h6", "7k/8/7p/6R1/8/8/8/7K w - - 0 2", null],
+  ["bishop-not-pawn-protector.white", "rules.pawn.event.dynamics", "7k/8/8/3P4/2B5/8/8/7K w - - 7 1", "h1g1", "7k/8/8/3P4/2B5/8/8/6K1 b - - 8 1", null],
+  ["bishop-not-pawn-protector.black", "rules.pawn.event.dynamics", "7k/8/8/2b5/3p4/8/8/7K b - - 7 1", "h8g8", "6k1/8/8/2b5/3p4/8/8/7K w - - 8 2", null],
+];
+
+// D3691: finite pawn geometry, not strategic merit or forced retreat. These
+// separately labelled excerpts are retained from Stockfish sf_15, Copyright
+// 2004–2022 The Stockfish developers; GPL-3.0-or-later. Corresponding source/licence:
+// https://github.com/official-stockfish/Stockfish/tree/e6e324eb28fd49c1fc44b3b65784f85a773ec61c
+// https://github.com/official-stockfish/Stockfish/blob/e6e324eb28fd49c1fc44b3b65784f85a773ec61c/Copying.txt
+export const PAWN_DYNAMICS_CITED_SOURCE = Object.freeze({
+  sourceId: "stockfish.pawn-dynamics",
+  sourceRevision: "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+  licence: "GPL-3.0-or-later",
+  url: "https://github.com/official-stockfish/Stockfish/tree/e6e324eb28fd49c1fc44b3b65784f85a773ec61c/src",
+  text: "bitboard.h constexpr Bitboard pawn_attacks_bb(Bitboard b):\ntemplate<Color C>\nconstexpr Bitboard pawn_attacks_bb(Bitboard b) {\n  return C == WHITE ? shift<NORTH_WEST>(b) | shift<NORTH_EAST>(b)\n                    : shift<SOUTH_WEST>(b) | shift<SOUTH_EAST>(b);\n}\n\nbitboard.h constexpr Bitboard adjacent_files_bb(Square s):\nconstexpr Bitboard adjacent_files_bb(Square s) {\n  return shift<EAST>(file_bb(s)) | shift<WEST>(file_bb(s));\n}\n\nbitboard.h constexpr Bitboard forward_file_bb(Color c, Square s):\nconstexpr Bitboard forward_file_bb(Color c, Square s) {\n  return forward_ranks_bb(c, s) & file_bb(s);\n}\n\nbitboard.h constexpr Bitboard passed_pawn_span(Color c, Square s):\nconstexpr Bitboard passed_pawn_span(Color c, Square s) {\n  return pawn_attack_span(c, s) | forward_file_bb(c, s);\n}\n\nposition.h inline bool Position::pawn_passed(Color c, Square s) const:\ninline bool Position::pawn_passed(Color c, Square s) const {\n  return !(pieces(~c, PAWN) & passed_pawn_span(c, s));\n}\n\npawns.cpp direction:\n    constexpr Direction Up   = pawn_push(Us);\n\npawns.cpp immediate pawn blocker:\n        blocked    = theirPawns & (s + Up);\n",
+  operation: { id: "runtime.semantic.local_edge", version: 1 } as const,
+  cases: pawnDynamicsFixtures.map(fixture => ruleCase("pawn-dynamics", fixture, "stockfish")),
+});
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  PAWN_DYNAMICS_CITED_SOURCE,
   ...RULE_STATE_CITED_SOURCES,
   pawnMembershipSource,
   ...pawnAbsenceSources,

@@ -335,6 +335,29 @@ Material/mobility negative arms are present; orientation and other required arms
 with zero subjects fully qualified. The real quiet edges also retain both king-state payloads
 with empty deltas: D3687's whole-event omission contract conflict remains an author blocker,
 not an invented negative, source abstention or permission to silently filter v1.
+D3691 adds 22 source-bound pawn-dynamics cases through the real local-edge operation:
+ten both-colour positives for new locks, pawn harassment of knights/bishops, new
+pawn-protected passers and new adjacent-file passed pairs; twelve populated negatives
+for retained locks, diagonal contact instead of a lock, a passer whose pawn protector
+changes, a physical pair whose display order changes, attacking a rook rather than
+a minor, and bishop rather than pawn protection. Neutral rank/file/piece arithmetic
+checks exact identities and gains independently of the pawn collector helpers.
+Retained-property negatives still emit the separate actual passer-advance event.
+Seven labelled Stockfish snippets match the fixed source revision used by D3685.
+All 191 predecessor case records remain unchanged. The register totals 213 passing
+cases (129 positives, 84 negatives), still 81 subjects and zero fully qualified.
+Only this family's positive/negative cells become present; candidate-majority
+conventions are not endorsed and orientation/other qualification debt remains.
+No attack implies a forced retreat, a strategically good move or a promotion result.
+
+D3690 widens the complete-state omission conflict to piece counts, pawn islands
+and reply breadth. Actual white/black bare-king edges retain twelve role counts,
+two zero island readings and one reply reading. A legal mate retains the terminal
+zero-reply observation. These are not whole-event omissions. All four affected
+negative arms remain required; the source-bound author handoff is
+`planning/platform-alignment/semantic-state-negative-contract.md`. No frozen v1
+filter, waived negative, collector mutation or consumer permission follows.
+
 All prior cases remain. Both colors have completed legal hard
 negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
 production window; canonical qualification invokes the complete recorded application path,

@@ -30601,6 +30601,33 @@
       "uxItems": [],
       "evidence": "tests/browser/studio-publication.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3690",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:83bf1b460055968f76f48745e343e98c9d721e7ca286a5c368f5ae9aabda2498",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md",
+      "question": "Specify coherent negatives for complete state events; retain v1 and required arms."
+    },
+    {
+      "id": "D3691",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3abc0a42a62339c2ea95755113d2df7ffad83fee057aedba8b16dc42b9fa9043",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-pawn-dynamics.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3692",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9253517d9638d50db065df12097abe7c8b345ec91870da76f63092b1ba9da41c",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

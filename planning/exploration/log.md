@@ -25234,3 +25234,43 @@ Campaign was the one capability with no API, route or content. Now:
 - Close D3689 in ledger/state/queue/docs/roadmap and refresh the existing total overview.
   No authored chess, pack format, migration, publication rule, whole capability/milestone,
   official-content, remote-CI or native release-image promotion. No push or deployment.
+
+## 2026-10-11 (codex) — D3691 pawn-dynamics validation and total 1.0 inventory
+
+- Complete the admitted semantic-validation-authority Slice B pawn-dynamics work:
+  ten both-colour positives for locks, bishop/knight harassment, pawn-protected passers
+  and adjacent-file passed pairs; twelve populated negatives distinguish retention,
+  changed protectors/pair enumeration and wrong roles. Neutral rank/file/piece arithmetic
+  checks production operations and exact identities without collector helpers.
+- Twenty-four permanent controls fail on the predecessor's missing canonical cases/cells.
+  All 191 predecessor records remain unchanged. Seven labelled snippets match Stockfish
+  commit e6e324eb28fd49c1fc44b3b65784f85a773ec61c; retain attribution and licence locally,
+  not raw upstream sources or new bulk research recordings.
+- The actual production register has 213 passing cases (129 positive/84 negative),
+  81 subjects and zero fully qualified. Only pawn-dynamics positive/negative cells become
+  present. Candidate-majority, orientation, window/reach and other obligations remain;
+  no pawn attack is declared a forced retreat, strategic merit or promotion outcome.
+- D3690 widens D3687's complete-state omission contradiction. Real White/Black bare-king
+  operations retain twelve counts/two zero island readings; legal f7g7 mate retains
+  its terminal zero-reply observation. Keep all four negative arms required and frozen
+  v1 unchanged. The coherent author handoff is the small existing-tier note at
+  planning/platform-alignment/semantic-state-negative-contract.md, not new authority.
+- All 192 focused/799 foundation checks and clean types pass. The complete normal
+  make roadmap-receipt verify-awake build finishes with exit zero: 4,734 software
+  cases/370 files, seven unchanged-budget performance cases/four files, 247 content
+  cases/25 files, governance, corpus/capability, packaging and production build.
+  Existing bundle warnings remain. No new browser result is claimed; the preceding
+  Studio commit's 291 passes/one optional skip/zero retries is historical.
+- Independently read GitHub, without publishing: latest pushed 75bc8744 has green
+  verify 37795549212 and failed browser 37795549157. The latter retains the branch-group
+  locator.click timeout at its historical drill.spec.ts:2670. Record D3692 as assigned
+  release-engineering debt; neither a cause nor a fix is inferred from local passes.
+- Refresh the existing overview/register/checkpoints, not a competing tracker. All
+  1,718 live ledger items remain assigned; UX is 273 completed/272 live/24 retired.
+  All fourteen whole capabilities and nine milestone gates remain incomplete. Product
+  RFCs remain 22 draft/42 implementing/10 awaiting; official graduates remain zero.
+- Close only D3691 with its permanent source-path evidence. D3690 remains author-blocked
+  and D3692 remains diagnostic work. No collector, learner eligibility, content,
+  capability/milestone, remote-CI or release promotion; no push or deployment.
+- Final closeout `make roadmap-receipt verify-governance` exits zero on the updated
+  ledger/state/register/roadmap/log. No protected intent or immutable archive is edited.
