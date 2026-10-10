@@ -277,7 +277,7 @@ positives. D3628 adds twelve legal nearby negatives and nine v2 recorded-path po
 giving 63 cases (41 positives, 22 negatives). D3639 adds 24 source-bound literal-rule cases
 for capture, clock reset, check and castling-rights loss, bringing that checkpoint to 87
 (57 positives, 30 negatives). D3663 adds six source-bound legal castling negatives for
-capture class, removed defender and last-of-role: the current total is 93 (57 positives,
+capture class, removed defender and last-of-role: that checkpoint has 93 (57 positives,
 36 negatives). D3666 adds ten both-colour legal isolated-pawn-advance negatives for
 occupied attack/defence, slider ray, pawn contact and defended duty, bringing the total
 to 103 (57 positives, 46 negatives). The complete operation must emit clock reset while
@@ -286,6 +286,15 @@ The source store retains separately labelled pawn and king branches of the same 
 python-chess movement function, not a fabricated contiguous excerpt. Castling touches a
 friendly rook but removes no piece; each completed
 operation emits the real castling event and omits the capture-dependent subject.
+D3667 adds sixteen both-colour gained/lost positives and eight populated negatives for
+occupied attack/defence, slider ray and defended duty: the current total is 127 (73 positives,
+54 negatives). Exact actor/occupant addresses, ray endpoints, blocker sets and gained/lost
+direction are asserted. Existing contact persists when a redundant defender moves; an
+unchanged blocked rook ray is not a newly opened line; one newly attacked defended target
+does not cross the existing two-duty threshold. Opponent pawn advances also create/release
+the stationary defender's counted duties. These are geometric/count facts, never an overload,
+strategic advantage or move grade. The new manifest retains the separately labelled rook branch
+at the same pinned revision without changing any prior source or case.
 All prior cases remain. Both colors have completed legal hard
 negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
 production window; canonical qualification invokes the complete recorded application path,
@@ -297,7 +306,7 @@ at a fixed commit, with attribution and licence; the four additions were compare
 with that pinned upstream source. Resolution checks the
 exact source, revision, licence, excerpt and proposition, then binds its case, subject,
 expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
-lookup, caller-provided source or protected owner-store bootstrap is involved. All 44 cited cases run
+lookup, caller-provided source or protected owner-store bootstrap is involved. All 68 cited cases run
 through actual registered production operations. This is not independent strategic judgement or a new
 learner permission. The source store is excluded from the production runtime import closure.
 

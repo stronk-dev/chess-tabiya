@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "ba1e50872c5487b4b5d20b0e2b95386149d6ec51a839f83ca04ee160b02e5107",
-  "caseDigest": "baa717e4afcf322e9dab2665994e29b1b1c33362b3cac4798ddf4b7be883f49a",
+  "profileDigest": "72c908897077f58f65129cb012093f1120ac25052e110f0bb861e4371dbd30bc",
+  "caseDigest": "f434c4e9fba387852e170f95bf8f7f6e61cf8e357861da696d8396fa1d23e6dc",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -2032,6 +2032,68 @@
       "failure": null
     },
     {
+      "case": "cited.python-chess.defended_duty.gained.black",
+      "subject": "event:rules.transition.event.defended_duty@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "1a1471eba72826a1024b7a90fe95cd4d7e93eb0dd75635a167340bf9f55e9f80",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 4,
+      "targets": [
+        {
+          "projection": "rules.transition.event.defended_duty@1",
+          "operandDigest": "f60539071199f5d619d94c8b31d6bc7016e07906cffd591c3b88d7268d38e7a3",
+          "factory": "createRulesTransitionEventDefendedDutyV1Evidence",
+          "inputDigest": "2f22016cc16f47e7194fd35d17a5ece9e7e0441a29b614ad1475bde7e516a2f5",
+          "payloadDigest": "f60539071199f5d619d94c8b31d6bc7016e07906cffd591c3b88d7268d38e7a3",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a385c38aba2a1705fd5360c220f26e602738cffddb306e7456bce3e95c17fef4",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.defended_duty.gained.white",
+      "subject": "event:rules.transition.event.defended_duty@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "98a6398d4d530c08fe4b97938a1dcb740b1cee343a4e0dfe7ad1f0858c140d58",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 4,
+      "targets": [
+        {
+          "projection": "rules.transition.event.defended_duty@1",
+          "operandDigest": "318281a705176e327c1dbcbb9b474eee9cc0ad3f4f6006256f0361007587beb1",
+          "factory": "createRulesTransitionEventDefendedDutyV1Evidence",
+          "inputDigest": "61417215a76d953947ecda87f73ae64b888c44b5e0b484b9874c332f121ce5fb",
+          "payloadDigest": "318281a705176e327c1dbcbb9b474eee9cc0ad3f4f6006256f0361007587beb1",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a5c2bfd8662afc3841b9cfc202e389783e5fb1a89fb973d1a11b37842901d270",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "cited.python-chess.defended_duty.isolated-push.black",
       "subject": "event:rules.transition.event.defended_duty@1",
       "arm": "semantic_negative",
@@ -2069,6 +2131,112 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "638405a1ee603c40615e0635f7ba5cc0f79238aabea2a309f76af682d328de5b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.defended_duty.lost.black",
+      "subject": "event:rules.transition.event.defended_duty@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "7a68c9968e98dde20c309b2a64fde4ea10a4aea3d42f43c14e1eff6ae20c9bcd",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 4,
+      "targets": [
+        {
+          "projection": "rules.transition.event.defended_duty@1",
+          "operandDigest": "a861c5f8e1386ae014ee77e870b413c688f6f90eb6fff51f377d3ea0dd453953",
+          "factory": "createRulesTransitionEventDefendedDutyV1Evidence",
+          "inputDigest": "148eb59b8d414a6ceb56a93967c886b5b7fb1c3318d83495e108efd848c28db2",
+          "payloadDigest": "a861c5f8e1386ae014ee77e870b413c688f6f90eb6fff51f377d3ea0dd453953",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "58aa43b9b7d4c5932c89b26feebf8869fee99ca682b89cb54649ff8d8349ca5e",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.defended_duty.lost.white",
+      "subject": "event:rules.transition.event.defended_duty@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "bf8133ae947ea4cb4c30354c8eeddf962ec3eb0c55a1f35dab8796069ae01ca5",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 4,
+      "targets": [
+        {
+          "projection": "rules.transition.event.defended_duty@1",
+          "operandDigest": "cee966f0b4e3571d3b2f2a9310dbe264c13ff5b6cad7af7483a8f0bcfbbf9746",
+          "factory": "createRulesTransitionEventDefendedDutyV1Evidence",
+          "inputDigest": "2ca91d1bb3c11b24bb2f2c29766eeb163cffe14ba0e93e3bee96cd5e0b309dc1",
+          "payloadDigest": "cee966f0b4e3571d3b2f2a9310dbe264c13ff5b6cad7af7483a8f0bcfbbf9746",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "045b5cfba9d217de2499779b25e28a3a032300d51b72c05aff1792781f77f062",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.defended_duty.populated-negative.black",
+      "subject": "event:rules.transition.event.defended_duty@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "f06eaa76e015c732a183d9561c46804b592a8c4312a622ab8bf5a1840ced3b70",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 4,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "5fa732c9ccf82a6ca7a17b782ee03f84a7826258c2fb373b8cae04d45341b3ee",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.defended_duty.populated-negative.white",
+      "subject": "event:rules.transition.event.defended_duty@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "5324c13ff5e9da5005c545c5f2efba38a8c989610f74443d2020fed287e9505e",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 4,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "087c11792ef1df8b79949a455f671bbdf0ba1851e642807b1198609af3d23322",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -2217,6 +2385,68 @@
       "failure": null
     },
     {
+      "case": "cited.python-chess.occupied_attack.gained.black",
+      "subject": "event:rules.transition.event.occupied_attack@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "cf92724e0b78d0b74bd9f4b94aaa3ac704d4c4b1fa6b90949dda81efd4b3a7ab",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_attack@1",
+          "operandDigest": "0fcf8385939016a9fd3f8819e186cdd5ad6ad2e953976a06f645f22814b5f47c",
+          "factory": "createRulesTransitionEventOccupiedAttackV1Evidence",
+          "inputDigest": "5d2fe6cd115a1bbd92bf53841d9c5102bc54b4c81f30f732701f74ce679ade95",
+          "payloadDigest": "0fcf8385939016a9fd3f8819e186cdd5ad6ad2e953976a06f645f22814b5f47c",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "40595bdc1b87fa2650bb2438e92549093b8d7728b70ad7e9de8d77a9d0975fb0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_attack.gained.white",
+      "subject": "event:rules.transition.event.occupied_attack@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "04dc006085ccbbcb20817c02b29906573a59d8217fe9562c6861829057d9a7d4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_attack@1",
+          "operandDigest": "dc89fea4bff89540687e2182ff6f9e04e40aad9513ac0efd1ffc8fac6f876835",
+          "factory": "createRulesTransitionEventOccupiedAttackV1Evidence",
+          "inputDigest": "4efd53773035c0511ff7d8f10f4af7fac42b2bf8aa851a78a4c6e6f560817fbd",
+          "payloadDigest": "dc89fea4bff89540687e2182ff6f9e04e40aad9513ac0efd1ffc8fac6f876835",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "792919efdbf8e42cceadc32f72da75d0ecd90ff59515f2c7661e2570b0403933",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "cited.python-chess.occupied_attack.isolated-push.black",
       "subject": "event:rules.transition.event.occupied_attack@1",
       "arm": "semantic_negative",
@@ -2261,6 +2491,174 @@
       "failure": null
     },
     {
+      "case": "cited.python-chess.occupied_attack.lost.black",
+      "subject": "event:rules.transition.event.occupied_attack@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "6876065fd39147f6e0052513853c37764abd1b7b62a791397aeb05f57f2c00f3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_attack@1",
+          "operandDigest": "e85be4d3508704171ed54134afb4c7a7cf18de6e7ec57f5eb497b812bf7cc1bd",
+          "factory": "createRulesTransitionEventOccupiedAttackV1Evidence",
+          "inputDigest": "09094ad9233bc99d1b29d42ad90dbf7081aafa528ae54304927f4f3eb7415fad",
+          "payloadDigest": "e85be4d3508704171ed54134afb4c7a7cf18de6e7ec57f5eb497b812bf7cc1bd",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "86b1f529420229e32291c3129980d36d5188dfb38246d371796f438ac7bec73e",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_attack.lost.white",
+      "subject": "event:rules.transition.event.occupied_attack@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "fa2a7080d06cff6fbe31f1ae65e60a0bd9df0ece391ae11d94d1c0792d529ccd",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_attack@1",
+          "operandDigest": "9adf1178b3288d4bda48f1b944ed75a59013a7865a741d51d9b1630519161561",
+          "factory": "createRulesTransitionEventOccupiedAttackV1Evidence",
+          "inputDigest": "e0336897f4003965ec270086e051e2f11d3d280c6758ed1e6387f5c5cfb92c37",
+          "payloadDigest": "9adf1178b3288d4bda48f1b944ed75a59013a7865a741d51d9b1630519161561",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "6ab2aa4e0072a516278accb7d7e58fde451a42c6521e7b76b094a4aa89b8c895",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_attack.populated-negative.black",
+      "subject": "event:rules.transition.event.occupied_attack@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "9e632c4190451084408a4e554fa77197c6b1fa24a8176231c6ab2a4f80941e66",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 2,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "b45459b767f70417b544360092abaf897d001f767259fe36d9360af507eb067d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_attack.populated-negative.white",
+      "subject": "event:rules.transition.event.occupied_attack@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "ec0f1e9583c4d5b5fc88ea6de22b38f67a1fc1399517a4e3e705772c93aba367",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 2,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "71a0550012cb87de542be90d62933a1891d2c75c6b8676d9fefc0f7e0736378f",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_defence.gained.black",
+      "subject": "event:rules.transition.event.occupied_defence@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "6d8e58e169b7ccfa3ce420185a9fe155024152d1ba55a9df4be3e61f3b6cc149",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 2,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_defence@1",
+          "operandDigest": "57259438e81373897d8b41890323b1be18195eef831301a837aff6182dc2f2fc",
+          "factory": "createRulesTransitionEventOccupiedDefenceV1Evidence",
+          "inputDigest": "19063a2a8c4789c3ce541f48cf8411f9ec9fa5453c95277d5c454cdd1c1a1a18",
+          "payloadDigest": "57259438e81373897d8b41890323b1be18195eef831301a837aff6182dc2f2fc",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "42c7ed2d0fb06fbbcea9fedc05951a51fcc9fe411d7147b857d322bfbfe2f514",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_defence.gained.white",
+      "subject": "event:rules.transition.event.occupied_defence@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "e6d7b950c9e239fc3062daf0bf0de649a33bdaef2aa04644f7e4aa68ff4fbb4e",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 2,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_defence@1",
+          "operandDigest": "ca67ab462ef0e18094b8b044dc2959db2ba1b428727a3bf9dbb462864a38cc67",
+          "factory": "createRulesTransitionEventOccupiedDefenceV1Evidence",
+          "inputDigest": "1cb9a566d296f9b60529c7468d4f2a4363dd29b2a18bcac4d5c1a0516e886813",
+          "payloadDigest": "ca67ab462ef0e18094b8b044dc2959db2ba1b428727a3bf9dbb462864a38cc67",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "c724e06938bc8bcec3a6c7cb9adcb3d5c6475602882f3a8be03b19f9d64fe3a5",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "cited.python-chess.occupied_defence.isolated-push.black",
       "subject": "event:rules.transition.event.occupied_defence@1",
       "arm": "semantic_negative",
@@ -2298,6 +2696,112 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "68a79776423996c333c1eaf9da5371ee36cf7ef2abd0f31d0f2b891c9ae27852",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_defence.lost.black",
+      "subject": "event:rules.transition.event.occupied_defence@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "814823dce2ee53984f9618e8b94bff7d867fb4eeb864de99e5570de67728f503",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_defence@1",
+          "operandDigest": "bb9d5793317ece6a978777691adcee3456af8d7b9d7b6e93f287c2bc4e96b17e",
+          "factory": "createRulesTransitionEventOccupiedDefenceV1Evidence",
+          "inputDigest": "f9c01c3e156d06fe5e5e4b2fc95b26c3284f16defccdf27792c8e94565d88123",
+          "payloadDigest": "bb9d5793317ece6a978777691adcee3456af8d7b9d7b6e93f287c2bc4e96b17e",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "dff5c7f31068adbddc8d7be9f0ea5c3d59fd7d29c073808ec7df9d28f2ba5305",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_defence.lost.white",
+      "subject": "event:rules.transition.event.occupied_defence@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "6cdb8aef63d3fa91a692eae491c80830286aa2c427c92776f39ae256c424f55c",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 1,
+      "targets": [
+        {
+          "projection": "rules.transition.event.occupied_defence@1",
+          "operandDigest": "4a6cc4355afd90fe63f75c81e13a8c246bc753a7297e79592e321e2b574bfd64",
+          "factory": "createRulesTransitionEventOccupiedDefenceV1Evidence",
+          "inputDigest": "0b3e3784355ba7f28c9dc118a4d7ad7e3abaa5599449e173996d8f199e43cdab",
+          "payloadDigest": "4a6cc4355afd90fe63f75c81e13a8c246bc753a7297e79592e321e2b574bfd64",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f575b4a67adc3f05687c3936157633ad90ad82d400bd093bfff7e266ffc52853",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_defence.populated-negative.black",
+      "subject": "event:rules.transition.event.occupied_defence@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "9e632c4190451084408a4e554fa77197c6b1fa24a8176231c6ab2a4f80941e66",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 2,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "82dd391f3c0ffde5b693c70d6ce1b5bc1a1bfa4bfb2b9923dcf3f199e24fa199",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.occupied_defence.populated-negative.white",
+      "subject": "event:rules.transition.event.occupied_defence@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "ec0f1e9583c4d5b5fc88ea6de22b38f67a1fc1399517a4e3e705772c93aba367",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 2,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "6f1a80dc089dde85e5a841abc2cf02dcb544609a09273d651b900002e4fb79eb",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -2533,6 +3037,68 @@
       "failure": null
     },
     {
+      "case": "cited.python-chess.slider_ray.gained.black",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "5d85be2f9a5ad4ae885975a9d4a61858875aa17b1d3b41e89ba5903a3f6cffa4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 2,
+      "targets": [
+        {
+          "projection": "rules.transition.event.slider_ray@1",
+          "operandDigest": "e301ac04f81de9838ccb59bfa958a612e5c585bae89456ffbfd061b1d63a7cff",
+          "factory": "createRulesTransitionEventSliderRayV1Evidence",
+          "inputDigest": "b46eadebd513ce00f52313d276d3c40b1405c422e2fa36839e8e5b0cb4519213",
+          "payloadDigest": "e301ac04f81de9838ccb59bfa958a612e5c585bae89456ffbfd061b1d63a7cff",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ca573b744f521f066a2eeb73ab771b241c7894b9f9a41b08692c3f54234e5454",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.slider_ray.gained.white",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "0ea1acc0cf9f2b0f523adaaaad4c427ab24b81101b4f51df064d171cf05d95d2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 2,
+      "targets": [
+        {
+          "projection": "rules.transition.event.slider_ray@1",
+          "operandDigest": "dc34c0665244dac3a47f257d943758fde0851d16fb805ca5d0bc3aa6dfa5d5b6",
+          "factory": "createRulesTransitionEventSliderRayV1Evidence",
+          "inputDigest": "953070ff7ab995ce2eae48fbbd3b7322f63d8574a02ad64a477ba7300d1465f3",
+          "payloadDigest": "dc34c0665244dac3a47f257d943758fde0851d16fb805ca5d0bc3aa6dfa5d5b6",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "93389494529e59f9271a665679c1e765d77677a9c35a62f82d218f63e150d755",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "cited.python-chess.slider_ray.isolated-push.black",
       "subject": "event:rules.transition.event.slider_ray@1",
       "arm": "semantic_negative",
@@ -2570,6 +3136,112 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "eede5bd2934cc987f56a59d2191912385b5cac92fa792867b5bfd3906c2e1cee",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.slider_ray.lost.black",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "bdcc866fd548fcbee3eaa177d0fcd1db22053542371723c8c348d3fd224d77aa",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 2,
+      "targets": [
+        {
+          "projection": "rules.transition.event.slider_ray@1",
+          "operandDigest": "5c87630cb87dcf483df78cb72302b0835bf996efc7bc023c8c6d7421b80ef56f",
+          "factory": "createRulesTransitionEventSliderRayV1Evidence",
+          "inputDigest": "00bfcb5bab7d89e6f1393487ca380b5b69bcf12ba2b71223dc0be396227600de",
+          "payloadDigest": "5c87630cb87dcf483df78cb72302b0835bf996efc7bc023c8c6d7421b80ef56f",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f3f673c7ec52dd9c1482b06b07c69ede438d1c46a0e4ed56958c771981d70e8d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.slider_ray.lost.white",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "331420ba9b8d90af2ce6154e71a32f7c0dcf3879039bc3d3586c8c035686fbff",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 2,
+      "targets": [
+        {
+          "projection": "rules.transition.event.slider_ray@1",
+          "operandDigest": "8d85791e1effa7dc2009ba90fc30d7b688ada4903b35ad1ac7cb52062e1e39a9",
+          "factory": "createRulesTransitionEventSliderRayV1Evidence",
+          "inputDigest": "ecafa76218f47b48877b798d19f7eab00dc463c1463dc517a0502eb7457fbe1c",
+          "payloadDigest": "8d85791e1effa7dc2009ba90fc30d7b688ada4903b35ad1ac7cb52062e1e39a9",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "287277fbf78dd44e42264f05e6b7197a8fb190dd9508bfceccf2306dc1f067c4",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.slider_ray.populated-negative.black",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "a77d6eef525679f39df551c7cc3eb091b8cdd0d8db5d49ebb8d200981d8e5129",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 1,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "46e15c034af619af725f9b1e7872b5c0ffd0ec6c543412d233af99a0ad2643ca",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.slider_ray.populated-negative.white",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "151a7a7c4057e3d69685cf932095a056adaf11a8bae3b65b08cf13af1d3dfc46",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 1,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "75effbcab09816445f6b7548cb720ccad05f938305c7310683d57fac3e7c5e35",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -9573,16 +10245,22 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.defended_duty.gained.white",
+            "cited.python-chess.defended_duty.gained.black",
+            "cited.python-chess.defended_duty.lost.white",
+            "cited.python-chess.defended_duty.lost.black"
+          ]
         },
         {
           "arm": "semantic_negative",
           "status": "passed",
           "refs": [
             "cited.python-chess.defended_duty.isolated-push.white",
-            "cited.python-chess.defended_duty.isolated-push.black"
+            "cited.python-chess.defended_duty.isolated-push.black",
+            "cited.python-chess.defended_duty.populated-negative.white",
+            "cited.python-chess.defended_duty.populated-negative.black"
           ]
         },
         {
@@ -9610,7 +10288,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9731,16 +10408,22 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.occupied_attack.gained.white",
+            "cited.python-chess.occupied_attack.gained.black",
+            "cited.python-chess.occupied_attack.lost.white",
+            "cited.python-chess.occupied_attack.lost.black"
+          ]
         },
         {
           "arm": "semantic_negative",
           "status": "passed",
           "refs": [
             "cited.python-chess.occupied_attack.isolated-push.white",
-            "cited.python-chess.occupied_attack.isolated-push.black"
+            "cited.python-chess.occupied_attack.isolated-push.black",
+            "cited.python-chess.occupied_attack.populated-negative.white",
+            "cited.python-chess.occupied_attack.populated-negative.black"
           ]
         },
         {
@@ -9768,7 +10451,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9784,16 +10466,22 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.occupied_defence.gained.white",
+            "cited.python-chess.occupied_defence.gained.black",
+            "cited.python-chess.occupied_defence.lost.white",
+            "cited.python-chess.occupied_defence.lost.black"
+          ]
         },
         {
           "arm": "semantic_negative",
           "status": "passed",
           "refs": [
             "cited.python-chess.occupied_defence.isolated-push.white",
-            "cited.python-chess.occupied_defence.isolated-push.black"
+            "cited.python-chess.occupied_defence.isolated-push.black",
+            "cited.python-chess.occupied_defence.populated-negative.white",
+            "cited.python-chess.occupied_defence.populated-negative.black"
           ]
         },
         {
@@ -9821,7 +10509,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9994,16 +10681,22 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.slider_ray.gained.white",
+            "cited.python-chess.slider_ray.gained.black",
+            "cited.python-chess.slider_ray.lost.white",
+            "cited.python-chess.slider_ray.lost.black"
+          ]
         },
         {
           "arm": "semantic_negative",
           "status": "passed",
           "refs": [
             "cited.python-chess.slider_ray.isolated-push.white",
-            "cited.python-chess.slider_ray.isolated-push.black"
+            "cited.python-chess.slider_ray.isolated-push.black",
+            "cited.python-chess.slider_ray.populated-negative.white",
+            "cited.python-chess.slider_ray.populated-negative.black"
           ]
         },
         {
@@ -10031,7 +10724,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },

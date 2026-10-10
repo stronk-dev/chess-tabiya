@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3666]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3667]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3666]]: 273 UX items complete, 272 live and 24
-retired; 1,712 live ledger items, all assigned, alongside 1,542 done and 161 refused. The 462
+Current checked inventory through [[D3667]]: 273 UX items complete, 272 live and 24
+retired; 1,712 live ledger items, all assigned, alongside 1,543 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -80,7 +80,24 @@ four tiers, one optional Maia skip, zero retries and all 150 input/112 compositi
 This is an exact read/recovery repair, not new source acquisition, deeper explanation,
 grading/selection policy, full Review, native release-image or remote-CI completion.
 
-Latest foundation validation: [[D3666]] closes five contact-family negative arms through
+Latest foundation validation: [[D3667]] closes four contact-family positive arms with
+sixteen both-colour gained/lost cases and eight populated negatives. Actual operations retain
+exact actors, occupants, ray endpoints, blocker/duty sets and direction. Moving a redundant
+defender does not erase retained defense; a fixed blocker keeps its ray blocked; one attacked
+defended target remains below the existing two-duty threshold. Opponent pawn moves can change
+the stationary defender's counted duties, not establish overload or strategic value. All 103
+prior cases remain unchanged and in order: 127 canonical cases pass (73 positive/54 negative),
+with 81 subjects and zero fully qualified subjects. Twenty-nine predecessor-red controls,
+all 83 focused/669 broader foundation controls and clean types pass. Complete normal
+`make roadmap-receipt verify-awake build` passes 4,503 software cases/365 files, seven
+unchanged-budget performance cases/four files, 246 content cases/25 files, governance,
+packaging and build. The four families now lack only orientation; 26 subjects in total have
+that sole missing arm. Independent orientation/reach review, real source/consumer adoption,
+useful guidance, official content and release proof remain. The preceding 271-browser result
+is historical, not rerun for this validation-only batch. No whole capability or milestone,
+native release-image or exact-revision remote-CI result is claimed.
+
+Previous foundation validation: [[D3666]] closes five contact-family negative arms through
 ten independently source-bound both-colour legal pawn advances. Actual operations emit clock
 reset while omitting occupied attack/defence, slider ray, pawn contact and defended duty;
 input/subject/operation/expectation borrowing refuses before invocation. Fifteen predecessor-red
@@ -4041,7 +4058,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   93 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   127 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

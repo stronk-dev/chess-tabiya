@@ -114,8 +114,51 @@ const contactRules = {
 } as const;
 const CONTACT_NEGATIVE_FAMILIES = ["occupied_attack", "occupied_defence", "slider_ray", "pawn_contact", "defended_duty"] as const;
 
+// D3667: exact geometric transitions and the EXISTING two-attacked-target duty
+// count, not a claim that a defender is overloaded or that a move is good.
+// These deliberately include opponent pawn moves creating/releasing a stationary
+// defender's counted duties. Old source manifests and case bytes remain intact.
+const contactTransitionFixtures: readonly RuleFixture[] = [
+  ["occupied_attack.gained.white", "rules.transition.event.occupied_attack", "7k/8/8/8/1n6/8/P7/7K w - - 7 1", "a2a3", "7k/8/8/8/1n6/P7/8/7K b - - 0 1", { subject: { color: "white", target: "b4", occupant: { color: "black", role: "knight" } }, sign: "gained", targets_before: [], targets_after: ["a3"] }],
+  ["occupied_attack.gained.black", "rules.transition.event.occupied_attack", "7k/p7/8/1N6/8/8/8/7K b - - 7 1", "a7a6", "7k/8/p7/1N6/8/8/8/7K w - - 0 2", { subject: { color: "black", target: "b5", occupant: { color: "white", role: "knight" } }, sign: "gained", targets_before: [], targets_after: ["a6"] }],
+  ["occupied_attack.lost.white", "rules.transition.event.occupied_attack", "7k/8/8/8/1n6/P7/8/7K w - - 7 1", "a3a4", "7k/8/8/8/Pn6/8/8/7K b - - 0 1", { subject: { color: "white", target: "b4", occupant: { color: "black", role: "knight" } }, sign: "lost", targets_before: ["a3"], targets_after: [] }],
+  ["occupied_attack.lost.black", "rules.transition.event.occupied_attack", "7k/8/p7/1N6/8/8/8/7K b - - 7 1", "a6a5", "7k/8/8/pN6/8/8/8/7K w - - 0 2", { subject: { color: "black", target: "b5", occupant: { color: "white", role: "knight" } }, sign: "lost", targets_before: ["a6"], targets_after: [] }],
+  ["occupied_defence.gained.white", "rules.transition.event.occupied_defence", "7k/8/8/8/1N6/8/P7/7K w - - 7 1", "a2a3", "7k/8/8/8/1N6/P7/8/7K b - - 0 1", { subject: { color: "white", target: "b4", occupant: { color: "white", role: "knight" } }, sign: "gained", targets_before: [], targets_after: ["a3"] }],
+  ["occupied_defence.gained.black", "rules.transition.event.occupied_defence", "7k/p7/8/1n6/8/8/8/7K b - - 7 1", "a7a6", "7k/8/p7/1n6/8/8/8/7K w - - 0 2", { subject: { color: "black", target: "b5", occupant: { color: "black", role: "knight" } }, sign: "gained", targets_before: [], targets_after: ["a6"] }],
+  ["occupied_defence.lost.white", "rules.transition.event.occupied_defence", "7k/8/8/8/1N6/P7/8/7K w - - 7 1", "a3a4", "7k/8/8/8/PN6/8/8/7K b - - 0 1", { subject: { color: "white", target: "b4", occupant: { color: "white", role: "knight" } }, sign: "lost", targets_before: ["a3"], targets_after: [] }],
+  ["occupied_defence.lost.black", "rules.transition.event.occupied_defence", "7k/8/p7/1n6/8/8/8/7K b - - 7 1", "a6a5", "7k/8/8/pn6/8/8/8/7K w - - 0 2", { subject: { color: "black", target: "b5", occupant: { color: "black", role: "knight" } }, sign: "lost", targets_before: ["a6"], targets_after: [] }],
+  ["slider_ray.gained.white", "rules.transition.event.slider_ray", "7k/8/8/8/8/8/R1P5/7K w - - 7 1", "c2c3", "7k/8/8/8/8/2P5/R7/7K b - - 0 1", { subject: { slider: "a2", color: "white", role: "rook", endpoint: "h2" }, sign: "gained", targets_before: ["c2"], targets_after: [] }],
+  ["slider_ray.gained.black", "rules.transition.event.slider_ray", "7k/r1p5/8/8/8/8/8/7K b - - 7 1", "c7c6", "7k/r7/2p5/8/8/8/8/7K w - - 0 2", { subject: { slider: "a7", color: "black", role: "rook", endpoint: "h7" }, sign: "gained", targets_before: ["c7"], targets_after: [] }],
+  ["slider_ray.lost.white", "rules.transition.event.slider_ray", "7k/8/8/8/8/R7/2P5/7K w - - 7 1", "c2c3", "7k/8/8/8/8/R1P5/8/7K b - - 0 1", { subject: { slider: "a3", color: "white", role: "rook", endpoint: "h3" }, sign: "lost", targets_before: [], targets_after: ["c3"] }],
+  ["slider_ray.lost.black", "rules.transition.event.slider_ray", "7k/2p5/r7/8/8/8/8/7K b - - 7 1", "c7c6", "7k/8/r1p5/8/8/8/8/7K w - - 0 2", { subject: { slider: "a6", color: "black", role: "rook", endpoint: "h6" }, sign: "lost", targets_before: [], targets_after: ["c6"] }],
+  ["defended_duty.gained.white", "rules.transition.event.defended_duty", "7k/8/4p3/p7/1N1N4/2P5/8/7K b - - 7 1", "e6e5", "7k/8/8/p3p3/1N1N4/2P5/8/7K w - - 0 2", { subject: { piece: "c3", color: "white", role: "pawn" }, sign: "gained", targets_before: ["b4"], targets_after: ["b4", "d4"] }],
+  ["defended_duty.gained.black", "rules.transition.event.defended_duty", "7k/8/2p5/1n1n4/P7/4P3/8/7K w - - 7 1", "e3e4", "7k/8/2p5/1n1n4/P3P3/8/8/7K b - - 0 1", { subject: { piece: "c6", color: "black", role: "pawn" }, sign: "gained", targets_before: ["b5"], targets_after: ["b5", "d5"] }],
+  ["defended_duty.lost.white", "rules.transition.event.defended_duty", "7k/8/8/p3p3/1N1N4/2P5/8/7K b - - 7 1", "e5e4", "7k/8/8/p7/1N1Np3/2P5/8/7K w - - 0 2", { subject: { piece: "c3", color: "white", role: "pawn" }, sign: "lost", targets_before: ["b4", "d4"], targets_after: ["b4"] }],
+  ["defended_duty.lost.black", "rules.transition.event.defended_duty", "7k/8/2p5/1n1n4/P3P3/8/8/7K w - - 7 1", "e4e5", "7k/8/2p5/1n1nP3/P7/8/8/7K b - - 0 1", { subject: { piece: "c6", color: "black", role: "pawn" }, sign: "lost", targets_before: ["b5", "d5"], targets_after: ["b5"] }],
+  ...["occupied_attack", "occupied_defence"].flatMap(family => ([
+    [`${family}.populated-negative.white`, `rules.transition.event.${family}`, "7k/8/8/8/8/1N1n4/P1P5/7K w - - 7 1", "a2a3", "7k/8/8/8/8/PN1n4/2P5/7K b - - 0 1", null],
+    [`${family}.populated-negative.black`, `rules.transition.event.${family}`, "7k/p1p5/1n1N4/8/8/8/8/7K b - - 7 1", "a7a6", "7k/2p5/pn1N4/8/8/8/8/7K w - - 0 2", null],
+  ] satisfies readonly RuleFixture[])),
+  ["slider_ray.populated-negative.white", "rules.transition.event.slider_ray", "7k/8/8/8/8/1P6/R1P5/7K w - - 7 1", "b3b4", "7k/8/8/8/1P6/8/R1P5/7K b - - 0 1", null],
+  ["slider_ray.populated-negative.black", "rules.transition.event.slider_ray", "7k/r1p5/1p6/8/8/8/8/7K b - - 7 1", "b6b5", "7k/r1p5/8/1p6/8/8/8/7K w - - 0 2", null],
+  ["defended_duty.populated-negative.white", "rules.transition.event.defended_duty", "7k/8/4p3/8/1N1N4/2P5/8/7K b - - 7 1", "e6e5", "7k/8/8/4p3/1N1N4/2P5/8/7K w - - 0 2", null],
+  ["defended_duty.populated-negative.black", "rules.transition.event.defended_duty", "7k/8/2p5/1n1n4/8/4P3/8/7K w - - 7 1", "e3e4", "7k/8/2p5/1n1n4/4P3/8/8/7K b - - 0 1", null],
+];
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
   ...literalSources,
+  {
+    ...contactRules,
+    sourceId: "python-chess.contact-transitions",
+    // Separately labelled excerpt from attacks_mask, lines 889–891 of the same
+    // immutable revision. Existing pawn/king source records are not overwritten.
+    text: `${contactRules.text}\nattacks_mask rook/queen branch:\n            if bb_square & self.rooks or bb_square & self.queens:\n                attacks |= (BB_RANK_ATTACKS[square][BB_RANK_MASKS[square] & self.occupied] |\n                            BB_FILE_ATTACKS[square][BB_FILE_MASKS[square] & self.occupied])\n`,
+    operation: { id: "runtime.semantic.transition_edge", version: 1 } as const,
+    cases: contactTransitionFixtures.map(([id, ...rest]) => {
+      const dot = id.indexOf(".");
+      return ruleCase(id.slice(0, dot), [id.slice(dot + 1), ...rest]);
+    }),
+  },
   ...CONTACT_NEGATIVE_FAMILIES.map(family => ({
     ...contactRules,
     sourceId: `python-chess.${family}`,

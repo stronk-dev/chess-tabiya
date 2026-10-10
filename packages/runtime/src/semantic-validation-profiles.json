@@ -4412,9 +4412,61 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.defended_duty.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.defended_duty",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.defended_duty.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.defended_duty",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.defended_duty.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.defended_duty",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.defended_duty.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.defended_duty",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
         "disposition": "present",
@@ -4435,6 +4487,32 @@
           {
             "kind": "case",
             "id": "cited.python-chess.defended_duty.isolated-push.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.defended_duty",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.defended_duty.populated-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.defended_duty",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.defended_duty.populated-negative.black",
             "version": 1,
             "subject": {
               "kind": "event",
@@ -4656,9 +4734,61 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_attack.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_attack",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_attack.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_attack",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_attack.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_attack",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_attack.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_attack",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
         "disposition": "present",
@@ -4679,6 +4809,32 @@
           {
             "kind": "case",
             "id": "cited.python-chess.occupied_attack.isolated-push.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_attack",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_attack.populated-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_attack",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_attack.populated-negative.black",
             "version": 1,
             "subject": {
               "kind": "event",
@@ -4733,9 +4889,61 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_defence.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_defence",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_defence.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_defence",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_defence.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_defence",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_defence.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_defence",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
         "disposition": "present",
@@ -4756,6 +4964,32 @@
           {
             "kind": "case",
             "id": "cited.python-chess.occupied_defence.isolated-push.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_defence",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_defence.populated-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.occupied_defence",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.occupied_defence.populated-negative.black",
             "version": 1,
             "subject": {
               "kind": "event",
@@ -5054,9 +5288,61 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
         "disposition": "present",
@@ -5077,6 +5363,32 @@
           {
             "kind": "case",
             "id": "cited.python-chess.slider_ray.isolated-push.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.populated-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.populated-negative.black",
             "version": 1,
             "subject": {
               "kind": "event",

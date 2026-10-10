@@ -24638,3 +24638,52 @@ Campaign was the one capability with no API, route or content. Now:
   pawn contact still requires orientation. Independent orientation/reach reviews, source
   adoption, useful guidance, calibrated bots and full release proof remain. No native image,
   remote-CI, readiness-to-push or whole-capability claim follows from this checkpoint.
+
+### 2026-10-10 — D3667 exact positive contact transitions and populated negatives
+
+- Continued semantic-validation-authority Slice B from D3666; recorded and assigned D3667
+  before implementation. No held orientation/reach rule, producer or learner eligibility changed.
+- Twenty-nine permanent controls fail on the unchanged predecessor: all 24 added canonical
+  cases and four positive profile arms are missing, and the exact retained-case guard fails.
+  Added sixteen both-colour gained/lost positives and eight populated negatives, grounded in
+  separately labelled pawn/king/rook movement excerpts from python-chess 1.11.2 commit
+  `3516d7c6c0879af724c2855fac5a304a4ef40949` (GPL-3.0-or-later). Read actual upstream lines
+  875–915 before retaining the exact rook branch. Prior manifests and case bytes remain intact.
+- Actual transition operations pass all 127 canonical cases (73 positive / 54 negative), with
+  exact actors/occupants, ray endpoints, blocker lists, counted defender-duty targets and sign.
+  Opponent pawn advances create/release a stationary defender's duties; no overload, advantage
+  or move-grade claim follows. Populated negatives retain an existing attack and redundant
+  defense, a fixed rook-ray blocker, or one newly attacked defended target below the existing
+  two-duty threshold. Independent fixture geometry checks make those populations non-vacuous.
+- The first expanded focused run passes canonical execution but catches eight fixture-observer
+  failures: actual Board pieces include `promoted: false`. Exact piece expectations now include
+  that field; no geometry or result assertion was removed. All 83 focused controls pass.
+  The global exact census now names 73 positives and 54 negatives, preserving every execution,
+  positive target count and negative omission. Broader/full verification and closeout follow.
+- The broader requirement-law equality check catches a case-order mismatch: the new cases
+  were prepended while their profile references were appended. Append the 24 cases after
+  the retained 103 instead; every input, expectation and authority stays identical, and
+  the strict derived-profile equality assertion remains unchanged. Regenerate the existing
+  report through its normal writer and rerun the complete foundation/type gates.
+- Corrected normal `make semantic-validation-update evidence-foundation-check typecheck`
+  exits zero: all 127 canonical cases, 669 broader controls and clean workspace types.
+  Read-only comparison with HEAD verifies all 103 prior cases retain identical values and
+  order. All four contact families now lack only orientation; 26 subjects in total have
+  that sole missing arm. No subject is fully qualified and no learner permission changes.
+- Complete sequential `make roadmap-receipt verify-awake build` exits zero: 4,503 software
+  cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/
+  25 files, clean types, governance, packaging and build. Clearance reports zero errors;
+  capability declarations match all 104 documents, including 86 production packs. The
+  earlier 271-browser checkpoint is historical, not rerun for validation-only changes.
+- Close D3667 with the existing ledger, durable state, queue, docs and roadmap; update the
+  requested total inventory, not another tracker. Inventory after closeout: 3,416 rows,
+  1,543 done, 161 refused, 1,712 assigned live (627 todo, fourteen doing, 1,071 blocked),
+  zero untriaged. UX remains 273 complete/272 live/24 retired; product RFCs 42 implementing,
+  ten awaiting and 22 draft; all fourteen whole capabilities remain incomplete, four
+  milestones active/five blocked, zero official graduates. Orientation/reach review,
+  source/consumer adoption, useful guidance, calibrated bots, Campaign curriculum/rewards
+  and full release proof remain. No remote CI, native release image, push or goal pause.
+- Final `make roadmap-receipt verify-governance roadmap-progress` exits zero after closeout:
+  ledger/UX/RFC/milestone counts match the inventory above, with no unassigned live work.
+  Stage only the fifteen batch files after inspecting the empty index; pre-existing research,
+  review and scratch files remain outside this change set. Ordinary commit hooks follow.

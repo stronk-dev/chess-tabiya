@@ -30397,6 +30397,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3667",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:db5fae98bed666ff0ba2394414c92e17f633c610276f8613e76d7aeb448e4631",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

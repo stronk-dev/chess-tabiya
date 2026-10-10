@@ -12,6 +12,19 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3667]] extends the admitted semantic-validation Slice B with sixteen both-colour
+gained/lost positives and eight populated negatives for occupied attack/defence, slider ray
+and defended duty. Twenty-nine controls fail on the predecessor; all 83 focused controls
+now pass. Exact actors/occupants, endpoints, blocker/duty sets and direction survive real
+operations. Redundant defense persists, a fixed ray blocker remains and a single attacked
+defended target does not cross the existing two-duty threshold. The canonical writer passes
+127 cases; all 103 prior remain unchanged and in order. All 669 broader foundation controls,
+clean types and complete normal verification/build pass: 4,503 software, seven unchanged-budget
+performance and 246 content cases, governance and packaging. D3667 closes with the existing
+ledger/state/docs/roadmap closeout; all four families now require only orientation. No strategic
+value, overload, orientation/reach, learner permission or content change follows. The preceding
+271-browser checkpoint is historical, not a fresh run for this validation-only batch.
+
 [[D3666]] strengthens the admitted semantic-validation Slice B: ten source-bound,
 both-colour isolated pawn advances complete through the actual transition operation,
 emit clock reset and omit occupied attack/defence, slider ray, pawn contact and defended
