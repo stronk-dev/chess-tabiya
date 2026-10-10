@@ -25045,3 +25045,22 @@ Campaign was the one capability with no API, route or content. Now:
   job invokes this exact Make target with Node 24. No published CI result is claimed. The
   unchanged production catalogue target passes nineteen cases; no broader browser/software
   rerun is claimed for this author/model-only change. Work/UX completion counts remain unchanged.
+
+## 2026-10-10 (codex) — D3535 draft test-tier correction
+
+- After `0d2c150f`, re-inspection of `tools/verify-scaffold.mjs` confirms that draft-RFC
+  evidence belongs outside ordinary governance CI. Its fixed historical-target list did not
+  catch this new model prerequisite. Correct the placement rather than mistake that green
+  structural guard for permission: the model now runs explicitly and through
+  `verify-rfc-evidence`, never through `verify-governance`/ordinary CI. The earlier entry
+  records what was actually verified then, not the final test-tier policy.
+- Correct the current roadmap/testing/proposal descriptions. No model result becomes
+  chess/feature qualification, no raw research gate is introduced and D3535 remains blocked
+  for independent acceptance. Existing production catalogue tests and their CI tier stand.
+- Final `make schema-check verify-governance` exits zero on the corrected tier placement:
+  scaffold, packaging, hook configuration, register/status/work/roadmap/intent and semantic-cut
+  checks pass. `make semantic-collector-cut-contract training-pass-model-check
+  make-toolchain-check roadmap-check` also exits zero; the nine model tests remain explicit.
+  The attempted nonexistent `scaffold-check` target did not run a test; the proper existing
+  `schema-check` target above is the recorded verification. No ordinary CI model prerequisite
+  remains and no production/browser result or remote run is newly claimed.

@@ -3235,8 +3235,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
 
-# The small draft author model is a contract check, not content coverage or product completion.
-verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract training-pass-model-check
+verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 
 # Draft-RFC evidence remains executable, but it is not a release gate. These targets include
 # historical source images, author models, and counterexamples whose job is to inform an RFC review;
@@ -3256,6 +3255,9 @@ capability-watch-check:
 	$(CI_NODE) tools/capability-watch-harness/check.mjs design/research/capability-watch.json planning/platform-alignment/capability-watch/results.json
 
 verify-content: test-content graduation-clearance-corpus-check pack-capability-check
+
+# Draft execution models stay in the explicit author/review tier, outside ordinary CI.
+verify-rfc-evidence: training-pass-model-check
 
 verify: verify-software verify-governance verify-content
 verify-software: make-toolchain-check

@@ -140,8 +140,8 @@ These focused commands do not replace the full CI tiers or remaining complete UX
 
 `make training-set-catalogue-check` exercises the installed set loader, validators and actual
 HTTP catalogue. `make training-pass-model-check` is a **disposable D3535 author model**, also
-run by governance CI: nine tests execute the draft two-table SQL and shipped pure pass/budget
-helpers. Its attempts are fabricated, not chess validation. It proves no production tempo,
+run by the explicit `verify-rfc-evidence` tier, not ordinary CI: nine tests execute the draft SQL
+and shipped pure pass/budget helpers. Its attempts are fabricated, not chess validation. It proves no production tempo,
 scheduler isolation, account lifecycle, client journey or amendment acceptance. Those remain
 the actual application/client criteria in `rfc/pack-training-forms.md` §4.10.
 `make support-theory-navigation-check` checks strict shape receipt rendering and the actual

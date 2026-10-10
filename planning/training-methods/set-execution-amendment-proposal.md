@@ -9,7 +9,8 @@ authorize the remaining mutation paths or settle the guided-pass ceiling ruling 
 two owned relational tables, retained normal pack-loader inputs, immutable selected-branch
 submissions, exact command retries, all-path effective move budgets and explicit automatic-ladder
 exclusion. `make training-pass-model-check` exercises that draft DDL and shipped pure arithmetic
-with nine disposable storage-model tests; it is also run by the existing governance CI tier.
+with nine disposable storage-model tests; it is also run by the explicit `verify-rfc-evidence`
+tier, not ordinary CI.
 It does not exercise production run orchestration, schedule isolation, account recovery or UX.
 Those require the RFC's actual application/client acceptance. No execution mutation has shipped.
 
