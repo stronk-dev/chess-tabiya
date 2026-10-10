@@ -43,6 +43,13 @@ a stale-run problem or floating an alert over the board. Closing the companion r
 board target without changing its size.
 This recovery state is in the current browser session; a reload reads the saved run and campaign.
 
+A replayed group command returns the group named in its stored result, even if another authorized
+tab has since created a different group. It does not replace the current cursor or debit again.
+A missing or unresolvable saved group is a storage error, never a fallback to the latest group.
+The command's original charge receipt remains unchanged. Its historical revision cannot overwrite
+a newer confirmed encounter read; only a valid newer revision for the currently mounted run can
+advance the browser's next-command revision. Crossed-run and invalid revisions cannot supply it.
+
 ## Leaving a pending action
 
 Create, encounter start, kit changes, abandonment and Declare done have one pending command

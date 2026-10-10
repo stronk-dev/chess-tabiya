@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:39933941dd8a0987d85b3928bb9f9665ffddad99964241821c693e1b37afd6f8",
+    "roadmap": "sha256:bfc4fcc80bc1c8722dd75dd45e0537b057d9fd420059592b82d4d9dcfa0d0601",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:0e6ba1712a178042e71ecf51e9d8d74ac988b017f20fc141a445bb9f81b02b65",
+    "workState": "sha256:34f564d8494fef804b54fc1ea43232a8ddffe0152aafdd1440231c531b0eabd0",
     "rfcRegister": "sha256:9aca4967ad4e2d8409c1a74978bdcd3be038b3c9a1deadef375d7408d6ede356",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 632,
+      "todo": 630,
       "doing": 14,
       "blocked": 1071,
-      "done": 1553,
+      "done": 1555,
       "refused": 161
     },
     "workItems": {
@@ -1091,7 +1091,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3677-D3679 repair Campaign gesture costs and lost committed responses. The verified encounter discloses one earned rewind at every charged entrance, keeps ordinary rehearsal and inspection free, reuses the exact unresolved command on explicit retry and restores the authorized event tail with verified overlap. Exhaustion remains in Actions/the active dialog instead of obstructing board targets. Thirteen software additions, extended server/refusal controls and two actual desktop/phone lost-response/exhaustion journeys pass. Complete normal make verify-awake build test-browser-ci-awake passes 4582 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, types/governance/packaging/build and 283 browser cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Previous Play start/profile and Review numbering/Analyze/focus/retry repairs remain delivered. D3680/D3682 retain exact group identity and late-receipt ordering repairs; D3681 requires a narrow truthful zero-income wording amendment. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No default, source, sampler, permission, content, whole capability/milestone, native release-image or remote-CI promotion.",
+        "summary": "D3680/D3682 close Campaign group replay identity and late-receipt revision ordering under rfc/campaign-core.md §2.2. Replay resolves the saved groupId after a later group is created; malformed or absent identities refuse without provider work or graph mutation. The mounted client preserves a newer confirmed current-run revision when an older immutable receipt settles and refuses crossed-run/invalid revision authority. Six new software cases, one actual content/API case and two desktop/phone two-tab journeys retain both observed predecessor regressions. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4588 software cases/365 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, types/governance/packaging/build and 285 browser cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Prior Campaign costs/lost-response recovery, Play start/profile and Review numbering/Analyze/focus/retry remain delivered. D3681's mandated zero-income wording still needs author amendment. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No source, economy, reward, default, permission, content or whole capability/milestone promotion; no native release-image or remote-CI result.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/DrillScreen.svelte",
@@ -1109,7 +1109,11 @@
           "tests/browser/campaign.spec.ts",
           "docs/campaign.md",
           "Makefile",
-          "planning/exploration/log.md"
+          "planning/exploration/log.md",
+          "apps/server/src/service.ts",
+          "apps/server/src/branch-groups.test.ts",
+          "apps/web/src/App.svelte",
+          "apps/web/src/lib/app-shell.test.ts"
         ],
         "anchors": [
           {
@@ -1126,6 +1130,16 @@
             "kind": "work_state",
             "id": "D3679",
             "digest": "sha256:712e97b4434fd35756382fb98f853a25c153cc3b77fce80a170167ecce9e3f66"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3680",
+            "digest": "sha256:ead002e939df1b4e83408bed13b945d00b4df883a80eae4be7e41e64c4676496"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3682",
+            "digest": "sha256:b2d71bf24f6e8e36076d5638d7c30b172a9599f83fa74e8bc08dcd458fbf3de6"
           }
         ]
       },
@@ -2005,7 +2019,7 @@
         ],
         "experience": [
           "partial",
-          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. D3587 retires departed action completion while preserving accepted work and writer resume, exact response-loss retries and separate abandonment-result recovery. D3603 bounds preparation in a focus-owned dialog with in-place server kit edits, suppression/cost disclosure and exact returned-revision ordering; dismissing a pending Start retains its accepted encounter on the map without late navigation. D3614 adds canonical named help before entry, explains preset-excluded equipment, preserves Custom/recovery and restores refused saves without claiming source-confirmed help or mutating the kit/revision. D3677-D3679 disclose every charged entrance, retain the exact unresolved gesture for explicit retry and restore its authorized event tail without double-spending; exhaustion stays in the action dialog/panel, not over board targets. Inspection and ordinary rehearsal remain free. Deleted or feedback-withheld recordings explain their unavailable actions. D3680/D3682 retain separate group-identity and late-receipt ordering work; D3681 requires a truthful zero-income wording amendment. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
+          "Campaign routes mount the map, kit, preparation, encounter strip, earned rewinds, Declare done, results and resume for the draft pilot. D3575 binds sealed and abandoned recordings to history; D3577 adds exact submitted-branch/node Game Review and a durable map return, bounded to the declared consequence. D3587 retires departed action completion while preserving accepted work and writer resume, exact response-loss retries and separate abandonment-result recovery. D3603 bounds preparation in a focus-owned dialog with in-place server kit edits, suppression/cost disclosure and exact returned-revision ordering; dismissing a pending Start retains its accepted encounter on the map without late navigation. D3614 adds canonical named help before entry, explains preset-excluded equipment, preserves Custom/recovery and restores refused saves without claiming source-confirmed help or mutating the kit/revision. D3677-D3679 disclose every charged entrance, retain the exact unresolved gesture for explicit retry and restore its authorized event tail without double-spending; exhaustion stays in the action dialog/panel, not over board targets. Inspection and ordinary rehearsal remain free. Deleted or feedback-withheld recordings explain their unavailable actions. D3680 resolves each replay's saved group identity instead of the latest group; D3682 prevents an older immutable charge receipt from replacing a newer confirmed revision or another mounted run's authority; D3681 requires a truthful zero-income wording amendment. Official progression, rewards, complete Review evidence and remaining boss/failure journeys remain."
         ],
         "defaults": [
           "blocked",
@@ -2017,7 +2031,7 @@
         ],
         "verification": [
           "partial",
-          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575-D3614 preserve history/Review/map return, departure/resume, preparation and named help. D3677-D3679 add thirteen permanent software cases plus extended server/refusal controls and two actual desktop/phone journeys that lose an already-committed response, retry its exact command, spend once and refuse exhaustion without graph mutation or board obstruction. Complete normal make verify-awake build test-browser-ci-awake passes 4582 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files and 283 browser cases across all four tiers, one optional Maia skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging/build. D3680/D3682 keep group-identity and late-receipt ordering follow-ups separate; D3681 requires a zero-income wording amendment. Complete official-run, reward conservation, crash/upgrade, failure, owner-device accessibility, missing Review sources and release-image journeys remain."
+          "Production campaign state, command replay, charged mutation, API and draft-pilot browser controls exist. D3575-D3614 preserve history/Review/map return, departure/resume, preparation and named help. D3677-D3679 retain truthful costs and exact committed-response recovery. D3680 adds actual two-group HTTP replay and five malformed saved-result refusals without provider work or mutation; D3682 adds mounted revision/crossed-run/invalid-revision controls and actual desktop/phone two-tab reordered-response journeys. Both production regressions were observed on their predecessors. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4588 software cases/365 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files and 285 browser cases across all four tiers, one optional Maia skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging/build. D3681 still requires a zero-income wording amendment. Complete official-run, reward conservation, crash/upgrade, failure, owner-device accessibility, missing Review sources and release-image journeys remain."
         ],
         "release": [
           "blocked",

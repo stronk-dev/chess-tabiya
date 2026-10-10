@@ -1674,7 +1674,9 @@ export class RunService {
   }
 
   #groupReplay(outcome: CampaignChargedOutcome): CreateGroupResult & { readonly campaign: Readonly<Record<string, unknown>> } {
-    const group = groupsFromEvents(outcome.run).at(-1);
+    const saved = outcome.campaign.operationResult;
+    const groupId = saved !== null && typeof saved === "object" && "groupId" in saved && typeof saved.groupId === "string" ? saved.groupId : undefined;
+    const group = groupId === undefined ? undefined : groupsFromEvents(outcome.run).find(value => value.groupId === groupId);
     if (group === undefined) throw new ServerError("STORAGE_FAILURE", "A replayed group command names no group");
     return Object.freeze({ group, run: outcome.run, emitted: outcome.emitted, campaign: outcome.campaign, comparison: compareBranches(outcome.run, group.members.map((member) => member.branchId), {}) });
   }

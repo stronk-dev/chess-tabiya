@@ -17,7 +17,8 @@ vi.mock("@lichess-org/chessground", () => ({
 }));
 
 import App from "../App.svelte";
-import { ApiError } from "./api.js";
+import { ApiError, type DrillApi } from "./api.js";
+import type { CampaignProjection } from "./campaign-api.js";
 import type {
   Capabilities,
   AssignedPack,
@@ -278,6 +279,56 @@ afterEach(() => {
 });
 
 describe("application shell", () => {
+  it("keeps the current encounter revision monotone when an older charge receipt settles", async () => {
+    history.replaceState(null, "", `/play/run/${run.id}`);
+    const campaignId = "campaign-revision-order", nodeId = "first-node";
+    const campaign: CampaignProjection = {
+      campaignRun: { id: campaignId, campaignId: "fixture", campaignVersion: 1, title: "Campaign revision order", channel: "community", documentDigest: digest, status: "active", revision: 9, createdAt: "2026-10-10T17:00:00.000Z" },
+      cursor: { kind: "active", act: "act1", layer: 1 },
+      activeEncounter: { nodeId, playRunId: run.id, title: "First encounter" },
+      acts: [], charges: { balance: 3, startingIncome: 3, actIncome: 0, rewardIncome: 0, spent: 0 },
+      economy: { startingCharges: 3, actGrants: { act1: 0, act2: 0, act3: 0 } },
+      kit: { owned: [], equipped: [], ceiling: [], shelf: [] },
+      prestige: { eligible: false }, awards: [], abandonedEncounter: null,
+    };
+    vi.spyOn(globalThis, "fetch").mockImplementation(async input => {
+      expect(String(input)).toBe(`/campaign-runs/${campaignId}`);
+      return Response.json(campaign);
+    });
+    const base = api();
+    const setCampaignCharging = vi.fn<DrillApi["setCampaignCharging"]>();
+    const shellApi = { ...base, setCampaignCharging, async graph(id: string, writerId?: string) {
+      return { ...await base.graph(id, writerId), campaignOrigin: { campaignRunId: campaignId, nodeId, campaignDocumentDigest: digest } };
+    } };
+    const component = mount(App, { target: target(), props: {
+      api: shellApi, router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    try {
+      await vi.waitFor(() => expect(document.querySelector('[data-testid="campaign-strip-charges"]')?.textContent).toContain("3 remaining"));
+      const callbacks = () => setCampaignCharging.mock.calls.at(-1)!;
+      expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(9);
+      const oldReceipt = Object.freeze({ kind: "charge_spent", campaignRevision: 5 });
+      callbacks()[1]!(run.id, oldReceipt);
+      await tick();
+      expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(9);
+      expect(oldReceipt.campaignRevision).toBe(5);
+      callbacks()[1]!("another-play-run", { campaignRevision: 100 });
+      await tick();
+      expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(9);
+      for (const campaignRevision of [NaN, Infinity, 10.5, -1]) {
+        callbacks()[1]!(run.id, { campaignRevision });
+        await tick();
+        expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(9);
+      }
+      callbacks()[1]!(run.id, { campaignRevision: 10 });
+      await tick();
+      expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(10);
+      callbacks()[1]!(run.id, oldReceipt);
+      await tick();
+      expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(10);
+    } finally { await unmount(component); }
+  });
+
   it("offers imported-story narration only after persona voice is selected", async () => {
     history.replaceState(null, "", "/review/game/route-run");
     const story = reviewPayload({ runId: "route-run", branchId: "main", source: { kind: "pgn_paste", headers: { White: "Ada", Black: "Mina" }, result: "*", importedAt: "2026-09-08T12:00:00.000Z" } });

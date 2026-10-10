@@ -30515,11 +30515,12 @@
     },
     {
       "id": "D3680",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1190b66957ece19a796ca8cb18d97b6a35e7c4dc4a8d4b152feffd282417c29b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ead002e939df1b4e83408bed13b945d00b4df883a80eae4be7e41e64c4676496",
       "uxItems": [],
-      "owner": "campaign"
+      "evidence": "apps/server/src/campaign-core.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3681",
@@ -30531,11 +30532,12 @@
     },
     {
       "id": "D3682",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4b10ed5288b0c78707c93c8588a4b175b4b661f76a784c9d882f57cb0227fb47",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b2d71bf24f6e8e36076d5638d7c30b172a9599f83fa74e8bc08dcd458fbf3de6",
       "uxItems": [],
-      "owner": "campaign"
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

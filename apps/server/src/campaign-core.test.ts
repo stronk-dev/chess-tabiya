@@ -136,6 +136,47 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     expect((await alice.call("GET", "/packs")).status).toBe(200);
   }, 60_000);
 
+  it("replays the original charged group after a later group without spending or selecting that later group", async () => {
+    const { learner } = await boot();
+    const alice = await learner("campaign_group_replay");
+    const created = await alice.call("POST", "/campaigns/browser-fixture-campaign/runs", { campaignVersion: 1, commandId: commandId() });
+    const campaignRunId = created.body.result.campaignRunId as string;
+    // Earn existing resource rewards, not a test-only grant or changed economy.
+    await sealPackNode(alice, campaignRunId, "f1-b");
+    const ready = (await alice.call("GET", `/campaign-runs/${campaignRunId}`)).body;
+    expect(ready.charges.balance).toBe(3);
+    const started = await startNode(alice, campaignRunId, "f2-a", ready.campaignRun.revision);
+    const playRunId = started.result.response.playRunId as string;
+    const initial = await run(alice, playRunId);
+    const firstCommand = { commandId: commandId(), expectedCampaignRevision: started.campaign.campaignRun.revision, expectedPlayRevision: initial.events.at(-1)!.seq };
+    const firstInput = { source: "hand_picked", candidates: ["c1e3", "c1f4"], campaignCommand: firstCommand };
+    const first = await alice.call("POST", `/runs/${playRunId}/group`, firstInput);
+    expect(first.status, JSON.stringify(first.body)).toBe(200);
+    const firstGroupId = first.body.group.groupId as string;
+    const rewound = await alice.call("POST", `/runs/${playRunId}/rewind`, {
+      nodeId: initial.nodes[0]!.id,
+      campaignCommand: { commandId: commandId(), expectedCampaignRevision: first.body.campaign.campaignRevision, expectedPlayRevision: first.body.run.events.at(-1)!.seq },
+    });
+    expect(rewound.status, JSON.stringify(rewound.body)).toBe(200);
+    const second = await alice.call("POST", `/runs/${playRunId}/group`, {
+      source: "hand_picked", candidates: ["c1g5", "c1h6"],
+      campaignCommand: { commandId: commandId(), expectedCampaignRevision: rewound.body.campaign.campaignRevision, expectedPlayRevision: rewound.body.run.events.at(-1)!.seq },
+    });
+    expect(second.status, JSON.stringify(second.body)).toBe(200);
+    expect(second.body.group.groupId).not.toBe(firstGroupId);
+    const beforeReplay = (await alice.call("GET", `/campaign-runs/${campaignRunId}`)).body;
+    expect(beforeReplay.charges).toMatchObject({ balance: 0, spent: 3 });
+    const replay = await alice.call("POST", `/runs/${playRunId}/group`, firstInput);
+    expect(replay.status, JSON.stringify(replay.body)).toBe(200);
+    expect(replay.body.group).toEqual(first.body.group);
+    expect(replay.body.campaign).toEqual(first.body.campaign);
+    expect(replay.body.comparison.columns.map((column: { branchId: string }) => column.branchId))
+      .toEqual(first.body.group.members.map((member: { branchId: string }) => member.branchId));
+    expect(replay.body.run.activeCursor).toEqual(second.body.run.activeCursor);
+    expect(replay.body.run.events.filter((event: DrillRun["events"][number]) => event.type === "group.created")).toHaveLength(2);
+    expect((await alice.call("GET", `/campaign-runs/${campaignRunId}`)).body).toEqual(beforeReplay);
+  });
+
   it("creates exactly once, charges rewinds atomically, seals by participation and completes with awards", async () => {
     const { learner } = await boot();
     const alice = await learner("campaign_alice2");

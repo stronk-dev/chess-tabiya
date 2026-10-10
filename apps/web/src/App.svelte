@@ -180,7 +180,13 @@
       if (charge === undefined || charge.runId !== runId || run === undefined || run.id !== runId) return undefined;
       return { commandId: `cmd-${globalThis.crypto.randomUUID()}`, expectedCampaignRevision: charge.campaignRevision, expectedPlayRevision: run.events.at(-1)?.seq ?? 0 };
     }, (runId, result) => {
-      if (campaignCharge?.runId === runId && typeof result.campaignRevision === "number") campaignCharge = { runId, campaignRevision: result.campaignRevision };
+      const charge = campaignCharge, revision = result.campaignRevision;
+      // A replay carries its immutable historical receipt, not the current campaign head.
+      // Never replace a newer confirmed read or another encounter's authority with it.
+      if (charge?.runId === runId && session.runState?.run.id === runId && typeof revision === "number"
+        && Number.isSafeInteger(revision) && revision > charge.campaignRevision) {
+        campaignCharge = { runId, campaignRevision: revision };
+      }
     });
   });
   const FIRST_REHEARSAL_RUN_KEY = "tabiya.first-rehearsal.v1.run";

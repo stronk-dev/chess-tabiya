@@ -3683,7 +3683,7 @@ submission-review-browser-check:
 
 .PHONY: campaign-actions-check campaign-actions-browser-check campaign-history-check campaign-history-browser-check
 campaign-actions-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/modal-boundary.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/modal-boundary.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/branch-groups.test.ts
 
 .PHONY: campaign-preparation-browser-check campaign-result-browser-check
 campaign-preparation-browser-check:

@@ -59,7 +59,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
 Current checked inventory through [[D3682]]: 273 UX items complete, 272 live and 24
-retired; 1,717 live ledger items, all assigned, alongside 1,553 done and 161 refused. The 462
+retired; 1,715 live ledger items, all assigned, alongside 1,555 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -67,7 +67,18 @@ incomplete; the nine milestones remain four active/five blocked. The installed p
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
-Latest Campaign journey repair: [[D3677]]–[[D3679]] disclose the earned charge at every
+Latest Campaign consistency repair: [[D3680]] returns the original saved group after another
+group is created; missing or malformed saved identities refuse without provider work or mutation.
+[[D3682]] preserves a newer confirmed current-run revision when an older immutable receipt
+arrives. Both predecessor regressions are permanent controls; actual desktop/phone two-tab
+journeys deliver the older response before another successful one-charge action. Complete normal
+`make roadmap-receipt verify-awake build test-browser-ci-awake` passes 4,588 software cases/365
+files, seven unchanged-budget performance cases/four files, 247 content cases/25 files and
+285 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells
+and clean types/governance/packaging/build. [[D3681]] still needs its narrow wording amendment.
+No full capability, milestone, content, remote-CI or native release-image promotion follows.
+
+Previous Campaign journey repair: [[D3677]]–[[D3679]] disclose the earned charge at every
 charged entrance, retain the exact unresolved gesture for explicit retry and restore its
 authorized event tail without double-spending. Matching overlap is verified; conflicting
 history and gaps still refuse. Exhaustion stays in the active dialog and Actions panel,
@@ -78,8 +89,8 @@ controls and two browser journeys are permanent. Complete normal `make verify-aw
 test-browser-ci-awake` passes 4,582 software cases/365 files, seven unchanged-budget performance
 cases/four files, 246 content cases/25 files, types/governance/packaging/build and 283 browser
 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112
-composition cells. [[D3680]]/[[D3682]] retain exact group-identity and late-receipt ordering
-repairs; [[D3681]] requires a narrow truthful zero-income wording amendment. No full Campaign,
+composition cells. [[D3680]]/[[D3682]] are now closed by the consistency repair above;
+[[D3681]] requires a narrow truthful zero-income wording amendment. No full Campaign,
 content graduation, milestone/capability, native release-image or remote-CI promotion follows.
 
 Latest foundation validation wave: [[D3676]] adds twelve both-colour populated legal

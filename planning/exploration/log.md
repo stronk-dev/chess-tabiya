@@ -24904,3 +24904,35 @@ Campaign was the one capability with no API, route or content. Now:
   86 production pack documents/zero official graduates. The full 1.0 goal remains active and
   accurate. This is no whole Campaign, foundation qualification, content, remote CI or native
   release-image promotion. No push, publication, deployment or broad staging is authorized.
+
+## 2026-10-10 — D3680/D3682: exact Campaign replay and revision ordering
+
+- Under implementing campaign-core §2.2, group replay resolves the groupId in the original
+  command result, never the newest group. The actual HTTP control earns existing resources,
+  creates two groups and replays the first while preserving the second cursor, immutable
+  receipt and balance. Its predecessor returned the second group. Five additional malformed
+  result controls refuse without provider work, evidence jobs or stored-run mutation.
+- App settlement advances only a valid newer integer revision for the currently mounted run.
+  The newer-read/older-receipt mounted control reproduces predecessor revision 5 versus 9;
+  crossed-run, invalid and later/earlier controls preserve the original receipt. Actual desktop
+  and phone journeys hold the first committed response, mutate from a second authorized tab,
+  confirm the newer encounter read, deliver the old receipt and successfully spend once again
+  using the newer revision. All 64 board targets retain their unchanged edge.
+- Six software additions, one actual content/API addition and two browser additions are
+  permanent. Focused types, 328 Campaign software controls, 60 client-history controls,
+  six actual Campaign API controls and all eleven action browser journeys pass. The first
+  browser attempt catches test setup errors: missing nodeId on the second request and an open
+  phone companion blocking Map. Supply the exact original node and close that companion;
+  preserve all production assertions and deadlines.
+- Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  4,588 software cases/365 files; seven unchanged-budget performance cases/four files;
+  247 content cases/25 files; clean types/governance/packaging/build; 220 smoke, five content,
+  59 matrix and one packaged-default browser pass (285 total), one optional Maia skip,
+  zero retries, all 150 input/112 composition cells. No assertion or budget is weakened.
+- Ledger/state/queue/docs/roadmap close together: 3,431 rows; 1,555 done, 161 refused,
+  1,715 assigned live, zero untriaged; 462 historical prose-only closures unchanged.
+  UX remains 273 complete/272 live/24 retired; milestones four active/five blocked;
+  all fourteen whole capabilities incomplete; 86 production packs/zero official graduates.
+  D3681's mandated zero-income wording remains author-held. No economy, source, reward,
+  permission, whole Campaign, native release-image or remote-CI promotion. The full 1.0
+  goal remains active. Other visible research edits/local artifacts are not included.

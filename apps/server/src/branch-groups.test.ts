@@ -124,6 +124,41 @@ describe("branch-group service and REST contract", () => {
   const stores: SQLiteRunStorage[] = [];
   afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
 
+  it.each([null, {}, { groupId: 1 }, { groupId: "" }, { groupId: "missing-group" }])("refuses a replay with no exact saved group instead of selecting the latest: %j", async operationResult => {
+    const environment = await setup(); stores.push(environment.storage);
+    const id = "group-replay-refusal";
+    const created = await runFrom(await request(environment.handler, "POST", "/runs", body(id)));
+    const first = await request(environment.handler, "POST", `/runs/${id}/group`, {
+      source: "hand_picked", candidates: ["e2e4", "d2d4"], at,
+    });
+    expect(first.status).toBe(200);
+    await request(environment.handler, "POST", `/runs/${id}/rewind`, { nodeId: created.nodes[0]!.id, at });
+    const second = await request(environment.handler, "POST", `/runs/${id}/group`, {
+      source: "hand_picked", candidates: ["a2a3", "b2b3"], at,
+    });
+    expect(second.status).toBe(200);
+    await environment.queue.whenIdle();
+    const current = environment.storage.read(id)!.run;
+    expect(groupsFromEvents(current)).toHaveLength(2);
+    const selections = environment.selector.requests.length, jobs = environment.evidence.jobs.length;
+    environment.service.setCampaignGate({
+      isActiveEncounter: () => true,
+      replay: () => ({ kind: "replayed", run: current, emitted: [], campaign: { operationResult } }),
+      charge: () => { throw new Error("replay must not charge again"); },
+      settleProviderFailure: input => { throw input.error; },
+      assistanceReceipt: () => undefined, origin: () => undefined, reviewBoundary: () => undefined,
+    });
+    const replay = await request(environment.handler, "POST", `/runs/${id}/group`, {
+      source: "hand_picked", candidates: ["e2e4", "d2d4"], at,
+      campaignCommand: { commandId: "saved-group-command", expectedCampaignRevision: 1, expectedPlayRevision: 1 },
+    });
+    expect(replay.status).toBe(500);
+    expect(await replay.json()).toMatchObject({ error: { code: "STORAGE_FAILURE" } });
+    expect(environment.storage.read(id)!.run).toEqual(current);
+    expect(environment.selector.requests).toHaveLength(selections);
+    expect(environment.evidence.jobs).toHaveLength(jobs);
+  });
+
   it("does not treat selections from different applied Elo bands as the same engine", () => {
     const base = { id: "maia-5m", name: "Maia3", version: "test", modelId: "maia3-test", seedHonored: false, eloHonored: true } as const;
     expect(sameEngine({ ...base, eloApplied: 1600 }, { ...base, eloApplied: 1600 })).toBe(true);

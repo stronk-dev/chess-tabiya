@@ -6,6 +6,86 @@ import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 
 for (const mobile of [false, true]) {
+  test(`Campaign actions preserve a newer encounter read when an older charge response arrives${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const campaignId = new URL(page.url()).pathname.split("/").at(-1)!;
+    await playPackNode(page, "f1-b"); // Existing seal grant plus resource reward: three charges.
+    const runId = await startNode(page, "f2-a");
+    await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, runId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+    const edge = await playableBoard(page);
+    const path = `**/runs/${runId}/fork`;
+    let release!: () => void, delivered!: () => void;
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    const delivery = new Promise<void>(resolve => { delivered = resolve; });
+    let held: { writer: string; campaignRevision: number } | undefined;
+    const sent: { nodeId: string; campaignCommand: { expectedCampaignRevision: number; commandId: string } }[] = [];
+    await page.route(path, async route => {
+      if (route.request().method() !== "POST") { await route.continue(); return; }
+      sent.push(route.request().postDataJSON());
+      if (sent.length !== 1) { await route.continue(); return; }
+      const response = await route.fetch();
+      expect(response.ok()).toBe(true);
+      const result = await response.json() as { campaign: { campaignRevision: number } };
+      held = { writer: route.request().headers()["x-writer-id"]!, campaignRevision: result.campaign.campaignRevision };
+      await gate;
+      await route.fulfill({ response });
+      delivered();
+    });
+    let otherTab: Page | undefined;
+    try {
+      await page.getByRole("button", { name: "Actions", exact: true }).click();
+      await page.getByRole("button", { name: "Fork branch", exact: true }).click();
+      const dialog = page.getByRole("dialog", { name: "Name the experiment." });
+      await dialog.getByLabel("What are you trying?").fill("First saved experiment");
+      await dialog.getByRole("button", { name: "Create branch", exact: true }).click();
+      await expect.poll(() => held !== undefined).toBe(true);
+      expect(held!.writer).toBeTruthy();
+      await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+      const collapse = page.getByRole("button", { name: "Collapse companion", exact: true });
+      if (await collapse.isVisible()) await collapse.click();
+      await page.getByRole("complementary", { name: "Campaign encounter" }).getByRole("button", { name: "Map", exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`/campaign/${campaignId}$`, "u"));
+      otherTab = await page.context().newPage();
+      await otherTab.goto(`/campaign/${campaignId}`);
+      await expect(otherTab.getByRole("button", { name: "Continue encounter", exact: true })).toBeVisible();
+      const newer = await otherTab.request.post(`/runs/${runId}/fork`, {
+        headers: { "x-writer-id": held!.writer },
+        data: { nodeId: sent[0]!.nodeId, label: "Other tab", intent: "Second saved experiment", campaignCommand: {
+          commandId: `cmd-${randomUUID()}`, expectedCampaignRevision: held!.campaignRevision,
+          expectedPlayRevision: ((await (await otherTab.request.get(`/runs/${runId}/events`)).json()) as { events: DrillRun["events"] }).events.at(-1)!.seq,
+        } },
+      });
+      expect(newer.ok()).toBe(true);
+      const confirmed = await (await otherTab.request.get(`/campaign-runs/${campaignId}`)).json() as { campaignRun: { revision: number }; charges: { balance: number; spent: number } };
+      expect(confirmed.charges).toMatchObject({ balance: 1, spent: 2 });
+      expect(confirmed.campaignRun.revision).toBeGreaterThan(held!.campaignRevision);
+      await page.getByRole("button", { name: "Continue encounter", exact: true }).click();
+      await expect(page.getByTestId("campaign-strip-charges")).toContainText("1 remaining");
+      release();
+      await delivery;
+      await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+      await page.getByRole("button", { name: "Actions", exact: true }).click();
+      await page.getByRole("button", { name: "Fork branch", exact: true }).click();
+      await dialog.getByLabel("What are you trying?").fill("After the older receipt");
+      await dialog.getByRole("button", { name: "Create branch", exact: true }).click();
+      await expect(dialog).not.toBeVisible();
+      expect(sent).toHaveLength(2);
+      expect(sent[1]!.campaignCommand.expectedCampaignRevision).toBe(confirmed.campaignRun.revision);
+      const after = await (await page.request.get(`/campaign-runs/${campaignId}`)).json() as { charges: { balance: number; spent: number } };
+      expect(after.charges).toMatchObject({ balance: 0, spent: 3 });
+      if (await collapse.isVisible()) await collapse.click();
+      await playableBoard(page, edge);
+    } finally {
+      release();
+      if (held !== undefined) await delivery;
+      await page.unroute(path);
+      await otherTab?.close();
+    }
+  });
+
   test(`Campaign account deletion discloses progress and recovers stale consent${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
