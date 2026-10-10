@@ -775,7 +775,7 @@ never turns into an unguarded trait or hides baseline Play.
 **[[D813]] — the candidate-evidence adapter — is named as the dependency it is.** The accepted
 `shared-candidate-evidence-packet` implementation must first compile one exact legal population and
 its retained candidate events/readings. This RFC does **not** apply collectors per child. Stage B
-consumes one admitted `CandidatePopulationReceipt<"events_and_readings">` — containing **the same
+consumes one admitted `CandidatePopulationReceipt<typeof CANDIDATE_WIDE_SCOPE>` — containing **the same
 registered collectors' values** under the literal ids shipped by `tactical-collectors` (30, e.g.
 `rules.exchange.predicate.legal_exchange@1`, `rules.tactic.event.fork_allowed@1`,
 `rules.tactic.consequence.threat@1`, `rules.tactic.consequence.reply_breadth@1`) and
@@ -783,7 +783,7 @@ registered collectors' values** under the literal ids shipped by `tactical-colle
 `rules.pawn.event.dynamics@1`, `rules.king.reading.zone_state@1`) — plus the same run-owned exact
 legal map and the admitted bounded Maia population. The bot-local derivation first proves packet
 root/FEN/legal-set equality against that all-legal authority, then produces a sealed
-`CandidateFeatureSubset` whose rows are set-equal to **the admitted bounded Maia moves**, selected
+`CandidateFeatureSubset` whose rows are set-equal to **all admitted returned Maia moves**, selected
 from the all-legal packet rows. It retains packet/root/Maia population identities, all-legal and
 retained counts, omitted move identities, coverage `bounded_subset | legal_set_equal`, and every
 retained value's exact source id. It emits only `derived.opponent.candidate_feature_vector@1`. It
@@ -823,7 +823,82 @@ was built for, adding an opponent-side consumer *without widening the grading bo
 Multi-band Maia queries are **not** a projection here and never will be on current
 evidence ([[D817]]).
 
+### §5a — Draft amendment: truthful Stage-B packet handoff ([[D3662]])
+
+**Held for independent review.** This repairs the operand contract, not sampling,
+personality calibration, or a shipped Stage-B feature. The following types import
+the actual dependency; no bot-local detector, score table or evidence vocabulary is
+introduced:
+
+```ts
+type CandidateSourceRow = CandidatePopulationReceipt["packet"]["candidates"][number];
+interface CandidateFeatureSubset {
+  readonly packet: CandidatePopulationReceipt;
+  readonly root: BotRootIdentity;
+  readonly legalMapDigest: `sha256:${string}`;
+  readonly rows: readonly CandidateSourceRow[];
+  readonly omittedMoves: readonly string[];
+  readonly coverage: "bounded_subset" | "legal_set_equal";
+}
+```
+
+1. The adapter belongs inside the existing bot compiler's root/legal/source authority
+   boundary. It asserts its private root/legal seals and the shared packet receipt;
+   structural equality is not a substitute for any of those admissions. It accepts
+   only `events_and_readings`. Packet FEN equals the canonical run-owned root FEN;
+   packet legal UCIs and candidate UCIs each uniquely equal the complete sealed
+   legal map. Packet identity is position-based, not run-based: reuse at the same
+   position is valid, but the subset binds the current exact run/branch/node/event
+   head independently. An existing subset cannot be reused across those roots.
+2. Rows uniquely equal **every move in the admitted returned Maia page**, before
+   top-p selection or guard/trait masks. The current sampler retains all returned
+   rows, including zero final-mass rows. Selecting only eventual survivors loses
+   the rejected alternatives that explain the pick. Maia duplicates, illegal moves,
+   empty populations, mismatched request roots or missing candidate rows refuse;
+   a smaller returned page is valid bounded coverage, not incomplete legal evidence.
+3. Each row retains the packet's original `afterFen`, `events`, `readings` and
+   `abstentions` by reference. Event identity is its exact `projection` plus anchor
+   and operands; reading identity is its exact declared projection and payload.
+   Multiple facts with one projection remain multiple facts. A renderer/trait cannot
+   substitute a scalar flag, UCI substring, loose label, or freshly recollected fact.
+   The subset records all omitted legal UCIs; exact set equality determines coverage.
+4. A successfully completed collector with no matching event is not the same as an
+   unavailable collector. Preserve published projection-specific abstentions. Traits
+   must declare the exact projections they need and abstain when those inputs are
+   unavailable; absence is not automatically a positive classifier, an avoidance
+   claim, or an evaluation of a move. Semantic qualification and §2.5's independent
+   trait measurement gate still apply. Gathering evidence alone creates no new
+   transform and cannot change the existing twelve profiles' decisions.
+5. The derivation performs no move enumeration, collector invocation, provider call,
+   child evaluation or private cache. It consumes one already admitted packet and
+   the existing shared root delivery. The packet remains an internal execution
+   value, never a JSON object sent to the client or persisted as though its process
+   seal survives serialization. D10's full source/score-domain/deadline/real-profile
+   discharges remain mandatory; a join prototype does not discharge them.
+
+**Persistence gate, explicitly unresolved.** Stage-A `features: []` and replay remain
+unchanged. Before Stage B can land, an independently reviewed amendment must claim the
+run-schema/migration resource and specify a versioned decision-evidence snapshot:
+exact packet inputs/identity, all retained operands and abstentions, declared source
+reconstruction, wrong-root/altered-operand refusal, export/import, historical Stage-A
+replay and no-provider restart. It must also declare an actual measured profile,
+registered derived producer/consumer, bounded acquisition and visible explainable-pick
+consumer. No unversioned packet, empty-array widening or test-only profile can satisfy
+that gate. This amendment deliberately does not pretend the snapshot grammar exists.
+
+**Buildability evidence:** `packet-handoff.test.ts` in the existing fourth-author
+instrument imports the real packet/compiler/sampler, shows the old path is absent,
+checks reference-preserving bounded joins and zero-mass retained alternatives, and
+refuses forged/narrow/crossed/duplicate inputs. Its model is disposable, not a new
+production source or a persistence authority. Independent review remains required.
+
 ### §6 — The explainable pick record ([[D818]]/[[D822]])
+
+**Draft amendment, 2026-10-10 — [[D3662]], not accepted.** The Stage-A record below
+matches the delivered grammar: `features` is an empty `never[]`. The previous
+`CandidatePopulationReceipt["rows"][number]["features"]` index was not a type in
+the shipped dependency. Stage B's proposed handoff is §5a below; it does not authorize
+silently widening the existing persisted record or changing a profile's identity.
 
 `OpponentSelection` gains one optional object (run schema 0.17→0.18; absent on every
 historical selection and **never inferred** — the migration-5 precedent):
@@ -893,11 +968,7 @@ interface BotPolicyDerivation {
     readonly finalMass: number;
     readonly guard: BotConsideredGuard;
     readonly classifiers: readonly BotClassifierId[];
-    readonly features: readonly Readonly<{
-      readonly id: CandidatePopulationReceipt["rows"][number]["features"][number]["id"];
-      readonly value: string | number | boolean;
-      readonly sourceId: string;
-    }>[];
+    readonly features: readonly never[]; // delivered Stage A; Stage B is held at §5a
   }>[];
   readonly chosenMoveUci: string;
 }
@@ -937,8 +1008,9 @@ execution. `projectBotPolicyDecisionRecord` accepts only that execution and adds
 derivation digest. It cannot accept chosen moves, final weights, layer actions, classifier ids or
 guard losses from callers. It asserts exact root equality and set equality between `considered`,
 the admitted Maia population and every supplied feature/classifier view. The ID and reason unions
-are generated from `bot-profile-catalog`; feature ids are the exact shared candidate-packet feature
-union, never a comment-promised bot copy. Each `RegisteredBotProviderInput` retains the complete
+are generated from `bot-profile-catalog`; future Stage-B evidence identities come from the
+retained events/readings themselves (§5a), not a nonexistent scalar feature union.
+Each `RegisteredBotProviderInput` retains the complete
 admitted `ProviderEvidenceDelivery`—acquisition receipt, requested/actual identity, raw-response
 binding and payload—plus its canonical delivery digest through decision, persistence, replay and
 export. An adapter may not strip it into selected fields. An unregistered identifier, free-form reason, open parameter
@@ -1476,6 +1548,11 @@ selection record, never a parallel definitions store; **D937** — the endgame f
 as a named future measured layer (Open question 4).
 
 ## Changelog
+
+- 2026-10-10: D3662 repairs the draft Stage-B handoff against actual packet rows,
+  including typed event/reading/abstention retention and pre-mask Maia membership.
+  Stage-A empty features remain pinned; production, versioned replay, a measured
+  profile and shared-packet D10 remain held. This author repair is not acceptance.
 
 - 2026-10-04: D3368 implements §3's shared delivery assertions and private immutable
   source-view admission at adaptation, compiler and replay. Forged Maia produces typed

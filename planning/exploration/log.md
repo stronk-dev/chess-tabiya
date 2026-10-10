@@ -24444,3 +24444,31 @@ Campaign was the one capability with no API, route or content. Now:
   remains 273 completed/272 live/24 retired UX items, 1,538 done/1,711 assigned live/161 refused
   ledger items and no official graduated pack or completed whole 1.0 capability. No new tracker,
   bulk capture, authored content, retention rule, native release-image or remote CI is claimed.
+
+### 2026-10-10 — D3662 truthful bot Stage-B handoff author repair
+
+- Inspected actual CandidatePopulationReceipt, candidate rows, bot compiler and sampler.
+  The RFC's `rows[].features` path does not exist; the delivered Stage-A decision correctly
+  exposes `features: never[]`. The sampler retains all returned rows even when top-p or
+  a later guard leaves zero final mass. A survivor-only evidence join would discard the
+  alternatives needed to explain a pick.
+- Authored held bot-policy §5a over the actual `packet.candidates` event/reading/abstention
+  operands, original references, complete returned Maia membership, exact legal equality
+  and separately bound run root. Kept absence distinct from unavailable and forbid a new
+  collector pipeline, unversioned packet persistence or profile changes. Versioned replay,
+  real measured profile, producer/consumer and shared packet D10 remain explicit gates.
+- Extended the existing disposable fourth-author instrument instead of adding a tracking
+  system or shadow production module. Seventeen probes import actual packet/root/legal/
+  sampler code, preserve special-move identities and refuse forged/narrow/crossed/duplicate
+  inputs. The pure join probe does not claim to enforce the production compiler's private
+  root/provider seals or implement replay; the draft requires those real boundaries.
+- `make bot-policy-fifth-author-repair` exits zero: 38 earlier author controls plus
+  six fourth-author controls and 17 new probes; both existing TypeScript checks pass.
+  D3662 is recorded as blocked on independent review/persistence, not closed or accepted.
+  Production code, authored content, decisions and calibration are unchanged. The unchanged
+  full software/content/browser reading remains the preceding D3660/D3661 batch; no fresh
+  full suite, exact-revision remote CI, official graduation or 1.0 completion is claimed.
+- The current governance aggregate exits zero. After the register gains the explicit
+  draft checkpoint, roadmap-check correctly refuses its old register-row anchor;
+  the existing anchor is refreshed to that exact current row. No checker, historical
+  test, qualification or milestone state is weakened.

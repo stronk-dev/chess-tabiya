@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3661]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3662]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,22 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3661]]: 273 UX items complete, 272 live and 24
-retired; 1,711 live ledger items, all assigned, alongside 1,538 done and 161 refused. The 462
+Current checked inventory through [[D3662]]: 273 UX items complete, 272 live and 24
+retired; 1,712 live ledger items, all assigned, alongside 1,538 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest bot contract checkpoint: [[D3662]] repairs the held Stage-B packet handoff in
+bot-policy §5a against exact retained events, readings and abstentions. All returned
+Maia alternatives survive before top-p/masking, including zero final mass. Seventeen
+actual-packet author probes and 44 retained controls pass with both TypeScript checks
+under the existing Make target. Independent review, versioned persisted evidence,
+measured profiles, shared source/D10 closure and visible explainable picks remain open.
+No bot behaviour, source, schema, calibration, milestone or whole capability changes.
 
 Latest foundation optimization: [[D3658]] omits unused whole-board defense maps while preserving
 complete legal replay, both recorded consequence arms and every receipt. Five predecessor failures,

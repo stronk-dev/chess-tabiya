@@ -325,7 +325,7 @@
       "completion": {
         "evidence": [
           "partial",
-          "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."
+          "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately. D3662 repairs the draft Stage-B handoff against actual packet events/readings/abstentions and all returned Maia alternatives; independent review and versioned decision evidence, measured profile, source/D10 and visible-consumer closure remain required."
         ],
         "state": [
           "partial",
@@ -919,7 +919,7 @@
             {
               "kind": "rfc",
               "id": "bot-policy.md",
-              "digest": "sha256:8170db8a7d61f5ccbb251bf995eeb8b30280370481d758333d5f00bde370c1bc"
+              "digest": "sha256:8df99e5b923947b7ee4317bf013d07cede1ca0c3fefa0f84f3386d2fabe73ada"
             },
             {
               "kind": "work_state",

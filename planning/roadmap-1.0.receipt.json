@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:eb978da117b4bd4fc22eb4171f907ef0139bd002c41fa41dbe9de507c26dca59",
+    "roadmap": "sha256:1985c177dd207947af6f9fdc5a40703ba1a0509a98a6a84c66e2785958ef93ae",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:28ebaf955f1a294eb86ee9272c370acaa1311804d19eb961f6af79ac4b57adfe",
-    "rfcRegister": "sha256:f5e30d387e6d4c07a6d5bcca14dacad0ec0341465406e5aa8370ed5b9f87712f",
+    "workState": "sha256:b1b4c63eca631e2f5f0e84d0b540d9798f0ac0e573a15494b42b158ae32f6ae4",
+    "rfcRegister": "sha256:75ad3c793ceab3ec1f03a72013843aa521b18e281c998ae9cfd8b3549da0a138",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 627,
       "doing": 14,
-      "blocked": 1070,
+      "blocked": 1071,
       "done": 1538,
       "refused": 161
     },
@@ -305,7 +305,7 @@
           {
             "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:8170db8a7d61f5ccbb251bf995eeb8b30280370481d758333d5f00bde370c1bc"
+            "digest": "sha256:8df99e5b923947b7ee4317bf013d07cede1ca0c3fefa0f84f3386d2fabe73ada"
           },
           {
             "kind": "work_state",
@@ -1834,7 +1834,7 @@
       "completion": {
         "evidence": [
           "partial",
-          "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."
+          "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately. D3662 repairs the draft Stage-B handoff against actual packet events/readings/abstentions and all returned Maia alternatives; independent review and versioned decision evidence, measured profile, source/D10 and visible-consumer closure remain required."
         ],
         "state": [
           "partial",

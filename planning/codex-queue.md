@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3662]] authors the held bot Stage-B handoff in bot-policy §5a against the actual
+shared packet, not nonexistent scalar `rows[].features`. Original events/readings/
+abstentions and every admitted returned Maia row survive, including zero final-mass
+alternatives. The existing author target passes 61 controls and both TypeScript checks,
+including 17 actual-packet probes. Independent review and the versioned persistence,
+measured-profile, source/D10 and visible explainable-pick contracts remain blocking;
+do not populate current `features: []`, change the twelve profiles or revive the legacy
+collector vector. This is contract progress, not a delivered personality or capability.
+
 [[D3660]]/[[D3661]] repair the Campaign→account consent journey under the existing
 portable-account-data §§1/3/5 and campaign-core §6.2 contracts. All five Campaign
 populations are visibly named and stale-bound; per-run deletion and retention policy

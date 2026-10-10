@@ -30352,6 +30352,15 @@
       "uxItems": [],
       "evidence": "tests/browser/campaign.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3662",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:18e5ed2cf84b17d6e428046ea02e5def43ce297458d283d84049ae3e0bb466cc",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
     }
   ]
 }

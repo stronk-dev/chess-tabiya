@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "files": ["contract.test.ts"]
+  "files": ["contract.test.ts", "packet-handoff.test.ts"]
 }
