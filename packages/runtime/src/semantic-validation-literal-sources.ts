@@ -100,8 +100,31 @@ export const CAPTURE_DEPENDENT_NEGATIVE_FAMILIES = Object.freeze([
   { id: "last-role", projection: "rules.transition.event.last_of_role", operation: "runtime.semantic.transition_edge" },
 ] as const);
 const captureSource = literalSources[0];
+
+// D3666: the two labelled excerpts below are separate branches of attacks_mask,
+// not a fabricated contiguous function. A pawn and distant kings have no slider,
+// enemy pawn or occupied attack/defence edge before or after the isolated push.
+// Resetting the halfmove clock proves the operation completed actual legal play.
+// These cases assert absence only, never the strategic value of the advance.
+const contactRules = {
+  sourceRevision: captureSource.sourceRevision,
+  licence: captureSource.licence,
+  url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+  text: "attacks_mask pawn branch:\n        if bb_square & self.pawns:\n            color = bool(bb_square & self.occupied_co[WHITE])\n            return BB_PAWN_ATTACKS[color][square]\n\nattacks_mask king branch:\n        elif bb_square & self.kings:\n            return BB_KING_ATTACKS[square]\n",
+} as const;
+const CONTACT_NEGATIVE_FAMILIES = ["occupied_attack", "occupied_defence", "slider_ray", "pawn_contact", "defended_duty"] as const;
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
   ...literalSources,
+  ...CONTACT_NEGATIVE_FAMILIES.map(family => ({
+    ...contactRules,
+    sourceId: `python-chess.${family}`,
+    operation: { id: "runtime.semantic.transition_edge", version: 1 } as const,
+    cases: ([
+      [`isolated-push.white`, `rules.transition.event.${family}`, "7k/8/8/8/8/8/P7/7K w - - 7 1", "a2a3", "7k/8/8/8/8/P7/8/7K b - - 0 1", null],
+      [`isolated-push.black`, `rules.transition.event.${family}`, "7k/p7/8/8/8/8/8/7K b - - 7 1", "a7a6", "7k/8/p7/8/8/8/8/7K w - - 0 2", null],
+    ] satisfies readonly RuleFixture[]).map(fixture => ruleCase(family, fixture)),
+  })),
   ...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.map(family => ({
     sourceId: `python-chess.capture.${family.id}`,
     sourceRevision: captureSource.sourceRevision,

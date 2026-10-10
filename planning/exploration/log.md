@@ -24602,3 +24602,39 @@ Campaign was the one capability with no API, route or content. Now:
   active/five blocked, and zero packs graduate officially. Missing sources/usefulness,
   semantic qualification, bot calibration, Campaign curriculum/rewards and full release
   journeys remain open. No remote-CI, native release-image or readiness-to-push claim.
+
+### 2026-10-10 — D3666 legal transition-contact negatives
+
+- Continued the admitted semantic-validation-authority Slice B, not the held orientation
+  or recorded-window reach amendments. Recorded and assigned D3666 before implementation.
+  The new-row sync correctly refuses its momentary untriaged state; the explicit transition
+  uses the existing evidence-foundation owner and doing timestamp, with no completion proof
+  attached to unfinished work.
+- Fifteen permanent controls first fail: ten exact canonical cases are absent and all five
+  negative profile cells remain required. Ten legal both-colour pawn advances then instantiate
+  independently cited pawn/king movement rules at python-chess commit
+  `3516d7c6c0879af724c2855fac5a304a4ef40949` (GPL-3.0-or-later). The separately labelled
+  source fragments are not represented as one contiguous upstream function.
+- Actual transition operations complete, emit clock reset and omit occupied attack/defence,
+  slider ray, pawn contact and defended duty. Borrowed input, subject, operation or expectation
+  refuses before invocation. All 54 focused controls pass. All 93 prior cases remain; the
+  normal sole writer produces 103 passing cases (57 positive / 46 negative), 81 subjects,
+  53 population receipts, eight external receipts and zero fully qualified subjects.
+- The first broader foundation run passes the new cases and fails the exact census guard:
+  46 negatives are present while its prior assertion names 36. The guard now names the ten
+  additions, retaining exact totals, per-case execution and all positive/negative assertions.
+  No production predicate, waiver, test timeout, content, permission or gate is weakened.
+  Broader/full verification and same-commit tracker closeout follow.
+- The corrected normal `make evidence-foundation-check typecheck` passes all 640 broader
+  controls and clean workspace types. Complete sequential `make roadmap-receipt verify-awake
+  build` exits zero: 4,474 software cases/365 files, seven unchanged-budget performance
+  cases/four files, 246 content cases/25 files, types/governance/packaging and build. No UI or
+  collector-logic change; the preceding 271-browser result is historical, not a fresh run.
+- D3666 closes only five negative arms, with ledger, durable state, queue, docs and the existing
+  roadmap checkpoint reconciled together. Inventory: 3,415 rows, 1,542 done, 161 refused and
+  1,712 assigned live (627 todo, fourteen doing, 1,071 blocked), zero untriaged. UX remains
+  273 complete/272 live/24 retired; all fourteen whole capabilities remain incomplete and
+  zero packs graduate. Four contact families still require positive and orientation arms;
+  pawn contact still requires orientation. Independent orientation/reach reviews, source
+  adoption, useful guidance, calibrated bots and full release proof remain. No native image,
+  remote-CI, readiness-to-push or whole-capability claim follows from this checkpoint.

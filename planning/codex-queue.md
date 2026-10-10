@@ -12,6 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3666]] strengthens the admitted semantic-validation Slice B: ten source-bound,
+both-colour isolated pawn advances complete through the actual transition operation,
+emit clock reset and omit occupied attack/defence, slider ray, pawn contact and defended
+duty. Fifteen new canonical/profile controls fail on the predecessor; all 54 focused
+controls now pass, alongside all 640 broader foundation controls and clean types. All 93
+prior cases remain; the sole writer reports 103 passing cases and zero fully qualified subjects.
+D3666 is closed with ledger/state/roadmap closeout. Normal full verification/build passes
+4,474 software, seven unchanged-budget performance and 246 content cases, governance,
+packaging and build. No orientation,
+reach, learner eligibility, source acquisition, pack or whole-capability change follows.
+
 [[D3665]] is closed locally under Review §7/O7.3: exact run/branch/move/entry admission and
 one persistent native Analyze/Hide action. Both crossed identities and native disabling
 fail on the predecessor. All 185 focused controls, clean types and actual desktop/touch-phone

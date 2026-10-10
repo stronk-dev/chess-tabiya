@@ -2,6 +2,376 @@
   "schemaVersion": 1,
   "cases": [
     {
+      "id": "cited.python-chess.occupied_attack.isolated-push.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.occupied_attack",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/P7/7K w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "7k/8/8/8/8/P7/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.occupied_attack",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "7e817ff03cf73499a8d534e8463ed70581dee3d0528f011e2af878512dfe9ee8"
+      }
+    },
+    {
+      "id": "cited.python-chess.occupied_attack.isolated-push.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.occupied_attack",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/p7/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "7k/8/p7/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.occupied_attack",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "139eaefcbe15ece6386b05ce7a578c02b12d9a2f03b0eb44575f16c0190b5432"
+      }
+    },
+    {
+      "id": "cited.python-chess.occupied_defence.isolated-push.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.occupied_defence",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/P7/7K w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "7k/8/8/8/8/P7/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.occupied_defence",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "68a79776423996c333c1eaf9da5371ee36cf7ef2abd0f31d0f2b891c9ae27852"
+      }
+    },
+    {
+      "id": "cited.python-chess.occupied_defence.isolated-push.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.occupied_defence",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/p7/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "7k/8/p7/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.occupied_defence",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "3baadfa7c84532633833b8d8a2f332da9054d1d01ce051f1842061958dd9cde4"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.isolated-push.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/P7/7K w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "7k/8/8/8/8/P7/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.slider_ray",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "eede5bd2934cc987f56a59d2191912385b5cac92fa792867b5bfd3906c2e1cee"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.isolated-push.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/p7/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "7k/8/p7/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.slider_ray",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "1980f296bcbfee0468b0093e882dbf46bea27dd300f9533fa47b6502ccdb369a"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn_contact.isolated-push.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.pawn_contact",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/P7/7K w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "7k/8/8/8/8/P7/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn_contact",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "f7047af1804aeb93c1b9e88e89db192d85031bf449376a3898ec5ea5cd17ba2f"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn_contact.isolated-push.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.pawn_contact",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/p7/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "7k/8/p7/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn_contact",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "8cec906f98b2f2a7bfa7946217e4e2f41a98ee61841f72ad7f37b19bec1df0d5"
+      }
+    },
+    {
+      "id": "cited.python-chess.defended_duty.isolated-push.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.defended_duty",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/P7/7K w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "7k/8/8/8/8/P7/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.defended_duty",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "638405a1ee603c40615e0635f7ba5cc0f79238aabea2a309f76af682d328de5b"
+      }
+    },
+    {
+      "id": "cited.python-chess.defended_duty.isolated-push.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.defended_duty",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/p7/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "7k/8/p7/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.defended_duty",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "33eb7099bbaf58a87ff0b8b4168d62b2e3195e74b02a7599454d651cc7ac4ffd"
+      }
+    },
+    {
       "id": "cited.python-chess.capture.direct.white",
       "version": 1,
       "subject": {

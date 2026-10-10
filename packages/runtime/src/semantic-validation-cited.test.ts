@@ -16,6 +16,59 @@ const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT
 const cases = raw.map(parseSemanticValidationCase);
 const byId = new Map(cases.map(value => [value.id, value]));
 
+// D3666: a played pawn advance resets the clock but creates no occupied contacts
+// when the only other pieces are distant kings. These are completed legal
+// negatives, not invalid input or an omitted helper argument.
+const contactFamilies = ["occupied_attack", "occupied_defence", "slider_ray", "pawn_contact", "defended_duty"] as const;
+const contactRows = contactFamilies.flatMap(family => ["white", "black"].map(color => ({
+  family, color, caseId: `cited.python-chess.${family}.isolated-push.${color}`,
+})));
+
+describe("D3666 completed contact negatives", () => {
+  it.each(contactRows)("$caseId records the played pawn advance without inventing contacts", async row => {
+    const value = byId.get(row.caseId);
+    expect(value, `missing source-bound case ${row.caseId}`).toBeDefined();
+    expect(value!.subject).toEqual({ kind: "event", projection: {
+      id: `rules.transition.event.${row.family}`, version: 1,
+    } });
+    expect(value!.arm).toBe("semantic_negative");
+    expect(value!.operation).toEqual({ id: "runtime.semantic.transition_edge", version: 1 });
+    const receipt = await executeSemanticValidationCase(value!, SEMANTIC_VALIDATION_RESOLVERS, byId);
+    expect(receipt).toMatchObject({ status: "passed", resultKind: "completed", invocations: 1,
+      targetCount: 0, failure: null });
+    expect(receipt.otherCount).toBeGreaterThan(0);
+    const result = await SEMANTIC_VALIDATION_OPERATIONS[value!.operation.id].invoke(value!.input as never);
+    const clock = selectSemanticTargets(result, { kind: "event", projection: {
+      id: "rules.transition.event.clock_reset", version: 1,
+    } });
+    expect(clock).toHaveLength(1);
+    expect(observationEvidence(clock[0]!).payload).toMatchObject({
+      mover: { color: row.color, role: "pawn" }, detail: { pawnMove: true, capture: false },
+    });
+  });
+
+  it.each(contactFamilies)("%s binds its negatives without waiving other validation arms", async family => {
+    const projection = { id: `rules.transition.event.${family}`, version: 1 };
+    const subject = { kind: "event" as const, projection };
+    const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
+    expect(profile.semanticNegative).toMatchObject({ disposition: "present", refs: [
+      { id: `cited.python-chess.${family}.isolated-push.white` },
+      { id: `cited.python-chess.${family}.isolated-push.black` },
+    ] });
+    expect(profile.orientation.disposition).toBe("required");
+    expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
+    const value = byId.get(`cited.python-chess.${family}.isolated-push.white`)!;
+    const capture = byId.get("cited.python-chess.capture.direct.white")!;
+    for (const edit of [{ input: capture.input }, { subject: capture.subject },
+      { arm: "positive", expectation: { kind: "emits", minimum: 1 } },
+      { operation: { id: "runtime.semantic.local_edge", version: 1 } }]) {
+      const forged = parseSemanticValidationCase({ ...value, ...edit });
+      expect(await executeSemanticValidationCase(forged, SEMANTIC_VALIDATION_RESOLVERS, byId))
+        .toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_AUTHORITY_INVALID" } });
+    }
+  });
+});
+
 const families = [
   { id: "capture", projection: "rules.transition.event.capture", operation: "runtime.semantic.transition_edge", examples: ["direct", "en-passant", "castle-negative"] },
   { id: "zeroing", projection: "rules.transition.event.clock_reset", operation: "runtime.semantic.transition_edge", examples: ["pawn", "capture", "castle-negative"] },
@@ -66,8 +119,9 @@ describe("source-grounded literal event validation", () => {
   it("closes only the four legal-negative cells; preserves all prior cases and orientation debt", () => {
     expect(rows).toHaveLength(24);
     expect(cases.filter(value => rows.some(row => row.caseId === value.id))).toHaveLength(24);
-    const added = new Set(CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
-      ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)));
+    const added = new Set([...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
+      ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)),
+      ...contactRows.map(row => row.caseId)]);
     expect(cases.filter(value => !rows.some(row => row.caseId === value.id) && !added.has(value.id))).toHaveLength(63);
     for (const family of families) {
       const subject = { kind: "event" as const, projection: { id: family.projection, version: 1 } };

@@ -278,7 +278,13 @@ giving 63 cases (41 positives, 22 negatives). D3639 adds 24 source-bound literal
 for capture, clock reset, check and castling-rights loss, bringing that checkpoint to 87
 (57 positives, 30 negatives). D3663 adds six source-bound legal castling negatives for
 capture class, removed defender and last-of-role: the current total is 93 (57 positives,
-36 negatives). Castling touches a friendly rook but removes no piece; each completed
+36 negatives). D3666 adds ten both-colour legal isolated-pawn-advance negatives for
+occupied attack/defence, slider ray, pawn contact and defended duty, bringing the total
+to 103 (57 positives, 46 negatives). The complete operation must emit clock reset while
+omitting each contact family; exact input/subject/operation/expectation borrowing refuses.
+The source store retains separately labelled pawn and king branches of the same pinned
+python-chess movement function, not a fabricated contiguous excerpt. Castling touches a
+friendly rook but removes no piece; each completed
 operation emits the real castling event and omits the capture-dependent subject.
 All prior cases remain. Both colors have completed legal hard
 negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
@@ -291,7 +297,7 @@ at a fixed commit, with attribution and licence; the four additions were compare
 with that pinned upstream source. Resolution checks the
 exact source, revision, licence, excerpt and proposition, then binds its case, subject,
 expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
-lookup, caller-provided source or protected owner-store bootstrap is involved. All 34 cited cases run
+lookup, caller-provided source or protected owner-store bootstrap is involved. All 44 cited cases run
 through actual registered production operations. This is not independent strategic judgement or a new
 learner permission. The source store is excluded from the production runtime import closure.
 

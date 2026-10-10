@@ -30388,6 +30388,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/review-map-remainder.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3666",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7049cbf2544a9960c5ac54f5554533219fd0b94306ebe2426336cec8392f177c",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

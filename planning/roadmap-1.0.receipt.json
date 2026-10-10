@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a224245373018aff532dfe799be0b6e69cf356c9cf7945bda1935f9d9c5d861b",
+    "roadmap": "sha256:aaccf6a77cb80569b6f731ab21b0f3eae4c218384451130281663b09de08fbce",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:c49c207e5cccb404d3463e1a98b0d2aea7df0ef08954de0409cbc4aed990c090",
+    "workState": "sha256:96fdd9d17d0a95b04c1fc875e9e2a4287f68796069a221ff6a940f01ae3f27eb",
     "rfcRegister": "sha256:c70c8ccdb038cf0a8db1cca0db72406bb63bd5d3d12595652288b122cf1fa69f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 14,
       "blocked": 1071,
-      "done": 1541,
+      "done": 1542,
       "refused": 161
     },
     "workItems": {
@@ -224,7 +224,7 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3663 closes exactly three capture-dependent semantic-negative arms through six source-bound both-colour legal castles. Actual local/transition operations complete, emit castling and omit capture class, removed defender and last-of-role. Ten new controls fail before case/profile admission, then all 39 cited and 625 broader foundation controls pass; input/subject/expectation borrowing refuses before invocation. The sole writer reports 93 passing canonical cases (all 87 prior retained), 81 subjects, 53 population receipts, eight external receipts and zero fully qualified subjects. Missing-capture injection, orientation/reach drafts and learner eligibility are unchanged. Complete normal make roadmap-receipt verify-awake build passes clean types, 4450 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance, packaging and build. The preceding 267-browser checkpoint is historical, not rerun for this validation-only batch. No new source computation, strategic judgement, authored pack, whole capability, graduation, release-image or remote-CI claim.",
+        "summary": "D3666 closes five negative arms with ten independently source-bound both-colour legal pawn advances for occupied attack/defence, slider ray, pawn contact and defended duty. Fifteen permanent controls fail on the predecessor; all 54 focused and 640 broader foundation controls pass with clean types. The actual transition operation emits clock reset while omitting the target, and input/subject/operation/expectation borrowing refuses before invocation. All 93 prior cases remain; the sole writer reports 103 passing cases, 81 subjects, 53 population receipts, eight external receipts and zero fully qualified subjects. Complete normal make roadmap-receipt verify-awake build passes 4474 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, types/governance/packaging and build. D3663's capture-dependent negatives remain. Orientation/reach drafts, learner eligibility, source computation, pack content, official graduation and whole-capability states are unchanged. The preceding 271-browser checkpoint is historical, not rerun for this validation-only wave; no native release-image or remote-CI result is claimed.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
