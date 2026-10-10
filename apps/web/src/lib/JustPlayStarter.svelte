@@ -23,10 +23,10 @@
   const startingSupport = presetDeclaration("quiet");
   const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const bands = Object.freeze([
-    { value: "1000", name: "First rung", detail: "More familiar human choices" },
-    { value: "1400", name: "Steady", detail: "A balanced rehearsal partner" },
-    { value: "1800", name: "Testing", detail: "Stronger practical resistance" },
-    { value: "2200", name: "Top measured rung", detail: "The hardest calibrated human-choice band" },
+    { value: "1000", name: "Model band 1000", detail: "Raw Maia model setting" },
+    { value: "1400", name: "Model band 1400", detail: "Raw Maia model setting" },
+    { value: "1800", name: "Model band 1800", detail: "Raw Maia model setting" },
+    { value: "2200", name: "Model band 2200", detail: "Raw Maia model setting" },
   ] as const);
   const families = $derived.by(() => {
     const grouped = new Map<BotRosterRow["reference"]["family"], BotRosterRow[]>();
@@ -63,7 +63,7 @@
     <fieldset class="bot-roster" aria-describedby="bot-roster-honesty">
       <legend>Opponent</legend>
       {#if roster.length === 0}
-        <p class="honest">The bot roster is not available here. Raw model rungs and the engine test are under Advanced.</p>
+        <p class="honest">The bot roster is not available here. Raw model bands and the engine test are under Advanced.</p>
       {/if}
       {#each families as family (family.family)}
         <section class="family" aria-label={family.label}>
@@ -94,9 +94,9 @@
         </section>
       {/if}
       <details class="advanced" bind:open={advancedOpen}>
-        <summary>Advanced: raw model rungs and the engine test</summary>
+        <summary>Advanced: raw model bands and the engine test</summary>
         <section class="ladder" aria-labelledby="human-ladder-title">
-          <div><strong id="human-ladder-title">Human-like ladder</strong><small>Maia models common human choices at four calibrated rungs.</small></div>
+          <div><strong id="human-ladder-title">Maia model bands</strong><small>Choose a raw model setting, not a measured bot strength.</small></div>
           <div class="opponent-grid">
             {#each bands as band}
               <label class:checked={opponent === band.value}>

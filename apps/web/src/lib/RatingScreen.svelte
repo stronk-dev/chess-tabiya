@@ -91,7 +91,7 @@
   <header>
     <p class="eyebrow">Rated games</p>
     <h1 id="rating-title">Your measured record</h1>
-    <p>Results against the calibrated human-choice opponent ladder. This record never grades a move or changes what a coach says about it.</p>
+    <p>Your private results against Maia model-band opponents, on Tabiya's internal scale. This record never grades a move or changes what a coach says about it.</p>
     {#if onOpenProfile}<p><a href="/profile" onclick={(event) => { event.preventDefault(); onOpenProfile(); }}>Your profile: the openings, habit cards and observations behind your saved games</a></p>{/if}
   </header>
 
@@ -111,10 +111,10 @@
         <form onsubmit={(event) => { event.preventDefault(); void start(); }}>
           <label>Opponent
             <select value={selectedBand} disabled={starting} onchange={(event) => selectedBand = event.currentTarget.value as typeof selectedBand}>
-              <option value="1000">Band 1000 · first rung</option>
-              <option value="1400">Band 1400 · steady</option>
-              <option value="1800">Band 1800 · testing</option>
-              <option value="2200">Band 2200 · top measured rung</option>
+              <option value="1000">Model band 1000</option>
+              <option value="1400">Model band 1400</option>
+              <option value="1800">Model band 1800</option>
+              <option value="2200">Model band 2200</option>
             </select>
           </label>
           <label>Your side

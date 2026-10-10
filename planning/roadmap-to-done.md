@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3663]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3664]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3663]]: 273 UX items complete, 272 live and 24
-retired; 1,712 live ledger items, all assigned, alongside 1,539 done and 161 refused. The 462
+Current checked inventory through [[D3664]]: 273 UX items complete, 272 live and 24
+retired; 1,712 live ledger items, all assigned, alongside 1,540 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -79,6 +79,18 @@ types/governance/packaging and build. There is no UI or collector-logic change; 
 267-browser checkpoint below is historical, not rerun for this validation-only batch.
 Orientation/reach drafts, learner permissions, official graduation and whole milestones
 remain open. No exact-revision remote-CI or release-image result is claimed.
+
+Latest bot presentation repair: [[D3664]] removes unmeasured raw-band calibration/strength
+claims across Play, Compare, Rating, shared resistance summaries and status. All four model-band
+selection payloads and twelve exact profile identities remain, as do the private internal rating
+scale, sampling, requested/applied bands and owner default/name holds. Three predecessor-red
+controls become passing regressions; 17 focused controls, clean types and six focused native
+desktop/phone journeys pass. Complete sequential `make roadmap-receipt verify-awake build
+test-browser-ci-awake` passes 4,452 software cases/365 files, seven unchanged-budget performance
+cases/four files, 246 content cases/25 files, types/governance/packaging/build and 269 browser
+cases across all four tiers, one optional Maia skip, zero retries and 112 composition cells.
+This closes a visible trust defect, not actual calibration, richer personality, the held Stage-B
+implementation, a whole capability or release. No exact-revision remote-CI result is claimed.
 
 Latest bot contract checkpoint: [[D3662]] repairs the held Stage-B packet handoff in
 bot-policy §5a against exact retained events, readings and abstentions. All returned

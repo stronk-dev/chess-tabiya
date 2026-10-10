@@ -59,6 +59,9 @@ describe("learner rating surfaces", () => {
     } as unknown as DrillClientApi, onStart: start } });
     await vi.waitFor(() => expect(document.body.textContent).toContain("No rated-game result has been recorded"));
     expect(document.body.textContent).toContain("Start rated game");
+    expect(document.querySelector("header")!.textContent).toContain("Maia model-band opponents");
+    expect(document.querySelector("header")!.textContent).not.toContain("calibrated human-choice");
+    expect(document.querySelector(".start-card")!.textContent).toContain("model settings");
     expect(document.body.textContent).toContain("opponent band, your side, result or abandonment");
     expect(document.body.textContent).toContain("included in your account download and removed when you delete your account");
     expect(document.querySelector("button[type=submit]")?.getAttribute("aria-describedby")).toBe("rated-game-data-disclosure");

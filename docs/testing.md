@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make bot-label-check` covers the distinction between raw Maia model-band settings and
+measured profile strength through shared copy, mounted Play/Rating, all four unchanged
+selection payloads and resistance presentation. `make bot-label-browser-check` exercises
+actual desktop/phone Play and Rating, Compare replay and registered-profile resume journeys. These cases also run
+in ordinary software/browser verification; no calibration or profile behaviour is inferred
+from passing presentation tests.
+
 `make make-toolchain-check` proves standalone JavaScript recipes select the configured runtime
 even when an ambient `node` disagrees. It runs in the software gate; its fixtures invoke Make with
 two controlled executable choices rather than checking only a PATH string. Normal caller commands

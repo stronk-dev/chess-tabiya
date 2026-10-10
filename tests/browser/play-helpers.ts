@@ -18,7 +18,7 @@ export async function returnFromRunActions(page: Page): Promise<void> {
  * rungs live under the Advanced disclosure beneath the bot roster. Journeys that exercise the raw
  * rung opponent choose it explicitly here; `name` is the rung card's label.
  */
-export async function chooseRawRung(page: Page, name: "First rung" | "Steady" | "Testing" | "Top measured rung" | "Engine test" = "Steady"): Promise<void> {
+export async function chooseRawRung(page: Page, name: "Model band 1000" | "Model band 1400" | "Model band 1800" | "Model band 2200" | "Engine test" = "Model band 1400"): Promise<void> {
   const advanced = page.locator("details.advanced");
   if (!(await advanced.evaluate((element) => (element as HTMLDetailsElement).open))) await advanced.locator("summary").click();
   await page.getByLabel(name).check();

@@ -30370,6 +30370,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3664",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6f94fdbd621dfbfc5753858c7217b7a61adee4789480ebf86fa7216bfe98f06b",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

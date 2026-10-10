@@ -159,12 +159,19 @@ Mock-engine deployments serve a labelled "Mock Maia" through the same exchange.
 
 **Play.** `apps/web/src/lib/JustPlayStarter.svelte` shows the roster as three family sections of
 four band cards from `/capabilities` (title, one compiled mechanism sentence, `Uncalibrated`,
-availability copy) with the full grounded card for the selection; raw Maia rungs and the engine
+availability copy) with the full grounded card for the selection; raw Maia model bands and the engine
 test sit under **Advanced**. Nothing is preselected (the first-use default is the owner's D1611
 decision) and no display name is invented (D1610). A profile run shows "Bot · <family> · model band
 <band>" in the status bar, a degraded/abstained note when the last reply's guard stood aside, "Ask
 the bot again" after a failure (reusing the idempotency key for the same root), and "Play this bot
 again" (rematch).
+
+Raw band controls in Play, Compare replay and Rating use the literal model-band number,
+without strongest/steady/personality labels or a blanket calibration claim. The shared
+disclaimer distinguishes a model setting from an exact-profile strength measurement;
+raw-run status names the human-move model and recorded band. This does not recalibrate
+the existing private internal rating scale or alter requested/applied bands, sampling,
+profile identities or the owner's unresolved default/name decisions.
 
 ## Cards and `/capabilities`
 

@@ -1,7 +1,7 @@
 import { BOT_FAMILY_LABELS, type RunOpponentPolicy } from "@chess-tabiya/runtime";
 
 export const HUMAN_MODEL_RUNG_DISCLAIMER =
-  "Maia rung numbers are calibrated inside Tabiya. They are not FIDE, Lichess, or Chess.com ratings.";
+  "Maia band numbers are model settings. They are not FIDE, Lichess, or Chess.com ratings. A bot's strength is shown only after that exact profile is measured.";
 
 export function opponentStatus(
   mode: "human_common" | "strong_engine" | string,
@@ -10,8 +10,8 @@ export function opponentStatus(
   if (mode === "strong_engine") return "Engine test · outside the human-like ladder";
   if (mode !== "human_common") return "Specialized resistance";
   return targetElo === undefined
-    ? "Human-like opponent · rung not recorded"
-    : `Human-like opponent · rung ${targetElo}`;
+    ? "Human-move model · band not recorded"
+    : `Human-move model · band ${targetElo}`;
 }
 
 export function humanModelMaterialLimit(

@@ -342,8 +342,8 @@
 
   {#if onReplayResistance}
     <section class="replay-resistance" aria-labelledby="replay-resistance-title">
-      <div><p class="eyebrow">Try the same decision again</p><h3 id="replay-resistance-title">Change the practical resistance, not the recorded attempts.</h3><p>Your comparison stays saved. You choose the next rung; Tabiya never changes it silently.</p></div>
-      <label>Human-like rung <select bind:value={replayBand} disabled={replayBusy}><option value={1000}>First rung · 1000</option><option value={1400}>Steady · 1400</option><option value={1800}>Testing · 1800</option><option value={2200}>Top measured rung · 2200</option></select></label>
+      <div><p class="eyebrow">Try the same decision again</p><h3 id="replay-resistance-title">Change the practical resistance, not the recorded attempts.</h3><p>Your comparison stays saved. You choose the next model band; Tabiya never changes it silently.</p></div>
+      <label>Maia model band <select bind:value={replayBand} disabled={replayBusy}><option value={1000}>Model band 1000</option><option value={1400}>Model band 1400</option><option value={1800}>Model band 1800</option><option value={2200}>Model band 2200</option></select></label>
       <button type="button" disabled={replayBusy} aria-describedby={replayBusy ? "comparison-replay-busy" : undefined} onclick={() => void startResistanceReplay()}>{replayBusy ? "Starting replay…" : "Start a new replay"}</button>
       {#if replayBusy}<span id="comparison-replay-busy" role="status">Starting one replay with the selected resistance.</span>{/if}
       {#if replayError}<p role="alert">{replayError}</p>{/if}

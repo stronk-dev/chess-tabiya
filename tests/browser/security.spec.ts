@@ -48,7 +48,9 @@ test("application response security covers every client route family", async ({ 
   await expect(page.getByRole("heading", { name: "Choose the game you want to understand." })).toBeVisible();
 });
 
-test("Rating opens directly and survives reload while its authenticated API stays JSON", async ({ page }) => {
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+test(`Rating opens directly and survives reload while its authenticated API stays JSON at ${viewport.width}`, async ({ page }) => {
+  await page.setViewportSize(viewport);
   const handle = `security_rating_${randomUUID().slice(0, 8)}`;
   expect((await page.request.post("/auth/register", { data: { handle, password: PASSWORD } })).status()).toBe(201);
   const api = await page.request.get("/rating", { headers: { accept: "application/json" } });
@@ -57,10 +59,16 @@ test("Rating opens directly and survives reload while its authenticated API stay
   expect(api.headers()["vary"]).toBe("Accept");
   await page.goto("/rating");
   await expect(page.getByRole("heading", { name: "Your measured record", exact: true })).toBeVisible();
+  await expect(page.locator(".rating-view > header")).toContainText("Maia model-band opponents");
+  await expect(page.locator(".rating-view > header")).not.toContainText("calibrated human-choice");
+  await expect(page.locator(".start-card")).toContainText("model settings");
+  await expect(page.getByRole("combobox", { name: "Opponent", exact: true }).locator("option")).toHaveText(["Model band 1000", "Model band 1400", "Model band 1800", "Model band 2200"]);
   await page.reload();
   await expect(page.getByRole("heading", { name: "Your measured record", exact: true })).toBeVisible();
+  await expect(page.locator(".start-card")).not.toContainText("calibrated inside Tabiya");
   await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
 });
+}
 
 for (const action of ["register", "login"] as const) {
   test(`the served invitation module completes ${action} and joins the actual session`, async ({ page: host, browser, baseURL }) => {

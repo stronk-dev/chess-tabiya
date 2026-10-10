@@ -3495,6 +3495,26 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("D3664 preserves all four raw band selections without unmeasured strength labels", async () => {
+    const onStart = vi.fn();
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
+    const ladder = document.querySelector<HTMLElement>(".ladder")!;
+    expect(ladder.textContent).toContain("model settings");
+    expect(ladder.textContent).not.toMatch(/calibrated|hardest|stronger|balanced rehearsal|first rung|top measured/iu);
+    const form = document.querySelector<HTMLFormElement>(".just-play form")!;
+    for (const band of [1000, 1400, 1800, 2200]) {
+      const radio = ladder.querySelector<HTMLInputElement>(`input[value="${band}"]`)!;
+      expect(radio.closest("label")!.textContent).toContain(`Model band ${band}`);
+      radio.click();
+      await tick();
+      form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+      expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "human_common", targetElo: band }));
+      expect(onStart.mock.calls.at(-1)?.[0]).not.toHaveProperty("profile");
+    }
+    expect(onStart).toHaveBeenCalledTimes(4);
+    await unmount(component);
+  });
+
   it("starts Just Play with a named Maia rung and keeps strong-engine play distinct", async () => {
     const onStart = vi.fn();
     const component = mount(JustPlayStarter, { target: target(), props: { onStart } });

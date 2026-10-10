@@ -12,6 +12,18 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3664]] repairs the raw Maia calibration claim across Play, Compare, Rating and shared
+resistance summaries under bot-policy §7/§8. Four band controls now name model settings,
+not calibrated strengths or synthetic personality labels. Registered cards and exact profile
+identities remain separate; requested/applied values, sampling, rating arithmetic and owner
+default/name holds are unchanged. Three predecessor-red controls become passing mounted/copy
+checks; all 17 focused controls, clean workspace types and six focused native journeys pass.
+Complete normal verification/build passes 4,452 software cases/365 files, seven unchanged-budget
+performance cases/four files, 246 content cases/25 files, governance/packaging and all four
+browser tiers: 269 passes, one optional Maia skip, zero retries and 112 composition cells.
+D3664 closes only this presentation contradiction; no calibration, persona, whole capability,
+release-image or exact-revision remote-CI completion follows.
+
 [[D3663]] closes three capture-dependent negative arms under the existing Slice B
 contract with six independently source-bound both-colour legal castles. The actual
 operations complete and emit castling while omitting capture class, removed defender

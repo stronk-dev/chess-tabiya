@@ -927,19 +927,26 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await expect(page.getByText("Commentary opens at a checkpoint", { exact: true })).toHaveCount(0);
 });
 
-test("Just Play states its selected human-model rung and low-material limit", async ({ page }) => {
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+test(`Just Play states its selected human-model rung and low-material limit at ${viewport.width}`, async ({ page }) => {
+  await page.setViewportSize(viewport);
   await page.goto("/play");
-  await chooseRawRung(page, "Testing");
+  await chooseRawRung(page, "Model band 1800");
+  await expect(page.locator(".ladder")).toContainText("model settings");
+  await expect(page.locator(".ladder")).not.toContainText("calibrated");
   await page.getByRole("button", { name: "Start from a FEN" }).click();
   await page.getByLabel("Position FEN").fill("8/8/8/8/8/4k3/6P1/4K3 w - - 0 1");
   await page.getByRole("button", { name: "Start and keep the game" }).click();
 
   const support = page.getByRole("region", { name: "Support" });
+  if (viewport.width < 600) await page.getByRole("button", { name: "Support", exact: true }).click();
   await expect(support).toContainText("Resistance requested: Human-model replies · rung 1800.");
   await expect(support).toContainText("They are not FIDE, Lichess, or Chess.com ratings.");
   await expect(support).toContainText("With ten pieces or fewer, changing the Maia rung has very little effect");
-  await expect(page.locator("[data-status-announcement]")).toContainText("Human-like opponent · rung 1800");
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-move model · band 1800");
+  await expect(support).not.toContainText("calibrated inside Tabiya");
 });
+}
 
 test("the private profile opens from Rating and Learn, abstains below each floor and drills into the counted game (rfc/player-style.md)", async ({ page }) => {
   await chooseRawRung(page);
@@ -4678,10 +4685,11 @@ test("branch intent names the saved line and Compare replays the same decision a
   await page.locator("main.drill").focus();
   await page.keyboard.press("Alt+C");
   await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
-  await page.getByLabel("Human-like rung").selectOption("1800");
+  await expect(page.locator(".replay-resistance")).not.toContainText("calibrated inside Tabiya");
+  await page.getByLabel("Maia model band").selectOption("1800");
   await page.getByRole("button", { name: "Start a new replay" }).click();
   await expect(page).toHaveURL(/\/play\/run\//u);
-  await expect(page.locator("[data-status-announcement]")).toContainText("Human-like opponent · rung 1800");
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-move model · band 1800");
   await expect(page.locator("[data-status-announcement]")).toContainText("Full game · until a rules-terminal result");
 });
 

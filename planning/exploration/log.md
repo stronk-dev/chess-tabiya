@@ -24525,3 +24525,40 @@ Campaign was the one capability with no API, route or content. Now:
   the preceding 267-browser checkpoint is historical rather than freshly rerun. Semantic
   orientation/reach and bot Stage-B amendments remain held. No release-image or remote-CI
   result is claimed; no tracker or research-capture storage was added.
+
+### 2026-10-10 — D3664 raw Maia settings versus measured profile strength
+
+- Re-derived a visible cross-screen contradiction: registered cards require exact-profile
+  measurement and correctly show uncalibrated, while Play's Advanced controls and the shared
+  Play/Compare/Rating/resistance disclaimer assert blanket raw-band calibration. Synthetic
+  first/steady/testing/hardest labels also imply strengths not bound to a profile measurement.
+- Three permanent regressions fail on the unchanged shared copy and mounted Play/Rating.
+  The repair names all four literal model settings, retains every selection payload and
+  describes the private rating as Tabiya's internal scale without changing its arithmetic.
+  Status names the human-move model and recorded band; all twelve exact profile identities
+  retain their existing family/model labels. The shared disclaimer reaches existing Compare,
+  Inspector and resistance summaries without a new rendering or evidence pipeline.
+- `make bot-label-check` exits zero: seventeen focused controls plus clean workspace types.
+  Existing strong-engine separation, requested/applied evidence, uncalibrated cards, owner
+  default/name holds, sampling, policies and persisted bytes are unchanged. Native Play/Compare/
+  profile-resume journeys and normal full verification follow before closeout/commit.
+- The first three native journeys pass. Expanded desktop/phone Play and Rating add three
+  failures in the instrument: phone Support is correctly collapsed until explicitly opened,
+  and the native Rating combobox's accessible name differs from its descendant label text.
+  Retained page snapshots show the actual model copy and all four options. The tests now
+  open Support through its normal button and locate Rating by its actual combobox role;
+  every value/disclosure/reload assertion and the five-second deadline remains.
+- The corrected focused native target passes all six desktop/phone Play/Rating, Compare replay
+  and registered-profile-resume journeys. Complete sequential `make roadmap-receipt verify-awake
+  build test-browser-ci-awake` exits zero: clean types, 4,452 software cases/365 files, seven
+  unchanged-budget performance cases/four files, 246 content cases/25 files, governance,
+  packaging/build and 269 browser passes (204 smoke, five content, 59 matrix, one packaged-default),
+  one optional Maia skip, zero retries and all 112 successful composition cells. No test budget,
+  retry setting, calibration arithmetic, profile or sampler changes.
+- D3664 closes only the cross-screen presentation contradiction. The ledger, durable work state,
+  queue, readable roadmap and current checkpoint/receipt are reconciled in the same change set.
+  The current inventory has 3,413 ledger rows: 1,540 done, 161 refused and 1,712 assigned live
+  (627 todo, fourteen doing, 1,071 blocked), zero untriaged. UX stays 273 complete/272 live/24
+  retired; all fourteen whole capabilities remain incomplete, with four active/five blocked
+  milestones and zero official graduates. Source/selected-Sight/semantic and bot Stage-B drafts
+  remain held. No remote-CI, native release-image, readiness-to-push or whole-1.0 result is claimed.
