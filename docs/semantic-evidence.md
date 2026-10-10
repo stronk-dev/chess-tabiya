@@ -306,11 +306,20 @@ D3676 adds twelve both-colour populated legal negatives for backward, isolated, 
 passed pawns and open/half-open files. One pawn per colour per file at ranks 2/7 gives adjacent
 friendly support and an opposing pawn ahead; king steps preserve those literal operands.
 The complete structural operation emits other events while omitting the exact subject.
-The current total is 139 (73 positives, 66 negatives), retaining all 127 prior cases unchanged.
+That checkpoint totals 139 (73 positives, 66 negatives), retaining all 127 prior cases unchanged.
 The independently retained piece-set excerpt establishes colour/pawn extraction only: the
 case's arithmetic binds absence under the existing vocabulary, not strategic value, general
-positive correctness or a new chess teaching claim. All six positive and orientation arms
-remain required; no subject becomes learner-eligible.
+positive correctness or a new chess teaching claim.
+D3685 adds 36 source-bound positives: both colours, gained/lost/preserved exact membership
+for those six families. Five separately labelled Stockfish rule excerpts are checked verbatim
+at commit `e6e324eb28fd49c1fc44b3b65784f85a773ec61c`; literal pawn sets, relative ranks,
+empty stop squares and attack directions independently check the retained operands.
+Opponent moves can change a stationary pawn's status. Open and half-open remain distinct;
+these finite backward/doubled examples do not adopt the engine's broader evaluation heuristics.
+The positive cells are now present; the 139 predecessor records remain byte-for-byte unchanged.
+The total is 175 (109 positives, 66 negatives), over 81 subjects. Orientation, the draft window
+repair and other required arms remain open: zero subjects are fully qualified and no subject
+becomes learner-eligible. No new collector, strategic value judgement or pack bytes are added.
 All prior cases remain. Both colors have completed legal hard
 negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
 production window; canonical qualification invokes the complete recorded application path,

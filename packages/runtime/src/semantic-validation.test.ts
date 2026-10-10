@@ -277,7 +277,7 @@ describe("semantic-validation cases and execution", () => {
       else expect(receipt.targetCount).toBe(0);
       for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
     }
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(73);
+    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(109);
     expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(66);
   });
 

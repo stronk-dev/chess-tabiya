@@ -1,5 +1,12 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-10 — [[D3685]] is closed under accepted semantic-validation-authority Slice B:
+36 source-bound legal pawn/file positives, both colours and gained/lost/preserved exact
+membership; all 139 predecessor records are unchanged. All 145 focused/752 foundation
+checks, types and normal software/performance/governance/content/build tiers pass.
+The register has 175 passing cases, 81 subjects and zero fully qualified. Orientation/window
+drafts and remaining arms remain held; no learner eligibility or content promotion follows.
+
 Owner intervention [[D3513]] is complete: 28 recordings / 722,980,928 bytes retained
 outside Git, actual restoration verified, and their paths removed from all 31 unpublished
 commits after a verified recovery bundle. Published history and final source tree are

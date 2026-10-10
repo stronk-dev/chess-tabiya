@@ -25088,3 +25088,35 @@ Campaign was the one capability with no API, route or content. Now:
   One optional Maia measurement is skipped; zero retries and all 112 composition cells pass.
   Types, governance, packaging and build pass. Close the ledger/state and refresh the existing
   roadmap/queue checkpoint, without introducing a new progress document or changing a gate.
+
+## 2026-10-10 (codex) — D3685 exact pawn/file positive membership
+
+- Record and assign the missing positive arms before implementation, under accepted
+  semantic-validation-authority Slice B. Forty-three predecessor-red controls expose
+  absent cases/profile refs; all original 102 focused controls pass on that predecessor.
+- Add 36 source-bound legal production cases, both colours and gained/lost/preserved
+  membership for backward/isolated/doubled/passed pawns and open/half-open files. Exact
+  file/pawn identity and before/after observations survive the registered operation.
+  Opponent captures can change stationary pawn status; no move quality or causal intent
+  is inferred. Retained neutral pawn/file/rank/attack arithmetic independently checks
+  these finite examples, not the engine's broader heuristic definitions or scores.
+- Verify five separately labelled Stockfish rule excerpts verbatim against public commit
+  e6e324eb28fd49c1fc44b3b65784f85a773ec61c, GPL-3.0-or-later. All 139 predecessor case
+  records remain byte-for-byte unchanged. Six positive cells become present; orientation,
+  draft window reach and remaining qualification arms stay open. No learner eligibility,
+  production collector, source availability, pack bytes or whole capability changes.
+- Focused cases and all 752 foundation checks pass. The sandbox-only attempt refused
+  localhost binding; the unchanged normal target runs with permission. Correct historical
+  population assertions to retain their old sets while accounting for this new wave;
+  do not delete cases, change production budgets or relax timeouts. Full normal local
+  verification/build and the existing roadmap closeout follow before commit.
+- Normal `make roadmap-receipt verify-awake build` passes clean types, 4,653 software
+  cases/367 files and seven unchanged-budget performance cases/four files, then stops in
+  governance on my incorrect RFC checkpoint reference. The anchor reads the register row,
+  not the RFC file; restore that correct reference without changing the verifier or software.
+  `make roadmap-receipt verify-governance verify-content build` then exits zero: governance,
+  247 content cases/25 files, corpus/capability checks, packaging and build all pass.
+  The build retains its existing chunk-size warning; no browser rerun, remote CI or native
+  release-image success is claimed. The sole writer reports 175 passing cases (109 positives,
+  66 negatives), 81 subjects, 53 population receipts and eight external receipts; zero
+  subjects are fully qualified. Close the ledger/state and update the existing roadmap.

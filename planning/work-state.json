@@ -30556,6 +30556,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/classroom-response.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3685",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a8e56a6f429af606046daedd7d31df00d168b70b9828c113071411fb70bcdf62",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

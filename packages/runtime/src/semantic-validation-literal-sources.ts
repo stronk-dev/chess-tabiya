@@ -9,14 +9,14 @@
 import type { SemanticCanonicalValue, SemanticEdgeInput, SemanticValidationPropositionRecord } from "./semantic-validation.js";
 
 type RuleFixture = readonly [id: string, projection: string, beforeFen: string, moveUci: string, afterFen: string, operands: Readonly<Record<string, SemanticCanonicalValue>> | null];
-function ruleCase(family: string, fixture: RuleFixture) {
+function ruleCase(family: string, fixture: RuleFixture, source = "python-chess") {
   const [suffix, projection, beforeFen, moveUci, afterFen, operands] = fixture;
   return {
     arm: operands === null ? "semantic_negative" as const : "positive" as const,
     input: { kind: "edge", beforeFen, moveUci, afterFen } satisfies SemanticEdgeInput,
     proposition: {
       subject: { kind: "event", projection: { id: projection, version: 1 } },
-      case: { id: `cited.python-chess.${family}.${suffix}`, version: 1 },
+      case: { id: `cited.${source}.${family}.${suffix}`, version: 1 },
       factConstraint: [],
       expectation: operands === null ? { kind: "omits" } : { kind: "emits", minimum: 1, operandMatch: operands },
     } satisfies Omit<SemanticValidationPropositionRecord, "factConstraintSha256">,
@@ -120,6 +120,70 @@ const pawnAbsenceSources = ["backward_pawn", "isolated_pawn", "doubled_pawn", "p
   ] satisfies readonly RuleFixture[]).map(fixture => ruleCase(`pawn-absence.${family}`, fixture)),
 }));
 
+// D3685: finite position facts, not evaluation scores or a universal definition
+// borrowed from an engine heuristic. The backward cases have a real adjacent
+// friendly pawn ahead and an enemy pawn attacking the empty stop square; the
+// doubled cases use adjacent ranks. Those operands satisfy both the cited
+// independent convention and the existing collector. Open means semi-open for
+// both colours; half-open additionally retains an enemy pawn on the file.
+// Source excerpts below are separately labelled, not a fabricated contiguous
+// function. Stockfish sf_15, Copyright 2004–2022 The Stockfish developers,
+// GPL-3.0-or-later; full corresponding source/licence:
+// https://github.com/official-stockfish/Stockfish/tree/sf_15
+// https://github.com/official-stockfish/Stockfish/blob/sf_15/Copying.txt
+const pawnMembershipFixtures = [
+  ["backward_pawn", "gained", "white", "7k/8/p7/1N6/3P4/2P5/8/7K b - - 7 1", "a6b5", "7k/8/8/1p6/3P4/2P5/8/7K w - - 0 2"],
+  ["backward_pawn", "gained", "black", "7k/8/2p5/3p4/1n6/P7/8/7K w - - 7 1", "a3b4", "7k/8/2p5/3p4/1P6/8/8/7K b - - 0 1"],
+  ["backward_pawn", "lost", "white", "7k/8/8/1p6/3P4/N1P5/8/7K w - - 7 1", "a3b5", "7k/8/8/1N6/3P4/2P5/8/7K b - - 0 1"],
+  ["backward_pawn", "lost", "black", "7k/8/n1p5/3p4/1P6/8/8/7K b - - 7 1", "a6b4", "7k/8/2p5/3p4/1n6/8/8/7K w - - 0 2"],
+  ["backward_pawn", "preserved", "white", "7k/8/8/1p6/3P4/2P5/8/7K w - - 7 1", "h1g1", "7k/8/8/1p6/3P4/2P5/8/6K1 b - - 8 1"],
+  ["backward_pawn", "preserved", "black", "7k/8/2p5/3p4/1P6/8/8/7K b - - 7 1", "h8g8", "6k1/8/2p5/3p4/1P6/8/8/7K w - - 8 2"],
+  ["isolated_pawn", "gained", "white", "7k/8/8/4p3/3P4/2P5/8/7K w - - 7 1", "d4e5", "7k/8/8/4P3/8/2P5/8/7K b - - 0 1"],
+  ["isolated_pawn", "gained", "black", "7k/8/2p5/3p4/4P3/8/8/7K b - - 7 1", "d5e4", "7k/8/2p5/8/4p3/8/8/7K w - - 0 2"],
+  ["isolated_pawn", "lost", "white", "7k/8/8/8/8/2Pn4/4P3/7K w - - 7 1", "e2d3", "7k/8/8/8/8/2PP4/8/7K b - - 0 1"],
+  ["isolated_pawn", "lost", "black", "7k/4p3/2pN4/8/8/8/8/7K b - - 7 1", "e7d6", "7k/8/2pp4/8/8/8/8/7K w - - 0 2"],
+  ["isolated_pawn", "preserved", "white", "7k/8/8/8/8/2P5/8/7K w - - 7 1", "h1g1", "7k/8/8/8/8/2P5/8/6K1 b - - 8 1"],
+  ["isolated_pawn", "preserved", "black", "7k/8/2p5/8/8/8/8/7K b - - 7 1", "h8g8", "6k1/8/2p5/8/8/8/8/7K w - - 8 2"],
+  ["doubled_pawn", "gained", "white", "7k/8/8/8/2n5/2PP4/8/7K w - - 7 1", "d3c4", "7k/8/8/8/2P5/2P5/8/7K b - - 0 1"],
+  ["doubled_pawn", "gained", "black", "7k/8/2pp4/2N5/8/8/8/7K b - - 7 1", "d6c5", "7k/8/2p5/2p5/8/8/8/7K w - - 0 2"],
+  ["doubled_pawn", "lost", "white", "7k/8/8/3b4/2P5/2P5/8/7K w - - 7 1", "c4d5", "7k/8/8/3P4/8/2P5/8/7K b - - 0 1"],
+  ["doubled_pawn", "lost", "black", "7k/8/2p5/2p5/3B4/8/8/7K b - - 7 1", "c5d4", "7k/8/2p5/8/3p4/8/8/7K w - - 0 2"],
+  ["doubled_pawn", "preserved", "white", "7k/8/8/8/2P5/2P5/8/7K w - - 7 1", "h1g1", "7k/8/8/8/2P5/2P5/8/6K1 b - - 8 1"],
+  ["doubled_pawn", "preserved", "black", "7k/8/2p5/2p5/8/8/8/7K b - - 7 1", "h8g8", "6k1/8/2p5/2p5/8/8/8/7K w - - 8 2"],
+  ["passed_pawn", "gained", "white", "7k/8/8/3p4/2P1P3/8/8/7K w - - 7 1", "e4d5", "7k/8/8/3P4/2P5/8/8/7K b - - 0 1"],
+  ["passed_pawn", "gained", "black", "7k/8/8/2p1p3/3P4/8/8/7K b - - 7 1", "e5d4", "7k/8/8/2p5/3p4/8/8/7K w - - 0 2"],
+  ["passed_pawn", "lost", "white", "7k/8/4p3/3N4/2P5/8/8/7K b - - 7 1", "e6d5", "7k/8/8/3p4/2P5/8/8/7K w - - 0 2"],
+  ["passed_pawn", "lost", "black", "7k/8/8/2p5/3n4/4P3/8/7K w - - 7 1", "e3d4", "7k/8/8/2p5/3P4/8/8/7K b - - 0 1"],
+  ["passed_pawn", "preserved", "white", "7k/8/8/8/2P5/8/8/7K w - - 7 1", "h1g1", "7k/8/8/8/2P5/8/8/6K1 b - - 8 1"],
+  ["passed_pawn", "preserved", "black", "7k/8/8/2p5/8/8/8/7K b - - 7 1", "h8g8", "6k1/8/8/2p5/8/8/8/7K w - - 8 2"],
+  ["open_file", "gained", "white", "7k/8/8/8/3n4/2P5/8/7K w - - 7 1", "c3d4", "7k/8/8/8/3P4/8/8/7K b - - 0 1"],
+  ["open_file", "gained", "black", "7k/8/2p5/3N4/8/8/8/7K b - - 7 1", "c6d5", "7k/8/8/3p4/8/8/8/7K w - - 0 2"],
+  ["open_file", "lost", "white", "7k/8/8/8/2n5/3P4/8/7K w - - 7 1", "d3c4", "7k/8/8/8/2P5/8/8/7K b - - 0 1"],
+  ["open_file", "lost", "black", "7k/8/3p4/2N5/8/8/8/7K b - - 7 1", "d6c5", "7k/8/8/2p5/8/8/8/7K w - - 0 2"],
+  ["open_file", "preserved", "white", "7k/8/3p4/8/8/3P4/8/7K w - - 7 1", "h1g1", "7k/8/3p4/8/8/3P4/8/6K1 b - - 8 1"],
+  ["open_file", "preserved", "black", "7k/8/3p4/8/8/3P4/8/7K b - - 7 1", "h8g8", "6k1/8/3p4/8/8/3P4/8/7K w - - 8 2"],
+  ["half_open_file", "gained", "white", "7k/8/2p5/8/3n4/2P5/8/7K w - - 7 1", "c3d4", "7k/8/2p5/8/3P4/8/8/7K b - - 0 1"],
+  ["half_open_file", "gained", "black", "7k/8/2p5/3N4/8/2P5/8/7K b - - 7 1", "c6d5", "7k/8/8/3p4/8/2P5/8/7K w - - 0 2"],
+  ["half_open_file", "lost", "white", "7k/8/2p5/8/2n5/3P4/8/7K w - - 7 1", "d3c4", "7k/8/2p5/8/2P5/8/8/7K b - - 0 1"],
+  ["half_open_file", "lost", "black", "7k/8/3p4/2N5/8/2P5/8/7K b - - 7 1", "d6c5", "7k/8/8/2p5/8/2P5/8/7K w - - 0 2"],
+  ["half_open_file", "preserved", "white", "7k/8/2p5/8/8/8/8/7K w - - 7 1", "h1g1", "7k/8/2p5/8/8/8/8/6K1 b - - 8 1"],
+  ["half_open_file", "preserved", "black", "7k/8/8/8/8/2P5/8/7K b - - 7 1", "h8g8", "6k1/8/8/8/8/2P5/8/7K w - - 8 2"],
+] as const;
+const pawnMembershipSource = {
+  sourceId: "stockfish.pawn-files",
+  sourceRevision: "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+  licence: "GPL-3.0-or-later",
+  url: "https://github.com/official-stockfish/Stockfish/tree/e6e324eb28fd49c1fc44b3b65784f85a773ec61c/src",
+  text: "pawns.cpp evaluate flags:\n        doubled    = ourPawns   & (s - Up);\n        neighbours = ourPawns   & adjacent_files_bb(s);\n\npawns.cpp backward:\n        // A pawn is backward when it is behind all pawns of the same color on\n        // the adjacent files and cannot safely advance.\n        backward =  !(neighbours & forward_ranks_bb(Them, s + Up))\n                  && (leverPush | blocked);\n\npawns.cpp isolated branch:\n        else if (!neighbours)\n\nposition.h semi-open:\ninline bool Position::is_on_semiopen_file(Color c, Square s) const {\n  return !(pieces(c, PAWN) & file_bb(s));\n}\n\nposition.h passed:\ninline bool Position::pawn_passed(Color c, Square s) const {\n  return !(pieces(~c, PAWN) & passed_pawn_span(c, s));\n}\n",
+  operation: { id: "runtime.semantic.structural_edge", version: 1 } as const,
+  cases: pawnMembershipFixtures.map(([family, sign, color, before, move, after]) => {
+    const observation = { kind: family, ...(family === "open_file" ? {} : { color }),
+      ...(family === "passed_pawn" ? { squares: [color === "white" ? "c4" : "c5"] } : { file: "c", squares: [] }) };
+    return ruleCase("pawn-files", [`${family}.${sign}.${color}`, `rules.structural.event.${family}`, before, move, after,
+      { family, before: sign === "gained" ? null : observation, after: sign === "lost" ? null : observation }], "stockfish");
+  }),
+};
+
 // D3666: the two labelled excerpts below are separate branches of attacks_mask,
 // not a fabricated contiguous function. A pawn and distant kings have no slider,
 // enemy pawn or occupied attack/defence edge before or after the isolated push.
@@ -165,6 +229,7 @@ const contactTransitionFixtures: readonly RuleFixture[] = [
 ];
 
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  pawnMembershipSource,
   ...pawnAbsenceSources,
   ...literalSources,
   {

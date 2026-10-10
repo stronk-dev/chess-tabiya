@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "ee9e61de515274cefdeea53615146396451b0a263cbf2b680c09ec7d77218b5f",
-  "caseDigest": "de6d36bb2c84bf21549e57352b1160312ad28674b5dfdb86da11818d8e3807ce",
+  "profileDigest": "3f09f1cf638440cb76e5e62a12031810f5c13d759b7ee3423188533d34abdbf3",
+  "caseDigest": "a3353044582e83b086422b653b7ede9f1b8462c3988d3ecaaa2ee67cac5da993",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -3705,6 +3705,1602 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "59c01a4aeb2977b1f2e28ef2b6857f6ab1ebda6a5a08d8e447391cdd1161cfeb",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.backward_pawn.gained.black",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "c48f030521f698099a918740cb0605d793828769db79f4ab4f0df6d13d0cb0d6",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 34,
+      "targets": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "f1bbe64c978b184ecfc204b4eda7d0a7e9aa2854bdb74c01561abce3128df733",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "2ea44c8e9078d973aa5cde71ace640051144b443f7d69417803402bc8db87a01",
+          "payloadDigest": "f1bbe64c978b184ecfc204b4eda7d0a7e9aa2854bdb74c01561abce3128df733",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "e09ecbe900d839defc2e8b1957e9424216d94517495d111336587e3947a9f1ef",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "2ea44c8e9078d973aa5cde71ace640051144b443f7d69417803402bc8db87a01",
+          "payloadDigest": "e09ecbe900d839defc2e8b1957e9424216d94517495d111336587e3947a9f1ef",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "1f51c479f1f117647374dbd604fd458fc2a7f37b77b45d39610d3efa3d0a33de",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.backward_pawn.gained.white",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "e7018ea3d842dd0a1249d5da1d4025fac05447e5322a3f90c3f49a313802252a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 34,
+      "targets": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "7447762491b9e55dd979c238ff0962bc78ce7eeef1df109bbd611ed7942d2ba7",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "f071a605cf3f89abdd63416b7bbd0ef738d4b77ea80bb902296a9a2388d8f50a",
+          "payloadDigest": "7447762491b9e55dd979c238ff0962bc78ce7eeef1df109bbd611ed7942d2ba7",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "db51b526b53907487fff668e9aaf7d8d884b9b4398d9189e0a4c9e2193475952",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "f071a605cf3f89abdd63416b7bbd0ef738d4b77ea80bb902296a9a2388d8f50a",
+          "payloadDigest": "db51b526b53907487fff668e9aaf7d8d884b9b4398d9189e0a4c9e2193475952",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ae0a59a1d0a079a55e3f3e88193152bec6bd01078f7d96a46f06d5477c78754e",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.backward_pawn.lost.black",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "6294c4e1c03e9de17726c4caef52ca2d6d194f822ae7d10dc8ce2fc4eecee230",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 30,
+      "targets": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "b4a25b27e77b641a87d22a01652879e6057ac8f72eda3150f40fb4481088c382",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "492d8403f377fef61dc50a9577e39cc9aaf2c98f0a84808c2fb26f708c7cedf0",
+          "payloadDigest": "b4a25b27e77b641a87d22a01652879e6057ac8f72eda3150f40fb4481088c382",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "28b804384221ad6416221aed07b61aa3671d304da983af6aabb168f0544c12ac",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "492d8403f377fef61dc50a9577e39cc9aaf2c98f0a84808c2fb26f708c7cedf0",
+          "payloadDigest": "28b804384221ad6416221aed07b61aa3671d304da983af6aabb168f0544c12ac",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "c9a22caa7bb5f874f4385873c7186b899f6afa05060dd3f3a3727b83bfdf3706",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.backward_pawn.lost.white",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "324caa5c4fae3af2537e926bce31f3c608a6ce9a7c2acc22d0b360188ec12e0a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 30,
+      "targets": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "b2ff69b9f770114138b7eb34d341a45c56140aa85f66aae8339cf60aa903a423",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "7463097bf75f193e1f257cafa6fee04d1719bfe2902e2c59b2b4507ded55e512",
+          "payloadDigest": "b2ff69b9f770114138b7eb34d341a45c56140aa85f66aae8339cf60aa903a423",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "1f755f73f0ebc0a666295243284dd45e41be1ec5cff7aace366147511aa7caac",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "7463097bf75f193e1f257cafa6fee04d1719bfe2902e2c59b2b4507ded55e512",
+          "payloadDigest": "1f755f73f0ebc0a666295243284dd45e41be1ec5cff7aace366147511aa7caac",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "92cf7c49beed0207fae18c29f38eafc68bb9669ab1e1a6a828758df3df014317",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.backward_pawn.preserved.black",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "42372abdf946ee623269a709e49a213260f0689847e6635f2402d5a510a39dac",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 28,
+      "targets": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "55bfcf9522f427db8c8152c901ff0b83b1447be103857403b75ee598bcd80976",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "2f491d7f0e3970cc5c52d1f470cd47bf3d85dc0c106474997783195d23f7cbaf",
+          "payloadDigest": "55bfcf9522f427db8c8152c901ff0b83b1447be103857403b75ee598bcd80976",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "1dec13cd4ce2c422b33f7a5453a068a55a53d4c8d2508be7fa19f60b0af2f8b0",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "2f491d7f0e3970cc5c52d1f470cd47bf3d85dc0c106474997783195d23f7cbaf",
+          "payloadDigest": "1dec13cd4ce2c422b33f7a5453a068a55a53d4c8d2508be7fa19f60b0af2f8b0",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "5d2e65364e1949409d309a4094fd36fc782ade9c965025afbbb2e9cc80251820",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.backward_pawn.preserved.white",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "07e1a51468dfb69ab62bd37322905c14101e61f4c9b12d3924fb073fd1550689",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 28,
+      "targets": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "b866462b74ca34af460b70ddaaca4039ba4f439439d341970b20578a88777dd1",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "60c31153b163cf8a6ab8183cf4123a2615b3fa9d093f46f1a18a980c91bfbc5f",
+          "payloadDigest": "b866462b74ca34af460b70ddaaca4039ba4f439439d341970b20578a88777dd1",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "operandDigest": "609f9c0a772a68b3373d5a780e43b28c7114d258f8b1161d5ad3d446ef1cffce",
+          "factory": "createRulesStructuralEventBackwardPawnV1Evidence",
+          "inputDigest": "60c31153b163cf8a6ab8183cf4123a2615b3fa9d093f46f1a18a980c91bfbc5f",
+          "payloadDigest": "609f9c0a772a68b3373d5a780e43b28c7114d258f8b1161d5ad3d446ef1cffce",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3614b2cd8a83cb7bc99898762b670a38a730d1abfc20bcd60af686ffd31e1177",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.doubled_pawn.gained.black",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "97139f43ffd7331bfaa5d31b737062186270b3e6e66c696dc39b917e9c3b942a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 32,
+      "targets": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "operandDigest": "c9eae23fd9fa4724b75f5ce55404bbee46b6be8a76664b6442b48d91842f10b4",
+          "factory": "createRulesStructuralEventDoubledPawnV1Evidence",
+          "inputDigest": "c1d52445237c703bab5ee9d7211698fba7aa0d37a7dc0f95c20b0c89148122cd",
+          "payloadDigest": "c9eae23fd9fa4724b75f5ce55404bbee46b6be8a76664b6442b48d91842f10b4",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "4d56e5e97a99caa816a8fc9849ec1aee854afac804547f1fcaf5f5af1ddd111d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.doubled_pawn.gained.white",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "01a274ea9ae884d9f409208e2a2149ea3b2e21cccba32f8d413555a3a10d3db3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 32,
+      "targets": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "operandDigest": "84ce20bef83183771a0e956ecd35da7466da8ff030d02ede8e669439ee70e6dd",
+          "factory": "createRulesStructuralEventDoubledPawnV1Evidence",
+          "inputDigest": "fc6f9b32555ed59dcb485611dc3b38f1efec9a833e03de5bd03633c8d0ae0603",
+          "payloadDigest": "84ce20bef83183771a0e956ecd35da7466da8ff030d02ede8e669439ee70e6dd",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "13494f3c4b95652b8fd6f318eaab19c69d3da08e752b9bfed49cc87f04c69c33",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.doubled_pawn.lost.black",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "5f3132c7db55bf757ce6b90af802261cce8a1a820858ba58f23f57854034cf68",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 37,
+      "targets": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "operandDigest": "5f92cb90b83761f34561238ad0415a6fc2668b98f989f9acf3932825d5cc34b3",
+          "factory": "createRulesStructuralEventDoubledPawnV1Evidence",
+          "inputDigest": "ac0f87f2608b06caeb0526bc89295c46bb0237f0cf0bc1666d26ab4e54cf39b2",
+          "payloadDigest": "5f92cb90b83761f34561238ad0415a6fc2668b98f989f9acf3932825d5cc34b3",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "5fdc30b027208a4f72bd359a7b69ffca5071e81ed9951776ee2a30e53e184258",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.doubled_pawn.lost.white",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "e467ff30aac6c8d77895c2aedfb35ab32eab9d30f61ca252e433a320f4dfc184",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 37,
+      "targets": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "operandDigest": "a1d6c3320376705dda97765b191ea6fd5acbe8685c576829b2b2463fa810b86c",
+          "factory": "createRulesStructuralEventDoubledPawnV1Evidence",
+          "inputDigest": "44d5ac5a9e95f7d4b10ab8226c8b1db8f9c40480e614f2862aba10386cc26e82",
+          "payloadDigest": "a1d6c3320376705dda97765b191ea6fd5acbe8685c576829b2b2463fa810b86c",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "bb7ce611e5b39a828132e9bb06b2fc6eef1ed17ab2af71abc3bedb5b964b2d2b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.doubled_pawn.preserved.black",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "67f3370bbf5f1c621aa0b0ac54bc6302d319d73d1862cb33f6bf4f10f6c7807f",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 29,
+      "targets": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "operandDigest": "8df982155f672195255bf8b467745202986c01356b525e9e4d3616ea9fbfdbfe",
+          "factory": "createRulesStructuralEventDoubledPawnV1Evidence",
+          "inputDigest": "3f518541312bc09e60a39e33c166231fb90228b381c970bc39820fe1592c224d",
+          "payloadDigest": "8df982155f672195255bf8b467745202986c01356b525e9e4d3616ea9fbfdbfe",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "277628d8a719d253bb1930d7876fb5834c37f21730fd4a57d63a13cd0d7249c7",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.doubled_pawn.preserved.white",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "4edd73ab258a835a358c218338bfe7484ec361798a790e1daa5f0592f5733efe",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 29,
+      "targets": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "operandDigest": "9b62064897d0ae4f9873e48ba6b7c3641645171adacb1b1c2597c5fe12f6dd61",
+          "factory": "createRulesStructuralEventDoubledPawnV1Evidence",
+          "inputDigest": "cf837ba3dafeb27fb699f6d0b15c40a5feb4deedae6751c24b964367dcdc079c",
+          "payloadDigest": "9b62064897d0ae4f9873e48ba6b7c3641645171adacb1b1c2597c5fe12f6dd61",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "165d69a6a70362fa264455b77281471b91668ceea3b81c9b1acc7a3c567a2033",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.half_open_file.gained.black",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "22cd7493d9810da1709bd9b87d050b53497a3a4acedff3e12fdbc4b6f702828a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 31,
+      "targets": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "f81d9449db7ba6e641deb38fb31a1d24d7ea1072f4ff724eaafbb7da29a6748e",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "2953fbd055702dcc8af71249769b6822d2a6a2f9af60a138a687aad2b576e46b",
+          "payloadDigest": "f81d9449db7ba6e641deb38fb31a1d24d7ea1072f4ff724eaafbb7da29a6748e",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "3cd4fa028f44933b819319fe6f63006fdb8a5c93a4e13e203094b256f96c09ea",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "2953fbd055702dcc8af71249769b6822d2a6a2f9af60a138a687aad2b576e46b",
+          "payloadDigest": "3cd4fa028f44933b819319fe6f63006fdb8a5c93a4e13e203094b256f96c09ea",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a427f4207f81ac52f07c9732aeba216b9826a04a848d5abc02943df36cccf263",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.half_open_file.gained.white",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "8eac9c1169c7e8f615cfb783dbc26d5e85fcc51306ca4866f3c3a3b540f8f598",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 31,
+      "targets": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "b78f6cc1ce8a0a8592e6f972cbeb9691039320a5424638f6db4c054c024eed37",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "693bfbff8911557b60c9ab20b509cb523a4ab13ebb33cf2919d4bc939fbb3a9b",
+          "payloadDigest": "b78f6cc1ce8a0a8592e6f972cbeb9691039320a5424638f6db4c054c024eed37",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "2a7081d3373a8b924335d6ef6f0c8eaaa1c1f875264ded5b4f81ec6db6154f9a",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "693bfbff8911557b60c9ab20b509cb523a4ab13ebb33cf2919d4bc939fbb3a9b",
+          "payloadDigest": "2a7081d3373a8b924335d6ef6f0c8eaaa1c1f875264ded5b4f81ec6db6154f9a",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ffbcd9f13f01b76a2acb5a2e8895a0e7a171964da1e860033ed5f1edd4fffe02",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.half_open_file.lost.black",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "0504f31276fd9ac3d4ff1e6d0ba9603ddf60368c4c1006e556ea7c2dff4418c5",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 29,
+      "targets": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "d23512212c2270980b36cfe981b20e97140acdce6a80cf25b3daea3a184a6ec2",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "dee45eb26f91051670921f6001cfe86c97d2b03e228b6f5d9684a273d405b1bb",
+          "payloadDigest": "d23512212c2270980b36cfe981b20e97140acdce6a80cf25b3daea3a184a6ec2",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "b90628c0c36a2591c6e6e4fa54ef14b76aa0e593c74c9aa21f0379f7cdac0701",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "dee45eb26f91051670921f6001cfe86c97d2b03e228b6f5d9684a273d405b1bb",
+          "payloadDigest": "b90628c0c36a2591c6e6e4fa54ef14b76aa0e593c74c9aa21f0379f7cdac0701",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "68e23fd6ac057a16fb90ad8e98c1726bda52b700cad2277dc7d1b04efb755f70",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.half_open_file.lost.white",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "d928a49895858d9d2ef6aa6ff86f29883080d79b7b4f2c03757584ce4d5eb68f",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 29,
+      "targets": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "8c79103b3844e2696689663b43117d3342d71cfd05fa383906772e024a6747af",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "6a954960ff1c6f8c2edc85b97baf64cf9c4267599ae70578208281e0ed176dba",
+          "payloadDigest": "8c79103b3844e2696689663b43117d3342d71cfd05fa383906772e024a6747af",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "7a06a95a69b7b050050a57713defc52144c4dc7572e0ed4f54eaf18ccbc7655d",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "6a954960ff1c6f8c2edc85b97baf64cf9c4267599ae70578208281e0ed176dba",
+          "payloadDigest": "7a06a95a69b7b050050a57713defc52144c4dc7572e0ed4f54eaf18ccbc7655d",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "287f7ea1d1f782004bc8d006e2552006be63063a8598acf5aaed9d37aa9dfce5",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.half_open_file.preserved.black",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3a809f0584aa9581b43bf025e8ce109b781bdf8c7b8b16713853c16f1effec25",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 27,
+      "targets": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "fd145c094b02cf0ebf50bc6d31ed29910c144a8a89ba02136f071c1ccd4299ee",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "a63addeafb4b39b8a7c505869424a406579169454f75ac7c09c3de6997e0072e",
+          "payloadDigest": "fd145c094b02cf0ebf50bc6d31ed29910c144a8a89ba02136f071c1ccd4299ee",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "10c5f660a9ed0bb44c4dc78703e96dbfbbc269132a815b3aa21334dbab1a027d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.half_open_file.preserved.white",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "1850ea80621b9072c779ff82ba18e4fb09c8824e7e6354dbe7c3d2386489e1c9",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 27,
+      "targets": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "operandDigest": "7de886a029d19eb6ce12a68300538048937e480fbc40b5c6ea40cd2155ca11b0",
+          "factory": "createRulesStructuralEventHalfOpenFileV1Evidence",
+          "inputDigest": "17fd60a97d15733fc973805c078952c35e959f481d7dd037ab6fff9c4bfa65d5",
+          "payloadDigest": "7de886a029d19eb6ce12a68300538048937e480fbc40b5c6ea40cd2155ca11b0",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "587fd3440715a456f0c28a8f45606b53caeeb53f3bdff9f37193e06ba94927ba",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.isolated_pawn.gained.black",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "b25aa77a01651856874143d715538c680b2a2ac5dd71cc74d10d198525f6a629",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 3,
+      "otherCount": 30,
+      "targets": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "f4e8844f0c3647ebf0b041a9b3d57db3ad8be63e0dac370d06ca03cdcd5295bc",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "84ce4ac9c332fb2af5c22133cc0cd8c663bd53ebe1759f7933c05023ebbfb977",
+          "payloadDigest": "f4e8844f0c3647ebf0b041a9b3d57db3ad8be63e0dac370d06ca03cdcd5295bc",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "f110f5b53ff1c5331a4dac51b617b37835439a6266c3666cca56d91e44fc6c04",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "84ce4ac9c332fb2af5c22133cc0cd8c663bd53ebe1759f7933c05023ebbfb977",
+          "payloadDigest": "f110f5b53ff1c5331a4dac51b617b37835439a6266c3666cca56d91e44fc6c04",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "8ef92e97eb645cc0d1cbda91f49ebd82d555a2b3697660f3dba9eea4c8677f53",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "84ce4ac9c332fb2af5c22133cc0cd8c663bd53ebe1759f7933c05023ebbfb977",
+          "payloadDigest": "8ef92e97eb645cc0d1cbda91f49ebd82d555a2b3697660f3dba9eea4c8677f53",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "1a44f689831ad8b5f81014825a031314c8cc8ae043520cfe30c51fdeadb4f45e",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.isolated_pawn.gained.white",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "9e1f29147bb94e215731bc8460ac916c595080ffb54323e7b5220cd93606ca34",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 3,
+      "otherCount": 30,
+      "targets": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "4947b5fdaa42a7eb4fed8fdbb41dddb33a6339e1cad52d0164d601d45fa755b3",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "094e1bf14426c9873d08bfefedf473f14cbe947823cc6cddf458fa373ca066b0",
+          "payloadDigest": "4947b5fdaa42a7eb4fed8fdbb41dddb33a6339e1cad52d0164d601d45fa755b3",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "4e025942083a574c20de7c6daf4c9843ec7edb11ac78a02423c99d34ee3d4244",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "094e1bf14426c9873d08bfefedf473f14cbe947823cc6cddf458fa373ca066b0",
+          "payloadDigest": "4e025942083a574c20de7c6daf4c9843ec7edb11ac78a02423c99d34ee3d4244",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "43bfacf6381f10b9ae268a90a7f74dfc37fde8052723d7e5ef82cdd0366ab019",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "094e1bf14426c9873d08bfefedf473f14cbe947823cc6cddf458fa373ca066b0",
+          "payloadDigest": "43bfacf6381f10b9ae268a90a7f74dfc37fde8052723d7e5ef82cdd0366ab019",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "54bc1285f0b0ff3df67d9143a431eaa6874e343209131f159b6794f60885d232",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.isolated_pawn.lost.black",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "07f9373eebab355487515d23628d1cb6db6706863d678844255854848041deb5",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 32,
+      "targets": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "75a2badf3605011db3572ed3c0108b1ebbda9145794c0d54f25e63553eeab182",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "aa15f2fd21a71a7fe123eb5818a6d9df60a6f4aa6eef77c7d0d9297692ae6fe4",
+          "payloadDigest": "75a2badf3605011db3572ed3c0108b1ebbda9145794c0d54f25e63553eeab182",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "7d691b0ca181d230bf2c7c6f72a0174add3c85aad27a4bb7f0814c3b05f96968",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "aa15f2fd21a71a7fe123eb5818a6d9df60a6f4aa6eef77c7d0d9297692ae6fe4",
+          "payloadDigest": "7d691b0ca181d230bf2c7c6f72a0174add3c85aad27a4bb7f0814c3b05f96968",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "bd9e59f4aad34240c164cf622fb0e7e18de119e07fd9ed4ebb678126358af7cf",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.isolated_pawn.lost.white",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "953797720c7b6493a50dc3a4e4b3812c3977b10e52ea7dc6b2458f7c058606e0",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 32,
+      "targets": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "8919db924a7ceff3cc4c8cb576a3ef1afb541c2f5906635786faaeb80008529a",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "19992a052ad32f8adf7b09fd1a0e092f3d3ae1be6ce212cd43e6c111b85e5ba5",
+          "payloadDigest": "8919db924a7ceff3cc4c8cb576a3ef1afb541c2f5906635786faaeb80008529a",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "c6aee983bd81cf69d34f3ebbc1edde09716f882bc7f562135ffb9a159a17959b",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "19992a052ad32f8adf7b09fd1a0e092f3d3ae1be6ce212cd43e6c111b85e5ba5",
+          "payloadDigest": "c6aee983bd81cf69d34f3ebbc1edde09716f882bc7f562135ffb9a159a17959b",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "0f8ad1467a979713847a596fd6a2dccefccf2cd32ca9bd89886008066520863b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.isolated_pawn.preserved.black",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "57dad34479eb447c7c03fb4351c6593c27a1ef806178ae8c4fdab3e3fa25360c",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 27,
+      "targets": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "7b422790d5205300887f494247e53c2fdf4fd3eab1a0b19b09054edaf1832662",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "e87b6fafe8ff1a54b9307bb500aecf6d21c53db49335c389cb30166780a4ca10",
+          "payloadDigest": "7b422790d5205300887f494247e53c2fdf4fd3eab1a0b19b09054edaf1832662",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "79bf923c210bc7d5e77cc093e5819b669e61da4bcb34242a99fec606ec6f21ae",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.isolated_pawn.preserved.white",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "cc94da66eb13423b7d86e4b3b76a262d47fb28380898315e1005d8b30d13a40f",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 27,
+      "targets": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "operandDigest": "5c7a3e57040e7c3f03a155c55c26c86c7b092ffb8a9c7ca2c079155fce795516",
+          "factory": "createRulesStructuralEventIsolatedPawnV1Evidence",
+          "inputDigest": "adb52917600ae02fd1b14991d951a36396d3d01eab230bdf88d70560f1d69dfb",
+          "payloadDigest": "5c7a3e57040e7c3f03a155c55c26c86c7b092ffb8a9c7ca2c079155fce795516",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "70fe6bcfc8689a1a9acf7d71ecb0a01533f20765bec9794cf2f7361bd2efb707",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.open_file.gained.black",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3780ed49b2ffb1168394fa4d5eed5f8910b85c7de99c377602a4396ced4e7ec9",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 8,
+      "otherCount": 25,
+      "targets": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "774cb04547667e4e710d29c51b05a09659eb2981ee65ba60baf3e7c996ead3a0",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "774cb04547667e4e710d29c51b05a09659eb2981ee65ba60baf3e7c996ead3a0",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "38117517091cca39813ccfc611c0093f57bebd9df39a84091d1cc73af643c63e",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "38117517091cca39813ccfc611c0093f57bebd9df39a84091d1cc73af643c63e",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "779e52a93a9b5cfa5b2aaa705253ff1a15c1766b573adc6457ef7b1672a20824",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "779e52a93a9b5cfa5b2aaa705253ff1a15c1766b573adc6457ef7b1672a20824",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "a2c779da6a82399168c0cdfb2790143f08be4d36c3bbf3f050a66da322189aae",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "a2c779da6a82399168c0cdfb2790143f08be4d36c3bbf3f050a66da322189aae",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "d0b809ab867bdb4405b686e0396d8999abac53834e015891a0ea290580bb72fe",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "d0b809ab867bdb4405b686e0396d8999abac53834e015891a0ea290580bb72fe",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "d05a40811523be469c7e8a5c32d74e8bf00d342dea8afad17bacfa20b1fdb138",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "d05a40811523be469c7e8a5c32d74e8bf00d342dea8afad17bacfa20b1fdb138",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "020642d1462f56a2f441e31ea9c52fcd2c3e3c7c95f797d7114fd6897282a847",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "020642d1462f56a2f441e31ea9c52fcd2c3e3c7c95f797d7114fd6897282a847",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "237579c421449f9938adafac38171dadbfb0342b06dc135221f356ec153ec89f",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "4b1a846181786d1be71b8d4c23774c134902074458a68e98680089bec1bdf0d5",
+          "payloadDigest": "237579c421449f9938adafac38171dadbfb0342b06dc135221f356ec153ec89f",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "53bf2a5d9de9de84daae9411d83e3fd1373dd90dc892baa72bb860d0010c9f09",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.open_file.gained.white",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "70b9b583be6c553c11c5e9fc96a3a1a147f94dc2930eb893e497c3d35fbeef03",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 8,
+      "otherCount": 25,
+      "targets": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "00bc58e9d011d5dde74595d2516fe21ae939d2ff6fbb1a8dfd38bb459cb8855a",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "00bc58e9d011d5dde74595d2516fe21ae939d2ff6fbb1a8dfd38bb459cb8855a",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "5fbd2b53bc1c7ab36fe38a7b36301b292e4a49aa54e84851f4a554ba01853b57",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "5fbd2b53bc1c7ab36fe38a7b36301b292e4a49aa54e84851f4a554ba01853b57",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "983221bc94d2149cdc003c3a9a3268a3e9b9e1acb6b8fd7caf12b633b0278fef",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "983221bc94d2149cdc003c3a9a3268a3e9b9e1acb6b8fd7caf12b633b0278fef",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "66bfab0132c9ecee5a7f847333589d68402555d9f1517e12a8a51a7d695e05a0",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "66bfab0132c9ecee5a7f847333589d68402555d9f1517e12a8a51a7d695e05a0",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "90119a48363893f80c89c23a9e2828302746b0427239de443111819fa894a56e",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "90119a48363893f80c89c23a9e2828302746b0427239de443111819fa894a56e",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "7afa5fff45a87ae523808820dd88bdb999093f67a6b214b7fdd4c6f8be1f918d",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "7afa5fff45a87ae523808820dd88bdb999093f67a6b214b7fdd4c6f8be1f918d",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "d6d0e661ab6857667ed0044a8077f141b9e8422d4f566d5f223b9eaad7f294d1",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "d6d0e661ab6857667ed0044a8077f141b9e8422d4f566d5f223b9eaad7f294d1",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "d2692ec4bba721ce94fca361a91045ce948f289ace04c7c62bee9acaba4fea0b",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "830412f869f74e8d7c43a59a65a3b0136db100bcfbf367e6214875153a032285",
+          "payloadDigest": "d2692ec4bba721ce94fca361a91045ce948f289ace04c7c62bee9acaba4fea0b",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f483e942c5f3ce52f297e759abc78020658a6657cd1eb9b7b6647dc62d4f7156",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.open_file.lost.black",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "cf5b410966a9c60097b5249204885a125ef7250356bc9e3afccb99833f7b55cc",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 8,
+      "otherCount": 25,
+      "targets": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "f47129f7aeff7b099b3105aa496c52167f1e4c1e02ad15f162ae3191fa9f99c5",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "f47129f7aeff7b099b3105aa496c52167f1e4c1e02ad15f162ae3191fa9f99c5",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "2e8a4306fe88c57be068e05df96bd5741cbaf5432dc63d1cc0668b5d754b15ef",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "2e8a4306fe88c57be068e05df96bd5741cbaf5432dc63d1cc0668b5d754b15ef",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "155ab8e0a0549df48c139cca1e2fdd4f19cdf87ae237fa0e7a97eb6b6fc927cf",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "155ab8e0a0549df48c139cca1e2fdd4f19cdf87ae237fa0e7a97eb6b6fc927cf",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "03f4866c61c2987ad5a32c18969c95bf7995ddbadf7b24006deb2e6a0777cdac",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "03f4866c61c2987ad5a32c18969c95bf7995ddbadf7b24006deb2e6a0777cdac",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "f054425b075aedfa7af1109d58819159bd4b01942f45041051c38f9b1e782ecd",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "f054425b075aedfa7af1109d58819159bd4b01942f45041051c38f9b1e782ecd",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "0c16514bd0bd8c365034259ea4ab473ff4ee5f4c09b14ebe817b7340ff22f801",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "0c16514bd0bd8c365034259ea4ab473ff4ee5f4c09b14ebe817b7340ff22f801",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "7e693aee110798ba6e668770ad5185d2060b600fe99d94648f84e792d999066d",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "7e693aee110798ba6e668770ad5185d2060b600fe99d94648f84e792d999066d",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "79de3b8b32e243ae088ae03f55ab493ac65ae307e655ece42fcb319409e325da",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "6ee78d349d29aef5822d48172166cea1397463e4a4e3b43b248879ef9b679803",
+          "payloadDigest": "79de3b8b32e243ae088ae03f55ab493ac65ae307e655ece42fcb319409e325da",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "61156d5bc4edb4e8a6f6b44560a7dd60ac7b0397a8eefee204c7448329dff9b8",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.open_file.lost.white",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "d2f0a6d5608e89afd5b4e4605d7e41b0a593fe459d4531c1dfc431221d471055",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 8,
+      "otherCount": 25,
+      "targets": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "a8053b0dc4bdb642bf305e53e89f38d343db07fef20c8cf6cee885f233c8cf5b",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "a8053b0dc4bdb642bf305e53e89f38d343db07fef20c8cf6cee885f233c8cf5b",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "07ac32280130e4734084d456551397ca1267ea09792b2db17b0232dd1acff1eb",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "07ac32280130e4734084d456551397ca1267ea09792b2db17b0232dd1acff1eb",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "c98a32615c19372b4024625bf7409c34696acd1919a5dfb97df271d75354feb7",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "c98a32615c19372b4024625bf7409c34696acd1919a5dfb97df271d75354feb7",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "6f07528e0440295502a3ed430284132f8b64abe1187e67d71b1038cf92d0e2a1",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "6f07528e0440295502a3ed430284132f8b64abe1187e67d71b1038cf92d0e2a1",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "638b2729d6b4df0408d62cf73f0d03b84250b45f2e4fdb978981bb5a89605146",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "638b2729d6b4df0408d62cf73f0d03b84250b45f2e4fdb978981bb5a89605146",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "a51d1486b574f0a2651b9c139a2001cfe65fb328e8d3804d45100dfe112ff92a",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "a51d1486b574f0a2651b9c139a2001cfe65fb328e8d3804d45100dfe112ff92a",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "28222878340a51d0b68415d056884f607aaa29ab60eff757550bf008cd71039c",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "28222878340a51d0b68415d056884f607aaa29ab60eff757550bf008cd71039c",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "f3af976968cf7f6c6ae8927a47df5fae064911161950d7d7a07d6794e14d712f",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "1d525bac3a317e0b3b76807a28f3461353135be2864171cee475913d57ee8810",
+          "payloadDigest": "f3af976968cf7f6c6ae8927a47df5fae064911161950d7d7a07d6794e14d712f",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "45fdc226168838cec5ee57fdda3678ef630527476b7a7e7caddabbcaafdeac97",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.open_file.preserved.black",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "0a4fd48eceb347064ec3831ec707111e7031d21333cd871693d06b1b398376eb",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 7,
+      "otherCount": 20,
+      "targets": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "e0fde3adb2597d01d7307d1ccad4b2f90dd5119efcdce9ae391c7315796aa109",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "e0fde3adb2597d01d7307d1ccad4b2f90dd5119efcdce9ae391c7315796aa109",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "f23ed4b110a8022cae683ca2179535f000326d1f8883033e5fafb6aee26f83d0",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "f23ed4b110a8022cae683ca2179535f000326d1f8883033e5fafb6aee26f83d0",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "a1826b86b946e346ff494e47a7ef9010e848f35329549997bd4fa685c9643050",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "a1826b86b946e346ff494e47a7ef9010e848f35329549997bd4fa685c9643050",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "6125f5e2689d83d359e06ef08f34abde6d92a245a7b808e9d59a252c9f41cc2b",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "6125f5e2689d83d359e06ef08f34abde6d92a245a7b808e9d59a252c9f41cc2b",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "c5c4bf18c3aa6aaff6e240de3c84ef473e13938f5efd67e2e616a4528c802c26",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "c5c4bf18c3aa6aaff6e240de3c84ef473e13938f5efd67e2e616a4528c802c26",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "b1d051c19032edd6b71b607c0b8738a5ec4905be06e18c0bdf3c091a5d4349cc",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "b1d051c19032edd6b71b607c0b8738a5ec4905be06e18c0bdf3c091a5d4349cc",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "757d85ce4c7136f9abb50b37113410f724bc91fcd37c7079412638a726343b66",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "3ca0bbd7e68659125cd3e0abb3aa00dda52afb5bd00448ee7f705b9f9e34696b",
+          "payloadDigest": "757d85ce4c7136f9abb50b37113410f724bc91fcd37c7079412638a726343b66",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "5894ca0bb39684c33d047d52cbff86a231351029765ccc2d01fb2df749b46535",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.open_file.preserved.white",
+      "subject": "event:rules.structural.event.open_file@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "791e2a1bafc43d764ab03152b1c2f233c70bf195f1da4d619dd1a70261d46d3e",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 7,
+      "otherCount": 20,
+      "targets": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "ff5754e19dfc59a47f16c9b8c417a278e037d677a288beb6932d39dbdb77e2da",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "ff5754e19dfc59a47f16c9b8c417a278e037d677a288beb6932d39dbdb77e2da",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "3e023f8e583ca52d6de004baded6e27bca154ac877e41c15d6abce39c3752524",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "3e023f8e583ca52d6de004baded6e27bca154ac877e41c15d6abce39c3752524",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "c88d81251dab69a6117c8e233e26888238ae36b73837b9588b7d19a2795db3aa",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "c88d81251dab69a6117c8e233e26888238ae36b73837b9588b7d19a2795db3aa",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "69067b8ca77b7ba7594c883dcfa911811c2aa1a3b2d0cc778cc6a15b53fb89ce",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "69067b8ca77b7ba7594c883dcfa911811c2aa1a3b2d0cc778cc6a15b53fb89ce",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "2a7816b261f723373d0788ac6b7784f67af2ea8bf7fd80f764c4320d8f81287a",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "2a7816b261f723373d0788ac6b7784f67af2ea8bf7fd80f764c4320d8f81287a",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "71d7b8c9da64e0c271694e839605cb7bc31f974afe96ead9652dfcf473facfc5",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "71d7b8c9da64e0c271694e839605cb7bc31f974afe96ead9652dfcf473facfc5",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "operandDigest": "9e533fffb5630df3758a039e7cf60157880e856cc26b77cfd4656dbc41132ee0",
+          "factory": "createRulesStructuralEventOpenFileV1Evidence",
+          "inputDigest": "652fe22497e1aacbcf00219295fe127cdb11eacc237f5ad200408712cf273655",
+          "payloadDigest": "9e533fffb5630df3758a039e7cf60157880e856cc26b77cfd4656dbc41132ee0",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "69c273f7407b3ad6aaa3dd790214b1d7caa5935057b15260579304d7ffb356c7",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.passed_pawn.gained.black",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "d24c83157049a21df3eb3d938adf4f3ffd558a3d8aa3023d187d925a9943828c",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 31,
+      "targets": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "44ac04b3c88b9edb2a2ff8a88fb265c5f4085be50f92c49c7ae55cf185643fb3",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "e050bba893bc88537b01c44777a02d73538600e1139359af54f65cdf06b311d4",
+          "payloadDigest": "44ac04b3c88b9edb2a2ff8a88fb265c5f4085be50f92c49c7ae55cf185643fb3",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "94f307282ae5dc4da5d24c1dd812ba7c3f8aa0cb4455ed975ac530f6228ccbac",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "e050bba893bc88537b01c44777a02d73538600e1139359af54f65cdf06b311d4",
+          "payloadDigest": "94f307282ae5dc4da5d24c1dd812ba7c3f8aa0cb4455ed975ac530f6228ccbac",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "9ac889c767370fda67ce87500a2a2f179cbb0868361f34adb36c57a912aa0661",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.passed_pawn.gained.white",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "b9c10cbd80514c2e5947064f47e8176caf45a6d669d23f00e406a93fa9e7454b",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 31,
+      "targets": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "ec8c1e3fbf5e0e23f160f25aca421a8b8b028b585c9d1d8290494107ec7aaf59",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "8e5f4ea4f3367c71b97bbbae325e5acd7a1a14267bbeeb0d1cd9823731e86775",
+          "payloadDigest": "ec8c1e3fbf5e0e23f160f25aca421a8b8b028b585c9d1d8290494107ec7aaf59",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "4e88390ac6ca7d2e988fcd66ed162203ac9aefb907869d19f13aa96f3888234c",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "8e5f4ea4f3367c71b97bbbae325e5acd7a1a14267bbeeb0d1cd9823731e86775",
+          "payloadDigest": "4e88390ac6ca7d2e988fcd66ed162203ac9aefb907869d19f13aa96f3888234c",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "378804235e85abb27cd6a3c474e102ceb02f2e708ad26f5d5dd7eaa11cc5650d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.passed_pawn.lost.black",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "b34b8343f74b9ef230a14e73201c385889847f50074dadd9770be69da28ad61a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 33,
+      "targets": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "2dd8010a5869046bcb638894544e46d93edfb0dc2b0efb085a659a5c330fec60",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "6a17ccef317017cd02784d479c072e4c6266f3bf336c9b9693c2f44428001de0",
+          "payloadDigest": "2dd8010a5869046bcb638894544e46d93edfb0dc2b0efb085a659a5c330fec60",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "f99120be522eec0641d1224ae86daa293a09110846342562df0b1e0a7e54332b",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "6a17ccef317017cd02784d479c072e4c6266f3bf336c9b9693c2f44428001de0",
+          "payloadDigest": "f99120be522eec0641d1224ae86daa293a09110846342562df0b1e0a7e54332b",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "494919315189c5478e85523760979af4e028d37e444b32d8713065e93ee13096",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.passed_pawn.lost.white",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "a3c21619a48b7b43784ccd426f70e91dc13ea3f28e94273c205ec841e61c6518",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 33,
+      "targets": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "ed7d788f551f98a62a22b7da78ce8cf2700abe6c49eb70225ad2cb1d3087d885",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "a833ba18be756ad3272a9fc5dcdba9dd0484fee218e8daf6ed93d275ffdb1e3b",
+          "payloadDigest": "ed7d788f551f98a62a22b7da78ce8cf2700abe6c49eb70225ad2cb1d3087d885",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "d92e2dc2612f2924a44ddc55f3cadec760da4756eefb7e0ecf4965c37b728e4e",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "a833ba18be756ad3272a9fc5dcdba9dd0484fee218e8daf6ed93d275ffdb1e3b",
+          "payloadDigest": "d92e2dc2612f2924a44ddc55f3cadec760da4756eefb7e0ecf4965c37b728e4e",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "def747bc164f6ca2c85074ff7ead6cfae205861c45c6e484b1dea7df60897a5b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.passed_pawn.preserved.black",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "7811d6dbb5058d65fd1b7a58629cbafc5bce03fa3b84188c8616698f2c35f249",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 27,
+      "targets": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "2e9333b0d142b5dffed262b589d41c1937ed98c659d194dc80926d08eb55c487",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "478c3035c17311093c2000f6a06666c657f9946d544821248fb09c57090baab0",
+          "payloadDigest": "2e9333b0d142b5dffed262b589d41c1937ed98c659d194dc80926d08eb55c487",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "b286e568401f75bfae1650f4bcdf9cdcbaa267461c9eb212837d02c3b97d013b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.stockfish.pawn-files.passed_pawn.preserved.white",
+      "subject": "event:rules.structural.event.passed_pawn@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "1fb6d7a0177424789ed3e445c473eb40623cd4d1518bfeed2d29966247c2272e",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 27,
+      "targets": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "operandDigest": "d2c630e65a33aa269c24fa5ba743ab2c0afb50818f11d92c5fa6f6a58e2ef93c",
+          "factory": "createRulesStructuralEventPassedPawnV1Evidence",
+          "inputDigest": "1be52c3d017bd6ed259784a4d92413c94d01cb3e08f9cfa7ddc27e3abc0c4b55",
+          "payloadDigest": "d2c630e65a33aa269c24fa5ba743ab2c0afb50818f11d92c5fa6f6a58e2ef93c",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "bc4ff61dc3fc750b678e3fe4c94af480a99f15998b4f5c1f55c844623696f86e",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -9341,9 +10937,15 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-files.backward_pawn.gained.white",
+            "cited.stockfish.pawn-files.backward_pawn.gained.black",
+            "cited.stockfish.pawn-files.backward_pawn.lost.white",
+            "cited.stockfish.pawn-files.backward_pawn.lost.black",
+            "cited.stockfish.pawn-files.backward_pawn.preserved.white",
+            "cited.stockfish.pawn-files.backward_pawn.preserved.black"
+          ]
         },
         {
           "arm": "semantic_negative",
@@ -9378,7 +10980,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9446,9 +11047,15 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-files.doubled_pawn.gained.white",
+            "cited.stockfish.pawn-files.doubled_pawn.gained.black",
+            "cited.stockfish.pawn-files.doubled_pawn.lost.white",
+            "cited.stockfish.pawn-files.doubled_pawn.lost.black",
+            "cited.stockfish.pawn-files.doubled_pawn.preserved.white",
+            "cited.stockfish.pawn-files.doubled_pawn.preserved.black"
+          ]
         },
         {
           "arm": "semantic_negative",
@@ -9483,7 +11090,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9499,9 +11105,15 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-files.half_open_file.gained.white",
+            "cited.stockfish.pawn-files.half_open_file.gained.black",
+            "cited.stockfish.pawn-files.half_open_file.lost.white",
+            "cited.stockfish.pawn-files.half_open_file.lost.black",
+            "cited.stockfish.pawn-files.half_open_file.preserved.white",
+            "cited.stockfish.pawn-files.half_open_file.preserved.black"
+          ]
         },
         {
           "arm": "semantic_negative",
@@ -9536,7 +11148,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9552,9 +11163,15 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-files.isolated_pawn.gained.white",
+            "cited.stockfish.pawn-files.isolated_pawn.gained.black",
+            "cited.stockfish.pawn-files.isolated_pawn.lost.white",
+            "cited.stockfish.pawn-files.isolated_pawn.lost.black",
+            "cited.stockfish.pawn-files.isolated_pawn.preserved.white",
+            "cited.stockfish.pawn-files.isolated_pawn.preserved.black"
+          ]
         },
         {
           "arm": "semantic_negative",
@@ -9589,7 +11206,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9761,9 +11377,15 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-files.open_file.gained.white",
+            "cited.stockfish.pawn-files.open_file.gained.black",
+            "cited.stockfish.pawn-files.open_file.lost.white",
+            "cited.stockfish.pawn-files.open_file.lost.black",
+            "cited.stockfish.pawn-files.open_file.preserved.white",
+            "cited.stockfish.pawn-files.open_file.preserved.black"
+          ]
         },
         {
           "arm": "semantic_negative",
@@ -9798,7 +11420,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },
@@ -9814,9 +11435,15 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.stockfish.pawn-files.passed_pawn.gained.white",
+            "cited.stockfish.pawn-files.passed_pawn.gained.black",
+            "cited.stockfish.pawn-files.passed_pawn.lost.white",
+            "cited.stockfish.pawn-files.passed_pawn.lost.black",
+            "cited.stockfish.pawn-files.passed_pawn.preserved.white",
+            "cited.stockfish.pawn-files.passed_pawn.preserved.black"
+          ]
         },
         {
           "arm": "semantic_negative",
@@ -9851,7 +11478,6 @@
         }
       ],
       "open": [
-        "positive",
         "orientation"
       ]
     },

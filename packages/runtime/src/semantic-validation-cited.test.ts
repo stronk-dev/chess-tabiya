@@ -24,6 +24,93 @@ const pawnAbsenceRows = pawnAbsenceFamilies.flatMap(family => ["white", "black"]
   family, color, caseId: `cited.python-chess.pawn-absence.${family}.${color}`,
 })));
 
+const pawnPositiveRows = pawnAbsenceFamilies.flatMap(family => ["gained", "lost", "preserved"].flatMap(sign =>
+  ["white", "black"].map(color => ({ family, sign, color,
+    caseId: `cited.stockfish.pawn-files.${family}.${sign}.${color}` }))));
+
+describe("D3685 source-bound pawn/file membership", () => {
+  it.each(pawnPositiveRows)("$caseId retains the exact membership through legal production play", async row => {
+    const value = byId.get(row.caseId);
+    expect(value, `missing canonical positive ${row.caseId}`).toBeDefined();
+    expect(value!.arm).toBe("positive");
+    expect(value!.operation).toEqual({ id: "runtime.semantic.structural_edge", version: 1 });
+    const receipt = await executeSemanticValidationCase(value!, SEMANTIC_VALIDATION_RESOLVERS, byId);
+    expect(receipt).toMatchObject({ status: "passed", resultKind: "completed", invocations: 1, failure: null });
+    expect(receipt.targetCount).toBeGreaterThan(0);
+    const result = await SEMANTIC_VALIDATION_OPERATIONS[value!.operation.id].invoke(value!.input as never);
+    const targets = selectSemanticTargets(result, value!.subject);
+    const expectedSquare = row.color === "white" ? "c4" : "c5";
+    const subject = { kind: row.family, ...(row.family === "open_file" ? {} : { color: row.color }),
+      ...(row.family === "passed_pawn" ? { squares: [expectedSquare] } : { file: "c", squares: [] }) };
+    const expected = { family: row.family, before: row.sign === "gained" ? null : subject,
+      after: row.sign === "lost" ? null : subject };
+    const matching = targets.filter(target => {
+      const payload = observationEvidence(target).payload as { before: unknown; after: unknown };
+      return evidenceDigest(payload.before) === evidenceDigest(expected.before) &&
+        evidenceDigest(payload.after) === evidenceDigest(expected.after);
+    });
+    expect(matching).toHaveLength(1);
+    expect(observationEvidence(matching[0]!).payload).toMatchObject(expected);
+    expect(matching[0]!.kind).toBe("event");
+    if (matching[0]!.kind === "event") expect(matching[0]!.item.sign).toBe(row.sign);
+    if (value!.input.kind !== "edge") throw new Error("pawn fixture must be a played edge");
+    // Retained neutral operands, independently of the structural classifier:
+    // occupancy, files, relative ranks and pawn attack direction only. This
+    // finite check does not grade a move or adopt Stockfish's evaluation scores.
+    const membership = [value!.input.beforeFen, value!.input.afterFen].map(fen => {
+      const position = positionFromFen(fen), color = row.color as "white" | "black";
+      const own = [...position.board.pawn.intersect(position.board[color])];
+      const enemy = [...position.board.pawn.intersect(position.board[opposite(color)])];
+      const cPawns = own.filter(square => square % 8 === 2);
+      if (row.family === "open_file") return [...own, ...enemy].every(square => square % 8 !== 2);
+      if (row.family === "half_open_file") return cPawns.length === 0 && enemy.some(square => square % 8 === 2);
+      if (row.family === "isolated_pawn") return cPawns.length > 0 && own.every(square => ![1, 3].includes(square % 8));
+      if (row.family === "doubled_pawn") {
+        if (cPawns.length === 2) expect(Math.abs(cPawns[0]! - cPawns[1]!)).toBe(8);
+        return cPawns.length === 2;
+      }
+      const forward = color === "white" ? 1 : -1;
+      if (row.family === "passed_pawn") {
+        const square = parseSquare(expectedSquare)!;
+        expect(position.board.get(square)).toMatchObject({ role: "pawn", color });
+        return enemy.every(other => Math.abs(other % 8 - 2) > 1 ||
+          (Math.floor(other / 8) - Math.floor(square / 8)) * forward <= 0);
+      }
+      const square = parseSquare(color === "white" ? "c3" : "c6")!;
+      const stop = square + 8 * forward;
+      expect(position.board.get(square)).toMatchObject({ role: "pawn", color });
+      expect(position.board.get(stop)).toBeUndefined();
+      expect(own.filter(other => [1, 3].includes(other % 8))).toEqual([parseSquare(color === "white" ? "d4" : "d5")]);
+      return enemy.some(other => pawnAttacks(opposite(color), other).has(stop));
+    });
+    expect(membership).toEqual([row.sign !== "gained", row.sign !== "lost"]);
+  });
+
+  it.each(pawnAbsenceFamilies)("%s closes its positive arm and rejects borrowed inputs/operands", async family => {
+    const subject = { kind: "event" as const, projection: { id: `rules.structural.event.${family}`, version: 1 } };
+    const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
+    expect(profile.positive).toMatchObject({ disposition: "present", refs: pawnPositiveRows.filter(row => row.family === family)
+      .map(row => ({ id: row.caseId })) });
+    expect(profile.orientation.disposition).toBe("required");
+    expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
+    const value = byId.get(`cited.stockfish.pawn-files.${family}.gained.white`)!;
+    const lost = byId.get(`cited.stockfish.pawn-files.${family}.lost.white`)!;
+    for (const edit of [{ input: lost.input }, { expectation: lost.expectation },
+      { operation: { id: "runtime.semantic.transition_edge", version: 1 } },
+      { subject: { kind: "event", projection: { id: "rules.structural.event.piece_count", version: 1 } } }]) {
+      expect(await executeSemanticValidationCase(parseSemanticValidationCase({ ...value, ...edit }), SEMANTIC_VALIDATION_RESOLVERS, byId))
+        .toMatchObject({ status: "failed", invocations: 0, failure: { code: "SEMANTIC_VALIDATION_AUTHORITY_INVALID" } });
+    }
+  });
+
+  it("retains all 139 predecessor records alongside 36 new positives", () => {
+    expect(cases.filter(value => pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(36);
+    expect(cases.filter(value => !pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(139);
+    expect(evidenceDigest(raw.filter(value => !pawnPositiveRows.some(row => row.caseId === value.id))))
+      .toBe("5859d9a11f0a7b32c8f7175e86c7caf79d38215ded671f9275e7dc4336573f69");
+  });
+});
+
 describe("D3676 populated pawn-structure absence", () => {
   it.each(pawnAbsenceRows)("$caseId omits the exact family after completed legal play", async row => {
     const value = byId.get(row.caseId);
@@ -56,14 +143,14 @@ describe("D3676 populated pawn-structure absence", () => {
     }
   });
 
-  it.each(pawnAbsenceFamilies)("%s closes only its omission arm and refuses borrowed authority", async family => {
+  it.each(pawnAbsenceFamilies)("%s retains its omission arm and refuses borrowed authority", async family => {
     const subject = { kind: "event" as const, projection: { id: `rules.structural.event.${family}`, version: 1 } };
     const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
     expect(profile.semanticNegative).toMatchObject({ disposition: "present", refs: [
       { id: `cited.python-chess.pawn-absence.${family}.white` },
       { id: `cited.python-chess.pawn-absence.${family}.black` },
     ] });
-    expect(profile.positive.disposition).toBe("required");
+    expect(profile.positive.disposition).toBe("present");
     expect(profile.orientation.disposition).toBe("required");
     expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
     const value = byId.get(`cited.python-chess.pawn-absence.${family}.white`)!;
@@ -78,7 +165,8 @@ describe("D3676 populated pawn-structure absence", () => {
 
   it("adds twelve absence cases without retiring any of the 127 prior cases", () => {
     expect(cases.filter(value => pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(12);
-    expect(cases.filter(value => !pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(127);
+    expect(cases.filter(value => !pawnAbsenceRows.some(row => value.id === row.caseId) &&
+      !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(127);
   });
 });
 
@@ -183,7 +271,8 @@ describe("D3667 exact contact transitions", () => {
     expect(contactTransitions).toHaveLength(24);
     expect(cases.filter(value => contactTransitions.some(row => value.id === row.caseId))).toHaveLength(24);
     expect(cases.filter(value => !contactTransitions.some(row => value.id === row.caseId) &&
-      !pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(103);
+      !pawnAbsenceRows.some(row => value.id === row.caseId) &&
+      !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(103);
   });
 });
 
@@ -293,7 +382,7 @@ describe("source-grounded literal event validation", () => {
     const added = new Set([...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
       ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)),
       ...contactRows.map(row => row.caseId), ...contactTransitions.map(row => row.caseId),
-      ...pawnAbsenceRows.map(row => row.caseId)]);
+      ...pawnAbsenceRows.map(row => row.caseId), ...pawnPositiveRows.map(row => row.caseId)]);
     expect(cases.filter(value => !rows.some(row => row.caseId === value.id) && !added.has(value.id))).toHaveLength(63);
     for (const family of families) {
       const subject = { kind: "event" as const, projection: { id: family.projection, version: 1 } };

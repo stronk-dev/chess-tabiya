@@ -1722,6 +1722,17 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-10: D3685 implements Slice B's 36 source-bound pawn/file positives:
+  both colours and exact gained/lost/preserved membership for six structural subjects.
+  The real structural-edge operation executes all cases; retained neutral pawn/file/rank/
+  attack operands independently check the observations, including opponent-induced changes.
+  Five separately labelled Stockfish excerpts are verified verbatim at
+  `e6e324eb28fd49c1fc44b3b65784f85a773ec61c`, GPL-3.0-or-later. All 139 prior records
+  remain unchanged. Six positive arms become present; orientation, draft window reach,
+  other required arms and learner eligibility are unchanged. No new collector or chess
+  strategy claim; zero subjects fully qualified. Evidence:
+  `packages/runtime/src/semantic-validation-cited.test.ts`.
+
 - 2026-10-10: D3676 implements Slice B's twelve populated legal negatives for six
   pawn/file structural subjects. Actual structural-edge invocation completes and omits the
   exact subject while emitting other observations. Every prior canonical case is retained:

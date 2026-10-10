@@ -838,7 +838,7 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3676 adds twelve completed legal pawn/file omission cases, with both colours on populated full pawn ranks. The six negative arms are now present; positive and orientation arms remain required and no learner eligibility changes. All 127 prior canonical records are unchanged; the normal writer reports 139 passing cases (73 positives/66 negatives), 81 subjects and zero fully qualified. Nineteen predecessor-red controls become permanent omission, population-retention and borrowed-authority checks. D3672's exact event-wrapper/observation-grain repair remains delivered. D3671 closes disposable model gaps only; D3564/D3629 orientation and window amendments still need independent acceptance. All 102 focused and 709 foundation checks pass with clean types. Complete normal make roadmap-receipt verify-awake build passes 4569 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance, corpus/capability, packaging and build. The prior 281-browser checkpoint remains historical, not rerun for this validation-only wave. No production collector, source admission, chess strategy claim, content graduation, whole-capability or milestone completion follows.",
+          "summary": "D3685 adds 36 source-bound legal pawn/file positives, both colours and gained/lost/preserved exact membership through production structural operations. Five Stockfish excerpts are verified verbatim at e6e324eb28fd49c1fc44b3b65784f85a773ec61c; neutral pawn/file/rank/attack facts independently check these finite cases. All 139 predecessor records are unchanged. Six positive arms become present; 175 canonical cases pass (109 positive/66 negative), 81 subjects and zero fully qualified. All 145 focused/752 foundation checks and clean types pass. Normal local tiers pass 4653 software cases/367 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, governance, corpus/capability, packaging and build. The first aggregate stops on an incorrect roadmap reference; corrected remaining tiers pass without software changes. The prior 287-browser checkpoint is historical, not rerun for this validation-only wave. D3564/D3629 orientation/window drafts and remaining arms stay open; no collector, strategy claim, learner eligibility, pack bytes, source availability, whole capability/milestone, remote-CI or native release-image promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-validation-authority.md",
@@ -884,6 +884,11 @@
               "kind": "rfc",
               "id": "semantic-validation-authority.md",
               "digest": "sha256:ed207aa3f9cb2720d6adb3598eb0e025f21e47fd9235d335fc980e0ffba466cc"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3685",
+              "digest": "sha256:a8e56a6f429af606046daedd7d31df00d168b70b9828c113071411fb70bcdf62"
             },
             {
               "kind": "work_state",
