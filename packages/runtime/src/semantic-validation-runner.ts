@@ -8,6 +8,8 @@
  * case. Not exported from the runtime barrel.
  */
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { assertSemanticEvidenceEvent } from "./semantic-evidence.js";
 import { evidenceValueRouteRegistry } from "./internal/evidence-value-routes.js";
 import { exactLegalMoves } from "./legal-moves.js";
 import { canonicalFen, positionFromFen } from "./position-cache.js";
@@ -21,6 +23,8 @@ import {
 } from "./semantic-validation-operations.js";
 import {
   SemanticValidationError,
+  SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS,
+  SEMANTIC_READING_VALIDATION_ROOTS,
   compareSemanticMirror,
   evaluateSemanticFactConstraints,
   mirrorSemanticFen,
@@ -145,6 +149,9 @@ function observationProjection(observation: SemanticValidationObservation): Vers
 
 export function selectSemanticTargets(result: SemanticValidationOperationResult, subject: SemanticValidationSubject): readonly SemanticValidationObservation[] {
   if (result.kind !== "completed") return [];
+  // Validate the result grain before filtering. Relabelling a real event as a
+  // reading must fail, not turn its emission into an apparently valid omission.
+  for (const observation of result.observations) assertSemanticTargetValueAuthority(observation);
   return result.observations.filter((observation) => observationSubjectKind(observation) === subject.kind && refKey(observationProjection(observation)) === refKey(subject.projection));
 }
 
@@ -152,6 +159,20 @@ export function selectSemanticTargets(result: SemanticValidationOperationResult,
 export function assertSemanticTargetValueAuthority(observation: SemanticValidationObservation): SemanticTargetObservationReceipt {
   const evidence = observationEvidence(observation);
   try {
+    // The factory receipt grounds the payload; the existing event seal also binds
+    // its identity, anchor, operands and derivation metadata. One cannot replace the other.
+    switch (observation.kind) {
+      case "event": assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, observation.item); break;
+      case "declared_event":
+        if (!SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS.some(root => refKey(root) === refKey(evidence.projection)))
+          throw new TypeError("bare event observation is not an explicit inspector event root");
+        break;
+      case "reading":
+        if (!SEMANTIC_READING_VALIDATION_ROOTS.some(root => refKey(root) === refKey(evidence.projection)))
+          throw new TypeError("reading observation is not an explicit reading root");
+        break;
+      default: throw new TypeError("unknown semantic observation kind");
+    }
     assertDeclaredEvidence(evidence);
   } catch (error) {
     throw new SemanticValidationError("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING", `target has no value receipt: ${error instanceof Error ? error.message : String(error)}`);

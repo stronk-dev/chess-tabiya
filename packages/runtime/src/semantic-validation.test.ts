@@ -18,7 +18,7 @@ import { SEMANTIC_VALIDATION_OPERATIONS, canonicalSemanticEdge, type SemanticVal
 import { executeSemanticValidationOracle, type SemanticValidationOracleWitness } from "./semantic-validation-oracles.js";
 import { SEMANTIC_VALIDATION_PROFILES, SEMANTIC_VALIDATION_ROOTS, admitValidatedSemanticInstance, semanticValidationSummary, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { SEMANTIC_VALIDATION_RECEIPT } from "./semantic-validation-receipt.generated.js";
-import { assertSemanticReachRetained, executeSemanticValidationCase, subjectSemanticResult } from "./semantic-validation-runner.js";
+import { assertSemanticReachRetained, assertSemanticTargetValueAuthority, executeSemanticValidationCase, selectSemanticTargets, subjectSemanticResult } from "./semantic-validation-runner.js";
 import {
   SEMANTIC_READING_VALIDATION_DECLARATIONS,
   SEMANTIC_VALIDATION_ARMS,
@@ -62,6 +62,48 @@ const code = (run: () => unknown): string | undefined => {
 };
 const event = (id: string, version = 1): SemanticValidationSubject => ({ kind: "event", projection: { id, version } });
 const run = (value: SemanticValidationCase) => executeSemanticValidationCase(value, SEMANTIC_VALIDATION_RESOLVERS, CASE_MAP);
+
+describe.each(["transition.short-castle.castled", "migration.deflection.positive"])("D3672 exact semantic wrapper: %s", id => {
+  const actual = async () => {
+    const value = CASE_MAP.get(id)!;
+    const result = await SEMANTIC_VALIDATION_OPERATIONS[value.operation.id].invoke(value.input as never);
+    const targets = selectSemanticTargets(result, value.subject);
+    expect(targets.length).toBeGreaterThan(0);
+    const target = targets[0]!;
+    if (target.kind !== "event") throw new Error("Expected an actual compiled semantic event");
+    return target;
+  };
+  it("retains the genuine production event and its exact receipt without mutation", async () => {
+    const target = await actual(), before = JSON.stringify(target);
+    const receipt = assertSemanticTargetValueAuthority(target);
+    expect(receipt.projection).toBe(`${target.item.projection.id}@${target.item.projection.version}`);
+    expect(receipt.factory).toMatch(/^create/u);
+    expect(JSON.stringify(target)).toBe(before);
+  });
+  it.each(["copy", "id", "projection", "anchor", "sign", "operands", "inputs", "basis"])("rejects a %s wrapper retaining genuine sealed evidence", async fault => {
+    const target = await actual();
+    const item = { ...target.item };
+    if (fault === "id") item.id = "another-event";
+    if (fault === "projection") item.projection = { ...item.projection, version: 99 };
+    if (fault === "anchor") item.anchor = { ...item.anchor, nodeId: "another-node" };
+    if (fault === "sign") item.sign = "avoided";
+    if (fault === "operands") item.operands = { replaced: true };
+    if (fault === "inputs") item.derivationInputs = [];
+    if (fault === "basis") item.basis = { ...item.basis, confidence: item.basis.confidence === "reported" ? "exact" : "reported" };
+    expect(item.evidence).toBe(target.item.evidence);
+    expect(code(() => assertSemanticTargetValueAuthority({ kind: "event", item }))).toBe("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING");
+    expect(() => assertSemanticTargetValueAuthority(target)).not.toThrow();
+  });
+  it("cannot downgrade a compiled event to a bare declaration or a reading to manufacture omission", async () => {
+    const target = await actual(), subject = CASE_MAP.get(id)!.subject;
+    for (const kind of ["declared_event", "reading"] as const) {
+      const disguised = { kind, item: target.item.evidence };
+      expect(code(() => assertSemanticTargetValueAuthority(disguised))).toBe("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING");
+      expect(code(() => selectSemanticTargets({ kind: "completed", observations: [disguised], abstentions: [] }, subject)))
+        .toBe("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING");
+    }
+  });
+});
 
 describe("semantic-validation roots, profiles and verdicts", () => {
   it("[1] derives live roots from production projections and proves four-way equality at import", () => {
@@ -509,6 +551,7 @@ describe("semantic-validation bounded-target roots (R1, criterion 26)", () => {
     if (result.kind !== "completed") throw new Error("expected completed");
     const kinds = new Set(result.observations.map((observation) => `${observation.kind}:${observation.item.projection.id}`));
     expect([...kinds].sort()).toEqual(["declared_event:derived.bounded_target.immediate", "reading:derived.bounded_target.bounded_return", "reading:derived.bounded_target.named_material_target"]);
+    for (const observation of result.observations) expect(() => assertSemanticTargetValueAuthority(observation)).not.toThrow();
     // An event subject cannot be answered by a reading observation, nor a reading by an event.
     const asReading = { kind: "reading" as const, projection: { id: "derived.bounded_target.immediate", version: 1 } };
     expect(result.observations.filter((observation) => observation.kind === "reading" && observation.item.projection.id === asReading.projection.id)).toHaveLength(0);
@@ -518,6 +561,18 @@ describe("semantic-validation bounded-target roots (R1, criterion 26)", () => {
       expect(verdict.open).toEqual(expect.arrayContaining(["positive", "semantic_negative", "orientation", "imported_population"]));
     }
     expect(SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.bounded_target_batch"].reach.kind).toBe("required");
+  });
+
+  it("D3672 preserves the explicit inspector event and reading grains without allowing swaps", async () => {
+    const result = await SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.bounded_target_batch"].invoke({ kind: "bounded_target_source", sourceFen: "8/8/8/7k/n7/8/2B5/4K3 b - - 0 1" });
+    if (result.kind !== "completed") throw new Error("expected completed");
+    expect(result.observations.length).toBeGreaterThan(0);
+    for (const observation of result.observations) {
+      if (observation.kind === "event") throw new Error("expected explicit event or reading");
+      expect(() => assertSemanticTargetValueAuthority(observation)).not.toThrow();
+      const crossed = { kind: observation.kind === "reading" ? "declared_event" as const : "reading" as const, item: observation.item };
+      expect(code(() => assertSemanticTargetValueAuthority(crossed))).toBe("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING");
+    }
   });
 });
 

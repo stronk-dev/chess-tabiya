@@ -939,7 +939,11 @@ For each sequence case, execute the following total join:
    The selected start is `pathNodeIds[fromPly]`; the ending node is
    `pathNodeIds[fromPly + horizon]`. The complete node count is `input.path.edges.length + 1`.
    Bind the retained path result to the run constructed by the existing recorded-path adapter,
-   including branch/origin. No FEN-only, path-prefix-only or active-cursor substitution is valid.
+   including run identity and branch/origin. Obtain that context from the existing
+   `recordedRun(input.path)` construction used by this same parent invocation, not from a
+   case or a second collector invocation. A different constructed run id must fail even when
+   its copied nodes/FENs happen to match. No FEN-only, path-prefix-only or active-cursor
+   substitution is valid.
 4. Find **exactly one** window matching the row's exact projection/version, start and horizon.
    Check its ending node too. Missing or duplicate receipts fail reach. A legal input with an
    incomplete source is unavailable; it cannot establish a completed omission. `emitted`
@@ -949,11 +953,18 @@ For each sequence case, execute the following total join:
    multiset. Each must be the exact selected event projection. Do not recover absent ids by
    filtering, substitute another window or remove duplicates with a Set. Other families and
    other windows remain in the parent result and do not enter this selected-window comparison.
+   Before that selection, require unique event ids independently in the complete retained
+   path events and the complete parent observations. Matching two collections containing the
+   same duplicated unrelated event is still invalid; a Set may detect duplicates, not remove them.
 6. Require the **entire child result**, not only its target projection filter, to be the same
    selected multiset. Compare exact event identities/signs and sole-factory value receipts with
    their payload/input digests. Existing `assertSemanticTargetValueAuthority` must succeed for
    every compared observation. Duplicate, foreign-window, extra-family or modified child
-   observations fail. Typed abstention is not an empty result and cannot match `no_witness`.
+   observations fail. The value check also calls the existing `assertSemanticEvidenceEvent`
+   for event observations: a genuine evidence payload inside a copied/edited outer event
+   does not bind its identity, anchor, operands or derivation. Do not mint a replacement
+   wrapper, add a new sealing scheme or compare only the payload receipt. Typed abstention
+   is not an empty result and cannot match `no_witness`.
 7. Record reach as passed only after this join. The ordinary positive/negative and independent
    proposition/oracle checks still run; successful reach alone supplies no chess expectation,
    orientation authority, profile qualification or learner eligibility.
@@ -977,6 +988,12 @@ disposable author model:
   duplicate or replaced parent observation; missing/duplicate window event id; and erased,
   duplicated, altered, foreign-window or extra-family child output. Include completed
   `no_witness` and extra unrelated parent events as positives so the guard is not blanket refusal.
+- Independently duplicate an unrelated event in **both** retained path events and parent
+  observations; cross the constructed run id while preserving nodes/FENs; and copy or edit a
+  child event's anchor, operands, projection, identity, derivation or basis while retaining
+  genuine sealed evidence. Relabelling event/reading grains must fail before target filtering,
+  not become a passing omission. All must fail, while untouched real one-edge/recorded events
+  and the explicit bounded-target event/reading roots pass.
 - Exercise every one of the thirteen production family/horizon rows, including both contact and
   attraction horizons, without treating thirteen row fixtures as thirteen new chess authorities.
 - Refresh the existing generated validation receipt with its normal writer, then run normal
@@ -994,6 +1011,17 @@ family. The initial harassment fixture emitted only its selected event, so it di
 an unequal whole-path multiset; the corrected counterexample uses the real deflection path.
 No production operation, independent authority or canonical case is changed. Independent review
 is still required; these model results do not certify the current broken runner.
+
+**2026-10-10 implementation-facing review (D3671/D3672):** two new controls fail on the
+original author model: co-edited duplicate unrelated parent events and a crossed constructed run
+id. The disposable model now rejects both, bringing the complete ordinary matrix to 81 checks.
+Sixteen permanent production controls separately reproduce the existing value validator accepting
+copied/edited semantic-event wrappers. Three further controls reproduce observation-kind bypasses,
+including an emission incorrectly becoming a passing omission. D3672 repairs that existing §4.2
+contract using the existing event validator and explicit root registries before target filtering,
+not this draft reach arm; all 127 canonical cases remain passing and every subject
+still lacks full qualification. This round clarifies the build seam above; independent acceptance
+of §4.3a and §4.1a is still required before their production implementation.
 
 ### 4.4 Reach and non-vacuity
 

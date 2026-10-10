@@ -30431,6 +30431,24 @@
       "sourceDigest": "sha256:e7c18fdc32d4294dec0e87bc71d21e9da81b10d07c21938d36097cd524a524ec",
       "uxItems": [],
       "owner": "learner-history"
+    },
+    {
+      "id": "D3671",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e2e44dacbdc33e9a54474aa8edd2b07c3047d9af790b20e63b42b299bdefeeef",
+      "uxItems": [],
+      "evidence": "tools/d1713-semantic-validation-matrix/sequence-reach.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3672",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:555e6b6f65d8ffcd80a35d0ce858e5e4df3338786e25b91c55230db3ad791dc6",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

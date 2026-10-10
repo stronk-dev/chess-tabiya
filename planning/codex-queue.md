@@ -12,6 +12,22 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3672]] repairs existing semantic-value admission: event observations must pass the
+existing semantic-event validator as well as the sole-factory payload check. Explicit
+observation-grain checks precede selection so relabelling cannot manufacture omission.
+Nineteen permanent controls fail on the predecessors; genuine one-edge/recorded events and
+bounded-target readings remain unchanged. All 690 foundation controls and clean types pass;
+all 127 canonical cases pass, zero subjects fully qualified. D3672 is closed: normal
+`make roadmap-receipt verify-awake build` passes 4,532 software, seven unchanged-budget
+performance and 246 content cases, governance/packaging and build. Ledger/state/docs/roadmap
+close together. The prior 275-browser checkpoint is historical for this validation-only batch.
+[[D3671]] records two gaps in D3629's disposable exact-window model: co-edited duplicate
+unrelated parent events and crossed constructed-run identity. Both now refuse, all 81
+research controls pass, and §4.3a names the existing checks. D3671 is closed for those model
+gaps only. Independent acceptance of
+the orientation/window amendments remains required before their production changes;
+do not treat model repairs or payload/event seals as chess qualification.
+
 [[D3668]] repairs Review's FEN numbering through rows, moment labels, Analyze and its
 absence captions, graph and Retry/Compare action labels. Local ply and saved play stay
 unchanged. D3668 is closed: permanent predecessor failures, 210 focused/87 application controls,

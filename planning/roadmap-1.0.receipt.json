@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4694f074a74d757bc1e130635da0e34b94658c3f165c5c43a56f7252c2481ce4",
+    "roadmap": "sha256:fc9d28fb2d2c14701f18747500204781e635df768e6b3abdd3e63845e61de9cc",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:fb3dfb731e9bbb930a84bdac4975ed50027743932e3742887d0a58a07c87f38d",
-    "rfcRegister": "sha256:c70c8ccdb038cf0a8db1cca0db72406bb63bd5d3d12595652288b122cf1fa69f",
+    "workState": "sha256:98cac5efd60da6154a9c64d11f77b73bfdd102d9f00d8a91c7cc22e3c8caf393",
+    "rfcRegister": "sha256:9aca4967ad4e2d8409c1a74978bdcd3be038b3c9a1deadef375d7408d6ede356",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 14,
       "blocked": 1071,
-      "done": 1544,
+      "done": 1546,
       "refused": 161
     },
     "workItems": {
@@ -224,10 +224,14 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3667 closes four contact-family positive arms with sixteen independently source-bound both-colour gained/lost positives and eight populated negatives for occupied attack/defence, slider ray and defended duty. Twenty-nine permanent controls fail on the predecessor; all 83 focused and 669 broader foundation controls pass with clean types, exact actor/occupant identities, ray endpoints, blockers, duty sets and direction. Actual played operations preserve redundant defense and fixed ray blockers; one attacked defended target stays below the existing two-duty threshold. Opponent pawn moves change a stationary defender's counted duties without claiming overload or strategic value. All 103 prior cases retain identical values and order; the sole writer reports 127 passing cases, 81 subjects and zero fully qualified subjects. Complete normal make roadmap-receipt verify-awake build passes 4503 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance/packaging and build. All four families now lack only orientation, as do 26 subjects in total. Ledger/state/docs/queue/roadmap close together. Orientation/reach drafts, learner eligibility, source acquisition, content, graduation and whole-capability states remain unchanged. The preceding 271-browser checkpoint is historical, not rerun for this validation-only batch; no native release-image or remote-CI result is claimed.",
+        "summary": "D3672 binds semantic validation to the existing exact event wrapper and explicit observation grain before target filtering. Nineteen predecessor-red controls expose copied/edited metadata and event/reading substitutions, including false omission; twenty-one permanent additions and all 690 foundation checks pass with clean types. Genuine one-edge/recorded events and explicit bounded-target readings retain their existing identities and value receipts. The normal writer retains all 127 passing canonical cases, 81 subjects and zero fully qualified subjects. D3671 closes only two disposable model gaps: independently duplicated parent events and crossed constructed-run identity. All 81 research controls pass; the orientation/window drafts still require independent acceptance before production implementation. Complete normal make roadmap-receipt verify-awake build passes 4532 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, types/governance/packaging and build. Ledger/state/docs/queue/roadmap close together without adding a seal, collector, authority, learner permission or content. All whole-capability/milestone states remain unchanged. The preceding 275-browser checkpoint is historical, not rerun for this validation-only batch; no native release-image or remote-CI result is claimed.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
+          "packages/runtime/src/semantic-validation-runner.ts",
+          "packages/runtime/src/semantic-validation.test.ts",
+          "tools/d1713-semantic-validation-matrix/sequence-reach.test.ts",
+          "docs/semantic-evidence.md",
           "packages/runtime/src/semantic-validation-cited.test.ts",
           "packages/runtime/src/semantic-validation-literal-sources.ts",
           "packages/runtime/src/semantic-validation-cases.json",
@@ -265,7 +269,12 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:5bcd2dac01185710a363b0a484c98248b0528b15cc286777d9bc1d95b601da30"
+            "digest": "sha256:ed207aa3f9cb2720d6adb3598eb0e025f21e47fd9235d335fc980e0ffba466cc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3672",
+            "digest": "sha256:555e6b6f65d8ffcd80a35d0ce858e5e4df3338786e25b91c55230db3ad791dc6"
           },
           {
             "kind": "work_state",

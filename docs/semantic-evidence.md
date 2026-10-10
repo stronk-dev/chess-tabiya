@@ -265,6 +265,13 @@ with four independent authorities:
    `semantic-validation-receipt.generated.{json,ts}`; `make semantic-validation-check` (part of
    `verify-software`) recomputes it and fails on any byte difference — so a change to an
    operation's source closure, a case, a profile or a population result must be regenerated.
+   Each event observation also passes the existing semantic-event validator before its value
+   receipt is admitted. A genuine sealed payload inside a copied or edited event wrapper does
+   not validate the wrapper's identity, projection, anchor, operands, derivation or basis.
+   Genuine one-edge and recorded-window events keep their existing identities and receipts.
+   Before target filtering, observation kinds must match the existing event/reading root
+   registries. Relabelling an emitted event as a reading cannot bypass its wrapper check or
+   turn its emission into a passing omission; legitimate bounded-target readings remain valid.
 3. **Research-only** — operator analysis may read an unvalidated event; the compiler refuses the
    same posture for a learner, host, participant or spectator consumer.
 4. **Learner-eligible** — `admitValidatedSemanticInstance` admits one exact instance only when its

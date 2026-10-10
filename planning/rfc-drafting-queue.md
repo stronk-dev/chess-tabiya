@@ -71,6 +71,10 @@
   parser/comparator/runner repair and permanent tests. This does
   not authorize production changes or supply independent chess-semantic authority. The
   separate already-specified preflight ordering repair is D3566, not an amendment request.
+  The 2026-10-10 implementation-facing review preserves the sixteen checks and the closed
+  grammar; the current census observes retained inputs on seventeen projections over 64
+  positive edge fixtures. The earlier thirteen/thirty figures describe the earlier census,
+  not a ceiling. Independent acceptance remains required, separate from D3672's repair.
 
 - **[[D3629]] — independently review the authored §4.3a exact-window reach amendment.**
   `rfc/semantic-validation-authority.md` now binds a selected sequence to its complete
@@ -81,6 +85,13 @@
   passing, with zero fully qualified subjects. Review the adapter result seam and runner
   ordering before acceptance; then production implementation and permanent tests can close
   D3629. Do not self-accept the amendment or equate model reach with chess qualification.
+  D3671's 2026-10-10 review adds two predecessor-red controls: co-edited duplicate unrelated
+  parent events and crossed constructed-run identity. The disposable model now refuses both;
+  §4.3a names the checks and the existing semantic-event seal. All 81 matrix controls pass.
+  D3672 also rejects event/reading kind substitutions before selection, preserving the explicit
+  bounded-target roots and preventing false omissions. It closes only the already-specified
+  production value-admission seam, not window reach;
+  retain independent acceptance before implementing the draft runner/result-adapter changes.
 
 ## 2026-08-26 live amendment queue
 

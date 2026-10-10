@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3670]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3672]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3670]]: 273 UX items complete, 272 live and 24
-retired; 1,714 live ledger items, all assigned, alongside 1,544 done and 161 refused. The 462
+Current checked inventory through [[D3672]]: 273 UX items complete, 272 live and 24
+retired; 1,714 live ledger items, all assigned, alongside 1,546 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -94,7 +94,20 @@ four tiers, one optional Maia skip, zero retries and all 150 input/112 compositi
 This is an exact read/recovery repair, not new source acquisition, deeper explanation,
 grading/selection policy, full Review, native release-image or remote-CI completion.
 
-Latest foundation validation: [[D3667]] closes four contact-family positive arms with
+Latest foundation repair: [[D3672]] rejects copied/edited event metadata and observation-kind
+substitutions before filtering, including false omissions, through the existing event validator
+and explicit root registries. Nineteen predecessor-red controls, 21 permanent additions, all 690
+foundation checks and clean types pass. All 127 canonical cases remain passing over 81 subjects,
+zero fully qualified. [[D3671]] closes two disposable model gaps with all 81 research checks;
+the orientation/window drafts still require independent acceptance and production implementation.
+Complete normal `make roadmap-receipt verify-awake build` passes 4,532 software cases/365
+files, seven unchanged-budget performance cases/four files, 246 content cases/25 files,
+types/governance/packaging and build. Both rows close with ledger/state/docs/queue/roadmap.
+No new seal, collector, chess authority, learner permission or content follows.
+The preceding 275-browser result is historical for this
+validation-only batch; no native release-image, remote CI or whole-capability promotion is claimed.
+
+Previous foundation validation: [[D3667]] closes four contact-family positive arms with
 sixteen both-colour gained/lost cases and eight populated negatives. Actual operations retain
 exact actors, occupants, ray endpoints, blocker/duty sets and direction. Moving a redundant
 defender does not erase retained defense; a fixed blocker keeps its ray blocked; one attacked

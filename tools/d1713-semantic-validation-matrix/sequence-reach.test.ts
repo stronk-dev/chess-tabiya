@@ -23,8 +23,11 @@ const fail = (): never => { throw new TypeError("D3629 exact recorded-window rea
 const observation = (item: Extract<RecordedSemanticPathResult, { kind: "available" }>["events"][number]): SemanticValidationObservation => ({ kind: "event", item });
 const completed = (observations: readonly SemanticValidationObservation[]): SemanticValidationOperationResult => ({ kind: "completed", observations, abstentions: [] });
 function multiset(observations: readonly SemanticValidationObservation[]): readonly string[] {
+  const ids = new Set<string>();
   return observations.map(value => {
     if (value.kind !== "event") return fail();
+    if (ids.has(value.item.id)) return fail();
+    ids.add(value.item.id);
     return evidenceDigest({ id: value.item.id, sign: value.item.sign, receipt: assertSemanticTargetValueAuthority(value) });
   }).sort();
 }
@@ -48,6 +51,8 @@ function assertWindowReach(input: SemanticRecordedSequenceInput, subject: Versio
   const matchingRows = rows.filter(row => row.family === productionFamily(parsed.family) && row.horizon === parsed.horizon);
   if (matchingRows.length !== 1 || refKey(matchingRows[0]!.projection) !== refKey(subject)) fail();
   if (!same(parent.input, parsed.path) || parent.output.kind !== "completed" || child.kind !== "completed") fail();
+  // Existing deterministic adapter grain, not a new persisted identity or collector rerun.
+  if (parent.run.id !== `semantic-validation:${parsed.path.pathDigest.slice(0, 16)}`) fail();
   const nodes = branchPath(parent.run, parent.receipt.branchId);
   const branch = parent.run.branches.find(value => value.id === parent.receipt.branchId);
   if (branch === undefined || branch.origin !== parent.receipt.branchOrigin || nodes.length !== parsed.path.edges.length + 1 || !same(nodes.map(node => node.id), parent.receipt.pathNodeIds)) fail();
@@ -134,6 +139,20 @@ describe("D3629 disposable exact recorded-window author model", () => {
   });
   it("maps every closed validation family exactly once, including the two literal aliases", () => {
     expect([...new Set(rows.map(row => validationFamily(row.family)))].sort()).toEqual([...SEMANTIC_SEQUENCE_FAMILIES].sort());
+  });
+  it("D3671 rejects a co-edited duplicate unrelated parent event", () => {
+    const { input, subject, child, parent } = fixture();
+    if (parent.output.kind !== "completed") throw new Error("Incomplete parent");
+    const extra = parent.receipt.events.find(event => refKey(event.projection) !== refKey(subject))!;
+    expect(extra).toBeDefined();
+    const crossed = { ...parent, receipt: { ...parent.receipt, events: [...parent.receipt.events, extra] },
+      output: completed([...parent.output.observations, observation(extra)]) };
+    expect(() => assertWindowReach(input, subject, child, crossed)).toThrow();
+  });
+  it("D3671 rejects a parent whose constructed run identity was crossed", () => {
+    const { input, subject, child, parent } = fixture();
+    const crossed = { ...parent, run: { ...parent.run, id: "another-recorded-run" } };
+    expect(() => assertWindowReach(input, subject, child, crossed)).toThrow();
   });
   it("keeps a no-witness three-ply window valid beside an emitted five-ply window of the SAME family", () => {
     // Retained from recorded-semantic-path.test.ts ATTRACTION_FIVE, not new chess authority.

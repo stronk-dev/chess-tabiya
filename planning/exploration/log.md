@@ -24732,3 +24732,47 @@ Campaign was the one capability with no API, route or content. Now:
 - Final `make roadmap-receipt verify-governance roadmap-progress` exits zero after closeout;
   the roadmap reports the counts above and D3668's exact completed checkpoint. Stage only
   the twenty batch files; existing research/review/scratch changes stay outside this commit.
+
+### 2026-10-10 — D3671/D3672 exact event admission and recorded-window review
+
+- Continued the existing full-1.0 goal after committed Review repair D3668. Prior turn
+  made production progress; the active orientation/window drafts still require acceptance.
+  Recorded D3671/D3672 before their probes and assigned both to evidence-foundation.
+- Two new D3629 disposable controls fail: co-editing duplicate unrelated events in both
+  complete parent collections, and crossing the constructed run id while retaining nodes/FENs.
+  The model now checks uniqueness independently and the existing deterministic run grain;
+  all 81 matrix controls pass. §4.3a clarifies those seams, without implementing the draft
+  reach arm or treating model output as independent chess authority.
+- Sixteen permanent production controls fail in `assertSemanticTargetValueAuthority`:
+  genuine one-edge/recorded payloads let copied/edited event id, projection, anchor, sign,
+  operands, derivation and basis pass. The validator now calls the existing process-local
+  semantic-event validator before the sole-factory value check; no new brand/hash mechanism.
+  Two untouched-real-event controls and every original control pass without changing payloads.
+- Normal typecheck and all 687 foundation controls pass, including authenticated HTTP.
+  Normal generated-receipt writer/check retain all 127 canonical cases passing over 81
+  subjects, zero fully qualified. The first non-escalated gate stopped at denied loopback
+  bind; the ordinary Make permission prompt allows its unchanged HTTP cases. A test-only
+  invalid confidence literal is corrected to an actual alternate confidence value before
+  types/gates pass; no double-assertion or weakened assertion is introduced.
+- Full normal verification/build is in flight. This does not implement §4.1a/§4.3a,
+  add an orientation/counterfactual authority, change a collector, enable learner evidence,
+  grade/select hints, migrate packs or qualify a whole capability. Prior 275-browser
+  checkpoint is historical for this validation-only batch; no remote CI or native-image claim.
+- Three further permanent controls reproduce an observation-kind bypass: real emitted events
+  can be relabelled as readings/bare events, and filtering can then call that emission an
+  omission. The existing explicit reading/event root registries now bind the grain before
+  target selection. Legitimate bounded-target readings and its explicit event remain admitted.
+  The preceding aggregate run caught these three failures; it is not a passing final run.
+  Fresh normal verification/build and foundation/model gates run on the complete repair.
+- Completed fresh `make roadmap-receipt verify-awake build`: clean types, 4,532 software
+  cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25
+  files, governance/packaging and build. The complete foundation target passes 690 controls;
+  the research matrix passes 81. Canonical generated files remain unchanged: all 127 cases
+  pass over 81 subjects, zero fully qualified. No assertions, timeouts or retry budgets change.
+- Close D3672's existing event/value admission defect and D3671's model gaps with ledger,
+  state, queue, docs and roadmap in this batch. The two terminal rows transition atomically,
+  then retain their distinct runtime/model path evidence. Inventory: 3,421 rows, 1,546 done,
+  161 refused and 1,714 assigned live (629 todo, fourteen doing, 1,071 blocked), zero untriaged.
+  UX remains 273 complete, 272 live and 24 retired; all fourteen whole capabilities incomplete,
+  four milestones active/five blocked, zero official graduates. The prior 275-browser checkpoint
+  is historical for this validation-only repair; no fresh remote CI, native image or release claim.
