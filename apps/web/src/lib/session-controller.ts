@@ -22,6 +22,7 @@ import {
 
 import {
   ApiError,
+  CampaignGesturePendingError,
   BotOpponentPlyError,
   type BotOpponentPlyOperation,
   type Capabilities,
@@ -198,7 +199,10 @@ const RUN_ERROR_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
 });
 
 export function sessionErrorMessage(error: unknown): string {
+  if (error instanceof CampaignGesturePendingError) return error.message;
   if (error instanceof ApiError) {
+    // campaign-core §2.4: preserve this known learner-facing refusal, not a stale-run diagnosis.
+    if (error.code === "CAMPAIGN_REWIND_EXHAUSTED") return error.message;
     const known = RUN_ERROR_MESSAGES[error.code];
     if (known !== undefined) return known;
     if (error.status === 401 || error.status === 403) return "Your access to this run has changed. Sign in again or reopen it.";

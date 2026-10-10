@@ -119,7 +119,7 @@
   </ol>
   {#if previewNodeId && rewindableNodeIds.has(previewNodeId)}
     <div class="rewind-offer">
-      <span>{rewindPolicy === "free" ? "Rewinding here costs nothing." : "This uses one earned rewind."} Your attempt is kept. Going back makes a second one.</span>
+      <span id="timeline-rewind-cost">{rewindPolicy === "free" ? "Rewinding here costs nothing." : "This uses one earned rewind."} Your attempt is kept. Going back makes a second one.</span>
       <HonestControl
         disabled={!canConfirm || confirming}
         reasonId="timeline-rewind-readonly"
@@ -131,7 +131,7 @@
             type="button"
             disabled={!canConfirm || confirming}
             aria-label="Rewind to preview"
-            aria-describedby={confirming ? "timeline-rewind-busy" : confirmError !== undefined ? "timeline-rewind-error" : describedBy}
+            aria-describedby={["timeline-rewind-cost", confirming ? "timeline-rewind-busy" : confirmError !== undefined ? "timeline-rewind-error" : describedBy].filter(Boolean).join(" ")}
             onclick={() => onConfirm(previewNodeId)}
           >{confirming ? "Rewinding…" : confirmError !== undefined ? "Try rewind again" : "Rewind to preview"} <kbd>Enter</kbd></button>
         {/snippet}

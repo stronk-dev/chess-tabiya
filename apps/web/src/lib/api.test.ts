@@ -34,6 +34,55 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("D3678 replays an unresolved Campaign gesture with its original command and refuses different operands", async () => {
+    const bodies: unknown[] = [];
+    let calls = 0, ids = 0;
+    const api = new DrillApi("", async (_input, init) => {
+      bodies.push(JSON.parse(init!.body as string));
+      if (++calls === 1) throw new TypeError("response lost after commit");
+      return json({ run, emitted: [], campaign: { campaignRevision: 3, chargeBalance: 0 } });
+    });
+    api.setCampaignCharging(() => ({ commandId: `command-${++ids}`, expectedCampaignRevision: ids, expectedPlayRevision: ids }));
+    const input = { nodeId: run.nodes[0]!.id, label: "Try another line" };
+    await expect(api.fork(run.id, input, "writer")).rejects.toThrow("response lost");
+    await expect(api.fork(run.id, { ...input, label: "Different operands" }, "writer")).rejects.toThrow("Retry the previous Campaign gesture");
+    expect(calls).toBe(1);
+    await api.fork(run.id, input, "writer");
+    expect(bodies[1]).toEqual(bodies[0]);
+    await api.fork(run.id, input, "writer");
+    expect(bodies[2]).not.toEqual(bodies[0]); // A successfully settled gesture is not cached forever.
+  });
+
+  it("D3678 clears a definite Campaign refusal, but retains an uncertain server failure", async () => {
+    const bodies: { campaignCommand: { commandId: string } }[] = [];
+    let ids = 0;
+    const api = new DrillApi("", async (_input, init) => {
+      bodies.push(JSON.parse(init!.body as string));
+      return json({ error: { code: "HTTP_ERROR", message: "refused" } }, { status: bodies.length === 1 ? 409 : 503 });
+    });
+    api.setCampaignCharging(() => ({ commandId: `command-${++ids}`, expectedCampaignRevision: 2, expectedPlayRevision: 3 }));
+    const input = { nodeId: run.nodes[0]!.id };
+    await expect(api.fork(run.id, input, "writer")).rejects.toThrow("refused");
+    await expect(api.fork(run.id, input, "writer")).rejects.toThrow("refused");
+    await expect(api.fork(run.id, input, "writer")).rejects.toThrow("refused");
+    expect(bodies[1]!.campaignCommand.commandId).not.toBe(bodies[0]!.campaignCommand.commandId);
+    expect(bodies[2]!.campaignCommand).toEqual(bodies[1]!.campaignCommand);
+  });
+
+  it("D3678 permits a new command after the Campaign's recorded no-spend provider failure", async () => {
+    const ids: string[] = [];
+    let counter = 0;
+    const api = new DrillApi("", async (_input, init) => {
+      ids.push((JSON.parse(init!.body as string) as { campaignCommand: { commandId: string } }).campaignCommand.commandId);
+      return json({ error: { code: "ENGINE_UNAVAILABLE", message: "No move was supplied", campaign: { kind: "provider_failed" } } }, { status: 503 });
+    });
+    api.setCampaignCharging(() => ({ commandId: `command-${++counter}`, expectedCampaignRevision: 2, expectedPlayRevision: 3 }));
+    const input = { nodeId: run.nodes[0]!.id };
+    await expect(api.fork(run.id, input, "writer")).rejects.toThrow("No move was supplied");
+    await expect(api.fork(run.id, input, "writer")).rejects.toThrow("No move was supplied");
+    expect(ids[1]).not.toBe(ids[0]);
+  });
+
   it("resolves a pinned pack only through its authorised run and checks its identity and digest", async () => {
     const document = {
       id: "pack-one", version: "0.29", title: "Retained pack", mode: "plan", phase: "middlegame",

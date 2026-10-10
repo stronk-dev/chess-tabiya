@@ -41,7 +41,7 @@ import type {
   RunSummary,
   SelectMoveRequest,
 } from "./api.js";
-import { ApiError, BotOpponentPlyError, type BotOpponentPlyResponse } from "./api.js";
+import { ApiError, BotOpponentPlyError, CampaignGesturePendingError, type BotOpponentPlyResponse } from "./api.js";
 import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 import type { PollScheduler } from "./run-state.js";
 import { DrillSessionController, sessionErrorMessage } from "./session-controller.js";
@@ -625,6 +625,9 @@ describe("DrillSessionController", () => {
   });
 
   it("never sends unrecognized server or invariant diagnostics to the run alert", () => {
+    const exhausted = "No earned rewinds remain in this campaign. Seal a node to earn more.";
+    expect(sessionErrorMessage(new ApiError(409, "CAMPAIGN_REWIND_EXHAUSTED", exhausted))).toBe(exhausted);
+    expect(sessionErrorMessage(new CampaignGesturePendingError())).toContain("Retry the previous Campaign gesture");
     const conflict = sessionErrorMessage(new ApiError(
       409,
       "NEW_CONFLICT_KIND",

@@ -208,6 +208,20 @@ function session(storage = new MemoryStorage()): WriterSession {
 }
 
 describe("RunStateStore", () => {
+  it("D3679 accepts a replayed mutation's matching overlap without applying it twice, and refuses conflicting history", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const mutation = commitMove(api.serverRun, "e2e4", { at });
+    const reply = vi.spyOn(api, "fork").mockResolvedValue(mutation);
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    expect(store.snapshot.run).toEqual(mutation.run);
+    expect(store.snapshot.run.events).toHaveLength(mutation.run.events.length);
+    reply.mockResolvedValue({ ...mutation, emitted: [{ ...mutation.emitted[0]!, at: "2026-08-12T20:00:01.000Z" }] });
+    await expect(store.fork({ nodeId: api.serverRun.nodes[0]!.id })).rejects.toThrow("conflicts with recorded history");
+    expect(store.snapshot.run).toEqual(mutation.run);
+  });
+
   it("routes learner disclosure through the mutation projection", async () => {
     const api = new FakeApi();
     api.serverRun = createRun({

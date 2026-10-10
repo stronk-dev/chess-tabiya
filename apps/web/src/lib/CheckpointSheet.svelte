@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import { onDestroy, onMount } from "svelte";
 
   import HonestControl from "./HonestControl.svelte";
@@ -42,6 +43,7 @@
     compareError?: string | undefined;
     rewinding?: boolean;
     rewindError?: string | undefined;
+    campaignEncounter?: boolean;
   }
 
   let {
@@ -71,6 +73,7 @@
     compareError,
     rewinding = false,
     rewindError,
+    campaignEncounter = false,
   }: Props = $props();
   let heading: HTMLHeadingElement;
   let candidates = $state("");
@@ -231,9 +234,10 @@
       <button type="button" onclick={onStop}>Leave this view</button>
     </div>
     {:else if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
+    <CampaignGestureCost {campaignEncounter} id="checkpoint-rewind-cost" />
     <div class="actions">
       <button class="primary" type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
-      <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : rewindError !== undefined ? "checkpoint-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try rewind again" : "Rewind here"}</button>
+      <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={[campaignEncounter ? "checkpoint-rewind-cost" : "", continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : rewindError !== undefined ? "checkpoint-rewind-error" : ""].filter(Boolean).join(" ") || undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try rewind again" : "Rewind here"}</button>
       {#if recognizedActions.compare_branches}
         <HonestControl
           disabled={!canCompare || continuing || comparing || rewinding}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import { onDestroy, onMount } from "svelte";
   import { modalBoundary } from "./modal-boundary.js";
 
@@ -34,6 +35,7 @@
     onRewind: () => boolean | void | Promise<boolean | void>;
     rewinding?: boolean;
     rewindError?: string | undefined;
+    campaignEncounter?: boolean;
     onStop: () => void;
     /** A reader may inspect history locally, never rewind the shared run. */
     readOnly?: boolean;
@@ -62,7 +64,7 @@
     campaignAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, onStop, readOnly = false, onInspectRun, assessment, resistance = [], grade, run, shapes = [], onStory, onRematch, rematching = false, rematchError, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, campaignEncounter = false, onStop, readOnly = false, onInspectRun, assessment, resistance = [], grade, run, shapes = [], onStory, onRematch, rematching = false, rematchError, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
   let winningSide = $derived(outcome === "win" ? run.start.side : run.start.side === "white" ? "black" : "white");
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
@@ -172,7 +174,7 @@
       {/if}
       <div class="primary-actions">
         {#if readOnly && onInspectRun}<button class="primary" type="button" onclick={onInspectRun}>Inspect recorded moves</button>
-        {:else}<button class="primary" type="button" disabled={!canRewind || rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>{/if}
+        {:else}<CampaignGestureCost {campaignEncounter} id="terminal-rewind-cost" /><button class="primary" type="button" disabled={!canRewind || rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : rewindError !== undefined ? "terminal-rewind-error" : campaignEncounter ? "terminal-rewind-cost" : undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try this rewind again" : "Play it again from here"}</button>{/if}
         {#if onRematch}<button type="button" disabled={rewinding || rematching || flipBusy} aria-describedby={rematching ? "terminal-rematch-busy" : flipBusy ? "terminal-flip-busy" : rewinding ? "terminal-rewind-busy" : undefined} onclick={() => void onRematch()}>{rematching ? "Opening new game…" : "Play this bot again"}</button>{/if}
         <HonestControl
           disabled={!canScheduleReturn || returnBusy || returnScheduled || rewinding}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
   import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, PRIMARY_EVIDENCE_MANIFEST, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, declareTransitionReadingEvidence, endgameClassification, endgameSetupMatches, evidenceForConsumer, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presentEvidenceItems, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
@@ -335,6 +336,12 @@
   let forkIntent = $state("");
   let forkBusy = $state(false);
   let forkError: string | undefined = $state();
+  let forkRetryNote = $derived(campaignEncounter
+    ? "The branch result could not be confirmed. Your name and intent are still here; try again with the same choices."
+    : "The branch was not created. Your name and intent are still here; try again.");
+  let rewindRetryNote = $derived(campaignEncounter
+    ? "The rewind result could not be confirmed. Keep this target and retry the same rewind."
+    : "The rewind did not finish. Your current attempt and target are unchanged, so you can try again.");
   let forkRequest = 0;
   let groupOpen = $state(false);
   let groupSource: CreateGroupRequest["source"] = $state("hand_picked");
@@ -1163,7 +1170,7 @@
       if (seatAlive && request === seatActionRequest && run.id === runId && run.activeCursor.nodeId === target.nodeId && run.activeCursor.branchId === target.branchId) await focusBoardFromSupport();
     } else if (!accepted && seatAuthority === authority && seatPackets.get(module)?.disclosure.digest === digest) {
       seatActionFailure = { module, digest, text: module === "postcommit_nudge"
-        ? "The rewind did not finish. Your current attempt and target are unchanged, so you can try again."
+        ? rewindRetryNote
         : "The other attempt did not open. Your recorded attempts are kept; try again." };
     }
     if (request === seatActionRequest) seatActionPending = undefined;
@@ -1956,12 +1963,12 @@
     try {
       const accepted = await onRewind(target);
       if (accepted === false) {
-        if (request === rewindRequest) rewindFailure = { targetKey, text: "The rewind did not finish. Your current attempt and target are unchanged, so you can try again." };
+        if (request === rewindRequest) rewindFailure = { targetKey, text: rewindRetryNote };
         return false;
       }
       return true;
     } catch {
-      if (request === rewindRequest) rewindFailure = { targetKey, text: "The rewind did not finish. Your current attempt and target are unchanged, so you can try again." };
+      if (request === rewindRequest) rewindFailure = { targetKey, text: rewindRetryNote };
       return false;
     } finally {
       if (request === rewindRequest) rewindBusy = false;
@@ -2102,7 +2109,7 @@
       const created = await onFork(forkLabel, forkIntent);
       if (request !== forkRequest) return;
       if (created === false) {
-        forkError = "The branch was not created. Your name and intent are still here; try again.";
+        forkError = forkRetryNote;
         return;
       }
       forkOpen = false;
@@ -2114,7 +2121,7 @@
       forkInvoker = undefined;
     } catch {
       if (request === forkRequest) {
-        forkError = "The branch was not created. Your name and intent are still here; try again.";
+        forkError = forkRetryNote;
       }
     } finally {
       if (request === forkRequest) forkBusy = false;
@@ -2479,7 +2486,7 @@
     {/if}
     {#if opponentSource === "cached_exact"}<p class="honest provider-notice" data-testid="opponent-cached">Using a saved response for this position.</p>{/if}
     {#if opponentChange !== undefined}<p class="honest provider-notice" data-testid="opponent-change">This session changed opponent after a provider failure; the run record does not retain it.</p>{/if}
-    {#if error && branchSwitchError === undefined}<p class="error" role="alert">{error}{#if run.opponentPolicy.profile !== undefined && onRetryOpponent !== undefined && snapshot.access !== "read_only"} <button class="retry-opponent" type="button" onclick={() => void onRetryOpponent()}>Ask the bot again</button>{/if}</p>{/if}
+    {#if error && branchSwitchError === undefined && !campaignEncounter}<p class="error" role="alert">{error}{#if run.opponentPolicy.profile !== undefined && onRetryOpponent !== undefined && snapshot.access !== "read_only"} <button class="retry-opponent" type="button" onclick={() => void onRetryOpponent()}>Ask the bot again</button>{/if}</p>{/if}
     {#if branchSwitchBusy}<p id="branch-switch-status" class="operation-status" role="status">Opening {branchSwitchBusy.label}. Other branch navigation waits until it finishes.</p>{/if}
     {#if branchSwitchError}<p class="error" role="alert">{branchSwitchError}</p>{/if}
     {#if snapshot.access === "read_only"}
@@ -2537,7 +2544,7 @@
             onConfirm={confirmPreview}
             confirming={rewindBusy}
             confirmError={previewNodeId === undefined ? undefined : rewindErrorFor({ nodeId: previewNodeId })}
-            rewindPolicy="free"
+              rewindPolicy={campaignEncounter ? "earned" : "free"}
             canConfirm={canWrite}
             rewindableNodeIds={timelineRewindNodeIds}
             {authoredSpineNodeIds}
@@ -2600,6 +2607,7 @@
             <div class="companion-queue" class:band={tabletViewport} style={`--queue-columns: ${queueSelectorCount}`}>
             {#if seats.length > 0}
               <ModuleSeats
+                {campaignEncounter}
                 {seats}
                 band={tabletViewport}
                 packets={seatPackets}
@@ -2636,7 +2644,8 @@
                 <div class="guard-actions">
                   <button type="button" disabled={rewindBusy} onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
                   {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect what changed</button>{/if}
-                  <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined || rewindBusy} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>{rewindBusy ? "Rewinding…" : guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId }) !== undefined ? "Try rewind again" : "Rewind"}</button>
+                  <button class="primary" type="button" aria-describedby={campaignEncounter ? "guard-rewind-cost" : undefined} disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined || rewindBusy} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>{rewindBusy ? "Rewinding…" : guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId }) !== undefined ? "Try rewind again" : "Rewind"}</button>
+                  <CampaignGestureCost {campaignEncounter} id="guard-rewind-cost" />
                 </div>
                 {#if guardRewindNodeId !== undefined && rewindErrorFor({ nodeId: guardRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guardRewindNodeId })}</p>{/if}
               </section>
@@ -2658,7 +2667,8 @@
                 <h2 id="rehearsal-guide-title">{guide.title}</h2>
                 {#each guide.body as sentence}<p class="guide-body">{sentence}</p>{/each}
                 {#if guide.rewindNodeId !== undefined}
-                  <button class="primary" type="button" disabled={!canWrite || busy || rewindBusy} onclick={() => void rewindFirstRehearsal()}>{rewindBusy ? "Going back…" : "Go back to the decision"}</button>
+                  <CampaignGestureCost {campaignEncounter} id="guide-rewind-cost" />
+                  <button class="primary" type="button" aria-describedby={campaignEncounter ? "guide-rewind-cost" : undefined} disabled={!canWrite || busy || rewindBusy} onclick={() => void rewindFirstRehearsal()}>{rewindBusy ? "Going back…" : "Go back to the decision"}</button>
                   {#if rewindErrorFor({ nodeId: guide.rewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: guide.rewindNodeId })}</p>{/if}
                 {:else if guide.compareBranchIds !== undefined}
                   <button class="primary" type="button" disabled={guide.compareBranchIds.length < 2 || busy} onclick={() => void compareFirstRehearsal()}>Compare both attempts</button>
@@ -2706,7 +2716,8 @@
                   <button class="primary" type="button" disabled={busy || rewindBusy || !canWrite || terminalEvent !== undefined} aria-describedby={busy || rewindBusy || !canWrite || terminalEvent !== undefined ? "support-keep-playing-disabled" : undefined} onclick={focusBoardFromSupport}>Keep playing</button>
                   {#if busy || rewindBusy || !canWrite || terminalEvent !== undefined}<span id="support-keep-playing-disabled" class="honest">{!canWrite ? "This read-only view cannot play a move." : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
                   {#if previousSupportRewindNodeId !== undefined}
-                    <button type="button" disabled={busy || rewindBusy || !canWrite} aria-describedby={busy || rewindBusy || !canWrite ? "support-rewind-disabled" : undefined} onclick={() => void rewindRun({ nodeId: previousSupportRewindNodeId! })}>{rewindBusy ? "Rewinding…" : "Rewind to a decision"}</button>
+                    <CampaignGestureCost {campaignEncounter} id="support-rewind-cost" />
+                    <button type="button" disabled={busy || rewindBusy || !canWrite} aria-describedby={[campaignEncounter ? "support-rewind-cost" : "", busy || rewindBusy || !canWrite ? "support-rewind-disabled" : ""].filter(Boolean).join(" ") || undefined} onclick={() => void rewindRun({ nodeId: previousSupportRewindNodeId! })}>{rewindBusy ? "Rewinding…" : "Rewind to a decision"}</button>
                     {#if busy || rewindBusy || !canWrite}<span id="support-rewind-disabled" class="honest">{!canWrite ? "This read-only view cannot rewind the run." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
                     {#if rewindErrorFor({ nodeId: previousSupportRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: previousSupportRewindNodeId })}</p>{/if}
                   {/if}
@@ -2762,6 +2773,9 @@
           </section>
 
           <section class="companion-section action-seat" class:compact-active={compactTab === "timeline"} aria-label="Run actions">
+        {#if campaignEncounter && error && branchSwitchError === undefined}
+          <p class="campaign-action-error" role="alert">{error}</p>
+        {/if}
         <div class="mark-controls" aria-label="Board marks">
           <label>Marks stay with <select value={markScope} disabled={markBusy !== undefined} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
           <span>{displayedMarks.length}/64 marks</span>
@@ -2829,6 +2843,7 @@
     {#if groupOpen}
       <div class="group-creator" role="dialog" aria-modal="false" aria-labelledby="group-create-title" aria-describedby="group-create-description">
         <div><p>Parallel experiment</p><h2 id="group-create-title" tabindex="-1" bind:this={groupHeading}>Create a branch group</h2></div>
+        <CampaignGestureCost {campaignEncounter} id="group-create-cost" action="Creating the whole group" />
         <label>Source
           <select bind:value={groupSource} disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined}>
             <option value="hand_picked">My candidate moves</option>
@@ -2848,21 +2863,22 @@
           <p id="group-create-description" class="capture-help">Choose how this parallel experiment is populated. The run is not changed until you create the group.</p>
           <label>Members <input type="number" min="2" max="8" bind:value={groupSize} disabled={groupBusy || groupOutcomeUncertain} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : undefined} /></label>
         {/if}
-        <div class="creator-actions"><button type="button" onclick={closeGroupCreator}>Cancel</button><button type="button" disabled={groupBusy || groupOutcomeUncertain || (groupSource === "hand_picked" && groupCandidates.length < 2)} aria-describedby={groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : undefined} onclick={() => void createGroup()}>{groupBusy ? "Creating group…" : "Create group"}</button></div>
+        <div class="creator-actions"><button type="button" onclick={closeGroupCreator}>Cancel</button><button type="button" disabled={groupBusy || groupOutcomeUncertain || (groupSource === "hand_picked" && groupCandidates.length < 2)} aria-describedby={[campaignEncounter ? "group-create-cost" : "", groupBusy ? "group-create-busy" : groupOutcomeUncertain ? "group-create-error" : groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : ""].filter(Boolean).join(" ") || undefined} onclick={() => void createGroup()}>{groupBusy ? "Creating group…" : "Create group"}</button></div>
         {#if groupSource === "hand_picked" && groupCandidates.length < 2}<span id="group-candidates-needed" class="honest">Capture at least two distinct legal moves.</span>{/if}
         {#if groupBusy}<span id="group-create-busy" class="honest" role="status">Creating this group from the current position.</span>{/if}
-        {#if groupError}<span id="group-create-error" class="honest" role="alert">{groupError}</span>{/if}
+        {#if groupError}<span id="group-create-error" class="honest" role="alert">{groupError}{#if campaignEncounter && error} {error}{/if}</span>{/if}
       </div>
     {/if}
   </main>
 {/if}
 
 {#if simulation !== undefined && onEnterSimulation !== undefined}
-  <SimulationPreview {simulation} {startSide} {busy} onEnter={onEnterSimulation} onClose={closeSimulation} />
+  <SimulationPreview {simulation} {startSide} {busy} {campaignEncounter} campaignError={campaignEncounter ? error : undefined} onEnter={onEnterSimulation} onClose={closeSimulation} />
 {/if}
 
 {#if viewportSupport.supported && checkpoint && checkpointOpen}
   <CheckpointSheet
+    {campaignEncounter}
     {run}
     readOnly={snapshot.access === "read_only"}
     onInspectRun={snapshot.access === "read_only" ? () => void inspectCheckpoint() : undefined}
@@ -2884,7 +2900,7 @@
     continueError={checkpointContinueError?.eventSeq === checkpoint.eventSeq ? checkpointContinueError.text : undefined}
     onRewind={() => rewindRun({ nodeId: checkpoint.nodeId })}
     rewinding={rewindBusy}
-    rewindError={rewindErrorFor({ nodeId: checkpoint.nodeId })}
+    rewindError={rewindErrorFor({ nodeId: checkpoint.nodeId }) === undefined ? undefined : `${rewindErrorFor({ nodeId: checkpoint.nodeId })}${campaignEncounter && error ? ` ${error}` : ""}`}
     onCompare={openCompare}
     comparing={compareBusy}
     {compareError}
@@ -2898,6 +2914,7 @@
     readOnly={snapshot.access === "read_only"}
     onInspectRun={snapshot.access === "read_only" ? () => void inspectCompletedRun() : undefined}
     campaignAction={campaignTerminalAction}
+    {campaignEncounter}
     outcome={terminalEvent.data.outcome}
     authoredItems={terminalAuthoredItems}
     {shapes}
@@ -2908,7 +2925,7 @@
     canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
     onRewind={() => currentNode.parentId === null ? undefined : rewindRun({ nodeId: currentNode.parentId })}
     rewinding={rewindBusy}
-    rewindError={currentNode.parentId === null ? undefined : rewindErrorFor({ nodeId: currentNode.parentId })}
+    rewindError={currentNode.parentId === null || rewindErrorFor({ nodeId: currentNode.parentId }) === undefined ? undefined : `${rewindErrorFor({ nodeId: currentNode.parentId })}${campaignEncounter && error ? ` ${error}` : ""}`}
     {onStory}
     onRematch={run.opponentPolicy.profile !== undefined && snapshot.access !== "read_only" && campaignTerminalAction === undefined && onRematch !== undefined ? rematchBot : undefined}
     {rematching}
@@ -3122,11 +3139,12 @@
       <form class="modal" onsubmit={(event) => { event.preventDefault(); void submitFork(); }}>
         <p>Branch from here</p>
         <h2 id="fork-title">Name the experiment.</h2>
+        <CampaignGestureCost {campaignEncounter} id="fork-create-cost" action="Creating this branch" />
         <label>What are you trying? <textarea bind:this={forkIntentInput} bind:value={forkIntent} disabled={forkBusy} aria-describedby={forkBusy ? "fork-create-busy" : undefined} placeholder="For example: keep the knight and challenge the centre"></textarea></label>
         <label>Short name <input bind:value={forkLabel} disabled={forkBusy} aria-describedby={forkBusy ? "fork-create-busy" : undefined} placeholder="Optional — the move and intent name it automatically" /></label>
-        <div><button type="button" onclick={closeFork}>Cancel</button><button class="primary" type="submit" disabled={forkBusy} aria-describedby={forkBusy ? "fork-create-busy" : undefined}>{forkBusy ? "Creating branch…" : "Create branch"}</button></div>
+        <div><button type="button" onclick={closeFork}>Cancel</button><button class="primary" type="submit" disabled={forkBusy} aria-describedby={[campaignEncounter ? "fork-create-cost" : "", forkBusy ? "fork-create-busy" : ""].filter(Boolean).join(" ") || undefined}>{forkBusy ? "Creating branch…" : "Create branch"}</button></div>
         {#if forkBusy}<span id="fork-create-busy" role="status">Creating this branch from the current position.</span>{/if}
-        {#if forkError}<span role="alert">{forkError}</span>{/if}
+        {#if forkError}<span role="alert">{forkError}{#if campaignEncounter && error} {error}{/if}</span>{/if}
       </form>
     </div>
   </div>
@@ -3136,10 +3154,11 @@
   <div class="modal-backdrop">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="picker-title" use:modalBoundary>
       <p>Rewind</p><h2 id="picker-title" tabindex="-1" bind:this={pickerHeading}>Choose a checkpoint.</h2>
+      <CampaignGestureCost {campaignEncounter} id="picker-rewind-cost" />
       <div class="checkpoint-options">
         {#each [...run.events].reverse().filter((event) => event.type === "checkpoint.reached") as event}
           {#if event.type === "checkpoint.reached"}
-            <button type="button" onclick={() => { checkpointPickerOpen = false; void rewindRun({ checkpointId: event.data.checkpointId }); }}>
+            <button type="button" aria-describedby={campaignEncounter ? "picker-rewind-cost" : undefined} onclick={() => { checkpointPickerOpen = false; void rewindRun({ checkpointId: event.data.checkpointId }); }}>
               {checkpointDisplayLabel(event.data.checkpointId)}
             </button>
           {/if}
@@ -3286,6 +3305,14 @@
   }
 
   .error {
+    background: color-mix(in srgb, var(--danger) 12%, var(--panel));
+    color: var(--ink);
+  }
+
+  .campaign-action-error {
+    margin: .5rem;
+    padding: .7rem .9rem;
+    border-radius: .7rem;
     background: color-mix(in srgb, var(--danger) 12%, var(--panel));
     color: var(--ink);
   }
@@ -3489,6 +3516,7 @@
   }
 
   .preview-label {
+    pointer-events: none;
     position: absolute;
     z-index: 4;
     top: 0.6rem;

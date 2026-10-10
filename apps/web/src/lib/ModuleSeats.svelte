@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CampaignGestureCost from "./CampaignGestureCost.svelte";
   // rfc/module-registration.md §2.6/§3 + rfc/play-composition.md §4 — the companion region's module
   // seats. A seat renders only what one strict-parsed, digest-bound packet delivered: collapsed as a
   // badged row, expanded as its card, or quiet when honestly empty. At most one seat is expanded;
@@ -17,6 +18,7 @@
     failed: ReadonlySet<PlaySeatModule>;
     expanded: PlaySeatModule | undefined;
     band?: boolean;
+    campaignEncounter?: boolean;
     /** Why an on-request door cannot open right now (e.g. no subject yet); absent when it can. */
     doorBlocked: Readonly<Partial<Record<PlaySeatModule, string>>>;
     staged: StagedCue | undefined;
@@ -29,7 +31,7 @@
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, band = false, doorBlocked, staged, actions = {}, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
@@ -99,9 +101,10 @@
               {@const action = actions[seat.module]}
               {#if action !== undefined}
                 <p>{action.description}</p>
+                <CampaignGestureCost {campaignEncounter} id={`${seat.module}-rewind-cost`} />
                 <div class="seat-actions">
                   <button type="button" class="primary" data-rehearsal-action disabled={action.pending || action.blockedReason !== undefined}
-                    aria-describedby={action.pending || action.blockedReason !== undefined ? `${seat.module}-action-status` : action.error !== undefined ? `${seat.module}-action-error` : undefined}
+                    aria-describedby={[campaignEncounter ? `${seat.module}-rewind-cost` : "", action.pending || action.blockedReason !== undefined ? `${seat.module}-action-status` : action.error !== undefined ? `${seat.module}-action-error` : ""].filter(Boolean).join(" ") || undefined}
                     onclick={action.onInvoke}>{action.pending ? action.pendingLabel : action.label}</button>
                 </div>
                 {#if action.pending}<p id={`${seat.module}-action-status`} role="status">{action.pendingLabel} Your recorded lines are kept.</p>

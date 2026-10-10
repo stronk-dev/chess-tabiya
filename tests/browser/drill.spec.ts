@@ -3270,7 +3270,9 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await expect(spectator.getByText("Your attempt is kept. Going back makes a second one.")).toBeVisible();
   const rewind = spectator.getByRole("button", { name: /^Rewind to preview/ });
   await expect(rewind).toBeDisabled();
-  await expect(rewind).toHaveAttribute("aria-describedby", "timeline-rewind-readonly");
+  await expect(rewind).toHaveAttribute("aria-describedby", "timeline-rewind-cost timeline-rewind-readonly");
+  await expect(spectator.locator("#timeline-rewind-readonly")).toContainText("read-only");
+  await expect(spectator.locator("#timeline-rewind-cost")).toContainText("costs nothing");
   await spectatorContext.close();
 });
 

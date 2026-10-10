@@ -1249,11 +1249,20 @@ export interface CampaignCommandEnvelope {
   readonly expectedPlayRevision: number;
 }
 
+/** Local recovery state, not a new server error code or command. */
+export class CampaignGesturePendingError extends Error {
+  constructor() {
+    super("Retry the previous Campaign gesture before starting a different one; its outcome is unknown.");
+    this.name = "CampaignGesturePendingError";
+  }
+}
+
 export class DrillApi implements DrillClientApi {
   readonly #baseUrl: string;
   readonly #fetch: Fetcher;
   #campaignCommand: ((runId: string) => CampaignCommandEnvelope | undefined) | undefined;
   #campaignSettled: ((runId: string, result: Readonly<Record<string, unknown>>) => void) | undefined;
+  readonly #pendingCampaignGestures = new Map<string, { readonly operands: string; readonly command: CampaignCommandEnvelope }>();
 
   /**
    * While a run is an ACTIVE campaign encounter, rewind/fork/group/line-entry carry the campaign
@@ -1265,10 +1274,30 @@ export class DrillApi implements DrillClientApi {
   }
 
   async #charged<T>(runId: string, path: string, writerId: string, body: Readonly<Record<string, unknown>>): Promise<T> {
-    const campaignCommand = this.#campaignCommand?.(runId);
-    const result = await this.#json<T & { readonly campaign?: Readonly<Record<string, unknown>> }>(path, { method: "POST", writerId, body: campaignCommand === undefined ? body : { ...body, campaignCommand } });
-    if (campaignCommand !== undefined && result.campaign !== undefined) this.#campaignSettled?.(runId, result.campaign);
-    return result;
+    const operands = JSON.stringify([path, writerId, body]);
+    const pending = this.#pendingCampaignGestures.get(runId);
+    if (pending !== undefined && pending.operands !== operands) {
+      throw new CampaignGesturePendingError();
+    }
+    const supplied = pending?.command ?? this.#campaignCommand?.(runId);
+    const campaignCommand = supplied === undefined ? undefined : Object.freeze({ ...supplied });
+    if (campaignCommand !== undefined) this.#pendingCampaignGestures.set(runId, { operands, command: campaignCommand });
+    try {
+      const result = await this.#json<T & { readonly campaign?: Readonly<Record<string, unknown>> }>(path, { method: "POST", writerId, body: campaignCommand === undefined ? body : { ...body, campaignCommand } });
+      this.#pendingCampaignGestures.delete(runId);
+      if (campaignCommand !== undefined && result.campaign !== undefined) this.#campaignSettled?.(runId, result.campaign);
+      return result;
+    } catch (error) {
+      // Transport loss, invalid success JSON and 5xx do not establish whether the debit committed.
+      // Keep it for explicit retry; a definite 4xx or recorded no-spend provider result clears it.
+      if (error instanceof ApiError) {
+        const campaign = error.details.campaign;
+        const settledProviderFailure = error.code === "ENGINE_UNAVAILABLE" && campaign !== null && typeof campaign === "object"
+          && "kind" in campaign && campaign.kind === "provider_failed";
+        if ((error.status >= 400 && error.status < 500) || settledProviderFailure) this.#pendingCampaignGestures.delete(runId);
+      }
+      throw error;
+    }
   }
 
   constructor(baseUrl = "", fetcher: Fetcher = browserFetch) {

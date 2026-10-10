@@ -452,7 +452,18 @@ export class RunStateStore {
   }
 
   #applyMutation(mutation: MutationResult): void {
-    const run = appendProjected(this.#snapshot.run, mutation.emitted);
+    const current = this.#snapshot.run;
+    const head = current.events.at(-1)?.seq ?? 0;
+    // An idempotent command replay may resend a tail already received by this tab.
+    // Ignore overlap only after checking that it is the same immutable history.
+    for (const event of mutation.emitted) {
+      if (event.seq > head) continue;
+      const recorded = current.events.find(candidate => candidate.seq === event.seq);
+      if (recorded === undefined || JSON.stringify(recorded) !== JSON.stringify(event)) {
+        throw new TypeError("Mutation replay conflicts with recorded history");
+      }
+    }
+    const run = appendProjected(current, mutation.emitted.filter(event => event.seq > head));
     if (run.events.length !== mutation.run.events.length) {
       throw new TypeError("Mutation response run and emitted events disagree");
     }

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import type { SimulationResult } from "./api.js";
   import type { StartSide } from "./board-model.js";
   import Chessboard from "./Chessboard.svelte";
@@ -9,11 +10,13 @@
     simulation: SimulationResult;
     startSide: StartSide;
     busy?: boolean;
+    campaignEncounter?: boolean;
+    campaignError?: string | undefined;
     onEnter: (branchIndex: number) => boolean | Promise<boolean>;
     onClose: () => void;
   }
 
-  let { simulation, startSide, busy = false, onEnter, onClose }: Props = $props();
+  let { simulation, startSide, busy = false, campaignEncounter = false, campaignError, onEnter, onClose }: Props = $props();
   let entering = $state<number>();
   let entryError = $state<number>();
   let locked = $derived(busy || entering !== undefined);
@@ -59,8 +62,9 @@
       <button type="button" aria-label="Close authored line preview" disabled={locked} aria-describedby={entering === undefined ? undefined : "simulation-entry-status"} onclick={requestClose}>Close</button>
     </header>
     <p id="simulation-note" class="note">These are demonstrations from the drill, not moves added to your attempt. Choose one only when you want to step into that line.</p>
+    <CampaignGestureCost {campaignEncounter} id="simulation-entry-cost" action="Entering a line (not previewing it)" />
     {#if entering !== undefined}<p id="simulation-entry-status" class="entry-state" role="status">Entering this authored line. The preview will close only after the run has changed.</p>{/if}
-    {#if entryError !== undefined}<p id="simulation-entry-error" class="entry-state error" role="alert">That line was not entered. Your run and this preview are unchanged, so you can try again.</p>{/if}
+    {#if entryError !== undefined}<p id="simulation-entry-error" class="entry-state error" role="alert">{campaignEncounter ? "Entering this line could not be confirmed. Keep this preview and retry this same line." : "That line was not entered. Your run and this preview are unchanged, so you can try again."}{#if campaignError} {campaignError}{/if}</p>{/if}
     <div class="line-grid">
       {#each simulation.branches as branch, index}
         <article>
@@ -77,7 +81,7 @@
             class="enter"
             type="button"
             disabled={locked}
-            aria-describedby={entering !== undefined ? "simulation-entry-status" : entryError === branch.index ? "simulation-entry-error" : undefined}
+            aria-describedby={[campaignEncounter ? "simulation-entry-cost" : "", entering !== undefined ? "simulation-entry-status" : entryError === branch.index ? "simulation-entry-error" : ""].filter(Boolean).join(" ") || undefined}
             onclick={() => void enter(branch.index)}
           >{entering === branch.index ? "Entering this line…" : entryError === branch.index ? "Try this line again" : "Enter this line"}</button>
         </article>

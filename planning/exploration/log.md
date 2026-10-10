@@ -24864,3 +24864,43 @@ Campaign was the one capability with no API, route or content. Now:
   86 production pack documents / zero official graduates. The active unlimited 1.0 goal
   remains accurate and unpaused. Stage only the explicit owned-file list; other visible
   work and local artifacts are not included or deleted.
+
+## 2026-10-10 — D3677–D3679: Campaign costs and committed-response recovery
+
+- Under implementing campaign-core §§2/6/7 and existing play composition, verified Campaign
+  encounters now disclose one earned rewind at timeline/checkpoint/terminal/guard/Support,
+  module, keyboard-picker, fork/group and authored-line entry controls. Group cost remains one;
+  preview, comparison, inspection and ordinary rehearsal remain free. This is contextual UI,
+  not new evidence, charging authority, economy, reward, default or permission policy.
+- DrillApi retains the exact unresolved command and operands after uncertain transport/5xx
+  outcomes. Explicit same-gesture retry reuses it; another gesture refuses before transport.
+  Success, definite 4xx refusal or a recorded no-spend provider failure clears it. Server replay
+  supplies the authorized tail after the saved play revision. Client projection verifies
+  already-received overlap before appending; conflicting history and event gaps still refuse.
+- Thirteen new software cases plus extended existing server/refusal controls are permanent.
+  Three disclosure entrances, two transport controls, client overlap and server empty-tail
+  assertions were observed red on their predecessors. The real desktop/phone journeys commit
+  through route.fetch, discard the response, retry the same command ID, verify one spend and
+  refuse exhausted retries without changing recorded nodes, branches or cursor.
+- The first complete browser attempt catches a spectator description expectation and the phone
+  companion still open during board-hit measurement. Preserve the read-only explanation/cost
+  assertions and close the companion before measuring. The next run then exposes a real
+  exhaustion alert covering the phone's top rank: 56/64 hits. Move that alert into Actions and
+  the active dialog, retain a mounted placement assertion and make the decorative Preview badge
+  pointer-transparent. Both real journeys now retain 64/64 hits at the unchanged board edge.
+- Complete sequential ordinary make verify-awake build test-browser-ci-awake exits zero:
+  clean types; 4,582 software cases/365 files; seven unchanged-budget performance cases/four
+  files; 246 content cases/25 files; governance/corpus/capability/packaging and web/server build.
+  Browser tiers pass 218 smoke, five real-content, 59 matrix and one packaged-default case:
+  283 passes, one existing optional Maia skip, zero retries, all 150 input/112 composition cells.
+  No deadline, performance budget or behavior assertion was relaxed.
+- D3680 records group replay selecting the latest group rather than its saved identity. D3682
+  records an older replay receipt overwriting a newer campaign revision. Both are separate
+  queued repairs. D3681 holds the mandated exhaustion wording's false zero-income promise for
+  a narrow author amendment; this implementation preserves the currently mandated refusal.
+- Ledger/state/queue/docs/roadmap close together: 3,431 rows, 1,553 done, 161 refused and
+  1,717 assigned live, zero untriaged. UX remains 273 complete/272 live/24 retired;
+  four milestones active/five blocked, all fourteen whole capabilities incomplete;
+  86 production pack documents/zero official graduates. The full 1.0 goal remains active and
+  accurate. This is no whole Campaign, foundation qualification, content, remote CI or native
+  release-image promotion. No push, publication, deployment or broad staging is authorized.

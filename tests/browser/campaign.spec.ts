@@ -153,6 +153,76 @@ async function holdCampaignAction(page: Page, path: RegExp) {
 }
 
 for (const mobile of [false, true]) {
+  test(`Campaign actions disclose costs, replay a lost branch response and refuse exhaustion without changing the run${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const campaignId = new URL(page.url()).pathname.split("/").at(-1)!;
+    const runId = await startNode(page, "f1-a");
+    await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, runId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+    const edge = await playableBoard(page);
+    const balance = async () => (await (await page.request.get(`/campaign-runs/${campaignId}`)).json()).charges;
+    const before = await balance();
+    await page.locator("[data-timeline-node]").first().click();
+    await expect(page.locator(".timeline")).toContainText("Preview only.");
+    expect(await balance()).toEqual(before); // Selecting/inspecting a position is not a spend.
+    await playableBoard(page, edge);
+
+    const commands: string[] = [];
+    let loseResponse = true;
+    await page.getByRole("button", { name: "Actions", exact: true }).click();
+    await page.getByRole("button", { name: "Fork branch", exact: true }).click();
+    const firstDialog = page.getByRole("dialog", { name: "Name the experiment." });
+    await expect(firstDialog.locator("[data-campaign-gesture-cost]")).toContainText("Creating this branch uses one earned rewind");
+    await firstDialog.getByLabel("What are you trying?").fill("Try another continuation");
+    await page.route(`**/runs/${runId}/fork`, async route => {
+      const body = route.request().postDataJSON() as { campaignCommand: { commandId: string } };
+      commands.push(body.campaignCommand.commandId);
+      if (loseResponse) {
+        loseResponse = false;
+        const response = await route.fetch();
+        expect(response.ok()).toBe(true);
+        await route.abort("failed"); // Persisted spend, missing response: retry the exact command.
+      } else await route.continue();
+    });
+    await firstDialog.getByRole("button", { name: "Create branch", exact: true }).click();
+    await expect(firstDialog.getByRole("alert")).toContainText("try again");
+    expect(await balance()).toMatchObject({ balance: 0, spent: 1 });
+    await firstDialog.getByRole("button", { name: "Create branch", exact: true }).click();
+    await expect(firstDialog).not.toBeVisible();
+    await expect(page.getByTestId("campaign-strip-charges")).toContainText("Earned rewinds: 0 remaining this campaign");
+    expect(commands).toHaveLength(2);
+    expect(commands[1]).toBe(commands[0]);
+    expect(await balance()).toMatchObject({ balance: 0, spent: 1 });
+    await page.unroute(`**/runs/${runId}/fork`);
+
+    await page.getByRole("button", { name: "Actions", exact: true }).click();
+    await page.getByRole("button", { name: "Fork branch", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "Name the experiment." });
+    await expect(dialog.locator("[data-campaign-gesture-cost]")).toContainText("Creating this branch uses one earned rewind");
+    await dialog.getByLabel("What are you trying?").fill("Try another continuation");
+    const graphBefore = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    await dialog.getByRole("button", { name: "Create branch", exact: true }).click();
+    await expect(dialog.getByRole("alert")).toContainText("No earned rewinds remain in this campaign");
+    await dialog.getByRole("button", { name: "Create branch", exact: true }).click();
+    await expect(dialog.getByRole("alert")).toContainText("No earned rewinds remain in this campaign");
+    const graphAfter = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    assertRecordedNodesPreserved(graphBefore.nodes, graphAfter.nodes);
+    expect(graphAfter.nodes.map(node => node.id)).toEqual(graphBefore.nodes.map(node => node.id));
+    expect(graphAfter.branches).toEqual(graphBefore.branches);
+    expect(graphAfter.activeCursor).toEqual(graphBefore.activeCursor);
+    expect(await balance()).toMatchObject({ balance: 0, spent: 1 });
+    await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+    await expect(dialog).not.toBeVisible();
+    const collapse = page.getByRole("button", { name: "Collapse companion", exact: true });
+    if (await collapse.isVisible()) {
+      await collapse.click();
+      await expect(collapse).not.toBeVisible();
+    }
+    await playableBoard(page, edge);
+  });
+
   test(`Campaign actions recover the in-game strip without repeating saved commands${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();

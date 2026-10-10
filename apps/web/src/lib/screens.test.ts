@@ -117,6 +117,51 @@ import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const carlsbad = { ...JSON.parse(carlsbadJson), channel: "official" } as ShapeEntryView;
+
+describe("D3677 Campaign gesture cost disclosure", () => {
+  for (const campaignEncounter of [true, false]) {
+    for (const entrance of ["timeline", "fork", "group"] as const) {
+      it(`${campaignEncounter ? "Campaign" : "ordinary rehearsal"} ${entrance} states its cost before mutation`, async () => {
+        const onRewind = vi.fn(), onFork = vi.fn(), onCreateGroup = vi.fn();
+        const run = branchedRun();
+        const component = mountDrill({ target: target(), props: {
+          pack, campaignEncounter, error: "No earned rewinds remain in this campaign.",
+          snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+          onMove: vi.fn(), onRewind, onFork, onCreateGroup, onSwitchBranch: vi.fn(),
+          onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+          onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+        } });
+        await tick();
+        const campaignAlert = document.querySelector(".campaign-action-error");
+        expect(campaignAlert !== null).toBe(campaignEncounter);
+        if (campaignEncounter) {
+          expect(campaignAlert?.closest(".action-seat")).not.toBeNull();
+          expect(document.querySelector(".drill > .error")).toBeNull();
+        }
+        if (entrance === "timeline") {
+          document.querySelector<HTMLButtonElement>("[data-timeline-node]")!.click();
+        } else {
+          [...document.querySelectorAll<HTMLButtonElement>(".quick-actions button")]
+            .find(button => entrance === "fork" ? button.getAttribute("aria-label") === "Fork branch" : button.textContent === "Branch group")!.click();
+        }
+        await tick();
+        const scope = document.querySelector(entrance === "timeline" ? ".timeline" : entrance === "fork" ? '[aria-labelledby="fork-title"]' : '[aria-labelledby="group-create-title"]')!;
+        expect(scope).not.toBeNull();
+        if (campaignEncounter) {
+          expect(scope.textContent).toContain("one earned rewind");
+          expect(scope.textContent).not.toContain("costs nothing");
+        } else {
+          expect(scope.textContent).not.toContain("one earned rewind");
+          if (entrance === "timeline") expect(scope.textContent).toContain("costs nothing");
+        }
+        expect(onRewind).not.toHaveBeenCalled();
+        expect(onFork).not.toHaveBeenCalled();
+        expect(onCreateGroup).not.toHaveBeenCalled();
+        await unmount(component);
+      });
+    }
+  }
+});
 const at = "2026-08-11T20:00:00.000Z";
 let regionKeyboard: RegionKeyboardHandler | undefined;
 
@@ -419,7 +464,7 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
-  it("previews authored consequences as scratch positions and offers explicit entry", async () => {
+  it.each([false, true])("previews authored consequences as scratch positions and offers explicit entry (Campaign: %s)", async (campaignEncounter) => {
     let run = createRun({
       id: "simulation-ui",
       packId: pack.id,
@@ -464,10 +509,12 @@ describe("Layer 3 screens", () => {
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onSimulate,
-      onEnterSimulation, onCloseSimulation, registerKeyboardRegion,
+      onEnterSimulation, onCloseSimulation, campaignEncounter, registerKeyboardRegion,
     } });
     await tick();
     const dialog = document.querySelector<HTMLElement>('[aria-labelledby="simulation-title"]')!;
+    expect(dialog.querySelector("[data-campaign-gesture-cost]") !== null).toBe(campaignEncounter);
+    if (campaignEncounter) expect(dialog.textContent).toContain("Entering a line (not previewing it) uses one earned rewind");
     expect(dialog.textContent).toContain("These are demonstrations from the drill, not moves added to your attempt");
     expect(dialog.textContent).toContain("f3");
     expect(dialog.textContent).toContain("Be2");
@@ -771,7 +818,7 @@ describe("Layer 3 screens", () => {
     await tick();
     const rewindButton = button("Rewind to preview")!;
     expect(rewindButton.disabled).toBe(true);
-    expect(document.getElementById(rewindButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
+    expect(rewindButton.getAttribute("aria-describedby")!.split(/\s+/).map(id => document.getElementById(id)?.textContent).join(" ")).toContain("read-only");
 
     expect(regionKeyboard?.(new KeyboardEvent("keydown", { key: "b" }))).toBe(true);
     expect(regionKeyboard?.(new KeyboardEvent("keydown", { key: "r" }))).toBe(true);
@@ -3243,7 +3290,7 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
-  it("presents terminal authored commentary and recorded engine evidence", async () => {
+  it.each([false, true])("presents terminal authored commentary, recorded engine evidence and Campaign cost (%s)", async (campaignEncounter) => {
     const terminalPack = {
       ...pack,
       id: "terminal-screen",
@@ -3287,6 +3334,7 @@ describe("Layer 3 screens", () => {
       target: target(),
       props: {
         pack: terminalPack,
+        campaignEncounter,
         snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
         authoredFeedback: {
           items: [{
@@ -3343,6 +3391,7 @@ describe("Layer 3 screens", () => {
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
     const terminalRewind = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!;
+    expect(document.querySelector("#terminal-rewind-cost") !== null).toBe(campaignEncounter);
     terminalRewind.click();
     expect(onRewind).toHaveBeenCalledWith({ nodeId: run.nodes[0]!.id });
     await tick();
@@ -3350,7 +3399,7 @@ describe("Layer 3 screens", () => {
     expect(terminalRewind.textContent).toContain("Rewinding");
     expect(document.querySelector("#terminal-rewind-busy")?.textContent).toContain("completed attempt remains open");
     rewindAttempt.resolve(false);
-    await vi.waitFor(() => expect(document.querySelector("#terminal-rewind-error")?.textContent).toContain("target are unchanged"));
+    await vi.waitFor(() => expect(document.querySelector("#terminal-rewind-error")?.textContent).toContain(campaignEncounter ? "could not be confirmed" : "target are unchanged"));
     expect(terminalRewind.textContent).toContain("Try this rewind again");
     terminalRewind.click();
     await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
@@ -4101,10 +4150,11 @@ describe("Layer 3 screens", () => {
     ).toThrow(/has no evidence references/);
   });
 
-  it("explains why checkpoint comparison is disabled", async () => {
+  it.each([false, true])("explains why checkpoint comparison is disabled and discloses Campaign cost (%s)", async (campaignEncounter) => {
     const component = mount(CheckpointSheet, {
       target: target(),
       props: {
+        campaignEncounter,
         run: branchedRun(),
         checkpoint: {
           id: "predict-reply",
@@ -4123,6 +4173,7 @@ describe("Layer 3 screens", () => {
     await tick();
 
     expectDisabledControlsExplained();
+    expect(document.querySelector("[data-campaign-gesture-cost]") !== null).toBe(campaignEncounter);
     expect(document.body.textContent).toContain(
       "Reach this checkpoint on at least two branches before comparing.",
     );

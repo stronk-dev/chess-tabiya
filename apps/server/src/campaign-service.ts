@@ -739,7 +739,10 @@ export class CampaignService implements CampaignChargeGate {
     }
     const current = this.#storage.read(runId);
     if (current === undefined) fail("CAMPAIGN_SUBMIT_INVALID", "The encounter run is no longer available");
-    return Object.freeze({ kind: "replayed", run: current!.run, emitted: Object.freeze([]), campaign: result });
+    // A caller may have lost the committed response. Supply the authorized event tail so it
+    // can reconstruct its run; matching overlap is verified by the client before projection.
+    return Object.freeze({ kind: "replayed", run: current!.run,
+      emitted: Object.freeze(current!.run.events.filter(event => event.seq > stored.expectedPlayRevision)), campaign: result });
   }
 
   replay(input: { readonly runId: string; readonly lease: LeaseHolder; readonly operation: "rewind" | "fork" | "group" | "simulate_enter"; readonly operands: unknown; readonly command: CampaignCommandInput | undefined }): CampaignChargedOutcome | undefined {

@@ -30485,6 +30485,57 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3677",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2b61b1dea5a76620ea64b1b4775238f896c39ebd96267102f4da2ef9ba729f82",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3678",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:26505dab4f64a6b352797d3d40f28973b0767675e6fa0e45d4dd79718dc0e2e6",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3679",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:712e97b4434fd35756382fb98f853a25c153cc3b77fce80a170167ecce9e3f66",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3680",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1190b66957ece19a796ca8cb18d97b6a35e7c4dc4a8d4b152feffd282417c29b",
+      "uxItems": [],
+      "owner": "campaign"
+    },
+    {
+      "id": "D3681",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4e3c0a26cd2890d66140d8cfadf0251e1dba0c925d44beb304e0cdf7acbb87da",
+      "uxItems": [],
+      "owner": "campaign"
+    },
+    {
+      "id": "D3682",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4b10ed5288b0c78707c93c8588a4b175b4b661f76a784c9d882f57cb0227fb47",
+      "uxItems": [],
+      "owner": "campaign"
     }
   ]
 }

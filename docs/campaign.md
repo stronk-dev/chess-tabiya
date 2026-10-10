@@ -24,6 +24,25 @@ attach to the current encounter. Keyboard retry returns focus to its error or en
 only while the learner has not moved focus elsewhere. Desktop and phone tests verify the saved
 position, branch, campaign state and board geometry through repeated failure and recovery.
 
+## Encounter gesture costs and lost responses
+
+In the verified Campaign encounter, the timeline and checkpoint, completed-line, guard and Support
+rewind controls disclose **one earned rewind** before the gesture. The fork and group dialogs state
+the same cost; a whole group costs one, not one per member. The authored-line preview is free;
+**Enter this line** discloses its separate one-charge cost. Ordinary rehearsal stays free.
+Cost copy is contextual UI, not a chess evidence item, preset override or new charging authority.
+
+If a charged response is lost, the browser retains that exact command and operands for explicit
+retry; it does not automatically repeat a spend. A different gesture is refused while the outcome
+is unknown. Success, a definite 4xx refusal or the recorded no-spend provider failure clears the
+pending command. The server replay supplies the authorized event tail from the original command's
+play revision. The client checks any overlapping events against its recorded history before
+applying the new tail; conflicting history and event gaps remain errors. Exhaustion displays the
+existing server explanation inside the action dialog and the Actions panel rather than calling it
+a stale-run problem or floating an alert over the board. Closing the companion restores every
+board target without changing its size.
+This recovery state is in the current browser session; a reload reads the saved run and campaign.
+
 ## Leaving a pending action
 
 Create, encounter start, kit changes, abandonment and Declare done have one pending command

@@ -194,6 +194,8 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     // Response-loss replay returns the stored result without a second mutation or spend.
     const replayedRewind = await alice.call("POST", `/runs/${playRunId}/rewind`, { nodeId: learnerNode.id, campaignCommand: rewindCommand });
     expect(replayedRewind.body.campaign).toEqual(rewound.body.campaign);
+    expect(replayedRewind.body.emitted.slice(0, rewound.body.emitted.length)).toEqual(rewound.body.emitted);
+    expect(replayedRewind.body.emitted).toEqual(replayedRewind.body.run.events.filter((event: DrillRun["events"][number]) => event.seq > rewindCommand.expectedPlayRevision));
     expect((await alice.call("GET", `/campaign-runs/${campaignRunId}`)).body.campaignRun.revision).toBe(3);
     expect((await alice.call("POST", `/runs/${playRunId}/rewind`, { nodeId: played.nodes[0]!.id, campaignCommand: rewindCommand })).body.error.code).toBe("CAMPAIGN_COMMAND_REUSED");
     // Exhausted: the typed 409 with the verbatim message; the play run is unchanged.

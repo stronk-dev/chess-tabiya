@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3676]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3682]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,29 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3676]]: 273 UX items complete, 272 live and 24
-retired; 1,714 live ledger items, all assigned, alongside 1,550 done and 161 refused. The 462
+Current checked inventory through [[D3682]]: 273 UX items complete, 272 live and 24
+retired; 1,717 live ledger items, all assigned, alongside 1,553 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest Campaign journey repair: [[D3677]]–[[D3679]] disclose the earned charge at every
+charged entrance, retain the exact unresolved gesture for explicit retry and restore its
+authorized event tail without double-spending. Matching overlap is verified; conflicting
+history and gaps still refuse. Exhaustion stays in the active dialog and Actions panel,
+not over the board. Actual desktop/phone journeys deliberately lose a committed response,
+retry the same command, spend once, refuse exhaustion without graph mutation and retain
+all 64 board hits at the unchanged edge. Thirteen new software cases plus extended API
+controls and two browser journeys are permanent. Complete normal `make verify-awake build
+test-browser-ci-awake` passes 4,582 software cases/365 files, seven unchanged-budget performance
+cases/four files, 246 content cases/25 files, types/governance/packaging/build and 283 browser
+cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112
+composition cells. [[D3680]]/[[D3682]] retain exact group-identity and late-receipt ordering
+repairs; [[D3681]] requires a narrow truthful zero-income wording amendment. No full Campaign,
+content graduation, milestone/capability, native release-image or remote-CI promotion follows.
 
 Latest foundation validation wave: [[D3676]] adds twelve both-colour populated legal
 negatives for six pawn/file families. Real structural operations complete, emit other events

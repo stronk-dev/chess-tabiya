@@ -1676,7 +1676,7 @@ export class RunService {
   #groupReplay(outcome: CampaignChargedOutcome): CreateGroupResult & { readonly campaign: Readonly<Record<string, unknown>> } {
     const group = groupsFromEvents(outcome.run).at(-1);
     if (group === undefined) throw new ServerError("STORAGE_FAILURE", "A replayed group command names no group");
-    return Object.freeze({ group, run: outcome.run, emitted: [], campaign: outcome.campaign, comparison: compareBranches(outcome.run, group.members.map((member) => member.branchId), {}) });
+    return Object.freeze({ group, run: outcome.run, emitted: outcome.emitted, campaign: outcome.campaign, comparison: compareBranches(outcome.run, group.members.map((member) => member.branchId), {}) });
   }
 
   /** rfc/intent-presets.md §5.1: the server re-derives context and access; it never trusts the client's. */
