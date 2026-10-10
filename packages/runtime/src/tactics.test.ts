@@ -3,6 +3,11 @@ import { expect, describe, it } from "vitest";
 import { backRankReading, checkEvent, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, forkSurvivesReply, loosePieceEvents, loosePieceReading, mateInOne, promotionPressureReading, rayClassificationReading, replyBreadth, rookOnSeventhReading, threats, trappedPieceReading } from "./tactics.js";
 import { transitionSemanticFacts } from "./transition.js";
 import type { GainedSliderRay } from "./tactics.js";
+import { canonicalFen, positionFromFen } from "./chess.js";
+import { exactLegalMoves } from "./legal-moves.js";
+import { parseSquare, parseUci } from "chessops/util";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { evidenceValueReceipt } from "./evidence-contract.js";
 
 describe("bounded tactical authorities", () => {
   it("records exact reply breadth and treats zero as terminal", () => {
@@ -189,6 +194,53 @@ describe("bounded tactical authorities", () => {
     expect(captureEscape.kind === "pieces" ? captureEscape.pieces.some((value) => value.piece.square === "a8") : true).toBe(false);
 
     expect(trappedPieceReading("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1")).toEqual({ kind: "abstained", reason: "trapped_while_in_check", conventionId: "trapped@1", pieces: [] });
+  });
+
+  it.each([
+    { fen: "r6k/8/8/8/8/8/b1n5/R1K5 w A - 0 1", castle: "c1a1", rook: "a1", landing: "d1", color: "white" },
+    { fen: "r1k5/B1N5/8/8/8/8/8/R6K b a - 0 1", castle: "c8a8", rook: "a8", landing: "d8", color: "black" },
+    { fen: "k7/8/8/8/8/8/5n1P/6KR w K - 0 1", castle: "g1h1", rook: "h1", landing: "f1", color: "white" },
+    { fen: "6kr/5N1p/8/8/8/8/8/K7 b k - 0 1", castle: "g8h8", rook: "h8", landing: "f8", color: "black" },
+  ])("D3652 counts the physical rook escape from a stationary-king castle: $castle", value => {
+    const before = positionFromFen(value.fen);
+    expect(before.isCheck()).toBe(false);
+    expect(exactLegalMoves(value.fen).map(move => move.uci)).toContain(value.castle);
+    const missingRight = before.clone();
+    missingRight.castles.discardColor(before.turn);
+    const trapped = trappedPieceReading(canonicalFen(missingRight));
+    expect(trapped.kind).toBe("pieces");
+    if (trapped.kind !== "pieces") throw new Error("expected the non-castling local reading");
+    expect(trapped.pieces.find(piece => piece.piece.square === value.rook)).toMatchObject({
+      piece: { occupant: { color: value.color, role: "rook" } },
+      attackers: expect.arrayContaining([expect.objectContaining({ exchange: expect.objectContaining({ resultUnits: expect.any(Number) }) })]),
+    });
+    expect(trapped.pieces.find(piece => piece.piece.square === value.rook)!.attackers.some(capture => capture.exchange.resultUnits > 0)).toBe(true);
+    const next = before.clone();
+    next.play(parseUci(value.castle)!);
+    expect(next.board.get(parseSquare(value.landing)!)).toMatchObject({ color: value.color, role: "rook" });
+    const actual = trappedPieceReading(value.fen);
+    expect(actual.kind).toBe("pieces");
+    if (actual.kind !== "pieces") throw new Error("expected the castling-capable local reading");
+    expect(actual.pieces.some(piece => piece.piece.square === value.rook)).toBe(false);
+    const sealed = invokeEvidenceValueRoute("rules.tactic.reading.trapped_piece@1", { fen: value.fen });
+    expect(evidenceValueReceipt(sealed).factory).toBe("createRulesTacticReadingTrappedPieceV1Evidence");
+    expect(sealed.payload).toEqual(actual);
+  });
+
+  it.each([
+    { fen: "r6k/8/8/8/8/8/b1n2n2/R1K5 w A - 0 1", castle: "c1a1", rook: "a1", recapture: "f2d1" },
+    { fen: "r1k5/B1N2N2/8/8/8/8/8/R6K b a - 0 1", castle: "c8a8", rook: "a8", recapture: "f7d8" },
+  ])("D3652 retains a locally losing castle instead of exempting the rook: $castle", value => {
+    expect(exactLegalMoves(value.fen).map(move => move.uci)).toContain(value.castle);
+    const actual = trappedPieceReading(value.fen);
+    expect(actual.kind).toBe("pieces");
+    if (actual.kind !== "pieces") throw new Error("expected a complete local reading");
+    const rook = actual.pieces.find(piece => piece.piece.square === value.rook);
+    expect(rook).toBeDefined();
+    expect(rook!.moves).toContainEqual(expect.objectContaining({
+      moveUci: value.castle, kind: "quiet", losing: true,
+      opponentCaptures: expect.arrayContaining([expect.objectContaining({ moveUci: value.recapture, exchange: expect.objectContaining({ resultUnits: 2 }) })]),
+    }));
   });
 
   it("keeps back-rank susceptibility separate from mate and records why every escape is unavailable", () => {

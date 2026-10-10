@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make castling-evidence-check` includes local trapped-piece escape testing through collector,
+factory, complete candidates, opponent consumer and authenticated Inspector. Safe castling rook
+landings escape; locally losing landings and same-board no-right controls remain trapped.
+`make trapped-piece-browser-check` runs eight actual desktop/phone-width Inspector journeys with
+exact captions, responsive layout and unchanged saved play. These permanent controls also run in
+the ordinary software/browser tiers; they are not a new chess convention or bot calibration.
+
 `make campaign-actions-check campaign-actions-browser-check` covers Campaign read/action
 recovery at the mounted boundary and actual desktop/phone HTTP journeys. The in-game strip
 withdraws command authority during failed/pending reads; repeated read-only retries preserve the

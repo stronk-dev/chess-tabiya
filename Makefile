@@ -1410,7 +1410,11 @@ semantic-validation-cited-check:
 
 .PHONY: castling-evidence-check
 castling-evidence-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/castling.test.ts packages/runtime/src/castling-evidence.test.ts apps/server/src/castling-evidence.test.ts apps/server/src/candidate-evidence.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/castling.test.ts packages/runtime/src/castling-evidence.test.ts packages/runtime/src/tactics.test.ts apps/server/src/castling-evidence.test.ts apps/server/src/candidate-evidence.test.ts
+
+.PHONY: trapped-piece-browser-check
+trapped-piece-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --project=desktop-chromium --grep D3652
 
 evidence-foundation-check: mobility-check king-state-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/pawn-dynamics.test.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts

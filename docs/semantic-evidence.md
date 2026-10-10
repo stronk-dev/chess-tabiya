@@ -62,6 +62,13 @@ positive/nearby-negative cases cover orthodox queenside and Chess960 stationary/
 The same corrected operands reach the existing opponent candidate-vector consumer; bounded
 score inputs are retained. This is collector fidelity, not a new personality or calibrated bot.
 
+Local trapped-piece readings also include the rook's physical destination when the legal
+command is castling. A safe landing is an escape; a landing admitting a positive local capture
+remains locally losing. Having castling rights alone is not an exemption. Both-color/wing
+controls reach the sealed factory, complete candidate packet, opponent consumer and authenticated
+Inspector; nearby positions without the right remain trapped. The convention remains the bounded
+`trapped@1` test, not a claim that the piece is lost under every possible defensive plan.
+
 Pawn protection and connected-pair gains follow the exact moved pawn across its legal edge;
 an advance does not create an existing property again. Pair identity is unordered, so a changed
 enumeration order also cannot become a gain. Genuine newly protected passers remain gains and

@@ -24158,3 +24158,44 @@ Campaign was the one capability with no API, route or content. Now:
   ten awaiting and 22 draft; all fourteen whole capabilities incomplete, four milestones active/
   five blocked, 86 production pack documents and zero official graduates. No remote CI, native
   release, push, milestone completion or new tracking system is claimed. Full 1.0 goal stays active.
+
+## 2026-10-10 — D3652: local trapped-rook castling escape; requested progress checkpoint
+
+- Finished the in-flight evidence-foundation repair before the owner's requested total progress
+  overview. Tactical-collectors §2.6/§3.13 already requires every legal destination; no successor
+  convention or new implementation authority is needed. The old origin-only filter omitted the
+  rook's relocation in a king-initiated castle and rendered a false trapped claim in Inspector.
+- Twelve permanent predecessor controls fail across both colors/wings, exact factory operands,
+  complete candidate packets, actual opponent selection and authenticated Support/Inspector. The
+  collector now uses its existing physical-relocation authority and tests the actual rook landing.
+  A legal castle with a locally losing landing remains losing; rights alone are not an exemption.
+- All 118 focused controls and 608 broader foundation controls pass; workspace types are clean.
+  Eight native desktop/phone-width Inspector journeys pair each escape with the same board minus
+  its castling right and preserve exact captions, layout, authorization and unchanged saved play.
+  The first browser command used the wrong project name; correcting the ordinary Make target to
+  the configured desktop-chromium project runs all eight successfully, without retries or budgets.
+- Same-batch ledger, work-state, canonical docs and existing queue/roadmap record the repair.
+  There are now 3,401 ledger rows: 1,530 done, 161 refused and 1,710 live, zero untriaged. UX remains
+  273 complete/272 live/24 retired. No whole capability or milestone is promoted; no source,
+  permission, chess judgement, bot calibration, official pack, full semantic qualification,
+  native release image or exact-revision remote CI is claimed. Normal aggregate gates follow
+  before committing. The full 1.0 goal remains active; this is a requested inventory checkpoint.
+- The first aggregate passes all 4,394 software cases/365 files and all seven unchanged-budget
+  performance cases/four files, then stops on the existing generated validation record after the
+  collector change. Its 87 canonical cases still pass and all 81 subjects remain unqualified.
+  Refresh only through `make semantic-validation-update`, inspect the generated diff, then repeat
+  the normal aggregate before committing. No receipt case, population, threshold or verdict is
+  rewritten to make the fix pass.
+- The complete sequential rerun of `make verify-awake build` exits zero: 4,394 software
+  cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24
+  files, workspace types, governance, packaging and production build. The generated diff contains
+  implementation references only; canonical cases/operands, population/external results and
+  qualification verdicts are unchanged. The complete GitHub-equivalent browser gate now follows
+  serially, with no simultaneous web rebuild, retry or relaxed deadline.
+- `make test-browser-ci-awake` exits zero across all four tiers: 196 learner journeys,
+  five real-content integrations, 59 responsive/accessibility matrix tests and one packaged-default
+  rehearsal (261 passing total). One optional Maia latency case is skipped; zero retries.
+  All 150 exact-input cells and 112 composition cells pass. The eight new Inspector journeys
+  pass again inside the full gate. Final tracker-only closeout updates do not alter production,
+  tests, content, permissions or qualification; governance is checked again before the explicit
+  owned-file commit. No push, remote-CI or native release-image proof is claimed.

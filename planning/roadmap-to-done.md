@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3651]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3652]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory after [[D3649]]–[[D3651]]: 273 UX items complete, 272 live and 24
-retired; 1,710 live ledger items, all assigned, alongside 1,529 done and 161 refused. The 462
+Current checked inventory after [[D3649]]–[[D3652]]: 273 UX items complete, 272 live and 24
+retired; 1,710 live ledger items, all assigned, alongside 1,530 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -87,7 +87,23 @@ unchanged-budget performance, 241 content, types/build/governance and both deskt
 account-restoration journeys, zero retries. The separate scheduled-return source reader is now
 repaired above; this is not whole-account/privacy, full browser-suite, native-image or remote-CI proof.
 
-Latest foundation repair: [[D3645]]/[[D3646]] distinguish the removed pawn's square from the
+Latest foundation repair: [[D3652]] includes the physical rook landing in local trapped-piece
+escape testing when the legal command is castling. Safe landings refute the claim; legal but
+locally losing castles remain losing. Twelve predecessor controls fail; all 118 focused and
+608 broader foundation cases, clean types and eight actual desktop/phone-width Inspector
+journeys pass. Complete candidate packets and the actual opponent consumer retain the same
+corrected reading; nearby no-right positions remain trapped. Exact captions, authorization,
+board geometry and saved play are preserved. The normal non-browser aggregate/build pass
+4,394 software cases/365 files, seven unchanged-budget performance cases/four files and
+241 content cases/24 files, plus clean types/governance/packaging. The first aggregate stopped
+on the existing generated validation record; its sole writer updates implementation references,
+not cases or qualification results. Complete browser verification passes 261 cases (196 learner
+journeys, five real-content, 59 matrix and one packaged-default), one optional Maia skip, zero
+retries and all 150 input/112 composition cells. No new chess
+convention, learner permission, calibration, full semantic
+qualification, capability/milestone completion, official content or release/remote-CI claim.
+
+Previous foundation repair: [[D3645]]/[[D3646]] distinguish the removed pawn's square from the
 en-passant landing through overload response conflict, saved overload/defender-consequence
 windows and actual authenticated Review. Twelve predecessor controls fail; 598 foundation/83
 Review controls and clean types pass. Eight new desktop/phone journeys retain exact captions,

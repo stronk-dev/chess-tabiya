@@ -12,6 +12,21 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3652]] repairs the omitted castling escape in the existing local trapped-piece reading.
+Every legal physical rook destination participates, including king-initiated commands; quiet
+destinations use the actual landing rather than the encoded rook origin. Legal but locally losing
+castles remain losing. Twelve collector/factory/candidate/authenticated-Inspector controls fail
+on the predecessor and all 118 focused controls pass after repair. All 608 broader foundation
+controls, clean types and eight native desktop/phone-width Inspector journeys pass, retaining
+both-color/wing escapes, no-right negatives, exact captions, layout and saved play. The normal
+non-browser aggregate and build pass: 4,394 software/365 files, seven unchanged-budget
+performance/four files, 241 content/24 files, types, governance and packaging. The existing
+generated validation record was refreshed through its sole writer after the first aggregate
+stopped; 87 canonical cases remain passing over 81 subjects, zero fully qualified. The complete
+browser gate passes all four tiers: 261 cases, one optional Maia skip, zero retries and all
+150 input/112 composition cells. No new convention, permission, bot calibration, semantic
+qualification, whole capability, native release-image or exact-revision remote CI is claimed.
+
 [[D3651]] reconciles the existing roadmap's execution waves during the total progress inventory:
 longitudinal/bot/Campaign persistence, routed theory APIs and board/module/preset composition are
 landed checkpoints with remaining obligations, not green-field jobs. The old 2026-09-05 store

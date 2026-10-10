@@ -30259,6 +30259,15 @@
       "uxItems": [],
       "evidence": "planning/roadmap-to-done.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3652",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bd985f07101071030075d176789402ae996a79a7776e90639b321dba66b8ca4f",
+      "uxItems": [],
+      "evidence": "apps/server/src/castling-evidence.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

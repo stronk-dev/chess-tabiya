@@ -531,6 +531,7 @@ export function trappedPieceReading(fen: string): TrappedPieceReading {
   opponentTurn.turn = opposite(owner);
   opponentTurn.epSquare = undefined;
   const pieces: TrappedPieceState[] = [];
+  const relocations = legalMoves(position).flatMap(move => pieceRelocations(position, move).map(relocation => ({ move, relocation })));
   for (const square of position.board[owner]) {
     const occupant = position.board.get(square)!;
     if (occupant.role === "pawn" || occupant.role === "king") continue;
@@ -539,13 +540,15 @@ export function trappedPieceReading(fen: string): TrappedPieceReading {
       return exchange === undefined ? [] : [{ moveUci: makeUci(move), exchange }];
     });
     if (!attackers.some((value) => value.exchange.resultUnits > 0)) continue;
-    const moves = legalMoves(position).filter((move) => move.from === square).map((move): TrappedPieceState["moves"][number] => {
+    // Castling is encoded as a king command but also relocates the rook. Test its
+    // physical landing, not the encoded rook-origin square, like every quiet move.
+    const moves = relocations.filter(({ relocation }) => relocation.from === square).map(({ move, relocation }): TrappedPieceState["moves"][number] => {
       const moveUci = makeUci(move);
       const exchange = legalExchangeForMove(position, move);
       if (exchange !== undefined) return Object.freeze({ moveUci, kind: "capture", losing: exchange.resultUnits < 0, exchange });
       const next = position.clone();
       next.play(move);
-      const opponentCaptures = legalCaptureMovesTo(next, move.to).flatMap((reply) => {
+      const opponentCaptures = legalCaptureMovesTo(next, relocation.to).flatMap((reply) => {
         const replyExchange = legalExchangeForMove(next, reply);
         return replyExchange === undefined ? [] : [{ moveUci: makeUci(reply), exchange: replyExchange }];
       });

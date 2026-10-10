@@ -824,10 +824,12 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3642 retains rook-only castling clearance blockers through the sealed factory, actual opponent-vector consumer and authenticated Inspector without changing saved play. Ten predecessor controls fail; 112 supported king/rook geometries, 672 blocker placements, literal nearby negatives and 91 focused cases pass. All normal local gates pass clean types/build, 4326 software tests/364 files, seven unchanged-budget performance/four files, governance/packaging, 239 content/23 files and 245 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. The phone helper now dismisses the actual companion modal before opening Advanced; all four new native journeys and the complete rerun pass. Explicit computed-profile/generated receipt refreshes retain 87 canonical cases over 81 subjects, zero fully qualified, with no frozen receipt or budget change. Same-commit closure retains permanent test evidence. No new source, learner permission, judgement, calibration, D1 discharge, source adoption, official graduation, whole capability, native release or remote CI promotion.",
+          "summary": "D3652 includes the rook's physical castling landing in every-legal-destination local trapped-piece testing. Safe landings escape; legal but locally losing castles remain losing. Twelve predecessor controls fail; 118 focused and 608 broader foundation controls, clean types and eight native desktop/phone-width Inspector journeys pass. Exact factory operands, complete candidate packets, the actual opponent consumer, no-right negatives, captions, layout, authorization and saved play are retained. Normal non-browser verification/build passes 4394 software cases/365 files, seven unchanged-budget performance cases/four files and 241 content cases/24 files, types/governance/packaging. The first aggregate stops on the existing generated record; its sole writer changes implementation references only, retaining 87 canonical passing cases over 81 subjects and zero fully qualified. Complete browser verification passes 261 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. No new convention, source, permission, judgement, calibration, semantic qualification, whole capability, official graduation, native release or remote-CI promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/tactical-collectors.md",
+            "packages/runtime/src/tactics.ts",
+            "packages/runtime/src/tactics.test.ts",
             "packages/runtime/src/castling.ts",
             "packages/runtime/src/castling.test.ts",
             "apps/server/src/castling-evidence.test.ts",
@@ -837,6 +839,7 @@
             "tests/browser/drill.spec.ts",
             "Makefile",
             "docs/semantic-evidence.md",
+            "docs/testing.md",
             "planning/codex-queue.md",
             "planning/exploration/log.md"
           ],
@@ -848,8 +851,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D3642",
-              "digest": "sha256:42d8a965ea100c81e51e59f92af4caad57c1781ac7e14fc21ba6735f7b054c95"
+              "id": "D3652",
+              "digest": "sha256:bd985f07101071030075d176789402ae996a79a7776e90639b321dba66b8ca4f"
             }
           ]
         },

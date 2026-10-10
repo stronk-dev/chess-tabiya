@@ -6,6 +6,7 @@ import {
   TACTICAL_COLLECTOR_PROJECTION_IDS,
   candidatePlayedRow,
   compileCandidatePopulation,
+  trappedPieceReading,
 } from "@chess-tabiya/runtime";
 
 import { BOT_POLICY_PROFILES } from "./bot-policy-catalog.js";
@@ -66,6 +67,33 @@ describe("candidate evidence adapter", () => {
       { id: "rules.mobility.reading.piece_destinations", version: 1 },
     ]));
     expect(EVIDENCE_MANIFEST.bindings.filter((binding) => binding.projection.id === projection.id).map((binding) => binding.consumer.id)).toEqual(["opponent.selection"]);
+  });
+
+  it.each([
+    { beforeFen: "r7/7k/8/8/8/8/b1n5/R1K5 b A - 0 1", move: "h7h8", rook: "a1" },
+    { beforeFen: "r1k5/B1N5/8/8/8/8/7K/R7 w a - 0 1", move: "h2h1", rook: "a8" },
+  ])("D3652 retains a castling escape in both the complete candidate packet and actual opponent consumer: $move", value => {
+    const packet = compileCandidatePopulation({ beforeFen: value.beforeFen, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+    if (packet.kind !== "ready") throw new Error("expected a complete legal packet");
+    const played = candidatePlayedRow(packet.receipt, value.move);
+    const reading = played.readings.find(item => item.projection.id === "rules.tactic.reading.trapped_piece");
+    expect(reading).toBeDefined();
+    const population = reading!.payload as { readonly kind: string; readonly pieces: readonly unknown[] };
+    expect(population.kind).toBe("pieces");
+    expect(population.pieces.length).toBe(0);
+    const vector = candidateFeatureVector({ beforeFen: value.beforeFen, engine: ENGINE, candidates: [{ moveUci: value.move, scoreCp: 31 }] });
+    const candidate = vector.candidates[0]!;
+    const retained = candidate.results.filter(item => item.source.id === "rules.tactic.reading.trapped_piece");
+    expect(candidate.moveUci).toBe(value.move);
+    expect(candidate.scoreCp).toBe(31);
+    expect(candidate.afterFen).toBe(played.afterFen);
+    expect(retained).toHaveLength(1);
+    expect(retained[0]!.payload).toEqual(reading!.payload);
+    // Removing the right is the same legal position with the escape removed,
+    // not a no-attacker or irrelevant-side negative.
+    const noCastle = candidate.afterFen.replace(/ [Qq] /u, " - ");
+    const original = trappedPieceReading(noCastle);
+    expect(original).toMatchObject({ kind: "pieces", pieces: expect.arrayContaining([expect.objectContaining({ piece: expect.objectContaining({ square: value.rook }) })]) });
   });
 
   it("retains the declared empty threat collection when a candidate gives check", () => {

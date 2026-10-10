@@ -3938,6 +3938,53 @@ async function startSupportFromFen(page: Page, fen: string, side: "white" | "bla
   await choosePreset(page, /Support/u);
 }
 
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }] as const) {
+  for (const setup of [
+    { fen: "r6k/8/8/8/8/8/b1n5/R1K5 w A - 0 1", side: "white", rook: "a1" },
+    { fen: "r1k5/B1N5/8/8/8/8/8/R6K b a - 0 1", side: "black", rook: "a8" },
+    { fen: "k7/8/8/8/8/8/5n1P/6KR w K - 0 1", side: "white", rook: "h1" },
+    { fen: "6kr/5N1p/8/8/8/8/8/K7 b k - 0 1", side: "black", rook: "h8" },
+  ] as const) {
+    test(`D3652 Inspector respects the ${setup.side} ${setup.rook} castling escape (${viewport.width}px)`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      for (const hasRight of [true, false]) {
+        const fields = setup.fen.split(" ");
+        if (!hasRight) fields[2] = "-";
+        await startSupportFromFen(page, fields.join(" "), setup.side);
+        await choosePreset(page, /Analyze/u);
+        await showSupportTools(page);
+        await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+        const runId = page.url().split("/").at(-1)!;
+        const saved = async () => Promise.all(["graph", "events"].map(async action => {
+          const response = await page.request.get(`/runs/${runId}/${action}`);
+          expect(response.ok()).toBe(true);
+          return response.json();
+        }));
+        const before = await saved();
+        const companion = page.getByRole("dialog", { name: "Run companion", exact: true });
+        if (await companion.isVisible()) await companion.getByRole("button", { name: "Collapse companion", exact: true }).click();
+        const response = page.waitForResponse(isFullInspectorResponse);
+        await page.getByRole("button", { name: "Inspector", exact: true }).click();
+        const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(item => item.module === "full_inspector")!;
+        await assertFullInspectorPacket(page, packet);
+        const trapped = packet.receipt.items.filter(item => item.evidenceRef?.projection.id === "rules.tactic.reading.trapped_piece");
+        const inspector = page.locator(".full-inspector");
+        const caption = `${setup.side === "white" ? "White" : "Black"}'s rook on ${setup.rook} is trapped under the declared convention`;
+        if (hasRight) {
+          expect(trapped).toHaveLength(0);
+          await expect(inspector).not.toContainText(caption);
+        } else {
+          expect(trapped.some(item => item.component.id === "fact_statement" && item.component.operand.renderedText.includes(caption))).toBe(true);
+          await expect(inspector).toContainText(caption);
+        }
+        await page.getByRole("button", { name: "Return to play", exact: true }).click();
+        await assertRunViewport(page, viewport);
+        expect(await saved()).toEqual(before);
+      }
+    });
+  }
+}
+
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
 test(`Empty Support returns to playable board without changing the recorded game (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
