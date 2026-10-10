@@ -25181,3 +25181,31 @@ Campaign was the one capability with no API, route or content. Now:
   milestone, official-content or release-readiness state changes.
 - Fresh `make roadmap-receipt verify-governance` exits zero; all 1,716 live items are
   assigned and routed. No ordinary software/browser rerun is claimed for these doc-only edits.
+
+## 2026-10-10 (codex) — D3688 exact material/mobility validation through real play
+
+- Nineteen permanent controls fail before registration: sixteen missing canonical cases,
+  two missing negative profile arms and the preserved-predecessor population check.
+  Add ten positives and six legal negatives under accepted semantic-validation-authority
+  Slice B. Every case executes runtime.semantic.local_edge and the sole target factory.
+- Independently check role counts, unweighted asymmetry, rook-ray destination sets and
+  pawn/knight geometry. Capture can reduce count asymmetry; queen/knight promotion can
+  change the role vector without changing its magnitude. A pawn advance can remove a
+  stationary knight's locally non-losing destination without removing its legal landing;
+  the literal legal continuation demonstrates the pawn capture and lack of recapture.
+  Quiet bishop negatives retain non-empty, unchanged destination sets; castles relocate
+  friendly pieces without changing material counts. No strategic value or recommendation.
+- Four separately labelled excerpts match python-chess's pinned primary-source revision
+  3516d7c6c0879af724c2855fac5a304a4ef40949 exactly. Preserve all 175 predecessor records:
+  191 canonical cases pass (119 positives/72 negatives), 81 subjects, zero fully qualified.
+  The material/mobility negative arms become present. Orientation/window and other arms remain.
+- Real quiet-edge operation checks confirm D3687: both king-state payloads exist with empty
+  deltas. Keep that contract conflict blocked, its negative arm required and v1 unchanged.
+- All 165 focused/772 broader foundation checks and clean types pass. The first broader
+  gate finds a stale exact total; update it to 119/72 without weakening any case/authority
+  assertion. Complete normal make evidence-foundation-check roadmap-receipt verify-awake
+  build exits zero: 4,683 software/369 files, seven unchanged-budget performance/four files,
+  content, governance, corpus/capability and packaging/build pass. Existing bundle warnings
+  remain. No fresh browser, remote CI or native release-image result is claimed.
+- Close D3688 in ledger/state/queue/docs/roadmap, keep D3687 blocked and preserve all product,
+  official-content, source-availability, learner-eligibility and whole-capability states.

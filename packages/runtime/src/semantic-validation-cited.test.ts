@@ -13,7 +13,7 @@ import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
-import { CAPTURE_DEPENDENT_NEGATIVE_FAMILIES } from "./semantic-validation-literal-sources.js";
+import { CAPTURE_DEPENDENT_NEGATIVE_FAMILIES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 
 const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
 const cases = raw.map(parseSemanticValidationCase);
@@ -104,9 +104,10 @@ describe("D3685 source-bound pawn/file membership", () => {
   });
 
   it("retains all 139 predecessor records alongside 36 new positives", () => {
+    const laterIds = new Set(RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
     expect(cases.filter(value => pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(36);
-    expect(cases.filter(value => !pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(139);
-    expect(evidenceDigest(raw.filter(value => !pawnPositiveRows.some(row => row.caseId === value.id))))
+    expect(cases.filter(value => !laterIds.has(value.id) && !pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(139);
+    expect(evidenceDigest(raw.filter(value => !laterIds.has(value.id as string) && !pawnPositiveRows.some(row => row.caseId === value.id))))
       .toBe("5859d9a11f0a7b32c8f7175e86c7caf79d38215ded671f9275e7dc4336573f69");
   });
 });
@@ -164,8 +165,9 @@ describe("D3676 populated pawn-structure absence", () => {
   });
 
   it("adds twelve absence cases without retiring any of the 127 prior cases", () => {
+    const laterIds = new Set(RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
     expect(cases.filter(value => pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(12);
-    expect(cases.filter(value => !pawnAbsenceRows.some(row => value.id === row.caseId) &&
+    expect(cases.filter(value => !laterIds.has(value.id) && !pawnAbsenceRows.some(row => value.id === row.caseId) &&
       !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(127);
   });
 });
@@ -270,7 +272,8 @@ describe("D3667 exact contact transitions", () => {
   it("retains every prior canonical case while adding exactly sixteen positives and eight negatives", () => {
     expect(contactTransitions).toHaveLength(24);
     expect(cases.filter(value => contactTransitions.some(row => value.id === row.caseId))).toHaveLength(24);
-    expect(cases.filter(value => !contactTransitions.some(row => value.id === row.caseId) &&
+    const laterIds = new Set(RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    expect(cases.filter(value => !laterIds.has(value.id) && !contactTransitions.some(row => value.id === row.caseId) &&
       !pawnAbsenceRows.some(row => value.id === row.caseId) &&
       !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(103);
   });
@@ -382,7 +385,8 @@ describe("source-grounded literal event validation", () => {
     const added = new Set([...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
       ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)),
       ...contactRows.map(row => row.caseId), ...contactTransitions.map(row => row.caseId),
-      ...pawnAbsenceRows.map(row => row.caseId), ...pawnPositiveRows.map(row => row.caseId)]);
+      ...pawnAbsenceRows.map(row => row.caseId), ...pawnPositiveRows.map(row => row.caseId),
+      ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     expect(cases.filter(value => !rows.some(row => row.caseId === value.id) && !added.has(value.id))).toHaveLength(63);
     for (const family of families) {
       const subject = { kind: "event" as const, projection: { id: family.projection, version: 1 } };

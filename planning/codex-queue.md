@@ -1,7 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-10 — [[D3687]] records a source-verified qualification conflict, not a new
-collector implementation or production measurement. `kingZoneEvents` returns both colours'
+2026-10-10 — [[D3688]] is closed under accepted semantic-validation-authority Slice B:
+sixteen both-colour material/mobility cases retain exact count-vector and destination
+deltas, including promotion without increased magnitude and a pawn-induced knight
+local-exchange loss without legal-set loss. All 175 predecessor records remain unchanged.
+Nineteen predecessor-red controls, all 165 focused/772 foundation checks, clean types and
+the complete normal verification/build pass: 4,683 software/369 files, seven unchanged-
+budget performance/four files, content, governance, corpus/capability and packaging/build.
+Four separately labelled source excerpts match python-chess's fixed revision. The register
+has 191 passing cases (119 positive/72 negative), 81 subjects, zero fully qualified.
+Two missing negative arms close; orientation/window and remaining arms stay open.
+No collector, strategic value, learner eligibility, pack bytes, new browser, whole
+capability, remote-CI or release-image claim follows.
+
+2026-10-10 — [[D3687]] records a source-verified qualification conflict, confirmed
+through D3688's real quiet-edge operation checks. `kingZoneEvents` returns both colours'
 state transitions for every admitted legal edge; its sole factory does not filter empty
 deltas. semantic-validation-authority §3.2 nevertheless requires whole-event omission,
 and the implemented `omits` expectation accepts no property-specific negative. Route to

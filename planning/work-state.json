@@ -30579,10 +30579,19 @@
       "id": "D3687",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:692ad1df4386cef1d2fa65dd18594adbf68178ed484b1c51eb42e32a1113197d",
+      "sourceDigest": "sha256:fb644fcd0960b36efd6be4692e1dacdd756d751bfb761c8bbd23aa777d6bc388",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D3688",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88075b6126da49ee381db6238ff2da4398179d0f6a28ed216fcc016c00eb1679",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-rule-state.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

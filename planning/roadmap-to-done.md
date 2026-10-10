@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3686]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3688]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3687]]: 273 UX items complete, 272 live and 24
-retired; 1,716 live ledger items, all assigned, alongside 1,559 done and 161 refused. The 462
+Current checked inventory through [[D3688]]: 273 UX items complete, 272 live and 24
+retired; 1,716 live ledger items, all assigned, alongside 1,560 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -78,7 +78,21 @@ skip, zero retries, all 150 input/112 composition cells and clean governance/pac
 Existing APIs, scheduling/intake rules and source-bound launch holds remain. No whole
 Theory/Library capability, official-content, remote-CI or native release-image promotion follows.
 
-Latest foundation validation wave: [[D3685]] supplies 36 both-colour source-bound positive
+Latest foundation validation wave: [[D3688]] adds sixteen both-colour material/mobility
+cases through the real local-edge operation. Exact count vectors, rook-ray destinations and
+pawn-induced knight local-exchange losses agree with independent operands and legal continuations.
+All 175 predecessor records remain unchanged; four labelled python-chess excerpts match the fixed
+source. Nineteen predecessor-red controls, all 165 focused/772 foundation checks, clean types and
+complete normal verification/build pass: 4,683 software/369 files, seven unchanged-budget
+performance/four files, content, governance, corpus/capability and packaging/build.
+The register has 191 passing cases (119 positive/72 negative), 81 subjects, zero fully qualified.
+Two missing negative arms become present. Real quiet-edge observations confirm D3687's king-state
+conflict; its negative arm stays required. Orientation/window and other arms remain open.
+The preceding 289-browser result is historical, not rerun for this validation-only wave.
+No collector, strategy claim, learner eligibility, pack bytes, whole capability/milestone,
+official-content, remote-CI or native release-image promotion follows.
+
+Previous foundation validation wave: [[D3685]] supplies 36 both-colour source-bound positive
 cases for six pawn/file families, retaining exact gained/lost/preserved membership through
 real production operations. Neutral operands independently check the observations, including
 opponent-induced changes. Five Stockfish excerpts match their fixed commit exactly; all 139
@@ -94,8 +108,9 @@ official-content, remote-CI or native release-image promotion follows.
 
 [[D3687]] adds a source-verified contract conflict: the king-zone state factory emits both
 colours for every admitted legal edge, while qualification requires whole-event omission.
-Its negative arm remains required pending author clarification; no collector is changed,
-no absence fixture is invented and no new production measurement or qualification is claimed.
+[[D3688]] now confirms both empty-delta state payloads through real quiet-edge operations.
+The negative arm remains required pending author clarification; no collector is changed,
+no absence fixture is invented and no qualification is claimed.
 
 Latest classroom consistency repair: [[D3684]] binds initial and post-mutation detail reads to
 their requested classroom and child relationships. Crossed reads explain failure; successful
@@ -4200,7 +4215,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   175 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   191 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

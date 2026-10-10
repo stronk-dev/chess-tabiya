@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:63d54d8a134bbfe6f419ef696972287d55d603cdad27bc87a3818a8dcd4bdbfe",
+    "roadmap": "sha256:55f8bb13795e381ff1fdcfc9ca4c0691b719e3b1470d5b25f343f28b6e6e3dba",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:da5e6d12069659d24f9755864305ddb6697ec021bb2922a8a80d4b4b8c4c0f10",
+    "workState": "sha256:92e7710e7a8e9294358cbd89ba0982a2e2c729425ac0d9d3b632fd3098658cbd",
     "rfcRegister": "sha256:5d42097815c9f933c56effc2be0d09ef0347570dcab94c85746d53796c95c200",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 14,
       "blocked": 1072,
-      "done": 1559,
+      "done": 1560,
       "refused": 161
     },
     "workItems": {
@@ -224,7 +224,7 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3685 adds 36 source-bound legal pawn/file positives, both colours and gained/lost/preserved exact membership through production structural operations. Five Stockfish excerpts are verified verbatim at e6e324eb28fd49c1fc44b3b65784f85a773ec61c; neutral pawn/file/rank/attack facts independently check these finite cases. All 139 predecessor records are unchanged. Six positive arms become present; 175 canonical cases pass (109 positive/66 negative), 81 subjects and zero fully qualified. All 145 focused/752 foundation checks and clean types pass. Normal local tiers pass 4653 software cases/367 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, governance, corpus/capability, packaging and build. The first aggregate stops on an incorrect roadmap reference; corrected remaining tiers pass without software changes. The prior 287-browser checkpoint is historical, not rerun for this validation-only wave. D3564/D3629 orientation/window drafts and remaining arms stay open; no collector, strategy claim, learner eligibility, pack bytes, source availability, whole capability/milestone, remote-CI or native release-image promotion.",
+        "summary": "D3688 adds sixteen source-bound legal material/mobility cases through runtime.semantic.local_edge, retaining exact count vectors, rook-ray destinations and pawn-induced knight local-exchange losses without legal-set loss. Independent operands and actual capture continuations agree. All 175 predecessor records remain unchanged; four separately labelled python-chess excerpts match revision 3516d7c6c0879af724c2855fac5a304a4ef40949. Nineteen predecessor-red controls, all 165 focused/772 foundation checks and clean types pass. Complete normal verification/build exits zero: 4683 software cases/369 files, seven unchanged-budget performance cases/four files, content, governance, corpus/capability and packaging/build. 191 canonical cases pass (119 positive/72 negative), 81 subjects, zero fully qualified; two missing negative arms become present. D3687 is confirmed through real quiet edges and remains blocked; orientation/window and other required arms stay open. The prior 289-browser checkpoint is historical, not rerun for this validation-only wave. No collector, strategic value, learner eligibility, pack bytes, source availability, whole capability/milestone, remote CI or native release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
@@ -253,7 +253,8 @@
           "rfc/recorded-semantic-path.md",
           "packages/runtime/src/semantic-evidence.ts",
           "packages/runtime/src/recorded-semantic-path.test.ts",
-          "apps/server/src/review-map.test.ts"
+          "apps/server/src/review-map.test.ts",
+          "packages/runtime/src/semantic-validation-rule-state.test.ts"
         ],
         "anchors": [
           {
@@ -290,6 +291,11 @@
             "kind": "work_state",
             "id": "D3658",
             "digest": "sha256:1600a7709a4fefe06038db09cd34832c8935b66f6986da8bac7f2f8041d5c408"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3688",
+            "digest": "sha256:88075b6126da49ee381db6238ff2da4398179d0f6a28ed216fcc016c00eb1679"
           }
         ]
       },

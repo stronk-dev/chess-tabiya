@@ -101,6 +101,57 @@ export const CAPTURE_DEPENDENT_NEGATIVE_FAMILIES = Object.freeze([
 ] as const);
 const captureSource = literalSources[0];
 
+// D3688: count vectors and finite legal/local-exchange facts, not advantage,
+// general safety or a recommended move. Each small excerpt below is separately
+// labelled and retained from the same independent GPL revision as the old cases.
+const roleStateFixtures: readonly RuleFixture[] = [
+  ["capture.white", "derived.material.event.role_asymmetry", "4k3/8/8/8/8/8/n7/R3K3 w - - 7 1", "a1a2", "4k3/8/8/8/8/8/R7/4K3 b - - 0 1", { changedRoles: ["knight"], before: { vector: { pawn: 0, knight: 1, bishop: 0, rook: 1, queen: 0 }, magnitude: 2 }, after: { vector: { pawn: 0, knight: 0, bishop: 0, rook: 1, queen: 0 }, magnitude: 1 }, increased: false }],
+  ["capture.black", "derived.material.event.role_asymmetry", "r3k3/N7/8/8/8/8/8/4K3 b - - 7 1", "a8a7", "4k3/r7/8/8/8/8/8/4K3 w - - 0 2", { changedRoles: ["knight"], before: { vector: { pawn: 0, knight: 1, bishop: 0, rook: 1, queen: 0 }, magnitude: 2 }, after: { vector: { pawn: 0, knight: 0, bishop: 0, rook: 1, queen: 0 }, magnitude: 1 }, increased: false }],
+  ...["queen", "knight"].flatMap(role => {
+    const vector = { pawn: 0, knight: role === "knight" ? 1 : 0, bishop: 0, rook: 0, queen: role === "queen" ? 1 : 0 };
+    const suffix = role === "queen" ? "q" : "n", piece = role === "queen" ? "Q" : "N";
+    const operands = { changedRoles: ["pawn", role], before: { vector: { pawn: 1, knight: 0, bishop: 0, rook: 0, queen: 0 }, magnitude: 1 }, after: { vector, magnitude: 1 }, increased: false };
+    return [
+      [`promotion-${role}.white`, "derived.material.event.role_asymmetry", "7k/P7/8/8/8/8/8/7K w - - 7 1", `a7a8${suffix}`, `${piece}6k/8/8/8/8/8/8/7K b - - 0 1`, operands],
+      [`promotion-${role}.black`, "derived.material.event.role_asymmetry", "7k/8/8/8/8/8/p7/7K b - - 7 1", `a2a1${suffix}`, `7k/8/8/8/8/8/8/${piece.toLowerCase()}6K w - - 0 2`, operands],
+    ] satisfies readonly RuleFixture[];
+  }),
+  ["quiet-negative.white", "derived.material.event.role_asymmetry", "6k1/8/8/8/8/2B5/P7/6K1 w - - 7 1", "a2a3", "6k1/8/8/8/8/P1B5/8/6K1 b - - 0 1", null],
+  ["quiet-negative.black", "derived.material.event.role_asymmetry", "6k1/p7/2b5/8/8/8/8/6K1 b - - 7 1", "a7a6", "6k1/8/p1b5/8/8/8/8/6K1 w - - 0 2", null],
+  ["castle-negative.white", "derived.material.event.role_asymmetry", "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 7 1", "e1h1", "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 8 1", null],
+  ["castle-negative.black", "derived.material.event.role_asymmetry", "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 7 1", "e8h8", "r4rk1/8/8/8/8/8/8/R3K2R w KQ - 8 2", null],
+];
+
+const destinationFixtures: readonly RuleFixture[] = [
+  ["ray-open.white", "rules.mobility.event.piece_destinations", "7k/8/8/8/8/8/R1P5/7K w - - 7 1", "c2c3", "7k/8/8/8/8/2P5/R7/7K b - - 0 1", { color: "white", piece: { before: { square: "a2", role: "rook" }, after: { square: "a2", role: "rook" } }, legalGained: ["c2", "d2", "e2", "f2", "g2", "h2"], legalLost: [], safeGained: ["c2", "d2", "e2", "f2", "g2", "h2"], safeLost: [], moved: false, zeroSafe: false }],
+  ["ray-open.black", "rules.mobility.event.piece_destinations", "7k/r1p5/8/8/8/8/8/7K b - - 7 1", "c7c6", "7k/r7/2p5/8/8/8/8/7K w - - 0 2", { color: "black", piece: { before: { square: "a7", role: "rook" }, after: { square: "a7", role: "rook" } }, legalGained: ["c7", "d7", "e7", "f7", "g7", "h7"], legalLost: [], safeGained: ["c7", "d7", "e7", "f7", "g7", "h7"], safeLost: [], moved: false, zeroSafe: false }],
+  ["pawn-prevention.white", "rules.mobility.event.piece_destinations", "k7/8/3p4/8/8/2N5/8/7K b - - 7 1", "d6d5", "k7/8/8/3p4/8/2N5/8/7K w - - 0 2", { color: "white", piece: { before: { square: "c3", role: "knight" }, after: { square: "c3", role: "knight" } }, legalGained: [], legalLost: [], safeGained: [], safeLost: ["e4"], moved: false, zeroSafe: false }],
+  ["pawn-prevention.black", "rules.mobility.event.piece_destinations", "7k/8/2n5/8/8/3P4/8/K7 w - - 7 1", "d3d4", "7k/8/2n5/8/3P4/8/8/K7 b - - 0 1", { color: "black", piece: { before: { square: "c6", role: "knight" }, after: { square: "c6", role: "knight" } }, legalGained: [], legalLost: [], safeGained: [], safeLost: ["e5"], moved: false, zeroSafe: false }],
+  ["quiet-negative.white", "rules.mobility.event.piece_destinations", "6k1/8/8/8/8/2B5/P7/6K1 w - - 7 1", "a2a3", "6k1/8/8/8/8/P1B5/8/6K1 b - - 0 1", null],
+  ["quiet-negative.black", "rules.mobility.event.piece_destinations", "6k1/p7/2b5/8/8/8/8/6K1 b - - 7 1", "a7a6", "6k1/8/p1b5/8/8/8/8/6K1 w - - 0 2", null],
+];
+
+export const RULE_STATE_CITED_SOURCES = Object.freeze([
+  {
+    sourceId: "python-chess.rule-state.material",
+    sourceRevision: captureSource.sourceRevision,
+    licence: captureSource.licence,
+    url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+    text: "pieces_mask role branches:\n        if piece_type == PAWN:\n            bb = self.pawns\n        elif piece_type == KNIGHT:\n            bb = self.knights\n        elif piece_type == BISHOP:\n            bb = self.bishops\n        elif piece_type == ROOK:\n            bb = self.rooks\n        elif piece_type == QUEEN:\n            bb = self.queens\n\npieces_mask colour intersection:\n        return bb & self.occupied_co[color]\n",
+    operation: { id: "runtime.semantic.local_edge", version: 1 } as const,
+    cases: roleStateFixtures.map(fixture => ruleCase("rule-state.material", fixture)),
+  },
+  {
+    sourceId: "python-chess.rule-state.mobility",
+    sourceRevision: captureSource.sourceRevision,
+    licence: captureSource.licence,
+    url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+    text: "attacks_mask pawn/knight/king branches:\n        if bb_square & self.pawns:\n            color = bool(bb_square & self.occupied_co[WHITE])\n            return BB_PAWN_ATTACKS[color][square]\n        elif bb_square & self.knights:\n            return BB_KNIGHT_ATTACKS[square]\n        elif bb_square & self.kings:\n            return BB_KING_ATTACKS[square]\n\nattacks_mask bishop/rook branches:\n            if bb_square & self.bishops or bb_square & self.queens:\n                attacks = BB_DIAG_ATTACKS[square][BB_DIAG_MASKS[square] & self.occupied]\n            if bb_square & self.rooks or bb_square & self.queens:\n                attacks |= (BB_RANK_ATTACKS[square][BB_RANK_MASKS[square] & self.occupied] |\n                            BB_FILE_ATTACKS[square][BB_FILE_MASKS[square] & self.occupied])\n",
+    operation: { id: "runtime.semantic.local_edge", version: 1 } as const,
+    cases: destinationFixtures.map(fixture => ruleCase("rule-state.mobility", fixture)),
+  },
+]);
+
 // D3676: literal piece-set arithmetic only. With one pawn of each colour on
 // every file at ranks 2/7, no file lacks pawns, no pawn lacks an adjacent
 // friendly pawn, no file has two same-colour pawns, and every pawn faces an
@@ -229,6 +280,7 @@ const contactTransitionFixtures: readonly RuleFixture[] = [
 ];
 
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  ...RULE_STATE_CITED_SOURCES,
   pawnMembershipSource,
   ...pawnAbsenceSources,
   ...literalSources,

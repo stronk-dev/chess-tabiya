@@ -317,9 +317,24 @@ empty stop squares and attack directions independently check the retained operan
 Opponent moves can change a stationary pawn's status. Open and half-open remain distinct;
 these finite backward/doubled examples do not adopt the engine's broader evaluation heuristics.
 The positive cells are now present; the 139 predecessor records remain byte-for-byte unchanged.
-The total is 175 (109 positives, 66 negatives), over 81 subjects. Orientation, the draft window
+That checkpoint totals 175 (109 positives, 66 negatives), over 81 subjects. Orientation, the draft window
 repair and other required arms remain open: zero subjects are fully qualified and no subject
 becomes learner-eligible. No new collector, strategic value judgement or pack bytes are added.
+D3688 adds sixteen source-bound material/mobility cases through the real local-edge operation:
+six role-count positives, four populated material negatives, four exact destination-change
+positives and two populated unchanged-bishop negatives. Capture can reduce the count-based
+asymmetry; queen/knight promotion can change its vector without increasing its magnitude.
+A pawn advance can remove one stationary knight's locally non-losing destination while
+leaving its full legal destination set unchanged. Vacating a friendly rook-ray blocker
+retains the exact new destinations. Neither finding means strategic advantage, a forced
+move or general safety. Neutral role counts/geometry and actual legal capture continuations
+independently check these finite cases. Four separately labelled primary-source excerpts
+match python-chess's pinned revision. All 175 predecessor records remain unchanged.
+The register now totals 191 (119 positives, 72 negatives), over the same 81 subjects.
+Material/mobility negative arms are present; orientation and other required arms stay open,
+with zero subjects fully qualified. The real quiet edges also retain both king-state payloads
+with empty deltas: D3687's whole-event omission contract conflict remains an author blocker,
+not an invented negative, source abstention or permission to silently filter v1.
 All prior cases remain. Both colors have completed legal hard
 negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
 production window; canonical qualification invokes the complete recorded application path,

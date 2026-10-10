@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "3f09f1cf638440cb76e5e62a12031810f5c13d759b7ee3423188533d34abdbf3",
-  "caseDigest": "a3353044582e83b086422b653b7ede9f1b8462c3988d3ecaaa2ee67cac5da993",
+  "profileDigest": "898ce705bd92b068a7f8bc66dbd748296417069a67b834e7088886413a8020bf",
+  "caseDigest": "9ad0103c5e1aa452d5990f2783c8996b5d0d9aea0d3509947676c9ba65fe47c4",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -3294,6 +3294,472 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "409a66ffae97e81086e3cdbf04dc6ce491397bcf389b5dac0900d7778c5a2240",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.capture.black",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "a878d0d61cdf6289b7232d58c2934f9d78265c185bf26224110082704ed8c9ef",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 82,
+      "targets": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "operandDigest": "8b25bc2a6d94d56cbc18201787d36df3a04a2b42813537a2634fc0d4d721d089",
+          "factory": "createDerivedMaterialEventRoleAsymmetryV1Evidence",
+          "inputDigest": "db3cf6c8ad3386003a4bdf18e881520309de3014cd6ebb61baac87782c25c011",
+          "payloadDigest": "8b25bc2a6d94d56cbc18201787d36df3a04a2b42813537a2634fc0d4d721d089",
+          "sourceDigests": [
+            "b406d35613c80429770d5e1b0c876b483c3e271bfd4596c4b056d34cfe8e349c",
+            "5fa5f2ad059d084a6e151d59fc3726dd6251a02766f9b3133cebce7c28c347dd",
+            "2a2230b37061b859ad11893cb0f0cae851cbbd0214ffa8ef16441327663a7012"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "bb10669d41675ef0ed712d49288d34d99b46f870d6e15c5b559f342d79c97596",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.capture.white",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "2e2927a35f7e7179fa51f705d3b83098302e273e3a69c8edadfce744d21f14d4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 82,
+      "targets": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "operandDigest": "64971cbbc7d1d3f4992d12e8a03c4c0e9dddb8f7a024cf437a25ff8f1a03a9ad",
+          "factory": "createDerivedMaterialEventRoleAsymmetryV1Evidence",
+          "inputDigest": "f0fcdae23c025f181df5b409ec8fc742fe51869fb92817736447ed125817bef0",
+          "payloadDigest": "64971cbbc7d1d3f4992d12e8a03c4c0e9dddb8f7a024cf437a25ff8f1a03a9ad",
+          "sourceDigests": [
+            "d20050fdf6380a7aaa7e2c39d3458d1ad866bb424dfe9066662e8d115684ec34",
+            "ad30a89e16def1435e53e677bbd4b2b1a7309e34e77e55ac9cb7d514cb9717a9",
+            "bc1a34af316df762d53be299241c23ed3ea3e5e3bd87700a08200d912012f928"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "298688980f503e6f5505957e33ef9dbc1f5e5a4afda094d6312d3111c5f66e2d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.castle-negative.black",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "da45d7ab72d52af8e38162490ffd819faadd6c5194f3e068eb7f949464d3e4b1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 127,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "63f86a95e7d1a8b5cad5a56c813e561a66c20396f2d4151bb54bd11500a55cc6",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.castle-negative.white",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "5f63c96367c2c014adb59aaa074417a67de40163d06895e763e06333e29ab7c0",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 127,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f0bdb466917e73b5e6caf875e327e4d1fa59cd8a0bc913134c68961d9a4c37b6",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.promotion-knight.black",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "739186ac744dcfd893ab0996bf5216287d50ae1d7dfb771c23ad94afb93777bb",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 39,
+      "targets": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "operandDigest": "eeb5f3206c4d741ce3ed3c0bc5975b80ca594b6cbeee52991c36ec1c665f88f8",
+          "factory": "createDerivedMaterialEventRoleAsymmetryV1Evidence",
+          "inputDigest": "a5765e1f6db335e68a94050b5fad7f56b78214788cfa211bf69b96b7238c7e74",
+          "payloadDigest": "eeb5f3206c4d741ce3ed3c0bc5975b80ca594b6cbeee52991c36ec1c665f88f8",
+          "sourceDigests": [
+            "1460acd7a29fb99cd1ad813be8f7fc3e1036fbc488f94a710041faadc442834c",
+            "0821365f4138b88bc142e28e93198c299e5307ae2f0663eadf4c84520f250615",
+            "fac49a20e3f550e2c2abafb6651b4419ce8af6e85783412d86c354f95c1f7a9b"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "09d1484e6ac9b2db54774626b7f900e68c313bdee43fa9e06a78ba3a13396dc7",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.promotion-knight.white",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "78b7956bb1261557de3d337555c88896a0ca54574949ebac08aa7a5891e438f8",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 39,
+      "targets": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "operandDigest": "7cf66870ae92a2d0734dca2943ba1862e61c3ee324a674ee0de54eabcf317cf9",
+          "factory": "createDerivedMaterialEventRoleAsymmetryV1Evidence",
+          "inputDigest": "f3cbd589442871caac4ca8bb4d4e00a9174669d744b589adabdddb50fcdb5fd9",
+          "payloadDigest": "7cf66870ae92a2d0734dca2943ba1862e61c3ee324a674ee0de54eabcf317cf9",
+          "sourceDigests": [
+            "39897ad8dddbb7603dce975d771b86dc6b53a1c6101291720281bf3a4be33942",
+            "d771e35248eb1ef2538fcc969bf48cb06ac1278fd47e6abea6a0eed5715c048e",
+            "dd38e7e129ca3e8448403dbcccf9f2adaaccf573f8aec3e8a51bcf42966084b3"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "9b83dadbf7c05d96e237f1cf645f9ed75b2587ab57795b25e1b3ab1b333c1585",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.promotion-queen.black",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "08facae76678e38499a8605ff78aaca92ec0ee170d98c94df1c386b2378cab4a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 66,
+      "targets": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "operandDigest": "5fe321432f476c17391d7ca492f1692604551c96b363c3a414c99babc0d888c3",
+          "factory": "createDerivedMaterialEventRoleAsymmetryV1Evidence",
+          "inputDigest": "61a38aec15a8cf3126defe55cf19c12763871311be4888de2d08921d26472f5d",
+          "payloadDigest": "5fe321432f476c17391d7ca492f1692604551c96b363c3a414c99babc0d888c3",
+          "sourceDigests": [
+            "1460acd7a29fb99cd1ad813be8f7fc3e1036fbc488f94a710041faadc442834c",
+            "0842bbde7de3b1d7f204be5ed14db86e5b9ed124fb6b44d0ad2261702dc8dead",
+            "7ef1d688da088e3df8590ab1818f4e56acf6478358f8d260dbb406835f03910b"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "2851c82717aee9929fe71eafde14963412d128bf70a70dc0d1fa530956db0859",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.promotion-queen.white",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "da35f05e2f0565d93fe588967b9b11f67d6633e8e699ac8a6a7d3e2210672609",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 66,
+      "targets": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "operandDigest": "cc12efddf84816207ed6b450520ad4caab281c486fe5cfde463a3ad54ba38b84",
+          "factory": "createDerivedMaterialEventRoleAsymmetryV1Evidence",
+          "inputDigest": "0794ddc74dbb49b9dc5d5565cca822aedf9fd12bb5eebbdd93cf1368714e39bf",
+          "payloadDigest": "cc12efddf84816207ed6b450520ad4caab281c486fe5cfde463a3ad54ba38b84",
+          "sourceDigests": [
+            "39897ad8dddbb7603dce975d771b86dc6b53a1c6101291720281bf3a4be33942",
+            "74a42f73a24f653d488ba34e95b6ae1949fd489c52e2081dcb2b268ffa033d41",
+            "79b48af6d81fdedcc5f54d17dee8b229b01da4d3152df42c1859d44bc5b1d0bb"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "4e851b5f486fe62d292b56ec80cb7ef3890a5ddceccf31344e9e363ea3dfcc75",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.quiet-negative.black",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "ee13685f0326046d08d821707d1acacdf8225086dbe5f592db3bc3bbceb7d939",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 38,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "5789eea92a9b3013bdd6fae439d7c5d7193be7a4f680655184d34583590b1079",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.material.quiet-negative.white",
+      "subject": "event:derived.material.event.role_asymmetry@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "093faca8242f4d5d62d4a8ddfeca64ceb2eff724e7dd1b2e3953519f903ff3f1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 38,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "9f234ad4f48c98f4e39704325cbcb0bde5dd9ff34f02b7f1417919a6d14cde6d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.mobility.pawn-prevention.black",
+      "subject": "event:rules.mobility.event.piece_destinations@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "2f50f66f40198c2f7c3366e22fca445e76b551c1172d831da3ddb27f7b1cd9e2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 40,
+      "targets": [
+        {
+          "projection": "rules.mobility.event.piece_destinations@1",
+          "operandDigest": "492af257163c977d39d6e232ef06cc8e94fb216600fbeed1be6d1e237156a556",
+          "factory": "createRulesMobilityEventPieceDestinationsV1Evidence",
+          "inputDigest": "7387267f5e51c9b127c883f5c7be84fd3090f8de0212fbfe4cee552e46e2feea",
+          "payloadDigest": "492af257163c977d39d6e232ef06cc8e94fb216600fbeed1be6d1e237156a556",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "c47978836b31dd6a8d6aaa8cefd0a5844c09bb5f058e2da889ca6396c4058ec5",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.mobility.pawn-prevention.white",
+      "subject": "event:rules.mobility.event.piece_destinations@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "8dd4c986ee4e95a3520141d6ba749f00242f9d6bbb7c3ad83865f900fce17205",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 40,
+      "targets": [
+        {
+          "projection": "rules.mobility.event.piece_destinations@1",
+          "operandDigest": "958e81e02dd5a7eaadc0053983525e0aaeb9b3efa1025da66395f2ce78bcc49c",
+          "factory": "createRulesMobilityEventPieceDestinationsV1Evidence",
+          "inputDigest": "0da8a95268b813e49afe9cf7ab65df53103b6bb88a1a280535709d93525a4404",
+          "payloadDigest": "958e81e02dd5a7eaadc0053983525e0aaeb9b3efa1025da66395f2ce78bcc49c",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "06b36bc617f95c78bea74acc8032e7d3f3055e8a7d8c7f9779c594ba667e4119",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.mobility.quiet-negative.black",
+      "subject": "event:rules.mobility.event.piece_destinations@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "ee13685f0326046d08d821707d1acacdf8225086dbe5f592db3bc3bbceb7d939",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 38,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "b1b99a0160cbb0acfc67eb599a36ccdcfdef271fdebe60b92a47eeff0d1df80b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.mobility.quiet-negative.white",
+      "subject": "event:rules.mobility.event.piece_destinations@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "093faca8242f4d5d62d4a8ddfeca64ceb2eff724e7dd1b2e3953519f903ff3f1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 38,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3219ecc1535116eadfb0ccb1e5d4231f81eb9c64e78c2e9857994e9fc9ae83e4",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.mobility.ray-open.black",
+      "subject": "event:rules.mobility.event.piece_destinations@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "5d85be2f9a5ad4ae885975a9d4a61858875aa17b1d3b41e89ba5903a3f6cffa4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 53,
+      "targets": [
+        {
+          "projection": "rules.mobility.event.piece_destinations@1",
+          "operandDigest": "401e7a6f36bcc05c79fdadcc71660e1d412f704df73bbfa1ca762a1a0f7aef9d",
+          "factory": "createRulesMobilityEventPieceDestinationsV1Evidence",
+          "inputDigest": "b46eadebd513ce00f52313d276d3c40b1405c422e2fa36839e8e5b0cb4519213",
+          "payloadDigest": "401e7a6f36bcc05c79fdadcc71660e1d412f704df73bbfa1ca762a1a0f7aef9d",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a9bece04f1ac9dc22905936e992907b059cab7817f282ed6cebc370a07682ff6",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.rule-state.mobility.ray-open.white",
+      "subject": "event:rules.mobility.event.piece_destinations@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "0ea1acc0cf9f2b0f523adaaaad4c427ab24b81101b4f51df064d171cf05d95d2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 53,
+      "targets": [
+        {
+          "projection": "rules.mobility.event.piece_destinations@1",
+          "operandDigest": "d8b76f9474126052b6551a1d8e0ea4a44104f368c96a54fad33722296124d1d9",
+          "factory": "createRulesMobilityEventPieceDestinationsV1Evidence",
+          "inputDigest": "953070ff7ab995ce2eae48fbbd3b7322f63d8574a02ad64a477ba7300d1465f3",
+          "payloadDigest": "d8b76f9474126052b6551a1d8e0ea4a44104f368c96a54fad33722296124d1d9",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ff358e718b542a57b4430e0027af8b3f9c3876cb174055f34ea24b30a8494152",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -8696,14 +9162,24 @@
           "arm": "positive",
           "status": "passed",
           "refs": [
-            "breadth.a-pawn-queens.role-asymmetry"
+            "breadth.a-pawn-queens.role-asymmetry",
+            "cited.python-chess.rule-state.material.capture.white",
+            "cited.python-chess.rule-state.material.capture.black",
+            "cited.python-chess.rule-state.material.promotion-queen.white",
+            "cited.python-chess.rule-state.material.promotion-queen.black",
+            "cited.python-chess.rule-state.material.promotion-knight.white",
+            "cited.python-chess.rule-state.material.promotion-knight.black"
           ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.rule-state.material.quiet-negative.white",
+            "cited.python-chess.rule-state.material.quiet-negative.black",
+            "cited.python-chess.rule-state.material.castle-negative.white",
+            "cited.python-chess.rule-state.material.castle-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -8730,7 +9206,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -10783,14 +11258,20 @@
           "arm": "positive",
           "status": "passed",
           "refs": [
-            "breadth.bishop-takes-b6.destinations"
+            "breadth.bishop-takes-b6.destinations",
+            "cited.python-chess.rule-state.mobility.ray-open.white",
+            "cited.python-chess.rule-state.mobility.ray-open.black",
+            "cited.python-chess.rule-state.mobility.pawn-prevention.white",
+            "cited.python-chess.rule-state.mobility.pawn-prevention.black"
           ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.rule-state.mobility.quiet-negative.white",
+            "cited.python-chess.rule-state.mobility.quiet-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -10817,7 +11298,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },

@@ -1722,6 +1722,16 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-10: D3688 implements accepted Slice B's sixteen legal material/mobility
+  cases through runtime.semantic.local_edge: ten positives and six semantic negatives.
+  Exact role vectors, stationary rook-ray destinations and pawn-induced knight local-
+  exchange losses are checked independently from the collector. All 175 predecessor
+  cases remain unchanged; 191 cases pass over 81 subjects, zero fully qualified.
+  Both missing negative arms become present; orientation/window and other arms remain
+  held. Quiet-edge production observations confirm D3687's universal king-state
+  conflict; no negative waiver or emitter change is authorized. Evidence:
+  `packages/runtime/src/semantic-validation-rule-state.test.ts`.
+
 - 2026-10-10: D3685 implements Slice B's 36 source-bound pawn/file positives:
   both colours and exact gained/lost/preserved membership for six structural subjects.
   The real structural-edge operation executes all cases; retained neutral pawn/file/rank/
