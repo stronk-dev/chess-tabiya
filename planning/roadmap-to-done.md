@@ -79,6 +79,15 @@ Final focused startup checks and types pass on the final test bytes. D3300 cold 
 D3591 performance attribution, source/consumer discharges and complete recovery remain open.
 No full capability, milestone, official content, remote-CI or release-image promotion follows.
 
+Latest training author checkpoint: [[D3535]] now specifies the remaining original set journey
+in `rfc/pack-training-forms.md` §4.4–§4.10, **draft awaiting independent acceptance**. Two ordinary
+tables retain exact inputs and frozen member submissions, with replay-safe commands, authored
+repeat/next cycles, all-path scaled move budgets, ladder exclusion and account/client lifecycle.
+Nine disposable tests execute its draft DDL and existing pure helpers; the nineteen unchanged
+production catalogue tests pass. The author-model check runs in the existing governance tier,
+not as a content-coverage or product-completion gate. [[D3318]], D1/D3 and the separate [[D3317]]
+ramp mapping remain open. No production mutation, migration, authored set or milestone is shipped.
+
 Latest Campaign consistency repair: [[D3680]] returns the original saved group after another
 group is created; missing or malformed saved identities refuse without provider work or mutation.
 [[D3682]] preserves a newer confirmed current-run revision when an older immutable receipt

@@ -137,6 +137,13 @@ compiler, domain branches, requests and sealed receipts at seven viewports. It i
 priority, every badge, native swaps/hits, compact tokens and board stability; no packet fixtures or
 forced input. `make play-composition-client-check` adds mounted snapshot/decision/badge controls.
 These focused commands do not replace the full CI tiers or remaining complete UX acceptance.
+
+`make training-set-catalogue-check` exercises the installed set loader, validators and actual
+HTTP catalogue. `make training-pass-model-check` is a **disposable D3535 author model**, also
+run by governance CI: nine tests execute the draft two-table SQL and shipped pure pass/budget
+helpers. Its attempts are fabricated, not chess validation. It proves no production tempo,
+scheduler isolation, account lifecycle, client journey or amendment acceptance. Those remain
+the actual application/client criteria in `rfc/pack-training-forms.md` §4.10.
 `make support-theory-navigation-check` checks strict shape receipt rendering and the actual
 desktop/phone Support → Library → saved-run return, including unchanged recorded events.
 It is a focused development check; the same journeys also run in the browser smoke tier.

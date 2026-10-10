@@ -955,7 +955,8 @@ source-authority hold, official content or release gate is promoted by this scop
    All 55 focused client/router, four application and two native desktop/touch-phone cases pass;
    full normal gates pass 3,609 software, seven performance, 228 content and 179 browser cases,
    one optional Maia skip, zero retries. No missing Review source or official Campaign is completed.
-3. [[D3535]]: training-set execution-context author amendment, then the remaining
+3. [[D3535]]: independently review the authored training execution amendment
+   (`rfc/pack-training-forms.md` §4.4–§4.10), then the remaining
    [[D3318]] member progression/repeat/re-offer journey. The installed catalogue/API
    is delivered; durable cycle identity is not. Preserve the existing migration
    order and do not group unrelated historical attempts in the client.

@@ -25007,3 +25007,41 @@ Campaign was the one capability with no API, route or content. Now:
 - Final `make roadmap-receipt verify-governance` exits zero after closeout: register C1–C8,
   status P1–P7, roadmap R1–R10, intent, routing, work/UX assignments, tiers and document checks
   pass. The source registers and generated roadmap receipt agree with the counts above.
+
+## 2026-10-10 (codex) — D3535 full training execution author checkpoint, not delivery
+
+- Following the whole-product inventory, advance the already-routed D3535 prerequisite of
+  D3318 rather than make another work register. The existing proposal becomes the draft
+  execution amendment in `rfc/pack-training-forms.md` §4.4–§4.10. Independent review and
+  acceptance precede production writes; parent status remains implementing for its landed
+  format/catalogue. D3535 stays blocked under content-and-theory and D3318 remains live.
+- Re-inspection finds two important implementation seams: `projectAttempts`/`upsertAttempts`
+  update existing branch results, and the normal storage projection refreshes schedules.
+  The amendment therefore specifies separate frozen submissions and explicit training-run
+  exclusion from automatic ladder histories, including later ordinary attempts at the same root.
+- Specify two owned tables, retained normal pack-loader inputs, exact member/run linkage,
+  idempotent receipts before revision checks, atomic creation/submission/continuation, authored
+  cycles, all-path effective move budgets, deleted-run states, account replay/import/deletion and
+  complete Learn/result/repeat/resume flows. Pack/run schema and installed bytes stay unchanged.
+  Only the next migration position is claimed; no number is assigned. D3317's rung-to-clamp
+  choice remains separate. No new evidence producer, chess grade, scheduler or campaign engine.
+- Nine disposable tests in `tools/training-pass-model.test.mjs` execute the draft SQL and
+  existing pass/budget helpers. Fabricated attempts prove no chess semantics or production
+  workflow. The small normal Make target is included in the existing governance CI job, not
+  as content coverage or an official-content graduation requirement. No raw recordings added.
+- `make training-pass-model-check register-check status-parity` passes. The first catalogue
+  run refuses localhost binding with sandbox EPERM; the same normal target with the required
+  permission passes all nineteen production cases. The first roadmap check catches its stale
+  RFC anchor, then the existing checkpoint/receipt are refreshed. The first full governance
+  pass catches a duplicate prerequisite declaration through the semantic-cut guard; moving
+  the new prerequisite into the existing canonical declaration fixes it without weakening tests.
+  `make semantic-collector-cut-contract make-toolchain-check training-pass-model-check` passes.
+- Update existing author/implementation queues, testing docs and roadmap to distinguish this
+  authoring progress from the previously delivered catalogue. No production mutation, authored
+  set, full training discharge, milestone, graduated content, remote CI or release promotion.
+- Final normal `make roadmap-receipt verify-governance` exits zero, including the nine model
+  tests, register/status/roadmap/intent/work/UX joins, test-tier/docs checks and the unchanged
+  semantic-cut controls. Existing workflow inspection confirms GitHub's repository-governance
+  job invokes this exact Make target with Node 24. No published CI result is claimed. The
+  unchanged production catalogue target passes nineteen cases; no broader browser/software
+  rerun is claimed for this author/model-only change. Work/UX completion counts remain unchanged.

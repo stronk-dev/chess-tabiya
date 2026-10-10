@@ -1,6 +1,6 @@
 # RFC: Pack training forms — the set grain, pass marks, the guided first pass, and tempo cycles
 
-- **Status:** implementing — 2026-09-24, lane 0.32 landed at the owner's direction as far as the format is executable: `assistanceCeilingRamp` and `$defs/trainingSet` ship with their validators and the pure pass-mark, ramp and tempo mechanics (criteria 1–8, 10–12 tests; 9 at the pure-function level). No learner surface serves a set yet, and the ramp is not wired into the live nine-field assistance clamp — see the changelog. Receipt: `planning/pack-capability-contract/implementation-2026-09-24.md`. Prior status: draft — 2026-08-23
+- **Status:** implementing — format/mechanics and installed catalogue reads have landed. Durable execution amendment §4.4–§4.10 is **draft, not implementation authorization**; independent review and acceptance are required. No complete learner set journey ships; the ramp remains unwired to the nine-field clamp ([[D3317]]). Historical receipts are in the changelog.
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/01-training-model.md` §blocked/varied repetition; `design/05-in-run-experience.md` §3 (the assistance ladder) and §3a (the ∩ algebra); `design/03-product-breadth.md` §Library
@@ -11,7 +11,7 @@
 - **Planning:** `planning/training-methods/`
 
 ```tabiya-claims
-none
+migration | position next | training_passes and training_pass_members; no historical adoption or run-schema rewrite
 ```
 
 ## Summary
@@ -213,6 +213,258 @@ weeks**. `rfc/return-scheduling.md` schedules roots; a cycle sequences members
 inside a set the learner has opened. Criterion 9 asserts a cycle writes no
 `schedules` row, so the two cannot silently become one mechanism.
 
+### 4.4 Durable execution amendment — D3535 (DRAFT)
+
+This specifies the **remaining original set journey**, not a new training engine. It does not
+reopen the implemented format, make a new evidence producer, or settle D3317. Independent
+acceptance of this amendment precedes all execution writes. D3318 and D1/D3 remain open.
+
+The source gaps are concrete: `RunService#create` has a caller-owned `persist` hook but calls
+`#project` afterwards; `#registeredPack` resolves only through the installed pack registry.
+`projectAttempts` projects every current branch, and `SQLiteRunStorage#upsertAttempts` updates
+existing `(run_id, branch_id)` verdicts and automatically refreshes root schedules. Consequently:
+current progress cannot be the immutable set result; a creation-only budget modifier cannot
+survive replay; and a pure sequencer test cannot establish scheduler isolation.
+
+**Execution context is an owned sidecar, not another run event.** Two relational tables link a
+pass to exact member runs. `DrillRun`, `SessionSource`, `run.started`, `digestSessionSource`,
+pack schema/version/digest and existing event bytes remain unchanged. A private run response
+adds an optional `training` view with pass ID, ordinal, cycle ordinal and applied scale; this
+is navigation/context, not a chess payload or assistance grant. Its server resolver looks up
+the run link, never accepts a client-supplied scale, and is used by all paths below. Historical
+runs have no link. No old attempt is adopted by pack ID, FEN, date or learner history.
+
+### 4.5 Storage, snapshots and exact ownership
+
+Add the following STRICT tables in the claimed migration, assigning its number only at landing.
+All JSON uses the existing closed parsers and ordinary document validation. It is not trusted
+because it is stored. The application additionally enforces the cross-row invariants below.
+
+```sql
+CREATE TABLE training_passes (
+  id TEXT PRIMARY KEY,
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  set_document TEXT NOT NULL CHECK(json_valid(set_document)),
+  set_digest TEXT NOT NULL,
+  cycle_ordinal INTEGER CHECK(cycle_ordinal >= 1),
+  budget_scale REAL NOT NULL CHECK(budget_scale > 0 AND budget_scale <= 1),
+  parent_pass_id TEXT UNIQUE REFERENCES training_passes(id),
+  transition_kind TEXT NOT NULL CHECK(transition_kind IN ('start','repeat','next_cycle')),
+  creation_request TEXT NOT NULL CHECK(json_valid(creation_request)),
+  creation_result TEXT NOT NULL CHECK(json_valid(creation_result)),
+  abandon_request TEXT CHECK(abandon_request IS NULL OR json_valid(abandon_request)),
+  abandon_result TEXT CHECK(abandon_result IS NULL OR json_valid(abandon_result)),
+  status TEXT NOT NULL CHECK(status IN ('active','complete','abandoned','unavailable')),
+  revision INTEGER NOT NULL CHECK(revision >= 1),
+  completion TEXT CHECK(completion IS NULL OR json_valid(completion)),
+  created_at TEXT NOT NULL,
+  ended_at TEXT
+) STRICT;
+CREATE TABLE training_pass_members (
+  pass_id TEXT NOT NULL REFERENCES training_passes(id) ON DELETE CASCADE,
+  ordinal INTEGER NOT NULL CHECK(ordinal >= 1),
+  pack_input TEXT NOT NULL CHECK(json_valid(pack_input)),
+  pack_digest TEXT NOT NULL,
+  run_id TEXT UNIQUE REFERENCES drill_runs(id) ON DELETE SET NULL,
+  original_run_id TEXT,
+  state TEXT NOT NULL CHECK(state IN ('pending','active','submitted','unavailable')),
+  start_request TEXT CHECK(start_request IS NULL OR json_valid(start_request)),
+  start_result TEXT CHECK(start_result IS NULL OR json_valid(start_result)),
+  submit_request TEXT CHECK(submit_request IS NULL OR json_valid(submit_request)),
+  submit_result TEXT CHECK(submit_result IS NULL OR json_valid(submit_result)),
+  attempt TEXT CHECK(attempt IS NULL OR json_valid(attempt)),
+  PRIMARY KEY(pass_id, ordinal)
+) STRICT;
+CREATE INDEX training_passes_owner ON training_passes(learner_id, created_at, id);
+```
+
+Pass IDs and command IDs are UUIDs, not timestamps or array positions. A pass has exactly the
+snapshot's contiguous member ordinals. At most one member is active; a pending member may start
+only when every smaller ordinal is submitted. A link is exclusively to a private pack run owned
+by this pass's learner. Neither consent to read a run nor a writer ID grants access to the pass.
+Retained `original_run_id` is an identity/tombstone, never authorization or a live foreign key.
+Parent and child have the same owner and snapshots. The unique parent permits one successor;
+concurrent Repeat/Next requests cannot create two continuations of one result. Further repeats
+continue from the completed child; starting a separate pass remains available explicitly.
+
+At initial Start retain the set document and **all** members before starting member 1. Each
+`pack_input` is the normal pack loader input `{document, ledger, manifest, channel}`: absent
+optional sidecars remain absent. These are small authored documents/current sidecars, not raw
+research recordings. Recompute normal pack validation, grounding and position evidence when
+loading them; never serialize a `PackRecord`, runtime brand, verdict allow-list or compiled claim
+map as authority. No current member document substitutes for its retained bytes. Repeat and Next
+copy the parent's retained inputs, including its authored cycle list, rather than today's set.
+
+Shape/principle/concept resolution and public capability checks still use their existing
+registries. A missing/incompatible required dependency refuses with a named reason; a snapshot
+does not fabricate it. Optional unavailable evidence retains its existing honest-unavailable
+behavior. Removing a set/member from the public catalogue prevents new standalone passes, but
+does not erase a privately retained pass or replace its content. Existing privacy, content-rights
+and access restrictions still apply. Retention does not promote publication/review status.
+
+### 4.6 Commands, transactions and retry
+
+Read routes are `GET /training-passes` (owned history, including unfinished passes) and
+`GET /training-passes/:passId` (retained title/members, status/revision, active run, individual
+objective verdicts and available next actions). No SQL record or internal request cache leaks
+through these responses. Mutation bodies are closed; unknown fields are refused.
+
+| POST route | Body in addition to authenticated identity | Successful immutable receipt |
+|---|---|---|
+| `/training-sets/:setId/passes` | `{passId, commandId, setDigest, writerId}` | `{passId, ordinal:1, runId}` |
+| `/training-passes/:passId/start-member` | `{commandId, expectedRevision, ordinal, writerId}` | `{passId, ordinal, runId}` |
+| `/training-passes/:passId/submit-member` | `{commandId, expectedRevision, ordinal, runId, branchId, nodeId, expectedEventSequence, writerId}` | `{passId, ordinal, runId, branchId, nodeId, verdict}` |
+| `/training-passes/:passId/continue` | `{passId:newPassId, commandId, expectedRevision, action:'repeat'|'next_cycle', writerId}` | `{passId:newPassId, ordinal:1, runId}` |
+| `/training-passes/:passId/abandon` | `{commandId, expectedRevision}` | `{passId, status:'abandoned'}` |
+
+Initial Start captures scale 1/no cycle for a non-tempo set, or the first **authored** cycle for
+a tempo set. It validates the current `setDigest`, ownership, complete member inputs and actual
+runtime dependencies before mutation. Preparation may be asynchronous; no provider work runs
+inside a SQLite transaction. Recheck ownership, saved command and revision immediately before
+`BEGIN IMMEDIATE` writes. Member/run insertion and linkage commit together through the existing
+creation persistence seam; failed preparation or transaction leaves neither an orphan run nor
+a partly populated pass. Nested storage transactions must be removed from this composed path,
+not suppressed with catch-and-continue. Ordinary standalone run creation stays unchanged.
+
+Creation/start/submit/abandon request and receipt pairs live in their existing pass/member row:
+no third command journal.
+Idempotency scope is owner + route + pass + member/action. Check the saved command **before**
+current-state/CAS refusal: identical ID and operands returns the original receipt even after
+completion; same ID with different operands is 409 `TRAINING_COMMAND_CONFLICT`. A different
+command against an already started/submitted slot or continued/abandoned pass is 409
+`TRAINING_ALREADY_APPLIED`, with a read/resume action, not a second run/result. Another UUID
+cannot bypass the unique parent. Revisions increment exactly once per accepted command;
+stale revisions refuse with 409 `TRAINING_REVISION_CONFLICT` and no mutation.
+
+No receipt contains a mutable whole-pass view. After acknowledgement the client reads current
+state; an old receipt cannot overwrite a newer confirmed revision or change the active run.
+Lost-response retry keeps the exact operands. Leaving the view cancels attachment/navigation,
+not a committed server command; reload discovers the owned unfinished pass. Crossed pass/member
+identities cannot attach. 404 hides foreign/nonexistent passes; unavailable execution is a typed
+409 `TRAINING_SOURCE_UNAVAILABLE`, distinct from an empty catalogue or provider 503.
+
+### 4.7 Submission, results and cycles
+
+Submission is an explicit **Finish member** gesture, never a grade inferred by scanning history.
+Read the stored linked run inside the transaction; require its current writer, exact event
+sequence and named branch tip. Derive `projectAttempts` with the retained execution context,
+choose its exact branch row and require `countable` (a real learner move), not a user-supplied
+verdict. A fork retry is eligible under the same authored objective; another run/pass is not.
+The frozen attempt contains only `{runId, branchId, nodeId, eventSequence, packDigest,
+objectiveState, verdict, userPlyCount, endedAt}`. Existing `open` is accepted as an explicitly
+finished ungraded/unresolved attempt and is **not stable**. It is not silently omitted.
+
+Store the attempt/receipt, mark the slot submitted and increment revision atomically. Do not
+change the play cursor or make a chess move. Later rewind/play/progress upserts cannot amend
+this pass's frozen verdict. An explicit repeat is the way to submit a new result. Every member
+must be submitted, even those outside `passMark.of`; only then finalize the pass in this same
+transaction. With a pass mark use `passMarkCompletion` unchanged over frozen verdicts. Without
+one return `{kind:'set_finished', setId}`—not a manufactured pass/fail/percentage. Neither form
+has per-member scores or a total grade; ordinals and authored thresholds remain navigation.
+
+Completed failed passes offer Repeat at the **same** scale. Completed successful or ungraded
+passes offer Repeat and, if present, the immediately following authored cycle. Next is refused
+on failure or after the last cycle. No skipping, synthesized scale or learner cycle-count knob.
+Continue creates a new pass and first run atomically; it never resets the parent. Abandon offers
+a new explicit Repeat from retained inputs but grants no completion, stability or next cycle.
+
+### 4.8 One execution resolver; budget and scheduler isolation
+
+Implement `resolvePackExecutionContext(run, principal)` at the existing service pack-resolution
+boundary. Standalone runs resolve as today. Linked runs resolve their retained pack input plus
+the stored authored cycle scale. The resolver supplies the pack used by start/commit/objective
+rules, opponent/authored-line expansion, rewind/branch/group/replay, progression projection,
+Inspector/Support/Review and cold reconstruction. Independent background consumers use the
+same owned linkage and loader, not current-catalogue-by-ID. Missing links/dependencies refuse;
+they never fall back to an unscaled pack. Duplicate/rematch/flip of a training run creates an
+ordinary standalone run and explicitly says it does **not** submit or advance the original pass.
+
+Pass an execution-only window view to timing/objective evaluation: each original window ID,
+predicate, source pointer and metadata remains the authored value, while its effective
+`luxuryMoveBudget` is `scaledLuxuryBudget(originalBudget, storedScale)` (floor, including zero).
+Do not modify/digest a scaled `DrillPackDefinition`, relabel budget as seconds, or multiply
+again on restart. The active UI states the authored cycle and effective move budget. All
+timing receipts use the applied budget while claim/sidecar joins keep the original pack bytes.
+
+Training attempts still appear in history/observations, but **never feed the return ladder**.
+The linkage is present before `#project`: skip automatic schedule refresh for training-only
+affected roots and exclude linked runs from ladder/difficult/due intake histories when a later
+ordinary attempt refreshes the same root. Do not use `countable:false` to erase real practice,
+forge a scheduled origin, clear an existing schedule or consume one. Startup, member play,
+submit, repeat, cycle advance and account re-projection add/update/delete zero schedule rows.
+Ordinary standalone practice and its pre-existing schedules retain their existing rules.
+
+### 4.9 Deletion, export, import and UX
+
+Deleting an active linked run marks that slot and its pass unavailable in the **same** deletion
+transaction. It cannot become stable, silently skip, or start a replacement. Retain completed
+frozen verdicts when a submitted run is deleted, with explicit `run_deleted` availability and
+no broken Review link; historical completion remains what was actually submitted. Unavailable
+passes offer an explicit new Repeat, never automatic repair. Account deletion hard-deletes both
+tables, command operands and retained pack inputs; ordinary run sharing/deletion rules stand.
+Delete child passes before parents (or null parent links within the deletion transaction).
+
+Register both stores in the existing account inventory and export them as tagged **progress**
+records in the existing bundle, not a new top-level format. Import validates ownership, complete
+snapshot/member/command shapes, counts/ordinals, parent acyclicity, cycle scales, frozen-result
+consistency and run references. Restore linked runs and passes in one transaction; remap all
+pass/member/run references and receipt operands consistently through the existing ID mapping.
+Do not transfer writer leases, trust a stored grading result without replay, or auto-adopt a
+target account's pre-existing attempt. Verify each frozen result at its recorded event prefix,
+not the imported run's later tip. If a deleted run leaves no replayable prefix, preserve its
+record only as explicitly unverified historical data, mark the restored pass unavailable and
+withhold Next; Repeat is still an explicit new execution. Do not restore secretly retained run
+bytes after deletion or treat unverifiable imported history as a successful live pass.
+Unsupported inputs roll back rather than drop context.
+Upgrade adds empty tables only; no historical run/schema stamp or inferred set history.
+
+Learn lists sets with authored threshold, member order, cycle and truthful source/review state.
+Starting uses current learner help preferences and the existing preset intersection; this
+amendment chooses no new preset/ramp mapping. The run shows compact set/cycle context and a
+Finish member action, not another evidence panel. Submitted-member view links Review/retry,
+displays its objective verdict, and offers **Continue** for the next member without auto-start.
+The final view offers the allowed Repeat/Next actions and ordinary Library/Review returns.
+Reload/home expose Resume unfinished set. Loading/error/empty/source-unavailable/deleted-run
+states have named retry/resume exits; pending commands are single-flight, error preserves the
+same command, and route departure retires old responses and focus changes. Desktop, keyboard
+and phone journeys keep the board geometry and assistance ceilings unchanged.
+
+### 4.10 Amendment acceptance (production boundaries, not model promotion)
+
+Code sites owned by this amendment's implementation are the training routes in `rest.ts` and
+`application.ts`; `RunService` creation/pack-context/progress seams; a small training-pass store
+composed by `storage.ts`; automatic-ladder history and run/account deletion in that store;
+the existing account inventory/importer; and Learn/client navigation plus run-context UI.
+It does not own the D3317 clamp projection, provider gateway/source migrations or new collectors.
+Coordinate the existing storage/service/account seams with their active RFC owners before
+implementation; no broad replacement of those subsystems is authorized.
+
+Independent review must verify the loader seam, all execution call sites, transactional run
+creation/deletion and the automatic-scheduler exclusions. A disposable model under D3535 can
+test identities/transactions and freeze rules, but cannot satisfy any production criterion.
+The implementing change must prove all of the following through real application/storage:
+
+1. Two passes share a pack but not attempts; a foreign run/pass/learner cannot submit or resume.
+2. Real stable/unstable/open branch attempts freeze exactly once; later progress upserts/rewinds
+   do not change the result; subset pass marks wait for **all** members.
+3. Lost Start/member/submit/Continue responses replay exact receipts; overlapping different
+   commands, changed operands, stale revisions and raced Repeat/Next produce one mutation.
+4. Fault injection between run/pass/member writes rolls everything back; server restart resumes
+   exact identity, order and retained content after catalogue edit/removal.
+5. A 4-budget member executes at 2 under scale .5; odd and zero budgets floor correctly; start,
+   real commits, rewind, branch/group/replay, objective/attempt projection, Review and cold reload
+   all use that same budget, without changing installed/member digests or claim pointers.
+6. Pre-existing schedules remain byte-identical throughout a cycle; a later ordinary attempt
+   excludes training attempts from ladder history but still schedules normally. No hidden
+   schedule write from startup, projection, import or worker rebuild passes this criterion.
+7. Active/completed run deletion, complete account export/import/delete, corrupt references,
+   foreign parents, changed scales and cyclic parent input follow §4.9 atomically.
+8. Built desktop and touch-phone Learn → first member → retry/branch → submit → Continue →
+   final result → Repeat/Next → reload journeys pass, including failed threshold/direct pack
+   access, pending departure, response loss, dependency failure and abandoned/deleted runs.
+9. Authored first pass-mark and tempo examples satisfy D3/D4 through these actual journeys.
+   Neither a schema fixture nor the disposable model is official content or a discharge.
+
 ## §5. What this RFC refuses
 
 | Refused | Ground |
@@ -344,6 +596,13 @@ Proposed — id assigned at landing; head was **D1310** at drafting.
   a pack forcing help onto a learner who declined it.
 
 ## Changelog
+
+- **2026-10-10** — codex authored the remaining original execution contract under [[D3535]]:
+  §4.4–§4.10 specifies owned passes/member slots, retained normal loader inputs, frozen exact
+  attempts, idempotent transactional commands, all-path budget resolution, scheduler isolation,
+  account lifecycle and complete learner journeys. Claims only the next migration position;
+  no pack/run schema lane, new evidence producer or numeric grade. **Draft awaiting independent
+  review**, not accepted or implemented; D3318/D1/D3 and the separate D3317 ruling remain open.
 
 - **2026-10-07** — D3318 catalogue stage: installed sibling documents, ordinal-ordered catalogue/detail
   reads through the production application, weakest-member publication and release-bundle admission.

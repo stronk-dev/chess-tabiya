@@ -4,6 +4,15 @@ Proposal for `rfc/pack-training-forms.md`, not an accepted storage or run-schema
 The existing catalogue stage of D3318 can ship independently. This proposal does not
 authorize the remaining mutation paths or settle the guided-pass ceiling ruling D3317.
 
+**2026-10-10 author checkpoint:** the bounded execution specification now lives in
+`rfc/pack-training-forms.md` §4.4–§4.10, **draft awaiting independent acceptance**. It chooses
+two owned relational tables, retained normal pack-loader inputs, immutable selected-branch
+submissions, exact command retries, all-path effective move budgets and explicit automatic-ladder
+exclusion. `make training-pass-model-check` exercises that draft DDL and shipped pure arithmetic
+with nine disposable storage-model tests; it is also run by the existing governance CI tier.
+It does not exercise production run orchestration, schedule isolation, account recovery or UX.
+Those require the RFC's actual application/client acceptance. No execution mutation has shipped.
+
 ## The actual missing contract
 
 A set pass must remember **which attempts belong to this pass**, and a tempo cycle

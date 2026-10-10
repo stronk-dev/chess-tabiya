@@ -1643,10 +1643,10 @@
         "dependsOn": [
           "durable-product-state"
         ],
-        "nextAction": "D3318's installed catalogue/detail reads and release packaging are locally verified. Review D3535's bounded execution amendment, then implement durable set/cycle context, member progression, repeat/re-offer and live tempo. Continue the existing theory, profile, bot, Campaign, social/clock and professional API work; catalogue reads do not close the training journey or whole milestone.",
+        "nextAction": "Independently review D3535's authored execution amendment in pack-training-forms §§4.4–4.10, then implement its full application/storage/client criteria: retained pass/member inputs, frozen submissions, repeat/next cycle, all-path tempo, ladder isolation and account lifecycle. D3318 catalogue/detail reads remain delivered; the nine disposable model controls are not production proof. D3317's ramp mapping is separate. Continue the existing theory, profile, bot, Campaign, social/clock and professional API work.",
         "latestCheckpoint": {
-          "at": "2026-10-07",
-          "summary": "D3318 installs and reads training-set sibling documents through the production application. Nineteen focused checks cover ordered members, authored thresholds, refusals, weakest-member publication, immutable separate bytes and native HTTP/direct member access. Full local verification passes clean types, 3,446 software, seven performance and 227 content cases plus downstream contracts. Browser tiers pass 88 smoke/one optional skip, five content, 59 matrix and packaged-default, with 150 exact inputs and 112 unretried composition cells. Final release policy passes 67 controls after D3536's declared-licence regression. Progression, repeat/re-offer, schedule isolation and live tempo remain; D3535 has a bounded source-linked proposal, not acceptance. No authored set, graduation, migration, whole capability/milestone, remote CI or 1.0 completion is claimed.",
+          "at": "2026-10-10",
+          "summary": "D3535's remaining original training-set execution is now specified in pack-training-forms §§4.4–4.10, draft awaiting independent acceptance. Two ordinary tables retain owned pass/member inputs, freeze selected branch results and record exact command receipts; no run-schema or pack-byte change. The contract includes all-path scaled move budgets, automatic-ladder exclusion, deletion/import and complete Learn/result/repeat/resume journeys. Nine disposable model tests execute the draft DDL and shipped pure helpers; nineteen unchanged production catalogue tests pass. The new small author-model check is included in existing governance CI, not content coverage or product proof. D3318/D1/D3 and separate D3317 remain open; no production mutation, authored content, graduation, migration, whole capability/milestone, remote CI or 1.0 promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/application.ts",
@@ -1655,6 +1655,8 @@
             "tools/release/inputs.test.mjs",
             "tests/browser/production.spec.ts",
             "planning/training-methods/set-execution-amendment-proposal.md",
+            "tools/training-pass-model.test.mjs",
+            "Makefile",
             "rfc/pack-training-forms.md",
             "planning/roadmap-to-done.md"
           ],
@@ -1682,7 +1684,7 @@
             {
               "kind": "rfc",
               "id": "pack-training-forms.md",
-              "digest": "sha256:ed3b80d97c090b0aafdef3db78d1e4cbdf934980461de7ae9e031904f0343bf1"
+              "digest": "sha256:cf8ba2b4f3aa1f9370e004bf1c0067a9a565121c054482567917d1df064ca793"
             }
           ]
         },

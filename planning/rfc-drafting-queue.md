@@ -2,6 +2,19 @@
 
 ## Current narrow author handoff — 2026-10-08
 
+- **[[D3535]] — independently review durable training-set execution.** The 2026-10-10 draft
+  in `rfc/pack-training-forms.md` §4.4–§4.10 specifies the remaining original [[D3318]] journey:
+  owned passes/ordered slots, retained loader inputs, exact frozen branch submissions,
+  transactional command retry, repeat/next authored cycles, execution-only scaled windows,
+  automatic-ladder exclusion, deletion/import and Learn-to-result/resume flows. Nine disposable
+  model tests execute its actual two-table DDL and shipped pass/budget helpers; nineteen existing
+  production catalogue tests pass. Neither proves the unimplemented journey. Review source/claim
+  replay without trusting serialized `PackRecord`s, every service/background timing path,
+  nested transaction boundaries, mutable attempt rows, later ordinary scheduling on the same root,
+  parent/command concurrency and unverifiable deleted-run import. The migration claim is
+  `position next`, with no speculative number, pack bytes or run-schema change. D3317 is separate;
+  do not invent its rung-to-clamp mapping or treat existing catalogue reads as full completion.
+
 - **[[D3580]] — Review tablebase acquisition, narrow output and durable source handoff.**
   **2026-10-10 authored, not accepted:** independently review `rfc/review-evidence-compiler.md`
   §4.3 before production. The actual Review coordinator is not the legacy job worker. The draft

@@ -318,6 +318,11 @@ roadmap-progress: roadmap-check
 training-set-catalogue-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/training-set-registry.test.ts apps/server/src/training-forms.test.ts
 
+# D3535 disposable author model: draft DDL/transactions only, not a shipped training journey.
+.PHONY: training-pass-model-check
+training-pass-model-check:
+	$(CI_NODE) --test tools/training-pass-model.test.mjs
+
 .PHONY: learner-profile-check
 learner-profile-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/ProfileScreen.test.ts apps/web/src/lib/profile-response.test.ts apps/web/src/lib/router.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts apps/server/src/learner-profile.test.ts apps/server/src/learner-profile-application.test.ts apps/server/src/review-map.test.ts apps/server/src/live-session.test.ts apps/server/src/rating-service.test.ts apps/server/src/adoption-wave.test.ts
@@ -3230,7 +3235,8 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
 
-verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
+# The small draft author model is a contract check, not content coverage or product completion.
+verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract training-pass-model-check
 
 # Draft-RFC evidence remains executable, but it is not a release gate. These targets include
 # historical source images, author models, and counterexamples whose job is to inform an RFC review;
