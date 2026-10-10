@@ -12,6 +12,22 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3649]] is the next cross-object privacy check: restored schedule source ids reach
+`RunService#duePopulation` without the current run grant. Reproduce at actual frequency
+source/HTTP boundaries before repairing; retain the specified missing-source/default policy.
+This is distinct from the completed repertoire reader, not a full account/privacy closeout.
+
+[[D3647]]/[[D3648]] close the private repertoire link boundary. Actual account upload admits
+a gap link only when both objects are restored from the file and counts omitted links once as
+orphans. Persisted links cannot confer game access: main/alternate gap reads and repeated entry
+consult the game's current read grant, including revocation. Eight predecessor controls fail;
+valid in-file replay retains the exact game without mutation. Permanent evidence:
+`apps/server/src/account-import.test.ts`. Final normal gates pass 4,371 software,
+seven unchanged-budget performance, 241 content,
+clean types/build/governance and both desktop/phone native account-restoration journeys, zero
+retries. These are the relevant browser journeys, not a fresh full browser-suite claim. Full
+account lifecycle, D3649, official content, native image and remote release remain open.
+
 [[D3645]]/[[D3646]] are closed locally under semantic-collectors and recorded-semantic-path:
 the removed pawn's identity remains distinct from the en-passant landing through overload
 response conflict, saved overload/defender-consequence windows and authenticated Review.

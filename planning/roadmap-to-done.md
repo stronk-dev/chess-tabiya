@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3646]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3649]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -57,6 +57,14 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Account/data | Authorization, private export/import/delete and native restored branched-play journeys | Guest/claim, complete object/lifecycle coverage and integrated operator recovery |
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
+
+Latest account boundary repair: [[D3647]]/[[D3648]] prevent a restored repertoire link from
+conveying access to another account's game. Both link endpoints must be restored; gap reads
+and reuse enforce the current game grant, including revocation. Eight predecessor controls
+fail and eleven permanent additions pass. Normal local gates pass 4,371 software, seven
+unchanged-budget performance, 241 content, types/build/governance and both desktop/phone native
+account-restoration journeys, zero retries. D3649 owns the separate scheduled-return source
+reader; this is not whole-account/privacy, full browser-suite, native-image or remote-CI proof.
 
 Latest foundation repair: [[D3645]]/[[D3646]] distinguish the removed pawn's square from the
 en-passant landing through overload response conflict, saved overload/defender-consequence

@@ -30214,6 +30214,32 @@
       "uxItems": [],
       "evidence": "apps/server/src/review-map.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3647",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e460942e74c6be757093cafc91549e9a31292540b0991de4c060d7b544c643a5",
+      "uxItems": [],
+      "evidence": "apps/server/src/account-import.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3648",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:92a5b908e8979344e2b7a4497871dcd6f07354e862aa4b22fbb287ce31b53c10",
+      "uxItems": [],
+      "evidence": "apps/server/src/account-import.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3649",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d10f898a49f8a82ae228fb2ffdd3191623d32bea342a9bbdda5314cf1f097f2e",
+      "uxItems": [],
+      "owner": "core-loop"
     }
   ]
 }

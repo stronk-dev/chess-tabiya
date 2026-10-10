@@ -23,6 +23,7 @@ import {
 } from "./account-import.js";
 import { IdentityService } from "./identity.js";
 import { projectAttempts } from "./progress.js";
+import { RepertoireService } from "./repertoire.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage, type LeaseHolder } from "./storage.js";
@@ -256,9 +257,10 @@ describe("account import over REST", () => {
   }
 
   function setup() {
-    const { storage } = installation();
+    const { storage, file } = installation();
     const identity = new IdentityService(storage, { cookieSecure: false, derive: cheapDerive });
-    const handler = createRestHandler(new RunService(storage), undefined, undefined, identity);
+    const runs = new RunService(storage);
+    const handler = createRestHandler(runs, undefined, undefined, identity, undefined, undefined, undefined, undefined, undefined, undefined, undefined, new RepertoireService(storage, runs));
     const call = (method: string, path: string, options: { readonly body?: unknown; readonly cookie?: string; readonly raw?: string } = {}) => handler(new Request(`http://tabiya.test${path}`, {
       method,
       headers: { ...(options.body === undefined && options.raw === undefined ? {} : { "content-type": "application/json" }), ...(options.cookie === undefined ? {} : { cookie: options.cookie }) },
@@ -269,8 +271,134 @@ describe("account import over REST", () => {
       expect(response.status).toBe(201);
       return response.headers.get("set-cookie")!.split(";", 1)[0]!;
     };
-    return { storage, call, register };
+    return { storage, file, call, register };
   }
+
+  async function repertoireBundle(gapRunId: string, alternate: boolean) {
+    const source = installation();
+    const { run } = await seed(source.storage, source.file, "alice-id", "alice", "a");
+    const key = run.nodes[0]!.transposeKey;
+    const gap = { key, representativeFen: START, replySan: "", replyUci: "", line: [], mass: 1, gamesUntilSeen: 1 };
+    source.storage.saveRepertoireScan!({
+      repertoireId: "a-repertoire", scannedAt: AT, repertoireDigest: `sha256:${"1".repeat(64)}`,
+      population: [], gaps: alternate ? [] : [gap], alternateGaps: alternate ? [{ ...gap, behindAlternate: true }] : [],
+      unknown: [], uncoveredMass: 1, truncated: false, sourceFailures: 0, queriesUsed: 0, unreachedKeys: 0,
+    });
+    const exported = source.storage.accountBundle("alice-id");
+    const bundle: AccountBundleV1 = {
+      ...exported,
+      repertoires: { ...exported.repertoires, value: [...exported.repertoires.value, {
+        table: "repertoire_gap_runs", record: { run_id: gapRunId, repertoire_id: "a-repertoire", gap_key: key, created_at: AT },
+      }] },
+    };
+    return { bundle: bytesOf(bundle), key };
+  }
+
+  function foreignRun(storage: SQLiteRunStorage) {
+    storage.createLearner({ id: "foreign-id", handle: "foreign", passwordHash: "!", createdAt: AT });
+    const run = commitMove(createRun({ id: "foreign-run", packId: "pack-a", packDigest: `sha256:${"4".repeat(64)}`, startFen: START, seed: 7, createdAt: AT, policyConfig }), "d2d4", { at: AT }).run;
+    storage.create(run, { writerId: "foreign-writer", learnerId: "foreign-id" }, "Private game");
+    return serializeAccountBundle(storage.accountBundle("foreign-id")).digest;
+  }
+
+  it.each([
+    ["foreign-run", false], ["missing-run", false], ["foreign-run", true], ["missing-run", true],
+  ] as const)("counts the uploaded %s gap link as an orphan (alternate=%s), without attaching private play", async (runId, alternate) => {
+    const { bundle, key } = await repertoireBundle(runId, alternate);
+    const { storage, call, register } = setup();
+    const foreignBefore = foreignRun(storage);
+    const cookie = await register("carol");
+    const before = serializeAccountBundle(storage.accountBundle(storage.learnerByHandle("carol")!.id)).digest;
+    const preview = await call("POST", "/auth/import-preview", { cookie, body: { bundle } });
+    expect(preview.status).toBe(200);
+    const receipt = (await preview.json() as { receipt: { notRestored: { kind: string; count: number }[]; restored: { table: string }[] } }).receipt;
+    expect(receipt.notRestored).toContainEqual(expect.objectContaining({ kind: "orphan_record", count: 1 }));
+    expect(receipt.restored.some((item) => item.table === "repertoire_gap_runs")).toBe(false);
+    expect(serializeAccountBundle(storage.accountBundle(storage.learnerByHandle("carol")!.id)).digest).toBe(before);
+    expect((await call("POST", "/auth/import", { cookie, body: { bundle, password: PASSWORD } })).status).toBe(201);
+    const response = await call("GET", "/repertoires/a-repertoire/gaps", { cookie });
+    expect(response.status).toBe(200);
+    const result = await response.json() as { scan: { gaps: { runId: string | null; firstMoves: unknown[] }[]; alternateGaps: { runId: string | null; firstMoves: unknown[] }[] } };
+    expect((alternate ? result.scan.alternateGaps : result.scan.gaps)[0]).toMatchObject({ runId: null, firstMoves: [] });
+    expect(JSON.stringify(result)).not.toContain("d2d4");
+    expect(storage.repertoireGapRun!("a-repertoire", key)).toBeUndefined();
+    expect(serializeAccountBundle(storage.accountBundle("foreign-id")).digest).toBe(foreignBefore);
+    expect(storage.foreignKeyViolationCount()).toBe(0);
+  });
+
+  it("counts a gap link with both missing parents once, rather than silently restoring it", async () => {
+    const { bundle } = await repertoireBundle("missing-run", false);
+    const parsed = readPortableAccountBundle(bundle);
+    const missingParents: AccountBundleV1 = { ...parsed, repertoires: { ...parsed.repertoires, value: parsed.repertoires.value.map((item) =>
+      item.table === "repertoire_gap_runs" ? { ...item, record: { ...item.record, repertoire_id: "missing-repertoire" } } : item,
+    ) } };
+    const plan = planAccountRestore(missingParents);
+    expect(plan.notRestored).toContainEqual(expect.objectContaining({ kind: "orphan_record", count: 1 }));
+    expect(plan.records.repertoire_gap_runs).toEqual([]);
+  });
+
+  it("restores an in-file gap link and reuses its authorized recorded game without mutation", async () => {
+    const { bundle, key } = await repertoireBundle("a-run", false);
+    const { storage, call, register } = setup();
+    const cookie = await register("carol");
+    expect((await call("POST", "/auth/import", { cookie, body: { bundle, password: PASSWORD } })).status).toBe(201);
+    const learner = storage.learnerByHandle("carol")!;
+    const before = serializeAccountBundle(storage.accountBundle(learner.id)).digest;
+    const response = await call("GET", "/repertoires/a-repertoire/gaps", { cookie });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ scan: { gaps: [{ runId: "a-run", firstMoves: [{ moveUci: "e2e4", moveSan: "e4" }] }] } });
+    const entered = await call("POST", "/repertoires/a-repertoire/gaps/enter", { cookie, body: { gapKey: key } });
+    expect(entered.status).toBe(201);
+    expect(await entered.json()).toEqual({ runId: "a-run", writerId: null, alreadyEntered: true });
+    expect(serializeAccountBundle(storage.accountBundle(learner.id)).digest).toBe(before);
+  });
+
+  it.each([
+    ["foreign-run", false], ["missing-run", false], ["foreign-run", true], ["missing-run", true],
+  ] as const)("refuses a persisted %s link before gap data or reuse (alternate=%s)", async (runId, alternate) => {
+    const { bundle, key } = await repertoireBundle("a-run", alternate);
+    const { storage, file, call, register } = setup();
+    const foreignBefore = foreignRun(storage);
+    const cookie = await register("carol");
+    const other = await register("other");
+    expect((await call("POST", "/auth/import", { cookie, body: { bundle, password: PASSWORD } })).status).toBe(201);
+    const raw = new DatabaseSync(file);
+    raw.prepare("UPDATE repertoire_gap_runs SET run_id=? WHERE repertoire_id='a-repertoire'").run(runId);
+    raw.close();
+    const before = serializeAccountBundle(storage.accountBundle(storage.learnerByHandle("carol")!.id)).digest;
+    expect((await call("GET", "/repertoires/a-repertoire/gaps")).status).toBe(401);
+    expect((await call("GET", "/repertoires/a-repertoire/gaps", { cookie: other })).status).toBe(404);
+    const response = await call("GET", "/repertoires/a-repertoire/gaps", { cookie });
+    expect({ status: response.status, body: await response.json() }).toMatchObject({ status: 404, body: { error: { code: "RUN_NOT_FOUND" } } });
+    const entered = await call("POST", "/repertoires/a-repertoire/gaps/enter", { cookie, body: { gapKey: key } });
+    expect(entered.status).toBe(404);
+    expect(await entered.json()).toMatchObject({ error: { code: "RUN_NOT_FOUND" } });
+    expect(serializeAccountBundle(storage.accountBundle(storage.learnerByHandle("carol")!.id)).digest).toBe(before);
+    expect(serializeAccountBundle(storage.accountBundle("foreign-id")).digest).toBe(foreignBefore);
+  });
+
+  it("checks a linked game's current grant on each read and reuse, including after revocation", async () => {
+    const { bundle, key } = await repertoireBundle("a-run", false);
+    const { storage, file, call, register } = setup();
+    foreignRun(storage);
+    const cookie = await register("carol");
+    expect((await call("POST", "/auth/import", { cookie, body: { bundle, password: PASSWORD } })).status).toBe(201);
+    const learner = storage.learnerByHandle("carol")!;
+    const raw = new DatabaseSync(file);
+    raw.prepare("UPDATE repertoire_gap_runs SET run_id='foreign-run' WHERE repertoire_id='a-repertoire'").run();
+    raw.close();
+    const owner = { writerId: "foreign-writer", learnerId: "foreign-id" };
+    storage.grantRole("foreign-run", learner.id, "spectator", owner, AT);
+    const allowed = await call("GET", "/repertoires/a-repertoire/gaps", { cookie });
+    expect(allowed.status).toBe(200);
+    expect(await allowed.json()).toMatchObject({ scan: { gaps: [{ runId: "foreign-run", firstMoves: [{ moveUci: "d2d4", moveSan: "d4" }] }] } });
+    expect((await call("POST", "/repertoires/a-repertoire/gaps/enter", { cookie, body: { gapKey: key } })).status).toBe(201);
+    storage.revokeGrant("foreign-run", learner.id, owner);
+    const before = serializeAccountBundle(storage.accountBundle(learner.id)).digest;
+    expect((await call("GET", "/repertoires/a-repertoire/gaps", { cookie })).status).toBe(404);
+    expect((await call("POST", "/repertoires/a-repertoire/gaps/enter", { cookie, body: { gapKey: key } })).status).toBe(404);
+    expect(serializeAccountBundle(storage.accountBundle(learner.id)).digest).toBe(before);
+  });
 
   it("previews without writing, commits only with the password, and bounds the upload", async () => {
     const source = installation();

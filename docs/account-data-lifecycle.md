@@ -105,6 +105,11 @@ restored attempts and the longitudinal projections are re-derived from the resto
 through the ordinary watermark (the restore is a registered longitudinal source mutation);
 neither is copied from the file.
 
+A restored repertoire gap link requires both its repertoire and its replayable game to come
+from the file. A missing, quarantined or out-of-file game does not become attached merely because
+its id exists in the destination installation. The preview and commit count these links as
+`orphan_record`; legitimate in-file links retain their exact recorded games.
+
 **What is not.** Runs that could not be replayed, access previously granted to other
 people, runs owned by other people, published packs and shapes, live sessions,
 classrooms and share links, and ratings, rated-game records, standings and earned marks

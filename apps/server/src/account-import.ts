@@ -172,13 +172,21 @@ export function planAccountRestore(bundle: AccountBundleV1): AccountRestorePlan 
     repertoire_scans: repertoireChild("repertoire_scans"),
     repertoire_gap_runs: repertoireChild("repertoire_gap_runs"),
   };
+  const restoredChildren = {
+    repertoire_moves: children.repertoire_moves.filter((row) => repertoireIds.has(String(row.repertoire_id))),
+    repertoire_scans: children.repertoire_scans.filter((row) => repertoireIds.has(String(row.repertoire_id))),
+    // A link is private only when both ends come from the file. Installation rows are not
+    // authority to attach somebody else's game (or a missing game) to a restored repertoire.
+    repertoire_gap_runs: children.repertoire_gap_runs.filter((row) => repertoireIds.has(String(row.repertoire_id)) && runIds.has(String(row.run_id))),
+  };
   const orphanCount =
     (attempts.length - restoredAttempts.length)
     + concepts.filter((row) => !attached(row)).length
     + legacy.filter((row) => !attached(row)).length
     + (marks.length - restoredMarks.length)
     + playtests.filter((row) => !draftIds.has(String(row.draft_id))).length
-    + Object.values(children).reduce((total, rows) => total + rows.filter((row) => !repertoireIds.has(String(row.repertoire_id))).length, 0)
+    + Object.values(children).reduce((total, rows) => total + rows.length, 0)
+    - Object.values(restoredChildren).reduce((total, rows) => total + rows.length, 0)
     + [...allDerivations].filter((id) => !derivationKeys.has(id)).length;
   const ratingTables = new Set(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks"]);
   const counted = (kind: AccountNotRestoredKind, count: number) => Object.freeze({ kind, count, reason: ACCOUNT_NOT_RESTORED_REASONS[kind] });
@@ -208,9 +216,9 @@ export function planAccountRestore(bundle: AccountBundleV1): AccountRestorePlan 
       attempt_concept_legacy: Object.freeze(legacy.filter(attached)),
       schedules: Object.freeze(recordsOf(progress, "schedules")),
       repertoires: Object.freeze(repertoires),
-      repertoire_moves: Object.freeze(children.repertoire_moves.filter((row) => repertoireIds.has(String(row.repertoire_id)))),
-      repertoire_scans: Object.freeze(children.repertoire_scans.filter((row) => repertoireIds.has(String(row.repertoire_id)))),
-      repertoire_gap_runs: Object.freeze(children.repertoire_gap_runs.filter((row) => repertoireIds.has(String(row.repertoire_id)))),
+      repertoire_moves: Object.freeze(restoredChildren.repertoire_moves),
+      repertoire_scans: Object.freeze(restoredChildren.repertoire_scans),
+      repertoire_gap_runs: Object.freeze(restoredChildren.repertoire_gap_runs),
       pack_drafts: Object.freeze(packDrafts),
       playtest_documents: Object.freeze(playtests.filter((row) => draftIds.has(String(row.draft_id)))),
       shape_drafts: Object.freeze(recordsOf(drafts, "shape_drafts")),

@@ -24076,3 +24076,41 @@ Campaign was the one capability with no API, route or content. Now:
   semantic qualification, useful defaults, calibration, official graduation, all full journeys
   and release obligations remain open. No pushed-revision CI or native release-image claim;
   the full 1.0 goal remains active.
+
+### 2026-10-10 — Private repertoire links cannot confer access to other games (D3647/D3648)
+
+- Continued the full 1.0 delivery goal after the completed capture-evidence batch. Read the current
+  queue and account/repertoire restore operations; larger source/selection amendments remain draft.
+  This repairs the existing private-data boundary, not a new import, merge or sharing mechanism.
+- Recorded both findings before implementation. Four permanent actual upload-preview controls
+  fail because out-of-file links are admitted rather than counted as orphans; four main/alternate
+  persisted-link controls return HTTP 200 instead of 404. The foreign-game response includes its
+  recorded first move. A valid in-file link already passes the unchanged-history control.
+- Restore now requires both the repertoire and replayable game to be restored from the file.
+  Missing/out-of-file parents count once in the existing orphan receipt. The repertoire gap and
+  repeated-entry readers require current run-read authority before moves, attempt counts or reuse;
+  a real granted game remains readable, and revocation takes effect on the next request.
+- Eleven new permanent controls include authenticated REST, native file-backed storage, actual
+  upload/preview/commit, main/alternate scans, missing/foreign parents, double-orphan counting,
+  peer-data preservation, valid unchanged replay, and grant/revocation. The normal account gate
+  passes 35 cases. A stronger distinct-foreign-move fixture initially omitted the legacy createRun
+  pack operands and failed construction; supplying those required fixture operands fixes the
+  instrument. Production validation was not weakened. Workspace types passed before this last
+  fixture addition; full normal gates are next and no final pass is claimed yet.
+- Updated the existing lifecycle/repertoire docs, queue, ledger and work-state. No protected
+  intent sentence changes, new provider/chess truth, schema/migration, authored content,
+  whole-capability/milestone or release promotion. No new tracking machinery or raw captures.
+- The same cross-object audit finds another reader, D3649: schedule source ids are restored
+  without an in-file dependency guard, and duePopulation reads the game directly for opponent
+  policy. Recorded and queued separately; current work does not close it. Actual source/transport
+  reproduction and preservation of the declared missing-source default are the next bounded step.
+- Final sequential `make roadmap-receipt verify-awake build account-portability-browser-check`
+  exits zero: 4,371 software cases / 364 files, seven unchanged-budget performance cases / four
+  files, 241 content cases / 24 files, clean types/build/governance/packaging and both native
+  desktop/phone archive → deletion → new-account import → resumed branched-play journeys,
+  zero retries. This is the relevant browser subset, not a new full browser-suite reading.
+  The generated sidecar initially refuses newly synced unassigned rows; explicit same-batch
+  assignment restores zero untriaged. No row is left missing or unowned. D3649 stays todo.
+- The existing durable-product-state checkpoint records this scoped boundary repair while
+  preserving the earlier migration/recovery caveats and its blocked-contract state. The roadmap
+  receipt is refreshed normally; no new progress mechanism or milestone completion is introduced.

@@ -1463,12 +1463,16 @@
         ],
         "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
         "latestCheckpoint": {
-          "at": "2026-10-09",
-          "summary": "D3637 corrects the blanket all-family recovery claim. Five migrations landed on September 24: longitudinal store (26), evidence jobs (27), concept registry (28), bot run lane (29) and campaign-core (30). Their durable implementations exist; landing migrations does not establish complete integrated backup/restore or upgrade/rollback. D3636's current longitudinal revision 4 rebuilds completed revision-1/2/3 histories through the actual file-backed application worker, retaining both-color pawn advancement while removing false gained properties; 65 longitudinal cases and clean types pass. Catalogue progression, social/clock contracts, complete cross-system lifecycle/recovery and D3574's native appliance capacity hold remain. No whole milestone or release promotion.",
+          "at": "2026-10-10",
+          "summary": "D3647/D3648 close private repertoire link admission/read/reuse: both objects must be restored, current game grants precede reads, and revocation takes effect. Eight predecessor controls fail; eleven additions, 35 account cases and both desktop/phone archive/delete/import/continued-play journeys pass without changing recorded history. D3649 separately owns the scheduled-return source-policy reader. D3637's correction stands: migrations 26-30 landed, but migration landing does not prove all-family backup/restore or upgrade/rollback. Current longitudinal revision 4 rebuilds completed earlier histories through the actual file-backed worker. Catalogue progression, social/clock contracts, complete cross-system lifecycle/recovery and D3574's native appliance capacity hold remain. No whole milestone or release promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
             "planning/campaign/implementation-receipt-2026-09-24.md",
+            "apps/server/src/account-import.ts",
+            "apps/server/src/repertoire.ts",
+            "apps/server/src/account-import.test.ts",
+            "docs/account-data-lifecycle.md",
             "apps/server/src/longitudinal-registry.ts",
             "apps/server/src/longitudinal-contract.test.ts",
             "apps/server/src/longitudinal-worker.test.ts",
@@ -1513,6 +1517,16 @@
               "kind": "work_state",
               "id": "D3637",
               "digest": "sha256:9765339354ce3b5c22ae8eddb04d7fc7f98d1fcb4202c3efdde35131c04b25b6"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3647",
+              "digest": "sha256:e460942e74c6be757093cafc91549e9a31292540b0991de4c060d7b544c643a5"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3648",
+              "digest": "sha256:92a5b908e8979344e2b7a4497871dcd6f07354e862aa4b22fbb287ce31b53c10"
             }
           ]
         },

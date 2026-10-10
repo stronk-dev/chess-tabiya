@@ -50,7 +50,10 @@ history. The same explicit choices appear in the linked run's completed-attempt 
 including after a direct route load. If the human model is deployed, entry uses the
 selected repertoire band. If it is unavailable but Stockfish is present, the action
 names Stockfish before the learner selects it; when neither opponent is available the
-control is disabled with the reason. A linked run always remains reopenable.
+control is disabled with the reason. A linked run remains reopenable while the learner has
+access to it. Gap responses and repeated entry check that game's current run-read authority
+before reading moves/attempt counts or returning its id. A foreign or missing linked game
+receives the normal `RUN_NOT_FOUND` refusal; owning the repertoire is not access to the game.
 
 The wire states remain `open`, `addressed`, and `answered`, but Learn does not expose
 those storage terms. It describes the learner consequence instead: no rehearsal yet,
