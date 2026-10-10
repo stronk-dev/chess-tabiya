@@ -5,6 +5,15 @@ same living pack validator as `make pack-check`, saves incomplete drafts, allows
 validation-clean drafts against the real run service, and registers immutable community
 versions.
 
+`/create/new` opens the source chooser without a selected pack. Creating or selecting a private
+draft opens `/create/draft/:draftId`; this address can be bookmarked and reloaded. Direct entry,
+reload and browser-history return read that exact draft through the existing owner-only API.
+Only saved changes are restored. Invalid unfinished documents remain editable; registered and
+withdrawn rows retain their existing read-only actions. Missing, crossed or unavailable reads
+show a retry/return path without displaying another draft or private server diagnostics. A late
+response cannot replace a different editor after navigation. This changes neither publication
+admission nor the immutable bytes preserved by an earlier playtest.
+
 Create begins with four concrete sources rather than an empty document: an arbitrary position
 entered as FEN or reached by legal moves on the production board, a finished Lichess game or PGN,
 a saved run, or an existing served pack. Position authoring emits the complete ten-field document

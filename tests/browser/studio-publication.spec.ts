@@ -23,6 +23,8 @@ for (const mobile of [false, true]) {
     const created = await createdResponse;
     expect(created.status()).toBe(201);
     const { draft } = await created.json();
+    const editorPath = `/create/draft/${encodeURIComponent(draft.id)}`;
+    await expect(page).toHaveURL(new RegExp(`/create/draft/${draft.id}$`));
     const editor = page.getByLabel("Pack JSON", { exact: true });
     const register = page.getByRole("button", { name: "Register community pack", exact: true });
     await expect(editor).toBeVisible();
@@ -59,10 +61,13 @@ for (const mobile of [false, true]) {
     await page.unroute(savePath);
     const savedClean = page.waitForResponse(response => response.request().method() === "PUT" && new URL(response.url()).pathname === `/packs/drafts/${draft.id}`);
     await page.getByRole("button", { name: "Save", exact: true }).click();
-    expect((await savedClean).status()).toBe(200);
+    const cleanResponse = await savedClean;
+    expect(cleanResponse.status()).toBe(200);
+    const savedDocument = (await cleanResponse.json()).draft.document;
     await expect(register).toBeEnabled();
     await page.reload();
-    await selectDraft(page, title);
+    await expect(page).toHaveURL(new RegExp(`/create/draft/${draft.id}$`));
+    await expect(editor).toHaveValue(JSON.stringify(savedDocument, null, 2));
     await expect(register).toBeEnabled();
     expect((await page.request.get(`/packs/${draft.packId}`)).status()).toBe(404);
 
@@ -78,8 +83,8 @@ for (const mobile of [false, true]) {
     expect(before.graph.nodes).toHaveLength(2);
     expect((await page.request.get(`/packs/${draft.packId}`)).status()).toBe(404);
 
-    await page.goto("/create");
-    await selectDraft(page, title);
+    await page.goto(editorPath);
+    await expect(editor).toBeVisible();
     const publishedTitle = `${title} published`;
     const retained = JSON.parse(await editor.inputValue());
     await editor.fill(JSON.stringify({ ...retained, title: publishedTitle }, null, 2));
@@ -128,5 +133,49 @@ for (const mobile of [false, true]) {
     await expect(page).toHaveURL(/\/play\/run\//);
     await expect(page.locator(".run-name")).toHaveText(publishedTitle);
     await expect(page.getByLabel("Chessboard", { exact: true })).toBeVisible();
+  });
+
+  test(`Studio exact editor retries a failed read and preserves owner-only access${mobile ? " @mobile" : ""}`, async ({ page, request }) => {
+    const suffix = randomUUID().slice(0, 8);
+    expect((await page.request.post("/auth/register", { data: { handle: `draft_owner_${suffix}`, password: "studio-lifecycle-test-password" } })).status()).toBe(201);
+    const source = { ...structuredClone(fixture), id: `exact-draft-${suffix}`, title: `Exact private draft ${suffix}`, provenance: { reviewStatus: "draft", sources: [] } };
+    const created = await page.request.post("/packs/drafts", { data: { document: source } });
+    expect(created.status(), await created.text()).toBe(201);
+    const { draft } = await created.json();
+    const editorPath = `/create/draft/${encodeURIComponent(draft.id)}`;
+    const getPath = `/packs/drafts/${encodeURIComponent(draft.id)}`;
+    expect((await request.post("/auth/register", { data: { handle: `draft_foreign_${suffix}`, password: "studio-lifecycle-test-password" } })).status()).toBe(201);
+    expect((await request.get(getPath)).status()).toBe(404);
+    const before = await (await page.request.get(getPath)).json();
+    await page.route(`**${getPath}`, async route => {
+      if (route.request().method() === "GET") await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "TEST_PRIVATE_READ", message: "private storage details" } }) });
+      else await route.continue();
+    });
+    await page.goto(editorPath);
+    await expect(page.getByRole("alert")).toContainText("This private draft could not be opened");
+    await expect(page.getByRole("alert")).not.toContainText("private storage details");
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveCount(0);
+    await page.unroute(`**${getPath}`);
+    await page.getByRole("button", { name: "Try again", exact: true }).click();
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveValue(JSON.stringify(draft.document, null, 2));
+    await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Create", exact: true })).toHaveAttribute("aria-current", "page");
+    await page.reload();
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveValue(JSON.stringify(draft.document, null, 2));
+    const after = await (await page.request.get(getPath)).json();
+    expect(after).toEqual(before);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    await page.getByRole("button", { name: "Start a new draft", exact: true }).click();
+    await expect(page).toHaveURL(/\/create\/new$/);
+    await expect(page.getByRole("button", { name: /^Position/ })).toBeVisible();
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveCount(0);
+    await page.goBack();
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveValue(JSON.stringify(draft.document, null, 2));
+    await page.goto("/create/draft/missing-private-draft");
+    await expect(page.getByRole("alert")).toContainText("This private draft could not be opened");
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveCount(0);
+    await page.getByRole("button", { name: "Return to Create", exact: true }).click();
+    await selectDraft(page, source.title);
+    await expect(page).toHaveURL(new RegExp(`/create/draft/${draft.id}$`));
+    await expect(page.getByLabel("Pack JSON", { exact: true })).toHaveValue(JSON.stringify(draft.document, null, 2));
   });
 }

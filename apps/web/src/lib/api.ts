@@ -1,4 +1,5 @@
 import type { ProviderHealthCapabilities } from "@chess-tabiya/runtime";
+import { assertSavedPackDraft } from "./pack-draft-response.js";
 import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime";
 import type {
   DrillPackDefinition,
@@ -1161,6 +1162,7 @@ export interface DrillClientApi extends RunApi {
   dismissSchedule?(scheduleId: string): Promise<void>;
   duplicateRun?(runId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun>;
   packDrafts?(): Promise<readonly PackDraft[]>;
+  packDraft?(draftId: string): Promise<PackDraft>;
   createPackDraft?(document: unknown): Promise<PackDraft>;
   updatePackDraft?(draftId: string, digest: string, document: unknown): Promise<PackDraft>;
   lintPackDraft?(draftId: string, document: unknown): Promise<PackValidation>;
@@ -1585,6 +1587,12 @@ export class DrillApi implements DrillClientApi {
     const body = await this.#json<{ readonly draft: PackDraft }>("/packs/drafts", {
       method: "POST", body: { document },
     });
+    return body.draft;
+  }
+
+  async packDraft(draftId: string): Promise<PackDraft> {
+    const body = await this.#json<{ readonly draft: unknown }>(`/packs/drafts/${encoded(draftId)}`);
+    assertSavedPackDraft(body.draft, draftId);
     return body.draft;
   }
 

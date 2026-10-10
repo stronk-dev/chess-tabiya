@@ -30592,6 +30592,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-rule-state.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3689",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9af252f8e666cef3b6a885b67ecff6b61299ddd2cc1753f77250e6d9dbf85820",
+      "uxItems": [],
+      "evidence": "tests/browser/studio-publication.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

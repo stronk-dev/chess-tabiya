@@ -27,7 +27,7 @@
   import { validAuthenticatedLearner } from "./lib/auth-response.js";
   import { assertClassroomDetailIdentity } from "./lib/classroom-response.js";
   import { validDistilledDraft } from "./lib/distill-response.js";
-  import { packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./lib/pack-draft-response.js";
+  import { assertSavedPackDraft, packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./lib/pack-draft-response.js";
   import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
   import { parseDueQueue, progressRecommendationSentence } from "./lib/progress-response.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
@@ -94,7 +94,7 @@
     type DeletionPreview,
     ApiError,
   } from "./lib/api.js";
-  import { HistoryRouter, routePath, routeTitle, type AppRoute } from "./lib/router.js";
+  import { HistoryRouter, isCreateRoute, routePath, routeTitle, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
   import {
     DrillSessionController,
@@ -269,6 +269,9 @@
   let drafts: readonly PackDraft[] = $state([]);
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
+  // One-shot route handoff from an owner-scoped read/create already completed in this view.
+  // Reload, history entry, another subject or another route always performs the private read.
+  let freshlyOpenedDraft: { readonly draft: PackDraft; readonly generation: number } | undefined;
   let studioActionError: string | undefined = $state();
   let studioPublicationFailure: { readonly draftId: string; readonly digest: string; readonly documentText: string; readonly issues: readonly PresentedValidationIssue[] } | undefined = $state();
   let studioMutationBusy: { readonly kind: "create" | "save" | "playtest" | "register" | "withdraw"; readonly draftId?: string } | undefined = $state();
@@ -532,7 +535,7 @@
   $effect(() => {
     const draft = selectedPackDraft;
     const documentText = studioJson;
-    if (route.name !== "create" || draft?.state !== "draft") {
+    if (!isCreateRoute(route) || draft?.state !== "draft") {
       packBufferValidation = undefined;
       packLintError = undefined;
       packLintState = "idle";
@@ -580,7 +583,7 @@
     const draftId = selectedShapeDraftId;
     const documentText = shapeStudioJson;
     const probeFen = shapeProbeFen;
-    if (route.name !== "create" || draftId === undefined) {
+    if (!isCreateRoute(route) || draftId === undefined) {
       shapeBufferValidation = undefined;
       shapeLintError = undefined;
       shapeLintState = "idle";
@@ -942,6 +945,9 @@
   }
 
   async function loadRoute(next: AppRoute): Promise<void> {
+    const openedHere = next.name === "create-draft" && freshlyOpenedDraft?.draft.id === next.draftId
+      && freshlyOpenedDraft.generation === loadGeneration ? freshlyOpenedDraft.draft : undefined;
+    freshlyOpenedDraft = undefined;
     const startedHere = next.name === "run" && freshlyStartedRun?.runId === next.runId ? freshlyStartedRun : undefined;
     freshlyStartedRun = undefined;
     const generation = ++loadGeneration;
@@ -962,7 +968,13 @@
       controller.stopSession();
     }
     try {
-      if (next.name === "home") {
+      if (openedHere !== undefined) {
+        drafts = [openedHere, ...drafts.filter(draft => draft.id !== openedHere.id)];
+        selectedDraftId = openedHere.id;
+        studioJson = JSON.stringify(openedHere.document, null, 2);
+        studioActionError = undefined;
+        withdrawConfirmId = undefined;
+      } else if (next.name === "home") {
         const loaded = await Promise.all([
           // Continue shows the newest run; the thread rail (ARR-a8) ranks facts over the recent page.
           initialRunPage(HOME_RUN_WINDOW),
@@ -1057,7 +1069,7 @@
         recommendations = loaded[4].recommendations;
         recommendationSelection = loaded[4].selection;
         repertoirePages=nextRepertoirePages;
-      } else if (next.name === "create") {
+      } else if (isCreateRoute(next)) {
         studioPublicationFailure = undefined;
         const loaded = await Promise.all([
           api.packDrafts?.() ?? Promise.resolve([]),
@@ -1070,7 +1082,34 @@
           api.conceptCatalogue?.() ?? Promise.resolve(undefined),
         ]);
         if (generation !== loadGeneration) return;
+        let openedDraft: PackDraft | undefined;
+        if (next.name === "create-draft") {
+          try {
+            // The production adapter reads the existing owner-only endpoint. Older embedded
+            // adapters may use their complete owned-draft list, never an arbitrary first entry.
+            const value = api.packDraft !== undefined
+              ? await api.packDraft(next.draftId)
+              : loaded[0].find(draft => draft.id === next.draftId);
+            assertSavedPackDraft(value, next.draftId);
+            openedDraft = value;
+          } catch {
+            throw new LearnerRouteError("This private draft could not be opened. It may no longer be available to this account. Try the read again or return to Create; no draft was changed.");
+          }
+        }
+        if (generation !== loadGeneration) return;
         [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities, packs] = loaded;
+        if (openedDraft !== undefined) {
+          drafts = [openedDraft, ...drafts.filter(draft => draft.id !== openedDraft.id)];
+          selectedDraftId = openedDraft.id;
+          studioJson = JSON.stringify(openedDraft.document, null, 2);
+          studioActionError = undefined;
+          withdrawConfirmId = undefined;
+        } else if (next.name === "create-new") {
+          selectedDraftId = undefined;
+          studioJson = "";
+          studioActionError = undefined;
+          withdrawConfirmId = undefined;
+        }
         authoringConcepts = loaded[7];
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
@@ -1812,15 +1851,16 @@
       if (api.createPackDraft === undefined || expectedPackId === "") throw new Error("Pack draft creation is unavailable");
       const draft = await api.createPackDraft(document);
       if (!validPackDraftIdentity(draft, expectedPackId)) throw new Error("Invalid pack draft response");
-      if (appMounted && action === studioMutationGeneration && generation === loadGeneration && route.name === "create") {
+      if (appMounted && action === studioMutationGeneration && generation === loadGeneration && isCreateRoute(route)) {
         drafts = [draft, ...drafts.filter((candidate) => candidate.id !== draft.id)];
         if (selectedDraftId === selection && studioJson === sourceJson) {
           selectedDraftId = draft.id;
           studioJson = JSON.stringify(draft.document, null, 2);
+          openKnownPackDraft(draft);
         }
       }
     } catch {
-      if (appMounted && action === studioMutationGeneration && generation === loadGeneration && route.name === "create") {
+      if (appMounted && action === studioMutationGeneration && generation === loadGeneration && isCreateRoute(route)) {
         studioActionError = "The draft could not be created. Check the JSON and try again.";
       }
     } finally {
@@ -1829,7 +1869,24 @@
   }
 
   function studioActionIsCurrent(action: number, generation: number): boolean {
-    return appMounted && action === studioMutationGeneration && generation === loadGeneration && route.name === "create";
+    return appMounted && action === studioMutationGeneration && generation === loadGeneration && isCreateRoute(route);
+  }
+
+  function selectPackDraft(draftId: string): void {
+    if (studioMutationBusy !== undefined) return;
+    try {
+      const draft = drafts.find(candidate => candidate.id === draftId);
+      assertSavedPackDraft(draft, draftId);
+      openKnownPackDraft(draft);
+    } catch {
+      routeError = "This private draft could not be opened. Try loading Create again; no draft was changed.";
+    }
+  }
+
+  function openKnownPackDraft(draft: PackDraft): void {
+    assertSavedPackDraft(draft, draft.id);
+    freshlyOpenedDraft = { draft, generation: loadGeneration };
+    navigate(routePath({ name: "create-draft", draftId: draft.id }));
   }
 
   function publishSavedDraft(saved: PackDraft, draftId: string, sourceJson: string): void {
@@ -1966,19 +2023,21 @@
       const draft = await work();
       if (!validPackDraftIdentity(draft, expectedPackId)) throw new Error("Invalid pack draft response");
       if (!appMounted || action !== createSeedGeneration) return false;
-      if (generation !== loadGeneration || route.name !== "create") return true;
+      if (generation !== loadGeneration || !isCreateRoute(route)) return true;
       drafts = [draft, ...drafts.filter((candidate) => candidate.id !== draft.id)];
       if (selectedDraftId === selection) {
         selectedDraftId = draft.id;
         studioJson = JSON.stringify(draft.document, null, 2);
+        openKnownPackDraft(draft);
+        const editorGeneration = loadGeneration;
         await tick();
-        if (generation === loadGeneration && route.name === "create" && selectedDraftId === draft.id) {
+        if (editorGeneration === loadGeneration && route.name === "create-draft" && selectedDraftId === draft.id) {
           document.getElementById("pack-studio-editor")?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }
       return true;
     } catch {
-      if (appMounted && action === createSeedGeneration && generation === loadGeneration && route.name === "create") {
+      if (appMounted && action === createSeedGeneration && generation === loadGeneration && isCreateRoute(route)) {
         createSeedError = createSeedPreparation === undefined
           ? "This draft could not be created. Check the source and try again."
           : "The game is saved, but its draft could not be prepared. Try finishing draft setup again.";
@@ -2046,7 +2105,7 @@
 
 
   function shapeActionIsCurrent(action: number, generation: number): boolean {
-    return appMounted && action === shapeMutationGeneration && generation === loadGeneration && route.name === "create";
+    return appMounted && action === shapeMutationGeneration && generation === loadGeneration && isCreateRoute(route);
   }
 
   function shapeRegistrationBlockReason(draft: ShapeDraft | undefined): string | undefined {
@@ -2700,7 +2759,7 @@
   {#if routeLoading}
     <main class="shell-view" aria-busy="true"><p>Loading Tabiya…</p></main>
   {:else if routeError}
-    <main class="shell-view"><h1>This page is temporarily unavailable.</h1><p role="alert">{routeError}</p><button class="primary" type="button" onclick={retryVisibleRoute}>Try again</button></main>
+    <main class="shell-view"><h1>This page is temporarily unavailable.</h1><p role="alert">{routeError}</p><button class="primary" type="button" onclick={retryVisibleRoute}>Try again</button>{#if route.name === "create-draft"}<button type="button" onclick={() => navigate("/create")}>Return to Create</button>{/if}</main>
   {:else if route.name === "home"}
     <main class="shell-view home" aria-labelledby="home-title">
       <p class="eyebrow">Tabiya / play the consequence</p>
@@ -3119,16 +3178,21 @@
       </section>
       <p class="honest">This is an attempt history and return queue, not a mastery score.</p>
     </main>
-  {:else if route.name === "create"}
+  {:else if isCreateRoute(route)}
     <main class="shell-view studio" aria-labelledby="create-title">
       <p class="eyebrow">Create / Pack Studio</p>
-      <h1 id="create-title">Author against the real validator.</h1>
-      <CreateSeedChooser {packs} {runs} busy={createSeedBusy} error={createSeedError} savedGamePending={createSeedPreparation !== undefined} onPosition={createPositionSeed} onGame={createGameSeed} onRun={createRunSeed} onPack={createPackSeed} onClearError={() => createSeedError = undefined} />
+      <h1 id="create-title">{route.name === "create-draft" ? draftTitle(selectedPackDraft?.document, "title", "Pack editor") : "Author against the real validator."}</h1>
+      {#if route.name === "create-draft"}
+        <p>This address reopens this private draft. Only saved changes are restored after a reload.</p>
+        <div class="row-actions"><button type="button" disabled={studioMutationBusy !== undefined} onclick={() => navigate("/create")}>All authoring sources</button><button type="button" disabled={studioMutationBusy !== undefined} onclick={() => navigate("/create/new")}>Start a new draft</button></div>
+      {:else}
+        <CreateSeedChooser {packs} {runs} busy={createSeedBusy} error={createSeedError} savedGamePending={createSeedPreparation !== undefined} onPosition={createPositionSeed} onGame={createGameSeed} onRun={createRunSeed} onPack={createPackSeed} onClearError={() => createSeedError = undefined} />
+      {/if}
       {#if !selectedDraftId}
       <aside class="resume-drafts" aria-label="Your drafts">
         <h2 id="resume-drafts-title">Resume one of your drafts</h2>
         <div class="row-actions">
-          {#each drafts as draft}<button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>{draftTitle(draft.document, "title", "Untitled pack draft")} · {labelFor("pack_draft_state", draft.state)}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
+          {#each drafts as draft}<button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => selectPackDraft(draft.id)}>{draftTitle(draft.document, "title", "Untitled pack draft")} · {labelFor("pack_draft_state", draft.state)}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
         </div>
       </aside>
       {/if}
@@ -3139,7 +3203,7 @@
         <aside aria-label="Your drafts">
           <h2>Your drafts</h2>
           {#each drafts as draft}
-            <button type="button" disabled={studioMutationBusy !== undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>
+            <button type="button" disabled={studioMutationBusy !== undefined} aria-current={route.name === "create-draft" && route.draftId === draft.id ? "page" : undefined} aria-describedby={studioMutationBusy !== undefined ? "studio-action-busy" : undefined} onclick={() => selectPackDraft(draft.id)}>
               {draftTitle(draft.document, "title", "Untitled pack draft")} · {labelFor("pack_draft_state", draft.state)}
             </button>
           {:else}<p>No database drafts yet. Paste a v{DRILL_PACK_SCHEMA_VERSION} pack to begin.</p>{/each}

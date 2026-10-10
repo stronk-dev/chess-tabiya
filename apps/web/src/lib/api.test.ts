@@ -34,6 +34,24 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("reads the requested private Studio draft through its encoded owner-scoped GET", async () => {
+    const draft = { id: "draft / one", packId: "one", document: { id: "one" }, digest: "saved-revision", state: "draft", validation: { valid: false, issues: [] } };
+    const requests: string[] = [];
+    const api = new DrillApi("", async (input, init) => {
+      requests.push(String(input));
+      expect(init?.method ?? "GET").toBe("GET");
+      expect(init?.body).toBeUndefined();
+      return json({ draft });
+    });
+    expect(await api.packDraft(draft.id)).toEqual(draft);
+    expect(requests).toEqual(["/packs/drafts/draft%20%2F%20one"]);
+  });
+
+  it("refuses a crossed private Studio response before handing it to the editor", async () => {
+    const api = new DrillApi("", async () => json({ draft: { id: "another", packId: "one", document: { id: "one" }, digest: "saved-revision", state: "draft", validation: { valid: true, issues: [] } } }));
+    await expect(api.packDraft("requested")).rejects.toThrow("saved draft");
+  });
+
   it("D3678 replays an unresolved Campaign gesture with its original command and refuses different operands", async () => {
     const bodies: unknown[] = [];
     let calls = 0, ids = 0;

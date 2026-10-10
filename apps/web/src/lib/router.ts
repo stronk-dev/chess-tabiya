@@ -7,12 +7,14 @@ export type StaticRouteName =
   | "learn"
   | "live"
   | "create"
+  | "create-new"
   | "library"
   | "settings"
   | "campaign";
 
 export type AppRoute =
   | { readonly name: StaticRouteName }
+  | { readonly name: "create-draft"; readonly draftId: string }
   | { readonly name: "run"; readonly runId: string }
   | { readonly name: "story"; readonly runId: string; readonly nodeId?: string; readonly branchId?: string }
   | { readonly name: "live-session"; readonly sessionId: string }
@@ -37,6 +39,7 @@ const STATIC_ROUTES: Readonly<Record<string, StaticRouteName>> = Object.freeze({
   "/learn": "learn",
   "/live": "live",
   "/create": "create",
+  "/create/new": "create-new",
   "/library": "library",
   "/settings": "settings",
   "/campaign": "campaign",
@@ -59,6 +62,8 @@ const ROUTE_TITLES: Readonly<Record<AppRoute["name"], string>> = Object.freeze({
   "principle-entry": "Principle",
   "opening-entry": "Opening",
   create: "Create",
+  "create-new": "New draft",
+  "create-draft": "Pack editor",
   library: "Library",
   settings: "Settings",
   campaign: "Campaign",
@@ -78,6 +83,13 @@ export function parseRoute(location: Pick<Location, "pathname"> & Partial<Pick<L
   const pathname = normalizedPath(location.pathname);
   const staticName = STATIC_ROUTES[pathname];
   if (staticName !== undefined) return Object.freeze({ name: staticName });
+  const draft = /^\/create\/draft\/([^/]+)$/.exec(pathname);
+  if (draft !== null) {
+    try {
+      const draftId = decodeURIComponent(draft[1]!);
+      if (draftId.trim() !== "") return Object.freeze({ name: "create-draft", draftId });
+    } catch { /* malformed private draft identities route to not-found */ }
+  }
   const run = /^\/play\/run\/([^/]+)$/.exec(pathname);
   if (run !== null) {
     try {
@@ -128,6 +140,7 @@ export function parseRoute(location: Pick<Location, "pathname"> & Partial<Pick<L
 }
 
 export function routePath(route: Exclude<AppRoute, { name: "not-found" }>): string {
+  if (route.name === "create-draft") return `/create/draft/${encodeURIComponent(route.draftId)}`;
   if(route.name==="run")return `/play/run/${encodeURIComponent(route.runId)}`;
   if(route.name==="story") {
     const query = [route.branchId === undefined ? undefined : `branch=${encodeURIComponent(route.branchId)}`, route.nodeId === undefined ? undefined : `node=${encodeURIComponent(route.nodeId)}`].filter(value => value !== undefined).join("&");
@@ -141,6 +154,10 @@ export function routePath(route: Exclude<AppRoute, { name: "not-found" }>): stri
   if(route.name==="opening-entry")return `/library/opening/${encodeURIComponent(route.positionKey)}`;
   if(route.name==="campaign-run")return `/campaign/${encodeURIComponent(route.campaignRunId)}`;
   return Object.entries(STATIC_ROUTES).find(([, name]) => name === route.name)![0];
+}
+
+export function isCreateRoute(route: AppRoute): boolean {
+  return route.name === "create" || route.name === "create-new" || route.name === "create-draft";
 }
 
 /** Minimal history-API router. Route state, not screen components, owns location. */

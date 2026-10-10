@@ -3620,6 +3620,89 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("opens the exact owner-scoped Studio draft from a reloadable URL", async () => {
+    history.replaceState(null, "", "/create/draft/exact-draft");
+    const draft = { id: "exact-draft", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const packDraft = vi.fn(async () => draft);
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), packDraft, async packDrafts() { return []; }, async lintPackDraft() { return draft.validation; } } as DrillClientApi,
+      router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    await vi.waitFor(() => expect(packDraft).toHaveBeenCalledWith(draft.id));
+    await vi.waitFor(() => expect(document.querySelector<HTMLTextAreaElement>("#studio-json")?.value).toBe(JSON.stringify(pack, null, 2)));
+    expect(location.pathname).toBe("/create/draft/exact-draft");
+    await unmount(component);
+  });
+
+  it.each(["missing", "crossed"])("keeps a %s named draft out of the editor and retries only the private read", async (failure) => {
+    history.replaceState(null, "", "/create/draft/exact-draft");
+    const draft = { id: "exact-draft", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const packDraft = vi.fn().mockImplementationOnce(async () => {
+      if (failure === "missing") throw new Error("private SQLite path");
+      return { ...draft, id: "other-draft" };
+    }).mockResolvedValue(draft);
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), packDraft, async packDrafts() { return [draft]; }, async lintPackDraft() { return draft.validation; } } as DrillClientApi,
+      router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("This private draft could not be opened"));
+    expect(document.querySelector("#studio-json")).toBeNull();
+    expect(document.body.textContent).not.toContain("private SQLite path");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!.click();
+    await vi.waitFor(() => expect(packDraft).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector("#studio-json")).not.toBeNull());
+    expect(location.pathname).toBe("/create/draft/exact-draft");
+    await unmount(component);
+  });
+
+  it.each(["registered", "withdrawn"] as const)("reopens a %s draft without enabling mutable draft actions", async (state) => {
+    history.replaceState(null, "", "/create/draft/retained-draft");
+    const draft: PackDraft = { id: "retained-draft", packId: pack.id, document: pack, digest, state, validation: { valid: true, issues: [] } };
+    const updatePackDraft = vi.fn();
+    const playtestPackDraft = vi.fn();
+    const registerPackDraft = vi.fn();
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), async packDraft() { return draft; }, updatePackDraft, playtestPackDraft, registerPackDraft },
+      router: new HistoryRouter(window), storage: new MemoryStorage(),
+    } });
+    await vi.waitFor(() => expect(document.querySelector<HTMLTextAreaElement>("#studio-json")?.value).toBe(JSON.stringify(pack, null, 2)));
+    for (const label of ["Save", "Save & playtest", "Register community pack"]) {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find(candidate => candidate.textContent === label)!;
+      expect(button.disabled).toBe(true);
+      button.click();
+    }
+    expect(updatePackDraft).not.toHaveBeenCalled();
+    expect(playtestPackDraft).not.toHaveBeenCalled();
+    expect(registerPackDraft).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("cannot attach a departed named-draft read over a newer editor", async () => {
+    history.replaceState(null, "", "/create/draft/older");
+    const older = deferred<PackDraft>();
+    const second = { id: "newer", packId: pack.id, document: { ...pack, title: "Current private draft" }, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
+    const packDraft = vi.fn(async (id: string) => id === "older" ? older.promise : second);
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: {
+      api: { ...api(), packDraft, async packDrafts() { return []; }, async lintPackDraft() { return second.validation; } },
+      router, storage: new MemoryStorage(),
+    } });
+    await vi.waitFor(() => expect(packDraft).toHaveBeenCalledWith("older"));
+    router.navigate("/create/draft/newer");
+    await vi.waitFor(() => expect(document.querySelector<HTMLTextAreaElement>("#studio-json")?.value).toContain("Current private draft"));
+    older.resolve({ ...second, id: "older", document: { ...pack, title: "Departed private draft" } });
+    await tick();
+    await Promise.resolve();
+    expect(location.pathname).toBe("/create/draft/newer");
+    expect(document.querySelector<HTMLTextAreaElement>("#studio-json")!.value).toContain("Current private draft");
+    expect(document.body.textContent).not.toContain("Departed private draft");
+    expect(document.querySelector<HTMLAnchorElement>('nav a[aria-current="page"]')?.textContent).toBe("Create");
+    router.navigate("/create/new");
+    await vi.waitFor(() => expect(document.querySelector("#studio-json")).toBeNull());
+    expect(document.body.textContent).toContain("Author against the real validator.");
+    await unmount(component);
+  });
+
   it("keeps Studio save single-flight and replaces storage diagnostics with retry copy", async () => {
     history.replaceState(null, "", "/create");
     const draft = { id: "save-lifecycle-draft", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };
@@ -4102,10 +4185,10 @@ describe("application shell", () => {
     const studioApi: DrillClientApi = { ...api(), createPackDraft, distillRun, importGame, exportPack };
     const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
     const backToDoors = async (): Promise<void> => {
-      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Back to four choices")!;
-      await vi.waitFor(() => expect(button.disabled).toBe(false));
-      button.click();
-      await tick();
+      const button = (): HTMLButtonElement | undefined => [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Start a new draft");
+      await vi.waitFor(() => expect(button()?.disabled).toBe(false));
+      button()!.click();
+      await vi.waitFor(() => expect(document.querySelectorAll(".seed-doors button")).toHaveLength(4));
     };
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("What are you starting from?"));

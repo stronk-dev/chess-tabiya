@@ -3757,7 +3757,7 @@ pack-loading-check:
 
 .PHONY: studio-publication-check studio-publication-browser-check
 studio-publication-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/pack-draft-response.test.ts apps/web/src/lib/pack-validation-presentation.test.ts apps/server/src/pack-studio.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/router.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/pack-draft-response.test.ts apps/web/src/lib/pack-validation-presentation.test.ts apps/server/src/pack-studio.test.ts
 	$(MAKE) typecheck
 
 studio-publication-browser-check:

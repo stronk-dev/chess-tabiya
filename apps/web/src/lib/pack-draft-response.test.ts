@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { PackDraft } from "./api.js";
-import { packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./pack-draft-response.js";
+import { assertSavedPackDraft, packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./pack-draft-response.js";
 
 function draft(overrides: Partial<PackDraft> = {}): PackDraft {
   return {
@@ -16,6 +16,14 @@ function draft(overrides: Partial<PackDraft> = {}): PackDraft {
 }
 
 describe("pack draft response identity", () => {
+  it.each(["draft", "registered", "withdrawn"] as const)("opens a matching %s saved draft without requiring validation-clean content", state => {
+    expect(() => assertSavedPackDraft(draft({ state }), "draft-1")).not.toThrow();
+  });
+
+  it.each([null, [], {}, draft({ id: "other" }), draft({ packId: "other" }), draft({ document: null }), draft({ digest: "" }), { ...draft(), state: "invented" }, { ...draft(), validation: null }, { ...draft(), validation: { valid: "true", issues: [] } }, { ...draft(), validation: { valid: true, issues: [null] } }, { ...draft(), validation: { valid: false, issues: [{ code: "X", path: "private-file", message: "x" }] } }].map(value => ({ value })))("refuses unusable named-draft reads %#", ({ value }) => {
+    expect(() => assertSavedPackDraft(value, "draft-1")).toThrow();
+  });
+
   it("accepts the requested mutable draft", () => {
     expect(validPackDraftIdentity(draft(), "pack-1")).toBe(true);
   });

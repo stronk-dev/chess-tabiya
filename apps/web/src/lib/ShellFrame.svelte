@@ -37,6 +37,7 @@
   ] as const;
 
   function active(name: string): boolean {
+    if (name === "create" && (route.name === "create-new" || route.name === "create-draft")) return true;
     return route.name === name || (name === "campaign" && route.name === "campaign-run") || (name === "play" && (route.name === "run" || route.name === "pack")) || (name === "library" && (route.name === "shape-entry" || route.name === "principle-entry" || route.name === "opening-entry")) || (name === "rating" && route.name === "profile") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
   }
 

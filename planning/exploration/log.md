@@ -25209,3 +25209,28 @@ Campaign was the one capability with no API, route or content. Now:
   remain. No fresh browser, remote CI or native release-image result is claimed.
 - Close D3688 in ledger/state/queue/docs/roadmap, keep D3687 blocked and preserve all product,
   official-content, source-availability, learner-eligibility and whole-capability states.
+
+## 2026-10-11 (codex) — D3689 exact private Pack Studio editor routes
+
+- Reproduce the archived pack-studio §13a omission with four original route/mounted
+  failures. Restore `/create/new` and `/create/draft/:draftId` under its existing
+  owner-only read and private-playtest contracts, not a new format or authoring policy.
+- Creation and selection navigate to the named editor; direct entry, reload and
+  browser-history return use the exact single-draft GET. Validate identity and usable
+  validation while preserving invalid work. A current-view one-shot handoff avoids
+  rereading a draft just obtained by the same owned read/create; later entry still reads.
+- Missing/crossed reads offer generic retry/return copy, never private diagnostics or
+  another editor. Departed responses cannot replace the current draft. Registered and
+  withdrawn rows retain read-only actions. Keep all four source doors reachable.
+- All 200 focused software checks and clean workspace types pass. Four actual desktop/
+  phone journeys cover creation, save, private playtest, exact reopening, publication,
+  failed-read retry, cross-account 404 and new/history/missing-route recovery. Earlier
+  playtest graphs and bytes remain unchanged after later edits/publication.
+- Complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 4,707 software/369 files, seven unchanged-budget performance/four files,
+  247 content/25 files, clean types/governance/corpus/capability/packaging/build and
+  291 browser passes across all four tiers; one existing optional skip, zero retries,
+  all 112 composition cells successful and unretried. Existing bundle warnings remain.
+- Close D3689 in ledger/state/queue/docs/roadmap and refresh the existing total overview.
+  No authored chess, pack format, migration, publication rule, whole capability/milestone,
+  official-content, remote-CI or native release-image promotion. No push or deployment.

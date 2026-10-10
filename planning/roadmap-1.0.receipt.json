@@ -2,12 +2,12 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:55f8bb13795e381ff1fdcfc9ca4c0691b719e3b1470d5b25f343f28b6e6e3dba",
+    "roadmap": "sha256:75fd9fd717773adbf0028da4124ebf489459656e9bf7ca6ba6d88146c8d86bb7",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:92e7710e7a8e9294358cbd89ba0982a2e2c729425ac0d9d3b632fd3098658cbd",
+    "workState": "sha256:7a8a6080552a95d5cc10a3ce8fdf160707fca38424929442a65f3b0a25f49ea1",
     "rfcRegister": "sha256:5d42097815c9f933c56effc2be0d09ef0347570dcab94c85746d53796c95c200",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
-    "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
+    "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
     "rest": "sha256:f6e50e9cabfbf4ec9a8302356dbeab1be138559ab0251bdd3144708ad8ec40df"
   },
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 14,
       "blocked": 1072,
-      "done": 1560,
+      "done": 1561,
       "refused": 161
     },
     "workItems": {
@@ -52,7 +52,7 @@
       "not_applicable": 8
     },
     "appRoutes": {
-      "live": 16,
+      "live": 18,
       "live_but_inadequate": 4,
       "missing": 0
     },
@@ -1110,8 +1110,8 @@
       ],
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-10-10",
-        "summary": "D3686 repairs the implemented read-time Library return journey under theory-drill-current-joins: bounded saved-history claims, explicit earlier-page lookup, due-only intake language, exact pack admission and read-only retry/refresh. Seven original mounted controls fail on the predecessor; ten permanent return controls and eleven existing Library controls pass with clean types. Two built desktop/touch-phone journeys create 52 real saved sessions, find the earlier owned pack run through a failed-read/retry path, preserve pending/native focus and reopen unchanged graph/events. Missing adapters, crossed roots, inconsistent page counts and departed reads cannot become empty success. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 4663 software cases/368 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, clean types/governance/corpus/capability/packaging/build and 289 browser cases across all four tiers; one existing optional Maia skip, zero retries and all 150 input/112 composition cells. Existing Campaign, Play, Review and classroom repairs remain delivered; missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards and full release recovery remain open. No new API, migration, schedule policy, source-bound launch, whole capability/milestone, remote-CI or native release-image promotion.",
+        "at": "2026-10-11",
+        "summary": "D3689 restores the already-accepted Pack Studio new/named editor routes under archived pack-studio §4/§8/§13. Creation and selection open the exact private draft; direct entry, reload and history use the existing owner-only single-draft GET. Missing/crossed/departed reads refuse safely, retry does not mutate a draft, invalid work remains editable and registered/withdrawn actions stay read-only. Four original route/mounted controls reproduce the omission; 200 focused checks, clean types and four actual desktop/phone publication/reopening/retry journeys pass, preserving saved documents and earlier immutable playtest graphs/bytes. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 4707 software cases/369 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files and 291 browser passes across all four tiers; one existing optional skip, zero retries and all 112 composition cells successful/unretried. Prior Library, Review, Play, Campaign and classroom repairs remain delivered. Source adoption/useful selection, skills, calibrated bots, official content, Campaign curriculum/rewards and full recovery remain open. No format, migration, publication rule, authored chess, whole capability/milestone, remote-CI or native release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/DrillScreen.svelte",
@@ -1139,6 +1139,13 @@
           "docs/classrooms.md",
           "apps/web/src/lib/TheoryEntryScreen.svelte",
           "apps/web/src/lib/library-return.test.ts",
+          "apps/web/src/lib/router.ts",
+          "apps/web/src/lib/router.test.ts",
+          "apps/web/src/lib/pack-draft-response.ts",
+          "apps/web/src/lib/pack-draft-response.test.ts",
+          "tests/browser/studio-publication.spec.ts",
+          "docs/pack-studio.md",
+          "rfc/archive/pack-studio.md",
           "apps/web/src/lib/theory-library.test.ts",
           "docs/return-and-progression.md",
           "rfc/theory-drill-current-joins.md"
@@ -1183,6 +1190,11 @@
             "kind": "work_state",
             "id": "D3686",
             "digest": "sha256:27a71d69301e954c36cea4efd85384a9cd7fcef148c671e4f1595588392d553b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3689",
+            "digest": "sha256:9af252f8e666cef3b6a885b67ecff6b61299ddd2cc1753f77250e6d9dbf85820"
           }
         ]
       },
@@ -1860,7 +1872,7 @@
         "retired": 1
       },
       "routes": {
-        "live": 6,
+        "live": 8,
         "live_but_inadequate": 0,
         "missing": 0
       },

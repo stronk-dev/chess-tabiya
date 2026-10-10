@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3689]] is closed: Pack Studio's accepted new/named editor routes
+use the existing owner-only single-draft GET on direct entry, reload and history.
+Four original controls reproduce the omission; 200 focused checks, clean types and
+four real desktop/phone publication/reopening/retry journeys pass. Missing/crossed/
+departed reads refuse safely; invalid work and immutable playtest bytes survive.
+Complete normal local gates pass 4,707 software/369 files, seven unchanged-budget
+performance/four files, 247 content/25 files and 291 browser tests: one optional
+skip, zero retries. No new format, migration, publication rule, chess prose,
+whole-content completion, remote-CI or native release-image claim follows.
+
 2026-10-10 — [[D3688]] is closed under accepted semantic-validation-authority Slice B:
 sixteen both-colour material/mobility cases retain exact count-vector and destination
 deltas, including promotion without increased magnitude and a pawn-induced knight

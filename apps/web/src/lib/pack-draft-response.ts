@@ -2,6 +2,28 @@ import type { PackDraft } from "./api.js";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { graduationEntries, type PresentedValidationIssue } from "./pack-validation-presentation.js";
 
+/** Saved work may be incomplete or read-only; identity and usable validation must still match. */
+export function assertSavedPackDraft(value: unknown, expectedDraftId: string): asserts value is PackDraft {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError("Invalid saved draft response");
+  const draft = value as Record<string, unknown>;
+  const document = draft.document;
+  const validation = draft.validation;
+  if (draft.id !== expectedDraftId || expectedDraftId.trim() === ""
+    || typeof draft.packId !== "string" || draft.packId.trim() === ""
+    || typeof draft.digest !== "string" || draft.digest.trim() === ""
+    || !["draft", "registered", "withdrawn"].includes(draft.state as string)
+    || document === null || typeof document !== "object" || Array.isArray(document)
+    || (document as Record<string, unknown>).id !== draft.packId
+    || validation === null || typeof validation !== "object" || Array.isArray(validation)) throw new TypeError("Invalid saved draft response");
+  const result = validation as Record<string, unknown>;
+  if (typeof result.valid !== "boolean" || !Array.isArray(result.issues)
+    || result.issues.some(issue => issue === null || typeof issue !== "object" || Array.isArray(issue)
+      || typeof issue.code !== "string" || issue.code.trim() === ""
+      || typeof issue.path !== "string" || (issue.path !== "" && !issue.path.startsWith("/"))
+      || typeof issue.message !== "string"
+      || (issue.severity !== undefined && issue.severity !== "error" && issue.severity !== "warning"))) throw new TypeError("Invalid saved draft validation");
+}
+
 /** Only the publication validator's structured errors are safe author-facing details. */
 export function parsePackPublicationIssues(value: unknown): readonly PresentedValidationIssue[] | undefined {
   if (!Array.isArray(value)) return undefined;

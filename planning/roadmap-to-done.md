@@ -28,7 +28,7 @@ is **partial**, not complete. Official content, remaining workflows and release
 proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
-## Product inventory — 2026-10-10
+## Product inventory — 2026-10-11
 
 ### At a glance
 
@@ -58,14 +58,26 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3688]]: 273 UX items complete, 272 live and 24
-retired; 1,716 live ledger items, all assigned, alongside 1,560 done and 161 refused. The 462
+Current checked inventory through [[D3689]]: 273 UX items complete, 272 live and 24
+retired; 1,716 live ledger items, all assigned, alongside 1,561 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest Studio route repair: [[D3689]] restores the archived requirement for `/create/new`
+and `/create/draft/:draftId`. Creation and selection open a named private editor; direct entry,
+reload and history read the exact owned draft. Missing/crossed/departed reads cannot replace the
+editor, failed reads have a safe retry/return path, and registered/withdrawn actions remain
+read-only. Four original controls reproduce the omission; 200 focused checks and clean types pass.
+Four real desktop/phone publication/reopening/retry journeys preserve private access, saved
+documents and earlier immutable playtest bytes. Complete normal local verification/build passes
+4,707 software/369 files, seven unchanged-budget performance/four files, 247 content/25 files
+and 291 browser tests across all four tiers: one existing optional skip, zero retries and
+112/112 unretried composition cells. No pack format, migration, publication rule, authored chess,
+whole capability/milestone, official-content, remote-CI or native release-image promotion follows.
 
 Latest Library return repair: [[D3686]] exposes earlier owned rehearsals through explicit
 50-run paging and read-only retry/refresh. One page no longer establishes an empty history;

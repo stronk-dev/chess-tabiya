@@ -9,6 +9,24 @@ import { REVIEW_FIXTURE_AT, reviewFixtureRun } from "../../../../packages/runtim
 import type { RunGraph } from "./api.js";
 
 describe("application router", () => {
+  it("opens the accepted Studio seed and exact named-draft routes, including reload and malformed IDs", () => {
+    expect(parseRoute({ pathname: "/create/new" })).toEqual({ name: "create-new" });
+    expect(routePath({ name: "create-new" })).toBe("/create/new");
+    for (const draftId of ["draft-one", "draft / 100%", "Grünfeld"] ) {
+      const draft = { name: "create-draft", draftId } as const;
+      const path = `/create/draft/${encodeURIComponent(draftId)}`;
+      expect(parseRoute({ pathname: path })).toEqual(draft);
+      expect(routePath(draft)).toBe(path);
+      history.replaceState(null, "", path);
+      const reloaded = new HistoryRouter(window);
+      expect(reloaded.route).toEqual(draft);
+      reloaded.destroy();
+    }
+    for (const pathname of ["/create/draft/%20", "/create/draft/%E0%A4%A", "/create/draft/", "/create/draft/a/b"] ) {
+      expect(parseRoute({ pathname }).name).toBe("not-found");
+    }
+  });
+
   it("parses every shell route and encoded run deep link", () => {
     expect(
       ["/", "/play", "/review", "/rating", "/profile", "/learn", "/live", "/create", "/library", "/settings"].map(
