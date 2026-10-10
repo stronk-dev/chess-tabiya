@@ -1101,6 +1101,7 @@ export {
   REVIEW_MAP_CONVENTION,
   REVIEW_MOMENT_BUDGET,
   reviewMapProjection,
+  reviewMoveNumber,
   selectReviewMoments,
   type ReviewAccuracy,
   type ReviewMapContext,

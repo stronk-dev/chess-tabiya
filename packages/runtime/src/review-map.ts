@@ -4,6 +4,8 @@
 // not detect (story.ts and the recorded-semantic-path compiler do) and it names no best move, no
 // principal variation and no praise class (§7).
 
+import { parseFen } from "chessops/fen";
+
 import { branchPath } from "./branch-path.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { evidenceForConsumer, type DeclaredEvidence, type EvidenceRole } from "./evidence-contract.js";
@@ -203,7 +205,14 @@ const GRADE_ABSTENTIONS: Readonly<Record<string, ReviewTemplateId>> = Object.fre
   mate_score_inconsistent: "grade.abstention.mate_score_inconsistent",
 });
 
-const moveNumberOf = (ply: number): number => Math.max(1, Math.ceil(ply / 2));
+/** Recorded chess numbering, independent of the rehearsal's root-relative ply counter. */
+export function reviewMoveNumber(fen: string, afterMove = false): number {
+  const setup = parseFen(fen).unwrap();
+  // Black's recorded move increments the fullmove counter in its resulting position.
+  const number = setup.fullmoves - (afterMove && setup.turn === "white" ? 1 : 0);
+  if (number < 1) throw new TypeError("Review move has no valid recorded fullmove number");
+  return number;
+}
 /** The side to move in a FEN. */
 const sideToMoveOf = (fen: string): GradeSide => fen.split(" ")[1] === "b" ? "black" : "white";
 const sideOfMove = (parentFen: string): GradeSide => sideToMoveOf(parentFen);
@@ -452,7 +461,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     // Third-party annotation glyphs never reach this surface: SAN is regenerated from the legal move.
     if (SAN_GLYPH.test(san)) throw new TypeError(`Review Map SAN ${san} carries an annotation glyph`);
     const side = sideOfMove(parent.fen);
-    const moveNumber = moveNumberOf(node.ply);
+    const moveNumber = reviewMoveNumber(parent.fen);
     const decision = decide(input.viewer, input.context, side, packets.get(parent.id), packets.get(node.id));
     decisions[side].push(decision);
     const grade = decision.grade === undefined ? undefined : (() => {
@@ -500,7 +509,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     const labels = storyEvidenceSourceLabels(moment);
     const kinds = moment.kinds.map((kind) => reviewText(MOMENT_KIND_TEMPLATES[kind]));
     const heading = kinds.length <= 1 ? kinds[0] ?? reviewText("moves.row.moment") : reviewText("kind.join", { first: kinds[0]!, rest: kinds.slice(1).join(" + ") });
-    const number = moveNumberOf(moment.ply);
+    const number = reviewMoveNumber(moment.fen, moment.san !== null);
     return Object.freeze({
       nodeId: moment.nodeId, entryNodeId: moment.entryNodeId, ply: moment.ply, san: moment.san, fen: moment.fen,
       phase: moment.phase, kinds: moment.kinds, heading,

@@ -211,7 +211,11 @@ evaluation job, writes no event and persists no grade.
   departure/re-entry retires old success/failure without locking the new view. It never reveals,
   claims a lease, rewinds or forks. Normal evidence coordination remains unchanged. These controls
   do not confer stronger source, grade, usefulness or whole-Review completion claims.
-- **Move list.** Every ply of the line, with number, SAN and side. SAN is regenerated from the
+- **Move list.** Every ply of the line, with number, SAN and side. The displayed chess move
+  number comes from the recorded FEN fullmove counter, not root-relative rehearsal ply;
+  Black-first and non-1 starts keep their original numbering. Row/graph labels, moment
+  Retry/Compare controls and Analyze's line/absence captions use that same counter.
+  Root-relative ply and run/node/entry identities remain unchanged. SAN is regenerated from the
   legal move, so third-party annotation glyphs, NAGs and comments never reach this surface (the
   import record has not stored them since [[D959]]; a record imported before that fix may still carry
   them in its stored PGN). Arrow keys select and focus the adjacent move; Home/End select and focus

@@ -1696,23 +1696,30 @@
         "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3665 binds Review Analyze to its exact requested run/branch/move/entry and preserves one native action through pending, success, failure and hide. Crossed responses fail visibly; navigation, retry and departure retire late completions. Three predecessor-red controls, 185 focused checks, clean types and two desktop/touch-phone Analyze-to-different-retry-to-Compare journeys pass, retaining original play. Complete sequential make roadmap-receipt verify-awake build test-browser-ci-awake passes 4459 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance/packaging/build and 271 browser cases (206 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. D3638's exact read/recovery and earlier Profile, Studio, account, Support and Campaign repairs stand. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No new source/search/grade/moment policy, whole capability, milestone, native release-image or remote-CI promotion.",
+          "summary": "D3668 preserves recorded FEN move numbers through Review rows, moments, graph, Analyze and Retry/Compare. White/Black starts at fullmove 1/37 retain local ply and saved play; the parser refuses crossed numbering. Permanent predecessor failures, 210 focused/87 authenticated application controls, clean types and six actual desktop/touch-phone journeys pass, retaining the original line through a different legal retry and Compare. Complete sequential make roadmap-receipt verify-awake build test-browser-ci-awake passes 4511 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance/packaging/build and 275 browser cases (210 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. D3665's exact Analyze identity/focus/recovery and earlier delivery stand. D3669/D3670 retain Story/Profile numbering source-contract gaps. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No source/search/grade policy, whole capability, milestone, native release-image or remote-CI promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/web/src/App.svelte",
             "apps/web/src/lib/ReviewMapScreen.svelte",
             "apps/web/src/lib/review-response.ts",
             "apps/web/src/lib/review-map-remainder.test.ts",
+            "apps/web/src/lib/review-map-screen.test.ts",
+            "packages/runtime/src/review-map.ts",
+            "packages/runtime/src/review-map.test.ts",
+            "packages/runtime/src/review-analysis.ts",
+            "packages/runtime/src/review-map-remainder.test.ts",
+            "apps/server/src/review-map.test.ts",
             "tests/browser/drill.spec.ts",
             "docs/review-evidence.md",
+            "docs/game-import-and-story.md",
             "rfc/review-map.md",
             "planning/exploration/log.md"
           ],
           "anchors": [
             {
               "kind": "work_state",
-              "id": "D3665",
-              "digest": "sha256:d8e1cd20ea2bb40cc9e2d32f2411edb31938d42ba2570626f3363911eedb8e8d"
+              "id": "D3668",
+              "digest": "sha256:e51271a43789f0973f0e9b515bdffff029d3865f825a8a05bbb8b7f9c3ed0313"
             },
             {
               "kind": "rfc",

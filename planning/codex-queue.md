@@ -12,6 +12,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3668]] repairs Review's FEN numbering through rows, moment labels, Analyze and its
+absence captions, graph and Retry/Compare action labels. Local ply and saved play stay
+unchanged. D3668 is closed: permanent predecessor failures, 210 focused/87 application controls,
+clean types and six native journeys pass. Full normal gates pass 4,511 software, seven unchanged-
+budget performance, 246 content and 275 browser cases, one optional skip and zero retries.
+The class audit records [[D3669]] (Story title)
+and [[D3670]] (Profile contributor labels) separately: those contracts currently omit the
+recorded FEN counter/mover inputs, unlike Review. Specify their grounded inputs through
+the existing Story/player-style contracts before claiming those paths fixed; do not infer
+from local ply or silently widen a sealed producer.
+
 [[D3667]] extends the admitted semantic-validation Slice B with sixteen both-colour
 gained/lost positives and eight populated negatives for occupied attack/defence, slider ray
 and defended duty. Twenty-nine controls fail on the predecessor; all 83 focused controls

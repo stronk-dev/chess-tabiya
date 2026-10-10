@@ -30406,6 +30406,31 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3668",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e51271a43789f0973f0e9b515bdffff029d3865f825a8a05bbb8b7f9c3ed0313",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/review-map-screen.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3669",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fed6e095c5ee92f6f7af2ca2688e53f27f684665fb5d6dc297cfe56472019f54",
+      "uxItems": [],
+      "owner": "review-and-return"
+    },
+    {
+      "id": "D3670",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e7c18fdc32d4294dec0e87bc71d21e9da81b10d07c21938d36097cd524a524ec",
+      "uxItems": [],
+      "owner": "learner-history"
     }
   ]
 }

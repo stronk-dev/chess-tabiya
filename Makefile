@@ -3657,7 +3657,7 @@ bot-rematch-browser-check:
 
 .PHONY: review-route-check
 review-route-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts packages/runtime/src/review-map.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts packages/runtime/src/review-map.test.ts packages/runtime/src/review-map-remainder.test.ts
 
 .PHONY: review-analysis-browser-check
 review-analysis-browser-check:

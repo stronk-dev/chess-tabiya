@@ -8,6 +8,7 @@ import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { parsePresentationReceipt, presentedSentence, type PresentationReceipt } from "@chess-tabiya/runtime";
+import type { ReviewMap } from "../../web/src/lib/api.js";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -114,8 +115,8 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   }
 
   it.each([
-    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", line: "1. d3 Bf3 *", squares: ["d3", "f3"] },
-    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", line: "1... d6 Bf6 *", squares: ["d6", "f6"] },
+    { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 37", line: "37. d3 Bf3 *", numbers: [37, 37], labels: ["37. d3", "37… Bf3"], squares: ["d3", "f3"] },
+    { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 37", line: "37... d6 38. Bf6 *", numbers: [37, 38], labels: ["37… d6", "38. Bf6"], squares: ["d6", "f6"] },
   ])("D3632/D3633 reaches Review's recorded consumer and keeps its complete presentation ($line)", async value => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "review_relation_owner");
@@ -124,8 +125,11 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const before = tableSnapshot(databasePath);
     const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
     expect(response.status, await response.clone().text()).toBe(200);
-    const review = await response.json() as ReviewPayload;
+    const review = await response.json() as ReviewMap;
     expect(review.rows).toHaveLength(2);
+    expect(review.rows.map(row => row.ply)).toEqual([1, 2]);
+    expect(review.rows.map(row => row.moveNumber)).toEqual(value.numbers);
+    expect(review.rows.map(row => row.label)).toEqual(value.labels);
     const items = parsePresentationReceipt(review.rows[1]!.packet).filter(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure");
     expect(items.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
     expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });

@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { REVIEW_MAP_TEMPLATES, judgementWordsOutsideGrounding, recordedSemanticPath, reviewMapProjection, reviewPacketForRun, reviewText, storyMomentsForRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_TEMPLATES, attachEvidence, commitMove, exactLegalMoves, fork, judgementWordsOutsideGrounding, recordedSemanticPath, reviewMapProjection, reviewPacketForRun, reviewText, rewind, storyMomentsForRun, type DrillRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -18,15 +18,15 @@ import { storyCardDocument } from "./story-card.js";
 const ROOT = `${process.cwd()}/`;
 afterEach(() => { document.body.replaceChildren(); vi.restoreAllMocks(); });
 
-function payload(options: { readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number; readonly packet?: boolean } = {}): ReviewMap {
-  const run = reviewFixtureRun({ id: "web-review", ...(options.evaluated === undefined ? {} : { evaluated: options.evaluated }), ...(options.plies === undefined ? {} : { plies: options.plies }) });
+function payload(options: { readonly run?: DrillRun; readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number; readonly packet?: boolean } = {}): ReviewMap {
+  const run = options.run ?? reviewFixtureRun({ id: "web-review", ...(options.evaluated === undefined ? {} : { evaluated: options.evaluated }), ...(options.plies === undefined ? {} : { plies: options.plies }) });
   const branchId = run.activeCursor.branchId;
   const story = options.noMoments === true ? { moments: [], rank: [] } : storyMomentsForRun(run, branchId, { recordedResult: "1-0" });
   const packet = options.packet === true ? reviewPacketForRun(run, branchId, { importRecord: { runId: run.id, result: "1-0", movetextDigest: run.sessionDigest }, engine: new Map(run.nodes.map((node, index) => [node.id, index % 2 === 0 ? { kind: "pending" as const, jobCount: 1, retrying: 0 } : { kind: "unavailable" as const, reason: "provider_off" as const }])) }) : undefined;
   const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, ...(packet === undefined ? {} : { packet }) });
   // A JSON round trip: the component renders exactly what crosses the wire.
   return JSON.parse(JSON.stringify({
-    runId: run.id, branchId, side: "white", ready: true, pendingEvidence: 0,
+    runId: run.id, branchId, side: run.start.side, ready: true, pendingEvidence: 0,
     source: { kind: "pgn_paste", headers: { White: "Alice", Black: "Bob" }, result: "1-0", importedAt: "2026-09-24T12:00:00.000Z" },
     outcome: { kind: "recorded_result", result: "1-0" }, storyTitle: "Won at move 12",
     viewer: { mayWrite: options.mayWrite ?? true }, semanticPath: { kind: "available", events: 0 },
@@ -62,6 +62,50 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it.each([
+    { side: "white" as const, moves: ["e2e4", "e7e5", "g1f3", "b8c6"], numbers: [37, 37, 38, 38] },
+    { side: "black" as const, moves: ["e7e5", "e2e4", "b8c6", "g1f3"], numbers: [37, 38, 38, 39] },
+  ])("D3668 retains $side-first FEN numbering in graph, moment and action labels", async value => {
+    const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${value.side === "white" ? "w" : "b"} KQkq - 0 37`;
+    let run = play(importedRun(`web-number-${value.side}`, value.side, fen), value.moves);
+    run.nodes.forEach((node, index) => {
+      run = attachEvidence(run, node.id, [`engine:number-${index}`], { kind: "eval", source: "engine_validated", values: { centipawns: index * 250, perspective: "white", engineId: "stockfish-test", requestedMovetimeMs: 100 } }, "2026-10-10T12:00:00.000Z").run;
+    });
+    const main = run.activeCursor;
+    const chosen = payload({ run }).moments.find(moment => moment.ply > 0)!;
+    const entry = run.nodes.find(node => node.id === chosen.entryNodeId)!;
+    const played = run.nodes.find(node => node.id === chosen.nodeId)!.moveUci;
+    const alternate = exactLegalMoves(entry.fen).find(move => move.uci !== played)!.uci;
+    run = fork(rewind(run, entry.id, "2026-10-10T12:00:00.000Z").run, entry.id, { label: "story-reentry", at: "2026-10-10T12:00:00.000Z" }).run;
+    run = commitMove(run, alternate, { actor: "user", at: "2026-10-10T12:00:00.000Z" }).run;
+    run = rewind(run, main.nodeId, "2026-10-10T12:00:00.000Z", undefined, main.branchId).run;
+    const review = payload({ run });
+    const crossed = { ...review, rows: review.rows.map((row, index) => index === 0 ? { ...row, moveNumber: row.moveNumber + 1, label: reviewText(row.side === "white" ? "moves.row.white" : "moves.row.black", { number: row.moveNumber + 1, san: row.san }) } : row) };
+    expect(() => assertReviewMapResponse(crossed, { runId: review.runId })).toThrow(/recorded move number/u);
+    const onRetry = vi.fn(async () => {});
+    const onCompare = vi.fn(async () => {});
+    const component = mount(ReviewMapScreen, { target: document.body, props: { review, onRetry, onCompare, onExport: vi.fn() } });
+    expect([...document.querySelectorAll(".move-label")].map(element => element.textContent)).toEqual(review.rows.map((row, index) => reviewText(row.side === "white" ? "moves.row.white" : "moves.row.black", { number: value.numbers[index]!, san: row.san })));
+    expect(review.moments.length).toBeGreaterThan(0);
+    for (const moment of review.moments) {
+      const card = document.querySelector(`[data-moment-id="${moment.nodeId}"]`)!;
+      const number = moment.ply === 0 ? 37 : value.numbers[moment.ply - 1]!;
+      expect(card.querySelector("button.retry")!.getAttribute("aria-label")).toBe(reviewText("retry.moment.label", { number }));
+      const compare = card.querySelector<HTMLButtonElement>("button.compare");
+      if (compare !== null) expect(compare.getAttribute("aria-label")).toBe(reviewText("compare.moment.label", { number, count: review.compareDoors.find(door => door.entryNodeId === moment.entryNodeId)!.branchIds.length - 1 }));
+    }
+    expect(document.querySelectorAll(".moment-card button.compare")).toHaveLength(1);
+    expect(document.querySelectorAll("button.compare").length).toBeGreaterThan(0);
+    document.querySelector<HTMLButtonElement>(".move-row button.compare")!.click();
+    await tick();
+    expect(onCompare).toHaveBeenCalledWith(review.compareDoors[0]!.branchIds);
+    const moment = review.moments[0]!;
+    document.querySelector<HTMLButtonElement>(`[data-moment-id="${moment.nodeId}"] button.retry`)!.click();
+    await tick();
+    expect(onRetry).toHaveBeenCalledWith(moment.entryNodeId);
+    await unmount(component);
+  });
+
   it("D3633 keeps a root-only Review free of absent-owner paint", async () => {
     const component = render(payload({ plies: 0, noMoments: true }));
     expect(document.querySelector('.stage .board')).toBeNull();

@@ -11,6 +11,7 @@ import { REVIEW_MOMENT_BUDGET, reviewMapProjection, selectReviewMoments, type Re
 import { REVIEW_MAP_TEMPLATES, reviewText } from "./review-map-templates.js";
 import { storyMomentsForRun, type StoryMoment } from "./story.js";
 import { fixtureCentipawns, reviewFixtureRun } from "./testing/review-map-fixture.js";
+import { attachEvidence } from "./evidence.js";
 import { BANNED_JUDGEMENTS, judgementWordsOutsideGrounding, ungroundedResidue } from "./voice.js";
 import type { DrillRun } from "./types.js";
 import { RECORDED_RELATION_LABELS, parsePresentationReceipt, presentedSentence } from "./presentation-contract.js";
@@ -54,6 +55,35 @@ describe("review map projection (rfc/review-map.md)", () => {
   const run = reviewFixtureRun();
   const path = branchPath(run, run.activeCursor.branchId);
   const projection = projectionOf(run, "imported_analysis", true);
+
+  it.each([
+    { side: "white" as const, fullmove: 1, moves: ["e2e4", "e7e5", "g1f3", "b8c6"], numbers: [1, 1, 2, 2] },
+    { side: "black" as const, fullmove: 1, moves: ["e7e5", "e2e4", "b8c6", "g1f3"], numbers: [1, 2, 2, 3] },
+    { side: "white" as const, fullmove: 37, moves: ["e2e4", "e7e5", "g1f3", "b8c6"], numbers: [37, 37, 38, 38] },
+    { side: "black" as const, fullmove: 37, moves: ["e7e5", "e2e4", "b8c6", "g1f3"], numbers: [37, 38, 38, 39] },
+  ])("D3668 numbers $side-first move $fullmove from recorded FEN, not local ply", value => {
+    const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${value.side === "white" ? "w" : "b"} KQkq - 0 ${value.fullmove}`;
+    let recorded = play(importedRun(`number-${value.side}-${value.fullmove}`, value.side, fen), value.moves);
+    recorded.nodes.forEach((node, index) => {
+      recorded = attachEvidence(recorded, node.id, [`engine:number-${index}`], {
+        kind: "eval", source: "engine_validated", values: { centipawns: fixtureCentipawns(index), perspective: "white", engineId: "stockfish-test", requestedMovetimeMs: 100 },
+      }, "2026-10-10T12:00:00.000Z").run;
+    });
+    const before = JSON.stringify(recorded);
+    const map = projectionOf(recorded);
+    expect(map.rows.map(row => row.ply)).toEqual([1, 2, 3, 4]);
+    expect(map.rows.map(row => row.moveNumber)).toEqual(value.numbers);
+    map.rows.forEach((row, index) => {
+      expect(row.label).toBe(reviewText(row.side === "white" ? "moves.row.white" : "moves.row.black", { number: value.numbers[index]!, san: row.san }));
+      expect(map.evalGraph.points[index]!.sentence).toContain(row.label);
+    });
+    expect(map.moments.length).toBeGreaterThan(0);
+    map.moments.forEach(moment => {
+      const number = moment.ply === 0 ? value.fullmove : value.numbers[moment.ply - 1]!;
+      expect(moment.moveLabel).toBe(reviewText(moment.san === null ? "moment.move" : "moment.move.san", { number, san: moment.san ?? "" }));
+    });
+    expect(JSON.stringify(recorded)).toBe(before);
+  });
 
   it("D3633 retains every recorded event's complete components at its own end node", () => {
     const semantic = recordedSemanticPath(run, run.activeCursor.branchId);

@@ -612,11 +612,23 @@ for (const projection of ["desktop", "@mobile phone"]) {
   });
 }
 
-for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
-  test(`D3665 Review Analyze rejects crossed positions, keeps native focus and returns to rehearsal (${viewport.width}px)${viewport.width < 720 ? " @mobile" : ""}`, async ({ page }) => {
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) for (const start of [
+  { side: "white" as const, number: 1 },
+  { side: "white" as const, number: 37 },
+  { side: "black" as const, number: 37 },
+]) {
+  test(`D3665/D3668 Review Analyze rejects crossed positions, keeps native focus and returns to rehearsal (${viewport.width}px, ${start.side}, move ${start.number})${viewport.width < 720 ? " @mobile" : ""}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.getByRole("link", { name: "Review" }).click();
-    await page.getByLabel("PGN").fill('[Event "Analyze recovery"]\n[White "Analyze White"]\n[Black "Analyze Black"]\n[Result "1-0"]\n\n1. e4 e5 2. Nf3 Nc6 1-0');
+    const black = start.side === "black";
+    const number = start.number + 1;
+    const san = black ? "Nc6" : "Nf3";
+    const reviewedMove = `${number}${black ? "…" : "."} ${san}`;
+    const labels = black ? [`${start.number}… e5`, `${number}. e4`, `${number}… Nc6`, `${number + 1}. Nf3`] : [`${start.number}. e4`, `${start.number}… e5`, `${number}. Nf3`, `${number}… Nc6`];
+    await page.getByLabel("Your side").selectOption(start.side);
+    const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${black ? "b" : "w"} KQkq - 0 ${start.number}`;
+    const line = black ? `${start.number}... e5 ${number}. e4 Nc6 ${number + 1}. Nf3 1-0` : `${start.number}. e4 e5 ${number}. Nf3 Nc6 1-0`;
+    await page.getByLabel("PGN").fill(`[Event "Analyze recovery"]\n[White "Analyze White"]\n[Black "Analyze Black"]\n[Result "1-0"]\n[SetUp "1"]\n[FEN "${fen}"]\n\n${line}`);
     await page.getByRole("button", { name: "Build game story" }).click();
     await expect(page).toHaveURL(/\/review\/game\/import-/);
     const runId = page.url().split("/").at(-1)!;
@@ -626,6 +638,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
     const original = await graph();
     const originalEvents = await events();
     const selectors = page.locator(".move-select");
+    await expect(page.locator(".move-label")).toHaveText(labels);
     await selectors.nth(2).click();
     const selectedRow = page.locator(".move-row").nth(2);
     const selectedNode = await selectedRow.getAttribute("data-node-id");
@@ -684,7 +697,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       await selectors.nth(2).click();
       await analyze.focus();
       await page.keyboard.press("Enter");
-      await expect(page.locator(".analysis-sentence")).toContainText("reported this principal variation from the position before 2. Nf3");
+      await expect(page.locator(".analysis-sentence")).toContainText(`reported this principal variation from the position before ${reviewedMove}`);
       await expect(page.getByRole("button", { name: "Hide engine line", exact: true })).toBeFocused();
       expect(await handle!.evaluate(element => element.isConnected)).toBe(true);
       await page.keyboard.press("Enter");
@@ -696,18 +709,19 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       assertOnlyEvidenceAppended(originalEvents, await events());
       expect(browsed.branches).toEqual(original.branches);
       expect(browsed.activeCursor).toEqual(original.activeCursor);
-      await page.getByRole("button", { name: "Retry from before move 2 (Nf3)" }).click();
+      await page.getByRole("button", { name: `Retry from before move ${number} (${san})` }).click();
       await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
       const board = page.locator(".board-frame").getByLabel("Chessboard", { exact: true });
       await expect(board).toBeVisible();
-      await move(page, "f1", "c4", "white", board);
-      await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === "f1c4")).toBe(true);
+      const from = black ? "f8" : "f1", to = black ? "c5" : "c4", uci = `${from}${to}`;
+      await move(page, from, to, start.side, board);
+      await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === uci)).toBe(true);
       const retried = await graph();
       const originalIds = new Set(original.nodes.map(node => node.id));
       assertRecordedNodesPreserved(original.nodes, retried.nodes.filter(node => originalIds.has(node.id)));
       expect(retried.branches.length).toBeGreaterThan(original.branches.length);
       await page.goto(`/review/game/${runId}`);
-      await page.getByRole("button", { name: "Compare the reviewed line and 1 more from before move 2 (Nf3)" }).click();
+      await page.getByRole("button", { name: `Compare the reviewed line and 1 more from before move ${number} (${san})` }).click();
       await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
     } finally {
       release();

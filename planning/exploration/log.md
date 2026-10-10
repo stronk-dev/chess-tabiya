@@ -24687,3 +24687,48 @@ Campaign was the one capability with no API, route or content. Now:
   ledger/UX/RFC/milestone counts match the inventory above, with no unassigned live work.
   Stage only the fifteen batch files after inspecting the empty index; pre-existing research,
   review and scratch files remain outside this change set. Ordinary commit hooks follow.
+
+### 2026-10-10 — D3668 recorded FEN numbering through Review and rehearsal
+
+- Continued the existing Review §§2–4/§6/§7 contract after the requested total inventory;
+  recorded and assigned D3668 before implementation. Local ply had been displayed as
+  a chess fullmove number in rows/cards/actions; Black-first and non-1 starts differ.
+- Three runtime and two mounted controls fail on the predecessor. The runtime repair
+  passes all four start populations (White/Black, fullmove 1/37); mounted controls then
+  independently catch moment Retry labels still saying move 2 beside move 38/39 cards.
+  Both source positions now use one FEN-counter helper; no schema or evidence source changes.
+- The parser controls additionally reproduce acceptance of crossed row numbers/labels.
+  It now binds those fields to the recorded resulting FEN before rendering. The fixture's
+  header follows the actual learner side rather than assuming every custom run is White.
+- The first six native journeys pass the retained two normal-start controls and fail
+  the four move-37 controls: Analyze names the position before local move 2 while
+  rendering its correctly numbered move-38 engine line. Two actual runtime controls
+  reproduce both the no-line and recorded-line class; Analyze now uses the entry FEN.
+  The existing normal review-route-check includes its previously omitted runtime remainder
+  file. No assertion, timeout, retry policy, grading or selection is weakened.
+- All 210 focused Review controls and clean workspace types pass. All six actual desktop/
+  touch-phone journeys pass, including White/Black move-37 imports, crossed-response
+  refusal, native focus, navigation retiring pending Analyze, different legal retry,
+  preserved original nodes/events and the two-line Compare handoff. The authenticated
+  application controls retain exact fullmove numbers and neutral pressure components;
+  their existing 87-case gate passes without broadening read grants or writing the game.
+- Class audit records D3669 (Story title) and D3670 (Profile contributors) as assigned
+  source-contract repairs. StoryTitleInput declares nodeId/ply/endgame, not a recorded
+  FEN counter; Profile's actual contributor supplies run/node/ply/SAN/time, not mover/
+  fullmove. Those paths cannot infer actual chess numbering from ply or learner side.
+  They remain queued in their existing lanes, not silently claimed fixed by Review.
+- Full normal verification/build/browser tiers and final ledger/state/roadmap closeout
+  are in flight. No remote CI, native image, full Review or whole-1.0 completion claim.
+- Completed sequential `make roadmap-receipt verify-awake build test-browser-ci-awake`:
+  clean types, 4,511 software cases/365 files, seven unchanged-budget performance cases/four
+  files, 246 content cases/25 files, governance/packaging/build and all four browser tiers
+  (210 smoke, five content, 59 matrix, one packaged-default): 275 passes, one optional Maia
+  skip, zero retries; 150 input and 112 composition cells pass. No budgets or retries changed.
+- Close D3668 with ledger, state, queue, docs and roadmap in the same batch. D3669/D3670
+  remain assigned todo. Inventory: 3,419 rows, 1,544 done, 161 refused and 1,714 assigned
+  live (629 todo, fourteen doing, 1,071 blocked), zero untriaged. UX remains 273 complete,
+  272 live and 24 retired; all fourteen whole capabilities incomplete, four milestones
+  active/five blocked, zero official graduates. No remote CI, native-image or release claim.
+- Final `make roadmap-receipt verify-governance roadmap-progress` exits zero after closeout;
+  the roadmap reports the counts above and D3668's exact completed checkpoint. Stage only
+  the twenty batch files; existing research/review/scratch changes stay outside this commit.

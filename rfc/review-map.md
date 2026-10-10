@@ -419,6 +419,14 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
 
 ## Changelog
 
+- 2026-10-10 — D3668 recorded numbering repair under §§2–4/§6/§7: rows, graph and
+  moment labels, Retry/Compare accessible names and Analyze's line/absence captions
+  use the exact FEN fullmove counter rather than local rehearsal ply. The client
+  checks row numbers/labels against their recorded resulting FEN. Local ply,
+  run/node/entry identities, selection, grading and saved play remain unchanged.
+  Black-first/non-1 starts have permanent runtime/mounted/application controls and
+  desktop/touch-phone retry/Compare journeys. D3669/D3670 separately own Story-title
+  and Profile-contributor source contracts; they are not closed by this repair.
 - 2026-10-10 — D3665 Analyze admission/action repair: the web response boundary now requires
   the exact requested run, branch, move and entry position. Crossed responses fail visibly;
   the mounted reveal independently validates its current selection. One persistent native

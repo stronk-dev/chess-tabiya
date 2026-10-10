@@ -1,4 +1,4 @@
-import { parsePresentationReceipt, presentedSentence } from "@chess-tabiya/runtime";
+import { parsePresentationReceipt, presentedSentence, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime";
 
 import type { ReviewAnalysisPage, ReviewMap } from "./api.js";
 
@@ -47,6 +47,9 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
     const row = record(candidate) ?? fail(`row ${index}`);
     if (!text(row.nodeId) || !text(row.entryNodeId) || !text(row.san) || !text(row.label) || !text(row.fen) || !text(row.moveUci)) fail(`row ${index} identity`);
     if (row.ply !== index + 1 || !natural(row.moveNumber) || !SIDES.has(row.side as string) || typeof row.moment !== "boolean") fail(`row ${index} position`);
+    let number: number;
+    try { number = reviewMoveNumber(row.fen as string, true); } catch { return fail(`row ${index} recorded move number`); }
+    if (row.moveNumber !== number || row.label !== reviewText(row.side === "white" ? "moves.row.white" : "moves.row.black", { number, san: row.san as string })) fail(`row ${index} recorded move number`);
     if (/[?!]|\$\d/u.test(row.san as string)) fail(`row ${index} carries an annotation glyph`);
     if (!texts(row.facts) || (row.facts as readonly string[]).length === 0) fail(`row ${index} facts`);
     // rfc/review-evidence-compiler.md: the typed packet components travel as one closed presentation

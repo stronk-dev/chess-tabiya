@@ -21,7 +21,7 @@ import type { EvidenceRole } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { compileModulePacket } from "./module-packets.js";
 import { reviewDurableEngineLine } from "./review-evidence.js";
-import { openRetryEntry } from "./review-map.js";
+import { openRetryEntry, reviewMoveNumber } from "./review-map.js";
 import { reviewText, type ReviewTemplateId } from "./review-map-templates.js";
 import type { DrillRun, EvidencePayload, Node } from "./types.js";
 
@@ -130,7 +130,7 @@ function sanLine(fen: string, movesUci: readonly string[]): readonly string[] | 
 }
 
 function moveLabel(entry: Node, node: Node): string {
-  const number = Math.max(1, Math.ceil(node.ply / 2));
+  const number = reviewMoveNumber(entry.fen);
   return reviewText(entry.fen.split(" ")[1] === "b" ? "moves.row.black" : "moves.row.white", { number, san: node.moveSan ?? node.moveUci ?? "" });
 }
 

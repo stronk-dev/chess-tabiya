@@ -1,7 +1,7 @@
 <script lang="ts">
   // rfc/review-map.md: the learner-facing whole-game Review Map. Every authored string on this
   // surface is a registered template (`reviewText`); everything else is payload data rendered as is.
-  import { parsePresentationReceipt, reviewText } from "@chess-tabiya/runtime";
+  import { parsePresentationReceipt, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime";
   import { onDestroy, tick } from "svelte";
   import type { DrawShape } from "@lichess-org/chessground/draw";
 
@@ -420,12 +420,12 @@
           {#if explanation?.nodeId === moment.nodeId}<p class="voice">{explanation.text}</p>{/if}
           {#if explanationFailed === moment.nodeId}<p role="alert">{reviewText("moment.explain.failed")}</p>{/if}
           <div class="moment-actions">
-            <button type="button" class="primary retry" disabled={!retryAvailable || retrying !== undefined} aria-label={reviewText("retry.moment.label", { number: Math.max(1, Math.ceil(moment.ply / 2)) })} aria-describedby={!retryAvailable ? "review-retry-unavailable" : undefined} onclick={() => void retry(`moment:${moment.nodeId}`, moment.entryNodeId)}>{retrying === `moment:${moment.nodeId}` ? reviewText("retry.busy") : reviewText("retry.action")}</button>
+            <button type="button" class="primary retry" disabled={!retryAvailable || retrying !== undefined} aria-label={reviewText("retry.moment.label", { number: reviewMoveNumber(moment.fen, moment.san !== null) })} aria-describedby={!retryAvailable ? "review-retry-unavailable" : undefined} onclick={() => void retry(`moment:${moment.nodeId}`, moment.entryNodeId)}>{retrying === `moment:${moment.nodeId}` ? reviewText("retry.busy") : reviewText("retry.action")}</button>
             <button type="button" disabled={review.rows.every((row) => row.nodeId !== moment.nodeId)} onclick={() => select(moment.nodeId)}>{moment.moveLabel}</button>
             {#if onVoice}<button type="button" disabled={explaining === moment.nodeId} onclick={() => void explain(moment.nodeId)}>{explaining === moment.nodeId ? reviewText("moment.explaining") : reviewText("moment.explain")}</button>{/if}
             {#if onCompare && doors.get(moment.entryNodeId)}
               {@const door = doors.get(moment.entryNodeId)!}
-              <button type="button" class="compare" disabled={comparing !== undefined || retrying !== undefined} aria-label={reviewText("compare.moment.label", { count: door.branchIds.length - 1, number: Math.max(1, Math.ceil(moment.ply / 2)) })} onclick={() => void compare(`moment:${moment.nodeId}`, door.branchIds)}>{comparing === `moment:${moment.nodeId}` ? reviewText("compare.busy") : reviewText("compare.action")}</button>
+              <button type="button" class="compare" disabled={comparing !== undefined || retrying !== undefined} aria-label={reviewText("compare.moment.label", { count: door.branchIds.length - 1, number: reviewMoveNumber(moment.fen, moment.san !== null) })} onclick={() => void compare(`moment:${moment.nodeId}`, door.branchIds)}>{comparing === `moment:${moment.nodeId}` ? reviewText("compare.busy") : reviewText("compare.action")}</button>
             {/if}
           </div>
           {#if compareFailed === `moment:${moment.nodeId}`}<p class="retry-error" role="alert">{reviewText("compare.failed")}</p>{/if}

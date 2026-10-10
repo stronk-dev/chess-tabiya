@@ -12,7 +12,7 @@ import { REVIEW_COMPARE_LIMIT, openRetryEntry, reviewMapProjection, type ReviewM
 import { reviewText } from "./review-map-templates.js";
 import { commitMove, fork, rewind } from "./runtime.js";
 import { storyMomentsForRun } from "./story.js";
-import { attachDelivery, evaluationDelivery, lineDelivery } from "./testing/review-evidence-fixture.js";
+import { attachDelivery, evaluationDelivery, importedRun, lineDelivery, play } from "./testing/review-evidence-fixture.js";
 import { REVIEW_FIXTURE_AT, fixtureCentipawns, reviewFixtureRun } from "./testing/review-map-fixture.js";
 import type { DrillRun } from "./types.js";
 import { judgementWordsOutsideGrounding } from "./voice.js";
@@ -163,6 +163,22 @@ describe("Analyze (§7, O7.3)", () => {
   const run = withLines();
   const main = run.branches[0]!.id;
   const rows = projectionOf(run).rows;
+
+  it.each([
+    { side: "white" as const, moves: ["e2e4", "e7e5", "g1f3"], label: "38. Nf3", line: ["g1f3"], rendered: ["38. Nf3"] },
+    { side: "black" as const, moves: ["e7e5", "e2e4", "b8c6"], label: "38… Nc6", line: ["b8c6"], rendered: ["38… Nc6"] },
+  ])("D3668 names $side's exact recorded move in Analyze and absence", value => {
+    const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${value.side === "white" ? "w" : "b"} KQkq - 0 37`;
+    let recorded = play(importedRun(`analysis-number-${value.side}`, value.side, fen), value.moves);
+    const map = projectionOf(recorded);
+    const target = map.rows[2]!;
+    expect(reviewAnalysis(recorded, recorded.activeCursor.branchId, target.nodeId, { role: "learner", session: "imported" }).sentence).toContain(value.label);
+    recorded = attachEvidence(recorded, target.entryNodeId, ["engine:number-line"], { kind: "bestline", source: "engine_validated", values: { engineId: "stockfish-test", requestedDepth: 18, movesUci: value.line } }, REVIEW_FIXTURE_AT).run;
+    const before = JSON.stringify(recorded);
+    const analysis = reviewAnalysis(recorded, recorded.activeCursor.branchId, target.nodeId, { role: "learner", session: "imported" });
+    expect(analysis).toMatchObject({ kind: "line", moves: value.rendered, sentence: `stockfish-test (depth 18 search) reported this principal variation from the position before ${value.label}: ${value.rendered.join(" ")}.` });
+    expect(JSON.stringify(recorded)).toBe(before);
+  });
 
   it("reveals the recorded principal variation, attributed to engine and search bound, and not phrased as advice", () => {
     const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
