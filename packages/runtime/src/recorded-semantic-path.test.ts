@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { branchPath, branchPaths, resolveBranchPath } from "./branch-path.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_FAMILY_IDS, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
@@ -32,6 +32,7 @@ import {
 import { commitMove, createRun, rewind } from "./runtime.js";
 import {
   assertSemanticEvidenceEvent,
+  defenderConsequenceOperands,
   deflectionObservedOperands,
   recordedDeflectionObservedSemanticEvent,
   recordedSquareClearanceSemanticEvent,
@@ -43,6 +44,7 @@ import {
   type TransitionSemanticEventOperands,
 } from "./semantic-evidence.js";
 import { defenderDutyReading } from "./tactics.js";
+import * as squareControl from "./square-control.js";
 import type { DrillRun, Node } from "./types.js";
 
 const at = "2026-09-24T00:00:00.000Z";
@@ -64,6 +66,53 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3658 demand-bound defender consequence work", () => {
+  const fixtures = [
+    { name: "quiet", fen: INITIAL, moves: ["e2e4", "e7e5", "g1f3"], reads: 0, kind: null },
+    { name: "non-positive capture", fen: "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", moves: ["e1f2", "e8f7", "e4d5"], reads: 0, kind: null },
+    { name: "undefended target", fen: "r3k3/8/8/2B5/8/8/8/R3K3 w - - 0 1", moves: ["c5b6", "e8d7", "a1a8"], reads: 1, kind: null },
+    { name: "captured defender", fen: "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", moves: ["c5b6", "e8d7", "a1a8"], reads: 2, kind: "edge_lost_target_captured" },
+    { name: "relocated defender", fen: "r3k3/8/1n6/8/2P5/8/8/R3K3 w - - 0 1", moves: ["c4c5", "b6d7", "a1a8"], reads: 3, kind: "defender_relocated_target_captured" },
+  ] as const;
+
+  it.each(fixtures)("$name reads only its demanded defense populations", fixture => {
+    const run = recordedRun(`d3658:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const anchors = path.slice(1).map((child, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: child.id, beforeFen: path[index]!.fen, moveUci: child.moveUci!, afterFen: child.fen }));
+    const reading = vi.spyOn(squareControl, "squareControlReading");
+    try {
+      const result = defenderConsequenceOperands(anchors);
+      expect(result.map(item => item.kind)).toEqual(fixture.kind === null ? [] : [fixture.kind]);
+      expect(reading).toHaveBeenCalledTimes(fixture.reads);
+      expect(reading.mock.calls.map(([fen]) => fen)).toEqual([anchors[0]!.beforeFen, anchors[0]!.afterFen, anchors[1]!.afterFen].slice(0, fixture.reads));
+    } finally { reading.mockRestore(); }
+  });
+
+  it("still validates every quiet edge before omitting source work", () => {
+    const run = recordedRun("d3658:corrupt", INITIAL, ["e2e4", "e7e5", "g1f3"]);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const anchors = path.slice(1).map((child, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: child.id, beforeFen: path[index]!.fen, moveUci: child.moveUci!, afterFen: child.fen }));
+    const reading = vi.spyOn(squareControl, "squareControlReading");
+    try {
+      expect(() => defenderConsequenceOperands([anchors[0]!, anchors[1]!, { ...anchors[2]!, afterFen: INITIAL }])).toThrow("Semantic-event anchor after FEN does not match g1f3");
+      expect(reading).not.toHaveBeenCalled();
+    } finally { reading.mockRestore(); }
+  });
+
+  it("the complete recorded operation keeps all 39 windows without quiet defense work", () => {
+    const run = recordedRun("d3658:complete", INITIAL, ["e2e4", "e7e5", "g1f3"]);
+    const reading = vi.spyOn(squareControl, "squareControlReading");
+    try {
+      const execution = recordedSemanticPathExecution(run, run.activeCursor.branchId);
+      const result = available(execution.result);
+      expect(result.windows).toHaveLength(39);
+      expect(result.windows.filter(window => window.projection.id === "derived.tactic.sequence.defender_consequence").map(window => window.status)).toEqual(["no_witness", "insufficient_continuation", "insufficient_continuation"]);
+      expect(execution.work).toMatchObject({ preparedEdges: 3, transitionCompiles: 3, checkProbes: 3, localFanOut: 0, receipts: 39 });
+      expect(reading).not.toHaveBeenCalled();
+    } finally { reading.mockRestore(); }
+  });
+});
 
 function replaceNode(run: DrillRun, id: string, change: (node: Node) => Node, extra: readonly Node[] = []): DrillRun {
   return Object.freeze({ ...run, nodes: Object.freeze([...run.nodes.map((node) => node.id === id ? Object.freeze(change(node)) : node), ...extra]) });

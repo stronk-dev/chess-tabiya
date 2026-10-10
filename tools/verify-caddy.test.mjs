@@ -16,6 +16,6 @@ test("verification validates inert rendered fixtures rather than invoking operat
   const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
   const target = /^verify-deployment:\n((?:\t[^\n]*\n)+)/mu.exec(makefile)?.[1];
   assert.ok(target);
-  assert.match(target, /node tools\/verify-caddy\.mjs/u);
+  assert.match(target, /\$\(CI_NODE\) tools\/verify-caddy\.mjs/u);
   assert.doesNotMatch(target, /deployment-check/u);
 });

@@ -4,6 +4,18 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make make-toolchain-check` proves standalone JavaScript recipes select the configured runtime
+even when an ambient `node` disagrees. It runs in the software gate; its fixtures invoke Make with
+two controlled executable choices rather than checking only a PATH string. Normal caller commands
+and CI's runtime/package-manager requirements are unchanged.
+
+`make recorded-semantic-path-check` includes demand-bound defender-consequence controls: quiet
+and non-positive captures need no defense populations, an undefended target needs only the initial
+population, and a lost defender needs no reply population. Complete legal-window validation and
+both observed consequence arms remain. The complete quiet-path control retains all 39 window
+receipts. The fixed imported census, eager/exact parity and unchanged 500 ms performance tier
+remain separate; a passing replay does not explain D3532's historical excursion.
+
 `make square-control-presentation-check` covers attack-only legal control through the collector,
 sealed reading/events, complete candidate packets, presentation adapters and actual Inspector API.
 Pawn advances remain legal moves, not attacks; all 112 king/rook home-rank geometries preserve

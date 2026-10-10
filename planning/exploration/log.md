@@ -24349,3 +24349,47 @@ Campaign was the one capability with no API, route or content. Now:
   graduates. Seventy-four product RFCs split 42 implementing/ten awaiting/22 draft; archived
   implementation records are not freshly re-audited whole-capability completion. No goal pause,
   new tracker, push, remote CI or release readiness is claimed.
+
+### 2026-10-10 — Demand-bound recorded consequences and normal Make runtime (D3658, D3659)
+
+- D3658 was recorded before production edits under recorded-semantic-path §§4/8. Both recorded
+  defender-consequence arms require a positive final capture; the predecessor nevertheless built
+  three full defense populations on every window. Complete canonical legal replay still runs
+  first. Source work is now demanded by the exact target/duty/relocation predicates, without
+  changing outputs, event identities, eligibility, windows, source versions or budgets.
+- Five permanent controls fail on the predecessor and pass after repair. Seven new runtime
+  controls retain all 39 quiet-window receipts, reject corrupted quiet replay and measure zero/
+  zero/one/two/three actual populations for quiet/non-positive/undefended/captured/relocated cases.
+  Four real authenticated file-backed Review paths cover both arms and colors, exact captions,
+  square sets, move paths, repeated packets, unchanged recorded events and authorization.
+- All 615 broader foundation controls and 87 Review execution controls pass. Normal recorded-path
+  checks pass 39 cases and retain exact/eager outputs over 108 games/6,991 plies/1,288 events.
+  D3659 records the first checker running Node 26 despite the Make-exported Node 24 path. The
+  existing selected executable now launches all 387 standalone JavaScript recipes. Three real
+  Make-boundary controls fail on the predecessor's ambient executable, then all four toolchain
+  controls pass. The software gate includes them; callers retain normal Make commands.
+- The normal checker now reports Node 24.21.0; 20/40/80-ply p95 totals are 23.8/48.4/78.3 ms
+  against the unchanged 500 ms gate. Types and tier checks pass. The existing semantic-validation
+  writer changes implementation references only, retaining 87 canonical cases over 81 subjects
+  and zero fully qualified. D3532's historical excursion remains unlocated, not closed by a
+  passing suite or this optimization. No package-manager/runtime upgrade or remote CI claim.
+- Ledger, durable states, existing queue and roadmap are updated in this batch. Full normal
+  verification/build and sequential browser closeout follow before committing. No whole-product
+  capability/milestone, official content, source migration or release readiness is promoted.
+- The first aggregate passes 4,438 software cases/365 files, seven unchanged-budget performance
+  cases/four files, types, packaging and preceding software contracts, then stops on the browser
+  composition contract's exact old bare-Node command assertion. That assertion and the analogous
+  inert Caddy assertion now require the selected runtime explicitly; dependency/arguments and
+  matrix population checks are unchanged. All 48 composition controls and three Caddy controls
+  pass; both pinned rendered deployment configurations validate. Full aggregate rerun follows.
+- The complete normal `make verify-awake build` rerun exits zero: clean workspace types,
+  4,438 software cases/365 files, seven unchanged-budget performance cases/four files, 241
+  real-content cases/24 files, governance, corpus compatibility, packaging and build. The
+  normal complete browser target starts afterward, with no concurrent coordinator rebuild.
+- The complete sequential `make test-browser-ci-awake` exits zero: 200 ordinary journeys,
+  five real-content journeys, 59 responsive/accessibility matrix cases and one packaged-default
+  journey (265 passing), one existing optional Maia skip, zero retries, all 150 exact-input
+  and 112 composition cells. Final proof replaces pending notes in the existing roadmap/queue.
+  No source adoption, calibrated personality, full semantic qualification, official graduation,
+  native appliance recovery, whole capability, remote CI or 1.0 readiness is claimed. The owner
+  receives the total current product inventory after this bounded batch's explicit-file commit.

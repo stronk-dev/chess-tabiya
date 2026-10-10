@@ -117,6 +117,10 @@ test-software:
 test-performance:
 	pnpm test:performance
 
+.PHONY: make-toolchain-check
+make-toolchain-check:
+	$(CI_NODE) --test tools/make-toolchain.test.mjs
+
 .PHONY: queued-stockfish-check
 queued-stockfish-check:
 	./node_modules/.bin/vitest run apps/server/src/evidence-queue.test.ts apps/server/src/evidence-job-durability.test.ts apps/server/src/sourcing/syzygy.test.ts
@@ -125,22 +129,22 @@ test-content:
 	pnpm test:content
 
 test-tier-check:
-	node --test tools/test-tier-check.test.mjs
-	node tools/test-tier-check.mjs
+	$(CI_NODE) --test tools/test-tier-check.test.mjs
+	$(CI_NODE) tools/test-tier-check.mjs
 
 docs-check:
-	node --test tools/docs-index.test.mjs
-	node tools/docs-index.mjs
+	$(CI_NODE) --test tools/docs-index.test.mjs
+	$(CI_NODE) tools/docs-index.mjs
 
 staged-process-contracts-test:
-	node --test tools/staged-process-contracts.test.mjs
+	$(CI_NODE) --test tools/staged-process-contracts.test.mjs
 
 staged-process-contracts:
-	node tools/staged-process-contracts.mjs
+	$(CI_NODE) tools/staged-process-contracts.mjs
 
 test-browser:
 	pnpm test:browser
-	node tools/play-composition-matrix.mjs
+	$(CI_NODE) tools/play-composition-matrix.mjs
 
 test-browser-smoke:
 	./node_modules/.bin/playwright test --grep-invert "@content|@matrix"
@@ -150,7 +154,7 @@ test-browser-content:
 
 test-browser-matrix: play-composition-matrix-contract
 	./node_modules/.bin/playwright test --grep "@matrix"
-	node tools/play-composition-matrix.mjs
+	$(CI_NODE) tools/play-composition-matrix.mjs
 
 play-composition-hint-check:
 	./node_modules/.bin/playwright test --grep "@matrix final Guided Hint"
@@ -165,7 +169,7 @@ play-composition-tablet-check:
 .PHONY: play-composition-conformance-check
 play-composition-conformance-check:
 	./node_modules/.bin/playwright test --grep "@matrix (A3 conformance|play composition keeps|final Guided Hint|maximum-load modules|module seats render|post-commit guard|terminal outcome|promotion picker|rewind, fork)"
-	node tools/play-composition-matrix.mjs
+	$(CI_NODE) tools/play-composition-matrix.mjs
 
 .PHONY: play-composition-board-controls-check
 play-composition-board-controls-check:
@@ -177,7 +181,7 @@ play-composition-inspector-check:
 
 play-composition-vocabulary-check:
 	./node_modules/.bin/playwright test --grep "@matrix (A4 vocabulary|A4 Inspector|play composition keeps|module seats render|maximum-load modules|final Guided Hint|post-commit guard|terminal outcome|promotion picker|rewind, fork)"
-	node tools/play-composition-matrix.mjs
+	$(CI_NODE) tools/play-composition-matrix.mjs
 
 play-composition-client-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/Chessboard.test.ts apps/web/src/lib/CreateSeedChooser.test.ts apps/web/src/lib/BoardNotation.test.ts
@@ -227,7 +231,7 @@ inspector-lifecycle-browser-check:
 	./node_modules/.bin/playwright test --grep "full Inspector (recompiles|retires|recovers)"
 
 play-composition-matrix-contract:
-	node --test tools/play-composition-matrix.test.mjs
+	$(CI_NODE) --test tools/play-composition-matrix.test.mjs
 
 test-browser-production:
 	./node_modules/.bin/playwright test --config playwright.production.config.ts
@@ -251,37 +255,37 @@ schema-check:
 	pnpm schema:check
 
 register-check:
-	node --test tools/register-check.test.mjs
-	node tools/register-check.mjs
+	$(CI_NODE) --test tools/register-check.test.mjs
+	$(CI_NODE) tools/register-check.mjs
 
 # shared-resource-register-bootstrap §7: the fourteen catalogue controls. The staged-discharge join
 # (criterion 7) is enforced generically by `work-state`.
 shared-resource-catalogue:
-	node --test --test-name-pattern='§7' tools/register-check.test.mjs
+	$(CI_NODE) --test --test-name-pattern='§7' tools/register-check.test.mjs
 
 # rfc/semantic-convention-provenance.md §1: the generated initial declarations stay byte-equal to the
 # reviewed source-recovery artifact, and the semantic history stays append-only and digest-equal.
 semantic-convention-source-check:
-	node tools/generate-initial-convention-declarations.mjs --check
+	$(CI_NODE) tools/generate-initial-convention-declarations.mjs --check
 
 semantic-convention-history-check:
-	node --test tools/semantic-convention-history-check.test.mjs
-	node tools/semantic-convention-history-check.mjs --staged
+	$(CI_NODE) --test tools/semantic-convention-history-check.test.mjs
+	$(CI_NODE) tools/semantic-convention-history-check.mjs --staged
 
 status-parity:
-	node --test tools/status-parity.test.mjs
-	node tools/status-parity.mjs
+	$(CI_NODE) --test tools/status-parity.test.mjs
+	$(CI_NODE) tools/status-parity.mjs
 
 work-index:
-	node --test tools/work-index.test.mjs
-	node tools/work-index.mjs
+	$(CI_NODE) --test tools/work-index.test.mjs
+	$(CI_NODE) tools/work-index.mjs
 
 work-state:
-	node --test tools/work-state.test.mjs
-	node tools/work-state.mjs
+	$(CI_NODE) --test tools/work-state.test.mjs
+	$(CI_NODE) tools/work-state.mjs
 
 work-state-sync:
-	node tools/work-state.mjs --sync
+	$(CI_NODE) tools/work-state.mjs --sync
 	$(MAKE) work-state
 
 .PHONY: work-state-transition work-item-complete
@@ -290,25 +294,25 @@ work-state-transition:
 	$(CI_NODE) tools/work-state.mjs --set="$(IDS)" --state="$(STATE)" $(if $(OWNER),--owner="$(OWNER)",) $(if $(SINCE),--since="$(SINCE)",) $(if $(BLOCKER),--blocker="$(BLOCKER)",) $(if $(QUESTION),--question="$(QUESTION)",) $(if $(EVIDENCE),--evidence="$(EVIDENCE)",) $(if $(EVIDENCE_KIND),--evidence-kind="$(EVIDENCE_KIND)",) $(if $(RULING),--ruling="$(RULING)",) $(if $(RULING_KIND),--ruling-kind="$(RULING_KIND)",)
 
 work-item-sync:
-	node tools/work-item-registry.mjs --sync
+	$(CI_NODE) tools/work-item-registry.mjs --sync
 
 work-item-complete:
 	@test -n "$(IDS)" -a -n "$(COMPLETED_ON)" -a -n "$(EVIDENCE)" || (echo "Usage: make work-item-complete IDS=ATR-a1,ATR-a2 COMPLETED_ON=YYYY-MM-DD EVIDENCE=commit-or-path" >&2; exit 2)
 	$(CI_NODE) tools/work-item-registry.mjs --complete="$(IDS)" --completed-on="$(COMPLETED_ON)" --evidence="$(EVIDENCE)"
 
 work-item-check:
-	node --test tools/work-item-registry.test.mjs
-	node tools/work-item-registry.mjs
+	$(CI_NODE) --test tools/work-item-registry.test.mjs
+	$(CI_NODE) tools/work-item-registry.mjs
 
 roadmap-check:
-	node --test tools/roadmap-check.test.mjs
-	node tools/roadmap-check.mjs
-	node --test tools/roadmap-receipt.test.mjs
-	node --test tools/roadmap-progress.test.mjs
-	node tools/roadmap-receipt.mjs
+	$(CI_NODE) --test tools/roadmap-check.test.mjs
+	$(CI_NODE) tools/roadmap-check.mjs
+	$(CI_NODE) --test tools/roadmap-receipt.test.mjs
+	$(CI_NODE) --test tools/roadmap-progress.test.mjs
+	$(CI_NODE) tools/roadmap-receipt.mjs
 
 roadmap-progress: roadmap-check
-	node tools/roadmap-progress.mjs
+	$(CI_NODE) tools/roadmap-progress.mjs
 
 .PHONY: training-set-catalogue-check
 training-set-catalogue-check:
@@ -330,24 +334,24 @@ return-journey-browser-check:
 	./node_modules/.bin/playwright test --grep "due intake replenishment|Learn shows each due return"
 
 roadmap-receipt:
-	node tools/roadmap-receipt.mjs --write
+	$(CI_NODE) tools/roadmap-receipt.mjs --write
 
 intent-parity:
-	node --test tools/intent-parity-harness/audit.test.mjs
+	$(CI_NODE) --test tools/intent-parity-harness/audit.test.mjs
 
 graduation-plan:
-	node tools/graduation-clearance-plan.mjs
+	$(CI_NODE) tools/graduation-clearance-plan.mjs
 
 graduation-plan-update:
-	node tools/graduation-clearance-plan.mjs --write
+	$(CI_NODE) tools/graduation-clearance-plan.mjs --write
 
 graduation-plan-check:
-	node --test tools/graduation-clearance-plan.test.mjs
-	node tools/graduation-clearance-plan.mjs --check
+	$(CI_NODE) --test tools/graduation-clearance-plan.test.mjs
+	$(CI_NODE) tools/graduation-clearance-plan.mjs --check
 
 .PHONY: graduation-clearance-migrate
 graduation-clearance-migrate:
-	node tools/graduation-clearance-migrate.mjs
+	$(CI_NODE) tools/graduation-clearance-migrate.mjs
 
 .PHONY: graduation-clearance-author-repair
 graduation-clearance-author-repair:
@@ -358,7 +362,7 @@ graduation-clearance-contract:
 
 graduation-clearance-corpus-check:
 	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-clearance-corpus.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-clearance-corpus.js
-	node apps/server/dist/graduation-clearance-corpus.js
+	$(CI_NODE) apps/server/dist/graduation-clearance-corpus.js
 
 .PHONY: graduation-clearance-acceptance
 graduation-clearance-acceptance: schema-check graduation-plan-check graduation-clearance-contract graduation-clearance-corpus-check
@@ -366,8 +370,8 @@ graduation-clearance-acceptance: schema-check graduation-plan-check graduation-c
 # rfc/evidence-presentation.md §8.1: no raw enum/id text node, de-underscore label or JSON.stringify
 # reaches learner-visible markup; output must be set-equal to an allowlist that ships empty.
 label-sweep:
-	node --test tools/label-sweep/label-sweep.test.mjs
-	node tools/label-sweep/label-sweep.mjs
+	$(CI_NODE) --test tools/label-sweep/label-sweep.test.mjs
+	$(CI_NODE) tools/label-sweep/label-sweep.mjs
 
 .PHONY: component-theme-sweep
 .PHONY: evidence-components-check
@@ -397,12 +401,12 @@ http-ingress-check:
 .PHONY: ingress-budget-author-check
 ingress-budget-author-check:
 	./node_modules/.bin/esbuild tools/d3334-ingress-contract/handler-entry.ts --bundle --platform=node --format=esm --outfile=.cache/d3334-ingress-contract/handler.mjs --log-level=warning
-	node --test tools/d3334-ingress-contract/model.test.mjs
+	$(CI_NODE) --test tools/d3334-ingress-contract/model.test.mjs
 
 .PHONY: http-streaming-proxy-check
 http-streaming-proxy-check:
 	./node_modules/.bin/esbuild tools/http-streaming-proxy/upstream.ts --bundle --platform=node --format=esm --outfile=.cache/http-streaming-proxy/upstream.mjs --log-level=warning
-	node tools/http-streaming-proxy/check.mjs
+	$(CI_NODE) tools/http-streaming-proxy/check.mjs
 
 # rfc/evidence-presentation.md §8.4 / criterion 11: literal, named, system and color-mix colours over
 # the component tree, with a self-check that the keyword lists stay non-empty.
@@ -414,27 +418,27 @@ component-theme-sweep:
 component-coverage:
 	./node_modules/.bin/vitest run --config tools/component-coverage/vitest.config.ts
 	./node_modules/.bin/esbuild tools/component-coverage/main.ts --bundle --platform=node --format=esm --log-level=warning --outfile=tools/component-coverage/dist/main.mjs
-	node tools/component-coverage/dist/main.mjs
+	$(CI_NODE) tools/component-coverage/dist/main.mjs
 
 evidence-manifest-check:
 	./node_modules/.bin/esbuild apps/server/src/evidence-manifest-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/evidence-manifest-check.js
-	node apps/server/dist/evidence-manifest-check.js
+	$(CI_NODE) apps/server/dist/evidence-manifest-check.js
 
 semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
-	node apps/server/dist/semantic-evidence-check.js
+	$(CI_NODE) apps/server/dist/semantic-evidence-check.js
 
 .PHONY: candidate-packet-projections candidate-packet-projections-check candidate-closure-census
 # rfc/shared-candidate-evidence-packet.md §5.3/§12: the generated literal closure and its drift check.
 candidate-packet-projections:
-	node tools/generate-candidate-packet-projections.mjs
+	$(CI_NODE) tools/generate-candidate-packet-projections.mjs
 
 candidate-packet-projections-check:
-	node tools/generate-candidate-packet-projections.mjs --check
+	$(CI_NODE) tools/generate-candidate-packet-projections.mjs --check
 
 # Prevalence/cost census over a fixed sample (POSITIONS=<file of FENs> to override); never the schema.
 candidate-closure-census:
-	node tools/candidate-closure-census.mjs $(POSITIONS)
+	$(CI_NODE) tools/candidate-closure-census.mjs $(POSITIONS)
 
 # rfc/recorded-semantic-path §8: fixtures, exact/eager parity, imported-sample census and the
 # pinned 20/40/80-ply timing arms (RECORDED_PATH_TIMING=report downgrades the budget to a warning
@@ -443,7 +447,7 @@ candidate-closure-census:
 recorded-semantic-path-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
 	./node_modules/.bin/esbuild apps/server/src/recorded-semantic-path-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/recorded-semantic-path-check.js
-	node apps/server/dist/recorded-semantic-path-check.js
+	$(CI_NODE) apps/server/dist/recorded-semantic-path-check.js
 
 .PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-stockfish-child-capture semantic-search-stockfish-child-check semantic-search-stockfish-child-beam semantic-search-maia-capture semantic-search-maia-check semantic-search-maia-child-capture semantic-search-maia-child-check semantic-search-maia-child-prefix semantic-search-maia-configured-window semantic-search-maia-direct-check semantic-search-maia-direct-frontier semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-touch semantic-search-semantic-reserve semantic-search-relation-event semantic-search-relation-event-reserve semantic-search-local-contrast semantic-search-local-rank-concordance semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 semantic-search-input-readiness:
@@ -1394,10 +1398,10 @@ foundation-closure-check: evidence-manifest-check evidence-value-authority-route
 	./node_modules/.bin/vitest run --config tools/d1710-producer-execution-harness/vitest.config.ts --reporter=verbose
 
 foundation-source-author-contract:
-	node --test tools/d1736-foundation-source-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d1736-foundation-source-author-contract/contract.test.mjs
 
 foundation-source-author-audit:
-	node --test tools/d2390-foundation-source-author-audit/contract.test.mjs
+	$(CI_NODE) --test tools/d2390-foundation-source-author-audit/contract.test.mjs
 
 foundation-source-author-repair: foundation-source-author-contract foundation-source-author-audit
 
@@ -1425,7 +1429,7 @@ semantic-validation-build:
 	./node_modules/.bin/esbuild tools/semantic-validation-build.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-validation-build.mjs --log-level=warning
 
 semantic-validation-update: semantic-validation-build
-	node tools/semantic-validation/dist/semantic-validation-build.mjs --write
+	$(CI_NODE) tools/semantic-validation/dist/semantic-validation-build.mjs --write
 
 .PHONY: mobility-check
 mobility-check:
@@ -1437,13 +1441,13 @@ king-state-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/castling-evidence.test.ts
 
 semantic-validation-check: semantic-validation-build
-	node tools/semantic-validation/dist/semantic-validation-build.mjs --check
+	$(CI_NODE) tools/semantic-validation/dist/semantic-validation-build.mjs --check
 
 # §R4: the owner-authority store is append-only and owner rows predate the case admitting them.
 .PHONY: semantic-validation-owner-transition-check
 semantic-validation-owner-transition-check:
 	./node_modules/.bin/esbuild tools/semantic-validation-owner-transition.ts --bundle --platform=node --format=esm --outfile=tools/semantic-validation/dist/semantic-validation-owner-transition.mjs --log-level=warning
-	node tools/semantic-validation/dist/semantic-validation-owner-transition.mjs $(if $(CI),--ci,)
+	$(CI_NODE) tools/semantic-validation/dist/semantic-validation-owner-transition.mjs $(if $(CI),--ci,)
 
 semantic-validation-closure:
 	./node_modules/.bin/vitest run --config tools/d1711-semantic-validation-closure/vitest.config.ts --reporter=verbose
@@ -1452,8 +1456,8 @@ semantic-validation-matrix:
 	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts --reporter=verbose
 
 semantic-validation-author-contract:
-	node --test tools/d2039-semantic-validation-author-contract/contract.test.mjs
-	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2039-semantic-validation-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
 .PHONY: semantic-validation-author-repair semantic-validation-fresh-review semantic-validation-second-fresh-review
 .PHONY: semantic-validation-third-author-repair semantic-validation-adversarial-audit semantic-validation-fourth-author-repair semantic-validation-fifth-fresh-review semantic-validation-fifth-author-repair
@@ -1461,60 +1465,60 @@ semantic-validation-author-contract:
 .PHONY: provider-protocol-fresh-review
 .PHONY: storage-backup-second-fresh-review storage-backup-second-author-repair storage-backup-third-fresh-review storage-backup-third-author-repair storage-backup-fourth-fresh-review storage-backup-fourth-author-repair
 semantic-validation-author-repair:
-	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
 semantic-validation-fresh-review:
-	node --test tools/d2194-semantic-validation-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2194-semantic-validation-fresh-review/*.test.mjs
 
 semantic-validation-second-fresh-review:
-	node --test tools/d2331-semantic-validation-second-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2331-semantic-validation-second-fresh-review/*.test.mjs
 
 semantic-validation-third-author-repair:
 	./node_modules/.bin/vitest run --config tools/d2331-semantic-validation-third-author-repair/vitest.config.ts --reporter=verbose
 
 semantic-validation-adversarial-audit:
-	node --test tools/d2385-semantic-validation-adversarial-audit/contract.test.mjs
+	$(CI_NODE) --test tools/d2385-semantic-validation-adversarial-audit/contract.test.mjs
 
 semantic-validation-fourth-author-repair:
-	node --test tools/d2385-semantic-validation-fourth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2385-semantic-validation-fourth-author-repair/contract.test.mjs
 
 semantic-validation-fifth-fresh-review:
-	node --test tools/d2445-semantic-validation-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2445-semantic-validation-fifth-fresh-review/contract.test.mjs
 
 semantic-validation-fifth-author-repair:
-	node --test tools/d2445-semantic-validation-fifth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2445-semantic-validation-fifth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2445-semantic-validation-fifth-author-repair/tsconfig.contract.json --noEmit
 
 assistance-register-sixth-fresh-review:
-	node --test tools/d2450-assistance-register-sixth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2450-assistance-register-sixth-fresh-review/contract.test.mjs
 
 provider-protocol-fresh-review:
-	node --test tools/d2455-provider-protocol-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2455-provider-protocol-fresh-review/contract.test.mjs
 
 .PHONY: provider-protocol-second-fresh-review
 provider-protocol-second-fresh-review:
-	node --test tools/d2809-provider-protocol-second-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2809-provider-protocol-second-fresh-review/review.test.mjs
 
 .PHONY: provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-fourth-author-repair
 provider-protocol-second-author-repair: provider-protocol-fresh-review provider-protocol-second-fresh-review
-	node --test tools/d2809-provider-protocol-second-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2809-provider-protocol-second-author-repair/contract.test.mjs
 
 .PHONY: provider-protocol-third-fresh-review
 provider-protocol-third-fresh-review: provider-protocol-second-author-repair
-	node --test tools/d2874-provider-protocol-third-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2874-provider-protocol-third-fresh-review/review.test.mjs
 
 provider-protocol-third-author-repair: provider-protocol-third-fresh-review
-	node --test tools/d2874-provider-protocol-third-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2874-provider-protocol-third-author-repair/contract.test.mjs
 
 provider-protocol-fourth-fresh-review: provider-protocol-third-author-repair
-	node --test tools/d2909-provider-protocol-fourth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2909-provider-protocol-fourth-fresh-review/review.test.mjs
 
 provider-protocol-fourth-author-repair: provider-protocol-fourth-fresh-review
-	node --test tools/d2909-provider-protocol-fourth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2909-provider-protocol-fourth-author-repair/contract.test.mjs
 
 .PHONY: provider-protocol-fifth-fresh-review
 provider-protocol-fifth-fresh-review: provider-protocol-fourth-author-repair
-	node --test tools/d2950-provider-protocol-fifth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2950-provider-protocol-fifth-fresh-review/review.test.mjs
 
 .PHONY: provider-protocol-fifth-author-repair
 provider-protocol-fifth-author-repair: provider-protocol-fifth-fresh-review
@@ -1527,7 +1531,7 @@ provider-protocol-sixth-fresh-review: provider-protocol-fifth-author-repair
 	./node_modules/.bin/tsc -p tools/d2956-provider-protocol-sixth-fresh-review/tsconfig.json
 
 provider-protocol-cut-contract:
-	node --test tools/d3128-provider-protocol-cut-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d3128-provider-protocol-cut-contract/contract.test.mjs
 
 .PHONY: provider-health-sixth-fresh-review
 provider-health-sixth-fresh-review:
@@ -1590,7 +1594,7 @@ provider-health-twelfth-fresh-review: provider-health-eleventh-author-repair
 	./node_modules/.bin/tsc -p tools/d2966-provider-health-twelfth-fresh-review/tsconfig.json
 
 storage-backup-second-fresh-review:
-	node --test tools/d2460-storage-backup-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2460-storage-backup-second-fresh-review/contract.test.mjs
 
 storage-backup-second-author-repair: storage-backup-author-repair
 	./node_modules/.bin/vitest run --config tools/d2460-storage-backup-second-author-repair/vitest.config.ts --reporter=verbose
@@ -1620,7 +1624,7 @@ module-evidence-assembly:
 
 module-registration-author-contract-update:
 	./node_modules/.bin/esbuild tools/d2120-module-registration-author-contract/generate.ts --bundle --platform=node --format=esm --outfile=/tmp/chess-tabiya-module-registration-generate.mjs
-	node /tmp/chess-tabiya-module-registration-generate.mjs
+	$(CI_NODE) /tmp/chess-tabiya-module-registration-generate.mjs
 
 module-registration-author-contract:
 	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts --reporter=verbose
@@ -1632,37 +1636,37 @@ requested-sight-contract-check:
 
 .PHONY: wave-c-module-amendment
 wave-c-module-amendment: module-evidence-assembly module-registration-author-contract
-	node --test tools/d3129-wave-c-module-amendment/contract.test.mjs
+	$(CI_NODE) --test tools/d3129-wave-c-module-amendment/contract.test.mjs
 
 .PHONY: module-discharge-coverage-contract
 module-discharge-coverage-contract:
 	./node_modules/.bin/vitest run --config tools/d3065-module-discharge-coverage-contract/vitest.config.ts --reporter=verbose
 
 module-registration-fresh-review:
-	node --test tools/d2120-module-registration-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2120-module-registration-fresh-review/*.test.mjs
 
 .PHONY: module-registration-fifth-fresh-review module-registration-sixth-author-repair
 module-registration-fifth-fresh-review:
-	node --test tools/d2432-module-registration-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2432-module-registration-fifth-fresh-review/contract.test.mjs
 
 module-registration-sixth-author-repair:
-	node --test tools/d2432-module-registration-sixth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2432-module-registration-sixth-author-repair/contract.test.mjs
 
 intent-presets-author-contract:
-	node --test tools/d1659-intent-presets-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d1659-intent-presets-author-contract/contract.test.mjs
 
 intent-presets-second-author-repair:
 	./node_modules/.bin/vitest run --config tools/d2127-intent-presets-author-contract/vitest.config.ts --reporter=verbose
 
 intent-presets-fresh-review:
-	node --test tools/d2127-intent-presets-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2127-intent-presets-fresh-review/*.test.mjs
 
 intent-presets-second-fresh-review:
-	node --test tools/d2171-intent-presets-second-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2171-intent-presets-second-fresh-review/*.test.mjs
 
 presentation-binding-census:
 	./node_modules/.bin/esbuild tools/d1862-presentation-adapter-plan/census.ts --bundle --platform=node --format=esm --outfile=/tmp/chess-tabiya-presentation-binding-census.mjs
-	node /tmp/chess-tabiya-presentation-binding-census.mjs
+	$(CI_NODE) /tmp/chess-tabiya-presentation-binding-census.mjs
 
 evidence-presentation-author-contract:
 	./node_modules/.bin/vitest run --config tools/d1862-presentation-adapter-plan/vitest.config.ts --reporter=verbose
@@ -1672,19 +1676,19 @@ evidence-presentation-second-author-repair:
 	./node_modules/.bin/vitest run --config tools/d2135-evidence-presentation-author-contract/vitest.config.ts --reporter=verbose
 
 evidence-presentation-fresh-review:
-	node --test tools/d2135-evidence-presentation-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2135-evidence-presentation-fresh-review/*.test.mjs
 
 semantic-collectors-promotion-fresh-review:
-	node --test tools/d2141-semantic-collectors-promotion-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2141-semantic-collectors-promotion-fresh-review/*.test.mjs
 
 semantic-collectors-promotion-author-repair:
-	node --test tools/d2141-semantic-collectors-promotion-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2141-semantic-collectors-promotion-author-repair/*.test.mjs
 
 semantic-collectors-promotion-second-fresh-review:
-	node --test tools/d2179-semantic-collectors-promotion-second-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2179-semantic-collectors-promotion-second-fresh-review/*.test.mjs
 
 semantic-collectors-promotion-second-author-repair:
-	node --test tools/d2179-semantic-collectors-promotion-second-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2179-semantic-collectors-promotion-second-author-repair/*.test.mjs
 	./node_modules/.bin/tsc -p tools/d2179-semantic-collectors-promotion-second-author-repair/tsconfig.contract.json --noEmit
 
 evidence-seal-audit:
@@ -1704,45 +1708,45 @@ evidence-seal-audit:
 .PHONY: return-frequency-metadata-check return-frequency-metadata-update
 return-frequency-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/return-frequency-metadata.js --log-level=warning
-	node apps/server/dist/return-frequency-metadata.js --return-frequency
+	$(CI_NODE) apps/server/dist/return-frequency-metadata.js --return-frequency
 return-frequency-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/return-frequency-metadata.js --log-level=warning
-	node apps/server/dist/return-frequency-metadata.js --return-frequency --apply-metadata
+	$(CI_NODE) apps/server/dist/return-frequency-metadata.js --return-frequency --apply-metadata
 
 .PHONY: inspector-corpus-metadata-check inspector-corpus-metadata-update
 inspector-corpus-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/inspector-corpus-metadata.js --log-level=warning
-	node apps/server/dist/inspector-corpus-metadata.js --inspector-population
+	$(CI_NODE) apps/server/dist/inspector-corpus-metadata.js --inspector-population
 inspector-corpus-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/inspector-corpus-metadata.js --log-level=warning
-	node apps/server/dist/inspector-corpus-metadata.js --inspector-population --apply-metadata
+	$(CI_NODE) apps/server/dist/inspector-corpus-metadata.js --inspector-population --apply-metadata
 
 repertoire-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/repertoire-metadata.js --log-level=warning
-	node apps/server/dist/repertoire-metadata.js --repertoire-frontier
+	$(CI_NODE) apps/server/dist/repertoire-metadata.js --repertoire-frontier
 repertoire-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/repertoire-metadata.js --log-level=warning
-	node apps/server/dist/repertoire-metadata.js --repertoire-frontier --apply-metadata
+	$(CI_NODE) apps/server/dist/repertoire-metadata.js --repertoire-frontier --apply-metadata
 health-tablebase-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/health-tablebase-metadata.js --log-level=warning
-	node apps/server/dist/health-tablebase-metadata.js --health-tablebase
+	$(CI_NODE) apps/server/dist/health-tablebase-metadata.js --health-tablebase
 health-tablebase-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/health-tablebase-metadata.js --log-level=warning
-	node apps/server/dist/health-tablebase-metadata.js --health-tablebase --apply-metadata
+	$(CI_NODE) apps/server/dist/health-tablebase-metadata.js --health-tablebase --apply-metadata
 .PHONY: queued-tablebase-metadata-check queued-tablebase-metadata-update
 queued-tablebase-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/queued-tablebase-metadata.js --log-level=warning
-	node apps/server/dist/queued-tablebase-metadata.js --queued-tablebase
+	$(CI_NODE) apps/server/dist/queued-tablebase-metadata.js --queued-tablebase
 queued-tablebase-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/queued-tablebase-metadata.js --log-level=warning
-	node apps/server/dist/queued-tablebase-metadata.js --queued-tablebase --apply-metadata
+	$(CI_NODE) apps/server/dist/queued-tablebase-metadata.js --queued-tablebase --apply-metadata
 .PHONY: branch-tablebase-metadata-check branch-tablebase-metadata-update
 branch-tablebase-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/branch-tablebase-metadata.js --log-level=warning
-	node apps/server/dist/branch-tablebase-metadata.js --branch-decidedness
+	$(CI_NODE) apps/server/dist/branch-tablebase-metadata.js --branch-decidedness
 branch-tablebase-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/branch-tablebase-metadata.js --log-level=warning
-	node apps/server/dist/branch-tablebase-metadata.js --branch-decidedness --apply-metadata
+	$(CI_NODE) apps/server/dist/branch-tablebase-metadata.js --branch-decidedness --apply-metadata
 branch-tablebase-check: evidence-manifest-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-tablebase.test.ts apps/server/src/pack-optional-runs.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts
 queued-tablebase-check: evidence-manifest-check
@@ -1759,19 +1763,19 @@ tablebase-cancellation-check:
 .PHONY: provider-source-history-check provider-source-history-metadata-update
 provider-source-history-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/provider-source-history.js --log-level=warning
-	node apps/server/dist/provider-source-history.js
+	$(CI_NODE) apps/server/dist/provider-source-history.js
 provider-source-history-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/provider-source-history.js --log-level=warning
-	node apps/server/dist/provider-source-history.js --apply-metadata
+	$(CI_NODE) apps/server/dist/provider-source-history.js --apply-metadata
 tablebase-selection-metadata-check:
 	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
-	node apps/server/dist/tablebase-selection-metadata.js
+	$(CI_NODE) apps/server/dist/tablebase-selection-metadata.js
 tablebase-selection-metadata-edits:
 	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
-	node apps/server/dist/tablebase-selection-metadata.js --edits
+	$(CI_NODE) apps/server/dist/tablebase-selection-metadata.js --edits
 tablebase-selection-metadata-update:
 	./node_modules/.bin/esbuild tools/d3366-tablebase-selection-metadata/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/tablebase-selection-metadata.js --log-level=warning
-	node apps/server/dist/tablebase-selection-metadata.js --apply-metadata
+	$(CI_NODE) apps/server/dist/tablebase-selection-metadata.js --apply-metadata
 maia-occurrence-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/maia-occurrence.test.ts apps/server/src/maia-occurrence-access.test.ts
 run-subject-check:
@@ -1780,7 +1784,7 @@ run-subject-check:
 explorer-summary-migration-proof:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/capability/explorer-summary-migration-proof.test.ts
 	./node_modules/.bin/esbuild tools/explorer-summary-migration-proof/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-summary-migration-proof.js --log-level=warning
-	node apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
+	$(CI_NODE) apps/server/dist/explorer-summary-migration-proof.js $(ARGS)
 
 .PHONY: bot-source-authority-check
 bot-source-authority-check:
@@ -1836,27 +1840,27 @@ confidence-contract-census-check:
 	./node_modules/.bin/vitest run --config tools/d3392-confidence-census/vitest.config.ts
 confidence-contract-census:
 	./node_modules/.bin/esbuild tools/d3392-confidence-census/report.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/confidence-contract-census.js --log-level=warning
-	node apps/server/dist/confidence-contract-census.js
+	$(CI_NODE) apps/server/dist/confidence-contract-census.js
 
 .PHONY: confidence-domain-metadata-update confidence-domain-metadata-check
 confidence-domain-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/confidence-domain-metadata.js --log-level=warning
-	node apps/server/dist/confidence-domain-metadata.js --confidence-domain --apply-metadata
+	$(CI_NODE) apps/server/dist/confidence-domain-metadata.js --confidence-domain --apply-metadata
 confidence-domain-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/confidence-domain-metadata.js --log-level=warning
-	node apps/server/dist/confidence-domain-metadata.js --confidence-domain
+	$(CI_NODE) apps/server/dist/confidence-domain-metadata.js --confidence-domain
 
 .PHONY: theory-binding-metadata-update theory-binding-metadata-check
 theory-binding-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/theory-binding-metadata.js --log-level=warning
-	node apps/server/dist/theory-binding-metadata.js --theory-bindings --apply-metadata
+	$(CI_NODE) apps/server/dist/theory-binding-metadata.js --theory-bindings --apply-metadata
 theory-binding-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/theory-binding-metadata.js --log-level=warning
-	node apps/server/dist/theory-binding-metadata.js --theory-bindings
+	$(CI_NODE) apps/server/dist/theory-binding-metadata.js --theory-bindings
 
 .PHONY: opponent-cancellation-check
 opponent-cancellation-check:
@@ -1865,28 +1869,28 @@ opponent-cancellation-check:
 .PHONY: opponent-cancellation-metadata-update opponent-cancellation-metadata-check
 opponent-cancellation-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-cancellation-metadata.js --log-level=warning
-	node apps/server/dist/opponent-cancellation-metadata.js --opponent-cancellation --apply-metadata
+	$(CI_NODE) apps/server/dist/opponent-cancellation-metadata.js --opponent-cancellation --apply-metadata
 opponent-cancellation-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-cancellation-metadata.js --log-level=warning
-	node apps/server/dist/opponent-cancellation-metadata.js --opponent-cancellation
+	$(CI_NODE) apps/server/dist/opponent-cancellation-metadata.js --opponent-cancellation
 
 .PHONY: binding-absence-metadata-check binding-absence-metadata-update
 .PHONY: review-transition-metadata-check review-transition-metadata-update
 review-transition-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/review-transition-metadata.js --log-level=warning
-	node apps/server/dist/review-transition-metadata.js --review-transitions
+	$(CI_NODE) apps/server/dist/review-transition-metadata.js --review-transitions
 
 review-transition-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/review-transition-metadata.js --log-level=warning
-	node apps/server/dist/review-transition-metadata.js --review-transitions --apply-metadata
+	$(CI_NODE) apps/server/dist/review-transition-metadata.js --review-transitions --apply-metadata
 
 binding-absence-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/binding-absence-metadata.js --log-level=warning
-	node apps/server/dist/binding-absence-metadata.js --binding-absence
+	$(CI_NODE) apps/server/dist/binding-absence-metadata.js --binding-absence
 
 binding-absence-metadata-update:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/binding-absence-metadata.js --log-level=warning
-	node apps/server/dist/binding-absence-metadata.js --binding-absence --apply-metadata
+	$(CI_NODE) apps/server/dist/binding-absence-metadata.js --binding-absence --apply-metadata
 
 provider-exchange-check: run-subject-check maia-occurrence-check evidence-execution-check bot-source-authority-check evidence-binding-execution-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-contract.test.ts
@@ -1953,7 +1957,7 @@ repertoire-source-check: evidence-manifest-check
 # request from stdin (operations: stockfish-legal-roots, stockfish-position-evaluation, stockfish-principal-variation,
 # maia-policy-page, syzygy-position, explorer-position-page).
 provider-traversal: build
-	node apps/server/dist/provider-traversal.js $(OP)
+	$(CI_NODE) apps/server/dist/provider-traversal.js $(OP)
 
 .PHONY: provider-traversal-check
 provider-traversal-check:
@@ -1970,24 +1974,24 @@ evidence-value-profile-update:
 	UPDATE_EVIDENCE_VALUE_PROFILES=1 ./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts -t "runs a valid authority case and a falsifier"
 
 evidence-value-authority-author-contract:
-	node --test tools/d2144-evidence-value-authority-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d2144-evidence-value-authority-author-contract/contract.test.mjs
 
 evidence-value-authority-route-map:
 	./node_modules/.bin/esbuild tools/d2144-evidence-value-authority-route-map/route-map.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs
-	node tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs
+	$(CI_NODE) tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs
 
 evidence-value-authority-route-map-update:
 	./node_modules/.bin/esbuild tools/d2144-evidence-value-authority-route-map/route-map.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs
-	node tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs --write
+	$(CI_NODE) tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs --write
 
 opening-source-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/opening-catalogue.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts
 
 opening-catalogue: build
-	node apps/server/dist/opening-catalogue-build.js
+	$(CI_NODE) apps/server/dist/opening-catalogue-build.js
 
 opening-catalogue-check: build
-	node apps/server/dist/opening-catalogue-build.js --check
+	$(CI_NODE) apps/server/dist/opening-catalogue-build.js --check
 
 account-data-lifecycle-check:
 	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
@@ -2010,11 +2014,11 @@ support-staged-browser-check:
 .PHONY: concept-registry-census concept-registry-revise
 concept-registry-census:
 	./node_modules/.bin/esbuild apps/server/src/concept-registry-tool.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/concept-registry-tool.js
-	node apps/server/dist/concept-registry-tool.js census
+	$(CI_NODE) apps/server/dist/concept-registry-tool.js census
 
 concept-registry-revise:
 	./node_modules/.bin/esbuild apps/server/src/concept-registry-tool.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/concept-registry-tool.js
-	node apps/server/dist/concept-registry-tool.js revise
+	$(CI_NODE) apps/server/dist/concept-registry-tool.js revise
 
 # rfc/player-style.md criteria 1–3: STYLE_METRICS is set-equal (metric id, feature id, floor) to the
 # R21 instrument rows whose R12 persistent floor is non-null; every drift arm must be red.
@@ -2023,13 +2027,13 @@ style-registry-check:
 
 learner-rating-bracket:
 	./node_modules/.bin/esbuild tools/learner-rating-bracket-harness/simulate.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-learner-rating-bracket.mjs
-	node /tmp/tabiya-learner-rating-bracket.mjs --update
+	$(CI_NODE) /tmp/tabiya-learner-rating-bracket.mjs --update
 
 learner-rating-bracket-check:
-	node --test tools/learner-rating-bracket-harness/check.test.mjs
+	$(CI_NODE) --test tools/learner-rating-bracket-harness/check.test.mjs
 
 learner-rating-isolation-check:
-	node --test tools/learner-rating-isolation-harness/import-graph.test.mjs
+	$(CI_NODE) --test tools/learner-rating-isolation-harness/import-graph.test.mjs
 	./node_modules/.bin/vitest run --config tools/learner-rating-isolation-harness/vitest.config.ts
 
 longitudinal-projector-check:
@@ -2039,11 +2043,11 @@ longitudinal-store-author-contract:
 	./node_modules/.bin/vitest run --config tools/d1612-longitudinal-contract-harness/vitest.config.ts --reporter=verbose
 
 longitudinal-store-fresh-review:
-	node --test tools/d2063-longitudinal-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2063-longitudinal-fresh-review/*.test.mjs
 
 .PHONY: longitudinal-store-second-fresh-review
 longitudinal-store-second-fresh-review:
-	node --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
 
 .PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review longitudinal-store-seventh-author-repair longitudinal-store-seventh-fresh-review longitudinal-store-eighth-author-repair longitudinal-store-eighth-fresh-review longitudinal-store-ninth-author-repair longitudinal-store-tenth-fresh-review
 longitudinal-store-third-fresh-review:
@@ -2061,7 +2065,7 @@ longitudinal-store-fifth-author-repair: longitudinal-store-fourth-author-repair
 	./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext tools/d2514-longitudinal-fifth-author-repair/contract.typecheck.ts
 
 longitudinal-store-fifth-fresh-review:
-	node --test tools/d2570-longitudinal-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2570-longitudinal-fifth-fresh-review/contract.test.mjs
 
 longitudinal-store-sixth-author-repair: longitudinal-store-fifth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2570-longitudinal-sixth-author-repair/vitest.config.ts --reporter=verbose
@@ -2100,19 +2104,19 @@ longitudinal-store-tenth-fresh-review: longitudinal-store-ninth-author-repair
 .PHONY: longitudinal-worker-once longitudinal-rebuild
 longitudinal-worker-once:
 	pnpm --filter @chess-tabiya/server exec esbuild src/longitudinal-worker-once.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/longitudinal-worker-once.js
-	node apps/server/dist/longitudinal-worker-once.js
+	$(CI_NODE) apps/server/dist/longitudinal-worker-once.js
 
 longitudinal-rebuild:
 	pnpm --filter @chess-tabiya/server exec esbuild src/longitudinal-rebuild.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/longitudinal-rebuild.js
-	node apps/server/dist/longitudinal-rebuild.js $(if $(WRITE),--write,)
+	$(CI_NODE) apps/server/dist/longitudinal-rebuild.js $(if $(WRITE),--write,)
 
 .PHONY: bot-roster-fresh-review
 bot-roster-fresh-review:
-	node --test tools/d2233-bot-roster-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2233-bot-roster-fresh-review/contract.test.mjs
 
 .PHONY: bot-roster-author-repair
 bot-roster-author-repair:
-	node --test tools/d2234-bot-roster-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2234-bot-roster-author-repair/contract.test.mjs
 
 # rfc/bot-roster.md criterion 1: the registered catalogue is set-equal to FAMILIES x BANDS; also
 # pins its generated digests, measurements and grounded cards. Runs inside test-software too.
@@ -2122,12 +2126,12 @@ bot-roster-census:
 
 .PHONY: bot-calibration-verdict-contract
 bot-calibration-verdict-contract:
-	node --test tools/d2236-bot-calibration-verdict-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d2236-bot-calibration-verdict-contract/contract.test.mjs
 
 # Disposable D3429 source-formula examples; no calibration or production admission.
 .PHONY: bot-calibration-numerical-author-check
 bot-calibration-numerical-author-check:
-	node --test tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs
+	$(CI_NODE) --test tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs
 
 # Disposable D3309 producer/presentation fidelity census. No v2 production migration.
 .PHONY: structural-inspector-fidelity-check
@@ -2146,7 +2150,7 @@ bot-calibration-population:
 
 bot-calibration-population-report bot-calibration-population-report-update bot-calibration-population-report-check:
 	./node_modules/.bin/esbuild tools/d2236-bot-calibration-verdict-contract/report.ts --bundle --platform=node --format=esm --alias:chessops=./apps/server/node_modules/chessops/dist/esm --outfile=.cache/bot-calibration/report.mjs --log-level=warning
-	node .cache/bot-calibration/report.mjs $(if $(filter bot-calibration-population-report-update,$@),--update,) $(if $(filter bot-calibration-population-report-check,$@),--check,)
+	$(CI_NODE) .cache/bot-calibration/report.mjs $(if $(filter bot-calibration-population-report-update,$@),--update,) $(if $(filter bot-calibration-population-report-check,$@),--check,)
 
 .PHONY: bot-calibration-engine bot-calibration-engine-check bot-calibration-verify bot-calibration-evaluate bot-calibration-evaluation-report bot-calibration-evaluation-report-update bot-calibration-evaluation-report-check
 ifndef BOT_CALIBRATION_SF_CMD
@@ -2189,7 +2193,7 @@ bot-calibration-opening-report bot-calibration-opening-report-update bot-calibra
 
 .PHONY: opponent-experience-fresh-review
 opponent-experience-fresh-review:
-	node --test tools/d2238-opponent-experience-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2238-opponent-experience-fresh-review/contract.test.mjs
 
 longitudinal-store-cost:
 	@test -z "$$(git status --porcelain -- Makefile packages/runtime/src/evidence-catalog.ts packages/runtime/src/semantic-evidence.ts packages/runtime/src/legal-moves.ts packages/runtime/src/phase.ts tools/research-chess/populations.ts tools/d1405-longitudinal-cost-harness tools/d1405b-single-decision-harness tools/d1612-longitudinal-contract-harness rfc/contracts/longitudinal-ingest-registry-v1.json rfc/contracts/longitudinal-sign-subsets-v1.json)" || (echo "longitudinal-store-cost requires committed measurement inputs" >&2; exit 2)
@@ -2203,13 +2207,13 @@ longitudinal-store-cost:
 		./node_modules/.bin/vitest run --config tools/d1405b-single-decision-harness/vitest.config.ts
 
 campaign-two-horizon-author-contract:
-	node --test tools/d1592-two-horizon-harness/model.test.mjs tools/campaign-two-horizon-author-contract/contract.test.mjs tools/d2244-campaign-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d1592-two-horizon-harness/model.test.mjs tools/campaign-two-horizon-author-contract/contract.test.mjs tools/d2244-campaign-author-repair/contract.test.mjs
 
 campaign-two-horizon-fresh-review:
-	node --test tools/d2077-campaign-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2077-campaign-fresh-review/contract.test.mjs
 
 campaign-two-horizon-third-fresh-review:
-	node --test tools/d2420-campaign-third-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2420-campaign-third-fresh-review/contract.test.mjs
 
 .PHONY: campaign-two-horizon-fourth-author-repair campaign-two-horizon-fourth-fresh-review campaign-two-horizon-fifth-author-repair
 campaign-two-horizon-fourth-author-repair: campaign-two-horizon-author-contract
@@ -2234,29 +2238,29 @@ campaign-two-horizon-sixth-author-repair: campaign-two-horizon-fifth-author-repa
 
 .PHONY: campaign-boss-author-contract
 campaign-boss-author-contract:
-	node --test tools/campaign-boss-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/campaign-boss-author-contract/contract.test.mjs
 
 .PHONY: module-registration-sixth-fresh-review module-registration-seventh-author-repair
 module-registration-sixth-fresh-review:
-	node --test tools/d2505-module-registration-sixth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2505-module-registration-sixth-fresh-review/contract.test.mjs
 
 module-registration-seventh-author-repair:
 	./node_modules/.bin/vitest run --config tools/d2505-module-registration-seventh-author-repair/vitest.config.ts --reporter=verbose
 
 .PHONY: module-registration-seventh-fresh-review module-registration-eighth-author-repair
 module-registration-seventh-fresh-review:
-	node --test tools/d2530-module-registration-seventh-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2530-module-registration-seventh-fresh-review/contract.test.mjs
 
 module-registration-eighth-author-repair: module-registration-author-contract
-	node --test tools/d2530-module-registration-eighth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2530-module-registration-eighth-author-repair/contract.test.mjs
 
 .PHONY: module-registration-eighth-fresh-review
 module-registration-eighth-fresh-review:
-	node --test tools/d2557-module-registration-eighth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2557-module-registration-eighth-fresh-review/contract.test.mjs
 
 .PHONY: module-registration-ninth-author-repair
 module-registration-ninth-author-repair: module-registration-eighth-author-repair
-	node --test tools/d2557-module-registration-ninth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2557-module-registration-ninth-author-repair/contract.test.mjs
 
 .PHONY: module-registration-tenth-fresh-review
 module-registration-tenth-fresh-review:
@@ -2273,11 +2277,11 @@ semantic-collectors-deflection-authority-author-contract:
 
 .PHONY: campaign-second-fresh-review
 campaign-second-fresh-review:
-	node --test tools/d2244-campaign-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2244-campaign-second-fresh-review/contract.test.mjs
 
 .PHONY: social-play-fresh-review
 social-play-fresh-review:
-	node --test tools/d2253-social-play-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2253-social-play-fresh-review/contract.test.mjs
 
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
@@ -2292,10 +2296,10 @@ human-divergence-measurement:
 	./node_modules/.bin/esbuild tools/d52-human-divergence-harness/prepare.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d52-human-divergence/prepare.mjs
 	./node_modules/.bin/esbuild tools/d52-human-divergence-harness/probe.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d52-human-divergence/probe.mjs
 	./node_modules/.bin/esbuild tools/d52-human-divergence-harness/analyze.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d52-human-divergence/analyze.mjs
-	node /tmp/tabiya-d52-human-divergence/extract.mjs content/drafts /tmp/tabiya-d52-human-divergence/corpus.json
-	node /tmp/tabiya-d52-human-divergence/prepare.mjs /tmp/tabiya-d52-human-divergence/corpus.json /tmp/tabiya-d52-human-divergence/jobs.json
-	node /tmp/tabiya-d52-human-divergence/probe.mjs /tmp/tabiya-d52-human-divergence/jobs.json /tmp/tabiya-d52-human-divergence/probes.jsonl
-	node /tmp/tabiya-d52-human-divergence/analyze.mjs /tmp/tabiya-d52-human-divergence/probes.jsonl planning/live-marker-quality/d52-human-divergence-results.json
+	$(CI_NODE) /tmp/tabiya-d52-human-divergence/extract.mjs content/drafts /tmp/tabiya-d52-human-divergence/corpus.json
+	$(CI_NODE) /tmp/tabiya-d52-human-divergence/prepare.mjs /tmp/tabiya-d52-human-divergence/corpus.json /tmp/tabiya-d52-human-divergence/jobs.json
+	$(CI_NODE) /tmp/tabiya-d52-human-divergence/probe.mjs /tmp/tabiya-d52-human-divergence/jobs.json /tmp/tabiya-d52-human-divergence/probes.jsonl
+	$(CI_NODE) /tmp/tabiya-d52-human-divergence/analyze.mjs /tmp/tabiya-d52-human-divergence/probes.jsonl planning/live-marker-quality/d52-human-divergence-results.json
 
 option-collapse-measurement:
 	./node_modules/.bin/vitest run --config tools/d53-option-collapse-harness/vitest.config.ts
@@ -2304,12 +2308,12 @@ dtz-census-measurement:
 	mkdir -p /tmp/tabiya-d457-dtz planning/dtz-census
 	python3 -B tools/d366-endgame-fidelity-harness/census.test.py
 	./node_modules/.bin/esbuild tools/d366-endgame-fidelity-harness/build-set.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d457-dtz/build-set.mjs
-	node /tmp/tabiya-d457-dtz/build-set.mjs content/drafts planning/dtz-census/d457-positions.jsonl 2 5 1200
+	$(CI_NODE) /tmp/tabiya-d457-dtz/build-set.mjs content/drafts planning/dtz-census/d457-positions.jsonl 2 5 1200
 	python3 tools/d366-endgame-fidelity-harness/census.py planning/dtz-census/d457-positions.jsonl planning/dtz-census/d457-census.json
 
 practical-resistance-measurement:
 	mkdir -p /tmp/tabiya-d490-practical planning/practical-resistance
-	node --test tools/r5-maia-stability-harness/probe-practical-resistance.test.mjs
+	$(CI_NODE) --test tools/r5-maia-stability-harness/probe-practical-resistance.test.mjs
 	docker image inspect chess-tabiya-maia:dev >/dev/null 2>&1 || docker compose build maia
 	./node_modules/.bin/esbuild tools/r5-maia-stability-harness/probe-practical-resistance.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d490-practical/probe.mjs
 	MAIA_IMAGE=chess-tabiya-maia:dev node /tmp/tabiya-d490-practical/probe.mjs tools/r5-maia-stability-harness/out/selection-summary.json planning/dtz-census/d457-positions.jsonl planning/practical-resistance/d490-tablebase.json planning/practical-resistance/d490-results.json 3 1200
@@ -2318,47 +2322,47 @@ phase-classifier-census:
 	mkdir -p /tmp/tabiya-d2483-phase planning/phase-classifier-census
 	./node_modules/.bin/vitest run --config tools/d2483-phase-classifier-census/vitest.config.ts
 	./node_modules/.bin/esbuild tools/d2483-phase-classifier-census/measure.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d2483-phase/measure.mjs
-	node /tmp/tabiya-d2483-phase/measure.mjs content/drafts planning/phase-classifier-census/results.json
+	$(CI_NODE) /tmp/tabiya-d2483-phase/measure.mjs content/drafts planning/phase-classifier-census/results.json
 
 phase-band-census:
 	mkdir -p /tmp/tabiya-d2484-phase-band planning/phase-band-census
 	./node_modules/.bin/vitest run --config tools/d2484-phase-band-census/vitest.config.ts
-	node --test tools/d2484-phase-band-census/run-isolated.test.mjs
+	$(CI_NODE) --test tools/d2484-phase-band-census/run-isolated.test.mjs
 	./node_modules/.bin/esbuild tools/d2484-phase-band-census/measure.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d2484-phase-band/measure.mjs
-	node tools/d2484-phase-band-census/run-isolated.mjs planning/phase-classifier-census/results.json /tmp/tabiya-d2484-phase-band/measure.mjs content/drafts planning/phase-band-census/results.json
+	$(CI_NODE) tools/d2484-phase-band-census/run-isolated.mjs planning/phase-classifier-census/results.json /tmp/tabiya-d2484-phase-band/measure.mjs content/drafts planning/phase-band-census/results.json
 
 phase-source-composition-census:
 	mkdir -p /tmp/tabiya-d2485-phase-sources planning/phase-source-composition
 	./node_modules/.bin/vitest run --config tools/d2485-phase-source-composition/vitest.config.ts
 	./node_modules/.bin/esbuild tools/d2485-phase-source-composition/measure.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d2485-phase-sources/measure.mjs
-	node /tmp/tabiya-d2485-phase-sources/measure.mjs content/drafts apps/server/artifacts/runtime-opening-catalogue.json planning/phase-source-composition/results.json
+	$(CI_NODE) /tmp/tabiya-d2485-phase-sources/measure.mjs content/drafts apps/server/artifacts/runtime-opening-catalogue.json planning/phase-source-composition/results.json
 
 phase-source-composition-author-contract:
-	node --test tools/d2485-phase-source-composition/author-contract.test.mjs
+	$(CI_NODE) --test tools/d2485-phase-source-composition/author-contract.test.mjs
 
 phase-source-composition-fresh-review: phase-source-composition-author-contract
-	node --test tools/d2636-phase-source-composition-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2636-phase-source-composition-fresh-review/contract.test.mjs
 
 phase-source-composition-author-repair: phase-source-composition-author-contract
-	node --test tools/d2636-phase-source-composition-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2636-phase-source-composition-author-repair/contract.test.mjs
 
 endgame-technique-applicability-census:
 	mkdir -p /tmp/tabiya-d2495-endgame-technique planning/endgame-technique-applicability
 	./node_modules/.bin/vitest run --config tools/d2495-endgame-technique-applicability/vitest.config.ts
 	./node_modules/.bin/esbuild tools/d2495-endgame-technique-applicability/measure.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d2495-endgame-technique/measure.mjs
-	node /tmp/tabiya-d2495-endgame-technique/measure.mjs content/drafts planning/endgame-technique-applicability/results.json
+	$(CI_NODE) /tmp/tabiya-d2495-endgame-technique/measure.mjs content/drafts planning/endgame-technique-applicability/results.json
 
 endgame-method-path-contract:
 	./node_modules/.bin/vitest run --config tools/d2496-endgame-method-path/vitest.config.ts
 	mkdir -p /tmp/tabiya-d2496-endgame-method-path
 	./node_modules/.bin/esbuild tools/d2496-endgame-method-path/measure.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d2496-endgame-method-path/measure.mjs
-	node /tmp/tabiya-d2496-endgame-method-path/measure.mjs content/drafts planning/endgame-method-path/results.json
+	$(CI_NODE) /tmp/tabiya-d2496-endgame-method-path/measure.mjs content/drafts planning/endgame-method-path/results.json
 
 endgame-setup-reachability-contract:
 	./node_modules/.bin/vitest run --config tools/d2497-endgame-setup-reachability/vitest.config.ts
 	mkdir -p /tmp/tabiya-d2497-endgame-setup-reachability planning/endgame-setup-reachability
 	./node_modules/.bin/esbuild tools/d2497-endgame-setup-reachability/measure.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-d2497-endgame-setup-reachability/measure.mjs
-	node /tmp/tabiya-d2497-endgame-setup-reachability/measure.mjs tools/d2497-endgame-setup-reachability/fixtures.json planning/endgame-setup-reachability/results.json
+	$(CI_NODE) /tmp/tabiya-d2497-endgame-setup-reachability/measure.mjs tools/d2497-endgame-setup-reachability/fixtures.json planning/endgame-setup-reachability/results.json
 
 # Registered KRPKR setup conventions vs Syzygy (design/research/endgame-setup-conventions.md).
 # Offline by default from the committed tablebase cache; ONLINE=1 probes the Lichess tablebase API
@@ -2366,35 +2370,35 @@ endgame-setup-reachability-contract:
 endgame-setup-convention-validation:
 	mkdir -p /tmp/tabiya-endgame-setup-conventions
 	./node_modules/.bin/esbuild tools/endgame-setup-convention-validation/validate.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-endgame-setup-conventions/validate.mjs --log-level=warning
-	node /tmp/tabiya-endgame-setup-conventions/validate.mjs $(if $(ONLINE),,--offline) > /dev/null
+	$(CI_NODE) /tmp/tabiya-endgame-setup-conventions/validate.mjs $(if $(ONLINE),,--offline) > /dev/null
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/endgame-setup.test.ts
 
 promotion-race-contract:
 	./node_modules/.bin/vitest run --config tools/d1699-promotion-race-contract-harness/vitest.config.ts
 
 provider-exchange-contract:
-	node --test tools/d1871-provider-exchange-amendment-harness/*.test.mts
+	$(CI_NODE) --test tools/d1871-provider-exchange-amendment-harness/*.test.mts
 
 assistance-register-contract:
-	node --test tools/d1916-assistance-register-review-harness/*.test.mts
+	$(CI_NODE) --test tools/d1916-assistance-register-review-harness/*.test.mts
 
 assistance-register-repeat-review:
-	node --test tools/d2009-assistance-register-repeat-review/*.test.mts
+	$(CI_NODE) --test tools/d2009-assistance-register-repeat-review/*.test.mts
 
 assistance-register-final-review:
-	node --test tools/d2037-assistance-register-final-review/*.test.mts
+	$(CI_NODE) --test tools/d2037-assistance-register-final-review/*.test.mts
 
 assistance-register-second-fresh-review:
-	node --test tools/d2113-assistance-register-second-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2113-assistance-register-second-fresh-review/*.test.mjs
 
 assistance-register-second-author-repair:
-	node --test tools/d2113-assistance-register-second-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2113-assistance-register-second-author-repair/*.test.mjs
 
 assistance-register-third-fresh-review:
-	node --test tools/d2190-assistance-register-third-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2190-assistance-register-third-fresh-review/*.test.mjs
 
 assistance-register-third-author-repair:
-	node --test tools/d2190-assistance-register-third-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2190-assistance-register-third-author-repair/*.test.mjs
 	./node_modules/.bin/tsc -p tools/d2190-assistance-register-third-author-repair/tsconfig.contract.json --noEmit
 
 assistance-register-fifth-fresh-review:
@@ -2408,51 +2412,51 @@ semantic-register-contract:
 	./node_modules/.bin/vitest run --config tools/d1722-convention-identity-harness/vitest.config.ts
 
 semantic-register-repeat-review:
-	node --test tools/d2013-semantic-register-repeat-review/*.test.mts
+	$(CI_NODE) --test tools/d2013-semantic-register-repeat-review/*.test.mts
 
 provider-exchange-repeat-review:
-	node --test tools/d1950-provider-exchange-repeat-review/*.test.mts
+	$(CI_NODE) --test tools/d1950-provider-exchange-repeat-review/*.test.mts
 
 provider-exchange-final-review:
-	node --test tools/d2000-provider-exchange-final-review/*.test.mts
+	$(CI_NODE) --test tools/d2000-provider-exchange-final-review/*.test.mts
 
 provider-exchange-fourth-review:
-	node --test tools/d2032-provider-exchange-fourth-review/*.test.mts
+	$(CI_NODE) --test tools/d2032-provider-exchange-fourth-review/*.test.mts
 
 provider-exchange-fresh-review:
-	node --test tools/d2056-provider-exchange-fresh-review/*.test.mts
+	$(CI_NODE) --test tools/d2056-provider-exchange-fresh-review/*.test.mts
 
 provider-exchange-author-repair:
-	node --test tools/d2056-provider-exchange-author-repair/*.test.mts
+	$(CI_NODE) --test tools/d2056-provider-exchange-author-repair/*.test.mts
 
 provider-exchange-second-fresh-review:
-	node --test tools/d2184-provider-exchange-second-fresh-review/*.test.mts
+	$(CI_NODE) --test tools/d2184-provider-exchange-second-fresh-review/*.test.mts
 
 .PHONY: provider-exchange-second-author-repair
 .PHONY: provider-protocol-author-repair
 provider-exchange-second-author-repair:
-	node --test tools/d2184-provider-exchange-second-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2184-provider-exchange-second-author-repair/*.test.mjs
 
 .PHONY: provider-health-author-repair
 provider-health-author-repair:
-	node --test tools/d1910-provider-health-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d1910-provider-health-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d1910-provider-health-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: provider-health-cut-contract
 provider-health-cut-contract:
-	node --test tools/d3059-provider-health-cut-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d3059-provider-health-cut-contract/contract.test.mjs
 
 .PHONY: provider-health-second-fresh-review
 provider-health-second-fresh-review:
-	node --test tools/d2412-provider-health-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2412-provider-health-second-fresh-review/contract.test.mjs
 
 .PHONY: provider-health-third-author-repair provider-health-fourth-fresh-review provider-health-fourth-author-repair provider-health-fifth-fresh-review provider-health-fifth-author-repair
 provider-health-third-author-repair: provider-health-author-repair
-	node --test tools/d2412-provider-health-third-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2412-provider-health-third-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2412-provider-health-third-author-repair/tsconfig.json
 
 provider-health-fourth-fresh-review: provider-health-third-author-repair
-	node --test tools/d2575-provider-health-fourth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2575-provider-health-fourth-fresh-review/contract.test.mjs
 
 provider-health-fourth-author-repair: provider-health-third-author-repair
 	./node_modules/.bin/vitest run --config tools/d2575-provider-health-fourth-author-repair/vitest.config.ts --reporter=verbose
@@ -2466,72 +2470,72 @@ provider-health-fifth-author-repair: provider-health-fifth-fresh-review
 	./node_modules/.bin/tsc -p tools/d2753-provider-health-fifth-author-repair/tsconfig.json
 
 candidate-packet-contract:
-	node --test tools/d1900-candidate-packet-amendment-harness/*.test.mts
+	$(CI_NODE) --test tools/d1900-candidate-packet-amendment-harness/*.test.mts
 	./node_modules/.bin/tsc -p tools/d1900-candidate-packet-amendment-harness/tsconfig.contract.json --noEmit
 
 candidate-packet-repeat-review:
-	node --test tools/d1958-candidate-packet-repeat-review/*.test.mts
+	$(CI_NODE) --test tools/d1958-candidate-packet-repeat-review/*.test.mts
 
 candidate-packet-final-review:
-	node --test tools/d1977-candidate-packet-final-review/*.test.mts
+	$(CI_NODE) --test tools/d1977-candidate-packet-final-review/*.test.mts
 
 candidate-packet-fresh-review:
-	node --test tools/d2097-candidate-packet-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2097-candidate-packet-fresh-review/contract.test.mjs
 
 candidate-packet-second-author-repair:
-	node --test tools/d2097-candidate-packet-second-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2097-candidate-packet-second-author-repair/contract.test.mjs
 
 .PHONY: candidate-packet-second-fresh-review
 candidate-packet-second-fresh-review:
-	node --test tools/d2198-candidate-packet-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2198-candidate-packet-second-fresh-review/contract.test.mjs
 
 .PHONY: candidate-packet-third-author-repair
 candidate-packet-third-author-repair:
-	node --test tools/d2198-candidate-packet-third-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2198-candidate-packet-third-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2198-candidate-packet-third-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: candidate-packet-third-fresh-review
 candidate-packet-third-fresh-review:
-	node --test tools/d2329-candidate-packet-third-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2329-candidate-packet-third-fresh-review/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2329-candidate-packet-third-fresh-review/tsconfig.contract.json --noEmit
 
 .PHONY: candidate-packet-fourth-author-repair
 candidate-packet-fourth-author-repair:
-	node --test tools/d2329-candidate-packet-fourth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2329-candidate-packet-fourth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2329-candidate-packet-fourth-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: candidate-packet-fourth-fresh-review
 candidate-packet-fourth-fresh-review:
-	node --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
 
 .PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair candidate-packet-sixth-fresh-review candidate-packet-seventh-author-repair candidate-packet-eighth-fresh-review candidate-packet-eighth-author-repair candidate-packet-ninth-fresh-review candidate-packet-tenth-author-repair candidate-packet-eleventh-fresh-review candidate-packet-eleventh-author-repair candidate-packet-twelfth-fresh-review candidate-packet-twelfth-author-repair semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review semantic-collectors-promotion-fourth-author-repair semantic-collectors-promotion-thirteenth-author-repair semantic-collectors-promotion-fourteenth-fresh-review semantic-collectors-promotion-fourteenth-author-repair
 candidate-packet-fifth-author-repair:
-	node --test tools/d2389-candidate-packet-fifth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2389-candidate-packet-fifth-author-repair/contract.test.mjs
 
 candidate-packet-fifth-fresh-review:
-	node --test tools/d2428-candidate-packet-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2428-candidate-packet-fifth-fresh-review/contract.test.mjs
 
 candidate-packet-d2428-measurement:
 	./node_modules/.bin/vitest run --config tools/d2428-candidate-packet-sixth-author-repair/vitest.measurement.config.ts --reporter=verbose
 
 candidate-packet-sixth-author-repair:
-	node --test tools/d2428-candidate-packet-sixth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2428-candidate-packet-sixth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2428-candidate-packet-sixth-author-repair/tsconfig.contract.json --noEmit
 
 candidate-packet-sixth-fresh-review: candidate-packet-sixth-author-repair
-	node --test tools/d2625-candidate-packet-sixth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2625-candidate-packet-sixth-fresh-review/contract.test.mjs
 
 candidate-packet-seventh-author-repair: candidate-packet-sixth-author-repair
-	node --test tools/d2625-candidate-packet-seventh-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2625-candidate-packet-seventh-author-repair/contract.test.mjs
 
 candidate-packet-eighth-fresh-review: candidate-packet-seventh-author-repair
-	node --test tools/d2655-candidate-packet-eighth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2655-candidate-packet-eighth-fresh-review/contract.test.mjs
 
 candidate-packet-eighth-author-repair: candidate-packet-eighth-fresh-review
-	node --test tools/d2655-candidate-packet-eighth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2655-candidate-packet-eighth-author-repair/contract.test.mjs
 
 candidate-packet-ninth-fresh-review: candidate-packet-eighth-author-repair
-	node --test tools/d2678-candidate-packet-ninth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2678-candidate-packet-ninth-fresh-review/contract.test.mjs
 
 candidate-packet-tenth-author-repair: candidate-packet-ninth-fresh-review
 	./node_modules/.bin/vitest run --config tools/d2678-candidate-packet-tenth-author-repair/vitest.config.ts --reporter=verbose
@@ -2576,22 +2580,22 @@ candidate-packet-fourteenth-fresh-review: candidate-packet-thirteenth-author-rep
 	./node_modules/.bin/tsc -p tools/d3009-candidate-packet-fourteenth-fresh-review/tsconfig.json --noEmit
 
 semantic-collectors-promotion-third-fresh-review:
-	node --test tools/d2468-semantic-collectors-promotion-third-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2468-semantic-collectors-promotion-third-fresh-review/*.test.mjs
 
 semantic-collectors-promotion-fourth-fresh-review:
-	node --test tools/d2521-semantic-collectors-promotion-fourth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2521-semantic-collectors-promotion-fourth-fresh-review/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2521-semantic-collectors-promotion-fourth-fresh-review/tsconfig.contract.json
 
 semantic-collectors-promotion-fourth-author-repair:
-	node --test tools/d2521-semantic-collectors-promotion-fourth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2521-semantic-collectors-promotion-fourth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2521-semantic-collectors-promotion-fourth-author-repair/tsconfig.contract.json
 
 semantic-collectors-promotion-third-author-repair:
-	node --test tools/d2469-semantic-collectors-promotion-third-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2469-semantic-collectors-promotion-third-author-repair/*.test.mjs
 	./node_modules/.bin/tsc -p tools/d2469-semantic-collectors-promotion-third-author-repair/tsconfig.contract.json --noEmit
 
 review-evidence-author-contract:
-	node --test tools/d1969-review-evidence-author-harness/*.test.mts
+	$(CI_NODE) --test tools/d1969-review-evidence-author-harness/*.test.mts
 
 .PHONY: review-evidence-runtime-check
 review-evidence-runtime-check:
@@ -2599,32 +2603,32 @@ review-evidence-runtime-check:
 
 .PHONY: review-evidence-fresh-review
 review-evidence-fresh-review: review-evidence-author-contract
-	node --test tools/d2631-review-evidence-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2631-review-evidence-fresh-review/contract.test.mjs
 
 .PHONY: review-evidence-second-author-repair
 review-evidence-second-author-repair: review-evidence-author-contract
-	node --test tools/d2631-review-evidence-second-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2631-review-evidence-second-author-repair/contract.test.mjs
 
 .PHONY: review-evidence-second-fresh-review review-evidence-third-author-repair
 review-evidence-second-fresh-review: review-evidence-author-contract
-	node --test tools/d2685-review-evidence-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2685-review-evidence-second-fresh-review/contract.test.mjs
 
 review-evidence-third-author-repair: review-evidence-second-author-repair
-	node --test tools/d2685-review-evidence-third-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2685-review-evidence-third-author-repair/contract.test.mjs
 
 bot-policy-independent-review:
-	node --test tools/d1970-bot-policy-independent-review/*.test.mts
+	$(CI_NODE) --test tools/d1970-bot-policy-independent-review/*.test.mts
 
 bot-policy-author-contract:
 	./node_modules/.bin/vitest run --config tools/d1970-bot-policy-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d1970-bot-policy-author-repair/tsconfig.contract.json --noEmit
 
 bot-policy-fresh-review:
-	node --test tools/d2087-bot-policy-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2087-bot-policy-fresh-review/contract.test.mjs
 
 .PHONY: bot-policy-second-fresh-review
 bot-policy-second-fresh-review:
-	node --test tools/d2219-bot-policy-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2219-bot-policy-second-fresh-review/contract.test.mjs
 
 .PHONY: bot-policy-third-fresh-review bot-policy-fourth-author-repair bot-policy-fifth-fresh-review bot-policy-fifth-author-repair
 bot-policy-third-fresh-review:
@@ -2669,119 +2673,119 @@ bot-human-endgame-reference:
 	bash tools/d2903-human-endgame-reference/capture-and-measure.sh
 
 bot-human-endgame-reference-report:
-	node tools/d2903-human-endgame-reference/render-result.mjs planning/bot-roster/d2903-human-endgame-reference-results.json planning/bot-roster/d2903-human-endgame-reference-results.md
+	$(CI_NODE) tools/d2903-human-endgame-reference/render-result.mjs planning/bot-roster/d2903-human-endgame-reference-results.json planning/bot-roster/d2903-human-endgame-reference-results.md
 
 pack-capability-closure:
 	./node_modules/.bin/vitest run --config tools/d1620-pack-capability-closure/vitest.config.ts
 
 pack-capability-repeat-review:
-	node --test tools/d1982-pack-capability-repeat-review/*.test.mts
+	$(CI_NODE) --test tools/d1982-pack-capability-repeat-review/*.test.mts
 
 pack-capability-fresh-review:
-	node --test tools/d2050-pack-capability-fresh-review/*.test.mts
+	$(CI_NODE) --test tools/d2050-pack-capability-fresh-review/*.test.mts
 
 pack-capability-second-fresh-review:
-	node --test tools/d2070-pack-capability-second-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2070-pack-capability-second-fresh-review/*.test.mjs
 
 pack-capability-third-fresh-review:
-	node --test tools/d2152-pack-capability-third-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2152-pack-capability-third-fresh-review/*.test.mjs
 
 pack-capability-fourth-fresh-review:
-	node --test tools/d2334-pack-capability-fourth-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2334-pack-capability-fourth-fresh-review/*.test.mjs
 
 .PHONY: pack-capability-fifth-fresh-review
 pack-capability-fifth-fresh-review:
-	node --test tools/d2429-pack-capability-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2429-pack-capability-fifth-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-sixth-author-repair
 pack-capability-sixth-author-repair:
-	node --test tools/d2429-pack-capability-sixth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2429-pack-capability-sixth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2429-pack-capability-sixth-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: pack-capability-sixth-fresh-review
 pack-capability-sixth-fresh-review:
-	node --test tools/d2509-pack-capability-sixth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2509-pack-capability-sixth-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-seventh-author-repair
 pack-capability-seventh-author-repair:
-	node --test tools/d2509-pack-capability-seventh-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2509-pack-capability-seventh-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2509-pack-capability-seventh-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: pack-capability-seventh-fresh-review
 pack-capability-seventh-fresh-review:
-	node --test tools/d2518-pack-capability-seventh-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2518-pack-capability-seventh-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-eighth-author-repair
 pack-capability-eighth-author-repair:
-	node --test tools/d2518-pack-capability-eighth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2518-pack-capability-eighth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2518-pack-capability-eighth-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: pack-capability-eighth-fresh-review
 pack-capability-eighth-fresh-review:
-	node --test tools/d2524-pack-capability-eighth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2524-pack-capability-eighth-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-ninth-author-repair
 pack-capability-ninth-author-repair:
-	node --test tools/d2524-pack-capability-ninth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2524-pack-capability-ninth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2524-pack-capability-ninth-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: pack-capability-ninth-fresh-review
 pack-capability-ninth-fresh-review:
-	node --test tools/d2542-pack-capability-ninth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2542-pack-capability-ninth-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-tenth-author-repair
 pack-capability-tenth-author-repair:
-	node --test tools/d2542-pack-capability-tenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2542-pack-capability-tenth-author-repair/contract.test.mjs
 
 .PHONY: pack-capability-tenth-fresh-review
 pack-capability-tenth-fresh-review:
-	node --test tools/d2563-pack-capability-tenth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2563-pack-capability-tenth-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-eleventh-author-repair
 pack-capability-eleventh-author-repair:
-	node --test tools/d2563-pack-capability-eleventh-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2563-pack-capability-eleventh-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2563-pack-capability-eleventh-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: pack-capability-eleventh-fresh-review
 pack-capability-eleventh-fresh-review:
-	node --test tools/d2587-pack-capability-eleventh-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2587-pack-capability-eleventh-fresh-review/contract.test.mjs
 
 .PHONY: pack-capability-twelfth-author-repair pack-capability-twelfth-fresh-review pack-capability-thirteenth-author-repair pack-capability-thirteenth-fresh-review pack-capability-fourteenth-author-repair pack-capability-fifteenth-fresh-review pack-capability-fifteenth-author-repair
 pack-capability-twelfth-author-repair: pack-capability-eleventh-author-repair
-	node --test tools/d2587-pack-capability-twelfth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2587-pack-capability-twelfth-author-repair/contract.test.mjs
 
 pack-capability-twelfth-fresh-review: pack-capability-twelfth-author-repair
-	node --test tools/d2673-pack-capability-twelfth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2673-pack-capability-twelfth-fresh-review/contract.test.mjs
 
 pack-capability-thirteenth-author-repair: pack-capability-twelfth-fresh-review
-	node --test tools/d2673-pack-capability-thirteenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2673-pack-capability-thirteenth-author-repair/contract.test.mjs
 
 pack-capability-thirteenth-fresh-review: pack-capability-thirteenth-author-repair
-	node --test tools/d2742-pack-capability-thirteenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2742-pack-capability-thirteenth-fresh-review/review.test.mjs
 
 pack-capability-fourteenth-author-repair: pack-capability-thirteenth-fresh-review
-	node --test tools/d2742-pack-capability-fourteenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2742-pack-capability-fourteenth-author-repair/contract.test.mjs
 
 pack-capability-fifteenth-fresh-review: pack-capability-fourteenth-author-repair
-	node --test tools/d2771-pack-capability-fifteenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2771-pack-capability-fifteenth-fresh-review/review.test.mjs
 
 pack-capability-fifteenth-author-repair: pack-capability-fifteenth-fresh-review
-	node --test tools/d2771-pack-capability-fifteenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2771-pack-capability-fifteenth-author-repair/contract.test.mjs
 
 .PHONY: pack-capability-sixteenth-fresh-review pack-capability-sixteenth-author-repair
 pack-capability-sixteenth-fresh-review: pack-capability-fifteenth-author-repair
-	node --test tools/d2802-pack-capability-sixteenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2802-pack-capability-sixteenth-fresh-review/review.test.mjs
 
 pack-capability-sixteenth-author-repair: pack-capability-sixteenth-fresh-review
-	node --test tools/d2802-pack-capability-sixteenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2802-pack-capability-sixteenth-author-repair/contract.test.mjs
 
 .PHONY: pack-capability-seventeenth-fresh-review
 pack-capability-seventeenth-fresh-review: pack-capability-sixteenth-author-repair
-	node --test tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs
 
 .PHONY: pack-capability-cut-fresh-review
 pack-capability-cut-fresh-review:
-	node --test tools/d3120-pack-capability-cut-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d3120-pack-capability-cut-fresh-review/review.test.mjs
 
 # rfc/pack-capability-contract.md (pack schema lane 0.30) — the implemented capability contract.
 # The generators write; every `-check` target compares without writing and is a release gate.
@@ -2793,141 +2797,141 @@ pack-capability-integration-check:
 
 .PHONY: capability-applicability capability-applicability-check capability-declarations capability-check capability-census capability-site-check capability-lifecycle-check pack-capability-check pack-stamp migration-plan migration-plan-check migration-apply-ready migration-apply
 capability-applicability:
-	node tools/d2152-pack-capability-author-repair/contract.mjs --update
+	$(CI_NODE) tools/d2152-pack-capability-author-repair/contract.mjs --update
 	$(CAPABILITY_CONTRACT_BUNDLE)
-	node apps/server/dist/capability-contract.js applicability --write
+	$(CI_NODE) apps/server/dist/capability-contract.js applicability --write
 
 capability-applicability-check:
 	$(CAPABILITY_CONTRACT_BUNDLE)
-	node apps/server/dist/capability-contract.js applicability
+	$(CI_NODE) apps/server/dist/capability-contract.js applicability
 
 capability-declarations: capability-applicability
 	$(CAPABILITY_CONTRACT_BUNDLE)
-	node apps/server/dist/capability-contract.js declarations --write
+	$(CI_NODE) apps/server/dist/capability-contract.js declarations --write
 
 .PHONY: capability-history-check
 capability-history-check:
-	node --test tools/capability-history.test.mjs
-	node tools/capability-history.mjs $(if $(CI),--ci,)
+	$(CI_NODE) --test tools/capability-history.test.mjs
+	$(CI_NODE) tools/capability-history.mjs $(if $(CI),--ci,)
 
 capability-check: capability-history-check
 	$(CAPABILITY_CONTRACT_BUNDLE)
-	node apps/server/dist/capability-contract.js check
+	$(CI_NODE) apps/server/dist/capability-contract.js check
 
 capability-census:
 	$(CAPABILITY_CONTRACT_BUNDLE)
-	node apps/server/dist/capability-contract.js census
+	$(CI_NODE) apps/server/dist/capability-contract.js census
 
 capability-site-check:
 	$(CAPABILITY_CONTRACT_BUNDLE)
-	node apps/server/dist/capability-contract.js site-check
+	$(CI_NODE) apps/server/dist/capability-contract.js site-check
 
 capability-lifecycle-check:
 	$(CAPABILITY_MIGRATION_BUNDLE)
-	node apps/server/dist/capability-migration.js lifecycle-check
+	$(CI_NODE) apps/server/dist/capability-migration.js lifecycle-check
 
 pack-capability-check:
 	$(CAPABILITY_MIGRATION_BUNDLE)
-	node apps/server/dist/capability-migration.js corpus-check
+	$(CI_NODE) apps/server/dist/capability-migration.js corpus-check
 
 pack-stamp:
 	@test -n "$(FILE)" || (echo "Usage: make pack-stamp FILE=<path-to-pack.json>" >&2; exit 2)
 	./node_modules/.bin/esbuild apps/server/src/capability/stamp-cli.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/pack-stamp.js --log-level=warning
-	node apps/server/dist/pack-stamp.js $(FILE)
+	$(CI_NODE) apps/server/dist/pack-stamp.js $(FILE)
 
 migration-plan:
 	@$(CAPABILITY_MIGRATION_BUNDLE)
-	@node apps/server/dist/capability-migration.js plan
+	@$(CI_NODE) apps/server/dist/capability-migration.js plan
 
 migration-plan-check:
 	$(CAPABILITY_MIGRATION_BUNDLE)
-	node apps/server/dist/capability-migration.js plan-check
+	$(CI_NODE) apps/server/dist/capability-migration.js plan-check
 
 migration-apply-ready:
 	$(CAPABILITY_MIGRATION_BUNDLE)
-	node apps/server/dist/capability-migration.js apply-ready
+	$(CI_NODE) apps/server/dist/capability-migration.js apply-ready
 
 migration-apply:
 	@test -n "$(FILE)" || (echo "Usage: make migration-apply FILE=<pack path>|all" >&2; exit 2)
 	$(CAPABILITY_MIGRATION_BUNDLE)
-	node apps/server/dist/capability-migration.js apply --file=$(FILE)
+	$(CI_NODE) apps/server/dist/capability-migration.js apply --file=$(FILE)
 
 .PHONY: shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair shared-resource-bootstrap-collision-core-second-author-repair shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair shared-resource-bootstrap-tenth-fresh-review shared-resource-bootstrap-tenth-author-repair
 shared-resource-bootstrap-collision-core-author-contract:
-	node --test tools/d3034-shared-resource-bootstrap-collision-core-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d3034-shared-resource-bootstrap-collision-core-author-contract/contract.test.mjs
 
 shared-resource-bootstrap-collision-core-fresh-review: shared-resource-bootstrap-collision-core-author-contract
-	node --test tools/d3116-shared-resource-bootstrap-collision-core-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d3116-shared-resource-bootstrap-collision-core-fresh-review/review.test.mjs
 
 shared-resource-bootstrap-collision-core-author-repair: shared-resource-bootstrap-collision-core-fresh-review
-	node --test tools/d3116-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d3116-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-collision-core-second-author-repair: shared-resource-bootstrap-collision-core-author-repair
-	node --test tools/d3131-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d3131-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-seventh-fresh-review:
-	node --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-seventh-author-repair: shared-resource-bootstrap-sixth-author-repair
-	node --test tools/d2593-shared-resource-bootstrap-seventh-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2593-shared-resource-bootstrap-seventh-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-eighth-fresh-review: shared-resource-bootstrap-seventh-author-repair
-	node --test tools/d2645-shared-resource-bootstrap-eighth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2645-shared-resource-bootstrap-eighth-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-eighth-author-repair: shared-resource-bootstrap-eighth-fresh-review
-	node --test tools/d2645-shared-resource-bootstrap-eighth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2645-shared-resource-bootstrap-eighth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-ninth-fresh-review: shared-resource-bootstrap-eighth-author-repair
-	node --test tools/d2667-shared-resource-bootstrap-ninth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2667-shared-resource-bootstrap-ninth-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-ninth-author-repair: shared-resource-bootstrap-ninth-fresh-review
-	node --test tools/d2667-shared-resource-bootstrap-ninth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2667-shared-resource-bootstrap-ninth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-tenth-fresh-review: shared-resource-bootstrap-ninth-author-repair
-	node --test tools/d2701-shared-resource-bootstrap-tenth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2701-shared-resource-bootstrap-tenth-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-tenth-author-repair: shared-resource-bootstrap-tenth-fresh-review
-	node --test tools/d2701-shared-resource-bootstrap-tenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2701-shared-resource-bootstrap-tenth-author-repair/contract.test.mjs
 
 .PHONY: shared-resource-bootstrap-eleventh-fresh-review shared-resource-bootstrap-eleventh-author-repair
 shared-resource-bootstrap-eleventh-fresh-review: shared-resource-bootstrap-tenth-author-repair
-	node --test tools/d2795-shared-resource-bootstrap-eleventh-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2795-shared-resource-bootstrap-eleventh-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-eleventh-author-repair: shared-resource-bootstrap-eleventh-fresh-review
-	node --test tools/d2795-shared-resource-bootstrap-eleventh-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2795-shared-resource-bootstrap-eleventh-author-repair/contract.test.mjs
 
 .PHONY: shared-resource-bootstrap-twelfth-fresh-review shared-resource-bootstrap-twelfth-author-repair shared-resource-bootstrap-thirteenth-fresh-review shared-resource-bootstrap-thirteenth-author-repair shared-resource-bootstrap-fourteenth-fresh-review shared-resource-bootstrap-fourteenth-author-repair shared-resource-bootstrap-fifteenth-fresh-review
 shared-resource-bootstrap-twelfth-fresh-review: shared-resource-bootstrap-eleventh-author-repair
-	node --test tools/d2828-shared-resource-bootstrap-twelfth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2828-shared-resource-bootstrap-twelfth-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-twelfth-author-repair: shared-resource-bootstrap-twelfth-fresh-review
-	node --test tools/d2828-shared-resource-bootstrap-twelfth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2828-shared-resource-bootstrap-twelfth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-thirteenth-fresh-review: shared-resource-bootstrap-twelfth-author-repair
-	node --test tools/d2843-shared-resource-bootstrap-thirteenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2843-shared-resource-bootstrap-thirteenth-fresh-review/review.test.mjs
 
 shared-resource-bootstrap-thirteenth-author-repair: shared-resource-bootstrap-thirteenth-fresh-review
-	node --test tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-fourteenth-fresh-review: shared-resource-bootstrap-thirteenth-author-repair
-	node --test tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs
 
 shared-resource-bootstrap-fourteenth-author-repair: shared-resource-bootstrap-fourteenth-fresh-review
-	node --test tools/d2854-shared-resource-bootstrap-fourteenth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2854-shared-resource-bootstrap-fourteenth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-fifteenth-fresh-review: shared-resource-bootstrap-fourteenth-author-repair
-	node --test tools/shared-resource-bootstrap-fifteenth-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/shared-resource-bootstrap-fifteenth-fresh-review/review.test.mjs
 
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review semantic-collectors-promotion-seventh-author-repair semantic-collectors-promotion-eighth-fresh-review semantic-collectors-promotion-eighth-author-repair semantic-collectors-promotion-ninth-fresh-review semantic-collectors-promotion-ninth-author-repair semantic-collectors-promotion-tenth-fresh-review semantic-collectors-promotion-tenth-author-repair semantic-collectors-promotion-eleventh-fresh-review semantic-collectors-promotion-eleventh-author-repair semantic-collectors-promotion-twelfth-fresh-review semantic-collectors-promotion-twelfth-author-repair semantic-collectors-promotion-thirteenth-fresh-review
 semantic-collectors-promotion-fifth-fresh-review:
-	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
 
 semantic-collectors-promotion-fifth-author-repair: semantic-collectors-promotion-author-repair semantic-collectors-promotion-second-author-repair semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-author-repair
-	node --test tools/d2548-semantic-collectors-promotion-fifth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2548-semantic-collectors-promotion-fifth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2548-semantic-collectors-promotion-fifth-author-repair/tsconfig.contract.json --noEmit
 
 semantic-collectors-promotion-sixth-fresh-review:
-	node --test tools/d2603-semantic-collectors-promotion-sixth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2603-semantic-collectors-promotion-sixth-fresh-review/contract.test.mjs
 
 semantic-collectors-promotion-sixth-author-repair: semantic-collectors-promotion-fifth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2603-semantic-collectors-promotion-sixth-author-repair/vitest.config.ts --reporter=verbose
@@ -3006,7 +3010,7 @@ semantic-collectors-promotion-sixteenth-fresh-review: semantic-collectors-promot
 
 .PHONY: semantic-collector-cut-contract
 semantic-collector-cut-contract:
-	node --test tools/d3069-semantic-collector-cut-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d3069-semantic-collector-cut-contract/contract.test.mjs
 
 .PHONY: semantic-collectors-deflection-authority-fresh-review
 semantic-collectors-deflection-authority-fresh-review:
@@ -3042,12 +3046,12 @@ recorded-semantic-path-source:
 	./node_modules/.bin/vitest run --config tools/d1931-recorded-path-source-harness/vitest.config.ts
 
 pack-capability-author-repair:
-	node tools/d2152-pack-capability-author-repair/contract.mjs
-	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs
+	$(CI_NODE) tools/d2152-pack-capability-author-repair/contract.mjs
+	$(CI_NODE) --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2334-pack-capability-fifth-author-repair/tsconfig.contract.json --noEmit
 
 pack-capability-author-repair-update:
-	node tools/d2152-pack-capability-author-repair/contract.mjs --update
+	$(CI_NODE) tools/d2152-pack-capability-author-repair/contract.mjs --update
 
 evidence-presentation-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2157-evidence-presentation-third-fresh-review/vitest.config.ts
@@ -3079,7 +3083,7 @@ evidence-presentation-seventh-fresh-review: evidence-presentation-sixth-author-r
 	./node_modules/.bin/vitest run --config tools/d3102-evidence-presentation-seventh-fresh-review/vitest.config.ts --reporter=verbose
 
 review-evidence-fourth-fresh-review: review-evidence-third-author-repair
-	node --test tools/d3109-review-evidence-fourth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d3109-review-evidence-fourth-fresh-review/contract.test.mjs
 
 .PHONY: review-evidence-fourth-author-repair
 review-evidence-fourth-author-repair: review-evidence-third-author-repair
@@ -3088,7 +3092,7 @@ review-evidence-fourth-author-repair: review-evidence-third-author-repair
 
 .PHONY: review-evidence-fifth-fresh-review
 review-evidence-fifth-fresh-review: review-evidence-fourth-author-repair
-	node --test tools/d3184-review-evidence-fifth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d3184-review-evidence-fifth-fresh-review/contract.test.mjs
 
 .PHONY: review-evidence-fifth-author-repair
 review-evidence-fifth-author-repair: review-evidence-fifth-fresh-review
@@ -3100,23 +3104,23 @@ module-registration-second-fresh-review:
 
 .PHONY: module-registration-third-fresh-review module-registration-fourth-author-repair
 module-registration-third-fresh-review:
-	node --test tools/d2343-module-registration-third-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2343-module-registration-third-fresh-review/*.test.mjs
 
 module-registration-fourth-author-repair:
-	node --test tools/d2343-module-registration-fourth-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2343-module-registration-fourth-author-repair/*.test.mjs
 
 .PHONY: module-registration-fourth-fresh-review
 module-registration-fourth-fresh-review:
-	node --test tools/d2398-module-registration-fourth-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2398-module-registration-fourth-fresh-review/*.test.mjs
 
 .PHONY: module-registration-fifth-author-repair
 module-registration-fifth-author-repair:
-	node --test tools/d2398-module-registration-fifth-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2398-module-registration-fifth-author-repair/*.test.mjs
 
 pack-capability-author-contract: pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-author-repair pack-capability-seventh-author-repair pack-capability-eighth-author-repair
 
 theory-drill-author-contract:
-	node --test tools/d1879-theory-drill-author-contract/*.test.mjs
+	$(CI_NODE) --test tools/d1879-theory-drill-author-contract/*.test.mjs
 
 bounded-target-contract:
 	./node_modules/.bin/vitest run --config tools/d1652-bounded-target-repair-harness/vitest.config.ts
@@ -3135,36 +3139,36 @@ bounded-target-repeat-review:
 	./node_modules/.bin/tsc -p tools/d1962-bounded-target-repeat-review/tsconfig.json --noEmit
 
 bounded-target-final-review:
-	node --test tools/d1993-bounded-target-final-review/*.test.mts
+	$(CI_NODE) --test tools/d1993-bounded-target-final-review/*.test.mts
 
 bounded-target-fresh-review:
-	node --test tools/d2105-bounded-target-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2105-bounded-target-fresh-review/*.test.mjs
 
 bounded-target-second-author-repair:
-	node --test tools/d2105-bounded-target-second-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2105-bounded-target-second-author-repair/*.test.mjs
 
 .PHONY: bounded-target-second-fresh-review
 bounded-target-second-fresh-review:
-	node --test tools/d2202-bounded-target-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2202-bounded-target-second-fresh-review/contract.test.mjs
 
 bounded-target-third-author-repair:
-	node --test tools/d2202-bounded-target-third-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2202-bounded-target-third-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2202-bounded-target-third-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: bounded-target-third-fresh-review
 .PHONY: bounded-target-fourth-author-repair bounded-target-fourth-fresh-review bounded-target-fifth-author-repair bounded-target-fifth-fresh-review
 bounded-target-third-fresh-review:
-	node --test tools/d2340-bounded-target-third-fresh-review/*.test.mjs
+	$(CI_NODE) --test tools/d2340-bounded-target-third-fresh-review/*.test.mjs
 
 bounded-target-fourth-author-repair:
-	node --test tools/d2340-bounded-target-fourth-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2340-bounded-target-fourth-author-repair/*.test.mjs
 	./node_modules/.bin/tsc -p tools/d2202-bounded-target-third-author-repair/tsconfig.contract.json --noEmit
 
 bounded-target-fourth-fresh-review: bounded-target-fourth-author-repair
-	node --test tools/d2628-bounded-target-fourth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2628-bounded-target-fourth-fresh-review/contract.test.mjs
 
 bounded-target-fifth-author-repair: bounded-target-fourth-author-repair
-	node --test tools/d2628-bounded-target-fifth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2628-bounded-target-fifth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2202-bounded-target-third-author-repair/tsconfig.contract.json --noEmit
 
 bounded-target-fifth-fresh-review: bounded-target-fifth-author-repair
@@ -3172,41 +3176,41 @@ bounded-target-fifth-fresh-review: bounded-target-fifth-author-repair
 
 .PHONY: bounded-target-sixth-author-repair
 bounded-target-sixth-author-repair: bounded-target-fifth-fresh-review
-	node --test tools/d3042-bounded-target-sixth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d3042-bounded-target-sixth-author-repair/contract.test.mjs
 
 .PHONY: professional-closure-audit
 professional-closure-audit:
-	node --test tools/d2261-professional-closure-audit/contract.test.mjs
+	$(CI_NODE) --test tools/d2261-professional-closure-audit/contract.test.mjs
 
 .PHONY: live-following-fresh-review
 live-following-fresh-review:
-	node --test tools/d2266-live-following-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2266-live-following-fresh-review/contract.test.mjs
 
 .PHONY: live-sources-fresh-review
 live-sources-fresh-review:
-	node --test tools/d2277-live-sources-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2277-live-sources-fresh-review/contract.test.mjs
 
 .PHONY: live-sources-author-repair
 live-sources-author-repair: live-sources-fresh-review
-	node --test tools/d2277-live-sources-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2277-live-sources-author-repair/contract.test.mjs
 
 .PHONY: recorded-clocks-fresh-review
 recorded-clocks-fresh-review:
-	node --test tools/d2286-recorded-clocks-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2286-recorded-clocks-fresh-review/contract.test.mjs
 
 .PHONY: enforced-clocks-fresh-review
 enforced-clocks-fresh-review:
-	node --test tools/d2296-enforced-clocks-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2296-enforced-clocks-fresh-review/contract.test.mjs
 
 .PHONY: native-ratings-fresh-review
 native-ratings-fresh-review:
-	node --test tools/d2308-native-ratings-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2308-native-ratings-fresh-review/contract.test.mjs
 
 .PHONY: rating-pool-research
 rating-pool-research:
 	./node_modules/.bin/vitest run --config tools/d2323-rating-pool-research/vitest.config.ts
 	./node_modules/.bin/esbuild tools/d2323-rating-pool-research/report.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-rating-pool-report.mjs
-	node /tmp/tabiya-rating-pool-report.mjs
+	$(CI_NODE) /tmp/tabiya-rating-pool-report.mjs
 
 build:
 	pnpm build
@@ -3235,6 +3239,7 @@ capability-watch-check:
 verify-content: test-content graduation-clearance-corpus-check pack-capability-check
 
 verify: verify-software verify-governance verify-content
+verify-software: make-toolchain-check
 verify: export ENGINES_REQUIRED := 1
 
 verify-awake: staged-process-contracts
@@ -3248,54 +3253,54 @@ verify-awake: staged-process-contracts
 # SHA pins/permissions, Dockerfile pins, material digests, SPDX policy, manifest v1, allow-list.
 .PHONY: release-policy-check release-verify-local release-verify-local-maia
 release-policy-check:
-	node --test tools/release/*.test.mjs
-	node tools/release/release-policy.mjs
+	$(CI_NODE) --test tools/release/*.test.mjs
+	$(CI_NODE) tools/release/release-policy.mjs
 
 .PHONY: maia-identity-check
 maia-identity-check:
-	node --test tools/release/maia-identity.test.mjs
+	$(CI_NODE) --test tools/release/maia-identity.test.mjs
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/maia-identity.test.ts
 
 # Builds the release server image natively, proves the allow-list/census, SBOM + licence gate,
 # embedded NOTICE/licences, a loader-traced boot to /healthz under 512 MiB without swap, and a local
 # prerelease release set (manifest + SHA256SUMS + mounted-index About join). Pushes nothing.
 release-verify-local:
-	node tools/release/verify-local.mjs $(if $(IDLE),--idle-seconds $(IDLE),)
+	$(CI_NODE) tools/release/verify-local.mjs $(if $(IDLE),--idle-seconds $(IDLE),)
 
 # The same plus the Maia CPU image (GPU census, weight digest, SBOM, D1 report). Downloads ~200 MB.
 release-verify-local-maia:
-	node tools/release/verify-local.mjs --maia $(if $(IDLE),--idle-seconds $(IDLE),)
+	$(CI_NODE) tools/release/verify-local.mjs --maia $(if $(IDLE),--idle-seconds $(IDLE),)
 
 .PHONY: runtime-distribution-fresh-review
 runtime-distribution-fresh-review:
-	node --test tools/d2206-runtime-distribution-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2206-runtime-distribution-fresh-review/contract.test.mjs
 
 .PHONY: runtime-distribution-author-repair
 runtime-distribution-author-repair:
-	node --test tools/d2206-runtime-distribution-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2206-runtime-distribution-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2206-runtime-distribution-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: storage-backup-fresh-review
 storage-backup-fresh-review:
-	node --test tools/d2210-storage-backup-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2210-storage-backup-fresh-review/contract.test.mjs
 
 .PHONY: storage-backup-author-repair
 storage-backup-author-repair:
-	node --test tools/d2210-storage-backup-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2210-storage-backup-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2210-storage-backup-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: safe-deployment-fresh-review
 safe-deployment-fresh-review:
-	node --test tools/d2214-safe-deployment-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2214-safe-deployment-fresh-review/contract.test.mjs
 
 .PHONY: safe-deployment-author-repair
 safe-deployment-author-repair:
-	node --test tools/d2214-safe-deployment-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2214-safe-deployment-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2214-safe-deployment-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: safe-deployment-second-fresh-review
 safe-deployment-second-fresh-review: safe-deployment-author-repair
-	node --test tools/d2614-safe-deployment-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2614-safe-deployment-second-fresh-review/contract.test.mjs
 
 .PHONY: safe-deployment-second-author-repair
 safe-deployment-second-author-repair: safe-deployment-author-repair
@@ -3323,68 +3328,68 @@ campaign-two-horizon-seventh-fresh-review: campaign-two-horizon-sixth-author-rep
 
 .PHONY: shared-resource-bootstrap-author-contract shared-resource-bootstrap-fresh-review shared-resource-bootstrap-author-repair shared-resource-bootstrap-second-fresh-review shared-resource-bootstrap-second-author-repair shared-register-reconciliation-author-repair shared-resource-bootstrap-third-fresh-review shared-resource-bootstrap-third-author-repair shared-resource-bootstrap-fourth-author-repair shared-resource-bootstrap-fourth-fresh-review shared-resource-bootstrap-fifth-author-repair shared-resource-bootstrap-sixth-fresh-review shared-resource-bootstrap-sixth-author-repair
 shared-resource-bootstrap-author-contract:
-	node --test tools/d2363-shared-resource-bootstrap-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/d2363-shared-resource-bootstrap-author-contract/contract.test.mjs
 
 shared-resource-bootstrap-fresh-review:
-	node --test tools/d2381-shared-resource-bootstrap-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2381-shared-resource-bootstrap-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-author-repair:
-	node --test tools/d2381-shared-resource-bootstrap-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2381-shared-resource-bootstrap-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-second-fresh-review:
-	node --test tools/d2442-shared-resource-bootstrap-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2442-shared-resource-bootstrap-second-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-second-author-repair:
-	node --test tools/d2442-shared-resource-bootstrap-second-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2442-shared-resource-bootstrap-second-author-repair/contract.test.mjs
 
 shared-register-reconciliation-author-repair:
-	node --test tools/d2454-shared-register-reconciliation-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2454-shared-register-reconciliation-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-third-fresh-review:
-	node --test tools/d2488-shared-resource-bootstrap-third-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2488-shared-resource-bootstrap-third-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-third-author-repair:
-	node --test tools/d2488-shared-resource-bootstrap-third-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2488-shared-resource-bootstrap-third-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-fourth-author-repair:
-	node --test tools/d2498-shared-resource-bootstrap-fourth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2498-shared-resource-bootstrap-fourth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-fourth-fresh-review:
-	node --test tools/d2537-shared-resource-bootstrap-fourth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2537-shared-resource-bootstrap-fourth-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-fifth-author-repair:
-	node --test tools/d2537-shared-resource-bootstrap-fifth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2537-shared-resource-bootstrap-fifth-author-repair/contract.test.mjs
 
 shared-resource-bootstrap-sixth-fresh-review:
-	node --test tools/d2559-shared-resource-bootstrap-sixth-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2559-shared-resource-bootstrap-sixth-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-sixth-author-repair:
-	node --test tools/d2559-shared-resource-bootstrap-sixth-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2559-shared-resource-bootstrap-sixth-author-repair/contract.test.mjs
 
 .PHONY: concept-registry-author-contract
 concept-registry-author-contract:
-	node --test tools/concept-registry-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/concept-registry-author-contract/contract.test.mjs
 
 .PHONY: concept-registry-fresh-review
 concept-registry-fresh-review:
-	node --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
 
 .PHONY: concept-registry-author-repair
 concept-registry-author-repair: concept-registry-author-contract
-	node --test tools/d2661-concept-registry-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2661-concept-registry-author-repair/contract.test.mjs
 
 .PHONY: concept-registry-second-fresh-review
 concept-registry-second-fresh-review: concept-registry-author-repair
-	node --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
-	node --test tools/d2709-concept-registry-second-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
+	$(CI_NODE) --test tools/d2709-concept-registry-second-fresh-review/contract.test.mjs
 
 .PHONY: concept-registry-second-author-repair
 concept-registry-second-author-repair: concept-registry-second-fresh-review
-	node --test tools/d2709-concept-registry-second-author-repair/contract.test.mjs
+	$(CI_NODE) --test tools/d2709-concept-registry-second-author-repair/contract.test.mjs
 
 .PHONY: concept-registry-third-fresh-review
 concept-registry-third-fresh-review: concept-registry-second-author-repair
-	node --test tools/d2878-concept-registry-third-fresh-review/review.test.mjs
+	$(CI_NODE) --test tools/d2878-concept-registry-third-fresh-review/review.test.mjs
 
 .PHONY: concept-registry-third-author-repair
 concept-registry-third-author-repair: concept-registry-third-fresh-review
@@ -3417,30 +3422,30 @@ concept-registry-sixth-fresh-review: concept-registry-fifth-author-repair
 
 .PHONY: campaign-catalogue-author-contract
 campaign-catalogue-author-contract:
-	node --test tools/campaign-catalogue-author-contract/contract.test.mjs
+	$(CI_NODE) --test tools/campaign-catalogue-author-contract/contract.test.mjs
 
 .PHONY: module-successor-alignment-contract
 module-successor-alignment-contract:
-	node --test tools/d2373-module-successor-alignment/contract.test.mjs
+	$(CI_NODE) --test tools/d2373-module-successor-alignment/contract.test.mjs
 
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js
-	node apps/server/dist/pack-check.js "$(abspath $(FILE))"
+	$(CI_NODE) apps/server/dist/pack-check.js "$(abspath $(FILE))"
 
 shape-check:
 	@test -n "$(FILE)" || (echo "Usage: make shape-check FILE=<path-to-shape.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/shape-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/shape-check.js
-	node apps/server/dist/shape-check.js "$(FILE)" "$(PROBE)" "$(CORPUS)"
+	$(CI_NODE) apps/server/dist/shape-check.js "$(FILE)" "$(PROBE)" "$(CORPUS)"
 
 expression-census:
 	pnpm --filter @chess-tabiya/server exec esbuild src/expression-census.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/expression-census.js
-	node apps/server/dist/expression-census.js $(if $(FILE),--file "$(FILE)",) $(if $(EXPR),--expr "$(abspath $(EXPR))",) $(if $(CORPUS),--corpus "$(CORPUS)",) $(if $(WITNESSES),--witnesses "$(abspath $(WITNESSES))",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(DEGENERATE),--degenerate "$(DEGENERATE)",) $(if $(DECLARATIONS),--declarations "$(DECLARATIONS)",)
+	$(CI_NODE) apps/server/dist/expression-census.js $(if $(FILE),--file "$(FILE)",) $(if $(EXPR),--expr "$(abspath $(EXPR))",) $(if $(CORPUS),--corpus "$(CORPUS)",) $(if $(WITNESSES),--witnesses "$(abspath $(WITNESSES))",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(DEGENERATE),--degenerate "$(DEGENERATE)",) $(if $(DECLARATIONS),--declarations "$(DECLARATIONS)",)
 
 pack-preview:
 	@test -n "$(FILE)" || (echo "Usage: make pack-preview FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm build
-	node apps/server/dist/pack-check.js "$(abspath $(FILE))"
+	$(CI_NODE) apps/server/dist/pack-check.js "$(abspath $(FILE))"
 	@echo "Previewing $(abspath $(FILE)) at http://localhost:$${PORT:-3000} (reloads on file change)"
 	NODE_ENV=development DRAFT_PACK_FILE="$(abspath $(FILE))" pnpm --filter @chess-tabiya/server preview
 
@@ -3452,7 +3457,7 @@ source-fetch:
 candidate-emit:
 	@test -n "$(PIPELINE)" || (echo "Usage: make candidate-emit PIPELINE=<id> ARGS='...'" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/candidate-emit.ts --bundle --platform=node --format=esm --outfile=dist/candidate-emit.js
-	node apps/server/dist/candidate-emit.js "$(PIPELINE)" $(ARGS)
+	$(CI_NODE) apps/server/dist/candidate-emit.js "$(PIPELINE)" $(ARGS)
 
 candidate-attach:
 	@test -n "$(DIR)$(FILE)" || (echo "Usage: make candidate-attach DIR=<candidate-directory> or FILE=<pack.json> PIPELINE=explorer ARGS='...'" >&2; exit 2)
@@ -3463,11 +3468,11 @@ candidate-attach:
 sourcing-check:
 	@test -n "$(DIR)$(FILE)" || (echo "Usage: make sourcing-check DIR=<candidate-directory> or FILE=<pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/sourcing-check.ts --bundle --platform=node --format=esm --outfile=dist/sourcing-check.js
-	node apps/server/dist/sourcing-check.js "$(abspath $(if $(FILE),$(FILE),$(DIR)))" $(if $(FILE),file,directory)
+	$(CI_NODE) apps/server/dist/sourcing-check.js "$(abspath $(if $(FILE),$(FILE),$(DIR)))" $(if $(FILE),file,directory)
 
 graduation-report:
 	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-report.js
-	node apps/server/dist/graduation-report.js
+	$(CI_NODE) apps/server/dist/graduation-report.js
 
 graduation-report-update:
 	pnpm --filter @chess-tabiya/server exec esbuild src/graduation-report.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/graduation-report.js
@@ -3491,19 +3496,19 @@ tablebase-walk:
 tablebase-census:
 	@test -n "$(FILE)" || (echo "Usage: make tablebase-census FILE=<pack.json> [MAX_QUERIES=N]" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/tablebase-census.ts --bundle --platform=node --format=esm --outfile=dist/tablebase-census.js
-	node apps/server/dist/tablebase-census.js --file "$(abspath $(FILE))" $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
+	$(CI_NODE) apps/server/dist/tablebase-census.js --file "$(abspath $(FILE))" $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
 
 tablebase-census-contract:
 	./node_modules/.bin/vitest run apps/server/src/sourcing/tablebase-census.test.ts apps/server/src/sourcing/tablebase-walk.test.ts apps/server/src/sourcing/verify-draft.test.ts
 
 tablebase-census-check:
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/tablebase-census.ts --bundle --platform=node --format=esm --outfile=dist/tablebase-census.js
-	node apps/server/dist/tablebase-census.js --check-root "$(abspath $(or $(ROOT),content/drafts))" $(if $(OUT),--out "$(abspath $(OUT))",)
+	$(CI_NODE) apps/server/dist/tablebase-census.js --check-root "$(abspath $(or $(ROOT),content/drafts))" $(if $(OUT),--out "$(abspath $(OUT))",)
 
 engine-walk:
 	@test -n "$(FILE)" || (echo "Usage: make engine-walk FILE=<pack.json> [OUT=<report.json>] [ENUMERATE=decision|none] [MAX_QUERIES=N]" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/engine-walk.ts --bundle --platform=node --format=esm --outfile=dist/engine-walk.js
-	node apps/server/dist/engine-walk.js --file "$(abspath $(FILE))" $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(ENUMERATE),--enumerate "$(ENUMERATE)",) $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
+	$(CI_NODE) apps/server/dist/engine-walk.js --file "$(abspath $(FILE))" $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(ENUMERATE),--enumerate "$(ENUMERATE)",) $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
 
 # ---------------------------------------------------------------------------------------------
 # Deployment profiles (rfc/safe-deployment-profiles.md, docs/deployment.md) and storage
@@ -3547,19 +3552,19 @@ down:
 	docker compose --profile engines --profile devcontainer down --remove-orphans
 
 deployment-render:
-	node tools/source-deployment.mjs --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE)
+	$(CI_NODE) tools/source-deployment.mjs --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE)
 
 .PHONY: deployment-build source-deployment-check source-deployment-identity-drill
 deployment-build:
-	node tools/source-deployment.mjs --build --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) $(if $(TABIYA_PUBLIC_HOSTNAME),--check-hostname "$(TABIYA_PUBLIC_HOSTNAME)",)
+	$(CI_NODE) tools/source-deployment.mjs --build --out $(DEPLOY_RENDER_DIR) --tier $(DEPLOY_TIER) --server-image $(LOCAL_SERVER_IMAGE) --maia-image $(LOCAL_MAIA_IMAGE) $(if $(TABIYA_PUBLIC_HOSTNAME),--check-hostname "$(TABIYA_PUBLIC_HOSTNAME)",)
 
 # Permanent source/release separation and native OCI-image identity controls; no daemon needed.
 source-deployment-check:
-	node --test tools/release/source-deployment.test.mjs
+	$(CI_NODE) --test tools/release/source-deployment.test.mjs
 
 # Docker tier: uses the previously built CPU image and its byte-joined native OCI export.
 source-deployment-identity-drill:
-	node tools/source-deployment-identity-drill.mjs --out $(DEPLOY_RENDER_DIR)
+	$(CI_NODE) tools/source-deployment-identity-drill.mjs --out $(DEPLOY_RENDER_DIR)
 
 # PROFILE=local|appliance|hosted; proxied profiles need TABIYA_PUBLIC_HOSTNAME (and hosted TABIYA_ACME_EMAIL).
 deployment-check: deployment-render
@@ -3601,9 +3606,9 @@ appliance-ca-export:
 # Docker-tier deployment verification (not part of `make verify`): renders and validates every
 # profile with the pinned Caddy, including `caddy validate`.
 verify-deployment:
-	node tools/verify-packaging.mjs
-	node --test tools/verify-caddy.test.mjs
-	node tools/verify-caddy.mjs
+	$(CI_NODE) tools/verify-packaging.mjs
+	$(CI_NODE) --test tools/verify-caddy.test.mjs
+	$(CI_NODE) tools/verify-caddy.mjs
 
 # Release-tier drills over the built image; each uses its own Compose project and volumes.
 .PHONY: storage-drill appliance-drill appliance-drill-staged application-readiness-check staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
@@ -3612,12 +3617,12 @@ storage-drill:
 
 appliance-drill:
 	pnpm exec esbuild tools/source-appliance-client.ts --bundle --platform=node --format=esm --outfile=.cache/deploy/source-appliance-client.mjs
-	node tools/source-appliance-drill.mjs --out .cache/deploy/source-appliance-proof.json
+	$(CI_NODE) tools/source-appliance-drill.mjs --out .cache/deploy/source-appliance-proof.json
 
 # Exact-index counterpart, as used by staged-process-contracts. No Git worktree, stash or resets;
 # pending unrelated source changes cannot silently enter the Docker build being verified.
 appliance-drill-staged:
-	node tools/staged-appliance-drill.mjs
+	$(CI_NODE) tools/staged-appliance-drill.mjs
 
 application-readiness-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-appliance.test.ts apps/server/src/longitudinal-worker.test.ts apps/server/src/config.test.ts
@@ -3735,10 +3740,10 @@ opponent-tablebase-preflight-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-tablebase-preflight-metadata.js --log-level=warning
-	node apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer --apply-metadata
+	$(CI_NODE) apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer --apply-metadata
 opponent-tablebase-preflight-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/opponent-tablebase-preflight-metadata.js --log-level=warning
-	node apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer
+	$(CI_NODE) apps/server/dist/opponent-tablebase-preflight-metadata.js --opponent-tablebase-consumer
 
 # Disposable D3403 research, not a release or availability gate.
 .PHONY: provider-execution-census-build provider-execution-census-check provider-execution-census provider-execution-census-update
@@ -3780,11 +3785,11 @@ assistance-codec-browser-check:
 .PHONY: assistance-codec-metadata-update assistance-codec-metadata-check
 assistance-codec-metadata-update: semantic-validation-update capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/assistance-codec-metadata.js --log-level=warning
-	node apps/server/dist/assistance-codec-metadata.js --assistance-codec --apply-metadata
+	$(CI_NODE) apps/server/dist/assistance-codec-metadata.js --assistance-codec --apply-metadata
 
 assistance-codec-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/assistance-codec-metadata.js --log-level=warning
-	node apps/server/dist/assistance-codec-metadata.js --assistance-codec
+	$(CI_NODE) apps/server/dist/assistance-codec-metadata.js --assistance-codec
 
 # D3497: isolated production-boundary measurement; not a CI/default-on latency gate.
 HINT_LATENCY_OUTPUT ?= .cache/verification/hint-latency-http-$(shell date -u +%Y%m%dT%H%M%SZ).json
@@ -3821,41 +3826,41 @@ guided-hint-browser-latency: guided-hint-latency-check guided-hint-browser-build
 guided-hint-execution-metadata-update:
 	$(MAKE) semantic-validation-update capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/guided-hint-execution-metadata.js --log-level=warning
-	node apps/server/dist/guided-hint-execution-metadata.js --guided-hint-consumer --apply-metadata
+	$(CI_NODE) apps/server/dist/guided-hint-execution-metadata.js --guided-hint-consumer --apply-metadata
 guided-hint-execution-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/guided-hint-execution-metadata.js --log-level=warning
-	node apps/server/dist/guided-hint-execution-metadata.js --guided-hint-consumer
+	$(CI_NODE) apps/server/dist/guided-hint-execution-metadata.js --guided-hint-consumer
 
 explorer-consumer-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-consumer-metadata.js --log-level=warning
-	node apps/server/dist/explorer-consumer-metadata.js --explorer-consumers --apply-metadata
+	$(CI_NODE) apps/server/dist/explorer-consumer-metadata.js --explorer-consumers --apply-metadata
 explorer-consumer-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/explorer-consumer-metadata.js --log-level=warning
-	node apps/server/dist/explorer-consumer-metadata.js --explorer-consumers
+	$(CI_NODE) apps/server/dist/explorer-consumer-metadata.js --explorer-consumers
 
 .PHONY: consumer-operation-version-metadata-update consumer-operation-version-metadata-check
 consumer-operation-version-metadata-update:
 	$(MAKE) semantic-validation-update
 	$(MAKE) capability-declarations
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/consumer-operation-version-metadata.js --log-level=warning
-	node apps/server/dist/consumer-operation-version-metadata.js --consumer-versions --apply-metadata
+	$(CI_NODE) apps/server/dist/consumer-operation-version-metadata.js --consumer-versions --apply-metadata
 consumer-operation-version-metadata-check:
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/consumer-operation-version-metadata.js --log-level=warning
-	node apps/server/dist/consumer-operation-version-metadata.js --consumer-versions
+	$(CI_NODE) apps/server/dist/consumer-operation-version-metadata.js --consumer-versions
 
 staged-software-contracts:
-	node tools/staged-appliance-drill.mjs --software
+	$(CI_NODE) tools/staged-appliance-drill.mjs --software
 
 # Diagnosis only: measure real native Stockfish process allocation independently of app startup.
 # Its generous diagnostic limit is NOT a deployment limit or passing release-envelope receipt.
 engine-memory-drill:
-	node tools/engine-memory-drill.mjs --image $(LOCAL_SERVER_IMAGE)
+	$(CI_NODE) tools/engine-memory-drill.mjs --image $(LOCAL_SERVER_IMAGE)
 
 maia-option-contract-drill:
 	@test -n "$(MAIA_IMAGE_ID)" || (echo "Usage: make maia-option-contract-drill MAIA_IMAGE_ID=sha256:<actual-local-id>" >&2; exit 2)
-	node tools/maia-option-contract-drill.mjs --image $(MAIA_IMAGE_ID) $(if $(filter 1,$(POLICY)),--policy,)
+	$(CI_NODE) tools/maia-option-contract-drill.mjs --image $(MAIA_IMAGE_ID) $(if $(filter 1,$(POLICY)),--policy,)
 
 engine-sharing-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/engine-binary-digest.test.ts apps/server/src/engine-supervisor.test.ts apps/server/src/engine-supervisor-exchange.test.ts apps/server/src/provider-health.test.ts apps/server/src/provider-traversal.test.ts
@@ -3914,4 +3919,4 @@ storage-recover: storage-maintenance-check
 	$(STORAGE_ADMIN) recover
 
 provider-protocol-author-repair:
-	node --test tools/d2361-provider-protocol-author-repair/*.test.mjs
+	$(CI_NODE) --test tools/d2361-provider-protocol-author-repair/*.test.mjs

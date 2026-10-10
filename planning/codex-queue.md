@@ -12,6 +12,25 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3658]] makes the existing recorded defender-consequence collector demand-bound without
+changing legal replay, qualification or emitted operands. Quiet/non-positive windows read no
+defense maps, undefended positive targets read one, captured defenders two and relocated defenders
+three. Five permanent predecessor failures, all seven new runtime controls, four authenticated
+mirrored Review controls and 615 broader foundation controls pass. The pinned-Node recorded-path
+checker retains all 39 quiet window receipts and exact/eager output parity; its 20/40/80-ply p95
+totals are 23.8/48.4/78.3 ms against the unchanged 500 ms gate. D3532's historical excursion is
+not diagnosed or closed by this optimization.
+[[D3659]] fixes standalone Make checker execution through the existing selected Node executable,
+not caller environment prefixes. Three real Make-boundary predecessor failures and the static
+recipe guard pass; the normal recorded-path checker now reports Node 24.21.0. No runtime upgrade,
+package-manager change or remote-CI parity claim. Full normal verification/build passes clean
+types, 4,438 software cases/365 files, seven unchanged-budget performance cases/four files,
+241 content cases/24 files, governance and packaging. All browser tiers pass 265 cases, one
+optional Maia skip, zero retries, all 150 input and 112 composition cells. The first aggregate's
+old bare-Node matrix assertion and analogous Caddy assertion now require the selected executable,
+retaining all dependencies, arguments and population checks. No whole milestone or capability is
+promoted; historical intermittent causes remain open.
+
 [[D3656]] repairs legal square control under breadth-collectors §2/§3.1: legal pawn
 advances and king-to-friendly-rook castling addresses are not attacks. Exact move maps,
 pseudo edges and invalid-clone abstention remain. Twenty-one permanent predecessor controls

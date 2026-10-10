@@ -117,6 +117,11 @@ present. On other systems it uses PATH and the optional `SF_CMD` override. Norma
 development and parity checks therefore use the commands above directly; callers
 do not prepend toolchain-specific environment assignments.
 
+Standalone JavaScript Make recipes invoke the selected `CI_NODE` explicitly. Exporting PATH alone
+does not reliably select their executable under GNU Make's direct recipe launch. The ordinary
+software gate includes `make make-toolchain-check`, which runs actual Make launches against a
+deliberately different ambient Node fixture. It does not install or upgrade a runtime.
+
 `make verify` is the aggregate local gate. GitHub presents its three owners separately:
 `make verify-software` runs types, synthetic/runtime contracts and compiled manifests;
 `make verify-governance` runs the registers, roadmap and process invariants; and

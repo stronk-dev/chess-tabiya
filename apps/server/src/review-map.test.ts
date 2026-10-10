@@ -165,6 +165,37 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
   });
 
+  it.each([
+    { side: "white", fen: "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", line: "1. Bxb6 Kd7 2. Rxa8 *", text: "Black's knight on b6 was captured", squares: ["b6", "a8"] },
+    { side: "black", fen: "r3k3/8/8/8/2b5/1N6/8/R3K3 b - - 0 1", line: "1... Bxb3 2. Kd2 Rxa1 *", text: "White's knight on b3 was captured", squares: ["b3", "a1"] },
+    { side: "white", fen: "r3k3/8/1n6/8/2P5/8/8/R3K3 w - - 0 1", line: "1. c5 Nd7 2. Rxa8 *", text: "Black's knight on b6 moved to d7", squares: ["b6", "a8"] },
+    { side: "black", fen: "r3k3/8/8/2p5/8/1N6/8/R3K3 b - - 0 1", line: "1... c4 2. Nd2 Rxa1 *", text: "White's knight on b3 moved to d2", squares: ["b3", "a1"] },
+  ] as const)("D3658 preserves the complete $side defender-consequence Review ($line)", async value => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "demand_review_owner");
+    const pgn = `[Event "Demand-bound defender consequence"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${value.fen}"]\n\n${value.line}`;
+    const runId = await importReviewedGame(origin, cookie, "writer-demand", pgn, value.side);
+    const before = eventKinds(databasePath, runId);
+    const ask = () => fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    const response = await ask();
+    expect(response.status, await response.clone().text()).toBe(200);
+    const review = await response.json() as ReviewPayload;
+    expect(review.rows).toHaveLength(3);
+    const items = parsePresentationReceipt(review.rows[2]!.packet).filter(item => item.adapter.projection.id === "derived.tactic.sequence.defender_consequence");
+    expect(items.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
+    expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
+    expect(presentedSentence(items[0]!)).toContain(value.text);
+    expect(items[1]!.component).toMatchObject({ operand: { plies: [{}, {}, {}] } });
+    expect(items.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+    for (const row of review.rows.slice(0, 2)) expect(row.packet.items.some(item => item.adapter.projection.id === "derived.tactic.sequence.defender_consequence")).toBe(false);
+    const repeated = await (await ask()).json() as ReviewPayload;
+    expect(repeated.rows[2]!.packet).toEqual(review.rows[2]!.packet);
+    expect(eventKinds(databasePath, runId)).toEqual(before);
+    expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
+    const stranger = await register(origin, "demand_review_stranger");
+    expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
+  });
+
   it("finishes concurrent imports from shared completion without story polling, through authenticated HTTP and durable SQLite (D3422/D3423)", async () => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "review_shared_owner");

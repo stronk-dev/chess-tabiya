@@ -562,21 +562,24 @@ function defenseKey(value: ReturnType<typeof defenseEdges>[number]): string {
 /** Three recorded edges retaining defender/target identity; no force or causal semantics. */
 export function defenderConsequenceOperands(values: readonly RecordedMoveAnchor[]): readonly DefenderConsequenceOperands[] {
   const anchors = canonicalRecordedPath(values, 3);
-  const firstPosition = positionFromFen(anchors[0]!.beforeFen);
-  const enemy = opposite(firstPosition.turn);
-  const initialEdges = defenseEdges(anchors[0]!.beforeFen, enemy);
-  const afterFirstEdges = new Set(defenseEdges(anchors[0]!.afterFen, enemy).map(defenseKey));
-  const afterReplyEdges = new Set(defenseEdges(anchors[1]!.afterFen, enemy).map(defenseKey));
+  // Complete legal replay remains first. A positive final capture is a necessary operand of
+  // either consequence arm, so a quiet/non-positive window needs no whole-board defense maps.
   const thirdPosition = positionFromFen(anchors[2]!.beforeFen);
   const thirdMove = parseUci(anchors[2]!.moveUci);
   if (thirdMove === undefined || !("from" in thirdMove)) return Object.freeze([]);
   const finalExchange = legalExchangeForMove(thirdPosition, thirdMove);
   if (finalExchange === undefined || finalExchange.resultUnits <= 0) return Object.freeze([]);
+  const firstPosition = positionFromFen(anchors[0]!.beforeFen);
+  const enemy = opposite(firstPosition.turn);
+  const initialEdges = defenseEdges(anchors[0]!.beforeFen, enemy).filter(edge => edge.target.square === finalExchange.captured.square && sameOccupant(edge.target.piece, finalExchange.captured));
+  if (initialEdges.length === 0) return Object.freeze([]);
+  const afterFirstEdges = new Set(defenseEdges(anchors[0]!.afterFen, enemy).map(defenseKey));
+  // Only a retained duty whose actual defender relocated can demand the reply population.
+  let afterReplyEdges: Set<string> | undefined;
   const firstCapture = transitionSemanticFacts(anchors[0]!.beforeFen, anchors[0]!.moveUci, anchors[0]!.afterFen).find((fact) => fact.family === "capture");
   const replyMove = parseUci(anchors[1]!.moveUci);
   const results: DefenderConsequenceOperands[] = [];
   for (const edge of initialEdges) {
-    if (edge.target.square !== finalExchange.captured.square || !sameOccupant(edge.target.piece, finalExchange.captured)) continue;
     const targetAfterFirst = exactPiece(positionFromFen(anchors[0]!.afterFen), edge.target.square);
     const targetAfterReply = exactPiece(positionFromFen(anchors[1]!.afterFen), edge.target.square);
     if (targetAfterFirst === undefined || targetAfterReply === undefined || !sameOccupant(edge.target.piece, targetAfterFirst.piece) || !sameOccupant(edge.target.piece, targetAfterReply.piece)) continue;
@@ -589,6 +592,7 @@ export function defenderConsequenceOperands(values: readonly RecordedMoveAnchor[
     const relocated = exactPiece(positionFromFen(anchors[1]!.afterFen), makeSquare(replyMove.to));
     if (relocated === undefined || !sameOccupant(edge.defender.piece, relocated.piece)) continue;
     const relocatedKey = defenseKey({ defender: relocated, target: edge.target });
+    afterReplyEdges ??= new Set(defenseEdges(anchors[1]!.afterFen, enemy).map(defenseKey));
     if (afterReplyEdges.has(relocatedKey)) continue;
     const beforePass = moverTurnClone(anchors[0]!.beforeFen, firstPosition.turn);
     const afterPass = moverTurnClone(anchors[0]!.afterFen, firstPosition.turn);

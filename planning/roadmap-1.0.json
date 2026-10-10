@@ -690,7 +690,7 @@
         "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3643 isolates unauthored Support software controls from installed-corpus acquisition using real empty registries while retaining actual application/SQLite/authentication/HTTP/module execution. The permanent predecessor control observes 50 installed documents instead of zero; both original installed-pack controls remain in the content tier with unchanged five-second deadlines and assertions. Final normal local gates pass clean types/build, 4325 software tests/364 files, seven unchanged-budget performance tests/four files, governance/packaging and 241 content tests/24 files. Two tests move tiers and one is added; none is removed. Production/content bytes are unchanged; D3642's browser reading is retained, not rerun. D3543/D3510 and D3591/D3600 historical causes remain open. All live rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
+          "summary": "D3659 fixes standalone Make checker execution through the existing selected Node executable rather than ambient search-path resolution. Three actual Make-boundary predecessor controls and the no-bare-recipe guard pass; all 387 standalone JavaScript recipes now use CI_NODE. The normal recorded-path checker reports Node 24.21.0; caller commands, test tiers, budgets, package-manager selection and runtime versions are unchanged. Focused toolchain, types, Review and foundation gates pass. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Historical D3532/D3543/D3510/D3591/D3600 causes remain open; no remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -746,9 +746,18 @@
             "apps/server/src/local-module-execution.test.ts",
             "apps/server/src/local-module-content.test.ts",
             "tools/test-tiers.mjs",
-            "docs/development.md"
+            "docs/development.md",
+            "rfc/verifiable-runtime-distribution.md",
+            "tools/make-toolchain.test.mjs",
+            "tools/play-composition-matrix.test.mjs",
+            "tools/verify-caddy.test.mjs"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "verifiable-runtime-distribution.md",
+              "digest": "sha256:fda5fd8fa81e60bb5a6845865813cee4920e16815c1d9e0c657913bd1006c5d4"
+            },
             {
               "kind": "work_state",
               "id": "D3549",
@@ -798,6 +807,11 @@
               "kind": "work_state",
               "id": "D3643",
               "digest": "sha256:a085659a8824742b78856f2aa30733ac0698932fa9583ff64c4d60c8839243f2"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3659",
+              "digest": "sha256:6bf8fc7c94af823ed943a8c3b93d9ebe8a2af08a439bd194377f7527417c3720"
             }
           ]
         },
@@ -824,7 +838,7 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3656 repairs the existing legal square-control meaning: pawn advances and friendly-rook castling command addresses are not attacks, including adjacent Chess960 rooks. Exact legal moves, pseudo control and invalid-clone abstention remain. Twenty-one permanent predecessor controls and two actual wrong-caption browser controls fail before repair; 44 focused and 608 broader foundation controls, clean types and desktop/touch-phone Inspector-and-reload journeys pass afterward. Both colors, 112 king/rook geometries, promotion captures, sealed readings/events, complete candidates and actual opponent input are covered. Three computed profile outputs change, removing three false legal pawn events. D3657 corrects the inherited error in the held selected-Sight model; all 32 disposable controls pass, not production migration or acceptance. Full normal local verification/build passes 4427 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, types/governance/packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. The semantic-validation writer retains 87 canonical passing cases over 81 subjects and zero fully qualified. No new convention, source/version, permission, authored bytes, calibration, semantic qualification, whole capability, official graduation, native release-image or remote-CI promotion.",
+          "summary": "D3658 demand-binds whole-board defense populations to the existing recorded defender-consequence predicates. Complete legal replay remains first; quiet/non-positive windows read zero maps, undefended positive captures one, captured defenders two and relocated defenders three. Five permanent predecessor failures, all seven new runtime controls, four mirrored authenticated file-backed Review controls and 615 broader foundation cases pass. Both arms retain exact captions, squares, move paths, event identities and 39 quiet-window receipts. The normal Node 24.21.0 checker preserves eager/exact output parity over 108 games/6991 plies/1288 events; 20/40/80-ply p95 totals are 23.8/48.4/78.3 ms under the unchanged 500 ms budget. The semantic-validation writer retains 87 canonical cases over 81 subjects and zero fully qualified, changing implementation references only. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. No new family, cache, source/version, qualification, convention, authored bytes, historical D3532 diagnosis, official graduation, whole capability or remote-CI promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/breadth-collectors.md",
@@ -840,9 +854,18 @@
             "docs/evidence-contract.md",
             "planning/learner-modules/registry-return.md",
             "planning/codex-queue.md",
-            "planning/exploration/log.md"
+            "planning/exploration/log.md",
+            "rfc/recorded-semantic-path.md",
+            "packages/runtime/src/semantic-evidence.ts",
+            "packages/runtime/src/recorded-semantic-path.test.ts",
+            "apps/server/src/review-map.test.ts"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "recorded-semantic-path.md",
+              "digest": "sha256:1765eaffdbe10340c4907d209604074f25985cd500104196fc40927671c0174f"
+            },
             {
               "kind": "rfc",
               "id": "breadth-collectors.md",
@@ -852,6 +875,11 @@
               "kind": "work_state",
               "id": "D3656",
               "digest": "sha256:86f4a4eb05112ccceedeb3b511c4f59dd4f8bc081135bd1109ee9864b8461355"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3658",
+              "digest": "sha256:1600a7709a4fefe06038db09cd34832c8935b66f6986da8bac7f2f8041d5c408"
             }
           ]
         },

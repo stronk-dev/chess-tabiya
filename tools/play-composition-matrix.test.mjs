@@ -160,7 +160,7 @@ test("the accepted closed population and normal CI commands carry the retained m
   const acceptanceViewports = rfc.slice(rfc.indexOf("2. **A2 —"), rfc.indexOf("3. **A3 —"));
   assert.deepEqual([...acceptanceViewports.matchAll(/\b(\d{3,4})×(\d{3,4})\b/gu)].map(match => `${match[1]}x${match[2]}`), VIEWPORTS);
   const make = readFileSync(join(root, "Makefile"), "utf8");
-  assert.match(make, /test-browser-matrix: play-composition-matrix-contract\n\t\.\/node_modules\/\.bin\/playwright test --grep "@matrix"\n\tnode tools\/play-composition-matrix\.mjs/u);
+  assert.match(make, /test-browser-matrix: play-composition-matrix-contract\n\t\.\/node_modules\/\.bin\/playwright test --grep "@matrix"\n\t\$\(CI_NODE\) tools\/play-composition-matrix\.mjs/u);
   assertSoftwareMatrixPrerequisite(make);
   assert.match(readFileSync(join(root, "playwright.config.ts"), "utf8"), /\["json", \{ outputFile: "test-results\/browser-results\.json" \}\]/u);
   const workflow = readFileSync(join(root, ".github/workflows/browser.yml"), "utf8");
