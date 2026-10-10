@@ -236,7 +236,7 @@ describe("semantic-validation cases and execution", () => {
       for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
     }
     expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(57);
-    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(30);
+    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(36);
   });
 
   it("[5][27] refuses callbacks, prebuilt evidence, forged keys, generated ids and @-suffixed dialects", () => {
@@ -557,7 +557,16 @@ describe("semantic-validation consumer eligibility", () => {
   it("[20] validates derived events on their own profile only", () => {
     const captureClass = semanticValidationVerdict(event("derived.exchange.capture_class"));
     const capture = semanticValidationVerdict(event("rules.transition.event.capture"));
-    expect(captureClass?.open).toContain("semantic_negative");
+    expect(captureClass?.open).not.toContain("semantic_negative");
+    expect(captureClass?.open).toContain("orientation");
+    expect(captureClass?.verdict).toBe("unvalidated");
+    // Its negative arm is backed by its OWN event cases, not inherited from capture.
+    expect(parseSemanticValidationProfile(readProfile("derived.exchange.capture_class")).semanticNegative).toMatchObject({
+      disposition: "present", refs: [
+        { id: "cited.python-chess.capture-class.castle-negative.white", subject: event("derived.exchange.capture_class") },
+        { id: "cited.python-chess.capture-class.castle-negative.black", subject: event("derived.exchange.capture_class") },
+      ],
+    });
     expect(capture?.open).not.toContain("positive");
     expect(semanticValidationVerdict(event("derived.exchange.capture_class", 2))).toBeUndefined();
   });

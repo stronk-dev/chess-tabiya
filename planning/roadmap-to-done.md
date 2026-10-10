@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3662]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3663]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,27 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3662]]: 273 UX items complete, 272 live and 24
-retired; 1,712 live ledger items, all assigned, alongside 1,538 done and 161 refused. The 462
+Current checked inventory through [[D3663]]: 273 UX items complete, 272 live and 24
+retired; 1,712 live ledger items, all assigned, alongside 1,539 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest foundation validation: [[D3663]] closes three capture-dependent negative arms
+with six both-colour legal castles through the actual operations. The operations emit
+castling while omitting capture class, removed defender and last-of-role; borrowed input,
+subject and expectation authority refuses before invocation. Ten predecessor-red additions,
+39 focused and 625 broader foundation controls pass. All 87 prior cases remain: 93 canonical
+cases pass (57 positive / 36 negative) over 81 subjects, with zero fully qualified subjects.
+Normal `make roadmap-receipt verify-awake build` passes 4,450 software cases/365 files,
+seven unchanged-budget performance cases/four files, 246 content cases/25 files, clean
+types/governance/packaging and build. There is no UI or collector-logic change; the preceding
+267-browser checkpoint below is historical, not rerun for this validation-only batch.
+Orientation/reach drafts, learner permissions, official graduation and whole milestones
+remain open. No exact-revision remote-CI or release-image result is claimed.
 
 Latest bot contract checkpoint: [[D3662]] repairs the held Stage-B packet handoff in
 bot-policy §5a against exact retained events, readings and abstentions. All returned
@@ -3990,7 +4003,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   87 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   93 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

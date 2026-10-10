@@ -30361,6 +30361,15 @@
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3663",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2d25cf14b1ea72408969d031308569f0bd9f8d4a3f8b902f404b7b85b527b6d9",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-cited.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

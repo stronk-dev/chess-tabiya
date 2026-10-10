@@ -275,8 +275,12 @@ The current register has 81 subjects. The 38 migrated cases remain, D3563 adds t
 standard castling positive/nearby negative, and D3616 adds adjacent-rook and stationary-king
 positives. D3628 adds twelve legal nearby negatives and nine v2 recorded-path positives,
 giving 63 cases (41 positives, 22 negatives). D3639 adds 24 source-bound literal-rule cases
-for capture, clock reset, check and castling-rights loss, bringing the current total to 87
-(57 positives, 30 negatives). All prior cases remain. Both colors have completed legal hard
+for capture, clock reset, check and castling-rights loss, bringing that checkpoint to 87
+(57 positives, 30 negatives). D3663 adds six source-bound legal castling negatives for
+capture class, removed defender and last-of-role: the current total is 93 (57 positives,
+36 negatives). Castling touches a friendly rook but removes no piece; each completed
+operation emits the real castling event and omits the capture-dependent subject.
+All prior cases remain. Both colors have completed legal hard
 negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
 production window; canonical qualification invokes the complete recorded application path,
 not the broken sequence-to-parent reach adapter tracked as D3629. The original 42 cases
@@ -287,7 +291,7 @@ at a fixed commit, with attribution and licence; the four additions were compare
 with that pinned upstream source. Resolution checks the
 exact source, revision, licence, excerpt and proposition, then binds its case, subject,
 expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
-lookup, caller-provided source or protected owner-store bootstrap is involved. All 28 cited cases run
+lookup, caller-provided source or protected owner-store bootstrap is involved. All 34 cited cases run
 through actual registered production operations. This is not independent strategic judgement or a new
 learner permission. The source store is excluded from the production runtime import closure.
 

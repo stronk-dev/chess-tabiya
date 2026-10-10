@@ -22,6 +22,11 @@
   rights loss. All original 63 remain: 87 canonical cases (57 positive / 30 negative).
   Source/subject/input/expectation/operation forgeries refuse before production invocation.
   **Zero subjects remain fully validated; no orientation or learner-permission promotion.**
+  **2026-10-10 Slice B checkpoint (D3663):** six independently source-bound legal
+  castling negatives close the capture-class, removed-defender and last-of-role negative
+  arms. All 87 prior cases remain: 93 canonical cases (57 positive / 36 negative).
+  Operations complete with the real castling event; missing-capture injection is not
+  promoted. **Zero subjects fully validated; orientation and learner eligibility unchanged.**
   **2026-10-09 draft amendment:** §4.1a below specifies D3564's retained-input comparison.
   It requires independent review and acceptance before production changes; Slice A's existing
   parser, runner, authority and learner-eligibility rules remain in force.

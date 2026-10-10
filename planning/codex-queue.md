@@ -12,6 +12,18 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3663]] closes three capture-dependent negative arms under the existing Slice B
+contract with six independently source-bound both-colour legal castles. The actual
+operations complete and emit castling while omitting capture class, removed defender
+and last-of-role; authority borrowing refuses before invocation. All 87 prior cases
+remain, bringing the canonical register to 93 passing cases. Zero subjects are fully
+qualified; the injection-only negative, draft orientation/reach amendments and learner
+permission rules remain unchanged. Complete normal `make roadmap-receipt verify-awake build`
+passes 4,450 software cases/365 files, seven unchanged-budget performance cases/four files,
+246 content cases/25 files, clean types/governance/packaging and build. All 39 focused and
+625 broader foundation controls pass. D3663 is closed only for these three negative arms;
+no fresh browser, whole capability, qualification, graduation or remote-CI result is claimed.
+
 [[D3662]] authors the held bot Stage-B handoff in bot-policy §5a against the actual
 shared packet, not nonexistent scalar `rows[].features`. Original events/readings/
 abstentions and every admitted returned Maia row survive, including zero final-mass

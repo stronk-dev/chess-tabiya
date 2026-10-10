@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1985c177dd207947af6f9fdc5a40703ba1a0509a98a6a84c66e2785958ef93ae",
+    "roadmap": "sha256:a21549e64347229b90689f33a1fb3009db2cf2f1574c798439f9b725077d0903",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:b1b4c63eca631e2f5f0e84d0b540d9798f0ac0e573a15494b42b158ae32f6ae4",
-    "rfcRegister": "sha256:75ad3c793ceab3ec1f03a72013843aa521b18e281c998ae9cfd8b3549da0a138",
+    "workState": "sha256:08d3ad9beadf9dd9fa7dfae294448e6c91313ca865281038058c3d16c14e2fe6",
+    "rfcRegister": "sha256:c70c8ccdb038cf0a8db1cca0db72406bb63bd5d3d12595652288b122cf1fa69f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 14,
       "blocked": 1071,
-      "done": 1538,
+      "done": 1539,
       "refused": 161
     },
     "workItems": {
@@ -224,9 +224,14 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3658 demand-binds whole-board defense populations to the existing recorded defender-consequence predicates. Complete legal replay remains first; quiet/non-positive windows read zero maps, undefended positive captures one, captured defenders two and relocated defenders three. Five permanent predecessor failures, all seven new runtime controls, four mirrored authenticated file-backed Review controls and 615 broader foundation cases pass. Both arms retain exact captions, squares, move paths, event identities and 39 quiet-window receipts. The normal Node 24.21.0 checker preserves eager/exact output parity over 108 games/6991 plies/1288 events; 20/40/80-ply p95 totals are 23.8/48.4/78.3 ms under the unchanged 500 ms budget. The semantic-validation writer retains 87 canonical cases over 81 subjects and zero fully qualified, changing implementation references only. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. No new family, cache, source/version, qualification, convention, authored bytes, historical D3532 diagnosis, official graduation, whole capability or remote-CI promotion.",
+        "summary": "D3663 closes exactly three capture-dependent semantic-negative arms through six source-bound both-colour legal castles. Actual local/transition operations complete, emit castling and omit capture class, removed defender and last-of-role. Ten new controls fail before case/profile admission, then all 39 cited and 625 broader foundation controls pass; input/subject/expectation borrowing refuses before invocation. The sole writer reports 93 passing canonical cases (all 87 prior retained), 81 subjects, 53 population receipts, eight external receipts and zero fully qualified subjects. Missing-capture injection, orientation/reach drafts and learner eligibility are unchanged. Complete normal make roadmap-receipt verify-awake build passes clean types, 4450 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance, packaging and build. The preceding 267-browser checkpoint is historical, not rerun for this validation-only batch. No new source computation, strategic judgement, authored pack, whole capability, graduation, release-image or remote-CI claim.",
         "impact": "advanced",
         "evidence": [
+          "rfc/semantic-validation-authority.md",
+          "packages/runtime/src/semantic-validation-cited.test.ts",
+          "packages/runtime/src/semantic-validation-literal-sources.ts",
+          "packages/runtime/src/semantic-validation-cases.json",
+          "packages/runtime/src/semantic-validation-profiles.json",
           "rfc/breadth-collectors.md",
           "packages/runtime/src/square-control.ts",
           "packages/runtime/src/square-control.test.ts",
@@ -256,6 +261,11 @@
             "kind": "rfc",
             "id": "breadth-collectors.md",
             "digest": "sha256:2781c2d6957ba49fbe31da98a21362395045d591f5b961d505b6fbba4c5f1f56"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-validation-authority.md",
+            "digest": "sha256:5bcd2dac01185710a363b0a484c98248b0528b15cc286777d9bc1d95b601da30"
           },
           {
             "kind": "work_state",

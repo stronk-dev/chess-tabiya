@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "4aeda30a0fbabdd5f1eeae33c0cc410ce31ae0097fa2e6e1f044aaa06961a0a9",
-  "caseDigest": "e9977906ecad96d3aad1b67fd04f545b39bba9461715a5f3d5341faace22cdcd",
+  "profileDigest": "da1266b88dbddb00fcb9374c61f55b40f6492b0bf1c89e8f410773b09ae7ca2f",
+  "caseDigest": "5e36114943ad44e53c34f8c44bd80f752affdf5354d0b738e501b3a35ca38d19",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -1652,6 +1652,50 @@
       "failure": null
     },
     {
+      "case": "cited.python-chess.capture-class.castle-negative.black",
+      "subject": "event:derived.exchange.capture_class@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "da45d7ab72d52af8e38162490ffd819faadd6c5194f3e068eb7f949464d3e4b1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 127,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "9fb0c4b6a8147730c9c1ac4c4b36ecb233b3cc6a4591a8d14b949365f8174a42",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.capture-class.castle-negative.white",
+      "subject": "event:derived.exchange.capture_class@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "5f63c96367c2c014adb59aaa074417a67de40163d06895e763e06333e29ab7c0",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 127,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "2871d1b49f4ebdf8a34ba4b57c11fb2e2c9d344c87bb58de8a4ffdec72492644",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "cited.python-chess.capture.castle-negative.black",
       "subject": "event:rules.transition.event.capture@1",
       "arm": "semantic_negative",
@@ -1988,6 +2032,50 @@
       "failure": null
     },
     {
+      "case": "cited.python-chess.defender-removed.castle-negative.black",
+      "subject": "event:rules.tactic.event.defender_removed@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "da45d7ab72d52af8e38162490ffd819faadd6c5194f3e068eb7f949464d3e4b1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 127,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "0a2ee283087ebd62767c0796f175682b534376635bd01561f07cc1e8f0458abc",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.defender-removed.castle-negative.white",
+      "subject": "event:rules.tactic.event.defender_removed@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.local_edge",
+      "inputDigest": "5f63c96367c2c014adb59aaa074417a67de40163d06895e763e06333e29ab7c0",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 127,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "37d4f03447f110d8183eaddcf6a07927319d44e809510edbd541df1d2290676a",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
       "case": "cited.python-chess.king-step.no-castle",
       "subject": "event:rules.transition.event.castled@1",
       "arm": "semantic_negative",
@@ -2034,6 +2122,50 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "85b51a267feed5efc3f391d03c99e372757c8ec257e5c15b7191dbd62a55d30b",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.last-role.castle-negative.black",
+      "subject": "event:rules.transition.event.last_of_role@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "da45d7ab72d52af8e38162490ffd819faadd6c5194f3e068eb7f949464d3e4b1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 9,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f74cb5de3248f942a85fea334ebeefc57574bcf1f4cb0f6305ef76f71d0f6911",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.last-role.castle-negative.white",
+      "subject": "event:rules.transition.event.last_of_role@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.transition_edge",
+      "inputDigest": "5f63c96367c2c014adb59aaa074417a67de40163d06895e763e06333e29ab7c0",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 9,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "bbe628d8df3b688a05359e8ef0d5c541bd5b244779f6fc52c6525e7d996cc31f",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -5608,9 +5740,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.capture-class.castle-negative.white",
+            "cited.python-chess.capture-class.castle-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -5637,7 +5771,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -8846,9 +8979,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.defender-removed.castle-negative.white",
+            "cited.python-chess.defender-removed.castle-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -8877,7 +9012,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -9330,9 +9464,11 @@
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.last-role.castle-negative.white",
+            "cited.python-chess.last-role.castle-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -9359,7 +9495,6 @@
         }
       ],
       "open": [
-        "semantic_negative",
         "orientation"
       ]
     },

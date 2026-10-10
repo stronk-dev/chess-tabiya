@@ -23,7 +23,7 @@ function ruleCase(family: string, fixture: RuleFixture) {
   };
 }
 
-export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+const literalSources = Object.freeze([
   {
     sourceId: "python-chess.capture",
     sourceRevision: "3516d7c6c0879af724c2855fac5a304a4ef40949",
@@ -89,3 +89,33 @@ export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
     ] satisfies readonly RuleFixture[]).map(fixture => ruleCase("rights", fixture)),
   },
 ] as const);
+
+// D3663: a legal castle touches a friendly rook but captures no piece. A capture
+// exchange, a captured defender, and elimination by capture of the last role are
+// therefore absent. Reuse the independently retained is_capture rule, never an
+// undefined capture argument or a freshly generated strategic judgement.
+export const CAPTURE_DEPENDENT_NEGATIVE_FAMILIES = Object.freeze([
+  { id: "capture-class", projection: "derived.exchange.capture_class", operation: "runtime.semantic.local_edge" },
+  { id: "defender-removed", projection: "rules.tactic.event.defender_removed", operation: "runtime.semantic.local_edge" },
+  { id: "last-role", projection: "rules.transition.event.last_of_role", operation: "runtime.semantic.transition_edge" },
+] as const);
+const captureSource = literalSources[0];
+export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  ...literalSources,
+  ...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.map(family => ({
+    sourceId: `python-chess.capture.${family.id}`,
+    sourceRevision: captureSource.sourceRevision,
+    licence: captureSource.licence,
+    url: captureSource.url,
+    text: captureSource.text,
+    operation: { id: family.operation, version: 1 } as const,
+    cases: captureSource.cases.filter(row => row.arm === "semantic_negative").map(row => ({
+      ...row,
+      proposition: {
+        ...row.proposition,
+        subject: { kind: "event", projection: { id: family.projection, version: 1 } } as const,
+        case: { id: row.proposition.case.id.replace(".capture.", `.${family.id}.`), version: 1 } as const,
+      },
+    })),
+  })),
+]);

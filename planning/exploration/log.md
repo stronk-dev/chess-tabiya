@@ -24472,3 +24472,56 @@ Campaign was the one capability with no API, route or content. Now:
   draft checkpoint, roadmap-check correctly refuses its old register-row anchor;
   the existing anchor is refreshed to that exact current row. No checker, historical
   test, qualification or milestone state is weakened.
+
+### 2026-10-10 — D3663 capture-dependent legal negatives, Slice B
+
+- Inspected actual capture/class/defender/last-role subjects, production operations and
+  the retained independent python-chess capture rule. Legal castling touches a friendly
+  rook but captures no piece; no capture exchange, captured defender or last-role capture
+  follows. This is literal rule evidence, not a strategic judgement or lower-predicate
+  missing-capture injection promoted into a legal negative.
+- Added six both-colour exact edge cases and three present negative arms. The new source
+  manifests reuse the same pinned GPL-3.0-or-later capture excerpt and preserve exact
+  subject/input/operation/expectation binding. All 87 prior cases and their authorities
+  remain; the protected owner store, source versions, orientation/reach drafts and learner
+  eligibility are untouched. Cases/profiles were patched mechanically from the retained
+  legal castle inputs; no general generator or new tracking mechanism was introduced.
+- Ten new permanent controls fail before case/profile admission. The corrected focused
+  target passes all 39 cases: six exact completed negatives, three borrowed-authority
+  controls and one profile/eligibility control, alongside the prior 29. Each actual
+  operation emits castling while omitting its target; it does not abstain or fake an empty
+  result. `make semantic-validation-update` reports 93/93 cases passing, 81 subjects,
+  53 population receipts, eight external receipts and zero fully qualified subjects.
+  Remaining required semantic-negative arms decrease from 56 to 53; other arms remain.
+- The normal `make roadmap-receipt verify-awake build` is running. Full verification,
+  closeout and commit remain pending; no native UI change, official content, calibrated
+  bot, whole capability, release-image or remote-CI result is claimed.
+- First complete software run executes 4,450 cases: 4,448 pass and two fail. Both failures
+  are retained assertions describing the former registry: 30 rather than 36 negatives,
+  and the capture-class negative arm being absent. The exact population assertion now
+  requires 36, while all 57 positives and every per-case execution/value check remain.
+  The derived-profile control now requires its own six-input-source family references,
+  its still-open orientation and unvalidated verdict, retaining the unknown-version
+  refusal. No assertion or deadline is removed. The full normal aggregate is rerun.
+- Wording clarification: the derived capture-class profile control checks its two own
+  case references; six is the total number of newly registered cases across all three
+  families, not six inputs to that one profile.
+- The second aggregate stops at TypeScript: the strengthened profile-reference test
+  accessed a deliberately unknown raw fixture. It now uses the existing strict profile
+  parser, not a type assertion. `make typecheck semantic-validation-cited-check` passes
+  clean workspace types and all 39 controls. `make evidence-foundation-check` passes all
+  625 broader controls, including native HTTP, exact operations, the strengthened derived
+  profile check and the original injection-only negative. Full aggregate follows.
+- The third complete `make roadmap-receipt verify-awake build` exits zero: clean workspace
+  types, 4,450 software cases/365 files, seven unchanged-budget performance cases/four files,
+  246 real-content cases/25 files, governance, corpus compatibility, packaging and build.
+  The two obsolete aggregate assertions were strengthened for the admitted case population,
+  not removed. D3663 closes only its three legal-negative arms; the ledger, durable state,
+  queue and existing roadmap now record this evidence in the same change set.
+- The current rollup has 3,412 ledger rows: 1,539 done, 161 refused and 1,712 assigned live
+  (627 todo, fourteen doing, 1,071 blocked), zero untriaged. UX stays 273 complete/272 live/
+  24 retired; all fourteen whole capabilities remain incomplete, with four active/five blocked
+  milestones and zero official graduates. No UI or collector logic changes in this batch;
+  the preceding 267-browser checkpoint is historical rather than freshly rerun. Semantic
+  orientation/reach and bot Stage-B amendments remain held. No release-image or remote-CI
+  result is claimed; no tracker or research-capture storage was added.

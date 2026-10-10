@@ -838,9 +838,14 @@
         "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3658 demand-binds whole-board defense populations to the existing recorded defender-consequence predicates. Complete legal replay remains first; quiet/non-positive windows read zero maps, undefended positive captures one, captured defenders two and relocated defenders three. Five permanent predecessor failures, all seven new runtime controls, four mirrored authenticated file-backed Review controls and 615 broader foundation cases pass. Both arms retain exact captions, squares, move paths, event identities and 39 quiet-window receipts. The normal Node 24.21.0 checker preserves eager/exact output parity over 108 games/6991 plies/1288 events; 20/40/80-ply p95 totals are 23.8/48.4/78.3 ms under the unchanged 500 ms budget. The semantic-validation writer retains 87 canonical cases over 81 subjects and zero fully qualified, changing implementation references only. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. No new family, cache, source/version, qualification, convention, authored bytes, historical D3532 diagnosis, official graduation, whole capability or remote-CI promotion.",
+          "summary": "D3663 closes exactly three capture-dependent semantic-negative arms through six source-bound both-colour legal castles. Actual local/transition operations complete, emit castling and omit capture class, removed defender and last-of-role. Ten new controls fail before case/profile admission, then all 39 cited and 625 broader foundation controls pass; input/subject/expectation borrowing refuses before invocation. The sole writer reports 93 passing canonical cases (all 87 prior retained), 81 subjects, 53 population receipts, eight external receipts and zero fully qualified subjects. Missing-capture injection, orientation/reach drafts and learner eligibility are unchanged. Complete normal make roadmap-receipt verify-awake build passes clean types, 4450 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance, packaging and build. The preceding 267-browser checkpoint is historical, not rerun for this validation-only batch. No new source computation, strategic judgement, authored pack, whole capability, graduation, release-image or remote-CI claim.",
           "impact": "advanced",
           "evidence": [
+            "rfc/semantic-validation-authority.md",
+            "packages/runtime/src/semantic-validation-cited.test.ts",
+            "packages/runtime/src/semantic-validation-literal-sources.ts",
+            "packages/runtime/src/semantic-validation-cases.json",
+            "packages/runtime/src/semantic-validation-profiles.json",
             "rfc/breadth-collectors.md",
             "packages/runtime/src/square-control.ts",
             "packages/runtime/src/square-control.test.ts",
@@ -870,6 +875,11 @@
               "kind": "rfc",
               "id": "breadth-collectors.md",
               "digest": "sha256:2781c2d6957ba49fbe31da98a21362395045d591f5b961d505b6fbba4c5f1f56"
+            },
+            {
+              "kind": "rfc",
+              "id": "semantic-validation-authority.md",
+              "digest": "sha256:5bcd2dac01185710a363b0a484c98248b0528b15cc286777d9bc1d95b601da30"
             },
             {
               "kind": "work_state",

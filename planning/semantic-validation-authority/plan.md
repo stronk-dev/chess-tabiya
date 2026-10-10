@@ -3,13 +3,14 @@
 ## State
 
 Implementing: the owner-directed September 24 Slice A is integrated on main on 2026-09-30.
-The current generated reading is 81 subjects, 40 passed executable cases and zero fully validated
+The current generated reading (2026-10-10, [[D3663]]) is 81 subjects, 93 passed executable cases and zero fully validated
 profiles. [[D2449]] remains the lawful D0 owner bootstrap; absent independent authorities and
 required production reach remain release debt, not waived by mechanism implementation.
 [[D3315]] binds the existing owner-history guard to governance CI and a narrow pre-commit job.
 Historical integration receipt: `planning/evidence-foundation-ux/integration-2026-09-30.md`.
-The two subsequent D3563 cited-source castling cases account for the case-count increase;
-they do not complete a profile. D3564's §4.1a amendment is authored on 2026-10-09 and awaits
+The subsequent D3563/D3616 castling cases, D3628 recorded/local migration, D3639 literal-rule
+cases and D3663 capture-dependent negatives extend the original population; none completes a
+profile. D3564's §4.1a amendment is authored on 2026-10-09 and awaits
 independent review. Its sixteen passing disposable research checks are not additional
 registered cases or semantic authority.
 
