@@ -140,6 +140,13 @@ events retain their existing disclosure behavior. This projection does not rewri
 stored events: the server still reconstructs Review and the explicit Analyze line from
 the exact saved deliveries, including after restart. Account archives are unchanged.
 
+The client admits Analyze responses only for the requested run, branch, reviewed move and
+position before that move. A crossed response becomes the ordinary read-failure state, not a
+line on a different position. The Analyze/Hide action is one persistent native button: loading
+withholds repeat reads without disabling or replacing the focused control, and success, failure
+and hide preserve keyboard focus. Navigation, retry and departure retire pending reveals; late
+responses cannot reopen them or alter the game. A failed read can be retried explicitly.
+
 `reviewDurableEngineLine(run, node)` re-derives the recorded bytes through
 `parsePersistedProviderDelivery` and seals them as `live.stockfish.principal_variation@1`. A line
 whose bytes no longer re-derive is not a line. `reviewAnalysis` turns it into the attributed

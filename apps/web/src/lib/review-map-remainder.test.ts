@@ -168,8 +168,110 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
   };
   const answer = (run: DrillRun) => vi.fn(async (nodeId: string): Promise<ReviewAnalysisPage> => {
     const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
-    assertReviewAnalysisResponse(page, { runId: run.id, nodeId });
+    assertReviewAnalysisResponse(page, { runId: run.id, branchId: page.branchId, nodeId, entryNodeId: page.entryNodeId });
     return page;
+  });
+
+  it.each(["branchId", "entryNodeId"] as const)("D3665 refuses a crossed Analyze %s before rendering", async field => {
+    const run = lined();
+    const review = payloadOf(run);
+    const target = review.rows[2]!;
+    const subject = { runId: run.id, branchId: review.branchId, nodeId: target.nodeId, entryNodeId: target.entryNodeId };
+    const page = await answer(run)(target.nodeId);
+    expect(() => assertReviewAnalysisResponse(page, subject)).not.toThrow();
+    const crossed = { ...page, [field]: "another-recorded-position" };
+    expect(() => assertReviewAnalysisResponse(crossed, subject)).toThrow(/analysis identity/u);
+    const component = render(review, { onAnalyze: vi.fn(async () => crossed) });
+    document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
+    await tick();
+    document.querySelector<HTMLButtonElement>(".analysis button.analyze")!.click();
+    await vi.waitFor(() => expect(document.querySelector(".analysis [role=alert]")?.textContent).toBe(reviewText("analysis.failed")));
+    expect(document.querySelector(".analysis-sentence")).toBeNull();
+    await unmount(component);
+  });
+
+  it("D3665 keeps the same focused Analyze control through a single read and hide", async () => {
+    const run = lined();
+    const review = payloadOf(run);
+    const target = review.rows[2]!;
+    let resolve!: (value: ReviewAnalysisPage) => void;
+    const pending = new Promise<ReviewAnalysisPage>(done => { resolve = done; });
+    const onAnalyze = vi.fn(() => pending);
+    const component = render(review, { onAnalyze });
+    document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
+    await tick();
+    const control = document.querySelector<HTMLButtonElement>(".analysis button.analyze")!;
+    control.focus();
+    control.click();
+    await tick();
+    expect(document.activeElement).toBe(control);
+    expect(control.disabled).toBe(false);
+    expect(control.getAttribute("aria-disabled")).toBe("true");
+    control.click();
+    await tick();
+    expect(onAnalyze).toHaveBeenCalledTimes(1);
+    resolve(await answer(run)(target.nodeId));
+    await vi.waitFor(() => expect(document.querySelector(".analysis-sentence")).not.toBeNull());
+    expect(document.querySelector(".analysis button")).toBe(control);
+    expect(document.activeElement).toBe(control);
+    expect(control.textContent).toBe(reviewText("analysis.hide"));
+    control.click();
+    await tick();
+    expect(document.querySelector(".analysis-sentence")).toBeNull();
+    expect(document.querySelector(".analysis button")).toBe(control);
+    expect(document.activeElement).toBe(control);
+    expect(control.textContent).toBe(reviewText("analysis.action"));
+    await unmount(component);
+  });
+
+  it.each(["navigation", "retry", "departure"] as const)("D3665 retires a pending Analyze read on %s", async action => {
+    const run = lined();
+    const review = payloadOf(run);
+    const target = review.rows[2]!;
+    let resolve!: (value: ReviewAnalysisPage) => void;
+    const pending = new Promise<ReviewAnalysisPage>(done => { resolve = done; });
+    const onAnalyze = vi.fn(() => pending);
+    const onRetry = vi.fn(async () => {});
+    const component = render(review, { onAnalyze, onRetry });
+    document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
+    await tick();
+    document.querySelector<HTMLButtonElement>(".analysis button.analyze")!.click();
+    await tick();
+    if (action === "navigation") document.querySelectorAll<HTMLButtonElement>(".move-select")[4]!.click();
+    else if (action === "retry") document.querySelectorAll<HTMLButtonElement>(".move-row button.retry")[2]!.click();
+    else await unmount(component);
+    await tick();
+    resolve(await answer(run)(target.nodeId));
+    await tick();
+    expect(document.querySelector(".analysis-sentence")).toBeNull();
+    expect(document.querySelector(".analysis [role=alert]")).toBeNull();
+    if (action !== "departure") {
+      expect(document.querySelector(".analysis")?.getAttribute("aria-busy")).toBe("false");
+      expect(onRetry).toHaveBeenCalledTimes(action === "retry" ? 1 : 0);
+      await unmount(component);
+    }
+  });
+
+  it("D3665 recovers a rejected Analyze read on the same focused action without private error text", async () => {
+    const run = lined();
+    const review = payloadOf(run);
+    const target = review.rows[2]!;
+    const onAnalyze = vi.fn().mockRejectedValueOnce(new Error("private provider details")).mockResolvedValueOnce(await answer(run)(target.nodeId));
+    const component = render(review, { onAnalyze });
+    document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
+    await tick();
+    const control = document.querySelector<HTMLButtonElement>(".analysis button.analyze")!;
+    control.focus();
+    control.click();
+    await vi.waitFor(() => expect(document.querySelector(".analysis [role=alert]")?.textContent).toBe(reviewText("analysis.failed")));
+    expect(document.activeElement).toBe(control);
+    expect(document.body.textContent).not.toContain("private provider details");
+    control.click();
+    await vi.waitFor(() => expect(document.querySelector(".analysis-sentence")).not.toBeNull());
+    expect(document.querySelector(".analysis [role=alert]")).toBeNull();
+    expect(document.activeElement).toBe(control);
+    expect(onAnalyze).toHaveBeenCalledTimes(2);
+    await unmount(component);
   });
 
   it("is an explicit, secondary action: the line appears only after Analyze and goes when the selection moves", async () => {
@@ -234,12 +336,13 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     const run = lined();
     const nodeId = payloadOf(run).rows[2]!.nodeId;
     const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
-    expect(() => assertReviewAnalysisResponse(page, { runId: run.id, nodeId })).not.toThrow();
-    expect(() => assertReviewAnalysisResponse({ ...page, bound: {} }, { runId: run.id, nodeId })).toThrow(/attributed/u);
+    const subject = { runId: run.id, branchId: page.branchId, nodeId, entryNodeId: page.entryNodeId };
+    expect(() => assertReviewAnalysisResponse(page, subject)).not.toThrow();
+    expect(() => assertReviewAnalysisResponse({ ...page, bound: {} }, subject)).toThrow(/attributed/u);
     // The sentence must open with the named engine attribution (a typed line names engine and version).
-    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1" }, { runId: run.id, nodeId })).toThrow(/attributed/u);
-    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1", sentence: page.sentence.replace(/^stockfish-test/u, "Mock Stockfish mock-1") }, { runId: run.id, nodeId })).not.toThrow();
-    expect(() => assertReviewAnalysisResponse({ ...page, sentence: `stockfish-test (depth 18 search): the best line is ${"3. Nf3"}.` }, { runId: run.id, nodeId })).toThrow(/advice/u);
+    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1" }, subject)).toThrow(/attributed/u);
+    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1", sentence: page.sentence.replace(/^stockfish-test/u, "Mock Stockfish mock-1") }, subject)).not.toThrow();
+    expect(() => assertReviewAnalysisResponse({ ...page, sentence: `stockfish-test (depth 18 search): the best line is ${"3. Nf3"}.` }, subject)).toThrow(/advice/u);
     const review = payloadOf(run);
     expect(() => assertReviewMapResponse({ ...review, rows: review.rows.map((row, index) => index === 0 ? { ...row, bestMoveUci: "e2e4" } : row) }, { runId: review.runId })).toThrow(/engine line/u);
   });

@@ -111,9 +111,9 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
 }
 
 /** Closed check for the explicit Analyze reveal (rfc/review-map.md §7, O7.3). */
-export function assertReviewAnalysisResponse(value: unknown, subject: { readonly runId: string; readonly nodeId: string }): asserts value is ReviewAnalysisPage {
+export function assertReviewAnalysisResponse(value: unknown, subject: { readonly runId: string; readonly branchId: string; readonly nodeId: string; readonly entryNodeId: string }): asserts value is ReviewAnalysisPage {
   const body = record(value) ?? fail("analysis is not an object");
-  if (body.runId !== subject.runId || body.nodeId !== subject.nodeId || !text(body.entryNodeId) || !text(body.branchId) || !text(body.sentence)) fail("analysis identity");
+  if (body.runId !== subject.runId || body.branchId !== subject.branchId || body.nodeId !== subject.nodeId || body.entryNodeId !== subject.entryNodeId || !text(body.branchId) || !text(body.entryNodeId) || !text(body.sentence)) fail("analysis identity");
   if (body.kind === "line") {
     const bound = record(body.bound) ?? fail("analysis bound");
     const positive = (value: unknown): boolean => Number.isSafeInteger(value) && (value as number) > 0;

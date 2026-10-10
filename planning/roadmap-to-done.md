@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3664]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3665]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,27 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3664]]: 273 UX items complete, 272 live and 24
-retired; 1,712 live ledger items, all assigned, alongside 1,540 done and 161 refused. The 462
+Current checked inventory through [[D3665]]: 273 UX items complete, 272 live and 24
+retired; 1,712 live ledger items, all assigned, alongside 1,541 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest Review journey repair: [[D3665]] requires Analyze to match its exact requested run,
+branch, move and entry position at both application and mounted boundaries. A single native
+Analyze/Hide action keeps focus during pending, success, failure and hide; navigation, retry
+and departure retire late responses. Three predecessor-red controls, 185 focused controls,
+clean types and two actual desktop/touch-phone journeys pass. Analyze browsing preserves
+recorded play; retry commits a different move, retains the original line and opens both in
+Compare. Complete sequential `make roadmap-receipt verify-awake build test-browser-ci-awake`
+passes 4,459 software cases/365 files, seven unchanged-budget performance cases/four files,
+246 content cases/25 files, types/governance/packaging/build and 271 browser cases across all
+four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells.
+This is an exact read/recovery repair, not new source acquisition, deeper explanation,
+grading/selection policy, full Review, native release-image or remote-CI completion.
 
 Latest foundation validation: [[D3663]] closes three capture-dependent negative arms
 with six both-colour legal castles through the actual operations. The operations emit

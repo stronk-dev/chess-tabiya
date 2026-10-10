@@ -12,6 +12,16 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3665]] is closed locally under Review §7/O7.3: exact run/branch/move/entry admission and
+one persistent native Analyze/Hide action. Both crossed identities and native disabling
+fail on the predecessor. All 185 focused controls, clean types and actual desktop/touch-phone
+Analyze → different retry → Compare journeys pass; navigation retires the late read and
+original recorded play survives. Complete normal gates pass 4,459 software cases/365 files,
+seven unchanged-budget performance cases/four files, 246 content cases/25 files, clean types,
+governance/packaging/build and 271 browser cases across all four tiers, one optional Maia skip,
+zero retries and 150 input/112 composition cells. The ledger/state/roadmap close together.
+No source, search, grading, moment-selection or whole-Review completion is claimed.
+
 [[D3664]] repairs the raw Maia calibration claim across Play, Compare, Rating and shared
 resistance summaries under bot-policy §7/§8. Four band controls now name model settings,
 not calibrated strengths or synthetic personality labels. Registered cards and exact profile

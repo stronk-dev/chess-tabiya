@@ -612,6 +612,110 @@ for (const projection of ["desktop", "@mobile phone"]) {
   });
 }
 
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  test(`D3665 Review Analyze rejects crossed positions, keeps native focus and returns to rehearsal (${viewport.width}px)${viewport.width < 720 ? " @mobile" : ""}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.getByRole("link", { name: "Review" }).click();
+    await page.getByLabel("PGN").fill('[Event "Analyze recovery"]\n[White "Analyze White"]\n[Black "Analyze Black"]\n[Result "1-0"]\n\n1. e4 e5 2. Nf3 Nc6 1-0');
+    await page.getByRole("button", { name: "Build game story" }).click();
+    await expect(page).toHaveURL(/\/review\/game\/import-/);
+    const runId = page.url().split("/").at(-1)!;
+    await expect(page.getByText("Evaluation coverage: 5 of 5 positions on this line carry a recorded engine evaluation.")).toBeVisible({ timeout: 15_000 });
+    const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    const events = async () => (await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] }).events;
+    const original = await graph();
+    const originalEvents = await events();
+    const selectors = page.locator(".move-select");
+    await selectors.nth(2).click();
+    const selectedRow = page.locator(".move-row").nth(2);
+    const selectedNode = await selectedRow.getAttribute("data-node-id");
+    expect(selectedNode).not.toBeNull();
+    const analyze = page.locator(".analysis button");
+    const handle = await analyze.elementHandle();
+    expect(handle).not.toBeNull();
+    const endpoint = `**/runs/${runId}/review-analysis?*`;
+    let requests = 0;
+    let release!: () => void;
+    let received!: () => void;
+    let delivered!: () => void;
+    const held = new Promise<void>(done => { release = done; });
+    const arrived = new Promise<void>(done => { received = done; });
+    const delivery = new Promise<void>(done => { delivered = done; });
+    await page.route(endpoint, async route => {
+      requests += 1;
+      const response = await route.fetch();
+      const body = await response.json() as { runId: string; branchId: string; nodeId: string; entryNodeId: string; kind: string };
+      expect(body.runId).toBe(runId);
+      expect(new URL(route.request().url()).searchParams.get("branch")).toBe(original.activeCursor.branchId);
+      expect(new URL(route.request().url()).searchParams.get("node")).toBe(body.nodeId);
+      if (requests <= 2) {
+        await route.fulfill({ response, json: { ...body, [requests === 1 ? "branchId" : "entryNodeId"]: "crossed-position" } });
+      } else if (requests === 3) {
+        expect(body.kind).toBe("line");
+        received();
+        await held;
+        await route.fulfill({ response, json: body });
+        delivered();
+      } else await route.fulfill({ response, json: body });
+    });
+    try {
+      for (let wrong = 0; wrong < 2; wrong += 1) {
+        await analyze.focus();
+        await page.keyboard.press("Enter");
+        await expect(page.locator(".analysis [role=alert]")).toHaveText("The recorded engine line could not be read. Try again.");
+        await expect(page.locator(".analysis-sentence")).toHaveCount(0);
+        await expect(analyze).toBeFocused();
+        expect(await handle!.evaluate(element => element.isConnected)).toBe(true);
+      }
+      await page.keyboard.press("Enter");
+      await arrived;
+      await expect(analyze).toHaveAttribute("aria-disabled", "true");
+      await expect(analyze).toBeFocused();
+      await page.keyboard.press("Enter");
+      expect(requests).toBe(3);
+      // Deliberate navigation retires this pending read, even when its correct response arrives.
+      await selectors.nth(3).click();
+      release();
+      await delivery;
+      await expect(selectors.nth(3)).toHaveAttribute("aria-current", "true");
+      await expect(selectors.nth(3)).toBeFocused();
+      await expect(page.locator(".analysis-sentence")).toHaveCount(0);
+      await expect(page.locator(".analysis [role=alert]")).toHaveCount(0);
+      await selectors.nth(2).click();
+      await analyze.focus();
+      await page.keyboard.press("Enter");
+      await expect(page.locator(".analysis-sentence")).toContainText("reported this principal variation from the position before 2. Nf3");
+      await expect(page.getByRole("button", { name: "Hide engine line", exact: true })).toBeFocused();
+      expect(await handle!.evaluate(element => element.isConnected)).toBe(true);
+      await page.keyboard.press("Enter");
+      await expect(page.locator(".analysis-sentence")).toHaveCount(0);
+      await expect(analyze).toBeFocused();
+      await expect(selectedRow).toHaveAttribute("data-node-id", selectedNode!);
+      const browsed = await graph();
+      assertRecordedNodesPreserved(original.nodes, browsed.nodes);
+      assertOnlyEvidenceAppended(originalEvents, await events());
+      expect(browsed.branches).toEqual(original.branches);
+      expect(browsed.activeCursor).toEqual(original.activeCursor);
+      await page.getByRole("button", { name: "Retry from before move 2 (Nf3)" }).click();
+      await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
+      const board = page.locator(".board-frame").getByLabel("Chessboard", { exact: true });
+      await expect(board).toBeVisible();
+      await move(page, "f1", "c4", "white", board);
+      await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === "f1c4")).toBe(true);
+      const retried = await graph();
+      const originalIds = new Set(original.nodes.map(node => node.id));
+      assertRecordedNodesPreserved(original.nodes, retried.nodes.filter(node => originalIds.has(node.id)));
+      expect(retried.branches.length).toBeGreaterThan(original.branches.length);
+      await page.goto(`/review/game/${runId}`);
+      await page.getByRole("button", { name: "Compare the reviewed line and 1 more from before move 2 (Nf3)" }).click();
+      await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
+    } finally {
+      release();
+      await page.unroute(endpoint);
+    }
+  });
+}
+
 test("Guided Nudge after 1.e4 retains real consequences without unchanged king-edge facts", async ({ page }) => {
   await chooseBot(page, "human-baseline.1400@1");
   await page.getByRole("button", { name: "Start and keep the game" }).click();

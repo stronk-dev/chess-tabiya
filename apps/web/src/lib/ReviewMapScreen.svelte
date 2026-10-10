@@ -10,6 +10,7 @@
   import ReviewEvalGraph from "./ReviewEvalGraph.svelte";
   import { storyCardDocument } from "./story-card.js";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
+  import { assertReviewAnalysisResponse } from "./review-response.js";
 
   interface Props {
     review: ReviewMap;
@@ -81,7 +82,8 @@
   /** The facts that are not packet components (the packet's equivalent sentences are their tail). */
   const plainFacts = $derived(selected === undefined ? [] : selected.facts.slice(0, selected.facts.length - packetItems.length));
   /** O7.3: the reveal belongs to one selected move and is gone the moment selection or a retry moves on. */
-  const shownAnalysis = $derived(analysis !== undefined && analysis.nodeId === selected?.nodeId && retrying === undefined ? analysis : undefined);
+  const analysisAllowed = $derived(onAnalyze !== undefined && selected !== undefined && selected.entryNodeId !== review.openRetryEntryNodeId);
+  const shownAnalysis = $derived(analysisAllowed && analysis !== undefined && analysis.runId === review.runId && analysis.branchId === review.branchId && analysis.nodeId === selected?.nodeId && analysis.entryNodeId === selected?.entryNodeId && retrying === undefined ? analysis : undefined);
   const sideLabel = (side: "white" | "black"): string => side === "white" ? reviewText("side.white") : reviewText("side.black");
   const resultSentence = $derived(review.outcome.kind === "board_terminal"
     ? reviewText("header.result.board", { result: review.outcome.result, side: sideLabel(review.side) })
@@ -96,6 +98,8 @@
     analysisBusy = undefined;
     analysisFailed = undefined;
   }
+
+  $effect(() => { if (!analysisAllowed) hideAnalysis(); });
 
   function select(nodeId: string): void {
     if (nodeId !== selected?.nodeId) {
@@ -124,13 +128,16 @@
   }
 
   async function analyze(nodeId: string): Promise<void> {
-    if (onAnalyze === undefined || analysisBusy !== undefined || retrying !== undefined) return;
+    const row = selected;
+    if (!analysisAllowed || row === undefined || row.nodeId !== nodeId || onAnalyze === undefined || analysisBusy !== undefined || retrying !== undefined) return;
+    const subject = { runId: review.runId, branchId: review.branchId, nodeId, entryNodeId: row.entryNodeId };
     const current = ++analysisRequest;
     analysisBusy = nodeId;
     analysisFailed = undefined;
     try {
       const page = await onAnalyze(nodeId);
-      if (mounted && current === analysisRequest && retrying === undefined) analysis = page;
+      assertReviewAnalysisResponse(page, subject);
+      if (mounted && current === analysisRequest && analysisAllowed && review.runId === subject.runId && review.branchId === subject.branchId && selected?.nodeId === subject.nodeId && selected.entryNodeId === subject.entryNodeId && retrying === undefined) analysis = page;
     } catch {
       if (mounted && current === analysisRequest) analysisFailed = nodeId;
     } finally {
@@ -382,7 +389,7 @@
           <PresentedEvidence items={packetItems} onFocusSquares={focusFactSquares} />
         </article>
         {#if onAnalyze && retrying === undefined}
-          <section class="analysis" aria-labelledby="review-analysis-title" data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.kind ?? "closed"}>
+          <section class="analysis" aria-labelledby="review-analysis-title" aria-busy={analysisBusy === selected.nodeId} data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.kind ?? "closed"}>
             <h3 id="review-analysis-title">{reviewText("analysis.title")}</h3>
             {#if selected.entryNodeId === review.openRetryEntryNodeId}
               <p class="muted">{reviewText("analysis.withheld", { move: selected.label })}</p>
@@ -391,9 +398,9 @@
                 <p class="analysis-sentence">{shownAnalysis.sentence}</p>
                 {#if shownAnalysis.kind === "line"}<p class="muted">{shownAnalysis.caveat}</p>{/if}
               </div>
-              <button type="button" class="secondary" onclick={hideAnalysis}>{reviewText("analysis.hide")}</button>
-            {:else}
-              <button type="button" class="secondary analyze" disabled={analysisBusy !== undefined} aria-label={reviewText("analysis.action.label", { number: selected.moveNumber, san: selected.san })} onclick={() => void analyze(selected!.nodeId)}>{analysisBusy === selected.nodeId ? reviewText("analysis.busy") : reviewText("analysis.action")}</button>
+            {/if}
+            {#if analysisAllowed}
+              <button type="button" class="secondary" class:analyze={!shownAnalysis} aria-disabled={analysisBusy !== undefined} aria-label={shownAnalysis ? reviewText("analysis.hide") : reviewText("analysis.action.label", { number: selected.moveNumber, san: selected.san })} onclick={() => { if (shownAnalysis) hideAnalysis(); else void analyze(selected!.nodeId); }}>{shownAnalysis ? reviewText("analysis.hide") : analysisBusy === selected.nodeId ? reviewText("analysis.busy") : reviewText("analysis.action")}</button>
               {#if analysisFailed === selected.nodeId}<p role="alert">{reviewText("analysis.failed")}</p>{/if}
             {/if}
           </section>
@@ -476,6 +483,7 @@
   .analysis{display:grid;gap:.3rem;padding:.5rem .6rem;border:1px dashed color-mix(in srgb,var(--ink) 25%,transparent);border-radius:.6rem}
   .analysis h3{font-size:.9rem}
   .analysis button{justify-self:start;font-size:.8rem}
+  .analysis button[aria-disabled="true"]{opacity:.65;cursor:wait}
   .retry-error{grid-column:1 / -1}
   .stage{display:grid;gap:.5rem;min-width:0}
   .board{width:min(100%,56vh);aspect-ratio:1;justify-self:center}

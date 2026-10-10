@@ -419,6 +419,17 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
 
 ## Changelog
 
+- 2026-10-10 — D3665 Analyze admission/action repair: the web response boundary now requires
+  the exact requested run, branch, move and entry position. Crossed responses fail visibly;
+  the mounted reveal independently validates its current selection. One persistent native
+  Analyze/Hide control retains focus through loading, success, failure and hide; pending work
+  is single-flight and navigation/retry/departure retire it. The three predecessor-red controls,
+  all 185 focused checks, clean types and actual desktop/touch-phone Analyze → different
+  rehearsal → Compare journeys pass. Complete normal gates pass 4,459 software, seven
+  unchanged-budget performance, 246 content and 271 browser cases, one optional Maia skip,
+  zero retries and 150 input/112 composition cells. Recorded line acquisition, module ceilings,
+  search, grading, moment selection and every existing discharge remain unchanged.
+
 - 2026-10-09 — D3638 read/recovery repair: pending reads are single-flight rather than superseded
   each second. Failed/crossed refreshes keep the last confirmed exact branch and selected move,
   stop polling and expose deliberate retry; departed responses cannot publish or clear a new

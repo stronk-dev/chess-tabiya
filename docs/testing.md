@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make review-route-check` includes exact Analyze run/branch/move/entry admission, crossed
+responses, single-flight focus continuity, read failure/retry and departed-result controls.
+`make review-analysis-browser-check` exercises the built application on desktop and a
+touch-enabled phone: two crossed HTTP responses, a late navigated-away read, keyboard
+Analyze/Hide, unchanged recorded play, a real different retry move and Compare. Both journeys
+also run in ordinary browser CI; they add no source, search or move-quality policy.
+
 `make bot-label-check` covers the distinction between raw Maia model-band settings and
 measured profile strength through shared copy, mounted Play/Rating, all four unchanged
 selection payloads and resistance presentation. `make bot-label-browser-check` exercises

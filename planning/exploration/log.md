@@ -24562,3 +24562,43 @@ Campaign was the one capability with no API, route or content. Now:
   retired; all fourteen whole capabilities remain incomplete, with four active/five blocked
   milestones and zero official graduates. Source/selected-Sight/semantic and bot Stage-B drafts
   remain held. No remote-CI, native release-image, readiness-to-push or whole-1.0 result is claimed.
+
+### 2026-10-10 — D3665 exact Review Analyze admission and native action continuity
+
+- Continued from the full inventory into the existing Review §7/O7.3 journey, not a new
+  source/search or a draft semantic upgrade. `assertReviewAnalysisResponse` accepted wrong
+  branch/entry IDs; the reveal also disabled/replaced its native action while it was focused.
+- `make review-route-check` first fails all three new controls: both crossed identities pass
+  the predecessor parser and the pending control is natively disabled. The other 178 checks
+  pass. The failures are retained here rather than calling a green replay their diagnosis.
+- Every production caller now supplies the exact run/branch/move/entry subject. The mounted
+  reveal independently validates it, accepts only its current selection and refuses an open
+  retry. Analyze and Hide share one focus-preserving, single-flight native control. Navigation,
+  retry and departure invalidate pending work; no new provider request, mutation or output
+  policy is added. Docs describe the actual boundary; native journey/full gates follow.
+- Expanded focused verification passes 185 controls and clean workspace types. The first native
+  desktop/phone-width run reaches both crossed refusals and focus-preserving success/hide, then
+  fails in the new observer: `data-node-id` belongs to the move row, not its button. The test now
+  reads and asserts the actual row identity; no product assertion or deadline is removed. The
+  phone journey is assigned to the existing touch-enabled mobile project rather than claiming
+  a narrow desktop viewport is a touch-device check.
+- The corrected normal `make review-analysis-browser-check` passes both actual desktop and
+  touch-phone journeys: crossed branch/entry HTTP responses are refused; a late response after
+  navigation cannot reopen the line; keyboard Analyze/Hide retain the same native button.
+  Browsing preserves nodes/branches/cursor and admits only additive evidence. Retry commits
+  actual Bc4 on the board, keeps the original Nf3 continuation, and Compare opens both. No
+  browser retries or deadline changes. Complete normal verification/build/browser tiers follow.
+- Complete sequential `make roadmap-receipt verify-awake build test-browser-ci-awake` exits
+  zero: clean types, 4,459 software cases/365 files, seven unchanged-budget performance
+  cases/four files, 246 content cases/25 files, governance/packaging/build and 271 browser
+  passes (206 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip,
+  zero retries and all 150 input/112 composition cells. Historical intermittents are not
+  diagnosed by this green run; no deadline, retry or release gate is weakened.
+- D3665 closes only the exact Analyze/focus/recovery defect. The ledger, durable state, queue,
+  readable roadmap and current checkpoint/receipt are reconciled in the same change set.
+  The inventory is 3,414 ledger rows: 1,541 done, 161 refused and 1,712 assigned live
+  (627 todo, fourteen doing, 1,071 blocked), zero untriaged. UX remains 273 complete/272
+  live/24 retired; all fourteen whole capabilities remain incomplete, four milestones are
+  active/five blocked, and zero packs graduate officially. Missing sources/usefulness,
+  semantic qualification, bot calibration, Campaign curriculum/rewards and full release
+  journeys remain open. No remote-CI, native release-image or readiness-to-push claim.

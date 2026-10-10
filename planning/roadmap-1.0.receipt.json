@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:cfa2e24c71221d61ab1e0a760898d4ac4626bbdc92926d6b08474c22cb5e2a95",
+    "roadmap": "sha256:a224245373018aff532dfe799be0b6e69cf356c9cf7945bda1935f9d9c5d861b",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:f82ff4ed02fe9dec07a9d868741c7720a165f04396433c6abf9925d8afb65470",
+    "workState": "sha256:c49c207e5cccb404d3463e1a98b0d2aea7df0ef08954de0409cbc4aed990c090",
     "rfcRegister": "sha256:c70c8ccdb038cf0a8db1cca0db72406bb63bd5d3d12595652288b122cf1fa69f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 14,
       "blocked": 1071,
-      "done": 1540,
+      "done": 1541,
       "refused": 161
     },
     "workItems": {
@@ -1081,24 +1081,24 @@
       ],
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-10-09",
-        "summary": "D3638 completes the existing Review read/recovery journey. Single-flight automatic polls stay quiet and publish slow responses; deliberate Refresh joins an existing read. Failed, crossed or cited-node-missing replies preserve the last confirmed exact branch and selected move with visible retry. Departed completions cannot attach, keyboard focus and geometry survive recovery, and no game commands are replayed. Two predecessor controls fail; mounted controls and four actual desktop/phone recovery journeys pass. Final local gates pass clean types/build, 4232 software cases/362 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 241 browser passes (176 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. The first browser run suffered coordinator-induced concurrent rebuilding; the complete sequential rerun passes unchanged. Earlier Review, Profile, Studio, account, Support and Campaign repairs stand. Complete sources/modules, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and release proof remain open; no whole capability, milestone or remote CI promotion.",
+        "at": "2026-10-10",
+        "summary": "D3665 binds Review Analyze to its exact requested run/branch/move/entry and preserves one native action through pending, success, failure and hide. Crossed responses fail visibly; navigation, retry and departure retire late completions. Three predecessor-red controls, 185 focused checks, clean types and two desktop/touch-phone Analyze-to-different-retry-to-Compare journeys pass, retaining original play. Complete sequential make roadmap-receipt verify-awake build test-browser-ci-awake passes 4459 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance/packaging/build and 271 browser cases (206 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. D3638's exact read/recovery and earlier Profile, Studio, account, Support and Campaign repairs stand. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No new source/search/grade/moment policy, whole capability, milestone, native release-image or remote-CI promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/App.svelte",
           "apps/web/src/lib/ReviewMapScreen.svelte",
-          "apps/web/src/lib/app-shell.test.ts",
-          "packages/runtime/src/review-map-templates.ts",
-          "tests/browser/review-refresh.spec.ts",
-          "docs/game-import-and-story.md",
+          "apps/web/src/lib/review-response.ts",
+          "apps/web/src/lib/review-map-remainder.test.ts",
+          "tests/browser/drill.spec.ts",
+          "docs/review-evidence.md",
           "rfc/review-map.md",
           "planning/exploration/log.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3638",
-            "digest": "sha256:b8b08659ac4430f47147dd15bbe68d10c3404631e87403bff58d5fe2d2384d6c"
+            "id": "D3665",
+            "digest": "sha256:d8e1cd20ea2bb40cc9e2d32f2411edb31938d42ba2570626f3363911eedb8e8d"
           },
           {
             "kind": "rfc",

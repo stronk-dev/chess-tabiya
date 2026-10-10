@@ -1445,8 +1445,11 @@
   }
 
   async function analyzeFromReview(runId: string, branchId: string, nodeId: string) {
+    const row = story?.runId === runId && story.branchId === branchId ? story.rows.find(row => row.nodeId === nodeId) : undefined;
+    if (row === undefined) throw new Error("This reviewed position is no longer open");
+    const subject = { runId, branchId, nodeId, entryNodeId: row.entryNodeId };
     const page = await api.reviewAnalysis!(runId, nodeId, branchId);
-    assertReviewAnalysisResponse(page, { runId, nodeId });
+    assertReviewAnalysisResponse(page, subject);
     return page;
   }
 

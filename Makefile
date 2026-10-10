@@ -3659,6 +3659,10 @@ bot-rematch-browser-check:
 review-route-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/review-map-remainder.test.ts packages/runtime/src/testing/recorded-play.test.ts packages/runtime/src/review-map.test.ts
 
+.PHONY: review-analysis-browser-check
+review-analysis-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep D3665
+
 .PHONY: submission-review-check submission-review-browser-check
 submission-review-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/screen-model.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/teacher-surface.test.ts
