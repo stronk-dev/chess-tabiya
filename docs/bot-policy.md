@@ -124,6 +124,16 @@ expectedNodeId, expectedBranchId, expectedEventHeadDigest }`. The server then:
    `concurrent_commit_conflict`; only then the root CAS (`stale_root`);
 6. appends move + decision + operation + deliveries in one `opponent.move_selected`.
 
+The guard's 500 ms opportunity includes engine identity discovery, not just scheduler work.
+Discovery that fails promptly retains `not_delivered`; expiry records `guard_deadline` and the
+dependent pawn trait abstains. Late discovery cannot dispatch work or settle provider health.
+An actual acquired-source failure still reaches the shared provider-health observer; only a
+successful delivery arriving after the guard opportunity is discarded without healing health.
+Only the remaining opportunity reaches the shared scheduler. The Maia waiter is capped by the
+existing `opponent.selection@1` consumer deadline (four seconds); operator-supplied waiter budgets
+may narrow it, never raise it. Provider execution timeout/request identities remain unchanged.
+This waiter correction is not a release-concurrency latency or human-likeness measurement.
+
 `parseStoredBotEnvelope` is the one durable parser: deliveries re-enter through
 `parsePersistedProviderDelivery`, the decision is recompiled from the run's root, the run's
 catalogue profile and those deliveries, and the whole stored decision and operation must be equal

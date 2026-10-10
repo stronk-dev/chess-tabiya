@@ -24199,3 +24199,47 @@ Campaign was the one capability with no API, route or content. Now:
   pass again inside the full gate. Final tracker-only closeout updates do not alter production,
   tests, content, permissions or qualification; governance is checked again before the explicit
   owned-file commit. No push, remote-CI or native release-image proof is claimed.
+
+### 2026-10-10 — Registered bot discovery and waiter deadlines (D3653)
+
+- The inventory-only prior goal turn made no implementation progress. The current accepted
+  bot-policy §4.3/§4.5 and provider-health-degradation §5 admit this production repair: discovery
+  formerly sat outside the guard opportunity, which restarted on scheduler entry. The Maia
+  waiter also defaulted to 15 seconds instead of the four-second declared consumer ceiling.
+- All six permanent controls fail on the unchanged predecessor. The repair bounds discovery,
+  handles its late rejection without dispatch, forwards only remaining time, and retains local
+  pre-acquisition expiry separately from shared provider settlements. The existing deadline
+  failure persists/reloads unchanged; no provider health is changed without acquisition.
+- All 85 focused source/compiler/registered-route cases and workspace types pass. The actual
+  file-backed route commits the same base distribution/draw with guard/trait abstention, then
+  reloads/replays without provider calls or extra events. A stalled base returns the existing
+  no-move 503. Source request timeout identities, sampler, profiles and durable formats stay put.
+- An initial test incorrectly compared every pre-top-p mass with the final distribution; the
+  correction independently reconstructs the exact same sealed Maia input without a guard and
+  compares all resulting weights and the selected move. Type checking also caught the nullable
+  consumer ceiling, now refused explicitly rather than assumed finite. No budget is relaxed.
+- Same-commit ledger, durable state, docs and existing queue/roadmap record this bounded advance.
+  Full normal verification/build and browser tiers follow before commit. No calibrated personality,
+  whole consumer migration, native release-concurrency/image or remote CI is claimed.
+- Stage B remains genuinely incomplete: the actual packet has typed events/readings, not the
+  scalar `rows[].features` API in bot-policy §6. Its legacy vector repeats collectors over caller
+  scores. Existing D1976/D818 and packet D10 retain that contract/consumer obligation; no second
+  detector pipeline or unversioned persisted packet is introduced. Independent source-draft
+  reviews were requested asynchronously; no reviewers are spawned without authorization.
+- Before completing the aggregate, review caught that the post-acquisition expiry branch also
+  hid genuine scheduler failures from provider health. The first aggregate was interrupted during
+  typechecking (exit 130), not reported as passing. The branch now discards only late successes;
+  a seventh permanent control observes the real acquired Stockfish timeout while retaining the
+  delivered Maia reply. All 86 focused cases pass with native HTTP permitted; the sandbox-only
+  attempt failed at the existing listener with EPERM, not a chess or deadline assertion.
+- Complete sequential `make verify-awake build` passes: 4,401 software cases/365 files, seven
+  unchanged-budget performance cases/four files, 241 content cases/24 files, workspace types,
+  governance, packaging and production build. The existing semantic record remains current:
+  87 passing canonical cases over 81 subjects, zero fully qualified. No generated qualification
+  outcome or authored content is changed.
+- `make test-browser-ci-awake` then passes all four tiers without simultaneous rebuilding:
+  196 ordinary journeys, five real-content integrations, 59 responsive/accessibility matrix cases
+  and one packaged-default rehearsal (261 passing total), one existing optional Maia latency skip,
+  zero retries, all 150 exact-input and 112 composition cells. Current registered-bot selection,
+  restart/resume and desktop/phone rematch remain playable. Final documentation/tracker-only
+  closeout is rechecked before the explicit owned-file commit; no push or remote-CI result.

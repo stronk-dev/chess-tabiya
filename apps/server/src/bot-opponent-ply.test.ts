@@ -21,11 +21,13 @@ import {
   type EvidencePayload,
   type OpponentMoveSelectedEvent,
 } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { APPLICATION_PROVIDER_BOUNDS } from "./application.js";
-import { BotOpponentProviders, parseStoredBotEnvelope, type BotAcquisition, type BotOpponentAcquirer } from "./bot-opponent-operation.js";
-import { BotProviderAvailability } from "./bot-opponent-source.js";
+import { BotOpponentProviders, parseStoredBotEnvelope, sealBotRootAt, type BotAcquisition, type BotOpponentAcquirer, type BotOpponentProvidersOptions } from "./bot-opponent-operation.js";
+import { BotProviderAvailability, reloadBotSources } from "./bot-opponent-source.js";
+import { compileBotClassifierView, compileBotLegalMoveMap, compileBotPolicyExecution, sealBotRootAuthority } from "./bot-policy-compiler.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 import { assertDuplicateRunResponse } from "../../web/src/lib/duplicate-response.js";
 import { ProviderRegistry } from "./provider-health.js";
 
@@ -70,8 +72,10 @@ afterEach(async () => {
   for (const cleanup of cleanups.splice(0).reverse()) await cleanup();
 });
 
-function providersFor(engine: MockProviderEngineClient, availability = botTestAvailability()): BotOpponentProviders {
-  const { scheduler } = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null, bounds: APPLICATION_PROVIDER_BOUNDS });
+type ProviderOptions = Partial<Pick<BotOpponentProvidersOptions, "stockfishEngine" | "now" | "maiaBudgetMs">>;
+
+function providersFor(engine: MockProviderEngineClient, availability = botTestAvailability(), options: ProviderOptions = {}): BotOpponentProviders {
+  const { scheduler } = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null, bounds: APPLICATION_PROVIDER_BOUNDS, ...(options.now === undefined ? {} : { monotonicNowMs: options.now }) });
   return new BotOpponentProviders({
     scheduler,
     stockfishEngine: async () => {
@@ -79,14 +83,15 @@ function providersFor(engine: MockProviderEngineClient, availability = botTestAv
       return { id: identity.id, version: identity.version };
     },
     availability,
+    ...options,
   });
 }
 
-function setup(options: { readonly engine?: MockProviderEngineClient; readonly engineOptions?: MockProviderEngineOptions; readonly filename?: string; readonly acquirer?: BotOpponentAcquirer; readonly availability?: BotProviderAvailability } = {}) {
+function setup(options: { readonly engine?: MockProviderEngineClient; readonly engineOptions?: MockProviderEngineOptions; readonly filename?: string; readonly acquirer?: BotOpponentAcquirer; readonly availability?: BotProviderAvailability; readonly providerOptions?: ProviderOptions } = {}) {
   const storage = new SQLiteRunStorage(options.filename);
   const engine = options.engine ?? new CountingEngine(options.engineOptions);
   const availability = options.availability ?? botTestAvailability();
-  const providers = providersFor(engine, availability);
+  const providers = providersFor(engine, availability, options.providerOptions);
   const queue = new EvidenceJobQueue(new NoEvidence(), { maxConcurrency: 1 });
   const service = new RunService(storage, {
     evidenceQueue: queue,
@@ -124,6 +129,150 @@ async function createBotRun(handler: ReturnType<typeof createRestHandler>, id: s
 function plyBody(run: DrillRun, id: string, overrides: Record<string, unknown> = {}) {
   return { requestId: id, expectedNodeId: run.activeCursor.nodeId, expectedBranchId: run.activeCursor.branchId, expectedEventHeadDigest: runEventHeadDigest(run), ...overrides };
 }
+
+describe("D3653: registered bot opportunity includes source discovery", () => {
+  it("records discovery expiry without acquiring Stockfish, preserves Maia and replays after restart", async () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-bot-deadline-"));
+    cleanups.push(() => rmSync(directory, { recursive: true, force: true }));
+    const filename = join(directory, "bot.sqlite");
+    const engine = new CountingEngine();
+    let clock = 0;
+    const first = setup({ filename, engine, providerOptions: {
+      now: () => clock,
+      stockfishEngine: async () => {
+        const identity = await engine.start("stockfish-analysis");
+        clock = 600;
+        return identity;
+      },
+    } });
+    const run = await createBotRun(first.handler, "bot-discovery-expired", profile("pawn-forward.1400@1"));
+    const body = plyBody(run, requestId("discovery-expired"));
+    const reply = await call(first.handler, "POST", `/runs/${run.id}/opponent-ply`, body);
+    expect(reply.status, await reply.clone().text()).toBe(200);
+    const saved = first.storage.read(run.id)!.run;
+    const selected = saved.events.find((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected")!;
+    const { decision } = parseStoredBotEnvelope(saved, selected);
+    expect(decision.layers).toContainEqual({ id: "guard.severe_error@1", action: "abstained", reason: "guard_deadline" });
+    expect(decision.layers).toContainEqual({ id: "trait.pawn_preference@1", action: "abstained", reason: "guard_dependency_abstained" });
+    const root = sealBotRootAt(run, { nodeId: run.activeCursor.nodeId, branchId: run.activeCursor.branchId, preCommitEventHeadDigest: runEventHeadDigest(run) })!;
+    const legal = compileBotLegalMoveMap(root);
+    const baseline = compileBotPolicyExecution({ root, legal, classifiers: compileBotClassifierView(root, legal), profile: run.opponentPolicy.profile!, maia: reloadBotSources(selected.data.selection.policy!.deliveries).maia });
+    expect(baseline.kind).toBe("executed");
+    if (baseline.kind !== "executed") throw new Error("expected the independently reconstructed base distribution");
+    expect(decision.considered.map(row => [row.moveUci, row.finalMass])).toEqual(baseline.execution.derivation.considered.map(row => [row.moveUci, row.finalMass]));
+    expect(decision.chosenMoveUci).toBe(baseline.execution.derivation.chosenMoveUci);
+    expect(first.availability.snapshot().stockfish).toBe("unverified");
+    expect(engine.exchanges).toEqual(["maia-5m"]);
+    const original = await reply.json() as { operation: unknown };
+    await cleanups.pop()!();
+    const secondEngine = new CountingEngine();
+    const second = setup({ filename, engine: secondEngine });
+    const retry = await call(second.handler, "POST", `/runs/${run.id}/opponent-ply`, body);
+    expect(retry.status, await retry.clone().text()).toBe(200);
+    expect((await retry.json() as { operation: unknown }).operation).toEqual(original.operation);
+    expect(secondEngine.exchanges).toEqual([]);
+    expect(second.storage.read(run.id)!.run.events).toEqual(saved.events);
+  });
+
+  it("cannot leave a delivered Maia reply waiting forever on engine identity", async () => {
+    vi.useFakeTimers();
+    try {
+      let rejectIdentity!: (reason: Error) => void;
+      const engine = new CountingEngine();
+      const fixture = setup({ engine, providerOptions: { now: () => Date.now(), stockfishEngine: () => new Promise((_resolve, reject) => { rejectIdentity = reject; }) } });
+      const run = await createBotRun(fixture.handler, "bot-discovery-hung", profile("guarded-human.1400@1"));
+      let complete = false;
+      const reply = call(fixture.handler, "POST", `/runs/${run.id}/opponent-ply`, plyBody(run, requestId("discovery-hung"))).then(value => { complete = true; return value; });
+      await vi.advanceTimersByTimeAsync(501);
+      expect(complete).toBe(true);
+      expect((await reply).status).toBe(200);
+      const saved = fixture.storage.read(run.id)!.run;
+      const selected = saved.events.find((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected")!;
+      expect(parseStoredBotEnvelope(saved, selected).decision.layers).toContainEqual({ id: "guard.severe_error@1", action: "abstained", reason: "guard_deadline" });
+      rejectIdentity(new Error("late shared discovery rejection"));
+      await vi.advanceTimersByTimeAsync(1);
+      expect(engine.exchanges).toEqual(["maia-5m"]);
+      expect(fixture.availability.snapshot().stockfish).toBe("unverified");
+    } finally { vi.useRealTimers(); }
+  });
+
+  it("records genuine acquired-source timeout in provider health while preserving the base reply", async () => {
+    class StalledStockfish extends CountingEngine {
+      override async exchange(engineId: string, request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
+        if (engineId !== "stockfish-analysis") return super.exchange(engineId, request);
+        this.exchanges.push(engineId);
+        return new Promise(() => {});
+      }
+    }
+    vi.useFakeTimers();
+    try {
+      const engine = new StalledStockfish();
+      const fixture = setup({ engine, providerOptions: { now: () => Date.now() } });
+      const observe = vi.spyOn(fixture.availability, "observe");
+      const run = await createBotRun(fixture.handler, "bot-guard-source-stalled", profile("guarded-human.1400@1"));
+      let complete = false;
+      const pending = call(fixture.handler, "POST", `/runs/${run.id}/opponent-ply`, plyBody(run, requestId("guard-source-stalled"))).then(value => { complete = true; return value; });
+      await vi.advanceTimersByTimeAsync(501);
+      expect(complete).toBe(true);
+      expect((await pending).status).toBe(200);
+      expect(observe).toHaveBeenCalledWith("stockfish.legal_root_table@1", expect.objectContaining({ kind: "source_failure", reason: "deadline_exceeded" }));
+      const saved = fixture.storage.read(run.id)!.run;
+      const selected = saved.events.find((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected")!;
+      expect(parseStoredBotEnvelope(saved, selected).decision.layers).toContainEqual({ id: "guard.severe_error@1", action: "abstained", reason: "guard_deadline" });
+      expect(engine.exchanges).toEqual(expect.arrayContaining(["maia-5m", "stockfish-analysis"]));
+      observe.mockRestore();
+    } finally { vi.useRealTimers(); }
+  });
+
+  it.each([undefined, 2_000, 20_000])("uses only the remaining guard opportunity and caps base waiter %s at the consumer ceiling", async maiaBudgetMs => {
+    const engine = new CountingEngine();
+    const { scheduler } = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null, bounds: APPLICATION_PROVIDER_BOUNDS });
+    const get = vi.spyOn(scheduler, "get");
+    let clock = 0;
+    const provider = new BotOpponentProviders({ scheduler, availability: botTestAvailability(), now: () => clock,
+      ...(maiaBudgetMs === undefined ? {} : { maiaBudgetMs }),
+      stockfishEngine: async () => { const identity = await engine.start("stockfish-analysis"); clock = 100; return identity; },
+    });
+    const root = sealBotRootAuthority({ runId: "remaining-run", branchId: "remaining-branch", nodeId: "remaining-node", preCommitEventHeadDigest: `sha256:${"a".repeat(64)}`, startFen: START, historyUci: [], seed: 7 });
+    const acquired = await provider.acquire({ root, profile: profile("guarded-human.1400@1") });
+    expect(acquired.maia.kind).toBe("success");
+    expect(typeof acquired.stockfish === "object" && acquired.stockfish?.kind).toBe("success");
+    const maia = get.mock.calls.find(([input]) => input.operation === "maia.policy_page@1")!;
+    const guard = get.mock.calls.find(([input]) => input.operation === "stockfish.legal_root_table@1")!;
+    expect(guard[1].budgetMs).toBe(400);
+    const ceiling = EVIDENCE_MANIFEST.consumers.find(row => row.id === "opponent.selection" && row.version === 1)!.latency.maxMs;
+    if (ceiling === null) throw new Error("expected a bounded consumer");
+    expect(maia[1].budgetMs).toBe(Math.min(maiaBudgetMs ?? ceiling, ceiling));
+    expect(guard[0].request.timeoutMs).toBe(5_000);
+    expect(maia[0].request.timeoutMs).toBe(15_000);
+    get.mockRestore();
+  });
+
+  it("settles stalled base acquisition at the consumer ceiling without committing a move", async () => {
+    class StalledMaia extends CountingEngine {
+      override async exchange(engineId: string, request: EngineExchangeRequest): Promise<EngineExchangeCapture> {
+        if (engineId !== "maia-5m") return super.exchange(engineId, request);
+        this.exchanges.push(engineId);
+        return new Promise(() => {});
+      }
+    }
+    vi.useFakeTimers();
+    try {
+      const engine = new StalledMaia();
+      const fixture = setup({ engine, providerOptions: { now: () => Date.now() } });
+      const run = await createBotRun(fixture.handler, "bot-base-stalled");
+      let complete = false;
+      const pending = call(fixture.handler, "POST", `/runs/${run.id}/opponent-ply`, plyBody(run, requestId("base-stalled"))).then(value => { complete = true; return value; });
+      await vi.advanceTimersByTimeAsync(4_001);
+      expect(complete).toBe(true);
+      const reply = await pending;
+      expect(reply.status).toBe(503);
+      expect((await reply.json() as { error: { result: unknown } }).error.result).toEqual(BOT_OPPONENT_PLY_RESULTS.base_provider_unavailable);
+      expect(fixture.storage.read(run.id)!.run.events).toEqual(run.events);
+      expect(engine.exchanges).toEqual(["maia-5m"]);
+    } finally { vi.useRealTimers(); }
+  });
+});
 
 async function events(handler: ReturnType<typeof createRestHandler>, runId: string): Promise<readonly DrillRunEvent[]> {
   return ((await (await call(handler, "GET", `/runs/${runId}/events`)).json()) as { events: DrillRunEvent[] }).events;

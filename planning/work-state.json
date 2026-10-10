@@ -30268,6 +30268,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/castling-evidence.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3653",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6defb3a1ed146c83d2e032375ac028e8328c9229d16753b8c401a7f9d8845b4a",
+      "uxItems": [],
+      "evidence": "apps/server/src/bot-opponent-ply.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

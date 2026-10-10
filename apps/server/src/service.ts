@@ -1438,7 +1438,11 @@ export class RunService {
       throw error;
     }
     const composing = performance.now();
-    const stockfishSource = acquisition.stockfish === undefined || acquisition.stockfish === "not_delivered" ? undefined : botStockfishSource(acquisition.stockfish);
+    const stockfishSource = acquisition.stockfish === undefined || acquisition.stockfish === "not_delivered"
+      ? undefined
+      : acquisition.stockfish === "opportunity_expired"
+        ? Object.freeze({ kind: "failure" as const, reason: "deadline" as const })
+        : botStockfishSource(acquisition.stockfish);
     const compiled = compileBotPolicyExecution({
       root,
       legal,
@@ -1473,9 +1477,11 @@ export class RunService {
       ? undefined
       : acquisition.stockfish === "not_delivered"
         ? Object.freeze({ failure: "not_delivered" as const })
-        : acquisition.stockfish.kind === "success"
-          ? acquisition.stockfish.delivery
-          : Object.freeze({ failure: acquisition.stockfish.kind === "source_failure" ? botSourceFailure(acquisition.stockfish.reason) : "invalid_response" as const });
+        : acquisition.stockfish === "opportunity_expired"
+          ? Object.freeze({ failure: "deadline" as const })
+          : acquisition.stockfish.kind === "success"
+            ? acquisition.stockfish.delivery
+            : Object.freeze({ failure: acquisition.stockfish.kind === "source_failure" ? botSourceFailure(acquisition.stockfish.reason) : "invalid_response" as const });
     const provisional = appendOpponentPly(current.stored.run, { ...base, policy: PROVISIONAL_POLICY }, { at: committedAt });
     const selected = provisional.emitted.find((event) => event.type === "opponent.move_selected");
     if (selected === undefined) throw new ServerError("STORAGE_FAILURE", "The opponent ply emitted no selection event");

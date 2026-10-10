@@ -51,14 +51,15 @@ import {
 } from "./bot-opponent-source.js";
 import type { ProviderExchangeScheduler } from "./provider-exchange.js";
 import type { LeaseHolder } from "./storage.js";
+import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
 
 type MaiaResult = TypedProviderResult<"maia.policy_page@1">;
 type StockfishResult = TypedProviderResult<"stockfish.legal_root_table@1">;
 
 export interface BotAcquisition {
   readonly maia: MaiaResult;
-  /** Absent for baseline profiles; `not_delivered` when the guard's request could not be formed. */
-  readonly stockfish?: StockfishResult | "not_delivered";
+  /** Local pre-acquisition outcomes are not shared-provider settlements or receipts. */
+  readonly stockfish?: StockfishResult | "not_delivered" | "opportunity_expired";
   readonly timingMs: Readonly<{ maia: number; guard: number }>;
 }
 
@@ -95,7 +96,10 @@ export class BotOpponentProviders implements BotOpponentAcquirer {
     this.#scheduler = options.scheduler;
     this.#stockfishEngine = options.stockfishEngine;
     this.#availability = options.availability;
-    this.#maiaBudgetMs = options.maiaBudgetMs ?? 15_000;
+    const consumer = EVIDENCE_MANIFEST.consumers.find(row => row.id === "opponent.selection" && row.version === 1);
+    if (consumer === undefined || consumer.latency.maxMs === null || !Number.isFinite(consumer.latency.maxMs) || consumer.latency.maxMs <= 0) throw new TypeError("Registered bot selection has no bounded consumer deadline");
+    if (options.maiaBudgetMs !== undefined && (!Number.isFinite(options.maiaBudgetMs) || options.maiaBudgetMs <= 0)) throw new TypeError("Bot Maia waiter budget must be positive and finite");
+    this.#maiaBudgetMs = Math.min(options.maiaBudgetMs ?? consumer.latency.maxMs, consumer.latency.maxMs);
     this.#maiaTimeoutMs = options.maiaTimeoutMs ?? 15_000;
     this.#guardTimeoutMs = options.guardTimeoutMs ?? 5_000;
     this.#now = options.now ?? (() => performance.now());
@@ -117,15 +121,32 @@ export class BotOpponentProviders implements BotOpponentAcquirer {
     return result;
   }
 
-  async #guard(fen: string, budgetMs: number): Promise<StockfishResult | "not_delivered"> {
-    let engine: Readonly<{ id: string; version: string }>;
-    try {
-      engine = await this.#stockfishEngine();
-    } catch {
-      return "not_delivered";
-    }
+  async #guard(fen: string, deadline: number): Promise<StockfishResult | "not_delivered" | "opportunity_expired"> {
+    const remaining = Math.floor(deadline - this.#now());
+    if (remaining <= 0) return "opportunity_expired";
+    // Engine startup/discovery is shared work and has no cancellation API. Bound this waiter,
+    // consume late rejection safely, and never dispatch a new source task after it has departed.
+    // This local expiry is NOT a manufactured exchange result and does not settle provider health.
+    const identity = await new Promise<Readonly<{ id: string; version: string }> | "not_delivered" | "opportunity_expired">(resolve => {
+      let settled = false;
+      const finish = (value: Readonly<{ id: string; version: string }> | "not_delivered" | "opportunity_expired"): void => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(value);
+      };
+      const timer = setTimeout(() => finish("opportunity_expired"), remaining);
+      void Promise.resolve().then(() => this.#stockfishEngine()).then(value => finish(value), () => finish("not_delivered"));
+    });
+    const budgetMs = Math.floor(deadline - this.#now());
+    if (budgetMs <= 0) return "opportunity_expired";
+    if (identity === "not_delivered" || identity === "opportunity_expired") return identity;
+    const engine = identity;
     const request = botStockfishRequest({ fen, requestedEngine: engine, timeoutMs: this.#guardTimeoutMs });
     const result = await this.#scheduler.get({ operation: "stockfish.legal_root_table@1", request }, this.#scope("guard", budgetMs), new AbortController().signal);
+    // A genuine exchange failure still belongs to the provider-health authority; only a
+    // successful delivery arriving after this opportunity must be refused without healing it.
+    if (result.kind === "success" && this.#now() >= deadline) return "opportunity_expired";
     this.#availability.observe("stockfish.legal_root_table@1", result);
     return result;
   }
@@ -138,7 +159,7 @@ export class BotOpponentProviders implements BotOpponentAcquirer {
     const deadline = BOT_LAYER_DECLARATIONS["guard.severe_error@1"].parameters.deadlineMs;
     let guardDone = started;
     const guard = guarded
-      ? this.#guard(input.root.beforeFen, deadline).then((value) => { guardDone = this.#now(); return value; })
+      ? this.#guard(input.root.beforeFen, started + deadline).then((value) => { guardDone = this.#now(); return value; })
       : undefined;
     const maia = await this.#maia({ startFen: input.root.startFen, historyUci: input.root.historyUci, profile: input.profile });
     const maiaDone = this.#now();
@@ -160,7 +181,7 @@ export class BotOpponentProviders implements BotOpponentAcquirer {
     const profile = catalogEntryFor("human-baseline.1400@1")!.reference;
     await Promise.allSettled([
       this.#maia({ startFen: PROBE_START_FEN, historyUci: [], profile }),
-      this.#guard(PROBE_START_FEN, this.#guardTimeoutMs),
+      this.#guard(PROBE_START_FEN, this.#now() + this.#guardTimeoutMs),
     ]);
   }
 }

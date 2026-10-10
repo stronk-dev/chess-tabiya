@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7637f5e0192976d093cd36cbaf596b225742545a8c9fe8124a7fb346905e3139",
+    "roadmap": "sha256:8b63e275e0f227360da2ffdfba9b0d93642eeb24ca2bddbce001ba5b23e6035e",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:1278dda2722157555223b60638910f68ada3bcea705c99028d93c335363436d9",
+    "workState": "sha256:dca07dc6b0e3ad4577e60b2b6c5677a1c9bf1d9a22faf1c5f896d7e5384fbff1",
     "rfcRegister": "sha256:f5e30d387e6d4c07a6d5bcca14dacad0ec0341465406e5aa8370ed5b9f87712f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1068,
-      "done": 1530,
+      "done": 1531,
       "refused": 161
     },
     "workItems": {
@@ -262,43 +262,33 @@
       "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3645/D3646 retain the removed pawn's identity separately from the en-passant landing through overload response conflicts, saved overload/defender-consequence windows and actual authenticated Review. Twelve predecessor controls fail; 598 foundation/83 Review controls and clean types pass. Eight native desktop/phone journeys preserve exact captions, complete admitted paths, oriented square centers and saved play. Final normal local gates pass 4360 software tests/364 files, seven unchanged-budget performance/four files, 241 content/24 files, types/build/governance/packaging and 253 browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. Existing generated validation records are refreshed with all case/population/external/verdict data unchanged: 87 canonical cases over 81 subjects, zero fully qualified. Missing queue references and the new browser instrument's two-fact path count are corrected without weakening product assertions or budgets. Same-commit permanent test-path closure; no new source, permission, judgement, bot calibration, source adoption, whole capability, native release-image or remote-CI promotion.",
+        "summary": "D3653 bounds registered-bot engine discovery and shared acquisition inside the original 500 ms guard opportunity and caps the base waiter at the declared consumer deadline. Six permanent controls fail on the predecessor; all 86 focused bot source/compiler/registered-route cases and workspace types pass. Expiry preserves the independently reconstructed Maia distribution/draw, records guard/trait abstention, starts no late work and changes no provider health before acquisition; genuine acquired-source failures still settle health. File-backed restart replays without provider calls or event mutation; stalled Maia returns the existing no-move 503. Complete normal local gates pass clean types/build/governance/packaging, 4401 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files and 261 browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. D3645/D3646's prior exact-identity Review repair stands. No source format, sampler, profile, calibration, Stage-B implementation, whole capability, native appliance or remote-CI promotion.",
         "impact": "advanced",
         "evidence": [
-          "rfc/semantic-collectors.md",
-          "rfc/recorded-semantic-path.md",
-          "packages/runtime/src/transition.ts",
-          "packages/runtime/src/tactics.ts",
-          "packages/runtime/src/semantic-evidence.ts",
-          "packages/runtime/src/semantic-tactics.test.ts",
-          "packages/runtime/src/semantic-tactic-sequences.test.ts",
-          "packages/runtime/src/recorded-semantic-path.test.ts",
-          "apps/server/src/review-map.test.ts",
-          "tests/browser/review-capture-identity.spec.ts",
-          "docs/semantic-evidence.md",
+          "rfc/bot-policy.md",
+          "rfc/provider-health-degradation.md",
+          "apps/server/src/bot-opponent-operation.ts",
+          "apps/server/src/service.ts",
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "docs/bot-policy.md",
           "planning/codex-queue.md",
           "planning/exploration/log.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"
+            "id": "bot-policy.md",
+            "digest": "sha256:8170db8a7d61f5ccbb251bf995eeb8b30280370481d758333d5f00bde370c1bc"
           },
           {
             "kind": "work_state",
-            "id": "D3645",
-            "digest": "sha256:beba68f3c4dd3a2b3db476f707cf6cd60b11cde6f1fb97752d79a793c30eb108"
+            "id": "D3653",
+            "digest": "sha256:6defb3a1ed146c83d2e032375ac028e8328c9229d16753b8c401a7f9d8845b4a"
           },
           {
             "kind": "rfc",
-            "id": "recorded-semantic-path.md",
-            "digest": "sha256:1765eaffdbe10340c4907d209604074f25985cd500104196fc40927671c0174f"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3646",
-            "digest": "sha256:e9b9c7e9caf5ff71c633923d7ab60f9ba7bb9c7dee966b3b994fee20a5afa53e"
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:b58d53094a34faa901f21a568c5409d78f56929b518a6387fe2eaece26878eed"
           }
         ]
       },

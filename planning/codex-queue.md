@@ -12,6 +12,22 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3653]] implements the existing registered-bot deadline contract end to end through discovery,
+shared acquisition, typed guard/trait abstention and file-backed replay. Six permanent controls
+fail on the unchanged predecessor; all 86 focused bot source/selection controls and workspace
+types pass after repair. A late or never-settling identity cannot hold a delivered Maia reply or
+start late Stockfish work. A stalled base waiter returns the existing no-move 503 at its declared
+ceiling. Sampling, source request identities, saved formats and provider-health authority are
+unchanged. A seventh new control distinguishes genuine acquired-source timeout from health-neutral
+discovery expiry. Complete normal gates pass clean types/build/governance/packaging, 4,401 software
+cases, seven unchanged-budget performance cases, 241 content cases and 261 browser cases, one
+optional Maia skip, zero retries and all 150 input/112 composition cells. No calibration, whole
+capability, native appliance or remote-CI promotion.
+The Stage-B contract still requires a truthful packet handoff: actual rows contain events/readings,
+not the scalar `rows[].features` named in bot-policy §6, and the old candidate vector re-runs
+collectors over caller scores. Preserve D1976/D818 and the shared packet's D10; do not populate the
+empty decision arrays from that legacy path or persist an unversioned packet to make them nonempty.
+
 [[D3652]] repairs the omitted castling escape in the existing local trapped-piece reading.
 Every legal physical rook destination participates, including king-initiated commands; quiet
 destinations use the actual landing rather than the encoded rook origin. Legal but locally losing
