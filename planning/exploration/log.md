@@ -25274,3 +25274,45 @@ Campaign was the one capability with no API, route or content. Now:
   capability/milestone, remote-CI or release promotion; no push or deployment.
 - Final closeout `make roadmap-receipt verify-governance` exits zero on the updated
   ledger/state/register/roadmap/log. No protected intent or immutable archive is edited.
+
+## 2026-10-11 — D3692 original CI checkpoint race repaired; full 1.0 inventory retained
+
+- Read the original retained artifact for GitHub browser 37795549157 at 75bc8744,
+  rather than infer a cause from later local passes. Actions is present and stable;
+  the Predict the reply backdrop intercepts it. The first Continue click occurs at
+  219730.362 while authored feedback is still pending (219590.591 + 202.019 ms).
+  The busy controller rejects that click; the second starts select-move at 219844.475
+  and reaches the still-open prediction checkpoint. This is a readiness handoff defect,
+  not missing Actions, a backdrop defect, a needed retry or a too-small timeout.
+- Under implemented drill-client/checkpoint contracts, forward session pending state
+  to the sheet, explain the wait and disable conflicting actions, prediction and
+  reasoning submissions. Continue guards the callback too. Retain failure rollback,
+  explicit separate checkpoints and the modal boundary; no forced click/dismissal.
+- The mounted readiness/guard case fails on the predecessor's enabled button, then
+  passes. A native case holds the committed move's real feedback response open,
+  checks the disabled action, crosses both checkpoints and opens a group. It and the
+  unchanged full three-candidate rotate/compare/export journey pass in focused and
+  full smoke runs. Normal focused Make targets are permanent and part of ordinary CI.
+- All 4,735 software cases/370 files, seven unchanged-budget performance cases/four
+  files, 247 content cases/25 files, clean types, source/component/capability checks,
+  governance, packaging and build pass. The initial aggregate stops on the work-state
+  report changed by todo→doing; regenerating the existing report and running the
+  remaining normal governance/content/build targets completes those gates.
+- Record D3693 separately: the flipped example prediction uses White-to-move FEN
+  with Black startSide, which the shared board does not allow to move. Existing
+  Continue/reader inspection is not successful prediction submission. Assign core-loop
+  diagnosis and actual submission/reload proof; do not silently rewrite a FEN turn.
+- Close only D3692 locally, keep D3693 open, and update the existing queue, ledger,
+  execution state and roadmap together. All 1,718 live rows remain assigned; UX stays
+  273 complete/272 live/24 retired, all fourteen whole capabilities remain incomplete,
+  milestones remain four active/five blocked and official graduates remain zero.
+  The roadmap retains the full evidence/support/review/bot/content/Campaign and release
+  scope; no competing tracker or percentage is invented.
+- No protected intent, immutable archive, chess convention, pack bytes, qualification,
+  whole capability/milestone, remote-CI result or release is promoted. Original CI
+  artifacts remain outside Git. No push, deployment or history rewrite is authorized.
+- Complete normal `make test-browser-ci-awake` finishes with exit zero: 227 smoke,
+  five real-content, 59 interaction-matrix and one production-configuration passes
+  (292 total), one existing optional Maia skip and zero retries. All 150 permanent
+  board-input cells and 112 composition cells pass. Final focused readiness checks
+  pass three cases; no source or test-budget change follows these results.

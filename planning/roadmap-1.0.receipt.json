@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:82cce78e04c6563a144f9680d732c0779ec0ce09d168c00a5146af2e23659e1a",
+    "roadmap": "sha256:065e0f59f2feb9c7fb93a5cc12a9af1567a8fa3bc3ee47746bac7c8fd1afe1ea",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:f00eab4a8c4d4843a4b8fe5d2bbf1ebb1b6304ffbe6b930c68b92566810adb14",
+    "workState": "sha256:da86cb2aebb6271b9a3e77c0260e26d109a8ea040fb4bbb4251688c10a05dc8a",
     "rfcRegister": "sha256:5bc47ac4662657716e166f4c45104044b6a10917e38ed2af2b8f0b48b40c15af",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 631,
       "doing": 14,
       "blocked": 1073,
-      "done": 1562,
+      "done": 1563,
       "refused": 161
     },
     "workItems": {
@@ -73,10 +73,10 @@
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "Locate D3692's latest remote branch-group click failure at its original pushed revision; do not infer its cause from newer local passes. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+      "nextAction": "D3692's original remote checkpoint race is repaired locally; require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. D3693 owns the separate actual prediction-submission gap, not closed by Continue journeys. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3659 fixes standalone Make checker execution through the existing selected Node executable rather than ambient search-path resolution. Three actual Make-boundary predecessor controls and the no-bare-recipe guard pass; all 387 standalone JavaScript recipes now use CI_NODE. The normal recorded-path checker reports Node 24.21.0; caller commands, test tiers, budgets, package-manager selection and runtime versions are unchanged. Focused toolchain, types, Review and foundation gates pass. Complete normal make verify-awake build passes clean types, 4438 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, governance and packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Historical D3532/D3543/D3510/D3591/D3600 causes remain open; no remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim. 2026-10-11 read-only GitHub audit records D3692: latest pushed 75bc8744 has green verify 37795549212 but red browser 37795549157 at its branch-group click. Current local 4734 software/seven performance/247 content and build pass; previous 291-browser result is historical. No paired green remote result or release promotion is claimed.",
+        "summary": "D3692 is repaired from original GitHub trace evidence, not a newer green replay: the first Continue reached a busy controller before move feedback settled, so the second left Predict the reply covering Actions. Checkpoint controls now inherit session readiness and explain the wait. A mounted predecessor-red guard/readiness control and held actual HTTP feedback plus the complete branch-group journey pass. Normal software passes 4735 cases/370 files; seven unchanged-budget performance cases, 247 content cases, clean types, governance, packaging and build pass. Browser sweep measurements are retained in the exploration log. D3693's flipped-prediction submission gap and earlier intermittent causes remain open. No paired green exact-revision remote CI, push, native release-image, whole capability or milestone completion is claimed.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -87,6 +87,9 @@
           ".github/workflows/verify.yml",
           ".github/workflows/release.yml",
           "tests/browser/drill.spec.ts",
+          "apps/web/src/lib/screens.test.ts",
+          "apps/web/src/lib/CheckpointSheet.svelte",
+          "apps/web/src/lib/DrillScreen.svelte",
           "tests/browser/profile.spec.ts",
           "tools/verify-scaffold.mjs",
           "tools/verify-scaffold.test.mjs",

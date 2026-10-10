@@ -3217,6 +3217,42 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   }
 });
 
+test("D3692 checkpoint Continue waits for pending move feedback without losing a click", async ({ page }) => {
+  await schemaPackCard(page).getByRole("button", { name: /Rehearse this position/ }).click();
+  // Hold the committed move's feedback, not the separate initial run attachment.
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  let release!: () => void;
+  let received!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  const arrival = new Promise<void>(resolve => { received = resolve; });
+  await page.route(/\/runs\/[^/]+\/authored-feedback$/u, async route => {
+    const response = await route.fetch();
+    received();
+    await held;
+    await route.fulfill({ response });
+  });
+  try {
+    await move(page, "c1", "e3");
+    await arrival;
+    const setup = page.getByRole("dialog", { name: "Choose the setup", exact: true });
+    await expect(setup).toBeVisible();
+    await expect(setup.getByRole("button", { name: "Continue", exact: true })).toBeDisabled();
+    await expect(setup).toContainText("Finishing the previous action");
+    release();
+    await setup.getByRole("button", { name: "Continue", exact: true }).click();
+    const prediction = page.getByRole("dialog", { name: "Predict the reply", exact: true });
+    await expect(prediction).toBeVisible();
+    await prediction.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(prediction).not.toBeVisible();
+    await expect(page.getByText("Active line 2 turns")).toBeVisible();
+    await showRunActions(page);
+    await page.getByRole("button", { name: "Branch group", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "Create a branch group", exact: true })).toBeVisible();
+  } finally {
+    release();
+  }
+});
+
 test("branch group captures three candidates, rotates, recovers evidence, compares, and exports", async ({ page }) => {
   await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })

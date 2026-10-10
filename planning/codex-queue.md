@@ -1,11 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-11 — [[D3692]] is the latest remote CI failure, not a newly reproduced
-local defect: browser run 37795549157 at 75bc8744 fails the branch-group journey's
-click at its historical drill.spec.ts:2670; paired verify 37795549212 passes.
-Locate the original blocked gesture before closing. Current local browser passes,
-unchanged deadlines and absence of retries remain separate evidence. No push is
-authorized; release-truth still requires paired green workflows on the exact revision.
+2026-10-11 — [[D3693]] owns the separate flipped-prediction input/timing audit.
+The example's checkpoint follows Black's reply; CheckpointSheet supplies that active
+FEN but flips startSide to Black, while Chessboard permits only the side to move.
+Existing Continue/read-only journeys do not establish actual prediction submission.
+Verify the authored timing and exact legal prediction operation, add submission/reload
+coverage, then repair within the accepted contract or return its ambiguity to the author.
+Do not change FEN turn to make a gesture pass. This is not closed by D3692's busy repair.
+
+2026-10-11 — [[D3692]] is repaired locally from its original remote evidence.
+Browser 37795549157 at 75bc8744 shows the first Continue click before the pending
+move-feedback response finishes; the controller rejects it as busy. The second click
+continues only to Predict the reply, whose backdrop correctly blocks Actions.
+The sheet now inherits session readiness, explains the wait and gates conflicting
+actions; Continue also guards its callback. The mounted control is predecessor-red,
+and held real feedback plus the unchanged full three-candidate group journey pass.
+No timeout, retry, forced click or backdrop waiver. D3693 remains a separate interaction
+gap. No push is authorized; release-truth still requires paired green exact-revision CI.
 
 2026-10-11 — [[D3691]] is closed under accepted semantic-validation Slice B:
 22 both-colour source-bound pawn-dynamics cases preserve exact identities and distinguish

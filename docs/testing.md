@@ -4,6 +4,13 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
+continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
+the move's feedback response open, checks that Continue waits, then crosses both distinct
+checkpoints and opens a branch group. It also runs the complete three-candidate group journey.
+These controls run in ordinary software/browser CI with unchanged deadlines and no retries;
+the backdrop is neither bypassed nor dismissed by the test.
+
 `make classroom-detail-check` checks exact classroom roots and child relationships through the
 HTTP adapter and mounted application, alongside existing server consent/authorization tests.
 `make classroom-detail-browser-check` exercises actual desktop and touch-phone creation,

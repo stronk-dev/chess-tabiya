@@ -2129,7 +2129,7 @@
   }
 
   async function continueFromCheckpoint(): Promise<void> {
-    if (checkpointContinueBusy || checkpoint === undefined) return;
+    if (busy || checkpointContinueBusy || checkpoint === undefined) return;
     const checkpointEventSeq = checkpoint.eventSeq;
     const request = ++checkpointContinueRequest;
     checkpointContinueBusy = true;
@@ -2897,6 +2897,7 @@
     canCompare={cards.length >= 2}
     onContinue={continueFromCheckpoint}
     continuing={checkpointContinueBusy}
+    pending={busy && !checkpointContinueBusy}
     continueError={checkpointContinueError?.eventSeq === checkpoint.eventSeq ? checkpointContinueError.text : undefined}
     onRewind={() => rewindRun({ nodeId: checkpoint.nodeId })}
     rewinding={rewindBusy}

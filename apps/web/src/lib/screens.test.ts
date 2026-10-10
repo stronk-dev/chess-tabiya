@@ -965,6 +965,34 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("D3692 waits for the move's pending checkpoint feedback before accepting Continue", async () => {
+    const run = branchedRun();
+    const checkpoint = latestCheckpoint(pack, run)!;
+    const onContinueCheckpoint = vi.fn().mockResolvedValue(true);
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: {
+      pack, snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      checkpoint, busy: true, onAssistanceQuery: testAssistanceAuthority,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint, onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    const sheet = document.querySelector<HTMLElement>('[aria-labelledby="checkpoint-title"]')!;
+    const continueButton = [...sheet.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Continue")!;
+    expect(continueButton.disabled).toBe(true);
+    expect(sheet.textContent).toContain("Finishing the previous action");
+    continueButton.click();
+    continueButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    expect(onContinueCheckpoint).not.toHaveBeenCalled();
+    expect(sheet.querySelector("[role='alert']")).toBeNull();
+    component.$set({ busy: false });
+    await tick();
+    expect(continueButton.disabled).toBe(false);
+    continueButton.click();
+    await vi.waitFor(() => expect(onContinueCheckpoint).toHaveBeenCalledTimes(1));
+    component.$destroy();
+  });
+
   it("keeps a failed checkpoint continuation open for a single-flight retry", async () => {
     const run = branchedRun();
     const checkpoint = latestCheckpoint(pack, run)!;

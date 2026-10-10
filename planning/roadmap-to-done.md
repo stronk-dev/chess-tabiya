@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3692]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3693]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -44,7 +44,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Area | Delivered | Still required for full 1.0 |
 |---|---|---|
 | Evidence | Typed collectors, exact events, candidate packets, shared provider execution and grounded presentation | Remaining real source/consumer bindings, semantic qualification, selection/usefulness and truthful availability |
-| Rehearsal | Commit, consequence, rewind, branch, compare, replay and durable resume | Complete first-run/return flows, all-context defaults, official examples and release-image proof |
+| Rehearsal | Commit, consequence, rewind, branch, compare, replay and durable resume | Complete first-run/return flows, actual prediction submission, all-context defaults, official examples and release-image proof |
 | Support | Registered modules, preset/ceiling composition, Guided Hint, theory navigation and board evidence | Selected-piece/square source integration, useful quiet/theory/prevention defaults, Inspector fidelity and owner-use discharge |
 | Review | Timeline, move grades, moments, graph, Analyze, retry, Compare and Story/share paths | Full cross-source explanation, missing opening/human/tablebase joins and every game's review-to-rehearsal return |
 | Theory/content | Searchable Library; principle/shape/pack entries; persistent authoring, validation, playtest and community publication | Grounded theory population, training-set progression and a varied graduated official corpus; currently zero official graduates |
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3692]]: 273 UX items complete, 272 live and 24
-retired; 1,718 live ledger items, all assigned, alongside 1,562 done and 161 refused. The 462
+Current checked inventory through [[D3693]]: 273 UX items complete, 272 live and 24
+retired; 1,718 live ledger items, all assigned, alongside 1,563 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -87,8 +87,21 @@ waves so they no longer commission already-landed persistence, APIs and composit
 Local and remote verification are separate. The latest pushed product revision
 `75bc8744` passes GitHub verify [37795549212](https://github.com/stronk-dev/chess-tabiya/actions/runs/37795549212)
 but fails browser [37795549157](https://github.com/stronk-dev/chess-tabiya/actions/runs/37795549157)
-on the branch-group click ([[D3692]]). Its cause is not established by newer local passes.
-No push, paired green CI at current HEAD, complete image recovery or release is claimed.
+on the branch-group click ([[D3692]]). Its original trace establishes a premature Continue
+while move feedback is pending; the locally verified repair gates that action and preserves
+both checkpoint choices. The separate flipped-prediction submission gap is [[D3693]], not
+closed by Continue tests. No push, paired green CI at current HEAD, complete image recovery
+or release is claimed.
+
+Latest checkpoint repair: [[D3692]] binds the visible checkpoint controls to session
+readiness, rather than offering a Continue the busy controller rejects. The original remote
+trace establishes the cause; the mounted predecessor-red control and held actual feedback
+journey pass. Local software passes 4,735 cases, performance seven unchanged-budget cases,
+content 247 cases, and types/governance/packaging/build pass. Complete sequential browser
+verification passes 292 cases across all four tiers, one existing optional skip, zero
+retries and all 150 input/112 composition cells. [[D3693]] remains assigned for actual
+flipped prediction submission; Continue does not prove that interaction. No paired remote
+CI, whole capability/milestone, official-content or native release-image completion follows.
 
 Latest foundation validation wave: [[D3691]] adds 22 both-colour source-bound pawn-dynamics
 cases: new locks, pawn harassment of knights/bishops, pawn-protected passers and adjacent-file

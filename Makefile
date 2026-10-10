@@ -149,6 +149,13 @@ test-browser:
 test-browser-smoke:
 	./node_modules/.bin/playwright test --grep-invert "@content|@matrix"
 
+.PHONY: checkpoint-readiness-check checkpoint-readiness-browser-check
+checkpoint-readiness-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts -t "D3692|checkpoint continuation|restores the checkpoint"
+
+checkpoint-readiness-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3692|branch group captures three candidates"
+
 test-browser-content:
 	./node_modules/.bin/playwright test --grep "@content"
 

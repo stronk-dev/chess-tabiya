@@ -116,6 +116,19 @@ evaluation job for the active node. Its shipped default is the ratified
 
 ## Feedback withholding
 
+Checkpoint actions wait for the session's preceding move/feedback operation, not just
+for a continuation initiated in the sheet. While that operation is pending, the sheet
+stays visible with a waiting explanation and disables Continue, rewind, comparison,
+prediction and reasoning submissions. Continue also guards its callback against a
+pending session. Once settled, one click continues the current occurrence; if that
+reveals another checkpoint, it remains a separate explicit choice. The client does
+not dismiss a checkpoint to make the board or run actions clickable.
+
+`make checkpoint-readiness-check` covers the mounted busy-to-ready boundary and
+existing continuation rollback. `make checkpoint-readiness-browser-check` holds a
+real move-feedback response open and verifies both checkpoint choices before opening
+a branch group, alongside the complete existing three-candidate group journey.
+
 ## Stated-reasoning checkpoint sheet
 
 The checkpoint sheet supports a three-row stated-reasoning form: candidate moves, the

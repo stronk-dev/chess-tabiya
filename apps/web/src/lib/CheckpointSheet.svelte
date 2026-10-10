@@ -38,6 +38,7 @@
     reasoning?: ReasoningPage;
     shapes?: readonly ShapeEntryView[];
     continuing?: boolean;
+    pending?: boolean;
     continueError?: string | undefined;
     comparing?: boolean;
     compareError?: string | undefined;
@@ -68,6 +69,7 @@
     reasoning,
     shapes = [],
     continuing = false,
+    pending = false,
     continueError,
     comparing = false,
     compareError,
@@ -80,6 +82,8 @@
   let plan = $state("");
   let fears = $state("");
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
+  let actionsBusy = $derived(pending || continuing || comparing || rewinding);
+  let busyDescription = $derived(pending ? "checkpoint-pending-action" : continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined);
   let currentReasoning = $derived(reasoning?.occurrences.find((item) => item.checkpointEventSeq === checkpoint.eventSeq));
   let recordedPrediction = $derived.by(() => {
     const event = run.events.find(candidate => candidate.type === "prediction.recorded" && candidate.seq > checkpoint.eventSeq
@@ -100,12 +104,17 @@
   }
 
   function submitReasoning(): void {
-    if (readOnly) return;
+    if (readOnly || actionsBusy) return;
     void onReasoning({ transcript: { candidates: candidates.split("\n").map((item) => item.trim()).filter(Boolean), plan, fears } });
   }
 
+  function skipReasoning(): void {
+    if (readOnly || actionsBusy) return;
+    void onReasoning({ skipped: true });
+  }
+
   async function requestReasoningReview(): Promise<void> {
-    if (readOnly || onReasoningReview === undefined || currentReasoning?.transcript === null || currentReasoning?.transcript === undefined || currentReasoning.keyPoints === undefined || currentReasoning.detections === undefined || reviewBusy) return;
+    if (readOnly || actionsBusy || onReasoningReview === undefined || currentReasoning?.transcript === null || currentReasoning?.transcript === undefined || currentReasoning.keyPoints === undefined || currentReasoning.detections === undefined || reviewBusy) return;
     const request = ++reviewRequest;
     const checkpointEventSeq = currentReasoning.checkpointEventSeq;
     const transcript = currentReasoning.transcript;
@@ -136,6 +145,7 @@
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
     <p id="checkpoint-boundary-note">{readOnly ? "This recorded attempt is paused at a learner checkpoint. Inspection does not continue the learner's attempt or open additional help." : "This drill paused here so you can choose what to do next. Choose an action below to continue; Escape does not dismiss this checkpoint."}</p>
+    {#if pending && !readOnly}<p id="checkpoint-pending-action" role="status">Finishing the previous action. Checkpoint actions will be available when it completes.</p>{/if}
     {#if checkpoint.interaction?.type === "prediction" && node}
       <section class="prediction" aria-labelledby="prediction-title">
         {#if readOnly}
@@ -148,6 +158,7 @@
           fen={node.fen}
           startSide={checkpoint.interaction.flipBoard ? (startSide === "white" ? "black" : "white") : startSide}
           lastMove={node.moveUci}
+          disabled={actionsBusy}
           onMove={onPrediction}
         />
         {/if}
@@ -165,8 +176,8 @@
               <label>Your plan <textarea aria-label="Your plan" rows="4" bind:value={plan}></textarea></label>
               <label>What you fear <textarea aria-label="What you fear" rows="3" bind:value={fears}></textarea></label>
               <div class="reasoning-actions">
-                <button class="primary" type="button" disabled={plan.trim() === ""} onclick={submitReasoning}>Record reasoning</button>
-                <button type="button" onclick={() => void onReasoning({ skipped: true })}>Show the author's points without writing</button>
+                <button class="primary" type="button" disabled={actionsBusy || plan.trim() === ""} onclick={submitReasoning}>Record reasoning</button>
+                <button type="button" disabled={actionsBusy} onclick={skipReasoning}>Show the author's points without writing</button>
               </div>
             </div>
             <section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>
@@ -182,7 +193,7 @@
                 <p class="honesty">{reasoning?.honestySentence}</p>
                 <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : readOnly ? "Not detected in the recorded words." : "Not detected in your words."}</p>{#each !readOnly && review?.checkpointEventSeq === currentReasoning.checkpointEventSeq ? review.proposals.filter((proposal) => proposal.keyPointId === point.id) : [] as proposal}<p class="proposal">{reasoningProposalSentence(proposal, point.label)}</p>{/each}<small>{point.attribution}</small></li>{/each}</ul>
                 {#if !readOnly && onReasoningReview !== undefined}
-                  <button type="button" disabled={reviewBusy} onclick={() => void requestReasoningReview()}>{reviewBusy ? "Checking your exact words…" : "Check for another possible mention"}</button>
+                  <button type="button" disabled={actionsBusy || reviewBusy} onclick={() => void requestReasoningReview()}>{reviewBusy ? "Checking your exact words…" : "Check for another possible mention"}</button>
                   <p class="honesty">The configured language model may select your exact words. It cannot add a detection or grade your reasoning.</p>
                   {#if review !== undefined && review.proposals.length === 0}<p>No additional possible mentions were proposed.</p>{/if}
                   {#if reviewError}<p role="alert">{reviewError}</p>{/if}
@@ -236,25 +247,25 @@
     {:else if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
     <CampaignGestureCost {campaignEncounter} id="checkpoint-rewind-cost" />
     <div class="actions">
-      <button class="primary" type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
-      <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={[campaignEncounter ? "checkpoint-rewind-cost" : "", continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : rewindError !== undefined ? "checkpoint-rewind-error" : ""].filter(Boolean).join(" ") || undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try rewind again" : "Rewind here"}</button>
+      <button class="primary" type="button" disabled={actionsBusy} aria-describedby={busyDescription} onclick={onContinue}>{continuing ? "Continuing…" : "Continue"}</button>
+      <button type="button" disabled={actionsBusy} aria-describedby={[campaignEncounter ? "checkpoint-rewind-cost" : "", busyDescription ?? (rewindError !== undefined ? "checkpoint-rewind-error" : "")].filter(Boolean).join(" ") || undefined} onclick={onRewind}>{rewinding ? "Rewinding…" : rewindError !== undefined ? "Try rewind again" : "Rewind here"}</button>
       {#if recognizedActions.compare_branches}
         <HonestControl
-          disabled={!canCompare || continuing || comparing || rewinding}
+          disabled={!canCompare || actionsBusy}
           reasonId="checkpoint-compare-unavailable"
-          reason={continuing ? "Wait for this continuation to finish." : comparing ? "Wait for this comparison to finish." : rewinding ? "Wait for this rewind to finish." : "Reach this checkpoint on at least two branches before comparing."}
+          reason={pending ? "Wait for the previous action to finish." : continuing ? "Wait for this continuation to finish." : comparing ? "Wait for this comparison to finish." : rewinding ? "Wait for this rewind to finish." : "Reach this checkpoint on at least two branches before comparing."}
         >
           {#snippet children(describedBy)}
             <button
               type="button"
-              disabled={!canCompare || continuing || comparing || rewinding}
-              aria-describedby={comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : compareError !== undefined ? "checkpoint-compare-error" : describedBy}
+              disabled={!canCompare || actionsBusy}
+              aria-describedby={busyDescription ?? (compareError !== undefined ? "checkpoint-compare-error" : describedBy)}
               onclick={onCompare}
             >{comparing ? "Opening comparison…" : compareError !== undefined ? "Try comparison again" : "Compare"}</button>
           {/snippet}
         </HonestControl>
       {/if}
-      <button type="button" disabled={continuing || comparing || rewinding} aria-describedby={continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined} onclick={onStop}>Stop session</button>
+      <button type="button" disabled={actionsBusy} aria-describedby={busyDescription} onclick={onStop}>Stop session</button>
     </div>
     {#if continuing}<p id="checkpoint-continue-busy" role="status">Continuing from this checkpoint.</p>{/if}
     {#if comparing}<p id="checkpoint-compare-busy" role="status">Preparing the selected branch comparison. This checkpoint remains open.</p>{/if}
