@@ -25138,3 +25138,28 @@ Campaign was the one capability with no API, route or content. Now:
   These counts describe tracked execution, not release qualification or usefulness.
 - The previous production batches retain their recorded verification. This closeout does
   not claim a fresh full software/browser run, remote CI, native release recovery or 1.0.
+
+## 2026-10-10 (codex) — D3686 truthful Library return and preserved-play recovery
+
+- Reproduce seven mounted predecessor failures: one first page falsely claimed no rehearsal,
+  a due-only intake falsely claimed no scheduled return, absent adapters fabricated emptiness,
+  initial/earlier reads had no retry, and crossed roots/inconsistent page counts attached.
+- Repair the existing read-time Library journey without new endpoints, migrations or schedule
+  rules. Search earlier saved play explicitly in 50-run pages, stop at the latest owned match,
+  and claim emptiness only over exhausted preserved history. Refresh starts at the beginning;
+  due-only wording retains waiting-intake scope. Retry/refresh/search are single-flight reads.
+- Ten permanent mounted controls and eleven unchanged Library controls pass with clean types.
+  Two actual built desktop/touch-phone journeys create 52 real saved sessions, find the older
+  pack rehearsal after a failed page read, retry once and reopen its unchanged graph/events.
+  The first browser attempt catches native focus loss from disabled controls; aria-disabled
+  controls plus synchronous admission guards preserve pending focus and transfer it to the
+  found rehearsal. Departure retires pending reads. No scheduling/launch authority changes.
+- Run the complete normal local software, performance, governance, content, build and browser
+  tiers before closeout; do not substitute the focused journeys for whole-repo verification.
+- Complete `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  4,663 software cases/368 files, seven unchanged-budget performance cases/four files,
+  247 content cases/25 files, clean types/governance/corpus/capability/packaging/build and
+  289 browser cases across all four tiers. One existing optional Maia skip, zero retries;
+  all 150 input and 112 composition cells remain green. The build retains its existing
+  chunk-size warning. Close D3686 and update the existing roadmap; no scheduling policy,
+  source-bound launch, official content, whole capability, remote CI or release-image claim.

@@ -2542,6 +2542,66 @@ test("Library search opens a principle, understands its basis, and rehearses an 
   await expect(page.getByRole("button", { name: "Open your latest rehearsal of this pack" })).toBeVisible();
 });
 
+for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: "phone", width: 390, height: 844 }]) {
+  test.describe(`Library return ${viewport.name}`, () => {
+    test.use({ viewport, hasTouch: viewport.name === "phone" });
+    test(`D3686 finds preserved play beyond one page with read-only recovery${viewport.name === "phone" ? " @mobile" : ""}`, async ({ page }) => {
+      await schemaPackCard(page).getByRole("button", { name: /Rehearse this position/ }).click();
+      await expect(page).toHaveURL(/\/play\/run\//u);
+      const originalUrl = new URL(page.url());
+      const targetId = originalUrl.pathname.split("/").at(-1)!;
+      const saved = await (await page.request.get(`/runs/${targetId}/graph`)).json();
+      const originalEvents = await (await page.request.get(`/runs/${targetId}/events`)).json();
+      const first = await (await page.request.get("/runs?limit=50&offset=0")).json() as { runs: { id: string; packId: string | null }[] };
+      const packId = first.runs.find(run => run.id === targetId)!.packId!;
+      for (let i = 0; i < 51; i += 1) {
+        const response = await page.request.post("/runs", { headers: { "x-writer-id": `writer-${randomUUID()}` }, data: {
+          id: `library-history-${randomUUID()}`,
+          session: { kind: "position", start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+          policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 7,
+        } });
+        expect(response.status(), await response.text()).toBe(201);
+      }
+      let earlierReads = 0;
+      let release: (() => void) | undefined;
+      await page.route(/\/runs\?/u, async route => {
+        if (new URL(route.request().url()).searchParams.get("offset") !== "50") return route.continue();
+        earlierReads += 1;
+        if (earlierReads === 1) return route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "SOURCE_UNAVAILABLE", message: "Test-owned read failure" } }) });
+        await new Promise<void>(resolve => { release = resolve; });
+        await route.continue();
+      });
+      await page.goto(`/play/pack/${packId}#return`);
+      const returns = page.locator("#return");
+      const earlier = returns.getByRole("button", { name: "Check earlier rehearsals" });
+      await expect(earlier).toBeVisible();
+      await expect(returns).not.toContainText("You have not rehearsed this pack yet");
+      await expect(returns).not.toContainText("No return is scheduled for this pack");
+      await expect(returns.getByRole("link", { name: "Open Learn for your return plan" })).toHaveAttribute("href", "/learn");
+      if (viewport.name === "phone") await earlier.tap(); else await earlier.click();
+      await expect(returns.getByRole("alert")).toContainText("Earlier rehearsals could not be loaded");
+      await earlier.focus();
+      if (viewport.name === "phone") await earlier.tap(); else await earlier.click();
+      await expect(earlier).toHaveAttribute("aria-disabled", "true");
+      await expect.poll(() => earlierReads).toBe(2);
+      await expect(earlier).toBeFocused();
+      await earlier.evaluate(button => { (button as HTMLButtonElement).click(); });
+      expect(earlierReads).toBe(2);
+      release!();
+      const reopen = returns.getByRole("button", { name: "Open your latest rehearsal of this pack" });
+      await expect(reopen).toBeVisible();
+      await expect(reopen).toBeFocused();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await reopen.click();
+      await expect(page).toHaveURL(originalUrl.href);
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      expect(await (await page.request.get(`/runs/${targetId}/graph`)).json()).toEqual(saved);
+      expect(await (await page.request.get(`/runs/${targetId}/events`)).json()).toEqual(originalEvents);
+      expect(earlierReads).toBe(2);
+    });
+  });
+}
+
 test("terminal outcome reveals authored commentary, a native story, and a revocable public card", async ({ page, browser }) => {
   const card = page
     .getByRole("article")

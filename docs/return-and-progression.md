@@ -24,6 +24,17 @@ intent cannot make a prompted return look voluntary.
 
 ## Return queue
 
+The Library's pack entry reads the existing due queue and one page of preserved play. It does
+not infer all scheduled returns from that due-only intake, or claim the pack was never rehearsed
+from one history page. If no owned rehearsal is found and earlier pages remain, **Check earlier
+rehearsals** reads the next 50 saved runs; finding an owned match offers its existing Play door.
+Only exhausting the history permits a saved-history empty state. **Refresh return lookup** starts
+over when history changes. Failed initial or earlier reads have explicit read-only retry, with
+single-flight guards and focusable busy controls. Missing adapters, inconsistent pagination and
+crossed pack entries refuse rather than manufacture an empty result. Navigation/departure retires
+pending reads. These reads never create a run or alter a schedule; **Rehearse** and due-return
+starts remain explicit actions.
+
 The automatic scheduler owns at most one pending item per learner and root. An ungraded
 attempt is varied; two consecutive stable graded attempts are varied; other histories are
 blocked. Varied repetitions use the 1, 3, 7, 16, and 35 day ladder. Ungraded histories advance

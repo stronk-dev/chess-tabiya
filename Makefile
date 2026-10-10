@@ -1422,6 +1422,13 @@ foundation-source-author-repair: foundation-source-author-contract foundation-so
 .PHONY: semantic-validation-update semantic-validation-check semantic-validation-build
 .PHONY: evidence-foundation-check
 .PHONY: semantic-validation-cited-check
+.PHONY: library-return-check library-return-browser-check
+library-return-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/library-return.test.ts apps/web/src/lib/theory-library.test.ts
+
+library-return-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep D3686
+
 semantic-validation-cited-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts
 

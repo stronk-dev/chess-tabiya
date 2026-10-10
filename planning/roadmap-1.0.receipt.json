@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8d3a2c585fe4a5f6febeb1781f15eb8bc7e9acdc0cca8b5e0d05a3e0fe4dcd73",
+    "roadmap": "sha256:63d54d8a134bbfe6f419ef696972287d55d603cdad27bc87a3818a8dcd4bdbfe",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:dbcd085074fb1654191730ea9c26ba52e8f8e627d69a3a819b8ed862864608f1",
+    "workState": "sha256:69b8051a9e2660be9e175bae2da4325416f677232353e883738a1b3572d536bf",
     "rfcRegister": "sha256:5d42097815c9f933c56effc2be0d09ef0347570dcab94c85746d53796c95c200",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 14,
       "blocked": 1071,
-      "done": 1558,
+      "done": 1559,
       "refused": 161
     },
     "workItems": {
@@ -1105,7 +1105,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3684 closes classroom detail consistency under the existing teacher-surface section 7.2 contract: initial and post-mutation reads refuse crossed roots, classroom-child links and submission-assignment links before attachment. Latest-request/departed-view guards and historical submissions remain. Successful invitations/assignments are acknowledged when their secondary read fails; reopening retries only the read. Six mounted predecessor regressions, ten HTTP adapter controls, all 150 focused cases, clean types and two actual desktop/touch-phone creation/refusal/retry/invitation/assignment journeys pass. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4610 software cases/367 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files and 287 browser cases, one optional Maia skip, zero retries, 112 composition cells and clean types/governance/packaging/build. Prior Campaign costs/lost-response recovery/group replay/revision ordering, Play start/profile and Review numbering/Analyze/focus/retry remain delivered. D3681's fixed exhaustion wording still needs author amendment. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards and full release recovery remain open. No new permission, grant, source, full professional capability, milestone, remote-CI or native release-image promotion.",
+        "summary": "D3686 repairs the implemented read-time Library return journey under theory-drill-current-joins: bounded saved-history claims, explicit earlier-page lookup, due-only intake language, exact pack admission and read-only retry/refresh. Seven original mounted controls fail on the predecessor; ten permanent return controls and eleven existing Library controls pass with clean types. Two built desktop/touch-phone journeys create 52 real saved sessions, find the earlier owned pack run through a failed-read/retry path, preserve pending/native focus and reopen unchanged graph/events. Missing adapters, crossed roots, inconsistent page counts and departed reads cannot become empty success. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 4663 software cases/368 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, clean types/governance/corpus/capability/packaging/build and 289 browser cases across all four tiers; one existing optional Maia skip, zero retries and all 150 input/112 composition cells. Existing Campaign, Play, Review and classroom repairs remain delivered; missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards and full release recovery remain open. No new API, migration, schedule policy, source-bound launch, whole capability/milestone, remote-CI or native release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/DrillScreen.svelte",
@@ -1130,7 +1130,12 @@
           "apps/web/src/lib/app-shell.test.ts",
           "apps/web/src/lib/classroom-response.ts",
           "apps/web/src/lib/classroom-response.test.ts",
-          "docs/classrooms.md"
+          "docs/classrooms.md",
+          "apps/web/src/lib/TheoryEntryScreen.svelte",
+          "apps/web/src/lib/library-return.test.ts",
+          "apps/web/src/lib/theory-library.test.ts",
+          "docs/return-and-progression.md",
+          "rfc/theory-drill-current-joins.md"
         ],
         "anchors": [
           {
@@ -1162,6 +1167,16 @@
             "kind": "work_state",
             "id": "D3684",
             "digest": "sha256:4324ebdb0efdc2acb5ec10632468f070f736476a8c1ccbc8d1db2431ba422991"
+          },
+          {
+            "kind": "rfc",
+            "id": "theory-drill-current-joins.md",
+            "digest": "sha256:4195698ca5705574716fe919f0a0061095b8ef9e469eb57ee1cf037a9865d6ff"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3686",
+            "digest": "sha256:27a71d69301e954c36cea4efd85384a9cd7fcef148c671e4f1595588392d553b"
           }
         ]
       },

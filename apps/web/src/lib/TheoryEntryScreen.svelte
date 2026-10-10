@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { untrack } from "svelte";
+  import { tick, untrack } from "svelte";
 
-  import type { DrillClientApi, DueSchedule, RunSummary } from "./api.js";
+  import type { DrillClientApi, DueSchedule, RunPage, RunSummary } from "./api.js";
   import { routePath, type AppRoute } from "./router.js";
   import {
     LIBRARY_PHASE_COPY,
@@ -40,6 +40,17 @@
   let dueSchedules: readonly DueSchedule[] = $state([]);
   let packRuns: readonly RunSummary[] = $state([]);
   let returnState: "loading" | "ready" | "unavailable" = $state("loading");
+  let returnBusy = $state(false);
+  let returnError = $state(false);
+  let returnLoaded = $state(false);
+  let historyBusy = $state(false);
+  let historyError = $state(false);
+  let historyShown = $state(0);
+  let historyTotal = $state(0);
+  let dueWaiting = $state(0);
+  const HISTORY_PAGE_SIZE = 50;
+  let historyControl: HTMLButtonElement | undefined = $state();
+  let latestRehearsalControl: HTMLButtonElement | undefined = $state();
   let generation = 0;
 
   async function load(target: EntryRoute): Promise<void> {
@@ -47,11 +58,22 @@
     loaded = undefined;
     error = undefined;
     returnState = "loading";
+    returnBusy = false;
+    returnError = false;
+    returnLoaded = false;
+    historyBusy = false;
+    historyError = false;
+    historyShown = 0;
+    historyTotal = 0;
+    dueWaiting = 0;
+    dueSchedules = [];
+    packRuns = [];
     try {
       let next: Loaded;
       if (target.name === "pack") {
         if (api.packEntry === undefined) throw new Error("unavailable");
         next = { kind: "pack", view: await api.packEntry(target.packId) };
+        if (next.view.pack.id !== target.packId) throw new Error("crossed pack entry");
       } else if (target.name === "principle-entry") {
         if (api.principleEntry === undefined) throw new Error("unavailable");
         next = { kind: "principle", view: await api.principleEntry(target.principleId) };
@@ -72,23 +94,78 @@
 
   /** Return state for one pack: the learner's due schedules and preserved rehearsals of it. */
   async function loadReturn(packId: string, current: number): Promise<void> {
+    if (current !== generation || returnBusy) return;
+    returnBusy = true;
+    returnState = "loading";
     try {
+      if (api.dueProgress === undefined || api.runPage === undefined) throw new Error("unavailable");
       const [due, page] = await Promise.all([
-        api.dueProgress?.() ?? Promise.resolve({ schedules: [], waiting: 0, intakeLimit: 0 }),
-        api.runPage?.(50, 0) ?? Promise.resolve({ runs: [], selection: { shown: 0, total: 0 } }),
+        api.dueProgress(),
+        api.runPage(HISTORY_PAGE_SIZE, 0),
       ]);
       if (current !== generation) return;
+      admitHistory(page, 0);
+      if (!Number.isSafeInteger(due.waiting) || due.waiting < 0) throw new Error("invalid due queue");
       dueSchedules = due.schedules.filter((schedule) => schedule.packId === packId);
+      dueWaiting = due.waiting;
       packRuns = page.runs.filter((run) => run.packId === packId && run.viewerRole === "host");
+      historyShown = page.selection.shown;
+      historyTotal = page.selection.total;
+      historyError = false;
+      returnLoaded = true;
+      returnError = false;
       returnState = "ready";
     } catch {
-      if (current === generation) returnState = "unavailable";
+      if (current === generation) { returnState = "unavailable"; returnError = true; }
+    } finally {
+      if (current === generation) returnBusy = false;
+    }
+  }
+
+  function admitHistory(page: RunPage, offset: number): void {
+    if (!Array.isArray(page.runs) || !Number.isSafeInteger(page.selection?.shown) ||
+        !Number.isSafeInteger(page.selection?.total) || page.selection.shown !== offset + page.runs.length ||
+        page.selection.total < page.selection.shown || page.runs.length > HISTORY_PAGE_SIZE ||
+        (page.runs.length === 0 && page.selection.shown < page.selection.total) ||
+        new Set(page.runs.map(run => run?.id)).size !== page.runs.length ||
+        page.runs.some(run => typeof run?.id !== "string" || run.id.length === 0 ||
+          (run.packId !== null && typeof run.packId !== "string") || typeof run.viewerRole !== "string")) {
+      throw new Error("invalid rehearsal history page");
+    }
+  }
+
+  async function earlierRehearsals(): Promise<void> {
+    if (historyBusy || returnBusy || returnState !== "ready" || loaded?.kind !== "pack" ||
+        packRuns.length > 0 || historyShown >= historyTotal || api.runPage === undefined) return;
+    const current = generation;
+    const packId = loaded.view.pack.id;
+    const offset = historyShown;
+    const initiator = historyControl;
+    const restoreFocus = typeof document !== "undefined" && document.activeElement === initiator;
+    historyBusy = true;
+    historyError = false;
+    try {
+      const page = await api.runPage(HISTORY_PAGE_SIZE, offset);
+      if (current !== generation) return;
+      admitHistory(page, offset);
+      packRuns = page.runs.filter(run => run.packId === packId && run.viewerRole === "host");
+      historyShown = page.selection.shown;
+      historyTotal = page.selection.total;
+      if (packRuns.length > 0 && restoreFocus) {
+        await tick();
+        if (current === generation && (document.activeElement === initiator || document.activeElement === document.body)) latestRehearsalControl?.focus();
+      }
+    } catch {
+      if (current === generation) historyError = true;
+    } finally {
+      if (current === generation) historyBusy = false;
     }
   }
 
   $effect(() => {
     const target = route;
     untrack(() => void load(target));
+    return () => { generation += 1; };
   });
 
   $effect(() => {
@@ -165,19 +242,35 @@
       <h2 id="return-title">Return</h2>
       {#if returnState === "loading"}
         <p role="status">Loading your return queue…</p>
-      {:else if returnState === "unavailable"}
-        <p class="honest">Your return queue could not be loaded. Returns you scheduled are unchanged.</p>
-      {:else if dueSchedules.length > 0}
+      {/if}
+      {#if returnError}
+        <p role="alert">Your return lookup could not be loaded. Saved rehearsals and returns you scheduled are unchanged.</p>
+      {/if}
+      {#if returnError || returnLoaded}
+        <button type="button" aria-disabled={returnBusy || historyBusy} aria-busy={returnBusy} onclick={() => { if (!historyBusy) void loadReturn(view.pack.id, generation); }}>{returnError ? "Retry return lookup" : "Refresh return lookup"}</button>
+      {/if}
+      {#if returnState === "ready"}
+      {#if dueSchedules.length > 0}
         <ul class="packs">
           {#each dueSchedules as schedule (schedule.id)}
             <li><span>A {schedule.kind === "varied" ? "varied" : "repeat"} return is due {readableDate(schedule.dueAt)}.</span>{#if onStartDue}<button class="primary" type="button" disabled={busy} onclick={() => void onStartDue!(schedule)}>Start the due return</button>{/if}</li>
           {/each}
         </ul>
-      {:else if packRuns.length > 0}
-        <p>No return is scheduled for this pack. A return is planned from a finished rehearsal: open your latest one and choose <strong>Schedule a retry from here</strong>.</p>
-        <div class="row"><button type="button" onclick={() => onNavigate(routePath({ name: "run", runId: packRuns[0]!.id }))}>Open your latest rehearsal of this pack</button></div>
       {:else}
-        <p class="honest">You have not rehearsed this pack yet. When a rehearsal finishes, it offers <strong>Schedule a retry from here</strong>, and the return then appears here and in Learn.</p>
+        <p class="honest">No return for this pack is in your current due queue. Scheduled returns appear when they are due and admitted to the queue.</p>
+      {/if}
+      <p class="honest">{#if dueWaiting > 0}{dueWaiting} due {dueWaiting === 1 ? "return is" : "returns are"} waiting outside the current intake. {/if}<a href="/learn" onclick={go("/learn")}>Open Learn for your return plan</a>.</p>
+      {#if packRuns.length > 0}
+        <p>Open your latest rehearsal to continue it, or choose <strong>Schedule a retry from here</strong> when it finishes.</p>
+        <div class="row"><button bind:this={latestRehearsalControl} type="button" onclick={() => onNavigate(routePath({ name: "run", runId: packRuns[0]!.id }))}>Open your latest rehearsal of this pack</button></div>
+      {:else if historyShown < historyTotal}
+        <p class="honest">This pack is not in the {historyShown} saved games and rehearsals checked so far. Earlier rehearsals have not been checked yet.</p>
+        {#if historyError}<p role="alert">Earlier rehearsals could not be loaded. You can retry; your saved play is unchanged.</p>{/if}
+        <button bind:this={historyControl} type="button" aria-disabled={historyBusy} aria-busy={historyBusy} onclick={() => void earlierRehearsals()}>Check earlier rehearsals</button>
+        {#if historyBusy}<p role="status">Checking earlier rehearsals…</p>{/if}
+      {:else}
+        <p class="honest">No rehearsal of this pack was found in your saved history. When a rehearsal finishes, it offers <strong>Schedule a retry from here</strong>; due returns then appear here and in Learn.</p>
+      {/if}
       {/if}
     </section>
   {:else if loaded.kind === "principle"}
@@ -247,6 +340,7 @@
   button { padding: .6rem .9rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
   button.primary { border-color: var(--ink); background: var(--ink); color: var(--paper); }
   button.primary:hover, button.primary:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  button[aria-disabled="true"] { opacity: .65; cursor: progress; }
   dl { display: grid; grid-template-columns: minmax(9rem, auto) 1fr; gap: .6rem 1rem; }
   dt { color: var(--muted); }
   dd { margin: 0; }

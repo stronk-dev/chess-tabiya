@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3685]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3686]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,25 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3685]]: 273 UX items complete, 272 live and 24
-retired; 1,715 live ledger items, all assigned, alongside 1,558 done and 161 refused. The 462
+Current checked inventory through [[D3686]]: 273 UX items complete, 272 live and 24
+retired; 1,715 live ledger items, all assigned, alongside 1,559 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest Library return repair: [[D3686]] exposes earlier owned rehearsals through explicit
+50-run paging and read-only retry/refresh. One page no longer establishes an empty history;
+due-only intake no longer establishes absence of scheduled returns. Seven predecessor-red
+controls, 21 focused controls, clean types and two real desktop/touch-phone 52-session
+recovery journeys pass, preserving the saved graph/events and pending/native focus.
+Complete normal verification/build passes 4,663 software/368 files, seven unchanged-budget
+performance/four files, 247 content/25 files and 289 browser cases; one existing optional Maia
+skip, zero retries, all 150 input/112 composition cells and clean governance/packaging/build.
+Existing APIs, scheduling/intake rules and source-bound launch holds remain. No whole
+Theory/Library capability, official-content, remote-CI or native release-image promotion follows.
 
 Latest foundation validation wave: [[D3685]] supplies 36 both-colour source-bound positive
 cases for six pawn/file families, retaining exact gained/lost/preserved membership through

@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-10 — [[D3686]] closed under theory-drill-current-joins' implemented read-time
+Library journey: bounded history, earlier-page search/retry/refresh, exact current-pack
+attachment and due-only scope. Seven predecessor-red controls, 21 focused controls, clean
+types and two real desktop/touch-phone 52-session recovery journeys pass. Complete normal
+verification/build passes 4,663 software, seven unchanged-budget performance, 247 content
+and 289 browser cases; one existing optional Maia skip, zero retries and all 150 input/112
+composition cells. Existing APIs, scheduling/intake rules, saved runs and source-bound launch
+holds remain; no whole capability, official-content, remote-CI or release-image promotion.
+
 2026-10-10 — [[D3685]] is closed under accepted semantic-validation-authority Slice B:
 36 source-bound legal pawn/file positives, both colours and gained/lost/preserved exact
 membership; all 139 predecessor records are unchanged. All 145 focused/752 foundation

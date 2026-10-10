@@ -789,6 +789,11 @@ Proposed — ids assigned at landing; head was **D1354** at drafting.
 
 ## Changelog
 
+- 2026-10-10: [[D3686]] repairs the already-implemented read-time Library return journey:
+  preserve the due-only intake's scope, page through earlier saved play explicitly and
+  offer read-only retry/refresh without duplicate work or departed/crossed attachment.
+  Existing APIs, schedule policy, source-bound launch and the held migration remain unchanged.
+
 - 2026-09-24: **read-time half implemented on the owner's direct-implementation mandate; the
   migration half is not taken** (its position behind `social-play` stands). Landed without a
   migration: the Library-context applicability result (`apps/server/src/theory-library.ts` —
