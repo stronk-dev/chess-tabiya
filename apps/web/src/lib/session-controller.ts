@@ -6,6 +6,7 @@ import {
   projectRun,
   trajectoryPolicyAt,
   botOpponentPlyRequestId,
+  resolveBotProfileReference,
   runEventHeadDigest,
   type BotProfileReference,
   type BranchComparison,
@@ -530,8 +531,20 @@ export class DrillSessionController {
         seed,
       }, session.writerId);
       if (!this.#attachmentIsCurrent(generation)) return;
-      // The response must echo the exact profile before the game opens (opponent-experience §2.6).
-      if (input.profile !== undefined && run.opponentPolicy.profile?.digest !== input.profile.digest) throw new ApiError(502, "INVALID_RESPONSE", "The created run does not carry the chosen bot");
+      // bot-policy §4.1: the complete registered reference is authoritative, not a digest
+      // copied onto different fields. Check both the response and the event replay will use.
+      if (input.profile !== undefined) {
+        try {
+          const chosen = resolveBotProfileReference(input.profile).reference;
+          const returned = resolveBotProfileReference(run.opponentPolicy.profile).reference;
+          const start = run.events[0];
+          if (start?.type !== "run.started") throw new TypeError("Missing run start");
+          const recorded = resolveBotProfileReference(start.data.opponentPolicy.profile).reference;
+          if (returned.id !== chosen.id || recorded.id !== chosen.id) throw new TypeError("Different bot");
+        } catch {
+          throw new ApiError(502, "INVALID_RESPONSE", "The created run does not carry the chosen bot");
+        }
+      }
       const shapes = await this.#loadShapes();
       if (!this.#attachmentIsCurrent(generation)) return;
       this.#capabilities = capabilities;

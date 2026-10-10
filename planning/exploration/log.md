@@ -24776,3 +24776,54 @@ Campaign was the one capability with no API, route or content. Now:
   UX remains 273 complete, 272 live and 24 retired; all fourteen whole capabilities incomplete,
   four milestones active/five blocked, zero official graduates. The prior 275-browser checkpoint
   is historical for this validation-only repair; no fresh remote CI, native image or release claim.
+
+## 2026-10-10 — Play starts the visible position and the exact chosen bot (D3673/D3674)
+
+- The previous goal turn was inventory, not implementation progress. Re-read the live queue,
+  roadmap, source and held contracts. Request-specific availability still requires unresolved
+  source/whole-occurrence joins; no partial endpoint, default or held source was invented.
+- Four mounted predecessor failures reproduce hidden-FEN submission after Use normal start,
+  disappeared-roster admission, busy submit events and missing rejected-start recovery.
+  Eight controller predecessor failures reproduce different profile fields accepted with the
+  requested digest. Recorded-start crossing and genuine retry receive additional controls.
+- Repair the existing Just Play form, not a new workflow: the visible position mode owns the
+  submitted FEN, an explicitly reopened draft survives, current roster/busy admission covers
+  Enter and same-turn repeats, and failures require explicit retry. Reuse the existing complete
+  catalogue resolver at both returned-policy and recorded-start boundaries before attachment
+  or opponent requests under bot-policy §4.1/the owner-directed playable roster landing.
+- `make play-start-check` passes 21 controls and clean workspace types. Six built native desktop
+  1280×720 and phone-width 390×844 journeys pass under `make play-start-browser-check`: actual
+  normal/FEN POST bodies, recorded roots, legal play/reload, crossed-response/start refusal,
+  zero opponent requests before refusal and successful exact-bot retry. The first browser pass
+  exposed test readiness and label-query mistakes; wait for actual committed play and use the
+  native named combobox, with no timeout/retry-budget changes.
+- D3673/D3674 close locally in ledger/state/docs/queue/roadmap; full normal verification/build
+  and all browser tiers precede the commit. These repairs do not calibrate bots, complete a
+  capability or clear source/selection/qualification/content/release holds. No remote CI,
+  native appliance or push claim. All live items remain assigned; zero official graduates.
+
+## 2026-10-10 — Complete Play-start verification and closeout (D3673–D3675)
+
+- The first full run failed the existing Carlsbad validation test at its unchanged five-second
+  deadline: five independent full-pack scenarios shared one test (5,763 ms). D3675 separates
+  successful resolution and four refusal scenarios, retaining the actual pack and every
+  assertion. Seven focused cases pass. This is functional-test isolation, not a production
+  validator performance benchmark or a diagnosis of other historical timing failures.
+- A fresh ordinary `make roadmap-receipt verify-awake build test-browser-ci-awake` passes
+  types, all 4,550 software cases/365 files and seven unchanged-budget performance cases/four
+  files, then stops at the new row's missing queue reference. The remaining-gate attempt
+  finds copied Review evidence in the new Play checkpoint; replace it with actual Play files.
+  Neither tracking failure is overridden or concealed. No code/assertion/budget changes follow
+  the passing software/performance run.
+- `make roadmap-receipt verify-governance verify-content build test-browser-ci-awake` then
+  passes governance, 246 content cases/25 files, corpus/capability checks, packaging/build
+  and all four browser tiers: 216 smoke, five content, 59 matrix and one production case,
+  one optional Maia skip, zero retries. All 150 input and 112 composition cells pass.
+- D3675 closes with the repaired test and tracking. D3673/D3674's focused and native results
+  now have complete normal local verification. Update ledger/state/docs/queue/roadmap together:
+  3,424 ledger rows, 1,549 done, 161 refused, 1,714 assigned live, zero untriaged. UX remains
+  273 complete, 272 live and 24 retired; four milestones active/five blocked; all fourteen
+  whole capabilities incomplete; 86 production pack documents, zero official graduates.
+- No push, exact-revision GitHub success, real Maia deployment/calibration, native appliance
+  recovery or release readiness is claimed. Existing source, selection, qualification,
+  official-content and release holds remain. Only the explicit owned-file list enters this commit.

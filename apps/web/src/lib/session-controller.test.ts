@@ -1867,4 +1867,57 @@ describe("bot-profile play through the server operation", () => {
     expect(api.plyRequests).toHaveLength(0);
     expect(environment.controller.state.error).toBeDefined();
   });
+
+  it.each([
+    ["id", { id: "human-baseline.1400@1" }],
+    ["version", { version: 2 }],
+    ["family", { family: "pawn-forward" }],
+    ["band", { band: 1800 }],
+    ["model", { model: "different-model" }],
+    ["sampler", { sampler: "different-sampler" }],
+    ["ordered layers", { orderedLayers: ["sampler.maia_reconstruction@1"] }],
+    ["extra field", { unexpected: true }],
+  ])("D3674 refuses crossed bot %s even with the chosen digest", async (_field, change) => {
+    class Crossing extends BotFakeApi {
+      override async createRun(input: CreateRunRequest, writerId: string): Promise<DrillRun> {
+        const run = await super.createRun(input, writerId);
+        return { ...run, opponentPolicy: { ...run.opponentPolicy, profile: { ...reference, ...change } as typeof reference } };
+      }
+    }
+    const api = new Crossing(pack, "e2e4", false);
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: START, side: "white", mode: "human_common", profile: reference });
+    expect(environment.controller.state.runState).toBeUndefined();
+    expect(environment.controller.state.error).toBeDefined();
+    expect(api.plyRequests).toHaveLength(0);
+    expect(api.selectCalls).toBe(0);
+  });
+
+  it.each(["response", "recorded start"])("D3674 refuses another genuine bot in the %s and recovers through the same choice", async (where) => {
+    const other = BOT_PROFILE_CATALOG.find(entry => entry.reference.id === "human-baseline.1400@1")!.reference;
+    class Crossing extends BotFakeApi {
+      cross = true;
+      override async createRun(input: CreateRunRequest, writerId: string): Promise<DrillRun> {
+        const run = await super.createRun(input, writerId);
+        if (!this.cross) return run;
+        if (where === "response") return { ...run, opponentPolicy: { ...run.opponentPolicy, profile: other } };
+        const events = run.events.map(event => event.type === "run.started"
+          ? { ...event, data: { ...event.data, opponentPolicy: { ...event.data.opponentPolicy, profile: other } } }
+          : event);
+        return { ...run, events };
+      }
+    }
+    const api = new Crossing(pack, "e2e4", false);
+    const environment = controller(api);
+    await environment.controller.startPosition({ fen: START, side: "black", mode: "human_common", profile: reference });
+    expect(environment.controller.state.runState).toBeUndefined();
+    expect(environment.controller.state.error).toBeDefined();
+    expect(api.plyRequests).toHaveLength(0);
+    expect(api.selectCalls).toBe(0);
+    api.cross = false;
+    await environment.controller.startPosition({ fen: START, side: "black", mode: "human_common", profile: reference });
+    expect(environment.controller.state.error).toBeUndefined();
+    expect(environment.controller.state.runState?.run.opponentPolicy.profile).toEqual(reference);
+    expect(api.plyRequests).toHaveLength(1);
+  });
 });

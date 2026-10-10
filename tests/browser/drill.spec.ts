@@ -730,6 +730,89 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
   });
 }
 
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  test(`D3673 Just Play respects normal/FEN choice through start, play and reload (${viewport.width}px)`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    const custom = "4k3/8/8/8/8/8/4P3/4K3 w - - 0 37";
+    const profile = BOT_PROFILE_CATALOG.find(entry => entry.reference.id === "human-baseline.1400@1")!.reference;
+    await chooseBot(page, profile.id);
+    await page.getByRole("button", { name: "Start from a FEN", exact: true }).click();
+    await page.getByLabel("Position FEN", { exact: true }).fill(custom);
+    await page.getByRole("button", { name: "Use normal start", exact: true }).click();
+    await expect(page.getByLabel("Position FEN", { exact: true })).toHaveCount(0);
+    const request = page.waitForRequest(request => new URL(request.url()).pathname === "/runs" && request.method() === "POST");
+    await page.getByRole("button", { name: "Start and keep the game", exact: true }).click();
+    const body = (await request).postDataJSON();
+    expect(body.session.start.fen).toBe("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    expect(body.session.opponentPolicy).toEqual({ mode: "human_common", profile });
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    const normalId = page.url().split("/").at(-1)!;
+    const graph = async (runId: string) => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { readonly graph: RunGraph }).graph;
+    expect((await graph(normalId)).nodes[0]!.fen).toBe(body.session.start.fen);
+    await move(page, "e2", "e4");
+    await expect.poll(async () => (await graph(normalId)).nodes.some(node => node.moveUci === "e2e4")).toBe(true);
+    await expect(page.locator(".timeline")).toContainText("Active line 2 turns");
+    const played = await graph(normalId);
+    expect(played.nodes.some(node => node.moveUci === "e2e4")).toBe(true);
+    await page.reload(); await expect(page.getByLabel("Chessboard")).toBeVisible();
+    assertRecordedNodesPreserved(played.nodes, (await graph(normalId)).nodes);
+    await assertRunViewport(page, viewport);
+    await page.goto("/play");
+    await chooseBot(page, profile.id);
+    await page.getByRole("button", { name: "Start from a FEN", exact: true }).click();
+    await page.getByLabel("Position FEN", { exact: true }).fill(custom);
+    await page.getByRole("button", { name: "Start and keep the game", exact: true }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    const customId = page.url().split("/").at(-1)!;
+    expect(customId).not.toBe(normalId);
+    expect((await graph(customId)).nodes[0]!.fen).toBe(custom);
+    await page.reload(); await expect(page.getByLabel("Chessboard")).toBeVisible();
+    expect((await graph(customId)).nodes[0]!.fen).toBe(custom);
+    assertRecordedNodesPreserved(played.nodes, (await graph(normalId)).nodes);
+    await assertRunViewport(page, viewport);
+  });
+
+  for (const where of ["response", "recorded start"] as const) {
+    test(`D3674 Just Play refuses crossed ${where} bot identity and retries the chosen bot (${viewport.width}px)`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      const chosen = BOT_PROFILE_CATALOG.find(entry => entry.reference.id === "human-baseline.1400@1")!.reference;
+      const other = BOT_PROFILE_CATALOG.find(entry => entry.reference.id === "guarded-human.1400@1")!.reference;
+      let starts = 0, replies = 0;
+      page.on("request", request => { if (request.method() === "POST" && new URL(request.url()).pathname.endsWith("/opponent-ply")) replies += 1; });
+      await page.route("**/runs", async route => {
+        if (route.request().method() !== "POST") { await route.continue(); return; }
+        starts += 1;
+        const response = await route.fetch();
+        const body = await response.json();
+        if (where === "response") body.run.opponentPolicy.profile = { ...other, digest: chosen.digest };
+        else body.run.events[0].data.opponentPolicy.profile = other;
+        await route.fulfill({ response, json: body });
+      });
+      await chooseBot(page, chosen.id);
+      await page.getByRole("combobox", { name: /Your side/u }).selectOption("black");
+      await page.getByRole("button", { name: "Start and keep the game", exact: true }).click();
+      await expect(page.getByRole("alert")).toBeVisible();
+      await expect(page.getByRole("button", { name: "Start and keep the game", exact: true })).toBeEnabled();
+      expect(new URL(page.url()).pathname).toBe("/play");
+      await expect(page.getByLabel("Chessboard")).toHaveCount(0);
+      expect(starts).toBe(1); expect(replies).toBe(0);
+      await expect(page.locator(`[data-bot-profile="${chosen.id}"] input`)).toBeChecked();
+      await page.unroute("**/runs");
+      const retryResponse = page.waitForResponse(response => response.request().method() === "POST" && new URL(response.url()).pathname === "/runs");
+      await page.getByRole("button", { name: "Start and keep the game", exact: true }).click();
+      const retried = await (await retryResponse).json() as { readonly run: DrillRun };
+      expect(retried.run.opponentPolicy.profile).toEqual(chosen);
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      const runId = page.url().split("/").at(-1)!;
+      const { graph } = await (await page.request.get(`/runs/${runId}/graph`)).json() as { readonly graph: RunGraph };
+      expect(graph.nodes.some(node => node.actor === "opponent")).toBe(true);
+      expect(replies).toBe(1);
+      await page.reload(); await expect(page.getByLabel("Chessboard")).toBeVisible();
+      await assertRunViewport(page, viewport);
+    });
+  }
+}
+
 test("Guided Nudge after 1.e4 retains real consequences without unchanged king-edge facts", async ({ page }) => {
   await chooseBot(page, "human-baseline.1400@1");
   await page.getByRole("button", { name: "Start and keep the game" }).click();

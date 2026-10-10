@@ -4,6 +4,16 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make play-start-check` covers the visible normal/FEN choice, current roster, busy/repeated
+submission and retry, plus complete bot-reference admission in both the response and recorded
+start. `make play-start-browser-check` exercises actual desktop/phone start, play, reload,
+crossed HTTP response refusal and exact-bot retry. These cases also run in normal CI.
+
+`make predicate-validation-check` retains the real Carlsbad plan-resolution and four refusal
+scenarios as independent functional tests. Each has the unchanged five-second test deadline;
+five full-document validations no longer share one deadline. This is functional coverage,
+not a validator performance benchmark or proof of a particular runtime latency.
+
 `make review-route-check` includes exact Analyze run/branch/move/entry admission, crossed
 responses, single-flight focus continuity, read failure/retry and departed-result controls.
 `make review-analysis-browser-check` exercises the built application on desktop and a

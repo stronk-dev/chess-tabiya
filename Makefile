@@ -3642,6 +3642,17 @@ application-startup-cleanup-check:
 	$(MAKE) typecheck
 
 .PHONY: bot-rematch-check bot-rematch-browser-check bot-label-check bot-label-browser-check
+.PHONY: predicate-validation-check play-start-check play-start-browser-check
+predicate-validation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/predicate-wave-3-validation.test.ts
+
+play-start-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts -t "D3673|D3674|bot-profile play through|starts Just Play|offers the bot roster|D3664"
+	$(MAKE) typecheck
+
+play-start-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3673|D3674"
+
 bot-label-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/opponent-copy.test.ts apps/web/src/lib/outcome-presentation.test.ts apps/web/src/lib/rating-surfaces.test.ts apps/web/src/lib/screens.test.ts -t "opponent learner copy|outcome presentation honesty|learner rating surfaces|D3664|starts Just Play|offers the bot roster"
 	$(MAKE) typecheck

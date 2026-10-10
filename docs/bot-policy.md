@@ -29,6 +29,10 @@ list.
 - **Complete identity.** `resolveBotProfileReference` is the only way bytes become a profile. The
   whole reference — id, family, band, version, digest, model, sampler and ordered layers — must
   equal one catalogue member; a genuine id with a substituted family or layer list is refused.
+  Before opening a newly created bot game, the client applies this same resolver to both
+  the response policy and its recorded `run.started` policy. Both must identify the selected
+  catalogue member; a matching digest alone is insufficient. Refusal leaves Play available
+  for an explicit retry and performs no opponent request.
 - **Composition refusals.** `assertBotLayerComposition` refuses duplicate authorities, delay or
   timing layers, memory and repertoire instances, learner-derived inputs or parameter citations,
   unregistered classifiers, unmeasured or gate-failing traits (forcing ×3 and quiet ×3 are

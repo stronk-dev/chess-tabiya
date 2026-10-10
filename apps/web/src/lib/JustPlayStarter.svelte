@@ -20,6 +20,8 @@
   let advancedOpen = $state(false);
   let fen = $state("");
   let positionOpen = $state(false);
+  let submitting = $state(false);
+  let startError: string | undefined = $state();
   const startingSupport = presetDeclaration("quiet");
   const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const bands = Object.freeze([
@@ -35,21 +37,27 @@
   });
   const selectedBot = $derived(opponent.startsWith("bot:") ? roster.find((row) => `bot:${row.reference.id}` === opponent) : undefined);
   // Why Start is disabled, stated next to it (every disabled control names its reason).
-  const startBlocked = $derived(busy ? "Starting the game…" : opponent === "" ? "Choose an opponent to start." : selectedBot !== undefined && !botIsStartable(selectedBot) ? "This bot is unavailable here. Choose another opponent." : undefined);
+  const startBlocked = $derived(busy || submitting ? "Starting the game…" : opponent === "" ? "Choose an opponent to start." : opponent.startsWith("bot:") && selectedBot === undefined ? "The selected bot is no longer in this roster. Choose another opponent." : selectedBot !== undefined && !botIsStartable(selectedBot) ? "This bot is unavailable here. Choose another opponent." : undefined);
 
-  function start(): void {
-    if (opponent === "") return;
-    const position = fen.trim() || initial;
-    if (selectedBot !== undefined) {
-      if (!botIsStartable(selectedBot)) return;
-      void onStart({ fen: position, side, mode: "human_common", profile: selectedBot.reference });
-      return;
+  async function start(): Promise<void> {
+    // Submit events (including Enter) must obey the same admission as the visible button.
+    // The local latch also closes the same-turn gap before the parent's busy prop updates.
+    if (startBlocked !== undefined) return;
+    const position = positionOpen ? fen.trim() || initial : initial;
+    const input: StartInput = selectedBot !== undefined
+      ? { fen: position, side, mode: "human_common", profile: selectedBot.reference }
+      : opponent === "engine"
+        ? { fen: position, side, mode: "strong_engine" }
+        : { fen: position, side, mode: "human_common", targetElo: Number(opponent) as 1000 | 1400 | 1800 | 2200 };
+    submitting = true;
+    startError = undefined;
+    try {
+      await onStart(input);
+    } catch {
+      startError = "The game could not be started. Try again.";
+    } finally {
+      submitting = false;
     }
-    if (opponent === "engine") {
-      void onStart({ fen: position, side, mode: "strong_engine" });
-      return;
-    }
-    void onStart({ fen: position, side, mode: "human_common", targetElo: Number(opponent) as 1000 | 1400 | 1800 | 2200 });
   }
 </script>
 
@@ -59,7 +67,7 @@
     <h2 id="just-play-title">Choose an opponent. Keep every decision.</h2>
     <p>Start from the normal position or bring a FEN. You can rewind and branch without losing the attempt.</p>
   </header>
-  <form onsubmit={(event) => { event.preventDefault(); start(); }}>
+  <form onsubmit={(event) => { event.preventDefault(); void start(); }}>
     <fieldset class="bot-roster" aria-describedby="bot-roster-honesty">
       <legend>Opponent</legend>
       {#if roster.length === 0}
@@ -131,9 +139,10 @@
       </label>
       <button class="position-toggle" type="button" aria-expanded={positionOpen} onclick={() => positionOpen = !positionOpen}>{positionOpen ? "Use normal start" : "Start from a FEN"}</button>
       {#if positionOpen}<label class="fen">Position FEN <input bind:value={fen} placeholder="Paste a legal FEN" /></label>{/if}
-      <button class="start" type="submit" disabled={startBlocked !== undefined} aria-describedby={startBlocked === undefined ? undefined : "just-play-start-note"}>{busy ? "Starting…" : "Start and keep the game"}</button>
+      <button class="start" type="submit" disabled={startBlocked !== undefined} aria-describedby={startBlocked === undefined ? undefined : "just-play-start-note"}>{busy || submitting ? "Starting…" : "Start and keep the game"}</button>
     </div>
     {#if startBlocked !== undefined}<p class="honest choose-first" id="just-play-start-note">{startBlocked}</p>{/if}
+    {#if startError !== undefined}<p class="honest" role="alert">{startError}</p>{/if}
   </form>
 </section>
 

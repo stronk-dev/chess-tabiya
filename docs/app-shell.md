@@ -30,6 +30,13 @@ an explicit not-found view rather than crashing the application.
 | `/library` | Phase-first searchable Library over packs, principles, shapes, concepts and named openings (official first, community drafts disclosed), plus the learner's saved games; entries open at `/library/principle/{id}`, `/library/shape/{id}`, `/library/opening/{positionKey}` and `/play/pack/{packId}` |
 | `/settings` | Appearance, provider, deployment-surface, and shortcut information |
 
+Just Play submits the currently visible starting-position choice. **Use normal start**
+submits the normal starting position even when an earlier FEN draft is retained; reopening
+**Start from a FEN** restores that draft. Submission checks the same current roster/busy
+state as the Start button and is single-flight, including Enter/repeated submit events.
+A disappeared or newly unavailable bot requires another choice, never a raw-model fallback.
+An unsuccessful start can be retried without an automatic second request.
+
 Public `/shared/:token` pages sit outside the authenticated shell. Story tokens render a
 bounded terminal card whose product link enters the public `/play` catalogue rather than a
 password wall; session-join tokens render only title, host, and the existing

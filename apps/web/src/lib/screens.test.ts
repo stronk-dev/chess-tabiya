@@ -35,6 +35,7 @@ import {
 } from "@chess-tabiya/runtime";
 import type { ComponentProps } from "svelte";
 import { mount, tick, unmount } from "svelte";
+import { createClassComponent } from "svelte/legacy";
 import { SvelteMap } from "svelte/reactivity";
 import { botRosterFixture } from "./bot-roster.test-support.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -3495,6 +3496,75 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("D3673 starts from the visible position mode and retains an explicitly reopened FEN", async () => {
+    const onStart = vi.fn();
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
+    const submit = () => document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    document.querySelector<HTMLInputElement>('input[value="engine"]')!.click();
+    document.querySelector<HTMLButtonElement>(".position-toggle")!.click(); await tick();
+    const fen = "4k3/8/8/8/8/8/8/4K3 w - - 0 37";
+    const field = document.querySelector<HTMLInputElement>(".fen input")!;
+    field.value = ` ${fen} `; field.dispatchEvent(new Event("input", { bubbles: true }));
+    document.querySelector<HTMLButtonElement>(".position-toggle")!.click(); await tick();
+    expect(document.querySelector(".fen input")).toBeNull();
+    submit();
+    expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" }));
+    await tick();
+    document.querySelector<HTMLButtonElement>(".position-toggle")!.click(); await tick();
+    expect(document.querySelector<HTMLInputElement>(".fen input")!.value).toBe(` ${fen} `);
+    submit();
+    expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ fen }));
+    await unmount(component);
+  });
+
+  it("D3673 refuses a disappeared or newly unavailable bot without substituting a raw model", async () => {
+    const onStart = vi.fn();
+    const roster = botRosterFixture();
+    const component = createClassComponent({ component: JustPlayStarter, target: target(), props: { onStart, roster } });
+    const id = "human-baseline.1400@1";
+    document.querySelector<HTMLInputElement>(`[data-bot-profile="${id}"] input`)!.click(); await tick();
+    component.$set({ roster: roster.filter(row => row.reference.id !== id) }); await tick();
+    const submit = () => document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    expect(document.querySelector<HTMLButtonElement>(".start")!.disabled).toBe(true);
+    expect(document.getElementById("just-play-start-note")!.textContent).toContain("Choose another opponent");
+    submit(); expect(onStart).not.toHaveBeenCalled();
+    component.$set({ roster: roster.map(row => ({ ...row, startable: { kind: "unavailable", blockedBy: ["maia_unavailable"] } })) }); await tick();
+    submit(); expect(onStart).not.toHaveBeenCalled();
+    component.$set({ roster }); await tick();
+    submit(); expect(onStart).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ profile: roster.find(row => row.reference.id === id)!.reference }));
+    component.$destroy();
+  });
+
+  it("D3673 gates submit events while busy and joins rapid repeated starts until recovery", async () => {
+    let finish!: () => void;
+    const onStart = vi.fn(() => new Promise<void>(resolve => { finish = resolve; }));
+    const component = createClassComponent({ component: JustPlayStarter, target: target(), props: { onStart, busy: true } });
+    document.querySelector<HTMLInputElement>('input[value="engine"]')!.click();
+    const submit = () => document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    submit(); expect(onStart).not.toHaveBeenCalled();
+    component.$set({ busy: false }); await tick();
+    submit(); submit(); expect(onStart).toHaveBeenCalledTimes(1);
+    await tick(); expect(document.querySelector<HTMLButtonElement>(".start")!.disabled).toBe(true);
+    finish(); await tick();
+    submit(); expect(onStart).toHaveBeenCalledTimes(2);
+    finish(); await tick(); component.$destroy();
+  });
+
+  it("D3673 recovers from a rejected start without changing the selected opponent or position", async () => {
+    const onStart = vi.fn().mockRejectedValueOnce(new Error("transport")).mockResolvedValueOnce(undefined);
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
+    document.querySelector<HTMLInputElement>('input[value="engine"]')!.click();
+    const submit = () => document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    submit();
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("Try again"));
+    expect(document.querySelector<HTMLButtonElement>(".start")!.disabled).toBe(false);
+    submit(); await tick();
+    expect(onStart).toHaveBeenCalledTimes(2);
+    expect(onStart.mock.calls[1]).toEqual(onStart.mock.calls[0]);
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+    await unmount(component);
+  });
+
   it("D3664 preserves all four raw band selections without unmeasured strength labels", async () => {
     const onStart = vi.fn();
     const component = mount(JustPlayStarter, { target: target(), props: { onStart } });
@@ -3532,6 +3602,7 @@ describe("Layer 3 screens", () => {
     radios[2]!.click();
     document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
     expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "human_common", targetElo: 1800 }));
+    await tick();
     radios[4]!.click();
     document.querySelector<HTMLFormElement>(".just-play form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
     expect(onStart).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "strong_engine" }));

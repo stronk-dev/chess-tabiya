@@ -14,11 +14,15 @@ const pack = json(resolvePackPath("carlsbad-minority-attack")) as DrillPackDefin
 const carlsbad = json("../../../content/shapes/carlsbad.json");
 const lookup = (document = carlsbad): PackShapeLookup => ({ get: (id) => id === "carlsbad" ? { document } : undefined });
 const codes = (value: unknown, shapes?: PackShapeLookup) => validatePackDocument(value, shapes === undefined ? {} : { shapes }).issues.map((issue) => issue.code);
+const minorityAttackPack = (): DrillPackDefinition => {
+  const value = structuredClone(pack) as DrillPackDefinition;
+  (value.objective as any).successConditions = [{ kind: "plan_consequence", planClassId: "minority-attack", to: "achieved" }];
+  return value;
+};
 
 describe("predicate wave 3 validation", () => {
-  it("resolves the Carlsbad plan consequence and refuses every unresolved form", () => {
-    const planPack = structuredClone(pack) as DrillPackDefinition;
-    (planPack.objective as any).successConditions = [{ kind: "plan_consequence", planClassId: "minority-attack", to: "achieved" }];
+  it("resolves the Carlsbad plan consequence", () => {
+    const planPack = minorityAttackPack();
     expect(validatePackDocument(withDerivedRequires(planPack, { shapes: lookup() }), { shapes: lookup() }).valid).toBe(true);
     const resolved = planSignatureResolver(planPack, lookup());
     expect(objectiveRules(planPack, planPack.objective, "/objective", resolved)[0]?.evidenceRefs).toEqual([
@@ -26,24 +30,32 @@ describe("predicate wave 3 validation", () => {
       "rules:structure-backward-pawn",
       "rules:structure-half-open-file",
     ]);
+  });
 
-    const unknown = structuredClone(planPack) as any;
+  it("refuses an unknown plan class", () => {
+    const unknown = minorityAttackPack() as any;
     unknown.objective.successConditions[0].planClassId = "missing";
     expect(codes(unknown, lookup())).toContain("PLAN_CONSEQUENCE_UNKNOWN_PLAN_CLASS");
+  });
 
-    const unbound = structuredClone(planPack) as any;
+  it("refuses a plan class without a shape plan", () => {
+    const unbound = minorityAttackPack() as any;
     delete unbound.planClasses[0].shapePlan;
     expect(codes(unbound, lookup())).toContain("PLAN_CONSEQUENCE_NO_SHAPE_PLAN");
+  });
 
-    const uncheckable = structuredClone(planPack) as any;
+  it("refuses a plan without a computable signature", () => {
+    const uncheckable = minorityAttackPack() as any;
     uncheckable.objective.successConditions[0].planClassId = "central-break";
     const uncheckableShape = structuredClone(carlsbad);
     uncheckableShape.plans.find((plan: any) => plan.id === "white-central-break").success = { note: "No structural signature is authored.", signature: null };
     expect(codes(uncheckable, lookup(uncheckableShape))).toContain("PLAN_CONSEQUENCE_NOT_COMPUTABLE");
+  });
 
+  it("refuses a signature absent from every authored position", () => {
     const impossibleShape = structuredClone(carlsbad);
     impossibleShape.plans[0].success.signature = { kind: "pieceOnSquare", square: "a1", piece: { color: "black", role: "queen" } };
-    expect(codes(planPack, lookup(impossibleShape))).toContain("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT");
+    expect(codes(minorityAttackPack(), lookup(impossibleShape))).toContain("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT");
   });
 
   it("refuses impossible distance queries and warns on the two deprecated forms", () => {

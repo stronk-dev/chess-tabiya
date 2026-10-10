@@ -12,6 +12,24 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3675]] owns the failed pre-commit Carlsbad validation case: five independent full-pack
+scenarios shared one five-second deadline. They now run as five named functional tests,
+retaining the real pack, every assertion and unchanged deadline. D3675 is closed locally:
+all 4,550 software, seven performance, 246 content and 281 browser cases pass, with types,
+governance, packaging/build, one optional Maia skip and zero retries. The two governance
+failures were corrected in tracking: missing queue reference and copied Review checkpoint
+evidence. No validator latency, historical timing-cause or remote-CI claim follows.
+
+[[D3673]]/[[D3674]] repair actual Play start under the existing position-session and
+playable bot contracts. Normal start no longer submits a hidden FEN; reopening FEN retains
+the draft. Current-roster/busy admission and a same-turn single-flight guard cover submit
+events, including Enter. Created bot games validate complete registered references in both
+the response and recorded start before attachment/opponent play. Fourteen permanent additions,
+21 focused controls, clean types and six native desktop/phone start/play/reload and crossed-
+response/retry journeys pass. All normal local gates pass as recorded above. No new default, calibration,
+source, permission, content or whole-capability promotion follows. Availability/source contracts,
+selected-Sight, orientation/window and bot Stage-B holds remain unchanged.
+
 [[D3672]] repairs existing semantic-value admission: event observations must pass the
 existing semantic-event validator as well as the sole-factory payload check. Explicit
 observation-grain checks precede selection so relabelling cannot manufacture omission.

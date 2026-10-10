@@ -1705,35 +1705,30 @@
         "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3668 preserves recorded FEN move numbers through Review rows, moments, graph, Analyze and Retry/Compare. White/Black starts at fullmove 1/37 retain local ply and saved play; the parser refuses crossed numbering. Permanent predecessor failures, 210 focused/87 authenticated application controls, clean types and six actual desktop/touch-phone journeys pass, retaining the original line through a different legal retry and Compare. Complete sequential make roadmap-receipt verify-awake build test-browser-ci-awake passes 4511 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance/packaging/build and 275 browser cases (210 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. D3665's exact Analyze identity/focus/recovery and earlier delivery stand. D3669/D3670 retain Story/Profile numbering source-contract gaps. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No source/search/grade policy, whole capability, milestone, native release-image or remote-CI promotion.",
+          "summary": "D3673/D3674 repair Play's actual starting-position choice and complete bot echo. Normal start ignores the hidden FEN draft; explicitly reopening FEN preserves it. Disappeared/unavailable roster selections, busy/rapid submissions and rejected starts retain explicit recovery. The existing catalogue validator admits both the returned and recorded-start profile before attachment/opponent requests. Fourteen permanent additions, twelve observed predecessor failures, 21 focused controls, clean types and six built desktop/phone start/play/reload and crossed-response/retry journeys pass. D3675 separates independent Carlsbad validation scenarios without changing assertions or the five-second deadline. All normal local gates pass: 4550 software cases/365 files, seven performance cases/four files, 246 content cases/25 files, types/governance/packaging/build and 281 browser cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. Missing queue and stale Review evidence references were corrected before governance passed. Previous Review numbering, exact Analyze/focus and retry/Compare repairs remain delivered. Missing sources/useful selection, skills, calibrated bots, official content, Campaign curriculum/progression/rewards/boss and full release proof remain open. No default, source, sampler, permission, content, whole capability/milestone, native release-image or remote-CI promotion.",
           "impact": "advanced",
           "evidence": [
-            "apps/web/src/App.svelte",
-            "apps/web/src/lib/ReviewMapScreen.svelte",
-            "apps/web/src/lib/review-response.ts",
-            "apps/web/src/lib/review-map-remainder.test.ts",
-            "apps/web/src/lib/review-map-screen.test.ts",
-            "packages/runtime/src/review-map.ts",
-            "packages/runtime/src/review-map.test.ts",
-            "packages/runtime/src/review-analysis.ts",
-            "packages/runtime/src/review-map-remainder.test.ts",
-            "apps/server/src/review-map.test.ts",
+            "apps/web/src/lib/JustPlayStarter.svelte",
+            "apps/web/src/lib/screens.test.ts",
+            "apps/web/src/lib/session-controller.ts",
+            "apps/web/src/lib/session-controller.test.ts",
             "tests/browser/drill.spec.ts",
-            "docs/review-evidence.md",
-            "docs/game-import-and-story.md",
-            "rfc/review-map.md",
+            "docs/app-shell.md",
+            "docs/bot-policy.md",
+            "docs/testing.md",
+            "Makefile",
             "planning/exploration/log.md"
           ],
           "anchors": [
             {
               "kind": "work_state",
-              "id": "D3668",
-              "digest": "sha256:e51271a43789f0973f0e9b515bdffff029d3865f825a8a05bbb8b7f9c3ed0313"
+              "id": "D3673",
+              "digest": "sha256:5dcfe90ff2e31c133a5deed1099e094c5ba349cde3115aef441e0d7723704ac0"
             },
             {
-              "kind": "rfc",
-              "id": "review-map.md",
-              "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+              "kind": "work_state",
+              "id": "D3674",
+              "digest": "sha256:315a361e416facda49bb6c52107112ce7d47973914e17b1adbbbc4b2694fcd80"
             }
           ]
         },
