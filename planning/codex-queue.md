@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3683]] is closed locally under implementing longitudinal-store §C. Startup refusal waits
+for real worker termination before application/storage cleanup and preserves the first failure
+against later frames. Six predecessor-red real-thread controls, 65 retained projector/worker
+controls and clean types pass. Complete normal verification/build/browser gates pass 4,594
+software, seven unchanged-budget performance, 247 content and 285 browser cases, one optional
+Maia skip, zero retries and all 150 input/112 composition cells. The normal focused command is
+`make longitudinal-worker-start-check`. No projection, lease, retry, source, storage-version,
+cold-cost, whole-capability or release promotion; D3300/D3591 remain separate.
+
 [[D3675]] owns the failed pre-commit Carlsbad validation case: five independent full-pack
 scenarios shared one five-second deadline. They now run as five named functional tests,
 retaining the real pack, every assertion and unchanged deadline. D3675 is closed locally:

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3682]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3683]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,14 +58,26 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3682]]: 273 UX items complete, 272 live and 24
-retired; 1,715 live ledger items, all assigned, alongside 1,555 done and 161 refused. The 462
+Current checked inventory through [[D3683]]: 273 UX items complete, 272 live and 24
+retired; 1,715 live ledger items, all assigned, alongside 1,556 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest longitudinal lifecycle repair: [[D3683]] keeps failed startup responsible for its worker
+until termination settles, before application cleanup closes storage. Late ready/progress frames
+cannot replace the first refusal. Six real-thread controls reproduce the predecessor's early
+settlement, including actual file-backed application cleanup; all six and 65 existing projector/
+ready/crash/drain controls pass. Complete normal `make roadmap-receipt verify-awake build
+test-browser-ci-awake` passes 4,594 software cases/366 files, seven unchanged-budget performance
+cases/four files, 247 content cases/25 files and 285 browser cases, one optional Maia skip,
+zero retries, all 150 input/112 composition cells and clean types/governance/packaging/build.
+Final focused startup checks and types pass on the final test bytes. D3300 cold projection,
+D3591 performance attribution, source/consumer discharges and complete recovery remain open.
+No full capability, milestone, official content, remote-CI or release-image promotion follows.
 
 Latest Campaign consistency repair: [[D3680]] returns the original saved group after another
 group is created; missing or malformed saved identities refuse without provider work or mutation.

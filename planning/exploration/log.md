@@ -24962,3 +24962,48 @@ Campaign was the one capability with no API, route or content. Now:
   exits zero. All 87 unchanged Review/runtime/privacy regressions pass, as do repository
   governance and compact-recording independence controls. These tests preserve the landed
   implementation; they do not test or accept the new tablebase amendment.
+
+## 2026-10-10 — D3683: failed-start worker ownership
+
+- The previous goal turn delivered the D3580 authoring checkpoint `0e4d4536`; its tablebase
+  integration remains unaccepted/unimplemented. This turn takes an admitted longitudinal
+  lifecycle repair instead. D3300 cold projection and D3591 intermittent attribution remain open.
+- Six permanent controls fail on the unchanged predecessor: wrong database, invalid first frame,
+  reported refusal, ready after refusal, startup deadline and actual file-backed application
+  cleanup. The last control observes SQLite closing before the held termination promise finishes.
+  Real worker termination proceeds; the test controls only when its completion is handed back.
+- Startup failure now has one refusal path which awaits termination and fences later frames.
+  All six controls pass, as do 65 existing projector/worker ready/crash/drain cases and workspace
+  types. A test-only Promise.withResolvers helper initially failed the existing ES library
+  target; ordinary Promise construction repairs the fixture without changing compiler settings.
+  Application controls use explicit empty validated catalogues, not installed pack wording.
+- Test teardown owns both threads and starting application promises before removing its exact
+  temporary directories. Projection, evidence, leases, retries, storage formats and the 2 s drain
+  grace are unchanged. No new primitive, skill credit, calibration, content or accepted contract.
+- Normal full verification/build/browser gates are running before closeout. D3683 remains doing
+  under learner-history, with zero untriaged and the durable-state checkpoint recording this
+  bounded progress. No push, remote-CI, release-image or whole-capability promotion is claimed.
+- Final complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: clean types/governance/packaging/build, 4,594 software cases/366 files,
+  seven unchanged-budget performance cases/four files, 247 content cases/25 files and
+  285 browser cases (220 ordinary journeys, five content, 59 matrix, one packaged-default),
+  one optional Maia skip, zero retries and all 150 input/112 composition cells. The final
+  test-only teardown/message assertions also pass `make longitudinal-worker-start-check
+  typecheck` after the aggregate, with six controls and clean workspace types. No production
+  code changed during verification.
+- D3683 closes with its ledger/state, existing queue/RFC/docs, roadmap and receipt. Final ledger
+  population is 3,432: 1,556 done, 161 refused and 1,715 live (630 todo, fourteen doing,
+  1,071 blocked), zero untriaged. UX remains 273 complete/272 live/24 retired; all fourteen
+  whole capabilities remain incomplete, milestones four active/five blocked, zero official
+  graduates. D3300, D3591, source/consumer discharges and full recovery remain open.
+- Read-only GitHub inspection shows published revision 75bc8744 has successful verify run
+  37795549212 but failed browser run 37795549157: the branch-group Actions click is intercepted
+  by a modal backdrop. That historical run predates the current local modal/lifecycle repairs;
+  its corresponding current journey passes. This is not paired remote-CI proof for the
+  unpublished checkpoint. No push, deployment, native release-image or readiness-to-push claim.
+- The requested whole-product inventory is reconciled in the existing roadmap, not another
+  work document. Separate semantic-tactics/review working-tree changes remain outside this
+  checkpoint; only the explicit owned-file list is staged for ordinary commit hooks.
+- Final `make roadmap-receipt verify-governance` exits zero after closeout: register C1–C8,
+  status P1–P7, roadmap R1–R10, intent, routing, work/UX assignments, tiers and document checks
+  pass. The source registers and generated roadmap receipt agree with the counts above.

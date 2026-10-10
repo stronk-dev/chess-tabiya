@@ -94,12 +94,20 @@ export class LongitudinalProjectionWorker {
     const supervisor = new LongitudinalProjectionWorker(worker, input.database.absolutePath, drainSignal, drainGraceMs);
     return new Promise<LongitudinalProjectionWorker>((resolve, reject) => {
       let ready = false;
+      let failing = false;
+      // Startup owns this worker until termination settles. In particular, application cleanup
+      // must not close/release storage while a rejected, unreturned supervisor still owns a thread.
+      const failStartup = (error: LongitudinalWorkerStartError): void => {
+        if (ready || failing) return;
+        failing = true;
+        clearTimeout(timeout);
+        void worker.terminate().then(() => reject(error), () => reject(error));
+      };
       const timeout = setTimeout(() => {
-        if (ready) return;
-        void worker.terminate();
-        reject(new LongitudinalWorkerStartError("worker_start_failed", "longitudinal worker did not report ready"));
+        failStartup(new LongitudinalWorkerStartError("worker_start_failed", "longitudinal worker did not report ready"));
       }, input.startTimeoutMs ?? 30_000);
       worker.on("message", (raw: unknown) => {
+        if (failing) return; // Late ready/progress frames cannot replace the first refusal.
         const message = parseLongitudinalThreadMessage(raw);
         if (!ready) {
           if (message?.type === "ready" && message.databasePath === input.database.absolutePath) {
@@ -108,17 +116,14 @@ export class LongitudinalProjectionWorker {
             resolve(supervisor);
             return;
           }
-          clearTimeout(timeout);
-          void worker.terminate();
-          reject(new LongitudinalWorkerStartError("worker_protocol_invalid", message?.type === "error" ? message.message : "unexpected first message or database path disagreement"));
+          failStartup(new LongitudinalWorkerStartError("worker_protocol_invalid", message?.type === "error" ? message.message : "unexpected first message or database path disagreement"));
           return;
         }
         supervisor.#receive(message);
       });
       worker.on("error", (error) => {
         if (!ready) {
-          clearTimeout(timeout);
-          reject(new LongitudinalWorkerStartError("worker_start_failed", error.message));
+          failStartup(new LongitudinalWorkerStartError("worker_start_failed", error.message));
           return;
         }
         supervisor.#degrade("worker_exited");
@@ -126,8 +131,7 @@ export class LongitudinalProjectionWorker {
       worker.on("exit", () => {
         supervisor.#exited = true;
         if (!ready) {
-          clearTimeout(timeout);
-          reject(new LongitudinalWorkerStartError("worker_start_failed", "longitudinal worker exited before ready"));
+          failStartup(new LongitudinalWorkerStartError("worker_start_failed", "longitudinal worker exited before ready"));
           return;
         }
         if (supervisor.#resolveDrained !== undefined) supervisor.#resolveDrained();

@@ -30538,6 +30538,15 @@
       "uxItems": [],
       "evidence": "tests/browser/campaign.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3683",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2a995bfe9f0467f0ef225b054cd8ed7924bc18ff4eab2a535f60a23ef72caf9a",
+      "uxItems": [],
+      "evidence": "apps/server/src/longitudinal-worker-start.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

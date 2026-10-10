@@ -67,6 +67,12 @@ checkpoints, and publishes rows plus `completed_seq` in one compare-and-swap tra
 5 s × 2ⁿ (capped at 5 min) and quarantine after 3 and 5 attempts. Only a changed source digest,
 event head or derivation revision reopens a quarantine.
 
+Failed startup retains ownership of the starting thread until its termination promise settles.
+Invalid first frames, missing readiness, early errors and exits preserve the first refusal;
+later ready/progress messages cannot revive it. Application cleanup therefore closes its database
+only after the failed worker has finished termination. `make longitudinal-worker-start-check`
+covers this ordering with real threads and actual file-backed application cleanup.
+
 `/healthz` returns `{ status, engineMode, longitudinal: { status, reason? } }`; a degraded or
 draining worker is HTTP 503. `close()` drains the worker before closing storage, bounded by
 `LONGITUDINAL_DRAIN_GRACE_MS` (2 s): the supervisor sets a shared drain cell that the thread reads

@@ -10,6 +10,12 @@
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
 - **Author:** claude
+- **Implementation checkpoint 2026-10-10 — D3683:** startup refusal is one-shot and awaits the
+  owned worker's termination before rejecting to application cleanup. Six real-thread controls
+  reproduce early settlement on the predecessor, including actual file-backed database cleanup.
+  Projection, leases, retries, storage formats, ready behavior and the 2 s drain grace are unchanged.
+  Full local verification is recorded in the exploration log; this does not complete the RFC,
+  qualify a new source or close D3300/D3591's cost/performance work.
 - **Implementation follow-up (2026-10-09, D3626):** derivation revision 3 carries the existing
   retained-piece mobility repair into untouched revision-2 histories. Registry membership,
   attribution and saved play stay unchanged; normal startup/worker reconciliation is exercised
@@ -2050,6 +2056,10 @@ head after that renumbering and **not yet written**:
   corruption the store exists to prevent.
 
 ## Changelog
+
+- 2026-10-10: D3683 corrects failed-start resource ownership and first-refusal ordering under
+  the existing §C lifecycle. `make longitudinal-worker-start-check` retains six real-thread
+  predecessor regressions; normal ready/crash/drain controls and all remaining discharges stand.
 
 - 2026-09-24 (coordinator): [[D3300]] opened — one imported game takes ~10 s to project and `close()` waits for the in-flight batch; profile the projector and bound the drain grace.
 - 2026-09-24: [[D3300]] fixed as an implementation correction with no revision bump — the projector

@@ -4,6 +4,12 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make longitudinal-worker-start-check` covers real starting-thread ownership on invalid first
+frames, reported refusal, late readiness and startup deadline, including actual application
+SQLite cleanup and immediate reopening. All six controls reproduce the predecessor's early
+settlement. They run in normal software CI with explicit empty catalogues; existing projector,
+worker ready/crash/drain and isolated 80-ply performance checks remain separate and unchanged.
+
 `make play-start-check` covers the visible normal/FEN choice, current roster, busy/repeated
 submission and retry, plus complete bot-reference admission in both the response and recorded
 start. `make play-start-browser-check` exercises actual desktop/phone start, play, reload,
