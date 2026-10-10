@@ -7,7 +7,7 @@ import AccountImportPanel from "./AccountImportPanel.svelte";
 import AccountInventoryPanel from "./AccountInventoryPanel.svelte";
 import AssistanceSettings from "./AssistanceSettings.svelte";
 import { ACCOUNT_DATA_CLASS_LABELS, deletionFate, exportFate } from "./account-inventory-copy.js";
-import { ApiError, type AccountExportProgress, type AccountImportReceipt, type AccountInventory } from "./api.js";
+import { ApiError, type AccountExportProgress, type AccountImportReceipt, type AccountInventory, type DeletionPreview } from "./api.js";
 
 /** The server's twelve non-installation classes (apps/server/src/account-import.test.ts pins the same list). */
 const TWELVE = [
@@ -163,6 +163,83 @@ describe("account download progress", () => {
     finish();
     await vi.waitFor(() => expect(document.querySelector("progress.export-progress")).toBeNull());
     expect(document.body.textContent).toContain("download has started");
+    unmount(component);
+  });
+});
+
+describe("Campaign account deletion consent", () => {
+  it("retains native refresh focus but withholds old consent through a pending and failed refresh", async () => {
+    const original: DeletionPreview = {
+      version: 1, scope: { kind: "account" }, digest: "first-confirmation",
+      hardDelete: [{ kind: "progress", count: 3, objectIds: ["campaign-one"], label: "Campaign progress is permanently deleted" }],
+      tombstone: [], revoke: [], retainedPublished: [], backupNotice: "Backups expire separately.",
+    };
+    let reject!: (error: Error) => void;
+    const loadDeletionPreview = vi.fn().mockResolvedValueOnce(original).mockImplementationOnce(() => new Promise((_resolve, fail) => { reject = fail; })).mockResolvedValueOnce({ ...original, digest: "fresh-confirmation" });
+    const onDelete = vi.fn();
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      learner: { id: "learner-a", handle: "alice", createdAt: "2026-08-23T00:00:00.000Z" },
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete, loadDeletionPreview,
+    } });
+    await vi.waitFor(() => expect(document.querySelector(".deletion-preview")).not.toBeNull());
+    const refresh = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Refresh data summary")!;
+    const submit = [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find(button => button.textContent === "Delete account")!;
+    const form = submit.closest("form")!;
+    setInput([...document.querySelectorAll<HTMLInputElement>('input[type="password"]')].at(-1)!, "pw");
+    refresh.focus();
+    refresh.click();
+    await tick();
+    expect(document.activeElement).toBe(refresh);
+    expect(refresh.isConnected).toBe(true);
+    expect(refresh.getAttribute("aria-disabled")).toBe("true");
+    expect(submit.disabled).toBe(true);
+    expect(document.querySelector(".deletion-preview")?.textContent).toContain("previous summary");
+    refresh.click();
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    await tick();
+    expect(loadDeletionPreview).toHaveBeenCalledTimes(2);
+    expect(onDelete).not.toHaveBeenCalled();
+    reject(new Error("offline"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("could not be loaded"));
+    expect(document.activeElement).toBe(refresh);
+    expect(submit.disabled).toBe(true);
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    await tick();
+    expect(onDelete).not.toHaveBeenCalled();
+    refresh.click();
+    await vi.waitFor(() => expect(submit.disabled).toBe(false));
+    submit.click();
+    await vi.waitFor(() => expect(onDelete).toHaveBeenCalledWith("pw", "fresh-confirmation"));
+    unmount(component);
+  });
+
+  it("shows the named progress effect and submits only the currently reviewed consent", async () => {
+    const original: DeletionPreview = {
+      version: 1, scope: { kind: "account" }, digest: `sha256:${"b".repeat(64)}`,
+      hardDelete: [{ kind: "progress", count: 3, objectIds: ["campaign_runs:one", "campaign_run_creations:one", "campaign_events:one:0"], label: "Campaign progress, collected tools and reward history are permanently deleted" }],
+      tombstone: [], revoke: [], retainedPublished: [], backupNotice: "Existing backups expire separately.",
+    };
+    const updated = { ...original, digest: `sha256:${"c".repeat(64)}`, hardDelete: [{ ...original.hardDelete[0]!, count: 4, objectIds: [...original.hardDelete[0]!.objectIds, "campaign_events:one:1"] }] };
+    const loadDeletionPreview = vi.fn().mockResolvedValueOnce(original).mockResolvedValueOnce(updated);
+    const onDelete = vi.fn().mockRejectedValueOnce(new ApiError(409, "DELETION_PREVIEW_STALE", "Review the new effects")).mockResolvedValueOnce(undefined);
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      learner: { id: "learner-a", handle: "alice", createdAt: "2026-08-23T00:00:00.000Z" },
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete, loadDeletionPreview,
+    } });
+    await vi.waitFor(() => expect(document.querySelector(".deletion-preview")?.textContent).toContain("Campaign progress, collected tools and reward history are permanently deleted (3)"));
+    const submit = () => {
+      setInput([...document.querySelectorAll<HTMLInputElement>('input[type="password"]')].at(-1)!, "pw");
+      [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find(button => button.textContent === "Delete account")!.click();
+    };
+    submit();
+    await vi.waitFor(() => expect(onDelete).toHaveBeenCalledWith("pw", original.digest));
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("could not be deleted"));
+    expect(document.querySelector(".deletion-preview")?.textContent).toContain("Campaign progress");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Refresh data summary")!.click();
+    await vi.waitFor(() => expect(document.querySelector(".deletion-preview")?.textContent).toContain("permanently deleted (4)"));
+    submit();
+    await vi.waitFor(() => expect(onDelete).toHaveBeenLastCalledWith("pw", updated.digest));
+    expect(onDelete).toHaveBeenCalledTimes(2);
     unmount(component);
   });
 });

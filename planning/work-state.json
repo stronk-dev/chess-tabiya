@@ -30334,6 +30334,24 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3660",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ddc48c8e47d151b75bd708405f634d5771fb4f79f1d0e4d13f3b508de1f7eaeb",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3661",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:17beb8ef75238db09a5422b2963165e101fa56f29c7e503abba44ff7343cd3ee",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

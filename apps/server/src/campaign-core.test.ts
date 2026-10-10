@@ -308,6 +308,18 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     expect(exported.status).toBe(200);
     const tables = new Set((exported.body.progress.value as { table: string }[]).map((record) => record.table));
     expect([...tables]).toEqual(expect.arrayContaining(["campaign_runs", "campaign_events", "campaign_run_creations", "campaign_mutation_commands", "campaign_reward_awards"]));
+    // Migration 30's progress is named in destructive consent, not silently cascaded. This real
+    // completion includes commands and the earned completion award, covering all five tables.
+    const deletion = await alice.call("POST", "/auth/deletion-preview", {});
+    expect(deletion.status).toBe(200);
+    const effects = deletion.body.hardDelete as { kind: string; label: string; count: number; objectIds: string[] }[];
+    const campaignEffect = effects.find(effect => effect.kind === "progress" && effect.label.startsWith("Campaign"));
+    expect(campaignEffect).toBeDefined();
+    const campaignRecords = (exported.body.progress.value as { table: string }[]).filter(record => record.table.startsWith("campaign_"));
+    expect(campaignEffect!.count).toBe(campaignRecords.length);
+    for (const table of ["campaign_runs", "campaign_events", "campaign_run_creations", "campaign_mutation_commands", "campaign_reward_awards"]) {
+      expect(campaignEffect!.objectIds.some(id => id.startsWith(`${table}:`)), table).toBe(true);
+    }
   }, 120_000);
 
   it("abandons with the exact active encounter and then starts a new run", async () => {

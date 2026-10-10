@@ -113,7 +113,7 @@
   async function removeAccount(): Promise<void> {
     if (deleteBusy) return;
     deleteError = undefined;
-    if (deletionPreview === undefined) { deleteError = "Review what will happen before deleting the account."; return; }
+    if (deletionPreview === undefined || previewLoading || previewError !== undefined) { deleteError = "Review the current data summary before deleting the account."; return; }
     if (password.length === 0) { deleteError = "Re-enter your password before deleting the account."; return; }
     const request = ++deleteRequest;
     const submittedPassword = password;
@@ -133,7 +133,6 @@
     const request = ++previewRequest;
     previewLoading = true;
     previewError = undefined;
-    deletionPreview = undefined;
     try {
       if (loadDeletionPreview === undefined) throw new Error("Deletion preview is unavailable.");
       const preview = await loadDeletionPreview();
@@ -271,9 +270,12 @@
     <p class="honest">This is a read-only summary of account data in this deployment. Loading or refreshing it does not start deletion.</p>
     {#if previewLoading}
       <p role="status">Loading your data summary…</p>
-    {:else if previewError}
-      <p role="alert">{previewError}</p><button type="button" onclick={() => void previewDeletion()}>Try loading again</button>
-    {:else if deletionPreview}
+    {/if}
+    {#if previewError}
+      <p role="alert">{previewError}</p>
+      {#if !deletionPreview}<button type="button" onclick={() => void previewDeletion()}>Try loading again</button>{/if}
+    {/if}
+    {#if deletionPreview}
       <!-- The server inventory (AccountInventoryPanel) is canonical; this preview-derived projection
            is the fallback for a deployment without that endpoint, so one heading never renders twice. -->
       {#if !loadAccountInventory}
@@ -292,15 +294,16 @@
       </section>
       {/if}
       <div class="deletion-preview">
+        {#if previewLoading || previewError}<p class="honest">This is the previous summary. Refresh successfully before deleting your account.</p>{/if}
         <StatusAnnouncement message={`Account data summary loaded. ${records(effectCount(deletionPreview.hardDelete))} would be permanently deleted. ${records(effectCount(deletionPreview.tombstone))} would remain read-only as shared history. ${records(effectCount(deletionPreview.revoke))} would have access revoked. ${records(effectCount(deletionPreview.retainedPublished))} would remain as published work.`} />
         {#if effectCount(deletionPreview.hardDelete) > 0}<h4>Private account data</h4><ul>{#each deletionPreview.hardDelete as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
         {#if effectCount(deletionPreview.tombstone) > 0}<h4>Shared history</h4><ul>{#each deletionPreview.tombstone as effect}<li>{effect.label}</li>{/each}</ul>{/if}
         {#if effectCount(deletionPreview.revoke) > 0}<h4>Revocable access</h4><ul>{#each deletionPreview.revoke as effect}<li>{effect.label} ({effect.count})</li>{/each}</ul>{/if}
         {#if effectCount(deletionPreview.retainedPublished) > 0}<h4>Published work</h4><ul>{#each deletionPreview.retainedPublished as effect}<li>{effect.label}</li>{/each}</ul>{/if}
         <p class="honest">{deletionPreview.backupNotice}</p>
-        <button type="button" disabled={previewLoading || deleteBusy} aria-describedby={previewLoading ? "account-preview-busy" : deleteBusy ? "account-delete-busy" : undefined} onclick={() => void previewDeletion()}>Refresh data summary</button>
+        <button type="button" aria-disabled={previewLoading || deleteBusy} aria-describedby={previewLoading ? "account-preview-busy" : deleteBusy ? "account-delete-busy" : undefined} onclick={() => void previewDeletion()}>Refresh data summary</button>
       </div>
-    {:else}<p>This deployment cannot provide an account data summary.</p>{/if}
+    {:else if !previewLoading && !previewError}<p>This deployment cannot provide an account data summary.</p>{/if}
     {#if loadAccountInventory}
       {#key inventoryVersion}<AccountInventoryPanel loadInventory={loadAccountInventory} />{/key}
     {/if}
@@ -331,7 +334,7 @@
     {:else}
     <p>The current data summary above is the deletion preview. Refresh it if your account changed since this page opened.</p>
     <label>Re-enter password <input type="password" autocomplete="current-password" bind:value={password} /></label>
-    <button type="submit" disabled={deleteBusy || previewLoading} aria-describedby={deleteBusy ? "account-delete-busy" : previewLoading ? "account-preview-busy" : undefined}>{deleteBusy ? "Deleting account…" : "Delete account"}</button>
+    <button type="submit" disabled={deleteBusy || previewLoading || previewError !== undefined} aria-describedby={deleteBusy ? "account-delete-busy" : previewLoading ? "account-preview-busy" : undefined}>{deleteBusy ? "Deleting account…" : "Delete account"}</button>
     {#if deleteBusy}<p id="account-delete-busy" role="status">Deleting this account and ending its sessions…</p>{/if}
     <p class="honest">This browser's sign-in and play preferences are cleared after deletion. Other devices may keep old display preferences, but you will be signed out everywhere.</p>
     {/if}

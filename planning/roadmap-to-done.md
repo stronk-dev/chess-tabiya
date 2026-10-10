@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3659]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3661]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3659]]: 273 UX items complete, 272 live and 24
-retired; 1,711 live ledger items, all assigned, alongside 1,536 done and 161 refused. The 462
+Current checked inventory through [[D3661]]: 273 UX items complete, 272 live and 24
+retired; 1,711 live ledger items, all assigned, alongside 1,538 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -77,6 +77,21 @@ timing-cause diagnosis, new qualification or whole-capability completion follows
 verification/build passes 4,438 software cases/365 files, seven unchanged-budget performance
 cases/four files, 241 content cases/24 files, clean types/governance/packaging. All browser tiers
 pass 265 cases, one optional Maia skip, zero retries and all 150 input/112 composition cells.
+
+Latest integrated lifecycle repair: [[D3660]] lists all five Campaign populations in account
+deletion consent and binds their actual state to the existing stale-preview guard. Five native
+file-backed authenticated controls prove stale refusal, rollback, foreign-account isolation,
+actual deletion and restart; the complete existing Campaign journey covers earned awards and
+charged commands. [[D3661]] preserves native refresh focus without permitting old consent during
+pending/failed reads. Mounted controls, workspace types and both desktop/touch-phone settings
+journeys pass. Complete normal verification/build passes 4,440 software cases/365 files,
+seven unchanged-budget performance cases/four files, 246 content cases/25 files, clean
+types/governance/packaging. All four browser tiers pass 267 cases, one optional Maia skip,
+zero retries and all 150 input/112 composition cells. The new native fixture test is in
+the content tier, with mounted controls in software; the first aggregate's ownership
+failure is retained in the log. Both ledger rows are closed. Campaign curriculum,
+all-object lifecycle, appliance recovery and whole milestones remain open. No native
+release-image or exact-revision remote-CI result is claimed.
 
 Previous foundation repair: [[D3656]] stops classifying pawn advances and castling's friendly-rook
 command addresses as legal attacks. Both colors, 112 king/rook geometries, promotions, sealed

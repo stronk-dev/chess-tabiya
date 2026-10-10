@@ -12,6 +12,23 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3660]]/[[D3661]] repair the Campaign→account consent journey under the existing
+portable-account-data §§1/3/5 and campaign-core §6.2 contracts. All five Campaign
+populations are visibly named and stale-bound; per-run deletion and retention policy
+are unchanged. Two observed predecessor controls fail, then five real file-backed
+authenticated lifecycle controls cover creation/in-place changes, stale refusal,
+rollback, foreign-account isolation and restart. The existing complete Campaign
+journey proves the preview covers actual charged commands and earned awards, not only
+root rows. Mounted controls and both desktop/touch-phone settings journeys preserve
+focused refresh and refuse old consent during pending/failed reads. Complete normal
+verification/build passes 4,440 software cases/365 files, seven unchanged-budget performance
+cases/four files, 246 content cases/25 files, clean types/governance/packaging. All four
+browser tiers pass 267 cases, one optional Maia skip, zero retries and all 150 input/112
+composition cells. The first aggregate correctly refused the new real-content file's
+software-tier assignment; it is now assigned to content without weakening the guard or
+assertions. Both rows are closed in the ledger and durable tracker. This does not complete the Campaign curriculum, all-object
+lifecycle, appliance recovery or any whole milestone.
+
 [[D3658]] makes the existing recorded defender-consequence collector demand-bound without
 changing legal replay, qualification or emitted operands. Quiet/non-positive windows read no
 defense maps, undefended positive targets read one, captured defenders two and relocated defenders

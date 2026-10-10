@@ -1996,6 +1996,15 @@ opening-catalogue-check: build
 account-data-lifecycle-check:
 	./node_modules/.bin/vitest run apps/server/src/r18-account-data.test.ts
 
+.PHONY: campaign-account-lifecycle-check
+campaign-account-lifecycle-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/account-data.test.ts apps/web/src/lib/account-data-panels.test.ts apps/web/src/lib/AssistanceSettings.test.ts apps/web/src/lib/account-record-inventory.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/campaign-account-lifecycle.test.ts
+
+.PHONY: campaign-account-lifecycle-browser-check
+campaign-account-lifecycle-browser-check:
+	./node_modules/.bin/playwright test --grep "Campaign account deletion"
+
 .PHONY: account-portability-check account-portability-browser-check
 account-portability-check:
 	./node_modules/.bin/vitest run apps/server/src/account-import.test.ts apps/web/src/lib/account-data-panels.test.ts apps/web/src/lib/api-auth.test.ts

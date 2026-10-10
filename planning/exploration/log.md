@@ -24393,3 +24393,54 @@ Campaign was the one capability with no API, route or content. Now:
   No source adoption, calibrated personality, full semantic qualification, official graduation,
   native appliance recovery, whole capability, remote CI or 1.0 readiness is claimed. The owner
   receives the total current product inventory after this bounded batch's explicit-file commit.
+
+### 2026-10-10 — Campaign/account consent and keyboard recovery (D3660, D3661)
+
+- D3660 is recorded before production edits. Account export and erasure already include all
+  five Campaign tables, but the deletion preview omits them and its stale-consent fingerprint
+  cannot see their changes. Two corrected-fixture predecessor controls fail at the actual
+  file-backed authenticated HTTP boundary: absent visible progress and unchanged consent after
+  an in-place row update. The first fixture attempt incorrectly passes bare documents to real
+  registry constructors; their existing source/value shape is restored before measuring defects.
+- The existing progress effect now names all five owned populations. Their private row images
+  enter the existing consent digest; no new wire field, source/hash checker, schema, import,
+  retention rule or tracking framework is introduced. Empty-account and per-run fingerprints
+  retain their old shape. Fixed table names and primary-key ordering preserve isolation and
+  deterministic previews. Deletion stays in its existing single transaction.
+- Five file-backed production-application controls pass: creation, three in-place same-count
+  updates, and fault-induced rollback after Campaign erasure but before encounter deletion.
+  Stale confirmation changes nothing; a refreshed confirmation deletes the account, leaves Bob's
+  export exact and preserves his Campaign across a real restart. Foreign keys remain valid.
+  The rollback control first meets a legitimately stale preview while the real longitudinal
+  worker publishes; waiting for that specific worker completion isolates the destructive fault.
+- The unchanged full Campaign journey now also compares the deletion preview to exported
+  actual events, creation receipts, charged commands and earned completion awards. Five content
+  and 58 history/client controls pass. Focused lifecycle tests and workspace types pass.
+- Both first native desktop/touch-phone journeys fail at the same keyboard boundary: refresh
+  removes its focused button. D3661 is recorded before the client edit. The old summary remains
+  visible with a previous-summary notice; the stable refresh control is aria-disabled while
+  single-flight, and both UI confirmation and the submit handler withhold old consent while
+  pending or failed. Mounted controls prevent programmatic stale submission and permit only a
+  successful new preview. Both actual browser journeys then pass with focus, exact changed
+  counts, stale refusal, successful account deletion and session invalidation.
+- Existing ledger, durable assignment, queue, roadmap and canonical lifecycle docs are updated.
+  Full normal verification/build and sequential browser closeout follow before committing.
+  No whole Campaign, account lifecycle, appliance recovery, milestone or remote-CI promotion.
+- The first full aggregate passes 4,445 software cases/366 files, seven unchanged-budget
+  performance cases/four files, types and preceding software/packaging checks, then the tier
+  guard refuses the new lifecycle file: it reads the committed line-boundary fixture under
+  content/. The file is explicitly assigned to the existing content tier; the focused Make
+  target runs its respective parts in their correct tiers. The guard, assertions, budgets and
+  source fixtures are not weakened or disguised. A complete aggregate rerun follows.
+- The corrected full `make test-tier-check roadmap-receipt verify-awake build` exits zero:
+  4,440 software cases/365 files, seven unchanged-budget performance cases/four files,
+  246 real-content cases/25 files, clean types, governance, corpus compatibility, packaging
+  and build. The five native lifecycle cases move tiers; none is removed.
+- Sequential `make test-browser-ci-awake` exits zero: 202 ordinary journeys, five real-content
+  journeys, 59 responsive/accessibility matrix cases and one packaged-default journey,
+  267 passing with one existing optional Maia skip, zero retries, all 150 exact input and
+  112 composition cells. D3660/D3661 close together with actual browser landing evidence;
+  the existing roadmap/queue replace pending notes with these results. The current inventory
+  remains 273 completed/272 live/24 retired UX items, 1,538 done/1,711 assigned live/161 refused
+  ledger items and no official graduated pack or completed whole 1.0 capability. No new tracker,
+  bulk capture, authored content, retention rule, native release-image or remote CI is claimed.

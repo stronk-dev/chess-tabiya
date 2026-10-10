@@ -5,6 +5,38 @@ import type { DrillRun } from "../../packages/runtime/src/types.js";
 import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 
+for (const mobile of [false, true]) {
+  test(`Campaign account deletion discloses progress and recovers stale consent${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const campaignRunId = new URL(page.url()).pathname.split("/").at(-1)!;
+    await page.goto("/settings");
+    const preview = page.locator(".deletion-preview");
+    const campaignEffect = preview.locator("li").filter({ hasText: "Campaign progress, collected tools and reward history" });
+    await expect(campaignEffect).toHaveText("Campaign progress, collected tools and reward history are permanently deleted (3)");
+    const current = await (await page.request.get(`/campaign-runs/${campaignRunId}`)).json();
+    const abandoned = await page.request.post(`/campaign-runs/${campaignRunId}/abandon`, { data: { expectedRevision: current.campaignRun.revision, commandId: `account-abandon-${randomUUID()}` } });
+    expect(abandoned.status()).toBe(200);
+    const saved = await (await page.request.get(`/campaign-runs/${campaignRunId}`)).json();
+    await page.getByLabel("Re-enter password").fill("browser-test-password");
+    await page.getByRole("button", { name: "Delete account", exact: true }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "account could not be deleted" })).toBeVisible();
+    expect(await (await page.request.get(`/campaign-runs/${campaignRunId}`)).json()).toEqual(saved);
+    const refresh = page.getByRole("button", { name: "Refresh data summary" });
+    await refresh.focus();
+    await page.keyboard.press("Enter");
+    await expect(campaignEffect).toHaveText("Campaign progress, collected tools and reward history are permanently deleted (4)");
+    await expect(refresh).toBeFocused();
+    await page.getByLabel("Re-enter password").fill("browser-test-password");
+    await page.getByRole("button", { name: "Delete account", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
+    expect((await page.request.get(`/campaign-runs/${campaignRunId}`)).status()).toBe(401);
+    expect((await page.request.get("/auth/account-inventory")).status()).toBe(401);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
 // rfc/campaign-core.md criterion 4/24 (foundation journey) and rfc/campaign-boss-games.md criterion 13:
 // enter the campaign, play pack encounters, play the Act-II boss against a registered bot, see each
 // result, and resume after reload. Uses the development-only browser fixture campaign

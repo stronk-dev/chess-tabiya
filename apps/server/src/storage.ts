@@ -1912,10 +1912,35 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ...longitudinalIds("learner_id=?", learnerId),
     ];
     const runLongitudinalIds = scope.kind === "run" ? longitudinalIds("run_id=? AND learner_id=?", scope.runId, learnerId) : [];
+    // Campaign history is private account progress (§6.2), not just a side effect of deleting
+    // encounter runs. Include its five populations in both visible effects and stale consent.
+    // Only fixed inventory table names enter SQL; the row image remains private to the digest.
+    const campaignFacts = scope.kind === "run" ? [] : CAMPAIGN_TABLES.map((store) => {
+      const order = store === "campaign_runs" ? "c.id"
+        : store === "campaign_run_creations" ? "c.campaign_id,c.command_id"
+        : store === "campaign_events" ? "c.campaign_run_id,c.seq"
+        : store === "campaign_mutation_commands" ? "c.campaign_run_id,c.command_id"
+        : "c.campaign_run_id,c.durable_reward_id";
+      const rows = this.#database.prepare(store === "campaign_runs" || store === "campaign_run_creations"
+        ? `SELECT c.* FROM ${store} c WHERE c.learner_id=? ORDER BY ${order}`
+        : `SELECT c.* FROM ${store} c JOIN campaign_runs r ON r.id=c.campaign_run_id WHERE r.learner_id=? ORDER BY ${order}`
+      ).all(learnerId) as readonly Record<string, unknown>[];
+      return { store, rows };
+    });
+    const campaignIds = campaignFacts.flatMap(({ store, rows }) => rows.map(row => {
+      const runId = String(row.campaign_run_id);
+      const id = store === "campaign_runs" ? String(row.id)
+        : store === "campaign_run_creations" ? runId
+        : store === "campaign_events" ? `${runId}:${String(row.seq)}`
+        : store === "campaign_mutation_commands" ? `${runId}:${String(row.command_id)}`
+        : `${runId}:${String(row.durable_reward_id)}`;
+      return `${store}:${id}`;
+    }));
     const hardDelete = scope.kind === "run" ? [
       { kind: "behavioral_profile" as const, count: runLongitudinalIds.length, objectIds: runLongitudinalIds, label: "Longitudinal observations derived from this run are erased with it" },
     ] : [
       { kind: "progress" as const, count: progressIds.length, objectIds: progressIds, label: "Attempt history, concepts, schedules, and position statistics are permanently deleted" },
+      { kind: "progress" as const, count: campaignIds.length, objectIds: campaignIds, label: "Campaign progress, collected tools and reward history are permanently deleted" },
       { kind: "mark" as const, count: markIds.length, objectIds: markIds, label: "Private board marks are permanently deleted" },
       { kind: "repertoire" as const, count: repertoireIds.length, objectIds: repertoireIds, label: "Repertoires, moves, scans, and gap links are permanently deleted" },
       { kind: "draft" as const, count: draftIds.length, objectIds: draftIds, label: "Unpublished drafts and playtest documents are permanently deleted" },
@@ -1946,7 +1971,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       hardDelete: [...hardDelete, ...classroomEffects.filter((item) => !item.shared).map((item) => item.effect)],
       tombstone: classroomEffects.filter((item) => item.shared).map((item) => item.effect),
       retainedPublished,
-      stateFingerprint: Object.freeze({ runs: fingerprint, publications: retainedPublished, classrooms: classroomEffects }),
+      stateFingerprint: Object.freeze({ runs: fingerprint, publications: retainedPublished, classrooms: classroomEffects, ...(campaignIds.length === 0 ? {} : { campaigns: campaignFacts }) }) as unknown as JsonValue,
     });
   }
 

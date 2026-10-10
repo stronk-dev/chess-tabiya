@@ -1489,7 +1489,7 @@
         "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
         "latestCheckpoint": {
           "at": "2026-10-10",
-          "summary": "D3649/D3650 close the scheduled-return source-policy boundary and misleading authored-band copy. Current game grants precede settings reads and retained acquisition, including after revocation; missing/unreadable sources keep their schedules and use the declared default sample. Four source controls and one copy control fail on predecessors; ten native file-backed REST/import/source controls pass, preserving exact accessible bands, upstream samples and private data. Final normal local gates pass 4382 software/365 files, seven unchanged-budget performance/four files, 241 content/24 files, types/build/governance/packaging and eleven native desktop/phone Learn journeys, zero retries. D3647/D3648's repertoire repair and native account-restoration journeys stand. D3637's correction stands: migrations 26-30 landed, but migration landing does not prove all-family backup/restore or upgrade/rollback. Current longitudinal revision 4 rebuilds completed earlier histories through the actual file-backed worker. Catalogue progression, social/clock contracts, complete cross-system lifecycle/recovery and D3574's native appliance capacity hold remain. No whole milestone, full browser-suite, native-image or remote-CI promotion.",
+          "summary": "D3660/D3661 close the Campaign-to-account deletion consent repair. All five owned Campaign populations are explicitly listed and their actual row state enters the existing stale-consent guard. Two observed predecessor controls fail; five real file-backed authenticated lifecycle cases prove stale refusal, in-place changes, rollback, actual deletion, foreign-account isolation and restart. The existing complete Campaign journey verifies charged commands and earned awards against export. Mounted controls withhold old consent during pending/failed reads; desktop/touch-phone native journeys preserve focused refresh, recover stale confirmation and invalidate deleted sessions. Complete normal verification/build passes clean types, 4440 software cases/365 files, seven unchanged-budget performance cases/four files, 246 content cases/25 files, governance and packaging. All four browser tiers pass 267 cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. The first aggregate's new-file tier-assignment failure is corrected without weakening guards or assertions. Prior repertoire/return isolation and migration-26-30 checkpoints stand. Catalogue progression, social/clock contracts, all-object lifecycle and full appliance recovery remain; no whole milestone, native-image or exact-revision remote-CI promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
@@ -1498,6 +1498,10 @@
             "apps/server/src/repertoire.ts",
             "apps/server/src/account-import.test.ts",
             "apps/server/src/return-source-authorization.test.ts",
+            "apps/server/src/campaign-account-lifecycle.test.ts",
+            "apps/server/src/campaign-core.test.ts",
+            "apps/web/src/lib/account-data-panels.test.ts",
+            "tests/browser/campaign.spec.ts",
             "apps/web/src/lib/learner-copy.test.ts",
             "docs/return-and-progression.md",
             "rfc/return-scheduling.md",
@@ -1566,6 +1570,16 @@
               "kind": "work_state",
               "id": "D3650",
               "digest": "sha256:7f58d8cfd50bcfcfb0f3c9ac0ff193aae835ecc5e1af42d6fdca88bfaa61336a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3660",
+              "digest": "sha256:ddc48c8e47d151b75bd708405f634d5771fb4f79f1d0e4d13f3b508de1f7eaeb"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3661",
+              "digest": "sha256:17beb8ef75238db09a5422b2963165e101fa56f29c7e503abba44ff7343cd3ee"
             },
             {
               "kind": "rfc",

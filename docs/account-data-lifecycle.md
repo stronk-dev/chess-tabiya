@@ -160,6 +160,17 @@ read-only shared tombstones, revoked anonymous access, and retained immutable
 publications. The commit accepts that preview's digest. It recomputes the same plan in
 an immediate SQLite transaction and refuses stale consent without changing storage.
 
+Campaign progress is listed explicitly, including collected tools and reward history. The
+preview covers all five Campaign tables, even for a run with no encounter yet. Creating or
+changing Campaign history invalidates an earlier confirmation; refresh the data summary before
+confirming again. Campaign erasure and the rest of account deletion share one transaction, so a
+later deletion failure restores that progress too. Deleting one sealed play run does not erase
+the Campaign's progress or earned rewards.
+
+A refresh keeps the previous summary visible and preserves keyboard focus. That old summary
+cannot authorize deletion while the read is pending or after it fails; only a successful new
+preview re-enables confirmation. Retrying a read does not repeat a deletion request.
+
 A private run hard-deletes with its dependent storage. Anonymous story or join links
 are revoked access, not a reason to retain it. An active authenticated grantee or a
 foreign-owned derived run is a real dependency, so the run survives only as a neutral,
@@ -181,8 +192,8 @@ backup may retain an older copy. The normal Account view automatically loads the
 same exact, digest-bound plan used by deletion and presents permanent removal,
 shared read-only history, revoked access, retained publications, and backup
 retention as a read-only privacy summary. Loading or refreshing the summary cannot
-start deletion; a refresh failure removes the stale digest from the confirmation
-form and remains retryable. The delete form reuses the current visible summary
+start deletion; a refresh failure withholds confirmation against the previous
+summary and remains retryable. The delete form reuses the current visible summary
 instead of maintaining a second description of its effects.
 
 The Account controls own their asynchronous lifecycles. Summary refresh, archive export, deletion,
@@ -202,3 +213,9 @@ PGN tags (including third-party player names) and moves are retained, exported, 
 the run or account subject to backup retention, and that comments, engine evaluations and move
 annotations are stripped before storage. Each notice is linked to
 its action with `aria-describedby`; none interprets the behavioral record.
+
+`make campaign-account-lifecycle-check` runs the file-backed authenticated Campaign
+consent, rollback, isolation and restart controls in the content tier, alongside the
+mounted account controls in the software tier. `make campaign-account-lifecycle-browser-check`
+runs the desktop and phone stale-consent and keyboard-refresh journeys. These checks
+cover the existing Campaign/account boundary, not full curriculum or operator recovery.
