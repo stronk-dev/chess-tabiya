@@ -1116,7 +1116,7 @@ for (const label of ["desktop", "@mobile touch phone"]) {
       await page.getByRole("button", { name: "Inspector", exact: true }).click();
       const inspector = page.getByRole("region", { name: "Evidence inspector: full inspector", exact: true });
       await expect(inspector).toBeVisible();
-      await expect(inspector.getByText("Square control: White attacks 4 squares (4 with legal moves); Black attacks 3 squares (3 with legal moves).", { exact: true })).toBeVisible();
+      await expect(inspector.getByText("Square control: White attacks 4 squares (2 with legal moves); Black attacks 3 squares (3 with legal moves).", { exact: true })).toBeVisible();
       await expect(inspector).not.toContainText("64 squares");
       await page.getByRole("button", { name: "Return to play", exact: true }).click();
     }

@@ -407,6 +407,13 @@ material-role vectors; king zone/shelter/escape sets; defender-exposure/conseque
 zone-defender identity; and moved heavy-piece open-file occupancy. All events are eligible only for
 `research.semantic_selection@1`; all five readings are `inspector_only`.
 
+Legal square controllers are geometric attack edges whose targets also survive the color's
+legal move calculation. Forward pawn advances and castling's friendly-rook command addresses
+are never attacks, including an adjacent Chess960 rook already in the king's pseudo attack set.
+Exact legal-move maps still retain those moves. Pseudo control and invalid-turn-clone abstention
+remain separate; the corrected edges reach sealed readings/events, complete candidate packets,
+opponent input and the Inspector's legal-attack counts (D3656).
+
 King escapes are adjacent physical king destinations. Castling's friendly-rook UCI address is
 never an escape square; stationary/distant king landings are excluded and shared adjacent
 landings deduplicate. The same corrected sets reach event deltas, candidate packets, saved-run

@@ -24305,3 +24305,47 @@ Campaign was the one capability with no API, route or content. Now:
   All fourteen whole capabilities remain incomplete, four milestones active/five blocked and zero
   official packs graduated. This batch is committed locally only; no remote CI, native appliance
   recovery, classifier qualification or release readiness is asserted.
+
+### 2026-10-10 — Attack-only legal square control and draft-model repair (D3656, D3657)
+
+- Finished the in-flight foundation defect before the owner's requested inventory. Existing
+  breadth-collectors §2/§3.1 defines legal control as a pseudo attack edge surviving legal
+  destinations. The implementation instead admitted every legal move destination, including
+  pawn pushes and friendly-rook castling command addresses. D3656 was recorded before production
+  edits; twenty-one permanent controls and both actual Inspector caption journeys fail on the
+  predecessor. No new strategic claim, convention, source or version is introduced.
+- Intersect current-occupancy attacks and legal destinations, excluding friendly targets even
+  when an adjacent Chess960 rook is already pseudo-defended. Exact legal moves remain independent.
+  Mirrored pawns/promotions, all 112 king/rook home-rank geometries, sealed reading/events and
+  complete candidate packets pass. The actual opponent input asserts the same subset boundary.
+  All 44 focused controls, 608 broader foundation controls and clean types pass.
+- Both actual desktop/touch-phone Inspector journeys now show the correct legal-attack counts,
+  survive reload and retain saved play. The first broader run stops on three computed profiles;
+  the explicit existing writer removes three false legal pawn events and changes only the square
+  reading/event and derived opponent-vector profiles. Literal assertions remain authoritative.
+- D3657 records a second inherited error: the held selected-Sight draft model calls e2–e4 control
+  at e4. One opt-in model assertion fails after the collector repair. It now proves an available
+  empty control set/no-witness result and separately retains the legal pawn move. Strict types and
+  all 32 disposable controls pass; D3578's amendment/migration remains held on independent review.
+- The sandbox initially denies the foundation HTTP tests at listen(), before their assertions;
+  the normal Make target passes with loopback permission. The existing semantic-validation writer
+  refreshes implementation references, retaining 87 passing cases over 81 subjects and zero fully
+  qualified subjects. No authored cases, budgets, thresholds or grading conventions change.
+- Existing docs, queue, ledger, durable state and roadmap are updated. All live rows remain
+  assigned; no new tracker or raw measurement dump is added. Full normal software/performance/
+  governance/content/build/browser closeout follows before committing; local verification cannot
+  establish remote CI, complete semantic qualification, official graduation or 1.0 readiness.
+- The complete sequential normal verification/build exits zero: 4,427 software cases/365 files,
+  seven unchanged-budget performance cases/four files, 241 content cases/24 files, clean types,
+  governance and packaging. The longitudinal revision/output guard remains unchanged and passes;
+  its Boolean projection/sign memberships do not store these individual controller operands.
+- The complete sequential browser target exits zero: 200 ordinary journeys, five real-content,
+  59 responsive/accessibility matrix cases and one packaged-default journey (265 passing), one
+  existing optional Maia skip, zero retries, all 150 exact-input/112 composition cells. No other
+  rebuild ran concurrently. Final proof replaces the pending note in the existing roadmap/queue.
+- The owner's full inventory remains an integrated development platform, not an RC: fourteen
+  incomplete whole capabilities, four active/five blocked milestones, 273 completed/272 live/24
+  retired UX items, 1,534 done/1,711 assigned live/161 refused ledger rows and zero official pack
+  graduates. Seventy-four product RFCs split 42 implementing/ten awaiting/22 draft; archived
+  implementation records are not freshly re-audited whole-capability completion. No goal pause,
+  new tracker, push, remote CI or release readiness is claimed.

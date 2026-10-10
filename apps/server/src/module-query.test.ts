@@ -76,9 +76,10 @@ describe("POST /runs/:id/modules/query", () => {
   });
 
   it.each([
-    // Seven total controller edges fit the Inspector's unchanged eight-arrow budget.
+    // Five legal controller edges fit the Inspector's unchanged eight-arrow budget.
     // The pawn keeps this a non-terminal start rather than a bare-kings draw.
-    { fen: "7k/8/8/8/8/8/P7/K7 w - - 0 1", pseudo: 4, legal: 4 },
+    { fen: "7k/8/8/8/8/8/P7/K7 w - - 0 1", pseudo: 4, legal: 2 },
+    { fen: "k7/p7/8/8/8/8/8/7K b - - 0 1", pseudo: 4, legal: 2 },
   ])("D3579: the actual Inspector query returns populated control totals ($pseudo/$legal)", async ({ fen, pseudo, legal }) => {
     const { service, storage, handler } = await setup(fen);
     service.reveal("modules", "writer", at);
@@ -94,8 +95,12 @@ describe("POST /runs/:id/modules/query", () => {
     const caption = parsePresentationReceipt(packet.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.square_control@1")!;
     expect(caption).toBeDefined();
     if (caption.component.id !== "fact_statement" || caption.component.operand.rendererId !== "play.square_control@1") throw new Error("Expected square-control caption");
-    expect(caption.component.operand.operands.colors).toContainEqual({ color: "white", pseudo, legal });
-    expect(presentedSentence(caption)).toContain(`White attacks ${pseudo} squares (${legal} with legal moves)`);
+    const color = fen.split(" ")[1] === "w" ? "white" : "black";
+    expect(caption.component.operand.operands.colors).toContainEqual({ color, pseudo, legal });
+    expect(presentedSentence(caption)).toContain(`${color === "white" ? "White" : "Black"} attacks ${pseudo} squares (${legal} with legal moves)`);
+    const graph = storage.read("modules")!.run;
+    expect(graph.nodes).toEqual(run.nodes);
+    expect(graph.events).toEqual(run.events);
     expect(presentedSentence(caption)).not.toContain("64");
   });
 

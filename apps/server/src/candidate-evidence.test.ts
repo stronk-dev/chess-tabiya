@@ -7,6 +7,7 @@ import {
   candidatePlayedRow,
   compileCandidatePopulation,
   trappedPieceReading,
+  type SquareControlReading,
 } from "@chess-tabiya/runtime";
 
 import { BOT_POLICY_PROFILES } from "./bot-policy-catalog.js";
@@ -54,6 +55,19 @@ describe("candidate evidence adapter", () => {
         expect.objectContaining({ color: "white", wing: "queenside", blockedSquares: ["d1", "c1", "b1"] }),
         expect.objectContaining({ color: "black", wing: "queenside", blockedSquares: ["d8", "c8", "b8"] }),
       ]));
+      // D3656: actual opponent input receives attack-only legal controllers, not
+      // merely a corrected caption or a refreshed authority-profile digest.
+      const control = row.results.find(result => result.source.id === "rules.square.reading.control")!.payload as SquareControlReading;
+      for (const color of control.colors) {
+        if (color.legal.kind !== "available") continue;
+        const pseudoEdges = new Set(color.pseudo.flatMap(cell => cell.controllers.map(piece => `${piece.square}:${cell.target}`)));
+        for (const cell of color.legal.squares) for (const piece of cell.controllers) {
+          expect(pseudoEdges.has(`${piece.square}:${cell.target}`), `${row.moveUci} ${piece.square} → ${cell.target}`).toBe(true);
+        }
+      }
+      const white = control.colors.find(color => color.color === "white")!;
+      if (white.legal.kind !== "available") throw new Error("Expected available white control");
+      expect(white.legal.squares.find(cell => cell.target === "e4")!.controllers.map(piece => piece.square)).not.toContain("e2");
     }
     expect(vector.candidates[0]!.results.some((result) => result.source.id === "rules.transition.event.developed")).toBe(true);
     expect(JSON.stringify(vector)).not.toMatch(/sentence|personality|move_quality|learner/u);

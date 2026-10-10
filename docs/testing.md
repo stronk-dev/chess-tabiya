@@ -4,6 +4,15 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make square-control-presentation-check` covers attack-only legal control through the collector,
+sealed reading/events, complete candidate packets, presentation adapters and actual Inspector API.
+Pawn advances remain legal moves, not attacks; all 112 king/rook home-rank geometries preserve
+friendly-target castling separation, including adjacent Chess960 rooks. The actual opponent adapter
+also checks the controller subset in its ordinary software test. `make square-control-browser-check`
+checks exact counts and saved-play preservation on the built desktop/touch-phone Inspector and
+reload. These controls run in normal software/browser tiers; they do not complete selected-Sight
+delivery, bot calibration or semantic qualification.
+
 `make castling-evidence-check` includes local trapped-piece escape testing through collector,
 factory, complete candidates, opponent consumer and authenticated Inspector. Safe castling rook
 landings escape; locally losing landings and same-board no-right controls remain trapped.

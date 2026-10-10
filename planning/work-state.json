@@ -30298,6 +30298,24 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/screens.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3656",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:86f4a4eb05112ccceedeb3b511c4f59dd4f8bc081135bd1109ee9864b8461355",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/square-control.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3657",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6d04318f1865e97c2b7050ac1c89c7bf657ccb81d36d143fd646e5b9806a6b4d",
+      "uxItems": [],
+      "evidence": "tools/d2120-module-registration-author-contract/selected-sight-model.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

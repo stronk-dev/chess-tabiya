@@ -12,6 +12,20 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3656]] repairs legal square control under breadth-collectors §2/§3.1: legal pawn
+advances and king-to-friendly-rook castling addresses are not attacks. Exact move maps,
+pseudo edges and invalid-clone abstention remain. Twenty-one permanent predecessor controls
+fail; 44 focused and 608 broader foundation cases, clean types and both actual desktop/phone
+Inspector-and-reload journeys pass. The actual opponent adapter retains attack-only edges.
+[[D3657]] corrects the same false assumption in the held selected-Sight draft model: one
+measured failure becomes an available empty controller set, while the separate move facet
+still includes e2–e4. All 32 disposable controls pass; D3578 is not accepted or migrated.
+Full normal local verification/build passes 4,427 software cases/365 files, seven unchanged-budget
+performance cases/four files, 241 content cases/24 files, types/governance/packaging. Complete
+sequential browser verification passes 265 cases across all four tiers, one existing optional
+Maia skip, zero retries and all 150 input/112 composition cells. No source, content, calibration,
+qualification, whole milestone, native release-image or remote CI is closed by this bounded repair.
+
 [[D3655]] closes Full Inspector's failed-read dead end and missing-packet blank success.
 Opening, explicit retry and refresh share one current subject/help/decision path; reads are
 single-flight, stale/absent packets refuse and failed refresh clears old components. Fifteen

@@ -43,8 +43,10 @@ square. D3578 records four Sight sources excluded by the current selected-square
 complete legal-destination set that can exceed the six-mark budget. The narrow contract return is
 in `planning/learner-modules/registry-return.md`; this remains unfinished, not a new collector need.
 Square-control captions count only target cells with nonempty controller lists, not all 64 retained
-map cells. Pseudolegal control and legal destinations retain separate counts; an unavailable legal
-turn clone stays unavailable. Large relation overlays remain subject to unchanged atomic budgets.
+map cells. Pseudolegal and clone-legal controllers retain separate counts; an unavailable legal
+turn clone stays unavailable. Legal control excludes pawn advances and castling's friendly-rook
+command address, while the exact legal-moves source retains those moves (D3656).
+Large relation overlays remain subject to unchanged atomic budgets.
 
 - **The module query** (`queryModules`, `packages/runtime/src/module-query.ts`, served at
   `POST /runs/:id/modules/query`): the browser sends its requested-assistance receipt and one closed

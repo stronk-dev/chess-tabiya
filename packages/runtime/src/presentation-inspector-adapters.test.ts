@@ -35,12 +35,13 @@ describe("D3579: square-control captions count populated targets, not the 64-cel
     expect(caption).toBeDefined();
     if (caption.component.id !== "fact_statement" || caption.component.operand.rendererId !== "play.square_control@1") throw new Error("Expected square-control caption");
     // Initial-position targets: all rank-three squares, all rank-two squares and b1–g1
-    // (22 pseudo); legal destinations are the sixteen rank-three/rank-four squares.
-    // Multiple controllers for one target must not increase either count.
+    // (22 pseudo). Only a3/c3/f3/h3 have a pseudo controller with a legal move:
+    // pawn advances are legal destinations, not attacks. Multiple controllers
+    // for one target must not increase either count.
     expect(caption.component.operand.operands).toEqual({ colors: [
-      { color: "white", pseudo: 22, legal: 16 }, { color: "black", pseudo: 22, legal: 16 },
+      { color: "white", pseudo: 22, legal: 4 }, { color: "black", pseudo: 22, legal: 4 },
     ] });
-    expect(presentedSentence(caption)).toBe("Square control: White attacks 22 squares (16 with legal moves); Black attacks 22 squares (16 with legal moves).");
+    expect(presentedSentence(caption)).toBe("Square control: White attacks 22 squares (4 with legal moves); Black attacks 22 squares (4 with legal moves).");
   });
 
   it.each(["module.sight_on_request", "module.full_inspector"])("%s preserves unavailable legal sets and distinguishes check-restricted moves", (consumer) => {

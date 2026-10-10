@@ -24,6 +24,13 @@ from geometric attacks; pawn state survives with no contacts; invalid clones sta
 The model does not mint any production value or exercise the future API/renderer/gesture path.
 The proposed automatic view choices need independent review and later owner-use evidence.
 
+2026-10-10 correction ([[D3657]]): the model's e4 assertion had inherited the collector bug
+despite the distinction stated above. [[D3656]] repairs the existing production collector under
+breadth-collectors §2/§3.1, making that assertion fail. The corrected draft control retains an
+available empty set/no-witness result at e4 and separately proves e2–e4 remains an exact legal
+move. Strict types and all 32 disposable controls pass. No selected-Sight factory, query,
+presentation, gesture or amendment is accepted or shipped by that instrument repair.
+
 The separately authorized [[D3607]] repair now resolves post-commit and ancestor squares through
 `exactMoveDestination(parent.fen, moveUci)`. Eight runtime cases and the actual REST query cover
 castling, both colors, Chess960's stationary king, ordinary moves, promotion and en passant;

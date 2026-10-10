@@ -86,7 +86,12 @@ function legalFor(fen: string, color: Color): LegalControlSet {
   for (const [source, destinations] of position.allDests()) {
     const piece = position.board.get(source);
     if (piece?.color !== color) continue;
+    const pseudo = attacks(piece, source, position.board.occupied);
     for (const target of destinations) {
+      // Legal control refines the current-occupancy attack map, not the move
+      // map. Pawn pushes do not attack; castling's friendly rook address is
+      // not a legal capture, even when an adjacent king pseudo-defends it.
+      if (!pseudo.has(target) || position.board.get(target)?.color === color) continue;
       const list = values.get(target) ?? [];
       list.push(Object.freeze({ square: makeSquare(source), piece }));
       values.set(target, list);

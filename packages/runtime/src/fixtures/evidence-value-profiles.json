@@ -558,7 +558,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "8afc6c3996e6af154a91986a527a3472badd89fce5f0438145ae1d382c7049e5"
+      "788da96228b84193f101236c103bdeb72647a09fb6cf279cabf723c3dbd18774"
     ]
   },
   "derived.pawn.event.transitions@1": {
@@ -1237,7 +1237,7 @@
   },
   "rules.square.event.control@1": {
     "availability": "available",
-    "cardinality": 25,
+    "cardinality": 22,
     "payloadDigests": [
       "6e43b944e35b95ec3e99e456bcefa2e360e5270d4a13d0413c56dfe334d139a7",
       "074b343c3a9f72acd2b2033da8d1009ee2d3a49087ef3018a90d10cbedefac66",
@@ -1247,9 +1247,6 @@
       "af544a265d38ea041d318677fe84e8aca3fd957d91e13c3efa7483b800a8bbc0",
       "e7cdbe3408696c17860b1d2f96f2ad9cb58770573c05a85bdd3c26e3a2e88044",
       "1d2071fde17d0f64a1b33d9251adac40ca0c6d11365b5adf67c050385ca73e25",
-      "2ac032b3659fe95fba511762da9c69d2569f7078c2ff71bbc5068ded7b874dc9",
-      "4ed7c7ea72b58bc2459bac33187fc1eb39a2c1d6ac756f50ff96037f5d3427bc",
-      "fb2f77daaf6f469193f79876165c443fedd23edf2364a9eaf72cf7471cdc2d2b",
       "0aadba5ee3489a76f45e47d229862ffe53d8742a128d2568510cf547530b124a",
       "92dbfc0e4d5e9c3adb2c370f1bd8e466927a2a30aa044c98eb70bf6f410bf065",
       "7535df40b291064de98246153487f9dc745328365d172ad4a3f74fd721824ea1",
@@ -1270,7 +1267,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "b5689e243d2a0e2083b477009bd90e2919682bb31da72774d8230772c2aeadf9"
+      "201b8d220e2016bfbe32297c565cad839f47f9c3facf24949aa11e635dd0817f"
     ]
   },
   "rules.structural.event.backward_pawn@1": {

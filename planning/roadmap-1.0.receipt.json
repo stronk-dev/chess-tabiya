@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:06e94ec22bbac572c9f6678a2c5a18053c556ae48090a642efda1c99f8463a1a",
+    "roadmap": "sha256:39b7d1f2266d56bc281c152f485b8d2739e9e82430f1a7678999614c23b8703b",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:5502c126f2614a06c3dafca46993095fd4f7733e27375e7ef7c4083f604ad0fa",
+    "workState": "sha256:0f35daf173f19e758c6dade409ac254f8187c74a12c0f6d26cc90869e08b43fc",
     "rfcRegister": "sha256:f5e30d387e6d4c07a6d5bcca14dacad0ec0341465406e5aa8370ed5b9f87712f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 14,
       "blocked": 1070,
-      "done": 1532,
+      "done": 1534,
       "refused": 161
     },
     "workItems": {
@@ -210,35 +210,34 @@
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
-        "summary": "D3652 includes the rook's physical castling landing in every-legal-destination local trapped-piece testing. Safe landings escape; legal but locally losing castles remain losing. Twelve predecessor controls fail; 118 focused and 608 broader foundation controls, clean types and eight native desktop/phone-width Inspector journeys pass. Exact factory operands, complete candidate packets, the actual opponent consumer, no-right negatives, captions, layout, authorization and saved play are retained. Normal non-browser verification/build passes 4394 software cases/365 files, seven unchanged-budget performance cases/four files and 241 content cases/24 files, types/governance/packaging. The first aggregate stops on the existing generated record; its sole writer changes implementation references only, retaining 87 canonical passing cases over 81 subjects and zero fully qualified. Complete browser verification passes 261 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. No new convention, source, permission, judgement, calibration, semantic qualification, whole capability, official graduation, native release or remote-CI promotion.",
+        "summary": "D3656 repairs the existing legal square-control meaning: pawn advances and friendly-rook castling command addresses are not attacks, including adjacent Chess960 rooks. Exact legal moves, pseudo control and invalid-clone abstention remain. Twenty-one permanent predecessor controls and two actual wrong-caption browser controls fail before repair; 44 focused and 608 broader foundation controls, clean types and desktop/touch-phone Inspector-and-reload journeys pass afterward. Both colors, 112 king/rook geometries, promotion captures, sealed readings/events, complete candidates and actual opponent input are covered. Three computed profile outputs change, removing three false legal pawn events. D3657 corrects the inherited error in the held selected-Sight model; all 32 disposable controls pass, not production migration or acceptance. Full normal local verification/build passes 4427 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, types/governance/packaging. Complete sequential browser verification passes 265 cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. The semantic-validation writer retains 87 canonical passing cases over 81 subjects and zero fully qualified. No new convention, source/version, permission, authored bytes, calibration, semantic qualification, whole capability, official graduation, native release-image or remote-CI promotion.",
         "impact": "advanced",
         "evidence": [
-          "rfc/tactical-collectors.md",
-          "packages/runtime/src/tactics.ts",
-          "packages/runtime/src/tactics.test.ts",
-          "packages/runtime/src/castling.ts",
-          "packages/runtime/src/castling.test.ts",
-          "apps/server/src/castling-evidence.test.ts",
+          "rfc/breadth-collectors.md",
+          "packages/runtime/src/square-control.ts",
+          "packages/runtime/src/square-control.test.ts",
+          "packages/runtime/src/presentation-inspector-adapters.test.ts",
+          "apps/server/src/module-query.test.ts",
           "apps/server/src/candidate-evidence.test.ts",
           "packages/runtime/src/fixtures/evidence-value-profiles.json",
           "packages/runtime/src/semantic-validation-receipt.generated.json",
           "tests/browser/drill.spec.ts",
-          "Makefile",
-          "docs/semantic-evidence.md",
-          "docs/testing.md",
+          "tools/d2120-module-registration-author-contract/selected-sight-model.test.ts",
+          "docs/evidence-contract.md",
+          "planning/learner-modules/registry-return.md",
           "planning/codex-queue.md",
           "planning/exploration/log.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "tactical-collectors.md",
-            "digest": "sha256:a5ce11ada5223c74703ef300e97975b805a8f96155d11e83ed520984e4ca54f6"
+            "id": "breadth-collectors.md",
+            "digest": "sha256:2781c2d6957ba49fbe31da98a21362395045d591f5b961d505b6fbba4c5f1f56"
           },
           {
             "kind": "work_state",
-            "id": "D3652",
-            "digest": "sha256:bd985f07101071030075d176789402ae996a79a7776e90639b321dba66b8ca4f"
+            "id": "D3656",
+            "digest": "sha256:86f4a4eb05112ccceedeb3b511c4f59dd4f8bc081135bd1109ee9864b8461355"
           }
         ]
       },

@@ -97,11 +97,16 @@ describe("D3578 draft selected-square model over actual sealed readings", () => 
     const a3 = selectControl(source, INITIAL, "a3");
     expect(a3.selectedSquare).toBe("a3");
     expect(a3.colors.find(entry => entry.color === "white")!.pseudo.map(entry => entry.square)).toEqual(["b1", "b2"]);
-    // e4 has no geometric controller here, but IS a legal pawn-push destination. Do not
-    // mistake the clone's destination convention for an attack or call it an empty set.
-    const e4 = selectControl(source, INITIAL, "e4").colors.find(entry => entry.color === "white")!;
+    // A legal pawn advance is not control. The complete legal-moves facet retains it,
+    // while this source retains an available empty controller set (not unavailable).
+    const selectedE4 = selectControl(source, INITIAL, "e4");
+    expect(selectedE4.kind).toBe("no_witness");
+    const e4 = selectedE4.colors.find(entry => entry.color === "white")!;
     expect(e4.pseudo).toEqual([]);
-    expect(e4.legal).toMatchObject({ kind: "available", controllers: [{ square: "e2" }] });
+    expect(e4.legal).toEqual({ kind: "available", controllers: [] });
+    const e2Moves = selectMoves(sourceFor("moves", INITIAL), INITIAL, "e2");
+    expect(e2Moves.kind).toBe("available");
+    if (e2Moves.kind === "available") expect(e2Moves.moves).toContainEqual({ from: "e2", to: "e4", role: "pawn", uci: "e2e4" });
     const kings = "7k/8/8/8/8/8/8/K7 w - - 0 1";
     expect(selectControl(sourceFor("control", kings), kings, "d4").kind).toBe("no_witness");
   });
