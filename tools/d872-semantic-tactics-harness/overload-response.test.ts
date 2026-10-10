@@ -159,6 +159,11 @@ describe("D872 exact overloaded-defender response conflict", () => {
 
     const alternateDefender = row("1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", "b8a7");
     expect(overloadResponseConflicts(alternateDefender)).toHaveLength(0);
+    // Cross-review fixture (semantic-collectors buildability review, 2026-08-22): the
+    // REJECTED broad lost-duty-edge rule (52/754 authored, 515/6,991 imported) must FIRE
+    // on this alternate-defender position the strict predicate refuses — the permanent
+    // hard negative wired as an executable discrimination, not a sentence.
+    expect(broadDutyEdgeConflicts(alternateDefender).length).toBeGreaterThan(0);
 
     const preserves = row("7k/3q4/8/1B1r4/8/8/8/3b3K w - - 0 1", "b5d7");
     expect(overloadResponseConflicts(preserves)).toHaveLength(0);

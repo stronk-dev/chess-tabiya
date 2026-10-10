@@ -25120,3 +25120,21 @@ Campaign was the one capability with no API, route or content. Now:
   release-image success is claimed. The sole writer reports 175 passing cases (109 positives,
   66 negatives), 81 subjects, 53 population receipts and eight external receipts; zero
   subjects are fully qualified. Close the ledger/state and update the existing roadmap.
+
+## 2026-10-10 (codex) — finish existing research fixtures and reconcile the 1.0 overview
+
+- Finish the two previously uncommitted D872 research controls already required and
+  described by `rfc/semantic-collectors.md`'s 2026-08-22 review: the rejected broad overload
+  rule fires on an alternate-defender position refused by the strict rule, and the pinned
+  heavy-piece attraction rule refuses the minor-piece near-miss. These are disposable
+  research controls, not new production detectors, content or qualification claims.
+- Run the four relevant fixture tests through the existing harness: four pass; five other
+  registered tests are intentionally outside this focused name selection, including the
+  corpus measurement writers. No raw population is remeasured or regenerated.
+- Correct Wave 1's stale current-case count from 139 to 175, preserving the dated 139-case
+  historical checkpoints. `make roadmap-progress work-state` confirms four active/five
+  blocked milestones, all fourteen whole capabilities incomplete, 1,715 assigned live
+  ledger items, 273 completed/272 live/24 retired UX items and zero official graduates.
+  These counts describe tracked execution, not release qualification or usefulness.
+- The previous production batches retain their recorded verification. This closeout does
+  not claim a fresh full software/browser run, remote CI, native release recovery or 1.0.

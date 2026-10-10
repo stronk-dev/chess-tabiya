@@ -19,6 +19,13 @@ describe("D872 split attraction, deflection and clearance events", () => {
     expect(attractedPieceSequence(positive)).toBe(true);
     const declined = triple("4k3/8/4B3/8/8/8/8/R5K1 w - - 0 1", ["e6d7", "e8f8", "a1d1"]);
     expect(attractedPieceSequence(declined)).toBe(false);
+    // Cross-review fixture (semantic-collectors buildability review, 2026-08-22): the
+    // REJECTED any-piece attraction form (100% sensitivity, 19.0% controls) would fire
+    // here — a knight captures the bait and is then attacked on the arrival square. The
+    // pinned heavy-piece (K/Q/R) form must refuse it: the permanent hard negative wired
+    // as an executable discrimination, not a sentence.
+    const minorPiece = triple("4k3/8/1n6/8/2B5/8/8/R5K1 w - - 0 1", ["c4d5", "b6d5", "a1d1"]);
+    expect(attractedPieceSequence(minorPiece)).toBe(false);
   });
 
   it("requires a defender duty, inducement and later target capture", () => {
