@@ -1808,6 +1808,11 @@ local-module-execution-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/application-fixture.test.ts apps/server/src/http-response.test.ts apps/server/src/local-module-execution.test.ts apps/server/src/module-query.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/module-registry.test.ts
 	$(MAKE) typecheck
 
+.PHONY: local-module-content-check
+local-module-content-check:
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/local-module-content.test.ts
+	$(MAKE) typecheck
+
 .PHONY: square-control-presentation-check
 square-control-presentation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/square-control.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/server/src/module-query.test.ts

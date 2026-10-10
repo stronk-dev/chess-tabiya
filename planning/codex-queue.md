@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3643]] is closed locally: unauthored Support software controls use real empty
+catalogue registries at the acquisition boundary, not repeated installed-corpus loads. The
+original two actual installed-pack HTTP controls move to the content tier with their original
+five-second deadlines and every assertion preserved. The predecessor isolation control observes
+50 documents instead of zero; 160 focused software controls, both content cases and clean types
+pass. Full normal local verification passes 4,325 software tests, seven unchanged-budget
+performance tests, 241 content tests, types/governance/packaging/build. D3543's historical startup stall remains open;
+this is test dependency isolation, not a production performance or whole-capability claim.
+
 [[D3642]] is closed locally: the existing exact castling-legality reading now retains
 rook-only clearance blockers, including orthodox queenside and Chess960 stationary/overlapping
 paths. Ten predecessor controls fail; both-color geometry, sealed factory, opponent-vector and

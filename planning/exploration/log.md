@@ -23988,3 +23988,23 @@ Campaign was the one capability with no API, route or content. Now:
   evidence and update the existing roadmap/checkpoint in the same commit. Full semantic
   qualification, source adoption, usefulness, calibration, official content, owner-use D1,
   native release and remote CI remain open; the 1.0 goal remains active.
+
+### 2026-10-10 — separate Support software and installed-content contracts (D3643)
+
+- The software suite reached all five installed catalogues through real default application
+  loaders on every setup. Its permanent empty-pack acquisition control fails on the predecessor:
+  50 documents instead of zero. The restricted runner's separate localhost EPERM failures are
+  sandbox failures, not product findings or evidence about the historical D3543 startup stall.
+- Unauthored-position controls now acquire explicit empty real registries; real application
+  composition, SQLite, authentication, HTTP, factories and module execution remain exercised.
+  The permanent control checks all five returned registries and their acquisition counts. Both
+  original installed-pack HTTP checks move to the content tier with all original assertions and
+  explicit unchanged five-second deadlines. No production or authored-content bytes change.
+- Focused verification passes 160 software controls, both content controls, types and tier guards.
+  The complete normal local sequence passes 4,325 software tests/364 files, seven unchanged-budget
+  performance tests/four files, 241 content tests/24 files and types/governance/packaging/build.
+  Two tests moved tiers and one was added; no test, budget or assertion was removed or weakened.
+- Close D3643 with permanent test-path evidence and update the existing queue, work-state and
+  roadmap checkpoint in this commit. Browser verification is retained from D3642, not claimed as
+  rerun for this test-only repair. D3543/D3510, remote CI, source adoption, official graduation,
+  whole-capability and native release obligations remain open. The 1.0 goal remains active.

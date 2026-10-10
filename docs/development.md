@@ -121,6 +121,14 @@ do not prepend toolchain-specific environment assignments.
 `make verify-software` runs types, synthetic/runtime contracts and compiled manifests;
 `make verify-governance` runs the registers, roadmap and process invariants; and
 `make verify-content` runs tests that deliberately read committed corpus bytes. It also runs
+the installed-pack Support controls (`make local-module-content-check`). The unauthored
+Support execution controls (`make local-module-execution-check`) inject real empty catalogue
+registries at the acquisition boundary, while retaining actual application composition, SQLite,
+authentication, HTTP and module factories. Their permanent isolation control checks all five
+returned catalogues. The two installed-pack cases retain their original five-second deadlines;
+moving a test to the content tier must not silently inherit a longer deadline.
+
+`make verify-governance` also runs
 `make register-check`, which joins every active RFC's
 `tabiya-claims` declaration to the shared-resource registers, derives their landed heads
 from the tree, refuses collisions, and prints the current next lanes. The resource inventory is

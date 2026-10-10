@@ -2,7 +2,6 @@ import type { AddressInfo } from "node:net";
 import * as runtime from "@chess-tabiya/runtime";
 import * as execution from "../../../packages/runtime/src/evidence-binding-execution.js";
 import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
-import * as authored from "./authored-feedback.js";
 import { afterEach, beforeEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
@@ -23,7 +22,10 @@ const originalCompile = execution.compileEvidenceConsumerExecution;
 const originalRoute = routes.invokeEvidenceValueRoute;
 let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | undefined;
 let setupElapsedMs = 0;
+let preparedPackCounts: number[] = [];
 beforeEach(async () => {
+  preparedPackCounts = [];
+  vi.spyOn(console, "info").mockImplementation(() => {});
   // Fresh application construction is fixture setup, not a module-operation assertion.
   // Keep Vitest's normal hook budget and the unchanged five-second test budget separate.
   const started = performance.now();
@@ -34,19 +36,22 @@ beforeEach(async () => {
     try { return await load(); }
     finally { phase(`${name} settled`); }
   };
-  // Observe the real loaders, never substitute installed content or validation with a fixture.
-  const shapeLoad = ShapeRegistry.loadDefault;
-  const principleLoad = PrincipleRegistry.loadDefault;
-  const packLoad = PackRegistry.loadDefault;
+  // These controls exercise unauthored positions, not the installed catalogue. Use real empty
+  // registries through their constructors/validators. Only the content acquisition is replaced;
+  // application composition, SQLite, authentication, routing and module factories remain real.
+  // The two installed-pack controls live unchanged in local-module-content.test.ts.
+  const shapes = new ShapeRegistry();
+  const principles = new PrincipleRegistry();
   const packBuild = PackRegistry.fromDocuments;
-  const trainingLoad = TrainingSetRegistry.loadDefault;
-  const campaignLoad = CampaignRegistry.loadDefault;
-  vi.spyOn(ShapeRegistry, "loadDefault").mockImplementation((...args) => observe("shapes", () => shapeLoad(...args)));
-  vi.spyOn(PrincipleRegistry, "loadDefault").mockImplementation((...args) => observe("principles", () => principleLoad(...args)));
-  vi.spyOn(PackRegistry, "loadDefault").mockImplementation((...args) => observe("pack files", () => packLoad(...args)));
-  vi.spyOn(PackRegistry, "fromDocuments").mockImplementation((...args) => observe("pack validation/construction", () => packBuild(...args)));
-  vi.spyOn(TrainingSetRegistry, "loadDefault").mockImplementation((...args) => observe("training sets", () => trainingLoad(...args)));
-  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation((...args) => observe("campaigns", () => campaignLoad(...args)));
+  vi.spyOn(ShapeRegistry, "loadDefault").mockImplementation(() => observe("fixture shapes", async () => shapes));
+  vi.spyOn(PrincipleRegistry, "loadDefault").mockImplementation(() => observe("fixture principles", async () => principles));
+  vi.spyOn(PackRegistry, "loadDefault").mockImplementation(options => observe("fixture packs", () => PackRegistry.fromDocuments([], options)));
+  vi.spyOn(PackRegistry, "fromDocuments").mockImplementation((...args) => {
+    preparedPackCounts.push(args[0].length);
+    return observe("pack validation/construction", () => packBuild(...args));
+  });
+  vi.spyOn(TrainingSetRegistry, "loadDefault").mockImplementation(packs => observe("fixture training sets", () => TrainingSetRegistry.fromDocuments([], packs)));
+  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation(packs => observe("fixture campaigns", () => CampaignRegistry.fromDocuments([], packs)));
   let ready = false;
   onTestFailed(() => console.error(`Local Support setup: ${ready ? `application ready in ${setupElapsedMs}ms` : "application construction did not finish"}; ${phases.join(" → ")}`));
   const owned = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
@@ -63,7 +68,7 @@ afterEach(async () => {
   await owned?.close();
 });
 
-async function control(module: LocalModule, fault?: Fault, disclose = true, pack = false) {
+async function control(module: LocalModule, fault?: Fault, disclose = true) {
   const started = performance.now();
   const boundaries: string[] = [];
   const boundary = (stage: string) => boundaries.push(`${Math.round(performance.now() - started)}ms ${stage}`);
@@ -94,10 +99,8 @@ async function control(module: LocalModule, fault?: Fault, disclose = true, pack
     expect(await responseStatus(registered)).toBe(201);
     const headers = { "content-type": "application/json", cookie: registered.headers.get("set-cookie")!.split(";", 1)[0]!, "x-writer-id": "local-module-writer" };
     const post = (path: string, body: unknown) => request(path, { method: "POST", headers, body: JSON.stringify(body) });
-    const moveUci = pack ? "a7a6" : "g8f6";
-    const created = await post("/runs", { id: "local-module", session: pack
-      ? { kind: "pack", packId: "carlsbad-minority-attack" }
-      : { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
+    const moveUci = "g8f6";
+    const created = await post("/runs", { id: "local-module", session: { kind: "position", start: { fen: FEN, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4 });
     expect(created.status, await created.text()).toBe(201);
     if (module === "structure_nudge" || module === "theory_breadcrumb") {
       const moved = await post("/runs/local-module/moves", { uci: moveUci });
@@ -136,8 +139,8 @@ async function control(module: LocalModule, fault?: Fault, disclose = true, pack
       ? { timing: "post_commit", subjectNodeId: nodeId, requested: module === "theory_breadcrumb" ? [module] : [] }
       : module === "blunder_prevention" ? { timing: "at_commit", nodeId, candidateUci: moveUci, generation: 1 }
         : { timing: "pre_commit", nodeId, selectedSquare: "c6", requested: [module] };
-    const ask = (preset: "quiet" | "support" | "guided" = pack || module === "structure_nudge" || module === "theory_breadcrumb" ? "guided" : "support", overrideQuery: runtime.ModuleQueryRequest = query, isolate = true) => post("/runs/local-module/modules/query", {
-      assistance: runtime.compileAssistanceRequest({ contextHint: pack ? "pack" : "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: pack ? [module] : [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
+    const ask = (preset: "quiet" | "support" | "guided" = module === "structure_nudge" || module === "theory_breadcrumb" ? "guided" : "support", overrideQuery: runtime.ModuleQueryRequest = query, isolate = true) => post("/runs/local-module/modules/query", {
+      assistance: runtime.compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
       query: overrideQuery,
     });
     return { application, close, ask, query, trace, compile, collect, prepare, fault(value?: Fault) { fault = value; } };
@@ -145,6 +148,19 @@ async function control(module: LocalModule, fault?: Fault, disclose = true, pack
 }
 
 describe("authenticated complete local Support execution", () => {
+  it("unauthored software controls construct only explicit empty catalogues", async () => {
+    expect(fixture?.current()).toBeDefined();
+    expect(preparedPackCounts).toEqual([0]);
+    // Inspect the exact objects returned to production composition, without acquiring them again.
+    for (const load of [ShapeRegistry.loadDefault, PrincipleRegistry.loadDefault, PackRegistry.loadDefault, TrainingSetRegistry.loadDefault, CampaignRegistry.loadDefault]) {
+      const calls = vi.mocked(load);
+      expect(calls).toHaveBeenCalledTimes(1);
+      const result = calls.mock.results[0]!;
+      expect(result.type).toBe("return");
+      const registry = await result.value;
+      expect(registry.list()).toEqual([]);
+    }
+  });
   for (const module of modules) {
     it.each(faults)(`${module}: %s refuses before any collector`, async fault => {
       const app = await control(module, fault);
@@ -201,21 +217,6 @@ describe("authenticated complete local Support execution", () => {
         expect((JSON.parse(body) as { page: runtime.ModuleQueryPage }).page.packets.map(packet => packet.module)).toEqual([module]);
         expect(app.trace[0]).toBe(`compile:module.${module}@1`);
         expect(app.collect).toHaveBeenCalled();
-        expect(app.prepare).not.toHaveBeenCalled();
-      } finally { vi.restoreAllMocks(); await app.close(); }
-    });
-  }
-
-  for (const module of ["sight_on_request", "threat_radar"] as const) {
-    it(`${module}: a real installed pack does not project unrelated authored feedback`, async () => {
-      const app = await control(module, undefined, true, true);
-      try {
-        const project = vi.spyOn(authored, "projectAuthoredFeedback").mockImplementation(() => { throw new Error("unrelated authored feedback unavailable"); });
-        const response = await app.ask();
-        const body = await response.text();
-        expect(response.status, body).toBe(200);
-        expect((JSON.parse(body) as { page: runtime.ModuleQueryPage }).page.packets.map(packet => packet.module)).toEqual([module]);
-        expect(project).not.toHaveBeenCalled();
         expect(app.prepare).not.toHaveBeenCalled();
       } finally { vi.restoreAllMocks(); await app.close(); }
     });

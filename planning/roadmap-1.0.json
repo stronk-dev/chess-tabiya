@@ -689,9 +689,9 @@
         "dependsOn": [],
         "nextAction": "Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned and require paired green GitHub verify/browser on the exact pushed revision before restoring this milestone to complete. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
-          "at": "2026-10-09",
-          "summary": "D3621's complete normal local sequence passes clean types/build, 4022 software cases/359 files, seven unchanged-budget performance cases/four files, governance/packaging, 237 content cases/23 files and 225 browser passes (160 smoke, five content, 59 matrix, one packaged-default). One optional Maia skip, zero retries, all 150 input/112 composition cells. Actual authenticated narration controls establish refusal after grant/disclosure/subject changes, cancellation and rejected-cache reuse; prior execution preflight, special-move evidence, Play/Compare exports, Review, Studio, Campaign, Profile and return repairs remain delivered. Native warm arrival is median 104 ms/p95 146.8 ms; original D3591/D3600 timing causes remain unlocated. All live rows are assigned, 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
-          "impact": "held",
+          "at": "2026-10-10",
+          "summary": "D3643 isolates unauthored Support software controls from installed-corpus acquisition using real empty registries while retaining actual application/SQLite/authentication/HTTP/module execution. The permanent predecessor control observes 50 installed documents instead of zero; both original installed-pack controls remain in the content tier with unchanged five-second deadlines and assertions. Final normal local gates pass clean types/build, 4325 software tests/364 files, seven unchanged-budget performance tests/four files, governance/packaging and 241 content tests/24 files. Two tests move tiers and one is added; none is removed. Production/content bytes are unchanged; D3642's browser reading is retained, not rerun. D3543/D3510 and D3591/D3600 historical causes remain open. All live rows are assigned; 462 historical prose-only closures remain qualified and zero official packs graduate. No remote CI, native release-image, readiness-to-push, whole capability or milestone completion claim.",
+          "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
             "apps/server/src/guidance-lifetime.test.ts",
@@ -742,7 +742,11 @@
             "apps/web/src/lib/pack-draft-response.test.ts",
             "tests/browser/studio-publication.spec.ts",
             "tests/browser/review-export.spec.ts",
-            "tests/browser/play-export.spec.ts"
+            "tests/browser/play-export.spec.ts",
+            "apps/server/src/local-module-execution.test.ts",
+            "apps/server/src/local-module-content.test.ts",
+            "tools/test-tiers.mjs",
+            "docs/development.md"
           ],
           "anchors": [
             {
@@ -789,6 +793,11 @@
               "kind": "rfc",
               "id": "concept-registry.md",
               "digest": "sha256:e4e2dfd4748a8a4803e422973f0abb277008daa846c79f98d1732d01fb8afce5"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3643",
+              "digest": "sha256:a085659a8824742b78856f2aa30733ac0698932fa9583ff64c4d60c8839243f2"
             }
           ]
         },

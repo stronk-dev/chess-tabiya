@@ -235,9 +235,14 @@ finishes after a setup timeout. It never publishes that late application into th
 without artificial sleeps, including closure of a real late-arriving listening server.
 Every response body is consumed before teardown. Failure diagnostics distinguish application
 construction's shape/principle/pack/training/Campaign phases from listen, authentication, module
-requests and shutdown. The installed Campaign control also distinguishes pack loading from
-Campaign loading. These observers call the original loaders and retain real installed validation.
-A later passing run does not establish the cause of an earlier timeout.
+requests and shutdown. The unauthored Support software controls use real empty shape, principle,
+pack, training-set and Campaign registries at the content-acquisition boundary; a permanent check
+inspects the exact five objects returned to application composition. Authentication, SQLite,
+HTTP, execution compilation and module factories remain production code. The two installed-pack
+controls run separately in `local-module-content.test.ts` through the original loaders, with their
+original five-second case deadlines explicitly retained. The installed Campaign control also
+distinguishes pack loading from Campaign loading and retains real installed validation.
+A later passing run or this dependency isolation does not establish the cause of an earlier timeout.
 
 Pre-commit process checks intentionally do not read the shared working tree. The hook materializes
 the Git index and runs register, status, work, roadmap and intent checks inside that temporary

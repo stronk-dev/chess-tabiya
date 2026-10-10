@@ -7,6 +7,7 @@ export const CONTENT_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/feedback-delivery.test.ts",
   "apps/server/src/graduation-report.test.ts",
   "apps/server/src/guidance.test.ts",
+  "apps/server/src/local-module-content.test.ts",
   "apps/server/src/opening-evidence.test.ts",
   "apps/server/src/campaign-core.test.ts",
   "apps/server/src/opponent-contracts.test.ts",
