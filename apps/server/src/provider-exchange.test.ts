@@ -49,6 +49,121 @@ const ignoreAbort = (base: ProviderOperationDescriptors): ProviderOperationDescr
 });
 
 describe("§4 shared scheduler", () => {
+  it.each(["normalization", "admission"] as const)("retained lookup cannot outlive the caller budget during %s", async stage => {
+    let cost = 0;
+    const h: ReturnType<typeof harness> = harness({ descriptors: base => ({ ...base, "syzygy.position@1": {
+      ...base["syzygy.position@1"],
+      normalizeRequest(request) {
+        if (stage === "normalization") h.clock.monotonic += cost;
+        return base["syzygy.position@1"].normalizeRequest(request);
+      },
+      admitRetained(acquisition) {
+        if (stage === "admission") h.clock.monotonic += cost;
+        return base["syzygy.position@1"].admitRetained(acquisition);
+      },
+    } }) });
+    const first = h.scheduler.get(syzygy(KQK), scope(), signal());
+    await flush(); h.tablebase.respond(0, syzygyBody(KQK));
+    expect((await first).kind).toBe("success"); await flush();
+    cost = 100;
+    expect(await h.scheduler.get(syzygy(KQK), scope(100), signal())).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    expect(h.tablebase.calls).toHaveLength(1);
+    expect(h.scheduler.stats()).toMatchObject({ active: 0, pending: 0, queued: 0, retained: 1 });
+    cost = 0;
+    expect(await h.scheduler.get(syzygy(KQK), scope(), signal())).toMatchObject({ kind: "success", delivery: { kind: "retained_exact" } });
+  });
+
+  it("cancellation during retained admission refuses only that caller and keeps reusable evidence", async () => {
+    const cancelled = new AbortController();
+    let cancelDuringAdmission = false;
+    const h = harness({ descriptors: base => ({ ...base, "syzygy.position@1": {
+      ...base["syzygy.position@1"],
+      admitRetained(acquisition) {
+        if (cancelDuringAdmission) cancelled.abort();
+        return base["syzygy.position@1"].admitRetained(acquisition);
+      },
+    } }) });
+    const first = h.scheduler.get(syzygy(KQK), scope(), signal());
+    await flush(); h.tablebase.respond(0, syzygyBody(KQK)); await first; await flush();
+    cancelDuringAdmission = true;
+    expect(await h.scheduler.get(syzygy(KQK), scope(), cancelled.signal)).toMatchObject({ kind: "source_failure", reason: "cancelled" });
+    cancelDuringAdmission = false;
+    expect(await h.scheduler.get(syzygy(KQK), scope(), signal())).toMatchObject({ kind: "success", delivery: { kind: "retained_exact" } });
+    expect(h.tablebase.calls).toHaveLength(1);
+  });
+
+  it("expiry crossed during retained admission refetches without extending the old TTL", async () => {
+    let cost = 0;
+    const h: ReturnType<typeof harness> = harness({ retentionTtlMs: 100, descriptors: base => ({ ...base, "syzygy.position@1": {
+      ...base["syzygy.position@1"],
+      admitRetained(acquisition) {
+        h.clock.monotonic += cost;
+        return base["syzygy.position@1"].admitRetained(acquisition);
+      },
+    } }) });
+    const first = h.scheduler.get(syzygy(KQK), scope(), signal());
+    await flush(); h.tablebase.respond(0, syzygyBody(KQK)); await first; await flush();
+    h.clock.monotonic = 99; cost = 1;
+    const next = h.scheduler.get(syzygy(KQK), scope(), signal());
+    await flush();
+    expect(h.tablebase.calls).toHaveLength(2);
+    expect(h.scheduler.stats().retained).toBe(0);
+    h.tablebase.respond(1, syzygyBody(KQK));
+    expect(await next).toMatchObject({ kind: "success", delivery: { kind: "live" } });
+  });
+
+  it.each(["waiter", "execution"] as const)("retention work cannot publish or retain after the %s deadline", async deadline => {
+    const h: ReturnType<typeof harness> = harness({ descriptors: base => ({ ...base, "syzygy.position@1": {
+      ...base["syzygy.position@1"],
+      retainedWeight(payload) {
+        h.clock.monotonic += 100;
+        return base["syzygy.position@1"].retainedWeight(payload);
+      },
+    } }) });
+    const pending = h.scheduler.get(syzygy(KQK, deadline === "execution" ? 100 : 5_000), scope(deadline === "waiter" ? 100 : 1_000), signal());
+    await flush();
+    let retainedAtAbort: number | undefined;
+    h.tablebase.calls[0]!.signal.addEventListener("abort", () => { retainedAtAbort = h.scheduler.stats().retained; }, { once: true });
+    h.tablebase.respond(0, syzygyBody(KQK));
+    expect(await pending).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    await flush();
+    expect(h.scheduler.stats()).toMatchObject({ active: 0, pending: 0, queued: 0, retained: 0 });
+    expect(retainedAtAbort).toBe(0);
+  });
+
+  it("retention work expires a short waiter without cancelling its longer peer's valid completion", async () => {
+    const h: ReturnType<typeof harness> = harness({ descriptors: base => ({ ...base, "syzygy.position@1": {
+      ...base["syzygy.position@1"],
+      retainedWeight(payload) {
+        h.clock.monotonic += 100;
+        return base["syzygy.position@1"].retainedWeight(payload);
+      },
+    } }) });
+    const short = h.scheduler.get(syzygy(KQK), scope(100), signal());
+    const long = h.scheduler.get(syzygy(KQK), scope(1_000), signal());
+    await flush(); h.tablebase.respond(0, syzygyBody(KQK));
+    expect(await short).toMatchObject({ kind: "source_failure", reason: "deadline_exceeded" });
+    expect(await long).toMatchObject({ kind: "success", delivery: { kind: "live" } });
+    await flush();
+    expect(h.scheduler.stats()).toMatchObject({ active: 0, pending: 0, queued: 0, retained: 1 });
+  });
+
+  it("cancellation during retention cannot reintroduce evidence after the final waiter leaves", async () => {
+    const caller = new AbortController();
+    const h = harness({ descriptors: base => ({ ...base, "syzygy.position@1": {
+      ...base["syzygy.position@1"],
+      retainedWeight(payload) {
+        caller.abort();
+        return base["syzygy.position@1"].retainedWeight(payload);
+      },
+    } }) });
+    const pending = h.scheduler.get(syzygy(KQK), scope(), caller.signal);
+    await flush(); h.tablebase.respond(0, syzygyBody(KQK));
+    expect(await pending).toMatchObject({ kind: "source_failure", reason: "cancelled" });
+    await flush();
+    expect(h.scheduler.stats()).toMatchObject({ active: 0, pending: 0, queued: 0, retained: 0 });
+  });
+
   it("rearms an early execution wake-up instead of fabricating a timeout", async () => {
     const { scheduler, tablebase, clock } = harness();
     const request = scheduler.get(syzygy(KQK, 100), scope(1_000), signal());

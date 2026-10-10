@@ -30187,6 +30187,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/local-module-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3644",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9102a68aa5947c01726956c760b59967ab0eb117eefa5d52acc82e8a3bec502f",
+      "uxItems": [],
+      "evidence": "apps/server/src/provider-tablebase.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

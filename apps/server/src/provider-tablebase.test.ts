@@ -2,7 +2,7 @@ import type { AddressInfo } from "node:net";
 import { describe, expect, it, vi } from "vitest";
 import { branchPath, exactLegalMoves, providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
 
-import { ProviderExchangeScheduler } from "./provider-exchange.js";
+import { ProviderExchangeScheduler, type ProviderOperationDescriptor } from "./provider-exchange.js";
 import { ControlledFetch, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
 import { testRegistry } from "./provider-health.test-support.js";
@@ -21,14 +21,14 @@ const OTHER = "8/8/8/8/8/8/3R4/k1K5 w - - 0 1";
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const request = (fen = FEN): SyzygyPositionRequest => ({ rules: "chess", variant: "standard", fen, timeoutMs: 4_000 });
 
-async function harness() {
+async function harness(wrap: (descriptor: ProviderOperationDescriptor<"syzygy.position@1">, clock: ManualClock) => ProviderOperationDescriptor<"syzygy.position@1"> = descriptor => descriptor) {
   const clock = new ManualClock();
   const healthClock = { get now() { return clock.monotonic; }, set now(value: number) { clock.monotonic = value; }, wall: clock.wall(), advance: () => undefined };
   const health = await testRegistry({ "tablebase-primary": "unverified", "explorer-primary": "unverified" }, { clock: healthClock });
   const remote = new ControlledFetch();
   const base = providerOperationDescriptors({ engines: null, tablebaseFetch: null, explorerFetch: null, explorerToken: null });
   const scheduler = new ProviderExchangeScheduler({
-    descriptors: { ...base, "syzygy.position@1": healthAdmittedSyzygyOperation(remote.fetch, health) },
+    descriptors: { ...base, "syzygy.position@1": wrap(healthAdmittedSyzygyOperation(remote.fetch, health), clock) },
     maxActive: 2, maxQueued: 4, maxRetainedEntries: 8, maxRetainedWeight: 1_000,
     retentionTtlMs: 10_000, monotonicNowMs: clock.now, wallNow: clock.wall, timers: clock,
   });
@@ -38,6 +38,31 @@ async function harness() {
 }
 
 describe("learner Syzygy shared exchange", () => {
+  it.each(["deadline", "cancelled"] as const)("does not mint retained source evidence for a caller that becomes %s during admission", async arm => {
+    const caller = new AbortController();
+    let refuse = false;
+    const { source, remote, clock, scheduler } = await harness((descriptor, time) => ({
+      ...descriptor,
+      admitRetained(acquisition) {
+        if (refuse) {
+          if (arm === "deadline") time.monotonic += 100;
+          else caller.abort();
+        }
+        return descriptor.admitRetained(acquisition);
+      },
+    }));
+    const first = source.probeEvidence(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN));
+    const evidence = await first; await flush();
+    refuse = true;
+    await expect(source.probeEvidence(FEN, { deadlineMonotonic: clock.now() + 100, signal: caller.signal })).rejects.toMatchObject({ code: "TABLEBASE_UNAVAILABLE" });
+    refuse = false;
+    const peer = await source.probeEvidence(FEN);
+    expect(peer.payload.payload.position).toEqual(evidence.payload.payload.position);
+    expect(remote.calls).toHaveLength(1);
+    expect(scheduler.stats()).toMatchObject({ active: 0, pending: 0, queued: 0, retained: 1 });
+  });
+
   it("preserves the evidence method and class receiver through health wrapping", async () => {
     const { source, remote } = await harness();
     const health = await testRegistry({ "tablebase-primary": "unverified" });
@@ -128,6 +153,32 @@ describe("learner Syzygy shared exchange", () => {
     }]);
     return { storage, queue, service, run };
   }
+
+  it("settles expired retained evidence as empty through the actual durable worker and REST result page", async () => {
+    let cost = 0;
+    const { source, remote } = await harness((descriptor, time) => ({
+      ...descriptor,
+      admitRetained(acquisition) {
+        time.monotonic += cost;
+        return descriptor.admitRetained(acquisition);
+      },
+    }));
+    const first = source.probeEvidence(FEN);
+    await flush(); remote.respond(0, syzygyBody(FEN)); await first; await flush();
+    const bare = vi.spyOn(source, "probe").mockRejectedValue(new Error("expired modern evidence must not fall back to bare probe"));
+    cost = 4_000;
+    const app = await queuedTablebase(source);
+    try {
+      await app.queue.whenIdle();
+      expect(app.storage.evidenceJobs.jobsForRun(app.run.id)).toMatchObject([{ state: "settled_empty", settlement: { kind: "empty", reason: "provider_unavailable" } }]);
+      const response = await createRestHandler(app.service)(new Request(`http://tabiya.test/runs/${app.run.id}/evidence`, { headers: { "x-writer-id": "writer" } }));
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({ results: [] });
+      expect(app.storage.read(app.run.id)!.run.events.filter(event => event.type === "evidence.attached")).toEqual([]);
+      expect(remote.calls).toHaveLength(1);
+      expect(bare).not.toHaveBeenCalled();
+    } finally { await app.queue.close(); app.storage.close(); bare.mockRestore(); }
+  });
 
   it("admits the whole source before staging the actual durable tablebase packet", async () => {
     const { source, remote } = await harness();

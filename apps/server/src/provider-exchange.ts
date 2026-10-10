@@ -237,6 +237,7 @@ export class ProviderExchangeScheduler {
     if (typeof scope !== "object" || scope === null || typeof scope.id !== "string" || scope.id === "") throw new ProviderRequestInvalid("scope.id must be a non-empty string");
     if (!Number.isSafeInteger(scope.budgetMs) || scope.budgetMs < 1) throw new ProviderRequestInvalid("scope.budgetMs must be a positive safe integer");
     const arrival = this.#now();
+    const deadline = arrival + scope.budgetMs;
     const requestedAt = this.#civil();
     const operation = request.operation as K;
     const descriptor = this.#descriptor(operation);
@@ -248,15 +249,22 @@ export class ProviderExchangeScheduler {
       return PROVIDER_EXCHANGE_AUTHORITY.makeProviderLocalDomainResult(requestedIdentity as ProviderRequestedIdentityMap["syzygy.position@1"], this.#civil()) as unknown as TypedProviderResult<K>;
     }
     if (signal.aborted) return this.#failure(operation, digest, "cancelled") as TypedProviderResult<K>;
+    if (this.#now() >= deadline) return this.#failure(operation, digest, "deadline_exceeded") as TypedProviderResult<K>;
     const key = pendingKeyOf({ operation, normalizedRequestDigest: digest });
 
     const retained = this.#retained.get(key);
     if (retained !== undefined) {
       const now = this.#now();
-      if (now >= retained.expiresAtMonotonic || !descriptor.admitRetained(retained.acquisition as ProviderAcquisitionReceipt<K>)) {
+      const admitted = now < retained.expiresAtMonotonic && descriptor.admitRetained(retained.acquisition as ProviderAcquisitionReceipt<K>);
+      const admittedAt = this.#now();
+      // Admission consumes the original caller budget too. A refused caller does not
+      // invalidate evidence that remains usable by an independent peer.
+      if (signal.aborted) return this.#failure(operation, digest, "cancelled") as TypedProviderResult<K>;
+      if (admittedAt >= deadline) return this.#failure(operation, digest, "deadline_exceeded") as TypedProviderResult<K>;
+      if (!admitted || admittedAt >= retained.expiresAtMonotonic) {
         this.#removeRetained(key);
       } else {
-        retained.lastServedAtMonotonic = now;
+        retained.lastServedAtMonotonic = admittedAt;
         const delivery = PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "retained_exact", acquisition: retained.acquisition as ProviderAcquisitionReceipt<K>, payload: retained.payload as ProviderOperationResultMap[K], payloadReceipt: retained.payloadReceipt as never, servedAt: this.#civil() });
         return Object.freeze({ kind: "success", operation, normalizedRequestDigest: digest, delivery }) as unknown as TypedProviderResult<K>;
       }
@@ -284,7 +292,6 @@ export class ProviderExchangeScheduler {
     }
     const joined = job;
     const result = new Promise<TypedProviderResult>((resolve, reject) => {
-      const deadline = arrival + scope.budgetMs;
       const waiter: Waiter = { resolve, reject, deadlineHandle: undefined, deadline, signal, onAbort: () => undefined, settled: false };
       waiter.onAbort = () => this.#settleWaiter(joined, waiter, this.#failure(operation, digest, "cancelled") as TypedProviderResult);
       signal.addEventListener("abort", waiter.onAbort, { once: true });
@@ -302,7 +309,7 @@ export class ProviderExchangeScheduler {
         }, delayMs);
       };
       joined.waiters.add(waiter);
-      arm(scope.budgetMs);
+      arm(Math.max(0, deadline - this.#now()));
     });
     this.#drain();
     return result as Promise<TypedProviderResult<K>>;
@@ -463,12 +470,18 @@ export class ProviderExchangeScheduler {
     }
     if (!stillLive()) return; // Parser/admission work also consumes the caller's original budget.
     const delivery = PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition: acquisition as never, payload: parsed.payload as never, payloadReceipt: parsed.payloadReceipt as never, servedAt: retrievedAt });
-    this.#retain(job.key, descriptor, acquisition, parsed.payload, parsed.payloadReceipt);
+    this.#retain(job.key, descriptor, acquisition, parsed.payload, parsed.payloadReceipt, stillLive);
+    if (!stillLive()) {
+      // Retention work may consume the remaining budget or detach the last waiter.
+      // Never erase a same-key replacement that started when this lease ended.
+      if (this.#retained.get(job.key)?.acquisition === acquisition) this.#removeRetained(job.key);
+      return;
+    }
     const success = Object.freeze({ kind: "success", operation: job.operation, normalizedRequestDigest: job.digest, delivery }) as unknown as TypedProviderResult;
     this.#settleAll(job, () => success);
   }
 
-  #retain(key: ProviderPendingDigest, descriptor: ProviderOperationDescriptor<ProviderOperationId>, acquisition: ProviderAcquisitionReceipt, payload: unknown, payloadReceipt: unknown): void {
+  #retain(key: ProviderPendingDigest, descriptor: ProviderOperationDescriptor<ProviderOperationId>, acquisition: ProviderAcquisitionReceipt, payload: unknown, payloadReceipt: unknown, stillLive: () => boolean): void {
     const weight = descriptor.retainedWeight(payload as never);
     if (!Number.isSafeInteger(weight) || weight < 1) return; // refuse admission of a non-positive/unsafe weight
     if (weight > this.#maxRetainedWeight) return; // served live, never retained
@@ -481,6 +494,9 @@ export class ProviderExchangeScheduler {
       const entryDescriptor = this.#descriptor(entry.acquisition.operation);
       if (now >= entry.expiresAtMonotonic || !entryDescriptor.admitRetained(entry.acquisition as never)) this.#removeRetained(candidateKey);
     }
+    // Check before eviction/insertion: abort observers must never see late evidence,
+    // and an expired completion must not displace still-valid peer cache entries.
+    if (!stillLive()) return;
     this.#removeRetained(key);
     let total = [...this.#retained.values()].reduce((sum, entry) => sum + entry.weight, 0);
     while (this.#retained.size + 1 > this.#maxRetainedEntries || total + weight > this.#maxRetainedWeight) {

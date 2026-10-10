@@ -12,6 +12,15 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3644]] is closed locally under provider-exchange §4: normalization, retained admission and
+live retention consume the original deadline/cancellation budget. Late results cannot publish,
+enter the cache even transiently, or displace valid peer entries. Seven predecessor controls and
+two stronger abort-observer assertions fail before their respective repairs; 223 focused controls
+and clean types pass. Final normal gates pass 4,336 software, seven unchanged-budget performance,
+241 content and 245 browser cases, one optional Maia skip, zero retries and 150 input/112
+composition cells. This adds no source, chess semantics, timeout allowance or whole-capability,
+native-image/remote-CI promotion. Permanent evidence: `apps/server/src/provider-tablebase.test.ts`.
+
 [[D3643]] is closed locally: unauthored Support software controls use real empty
 catalogue registries at the acquisition boundary, not repeated installed-corpus loads. The
 original two actual installed-pack HTTP controls move to the content tier with their original

@@ -872,41 +872,28 @@
         ],
         "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
-          "at": "2026-10-09",
-          "summary": "D3632/D3633 close stale recorded-path consumer descriptions and the Review component-loss defect. Each admitted event retains its full registered composition at its own ending move; neutral caption/chip focus paints only the selected board, clears on navigation and leaves saved play unchanged. Seven predecessor controls fail; 172 client/runtime and 79 authenticated Review/runtime cases plus clean types pass. Complete normal local tiers pass 4189 software cases/361 files, seven unchanged-budget performance cases/four files, governance/packaging, 239 content cases/23 files and 235 browser passes (170 smoke, five content, 59 matrix, one packaged-default), one optional Maia skip, zero retries and 150 input/112 composition cells. The first governance pass refuses omitted queue references; corrected references precede the remaining passing tiers on unchanged product/test bytes. Review already consumed the underlying runtime path; no new source, collection, motif, grading, permission or lifecycle promotion. Remaining source, execution, longitudinal, eligibility, semantic qualification, usefulness, official content and release obligations stay open. No remote CI result.",
+          "at": "2026-10-10",
+          "summary": "D3644 enforces original caller/execution deadlines and cancellation through normalization, retained admission and live cache publication. Late evidence cannot enter the cache even transiently or displace valid peer entries; short callers remain independent. Seven predecessor controls and two stronger abort-observer assertions fail before their respective repairs. Actual TablebaseSource, durable-worker and REST controls prevent late attachment and bare-probe fallback. Final normal local gates pass 4336 software tests/364 files, seven unchanged-budget performance/four files, 241 content/24 files, types/governance/packaging/build and 245 browser cases, one optional Maia skip, zero retries and 150 input/112 composition cells. Same-commit permanent test evidence closes the defect, not source adoption, semantic qualification, useful defaults, official content, calibration or any whole capability/milestone. No new source, chess meaning, budget, native-image or remote-CI claim.",
           "impact": "advanced",
           "evidence": [
-            "packages/runtime/src/review-map.ts",
-            "packages/runtime/src/review-map.test.ts",
-            "apps/server/src/review-map.test.ts",
-            "apps/web/src/lib/ReviewMapScreen.svelte",
-            "apps/web/src/lib/review-map-screen.test.ts",
-            "tests/browser/drill.spec.ts",
-            "docs/review-evidence.md",
-            "docs/semantic-evidence.md",
-            "rfc/recorded-semantic-path.md",
-            "rfc/evidence-presentation.md"
+            "apps/server/src/provider-exchange.ts",
+            "apps/server/src/provider-exchange.test.ts",
+            "apps/server/src/provider-tablebase.test.ts",
+            "docs/provider-exchange.md",
+            "rfc/provider-exchange-and-execution.md",
+            "planning/codex-queue.md",
+            "planning/exploration/log.md"
           ],
           "anchors": [
             {
               "kind": "rfc",
-              "id": "recorded-semantic-path.md",
-              "digest": "sha256:1765eaffdbe10340c4907d209604074f25985cd500104196fc40927671c0174f"
-            },
-            {
-              "kind": "rfc",
-              "id": "evidence-presentation.md",
-              "digest": "sha256:60390e33f6d19cb011f65417b2d47a249ed56566b3394d8c7838dd4885b8ce8a"
+              "id": "provider-exchange-and-execution.md",
+              "digest": "sha256:ce70fd1e1862180bf025f5e58cbb4d5ced94d71a3a14dfcfa3e3097280f1b50d"
             },
             {
               "kind": "work_state",
-              "id": "D3632",
-              "digest": "sha256:d191640ffe86443056a0a27146215c45a9ee3d48a3b7406abcd4da314e31eed1"
-            },
-            {
-              "kind": "work_state",
-              "id": "D3633",
-              "digest": "sha256:07a12432c5d59e0b8edba8534f27d36f3319197817c7ba0a980a9b5b2f71f358"
+              "id": "D3644",
+              "digest": "sha256:9102a68aa5947c01726956c760b59967ab0eb117eefa5d52acc82e8a3bec502f"
             }
           ]
         },

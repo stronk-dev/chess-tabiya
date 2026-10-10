@@ -24008,3 +24008,32 @@ Campaign was the one capability with no API, route or content. Now:
   roadmap checkpoint in this commit. Browser verification is retained from D3642, not claimed as
   rerun for this test-only repair. D3543/D3510, remote CI, source adoption, official graduation,
   whole-capability and native release obligations remain open. The 1.0 goal remains active.
+
+### 2026-10-10 — provider admission consumes the original caller budget (D3644)
+
+- Seven permanent predecessor controls reproduce retained results returned after normalization/
+  admission expiry or cancellation, reuse past the fixed TTL, and live retention publishing after
+  waiter/execution expiry. The existing provider-exchange §4 contract covers these paths; no new
+  source, parser, chess meaning, persistence field, selection rule or timeout is introduced.
+- Original monotonic deadlines now bound normalization and retained admission. Retention completion
+  rechecks surviving waiters and execution; late evidence cannot publish or remain cached, without
+  deleting a same-key replacement. Short callers expire independently and valid peer cache entries
+  remain usable. Initial waiter timers use only the remaining arrival budget.
+- Eight new scheduler controls, real TablebaseSource refusals and the durable worker/REST empty
+  result path pass. The expired result never attaches to the saved run or falls back to the bare
+  probe. Focused verification passes 223 controls and clean types. A first restricted integration
+  run encounters localhost sandbox refusal and is stopped; the normal authorized Make rerun passes.
+  Complete normal verification/build and same-commit closeout are in progress, not yet claimed.
+- Two stronger abort-observer assertions expose transient cache publication in the first repair
+  (one visible entry instead of zero). Retention now checks liveness before eviction/insertion;
+  both assertions pass. The first full verification is explicitly interrupted before this final
+  source correction; only the restarted final-code run is counted.
+- Final normal verification/build passes 4,336 software tests/364 files, seven unchanged-budget
+  performance tests/four files, 241 content tests/24 files and types/governance/packaging. The
+  sequential native browser tiers pass 180 smoke, five content, 59 matrix and one packaged-default
+  cases (245 total), one optional Maia skip, zero retries and all 150 input/112 composition cells.
+  No assertion, budget, receipt or generated semantic verdict is weakened/refreshed for the repair.
+- Close D3644 with permanent source-test evidence and update the existing state, queue and roadmap
+  in this commit. Remaining source adoption, semantic qualification, useful defaults, official
+  content, calibration, whole-capability and native release obligations remain open. No push or
+  remote CI result is claimed; the full 1.0 goal remains active.

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3643]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3644]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -53,7 +53,18 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest testing repair: [[D3643]] separates unauthored Support software controls from installed
+Latest foundation repair: [[D3644]] makes the shared provider scheduler enforce original
+deadlines and cancellation across normalization, retained admission and live cache publication.
+Late evidence never enters the cache even transiently, while a short/cancelled caller cannot
+spoil valid peer evidence. Seven predecessor controls and two stronger abort-observer assertions
+fail before their respective repairs; permanent actual TablebaseSource, durable-worker and REST
+controls prevent attachment or bare-probe fallback. Final normal verification passes 4,336
+software tests / 364 files, seven unchanged-budget performance tests / four files, 241 content
+tests / 24 files, clean types/build/governance/packaging and 245 browser passes. One optional Maia
+skip, zero retries, all 150 input/112 composition cells. No new source, chess meaning, budget,
+whole capability, native release-image or remote-CI claim.
+
+Previous testing repair: [[D3643]] separates unauthored Support software controls from installed
 content acquisition. The real empty registry factories, application, SQLite, authentication,
 HTTP and module execution still run. Both original installed-pack controls remain in the content
 tier with their original five-second deadlines and assertions. The permanent isolation control
@@ -77,8 +88,8 @@ one optional Maia skip, zero retries, all 150 input/112 composition cells. Three
 digests and generated validation implementation digests were explicitly refreshed after exact
 operand controls; no frozen receipt, budget or verdict was weakened. The first browser attempt
 found the phone helper clicking behind an open companion modal; normal dismissal fixes that
-journey and the complete rerun passes. Current ledger after D3643:
-3,392 rows, 1,521 done, 161 refused and 1,710 live (628 todo, fourteen doing, 1,068 blocked),
+journey and the complete rerun passes. Current ledger after D3644:
+3,393 rows, 1,522 done, 161 refused and 1,710 live (628 todo, fourteen doing, 1,068 blocked),
 zero untriaged. UX stays 273 complete / 272 live / 24 retired; product RFCs 42 implementing /
 ten awaiting / 22 draft. Milestones remain four active / five blocked, all fourteen whole
 capabilities incomplete. There are 86 production pack documents and zero official graduates.

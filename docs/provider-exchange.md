@@ -157,9 +157,14 @@ data; only the actual appliance journey proves real bot play. Amendment and reta
   pieces is the local `outside_domain` fact, not a failure. A zero explorer population is
   successful source truth.
 - **Scheduling.** Each waiter gets its own scheduler-minted deadline. Queue time consumes the first
-  arrival's execution timeout. Monotonic deadlines are checked at dispatch and source settlement;
+  arrival's execution timeout. Monotonic deadlines are checked after request normalization,
+  retained admission, dispatch and live retention work, as well as source settlement;
   delayed timers cannot admit expired evidence, and early wake-ups rearm for the remaining budget.
   A short waiter expires independently while its longer-lived sibling can still succeed.
+  Cancellation or expiry during a retained lookup refuses only that caller; a still-valid cache
+  entry remains usable by peers. Admission crossing the entry's fixed TTL instead retires it and
+  requires new acquisition. A live result finishing retention after its final deadline cannot
+  publish or remain cached, even when the deadline timer has not yet dispatched.
   Execution expiry or final-waiter cancellation releases the logical scheduler lease exactly once,
   even if a transport ignores abort. Descriptors still own cancellation of actual provider I/O.
   Abandoned late captures cannot retain evidence or retire a newer same-key job. Retention
