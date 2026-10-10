@@ -329,6 +329,12 @@ predeclared D545 answer the measurement must confirm or refute.
   - `rules.castling.reading.legality@1` — *state*: rights held but castling currently
     illegal, with the specific disqualifying squares retained (transit/landing attacked,
     blocked, in check). Disposition `inspector_only`.
+    Maintenance [[D3642]] (2026-10-09) repairs omitted rook-only clearance blockers under this
+    existing contract. The collector uses the rules authority's combined king/rook path,
+    retains the prior king-path ordering and deduplicates shared squares. Both-color literal
+    controls, full supported king/rook geometry controls, sealed factories and authenticated
+    Inspector positive/nearby-negative cases are permanent; no projection identity or learner
+    permission changes. This local repair does not discharge D1.
   - **"Prevented" is served by rights-lost (permanent) and legality (transient) and by
     nothing else** — as ruled ([[D745]] (3)): the intent reading stays refused under
     law 8. No projection in this RFC may use the word "prevented" of an opponent's

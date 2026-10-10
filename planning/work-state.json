@@ -30169,6 +30169,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/castling-evidence.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3642",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:42d8a965ea100c81e51e59f92af4caad57c1781ac7e14fc21ba6735f7b054c95",
+      "uxItems": [],
+      "evidence": "apps/server/src/castling-evidence.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

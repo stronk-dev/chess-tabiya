@@ -62,7 +62,11 @@ export function castlingLegality(fen: string): readonly CastlingLegalityIssue[] 
       if (rook === undefined) continue;
       const path = kingPath(king, color, wing);
       const occupiedWithoutCastlePieces = position.board.occupied.without(king).without(rook);
-      const blocked = path.filter((square) => occupiedWithoutCastlePieces.has(square));
+      // The rules authority's path includes BOTH pieces' transit/landing
+      // squares. Preserve the existing king-path order, adding rook-only
+      // blockers once; the moving king and rook never block their own castle.
+      const clearancePath = new Set([...path, ...position.castles.path[color][sideKey(wing)]]);
+      const blocked = [...clearancePath].filter((square) => occupiedWithoutCastlePieces.has(square));
       const attacked = path.filter((square) => position.kingAttackers(square, opposite(color), occupiedWithoutCastlePieces.with(square)).nonEmpty());
       const castleMove: NormalMove = { from: king, to: rook };
       const legalNow = position.turn === color && position.isLegal(castleMove);

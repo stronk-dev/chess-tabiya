@@ -558,7 +558,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "fb66bc42eae21e143c86935d2fc5147aaf8447617588d8f0c887a2a2b082a95e"
+      "8afc6c3996e6af154a91986a527a3472badd89fce5f0438145ae1d382c7049e5"
     ]
   },
   "derived.pawn.event.transitions@1": {
@@ -1129,9 +1129,9 @@
     "cardinality": 4,
     "payloadDigests": [
       "4d1bfe0085ae568a07b2b2b7332c32735956db13222de9f9071299065b2bb68b",
-      "e52e9c8de7462a1f85cc68a8f72e1c3e38d7354c11c892ffd6c7597c9a634fab",
+      "3f3b5a461794aa830fe0c1faba5638dfad4279767d21e4a7498727572a3428f8",
       "7392a8bf1eb692662f7d1be1b0c1ab4ff785cf801c261618504762f5b10186cc",
-      "096e085588013dcbb52625bf8c28c69c06e9bf7303f948ecbc70a5f185be7ac6"
+      "ffe0d61636abdff2dcbf1c5bd10113c0754b6f444848197ef06c6939c6216488"
     ]
   },
   "rules.castling.reading.rights@1": {

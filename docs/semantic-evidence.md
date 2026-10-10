@@ -55,6 +55,12 @@ adjacent-rook and stationary-king Chess960 moves are `castled`, while ordinary k
 attacks exposed when the rook moves away. Permanent controls reach candidate/saved reconstruction,
 registered Review rendering and authenticated Inspector HTTP output; reading evidence does not
 change saved play. Longitudinal membership uses projection/sign, not this cause operand.
+The legality reading also retains rook-only transit/landing blockers using the rules authority's
+combined clearance path. It preserves existing king-path ordering, excludes both castling pieces
+and names shared blockers only once. Both-color geometry controls and authenticated Inspector
+positive/nearby-negative cases cover orthodox queenside and Chess960 stationary/overlapping paths.
+The same corrected operands reach the existing opponent candidate-vector consumer; bounded
+score inputs are retained. This is collector fidelity, not a new personality or calibrated bot.
 
 Pawn protection and connected-pair gains follow the exact moved pawn across its legal edge;
 an advance does not create an existing property again. Pair identity is unordered, so a changed

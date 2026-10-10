@@ -133,6 +133,11 @@ async function assertTopbarSeparation(page: Page, width: number): Promise<void> 
 }
 
 async function openAdvancedSupport(page: Page): Promise<void> {
+  const companion = page.getByRole("dialog", { name: "Run companion", exact: true });
+  if (await companion.isVisible()) {
+    await companion.getByRole("button", { name: "Collapse companion", exact: true }).click();
+    await expect(companion).not.toBeVisible();
+  }
   await page.locator("details.assistance-control summary").click();
   await page.getByRole("button", { name: "Advanced support controls" }).click();
   await expect(page.getByRole("dialog", { name: "Evidence inspector" })).toBeVisible();
@@ -3341,10 +3346,10 @@ test("@matrix A4 Inspector carries actual admitted local evidence and returns it
   expect(after.leaks).toEqual([]);
 });
 
-async function openFullInspectorRun(page: Page): Promise<void> {
-  await page.getByLabel("Your side").selectOption("black");
+async function openFullInspectorRun(page: Page, setup: { fen: string; side: "white" | "black" } = { fen: SCHOLAR_TRAP, side: "black" }): Promise<void> {
+  await page.getByLabel("Your side").selectOption(setup.side);
   await page.getByRole("button", { name: "Start from a FEN" }).click();
-  await page.getByLabel("Position FEN").fill(SCHOLAR_TRAP);
+  await page.getByLabel("Position FEN").fill(setup.fen);
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -3371,6 +3376,37 @@ async function assertFullInspectorPacket(page: Page, packet: ModuleQueryPage["pa
   }
   await expect(inspector.locator("[data-family-state]")).toHaveCount(8);
   await expect(inspector.getByRole("alert")).toHaveCount(0);
+}
+
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  for (const setup of [
+    { fen: "4k3/8/8/8/8/8/8/RN2K3 w Q - 0 1", side: "white", sentence: "White cannot castle queenside now: b1 is occupied." },
+    { fen: "rk1n4/8/8/8/8/8/8/4K3 b a - 0 1", side: "black", sentence: "Black cannot castle queenside now: d8 is occupied." },
+  ] as const) {
+    test(`Inspector names the actual ${setup.side} rook-path blocker at ${viewport.width}px without changing play`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await openFullInspectorRun(page, setup);
+      const runId = page.url().split("/").at(-1)!;
+      const saved = async () => Promise.all(["graph", "events"].map(async action => {
+        const response = await page.request.get(`/runs/${runId}/${action}`);
+        expect(response.ok()).toBe(true);
+        return response.json();
+      }));
+      const before = await saved();
+      const response = page.waitForResponse(isFullInspectorResponse);
+      await page.getByRole("checkbox", { name: "Full inspector", exact: true }).check();
+      const next = (await (await response).json() as { page: ModuleQueryPage }).page;
+      const packet = next.packets.find(p => p.module === "full_inspector")!;
+      await assertFullInspectorPacket(page, packet);
+      const items = packet.receipt.items.filter(item => item.evidenceRef?.projection.id === "rules.castling.reading.legality");
+      expect(items).toHaveLength(1);
+      await expect(page.locator(".full-inspector").getByText(setup.sentence, { exact: true })).toBeVisible();
+      await page.getByRole("button", { name: "Return to play", exact: true }).click();
+      await expect(page.locator(".full-inspector")).toHaveCount(0);
+      await assertRunViewport(page, viewport);
+      expect(await saved()).toEqual(before);
+    });
+  }
 }
 
 async function openThreatSeatRun(page: Page): Promise<void> {

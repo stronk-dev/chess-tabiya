@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:0d1ccab56885888631f2ebe50bb66ba5376544ea3697f4c394c60fea42b5d098",
+    "roadmap": "sha256:763becc665cbc97d153a18989fa4d9b43836374fb55a4db6d2947c3e2d5cb8f5",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:bddc11b3d6a3daef56d9f3bef6a0a86a406cfadc1052f85690dde25e29165034",
+    "workState": "sha256:7c5700c77a62a93a2cd6f5e595adf8f7b30451d3104bf54f5bf850c066f02777",
     "rfcRegister": "sha256:f5e30d387e6d4c07a6d5bcca14dacad0ec0341465406e5aa8370ed5b9f87712f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 14,
       "blocked": 1068,
-      "done": 1519,
+      "done": 1520,
       "refused": 161
     },
     "workItems": {
@@ -200,30 +200,24 @@
       ],
       "nextAction": "Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-09",
-        "summary": "D3639 closes 24 pinned-source literal-rule cases while retaining the original 63: 87 canonical cases (57 positive/30 negative) pass over 81 subjects, still zero fully qualified. D3640 repairs Chess960 castling cause at normalized identity; D3641 terminates stationary-king legality without hiding rook-exposed attacks. Twelve wrong-cause predecessor controls fail; the unbounded predecessor was deliberately not executed. Fifty-six focused castling cases include four actual authenticated Inspector HTTP boundaries, unchanged saved play and registered Review rendering. All normal local gates pass clean types/build, 4297 software tests/364 files, seven unchanged-budget performance/four files, governance/packaging, 239 content/23 files and 241 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. Same-commit closure retains permanent test evidence. No orientation/owner waiver, learner permission, strategic judgement, source adoption, official graduation, whole capability, native release or remote CI promotion.",
+        "at": "2026-10-10",
+        "summary": "D3642 retains rook-only castling clearance blockers through the sealed factory, actual opponent-vector consumer and authenticated Inspector without changing saved play. Ten predecessor controls fail; 112 supported king/rook geometries, 672 blocker placements, literal nearby negatives and 91 focused cases pass. All normal local gates pass clean types/build, 4326 software tests/364 files, seven unchanged-budget performance/four files, governance/packaging, 239 content/23 files and 245 browser passes, one optional Maia skip, zero retries and all 150 input/112 composition cells. The phone helper now dismisses the actual companion modal before opening Advanced; all four new native journeys and the complete rerun pass. Explicit computed-profile/generated receipt refreshes retain 87 canonical cases over 81 subjects, zero fully qualified, with no frozen receipt or budget change. Same-commit closure retains permanent test evidence. No new source, learner permission, judgement, calibration, D1 discharge, source adoption, official graduation, whole capability, native release or remote CI promotion.",
         "impact": "advanced",
         "evidence": [
-          "rfc/semantic-validation-authority.md",
           "rfc/tactical-collectors.md",
           "packages/runtime/src/castling.ts",
-          "packages/runtime/src/castling-evidence.test.ts",
+          "packages/runtime/src/castling.test.ts",
           "apps/server/src/castling-evidence.test.ts",
-          "packages/runtime/src/semantic-validation-cited.test.ts",
-          "packages/runtime/src/semantic-validation-literal-sources.ts",
-          "packages/runtime/src/semantic-validation-cases.json",
-          "packages/runtime/src/semantic-validation-profiles.json",
+          "apps/server/src/candidate-evidence.test.ts",
+          "packages/runtime/src/fixtures/evidence-value-profiles.json",
+          "packages/runtime/src/semantic-validation-receipt.generated.json",
+          "tests/browser/drill.spec.ts",
+          "Makefile",
           "docs/semantic-evidence.md",
           "planning/codex-queue.md",
-          "planning/exploration/log.md",
-          "planning/semantic-validation-authority/log.md"
+          "planning/exploration/log.md"
         ],
         "anchors": [
-          {
-            "kind": "rfc",
-            "id": "semantic-validation-authority.md",
-            "digest": "sha256:c2c5355ee9dfe9527d0b74578c5e1f5d5d19def11daa6945c89829a7388f5497"
-          },
           {
             "kind": "rfc",
             "id": "tactical-collectors.md",
@@ -231,18 +225,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D3639",
-            "digest": "sha256:ead371029e2a8c273c50541b7d0e6cac401b95c2c4eb54e20a60a6198b84f4b6"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3640",
-            "digest": "sha256:a818b8b0a1a5e157dea4ec4338e9cd9d93eb3c1a7cc64bdef9ae9d759b22effe"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3641",
-            "digest": "sha256:315440f67326ac3dbd2eca5aaafed22a422ba1299b667e680a9460e08b27e407"
+            "id": "D3642",
+            "digest": "sha256:42d8a965ea100c81e51e59f92af4caad57c1781ac7e14fc21ba6735f7b054c95"
           }
         ]
       },

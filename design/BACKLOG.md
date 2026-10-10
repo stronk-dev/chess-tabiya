@@ -13,6 +13,8 @@ exploration gate opens). Honesty note: everything marked 🔬 below rests on the
 
 Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 
+| D3642 ✅ | **CLOSED: CASTLING LEGALITY RETAINS BOTH PIECES' CLEARANCE BLOCKERS.** Orthodox queenside b-file and Chess960 rook-only transit/landing blockers reach the sealed factory, actual opponent-vector consumer and authenticated Inspector with exact square names. Shared blockers appear once, the moving pieces do not block themselves and prior king-path ordering is preserved | closed locally 2026-10-10 under tactical-collectors §3.2 — ten predecessor controls fail; 112 supported geometries/672 individual blocker placements, literal nearby negatives and 91 permanent focused cases pass. `apps/server/src/castling-evidence.test.ts` and four desktop/phone browser journeys preserve authorization and saved play. Full normal local gates pass; no new source, permission, calibration, D1 discharge, whole capability or release claim. |
+
 ## Current implementation findings
 
 | D3641 ✅ | **CLOSED: STATIONARY-KING CASTLING LEGALITY TERMINATES AT ITS ACTUAL LANDING.** The finite path checks the king's actual destination, retaining attacks exposed when the rook moves away. Both colors reach exact legal/attacked Inspector output through the actual authenticated application; anonymous/foreign reads refuse and saved play remains unchanged | closed locally 2026-10-09 — inspected nonterminating predecessor was deliberately not executed. Finite literal controls and four actual HTTP cases pass in apps/server/src/castling-evidence.test.ts; full normal local gates pass. Existing tactical-collectors §3.2 only; no new projection, source consumer, learner permission, variant promise or release claim. |

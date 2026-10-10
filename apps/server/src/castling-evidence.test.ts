@@ -10,12 +10,30 @@ let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | und
 beforeEach(async () => { fixture = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false })); await fixture.ready; });
 afterEach(async () => { const owned = fixture; fixture = undefined; await owned?.close(); });
 
-describe("stationary-king castling legality in authenticated Inspector", () => {
+describe("exact castling legality in authenticated Inspector", () => {
   it.each([
     { fen: "4k3/8/8/8/8/8/8/6KR w K - 0 1", side: "white", sentence: "White can castle kingside now." },
     { fen: "6kr/8/8/8/8/8/8/4K3 b k - 0 1", side: "black", sentence: "Black can castle kingside now." },
     { fen: "7k/8/8/8/8/8/8/rRK5 w B - 0 1", side: "white", sentence: "White cannot castle queenside now: c1 is attacked." },
     { fen: "Rrk5/8/8/8/8/8/8/7K b b - 0 1", side: "black", sentence: "Black cannot castle queenside now: c8 is attacked." },
+    // D3642, FIDE Guidelines II.3.2.7(4): the rook's route must also be clear.
+    { fen: "4k3/8/8/8/8/8/8/RN2K3 w Q - 0 1", side: "white", sentence: "White cannot castle queenside now: b1 is occupied." },
+    { fen: "rn2k3/8/8/8/8/8/8/4K3 b q - 0 1", side: "black", sentence: "Black cannot castle queenside now: b8 is occupied." },
+    { fen: "4k3/8/8/8/8/8/8/1RKN4 w B - 0 1", side: "white", sentence: "White cannot castle queenside now: d1 is occupied." },
+    { fen: "1rkn4/8/8/8/8/8/8/4K3 b b - 0 1", side: "black", sentence: "Black cannot castle queenside now: d8 is occupied." },
+    { fen: "4k3/8/8/8/8/8/8/5NKR w K - 0 1", side: "white", sentence: "White cannot castle kingside now: f1 is occupied." },
+    { fen: "5nkr/8/8/8/8/8/8/4K3 b k - 0 1", side: "black", sentence: "Black cannot castle kingside now: f8 is occupied." },
+    { fen: "4k3/8/8/8/8/8/8/RK1N4 w A - 0 1", side: "white", sentence: "White cannot castle queenside now: d1 is occupied." },
+    { fen: "rk1n4/8/8/8/8/8/8/4K3 b a - 0 1", side: "black", sentence: "Black cannot castle queenside now: d8 is occupied." },
+    // Completed negatives: same rights/geometry, with only that knight removed.
+    { fen: "4k3/8/8/8/8/8/8/R3K3 w Q - 0 1", side: "white", sentence: "White can castle queenside now." },
+    { fen: "r3k3/8/8/8/8/8/8/4K3 b q - 0 1", side: "black", sentence: "Black can castle queenside now." },
+    { fen: "4k3/8/8/8/8/8/8/1RK5 w B - 0 1", side: "white", sentence: "White can castle queenside now." },
+    { fen: "1rk5/8/8/8/8/8/8/4K3 b b - 0 1", side: "black", sentence: "Black can castle queenside now." },
+    { fen: "4k3/8/8/8/8/8/8/6KR w K - 0 1", side: "white", sentence: "White can castle kingside now." },
+    { fen: "6kr/8/8/8/8/8/8/4K3 b k - 0 1", side: "black", sentence: "Black can castle kingside now." },
+    { fen: "4k3/8/8/8/8/8/8/RK6 w A - 0 1", side: "white", sentence: "White can castle queenside now." },
+    { fen: "rk6/8/8/8/8/8/8/4K3 b a - 0 1", side: "black", sentence: "Black can castle queenside now." },
   ])("returns exact legal/attacked reasons for $fen without changing saved play", async value => {
     const app = fixture!.current()!;
     await new Promise<void>((resolve, reject) => { app.server.once("error", reject); app.server.listen(0, "127.0.0.1", resolve); });

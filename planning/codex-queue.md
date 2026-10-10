@@ -12,6 +12,19 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3642]] is closed locally: the existing exact castling-legality reading now retains
+rook-only clearance blockers, including orthodox queenside and Chess960 stationary/overlapping
+paths. Ten predecessor controls fail; both-color geometry, sealed factory, opponent-vector and
+authenticated Inspector controls pass. The first full software run caught the expected changed
+legality/vector snapshots; only their three computed payload digests were refreshed after literal
+operand assertions, not the frozen migration receipt. The generated validation receipt rebuild
+preserves all 87 canonical verdicts and zero fully qualified subjects. All 91 focused cases and
+full normal local gates pass: 4,326 software, seven unchanged-budget performance, 239 content
+and 245 browser cases, one optional Maia skip, zero retries and 150 input/112 composition cells.
+The first browser attempt exposed a phone helper clicking behind an open companion modal;
+normal dismissal fixes the journey and the complete rerun passes. No calibration, permission,
+D1 discharge, whole capability, remote CI or release claim.
+
 [[D3639]]/[[D3640]]/[[D3641]] are closed locally: 24 source-bound literal-rule cases retain
 the original 63, bringing canonical coverage to 87 passing cases over 81 subjects, still zero
 fully qualified. Exact castling causes and finite stationary-king checks reach sealed factories,

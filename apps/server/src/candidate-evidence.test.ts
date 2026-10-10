@@ -47,6 +47,12 @@ describe("candidate evidence adapter", () => {
         "rules.tactic.reading.loose_piece",
         "rules.tactic.consequence.reply_breadth",
       ]));
+      // D3642: the real opponent consumer receives both pieces' clearance
+      // blockers, not merely a new Inspector caption or a refreshed snapshot.
+      expect(row.results.filter(result => result.source.id === "rules.castling.reading.legality").map(result => result.payload)).toEqual(expect.arrayContaining([
+        expect.objectContaining({ color: "white", wing: "queenside", blockedSquares: ["d1", "c1", "b1"] }),
+        expect.objectContaining({ color: "black", wing: "queenside", blockedSquares: ["d8", "c8", "b8"] }),
+      ]));
     }
     expect(vector.candidates[0]!.results.some((result) => result.source.id === "rules.transition.event.developed")).toBe(true);
     expect(JSON.stringify(vector)).not.toMatch(/sentence|personality|move_quality|learner/u);
