@@ -17,6 +17,11 @@
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
+- **Draft amendment 2026-10-10 — D3309/D3654:** the detailed structural Inspector contract
+  below adds sixteen reading successors and `inspector.position_structure@2`. It preserves all
+  existing `@1` declarations, factories, adapters and operations, including board Sight. Authored
+  from the measured fidelity instrument; independent review remains required. The parent's
+  implementing status does **not** authorize this amendment's production migration.
 - **Draft companion amendment 2026-10-09 — D3578:** `rfc/module-registration.md` §4.2a
   owns selected-square context as four explicit derived payloads, not a generic adapter callback
   or a changed parent reading. Once independently accepted, register exact successor adapters
@@ -1838,6 +1843,133 @@ and positive/negative visible fidelity fixtures. This is a proposed amendment fo
 accepted implementation authority. Neither a generic `Position reading: ...` substitute nor a
 local prose side channel discharges the current-consumer obligation.
 
+## Draft amendment — detailed structural Inspector (D3309/D3654)
+
+**State: authored, awaiting independent review; not accepted implementation authority.** This
+amendment completes the specification missing from D3309's measured proposal. It does not
+discharge the current-consumer obligation, qualify a chess detector or select useful hints.
+Evidence: `planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md`
+and the disposable `make structural-inspector-fidelity-check` (195 controls). The prototype checks
+fidelity against the same collector; it is not an independent oracle for chess semantics.
+
+### Version boundary and callable operations
+
+For each of the sixteen kinds below, add `rules.structural.reading.<kind>@2`; never change the
+operands or meaning of its `@1` predecessor. Introduce **`inspector.position_structure@2`**, accepting
+exactly these sixteen `@2` readings plus the existing `rules.structural.reading.named_structure@2`.
+The existing consumer `inspector.position_structure@1` continues to accept its original exact
+versions, through its existing operations and adapters. `board.selected_square_sight@1`, predicate
+projections, comparison-delta projections and installed pack references remain unchanged.
+`pawn_count` is matcher-only and receives no successor. The existing named-structure successor is
+reused unchanged, not replaced with a generic string slot. This corrects D3654: changing the
+accepted input set of the old consumer is a version change, even if its label remains identical
+(`rfc/archive/evidence-contract-manifest.md` §4.2).
+
+The new runtime entry is `presentPositionStructureEvidence({ fen, context })` in
+`packages/runtime/src/reading-evidence.ts`: acquire sole-factory readings for the displayed FEN,
+compile the exact `@2` consumer, and present its admitted items with registered pair-keyed adapters.
+`context` is the existing compiler/presentation context, not a new permission or prose object.
+Register this actual callable in `CONSUMER_PRESENTATION_CLASSES` and its consumer-operation census;
+pointing at a symbol without production consumption does not pass. No new server endpoint,
+background search, cache or shared-resource version is required. Existing extensible projection,
+consumer and renderer registries receive independently versioned declarations.
+
+### Closed payloads, not optional observation bags
+
+All successors retain `kind` (the literal kind) and `squares` (the exact ordered square array).
+Each has a closed payload type/parser and the following **required**, not optional, fields.
+No renderer may infer a missing side as Black or a missing count as zero.
+
+| Kind | Additional required operands | Retained scope |
+|---|---|---|
+| `backward_pawn` | `color`, `file` | Existing detector match; not a move grade |
+| `isolated_pawn` | `color`, `file` | Existing adjacent-file pawn test |
+| `doubled_pawn` | `color`, `file` | At least two same-side pawns on the file |
+| `half_open_file` | `color`, `file` | No own pawn, at least one opposing pawn |
+| `open_file` | `file` | Neither side has a pawn on the file |
+| `passed_pawn` | `color` | Existing ahead/adjacent-file test, not promotion assurance |
+| `outpost` | `color` | Existing strict detector, explicitly convention-qualified |
+| `pawn_safe_square` | `color`, `detail` | Maximal pawn-reach geometry, not future legal moves |
+| `bishop_on_shade` | `color`, `shade` | Actual bishop square and light/dark shade |
+| `line_blockers` | `count` | Ordered ray endpoints and actual interior blocker count |
+| `direct_attack_count` | `color`, `count` | Geometric attacks, not pin/check-filtered legal captures |
+| `piece_reach_count` | `color`, `role`, `count` | Knight/bishop/rook/queen pseudo-reach excluding own occupied squares |
+| `king_opposition` | `color`, `form` | Existing direct/distant predicate and turn-dependent beneficiary |
+| `piece_count` | `color`, `role`, `count` | Every side/role, including zero, with empty witness squares |
+| `king_zone` | `color`, `zone` | Existing edge/corner location, not safety assessment |
+| `piece_distance` | `role`, `count` | Literal king role; empty-board king distance, not a legal forecast |
+
+Use existing `Color`, `FileName`, `SquareName` and role definitions, narrowed where the collector
+is narrower: `piece_distance.role` is `king`; reach roles exclude pawn/king. Counts are the
+collector's nonnegative integers (including zero where emitted); a guessed universal count cap
+is not introduced. `shade`, `form` and `zone` use their existing finite alternatives. `squares`
+retain order/multiplicity and the kind's actual witness shape: empty arrays for file/count facts,
+one square for individual piece/pawn readings, ordered endpoints for rays and the existing sorted
+pair for king opposition/distance. Do not sort all witnesses or merge readings by caption.
+
+`detail` is the complete existing pawn-safety record: `square`, `color`, `safe`, literal
+`basis: maximal_pawn_reach@1`, and ordered `pushAttackers[{square,pushes}]` /
+`captureAttackers[{square,captures}]` arrays. Nested records are closed; unknown keys, missing
+fields, mismatched side/square and invented legal-move bases refuse. Render the geometry caveat
+even when the square is called safe. Keep the strict-outpost caveat as registered convention
+wording rather than accepting caller-supplied `provenanceNote` prose in these successor payloads.
+The separately admitted named-structure record retains its existing registered provenance.
+
+Add a successor factory table alongside, not over, `STRUCTURAL_READING_FACTORIES`. Factories
+accept the canonical FEN through the existing validated FEN path and compute their own operands;
+they do not accept caller observations, component records, captions or cached caller testimony.
+They copy only the declared kind-specific fields from the existing computation and use the
+existing evidence sealing/value receipt. One actual emitted observation yields one item; the
+successor table introduces no extra detector or new content claim. Wrong-kind, unknown-key and
+malformed payloads fail before rendering. Forged/copied items remain inadmissible.
+
+### Registered presentation and the two real migrations
+
+Register every exact `inspector.position_structure@2 × reading@2` pair in
+`packages/runtime/src/presentation-consumer-adapters.ts`. Each uses the existing `fact_statement`
+component and a registered renderer over the closed admitted payload. Keep source attribution,
+grounding, exactness and assistance ceilings inherited from the declared reading; richer text
+does not increase evidence authority. Both component captions and equivalent accessible sentences
+name the literal retained fields. King distance explicitly says empty-board distance; pawn reach,
+strict outposts and geometric attack/reach retain their qualifications. Counts are counts, not
+quality colours or recommendations. No generic `Position reading: ...` substitute, optional-field
+fallback, caller prose, or legacy raw rendering closes fidelity.
+
+Migrate both actual consumers: `DrillScreen.svelte`'s open Position structure section and
+`CompareView.svelte`'s position-structure details use the new callable and `PresentedEvidence`.
+Do not migrate only one or leave a raw loop as fallback. Preserve collapse/empty states, current
+access/help/disclosure, displayed branch/FEN and decision lifetime. Old responses or items for a
+retired displayed position cannot paint the new board. This amendment adds no settings, presets,
+module relevance ranking, automatic display, selected-square policy or ordinary hint surface.
+The legacy renderer may remain for its other retained consumers; deleting it globally is not
+part of this migration. Existing saved packs/runs do not change format.
+
+### Able-to-fail acceptance and closeout
+
+1. Set equality: exactly sixteen successor factories/types/parsers, explicit `@2` consumer,
+   operation and complete pair-keyed adapter coverage. Include zero-count/empty-witness records.
+2. Freeze predecessor contract fixtures: all retained `@1` declaration/accept lists, outputs and
+   board Sight still work. An `@1` item cannot satisfy the new sixteen-kind `@2` bindings and a
+   new `@2` item cannot silently widen an old binding. Existing named-structure `@2` still works.
+3. For every kind, a real FEN/factory/compiler/component positive retains all required operands;
+   missing/mismatched/extra fields and forged item/component prose refuse. Keep malformed nested
+   pawn-safety negatives and count/side/role/shade distinctions, not just rendered snapshots.
+4. Mounted **both** screens assert actual typed components and captions, not adapter invocation.
+   The measured Carlsbad reading keeps White/Black seven-pawn counts and White's light-square
+   bishop on d3; twelve side/role counts must not collapse into one caption. Changing displayed
+   branch/FEN and closing/reopening the section cannot retain stale readings or change moves.
+5. Native desktop/phone journeys open both sections, verify readable qualified facts without raw
+   identifiers, and preserve board hit targets, ceilings, collapse/empty state and saved play.
+6. Normal software/content/governance/build/browser gates pass. Content remains a compatibility
+   check, not a requirement that every pack emit all sixteen kinds. No raw measurement dump or
+   new mandatory research gate is added. Close D3309/D3654 only with production bindings and
+   visible fidelity proof; the 195 prototype controls alone close neither.
+
+Open review question: does the successor operation inherit the actual display/help context at
+both call sites without creating a second admission path? Independent review must inspect the
+compiler, parser, renderer and consumers, including the zero-count and pawn-geometry negatives.
+No further product policy or owner choice is presumed necessary for preserving measured facts.
+
 ## Questions resolved for this draft
 
 1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the
@@ -1895,6 +2027,11 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-10-10 — **D3309/D3654 detailed structural Inspector amendment authored, not accepted.**
+  Sixteen closed reading successors, a separate consumer/operation, required scope qualifiers,
+  retained predecessor contracts and both real UI migrations are specified above. The existing
+  195-control fidelity instrument passes; no production declaration, adapter or UI is changed.
 
 - 2026-09-24 — **Checkpoints P (remainder) and B implemented directly at the owner's direction; status
   stays `implementing`.** Receipt: `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`. Checkpoint P: opponent selection and the repertoire scan

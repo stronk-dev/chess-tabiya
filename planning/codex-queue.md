@@ -12,6 +12,14 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3309]]/[[D3654]] now have an authored detailed-Inspector amendment in
+`rfc/evidence-presentation.md`: sixteen closed reading successors, a separately versioned
+consumer/operation and both DrillScreen/Compare migrations. The 195-control existing fidelity
+instrument passes; this is specification progress, not production migration or new acceptance.
+Get fresh independent review of the exact operand/version/context contract before implementation;
+preserve all old reading/consumer versions and board Sight. Do not replace the richer raw view
+with the current lossy typed caption or close these rows on prototype tests alone.
+
 [[D3653]] implements the existing registered-bot deadline contract end to end through discovery,
 shared acquisition, typed guard/trait abstention and file-backed replay. Six permanent controls
 fail on the unchanged predecessor; all 86 focused bot source/selection controls and workspace

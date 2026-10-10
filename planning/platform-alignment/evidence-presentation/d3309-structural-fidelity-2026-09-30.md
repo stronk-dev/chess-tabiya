@@ -113,3 +113,21 @@ Make commands run it without caller-supplied environment or toolchain overrides.
 process/scaffold checks and ordinary commit hooks are recorded in the exploration log; older
 full software/browser evidence is not relabelled as a fresh run. The simultaneous depth12/top8
 capture remains an incomplete measurement and is neither restarted nor counted complete.
+
+### Author checkpoint — 2026-10-10 (D3309/D3654)
+
+The formal draft amendment is now in `rfc/evidence-presentation.md`, under “Detailed structural
+Inspector”. It specifies sixteen closed successor payloads, sole-FEN factories, registered
+qualified statements, an actual callable operation and both visible migrations. The current
+195-control disposable instrument passes again; its same-collector limitation remains. [V: RFC
+amendment and `make structural-inspector-fidelity-check`]
+
+D3654 corrects the earlier proposal's version seam: retaining `inspector.position_structure@1`
+while changing its accepted inputs is not preservation. The successor is
+`inspector.position_structure@2`; all predecessor declarations/operations, board Sight and
+saved formats remain. This supersedes that part of the proposal, not its historical measurement.
+[V: `rfc/archive/evidence-contract-manifest.md` §4.2; current consumer accept declarations]
+
+Independent review is next. Neither production factory/adapters nor either UI migration is
+delivered by this author checkpoint. D3309 and D3654 remain open; no full-presentation, browser,
+semantic-qualification or 1.0 capability claim follows. No new raw recording or required gate.

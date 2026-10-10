@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8b63e275e0f227360da2ffdfba9b0d93642eeb24ca2bddbce001ba5b23e6035e",
+    "roadmap": "sha256:1cb23af42c779701fc2be4e976539e63a2afe0d9d9570e91984147a8eea164dc",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:dca07dc6b0e3ad4577e60b2b6c5677a1c9bf1d9a22faf1c5f896d7e5384fbff1",
+    "workState": "sha256:6b01635639c5bb02146c05c2a1fd3128774d29dfe8bd61694ecc4addb31d7239",
     "rfcRegister": "sha256:f5e30d387e6d4c07a6d5bcca14dacad0ec0341465406e5aa8370ed5b9f87712f",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:cc77a73dfc611fbb32c5d4b54affac65590fda8e4c34dd16ab1b18346288af10",
@@ -30,9 +30,9 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
+      "todo": 627,
       "doing": 14,
-      "blocked": 1068,
+      "blocked": 1070,
       "done": 1531,
       "refused": 161
     },
@@ -259,7 +259,7 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
+      "nextAction": "Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-10",
         "summary": "D3653 bounds registered-bot engine discovery and shared acquisition inside the original 500 ms guard opportunity and caps the base waiter at the declared consumer deadline. Six permanent controls fail on the predecessor; all 86 focused bot source/compiler/registered-route cases and workspace types pass. Expiry preserves the independently reconstructed Maia distribution/draw, records guard/trait abstention, starts no late work and changes no provider health before acquisition; genuine acquired-source failures still settle health. File-backed restart replays without provider calls or event mutation; stalled Maia returns the existing no-move 503. Complete normal local gates pass clean types/build/governance/packaging, 4401 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files and 261 browser cases, one optional Maia skip, zero retries and all 150 input/112 composition cells. D3645/D3646's prior exact-identity Review repair stands. No source format, sampler, profile, calibration, Stage-B implementation, whole capability, native appliance or remote-CI promotion.",

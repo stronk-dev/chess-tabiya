@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3653]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3654]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -59,13 +59,19 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
 Current checked inventory after [[D3649]]–[[D3653]]: 273 UX items complete, 272 live and 24
-retired; 1,710 live ledger items, all assigned, alongside 1,531 done and 161 refused. The 462
+retired; 1,711 live ledger items, all assigned, alongside 1,531 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
+
+Latest author checkpoint: [[D3309]]/[[D3654]] now have a formal draft amendment in
+`rfc/evidence-presentation.md`: sixteen detailed structural reading successors, a separate
+Inspector consumer/operation and both visible Inspector/Compare migrations. The existing
+195-control fidelity instrument passes. Independent review and production migration remain
+open; this is not delivered UI fidelity, semantic qualification or capability completion.
 
 Latest return boundary repair: [[D3649]]/[[D3650]] prevent a restored schedule from reading a
 foreign game's settings or forwarding its authored rating band to Explorer. Current game grants

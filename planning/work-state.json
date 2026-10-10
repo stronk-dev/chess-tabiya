@@ -27176,11 +27176,13 @@
     },
     {
       "id": "D3309",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:8e213c65162de8a042b9fc542eb7a7f1b802c32f3312a1a997709362f9a7fd37",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md",
+      "question": "Independent review of the authored structural Inspector successor contract before production migration"
     },
     {
       "id": "D3310",
@@ -30277,6 +30279,16 @@
       "uxItems": [],
       "evidence": "apps/server/src/bot-opponent-ply.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3654",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8c136d910ed528a4d3cf1b3ab5ce58de31af4acecc8bd6e81f51500597aed1f9",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md",
+      "question": "Independent review of the authored structural Inspector successor contract before production migration"
     }
   ]
 }

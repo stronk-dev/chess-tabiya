@@ -24243,3 +24243,26 @@ Campaign was the one capability with no API, route or content. Now:
   zero retries, all 150 exact-input and 112 composition cells. Current registered-bot selection,
   restart/resume and desktop/phone rematch remain playable. Final documentation/tracker-only
   closeout is rechecked before the explicit owned-file commit; no push or remote-CI result.
+
+### 2026-10-10 — Structural Inspector fidelity contract authored (D3309/D3654)
+
+- Finished the in-flight authoring before the owner's total progress overview. The existing
+  disposable fidelity instrument passes all 195 controls: actual computed operands survive
+  sealing but the current typed Inspector discards their distinctions. It is fidelity evidence
+  against the same collector, not independent validation of the chess predicates.
+- D3654 records the proposal's retained-consumer version error before repair. The formal draft
+  in evidence-presentation specifies sixteen closed reading successors, a separate `@2`
+  consumer/callable, qualified registered statements and both real Inspector/Compare migrations.
+  Existing versions, board Sight, installed packs and saved runs remain unchanged.
+- Both rows retain the assistance-and-presentation owner and an explicit independent-review
+  blocker. The parent RFC's implementing status does not accept this amendment. No production
+  factory, adapter, screen, semantic qualification or whole capability is delivered by authoring.
+- The existing queue, research note, roadmap and durable state carry the checkpoint; no new
+  tracker, research dump, global version or mandatory research/content gate is introduced.
+  Normal governance and receipt checks run before the explicit owned-file commit. The previous
+  production commit's full software/build/browser result is historical proof, not a fresh run
+  of this documentation-only amendment. Nothing is pushed or reported as remote CI.
+- Final author checkpoint checks pass: `make structural-inspector-fidelity-check` (strict types,
+  195 controls), `make verify-governance`, current generated roadmap receipt and whitespace check.
+  Routing covers all 1,711 live ledger items; zero untriaged. No production tests or qualification
+  outcome are modified. The owner-requested overview uses that checked inventory, not commit count.
