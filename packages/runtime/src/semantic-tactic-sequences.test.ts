@@ -11,6 +11,7 @@ import {
   deflectionObservedInduction,
   deflectionObservedOperands,
   deflectionObservedSemanticEvent,
+  defenderConsequenceOperands,
   interferenceObservedOperands,
   interferenceSemanticEvent,
   lineBlockerClearanceObservedOperands,
@@ -73,6 +74,34 @@ function captureEvidenceForPath(path: readonly RecordedMoveAnchor[]) {
 }
 
 describe("observed semantic tactic sequences", () => {
+  it.each([
+    { fen: "k2r2r1/8/8/3pP3/8/8/8/1K4R1 w - d6 0 2", moves: ["e5d6", "d8d6", "g1g8"], removed: "d5", landing: "d6" },
+    { fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", moves: ["e4d3", "d1d3", "g8g1"], removed: "d4", landing: "d3" },
+  ])("D3646 keeps an en-passant overload's removed target and actual recapture ($landing)", value => {
+    const path = anchors(value.fen, value.moves);
+    const events = overloadExploitationObservedOperands(path);
+    expect(events).toHaveLength(1);
+    const event = events[0]!;
+    expect(event.firstCapture).toMatchObject({ enPassant: true, to: value.landing });
+    expect(event.defenderRecapture).toMatchObject({ to: value.landing });
+    expect(event.dutySet).toContainEqual(expect.objectContaining({ target: expect.objectContaining({ square: value.removed, piece: expect.objectContaining({ role: "pawn" }) }) }));
+    expect(overloadExploitationSemanticEvent(event, moveEvidence(path), dutyEvidence(path[0]!.beforeFen), path.map(captureEvidence), exchangeEvidence(event.secondTargetCapture))).toMatchObject({ projection: { id: "derived.tactic.overload_exploitation_observed", version: 1 }, operands: event });
+    // A complete continuation without the defender's recapture is not this event.
+    const other = value.landing === "d6" ? ["e5d6", "a8b7", "g1g8"] : ["e4d3", "a1b2", "g8g1"];
+    expect(overloadExploitationObservedOperands(anchors(value.fen, other))).toEqual([]);
+  });
+
+  it.each([
+    { fen: "k7/8/8/3pP3/4n3/8/8/1K2R3 w - d6 0 2", moves: ["e5d6", "a8b7", "e1e4"], defender: "d5", target: "e4" },
+    { fen: "1k2r3/8/8/4N3/3Pp3/8/8/K7 b - d3 0 2", moves: ["e4d3", "a1b2", "e8e5"], defender: "d4", target: "e5" },
+  ])("D3646 identifies the actual en-passant-captured defender ($defender)", value => {
+    expect(defenderConsequenceOperands(anchors(value.fen, value.moves))).toContainEqual(expect.objectContaining({
+      kind: "edge_lost_target_captured", firstMoveCapturedDefender: true,
+      defender: { before: expect.objectContaining({ square: value.defender, piece: expect.objectContaining({ role: "pawn" }) }) },
+      target: expect.objectContaining({ square: value.target }),
+    }));
+  });
+
   it("requires defender displacement and a later positive target capture", () => {
     const positive = anchors("1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e7"]);
     const event = deflectionObservedOperands(positive)[0]!;

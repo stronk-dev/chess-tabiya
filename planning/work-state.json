@@ -30196,6 +30196,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/provider-tablebase.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3645",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:beba68f3c4dd3a2b3db476f707cf6cd60b11cde6f1fb97752d79a793c30eb108",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-tactics.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3646",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e9b9c7e9caf5ff71c633923d7ab60f9ba7bb9c7dee966b3b994fee20a5afa53e",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -24037,3 +24037,42 @@ Campaign was the one capability with no API, route or content. Now:
   in this commit. Remaining source adoption, semantic qualification, useful defaults, official
   content, calibration, whole-capability and native release obligations remain open. No push or
   remote CI result is claimed; the full 1.0 goal remains active.
+
+### 2026-10-10 — exact removed-piece identity survives en passant (D3645/D3646)
+
+- Twelve permanent predecessor controls reproduce a silently clear overload-response predicate,
+  missing saved three-edge overload events, and incorrect defender-consequence captions through
+  actual authenticated Review. Both colors distinguish the removed pawn's square from the
+  capturing pawn's landing; this repairs semantic-collectors' existing capture/overload contract
+  and the implemented recorded-semantic-path compiler, not a new detector or chess judgement.
+- One internal capture-address helper preserves that distinction in defender removal, overload
+  duty lookup, observed overload and defender consequence. Legal recaptures still target the
+  actual landing. Both-color no-recapture, extra-defender and non-profitable-capture controls
+  preserve abstention and refutation; crossed sealed inputs refuse. Saved v2 reconstruction and
+  authenticated owned/anonymous/foreign Review controls preserve attribution and recorded play.
+- Focused verification passes 598 foundation and 83 Review controls plus clean types. Eight native
+  desktop/phone Review journeys are added for exact captions, three-edge paths, square highlights,
+  selection retirement, unchanged board size and saved play; their execution and the complete
+  normal local gates are in progress, not yet claimed. A diagnostic shell command reports
+  transient process-resource exhaustion; a read-only process check confirms the bounded software
+  workers are still progressing. No unrelated process is stopped or test budget changed.
+- Current-code full software (4,360 tests/364 files) and unchanged-budget performance (seven/
+  four files) pass twice. The first aggregate stops on the existing generated validation record;
+  its normal regeneration changes implementation references only, preserving every case,
+  population, external and verdict datum (87 cases pass, zero fully qualified). The second stops
+  on missing queue references for these two assigned rows. Adding their existing-queue entry
+  restores routing; remaining normal governance, 241 content tests/24 files and build pass.
+- The first native browser run passes 184 cases, skips optional Maia and fails the four new
+  overload examples because the test counts plies across two legitimate admitted facts as one.
+  Deflection and overload each render the complete three-edge recorded path. The corrected
+  control requires both paths and their exact literal SAN lists, instead of deleting a fact or
+  weakening its completeness. All native browser tiers are rerunning; no final pass is claimed yet.
+- Final native rerun passes 188 smoke, five content, 59 matrix and one packaged-default cases
+  (253 total), one optional Maia skip, zero retries and all 150 input/112 composition cells.
+  All eight new desktop/phone Review journeys pass literal paths, captured-piece captions,
+  oriented square centers, selection retirement, unchanged board size and saved play.
+- Close D3645/D3646 with permanent test-path evidence and update the existing queue, work-state,
+  product inventory and evidence-spine checkpoint in this commit. Larger source integration,
+  semantic qualification, useful defaults, calibration, official graduation, all full journeys
+  and release obligations remain open. No pushed-revision CI or native release-image claim;
+  the full 1.0 goal remains active.

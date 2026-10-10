@@ -7,7 +7,7 @@ import { kingCastlesTo, makeSquare, makeUci, opposite, parseSquare, parseUci, ro
 import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { exchangeCaptureAt, EXCHANGE_PIECE_VALUES, legalCaptureMovesTo, legalExchangeForMove, type LegalExchangeResult } from "./exchange.js";
 import { matchesStructuralFeature, vacationReading } from "./structure.js";
-import type { TransitionSemanticFact } from "./transition.js";
+import { captureTargetSquare, type TransitionSemanticFact } from "./transition.js";
 import { memoByInput } from "./fen-memo.js";
 
 const PROMOTIONS: readonly Role[] = Object.freeze(["queen", "rook", "bishop", "knight"]);
@@ -134,10 +134,7 @@ export function defenderRemovedEvents(beforeFen: string, moveUci: string, afterF
   if (capture === undefined) return Object.freeze([]);
   const edge = exactEdge(beforeFen, moveUci, afterFen);
   if (capture.from !== makeSquare(edge.move.from) || capture.to !== makeSquare(edge.move.to)) throw new TypeError("Defender-removal capture identity differs from the edge");
-  const capturedSquare = capture.enPassant
-    ? ((Math.floor(edge.move.from / 8) * 8 + edge.move.to % 8) as Square)
-    : edge.move.to;
-  const capturedName = makeSquare(capturedSquare);
+  const capturedName = captureTargetSquare(capture);
   const duties = defenderDutyReading(edge.beforeFen).duties.filter((duty) => duty.defender.square === capturedName && duty.defender.piece.color === capture.captured.color && duty.defender.piece.role === capture.captured.role);
   return Object.freeze(duties.filter((duty) => retainedTarget(edge.after, duty)).map((lostDuty) => Object.freeze({
     beforeFen: edge.beforeFen,
@@ -189,7 +186,10 @@ export function overloadedDefenderResponseConflict(beforeFen: string, moveUci: s
   const edge = exactEdge(beforeFen, moveUci, afterFen);
   if (capture.from !== makeSquare(edge.move.from) || capture.to !== makeSquare(edge.move.to)) throw new TypeError("Overload capture identity differs from the edge");
   const duties = defenderDutyReading(edge.beforeFen).duties;
-  const targetDuties = duties.filter((duty) => duty.target.square === capture.to && duty.target.piece.color === capture.captured.color && duty.target.piece.role === capture.captured.role && duty.coDefenders.length === 0);
+  // Join the removed target's prior duty, not the candidate's landing square.
+  // Legal recaptures below still target the candidate where it actually landed.
+  const capturedName = captureTargetSquare(capture);
+  const targetDuties = duties.filter((duty) => duty.target.square === capturedName && duty.target.piece.color === capture.captured.color && duty.target.piece.role === capture.captured.role && duty.coDefenders.length === 0);
   let missingRecapture = false;
   const conflicts: OverloadedDefenderConflict[] = [];
   for (const capturedDuty of targetDuties) {

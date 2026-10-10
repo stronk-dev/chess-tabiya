@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { parsePresentationReceipt, type PresentationReceipt } from "@chess-tabiya/runtime";
+import { parsePresentationReceipt, presentedSentence, type PresentationReceipt } from "@chess-tabiya/runtime";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -94,9 +94,9 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     return response.headers.get("set-cookie")!.split(";", 1)[0]!;
   }
 
-  async function importReviewedGame(origin: string, cookie: string, writer: string, pgn = GLYPHED_PGN): Promise<string> {
+  async function importReviewedGame(origin: string, cookie: string, writer: string, pgn = GLYPHED_PGN, side: "white" | "black" = "white"): Promise<string> {
     const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": writer }, body: JSON.stringify(body) });
-    const imported = await post("/runs/import", { id: "review-import", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn } });
+    const imported = await post("/runs/import", { id: "review-import", side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn } });
     expect(imported.status, await imported.clone().text()).toBe(201);
     const runId = "review-import";
     expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
@@ -134,6 +134,34 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(tableSnapshot(databasePath)).toEqual(before);
     expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
     const stranger = await register(origin, "review_relation_stranger");
+    expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
+  });
+
+  it.each([
+    { side: "white", fen: "k2r2r1/8/8/3pP3/8/8/8/1K4R1 w - d6 0 2", line: "2. exd6 Rxd6 3. Rxg8+ *", projection: "derived.tactic.overload_exploitation_observed", text: "exd6 was answered by the recapture Rxd6", squares: ["d6", "g8"] },
+    { side: "black", fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", line: "2... exd3 3. Rxd3 Rxg1+ *", projection: "derived.tactic.overload_exploitation_observed", text: "exd3 was answered by the recapture Rxd3", squares: ["d3", "g1"] },
+    { side: "white", fen: "k7/8/8/3pP3/4n3/8/8/1K2R3 w - d6 0 2", line: "2. exd6 Kb7 3. Rxe4 *", projection: "derived.tactic.sequence.defender_consequence", text: "Black's pawn on d5 was captured", squares: ["d5", "e4"] },
+    { side: "black", fen: "1k2r3/8/8/4N3/3Pp3/8/8/K7 b - d3 0 2", line: "2... exd3 3. Kb2 Rxe5 *", projection: "derived.tactic.sequence.defender_consequence", text: "White's pawn on d4 was captured", squares: ["d4", "e5"] },
+  ] as const)("D3646 delivers exact en-passant $projection through owned Review ($side)", async value => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "ep_review_owner");
+    const pgn = `[Event "En-passant recorded sequence"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${value.fen}"]\n\n${value.line}`;
+    const runId = await importReviewedGame(origin, cookie, "writer-en-passant", pgn, value.side);
+    const before = eventKinds(databasePath, runId);
+    const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const review = await response.json() as ReviewPayload;
+    expect(review.rows).toHaveLength(3);
+    const items = parsePresentationReceipt(review.rows[2]!.packet).filter(item => item.adapter.projection.id === value.projection);
+    expect(items.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
+    expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
+    expect(presentedSentence(items[0]!)).toContain(value.text);
+    expect(items[1]!.component).toMatchObject({ operand: { plies: [{}, {}, {}] } });
+    expect(items.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+    for (const row of review.rows.slice(0, 2)) expect(row.packet.items.some(item => item.adapter.projection.id === value.projection)).toBe(false);
+    expect(eventKinds(databasePath, runId)).toEqual(before);
+    expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
+    const stranger = await register(origin, "ep_review_stranger");
     expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
   });
 

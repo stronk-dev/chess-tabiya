@@ -32,7 +32,7 @@ import { pawnContactsReading, pawnDynamicsEvents, pawnTransitionEvents, type Har
 import { squareControlEvents, squareControlReading, type SquareControlEvent } from "./square-control.js";
 import { pawnConnectivityReading, structuralReading, type StructuralObservation, type StructuralReading } from "./structure.js";
 import { checkEvent, defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, discoveredExecutedEvents, discoveredLatencyReading, doubleAttackEvent, loosePieceEvents, replyBreadth, type CheckEvent, type DiscoveredExecutedEvent, type DoubleAttackEvent, type GainedSliderRay, type LoosePieceEvent, type ReplyBreadth } from "./tactics.js";
-import { transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
+import { captureTargetSquare, transitionSemanticFacts, type TransitionSemanticFact } from "./transition.js";
 import {
   CANDIDATE_EVENTS_SCOPE,
   assertCandidatePopulationReceipt,
@@ -580,7 +580,7 @@ export function defenderConsequenceOperands(values: readonly RecordedMoveAnchor[
     const targetAfterFirst = exactPiece(positionFromFen(anchors[0]!.afterFen), edge.target.square);
     const targetAfterReply = exactPiece(positionFromFen(anchors[1]!.afterFen), edge.target.square);
     if (targetAfterFirst === undefined || targetAfterReply === undefined || !sameOccupant(edge.target.piece, targetAfterFirst.piece) || !sameOccupant(edge.target.piece, targetAfterReply.piece)) continue;
-    const capturedDefender = firstCapture?.family === "capture" && firstCapture.to === edge.defender.square && firstCapture.captured.color === edge.defender.piece.color && firstCapture.captured.role === edge.defender.piece.role;
+    const capturedDefender = firstCapture?.family === "capture" && captureTargetSquare(firstCapture) === edge.defender.square && firstCapture.captured.color === edge.defender.piece.color && firstCapture.captured.role === edge.defender.piece.role;
     if (!afterFirstEdges.has(defenseKey(edge))) {
       results.push(Object.freeze({ kind: "edge_lost_target_captured", anchors, nodes: recordNodes(anchors), defender: Object.freeze({ before: edge.defender }), target: edge.target, firstMoveCapturedDefender: capturedDefender, finalCapture: finalExchange }));
       continue;
@@ -774,8 +774,8 @@ export function overloadExploitationObservedOperands(values: readonly RecordedMo
   const result: OverloadExploitationObservedOperands[] = [];
   for (const dutySet of groups.values()) {
     if (dutySet.length < 2) continue;
-    const firstDuty = dutySet.find((duty) => duty.target.square === firstCapture.to && duty.target.piece.color === firstCapture.captured.color && duty.target.piece.role === firstCapture.captured.role);
-    if (firstDuty === undefined || makeSquare(reply.move.from) !== firstDuty.defender.square || makeSquare(reply.move.to) !== firstDuty.target.square || defenderRecapture.captured.color !== first.position.turn) continue;
+    const firstDuty = dutySet.find((duty) => duty.target.square === captureTargetSquare(firstCapture) && duty.target.piece.color === firstCapture.captured.color && duty.target.piece.role === firstCapture.captured.role);
+    if (firstDuty === undefined || makeSquare(reply.move.from) !== firstDuty.defender.square || makeSquare(reply.move.to) !== firstCapture.to || defenderRecapture.captured.color !== first.position.turn) continue;
     const secondDuty = dutySet.find((duty) => duty.target.square !== firstDuty.target.square && duty.target.square === secondTargetCapture.captured.square && sameOccupant(duty.target.piece, secondTargetCapture.captured));
     if (secondDuty === undefined) continue;
     result.push(observed<OverloadExploitationObservedOperands>({ anchors, firstCapture, defenderRecapture, secondTargetCapture, dutySet }));
@@ -788,10 +788,7 @@ export function capturedZoneDefenderOperands(beforeFen: string, moveUci: string,
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
   const capture = transitionSemanticFacts(anchor.beforeFen, anchor.moveUci, anchor.afterFen).find((fact) => fact.family === "capture");
   if (capture?.family !== "capture") return Object.freeze([]);
-  const from = parseSquare(capture.from)!;
-  const to = parseSquare(capture.to)!;
-  const capturedIndex = capture.enPassant ? ((Math.floor(from / 8) * 8 + to % 8) as typeof to) : to;
-  const capturedSquare = makeSquare(capturedIndex);
+  const capturedSquare = captureTargetSquare(capture);
   const state = kingZoneReading(anchor.beforeFen).kings.find((entry) => entry.color === capture.captured.color)!;
   return Object.freeze(state.defenders.filter((value) => value.square === capturedSquare && value.piece.role === capture.captured.role).map((defender) => Object.freeze({ beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, capture: immutable({ ...capture, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen }) as TransitionSemanticEventOperands, capturedSquare, kingColor: capture.captured.color, defender })));
 }

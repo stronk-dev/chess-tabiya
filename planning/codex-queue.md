@@ -12,6 +12,21 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3645]]/[[D3646]] are closed locally under semantic-collectors and recorded-semantic-path:
+the removed pawn's identity remains distinct from the en-passant landing through overload
+response conflict, saved overload/defender-consequence windows and authenticated Review.
+Twelve predecessor controls fail; 598 foundation/83 Review controls and clean types pass.
+Current-code full software (4,360) and unchanged-budget performance (seven) pass twice;
+remaining governance, 241 content cases and build pass after the existing validation record
+refresh and queue-reference correction. Eight desktop/phone journeys preserve exact captions,
+each complete admitted path, oriented paint and saved play. Final native tiers pass 253 cases,
+one optional Maia skip, zero retries and all 150 input/112 composition cells. The first browser
+control incorrectly counted two legitimate facts' paths as one; requiring both literal SAN
+lists fixes the instrument, not the product. Canonical cases remain 87 passing over 81 subjects,
+zero fully qualified, with all population/external/verdict data unchanged. Same-commit permanent
+test-path closeout; no new source, permission, judgement, bot calibration, whole capability,
+native release-image or remote-CI promotion.
+
 [[D3644]] is closed locally under provider-exchange §4: normalization, retained admission and
 live retention consume the original deadline/cancellation budget. Late results cannot publish,
 enter the cache even transiently, or displace valid peer entries. Seven predecessor controls and

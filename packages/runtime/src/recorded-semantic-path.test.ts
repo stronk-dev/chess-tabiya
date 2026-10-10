@@ -114,6 +114,26 @@ function forkedRun(): { readonly run: DrillRun; readonly main: string; readonly 
 
 describe("recorded semantic path compiler", () => {
   it.each([
+    { fen: "k2r2r1/8/8/3pP3/8/8/8/1K4R1 w - d6 0 2", moves: ["e5d6", "d8d6", "g1g8"], projection: "derived.tactic.overload_exploitation_observed", removed: "d5" },
+    { fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", moves: ["e4d3", "d1d3", "g8g1"], projection: "derived.tactic.overload_exploitation_observed", removed: "d4" },
+    { fen: "k7/8/8/3pP3/4n3/8/8/1K2R3 w - d6 0 2", moves: ["e5d6", "a8b7", "e1e4"], projection: "derived.tactic.sequence.defender_consequence", removed: "d5" },
+    { fen: "1k2r3/8/8/4N3/3Pp3/8/8/K7 b - d3 0 2", moves: ["e4d3", "a1b2", "e8e5"], projection: "derived.tactic.sequence.defender_consequence", removed: "d4" },
+  ])("D3646 retains exact captured identity through saved v2 $projection ($removed)", value => {
+    const run = recordedRun("en-passant-sequence", value.fen, value.moves);
+    const saved = JSON.parse(JSON.stringify(run)) as DrillRun;
+    const before = JSON.stringify(saved);
+    const result = compileMain(saved);
+    const event = result.events.find(item => item.projection.id === value.projection && item.projection.version === 2);
+    expect(event).toBeDefined();
+    if (event === undefined) throw new Error("Expected recorded en-passant event");
+    if (value.projection.endsWith("defender_consequence")) expect(event.operands).toMatchObject({ firstMoveCapturedDefender: true, defender: { before: { square: value.removed } } });
+    else expect(event.operands).toMatchObject({ firstCapture: { enPassant: true }, dutySet: expect.arrayContaining([expect.objectContaining({ target: expect.objectContaining({ square: value.removed }) })]) });
+    expect(result.windows.filter(window => window.projection.id === value.projection && window.status === "emitted")).toHaveLength(1);
+    expect(result.events.some(item => item.projection.id === value.projection && item.projection.version === 1)).toBe(false);
+    expect(JSON.stringify(saved)).toBe(before);
+  });
+
+  it.each([
     { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], before: "e4", after: "f3", screen: "d5", target: "c6" },
     { fen: "7k/8/2Q5/3N4/2b1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], before: "e4", after: "f3", screen: "d5", target: "c6" },
     { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], before: "e5", after: "f6", screen: "d4", target: "c3" },

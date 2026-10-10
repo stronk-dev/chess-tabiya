@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3644]] · **Machine map:**
+2026-10-10 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3646]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -36,6 +36,11 @@ This is an integrated development platform, not a release candidate. No whole 1.
 complete. The rehearsal loop is the most mature part; existing screens and APIs are delivery, but
 they do not close their missing defaults, evidence, content or release obligations.
 
+The foundation is not yet fully qualified or adopted by every consumer. In particular, emitting
+named motifs and engine numbers does not complete “why this move?”: qualified bounded consequences,
+cross-source explanation and useful module selection still remain. Twelve bot configurations are
+not twelve calibrated personalities; the Campaign pilot is not the full curriculum/reward loop.
+
 | Area | Delivered | Still required for full 1.0 |
 |---|---|---|
 | Evidence | Typed collectors, exact events, candidate packets, shared provider execution and grounded presentation | Remaining real source/consumer bindings, semantic qualification, selection/usefulness and truthful availability |
@@ -53,7 +58,21 @@ they do not close their missing defaults, evidence, content or release obligatio
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Latest foundation repair: [[D3644]] makes the shared provider scheduler enforce original
+Latest foundation repair: [[D3645]]/[[D3646]] distinguish the removed pawn's square from the
+en-passant landing through overload response conflict, saved overload/defender-consequence
+windows and actual authenticated Review. Twelve predecessor controls fail; 598 foundation/83
+Review controls and clean types pass. Eight new desktop/phone journeys retain exact captions,
+complete paths, oriented paint and unchanged saved play. Final normal local verification passes
+4,360 software tests / 364 files, seven unchanged-budget performance / four files, 241 content /
+24 files, types/build/governance/packaging and 253 browser cases, one optional Maia skip, zero
+retries and all 150 input/112 composition cells. The first aggregates stop on the existing
+generated validation record and missing queue references; both are corrected. The first browser
+control counts two legitimate paths as one; requiring both exact SAN lists corrects the instrument.
+Canonical cases remain 87 passing over 81 subjects, zero fully qualified, with no population,
+external, verdict, budget, source/permission, authored pack or whole-capability change. No new
+tracking mechanism, raw capture, pushed-revision CI or native release-image claim.
+
+Previous foundation repair: [[D3644]] makes the shared provider scheduler enforce original
 deadlines and cancellation across normalization, retained admission and live cache publication.
 Late evidence never enters the cache even transiently, while a short/cancelled caller cannot
 spoil valid peer evidence. Seven predecessor controls and two stronger abort-observer assertions

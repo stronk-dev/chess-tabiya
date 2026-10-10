@@ -81,6 +81,12 @@ observed events retain their complete recorded windows in the sealed payload eve
 though their manifest operands name only the motif-specific identities. They remain evidence facts,
 not claims that a move was intended, forced, best, or good.
 
+Capture identity distinguishes the removed piece's square from the mover's landing. For en
+passant, overload response conflicts and recorded overload/defender-consequence windows join the
+removed pawn's prior duty; a recapture still lands on the attacking pawn's actual landing square.
+The same distinction survives saved-window reconstruction and the registered Review caption and
+square/path presentation. It does not assert intent, force or move quality.
+
 **Eligibility** is an exact event-to-consumer permission. It says that an event may reach that
 consumer; it does not say the event is useful, visible or enabled. Every row names its validation
 posture explicitly (`semanticValidation`): `required` compiles eligible only over a `passed`

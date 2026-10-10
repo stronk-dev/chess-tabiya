@@ -5,6 +5,9 @@ import { describe, expect, it } from "vitest";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { localSemanticEvents } from "./semantic-evidence.js";
+import { evidenceForConsumer, evidenceValueReceipt } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { parsePresentationReceipt, presentEvidenceItems, presentedSentence, serializePresentedEvidence } from "./presentation-contract.js";
 import { defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, overloadedDefenderResponseConflict } from "./tactics.js";
 import { transitionSemanticFacts } from "./transition.js";
 
@@ -88,5 +91,70 @@ describe("semantic tactic anchors", () => {
     const pinnedAfter = after(pinnedFen, "b8a7");
     const pinnedCapture = transitionSemanticFacts(pinnedFen, "b8a7", pinnedAfter).find((fact) => fact.family === "capture");
     expect(overloadedDefenderResponseConflict(pinnedFen, "b8a7", pinnedAfter, pinnedCapture)).toMatchObject({ kind: "unavailable", reason: "no_legal_recapture" });
+  });
+});
+
+const enPassantOverloads = [
+  { name: "white", fen: "k2r2r1/8/8/3pP3/8/8/8/1K4R1 w - d6 0 2", move: "e5d6", defender: "d8", captured: "d5", retained: "g8", reply: "d8d6", capture: "g1g8", san: "exd6", recaptureSan: "Rxd6" },
+  { name: "black", fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", move: "e4d3", defender: "d1", captured: "d4", retained: "g1", reply: "d1d3", capture: "g8g1", san: "exd3", recaptureSan: "Rxd3" },
+] as const;
+
+describe("D3645 exact en-passant target and recapture identities", () => {
+  it.each([
+    { fen: "k5r1/4n3/8/3pP3/8/8/8/1K4R1 w - d6 0 2", move: "e5d6", kind: "unavailable" },
+    { fen: "1k4r1/8/8/8/3Pp3/8/4N3/K5R1 b - d3 0 2", move: "e4d3", kind: "unavailable" },
+    { fen: "k2r2r1/2n5/8/3pP3/8/8/8/1K4R1 w - d6 0 2", move: "e5d6", kind: "clear" },
+    { fen: "1k4r1/8/8/8/3Pp3/8/2N5/K2R2R1 b - d3 0 2", move: "e4d3", kind: "clear" },
+    { fen: "k2r2r1/8/7n/3pP3/8/8/8/1K4R1 w - d6 0 2", move: "e5d6", kind: "clear" },
+    { fen: "1k4r1/8/8/8/3Pp3/7N/8/K2R2R1 b - d3 0 2", move: "e4d3", kind: "clear" },
+    { fen: "k2r2r1/8/8/3pP3/8/8/8/1K4B1 w - d6 0 2", move: "e5d6", kind: "clear" },
+    { fen: "1k4b1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", move: "e4d3", kind: "clear" },
+  ])("retains complete-refutation/no-recapture outcomes for $fen", value => {
+    const next = after(value.fen, value.move);
+    const capture = transitionSemanticFacts(value.fen, value.move, next).find(fact => fact.family === "capture");
+    const result = overloadedDefenderResponseConflict(value.fen, value.move, next, capture);
+    expect(result).toMatchObject({ kind: value.kind, conflicts: [] });
+    if (value.kind === "unavailable") expect(result).toMatchObject({ reason: "no_legal_recapture" });
+    const declared = invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", {
+      duties: invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: value.fen }),
+      capture: invokeEvidenceValueRoute("rules.transition.event.capture@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next })[0]!,
+    });
+    expect(declared).toMatchObject(value.kind === "unavailable" ? { kind: "unavailable", reason: "no_legal_recapture" } : { kind: "available", value: [] });
+  });
+
+  it.each(enPassantOverloads)("retains the $name captured pawn separately from the recapture landing", value => {
+    const next = after(value.fen, value.move);
+    const capture = transitionSemanticFacts(value.fen, value.move, next).find(fact => fact.family === "capture");
+    expect(capture).toMatchObject({ enPassant: true });
+    const result = overloadedDefenderResponseConflict(value.fen, value.move, next, capture);
+    expect(result).toMatchObject({ kind: "conflicts", conflicts: [expect.objectContaining({
+      candidate: value.move,
+      soleDefender: expect.objectContaining({ square: value.defender }),
+      capturedTarget: expect.objectContaining({ square: value.captured, piece: expect.objectContaining({ role: "pawn" }) }),
+      retainedTargets: [expect.objectContaining({ square: value.retained })],
+      legalRecaptures: [value.reply],
+      positiveCaptures: [expect.objectContaining({ recapture: value.reply, captures: expect.arrayContaining([expect.objectContaining({ captureUci: value.capture })]) })],
+    })] });
+  });
+
+  it.each(enPassantOverloads)("seals and serializes the $name conflict with its original source items", value => {
+    const next = after(value.fen, value.move);
+    const capture = invokeEvidenceValueRoute("rules.transition.event.capture@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next })[0]!;
+    const duties = invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: value.fen });
+    const result = invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", { duties, capture });
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("Expected available overload computation");
+    expect(result.value).toHaveLength(1);
+    const item = result.value[0]!;
+    expect(evidenceValueReceipt(item)).toMatchObject({ factory: "createDerivedTacticOverloadedDefenderResponseConflictV1Evidence" });
+    const receipt = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, result.value))))));
+    expect(receipt).toHaveLength(1);
+    const sentence = presentedSentence(receipt[0]!);
+    expect(sentence).toContain(value.san);
+    expect(sentence).toContain(`pawn on ${value.captured}`);
+    expect(sentence).toContain(`rook on ${value.retained}`);
+    expect(sentence).toContain(value.recaptureSan);
+    expect(sentence).not.toContain(`pawn on ${value.move.slice(2)}`);
+    expect(() => invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", { duties: invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: next }), capture })).toThrow(/before position/u);
   });
 });

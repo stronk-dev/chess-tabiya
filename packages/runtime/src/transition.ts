@@ -110,6 +110,11 @@ export type TransitionSemanticFact =
       readonly detail: Readonly<{ readonly conventionId: typeof DEVELOPMENT_CONVENTION; readonly roleMatchedHome: true }>;
     };
 
+/** Removed-piece address from a validated capture, distinct from the mover's landing. */
+export function captureTargetSquare(capture: Pick<Extract<TransitionSemanticFact, { readonly family: "capture" }>, "from" | "to" | "enPassant">): SquareName {
+  return capture.enPassant ? `${capture.to[0]}${capture.from[1]}` as SquareName : capture.to;
+}
+
 type Position = ReturnType<typeof positionFromFen>;
 
 interface AttackMap {
