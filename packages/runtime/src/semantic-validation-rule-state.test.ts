@@ -12,7 +12,7 @@ import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
-import { ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
@@ -168,7 +168,7 @@ describe("D3688 material and mobility qualification", () => {
 
   it("retains all 175 predecessor records unchanged and adds exactly sixteen grounded cases", () => {
     const ids = new Set(rows.map(row => row.proposition.case.id));
-    const later = new Set([...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
+    const later = new Set([...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(16);
     expect(raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string))).toHaveLength(175);
     expect(evidenceDigest(raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string))))

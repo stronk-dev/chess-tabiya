@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE } from "./semantic-validation-literal-sources.js";
+import { ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
@@ -134,7 +134,7 @@ describe("D3691 finite pawn dynamics qualification", () => {
   it("adds exactly 22 cases and preserves all 191 predecessor records unchanged", () => {
     const ids = new Set(rows.map(row => row.proposition.case.id));
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(22);
-    const later = new Set(ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    const later = new Set([...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     const prior = raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string));
     expect(prior).toHaveLength(191);
     expect(evidenceDigest(prior)).toBe("822823866a9f9430f9e4438be96e6b17157aab6f05775d4ff199ddc98ba740b9");

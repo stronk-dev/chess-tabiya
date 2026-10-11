@@ -25506,3 +25506,38 @@ Campaign was the one capability with no API, route or content. Now:
 - No fresh browser run, paired exact-revision remote CI, publication, deployment, native image
   recovery or whole capability/release completion is claimed. Protected intent and immutable
   archives are unchanged. The full 1.0 goal stays active; the requested overview is a checkpoint.
+
+## 2026-10-11 — recorded exchange and pawn-contact case arms
+
+- D3705 executes accepted semantic-validation-authority Slices B/C with twenty test/build-only
+  source propositions over the current v2 whole recorded-path operation. Both colours cover
+  immediate, delayed and unrelated captures, en passant, unequal captured roles, contact that
+  survives a reply, its actual next-own-move execution, a departed target, a captured initiator
+  and contact already present before the sequence. These are observed rule facts, not exchange
+  quality, strategic intent, forced replies or authored lessons.
+- Twenty-two initial missing-case/profile controls fail before canonical registration. The
+  exact independent source joins, neutral legal replay, raw pawn geometry, captured identities,
+  FEN chains and recorded anchors pass afterward; borrowed inputs/arms/version and incompatible
+  operation schemas refuse. All 229 predecessor case records and their older assertions/digests
+  remain intact. The full aggregate separately checks the predecessor, the attack extension,
+  the twenty new cases and the complete population; no aggregate is left behind this wave.
+- The normal focused Make gate includes the new file: 234 checks/five files and clean types.
+  The generated production receipt executes all 249 cases (147 positive/102 negative) over
+  81 subjects. Positive arms are present for 52 subjects and semantic negatives for 46;
+  29 positives, 35 negatives and all 81 orientation obligations remain required. Four case
+  arms fill; zero whole subjects fully qualify. No eligibility or consumer promotion follows.
+- Complete normal make roadmap-receipt verify-awake build exits zero: 4,819 software
+  checks/372 files, seven isolated performance checks/four files, 247 real-content checks/25
+  files, types, governance, packaging and build. Corpus clearance has 92 documents, 354
+  blocking, 34 resolved and 48 accepted entries, with no contract errors. The installed
+  capability corpus remains 86 production packs, six browser fixtures, the schema example
+  and eleven schema fixtures. Existing large web/server bundle warnings remain.
+- D3705 closes with path-backed evidence; the original intermittent D3702/D3703 failures
+  remain open despite passing repeats. The existing ledger/state, RFC register, queue and
+  roadmap are updated, without another tracker or raw recording. The live backlog remains
+  1,720 assigned items; done is 1,573, including 462 weaker historical prose-only closures.
+  UX stays 273 completed/272 live/24 retired; all fourteen whole capabilities remain incomplete,
+  nine milestones remain four active/five blocked and zero official packs graduate.
+- Frozen v1, draft D3564/D3629, production collectors, source/consumer adoption, permissions,
+  authored pack bytes, protected intent and immutable archives are unchanged. No fresh browser,
+  exact-revision remote CI, publication, deployment or native release-image proof is claimed.

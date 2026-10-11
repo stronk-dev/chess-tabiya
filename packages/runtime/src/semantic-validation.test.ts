@@ -14,7 +14,7 @@ import {
   semanticValidationImportClosure,
 } from "./semantic-validation-authorities.js";
 import { semanticValidationLawProfile } from "./semantic-validation-law.js";
-import { ATTACK_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { ATTACK_CITED_SOURCES, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, canonicalSemanticEdge, type SemanticValidationOperationResult } from "./semantic-validation-operations.js";
 import { executeSemanticValidationOracle, type SemanticValidationOracleWitness } from "./semantic-validation-oracles.js";
 import { SEMANTIC_VALIDATION_PROFILES, SEMANTIC_VALIDATION_ROOTS, admitValidatedSemanticInstance, semanticValidationSummary, semanticValidationVerdict } from "./semantic-validation-registry.js";
@@ -280,7 +280,8 @@ describe("semantic-validation cases and execution", () => {
     }
     // Keep the predecessor population's assertions; the source-bound extension is additive.
     const addedIds = new Set(ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
-    const predecessor = receipts.filter(receipt => !addedIds.has(receipt.case));
+    const recordedIds = new Set(RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    const predecessor = receipts.filter(receipt => !addedIds.has(receipt.case) && !recordedIds.has(receipt.case));
     const added = receipts.filter(receipt => addedIds.has(receipt.case));
     expect(predecessor).toHaveLength(213);
     expect(predecessor.filter(receipt => receipt.arm === "positive")).toHaveLength(129);
@@ -288,9 +289,17 @@ describe("semantic-validation cases and execution", () => {
     expect(added).toHaveLength(16);
     expect(added.filter(receipt => receipt.arm === "positive")).toHaveLength(8);
     expect(added.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(8);
-    expect(receipts).toHaveLength(229);
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(137);
-    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(92);
+    const prior = receipts.filter(receipt => !recordedIds.has(receipt.case));
+    expect(prior).toHaveLength(229);
+    expect(prior.filter(receipt => receipt.arm === "positive")).toHaveLength(137);
+    expect(prior.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(92);
+    const recorded = receipts.filter(receipt => recordedIds.has(receipt.case));
+    expect(recorded).toHaveLength(20);
+    expect(recorded.filter(receipt => receipt.arm === "positive")).toHaveLength(10);
+    expect(recorded.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(10);
+    expect(receipts).toHaveLength(249);
+    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(147);
+    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(102);
   });
 
   it("[5][27] refuses callbacks, prebuilt evidence, forged keys, generated ids and @-suffixed dialects", () => {

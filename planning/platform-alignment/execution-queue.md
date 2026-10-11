@@ -6,6 +6,17 @@
 
 ## Attack qualification checkpoint — 2026-10-11
 
+[[D3705]] is **DONE LOCALLY FOR FOUR CASE ARMS**, under accepted semantic-validation-authority
+Slices B/C. Twenty independently source-bound current-v2 exchange/contact cases pass through
+the complete recorded-path operation; 234 focused checks and workspace types pass. All 229
+predecessor records and their controls remain. Immediate/delayed/different-square recaptures,
+en passant and exact pawn-contact survival/execution are distinguished by legal replay and
+literal geometry. Four positive/negative arms fill; no whole subject, learner permission,
+source adoption or pack eligibility is promoted. Complete normal make verify-awake build
+exits zero: 4,819 software checks/372 files, seven performance/four files, 247 content/25 files,
+types, governance, packaging and build. Draft D3564/D3629 stays unimplemented;
+D3702/D3703 retain their unknown intermittent causes. No fresh browser/remote/image proof.
+
 [[D3704]] is **DONE LOCALLY**, evidence-foundation: the aggregate retains the 213-case predecessor
 and separately verifies the sixteen additions and full 229-case successor through real operations.
 The original normal run's 129-versus-137 failure remains recorded. Complete normal

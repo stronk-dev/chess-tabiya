@@ -7,6 +7,7 @@
  * Literal positions instantiate those rules only; none grades a move or claims strategic value.
  */
 import type { SemanticCanonicalValue, SemanticEdgeInput, SemanticValidationPropositionRecord } from "./semantic-validation.js";
+import { recordedValidationSources } from "./semantic-validation-recorded-sources.js";
 
 type RuleFixture = readonly [id: string, projection: string, beforeFen: string, moveUci: string, afterFen: string, operands: Readonly<Record<string, SemanticCanonicalValue>> | null];
 function ruleCase(family: string, fixture: RuleFixture, source = "python-chess") {
@@ -247,6 +248,7 @@ const contactRules = {
   text: "attacks_mask pawn branch:\n        if bb_square & self.pawns:\n            color = bool(bb_square & self.occupied_co[WHITE])\n            return BB_PAWN_ATTACKS[color][square]\n\nattacks_mask king branch:\n        elif bb_square & self.kings:\n            return BB_KING_ATTACKS[square]\n",
 } as const;
 const CONTACT_NEGATIVE_FAMILIES = ["occupied_attack", "occupied_defence", "slider_ray", "pawn_contact", "defended_duty"] as const;
+export const RECORDED_CITED_SOURCES = Object.freeze(recordedValidationSources(captureSource, contactRules));
 
 // D3667: exact geometric transitions and the EXISTING two-attacked-target duty
 // count, not a claim that a defender is overloaded or that a move is good.
@@ -402,6 +404,7 @@ export const ATTACK_CITED_SOURCES = Object.freeze([
 ]);
 
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  ...RECORDED_CITED_SOURCES,
   ...ATTACK_CITED_SOURCES,
   PAWN_DYNAMICS_CITED_SOURCE,
   ...RULE_STATE_CITED_SOURCES,

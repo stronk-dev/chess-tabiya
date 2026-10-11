@@ -1722,6 +1722,22 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-11: D3705 extends accepted Slices B/C with twenty source-bound current-v2
+  recorded exchange and pawn-contact cases through runtime.semantic.recorded_path.
+  Both colours cover immediate versus delayed/unrelated captures, en passant,
+  unequal-role exchanges, contact survival, actual next-own-move execution, a moved
+  target, a captured initiator and an already-existing contact. Neutral legal replay,
+  board occupancy, pawn geometry and exact anchors independently check identities and
+  timing; capture geometry does not establish strategic value or a forced reply.
+  All 229 predecessor records remain unchanged. The receipt executes 249 cases
+  (147 positive/102 negative) over 81 subjects, zero fully qualified. Four missing
+  positive/negative arms become present; frozen v1, draft orientation/window grammar,
+  source/consumer adoption, learner eligibility and authored pack bytes do not change.
+  Focused gate: 234 checks/five files and clean workspace types. Complete normal
+  make verify-awake build passes 4,819 software checks/372 files, seven performance
+  checks/four files and 247 content checks/25 files, governance, packaging and build.
+  D3702/D3703 remain open; no fresh browser, remote or release proof. Evidence:
+  `packages/runtime/src/semantic-validation-recorded.test.ts`.
 - 2026-10-11: D3701 executes accepted Slice B with sixteen source-bound cases for
   direct attack counts and loose-piece omissions. Complete neutral geometry distinguishes
   multiple, blocked and pinned contacts from legal captures; all 213 predecessor records

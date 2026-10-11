@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { ATTACK_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { ATTACK_CITED_SOURCES, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
@@ -136,7 +136,8 @@ describe("D3701 source-bound attack counts and loose omissions", () => {
   it("adds sixteen source-bound cases without rewriting predecessor records", () => {
     const ids = new Set(rows.map(row => row.proposition.case.id));
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(16);
-    const prior = raw.filter(value => !ids.has(value.id as string));
+    const later = new Set(RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    const prior = raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string));
     expect(prior).toHaveLength(213);
     // Filled from the predecessor before this wave's authored source cases are registered.
     expect(evidenceDigest(prior)).toBe("006ad9a360eac9824c82a239e21497973e4768cb1d85927e045664b81a51a375");

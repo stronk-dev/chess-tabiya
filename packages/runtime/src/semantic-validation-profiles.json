@@ -251,14 +251,144 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.immediate.white",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.immediate.black",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.en-passant.white",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.en-passant.black",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.rook-for-pawn.white",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.rook-for-pawn.black",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.delayed-negative.white",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.delayed-negative.black",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.other-square-negative.white",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.trade.other-square-negative.black",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.exchange.trade_completed",
+                "version": 2
+              }
+            }
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -687,14 +817,144 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.survived.white",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.survived.black",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.executed.white",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.executed.black",
+            "arm": "positive",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.target-moved-negative.white",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.target-moved-negative.black",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.pawn-captured-negative.white",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.pawn-captured-negative.black",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.not-created-negative.white",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.contact.not-created-negative.black",
+            "arm": "semantic_negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.contact_timing",
+                "version": 2
+              }
+            }
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",

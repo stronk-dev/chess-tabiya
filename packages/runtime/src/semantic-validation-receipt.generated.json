@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "1888c25fbde1b7a9a9a1f04666928d133829ae669b0839488178c6ccbb467ba4",
-  "caseDigest": "1618f7abaee651bc25ca0a52126192bc6fb18f3841d9470e057340b4544e1e04",
+  "profileDigest": "fdb9acfcd348e9a2a7679c8c42cb2eba7320190fef64090b1be6950ca925760e",
+  "caseDigest": "c7dec635dc20cc2d20305328b9a7374925230fbc0eb2951109c4c1a77d7cf91b",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -3582,6 +3582,602 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "0b668999e04e816ad470b51976e59c5510aad971deeca2ccc7e4fb6391d4d6e0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.executed.black",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "7ae1e8134020e3df01584df19d228ddc60aceadd7e8ad3cb568a7b5b9e85cde7",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.pawn.sequence.contact_timing@2",
+          "operandDigest": "15074a1d2b3a5c992939a75422902d214e536e3d59391bcf05d669d5db9c6202",
+          "factory": "createDerivedPawnSequenceContactTimingV2Evidence",
+          "inputDigest": "eaa9172996b3c07854575590eb2f521ef5f53ab8270a4ec3d09c813e1515cb70",
+          "payloadDigest": "15074a1d2b3a5c992939a75422902d214e536e3d59391bcf05d669d5db9c6202",
+          "sourceDigests": [
+            "5643c8fce7e4d66ccc081163a559c49a193c437255bcd2ccab8db0b5d28b79d4",
+            "c78f8f9f6313238e9ae279a07f1522725fa74dc3a320ec6c055e8f0b17c479c7"
+          ]
+        },
+        {
+          "projection": "derived.pawn.sequence.contact_timing@2",
+          "operandDigest": "555d0e610aa905ec8868ddd7e9d112d5eeac07b640306b633b13f8e3f734b287",
+          "factory": "createDerivedPawnSequenceContactTimingV2Evidence",
+          "inputDigest": "c0dadf0dd168ff26f002f9ee58c28ff7727d5529f0b8b5465c7c0b50b23f324e",
+          "payloadDigest": "555d0e610aa905ec8868ddd7e9d112d5eeac07b640306b633b13f8e3f734b287",
+          "sourceDigests": [
+            "5643c8fce7e4d66ccc081163a559c49a193c437255bcd2ccab8db0b5d28b79d4",
+            "c78f8f9f6313238e9ae279a07f1522725fa74dc3a320ec6c055e8f0b17c479c7",
+            "8f2d8f32af669d14fcbc6bab5187c8702b3cab8aa0ae40e012d6ba27b6ff1eae"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "db210fbcd0925867dbbb9913f37804875a3e536f45327306d6874900bb1e3f52",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.executed.white",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "7400302ab226e4448dbfcd2f79c48f53546e7df8b0af8beb089469fe0e0ccc87",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.pawn.sequence.contact_timing@2",
+          "operandDigest": "95fc706ebfac9d082a5da3f3706f206858f12a3ebaa32b02777712979adde7fb",
+          "factory": "createDerivedPawnSequenceContactTimingV2Evidence",
+          "inputDigest": "b22acdd12cbd9b0d65c30b6f9485d81c83cb5e675076c591cec769dc21f7d21d",
+          "payloadDigest": "95fc706ebfac9d082a5da3f3706f206858f12a3ebaa32b02777712979adde7fb",
+          "sourceDigests": [
+            "e78c602b68fda8d82c4eb9800fefd7d3eb6826f8243bf66530e9edba1a38801e",
+            "f5df08de18282e0ab2ef757f8bc07ba3e479ed58a2e828c8bdc7d946a6299b84"
+          ]
+        },
+        {
+          "projection": "derived.pawn.sequence.contact_timing@2",
+          "operandDigest": "674c32f32b5c197935c73cf10b1c978c39e76a94b711510b325f27370740587c",
+          "factory": "createDerivedPawnSequenceContactTimingV2Evidence",
+          "inputDigest": "db9507b8fcde4620dee32437ac5408a8746da791c75116e507c63b62b15e11e1",
+          "payloadDigest": "674c32f32b5c197935c73cf10b1c978c39e76a94b711510b325f27370740587c",
+          "sourceDigests": [
+            "e78c602b68fda8d82c4eb9800fefd7d3eb6826f8243bf66530e9edba1a38801e",
+            "f5df08de18282e0ab2ef757f8bc07ba3e479ed58a2e828c8bdc7d946a6299b84",
+            "25c6d90f8c43a860eea0c479874a2d44eaeb236f63cf81c28c62591a96cf46db"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "79745ebca1279ed029166c88602af253579aecf90592fa0444bda3564b86d1af",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.not-created-negative.black",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "cb08705c6df976586db34477a25682e006630459b4921231ae642b0ee3c76913",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "9a2712ef20dfa72cea97611fbe5e6ebbf1b7ed23f69376c27a6fa65387971629",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.not-created-negative.white",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "aaf54b4bcb49cbd6623428ec07ab964b2955c6a2dd8816f9092b54c6c4f960c9",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f07c836691899210a4d2f1b091c05e85b230f294ea3936666ab112b9cd92bca5",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.pawn-captured-negative.black",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "9cb1517ee7757fca3b9800b015854e3027ee39d2c87afb0f24d95612b4f6654a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "4408f83851aed073f58bd4dca79f887744177b152780bb78b8c9ce628cbce9d4",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.pawn-captured-negative.white",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "924f6d8e78d56e0d28e3f4b7b3d3f80db746c13a45b8712da3c22a032a1c5ba3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "082dcdf56e73e5197e1d4dfe2cf63cdafe13a72f4d768d7bed7d4cb07a018815",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.survived.black",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "50007cbe88f68c6759da3a7d8659c0a40dae51dbf7c74bafb5b2531d0c784b4a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.pawn.sequence.contact_timing@2",
+          "operandDigest": "52c78b12191a1e1bd34540c163a80ddcd02279da53abf0ad95b06d9801084560",
+          "factory": "createDerivedPawnSequenceContactTimingV2Evidence",
+          "inputDigest": "db32091513e2b8bb4ec65e182e54f5d300bdac2adfcd97c939bf4d35237c280f",
+          "payloadDigest": "52c78b12191a1e1bd34540c163a80ddcd02279da53abf0ad95b06d9801084560",
+          "sourceDigests": [
+            "0558dad2f9133ee3596c2372811335f7d86cb16f0fcc43f228280f9f27d52ac1",
+            "5696590d55b96d8c175287dee41806b02236f19da857d1ef07011a59993848dc"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "11873bf3c753d4580fe3b9131c3df6fc077d523f29fd8473518f4ffa9e6971ed",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.survived.white",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "ae752b2cc6c228eb591dc52426dc60e47c8a434a99be86169f4a52dce5d536f1",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.pawn.sequence.contact_timing@2",
+          "operandDigest": "5726a2538a968f987a7707dd44c548a80efc0468159a3d5cd13942b74c62723e",
+          "factory": "createDerivedPawnSequenceContactTimingV2Evidence",
+          "inputDigest": "63a79b5c57ceec5fa56b43672ba49a6b9268f229cdbcacc176d51f3000506d7f",
+          "payloadDigest": "5726a2538a968f987a7707dd44c548a80efc0468159a3d5cd13942b74c62723e",
+          "sourceDigests": [
+            "131765060a6a81ece9a45f3c4ae3a1a9d187710c57b6700b841e110ff6d5ddeb",
+            "78ee1bd1da1297bcc963e4c349eebe6976ecaaa20856199e5e2927f210b72923"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "4a0f90d918e85769a61758ebadd44f385ffb0e488f9b14496946f165c31e5e90",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.target-moved-negative.black",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "657352dac640d5b4ade8fbefdf0504842305b6a51fe25da677c061e760addf70",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "1316d6885e03f1874a81b7cc90fc25a516620b6e91fff0ee15d7666bc11055af",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.contact.target-moved-negative.white",
+      "subject": "event:derived.pawn.sequence.contact_timing@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "f60fb1fe2a8f0ec31c0a232a466924276878b120a78bd809de141ad7288d66b3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "46cf3ca364677ed8171360024bd401a8294e9cc9ba31938f426dd640c31094e0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.delayed-negative.black",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "ca9aa9b0298851e1721dcefbcc21905cad1e63193e1ff12291e974154ad23fa3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a6ff5778806e333a79d3235d2fbab935d32ebe3f69991aa784fad301454ad984",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.delayed-negative.white",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "a6ddcff6439dfbb1d48ba9d480526867d1178db4500cad59c3a34bb5049c798c",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "983e120664dec05b72023f7d89da92777425915252d53fb2b5970a459f4f7bed",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.en-passant.black",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "dc834f348f25f96fc47b2bf41d54b83952a777d990bf712385dc866d16e26847",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.exchange.trade_completed@2",
+          "operandDigest": "85581a032aecd3fa4eba4d3f222924229b8de68bb8e4c16e827e6590e27c6b34",
+          "factory": "createDerivedExchangeTradeCompletedV2Evidence",
+          "inputDigest": "4f168286be5d13c1784944cb4490aa616b87b92473f4f50e94800237c8c272d5",
+          "payloadDigest": "85581a032aecd3fa4eba4d3f222924229b8de68bb8e4c16e827e6590e27c6b34",
+          "sourceDigests": [
+            "0d1e33a0e4f83e0cd452d89ccc040e8195fb62e9dfb685ac934e1efee5bc566e",
+            "29e549f5a2de212d442f146608c128e155bf6974ad95901cc97b2c9335f4d092",
+            "bf2ee9f89d10fb8abf54ca9dac8c22583068a8360c0ba7ed5d35f5fe597c698e",
+            "8285bd6e1efdd6eeab8733396c6c5a39c1c0ad89b58511cf45dcb73ef97da4d0"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "406bdb42b387dc1b18d054c0493279b108154d5b4778d2b14d3fec1fc9f44b21",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.en-passant.white",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "711a9f97f98b5cfd6403ec393ae163ab5aaa6b6c0caa48e501e117dcc6bf9204",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.exchange.trade_completed@2",
+          "operandDigest": "b298257a5672970a46fce51b5f43a237af98d153e76fb4021eee49ff51f201c5",
+          "factory": "createDerivedExchangeTradeCompletedV2Evidence",
+          "inputDigest": "2f9f925ba26b03055b85885bbbb862face0c31dccbc751daeb71de48fe2f91fd",
+          "payloadDigest": "b298257a5672970a46fce51b5f43a237af98d153e76fb4021eee49ff51f201c5",
+          "sourceDigests": [
+            "80c01c9a5ff240e0709f017a437dab58848ca99134ecb7364791782c67b8b71a",
+            "206153f602a411f41aed7255eddf9d72748ef1d2c49e9e8a7f928b2a428bbf63",
+            "07708fae5b7dd65680a262ac104ec0365dd96a8481433b50acbc153cff7978b9",
+            "14313155a8cc2d401d148e9511eed6454df7b108cd292858fa6b863784baf145"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ee40f9727cb835b8e5bc5e63adb358a2c75668a2a29d867882ad10a14559bddb",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.immediate.black",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "3b75c69ae2425ab4cbfa7b86423363f9e858576eec08d6376c2bf8ce36e25936",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.exchange.trade_completed@2",
+          "operandDigest": "f31bd371d1bd0ef32a8eafcc2d0373cdd08484b38cda3e98f3e85b4fd415e0a4",
+          "factory": "createDerivedExchangeTradeCompletedV2Evidence",
+          "inputDigest": "653747f5e6f419a356a3d1b05c739e6dd25bd1f02a4ab52db5dfc64fbd85fded",
+          "payloadDigest": "f31bd371d1bd0ef32a8eafcc2d0373cdd08484b38cda3e98f3e85b4fd415e0a4",
+          "sourceDigests": [
+            "13005dfd4b5cc09429c3d602857ecb15511ffa5870f8c0a155b02b85af78e650",
+            "f36168f50343cebc3e0e788e61fe64fe377df7d5c40d3d5e2d1cc6d3b93ab632",
+            "56175d2607115c0788ad2ae4302309c5f859eb8bc07e3ad3a959609945654a83",
+            "e7c5f11884103eb5200d6f338bd8fedf164fa059a45126cc71fe4a895cc02d50"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "0492f3fe1ecbe777e261076386b897ebd77ccd50525e689f6adb382e3b418e51",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.immediate.white",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "56841076ca735de45098a6a2d8a7759eb5ec5df189301a118c56b076e695c3be",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.exchange.trade_completed@2",
+          "operandDigest": "e2ef6e218d93ae4f44d1b4e9f8586856c3c20de27f9b6c1a5b61ca544b0fc0f4",
+          "factory": "createDerivedExchangeTradeCompletedV2Evidence",
+          "inputDigest": "17098d5b3bef1e57c354cd5355f349fa25eb0ffbe19b43720b01d49c16072dce",
+          "payloadDigest": "e2ef6e218d93ae4f44d1b4e9f8586856c3c20de27f9b6c1a5b61ca544b0fc0f4",
+          "sourceDigests": [
+            "e3cfe0495343dc52ff836dadfa26dc31ebed2dfccf4821033f53c5f0576376b2",
+            "11a03b4997681001177d0d8e590f4d75753f333c9e38f6621b31524478fa1f55",
+            "43bd2e88cf851b515e380dea959ff7e9fe72a78caad27c6ac2c9b89279e19cb2",
+            "4137060d065cb9c45c00938889fac89c25c539e68199bc19a3f22580610aa4a9"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a6110b271761ca09b1ea6ac8a3946c859bba1ec36e181a7ee3be360fc9ee05d0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.other-square-negative.black",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "8c00523c7f38ea4a33528387cb8de7361654eed0d9f4f57a7ed12752adf32abc",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "71ace19da35a9892f81d26f5f55ade198f012384e1cecf20938dc8d981bbd979",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.other-square-negative.white",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "3805b8b22931ce1d8134d8a51ffa63a59ba168be54b8d2a218a88b1ed3a3fd06",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 0,
+      "targets": [],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "6dbaa5a15e8106666eb65182cc4fb720f7cdfc3b2dd2a6c96a19ce9330177f86",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.rook-for-pawn.black",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "e75231b854f4fef67a83990cb93dc62c770665487c8045c3dda3a0dd1de37cb4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.exchange.trade_completed@2",
+          "operandDigest": "b95c2528ed6d77d8846808ea72768a0c8dacfbd9d610490700dc7352fcdc1d48",
+          "factory": "createDerivedExchangeTradeCompletedV2Evidence",
+          "inputDigest": "1d149caf3ae8c665b9b03dd0d6be2d80224fbc9cca4f177a8cdaad59356358a7",
+          "payloadDigest": "b95c2528ed6d77d8846808ea72768a0c8dacfbd9d610490700dc7352fcdc1d48",
+          "sourceDigests": [
+            "79330a4129437bafe9c943266ed923301efa51edca6a5d6913188a97854eb15a",
+            "338878fecb877683fbe70d5d9b12ec3691ad472ebd630572f136e76ac67dbcee",
+            "49a13be3bc25947b0a7ed2a892a5fbdb0ff4ab4d7fe854eed717fb864592579d",
+            "30bf59c90218c55b5958fe45e5da4ce569394baa341c87871b6ee5966ccdcf92"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "326e38c30727cc81c64b323e42dffc0190ffd05b20cb425adde728a332208eda",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.recorded.trade.rook-for-pawn.white",
+      "subject": "event:derived.exchange.trade_completed@2",
+      "arm": "positive",
+      "operation": "runtime.semantic.recorded_path",
+      "inputDigest": "c7959efc63bbb94ed52b04d3ca6ffe1d1da85e4d5112ebc94f35536ca63f7d8a",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 0,
+      "targets": [
+        {
+          "projection": "derived.exchange.trade_completed@2",
+          "operandDigest": "1bbf51d960de27024a2875adf3639aa6b2bb65993f7ae3a3fc77ae47c69afeaf",
+          "factory": "createDerivedExchangeTradeCompletedV2Evidence",
+          "inputDigest": "3d23664b70bf46c6faa406f861bb1458121fae219956713bc79acab8ce297745",
+          "payloadDigest": "1bbf51d960de27024a2875adf3639aa6b2bb65993f7ae3a3fc77ae47c69afeaf",
+          "sourceDigests": [
+            "750929fa28699376236645d7fc53a853201ae9ea652866a6c99d59546261de82",
+            "7f415ddf7001c7e12e1254ad94a91f54919570f705ed53d89a854ee3372ae7cc",
+            "8c0ca3ccded11bb0ce7f507c97841f92551364e8cf011373fdd11ce0d8a9caf2",
+            "9fa6c335632aae365e995a05aa13813cc1cb094a055ad88ed9e34fd09576a7ce"
+          ]
+        }
+      ],
+      "reach": "direct",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "944eedf9f0a915c8a2f0e8cff4b78de2e72d59369dba44eefe13628651d588e6",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -10118,15 +10714,25 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.recorded.trade.immediate.white",
+            "cited.python-chess.recorded.trade.immediate.black",
+            "cited.python-chess.recorded.trade.en-passant.white",
+            "cited.python-chess.recorded.trade.en-passant.black",
+            "cited.python-chess.recorded.trade.rook-for-pawn.white",
+            "cited.python-chess.recorded.trade.rook-for-pawn.black"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.recorded.trade.delayed-negative.white",
+            "cited.python-chess.recorded.trade.delayed-negative.black",
+            "cited.python-chess.recorded.trade.other-square-negative.white",
+            "cited.python-chess.recorded.trade.other-square-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -10153,8 +10759,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
@@ -10387,15 +10991,25 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.recorded.contact.survived.white",
+            "cited.python-chess.recorded.contact.survived.black",
+            "cited.python-chess.recorded.contact.executed.white",
+            "cited.python-chess.recorded.contact.executed.black"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.recorded.contact.target-moved-negative.white",
+            "cited.python-chess.recorded.contact.target-moved-negative.black",
+            "cited.python-chess.recorded.contact.pawn-captured-negative.white",
+            "cited.python-chess.recorded.contact.pawn-captured-negative.black",
+            "cited.python-chess.recorded.contact.not-created-negative.white",
+            "cited.python-chess.recorded.contact.not-created-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -10422,8 +11036,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation"
       ]
     },
