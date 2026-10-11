@@ -314,6 +314,35 @@ test deadline, and share one complete five-cold/five-warm report. Registration
 and ten browser journeys no longer compete for one 30-second deadline. These
 historical latency figures are not a current release-performance claim.
 
+### Delivery measurement — D3722, 2026-10-11
+
+The normal `make build` emits `assets/index-DIAsdLNb.js`: 3,188,862 bytes,
+693.13 kB gzip reported by Vite, and the existing large-chunk warning. The optional
+`make web-bundle-report` uses the installed Vite configuration and the same web
+workspace working directory, but writes neither assets nor source maps. It
+reproduces the entry filename and raw byte count and reports its dependencies:
+654 rendered modules, no static chunk imports and no dynamic chunk imports.
+Its module weights are rendered characters, **not** separately compressed
+download sizes or user latency.
+
+The largest module is `capability/declarations.generated.ts` (709,364 rendered
+characters), reached by `capability/registry.ts` and the runtime barrel. The
+registry builds and checks its full catalogue at module load; no production web
+source directly names `CAPABILITY_REGISTRY`. The schema capability barrel also
+re-exports the parsed applicability table. The client uses the shared public
+capabilities parser, not an independently declared wire format. Semantic-validation
+profiles are retained by the registry's module-load parsing and equality check.
+These are dependency findings, not permission to remove required validation.
+`App.svelte` also imports the screens eagerly; splitting only the entry into
+several equally eager files would not remove their total delivery cost.
+
+Cold usable arrival on supported devices/deployments remains unmeasured for this
+revision. D3722 stays open until that measurement informs a repair and its actual
+journeys are retested. No production imports, route states, validation, admission,
+warning thresholds or budgets changed in this investigation. The diagnostic is
+disposable analysis under RFC-0000's exploration gate, not a CI/progress dependency.
+It prints a small report to the terminal and commits no generated recording.
+
 `/settings` is the learner-facing Settings surface, with a sticky section index
 for Appearance, Playing, Account, and About. It edits the same per-browser
 assistance records used by the in-run popover for pack, position, and imported

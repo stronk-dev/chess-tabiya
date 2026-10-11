@@ -15,6 +15,13 @@ Do not start a second build or verification process while browser CI serves that
 receive `STATIC_NOT_BUILT`. Such a run is invalid, not an excuse for a timeout increase or a
 retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tiers remain intact.
 
+`make web-bundle-report` is an optional D3722 dependency investigation, not another
+test tier or push gate. It uses the normal web build configuration without writing
+served assets or source maps and prints final JavaScript bytes plus rendered-module
+weights/importers. It stores no research dump and changes no size limit. A passing
+diagnostic does not prove latency, usability or release readiness; `make build`
+and the existing browser/performance journeys retain those separate obligations.
+
 `make prediction-workflow-check` covers independent perspective/move authority, legal opponent
 guess admission, repeated-client-guess refusal, failed prediction/retry, durable receipt resume and playing
 the same distribution without selecting again. It also covers exact private-playtest pack lookup

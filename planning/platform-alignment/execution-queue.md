@@ -6,11 +6,18 @@
 
 ## Discovered execution qualification — 2026-10-11
 
-[[D3722]] is **TODO**, client-platform: the normal build's single JavaScript entry
-is 3,188.86 kB / 693.13 kB gzip and raises the existing large-chunk warning. Measure
-actual deployment/device cold delivery and inspect route dependency boundaries
-before proposing a split. This warning is neither an interaction diagnosis nor a
-reason to suppress it or change a budget. No production change is authorised here.
+[[D3722]] is **PARTIALLY MEASURED; RESIDUAL TODO**, client-platform. The normal
+build's entry is 3,188,862 bytes / 693.13 kB reported gzip. The optional, no-write
+`make web-bundle-report` reproduces that entry filename and raw byte count and
+shows 654 rendered modules with no dynamic imports. The largest module is the
+generated capability catalogue (709,364 rendered characters), imported by the
+module-load registry; schema applicability and semantic-validation profiles also
+enter through shared exports. See `docs/app-shell.md` Delivery measurement for
+the dependency trace and limits. Next: supported deployment/device cold delivery,
+then separate unnecessary browser dependencies without dropping required live
+validation, changing admission or inventing route-loading states. A smaller chunk
+alone does not establish faster usable delivery. No production change is authorised
+by this diagnostic; warning limits and existing budgets remain unchanged.
 
 [[D3721]] is **DONE LOCALLY**, evidence-foundation under the accepted value-authority
 deep-freeze/admission contract. Four permanent regressions fail on the predecessor:

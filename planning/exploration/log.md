@@ -26235,3 +26235,29 @@ Campaign was the one capability with no API, route or content. Now:
   failure; no warning threshold or budget changes. Every live item remains assigned.
   No source/consumer qualification, official graduation, whole capability/milestone,
   exact-revision remote CI or built-image/release completion follows.
+
+## 2026-10-11 (codex) — D3722 dependency investigation and inventory closeout
+
+- Finish the bounded bundle investigation before the owner's whole-product
+  inventory. Normal `make build` still emits the 3,188,862-byte JavaScript entry,
+  with Vite reporting 693.13 kB gzip. No application source changed.
+- Optional `make web-bundle-report` uses the real web workspace working directory
+  and Vite configuration, captures dependencies during bundling and measures final
+  returned code after plugin hooks. It reproduces the normal entry filename and
+  raw byte count: 654 rendered modules, no static or dynamic chunk imports.
+  It writes no served assets, source maps, measurement dump or progress dependency.
+- The largest module is the generated capability declarations (709,364 rendered
+  characters), through the module-load registry/runtime barrel. Schema applicability
+  and semantic-validation profiles also enter; App imports screens eagerly. Those
+  module weights are not compressed download sizes or measured arrival latency.
+  Required registry/wire/admission checks cannot be blindly removed or labelled pure.
+- `make web-bundle-report roadmap-receipt verify-governance roadmap-progress`
+  exits zero; the normal build exits zero with its unchanged warning. Existing
+  full application verification belongs to the preceding production seal repair,
+  not this diagnostic/doc-only change. No new full-browser execution is claimed.
+- Update the existing shell/testing docs, queue, ledger and roadmap summary.
+  D3722 returns to TODO for supported-device/deployment cold arrival and a justified
+  repair. All 1,722 live ledger items remain assigned; 273 of 569 UX items are
+  complete, 272 live, 24 retired. Four milestones remain active/five blocked;
+  all fourteen whole capabilities remain incomplete and zero official packs
+  graduate. No remote CI, publication or whole 1.0 completion follows.

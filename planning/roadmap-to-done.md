@@ -79,9 +79,13 @@ optional skip, zero retries and all 150 input/112 composition cells. Eight isola
 complete-output comparisons agree, but cold projection is 23.06% slower locally:
 D3300 remains open. Canonical qualification remains 307 passing cases/81 subjects/
 zero fully qualified; real source adoption, useful guidance, content and release
-proof remain. D3722 records the 3,188.86 kB / 693.13 kB gzip JavaScript-entry
-warning for actual delivery/dependency measurement, not a budget change or a
-diagnosed UX failure. No whole capability or milestone is promoted.
+proof remain. D3722's dependency diagnostic reproduces the normal build's
+3,188,862-byte entry: 654 rendered modules, no dynamic imports, and generated
+capability/validation data retained alongside eagerly imported screens. The
+normal build reports 693.13 kB gzip. Supported-device/deployment cold delivery
+and a justified repair remain TODO; the optional diagnostic writes no assets
+or research dumps and is not a release gate. No whole capability or milestone
+is promoted.
 
 [[D3720]] adds twelve independent finite-board controls of the complete local bounded
 material-target batch: every named target/legal candidate, immediate removal cause,
