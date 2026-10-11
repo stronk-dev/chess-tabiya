@@ -31,8 +31,8 @@ const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server"
 const stores: SQLiteRunStorage[] = [];
 afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
 
-async function setup(charged: boolean) {
-  const packs = await PackRegistry.fromDocuments([{ source: "promotion-test", value: withDerivedRequires(document) }]);
+async function setup(charged: boolean, fixture: DrillPackDefinition = document) {
+  const packs = await PackRegistry.fromDocuments([{ source: "promotion-test", value: withDerivedRequires(fixture) }]);
   const storage = new SQLiteRunStorage(":memory:", { onMigration: () => undefined });
   stores.push(storage);
   storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: at });
@@ -44,7 +44,7 @@ async function setup(charged: boolean) {
   if (charged) {
     const campaign = JSON.parse(readFileSync(new URL("../../../tests/browser/fixtures/campaign.browser.json", import.meta.url), "utf8")) as CampaignDocument;
     for (const act of campaign.acts) for (const layer of act.layers) for (const node of layer.choices) {
-      Object.assign(node, { encounter: { kind: "pack", packId: document.id } });
+      Object.assign(node, { encounter: { kind: "pack", packId: fixture.id } });
     }
     const registry = await CampaignRegistry.fromDocuments([{ source: "promotion-campaign", value: campaign }], { get: id => packs.get(id)?.document });
     campaigns = new CampaignService({ storage, packs, registry, runs: service, policyConfig: async () => policyConfig, now: () => at });
@@ -52,7 +52,7 @@ async function setup(charged: boolean) {
     await campaigns.start(principal, campaignRunId, "f1-a", { expectedRevision: 1, commandId: "cmd-start-preview" }, writerId);
     runId = storage.campaigns.run(campaignRunId)!.activeEncounterRunId!;
   } else {
-    await service.create({ id: runId, session: { kind: "pack", packId: document.id }, policyConfig, seed: 1, createdAt: at }, { writerId, learnerId: principal.learnerId });
+    await service.create({ id: runId, session: { kind: "pack", packId: fixture.id }, policyConfig, seed: 1, createdAt: at }, { writerId, learnerId: principal.learnerId });
   }
   const handler = createRestHandler(service);
   const call = async (action: string, body: unknown) => handler(new Request(`http://server.test/runs/${runId}/${action}`, {
@@ -133,4 +133,80 @@ describe("D3709 authored preview promotion", () => {
       }
     });
   }
+});
+
+function nestedFixture(checkpointAt = "finish-h3"): DrillPackDefinition {
+  return {
+    ...document,
+    id: "nested-authored-promotion-fixture",
+    spine: [
+      { id: "h3", moveUci: "h2h3", moveSan: "h3", children: [
+        { id: "reply-h3", moveUci: "e8f8", moveSan: "Kf8", children: [
+          { id: "advance-h3", moveUci: "h3h4", moveSan: "h4", children: [
+            { id: "finish-h3", moveUci: "f8g8", moveSan: "Kg8", children: [] },
+            { id: "other-king-reply", moveUci: "f8e8", moveSan: "Ke8", children: [] },
+          ] },
+          { id: "other-white-move", moveUci: "g1f1", moveSan: "Kf1", children: [] },
+        ] },
+      ] },
+      document.spine![1]!,
+    ],
+    checkpoints: [{ ...document.checkpoints[0]!, trigger: { atSpineNode: checkpointAt } }],
+  };
+}
+
+describe("D3727 nested authored simulation", () => {
+  for (const charged of [false, true]) {
+    it(`walks both first-child forks and promotes the exact consequence (Campaign=${charged})`, async () => {
+      const { storage, runId, call, campaigns, campaignRunId } = await setup(charged, nestedFixture());
+      const before = storage.read(runId)!.run;
+      const response = await call("simulate", { at });
+      expect(response.status, await response.clone().text()).toBe(200);
+      const preview = await response.json() as ReturnType<RunService["simulate"]>;
+      expect(preview.branches[0]).toMatchObject({ label: "h3", plies: 4, subvariationsSkipped: 2, leafFen: "6k1/8/8/8/7P/8/8/6K1 w - - 1 3" });
+      expect(preview.branches[0]).not.toHaveProperty("truncatedAt");
+      expect(preview.branches[1]).toMatchObject({ label: "h4", plies: 2 });
+      expect(preview.comparison.rows).toHaveLength(4);
+      const column = preview.comparison.columns[0]!;
+      expect(consequences(preview.comparison, column.branchId)).toEqual({ objectiveState: "achieved", terminal: true, checkpointsReached: ["finish"] });
+      expect(storage.read(runId)!.run).toEqual(before);
+      if (charged) expect(campaigns!.read(principal, campaignRunId!).charges).toMatchObject({ spent: 0, balance: 1 });
+
+      const entered = await call("simulate-enter", {
+        simulationId: preview.simulationId, branchIndex: 0, at,
+        ...(charged ? { campaignCommand: { commandId: "cmd-enter-nested", expectedCampaignRevision: 2, expectedPlayRevision: before.events.at(-1)!.seq } } : {}),
+      });
+      expect(entered.status, await entered.clone().text()).toBe(200);
+      const saved = storage.read(runId)!.run;
+      expect(projectRun(saved.events)).toEqual(saved);
+      const promoted = saved.branches.filter(branch => branch.origin === "simulated");
+      expect(promoted).toHaveLength(1);
+      const path = branchPath(saved, promoted[0]!.id);
+      expect(path.slice(1).map(node => [node.moveUci, node.actor])).toEqual([
+        ["h2h3", "system"], ["e8f8", "system"], ["h3h4", "system"], ["f8g8", "system"],
+      ]);
+      expect(path.at(-1)!.fen).toBe(preview.branches[0]!.leafFen);
+      expect(path.at(-1)!.objectiveState).toBe("achieved");
+      expect(saved.events.filter(event => event.type === "checkpoint.reached").map(event => event.data.checkpointId)).toEqual(["finish"]);
+      if (charged) expect(campaigns!.read(principal, campaignRunId!).charges).toMatchObject({ spent: 1, balance: 0 });
+    });
+  }
+
+  it("reports the first unplayed nested child when the requested horizon ends", async () => {
+    const { storage, runId, call } = await setup(false, nestedFixture());
+    const before = storage.read(runId)!.run;
+    const response = await call("simulate", { at, maxPlies: 2 });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const preview = await response.json() as ReturnType<RunService["simulate"]>;
+    expect(preview.branches[0]).toMatchObject({ plies: 2, truncatedAt: "advance-h3", subvariationsSkipped: 1 });
+    expect(preview.comparison.consequences[preview.comparison.columns[0]!.branchId]).toMatchObject({ objectiveState: "active", terminal: false, checkpointsReached: [] });
+    expect(storage.read(runId)!.run).toEqual(before);
+  });
+
+  it("refuses an authored continuation beyond an achieved objective at admission", async () => {
+    await expect(setup(false, nestedFixture("reply-h3"))).rejects.toMatchObject({
+      code: "PACK_INVALID",
+      message: expect.stringContaining("still has 2 authored children"),
+    });
+  });
 });

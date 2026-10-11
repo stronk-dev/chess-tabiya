@@ -15,6 +15,15 @@ Do not start a second build or verification process while browser CI serves that
 receive `STATIC_NOT_BUILT`. Such a run is invalid, not an excuse for a timeout increase or a
 retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tiers remain intact.
 
+`make authored-simulation-check` covers scratch isolation, selected consequence promotion,
+ordinary and charged entry, nested first-child walking, skipped alternatives, horizon truncation
+and admission refusal of authored children beyond an achieved objective. The nested-walk fix
+has three independently failing predecessor controls. `make authored-simulation-browser-check`
+covers both simple and nested authored lines on desktop and phone: actual private Studio
+playtest, unchanged saved graph during preview, failed entry/retry, exact promoted path,
+checkpoint and durable reload. These tests also run in normal software/browser CI. They do not
+complete D1154's missing step-by-step scratch comparison transport.
+
 `make web-bundle-report` is an optional D3722 dependency investigation, not another
 test tier or push gate. It uses the normal web build configuration without writing
 served assets or source maps and prints final JavaScript bytes plus rendered-module

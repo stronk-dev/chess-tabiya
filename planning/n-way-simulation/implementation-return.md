@@ -3,7 +3,7 @@
 **Date:** 2026-08-23  
 **Owner:** `n-way-comparison` amendment  
 **Ledger:** D1154  
-**Disposition:** do not add the two client callers until this return is resolved
+**Historical disposition (2026-08-23):** do not add the two client callers until this return is resolved
 
 **Current repair checkpoint, 2026-10-11 — D3709:** the preview and entry callers have since
 landed, and the current scratch walk already orchestrates pack moves. Ordinary and charged
@@ -14,7 +14,21 @@ step-by-step scratch comparison payload or declare this whole return closed. Cur
 behavior is in `docs/n-way-comparison.md`; permanent service/native controls are
 `apps/server/src/authored-simulation.test.ts` and the D3709 cases in `tests/browser/drill.spec.ts`.
 
-## Outcome
+**Nested-walk repair, 2026-10-11 — D3727:** the accepted first-child continuation now walks
+through nested forks instead of stopping after their parent. Three predecessor failures cover
+the four-ply ordinary/charged consequence and horizon truncation. Pack admission separately
+refuses children after an achieved objective. Four actual desktop/phone simple/nested journeys
+pass preview isolation, failed-entry retry, exact promotion and reload. This is an existing
+§7.3 contract repair. D1154's self-contained readonly scratch board projection still requires
+the amendment below before implementing the full synchronized comparison; final-position cards
+and node references alone are not that projection.
+
+D3728 separately records the scratch comparison's disclosure investigation: raw `compareBranches`
+reports machine feedback available, whereas the ordinary endpoint applies its disclosure filter.
+Use real populated inherited evidence and closed/open/reclosed windows before claiming or repairing
+a bypass. The nested-walk repair does not establish that boundary or change its policy.
+
+## Historical outcome — 2026-08-23
 
 The server verbs exist, but the accepted scratch-simulation interaction is not buildable from
 their response and promotion does not preserve the previewed authored consequence. Wiring the
@@ -22,7 +36,7 @@ current endpoints would produce an apparently legitimate comparison whose boards
 missing, then enter a real branch without the checkpoint/objective events the preview was supposed
 to demonstrate.
 
-## Reproduced boundary failures
+## Reproduced boundary failures — 2026-08-23
 
 1. **The preview nodes do not cross the boundary.** `RunService.simulate` computes
    `compareBranches(scratch, branchIds)` but returns only `simulationId`, `comparison`, and final

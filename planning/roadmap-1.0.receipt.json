@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:50bc09efaf6c93d34a13f2a5d63eabeeaea0bf4e4595135637c0d21202d47b93",
+    "roadmap": "sha256:e096004bcc836c3724ddb5d1f5e1b8e51a519a19864be0143a769c073c79a32e",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:63d05dfdb8ec348648fbc795b294367de5feb791d5ef4db9c1b0453afba847e3",
+    "workState": "sha256:a16547b0c70d8ee866b09447818c84109e80cc72ab99c4a90c1f2205f6f839f0",
     "rfcRegister": "sha256:4cd353e8685d40e04fc9775467f470dd04ceb02dfabd867a915b23d9082dd171",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 632,
+      "todo": 633,
       "doing": 16,
       "blocked": 1074,
-      "done": 1592,
+      "done": 1593,
       "refused": 161
     },
     "workItems": {
@@ -1150,7 +1150,7 @@
       "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3709 repairs authored-preview promotion under accepted n-way-comparison §7.4. Ordinary and charged entry share one orchestrated walk, retaining the chosen checkpoint/objective events and counting them in the unchanged 800-event budget. Ten focused controls, clean types and two genuine desktop/phone failure → retry → entry → reload journeys pass. D1154 retains the incomplete full scratch-comparison payload. Prior Campaign, Library, Review, Studio, Play and classroom checkpoints stand. Complete serial normal verification/build/all browser tiers pass: 4,825 software/373 files, seven performance/four files, 248 content/25 files and 298 browser cases, one existing optional skip, zero retries, all 150 input/112 composition cells; source adoption, useful selection, skills, bot calibration, official content, curriculum and complete release recovery remain open. No whole capability/milestone, remote CI or release-image promotion.",
+        "summary": "D3727 repairs nested first-child walking under accepted n-way-comparison §7.3. Fourteen focused checks and four actual desktop/phone simple/nested preview, failed-entry retry, exact promotion, checkpoint and reload journeys pass; three controls fail against the predecessor. D3709 ordinary/charged consequence parity remains delivered. D1154 still requires the self-contained readonly scratch transport amendment before full synchronized comparison; D3728 separately investigates actual scratch disclosure behavior without claiming a leak. Final ordinary serial make verify-awake build test-browser-ci-awake passes 4,984 software/377 files, seven performance/four files, 255 content/26 files, 129 release-policy controls, clean types/governance/packaging/build and 304 browser checks, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. Prior Campaign, Library, Review, Studio, Play and classroom checkpoints stand. Source adoption, useful selection, skills, bot calibration, official content, curriculum and complete release recovery remain open. No whole capability/milestone, remote CI or release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/DrillScreen.svelte",

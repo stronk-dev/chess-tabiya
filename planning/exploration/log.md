@@ -26303,3 +26303,46 @@ Campaign was the one capability with no API, route or content. Now:
   26 files, 129 release-policy controls, normal build/packaging and governance.
   No browser rerun is claimed for this tools/docs-only checkpoint; the preceding
   production change retains its 302 browser passes, one optional skip, zero retries.
+
+## 2026-10-11 (codex) — nested authored consequence walk
+
+- Finish the in-flight comparison repair under implemented n-way-comparison
+  §7.3 rather than inventing D1154's missing readonly scratch transport.
+  D3727 follows the first authored child through nested forks, retains skipped
+  alternative counts and names the first unplayed node at the requested horizon.
+  The existing terminal guard, scratch isolation, 8/40 bounds and zero-engine-job
+  behavior remain. Promotion retains the exact selected four-ply consequence,
+  objective and checkpoint through both ordinary and charged entry.
+- Three new controls fail on the predecessor: ordinary/charged preview ends at
+  two plies rather than four, and a horizon loses its truncation marker. A fourth
+  proposed input was invalid at pack admission; retain that rejection as a
+  separate negative control instead of weakening admission or reporting it as
+  another production failure. Fourteen focused checks pass after the repair.
+- Four actual desktop/phone simple/nested private Studio playtest journeys pass:
+  preview leaves saved branches/cursor/nodes unchanged; failed entry retains the
+  same preview; retry promotes exactly one system branch; the named checkpoint,
+  final position and recorded path survive reload. No fabricated successful API
+  response, timeout increase, retry setting or published curriculum is added.
+- Close D3727 narrowly and update existing canonical docs, implementation return,
+  queue and roadmap. D1154 remains open for the full synchronized scratch
+  comparison amendment. No protected intent or archive is edited. All 1,722
+  live ledger items remain assigned; UX remains 273 complete/272 live/24 retired,
+  fourteen whole capabilities incomplete and zero official graduates.
+- D3728 records, without declaring a leak, the adjacent raw scratch-comparison
+  disclosure question. Ordinary comparison applies a disclosure filter; raw
+  compareBranches reports machine feedback available. Populated inherited evidence
+  and real closed/open/reclosed windows still need measurement. It is assigned
+  to core-loop for investigation, not silently included in D3727's repair.
+- Final ordinary serial `make verify-awake build test-browser-ci-awake` exits
+  zero: clean types, 4,984 software/377 files, seven unchanged-budget performance/
+  four files, 255 content/26 files, 129 release-policy controls, governance,
+  packaging and build. Browser tiers pass 239 ordinary + five real-content +
+  59 matrix + one packaged-production journey: 304 passes, one existing optional
+  Maia skip, zero retries, all 150 input and 112 composition cells. The known
+  bundle-size warning remains debt, not suppressed. No GitHub run or actual
+  release-platform qualification is claimed.
+- Final inventory is 3,477 ledger items: 1,593 done, 161 refused, 1,723 live
+  (633 TODO, 16 doing, 1,074 blocked), zero untriaged. Existing UX and whole
+  capability/milestone states are unchanged. Update the existing full inventory
+  before handing the owner's progress overview back; no new tracking authority,
+  raw research recording or publication is added.

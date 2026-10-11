@@ -30933,6 +30933,23 @@
       "sourceDigest": "sha256:df10524c86f7d359614c8005c29c705380e4b17c7cf453ff81aeea3981c1816f",
       "uxItems": [],
       "owner": "release-engineering"
+    },
+    {
+      "id": "D3727",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a26bec0f29f2e5727e248bf6831114fcf18b9773dc9e31a4144948618ae63b3c",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-simulation.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3728",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:c0f53b74098ea302495b74e3df41c16683b75002a2b1342a25773796bcc3d66e",
+      "uxItems": [],
+      "owner": "core-loop"
     }
   ]
 }

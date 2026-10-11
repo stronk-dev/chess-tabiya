@@ -75,6 +75,20 @@ and pack bytes stay unchanged; zero subjects fully qualify and no release gate c
 
 ## Authored consequence promotion — 2026-10-11
 
+[[D3727]] is **DONE LOCALLY** under accepted n-way-comparison §7.3: nested first-child walks,
+skipped alternatives and horizon truncation now preserve the selected authored consequence.
+Three predecessor failures and fourteen focused controls pass; four actual desktop/phone
+simple/nested preview → failed-entry retry → exact promotion → reload journeys pass. The
+ordinary/charged path retains scratch isolation, checkpoints, zero engine jobs and existing
+bounds. [[D1154]] still needs the explicit readonly scratch transport amendment before full
+synchronized preview implementation; do not put canonical scratch events into the live store.
+No whole capability, content, source or release qualification follows.
+
+[[D3728]] is **TODO INVESTIGATION**, core-loop: compare the scratch response with the ordinary
+disclosure contract using populated inherited engine evidence and permitted feedback windows.
+The raw available marker differs; actual exposure has not yet been established. Retain the
+existing policy and D1154 transport hold, and do not treat D3727's path repair as this discharge.
+
 [[D3709]] is **DONE LOCALLY**, under accepted `rfc/archive/n-way-comparison.md`
 §7.4/A5a. Ordinary and charged entry use one implementation retaining the selected
 preview's checkpoint/objective events; the existing 800-event limit includes them.

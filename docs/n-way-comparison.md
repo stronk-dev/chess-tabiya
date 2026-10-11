@@ -50,6 +50,10 @@ continuations, **Preview authored lines** opens a responsive grid of their final
 positions. `/simulate` walks at most eight variations and forty total plies in
 memory and writes no events, evidence, or attempts. Each card names the authored
 move, shown horizon, truncation, and skipped nested alternatives when present.
+At a nested fork the walk follows the first authored child and counts the other
+children as skipped alternatives; it does not silently end at that fork. A requested
+horizon names the first unplayed authored node. Pack admission refuses children
+after an achieved objective, and the walk retains the runtime terminal guard.
 **Enter this line** calls `/simulate-enter` and explicitly promotes only that
 result to a real branch with origin `simulated`; only then does it enter replay,
 progress, compare, and PGN. Preview ids are writer-scoped, expire after ten

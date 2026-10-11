@@ -2498,7 +2498,8 @@ export class RunService {
         line.push(node.moveUci);
         totalPlies += 1;
         if (node.children.length > 1) subvariationsSkipped += node.children.length - 1;
-        node = node.children.length === 1 ? node.children[0] : undefined;
+        // Authored preview follows the first child; other children are counted above.
+        node = node.children[0];
       }
       if (node !== undefined && truncatedAt === undefined) truncatedAt = node.id;
       branchIds.push(branchId);
