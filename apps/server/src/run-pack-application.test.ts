@@ -4,25 +4,136 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import type { DrillRun } from "@chess-tabiya/runtime";
+import { attachEvidence, feedbackDisclosed, fork, projectRun, transitionObjective, type BranchComparison, type DrillRun } from "@chess-tabiya/runtime";
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
+import { applicationFixture } from "./application-fixture.test-support.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
+import { SQLiteRunStorage } from "./storage.js";
 
 const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
 let application: ChessTabiyaApplication | undefined;
+let constructingApplication: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | undefined;
 let directory: string | undefined;
 afterEach(async () => {
   const closing = application;
   const removing = directory;
+  const constructing = constructingApplication;
   application = undefined;
+  constructingApplication = undefined;
   directory = undefined;
-  try { await closing?.close(); }
+  try { if (constructing !== undefined) await constructing.close(); else await closing?.close(); }
   finally { if (removing !== undefined) rmSync(removing, { recursive: true, force: true }); }
 });
 
 describe("pinned pack production HTTP retrieval", { timeout: 120_000 }, () => {
+  it("D3728 preserves the saved disclosure boundary through authenticated private preview and actual entry", async () => {
+    directory = mkdtempSync(join(tmpdir(), "tabiya-preview-disclosure-"));
+    const databasePath = join(directory, "app.sqlite");
+    async function boot() {
+      constructingApplication = applicationFixture(createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() }));
+      await constructingApplication.ready;
+      application = constructingApplication.current()!;
+      await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+      return `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
+    }
+    let origin = await boot();
+    async function register(handle: string) {
+      const response = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle, password: `${handle}-password-long` }) });
+      expect(response.status).toBe(201);
+      return response.headers.get("set-cookie")!.split(";", 1)[0]!;
+    }
+    const cookie = await register("previewauthor");
+    const stranger = await register("previewstranger");
+    const writerId = "disclosure-writer";
+    const at = "2026-10-11T10:00:00.000Z";
+    const headers = { cookie, "content-type": "application/json", "x-writer-id": writerId };
+    const post = (path: string, body: unknown = {}, requestHeaders: Record<string, string> = headers) => fetch(`${origin}${path}`, { method: "POST", headers: requestHeaders, body: JSON.stringify(body) });
+    const runIds: string[] = [];
+    for (const feedbackPolicy of ["delayed_checkpoint", "segment_end"] as const) {
+      // Legal transport fixture, not a chess lesson or measured engine output.
+      const document: DrillPackDefinition = {
+        id: `private-disclosure-${feedbackPolicy.replaceAll("_", "-")}`, version: "0.1.0", title: "Private disclosure fixture", requires: [],
+        mode: "outcome", phase: "middlegame", start: { fen: "4k3/8/8/8/8/8/7P/6K1 w - - 0 1", side: "white" },
+        objective: { type: "play_until_checkpoint", summary: "Reach the fixture boundary.", successConditions: [{ kind: "reach_checkpoint", checkpointId: "finish" }] },
+        spine: [
+          { id: "h3", moveUci: "h2h3", moveSan: "h3", children: [{ id: "reply-h3", moveUci: "e8f8", moveSan: "Kf8", children: [] }] },
+          { id: "h4", moveUci: "h2h4", moveSan: "h4", children: [{ id: "reply-h4", moveUci: "e8f8", moveSan: "Kf8", children: [] }] },
+        ],
+        checkpoints: [
+          ...(feedbackPolicy === "segment_end" ? [{ id: "begin", label: "Begin fixture segment", trigger: { atSpineNode: "h3" }, actions: [] }] : []),
+          { id: "finish", label: "Finish fixture segment", trigger: { atSpineNode: "reply-h3" }, actions: [] },
+        ],
+        feedbackPolicy, opponentPolicy: { mode: "theory_strict" },
+        provenance: { sources: ["Mechanical HTTP disclosure fixture."], licence: "CC0-1.0", reviewStatus: "draft" },
+      };
+      const created = await post("/packs/drafts", { document });
+      expect(created.status, await created.clone().text()).toBe(201);
+      const { draft } = await created.json();
+      const played = await post(`/packs/drafts/${draft.id}/playtest`);
+      expect(played.status, await played.clone().text()).toBe(201);
+      runIds.push((await played.json()).run.id);
+    }
+    await constructingApplication!.close();
+    constructingApplication = undefined;
+    application = undefined;
+    const storage = new SQLiteRunStorage(databasePath, { onMigration: () => undefined });
+    try {
+      for (const runId of runIds) {
+        let run = storage.read(runId)!.run;
+        const root = run.activeCursor.nodeId;
+        run = attachEvidence(run, root, ["engine:fixture-score"], { kind: "eval", source: "engine_validated", values: { centipawns: 333 } }, at).run;
+        run = attachEvidence(run, root, ["engine:fixture-line"], { kind: "bestline", source: "engine_validated", values: { movesUci: ["h2h3", "e8f8"], depth: 12 } }, at).run;
+        run = transitionObjective(run, "preserved", ["rules:fixture", "engine:fixture-score", "tablebase:fixture"], at).run;
+        run = fork(run, root, { label: "Existing attempt", at }).run;
+        expect(projectRun(run.events)).toEqual(run);
+        expect(feedbackDisclosed(run)).toBe(false);
+        storage.save(run, { writerId, learnerId: storage.ownerLearnerId(runId)! });
+      }
+    } finally { storage.close(); }
+    origin = await boot();
+    for (const runId of runIds) {
+      const graph = async () => {
+        const response = await fetch(`${origin}/runs/${runId}/graph`, { headers: { cookie } });
+        expect(response.status).toBe(200);
+        return response.text();
+      };
+      const before = await graph();
+      expect((await post(`/runs/${runId}/simulate`, {}, { "content-type": "application/json", "x-writer-id": writerId })).status).toBe(401);
+      expect((await post(`/runs/${runId}/simulate`, {}, { ...headers, cookie: stranger })).status).toBe(404);
+      const previewResponse = await post(`/runs/${runId}/simulate`, { at });
+      expect(previewResponse.status, await previewResponse.clone().text()).toBe(200);
+      const preview = await previewResponse.json() as { simulationId: string; comparison: BranchComparison };
+      expect(preview.comparison.machineFeedback).toBe("withheld");
+      for (const { branchId } of preview.comparison.columns) {
+        expect(preview.comparison.evidence[branchId]).toEqual([]);
+        expect(preview.comparison.lines[branchId]).toEqual([]);
+        expect(preview.comparison.consequences[branchId]!.deepestScore).toBeNull();
+        expect(preview.comparison.objectiveTimelines[branchId]![0]!.evidenceRefs).toEqual(["rules:fixture"]);
+      }
+      expect(await graph()).toBe(before);
+      const entered = await post(`/runs/${runId}/simulate-enter`, { simulationId: preview.simulationId, branchIndex: 0, at });
+      expect(entered.status, await entered.clone().text()).toBe(200);
+      const saved = (await entered.json()).run as DrillRun;
+      expect(feedbackDisclosed(saved)).toBe(true);
+      expect((await post(`/runs/${runId}/rewind`, { nodeId: saved.nodes[0]!.id, at })).status).toBe(200);
+      const afterEntry = await graph();
+      const disclosed = await post(`/runs/${runId}/simulate`, { at });
+      expect(disclosed.status, await disclosed.clone().text()).toBe(200);
+      const shown = (await disclosed.json()).comparison as BranchComparison;
+      expect(shown.machineFeedback).toBe("available");
+      for (const { branchId } of shown.columns) {
+        expect(shown.evidence[branchId]).toEqual([expect.objectContaining({ score: { kind: "cp", value: 333 } })]);
+        expect(shown.lines[branchId]).toHaveLength(1);
+        expect(shown.consequences[branchId]!.deepestScore).toMatchObject({ score: { kind: "cp", value: 333 } });
+        expect(shown.objectiveTimelines[branchId]![0]!.evidenceRefs).toEqual(["rules:fixture", "engine:fixture-score", "tablebase:fixture"]);
+      }
+      expect(await graph()).toBe(afterEntry);
+    }
+  });
+
   it("retains private edited/withdrawn playtests across duplication and restart without exposing answers or strangers' bytes", async () => {
     directory = mkdtempSync(join(tmpdir(), "tabiya-run-pack-"));
     const databasePath = join(directory, "app.sqlite");

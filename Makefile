@@ -159,7 +159,7 @@ checkpoint-readiness-browser-check:
 .PHONY: prediction-workflow-check prediction-workflow-browser-check
 .PHONY: authored-simulation-check authored-simulation-browser-check
 authored-simulation-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/authored-simulation.test.ts apps/server/src/drill-client-server.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts -t "D3709|D3727|previews authored|simulation|scratch"
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/authored-simulation.test.ts apps/server/src/run-pack-application.test.ts apps/server/src/drill-client-server.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts -t "D3709|D3727|D3728|previews authored|simulation|scratch"
 
 authored-simulation-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3709|D3727"

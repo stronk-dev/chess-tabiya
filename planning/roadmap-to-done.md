@@ -78,15 +78,20 @@ predecessor. This improves a delivered rehearsal path, not a complete scratch co
 milestone states remain unchanged.
 
 Final ordinary serial `make verify-awake build test-browser-ci-awake` exits zero:
-4,984 software/377 files, seven performance/four files, 255 content/26 files,
+4,991 software/377 files, seven performance/four files, 255 content/26 files,
 129 release-policy controls, clean types/governance/packaging/build and 304 browser
 passes, one existing optional Maia skip, zero retries, all 150 input/112 composition
 cells. The known entry-bundle warning remains. These local gates do not establish
 current-revision GitHub CI or actual release-platform qualification.
 
-[[D3728]] is an assigned investigation, not a declared engine leak: the scratch comparison
-returns the raw available marker rather than ordinary comparison's disclosure projection.
-Actual inherited evidence and permitted feedback-window behavior still need measurement.
+[[D3728]] closes a measured disclosure defect: populated scratch previews exposed inherited
+scores, lines, summary scores and machine references under closed delayed-checkpoint/segment-end
+policies. Preview now applies ordinary comparison's projection using the saved run, not virtual
+checkpoints. Twenty-one focused controls pass; three fail with unfiltered predecessor behavior,
+including authenticated private playtest/restart/preview/actual entry/rewind. Admitted open analysis
+remains; auth/ownership and pack admission stay strict. This is not D1154's complete scratch
+transport, a new theory/policy/source contract or whole-capability qualification.
+The complete standard command passes after the repair; no test deadline or retry setting changes.
 
 [[D3573]]'s local native linux/arm64 image journey now passes all seven Make recovery commands;
 [[D3574]]'s current capacity hold clears without pruning. [[D3724]] repairs the harness's restored

@@ -23,10 +23,15 @@ pass preview isolation, failed-entry retry, exact promotion and reload. This is 
 the amendment below before implementing the full synchronized comparison; final-position cards
 and node references alone are not that projection.
 
-D3728 separately records the scratch comparison's disclosure investigation: raw `compareBranches`
-reports machine feedback available, whereas the ordinary endpoint applies its disclosure filter.
-Use real populated inherited evidence and closed/open/reclosed windows before claiming or repairing
-a bypass. The nested-walk repair does not establish that boundary or change its policy.
+**Disclosure repair, 2026-10-11 — D3728:** populated, admitted delayed-checkpoint and segment-end
+fixtures reproduce inherited scores, lines, summary scores and machine references escaping through
+raw scratch comparison. The preview now uses the ordinary filter and the saved run's disclosure,
+not checkpoints reached in memory. Twenty-one focused controls pass; three fail with unfiltered
+predecessor behavior. Real authenticated private playtest/restart/preview/entry/rewind controls
+retain analysis after actual disclosure and refuse absent authentication and strangers. Preview
+keeps saved bytes unchanged. Immediate-guard remains open; attempt_end is not admitted for packs,
+so no reclosed pack preview is fabricated. This fixes an existing accepted boundary, not policy,
+theory projection or D1154's missing readonly transport.
 
 ## Historical outcome — 2026-08-23
 

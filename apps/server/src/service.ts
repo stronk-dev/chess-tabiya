@@ -2512,14 +2512,16 @@ export class RunService {
     }
     const simulationId = randomUUID();
     this.#simulations.set(simulationId, { runId, writerId, sourceNodeId, moves, labels, createdAt: Date.now() });
+    const comparison = compareBranches(scratch, branchIds, {
+      pack: expandPackAuthoredBoundary(
+        pack.document,
+        planSignatureResolver(pack.document, this.#shapes),
+      ),
+    });
     return Object.freeze({
       simulationId,
-      comparison: compareBranches(scratch, branchIds, {
-        pack: expandPackAuthoredBoundary(
-          pack.document,
-          planSignatureResolver(pack.document, this.#shapes),
-        ),
-      }),
+      // A virtual checkpoint cannot disclose the saved run's inherited analysis.
+      comparison: feedbackDisclosed(stored.run) ? comparison : comparisonWithoutEngineFeedback(comparison),
       branches: Object.freeze(branchIds.map((branchId, indexValue) => ({
         index: indexValue,
         label: scratch.branches.find((branch) => branch.id === branchId)!.label,

@@ -30945,11 +30945,12 @@
     },
     {
       "id": "D3728",
-      "state": "todo",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:c0f53b74098ea302495b74e3df41c16683b75002a2b1342a25773796bcc3d66e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:558660fccf06e8315b5832093eb72567690763a87bbe81a454853dd81f4e1eff",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "apps/server/src/run-pack-application.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

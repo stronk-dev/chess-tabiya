@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { branchPath, compareBranches, projectRun, rewind, type BranchComparison, type CampaignDocument, type MutationResult } from "@chess-tabiya/runtime";
+import { attachEvidence, branchPath, compareBranches, feedbackDisclosed, fork, projectRun, rewind, transitionObjective, type BranchComparison, type CampaignDocument, type MutationResult } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { CampaignRegistry } from "./campaign-registry.js";
 import { CampaignService } from "./campaign-service.js";
@@ -208,5 +208,96 @@ describe("D3727 nested authored simulation", () => {
       code: "PACK_INVALID",
       message: expect.stringContaining("still has 2 authored children"),
     });
+  });
+});
+
+async function populatedPreview(feedbackPolicy: DrillPackDefinition["feedbackPolicy"]) {
+  const context = await setup(false, {
+    ...document, feedbackPolicy,
+    checkpoints: feedbackPolicy === "segment_end"
+      ? [{ id: "begin", label: "Fixture segment begins", trigger: { atSpineNode: "h3" }, actions: [] }, ...document.checkpoints]
+      : document.checkpoints,
+  });
+  let run = context.storage.read(context.runId)!.run;
+  const root = run.activeCursor.nodeId;
+  // Controlled transport records, not engine measurements or authored chess claims.
+  run = attachEvidence(run, root, ["engine:inherited-score"], {
+    kind: "eval", source: "engine_validated", values: { centipawns: 333 },
+  }, at).run;
+  run = attachEvidence(run, root, ["engine:inherited-line"], {
+    kind: "bestline", source: "engine_validated", values: { movesUci: ["h2h3", "e8f8"], depth: 12 },
+  }, at).run;
+  run = attachEvidence(run, root, ["tablebase:inherited-exact"], {
+    kind: "tablebase", source: "tablebase_exact", values: { category: "draw", dtz: 0 },
+  }, at).run;
+  run = transitionObjective(run, "preserved", ["rules:fixture-boundary", "engine:inherited-score", "tablebase:inherited-exact"], at).run;
+  run = fork(run, root, { label: "Existing attempt", at }).run;
+  expect(projectRun(run.events)).toEqual(run);
+  context.storage.save(run, { writerId, learnerId: principal.learnerId });
+  return { ...context, root };
+}
+
+function assertComparisonDisclosure(comparison: BranchComparison, open: boolean) {
+  for (const { branchId } of comparison.columns) {
+    if (!open) {
+      expect({
+        machineFeedback: comparison.machineFeedback,
+        evidence: comparison.evidence[branchId],
+        lines: comparison.lines[branchId],
+        deepestScore: comparison.consequences[branchId]!.deepestScore,
+        references: comparison.objectiveTimelines[branchId]![0]!.evidenceRefs,
+      }).toEqual({ machineFeedback: "withheld", evidence: [], lines: [], deepestScore: null, references: ["rules:fixture-boundary"] });
+      continue;
+    }
+    expect(comparison.machineFeedback).toBe("available");
+    expect(comparison.objectiveTimelines[branchId]![0]!.evidenceRefs).toEqual(["rules:fixture-boundary", "engine:inherited-score", "tablebase:inherited-exact"]);
+    expect(comparison.evidence[branchId]).toEqual([expect.objectContaining({ plyOffset: 0, score: { kind: "cp", value: 333 } })]);
+    expect(comparison.lines[branchId]).toEqual([expect.objectContaining({ plyOffset: 0, payload: expect.objectContaining({ values: { movesUci: ["h2h3", "e8f8"], depth: 12 } }) })]);
+    expect(comparison.consequences[branchId]!.deepestScore).toEqual({ plyOffset: 0, score: { kind: "cp", value: 333 } });
+  }
+}
+
+describe("D3728 authored comparison disclosure", () => {
+  for (const feedbackPolicy of ["delayed_checkpoint", "segment_end", "immediate_guard"] as const) {
+    it(`keeps populated scratch evidence under the stored ${feedbackPolicy} boundary`, async () => {
+      const { storage, runId, call } = await populatedPreview(feedbackPolicy);
+      const before = storage.read(runId)!.run;
+      const storedBytes = JSON.stringify(before);
+      const disclosed = feedbackDisclosed(before);
+      expect(disclosed).toBe(feedbackPolicy === "immediate_guard");
+      const ordinary = await call("compare", { branchIds: before.branches.map(branch => branch.id) });
+      expect(ordinary.status, await ordinary.clone().text()).toBe(200);
+      assertComparisonDisclosure((await ordinary.json() as { comparison: BranchComparison }).comparison, disclosed);
+      const response = await call("simulate", { at });
+      expect(response.status, await response.clone().text()).toBe(200);
+      const preview = await response.json() as ReturnType<RunService["simulate"]>;
+      expect(preview.comparison.rows).toHaveLength(2);
+      expect(preview.comparison.consequences[preview.comparison.columns[0]!.branchId]).toMatchObject({ objectiveState: "achieved", terminal: true, checkpointsReached: feedbackPolicy === "segment_end" ? ["begin", "finish"] : ["finish"] });
+      // Reaching the virtual finish cannot reveal the real run's inherited evidence.
+      assertComparisonDisclosure(preview.comparison, disclosed);
+      expect(JSON.stringify(storage.read(runId)!.run)).toBe(storedBytes);
+    });
+  }
+
+  for (const feedbackPolicy of ["delayed_checkpoint", "segment_end"] as const) {
+    it(`retains populated analysis after actually entering the ${feedbackPolicy} boundary`, async () => {
+      const { storage, runId, call, root } = await populatedPreview(feedbackPolicy);
+      const response = await call("simulate", { at });
+      expect(response.status, await response.clone().text()).toBe(200);
+      const { simulationId } = await response.json() as ReturnType<RunService["simulate"]>;
+      const entered = await call("simulate-enter", { simulationId, branchIndex: 0, at });
+      expect(entered.status, await entered.clone().text()).toBe(200);
+      expect(feedbackDisclosed(storage.read(runId)!.run)).toBe(true);
+      expect((await call("rewind", { nodeId: root, at })).status).toBe(200);
+      const before = storage.read(runId)!.run;
+      const shown = await call("simulate", { at });
+      expect(shown.status, await shown.clone().text()).toBe(200);
+      assertComparisonDisclosure((await shown.json() as ReturnType<RunService["simulate"]>).comparison, true);
+      expect(storage.read(runId)!.run).toEqual(before);
+    });
+  }
+
+  it("refuses the proposed attempt_end pack at admission instead of forging a reclosed preview", async () => {
+    await expect(populatedPreview("attempt_end")).rejects.toMatchObject({ code: "PACK_INVALID" });
   });
 });

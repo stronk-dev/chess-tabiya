@@ -26346,3 +26346,39 @@ Campaign was the one capability with no API, route or content. Now:
   capability/milestone states are unchanged. Update the existing full inventory
   before handing the owner's progress overview back; no new tracking authority,
   raw research recording or publication is added.
+
+## 2026-10-11 — D3728: saved disclosure controls authored previews
+
+- Finish the in-flight comparison audit before the requested complete 1.0 overview.
+  Admitted delayed-checkpoint and segment-end packs expose inherited engine scores,
+  best lines, summary scores and machine objective references in the old scratch
+  response; ordinary comparison withholds those same records. Two permanent payload
+  controls and one authenticated production-application control fail with the old
+  unfiltered behavior. Controlled engine records are transport fixtures, not chess
+  measurements or strategic claims.
+- Apply the existing comparison projection using the persisted source run's
+  disclosure state. A virtual checkpoint cannot reveal inherited analysis. Actual
+  entry opens the permitted boundary and rewind retains analysis; immediate-guard
+  behavior is unchanged. Scratch preview saves no events, branches or graph bytes.
+- Twenty-one focused controls pass, including real cookie authentication, private
+  Studio draft/playtest, canonical restoration, application restart, missing-auth
+  and stranger refusals, preview isolation and actual entry/rewind/open comparison.
+  The probe's invalid underscore identifier was corrected, not the schema. The
+  earlier attempt-end pack assumption was rejected at admission; segment completion
+  uses two actual same-branch checkpoints. No policy or deadline was widened.
+- Close D3728 narrowly and update existing docs, return, queue and roadmap. D1154's
+  self-contained readonly scratch transport stays open; theory/source contracts,
+  official content and all whole capability/milestone states are unchanged. Current
+  ledger: 3,477 items, 1,594 done, 161 refused and 1,722 live (632 TODO, 16 doing,
+  1,074 blocked), zero untriaged. The 462 historical prose-only closures remain
+  weaker evidence. UX remains 273 complete/272 live/24 retired. Full ordinary
+  serial verification/build/browser gates are the next checkpoint before commit.
+- Final ordinary serial `make verify-awake build test-browser-ci-awake` exits zero:
+  4,991 software/377 files, seven unchanged-budget performance/four files,
+  255 content/26 files, clean types/governance/packaging/build and all browser
+  tiers: 239 ordinary + five real-content + 59 matrix + one packaged-production
+  journey = 304 passes, one existing optional Maia skip, zero retries and all
+  112 composition cells. The first full attempt caught this task's test-header
+  helper type error; it was corrected to retain the missing-cookie negative,
+  not hidden by a deadline or test change. Known bundle-size debt remains.
+  No current-revision GitHub CI or actual release-platform proof is claimed.

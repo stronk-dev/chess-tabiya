@@ -24,6 +24,14 @@ playtest, unchanged saved graph during preview, failed entry/retry, exact promot
 checkpoint and durable reload. These tests also run in normal software/browser CI. They do not
 complete D1154's missing step-by-step scratch comparison transport.
 
+The focused target also exercises populated inherited scores, lines and machine references under
+saved delayed-checkpoint, segment-end and immediate-guard disclosure. D3728 has three controls
+that fail with the unfiltered predecessor behavior, including authenticated production HTTP:
+private draft/playtest, canonical fixture restoration, application restart, unauthorized/stranger
+refusal, isolated preview, actual entry, rewind and retained permitted analysis. A virtual finish
+cannot reveal the saved run. Attempt-end packs remain invalid; segment completion requires two
+checkpoints on the entered branch. These are transport fixtures, not measured chess conclusions.
+
 `make web-bundle-report` is an optional D3722 dependency investigation, not another
 test tier or push gate. It uses the normal web build configuration without writing
 served assets or source maps and prints final JavaScript bytes plus rendered-module

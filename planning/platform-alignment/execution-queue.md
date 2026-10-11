@@ -84,10 +84,13 @@ bounds. [[D1154]] still needs the explicit readonly scratch transport amendment 
 synchronized preview implementation; do not put canonical scratch events into the live store.
 No whole capability, content, source or release qualification follows.
 
-[[D3728]] is **TODO INVESTIGATION**, core-loop: compare the scratch response with the ordinary
-disclosure contract using populated inherited engine evidence and permitted feedback windows.
-The raw available marker differs; actual exposure has not yet been established. Retain the
-existing policy and D1154 transport hold, and do not treat D3727's path repair as this discharge.
+[[D3728]] is **DONE LOCALLY**, core-loop: populated delayed-checkpoint/segment-end controls
+reproduce actual inherited score/line/reference exposure. Scratch comparison now applies ordinary
+comparison's saved-run disclosure; virtual checkpoints cannot open it. Twenty-one focused controls
+pass; three fail with unfiltered predecessor behavior, including authenticated private playtest,
+restart, isolated preview, actual entry, rewind and retained permitted analysis. Auth/ownership and
+attempt-end pack admission remain strict. This closes the existing boundary only: no new policy,
+theory, source or D1154 readonly transport contract and no whole-capability qualification.
 
 [[D3709]] is **DONE LOCALLY**, under accepted `rfc/archive/n-way-comparison.md`
 §7.4/A5a. Ordinary and charged entry use one implementation retaining the selected

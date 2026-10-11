@@ -59,6 +59,12 @@ result to a real branch with origin `simulated`; only then does it enter replay,
 progress, compare, and PGN. Preview ids are writer-scoped, expire after ten
 minutes, and are consumed after one successful entry.
 
+Scratch comparison uses the **saved run's** machine-feedback disclosure state and the same
+server projection as ordinary comparison. A checkpoint reached only in memory cannot open that
+boundary: inherited scores, best lines, summary scores and machine objective references stay
+withheld. Actually entering the checkpoint/segment boundary permits later comparison analysis;
+immediate-guard policy remains immediately disclosed. Preview still changes no saved run bytes.
+
 Promotion uses one implementation for ordinary and Campaign entry. Each system move runs the
 same pack orchestration as the preview, retaining checkpoint and objective events in the saved
 branch and its returned event tail. Those events count toward the existing 800-event entry
