@@ -1,5 +1,31 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3700]] is a separate next contract boundary exposed while auditing
+conditional public snapshots: a withheld, unskipped reasoning receipt has no detections,
+so canonical event replay rejects it. The actual server projection control reproduces
+the conflict; saved/disclosed streams replay correctly. Specify the public-view/client
+reconstruction repair without leaking key points or weakening canonical skip consistency.
+This evidence-only test records the known failure and does not close the row.
+
+2026-10-11 — [[D3694]]/[[D3698]] are repaired locally. Prediction now admits the real
+writer/role, active/reached occurrence and legal guess before provider execution, binds the
+request to recorded position/history/seed/session/private pack, and re-admits after awaiting
+selection. Identical retry returns the original distribution; changed guesses and stale races
+are refused. Actual production HTTP grants and imported source-mainline revisits are covered.
+The native committed-but-lost response exposed a separate client event gap: mutation snapshots
+now recover the missing contiguous tail, refuse conflicts and preserve newer local history.
+The first complete browser attempt exposed this task's disclosure regression [[D3699]]:
+optional scores become visible when feedback opens. The narrow repair preserves immutable
+selection identity and refuses changed already-visible values. Forty-eight focused checks and
+ten targeted native journeys pass, including receipt reload/exact Continue, Line Drill,
+spectator following and desktop/phone Support reveal/return. [[D1685]]'s historical unbound
+prediction-subject row closes with this same repair, rather than remaining a duplicate live job.
+Complete serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+4,775 software cases/370 files, seven performance cases/four files, 247 content cases/25
+files, clean types/governance/packaging and build; 294 browser passes, one existing optional
+Maia skip, zero retries and all 112 composition cells. No remote green or whole capability
+is claimed. [[D3695]] remains the authored-example follow-up below.
+
 2026-10-11 — [[D3697]] closes this task's invalid concurrent local verification:
 verify rebuilt the same web dist served by browser CI, whose error context shows
 STATIC_NOT_BUILT instead of a catalogue. The documented normal command is one serial
@@ -16,9 +42,8 @@ controls and real saved private Studio gestures/failure/retry/reload journeys pa
 both perspectives. The native tests first exposed private pack lookup's 404; REST now
 resolves the run-pinned bytes and refuses a crossed id before selecting.
 
-Next boundary: [[D3694]], writer/checkpoint-occurrence/position/legality/duplicate admission
-before provider execution, preserving imported source-game semantics. Client guards are
-not this server proof. [[D3695]] is an author follow-up: the example's trigger follows
+The previously queued server boundary [[D3694]] is now repaired above, separately from
+the earlier client guards. [[D3695]] is an author follow-up: the example's trigger follows
 Black's reply; placing it before that reply collides with Choose the setup. Retain an honest
 wrong-turn explanation and ordinary actions until its explicit sequence is authored.
 The proposed intent correction is in planning/platform-alignment/execution-queue.md.

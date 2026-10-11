@@ -107,6 +107,135 @@ describe("drill-client pack registry", () => {
     for (const storage of stores.splice(0)) storage.close();
   });
 
+  async function predictionFixture() {
+    const environment = await setup(fixture);
+    stores.push(environment.storage);
+    const document = withDerivedRequires(pack({ id: "prediction-admission", checkpoints: fixture.checkpoints.map((checkpoint, index) => index === 0
+      ? { ...checkpoint, interaction: { type: "prediction", flipBoard: true } } : checkpoint) }));
+    const record = environment.registry.addPlaytest(document as DrillPackDefinition, await digestDrillPack(document as DrillPackDefinition));
+    const run = await environment.service.createPlaytestRun(record, { writerId: "writer-a", learnerId: "__legacy" });
+    const moved = environment.service.move(run.id, "writer-a", "c1e3", { at });
+    const selector = new OpponentSelector({ execute: async () => { throw new Error("unused provider"); }, health: () => { throw new Error("unused health"); } });
+    const selection = { moveUci: "e7e6", policyModeApplied: "theory_strict" as const,
+      candidates: [{ moveUci: "e7e6", mass: 0.7, rank: 1 }, { moveUci: "e7e5", mass: 0.3, rank: 2 }],
+      engine: { id: "fixture", name: "Recorded fixture", version: "1", seedHonored: true } };
+    const select = vi.spyOn(selector, "select").mockResolvedValue(selection);
+    const body = { startFen: document.start.fen, historyUci: ["c1e3"], seed: run.branches[0]!.seed,
+      policy: { mode: "theory_strict", policyConfigDigest: run.sessionDigest }, packId: document.id,
+      nodeId: moved.run.activeCursor.nodeId, checkpointId: "plan-commitment", predictedUci: "e7e6" };
+    return { ...environment, run: moved.run, selector, select, selection, body, handler: createRestHandler(environment.service, selector) };
+  }
+
+  it.each(["writer", "missing-writer", "missing-run", "malformed-checkpoint", "unknown-node", "unreached-checkpoint", "start", "history", "seed", "digest", "missing-pack", "crossed-pack", "illegal-guess"])(
+    "D3694 refuses %s before prediction provider execution", async (kind) => {
+      const environment = await predictionFixture();
+      const body: Record<string, unknown> = { ...environment.body };
+      if (kind === "malformed-checkpoint") body.checkpointId = 1;
+      if (kind === "unknown-node") body.nodeId = "another-node";
+      if (kind === "unreached-checkpoint") body.checkpointId = "predict-reply";
+      if (kind === "start") body.startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+      if (kind === "history") body.historyUci = [];
+      if (kind === "seed") body.seed = environment.body.seed + 1;
+      if (kind === "digest") body.policy = { ...environment.body.policy, policyConfigDigest: `sha256:${"0".repeat(64)}` };
+      if (kind === "missing-pack") delete body.packId;
+      if (kind === "crossed-pack") body.packId = fixture.id;
+      if (kind === "illegal-guess") body.predictedUci = "e7e4";
+      const response = await request(environment.handler, "POST", `/runs/${kind === "missing-run" ? "absent" : environment.run.id}/prediction`, body,
+        kind === "writer" ? "another-writer" : kind === "missing-writer" ? "" : "writer-a");
+      expect(response.status, await response.clone().text()).toBe(kind === "writer" ? 409 : kind === "missing-run" ? 404 : 400);
+      expect(environment.select).not.toHaveBeenCalled();
+      expect(environment.storage.read(environment.run.id)!.run).toEqual(environment.run);
+    });
+
+  it("D3694 refuses a reached prediction on the learner's turn before selecting", async () => {
+    const environment = await predictionFixture();
+    const moved = environment.service.opponentPly(environment.run.id, "writer-a", environment.selection);
+    const response = await request(environment.handler, "POST", `/runs/${environment.run.id}/prediction`, {
+      ...environment.body, historyUci: ["c1e3", "e7e6"], nodeId: moved.run.activeCursor.nodeId,
+      checkpointId: "predict-reply", predictedUci: "f2f3",
+    });
+    expect(response.status, await response.clone().text()).toBe(400);
+    expect(environment.select).not.toHaveBeenCalled();
+    expect(environment.storage.read(environment.run.id)!.run).toEqual(moved.run);
+  });
+
+  it("D3694 replays a committed guess after response loss but refuses a changed guess without another selection", async () => {
+    const environment = await predictionFixture();
+    const path = `/runs/${environment.run.id}/prediction`;
+    const first = await request(environment.handler, "POST", path, environment.body);
+    expect(first.status, await first.clone().text()).toBe(200);
+    const receipt = await first.json();
+    const retry = await request(environment.handler, "POST", path, environment.body);
+    expect(retry.status, await retry.clone().text()).toBe(200);
+    expect(await retry.json()).toEqual(receipt);
+    const changed = await request(environment.handler, "POST", path, { ...environment.body, predictedUci: "e7e5" });
+    expect(changed.status, await changed.clone().text()).toBe(400);
+    expect(environment.select).toHaveBeenCalledTimes(1);
+    expect(environment.storage.read(environment.run.id)!.run.events.filter(event => event.type === "prediction.recorded")).toHaveLength(1);
+  });
+
+  it.each(["cursor", "leave-and-return", "lease", "occurrence"])("D3694 rechecks %s after an asynchronous selection", async (kind) => {
+    const environment = await predictionFixture();
+    environment.select.mockImplementationOnce(async () => {
+      if (kind === "lease") environment.storage.claimLease(environment.run.id, { learnerId: "__legacy", writerId: "new-device" });
+      else if (kind === "occurrence") environment.storage.save(reachCheckpoint(environment.run, "plan-commitment").run, { learnerId: "__legacy", writerId: "writer-a" });
+      else {
+        environment.service.rewind(environment.run.id, "writer-a", { nodeId: environment.run.nodes[0]!.id });
+        if (kind === "leave-and-return") environment.service.rewind(environment.run.id, "writer-a", { nodeId: environment.run.activeCursor.nodeId });
+      }
+      return environment.selection;
+    });
+    const response = await request(environment.handler, "POST", `/runs/${environment.run.id}/prediction`, environment.body);
+    expect(response.status, await response.clone().text()).toBe(kind === "lease" ? 409 : 400);
+    expect(environment.select).toHaveBeenCalledTimes(1);
+    expect(environment.storage.read(environment.run.id)!.run.events.filter(event => event.type === "prediction.recorded")).toEqual([]);
+  });
+
+  it("D3694 keeps a later sibling checkpoint from shadowing the resumed original position", async () => {
+    const environment = await predictionFixture();
+    environment.service.fork(environment.run.id, "writer-a", environment.run.nodes[0]!.id, { label: "sibling" });
+    const sibling = environment.service.move(environment.run.id, "writer-a", "c1e3");
+    expect(sibling.run.events.at(-1)?.type).toBe("checkpoint.reached");
+    environment.service.rewind(environment.run.id, "writer-a", { nodeId: environment.run.activeCursor.nodeId, branchId: environment.run.activeCursor.branchId });
+    const response = await request(environment.handler, "POST", `/runs/${environment.run.id}/prediction`, environment.body);
+    expect(response.status, await response.clone().text()).toBe(200);
+    expect(environment.select).toHaveBeenCalledTimes(1);
+  });
+
+  it("D3694 concurrent identical guesses retain exactly one winning event and distribution", async () => {
+    const environment = await predictionFixture();
+    let entered!: () => void;
+    const selecting = new Promise<void>(resolve => { entered = resolve; });
+    let settle!: (selection: typeof environment.selection) => void;
+    environment.select.mockImplementationOnce(() => { entered(); return new Promise(resolve => { settle = resolve; }); });
+    const pending = request(environment.handler, "POST", `/runs/${environment.run.id}/prediction`, environment.body);
+    await selecting;
+    const winner = await request(environment.handler, "POST", `/runs/${environment.run.id}/prediction`, environment.body);
+    expect(winner.status, await winner.clone().text()).toBe(200);
+    const receipt = await winner.json();
+    // The later-settling provider cannot replace the distribution that already committed.
+    settle({ ...environment.selection, moveUci: "e7e5" });
+    const completed = await pending;
+    expect(completed.status, await completed.clone().text()).toBe(200);
+    expect(await completed.json()).toEqual(receipt);
+    expect(environment.storage.read(environment.run.id)!.run.events.filter(event => event.type === "prediction.recorded")).toHaveLength(1);
+  });
+
+  it("D3694 unrelated evidence arriving during selection does not invalidate the position", async () => {
+    const environment = await predictionFixture();
+    environment.select.mockImplementationOnce(async () => {
+      const updated = attachEvidence(environment.run, environment.run.activeCursor.nodeId,
+        [engineEvidenceRef("prediction-background")], { kind: "eval", source: "engine_validated", values: { centipawns: 20 } });
+      environment.storage.save(updated.run, { learnerId: "__legacy", writerId: "writer-a" });
+      return environment.selection;
+    });
+    const response = await request(environment.handler, "POST", `/runs/${environment.run.id}/prediction`, environment.body);
+    expect(response.status, await response.clone().text()).toBe(200);
+    const result = await response.json();
+    expect(result.run.events.filter((event: { type: string }) => event.type === "evidence.attached")).toHaveLength(1);
+    expect(result.emitted.map((event: { type: string }) => event.type)).toEqual(["prediction.recorded"]);
+  });
+
   it.each([false, true])("D3696 resolves the prediction's immutable private playtest, refusing crossed ids (%s)", async (crossed) => {
     const environment = await setup(fixture);
     stores.push(environment.storage);

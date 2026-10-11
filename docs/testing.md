@@ -18,11 +18,23 @@ retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tie
 `make prediction-workflow-check` covers independent perspective/move authority, legal opponent
 guess admission, repeated-client-guess refusal, failed prediction/retry, durable receipt resume and playing
 the same distribution without selecting again. It also covers exact private-playtest pack lookup
-and crossed-id refusal before selector execution. `make prediction-workflow-browser-check` runs
+and crossed-id refusal before selector execution. Actual HTTP negative controls cover writer/role,
+checkpoint occurrence, legal turn/guess, forged start/history/seed/session/pack, asynchronous
+cursor/lease races, identical/concurrent replay and imported-game revisits. Client controls
+recover missing event tails while refusing conflicting or non-contiguous snapshots. The actual
+server public projection also tests score disclosure versus changed visible measurements,
+rank and mass. D3700's expected-rejection control records a known withheld-reasoning contract
+conflict, not a fixed or complete reasoning journey.
+`make prediction-workflow-browser-check` runs
 real saved private Studio playtests with both perspectives: genuine pointer guesses, provider
-failure/retry, unchanged nodes until Continue, full candidate receipts, reload and exact reply.
+failure/retry and a committed-but-lost response, unchanged nodes until Continue, full candidate
+receipts, reload and exact reply. Background evidence delivery is held only to ensure the native
+case exercises explicit retry rather than recovering first through another response's snapshot;
+its actual server collection and commitment are unchanged. The focused browser command also
+covers Line Drill, granted spectators and desktop/phone Support reveal/return.
 These tests run in ordinary CI. They do not discharge the schema example's wrong-turn trigger
-(D3695) or the broader server writer/position pre-admission boundary (D3694).
+(D3695). The server admission (D3694) and event-gap recovery (D3698) have separate negative
+controls; successful UI submission alone is not their security or integrity proof.
 
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds

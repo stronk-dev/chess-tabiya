@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:37138cf2cfac060a542e319e07e78e70b164a8efb3338e8d5d7783885f02ce45",
+    "roadmap": "sha256:ea3fa81810ab7b107da0cf73783b93216ce2bc48ff751700f13f7dde411ab0e2",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:336cb59e141bef34b4a63a5c3e53c68cbb67617ecc300f56bb04569ef1cd41fb",
+    "workState": "sha256:6df8a00f2b14c4f7c7e5953475711970465a235371683057ace97014c62d5e71",
     "rfcRegister": "sha256:5bc47ac4662657716e166f4c45104044b6a10917e38ed2af2b8f0b48b40c15af",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
-    "rest": "sha256:ad5f66aacd1b3bea631f800c1f179756ac841296431492004c90641c29e0a05e"
+    "rest": "sha256:c52d7266bfe5d6c35f232651cff87e3bbe41ee745a9b5a174ea31702dbfd5c91"
   },
   "summary": {
     "capabilities": 14,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 631,
+      "todo": 630,
       "doing": 14,
       "blocked": 1074,
-      "done": 1566,
+      "done": 1570,
       "refused": 161
     },
     "workItems": {
@@ -73,10 +73,10 @@
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally; require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. D3694 owns server writer/checkpoint/position admission before prediction provider work; D3695 retains the authored example's wrong-turn sequence. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+      "nextAction": "D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3693 now proves actual legal opponent prediction capture, independently oriented input, durable ungraded full-candidate receipt and exact Continue without another selection. Eighteen focused controls and real saved private Studio gestures/failure/retry/reload journeys pass for both perspectives. Those native cases exposed D3696's private-pack 404; run-pinned resolution and crossed-id refusal before selecting now pass. D3692's session readiness repair stands. D3695 retains the authored example/A7 wrong-turn sequence; D3694 separately owns server pre-admission. Full local gate results are retained in the exploration log. No paired green exact-revision remote CI, push, native release-image, whole capability or milestone completion is claimed.",
+        "summary": "D3694/D1685 now prove pre-provider writer/role, active/reached occurrence, legal opponent guess and exact recorded position/history/branch/session/private-pack admission, asynchronous re-admission and immutable replay. Production HTTP non-grantee/spectator controls and imported source-mainline revisits pass. Native response loss exposed D3698's client event gap; snapshots recover missing contiguous events while refusing conflicts and preserving newer local history. The first complete browser attempt exposed this task's D3699 selection-disclosure regression; its narrow repair admits declared score/WDL omissions while refusing changed already-visible measurements and immutable selection identity. Forty-eight focused controls and ten real native journeys pass, including committed-response loss, retry/reload/exact Continue, Line Drill, spectator following and desktop/phone Support reveal/return. D3700's independently reproduced withheld-reasoning replay conflict remains open; D3695 retains the authored example/A7 wrong-turn sequence. Complete serial normal Make verification passes 4,775 software cases/370 files, seven performance cases/four files, 247 content cases/25 files, clean types/governance/capability/packaging and build; 294 browser passes, one existing optional Maia skip, zero retries and all 112 composition cells. No paired green exact-revision remote CI, push, native release-image, whole capability or milestone completion is claimed.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -91,6 +91,8 @@
           "apps/web/src/lib/CheckpointSheet.svelte",
           "apps/web/src/lib/session-controller.test.ts",
           "apps/server/src/drill-client-server.test.ts",
+          "apps/server/src/return-scheduling-application.test.ts",
+          "apps/web/src/lib/run-state.test.ts",
           "apps/server/src/rest.ts",
           "apps/web/src/lib/DrillScreen.svelte",
           "tests/browser/profile.spec.ts",

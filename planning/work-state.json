@@ -13179,11 +13179,12 @@
     },
     {
       "id": "D1685",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e567c11250810973b6c532ed90046cb8621cd19839499bd0ebc7e537e3ae7f05",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:85ac29b3269df6c09f1ddfda55b4bae99783925cf96f6874b7528997fe9da8b8",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/drill-client-server.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1686",
@@ -30641,11 +30642,12 @@
     },
     {
       "id": "D3694",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ae31269ceaa0a63f13c4d7e935a0432bf2c5af8d095491a7a43abf8affd4e309",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:31e48dc5209f9cc9ab481bfa1a383e3beb374df43829114e6b68228e39471e0a",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "apps/server/src/drill-client-server.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3695",
@@ -30661,7 +30663,7 @@
       "id": "D3696",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:1fcf0168759e44932ca9d191d9eac7358251eea91f7aa50dd5d8a6cac016c425",
+      "sourceDigest": "sha256:bb095b786565c1176a6d0ccbf9737ba93f6c23ee8ffb0fc6d43a48215db7c7d1",
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
@@ -30674,6 +30676,32 @@
       "uxItems": [],
       "evidence": "docs/testing.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3698",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:25f66452a95fc53f2e47b8c218316a57be6e12b4800c85976294c19382cfe367",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/run-state.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3699",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ad26ec7592226be3b8e9e6dfc31ca1dbb56b2508eefae534baad055fc09aeda3",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/run-state.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3700",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2288dc97c3692789366323ff5afd0667f05c50acabcf50ea6b0ffc837bfc2def",
+      "uxItems": [],
+      "owner": "core-loop"
     }
   ]
 }

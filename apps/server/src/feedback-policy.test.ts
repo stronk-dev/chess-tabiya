@@ -1,6 +1,9 @@
 import {
   attachEvidence,
+  appendEvents,
   createRun,
+  projectRun,
+  reachCheckpoint,
   revealFeedback,
   type DrillRun,
   type DrillRunEvent,
@@ -29,6 +32,24 @@ function run(): DrillRun {
 }
 
 describe("machine-evidence withholding", () => {
+  it("D3700 records the existing withheld-reasoning projection/replay contract conflict", () => {
+    const reached = reachCheckpoint(run(), "reason", at).run;
+    const recorded = appendEvents(reached, [{ type: "reasoning.recorded", at, data: {
+      nodeId: reached.activeCursor.nodeId, checkpointId: "reason", checkpointEventSeq: 2,
+      skipped: false, transcript: { candidates: ["Nf3"], plan: "", fears: "" }, matcherVersion: 1,
+      detections: [{ keyPointId: "knight", status: "detected", match: { field: "candidates", index: 0, start: 0, end: 3 } }],
+    } }]);
+    expect(projectRun(recorded.events)).toEqual(recorded);
+    const hidden = publicRunSnapshot(recorded);
+    const event = hidden.events.at(-1)!;
+    expect(event).toMatchObject({ type: "reasoning.recorded", data: { skipped: false, detections: [] } });
+    // This is a known incompatibility, not a completion test: the public response
+    // is intentionally not a canonical event log before disclosure.
+    expect(() => projectRun(hidden.events)).toThrow("inconsistent skip data");
+    const disclosed = publicRunSnapshot(revealFeedback(recorded, at).run);
+    expect(projectRun(disclosed.events)).toEqual(disclosed);
+  });
+
   it.each(["events", "snapshot", "mutation"] as const)("keeps provider save/reload images private in %s while retaining disclosed readings", (surface) => {
     const base = revealFeedback(run(), at).run;
     const values = Object.freeze({

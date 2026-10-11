@@ -226,6 +226,13 @@ export interface DueQueue {
  */
 export const IMPORTED_GAME_PREDICTION_CHECKPOINT = "imported-game:next-move";
 
+interface PredictionInput {
+  readonly nodeId: string;
+  readonly checkpointId: string;
+  readonly predictedUci: string;
+  readonly at?: string;
+}
+
 export interface RunViewer {
   readonly role: RunRole;
   readonly mayWrite: boolean;
@@ -2201,50 +2208,110 @@ export class RunService {
     }, idempotencyKey);
   }
 
+  async predictReply(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    input: PredictionInput,
+    request: SelectMoveRequest,
+    selector: OpponentSelector | undefined,
+  ): Promise<MutationResult & { readonly selection: OpponentSelection }> {
+    input = Object.freeze({ ...input });
+    const access = this.#predictionAccess(runId, principal, writerId, input);
+    const run = access.stored.run;
+    const history = historyFrom(run, input.nodeId).flatMap(node => node.moveUci === null ? [] : [node.moveUci]);
+    let startFen: string;
+    try { startFen = canonicalRunStart({ fen: request.startFen, side: run.start.side }).fen; }
+    catch { throw new ServerError("INVALID_REQUEST", "Prediction start position is invalid"); }
+    if (startFen !== run.start.fen || request.historyUci.length !== history.length
+      || request.historyUci.some((move, index) => move !== history[index])) {
+      throw new ServerError("INVALID_REQUEST", "Prediction selection must use the recorded run position and history");
+    }
+    const branch = run.branches.find(candidate => candidate.id === run.activeCursor.branchId);
+    if (request.seed !== branch?.seed || request.policy.policyConfigDigest !== run.sessionDigest
+      || request.packId !== access.pack?.document.id) {
+      throw new ServerError("INVALID_REQUEST", "Prediction selection does not match the run's branch, session or pack");
+    }
+    // Response-loss retry returns the original recording, never another preview of the reply.
+    if (access.recorded !== undefined) {
+      return { run, emitted: [access.recorded], selection: access.recorded.data.distribution };
+    }
+    if (selector === undefined) throw new ServerError("ENGINE_UNAVAILABLE", "Opponent selector is not configured", {
+      details: { engineId: "opponent-selector", retryAfterMs: 0 },
+    });
+    // Keep client policy composition, but bind the request to the admitted immutable position.
+    const selection = await selector.select({ ...request, historyUci: Object.freeze([...request.historyUci]),
+      policy: Object.freeze({ ...request.policy, ...(access.pack?.document.spine === undefined ? {} : { spine: access.pack.document.spine }) }) });
+    const current = this.#predictionAccess(runId, principal, writerId, input);
+    if (current.positionSeq !== access.positionSeq || current.occurrenceSeq !== access.occurrenceSeq) {
+      throw new ServerError("INVALID_REQUEST", "Prediction position changed while selecting the reply");
+    }
+    // A concurrent identical guess can win; return its recording rather than append twice.
+    if (current.recorded !== undefined) return { run: current.stored.run, emitted: [current.recorded], selection: current.recorded.data.distribution };
+    return { ...this.recordPrediction(runId, principal, writerId, { ...input, distribution: selection }), selection };
+  }
+
+  #predictionAccess(runId: string, principal: Principal, writerId: string, input: PredictionInput) {
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId, stored.run);
+    const run = stored.run;
+    const node = run.nodes.find(candidate => candidate.id === input.nodeId);
+    if (node === undefined || run.activeCursor.nodeId !== input.nodeId) {
+      throw new ServerError("INVALID_REQUEST", "Prediction node is not the active cursor");
+    }
+    const pack = this.#requiredRegisteredPack(run);
+    const positionSeq = run.events.filter(event => event.type === "move.committed" || event.type === "run.rewound" || event.type === "branch.forked").at(-1)?.seq ?? 0;
+    let occurrenceSeq = positionSeq;
+    if (run.sessionKind === "imported") {
+      if (input.checkpointId !== IMPORTED_GAME_PREDICTION_CHECKPOINT) {
+        throw new ServerError("INVALID_REQUEST", `Imported games record predictions only at ${IMPORTED_GAME_PREDICTION_CHECKPOINT}`);
+      }
+      const primary = run.branches[0];
+      if (primary === undefined || node.branchId !== primary.id ||
+        !run.nodes.some(candidate => candidate.branchId === primary.id && candidate.parentId === node.id)) {
+        throw new ServerError("INVALID_REQUEST", "Imported-game predictions need a source-game position with a played next move");
+      }
+    } else {
+      if (pack === undefined || !pack.document.checkpoints.some(checkpoint => checkpoint.id === input.checkpointId && checkpoint.interaction?.type === "prediction")) {
+        throw new ServerError("INVALID_REQUEST", "Unknown prediction checkpoint");
+      }
+      const pathIds = new Set(historyFrom(run, node.id).map(candidate => candidate.id));
+      const occurrence = run.events.filter(event => event.type === "checkpoint.reached" && event.data.checkpointId === input.checkpointId
+        && pathIds.has(event.data.nodeId)).at(-1);
+      if (occurrence?.type !== "checkpoint.reached" || occurrence.data.nodeId !== node.id) {
+        throw new ServerError("INVALID_REQUEST", "Prediction checkpoint has not been reached at the active position");
+      }
+      occurrenceSeq = occurrence.seq;
+      if (learnerToMove(run, node)) throw new ServerError("INVALID_REQUEST", "Reply prediction requires the opponent's turn");
+    }
+    let predictedUci: string;
+    try { predictedUci = exactMoveIdentity(node.fen, input.predictedUci); }
+    catch { throw new ServerError("INVALID_REQUEST", "Prediction requires a legal move at the active position"); }
+    const recorded = run.events.find(event => event.type === "prediction.recorded" && event.seq > occurrenceSeq
+      && event.data.nodeId === node.id && event.data.checkpointId === input.checkpointId);
+    if (recorded?.type === "prediction.recorded" && recorded.data.predictedUci !== predictedUci) {
+      throw new ServerError("INVALID_REQUEST", "A different prediction was already recorded for this occurrence");
+    }
+    return { stored, lease, pack, positionSeq, occurrenceSeq, predictedUci, recorded: recorded?.type === "prediction.recorded" ? recorded : undefined };
+  }
+
   recordPrediction(
     runId: string,
     principal: Principal,
     writerId: string,
-    input: {
-      readonly nodeId: string;
-      readonly checkpointId: string;
-      readonly predictedUci: string;
-      readonly distribution: OpponentSelection;
-      readonly at?: string;
-    },
+    input: PredictionInput & { readonly distribution: OpponentSelection },
   ): MutationResult {
-    const { stored, lease } = this.#forWrite(runId, principal, writerId);
-    this.#refuseWhileMatchLive(runId,stored.run);
-    if (stored.run.sessionKind === "imported") {
-      // Guess-the-move on an imported game (rfc/return-scheduling.md §8): the reference is the move
-      // the source game actually played, so the gate is the source mainline, not a pack checkpoint.
-      if (input.checkpointId !== IMPORTED_GAME_PREDICTION_CHECKPOINT) {
-        throw new ServerError("INVALID_REQUEST", `Imported games record predictions only at ${IMPORTED_GAME_PREDICTION_CHECKPOINT}`);
-      }
-      const primary = stored.run.branches[0];
-      const node = stored.run.nodes.find((candidate) => candidate.id === input.nodeId);
-      if (primary === undefined || node === undefined || node.branchId !== primary.id ||
-        !stored.run.nodes.some((candidate) => candidate.branchId === primary.id && candidate.parentId === node.id)) {
-        throw new ServerError("INVALID_REQUEST", "Imported-game predictions need a source-game position with a played next move");
-      }
-    } else {
-      const pack = this.#requiredRegisteredPack(stored.run);
-      if (pack === undefined || !pack.document.checkpoints.some((checkpoint) => checkpoint.id === input.checkpointId && checkpoint.interaction?.type === "prediction")) {
-        throw new ServerError("INVALID_REQUEST", "Unknown prediction checkpoint");
-      }
-    }
-    if (stored.run.activeCursor.nodeId !== input.nodeId) {
-      throw new ServerError("INVALID_REQUEST", "Prediction node is not the active cursor");
-    }
+    const { stored, lease, predictedUci, recorded } = this.#predictionAccess(runId, principal, writerId, input);
+    if (recorded !== undefined) return { run: stored.run, emitted: [recorded] };
     const candidates = input.distribution.candidates ?? [];
-    const candidate = candidates.find((entry) => entry.moveUci === input.predictedUci);
+    const candidate = candidates.find((entry) => entry.moveUci === predictedUci);
     const next = appendEvents(stored.run, [{
       type: "prediction.recorded",
       at: input.at ?? new Date().toISOString(),
       data: {
         nodeId: input.nodeId,
         checkpointId: input.checkpointId,
-        predictedUci: input.predictedUci,
+        predictedUci,
         predictedMass: candidate?.mass ?? null,
         predictedRank: candidate?.rank ?? null,
         candidateCount: candidates.length,

@@ -18,8 +18,10 @@ Proposed intent amendment, **not applied**: `design/03-product-breadth.md` B3 cu
 “shipped in full — N-way compare, simulate, prediction rendering, deep analysis, export, **and
 branch groups (2026-08-14)**.” Bound that completion to the delivered component paths and retain
 the example's authored prediction sequence as open. No whole Review completion follows from a
-rendered board or Continue. [[D3694]] separately owns server writer/position/occurrence admission
-before provider work; the exact private-pack lookup repair [[D3696]] is not that broader proof.
+rendered board or Continue. [[D3694]] now separately proves server writer/position/occurrence
+admission before provider work, including production HTTP grant controls and asynchronous
+re-admission. [[D3698]] repairs client recovery of a committed-but-lost response followed by
+background evidence. Neither repair discharges the example's authored sequence.
 
 ## Compatibility and Support checkpoint — 2026-10-07
 

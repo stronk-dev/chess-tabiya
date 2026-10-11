@@ -125,10 +125,27 @@ through the opponent-ply path without another selection; an unrecorded Continue 
 Failure leaves the position and checkpoint intact for retry. Private playtests resolve their
 run-pinned pack bytes, not the public catalogue's current id.
 
+Before selecting a prediction reply, the server admits the writer and role, active node,
+reached checkpoint occurrence, opponent turn and legal guess. The submitted start/history,
+branch seed, session identity and private pack must match the saved run. These checks run again
+after asynchronous selection; changing the position or writer cannot attach a stale receipt.
+A lost-response retry returns the same recorded event and distribution without selecting again;
+a changed guess at that occurrence is refused. Imported-game guesses instead use a source-mainline
+position with an actual next move, and a later visit can record a new guess.
+
+Mutation responses reconcile their full immutable event history, not just the operation's
+emitted events. This fills gaps left by lost responses even when background evidence arrives
+next. Conflicting history, missing sequence entries, foreign runs and emitted events absent
+from that history remain errors. The server's declared selection score/WDL omissions can
+become visible at disclosure without changing move, rank, mass or provider identity; values
+already present in both views cannot change. A slower response never removes a newer local
+event. D3700 remains a separate public-view/canonical-replay conflict for withheld reasoning;
+the source/disclosed receipts are valid, but the hidden detection view cannot yet replay.
+
 The schema example currently reaches its prediction after Black's reply, on the learner's turn.
 The sheet explains why a reply cannot be predicted there and keeps Continue/rewind available; it
-does not rewrite the FEN. D3695 owns an explicit authored checkpoint sequence. D3694 separately
-owns stronger server admission before provider work; the client checks are not that security proof.
+does not rewrite the FEN. D3695 owns an explicit authored checkpoint sequence; the generic
+admission and recovery repairs do not discharge that authored example.
 
 Checkpoint actions wait for the session's preceding move/feedback operation, not just
 for a continuation initiated in the sheet. While that operation is pending, the sheet

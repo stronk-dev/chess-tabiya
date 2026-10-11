@@ -3272,41 +3272,80 @@ for (const flipBoard of [false, true]) {
     await page.getByRole("button", { name: "Save & playtest", exact: true }).click();
     await expect(page).toHaveURL(/\/play\/run\//);
     const runId = new URL(page.url()).pathname.split("/").at(-1)!;
-    const requests: string[] = [];
-    page.on("request", request => { if (request.method() === "POST") requests.push(new URL(request.url()).pathname); });
-    await move(page, "c1", "e3");
-    const checkpoint = page.getByRole("dialog", { name: "Choose the setup", exact: true });
-    await expect(checkpoint).toBeVisible();
-    await expect(checkpoint.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
-    const before = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
-    await page.route(`**/runs/${runId}/prediction`, route => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "ENGINE_UNAVAILABLE", message: "Opponent selector is not configured" } }) }));
-    await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
-    await expect(checkpoint.getByRole("alert")).toContainText("No move was played");
-    expect((await (await page.request.get(`/runs/${runId}/graph`)).json()).graph.nodes).toEqual(before.nodes);
-    await page.unroute(`**/runs/${runId}/prediction`);
-    const recordedResponse = page.waitForResponse(response => new URL(response.url()).pathname === `/runs/${runId}/prediction` && response.request().method() === "POST");
-    await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
-    const response = await recordedResponse;
-    expect(response.status(), await response.text()).toBe(200);
-    const receipt = await response.json();
-    const prediction = receipt.emitted.find((event: { type: string }) => event.type === "prediction.recorded");
-    expect(prediction.data).toMatchObject({ predictedUci: "e7e6", nodeId: before.activeCursor.nodeId, distribution: receipt.selection });
-    await expect(checkpoint).toContainText("You predicted e6.");
-    await expect(checkpoint.getByRole("list", { name: "Recorded reply candidates" }).getByRole("listitem")).toHaveCount(receipt.selection.candidates?.length ?? 0);
-    expect((await (await page.request.get(`/runs/${runId}/graph`)).json()).graph.nodes).toEqual(before.nodes);
-    await page.reload();
-    await expect(checkpoint).toContainText("You predicted e6.");
-    await expect(checkpoint).toContainText("not a grade");
-    await checkpoint.getByRole("button", { name: "Continue", exact: true }).click();
-    const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
-    expect(after.nodes).toHaveLength(before.nodes.length + 1);
-    expect(after.nodes.at(-1).moveUci).toBe(receipt.selection.moveUci);
-    expect(requests.filter(path => path === "/select-move")).toEqual([]);
-    const unavailable = page.getByRole("dialog", { name: "Predict the reply", exact: true });
-    await expect(unavailable).toContainText("This checkpoint is on your turn");
-    await expect(unavailable.getByLabel("Chessboard", { exact: true })).toHaveCount(0);
-    await unavailable.getByRole("button", { name: "Continue", exact: true }).click();
-    await expect(unavailable).toBeHidden();
+    // Hold delivery (not collection) of background evidence so this case exercises
+    // an explicit retry. Otherwise its full snapshot can recover the receipt first.
+    let releaseEvidence!: () => void;
+    const evidenceDelivery = new Promise<void>(resolve => { releaseEvidence = resolve; });
+    await page.route(`**/runs/${runId}/evidence`, async route => {
+      if (route.request().method() !== "POST") { await route.continue(); return; }
+      const response = await route.fetch();
+      await evidenceDelivery;
+      await route.fulfill({ response });
+    });
+    try {
+      const requests: string[] = [];
+      page.on("request", request => { if (request.method() === "POST") requests.push(new URL(request.url()).pathname); });
+      await move(page, "c1", "e3");
+      const checkpoint = page.getByRole("dialog", { name: "Choose the setup", exact: true });
+      await expect(checkpoint).toBeVisible();
+      await expect(checkpoint.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
+      const before = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+      await page.route(`**/runs/${runId}/prediction`, route => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "ENGINE_UNAVAILABLE", message: "Opponent selector is not configured" } }) }));
+      await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
+      await expect(checkpoint.getByRole("alert")).toContainText("No move was played");
+      assertRecordedNodesPreserved(before.nodes, (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph.nodes);
+      await page.unroute(`**/runs/${runId}/prediction`);
+      // D3694: the server commits, but the browser loses the response. Retry must recover
+      // that same event/distribution instead of previewing another reply or recording twice.
+      let committedResponse!: (response: APIResponse) => void;
+      const committedDelivery = new Promise<APIResponse>(resolve => { committedResponse = resolve; });
+      const lostDelivery = page.waitForEvent("requestfailed", request => new URL(request.url()).pathname === `/runs/${runId}/prediction`);
+      await page.route(`**/runs/${runId}/prediction`, async route => {
+        const committed = await route.fetch();
+        await route.abort("failed");
+        committedResponse(committed);
+      });
+      await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
+      const committed = await committedDelivery;
+      expect(committed.status(), await committed.text()).toBe(200);
+      const lostReceipt = await committed.json();
+      await lostDelivery;
+      await expect(checkpoint.getByRole("alert")).toContainText("No move was played");
+      await expect(checkpoint.getByRole("alert")).not.toContainText("Opponent selector is not configured");
+      const afterLoss = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+      assertRecordedNodesPreserved(before.nodes, afterLoss.nodes);
+      expect(lostReceipt.emitted).toHaveLength(1);
+      await page.unroute(`**/runs/${runId}/prediction`);
+      const recordedResponse = page.waitForResponse(response => new URL(response.url()).pathname === `/runs/${runId}/prediction` && response.request().method() === "POST");
+      await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
+      const response = await recordedResponse;
+      expect(response.status(), await response.text()).toBe(200);
+      const receipt = await response.json();
+      releaseEvidence();
+      expect(receipt.emitted).toEqual(lostReceipt.emitted);
+      expect(receipt.selection).toEqual(lostReceipt.selection);
+      expect(receipt.run.events.filter((event: { type: string }) => event.type === "prediction.recorded")).toHaveLength(1);
+      const prediction = receipt.emitted.find((event: { type: string }) => event.type === "prediction.recorded");
+      expect(prediction.data).toMatchObject({ predictedUci: "e7e6", nodeId: before.activeCursor.nodeId, distribution: receipt.selection });
+      await expect(checkpoint).toContainText("You predicted e6.");
+      await expect(checkpoint.getByRole("list", { name: "Recorded reply candidates" }).getByRole("listitem")).toHaveCount(receipt.selection.candidates?.length ?? 0);
+      assertRecordedNodesPreserved(before.nodes, (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph.nodes);
+      await page.reload();
+      await expect(checkpoint).toContainText("You predicted e6.");
+      await expect(checkpoint).toContainText("not a grade");
+      await checkpoint.getByRole("button", { name: "Continue", exact: true }).click();
+      const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+      expect(after.nodes).toHaveLength(before.nodes.length + 1);
+      expect(after.nodes.at(-1).moveUci).toBe(receipt.selection.moveUci);
+      expect(requests.filter(path => path === "/select-move")).toEqual([]);
+      const unavailable = page.getByRole("dialog", { name: "Predict the reply", exact: true });
+      await expect(unavailable).toContainText("This checkpoint is on your turn");
+      await expect(unavailable.getByLabel("Chessboard", { exact: true })).toHaveCount(0);
+      await unavailable.getByRole("button", { name: "Continue", exact: true }).click();
+      await expect(unavailable).toBeHidden();
+    } finally {
+      releaseEvidence();
+    }
   });
 }
 

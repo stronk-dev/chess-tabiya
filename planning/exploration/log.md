@@ -25353,3 +25353,45 @@ Campaign was the one capability with no API, route or content. Now:
 - No protected intent, immutable archive, pack bytes, qualification or whole-product gate
   is changed. Local green gates are not paired green GitHub CI at this revision. No push,
   deployment, native image recovery or 1.0 completion is claimed; the 1.0 goal stays active.
+
+## 2026-10-11 — D3694/D1685 prediction admission; D3698 recovery; D3699 disclosure repair and full 1.0 reconciliation
+
+- Under the accepted n-way-comparison, identity and return-scheduling contracts, admit
+  writer/role, active/reached occurrence and a legal guess before provider execution.
+  Bind root/history/branch seed/session/private pack to saved play, then re-admit after
+  awaiting selection. Identical retry returns the recorded distribution; changed guesses,
+  crossed subjects and cursor/lease/occurrence races are refused. Imported source-mainline
+  visits retain their actual-next-move semantics. Fourteen admission controls fail on the
+  predecessor; real production HTTP non-grantee/spectator and asynchronous controls pass.
+- Actual committed-but-lost native responses exposed D3698: prediction event 4 and background
+  event 5 could not be reconciled. Verify the immutable prefix and emitted-event membership,
+  recover the full contiguous snapshot and retain newer local history. Both saved private
+  playtest perspectives now retry the original receipt, reload and Continue the exact
+  distribution without another selection. Background collection stays real; only delivery
+  is held to exercise explicit retry. Conflicts, foreign runs and sequence holes are refused.
+- The first full browser attempt exposed this task's D3699 regression and was stopped,
+  not counted green: legitimate score/WDL disclosure was treated as rewritten history.
+  Narrowly admit those declared optional public-view fields while retaining immutable
+  selection identity and refusing changed already-visible measurements. The actual server
+  publicMutationPayload control fails on the predecessor. Forty-eight focused controls and
+  ten native affected journeys pass, without deadline changes, retries or conflict waivers.
+- Record D3700 as open, owned core-loop: actual publicRunSnapshot hides reasoning detections
+  while retaining skipped=false, which canonical replay rejects. Saved and disclosed streams
+  replay correctly. The expected-rejection test is evidence of the pre-existing conflict,
+  not a completion test. Route a declared public-view/client repair through the reasoning
+  contract; do not leak detections or weaken the canonical invariant. D3695's authored
+  prediction sequence remains blocked and is not discharged by eligible private fixtures.
+- Complete serial normal `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 4,775 software cases/370 files, seven unchanged-budget performance cases/four
+  files, 247 content cases/25 files, clean types/governance/capability/packaging and build;
+  229 smoke, five content, 59 matrix and one production browser pass (294 total), one existing
+  optional Maia skip, zero retries, all 150 board-input and 112 composition cells.
+- Update the existing ledger, work state, queues and roadmap in the same checkpoint.
+  D3694/D1685/D3698/D3699 close locally. All 1,718 live ledger items remain assigned;
+  273 UX items complete/272 live/24 retired; fourteen whole capabilities remain incomplete,
+  nine milestones remain four active/five blocked; 86 production pack documents and zero
+  official graduates. The 462 historical prose-only closures are not fresh proof.
+- No protected intent, immutable archive, pack format/content, semantic qualification,
+  whole capability or milestone is promoted. The latest pushed product has green verify
+  but failed browser at 75bc8744; this local result is not paired exact-revision remote CI.
+  No push, deployment, native release-image recovery or 1.0 completion is claimed.

@@ -55,6 +55,40 @@ export interface RunStateSnapshot {
 
 type Subscriber = (snapshot: RunStateSnapshot) => void;
 
+function sameJson(left: unknown, right: unknown): boolean {
+  if (left === right) return true;
+  if (left === null || right === null || typeof left !== "object" || typeof right !== "object") return false;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return Array.isArray(left) && Array.isArray(right) && left.length === right.length
+      && left.every((value, index) => sameJson(value, right[index]));
+  }
+  const a = left as Record<string, unknown>, b = right as Record<string, unknown>;
+  return Object.keys(a).length === Object.keys(b).length
+    && Object.keys(a).every(key => Object.hasOwn(b, key) && sameJson(a[key], b[key]));
+}
+
+function sameVisibleEvent(left: DrillRunEvent | undefined, right: DrillRunEvent): boolean {
+  if (sameJson(left, right)) return true;
+  // The server's publicSelectionEvent omits scores/WDL until disclosure. Those
+  // optional fields may become visible; move, rank, mass and provider identity
+  // cannot change, nor can any measurement already present on both views.
+  if (left?.type !== "opponent.move_selected" || right.type !== "opponent.move_selected") return false;
+  const a = left.data.selection.candidates, b = right.data.selection.candidates;
+  if (a === undefined || b === undefined || a.length !== b.length) return false;
+  for (let index = 0; index < a.length; index += 1) {
+    for (const field of ["scoreCp", "wdl"] as const) {
+      if (a[index]![field] !== undefined && b[index]![field] !== undefined
+        && !sameJson(a[index]![field], b[index]![field])) return false;
+    }
+  }
+  const identity = (event: Extract<DrillRunEvent, { type: "opponent.move_selected" }>) => ({
+    ...event, data: { ...event.data, selection: { ...event.data.selection,
+      candidates: event.data.selection.candidates!.map(({ scoreCp: _scoreCp, wdl: _wdl, ...candidate }) => candidate),
+    } },
+  });
+  return sameJson(identity(left), identity(right));
+}
+
 function pendingEvidenceNodes(events: readonly DrillRunEvent[]): Set<string> {
   const parentByNode = new Map<string, string | null>();
   const pendingNodeIds = new Set<string>();
@@ -453,20 +487,29 @@ export class RunStateStore {
 
   #applyMutation(mutation: MutationResult): void {
     const current = this.#snapshot.run;
+    if (mutation.run.id !== current.id) throw new TypeError("Mutation response belongs to a different run");
     const head = current.events.at(-1)?.seq ?? 0;
-    // An idempotent command replay may resend a tail already received by this tab.
-    // Ignore overlap only after checking that it is the same immutable history.
-    for (const event of mutation.emitted) {
-      if (event.seq > head) continue;
-      const recorded = current.events.find(candidate => candidate.seq === event.seq);
-      if (recorded === undefined || JSON.stringify(recorded) !== JSON.stringify(event)) {
+    // A response lost by this tab can still commit on the server. A later mutation
+    // or replay carries the full event snapshot, not necessarily every missing
+    // event in `emitted`. Verify its immutable prefix before filling the gap.
+    const incoming = mutation.run.events;
+    for (let index = 0; index < incoming.length; index += 1) {
+      const event = incoming[index]!;
+      if (event.seq !== index + 1) throw new TypeError("Mutation snapshot event stream is not contiguous");
+      if (index < current.events.length && !sameVisibleEvent(current.events[index], event)) {
         throw new TypeError("Mutation replay conflicts with recorded history");
       }
     }
-    const run = appendProjected(current, mutation.emitted.filter(event => event.seq > head));
-    if (run.events.length !== mutation.run.events.length) {
-      throw new TypeError("Mutation response run and emitted events disagree");
+    for (const event of mutation.emitted) {
+      if (event.seq <= head && !sameVisibleEvent(current.events[event.seq - 1], event)) {
+        throw new TypeError("Mutation replay conflicts with recorded history");
+      }
+      if (!sameJson(incoming[event.seq - 1], event)) {
+        throw new TypeError("Mutation response run and emitted events disagree");
+      }
     }
+    // Preserve a newer local tail when a slower response contains an older prefix.
+    const run = incoming.length >= current.events.length ? projectRun(incoming) : current;
     this.#eventSeq = run.events.at(-1)?.seq ?? this.#eventSeq;
     this.#setRun(run);
   }

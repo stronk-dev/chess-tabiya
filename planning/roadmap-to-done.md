@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3697]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3700]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -44,7 +44,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Area | Delivered | Still required for full 1.0 |
 |---|---|---|
 | Evidence | Typed collectors, exact events, candidate packets, shared provider execution and grounded presentation | Remaining real source/consumer bindings, semantic qualification, selection/usefulness and truthful availability |
-| Rehearsal | Commit, consequence, rewind, branch, compare, replay, durable resume and actual legal prediction/receipt/continuation | Complete first-run/return flows, the example's authored prediction sequence, server prediction admission, all-context defaults, official examples and release-image proof |
+| Rehearsal | Commit, consequence, rewind, branch, compare, replay, durable resume, admitted legal predictions and lost-response recovery | Complete first-run/return flows, the example's authored prediction sequence, all-context defaults, official examples and release-image proof |
 | Support | Registered modules, preset/ceiling composition, Guided Hint, theory navigation and board evidence | Selected-piece/square source integration, useful quiet/theory/prevention defaults, Inspector fidelity and owner-use discharge |
 | Review | Timeline, move grades, moments, graph, Analyze, retry, Compare and Story/share paths | Full cross-source explanation, missing opening/human/tablebase joins and every game's review-to-rehearsal return |
 | Theory/content | Searchable Library; principle/shape/pack entries; persistent authoring, validation, playtest and community publication | Grounded theory population, training-set progression and a varied graduated official corpus; currently zero official graduates |
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3697]]: 273 UX items complete, 272 live and 24
-retired; 1,719 live ledger items, all assigned, alongside 1,566 done and 161 refused. The 462
+Current checked inventory through [[D3700]]: 273 UX items complete, 272 live and 24
+retired; 1,718 live ledger items, all assigned, alongside 1,570 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -91,16 +91,37 @@ on the branch-group click ([[D3692]]). Its original trace establishes a prematur
 while move feedback is pending; the locally verified repair gates that action and preserves
 both checkpoint choices. [[D3693]] now has actual legal submission, receipt reload and exact
 continuation, including the private-pack resolution repair [[D3696]]. The authored example's
-timing and server pre-admission remain [[D3695]]/[[D3694]]. No push, paired green CI at current HEAD, complete image recovery
+timing remains [[D3695]]; server pre-admission and client event-gap recovery are now locally
+repaired as [[D3694]]/[[D3698]]. No push, paired green CI at current HEAD, complete image recovery
 or release is claimed.
 
-Latest checkpoint repair: [[D3693]] separates board perspective from move authority and
+Latest checkpoint repair: [[D3694]] admits writer/role, reached occurrence, legal guess and
+exact recorded selector operands before provider work, then re-admits after awaiting it.
+Identical retry returns the original receipt; changed guesses and stale position/lease races
+are refused. Production HTTP non-grantee/spectator controls and imported-game revisits pass.
+Native response loss exposed [[D3698]]: the client now reconciles the full immutable event
+snapshot to fill missing responses even when background evidence arrives next, preserves
+newer local history and rejects conflicting/unbound/non-contiguous events. Full browser testing
+then exposed this task's selection-disclosure regression [[D3699]]; the narrow repair admits
+declared optional score/WDL views but refuses changed visible values or selection identity.
+Forty-eight focused checks and ten native journeys pass, including both private-playtest
+perspectives, retry/reload/exact Continue, Line Drill, spectator following and desktop/phone
+Support reveal/return. [[D1685]]'s duplicate historical subject job closes with D3694;
+[[D3700]] remains the independently reproduced withheld-reasoning replay conflict. Complete
+serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+4,775 software cases/370 files, seven performance cases/four files, 247 content cases/25
+files and 294 browser passes (229 smoke, five content, 59 matrix and one production).
+The existing optional Maia skip remains; zero retries and all 112 composition cells pass.
+Types, governance, capability/packaging checks and build pass. Prior results below remain
+historical; no exact-revision remote green, native release-image or whole capability is claimed.
+
+The preceding [[D3693]] repair separates board perspective from move authority and
 retains a recorded prediction without committing its guess. The ungraded full-candidate
 receipt survives reload; Continue plays its exact recorded distribution, without selecting
 again. Eighteen focused controls and real private Studio playtests cover both perspectives,
 failure/retry and exact continuation. [[D3696]] closes the actual private-pack 404 through
 run-pinned resolution and crossed-id refusal. [[D3695]] retains the example/A7 sequencing
-contradiction; [[D3694]] owns the broader server admission boundary. The preceding D3692
+contradiction; [[D3694]]'s broader server boundary is now repaired above. The preceding D3692
 4735-software/292-browser run is historical. The final serial normal Make run passes
 4,747 software cases/370 files, seven performance cases/four files, 247 content cases/25 files,
 294 browser cases, one existing optional skip, zero retries and all 112 composition cells.
@@ -3281,8 +3302,9 @@ evidence-contamination failure, not partial variant support.
 [[D1686]] measures the request side of that contamination boundary: run-derived evidence has 15
 producer calls, split 8 service / 7 direct REST. A queue guard cannot cover human split, corpus,
 voice packets or prediction; the operation population and the rules/setup receipt must be compiled
-together. [[D1685]] also blocks prediction independently because its stored Maia mass/rank is not
-bound to the active node's position/history.
+together. [[D1685]]'s separate prediction-subject defect is now closed locally with
+[[D3694]]: exact saved root/history and active/reached/legal scope are admitted before selection
+and re-admitted after awaiting it. That repair does not close the broader variant request gate.
 [[D1688]] now measures the catalogue side across all 37 current producers and three subject
 families. Capability must compile three independent axes—source computability, learner admission
 and honest-empty versus suppression—before the 193 projection dispositions and 210 bindings are

@@ -2283,11 +2283,6 @@ export function createRestHandler(
         ));
       }
       if (route.action === "prediction") {
-        if (selector === undefined) {
-          throw new ServerError("ENGINE_UNAVAILABLE", "Opponent selector is not configured", {
-            details: { engineId: "opponent-selector", retryAfterMs: 0 },
-          });
-        }
         const body = closedRecord(value, "/", ["startFen", "historyUci", "policy", "seed", "packId", "checkpointId", "nodeId", "predictedUci", "at"]);
         const parsed = parseSelectMoveRequest({
           startFen: body.startFen,
@@ -2296,20 +2291,13 @@ export function createRestHandler(
           seed: body.seed,
           ...(body.packId === undefined ? {} : { packId: body.packId }),
         });
-        const pack = parsed.packId === undefined ? undefined : service.runPack(route.runId, principal);
-        if (pack !== undefined && pack.document.id !== parsed.packId) throw invalid("Prediction pack does not match the run");
-        const selection = await selector.select({
-          ...parsed,
-          policy: { ...parsed.policy, ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }) },
-        });
-        const result = service.recordPrediction(route.runId, principal, writerId(request), {
+        const result = await service.predictReply(route.runId, principal, writerId(request), {
           nodeId: requiredString(body.nodeId, "nodeId"),
           checkpointId: requiredString(body.checkpointId, "checkpointId"),
           predictedUci: requiredString(body.predictedUci, "predictedUci"),
-          distribution: selection,
           ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
-        });
-        return json(200, { selection, run: result.run, emitted: result.emitted });
+        }, parsed, selector);
+        return json(200, { selection: result.selection, run: result.run, emitted: result.emitted });
       }
       if (route.action === "reasoning") {
         requireJson(request);

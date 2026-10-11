@@ -1,12 +1,14 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   attachEvidence,
+  appendEvents,
   commitMove,
   createRun,
   reachCheckpoint,
   revealFeedback,
   rewind,
   type DrillRun,
+  type DrillRunEvent,
   type MutationResult,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
@@ -26,6 +28,7 @@ import {
 } from "./api.js";
 import { RunStateStore, type PollScheduler } from "./run-state.js";
 import { WriterSession, type KeyValueStorage } from "./writer-session.js";
+import { publicMutationPayload } from "../../../server/src/feedback-policy.js";
 
 const at = "2026-08-12T20:00:00.000Z";
 const pack = {
@@ -208,6 +211,76 @@ function session(storage = new MemoryStorage()): WriterSession {
 }
 
 describe("RunStateStore", () => {
+  it("D3699 accepts actual server score disclosure without accepting rewritten selection facts", async () => {
+    const api = new FakeApi();
+    const moved = commitMove(api.serverRun, "e2e4", { at });
+    const selected = appendEvents(moved.run, [{ type: "opponent.move_selected", at, data: {
+      nodeId: moved.run.activeCursor.nodeId, branchId: moved.run.activeCursor.branchId, moveUci: "e7e5",
+      selection: { moveUci: "e7e5", policyModeApplied: "human_common", candidates: [{ moveUci: "e7e5", rank: 1, mass: 1, scoreCp: 31, wdl: { win: 401, draw: 500, loss: 99 } }],
+        engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: true } },
+    } }]);
+    const hidden = publicMutationPayload({ run: selected, emitted: selected.events.slice(moved.run.events.length) });
+    const store = new RunStateStore(api, session(), hidden.run);
+    const revealed = publicMutationPayload(reachCheckpoint(selected, "reveal", at));
+    const reply = vi.spyOn(api, "fork").mockResolvedValue(revealed);
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    expect(store.snapshot.run).toEqual(revealed.run);
+    const event = revealed.run.events.find(event => event.type === "opponent.move_selected")!;
+    if (event.type !== "opponent.move_selected") throw new Error("missing selection");
+    for (const patch of [{ scoreCp: 32 }, { rank: 2 }, { mass: 0.5 }]) {
+      const forged = { ...event, data: { ...event.data, selection: { ...event.data.selection, candidates: [{ ...event.data.selection.candidates![0]!, ...patch }] } } } as DrillRunEvent;
+      reply.mockResolvedValue({ ...revealed, run: { ...revealed.run, events: revealed.run.events.map(candidate => candidate.seq === event.seq ? forged : candidate) } });
+      await expect(store.fork({ nodeId: api.serverRun.nodes[0]!.id })).rejects.toThrow("conflicts with recorded history");
+      expect(store.snapshot.run).toEqual(revealed.run);
+    }
+    // An older redacted response cannot erase the disclosed snapshot or its checkpoint.
+    reply.mockResolvedValue(hidden);
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    expect(store.snapshot.run).toEqual(revealed.run);
+  });
+
+  it("D3698 recovers a missing response from the snapshot's contiguous event tail", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const lost = commitMove(api.serverRun, "e2e4", { at });
+    const later = commitMove(lost.run, "e7e5", { at });
+    const reply = vi.spyOn(api, "fork").mockResolvedValue(later);
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    expect(store.snapshot.run).toEqual(later.run);
+    // A slower replay must not erase an event already received by this tab.
+    reply.mockResolvedValue(lost);
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    expect(store.snapshot.run).toEqual(later.run);
+  });
+
+  it("D3698 refuses a conflicting snapshot prefix, an unbound emitted event and a foreign run", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const mutation = commitMove(api.serverRun, "e2e4", { at });
+    const reply = vi.spyOn(api, "fork");
+    reply.mockResolvedValue({ ...mutation, run: { ...mutation.run, events: [{ ...mutation.run.events[0]!, at: "2026-08-12T20:00:01.000Z" }, ...mutation.run.events.slice(1)] } });
+    await expect(store.fork({ nodeId: api.serverRun.nodes[0]!.id })).rejects.toThrow("conflicts with recorded history");
+    reply.mockResolvedValue({ ...mutation, emitted: [{ ...mutation.emitted[0]!, at: "2026-08-12T20:00:01.000Z" }] });
+    await expect(store.fork({ nodeId: api.serverRun.nodes[0]!.id })).rejects.toThrow("run and emitted events disagree");
+    reply.mockResolvedValue({ ...mutation, run: { ...mutation.run, id: "another-run" } });
+    await expect(store.fork({ nodeId: api.serverRun.nodes[0]!.id })).rejects.toThrow("different run");
+    expect(store.snapshot.run).toEqual(api.serverRun);
+  });
+
+  it("D3698 refuses a hole in the snapshot and accepts equivalent JSON key ordering", async () => {
+    const api = new FakeApi();
+    const store = new RunStateStore(api, session(), api.serverRun);
+    const first = commitMove(api.serverRun, "e2e4", { at });
+    const second = commitMove(first.run, "e7e5", { at });
+    const reply = vi.spyOn(api, "fork").mockResolvedValue({ ...second, run: { ...second.run, events: [second.run.events[0]!, second.run.events[2]!] } });
+    await expect(store.fork({ nodeId: api.serverRun.nodes[0]!.id })).rejects.toThrow("not contiguous");
+    expect(store.snapshot.run).toEqual(api.serverRun);
+    const reordered = first.run.events.map(event => ({ data: event.data, type: event.type, seq: event.seq, at: event.at })) as DrillRun["events"];
+    reply.mockResolvedValue({ ...first, run: { ...first.run, events: reordered } });
+    await store.fork({ nodeId: api.serverRun.nodes[0]!.id });
+    expect(store.snapshot.run).toEqual(first.run);
+  });
+
   it("D3679 accepts a replayed mutation's matching overlap without applying it twice, and refuses conflicting history", async () => {
     const api = new FakeApi();
     const store = new RunStateStore(api, session(), api.serverRun);
