@@ -29549,22 +29549,21 @@
     },
     {
       "id": "D3573",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75d505a244ab0d7510e681846fe7ff6397989415ff995f7a05372f13fdee844e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a6c4f92ba563a9e2505a2b8736b7470d5efa7cc09287cbb36282612533789833",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "item:D3574"
+      "evidence": "docs/storage-backup-and-recovery.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3574",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:392d4c6e9256d499e5b722d7074990c63f821649434d2f4d889fc6e8958fdcc4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa833161dc9b64df32470edfe0253cd2676df04739fbec6eb3a126150349b3bc",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Approve clearing only old rebuildable cache in the verified tabiya-source-v1 builder, or free Docker space separately?"
+      "evidence": "docs/storage-backup-and-recovery.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3575",
@@ -30900,6 +30899,40 @@
       "sourceDigest": "sha256:cc1820c50e416dd6b09f76a4fac1b71896404db07dc93b835bfc2b9a53e86288",
       "uxItems": [],
       "owner": "client-platform"
+    },
+    {
+      "id": "D3723",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bb9b38956c5c689996684146465adf0d5f722724657e3e4cb2bb3d1cb319b759",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3724",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:af36a5da0a176b5b5f0e9e4db3e43305fcd01ae67af9f99a749b1c0b7d8a3fc7",
+      "uxItems": [],
+      "evidence": "docs/storage-backup-and-recovery.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3725",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ca1f99d1290b94e9f68ede8c76215c9eae5d59055422abd4f814bfb8f8c3477f",
+      "uxItems": [],
+      "evidence": "docs/storage-backup-and-recovery.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3726",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:df10524c86f7d359614c8005c29c705380e4b17c7cf453ff81aeea3981c1816f",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

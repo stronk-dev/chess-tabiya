@@ -69,6 +69,13 @@ export function requireStorageCapacity({ bavail, bsize, ffree }) {
     "Docker /data has no usable space for its non-root runtime user; free Docker space before rerunning (no automatic pruning)");
 }
 
+/** Attribute transport failures without printing request bodies or credentials. */
+export function storageHttpFailure(path, error) {
+  const cause = error?.cause;
+  const detail = [cause?.code, cause?.message].filter(value => typeof value === "string").join(": ");
+  return new Error(`storage drill HTTP ${path}: ${error?.message ?? "request failed"}${detail ? ` (${detail})` : ""}`, { cause: error });
+}
+
 // Make prints a documented next step for fresh restore and rollback; no other stdout is allowed.
 export function storageReceipt(result, after = []) {
   const lines = result.stdout.split("\n");
@@ -116,9 +123,14 @@ export async function storageDrill({ image: suppliedImage } = {}) {
   let failure;
   let cookie;
   async function http(path, body, expected = 200) {
-    const response = await fetch(origin + path, { headers: { origin, "content-type": "application/json",
-      "x-writer-id": "storage-drill-writer", ...(cookie ? { cookie } : {}) },
-      ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.timeout(15_000) });
+    let response;
+    try {
+      response = await fetch(origin + path, { headers: { origin, "content-type": "application/json",
+        "x-writer-id": "storage-drill-writer", ...(cookie ? { cookie } : {}) },
+        ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.timeout(15_000) });
+    } catch (error) {
+      throw storageHttpFailure(path, error);
+    }
     const text = await response.text();
     assert.equal(response.status, expected, `${path}: ${text.slice(0, 1000)}`);
     if (response.headers.has("set-cookie")) cookie = response.headers.get("set-cookie").split(";")[0];
@@ -139,7 +151,7 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     const [inspected] = JSON.parse(run("docker", ["image", "inspect", suppliedImage ?? tag]).stdout);
     const image = inspected.Id;
     requireCheck(inspected.Config.User === "node", "built server must retain its non-root runtime user");
-    console.error(`storage drill: ${image}, ${inspected.Os}/${inspected.Architecture}; development image, mock providers`);
+    console.error(`storage drill: ${image}, ${inspected.Os}/${inspected.Architecture}; ${suppliedImage === undefined ? "development build" : "supplied image"}, mock providers`);
     for (const [name, text] of Object.entries(renderSourceDeployment({ serverImage: image, maiaImage: "chess-tabiya-maia:dev" }))) {
       writeFileSync(join(directory, name), text);
     }
@@ -230,6 +242,12 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     checked("direct CLI confirmation refusal and Make replacement with a verified pre_restore bundle");
     compose(volumeB, "start", "server");
     await ready(volumeB);
+    // This session was issued after the original snapshot. Restoring that snapshot
+    // must not retain its authority: earn a new session through the real auth route.
+    await http(path + "/graph", undefined, 401);
+    await http("/auth/login", { handle: "drill", password: "drill-password-long" });
+    assert.deepEqual((await http(path + "/graph")).graph, saved);
+    checked("replacement refuses the post-snapshot session; explicit login retains the original learner and graph");
     await http(path + "/rewind", { nodeId: root });
     await http(path + "/fork", { nodeId: root, label: "Before rollback" });
     await http(path + "/moves", { uci: "c2c4" });
@@ -243,12 +261,17 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     assert.equal(storageReceipt(make(volumeB, "storage-recover")).recovery, "none");
     compose(volumeB, "start", "server");
     await ready(volumeB);
+    await http(path + "/graph", undefined, 401);
+    await http("/auth/login", { handle: "drill", password: "drill-password-long" });
     assert.deepEqual((await http(path + "/graph")).graph, saved);
     checked("Make rollback installs exact snapshot bytes; recover/reboot returns the original game");
   } catch (error) {
     failure = error;
     if (safeToClean) {
-      try { console.error(run("docker", ["compose", "logs", "--tail", "80", "server"], { allowFailure: true }).stdout); }
+      try {
+        console.error("storage drill service state: " + compose(volumeA, "ps", "--all", "--format", "json").stdout);
+        console.error(run("docker", ["compose", "logs", "--tail", "80", "server"], { allowFailure: true }).stdout);
+      }
       catch (diagnosticError) { console.error(`cannot read drill diagnostics: ${diagnosticError.message}`); }
     }
   } finally {
@@ -272,7 +295,7 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     if (suppliedImage === undefined) run("docker", ["image", "rm", tag], { allowFailure: true });
   }
   if (failure) throw failure;
-  console.error("storage drill: OK (development image; all seven Make maintenance targets; not full release proof)");
+  console.error("storage drill: OK (all seven Make maintenance targets; mock providers; not prior-release or all-data-class image proof)");
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

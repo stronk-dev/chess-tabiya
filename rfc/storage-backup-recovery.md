@@ -981,6 +981,17 @@ Another genuinely fresh independent review is required before acceptance or impl
 
 ## Changelog
 
+- 2026-10-11: local native linux/arm64 development-image journey passes all seven real Make
+  maintenance commands, exact branched restore and byte-identical rollback/reboot ([[D3573]]).
+  Current capacity clears [[D3574]] without pruning. [[D3724]] corrects the harness's restored
+  session assumption while retaining actual 401 refusals. Release-native orchestration now requires
+  this journey on the same pulled platform-digest image ([[D3725]]); four controls fail without the
+  call. [[D3723]] retains the first unexplained transport failure; [[D3726]] measures EACCES for a
+  private Linux backup directory owned by another uid. The portable ownership procedure is still
+  unresolved. This is an implementation checkpoint, not amended requirements or full acceptance:
+  all-data-class image recovery, cross-version, both actual release architectures and final release
+  discharges remain. See `docs/storage-backup-and-recovery.md` for the compact measured record.
+
 - 2026-09-24: implemented on the owner's direct-implementation ruling (no further review round);
   see `docs/storage-backup-and-recovery.md`. The fifth-review returns are closed by construction:
   every check runs inside the operation that owns the SQLite handle and compiles from a private

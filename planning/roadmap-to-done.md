@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3722]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3726]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -54,12 +54,12 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Social play | Live sessions, imports, invitations and playable native friend matches | Coherent pairing/clock/result/rematch/provider-follow workflows and supported variant journeys |
 | Coach/streamer | Classrooms, assignments and actual consented completed/incomplete submission inspection/revocation | Guided setup, complete Academy/Stream compositions, audience preview/voting/delay and broader multi-user journeys |
 | Accessibility | Shared board input, permanent cells, responsive in-run shell, themes and evidence paint | Route-wide post-gesture/zoom/focus/device checks, owner screen-reader use and PWA install/update/offline behavior |
-| Account/data | Authorization, private export/import/delete, native restored branched play and populated installation recovery | Guest/claim, complete object/lifecycle coverage and built-image operator recovery |
-| Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
+| Account/data | Authorization, private export/import/delete, native restored branched play, populated process recovery and local image recovery | Guest/claim, complete object/lifecycle coverage and portable full-population image recovery |
+| Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3722]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
-retired; 1,722 live ledger items, all assigned, alongside 1,588 done and 161 refused. The 462
+Current checked inventory through [[D3726]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,15 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3573]]'s local native linux/arm64 image journey now passes all seven Make recovery commands;
+[[D3574]]'s current capacity hold clears without pruning. [[D3724]] repairs the harness's restored
+session assumption without weakening authentication. [[D3725]] requires the actual pulled server
+image's recovery journey in release-native proof; four permanent controls fail without the call.
+[[D3723]] retains the earlier unexplained transport failure, and [[D3726]] measures EACCES when
+the private Linux backup directory belongs to a different uid. Portable ownership, all-data-class
+image recovery, prior-release rollback and both actual release architectures remain open. The
+existing storage doc holds the compact receipt; no whole capability or milestone is promoted.
 
 [[D3721]] repairs the shared evidence seal under the accepted value-authority
 contract. Four regressions reproduce changed facts admitting under their original

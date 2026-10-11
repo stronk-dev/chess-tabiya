@@ -22,6 +22,15 @@ weights/importers. It stores no research dump and changes no size limit. A passi
 diagnostic does not prove latency, usability or release readiness; `make build`
 and the existing browser/performance journeys retain those separate obligations.
 
+`make release-policy-check` includes the native-proof orchestration controls. Each release-native
+job must run the seven-command storage journey against the same pulled platform-digest server
+image before emitting success; it cannot substitute a development build. A recovery failure is
+fatal and removes an earlier generated success. These unit controls prove wiring and failure
+propagation, not an actual architecture or storage pass. `make storage-drill` exercises the actual
+local image; its dated checkpoint and Linux backup-directory ownership residual are documented in
+`docs/storage-backup-and-recovery.md`. Ordinary push CI and heavy native release proof remain
+separate; no pre-push Docker journey is added.
+
 `make prediction-workflow-check` covers independent perspective/move authority, legal opponent
 guess admission, repeated-client-guess refusal, failed prediction/retry, durable receipt resume and playing
 the same distribution without selecting again. It also covers exact private-playtest pack lookup

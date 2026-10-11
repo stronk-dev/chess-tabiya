@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:0200f9ab03f2f13865b5247b1f8cff79da3d8e99b6aa518289083eae98353f2f",
+    "roadmap": "sha256:50bc09efaf6c93d34a13f2a5d63eabeeaea0bf4e4595135637c0d21202d47b93",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:c7c17ff531d8152038604efebd051adaa813529238e3e865331874250dce42eb",
+    "workState": "sha256:63d05dfdb8ec348648fbc795b294367de5feb791d5ef4db9c1b0453afba847e3",
     "rfcRegister": "sha256:4cd353e8685d40e04fc9775467f470dd04ceb02dfabd867a915b23d9082dd171",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 630,
+      "todo": 632,
       "doing": 16,
-      "blocked": 1076,
-      "done": 1588,
+      "blocked": 1074,
+      "done": 1592,
       "refused": 161
     },
     "workItems": {
@@ -1344,10 +1344,10 @@
       "dependsOn": [
         "official-content"
       ],
-      "nextAction": "Resolve D3574's Docker capacity/cleanup approval, then complete D3573's actual Make built-image recovery journey without substituting overlay/tmpfs storage or a root runtime. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual generated reader/dispatcher and proxy limits; the 112-id source census is not protection. Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
+      "nextAction": "Resolve D3726's portable private backup-directory ownership procedure and diagnose D3723's first transport failure, then qualify full-population image recovery, prior-release migration/rollback and actual release-native runs on both architectures. Do not substitute tmpfs backups, weaken privacy or run the application as root. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual reader/dispatcher and proxy limits; the source census is not protection. Resolve D3397's complete CSP/audience-preview contract and D3393's public/internal probe contract. Exercise all ten clean-host release journeys, including provider-off degradation, accessibility, rights/resources and owner-device use.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D608 closes the populated native-process recovery residual under storage-backup-recovery criterion 8. Actual bundled server/worker/CLI creation, backup, source media loss, restore to a different empty directory and restart preserve every application table/row, with each server data class and 28 critical families nonempty. Restarted APIs retain accounts/session authority, branches, documents, publications, marks, schedules, repertoire, classroom/submission grants, social, longitudinal and charged Campaign history. Bot and Campaign command replay cannot append events or duplicate rewards; actual play and the next encounter continue. Historical rated data uses the real storage API with an explicitly abandoned/voided fixture, not mock calibration or an invented result. All seven process journeys, 41 SQLite/replacement and 33 actual Make-wrapper controls pass. The installed-content process suite is assigned to the content tier in both normal recovery/readiness commands, retaining its original deadlines. The initial wrong shape-export and private-access status assumptions are corrected; persisted job completion replaces an incorrect assumption that shutdown finishes the backlog. D3573/D3574 still hold built-image recovery at zero available Docker bytes; no pruning or image substitute is used. Ingress/CSP/probe, cross-version/architecture, rights/resources, owner use, official content and final release journeys remain. No whole milestone, calibration, image, push or current-revision GitHub proof.",
+        "summary": "D608's populated native-process recovery retains every application row, each server data class and 28 nonempty critical families; restarted APIs preserve ownership and actual bot/Campaign command replay cannot duplicate history or rewards. Seven process journeys, 41 SQLite/replacement and 33 actual Make-wrapper controls pass. D3573 now additionally passes all seven Make commands against the local native linux/arm64 development image with branched restore, guarded replacement, stale-session rejection and exact-byte rollback/reboot. D3574's available capacity clears without pruning. D3724 repairs the harness session assumption, not auth. D3725 wires the same pulled platform-digest image's recovery into release-native proof; six orchestration controls pass and four fail without the call. All 129 release-policy controls pass. D3723 retains the first unexplained transport failure. D3726 measures EACCES for uid-1000 writes to a uid-1001 private Linux backup directory; portable operator ownership remains open. Mock-provider local image recovery is not full-population image, prior-release, both-architecture or clean-host release qualification. Ingress/CSP/probe, rights/resources, owner use, official content and final release journeys remain. No whole milestone, push or current-revision GitHub proof.",
         "impact": "advanced",
         "evidence": [
           "Makefile",
@@ -1355,6 +1355,8 @@
           "tools/release/storage-maintenance.test.mjs",
           "tools/appliance-drill.mjs",
           "tools/release/storage-drill.test.mjs",
+          "tools/release/native-proof.mjs",
+          "tools/release/native-proof.test.mjs",
           "docs/storage-backup-and-recovery.md",
           "planning/verifiable-runtime-distribution/implementation-2026-09-24.md",
           "rfc/verifiable-runtime-distribution.md",
@@ -2446,7 +2448,7 @@
         ],
         "verification": [
           "partial",
-          "D3570/D3571/D3572 retain 33 passing actual-Make process cases, 47 native SQLite/CLI/replacement cases and actual Compose packaging for development plus all six source/release profiles. All 122 release-policy cases pass, including 22 new drill isolation/receipt/capacity controls. D3573 wires all seven Make targets into the isolated built-image journey; native config/capacity-refusal/owned-cleanup pass. Full recovery and host-backup permissions remain held by D3574: recurring Docker bavail=0 and independently reproduced SQLITE_FULL. Narrow old Tabiya-builder cache cleanup awaits owner approval. Unit/content/browser/accessibility/native release tiers stay separate; no full image recovery, multi-architecture release or remote CI proof follows."
+          "D3570/D3571/D3572 retain 33 actual-Make process cases and deployment packaging coverage. Current recovery verification passes 41 SQLite/replacement checks plus seven populated application-process journeys; all 129 release-policy controls pass. D3573 completes all seven Make maintenance commands against the local native linux/arm64 development image, including exact branch restore, stale-session refusal and byte-identical rollback/reboot. D3574's current capacity hold clears without pruning. D3725 requires recovery on the exact pulled platform-digest image in each release-native job; four controls fail when that call is removed. D3723 retains the first unexplained transport failure. D3726 measures EACCES for a private Linux backup directory owned by another uid; the portable ownership procedure remains unresolved. Unit/content/browser/native release tiers remain separate. All-data-class image recovery, prior-release rollback, actual dual-architecture release and current-revision remote CI remain open."
         ],
         "release": [
           "blocked",

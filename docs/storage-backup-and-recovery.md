@@ -219,3 +219,36 @@ recovers readiness without a server restart.
   matching images, mounts and loopback ports before starting. It checks space available to the image
   user on the actual data volume, refusing a full filesystem without automatically pruning Docker.
   Cleanup removes only its generated project and volumes with matching live Compose ownership labels.
+
+### Current image checkpoint — 2026-10-11
+
+The ordinary `make storage-drill` finished with exit zero on native linux/arm64 image
+`sha256:ece2489d9c367c7633e496922128094e00498e3549f93aef56015d9d1aa04cca`
+(development revision, mock providers, local Docker Desktop). All seven maintenance commands
+passed; replacement and rollback rejected the post-snapshot session with 401, then real login
+restored access to the exact original learner and graph. Rollback bytes matched the snapshot before
+boot. The earlier zero-capacity condition is no longer current: an isolated non-root volume
+control measured 1,256,366,080 available bytes and 6,511,300 free inodes. Nothing was pruned.
+
+Two preceding image runs failed. The first reached fresh restore and then reported only
+`fetch failed`; D3723 retains that unexplained transport failure. Request-path/cause and service
+state diagnostics now exist, without retries or changed deadlines. The second reached replacement
+but reused a session issued after the restored snapshot; the application correctly returned 401.
+D3724 fixes that harness assumption, not authentication.
+
+Release native-proof jobs now invoke this same journey on their pulled platform-digest server
+image before reporting success. Six orchestration tests check both platform bindings, failure
+propagation, stale generated-result removal and runner mismatch. Removing the recovery call makes
+four fail. These controls are not actual native release runs.
+
+**Open Linux ownership requirement (D3726):** a separate isolated Linux tmpfs control created a
+uid-1001 directory at mode 0700, then attempted a write as uid 1000. It measured EACCES
+(`runtimeUid=1000`, `backupUid=1001`, `backupMode=448`). Root was used only to construct this
+temporary fixture; the write was non-root, with no host/operator bind or network. The current
+operator procedure does not resolve differing host and image UIDs, including host access to
+private bundles. Do not make backups world-writable, run the app as root or silently change
+operator-directory ownership. The local pass cannot qualify this deployment case.
+
+All-data-class **process** recovery above remains separate. All-data-class image recovery,
+prior-release/v24 upgrade and rollback, both actual release architectures, clean-host permission
+handling and the final release journeys remain open. The storage RFC remains implementing.

@@ -1,11 +1,20 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { requireStorageCapacity, storageEnvironment, storageReceipt, validateStorageCompose, validateStorageVolume } from "../appliance-drill.mjs";
+import { requireStorageCapacity, storageEnvironment, storageHttpFailure, storageReceipt, validateStorageCompose, validateStorageVolume } from "../appliance-drill.mjs";
 
 const project = "tabiya-storage-drill-00000000-0000-4000-8000-000000000000";
 const volume = project + "-a";
 const image = "sha256:" + "a".repeat(64);
 const subject = { project, volume, port: 14001, image, backups: "/tmp/drill/backups" };
+
+test("storage HTTP diagnostics identify the request and transport cause without request data", () => {
+  const cause = Object.assign(new Error("other side closed"), { code: "UND_ERR_SOCKET" });
+  const original = new TypeError("fetch failed", { cause });
+  const error = storageHttpFailure("/runs/storage-drill-run/graph", original);
+  assert.equal(error.message, "storage drill HTTP /runs/storage-drill-run/graph: fetch failed (UND_ERR_SOCKET: other side closed)");
+  assert.equal(error.cause, original);
+  assert.equal(storageHttpFailure("/readyz", new Error("failed")).message, "storage drill HTTP /readyz: failed");
+});
 function config() {
   const data = { type: "volume", source: "tabiya-data", target: "/data" };
   return { name: project, services: {

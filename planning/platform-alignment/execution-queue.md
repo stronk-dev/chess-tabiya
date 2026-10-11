@@ -6,6 +6,17 @@
 
 ## Discovered execution qualification — 2026-10-11
 
+[[D3573]]/[[D3574]]/[[D3724]] are **DONE LOCALLY**: current Docker capacity is usable without
+pruning, and the ordinary native linux/arm64 image journey passes all seven Make maintenance
+commands, restored branches and exact rollback bytes. It correctly rejects sessions created after
+the restored snapshot and explicitly logs in again. [[D3725]] closes missing release orchestration:
+the native jobs require that journey against the exact pulled server image before success. Actual
+release-platform qualification is not claimed. [[D3723]] remains TODO for the first unexplained
+transport failure; [[D3726]] remains TODO for a portable private host-backup ownership procedure
+after an isolated Linux uid-mismatch control measures EACCES. Preserve private backups/non-root
+runtime; do not silently chown operator paths or weaken permissions. The existing storage doc/RFC
+holds this checkpoint. Whole capabilities, official content and final release remain open.
+
 [[D3722]] is **PARTIALLY MEASURED; RESIDUAL TODO**, client-platform. The normal
 build's entry is 3,188,862 bytes / 693.13 kB reported gzip. The optional, no-write
 `make web-bundle-report` reproduces that entry filename and raw byte count and

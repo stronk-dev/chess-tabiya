@@ -26261,3 +26261,45 @@ Campaign was the one capability with no API, route or content. Now:
   complete, 272 live, 24 retired. Four milestones remain active/five blocked;
   all fourteen whole capabilities remain incomplete and zero official packs
   graduate. No remote CI, publication or whole 1.0 completion follows.
+
+## 2026-10-11 (codex) — local image recovery and release-native binding
+
+- Finish the in-flight storage checkpoint before the owner's full 1.0 overview.
+  The ordinary native linux/arm64 development-image `make storage-drill` exits zero
+  through all seven Make maintenance commands, exact branched restore, guarded
+  replacement and byte-identical rollback/reboot. Direct lock/confirmation and
+  wrong-directory refusals remain. Only its generated project/tag and labelled
+  test volumes are removed; no operator data, other images or builder caches.
+- D3574's current space hold clears: isolated non-root data-volume capacity is
+  1,256,366,080 available bytes and 6,511,300 free inodes. Keep the October-8
+  SQLITE_FULL observation and the capacity guard; no claim about how space freed.
+- Preserve both failed image runs. The first unexplained `fetch failed` remains
+  D3723; new path/cause/service-state diagnostics do not close it. The second
+  correctly refused a session created after the restored snapshot. D3724 fixes
+  the harness with actual 401 checks, explicit login and original-graph comparison,
+  without auth changes, retries or deadline increases.
+- D3725 binds release-native proof to this journey on the exact pulled server
+  platform digest before success. Six permanent orchestration controls cover both
+  platforms, failed recovery, stale result removal and wrong-runner refusal.
+  Removing the call produces four failures; restoring it passes all 129 ordinary
+  release-policy checks. No substitute build, publication or new pre-push gate.
+- `make storage-recovery-check release-policy-check` exits zero: 33 actual Make
+  controls, 41 SQLite/replacement cases, seven populated process journeys and
+  129 release-policy checks. Process all-data-class recovery remains separate
+  from this narrower mock-provider image journey.
+- D3726 retains an unresolved portable private-backup ownership requirement.
+  A network-free Linux tmpfs fixture measures EACCES for uid-1000 writes to a
+  uid-1001 mode-0700 directory. Root constructs only that fixture; no host bind
+  or operator permission is touched. No world-writable workaround or root app.
+- Close D3573/D3574/D3724 and the D3725 wiring gap narrowly. D3723/D3726 return
+  to assigned TODO. Update the existing docs/RFC checkpoint, execution queue,
+  roadmap and normal generated status—no new tracker or raw research dump.
+  Current ledger: 1,592 done, 161 refused, 1,722 live, zero untriaged; UX stays
+  273 complete/272 live/24 retired. All fourteen full capabilities and all nine
+  milestone exits remain unfinished. Prior-release/both-architecture/full-data
+  image recovery, content, actual release/remote CI and whole 1.0 remain open.
+- Final ordinary `make verify-awake` exits zero: clean workspace types, 4,980
+  software/377 files, seven unchanged-budget performance/four files, 255 content/
+  26 files, 129 release-policy controls, normal build/packaging and governance.
+  No browser rerun is claimed for this tools/docs-only checkpoint; the preceding
+  production change retains its 302 browser passes, one optional skip, zero retries.
