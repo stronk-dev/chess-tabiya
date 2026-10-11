@@ -757,7 +757,12 @@ export function discoveredExecutedEvents(beforeFen: string, moveUci: string, aft
     if (target?.color !== relation.target.occupant.color || target.role !== relation.target.occupant.role) continue;
     for (const ray of gainedRays) {
       if (ray.subject.slider !== relation.slider.square || ray.subject.color !== relation.slider.piece.color || ray.subject.role !== relation.slider.piece.role) continue;
-      if (!ray.targets_before.includes(relation.screen.square) || !ray.targets_before.includes(relation.target.square) || !ray.targets_after.includes(relation.target.square) || ray.targets_after.includes(relation.screen.square)) continue;
+      // Ray blocker arrays describe the interior, excluding their board-edge
+      // endpoint. The exact target can be that endpoint; its retained square,
+      // colour and role were checked above, not inferred from blocker counts.
+      const retainedTarget = ray.subject.endpoint === relation.target.square ||
+        (ray.targets_before.includes(relation.target.square) && ray.targets_after.includes(relation.target.square));
+      if (!ray.targets_before.includes(relation.screen.square) || !retainedTarget || ray.targets_after.includes(relation.screen.square)) continue;
       events.push(Object.freeze({
         beforeFen: canonicalBefore,
         moveUci: makeUci(move),

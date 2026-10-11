@@ -2087,13 +2087,221 @@
               }
             },
             "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.rook.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.rook.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.bishop.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.bishop.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.queen.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.queen.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "positive"
           }
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.direct-check-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.direct-check-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.second-blocker-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.second-blocker-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.screen-stays-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.screen-stays-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.unrelated-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.unrelated-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.slider-moved-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.discovered-ray.slider-moved-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.tactic.discovered_executed",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",

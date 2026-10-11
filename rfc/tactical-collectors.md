@@ -1080,6 +1080,14 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-10-11: D3711 restores §3.12's executed discovered-check join when the retained
+  target is a slider ray's board-edge endpoint. Interior blocker arrays deliberately omit
+  that endpoint; its existing exact operand now supplies the retained-target condition.
+  Screen removal, before-state latency, stationary slider and target identity checks remain.
+  D3710's independent rook/bishop/queen cases cover both colours and five nearby legal
+  negative families. No transition-ray fields, convention definitions, source authority,
+  learner admission or frozen recorded-path collector changes; D1 is not discharged.
+
 - 2026-10-09: repaired [[D3640]]/[[D3641]] under §3.2, without discharging D1.
   Rights-loss cause follows normalized castling identity even for adjacent-rook or stationary
   king moves; ordinary king steps remain distinct. Stationary landing checks terminate and

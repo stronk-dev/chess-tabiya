@@ -691,7 +691,7 @@
         "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3709 authored-preview promotion parity passes complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake: 4,825 software/373 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 298 browser passes across four tiers, one existing optional Maia skip and zero retries, all 150 input/112 composition cells. D3706 Campaign help and D3705 qualification case arms remain delivered. D3702/D3703 retain original failures and unknown causes: passing replay is not diagnosis. D1154 full scratch comparison, D3700 reconstruction and D3695 authored prediction remain open. No exact-revision remote CI, native image recovery, whole capability/milestone or release completion.",
+          "summary": "D3710/D3711 complete independent discovered-execution controls and restore exact board-edge targets under the accepted collector contract. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,844 software/374 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 298 browser cases, one existing optional skip, zero retries and all 150 input/112 composition cells. D3709 authored-preview consequence parity and the existing Campaign/help, prediction, private-pack and saved-play repairs remain delivered. D3702/D3703 and earlier intermittent causes remain open; a green replay is not diagnosis. D1154 full scratch comparison, D3700 public reconstruction and D3695 authored prediction remain open. No exact-revision remote CI, native image recovery, whole capability/milestone or release completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -872,7 +872,7 @@
         "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3705 completes twenty source-bound current-v2 recorded exchange/contact cases through the whole-path operation: 249 canonical cases (147 positive/102 negative), 81 subjects, zero fully qualified. All 229 predecessor records and controls remain; 234 focused checks and workspace types pass. Four missing positive/negative arms become present. Complete normal make verify-awake build exits zero: 4,819 software checks/372 files, seven performance/four files, 247 content/25 files, types, governance, packaging and build. D3702/D3703 retain unknown intermittent causes and real failure-phase diagnostics. Draft orientation/window grammar, complete-state conflicts, source/consumer adoption, learner eligibility and pack bytes stay unchanged; no fresh browser/remote/image proof or whole capability/milestone promotion.",
+          "summary": "D3710 adds sixteen independent discovered-execution cases: six both-colour rook/bishop/queen checks and ten populated nearby negatives. Their exact legal geometry exposes D3711, repaired by admitting the retained ray endpoint without changing interior blocker meaning. All 249 predecessor cases remain unchanged; 265 canonical cases (153 positive/112 negative) pass over 81 subjects, zero fully qualified. Positive/negative cells are 52/47 present and 29/34 required; all 81 orientation obligations remain. 253 cited controls and clean types pass. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,844 software/374 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 298 browser cases, one existing optional skip, zero retries and all 150 input/112 composition cells. Frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, learner admission and authored packs remain held.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-validation-authority.md",
@@ -908,7 +908,10 @@
             "packages/runtime/src/semantic-validation-attacks.test.ts",
             "packages/runtime/src/semantic-validation-recorded.test.ts",
             "packages/runtime/src/semantic-validation-recorded-sources.ts",
-            "apps/server/src/castling-evidence.test.ts"
+            "apps/server/src/castling-evidence.test.ts",
+            "rfc/tactical-collectors.md",
+            "packages/runtime/src/tactics.ts",
+            "packages/runtime/src/semantic-validation-discovered.test.ts"
           ],
           "anchors": [
             {
@@ -956,7 +959,10 @@
             {"kind":"work_state","id":"D3702","digest":"sha256:ff0e37f79131539fb323f5af5ccfa72dd50571a8197f384eb537aff81a926794"},
             {"kind":"work_state","id":"D3703","digest":"sha256:803a254e71fdbb2e119642410bdf2306acb2c3816f74a792152387c878651742"},
             {"kind":"work_state","id":"D3704","digest":"sha256:a670ab9478a09b90f21f10ab50e338d39450184c2bb85d8e5271206da8c38ec8"},
-            {"kind":"work_state","id":"D3705","digest":"sha256:ccca047ebf1683d0393633e505ee5fea353902be21c820f2aa5a8e02f44df396"}
+            {"kind":"work_state","id":"D3705","digest":"sha256:ccca047ebf1683d0393633e505ee5fea353902be21c820f2aa5a8e02f44df396"},
+            {"kind":"rfc","id":"tactical-collectors.md","digest":"sha256:a5ce11ada5223c74703ef300e97975b805a8f96155d11e83ed520984e4ca54f6"},
+            {"kind":"work_state","id":"D3710","digest":"sha256:244d6203d65669f5332068efd0fcab3fc2f909660fbec85353e48fab711f730d"},
+            {"kind":"work_state","id":"D3711","digest":"sha256:ecb67b3d2f087013897af3ed3bd83fb9c56b9371617a5ea0268a05196e9d2aa6"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

@@ -13,7 +13,7 @@ import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
-import { ATTACK_CITED_SOURCES, CAPTURE_DEPENDENT_NEGATIVE_FAMILIES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, CAPTURE_DEPENDENT_NEGATIVE_FAMILIES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 
 const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
 const cases = raw.map(parseSemanticValidationCase);
@@ -104,7 +104,7 @@ describe("D3685 source-bound pawn/file membership", () => {
   });
 
   it("retains all 139 predecessor records alongside 36 new positives", () => {
-    const laterIds = new Set([...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const laterIds = new Set([...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(36);
     expect(cases.filter(value => !laterIds.has(value.id) && !pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(139);
     expect(evidenceDigest(raw.filter(value => !laterIds.has(value.id as string) && !pawnPositiveRows.some(row => row.caseId === value.id))))
@@ -165,7 +165,7 @@ describe("D3676 populated pawn-structure absence", () => {
   });
 
   it("adds twelve absence cases without retiring any of the 127 prior cases", () => {
-    const laterIds = new Set([...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const laterIds = new Set([...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(12);
     expect(cases.filter(value => !laterIds.has(value.id) && !pawnAbsenceRows.some(row => value.id === row.caseId) &&
       !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(127);
@@ -272,7 +272,7 @@ describe("D3667 exact contact transitions", () => {
   it("retains every prior canonical case while adding exactly sixteen positives and eight negatives", () => {
     expect(contactTransitions).toHaveLength(24);
     expect(cases.filter(value => contactTransitions.some(row => value.id === row.caseId))).toHaveLength(24);
-    const laterIds = new Set([...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const laterIds = new Set([...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => !laterIds.has(value.id) && !contactTransitions.some(row => value.id === row.caseId) &&
       !pawnAbsenceRows.some(row => value.id === row.caseId) &&
       !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(103);
@@ -386,7 +386,7 @@ describe("source-grounded literal event validation", () => {
       ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)),
       ...contactRows.map(row => row.caseId), ...contactTransitions.map(row => row.caseId),
       ...pawnAbsenceRows.map(row => row.caseId), ...pawnPositiveRows.map(row => row.caseId),
-      ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+      ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => !rows.some(row => row.caseId === value.id) && !added.has(value.id))).toHaveLength(63);
     for (const family of families) {
       const subject = { kind: "event" as const, projection: { id: family.projection, version: 1 } };

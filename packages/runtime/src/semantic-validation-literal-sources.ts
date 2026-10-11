@@ -403,7 +403,40 @@ export const ATTACK_CITED_SOURCES = Object.freeze([
   },
 ]);
 
+// D3710: exact stationary-slider / moved-screen / retained-king geometry. These
+// cases do not claim material gain, a forced reply or a recommendation. The
+// existing positive remains; the new negatives complete real legal edges.
+const discoveredFixtures: readonly RuleFixture[] = [
+  ["direct-check-negative.white", "derived.tactic.discovered_executed", "8/8/3k4/8/8/2R5/8/2R3K1 w - - 0 1", "c3d3", "8/8/3k4/8/8/3R4/8/2R3K1 b - - 1 1", null],
+  ["direct-check-negative.black", "derived.tactic.discovered_executed", "2r3k1/8/2r5/8/8/3K4/8/8 b - - 0 1", "c6d6", "2r3k1/8/3r4/8/8/3K4/8/8 w - - 1 2", null],
+  ["rook.white", "derived.tactic.discovered_executed", "4k3/8/8/8/8/8/4B3/4R1K1 w - - 0 1", "e2d3", "4k3/8/8/8/8/3B4/8/4R1K1 b - - 1 1", { screen: { square: "e2", piece: { color: "white", role: "bishop" } }, slider: { square: "e1", piece: { color: "white", role: "rook" } }, target: { square: "e8", occupant: { color: "black", role: "king" } }, raySquares: ["e2", "e3", "e4", "e5", "e6", "e7"], discoveredCheck: true }],
+  ["rook.black", "derived.tactic.discovered_executed", "4r1k1/4b3/8/8/8/8/8/4K3 b - - 0 1", "e7d6", "4r1k1/8/3b4/8/8/8/8/4K3 w - - 1 2", { screen: { square: "e7", piece: { color: "black", role: "bishop" } }, slider: { square: "e8", piece: { color: "black", role: "rook" } }, target: { square: "e1", occupant: { color: "white", role: "king" } }, raySquares: ["e2", "e3", "e4", "e5", "e6", "e7"], discoveredCheck: true }],
+  ["bishop.white", "derived.tactic.discovered_executed", "8/8/7k/8/8/8/3N4/K1B5 w - - 0 1", "d2b3", "8/8/7k/8/8/1N6/8/K1B5 b - - 1 1", { screen: { square: "d2", piece: { color: "white", role: "knight" } }, slider: { square: "c1", piece: { color: "white", role: "bishop" } }, target: { square: "h6", occupant: { color: "black", role: "king" } }, raySquares: ["d2", "e3", "f4", "g5"], discoveredCheck: true }],
+  ["bishop.black", "derived.tactic.discovered_executed", "k1b5/3n4/8/8/8/7K/8/8 b - - 0 1", "d7b6", "k1b5/8/1n6/8/8/7K/8/8 w - - 1 2", { screen: { square: "d7", piece: { color: "black", role: "knight" } }, slider: { square: "c8", piece: { color: "black", role: "bishop" } }, target: { square: "h3", occupant: { color: "white", role: "king" } }, raySquares: ["g4", "f5", "e6", "d7"], discoveredCheck: true }],
+  ["queen.white", "derived.tactic.discovered_executed", "k7/8/8/8/8/8/N7/Q6K w - - 0 1", "a2b4", "k7/8/8/8/1N6/8/8/Q6K b - - 1 1", { screen: { square: "a2", piece: { color: "white", role: "knight" } }, slider: { square: "a1", piece: { color: "white", role: "queen" } }, target: { square: "a8", occupant: { color: "black", role: "king" } }, raySquares: ["a2", "a3", "a4", "a5", "a6", "a7"], discoveredCheck: true }],
+  ["queen.black", "derived.tactic.discovered_executed", "q6k/n7/8/8/8/8/8/K7 b - - 0 1", "a7b5", "q6k/8/8/1n6/8/8/8/K7 w - - 1 2", { screen: { square: "a7", piece: { color: "black", role: "knight" } }, slider: { square: "a8", piece: { color: "black", role: "queen" } }, target: { square: "a1", occupant: { color: "white", role: "king" } }, raySquares: ["a2", "a3", "a4", "a5", "a6", "a7"], discoveredCheck: true }],
+  ["second-blocker-negative.white", "derived.tactic.discovered_executed", "4k3/8/8/8/4P3/8/4B3/4R1K1 w - - 0 1", "e2d3", "4k3/8/8/8/4P3/3B4/8/4R1K1 b - - 1 1", null],
+  ["second-blocker-negative.black", "derived.tactic.discovered_executed", "4r1k1/4b3/8/4p3/8/8/8/4K3 b - - 0 1", "e7d6", "4r1k1/8/3b4/4p3/8/8/8/4K3 w - - 1 2", null],
+  ["screen-stays-negative.white", "derived.tactic.discovered_executed", "4k3/8/8/8/8/8/4P3/4R1K1 w - - 0 1", "e2e3", "4k3/8/8/8/8/4P3/8/4R1K1 b - - 0 1", null],
+  ["screen-stays-negative.black", "derived.tactic.discovered_executed", "4r1k1/4p3/8/8/8/8/8/4K3 b - - 0 1", "e7e6", "4r1k1/8/4p3/8/8/8/8/4K3 w - - 0 2", null],
+  ["unrelated-negative.white", "derived.tactic.discovered_executed", "4k3/8/8/8/8/8/P3B3/4R1K1 w - - 0 1", "a2a3", "4k3/8/8/8/8/P7/4B3/4R1K1 b - - 0 1", null],
+  ["unrelated-negative.black", "derived.tactic.discovered_executed", "4r1k1/p3b3/8/8/8/8/8/4K3 b - - 0 1", "a7a6", "4r1k1/4b3/p7/8/8/8/8/4K3 w - - 0 2", null],
+  ["slider-moved-negative.white", "derived.tactic.discovered_executed", "4k3/8/8/8/8/8/4B3/4R1K1 w - - 0 1", "e1d1", "4k3/8/8/8/8/8/4B3/3R2K1 b - - 1 1", null],
+  ["slider-moved-negative.black", "derived.tactic.discovered_executed", "4r1k1/4b3/8/8/8/8/8/4K3 b - - 0 1", "e8d8", "3r2k1/4b3/8/8/8/8/8/4K3 w - - 1 2", null],
+];
+
+export const DISCOVERED_CITED_SOURCE = Object.freeze({
+  sourceId: "python-chess.discovered-ray",
+  sourceRevision: captureSource.sourceRevision,
+  licence: captureSource.licence,
+  url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py#L905-L923`,
+  text: attackRuleText,
+  operation: { id: "runtime.semantic.local_edge", version: 1 } as const,
+  cases: discoveredFixtures.map(fixture => ruleCase("discovered-ray", fixture)),
+});
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  DISCOVERED_CITED_SOURCE,
   ...RECORDED_CITED_SOURCES,
   ...ATTACK_CITED_SOURCES,
   PAWN_DYNAMICS_CITED_SOURCE,

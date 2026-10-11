@@ -25625,3 +25625,52 @@ Campaign was the one capability with no API, route or content. Now:
   passing replay is not diagnosis. No new status mechanism or raw capture is committed. Protected
   intent and immutable archives are unchanged; this correction does not newly falsify an intent
   sentence. No push, exact-revision GitHub CI, deployment, image recovery or release completion.
+
+
+## 2026-10-11 — D3710/D3711 discovered execution and requested whole-product inventory
+
+- Completed the in-flight accepted semantic-validation-authority Slice B work before starting
+  another feature wave. Six legal rook/bishop/queen discovered-check cases in both colours
+  reproduced a real production omission: the before-state latency retained the enemy king,
+  but the execution join required its square in interior blocker arrays that exclude a ray's
+  board-edge endpoint. The existing exact endpoint now supplies that condition under
+  tactical-collectors §3.12; screen removal, stationary slider and target identities remain.
+- Ten nearby populated negatives distinguish a direct check by the moved piece, another blocker,
+  a screen remaining on its ray, an unrelated move and the slider itself moving. Independent
+  integer geometry and legal replay check the full finite king-target population without using
+  the production latency/transition detector. Initial illegal queen/screen fixtures were corrected
+  separately from the demonstrated bug; an initial proposition-registration error used the wrong
+  empty-constraint digest domain and was corrected, not counted as chess evidence.
+- All 249 predecessor case records remain unchanged. The sole normal receipt writer executes
+  265 cases (153 positive/112 negative); 253 cited checks/six files and clean workspace types pass.
+  The negative cell becomes present: 52/47 positive/negative cells present, 29/34 still required,
+  all 81 orientation obligations open and zero fully qualified subjects. Frozen recorded-path
+  collectors, draft orientation/window amendments, source adoption, learner admission and
+  authored packs remain unchanged. Existing Make commands include the new permanent controls;
+  no new tracking framework, research capture, source-hash compatibility rule or pack rewrite.
+- Complete serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  4,844 software/374 files (325.75 s), seven unchanged-budget performance/four files (63.06 s),
+  248 content/25 files, workspace types, governance, packaging and build. Browser tiers pass
+  298 cases: 233 smoke, five real-content, 59 matrix and one production-configuration test;
+  the one existing optional Maia skip remains, zero retries. All 150 input and 112 composition
+  cells pass. D3702/D3703 and other historical intermittent causes remain open: green repeats
+  do not diagnose them. No exact-revision remote or native release-image proof follows.
+- Updated the existing roadmap inventory, foundation/release checkpoints, execution queue,
+  implementation docs, RFC changelogs, ledger and durable state in this closeout. Population:
+  3,460 ledger rows; 1,720 live/all assigned; 1,579 done; 161 refused; 462 historical prose-only
+  closures still need stronger audit. UX: 273 complete, 272 live, 24 retired. Product RFCs:
+  42 implementing, ten awaiting, 23 draft; 75 implemented archive records and one superseded,
+  not 75 freshly re-audited complete capabilities. All fourteen whole capabilities remain
+  incomplete; four milestones active/five blocked; 86 production pack documents and zero
+  official graduates; twelve uncalibrated bot configurations and no valid skill marks.
+- Re-read current code/docs and fetched the latest GitHub run list for the requested overview.
+  Last pushed product revision 75bc8744 has verify 37795549212 green and browser 37795549157 red;
+  the later green Dependabot workflow is not product CI. The local repaired checkout is ahead
+  and is not claimed green remotely. The summary distinguishes delivered core loop, modules,
+  Review, Library/Studio, bots, Profile, classroom inspection and draft Campaign from remaining
+  source/consumer adoption, qualification/useful defaults, calibrated behavior, training-set
+  execution, complete curriculum/rewards, official content and clean-host release recovery.
+- Protected intent and immutable archives remain untouched; this restores an already-promised
+  relation and newly falsifies no intent sentence. No push, deployment, native image recovery,
+  whole-capability or release completion. The 1.0 goal stays active; the requested inventory
+  is the handoff after this batch, not permission to declare the goal achieved.

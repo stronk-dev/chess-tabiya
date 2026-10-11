@@ -1722,6 +1722,20 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-11: D3710 adds sixteen independent discovered-execution cases under accepted
+  Slice B: both colours and all three slider roles, with populated direct-check,
+  second-blocker, retained-screen, unrelated-move and moved-slider omissions.
+  Separate integer geometry and legal replay check exact identities through the completed
+  local operation. These cases exposed D3711, repaired under tactical-collectors §3.12.
+  All 249 predecessor cases remain unchanged; 265 canonical executions pass (153 positive,
+  112 negative). The negative arm becomes present, but orientation and whole-subject
+  qualification remain open. The orientation/window draft amendments are not implemented.
+  Focused verification: 253 cited checks across six files and clean workspace types.
+  Complete serial normal verification/build/all browser tiers pass 4,844 software/374 files,
+  seven performance/four files, 248 content/25 files and 298 browser cases, one existing
+  optional skip, zero retries and all 150 input/112 composition cells. No whole capability,
+  source adoption, exact-revision remote CI or release-image completion follows.
+  Evidence: `packages/runtime/src/semantic-validation-discovered.test.ts`.
 - 2026-10-11: D3705 extends accepted Slices B/C with twenty source-bound current-v2
   recorded exchange and pawn-contact cases through runtime.semantic.recorded_path.
   Both colours cover immediate versus delayed/unrelated captures, en passant,

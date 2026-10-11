@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3709]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3711]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3709]]: 273 UX items complete, 272 live and 24
-retired; 1,720 live ledger items, all assigned, alongside 1,577 done and 161 refused. The 462
+Current checked inventory through [[D3711]]: 273 UX items complete, 272 live and 24
+retired; 1,720 live ledger items, all assigned, alongside 1,579 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,24 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3710]] adds sixteen independent discovered-execution cases; their legal rook/bishop/queen
+checks in both colours exposed [[D3711]]'s omitted board-edge target. The repaired execution
+join retains exact screen/slider/target identities and the existing interior blocker meaning.
+Direct checks, another blocker, a retained screen, unrelated play and a moved slider remain
+populated negatives. All 249 predecessor cases remain unchanged; all 265 canonical executions
+pass, without qualifying a whole subject or changing learner admission or pack bytes.
+Complete serial normal verification/build/all browser tiers pass 4,844 software/374 files,
+seven performance/four files, 248 content/25 files and 298 browser cases, one existing optional
+skip, zero retries and all 150 input/112 composition cells. No whole capability, milestone,
+exact-revision remote CI or release-image completion is claimed.
+
+The older 'mostly drafts' progress snapshot no longer describes the implementation register:
+42 product RFCs are implementing and ten await discharge, against 23 drafts. Real delivery
+includes the board/input and preset/module infrastructure, Review/retry, Library/Studio,
+persistent bot games, private Profile and the exposed draft Campaign. The remaining bottleneck
+is completing and integrating those pieces, not locating the work. Routes and schemas do not
+establish useful defaults, calibrated behavior, a complete curriculum or release readiness.
 
 [[D3709]] repairs consequence parity when an authored preview becomes a real branch, for both
 ordinary and charged entry. Chosen checkpoint/objective events survive promotion and reload;
@@ -99,8 +117,8 @@ disclosure; the new passing evidence controls do not repair that learner flow.
    sampled Maia tasks, durable Stockfish, Review tablebase and selected-piece/square Sight.
    Their existing draft repairs require independent acceptance, then real API/client proof.
 2. Complete semantic qualification and useful selection, not just emission. The current
-   register has 249 passing cases over 81 subjects: 52 positive cells and 46 negative
-   cells present, but 29 positive, 35 negative and all 81 orientation obligations remain.
+   register has 265 passing cases over 81 subjects: 52 positive cells and 47 negative
+   cells present, but 29 positive, 34 negative and all 81 orientation obligations remain.
    Four complete-state projections have a genuine omission-contract conflict. “Why this
    move?” search remains a draft upgrade, not a delivered explanatory engine.
 3. Convert those facts into complete default journeys, calibrated bot behavior, valid

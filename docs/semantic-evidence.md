@@ -365,6 +365,19 @@ counterfactual/other required arms and the complete-state omission conflict rema
 zero subjects are fully qualified and learner eligibility is unchanged. This is qualification
 work under existing collectors, not a new recommendation, strategy claim or content wave.
 
+D3710 adds sixteen independent discovered-execution cases through the completed local
+operation: rook, bishop and queen discovered checks in both colours, plus both-colour
+direct-check, second-blocker, retained-screen, unrelated-move and moved-slider negatives.
+Legal replay and separate integer ray geometry check exact screen, slider and king identities.
+These controls exposed D3711: a king at a slider ray's board-edge endpoint was absent from
+the interior blocker arrays, so the execution join discarded its true before-state latency.
+The join now admits that exact retained endpoint without changing the ray's interior blocker
+meaning. All 249 predecessor cases remain unchanged. The current 265 cases pass (153 positive,
+112 negative); discovered execution's negative cell becomes present. Orientation and all other
+required qualification, source adoption and learner eligibility obligations remain open;
+zero subjects are fully qualified. This repairs the accepted executed relation, not a claim
+that the move is best, forcing or strategically useful.
+
 D3690 widens the complete-state omission conflict to piece counts, pawn islands
 and reply breadth. Actual white/black bare-king edges retain twelve role counts,
 two zero island readings and one reply reading. A legal mate retains the terminal

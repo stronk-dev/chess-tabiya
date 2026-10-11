@@ -40,6 +40,15 @@ These tests run in ordinary CI. They do not discharge the schema example's wrong
 (D3695). The server admission (D3694) and event-gap recovery (D3698) have separate negative
 controls; successful UI submission alone is not their security or integrity proof.
 
+`make semantic-validation-discovered-check` checks actual completed discovered-execution
+operations against independent legal replay and integer ray geometry. Six positives cover
+rook, bishop and queen checks in both colours, including kings at board-edge ray endpoints;
+ten populated negatives distinguish a moved piece's direct check, another blocker, a screen
+remaining on the ray, an unrelated move and the slider itself moving. Canonical registration,
+borrowed-input refusal and all 249 unchanged predecessor cases are also checked. These tests
+run in ordinary software CI and in the existing cited/foundation commands. They repair and
+validate an executed relation, not hint quality, move quality or whole semantic qualification.
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct

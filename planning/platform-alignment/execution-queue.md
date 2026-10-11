@@ -4,6 +4,20 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Discovered execution qualification — 2026-10-11
+
+[[D3710]]/[[D3711]] are **DONE LOCALLY**, evidence-foundation under accepted
+semantic-validation-authority Slice B and tactical-collectors §3.12. Six independently legal
+rook/bishop/queen checks in both colours reproduce the endpoint omission; ten populated
+negatives distinguish direct checks, another blocker, a retained screen, unrelated play and
+moving the slider. The execution join now retains the exact ray endpoint without changing
+interior blockers or conventions. All 249 predecessor cases remain unchanged; 265 canonical
+cases, 253 cited checks and clean types pass. Complete serial normal verification/build/all
+browser tiers pass 4,844 software, seven performance, 248 content and 298 browser cases,
+one existing optional skip, zero retries and all 150 input/112 composition cells. Source
+availability, frozen recorded collectors, orientation/window drafts, learner eligibility
+and pack bytes stay unchanged; zero subjects fully qualify and no release gate closes.
+
 ## Authored consequence promotion — 2026-10-11
 
 [[D3709]] is **DONE LOCALLY**, under accepted `rfc/archive/n-way-comparison.md`

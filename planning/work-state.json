@@ -30784,6 +30784,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/authored-simulation.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3710",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:244d6203d65669f5332068efd0fcab3fc2f909660fbec85353e48fab711f730d",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-discovered.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3711",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ecb67b3d2f087013897af3ed3bd83fb9c56b9371617a5ea0268a05196e9d2aa6",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-discovered.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
