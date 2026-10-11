@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3719]] closes the false same-recapturer join in recorded
+check zwischenzug. Four predecessor-red controls reproduce castling's secondary-rook
+substitution through legal compiler/factory inputs. Shared recorded v2 enforces original
+occupancy; frozen v1 remains. Twenty permanent controls reach actual owned storage,
+Review phase arcs and authenticated import/review HTTP presentation, with genuine
+king positives and history/access preservation. All 44 continuity and 71 full recorded-path
+checks, exact/eager 108-game census and types pass. Complete normal serial verification/build
+passes 4,959 software/376 files, seven performance/four files, 255 content/26 files and
+302 browser checks, one existing optional skip, zero retries, all 150 input/112 composition
+cells and clean types/governance/packaging. No broader motif or selection amendment,
+whole-RFC/capability/milestone, remote-CI or release-image completion.
+
 2026-10-11 — [[D3718]] reproduces false recorded v2 deflection/line-clearance
 through eight predecessor-red compiler/sole-factory controls: edge one captures
 the original target, edge two replaces it with the same role/colour, edge three

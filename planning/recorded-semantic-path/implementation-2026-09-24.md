@@ -95,3 +95,26 @@ performance checks/four files, 255 content tests/26 files, clean types/governanc
 optional Maia skip, zero retries and 150 input/112 composition cells. All 307 canonical cases
 pass over 81 subjects, zero fully qualified. No authored pack, source contract, derivation
 revision, learner eligibility, whole capability/milestone, remote CI or release image changes.
+
+## 2026-10-11 follow-up — original recapturer continuity (D3719)
+
+Four predecessor-red both-colour compiler/sole-factory controls prove a false checking
+zwischenzug: a king had a legal recapture; castling gave check and replaced that king
+with its secondary rook; the rook later captured from the same origin. The current
+v2 reader requires the original occupant at both intervening boundaries, shared by
+compiler enumeration and factory recomputation. Frozen v1 remains unchanged. This
+does not broaden the existing same-origin subset or add intent/force/quality claims.
+
+Twenty permanent controls cover the negatives, genuine original-king positives,
+historical v1, actual owned storage/repeated reconstruction, real Review phase arcs
+and authenticated import/review HTTP presentation, including anonymous/stranger
+refusals and saved-history preservation. All 44 continuity controls, 71 full
+recorded-path tests and workspace types pass. The fixed 108-game/6,991-ply census
+retains all 1,264 existing events, seven checking zwischenzugs and exact/eager
+parity. All 307 canonical cases pass over 81 subjects; zero fully qualified.
+Complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake`
+exits zero: 4,959 software tests/376 files, seven performance checks/four files,
+255 content tests/26 files, clean types/governance/packaging and 302 browser passes
+(237 smoke, five content, 59 matrix, one packaged-production), one existing optional
+Maia skip, zero retries and 150 input/112 composition cells. D3719 closes locally;
+no whole RFC, capability, milestone, remote CI or release-image promotion follows.

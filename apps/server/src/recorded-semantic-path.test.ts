@@ -38,6 +38,32 @@ async function longitudinalBuilder(compile: CompileRecordedSemanticPath, runId: 
   return result.kind === "available" ? { ids: result.events.map((event) => event.id), digest: result.digest } : result;
 }
 
+describe("D3719 saved recapturer continuity", () => {
+  it.each([
+    { name: "replacement white", fen: "8/8/8/8/8/7n/5P2/1k3K1R b H - 0 1", moves: ["h3f2", "f1h1", "b1a2", "f1f2"], count: 0 },
+    { name: "replacement black", fen: "1K3k1r/5p2/7N/8/8/8/8/8 w h - 0 1", moves: ["h6f7", "f8h8", "b8a7", "f8f7"], count: 0 },
+    { name: "original white", fen: "1k6/8/8/8/8/7n/5P2/5K1R b - - 0 1", moves: ["h3f2", "h1h8", "b8a7", "f1f2"], count: 1 },
+    { name: "original black", fen: "5k1r/5p2/7N/8/8/8/8/1K6 w - - 0 1", moves: ["h6f7", "h8h1", "b1a2", "f8f7"], count: 1 },
+  ])("$name survives actual owned storage reconstruction without false attribution", async value => {
+    const { storage, run } = fixture(value.fen, value.moves);
+    const compile = recordedSemanticPathOperation(storage);
+    const input = { principal: owner, runId: run.id, branchId: run.activeCursor.branchId };
+    const saved = JSON.stringify(storage.read(run.id));
+    const result = await compile(input);
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("valid saved four-edge path was refused");
+    const events = result.events.filter(event => event.projection.id === "derived.tactic.check_zwischenzug_observed" && event.projection.version === 2);
+    expect(events).toHaveLength(value.count);
+    if (value.count > 0) expect(events[0]!.operands).toMatchObject({ retainedRecapture: { capturer: { role: "king" } } });
+    expect(result.windows.find(window => window.projection.id === "derived.tactic.check_zwischenzug_observed" && window.projection.version === 2 && window.startNodeId === run.nodes[0]!.id))
+      .toMatchObject({ horizon: 4, status: value.count === 0 ? "no_witness" : "emitted", endNodeId: run.nodes[4]!.id });
+    expect(result.pathNodeIds).toEqual(run.nodes.map(node => node.id));
+    expect(await compile(input)).toEqual(result);
+    await expect(compile({ ...input, principal: stranger })).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+    expect(JSON.stringify(storage.read(run.id))).toBe(saved);
+  });
+});
+
 function productionSources(directory: URL): readonly { readonly path: string; readonly text: string }[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     if (entry.name === "node_modules" || entry.name === "dist") return [];

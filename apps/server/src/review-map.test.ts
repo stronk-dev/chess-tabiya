@@ -156,6 +156,32 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   });
 
   it.each([
+    { name: "replacement white", side: "white", fen: "8/8/8/8/8/7n/5P2/1k3K1R b H - 0 1", line: "1... Nxf2 2. O-O+ Ka2 3. Rxf2+ *", emitted: false },
+    { name: "replacement black", side: "black", fen: "1K3k1r/5p2/7N/8/8/8/8/8 w h - 0 1", line: "1. Nxf7 O-O+ 2. Ka7 Rxf7+ *", emitted: false },
+    { name: "original white", side: "white", fen: "1k6/8/8/8/8/7n/5P2/5K1R b - - 0 1", line: "1... Nxf2 2. Rh8+ Ka7 3. Kxf2 *", emitted: true },
+    { name: "original black", side: "black", fen: "5k1r/5p2/7N/8/8/8/8/1K6 w - - 0 1", line: "1. Nxf7 Rh1+ 2. Ka2 Kxf7 *", emitted: true },
+  ] as const)("D3719 presents only the original recapturer through authenticated Review ($name)", async value => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "recapturer_review_owner");
+    const pgn = `[Event "Recorded recapturer"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${value.fen}"]\n\n${value.line}`;
+    const runId = await importReviewedGame(origin, cookie, "writer-recapturer", pgn, value.side);
+    const before = eventKinds(databasePath, runId);
+    const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const review = await response.json() as ReviewPayload;
+    expect(review.rows).toHaveLength(4);
+    const projection = "derived.tactic.check_zwischenzug_observed";
+    const items = parsePresentationReceipt(review.rows[3]!.packet).filter(item => item.adapter.projection.id === projection);
+    expect(items.map(item => item.component.id)).toEqual(value.emitted ? ["square_set", "move_path"] : []);
+    expect(items.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+    for (const row of review.rows.slice(0, 3)) expect(row.packet.items.some(item => item.adapter.projection.id === projection)).toBe(false);
+    expect(eventKinds(databasePath, runId)).toEqual(before);
+    expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
+    const stranger = await register(origin, "recapturer_review_stranger");
+    expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
+  });
+
+  it.each([
     { side: "white", fen: "k2r2r1/8/8/3pP3/8/8/8/1K4R1 w - d6 0 2", line: "2. exd6 Rxd6 3. Rxg8+ *", projection: "derived.tactic.overload_exploitation_observed", text: "exd6 was answered by the recapture Rxd6", squares: ["d6", "g8"] },
     { side: "black", fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", line: "2... exd3 3. Rxd3 Rxg1+ *", projection: "derived.tactic.overload_exploitation_observed", text: "exd3 was answered by the recapture Rxd3", squares: ["d3", "g1"] },
     { side: "white", fen: "k7/8/8/3pP3/4n3/8/8/1K2R3 w - d6 0 2", line: "2. exd6 Kb7 3. Rxe4 *", projection: "derived.tactic.sequence.defender_consequence", text: "Black's pawn on d5 was captured", squares: ["d5", "e4"] },

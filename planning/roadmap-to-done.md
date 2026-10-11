@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3718]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3719]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3718]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
-retired; 1,721 live ledger items, all assigned, alongside 1,585 done and 161 refused. The 462
+Current checked inventory through [[D3719]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,586 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,20 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3719]] repairs a false recorded checking zwischenzug when legal castling replaces
+the original king recapturer with its secondary rook on the same square. Shared v2
+enumeration and sole-factory recomputation retain the original occupant across the
+checking move and reply; frozen v1 remains. Twenty permanent both-colour controls
+include four predecessor failures, genuine original-king positives, owned storage,
+actual Review phase arcs and authenticated HTTP presentation without saved-play
+mutation. Focused checks, full recorded-path tests, exact/eager census and types
+pass. Complete normal serial verification/build exits zero: 4,959 software/376 files,
+seven performance/four files, 255 content/26 files, clean types/governance/packaging
+and 302 browser checks, one existing optional skip, zero retries, all 150 input/112
+composition cells. D3719 closes locally. All 307
+canonical cases pass, zero qualified. No source, selection, whole-RFC/capability,
+remote-CI or release-image claim follows.
 
 [[D3718]] repairs false recorded deflection/line clearance when the original target is
 captured and replaced by another piece of the same role. The compiler and sole v2

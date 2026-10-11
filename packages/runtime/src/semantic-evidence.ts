@@ -974,7 +974,7 @@ export function overloadExploitationSemanticEvent(payload: OverloadExploitationO
 // selector only (rfc/evidence-value-authority.md §2.2).
 // ---------------------------------------------------------------------------------------------
 
-/** The original observed target must remain at every intervening boundary, not be replaced. */
+/** A named original occupant must remain at every intervening boundary, not be replaced. */
 function recordedTargetRetained(anchors: readonly RecordedMoveAnchor[], target: { readonly square: SquareName; readonly piece: Piece }): boolean {
   return anchors.slice(0, -1).every(anchor => {
     const occupant = exactPiece(positionFromFen(anchor.afterFen), target.square);
@@ -990,6 +990,14 @@ export function recordedDeflectionObservedOperands(values: readonly RecordedMove
 
 export function recordedLineBlockerClearanceObservedOperands(values: readonly RecordedMoveAnchor[]): readonly LineBlockerClearanceObservedOperands[] {
   return Object.freeze(lineBlockerClearanceObservedOperands(values).filter(payload => recordedTargetRetained(payload.anchors, payload.target)));
+}
+
+/** Same-square UCI does not retain a king that castling replaced with its secondary rook. */
+export function recordedCheckZwischenzugObservedOperands(values: readonly RecordedMoveAnchor[]): readonly CheckZwischenzugObservedOperands[] {
+  return Object.freeze(checkZwischenzugObservedOperands(values).filter(payload => {
+    const original = exactPiece(positionFromFen(payload.anchors[0]!.afterFen), payload.retainedRecapture.capturer.square);
+    return original !== undefined && recordedTargetRetained(payload.anchors.slice(1), original);
+  }));
 }
 
 function recordedEdgePayloads(edges: readonly DeclaredEvidence<unknown>[]): readonly RecordedEdge[] {

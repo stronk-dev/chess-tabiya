@@ -88,6 +88,14 @@ observed events retain their complete recorded windows in the sealed payload eve
 though their manifest operands name only the motif-specific identities. They remain evidence facts,
 not claims that a move was intended, forced, best, or good.
 
+Recorded v2 checking zwischenzug requires the original recapturer to remain at its
+origin after the intervening checking move and reply. Matching an earlier legal UCI
+origin is not sufficient: checking castling can replace that king with the secondary
+rook on the same square. Both compiler enumeration and the sole evidence factory
+apply the same occupancy check; historical v1 stays unchanged. Both-colour valid
+king recaptures survive owned reconstruction and the actual authenticated Review
+caption/square/path presentation without rewriting saved play.
+
 Capture identity distinguishes the removed piece's square from the mover's landing. For en
 passant, overload response conflicts and recorded overload/defender-consequence windows join the
 removed pawn's prior duty; a recapture still lands on the attacking pawn's actual landing square.

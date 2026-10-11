@@ -32,6 +32,7 @@ import {
 import { commitMove, createRun, rewind } from "./runtime.js";
 import {
   assertSemanticEvidenceEvent,
+  checkZwischenzugObservedOperands,
   defenderConsequenceOperands,
   deflectionObservedOperands,
   lineBlockerClearanceObservedOperands,
@@ -69,6 +70,61 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3719 recorded recapturer continuity", () => {
+  const substitutions = [
+    { name: "white", fen: "8/8/8/8/8/7n/5P2/1k3K1R b H - 0 1", moves: ["h3f2", "f1h1", "b1a2", "f1f2"], from: "f1", to: "f2" },
+    { name: "black", fen: "1K3k1r/5p2/7N/8/8/8/8/8 w h - 0 1", moves: ["h6f7", "f8h8", "b8a7", "f8f7"], from: "f8", to: "f7" },
+  ] as const;
+
+  it.each(substitutions)("$name king-to-rook replacement is not the same recapturer in the compiler", fixture => {
+    const run = recordedRun(`d3719:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const square = parseSquare(fixture.from)!;
+    expect(positionFromFen(path[1]!.fen).board.get(square)?.role).toBe("king");
+    expect(positionFromFen(path[1]!.fen).isLegal({ from: square, to: parseSquare(fixture.to)! })).toBe(true);
+    expect(positionFromFen(path[2]!.fen).board.get(square)?.role).toBe("rook");
+    expect(positionFromFen(path[2]!.fen).isCheck()).toBe(true);
+    expect(positionFromFen(path[3]!.fen).isCheck()).toBe(false);
+    expect(positionFromFen(path[4]!.fen).board.get(parseSquare(fixture.to)!)).toMatchObject({ role: "rook" });
+    const result = compileMain(run);
+    expect(result.events.filter(event => exact(event.projection) === "derived.tactic.check_zwischenzug_observed@2").map(event => event.id)).toEqual([]);
+    expect(result.windows.find(window => exact(window.projection) === "derived.tactic.check_zwischenzug_observed@2" && window.startNodeId === path[0]!.id))
+      .toMatchObject({ status: "no_witness", horizon: 4, endNodeId: path[4]!.id, eventIds: [] });
+  });
+
+  it.each(substitutions)("$name replacement cannot pass the sole recorded v2 factory", fixture => {
+    const run = recordedRun(`d3719:factory:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const edges = path.slice(1).map((node, index) => declareRecordedEdgeEvidence(run, path[index]!, node));
+    const transition = transitionSemanticEvents(path[0]!.fen, path[1]!.moveUci!, path[1]!.fen);
+    const capture = transition.find(event => event.projection.id === "rules.transition.event.capture")!.evidence;
+    const check = invokeEvidenceValueRoute("rules.tactic.event.check@1", { beforeFen: path[1]!.fen, moveUci: path[2]!.moveUci!, afterFen: path[2]!.fen })[0]!;
+    const exchange = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: path[3]!.fen, captureUci: path[4]!.moveUci! })[0]!;
+    expect((exchange.payload as LegalExchangeResult).resultUnits).toBeGreaterThan(0);
+    expect(invokeEvidenceValueRoute("derived.tactic.check_zwischenzug_observed@2", { edges, capture, check, exchange }).map(evidence => exact(evidence.projection))).toEqual([]);
+  });
+
+  it.each(substitutions)("$name frozen v1 retains its historical operand reader", fixture => {
+    const run = recordedRun(`d3719:legacy:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const anchors = path.slice(1).map((node, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: node.id, beforeFen: path[index]!.fen, moveUci: node.moveUci!, afterFen: node.fen }));
+    expect(checkZwischenzugObservedOperands(anchors)).toHaveLength(1);
+  });
+
+  it.each([
+    { name: "white", fen: "1k6/8/8/8/8/7n/5P2/5K1R b - - 0 1", moves: ["h3f2", "h1h8", "b8a7", "f1f2"], from: "f1" },
+    { name: "black", fen: "5k1r/5p2/7N/8/8/8/8/1K6 w - - 0 1", moves: ["h6f7", "h8h1", "b1a2", "f8f7"], from: "f8" },
+  ] as const)("$name original king recapturer still has an exact positive witness", fixture => {
+    const run = recordedRun(`d3719:positive:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    for (const node of path.slice(1, 4)) expect(positionFromFen(node.fen).board.get(parseSquare(fixture.from)!)).toMatchObject({ role: "king" });
+    const matching = compileMain(run).events.filter(event => exact(event.projection) === "derived.tactic.check_zwischenzug_observed@2");
+    expect(matching).toHaveLength(1);
+    expect((matching[0]!.operands as { retainedRecapture: LegalExchangeResult }).retainedRecapture.capturer).toMatchObject({ role: "king", square: fixture.from });
+    assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, matching[0]!);
+  });
+});
 
 describe("D3718 recorded target continuity", () => {
   const replacements = [

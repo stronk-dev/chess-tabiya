@@ -30865,6 +30865,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3719",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c26d8ff9b418f0fd6313c2384898c758b65ddfb90ebd856e953a2d6df15aca4b",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

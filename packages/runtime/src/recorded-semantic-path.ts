@@ -20,7 +20,7 @@ import { harassmentPressureSequence, pawnContactTimingSequence, type RecordedMov
 import {
   attractionObservedOperands,
   checkSemanticEvent,
-  checkZwischenzugObservedOperands,
+  recordedCheckZwischenzugObservedOperands,
   defenderConsequenceOperands,
   deflectionObservedInduction,
   recordedDeflectionObservedOperands,
@@ -311,7 +311,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       for (const value of interferenceObservedOperands(anchors)) emitted.push(recordedInterferenceSemanticEvent(value, edges, duty(), exchangeEvidence(value.targetCapture)));
       break;
     case "check_zwischenzug":
-      for (const value of checkZwischenzugObservedOperands(anchors)) {
+      for (const value of recordedCheckZwischenzugObservedOperands(anchors)) {
         const capture = window[0]!.capture, check = window[1]!.check;
         if (capture === undefined || check === undefined) throw new TypeError("Checking zwischenzug lost its exact capture/check source");
         emitted.push(recordedCheckZwischenzugSemanticEvent(value, edges, capture.evidence, check.evidence, exchangeEvidence(value.retainedRecapture)));

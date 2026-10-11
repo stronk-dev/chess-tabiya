@@ -55,6 +55,7 @@ import {
   assertSemanticEvidenceEvent,
   attractionObservedOperands,
   checkZwischenzugObservedOperands,
+  recordedCheckZwischenzugObservedOperands,
   defenderConsequenceOperands,
   defenderExposureOperands,
   deflectionObservedInduction,
@@ -1816,7 +1817,7 @@ export const createDerivedTacticInterferenceObservedV2Evidence = recordedSequenc
 }, (input) => [...edgesOf(input), ...others(input, "duty", "exchange")]);
 export const createDerivedTacticCheckZwischenzugObservedV2Evidence = recordedSequenceFactory("derived.tactic.check_zwischenzug_observed@2", { edges: EDGES(4), capture: sealed("rules.transition.event.capture@1"), check: sealed("rules.tactic.event.check@1"), exchange: sealed("rules.exchange.predicate.legal_exchange@1") }, (input, anchors) => {
   exactRecordedSequenceInputs(anchors, edgesOf(input), 4, others(input, "capture", "check", "exchange"), ["rules.transition.event.capture", "rules.tactic.event.check", "rules.exchange.predicate.legal_exchange"]);
-  return checkZwischenzugObservedOperands(anchors).filter((payload) => sameDigest(payload.retainedRecapture, (input.exchange as DeclaredEvidence<unknown>).payload));
+  return recordedCheckZwischenzugObservedOperands(anchors).filter((payload) => sameDigest(payload.retainedRecapture, (input.exchange as DeclaredEvidence<unknown>).payload));
 }, (input) => [...edgesOf(input), ...others(input, "capture", "check", "exchange")]);
 export const createDerivedTacticOverloadExploitationObservedV2Evidence = recordedSequenceFactory("derived.tactic.overload_exploitation_observed@2", { edges: EDGES(3), duty: sealed("rules.tactic.reading.defender_duty_set@1"), captures: sealedList(3, 3, "rules.transition.event.capture@1"), exchange: sealed("rules.exchange.predicate.legal_exchange@1") }, (input, anchors) => {
   exactRecordedSequenceInputs(anchors, edgesOf(input), 3, others(input, "duty", "captures", "exchange"), ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);

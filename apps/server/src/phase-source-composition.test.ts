@@ -136,6 +136,25 @@ describe("recorded and live tablebase slots (§2.2, criterion 7)", () => {
 
 describe("the ordered arc (§3, criteria 4, 11, 12)", () => {
   it.each([
+    { name: "replacement white", fen: "8/8/8/8/8/7n/5P2/1k3K1R b H - 0 1", moves: ["h3f2", "f1h1", "b1a2", "f1f2"], count: 0 },
+    { name: "replacement black", fen: "1K3k1r/5p2/7N/8/8/8/8/8 w h - 0 1", moves: ["h6f7", "f8h8", "b8a7", "f8f7"], count: 0 },
+    { name: "original white", fen: "1k6/8/8/8/8/7n/5P2/5K1R b - - 0 1", moves: ["h3f2", "h1h8", "b8a7", "f1f2"], count: 1 },
+    { name: "original black", fen: "5k1r/5p2/7N/8/8/8/8/1K6 w - - 0 1", moves: ["h6f7", "h8h1", "b1a2", "f8f7"], count: 1 },
+  ])("D3719 Review phase arc preserves $name without changing the recorded path", value => {
+    const run = runFrom(value.fen, value.moves);
+    const result = compilePhaseArc(run, run.activeCursor.branchId, deps());
+    expect(result.kind).toBe("arc");
+    if (result.kind !== "arc") throw new Error("valid four-edge path was refused");
+    assertPhaseArc(result.arc);
+    const events = result.arc.path.events.filter(event => event.projection.id === "derived.tactic.check_zwischenzug_observed" && event.projection.version === 2);
+    expect(events).toHaveLength(value.count);
+    if (value.count > 0) expect(events[0]!.operands).toMatchObject({ retainedRecapture: { capturer: { role: "king" } } });
+    expect(result.arc.points.map(point => point.position.payload.fen)).toEqual(run.nodes.map(node => node.fen));
+    expect(result.arc.path.pathNodeIds).toEqual(run.nodes.map(node => node.id));
+    expect(compilePhaseArc(run, run.activeCursor.branchId, deps())).toEqual(result);
+  });
+
+  it.each([
     { projection: "derived.tactic.deflection_observed", fen: "1B5k/r1r5/8/8/8/8/8/R5K1 w - - 0 1", moves: ["b8a7", "c7a7", "a1a7"] },
     { projection: "derived.tactic.deflection_observed", fen: "r5k1/8/8/8/8/8/R1R5/1b5K b - - 0 1", moves: ["b1a2", "c2a2", "a8a2"] },
     { projection: "derived.tactic.line_blocker_clearance_observed", fen: "qq5k/8/8/8/Q7/8/8/R5K1 w - - 0 1", moves: ["a4a8", "b8a8", "a1a8"] },

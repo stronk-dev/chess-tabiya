@@ -480,7 +480,7 @@ candidate-closure-census:
 .PHONY: recorded-semantic-path-check
 .PHONY: recorded-target-continuity-check
 recorded-target-continuity-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/phase-source-composition.test.ts -t D3718
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/review-map.test.ts -t 'D3718|D3719'
 
 recorded-semantic-path-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts

@@ -872,7 +872,7 @@
         "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3718 repairs false recorded v2 deflection/line-blocker-clearance when the original target is captured and replaced by an enemy piece of the same role. Both intermediate boundaries now retain the original occupant in shared compiler enumeration and sole-factory recomputation. Eight predecessor-red controls and 24 permanent both-colour compiler/factory/positive/frozen-v1/saved-operation/real Review phase-arc controls pass; 59 full recorded-path tests and the 108-game/6,991-ply census preserve eager parity. Complete normal serial verification/build exits zero: 4,939 software/376 files, seven performance/four files, 255 content/26 files, 302 browser passes, one existing optional skip, zero retries, 150 input/112 composition cells and clean types/governance/packaging. All 307 canonical cases remain passing over 81 subjects, zero fully qualified. Orientation/reach and complete-state contracts, real source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open. No new learner eligibility, whole capability/milestone, remote CI or release-image completion.",
+        "summary": "D3719 repairs false recorded checking zwischenzug when legal castling substitutes its secondary rook for the original king recapturer at the same origin. Shared v2 enumeration/factory retain the original occupant after checking move and reply; frozen v1 remains. Twenty permanent both-colour controls include four predecessor failures, original-king positives, owned storage, real Review phase arcs and authenticated import/review HTTP presentation without saved-history mutation. All 44 continuity controls, 71 full recorded-path tests, exact/eager 108-game/6,991-ply census and types pass. The census retains 1,264 events and all seven current checking zwischenzugs. All 307 canonical cases pass over 81 subjects, zero fully qualified. Complete normal serial verification/build exits zero: 4,959 software/376 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser passes, one existing optional skip, zero retries and all 150 input/112 composition cells. D3719 closes locally; orientation/reach, complete-state contracts, real source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open. No new learner eligibility, whole capability/milestone, remote CI or release-image completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-collectors.md",
@@ -884,6 +884,7 @@
             "packages/runtime/src/recorded-semantic-path.test.ts",
             "apps/server/src/recorded-semantic-path.test.ts",
             "apps/server/src/phase-source-composition.test.ts",
+            "apps/server/src/review-map.test.ts",
             "packages/runtime/src/semantic-validation-receipt.generated.json",
             "docs/semantic-evidence.md",
             "planning/recorded-semantic-path/implementation-2026-09-24.md",
@@ -907,8 +908,8 @@
             },
             {
               "kind": "work_state",
-              "id": "D3718",
-              "digest": "sha256:728597b3bbed6b92604aa3b64eea9b8ff11ab93dbd51cd90d9a5d49b708bc4e8"
+              "id": "D3719",
+              "digest": "sha256:c26d8ff9b418f0fd6313c2384898c758b65ddfb90ebd856e953a2d6df15aca4b"
             }
           ]
         },

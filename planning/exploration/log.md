@@ -26093,3 +26093,41 @@ Campaign was the one capability with no API, route or content. Now:
   zero unassigned, four active/five blocked milestones and zero official graduates.
   Only five existing documentation files change; no production/test source or raw
   recording is staged. Preserve the pre-existing untracked paths; no push.
+
+## 2026-10-11 (codex) — D3719 same-recapturer continuity
+
+- Previous turn commits ecbd675c and finishes the D3300 measurement with focused
+  worker/governance proof; it does not complete cold cost or the 1.0 goal.
+- Check accepted recorded tactical identities after D3718. Candidate D3719 is
+  recorded before tests, explicitly unproven until legal replay. Initial work-state
+  sync refuses its temporary untriaged row; normal doing assignment immediately
+  restores zero unassigned work without changing the ratchet.
+- Both-colour legal capture/checking-castle/king-reply/rook-capture windows reproduce
+  four false-motif compiler/sole-factory failures. Initial recapturer is the king;
+  castling substitutes the secondary rook on its square. Same origin UCI is not
+  same physical piece. Four frozen-v1 and original-king positives already pass.
+- A shared recorded v2 reader checks original occupancy after the checking move and
+  reply, used by both compiler enumeration and sole-factory recomputation. Frozen v1,
+  all legal moves, source versions, selection and chess-judgement ceilings remain.
+  Saved-operation/actual Review controls and full normal verification follow.
+- Twenty new permanent controls and the earlier D3718 controls all pass (44 total).
+  Actual import/review HTTP retains genuine original-king explanations and omits the
+  false rook-substitution caption/paint; owned history is unchanged and anonymous/
+  stranger readers refuse. Full recorded-path tests pass 71. The 108-game/6,991-ply
+  census retains 1,264 events, all seven current checking zwischenzugs and exact/eager
+  parity; local 20/40/80-ply p95 is 25.0/48.1/73.7 ms, not a portable speed claim.
+  Normal generated validation retains 307 passing cases/81 subjects/zero qualified.
+  Workspace types pass. Complete normal serial gates follow before scoped closure.
+- Complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 4,959 software/376 files, seven performance/four files, 255 content/26
+  files, clean types/governance/packaging/build and 302 browser passes (237 smoke,
+  five content, 59 matrix, one packaged-production), one existing optional Maia skip,
+  zero retries and all 150 input/112 composition cells. Close only D3719 with its
+  permanent production-path tests; all broader source, qualification, selection,
+  RFC discharge, milestone, remote-CI and release-image obligations remain.
+- The first terminal transition supplied an owner and was refused by the existing
+  terminal-state rule. Repeating the normal transition without that forbidden field
+  records D3719 done with its test path, not prose-only evidence; zero untriaged remains.
+- A final roadmap indentation correction after generation makes the first final
+  governance run refuse its stale roadmap status file. Regenerate with the normal
+  target and rerun governance; the complete product/build/browser result stands.
