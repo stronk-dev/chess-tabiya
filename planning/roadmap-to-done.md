@@ -96,6 +96,20 @@ clean types/governance/packaging. Generated validation was refreshed after its
 initial stale-file refusal; 289 cases still pass and zero subjects qualify.
 D3300 retains its remaining cold-cost TODO; no whole release gate advances.
 
+The next [[D3300]] correction reuses only the latest complete square-control delta
+across control/defender-exposure sources. Four new predecessor-red controls pass
+within 78 collector and 65 projector/store/real-worker checks. All eight fresh-process
+pairs preserve complete events, factory/input receipts and projected rows; summed
+cold time is 5.37% lower locally, seven faster / one slower. Exact clock fields,
+immutable operands, failed-request refusals, replacement and every alternative remain.
+Final normal serial verification/build exits zero: 4,915 software/376 files,
+seven performance/four files, 255 content/26 files and 302 browser passes across
+all four tiers, one existing optional Maia skip, zero retries, all 150 input/112
+composition cells and clean types/governance/packaging.
+All 307 canonical validation cases pass, 81 subjects, zero qualified. The same
+receipt above carries the follow-up; no source-contract, revision, content, whole capability,
+current-revision remote CI or release-image promotion follows.
+
 [[D3300]] fresh-process projection measurement distinguishes the remaining cold
 cost from delivered prefix reuse and bounded drain: the real 80-ply arm takes
 3.26–4.27 s across both sides/three observations versus about 20 ms warm, retaining

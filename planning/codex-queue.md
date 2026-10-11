@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3300]]'s second work-reuse correction retains only the latest
+complete immutable square-control delta across the control/defender-exposure sources.
+Four predecessor-red controls now pass within 78 collector and 65 real projector/store/worker
+checks. Eight counterbalanced fresh-process pairs preserve every event, factory/input
+receipt and projected row; summed cold time is 5.37% lower locally, seven faster / one slower.
+Final normal serial verification/build exits zero: 4,915 software/376 files,
+seven performance/four files, 255 content/26 files and 302 browser passes across
+all four tiers, one existing optional Maia skip, zero retries, all 150 input/112
+composition cells and clean types/governance/packaging.
+All 307 canonical cases pass and zero subjects qualify. Full clocks, failures,
+replacement, availability and every alternative remain; no source-contract/revision/policy change.
+D3300 retains residual cold cost; do not recommission the delivered index or delta reuse.
+Receipt: planning/longitudinal-store/d3300-index-reuse-2026-10-11.md.
+
 2026-10-11 — [[D3717]] adds eighteen independent recorded bishop-pressure cases:
 four positives and fourteen legal near-miss negatives in both colours. Existing migrated
 profile references and all 289 predecessor cases remain; 307 canonical cases pass over

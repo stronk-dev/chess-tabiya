@@ -141,8 +141,15 @@ function beforeEdges(reading: SquareControlReading, squares: readonly Controlled
   return index;
 }
 
+// The complete one-edge closure asks for this same delta through both the control source and
+// defender-exposure derivation. Keep only the last successful exact request, not an edge history.
+// Its operands come from recursively frozen readings; callers cannot alter the retained result.
+// Full FEN strings (including clocks) and the original UCI are compared without lossy normalization.
+let lastDelta: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string; readonly value: SquareControlEvents } | undefined;
+
 /** Exact controller-edge deltas. Legal deltas abstain per color when either complete set is unavailable. */
 export function squareControlEvents(beforeFen: string, moveUci: string, afterFen: string): SquareControlEvents {
+  if (lastDelta !== undefined && lastDelta.beforeFen === beforeFen && lastDelta.moveUci === moveUci && lastDelta.afterFen === afterFen) return lastDelta.value;
   const before = squareControlReading(beforeFen), after = squareControlReading(afterFen);
   const position = positionFromFen(before.fen);
   const parsed = parseUci(moveUci.toLowerCase());
@@ -169,5 +176,7 @@ export function squareControlEvents(beforeFen: string, moveUci: string, afterFen
     }
   }
   events.sort((left, right) => left.color.localeCompare(right.color) || left.mode.localeCompare(right.mode) || left.target.localeCompare(right.target) || left.controller.square.localeCompare(right.controller.square) || left.sign.localeCompare(right.sign));
-  return Object.freeze({ events: Object.freeze(events), legalAvailability: Object.freeze(availability) });
+  const value = Object.freeze({ events: Object.freeze(events), legalAvailability: Object.freeze(availability) });
+  lastDelta = { beforeFen, moveUci, afterFen, value };
+  return value;
 }

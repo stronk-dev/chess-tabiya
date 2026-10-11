@@ -25976,3 +25976,44 @@ Campaign was the one capability with no API, route or content. Now:
   for this bounded closeout. Frozen v1, draft orientation/window contracts, source
   adoption, useful selection, authored content, owner use and release-image/remote
   verification remain open. The active 1.0 goal is not completed or paused.
+
+## 2026-10-11 (codex) — D3300 complete control-delta reuse
+
+- Captured the unmodified predecessor with the ordinary Make baseline, then removed
+  repeated complete square-control delta work within the actual sealed one-edge closure.
+  Only the latest successful exact full before-FEN/UCI/after-FEN request is retained;
+  different edges replace it, invalid requests still throw, clock fields stay exact,
+  all operands remain immutable and every pseudo/legal event and availability remains.
+  No narrowed collector, alternative omission, new producer or policy is introduced.
+- Four permanent both-colour controls fail on the predecessor: actual sealed collection
+  builds sixteen controller maps instead of eight. All fifteen work-reuse controls now
+  pass within 78 collector and 65 projector/store/real-worker tests. Types initially
+  refuse a readonly test array at Vitest's mutable matcher; an explicit array copy
+  fixes that test call without changing its assertion. Workspace types then pass.
+- Eight counterbalanced fresh-process pairs preserve complete events, factory/input
+  receipts and projected rows, all 2,199 legal edges / 196,589 events and forty
+  checkpoints per side. Summed cold time is 26.392 → 24.975 s (5.37% lower locally),
+  seven faster / one slower. This uses a new immediate-predecessor baseline, not
+  the earlier index/sort-key baseline; no portable guarantee or cold-cost closure.
+  The ordinary measurement retains only ignored compact timings, no raw recordings.
+- Normal serial verification passes 4,915 software/376 files, seven performance/four
+  files, 255 content/26 files and types/governance/packaging/build so far. Built-browser
+  verification remains live, not completed. Ordinary generated validation retains
+  all 307 passing cases over 81 subjects, zero qualified; no primitive, source,
+  derivation revision, authored content, learner eligibility or protected intent changes.
+- Existing ledger, assignment, queue, docs, receipt and roadmap carry the bounded
+  checkpoint. D3300's residual cold cost remains open; no whole milestone/capability,
+  current-revision remote CI or release-image result is claimed.
+- Final normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 4,915 software/376 files, seven performance/four files, 255 content/26
+  files, clean types/governance/packaging/build and 302 browser passes across all
+  four tiers (237 smoke, five real-content, 59 matrix, one packaged-production),
+  one existing optional Maia latency skip, zero retries and all 150 input/112
+  composition cells. Generated implementation metadata is refreshed; producer/source
+  contracts and chess meaning remain unchanged. The residual D3300 cold-cost item
+  returns to its existing TODO, not completed or left falsely in flight. No push,
+  exact-revision GitHub CI, clean-host image or whole-1.0 completion follows.
+- Final assignment initially refuses my TODO transition because TODO cannot carry
+  a start date. The ordinary Make transition without SINCE corrects that invocation;
+  the remaining cost item is valid TODO, learner-history owned. Tracking-only final
+  refresh follows without modifying the verified product/test sources.

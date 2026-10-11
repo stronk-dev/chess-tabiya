@@ -101,6 +101,13 @@ Exact full-event/receipt and projected-row comparison over both players is uncha
 24 fresh-process cold pairs show a modest 4.91% summed-time reduction on the loaded
 development host, with one slower pair. This is not cold-cost completion or a changed
 derivation revision. See `planning/longitudinal-store/d3300-index-reuse-2026-10-11.md`.
+The next scoped correction retains only the latest successful complete square-control
+delta. The control source and defender-exposure derivation reuse it within the same
+edge; no alternative or fact is omitted. Its full before/after FENs and original UCI
+must match exactly, including clocks. Different edges replace it, invalid requests
+still fail, and all retained operands are immutable. Permanent both-colour controls
+exercise the actual sealed closure, independent array/Set results, special moves,
+clock separation, failure and replacement. Cold cost remains a separate open obligation.
 Growing prefixes now reuse complete local v1 projection/sign memberships for exact
 before-FEN/move/after-FEN tuples. The worker retains at most 4,096 immutable entries, FIFO;
 clock fields remain part of identity, failures are recollected, and injected collectors stay
