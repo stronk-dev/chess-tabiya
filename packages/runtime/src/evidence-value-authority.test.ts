@@ -1095,6 +1095,56 @@ const PROFILE_FILE = new URL("fixtures/evidence-value-profiles.json", import.met
 const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
+  it("D3721 a real structural factory cannot admit a changed feature under its original receipt", () => {
+    const feature = { kind: "piece_count", color: "white", role: "rook", basis: "count", comparison: "equal", count: 2 };
+    const value = invoke("rules.structural.predicate.piece_count@1", { fen: INITIAL, feature }) as DeclaredEvidence<{ readonly feature: typeof feature; readonly matched: boolean }>;
+    const receipt = evidenceValueReceipt(value);
+    const changed = Reflect.set(value.payload.feature, "count", 99);
+    expect(() => assertDeclaredEvidence(value)).not.toThrow();
+    expect(value.payload.feature.count).toBe(2);
+    expect(changed).toBe(false);
+    expect(value.payload.matched).toBe(true);
+    expect(evidenceValueReceipt(value)).toEqual(receipt);
+  });
+
+  it("D3721 frozen accessors cannot borrow the immutable-data digest cache", () => {
+    let count = 2;
+    const feature = Object.freeze({ kind: "piece_count", color: "white", role: "rook", basis: "count", comparison: "equal", get count() { return count; } });
+    const value = invoke("rules.structural.predicate.piece_count@1", { fen: INITIAL, feature }) as DeclaredEvidence<unknown>;
+    expect(() => assertDeclaredEvidence(value)).not.toThrow();
+    count = 99;
+    expect(() => assertDeclaredEvidence(value)).toThrow(/receipt disagrees/u);
+  });
+
+  it("D3721 every emitted factory payload is recursively immutable, not just its outer shell", () => {
+    const mutable: string[] = [];
+    const payloads = (value: unknown): readonly unknown[] => {
+      if (value === null || typeof value !== "object") return [];
+      if (Array.isArray(value)) return value.flatMap(payloads);
+      if ("producer" in value && "projection" in value && "payload" in value) return [(value as DeclaredEvidence<unknown>).payload];
+      if ("evidence" in value) return payloads(value.evidence);
+      if ("value" in value) return payloads(value.value);
+      if ("item" in value) return payloads(value.item);
+      return [];
+    };
+    const inspect = (value: unknown, path: string, seen = new WeakSet<object>()): void => {
+      if (value === null || typeof value !== "object" || seen.has(value)) return;
+      seen.add(value);
+      if (!Object.isFrozen(value)) mutable.push(path);
+      for (const [key, child] of Object.entries(value)) inspect(child, `${path}.${key}`, seen);
+    };
+    const profiles = buildProfiles();
+    expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
+    for (const [route, profile] of profiles) {
+      if (profile.valid === undefined) continue;
+      const result = profile.resolved ?? invoke(route, profile.valid);
+      const emitted = payloads(result);
+      expect(emitted.length, route).toBe(outcomeOf(result).cardinality);
+      emitted.forEach((payload, index) => inspect(payload, `${route}[${index}]`));
+    }
+    expect(mutable).toEqual([]);
+  });
+
   it("changes only transition identity and preserves the predecessor's calculation and Story output", () => {
     const previous = JSON.parse(read("packages/runtime/src/fixtures/review-transition-v1-profiles.json")) as Record<string, Outcome>;
     expect(Object.keys(previous).sort()).toEqual([...REVIEW_V1_ROUTES].sort());

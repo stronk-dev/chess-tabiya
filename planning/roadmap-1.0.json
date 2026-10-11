@@ -872,9 +872,14 @@
         "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-        "summary": "D3719 repairs false recorded checking zwischenzug when legal castling substitutes its secondary rook for the original king recapturer at the same origin. Shared v2 enumeration/factory retain the original occupant after checking move and reply; frozen v1 remains. Twenty permanent both-colour controls include four predecessor failures, original-king positives, owned storage, real Review phase arcs and authenticated import/review HTTP presentation without saved-history mutation. All 44 continuity controls, 71 full recorded-path tests, exact/eager 108-game/6,991-ply census and types pass. The census retains 1,264 events and all seven current checking zwischenzugs. All 307 canonical cases pass over 81 subjects, zero fully qualified. Complete normal serial verification/build exits zero: 4,959 software/376 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser passes, one existing optional skip, zero retries and all 150 input/112 composition cells. D3719 closes locally; orientation/reach, complete-state contracts, real source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open. No new learner eligibility, whole capability/milestone, remote CI or release-image completion.",
+          "summary": "D3721 repairs the sole evidence mint's shallow-freeze bypass under the accepted value-authority contract. Four predecessor failures include an actual fact mutated from two rooks to 99 under its original receipt, a changing frozen accessor and 277 mutable descendant fixture paths. Complete factory profiles now freeze nested ordinary data beneath frozen shells; only verified ordinary-data trees enter the private digest cache. No chess meaning, receipt field, source, permission or pack changes. Eight isolated complete-output comparisons agree; cold projection is 23.06% slower locally and D3300 remains TODO. Complete normal serial verification/build passes 4,980 software/377 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser checks, one existing optional skip, zero retries and all 150 input/112 composition cells. Validation remains 307 passing cases/81 subjects/zero fully qualified. D3719/D3720 original-piece and complete bounded-consequence controls remain delivered. Source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open; no whole capability/milestone, remote CI or release-image completion.",
           "impact": "advanced",
           "evidence": [
+            "rfc/evidence-value-authority.md",
+            "packages/runtime/src/evidence-contract.ts",
+            "packages/runtime/src/evidence-contract.test.ts",
+            "packages/runtime/src/evidence-value-authority.test.ts",
+            "planning/evidence-value-authority/implementation-2026-09-24.md",
             "rfc/semantic-collectors.md",
             "rfc/recorded-semantic-path.md",
             "rfc/semantic-validation-authority.md",
@@ -891,6 +896,16 @@
             "Makefile"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "evidence-value-authority.md",
+              "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3721",
+              "digest": "sha256:de63ca5ba7c9051fd2dffac5c36feb7c8c163292bac8973a4f335434056f64c2"
+            },
             {
               "kind": "rfc",
               "id": "recorded-semantic-path.md",

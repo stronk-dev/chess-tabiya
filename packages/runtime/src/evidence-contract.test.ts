@@ -67,6 +67,19 @@ function code(value: EvidenceContractDeclarations): string | undefined {
 }
 
 describe("evidence manifest compiler", () => {
+  it("D3721 seals children beneath an already-frozen payload before caching its digest", () => {
+    const child = { fen: "original" };
+    const values = [child];
+    const payload = Object.freeze({ values: Object.freeze(values) });
+    const declared = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, payload);
+    const receipt = evidenceValueReceipt(declared);
+    expect(Object.isFrozen(child)).toBe(true);
+    expect(Reflect.set(child, "fen", "changed")).toBe(false);
+    assertDeclaredEvidence(declared);
+    expect(declared.payload.values[0]!.fen).toBe("original");
+    expect(evidenceDigest(declared.payload)).toBe(receipt.payloadDigest);
+  });
+
   it("keeps the executable error-code set equal to the RFC table", () => {
     expect(EVIDENCE_MANIFEST_ERROR_CODES).toEqual(ERROR_TABLE);
   });

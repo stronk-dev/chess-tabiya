@@ -30883,6 +30883,23 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/bounded-target-oracle.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3721",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:de63ca5ba7c9051fd2dffac5c36feb7c8c163292bac8973a4f335434056f64c2",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3722",
+      "state": "todo",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:df9d4076ca6869fb54149ce536e5f7f32b51a70667420e158c04b594228efae9",
+      "uxItems": [],
+      "owner": "client-platform"
     }
   ]
 }

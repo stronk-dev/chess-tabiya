@@ -26201,3 +26201,37 @@ Campaign was the one capability with no API, route or content. Now:
   docs, implementation receipt, queue and roadmap. Canonical authority, orientation,
   population, actual consumer adoption and learner eligibility stay open. No
   whole capability/milestone, exact-revision remote CI or release-image claim.
+
+## 2026-10-11 (codex) — D3721 recursively sealed evidence, full closeout
+
+- Four permanent regressions fail on the predecessor: frozen outer shells with
+  mutable children, a real structural fact mutated from two rooks to 99 while its
+  old receipt admits, a changing frozen getter and 277 mutable descendant paths
+  across the complete factory fixtures. Paths are not a detector failure rate.
+- Under the accepted value-authority deep-freeze/admission contract, the sole mint
+  traverses already-frozen shells and caches only recursively frozen ordinary
+  own-data trees. Other objects are rechecked. The focused Make gate includes both
+  authority test files (51 passing tests); collectors (83), longitudinal checks
+  (65) and workspace types pass. No chess meaning, receipt field, source contract,
+  assistance permission or pack byte changes.
+- Eight isolated, counterbalanced fresh-process comparisons retain complete
+  events, factory receipts and projected rows in both colours. Cold time increases
+  23,610.272 → 29,054.584 ms, 23.06% locally; all eight pairs are slower. Keep D3300's
+  cold-cost TODO. The ignored compact timing aggregate and bundles are not raw
+  recordings, progress dependencies or release proof.
+- The first full gate stops at stale generated validation metadata after 4,980
+  software and seven performance passes. The normal writer changes only nine
+  implementation and 53 population predicate digests plus the derived receipt
+  digest. All 307 case outcomes/81 subjects remain; zero subjects fully qualify.
+- The complete normal serial rerun of `make roadmap-receipt verify-awake build
+  test-browser-ci-awake` exits zero: 4,980 software/377 files, seven performance/
+  four files, 255 content/26 files, clean types/governance/packaging/build and 302
+  browser passes (237 smoke, five real-content, 59 matrix, one packaged-production),
+  one existing optional Maia skip, zero retries, all 150 input/112 composition cells.
+- Close D3721 with its permanent test path; update the existing roadmap checkpoint,
+  ledger/state, docs, implementation receipt, cold-cost record and execution queue.
+  D3722 queues actual delivery/dependency measurement of the normal build's single
+  3,188.86 kB / 693.13 kB gzip JavaScript entry. It is a warning, not a diagnosed UX
+  failure; no warning threshold or budget changes. Every live item remains assigned.
+  No source/consumer qualification, official graduation, whole capability/milestone,
+  exact-revision remote CI or built-image/release completion follows.

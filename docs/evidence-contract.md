@@ -129,6 +129,11 @@ therefore no generic mint API and no caller-payload adapter:
   semantic selection, module reducers, deterministic renderers and voice requests) refuses a value
   with no receipt or whose payload digest disagrees with it. It does not claim to reconstruct the
   inputs the factory discarded.
+- Sealing recursively freezes nested own data, even when a factory has already frozen the outer
+  object or array. Payload digests are cached only for complete plain-data trees verified by the
+  sealing function. Accessors, custom prototypes and array holes cannot borrow that cache: their
+  current bytes are rechecked at admission. A shallow-frozen shell does not make mutable children
+  trustworthy. The permanent factory profiles check every emitted payload's nested immutability.
 - Every non-retired catalogue projection has exactly one factory,
   `create{Projection}V{version}Evidence`, of one of four shapes. **Computed** factories take authority
   inputs (a FEN, a validated edge, a recorded run) and compute the payload themselves. **Derived**

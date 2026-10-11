@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4454ec238eced2d1c6f40df396c79119827c60b6aea2f8813d3149f3afc959fe",
+    "roadmap": "sha256:0200f9ab03f2f13865b5247b1f8cff79da3d8e99b6aa518289083eae98353f2f",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:b513525b33f875394b9461631cddee57ec76fa9c1be9d30fc6f6a9f9789185e0",
+    "workState": "sha256:0283fbd657ec27f0fd767ef84ce9c1ded6a8c8d7fde4f390d3b62bfd08c8ddc9",
     "rfcRegister": "sha256:4cd353e8685d40e04fc9775467f470dd04ceb02dfabd867a915b23d9082dd171",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 630,
       "doing": 16,
       "blocked": 1076,
-      "done": 1587,
+      "done": 1588,
       "refused": 161
     },
     "workItems": {
@@ -261,9 +261,14 @@
       "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3719 repairs false recorded checking zwischenzug when legal castling substitutes its secondary rook for the original king recapturer at the same origin. Shared v2 enumeration/factory retain the original occupant after checking move and reply; frozen v1 remains. Twenty permanent both-colour controls include four predecessor failures, original-king positives, owned storage, real Review phase arcs and authenticated import/review HTTP presentation without saved-history mutation. All 44 continuity controls, 71 full recorded-path tests, exact/eager 108-game/6,991-ply census and types pass. The census retains 1,264 events and all seven current checking zwischenzugs. All 307 canonical cases pass over 81 subjects, zero fully qualified. Complete normal serial verification/build exits zero: 4,959 software/376 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser passes, one existing optional skip, zero retries and all 150 input/112 composition cells. D3719 closes locally; orientation/reach, complete-state contracts, real source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open. No new learner eligibility, whole capability/milestone, remote CI or release-image completion.",
+        "summary": "D3721 repairs the sole evidence mint's shallow-freeze bypass under the accepted value-authority contract. Four predecessor failures include an actual fact mutated from two rooks to 99 under its original receipt, a changing frozen accessor and 277 mutable descendant fixture paths. Complete factory profiles now freeze nested ordinary data beneath frozen shells; only verified ordinary-data trees enter the private digest cache. No chess meaning, receipt field, source, permission or pack changes. Eight isolated complete-output comparisons agree; cold projection is 23.06% slower locally and D3300 remains TODO. Complete normal serial verification/build passes 4,980 software/377 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser checks, one existing optional skip, zero retries and all 150 input/112 composition cells. Validation remains 307 passing cases/81 subjects/zero fully qualified. D3719/D3720 original-piece and complete bounded-consequence controls remain delivered. Source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open; no whole capability/milestone, remote CI or release-image completion.",
         "impact": "advanced",
         "evidence": [
+          "rfc/evidence-value-authority.md",
+          "packages/runtime/src/evidence-contract.ts",
+          "packages/runtime/src/evidence-contract.test.ts",
+          "packages/runtime/src/evidence-value-authority.test.ts",
+          "planning/evidence-value-authority/implementation-2026-09-24.md",
           "rfc/semantic-collectors.md",
           "rfc/recorded-semantic-path.md",
           "rfc/semantic-validation-authority.md",
@@ -280,6 +285,16 @@
           "Makefile"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "evidence-value-authority.md",
+            "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3721",
+            "digest": "sha256:de63ca5ba7c9051fd2dffac5c36feb7c8c163292bac8973a4f335434056f64c2"
+          },
           {
             "kind": "rfc",
             "id": "recorded-semantic-path.md",

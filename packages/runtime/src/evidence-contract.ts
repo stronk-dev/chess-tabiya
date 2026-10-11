@@ -380,9 +380,9 @@ function latencyNarrows(candidate: EvidenceLatency, ceiling: EvidenceLatency): b
   return ceiling.maxMs === null || (candidate.maxMs !== null && candidate.maxMs >= 0 && candidate.maxMs <= ceiling.maxMs);
 }
 
-// Canonical bytes of each sealed payload, recorded when its digest is first taken. A sealed payload is
-// deep-frozen before sealing (the same premise as SEALED_PAYLOAD_DIGESTS), so an event id or receipt
-// that embeds it reuses these bytes instead of re-walking the tree ([[D3300]]).
+// Canonical bytes of recursively frozen ordinary-data payloads, recorded only after freezeData
+// verifies that their bytes cannot change. An event id or receipt embedding that same payload
+// reuses these bytes instead of re-walking the tree ([[D3300]]); other objects remain uncached.
 const SEALED_CANONICAL = new WeakMap<object, string>();
 
 // Byte-identical to the former `map`/`join` template form, including its accidents: a value
@@ -529,11 +529,37 @@ function sha256(input: string): string {
   return NATIVE_SHA256 === undefined ? portableSha256(input) : NATIVE_SHA256(input);
 }
 
-function immutable<T>(value: T): T {
-  if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
-    for (const child of Object.values(value as Record<string, unknown>)) immutable(child);
-    Object.freeze(value);
+// Object.freeze only freezes one object. Cache a digest only after this module has frozen
+// the complete ordinary-data tree; a caller's shallow freeze is not that guarantee.
+const IMMUTABLE_DATA = new WeakSet<object>();
+
+function freezeData(value: unknown, visiting: WeakSet<object>): boolean {
+  if (value === null || typeof value !== "object") return true;
+  if (IMMUTABLE_DATA.has(value)) return true;
+  if (visiting.has(value)) return false;
+  visiting.add(value);
+  const prototype = Object.getPrototypeOf(value);
+  let stable = Array.isArray(value) ? prototype === Array.prototype : prototype === Object.prototype || prototype === null;
+  for (const key of Reflect.ownKeys(value)) {
+    const property = Object.getOwnPropertyDescriptor(value, key)!;
+    // A frozen getter can still read changing external state. Keep rechecking those bytes.
+    if (!("value" in property)) stable = false;
+    else if (!freezeData(property.value, visiting)) stable = false;
   }
+  // Array holes read through the prototype and therefore are not stable own data.
+  if (Array.isArray(value)) {
+    for (let index = 0; index < value.length; index += 1) {
+      if (!Object.hasOwn(value, index)) { stable = false; break; }
+    }
+  }
+  Object.freeze(value);
+  visiting.delete(value);
+  if (stable) IMMUTABLE_DATA.add(value);
+  return stable;
+}
+
+function immutable<T>(value: T): T {
+  freezeData(value, new WeakSet<object>());
   return value;
 }
 
@@ -572,9 +598,10 @@ const DIGEST = /^[0-9a-f]{64}$/u;
 
 function sealedPayloadDigest(payload: unknown): string {
   if (payload === null || typeof payload !== "object") return evidenceDigest(payload);
+  if (!IMMUTABLE_DATA.has(payload)) return evidenceDigest(payload);
   const cached = SEALED_PAYLOAD_DIGESTS.get(payload);
   if (cached !== undefined) return cached;
-  // The payload is deep-frozen before this point; its canonical bytes cannot change afterwards.
+  // Only a recursively frozen own-data tree reaches this cache.
   const text = canonical(payload);
   const digest = sha256(text);
   SEALED_CANONICAL.set(payload, text);

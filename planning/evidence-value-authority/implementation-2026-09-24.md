@@ -128,3 +128,41 @@ Unless another file is named, tests are in `packages/runtime/src/evidence-value-
 `planning/platform-alignment/evidence-value-authority-intent-amendment-2026-09-24.md` reports that
 `design/03` B10's "endgame technique naming" is now false. It also flags B4's "exact source
 adapters" as stale.
+
+## 2026-10-11 follow-up — recursively immutable payloads (D3721)
+
+The accepted deep-freeze/admission contract did not hold for shallow-frozen factory
+payloads. Four new permanent regressions fail against the predecessor: an already-frozen
+object/array with a mutable child; a real structural fact whose `feature.count` changes
+from 2 to 99 while its original receipt still admits; a frozen getter whose external count
+changes; and 277 mutable descendant paths across the existing complete factory profiles.
+Those are fixture paths, not a population-wide detector failure rate.
+
+The sole mint now traverses already-frozen shells. Only recursively frozen ordinary
+own-data trees enter the private digest/canonical cache. Accessors, custom prototypes
+and array holes remain uncached and their current bytes are rechecked at admission.
+Shared sealed inputs retain identity; no chess semantics, registry routes, receipt fields,
+provider contracts, assistance policy or pack bytes change. The focused Make gate now
+includes the contract tests as well as the complete factory authority tests: all 51 pass.
+Collector checks (83), longitudinal checks (65) and workspace types also pass.
+
+Eight isolated fresh-process before/after comparisons retain complete projected rows,
+events and factory receipts in both colours. Summed cold time increases from 23,610.272
+to 29,054.584 ms, 23.06% locally; all eight pairs are slower (20.53–26.77%). This is a
+correctness repair, not a performance improvement or a portable latency claim. D3300's
+cold-cost residual remains open. Only ignored bundles and a compact timing aggregate are
+retained; raw recordings are not a CI/progress dependency.
+
+The normal validation writer refreshes only nine implementation digests and 53 population
+predicate digests, plus the derived TypeScript receipt digest. All 307 case outcomes,
+81 subjects, 53 population receipts and eight external receipts remain; zero subjects
+fully qualify. Existing qualification, consumer adoption and RFC discharges remain open.
+
+Final normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+exits zero: 4,980 software/377 files, seven performance/four files, 255 content/26
+files, clean types/governance/packaging/build and 302 browser passes (237 smoke,
+five real-content, 59 matrix, one packaged-production), one existing optional Maia
+skip, zero retries and all 150 input/112 composition cells. D3721 closes locally
+with its permanent test path. No exact-revision GitHub run, built-image recovery,
+official graduation or whole capability/milestone is claimed. The existing large
+JavaScript-entry warning is recorded separately as D3722, measurement before a fix.

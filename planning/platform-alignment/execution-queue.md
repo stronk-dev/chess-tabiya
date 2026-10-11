@@ -6,6 +6,26 @@
 
 ## Discovered execution qualification — 2026-10-11
 
+[[D3722]] is **TODO**, client-platform: the normal build's single JavaScript entry
+is 3,188.86 kB / 693.13 kB gzip and raises the existing large-chunk warning. Measure
+actual deployment/device cold delivery and inspect route dependency boundaries
+before proposing a split. This warning is neither an interaction diagnosis nor a
+reason to suppress it or change a budget. No production change is authorised here.
+
+[[D3721]] is **DONE LOCALLY**, evidence-foundation under the accepted value-authority
+deep-freeze/admission contract. Four permanent regressions fail on the predecessor:
+a shallow-frozen shell, an actual structural fact mutated after sealing, a frozen
+accessor with changing external state and 277 mutable descendant paths in the full
+factory fixture population. The shared seal now traverses already-frozen shells and
+caches only recursively frozen ordinary-data trees. Focused authority/collector/
+longitudinal checks and types pass. Complete normal serial verification/build
+passes 4,980 software, seven performance, 255 content and 302 browser checks,
+one existing optional skip, zero retries and all 150 input/112 composition cells.
+Eight isolated comparisons retain complete outputs; cold projection is 23.06%
+slower locally. D3300 remains TODO; qualification, consumer adoption and release
+completion do not follow. The existing value-authority implementation record
+holds the detailed closeout; D3722 retains the build-size measurement follow-up.
+
 [[D3720]] is **DONE LOCALLY**, evidence-foundation under the accepted bounded-policy-targets
 local contract. Twelve finite both-colour boards independently enumerate the complete
 target/candidate populations, immediate removal causes and existential/all-defences

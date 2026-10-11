@@ -2027,7 +2027,7 @@ provider-traversal-check:
 # Permanent value-authority gate (rfc/evidence-value-authority.md §8): single mint, central invoker,
 # registry = non-retired catalogue, receipts, positives and falsifiers for every factory.
 evidence-value-authority:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts
 
 # Explicit opt-in refresh of permanent computed factory profiles, not the frozen migration receipt.
 .PHONY: evidence-value-profile-update
