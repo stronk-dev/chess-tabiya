@@ -108,6 +108,10 @@ must match exactly, including clocks. Different edges replace it, invalid reques
 still fail, and all retained operands are immutable. Permanent both-colour controls
 exercise the actual sealed closure, independent array/Set results, special moves,
 clock separation, failure and replacement. Cold cost remains a separate open obligation.
+The final 2026-10-11 observation after both corrections is 3.476 s White / 3.391 s
+Black cold and 22.15 / 22.02 ms warm, with unchanged complete populations and rows.
+This is not a paired speed benchmark or a further implementation change; host load
+differs from the earlier samples. The dated measurement receipt retains the distinction.
 Growing prefixes now reuse complete local v1 projection/sign memberships for exact
 before-FEN/move/after-FEN tuples. The worker retains at most 4,096 immutable entries, FIFO;
 clock fields remain part of identity, failures are recollected, and injected collectors stay

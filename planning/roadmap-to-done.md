@@ -131,6 +131,10 @@ compact aggregate, no raw recordings or progress/CI dependency. Locating cost do
 not prove a safe optimization or authorize a narrower evidence path; D3300 remains
 open. Receipt: `planning/longitudinal-store/d3300-cold-profile-2026-10-11.md`.
 No product behavior, capability, milestone or release gate advances by this measurement.
+The final post-correction observation remains 3.476 s White / 3.391 s Black cold,
+about 22 ms warm, with every legal edge, event, row and checkpoint retained. Different
+host load prevents a paired speed claim. No additional optimization was implemented;
+the remaining learner-history cost returns to TODO, not closed or falsely in flight.
 
 [[D3716]] repairs the accepted overload predicate's promotion identity join: the actual
 recapture occupant can keep the retained defence duty as a rook/queen. Both-colour predecessor

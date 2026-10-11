@@ -26065,3 +26065,31 @@ Campaign was the one capability with no API, route or content. Now:
   eighteen-file index and commit with ordinary hooks; preserve the three pre-existing
   untracked paths and publish nothing. The requested whole-product overview is the
   existing roadmap inventory, not test totals presented as release completion.
+
+## 2026-10-11 (codex) — finish D3300 measurement before whole-product inventory
+
+- The ordinary full-population profile completes both fresh timing/profile child
+  controls and writes only the ignored compact aggregate. No live measurement process
+  remains. White cold is 3.476 s / warm 22.15 ms; Black cold is 3.391 s / warm 22.02 ms.
+  All 2,199 legal edges, 196,589 semantic events, exact rows and forty checkpoints per
+  side remain. Different host load forbids claiming a paired improvement from this
+  observation. No raw CPU dump, source contract change or additional optimization.
+- Source/consumer obligations found while choosing work retain their accepted/draft
+  boundaries: a compiled manifest does not prove full runtime adoption, and D3526's
+  Threat Radar selection change explicitly awaits amendment. Do not implement a
+  partial availability endpoint or change selection semantics to manufacture closure.
+- Finish this measurement in its existing receipt, docs, queue and roadmap; return
+  D3300 to learner-history TODO. The delivered reuse controls remain, but cold cost is
+  open. Focused projector/real-worker and normal governance verification follow; no
+  repeated full browser run is needed for documentation-only changes. The last product
+  commit fcc564b2 already has complete serial local verification, not exact-revision
+  remote CI or release proof. Requested whole-product inventory follows the scoped
+  commit; no new implementation wave starts before it.
+- Final normal `make longitudinal-projector-check` passes all 65 checks/five files.
+  `make roadmap-receipt verify-governance roadmap-progress` exits zero: assignments,
+  registers, append-only logs, artifact-size policy, test-tier separation, docs and
+  roadmap are consistent. D3300 is TODO; no measurement or test process remains live.
+  Counts remain 273 completed/272 live UX items, 1,585 done/1,721 live ledger rows,
+  zero unassigned, four active/five blocked milestones and zero official graduates.
+  Only five existing documentation files change; no production/test source or raw
+  recording is staged. Preserve the pre-existing untracked paths; no push.

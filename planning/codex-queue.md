@@ -68,6 +68,10 @@ denominator, seal or performance budget is cut. The old claim that further
 improvement necessarily needs a contract change is unproven. Next: measured
 repeat-computation correction with exact-output controls, or accepted authority
 amendment if truly required. Receipt: planning/longitudinal-store/d3300-cold-profile-2026-10-11.md.
+Final post-correction observation is 3.476 s White / 3.391 s Black cold, versus
+22.15 / 22.02 ms warm, with the same complete population and checkpoints. Different
+host load prevents treating this as a paired repair benchmark. No further production
+change was made; residual cold cost is TODO, not left in flight or closed.
 
 2026-10-11 — [[D3716]] repairs the accepted overload predicate's recapture-promotion join.
 Both-colour predecessor controls establish false conflicts; the actual landing occupant now
