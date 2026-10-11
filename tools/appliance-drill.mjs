@@ -11,6 +11,7 @@ import { delimiter, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { renderSourceDeployment } from "./render-deployment.mjs";
+import { linuxBackupPermissions } from "./release/storage-permissions.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PROJECT = /^tabiya-storage-drill-[0-9a-f-]{36}$/u;
@@ -76,6 +77,18 @@ export function storageHttpFailure(path, error) {
   return new Error(`storage drill HTTP ${path}: ${error?.message ?? "request failed"}${detail ? ` (${detail})` : ""}`, { cause: error });
 }
 
+/** External synchronous maintenance outlives idle sockets while this client's event loop is
+ * blocked. Each recovery probe uses a fresh connection; mutations are never retried. */
+export async function storageHttpRequest(origin, path, body, cookie) {
+  try {
+    return await fetch(origin + path, { headers: { origin, "content-type": "application/json",
+      connection: "close", "x-writer-id": "storage-drill-writer", ...(cookie ? { cookie } : {}) },
+      ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.timeout(15_000) });
+  } catch (error) {
+    throw storageHttpFailure(path, error);
+  }
+}
+
 // Make prints a documented next step for fresh restore and rollback; no other stdout is allowed.
 export function storageReceipt(result, after = []) {
   const lines = result.stdout.split("\n");
@@ -123,14 +136,7 @@ export async function storageDrill({ image: suppliedImage } = {}) {
   let failure;
   let cookie;
   async function http(path, body, expected = 200) {
-    let response;
-    try {
-      response = await fetch(origin + path, { headers: { origin, "content-type": "application/json",
-        "x-writer-id": "storage-drill-writer", ...(cookie ? { cookie } : {}) },
-        ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.timeout(15_000) });
-    } catch (error) {
-      throw storageHttpFailure(path, error);
-    }
+    const response = await storageHttpRequest(origin, path, body, cookie);
     const text = await response.text();
     assert.equal(response.status, expected, `${path}: ${text.slice(0, 1000)}`);
     if (response.headers.has("set-cookie")) cookie = response.headers.get("set-cookie").split(";")[0];
@@ -204,6 +210,15 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     assert.deepEqual(readdirSync(bundle).sort(), ["database.sqlite", "manifest.json"]);
     assert.equal(statSync(backups).mode & 0o777, 0o700);
     checked("Make backup stops/restarts the live server and verifies the private two-file bundle");
+    const permissionControl = JSON.parse(run("docker", ["run", "--rm", "--network", "none", "--user", "0:0",
+      "--tmpfs", "/permission-probe:rw,nosuid,nodev,mode=0711,size=64m",
+      "--mount", `type=bind,src=${backups},dst=/backup,readonly`, "--entrypoint", "node", image,
+      "--input-type=module", "-e", `await (${linuxBackupPermissions.toString()})(${JSON.stringify(backup.backupId)}, ${JSON.stringify(readFileSync(join(ROOT, "tools/storage-compose.mjs"), "utf8"))});`]).stdout);
+    requireCheck(permissionControl.privateBackupAndVerify && permissionControl.foreignReadDenied
+      && permissionControl.privateOperatorCopyVerified && permissionControl.administratorSelectionVerified
+      && permissionControl.operatorCopySelectionVerified, "private Linux ownership procedure failed");
+    console.error("storage drill Linux permissions: " + JSON.stringify(permissionControl));
+    checked("real non-root storage CLI backup/verify and explicit private administrator copy across differing Linux UIDs");
     await http(path + "/rewind", { nodeId: root });
     await http(path + "/fork", { nodeId: root, label: "After backup" });
     await http(path + "/moves", { uci: "c2c4" });

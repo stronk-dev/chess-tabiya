@@ -1,11 +1,61 @@
 import assert from "node:assert/strict";
+import { spawn, spawnSync } from "node:child_process";
+import { once } from "node:events";
 import test from "node:test";
-import { requireStorageCapacity, storageEnvironment, storageHttpFailure, storageReceipt, validateStorageCompose, validateStorageVolume } from "../appliance-drill.mjs";
+import { requireStorageCapacity, storageEnvironment, storageHttpFailure, storageHttpRequest, storageReceipt, validateStorageCompose, validateStorageVolume } from "../appliance-drill.mjs";
 
 const project = "tabiya-storage-drill-00000000-0000-4000-8000-000000000000";
 const volume = project + "-a";
 const image = "sha256:" + "a".repeat(64);
 const subject = { project, volume, port: 14001, image, backups: "/tmp/drill/backups" };
+
+test("recovery probes do not reuse a socket closed during synchronous maintenance or retry a mutation", { timeout: 10_000 }, async t => {
+  // A separate server can expire an idle connection while the maintenance client is blocked.
+  const child = spawn(process.execPath, ["--input-type=module", "-e", `
+    import { createServer } from 'node:http';
+    let mutations = 0;
+    const server = createServer((request, response) => {
+      if (request.method === 'POST') mutations++;
+      if (request.url === '/lost-response') {
+        request.resume();
+        request.on('end', () => request.socket.destroy());
+        return;
+      }
+      response.setHeader('content-type', 'application/json');
+      response.end(JSON.stringify({ mutations }));
+      if (request.url === '/before-maintenance') {
+        const socket = request.socket;
+        setTimeout(() => socket.destroy(), 100);
+      }
+    });
+    server.keepAliveTimeout = 60_000;
+    server.listen(0, '127.0.0.1', () => process.send(server.address().port));
+  `], { stdio: ["ignore", "ignore", "inherit", "ipc"] });
+  t.after(async () => { const exited = once(child, "exit"); child.kill(); await exited; });
+  const [port] = await once(child, "message");
+  const origin = `http://127.0.0.1:${port}`;
+  function maintenance() {
+    const result = spawnSync(process.execPath, ["-e", "Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 250)"], { timeout: 2000 });
+    assert.ifError(result.error);
+    assert.equal(result.status, 0);
+  }
+  // Control: this server otherwise offers a reusable connection, so close is not tautological.
+  const reusable = await fetch(origin + "/before-maintenance");
+  assert.equal(reusable.headers.get("connection"), "keep-alive");
+  assert.equal((await reusable.json()).mutations, 0);
+  // Actual recovery helper: fresh connections across the same block, exactly one POST received.
+  const before = await storageHttpRequest(origin, "/before-maintenance");
+  assert.equal(before.headers.get("connection"), "close");
+  assert.equal((await before.json()).mutations, 0);
+  await new Promise(setImmediate);
+  maintenance();
+  const after = await storageHttpRequest(origin, "/mutation", {});
+  assert.equal((await after.json()).mutations, 1);
+  // A real committed mutation with a lost response still fails. Never silently repeat it.
+  await assert.rejects(storageHttpRequest(origin, "/lost-response", {}),
+    error => error.cause?.cause?.code === "UND_ERR_SOCKET");
+  assert.equal((await storageHttpRequest(origin, "/counts").then(response => response.json())).mutations, 2);
+});
 
 test("storage HTTP diagnostics identify the request and transport cause without request data", () => {
   const cause = Object.assign(new Error("other side closed"), { code: "UND_ERR_SOCKET" });

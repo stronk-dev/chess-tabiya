@@ -50,6 +50,81 @@ disk fails.
 
 ## Commands
 
+### Private backup directory on Linux
+
+For ordinary rootful Docker on Linux, bind-mount permissions use numeric host UIDs, not user
+names. The current image runs as uid/gid **1000:1000**. A directory owned by a different host
+user at mode 0700 is deliberately inaccessible to that image. The application never changes
+host ownership or falls back to root. Confirm the uid/gid with `id` in the exact selected server
+image before setting up an installation; do not assume another image uses the same IDs.
+
+Use a **new dedicated service-owned directory**, not an existing personal backup folder:
+
+```sh
+export TABIYA_BACKUP_DIRECTORY=/var/lib/tabiya-backups
+sudo test ! -e "$TABIYA_BACKUP_DIRECTORY" &&
+  sudo install -d -m 0700 -o 1000 -g 1000 "$TABIYA_BACKUP_DIRECTORY"
+```
+
+If that path already exists, stop and inspect its ownership and contents. This setup is not a
+repair command for an existing directory. Do not recursively chown backups, loosen permissions
+or change the application user. `install` explicitly creates this new private directory with the
+service's numeric owner. See the [GNU install documentation](https://www.gnu.org/software/coreutils/manual/html_node/install-invocation.html).
+
+When your host uid differs, selecting a private bundle also needs administrative access. Run
+maintenance from the installation checkout with its normal Node/Make dependencies installed,
+passing the **same** selected Compose files/project and absolute directory explicitly:
+
+```sh
+sudo make storage-backup TABIYA_BACKUP_DIRECTORY=/var/lib/tabiya-backups \
+  COMPOSE_FILE=/srv/tabiya/compose.yaml COMPOSE_PROJECT_NAME=tabiya
+sudo make storage-verify TABIYA_BACKUP_DIRECTORY=/var/lib/tabiya-backups \
+  COMPOSE_FILE=/srv/tabiya/compose.yaml COMPOSE_PROJECT_NAME=tabiya \
+  BACKUP=/var/lib/tabiya-backups/<id>
+```
+
+The host wrapper runs with that explicit administrative authority; the server and storage-admin
+container still run as uid 1000. Do not use `sudo -E` or silently select a different Docker
+context. This procedure assumes the same rootful daemon, system-installed dependencies and
+deployment profile. Apply the same explicit selectors to restore/rehearsal/rollback commands.
+
+For an offline copy you can access as yourself, copy both files into a **new** private directory
+on your chosen backup destination. Substitute the actual backup id and destination first:
+
+```sh
+bundle_id=<id>
+copy_directory="$HOME/tabiya-offline/$bundle_id"
+install -d -m 0700 "$HOME/tabiya-offline"
+mkdir -m 0700 "$copy_directory" &&
+  sudo install -m 0600 -o "$(id -u)" -g "$(id -g)" \
+  "/var/lib/tabiya-backups/$bundle_id/database.sqlite" "$copy_directory/database.sqlite" &&
+  sudo install -m 0600 -o "$(id -u)" -g "$(id -g)" \
+  "/var/lib/tabiya-backups/$bundle_id/manifest.json" "$copy_directory/manifest.json"
+```
+
+Verify the copy before depending on it. Use the same immutable server image recorded in the
+selected Compose profile; this **read-only offline verifier only** runs as the copy's owner:
+
+```sh
+backup_image='<same immutable server image digest>'
+docker run --rm --network none --user "$(id -u):$(id -g)" \
+  --mount "type=bind,src=$HOME/tabiya-offline,dst=/backup,readonly" \
+  --entrypoint node "$backup_image" /app/apps/server/dist/storage-admin.js \
+  verify "/backup/$bundle_id"
+```
+
+Do not apply that user override to the running server, data volume, restore or writable
+maintenance. The original service-owned bundle must remain private and unchanged. There is no
+built-in offsite copy or encryption. The Make maintenance wrapper keeps the service uid;
+an operator-owned 0700 copy is not automatically readable by it.
+
+Docker Desktop and rootless/user-namespace-remapped Docker have different host mapping behavior.
+Do not apply this numeric-UID recipe to them without checking their mapping. The isolated Linux
+control below proves the CLI, selector and private-copy behavior, not a complete clean-host
+deployment on every Docker configuration. See Docker's
+[bind mount](https://docs.docker.com/engine/storage/bind-mounts/) and
+[user namespace](https://docs.docker.com/engine/security/userns-remap/) documentation.
+
 All commands need `TABIYA_BACKUP_DIRECTORY=<absolute host directory>`, which is mounted at
 `/backup`. `BACKUP=` names an existing bundle directory directly inside that host directory,
 using an absolute path or a filesystem path relative to the directory where Make runs. A bare
@@ -78,6 +153,9 @@ make storage-rollback BACKUP=…/<pre_upgrade id> CONFIRM_DATABASE=/data/chess-t
 make storage-upgrade-rehearsal BACKUP=…/<id>
 make storage-recover
 ```
+
+The example above assumes the host directory is already privately accessible to the image's
+runtime uid. On a differing-UID Linux host, use the explicit setup/administrative commands above.
 
 If you do not have Make, run
 `docker compose -f compose.yaml -f compose.maintenance.yaml run --rm storage-admin <operation>`.
@@ -241,14 +319,53 @@ image before reporting success. Six orchestration tests check both platform bind
 propagation, stale generated-result removal and runner mismatch. Removing the recovery call makes
 four fail. These controls are not actual native release runs.
 
-**Open Linux ownership requirement (D3726):** a separate isolated Linux tmpfs control created a
+**Initial Linux ownership control (D3726), 2026-10-11:** a separate isolated Linux tmpfs control created a
 uid-1001 directory at mode 0700, then attempted a write as uid 1000. It measured EACCES
 (`runtimeUid=1000`, `backupUid=1001`, `backupMode=448`). Root was used only to construct this
-temporary fixture; the write was non-root, with no host/operator bind or network. The current
-operator procedure does not resolve differing host and image UIDs, including host access to
+temporary fixture; the write was non-root, with no host/operator bind or network. The
+operator procedure at that checkpoint did not resolve differing host and image UIDs, including host access to
 private bundles. Do not make backups world-writable, run the app as root or silently change
 operator-directory ownership. The local pass cannot qualify this deployment case.
 
 All-data-class **process** recovery above remains separate. All-data-class image recovery,
 prior-release/v24 upgrade and rollback, both actual release architectures, clean-host permission
 handling and the final release journeys remain open. The storage RFC remains implementing.
+
+### Private ownership and typed failure checkpoint — 2026-10-12
+
+The updated `make storage-drill` finishes with exit zero on native linux/arm64 development image
+`sha256:dc2742b1d5193933c2e5893a1ad4a2874f8862788d68db7ba7f71c411eee327a`.
+All seven Make maintenance commands retain the actual branched restoration, stale-session refusal
+and byte-identical rollback/reboot. No runtime user, backup privacy, deadline or retry changes.
+
+Its isolated Linux fixture uses the **real bundled CLI** at uid 1000 against a uid-1001 mode-0700
+root. The predecessor returned refused/BACKUP_ID_COLLISION with no existing work directory.
+D3729 now returns failed/BACKUP_FAILED (CLI exit 3); a real existing work-directory collision
+still refuses without deleting foreign content. Source database bytes and private ownership stay
+unchanged on failure. The fixture's root process only constructs owned temporary permissions;
+it has no network and only a read-only mount of the test-owned original bundle.
+
+The fixture then runs actual GNU `install` to create a **new** service-owned directory, leaves the
+original operator-owned directory untouched, backs up/verifies as uid 1000 and exercises the
+actual host bundle-selection script. Selection as the foreign operator refuses; explicit
+administrator selection passes. Both files are copied privately using `install` to uid 1001,
+their bytes match the originals, and the real CLI plus selector verify the operator's copy.
+The setup/copy procedure above records those mechanics. D3726 still requires an actual differing-UID
+Linux **host** deployment: tmpfs process controls and Docker Desktop binds are not that proof.
+
+One preceding run failed on `/runs/storage-drill-run/rewind` with UND_ERR_SOCKET/other side closed
+while the server remained healthy. The client used pooled HTTP connections around synchronous
+external maintenance. Recovery probes now request connection close, and a real separate-server
+control checks fresh requests across a blocked client plus a lost mutation response received only
+once. There is no mutation retry. This mitigates that lifecycle hazard but does not attribute the
+first historical transport failure: D3723 remains open. An initial attempted expired-socket
+counterexample did not fail on this machine and was not retained as proof of the cause.
+
+Focused normal gates pass 130 release-policy controls, 33 actual-Make wrapper controls,
+42 SQLite/replacement checks, seven populated process journeys and clean types. These controls
+and the local image pass do not qualify prior-release, all-data-class image, dual-architecture
+release or clean-host recovery. Final `make verify-awake build test-browser-ci-awake` also exits
+zero: 4,994 software, seven unchanged-budget performance, 255 content and 304 browser passes,
+one existing optional Maia skip, zero retries and all 150 input/112 composition cells. Types,
+governance, packaging and build pass; the known entry-bundle warning remains. No push or
+current-revision GitHub/native-release claim follows.

@@ -643,8 +643,11 @@ async function createBackup(context: StorageOperationContext, reason: BackupReas
   const work = join(root, `.tabiya-work-${context.operationId}`);
   try {
     mkdirSync(work, { mode: 0o700 });
-  } catch {
-    throw refuse("BACKUP_ID_COLLISION", "the operation work directory already exists");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "EEXIST") {
+      throw refuse("BACKUP_ID_COLLISION", "the operation work directory already exists");
+    }
+    throw fail("BACKUP_FAILED", "cannot create the private backup work directory");
   }
   writeExclusive(join(work, ".owner"), `${context.operationId}\n`);
   let reserved: string | undefined;

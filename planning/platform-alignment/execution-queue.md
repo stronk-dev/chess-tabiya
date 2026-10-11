@@ -6,6 +6,17 @@
 
 ## Discovered execution qualification — 2026-10-11
 
+**2026-10-12 continuation:** [[D3729]] is **DONE LOCALLY** under
+`rfc/storage-backup-recovery.md` §§3/8/9: the real non-root CLI distinguishes inaccessible backup
+work directories from actual ID collisions. Private-root refusal, unchanged source/foreign
+ownership, actual GNU setup/copy and administrator/operator selection controls pass in Linux.
+The rebuilt local image completes all seven Make commands. The operator procedure is now
+defined; [[D3726]] returns to residual TODO for its actual differing-UID Linux **host** discharge.
+[[D3723]] records rewind/UND_ERR_SOCKET recurrence and fresh-connection mitigation with no
+mutation retry, but retains the original unexplained cause. Focused normal gates pass 130
+release-policy, 33 wrapper, 42 SQLite/replacement and seven populated process checks plus types.
+No whole capability/milestone or native release qualification advances.
+
 [[D3573]]/[[D3574]]/[[D3724]] are **DONE LOCALLY**: current Docker capacity is usable without
 pruning, and the ordinary native linux/arm64 image journey passes all seven Make maintenance
 commands, restored branches and exact rollback bytes. It correctly rejects sessions created after

@@ -49,6 +49,14 @@ D3503 is now path-backed done: staged software 3398/344 plus seven performance
 cases, content 227/23 and browser 145 passes/one optional skip/zero retries,
 including 112 composition cells. Hint remains implementing with the above holds.
 
+**Storage implementation checkpoint, 2026-10-12:** `storage-backup-recovery.md` remains
+implementing. D3729 repairs the real CLI's false backup-ID collision; actual Linux CLI/selector
+and private GNU setup/copy controls pass, followed by all seven local image recovery commands.
+D3726 retains actual differing-UID Linux host proof, and D3723 retains the original transport
+cause. All-class image, prior-release, both release architectures and full operator discharges
+remain open. This is delivery under existing §§3/8/9, not a new amendment or full completion;
+see `docs/storage-backup-and-recovery.md`.
+
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |

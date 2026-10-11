@@ -26411,3 +26411,47 @@ Campaign was the one capability with no API, route or content. Now:
   complete native release-platform proof is claimed. Ledger counts remain
   1,594 done, 161 refused and 1,722 live (632 TODO, 16 doing, 1,074 blocked),
   zero untriaged. UX and whole capability/milestone/content states are unchanged.
+
+### 2026-10-12 — Private backup ownership mechanics and truthful creation failures
+
+- Under the existing accepted `rfc/storage-backup-recovery.md` §§3/8/9, record and
+  close D3729: the real bundled uid-1000 CLI returned refused/BACKUP_ID_COLLISION
+  when a uid-1001 private root contained no colliding work directory. Only EEXIST
+  now has that refusal; other work-directory creation errors use failed/BACKUP_FAILED.
+  A real foreign-directory control retains its contents and source bytes; a new
+  operation still backs up and verifies.
+- Define D3726's explicit rootful-Linux operator procedure: new dedicated service
+  directory, private modes, administrator host selection and private offline copy.
+  The owned isolated Linux control executes actual GNU install, the real CLI and
+  the actual selector at uid 1000/1001. It never changes the original foreign root,
+  keeps source bytes and rejects unauthorized reads/selection. Operator-owned copies
+  retain matching bytes and verify as their owner. This is not an actual differing-UID
+  Linux host deployment; D3726 returns to that residual TODO, not done.
+- The pre-repair image reports rewind/UND_ERR_SOCKET/other side closed while healthy,
+  extending D3723's evidence. Recovery probes now use fresh connections around
+  synchronous external maintenance, with no mutation retry. A separate real server
+  verifies connection close and a delivered mutation whose response is lost exactly
+  once. The attempted deterministic expired-socket counterexample did not reproduce
+  and is not causal proof; D3723's original missing cause remains open. An initial
+  unsupported Docker Compose --tmpfs invocation was this task's harness error, not
+  a product defect; the fixture uses standard isolated docker run instead.
+- The rebuilt local native linux/arm64 development image
+  `sha256:dc2742b1d5193933c2e5893a1ad4a2874f8862788d68db7ba7f71c411eee327a`
+  finishes `make storage-drill` with exit zero: all seven Make maintenance commands,
+  exact branched restore, stale-session refusal and byte-identical rollback/reboot.
+  Cleanup removes only its owned resources. Focused normal gates pass 130 release-policy,
+  33 Make-wrapper, 42 SQLite/replacement and seven populated process checks plus types.
+  No new scope, schema, chess claim, deadline, retry, host chown or root application.
+- Keep all-data-class image, prior-release, actual both-architecture release, clean-host,
+  ingress/security, rights/resources and owner-use obligations open. Existing ledger,
+  queue, machine/readable roadmap, docs and RFC checkpoint are updated; no new tracker
+  or raw recording. Full serial gates follow before commit.
+- Final ordinary serial `make verify-awake build test-browser-ci-awake` exits zero:
+  4,994 software/377 files, seven unchanged-budget performance/four files,
+  255 content/26 files, clean types/governance/packaging/build and 304 browser
+  passes (239 ordinary, five real-content, 59 matrix, one packaged-production),
+  one existing optional Maia skip, zero retries and all 150 input/112 composition
+  cells. The known 3,188.86 kB entry/693.13 kB gzip warning remains. Ledger counts:
+  1,595 done, 161 refused, 1,722 live (632 TODO, 16 doing, 1,074 blocked), zero
+  untriaged. UX remains 273 complete/272 live/24 retired; whole capability,
+  milestone and official-content states are unchanged. No push or remote-CI claim.

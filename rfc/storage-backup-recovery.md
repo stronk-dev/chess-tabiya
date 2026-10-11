@@ -981,6 +981,17 @@ Another genuinely fresh independent review is required before acceptance or impl
 
 ## Changelog
 
+- 2026-10-12: D3729 corrects the existing typed failure boundary: only an actual EEXIST at
+  work-directory creation is BACKUP_ID_COLLISION; other failures are BACKUP_FAILED, without
+  changing source bytes or foreign ownership. The native image exercises the real non-root CLI,
+  actual GNU private-directory/copy setup and the real host selector across differing UIDs.
+  All seven Make recovery commands pass; 130 release-policy, 33 wrapper, 42 SQLite/replacement
+  and seven populated process checks pass. The operator doc now defines the explicit rootful-Linux
+  procedure; D3726 retains the actual differing-UID host discharge. Recovery probes use fresh HTTP
+  connections without retrying mutations; D3723's original transport cause remains open. This is
+  an implementation checkpoint under §§3/8/9, not amended scope or whole release qualification.
+  See `docs/storage-backup-and-recovery.md` for the compact measured record.
+
 - 2026-10-11: local native linux/arm64 development-image journey passes all seven real Make
   maintenance commands, exact branched restore and byte-identical rollback/reboot ([[D3573]]).
   Current capacity clears [[D3574]] without pruning. [[D3724]] corrects the harness's restored

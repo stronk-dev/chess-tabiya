@@ -239,6 +239,23 @@ describe("paths and the storage lock (§1)", () => {
 });
 
 describe("backup and verification (§§2–4, criteria 1–4, 18)", () => {
+  it("preserves an existing foreign work directory and refuses a real operation-id collision", async () => {
+    const state = setup();
+    seedCurrent(state.paths.database);
+    const work = join(state.paths.backupRoot!, `.tabiya-work-${state.context.operationId}`);
+    mkdirSync(work, { recursive: true, mode: 0o700 });
+    writeFileSync(join(work, "foreign-owner"), "not this operation");
+    const before = sha256File(state.paths.database);
+    const error = await expectAdminError(backupOperation(state.context), "BACKUP_ID_COLLISION");
+    expect(error.result).toBe("refused");
+    expect(readFileSync(join(work, "foreign-owner"), "utf8")).toBe("not this operation");
+    expect(sha256File(state.paths.database)).toBe(before);
+    expect(readdirSync(state.paths.backupRoot!)).toEqual([`.tabiya-work-${state.context.operationId}`]);
+    // A new operation id still admits a real backup without deleting the foreign directory.
+    expect(verify(await backup(state)).result).toBe("succeeded");
+    expect(readFileSync(join(work, "foreign-owner"), "utf8")).toBe("not this operation");
+  });
+
   it("backs up committed WAL-only transactions through the online API, not a main-file copy", async () => {
     const state = setup();
     seedCurrent(state.paths.database);

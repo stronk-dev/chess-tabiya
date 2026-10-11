@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3728]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3729]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -69,6 +69,20 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
+[[D3729]] closes the backup CLI's false collision classification under
+`rfc/storage-backup-recovery.md` §§3/8/9. The actual local native linux/arm64 image passes all
+seven Make recovery commands, with unchanged private backups, non-root runtime, exact branched
+restore, stale-session rejection and byte-identical rollback. D3726's explicit Linux ownership,
+administrator selection and private offline-copy procedure is now documented and exercised by
+real CLI/GNU-install/host-selector controls across differing UIDs. Its actual Linux **host**
+discharge remains TODO. A real socket control checks fresh recovery connections and no mutation
+retry; D3723's original transport cause remains open. Focused normal gates pass 130 release-policy,
+33 wrapper, 42 SQLite/replacement and seven populated process checks plus types. Final full serial
+verification/build/browser gates exit zero: 4,994 software/377 files, seven unchanged-budget
+performance/four files, 255 content/26 files, clean types/governance/packaging and 304 browser
+passes, one existing optional skip, zero retries and all 150 input/112 composition cells.
+No whole capability, milestone or native release qualification moves.
+
 [[D3300]]'s next seal-cost probes are finished, not promoted: descriptor batching
 is slower, while transient Set/ancestor-array candidates change local summed cold
 time only about 2%, with mixed results. All three preserve complete populations and
@@ -78,7 +92,7 @@ cold cost stays TODO and no milestone or whole capability advances. The existing
 D3300 receipt records the rejected measurements without raw research dumps.
 
 Final ordinary serial verification/build/browser gates on 2026-10-12 exit zero:
-4,993 software/377 files, seven unchanged-budget performance/four files,
+4,994 software/377 files, seven unchanged-budget performance/four files,
 255 content/26 files and 304 browser passes, one existing optional Maia skip,
 zero retries, all 150 input/112 composition cells and clean types/governance/packaging.
 The existing entry-bundle warning remains. These local results do not establish
