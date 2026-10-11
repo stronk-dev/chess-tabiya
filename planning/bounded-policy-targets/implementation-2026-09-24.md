@@ -65,3 +65,40 @@ semantic-validation "[26] admits both readings and the inspector-only immediate 
 - Criterion 27/29 (generated declaration-AST module) and 35 (the author-repair make target) are
   author-contract instruments; the exported TypeScript types are the protocol image.
 - Semantic-validation positives/negatives for the three subjects need independent authority.
+
+## Independent complete-batch controls — 2026-10-11 (D3720)
+
+`packages/runtime/src/bounded-target-oracle.test.ts` adds twelve finite legal-board
+controls, paired by colour. The test oracle uses whole-board material balances and
+source-piece labels; it calls no production threat/exchange/target/identity helper
+to construct expected results. It enumerates the complete named-capture set and
+every legal candidate, checks the exact immediate outcome and post-candidate
+exchange units, and independently checks existential and all-defences return
+quantifiers and visited counts. Published witnesses must retain the original
+attacker/victim; a universal witness is replayed against its whole nonempty legal
+defence set. The registered operation's three complete payload populations must
+equal the production batch, including populated defended/blocked zero-target cases.
+
+A checked-reply fixture supplies an actual universal result. Its nearby mating
+preparation has zero replies and supplies neither quantifier; other preparations
+in that position still supply a mixed existential result. Initial test errors
+(an inferred `promoted: false` field, the operation input's plural discriminant,
+and assuming no other existential preparation) were corrected as test errors,
+not recorded as production defects. Production collectors, policies, deadlines,
+caps, persisted data, pack bytes and canonical validation authorities are unchanged.
+
+The existing `make bounded-target-contract-production` includes these controls;
+the new file is also discovered by ordinary software CI. It is not a requirement
+to download a research recording, cover an authored pack, or keep an open-work
+status forever. These controls establish finite regression coverage, not the
+missing independent canonical authority, orientation, imported population or
+application caller discharge. All three projections remain inspector-only.
+
+Complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake`
+exits zero: 4,976 software/377 files, seven performance/four files, 255 content/26
+files, clean types/governance/packaging/build and 302 browser passes across all four
+tiers, one existing optional Maia skip, zero retries and all 150 input/112
+composition cells. The focused target contains 31 tests. The unchanged canonical
+receipt still reports 307 passing cases over 81 subjects, zero fully qualified.
+D3720 closes this finite regression-coverage gap only; no remote CI, whole
+capability, milestone or release-image completion follows.

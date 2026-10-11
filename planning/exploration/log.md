@@ -26174,3 +26174,30 @@ Campaign was the one capability with no API, route or content. Now:
   to its residual cold-cost TODO. No push, GitHub-CI, image recovery, whole capability
   or milestone completion is claimed. The owner's requested 1.0 inventory follows
   this bounded finish-up; the existing roadmap remains its authority.
+
+## 2026-10-11 (codex) — independent complete bounded consequence controls (D3720)
+
+- Add twelve finite both-colour legal-board controls under the accepted local
+  bounded-policy-targets contract. Expected results use independent whole-board
+  material balances and original-piece labels, not production threat, target,
+  exchange or identity helpers. Check every named target and legal candidate,
+  immediate causes, existential/all-defences returns, full nonempty defence sets,
+  witness/refutation identities and visited counts. The registered operation's
+  three complete populations equal the real service batch.
+- Include defended/blocked targets, captured attackers, a genuine universal
+  checked-reply case and its terminal-preparation neighbour. Zero replies cannot
+  provide either quantifier. Correct the initial test expectations/discriminant;
+  those errors are not production defects. No production bytes, conventions,
+  caps/deadlines, authority records, source populations or pack data change.
+- The ordinary software tier discovers the new file; the existing focused Make
+  target includes it (31 tests total). Complete normal serial
+  `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  4,976 software/377 files, seven performance/four files, 255 content/26 files,
+  clean types/governance/packaging/build and 302 browser passes across all four
+  tiers, one existing optional Maia skip, zero retries and all 150 input/112
+  composition cells. Canonical validation remains 307 passing cases/81 subjects,
+  zero fully qualified. No raw recording is a test or progress dependency.
+- Close D3720 with its permanent test path and reconcile the existing tracker,
+  docs, implementation receipt, queue and roadmap. Canonical authority, orientation,
+  population, actual consumer adoption and learner eligibility stay open. No
+  whole capability/milestone, exact-revision remote CI or release-image claim.

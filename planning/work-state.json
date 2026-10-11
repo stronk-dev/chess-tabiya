@@ -30874,6 +30874,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3720",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b31a28b02109cbbaa42299195745c12fd9d3dce12135ce3b315640bf1514fe4b",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/bounded-target-oracle.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

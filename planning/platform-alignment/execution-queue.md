@@ -6,6 +6,16 @@
 
 ## Discovered execution qualification — 2026-10-11
 
+[[D3720]] is **DONE LOCALLY**, evidence-foundation under the accepted bounded-policy-targets
+local contract. Twelve finite both-colour boards independently enumerate the complete
+target/candidate populations, immediate removal causes and existential/all-defences
+returns, including defended/blocked targets and a terminal preparation. The real batch
+and registered operation agree. Full normal serial verification/build passes 4,976
+software, seven performance, 255 content and 302 browser checks, one existing
+optional skip, zero retries and all 150 input/112 composition cells. No canonical
+authority, source/consumer reach, learner eligibility or whole release gate is closed.
+Details remain in `planning/bounded-policy-targets/implementation-2026-09-24.md`.
+
 [[D3300]]'s private structural-join hashing correction is **DONE LOCALLY** under the
 existing longitudinal-store full-population contract; the residual cold-cost item
 returns to TODO. No new cache, source, collector meaning or content revision ships.

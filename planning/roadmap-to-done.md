@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3719]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3720]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3719]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
-retired; 1,721 live ledger items, all assigned, alongside 1,586 done and 161 refused. The 462
+Current checked inventory through [[D3720]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,587 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,17 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3720]] adds twelve independent finite-board controls of the complete local bounded
+material-target batch: every named target/legal candidate, immediate removal cause,
+existential/all-defences return, original-piece witness and nonempty defence set.
+The registered operation retains the exact complete batch populations. Full normal
+serial gates/build pass 4,976 software/377 files, seven performance/four files,
+255 content/26 files and 302 browser checks, one existing optional skip, zero retries,
+all 150 input/112 composition cells and clean types/governance/packaging. This closes
+finite regression coverage only. All three projections remain inspector-only; the
+307 canonical cases/81 subjects/zero fully qualified, consumer bindings, useful
+guidance and whole capability/milestone/release obligations remain unchanged.
 
 [[D3719]] repairs a false recorded checking zwischenzug when legal castling replaces
 the original king recapturer with its secondary rook on the same square. Shared v2

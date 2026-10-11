@@ -3225,7 +3225,7 @@ bounded-target-census:
 # rfc/bounded-policy-targets.md §7: the production service, factories and protocol tests.
 .PHONY: bounded-target-contract-production
 bounded-target-contract-production:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts packages/runtime/src/bounded-target-oracle.test.ts
 
 bounded-target-repeat-review:
 	./node_modules/.bin/vitest run --config tools/d1962-bounded-target-repeat-review/vitest.config.ts

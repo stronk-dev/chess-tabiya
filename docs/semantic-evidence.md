@@ -110,6 +110,15 @@ the sealed factory and registered Full Inspector wire presentation (`make semant
 This kernel repair does not add the response predicate to the shared candidate packet or discharge
 the semantic-collector RFC's remaining consumer/use obligations.
 
+The separate local bounded-target service retains an exact named material capture,
+its immediate preservation/removal for every legal candidate, and existential versus
+all-defences return within the declared horizon. `make bounded-target-contract-production`
+includes twelve independent finite-board controls over complete populations, published
+witness/refutation identities, nonempty universal defence sets and visited counts. The
+oracle uses whole-board material balances, not production exchange/target helpers.
+This is regression coverage; the canonical validation authorities and application
+consumer bindings remain incomplete, and these three projections stay inspector-only.
+
 **Eligibility** is an exact event-to-consumer permission. It says that an event may reach that
 consumer; it does not say the event is useful, visible or enabled. Every row names its validation
 posture explicitly (`semanticValidation`): `required` compiles eligible only over a `passed`
