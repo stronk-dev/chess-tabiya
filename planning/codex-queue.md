@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3300]] seal-cost experiments are finished and rejected, not left
+in flight or described as delivered optimizations. Descriptor batching is 14.35%
+slower; transient Set/ancestor-array candidates improve summed cold time only
+2.00%/2.10%, with mixed pairs. All complete events/receipts/rows remain identical.
+Production sealing is unchanged; two permanent D3721 alias/hidden/symbol/sparse-array
+regressions pass within 53 authority tests. Residual cold cost stays TODO, not done.
+Receipt: planning/longitudinal-store/d3300-index-reuse-2026-10-11.md.
+
+Final normal serial verification/build on 2026-10-12 exits zero: 4,993 software,
+seven performance, 255 content and 304 browser passes, one existing optional Maia
+skip, zero retries, all 150 input/112 composition cells. No production change,
+qualification, whole milestone or remote-CI/release-image promotion.
+
 2026-10-11 — [[D3719]] closes the false same-recapturer join in recorded
 check zwischenzug. Four predecessor-red controls reproduce castling's secondary-rook
 substitution through legal compiler/factory inputs. Shared recorded v2 enforces original

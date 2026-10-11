@@ -67,6 +67,33 @@ function code(value: EvidenceContractDeclarations): string | undefined {
 }
 
 describe("evidence manifest compiler", () => {
+  it("D3721 keeps aliased, hidden and symbol descendants frozen without copying their identity", () => {
+    const symbol = Symbol("fixture");
+    const hidden = { count: 2 };
+    const symbolic = { square: "e4" };
+    const shared = Object.assign(Object.create(null), { count: 2, [symbol]: symbolic });
+    Object.defineProperty(shared, "hidden", { value: hidden, enumerable: false });
+    const payload = { left: shared, right: [shared, shared] };
+    const expectedDigest = evidenceDigest(payload);
+    const value = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, payload);
+    expect(value.payload).toBe(payload);
+    expect(value.payload.right[0]).toBe(value.payload.left);
+    expect(value.payload.right[1]).toBe(value.payload.left);
+    for (const entry of [payload, payload.right, shared, hidden, symbolic]) expect(Object.isFrozen(entry)).toBe(true);
+    expect(evidenceValueReceipt(value).payloadDigest).toBe(expectedDigest);
+    expect(() => assertDeclaredEvidence(value)).not.toThrow();
+  });
+
+  it("D3721 inherited sparse-array values remain uncached and revalidated", () => {
+    const prototype = Object.assign(Object.create(Array.prototype), { 0: "before" });
+    const payload = new Array(1);
+    Object.setPrototypeOf(payload, prototype);
+    const value = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, payload);
+    expect(() => assertDeclaredEvidence(value)).not.toThrow();
+    prototype[0] = "after";
+    expect(() => assertDeclaredEvidence(value)).toThrow(/receipt disagrees/u);
+  });
+
   it("D3721 seals children beneath an already-frozen payload before caching its digest", () => {
     const child = { fen: "original" };
     const values = [child];

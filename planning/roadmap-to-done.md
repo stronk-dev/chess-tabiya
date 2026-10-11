@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3728]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3728]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -28,7 +28,7 @@ is **partial**, not complete. Official content, remaining workflows and release
 proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
-## Product inventory — 2026-10-11
+## Product inventory — 2026-10-12
 
 ### At a glance
 
@@ -68,6 +68,21 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3300]]'s next seal-cost probes are finished, not promoted: descriptor batching
+is slower, while transient Set/ancestor-array candidates change local summed cold
+time only about 2%, with mixed results. All three preserve complete populations and
+outputs; none ships. Two permanent D3721 alias/hidden/symbol/sparse-array controls
+extend integrity coverage. Production and qualification stay unchanged, residual
+cold cost stays TODO and no milestone or whole capability advances. The existing
+D3300 receipt records the rejected measurements without raw research dumps.
+
+Final ordinary serial verification/build/browser gates on 2026-10-12 exit zero:
+4,993 software/377 files, seven unchanged-budget performance/four files,
+255 content/26 files and 304 browser passes, one existing optional Maia skip,
+zero retries, all 150 input/112 composition cells and clean types/governance/packaging.
+The existing entry-bundle warning remains. These local results do not establish
+current-revision GitHub CI or complete native release qualification.
 
 [[D3727]] repairs an accepted authored-walk defect: nested forks follow their first child
 and report skipped alternatives rather than silently ending the preview. Four desktop/phone

@@ -26382,3 +26382,32 @@ Campaign was the one capability with no API, route or content. Now:
   helper type error; it was corrected to retain the missing-cookie negative,
   not hidden by a deadline or test change. Known bundle-size debt remains.
   No current-revision GitHub CI or actual release-platform proof is claimed.
+
+## 2026-10-11 — D3300: finish and reject unconvincing seal-cost probes
+
+- Complete three disposable implementations against the unchanged production
+  baseline in eight counterbalanced fresh-process pairs each. All complete rows,
+  events, factory/input receipts, 2,199 legal edges, 196,589 events and forty
+  checkpoints per side agree. Descriptor batching is 14.35% slower; invocation-local
+  Set/ancestor-array candidates change summed cold time by only -2.00%/-2.10%, with
+  mixed pairs. Reject all three; production sealing stays unchanged. Existing
+  D3300 receipt records the compact measurements; no raw dump or new tracking
+  authority is retained.
+- Keep two permanent D3721 integrity regressions: aliased, hidden and symbol
+  descendants remain deeply frozen with original identities; inherited sparse-array
+  data remains uncached and a changed prototype fails revalidation. All 53 focused
+  authority tests pass. Remove the transient-allocation test because no unproven
+  data-structure choice should become a contract.
+- Return D3300 to residual cold-cost TODO rather than pretending an inconclusive
+  experiment completed it. Source contracts, projection population, canonical
+  qualification, content, whole capability and milestone states are unchanged.
+  Normal serial verification/build/browser gates follow before commit.
+- Final ordinary serial `make verify-awake build test-browser-ci-awake` finishes
+  2026-10-12 with exit zero: 4,993 software/377 files, seven unchanged-budget
+  performance/four files, 255 content/26 files, clean types/governance/packaging/build
+  and 304 browser passes (239 ordinary, five real-content, 59 matrix, one
+  packaged-production), one existing optional Maia skip, zero retries and all
+  150 input/112 composition cells. Known bundle debt remains; no remote-CI or
+  complete native release-platform proof is claimed. Ledger counts remain
+  1,594 done, 161 refused and 1,722 live (632 TODO, 16 doing, 1,074 blocked),
+  zero untriaged. UX and whole capability/milestone/content states are unchanged.
