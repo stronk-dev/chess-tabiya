@@ -54,12 +54,12 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Social play | Live sessions, imports, invitations and native match foundations | Coherent pairing/clock/result/rematch/provider-follow workflows and supported variant journeys |
 | Coach/streamer | Classrooms, assignments and actual consented completed/incomplete submission inspection/revocation | Guided setup, complete Academy/Stream compositions, audience preview/voting/delay and broader multi-user journeys |
 | Accessibility | Shared board input, permanent cells, responsive in-run shell, themes and evidence paint | Route-wide post-gesture/zoom/focus/device checks, owner screen-reader use and PWA install/update/offline behavior |
-| Account/data | Authorization, private export/import/delete and native restored branched-play journeys | Guest/claim, complete object/lifecycle coverage and integrated operator recovery |
+| Account/data | Authorization, private export/import/delete, native restored branched play and populated installation recovery | Guest/claim, complete object/lifecycle coverage and built-image operator recovery |
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3715]]: 273 UX items complete, 272 live and 24
-retired; 1,722 live ledger items, all assigned, alongside 1,581 done and 161 refused. The 462
+Current checked inventory through [[D3715]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,582 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,21 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D608]] closes the populated native-process backup/recovery residual. The bundled server,
+real worker and maintenance CLI preserve every stored row after backup, complete source loss
+and restore into a different empty data directory. Every server data class and 28 named families
+are nonempty; restarted APIs retain identities, documents, grants, branches and charged history,
+then bot play and Campaign entry continue without duplicated commands/rewards. Historical rated
+storage is an explicitly abandoned/voided fixture, not a calibrated mock game. All seven process
+journeys, 41 SQLite/replacement and 33 Make wrapper controls pass. The content-dependent process
+suite moves to the content tier without changing deadlines. This does not close the built-image,
+cross-version, architecture or final-release obligations; D3573/D3574 still hold image recovery.
+Complete normal `make roadmap-receipt verify-awake` exits zero: 4,876 software checks/374
+files, seven performance checks/four files and 255 content checks/26 files, clean types,
+governance, packaging, application build and corpus checks. Six existing process cases moved
+from software to content alongside the new journey; the lower software total is tier assignment,
+not dropped coverage. No fresh browser, built-image or current-revision GitHub result is claimed.
 
 [[D3715]] identifies why the attempted quiet Nudge recovery never became quiet: its
 source emits both colours' island-count states, including unchanged and zero counts,
@@ -4430,7 +4445,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   249 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   289 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

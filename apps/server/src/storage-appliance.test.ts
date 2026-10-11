@@ -4,7 +4,7 @@
 // database. Backup → loss → restore → boot proves stable identities through a restarted server,
 // the live server excludes maintenance, and a newer database never reaches an HTTP listener.
 import { spawn, spawnSync, type ChildProcess } from "node:child_process";
-import { mkdirSync, mkdtempSync, readdirSync, renameSync, rmdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmdirSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { networkInterfaces, tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -13,7 +13,10 @@ import { fileURLToPath } from "node:url";
 
 import { buildSync } from "esbuild";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { catalogEntryFor, createRun, runEventHeadDigest, type DrillRun } from "@chess-tabiya/runtime";
+import { RATED_OPPONENT_CALIBRATION } from "@chess-tabiya/runtime/rating";
 
+import { ACCOUNT_DATA_INVENTORY } from "./account-data.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -137,6 +140,21 @@ function admin(state: Appliance, args: readonly string[]): { readonly status: nu
 
 const writeHeaders = (state: Appliance, cookie?: string) => ({ "content-type": "application/json", origin: state.origin, ...(cookie === undefined ? {} : { cookie }) });
 
+/** Independent read of all persisted rows, not the backup manifest's counts or export projection. */
+function storedRows(database: string): Record<string, readonly object[]> {
+  const db = new DatabaseSync(database, { readOnly: true });
+  try {
+    const tables = db.prepare("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all();
+    return Object.fromEntries(tables.map(({ name }) => {
+      const table = String(name);
+      expect(table).toMatch(/^[a-z_]+$/u);
+      const rows = db.prepare(`SELECT * FROM "${table}"`).all();
+      rows.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+      return [table, rows];
+    }));
+  } finally { db.close(); }
+}
+
 describe("appliance process boundary", { timeout: 240_000 }, () => {
   it("refuses readiness while the actual web shell is missing and recovers on restoration", async () => {
     const state = await appliance();
@@ -178,7 +196,7 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     await stop(server);
   });
 
-  it("backup → loss → fresh restore → boot with the worker running keeps every identity", async () => {
+  it("backup → loss → fresh restore → boot keeps a learner and imported-game identity", async () => {
     const state = await appliance();
     const first = startServer(state);
     await ready(state, first);
@@ -232,6 +250,167 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     const runs = await (await fetch(`${state.origin}/runs`, { headers: { cookie: again } })).json() as { runs: { id: string }[] };
     expect(runs.runs.map((run) => run.id)).toContain("kept-game");
     expect(await (await fetch(`${state.origin}/healthz`)).json()).toMatchObject({ status: "ok", longitudinal: { status: "ready" } });
+    await stop(second);
+  });
+
+  it("D608: restores nonempty application classes to a new data directory and continues real workflows", async () => {
+    const state = await appliance();
+    const fixtureEnv = {
+      NODE_ENV: "development",
+      DRAFT_PACK_FILES: [join(ROOT, "content/drafts/line-boundary.browser.json"), join(ROOT, "schemas/fixtures/drill-pack/campaign-boss.browser.json")].join(","),
+      DRAFT_CAMPAIGN_FILES: join(ROOT, "tests/browser/fixtures/campaign.browser.json"),
+    };
+    const first = startServer(state, fixtureEnv);
+    await ready(state, first);
+    async function register(handle: string) {
+      const response = await fetch(`${state.origin}/auth/register`, { method: "POST", headers: writeHeaders(state), body: JSON.stringify({ handle, password: `${handle}-password-long` }) });
+      expect(response.status, await response.clone().text()).toBe(201);
+      return { cookie: response.headers.get("set-cookie")!.split(";", 1)[0]!, learner: (await response.json() as { learner: { id: string } }).learner };
+    }
+    const keeper = await register("recovery_keeper");
+    const pupil = await register("recovery_pupil");
+    const outsider = await register("recovery_outsider");
+    async function call(target: Appliance, cookie: string, method: string, path: string, body?: unknown, status = 200) {
+      const response = await fetch(`${target.origin}${path}`, { method, headers: { ...writeHeaders(target, cookie), "x-writer-id": "writer-recovery" }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+      expect(response.status, `${method} ${path}: ${await response.clone().text()}`).toBe(status);
+      return await response.json() as Record<string, any>;
+    }
+    const owner = (method: string, path: string, body?: unknown, status = 200) => call(state, keeper.cookie, method, path, body, status);
+    const policyConfig = { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } as const;
+    const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    await owner("POST", "/runs/import", { id: "recovery-import", side: "white", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig, seed: 3, source: { kind: "pgn", pgn: "1. e4 e5 2. Nf3 *" } }, 201);
+    const played = (await owner("POST", "/runs", { id: "recovery-branches", session: { kind: "position", start: { fen: initialFen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig, seed: 4 }, 201)).run as DrillRun;
+    await owner("POST", `/runs/${played.id}/moves`, { uci: "e2e4" });
+    await owner("POST", `/runs/${played.id}/rewind`, { nodeId: played.nodes[0]!.id });
+    const forked = (await owner("POST", `/runs/${played.id}/fork`, { nodeId: played.nodes[0]!.id, label: "Queen pawn retry" })).run as DrillRun;
+    await owner("POST", `/runs/${played.id}/moves`, { uci: "d2d4" });
+    await owner("PUT", `/runs/${played.id}/marks`, { nodeId: played.nodes[0]!.id, branchId: forked.activeCursor.branchId, scope: "position", shapes: [{ brush: "blue", orig: "d2", dest: "d4" }] });
+    await owner("POST", `/runs/${played.id}/schedule`, { nodeId: played.nodes[0]!.id, kind: "blocked" }, 201);
+    const repertoire = (await owner("POST", "/repertoires", { name: "Recovered repertoire", side: "white", targetElo: 1500, coverageDenominator: 100, source: { kind: "pgn", pgn: "1. e4 e5 2. Nf3 *" } }, 201)).repertoire;
+
+    // Existing schema content is copied for storage/authoring, never endorsed as official theory.
+    const document = JSON.parse(readFileSync(join(ROOT, "schemas/drill_pack.example.json"), "utf8"));
+    document.id = "recovery-community-pack";
+    document.version = "1.0.0";
+    document.provenance = { reviewStatus: "draft", sources: ["schemas/drill_pack.example.json; recovery fixture, not chess review"], corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "Storage recovery fixture has no corpus judgement." } };
+    const draft = (await owner("POST", "/packs/drafts", { document }, 201)).draft;
+    expect(draft.validation.valid).toBe(true);
+    const playtest = (await owner("POST", `/packs/drafts/${draft.id}/playtest`, {}, 201)).run as DrillRun;
+    await owner("POST", `/packs/drafts/${draft.id}/register`, {}, 201);
+    const shapeDocument = structuredClone(await owner("GET", "/shapes/carlsbad"));
+    delete shapeDocument.channel;
+    delete shapeDocument.publisherHandle;
+    delete shapeDocument.digest;
+    shapeDocument.id = "recovery-community-shape";
+    shapeDocument.version = "1.0.0";
+    const shapeDraft = (await owner("POST", "/shapes/drafts", { document: shapeDocument }, 201)).draft;
+    expect(shapeDraft.validation.valid).toBe(true);
+    await owner("POST", `/shapes/drafts/${shapeDraft.id}/register`, {}, 201);
+
+    const classroom = (await owner("POST", "/classrooms", { name: "Recovered study group" }, 201)).classroom;
+    await owner("POST", `/classrooms/${classroom.id}/members`, { op: "invite", handle: "recovery_pupil", role: "learner" }, 201);
+    await call(state, pupil.cookie, "POST", `/classrooms/${classroom.id}/members`, { op: "accept" });
+    const assignment = (await owner("POST", `/classrooms/${classroom.id}/assignments`, { packId: document.id, note: "Retain my submitted branch" }, 201)).assignment;
+    const submitted = (await call(state, pupil.cookie, "POST", "/runs", { id: "recovery-submission", session: { kind: "pack", packId: document.id }, policyConfig, seed: 8 }, 201)).run as DrillRun;
+    await call(state, pupil.cookie, "POST", `/assignments/${assignment.id}/submissions`, { runId: submitted.id }, 201);
+    const session = (await owner("POST", "/sessions", { runId: played.id, kind: "stream", title: "Recovered rehearsal", boardControl: "host_directed" }, 201)).session;
+    await owner("POST", `/cohorts/${classroom.id}/standing`, { op: "open", windowFrom: "2026-01-01T00:00:00.000Z" }, 201);
+    await call(state, pupil.cookie, "POST", `/cohorts/${classroom.id}/standing`, { op: "publish" }, 201);
+
+    const bot = (await owner("POST", "/runs", { id: "recovery-bot", session: { kind: "position", start: { fen: initialFen, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", profile: catalogEntryFor("human-baseline.1400@1")!.reference } }, policyConfig, seed: 9 }, 201)).run as DrillRun;
+    const botRequest = { requestId: "botreq_recoveryxxxxxxxx", expectedNodeId: bot.activeCursor.nodeId, expectedBranchId: bot.activeCursor.branchId, expectedEventHeadDigest: runEventHeadDigest(bot) };
+    const botReply = await owner("POST", `/runs/${bot.id}/opponent-ply`, botRequest);
+    expect(botReply.result.kind).toBe("committed");
+
+    const createdCampaign = await owner("POST", "/campaigns/browser-fixture-campaign/runs", { campaignVersion: 1, commandId: "recovery-campaign-create" }, 201);
+    const campaignId = createdCampaign.result.campaignRunId as string;
+    const started = await owner("POST", `/campaign-runs/${campaignId}/nodes/f1-b/start`, { expectedRevision: 1, commandId: "recovery-campaign-start" }, 201);
+    const encounterId = started.result.response.playRunId as string;
+    await owner("POST", `/runs/${encounterId}/moves`, { uci: "c1e3" });
+    const encounter = (await owner("POST", `/runs/${encounterId}/moves`, { uci: "e7e6", actor: "system" })).run as DrillRun;
+    await owner("POST", `/runs/${encounterId}/fork`, { nodeId: encounter.activeCursor.nodeId, campaignCommand: { commandId: "recovery-campaign-fork", expectedCampaignRevision: 2, expectedPlayRevision: encounter.events.at(-1)!.seq } });
+    const submitCommand = { runId: encounterId, expectedRevision: 3, commandId: "recovery-campaign-submit" };
+    const campaignSubmitted = await owner("POST", `/campaign-runs/${campaignId}/nodes/f1-b/submit`, submitCommand);
+
+    const paths = ["/runs/recovery-import/events", `/runs/${played.id}/events`, `/runs/${played.id}/marks`, `/runs/${playtest.id}/events`, `/runs/${submitted.id}/events`, `/runs/${bot.id}/events`, "/progress", `/repertoires/${repertoire.id}`, `/packs/drafts/${draft.id}`, `/packs/${document.id}`, `/shapes/drafts/${shapeDraft.id}`, `/shapes/${shapeDocument.id}`, `/classrooms/${classroom.id}`, "/assignments", `/sessions/${session.id}`, `/campaign-runs/${campaignId}`];
+    const beforeReads = new Map<string, Record<string, any>>();
+    for (const path of paths) beforeReads.set(path, await owner("GET", path));
+    // Shutdown drains/abandons an in-flight claim; it does not promise to finish the backlog.
+    // Wait on actual persisted jobs for BOTH owners instead of assuming readiness means caught up.
+    await expect.poll(async () => {
+      const exports = await Promise.all([keeper, pupil].map(account => call(state, account.cookie, "POST", "/auth/export", { password: account === keeper ? "recovery_keeper-password-long" : "recovery_pupil-password-long" })));
+      return exports.every(bundle => {
+        const jobs = bundle.behavioralProfiles.value.filter((value: { table: string }) => value.table === "learner_observation_jobs");
+        return jobs.length > 0 && jobs.every((value: { record: { state: string; requested_seq: number; completed_seq: number } }) => value.record.state === "complete" && value.record.requested_seq === value.record.completed_seq);
+      });
+    }, { timeout: 90_000, interval: 200 }).toBe(true);
+    await stop(first);
+
+    // Historical rated storage must survive even when the current mock provider cannot admit
+    // new calibrated games. Use the real transactional storage API, not fabricated SQL rows,
+    // engine claims or a manufactured win. This empty game is explicitly abandoned/voided.
+    const history = new SQLiteRunStorage(state.database, { onMigration: () => {} });
+    const at = "2026-09-24T12:00:00.000Z";
+    const rated = createRun({ id: "recovery-historical-rated", session: { kind: "position", start: { fen: initialFen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1400 } }, sessionDigest: "sha256:" + "a".repeat(64), policyConfig, seed: 10, createdAt: at });
+    const rung = RATED_OPPONENT_CALIBRATION.rungs.find(value => value.band === 1400)!;
+    history.createRatedRun(rated, { learnerId: keeper.learner.id, writerId: "writer-recovery" }, "Historical recovery fixture", { runId: rated.id, learnerId: keeper.learner.id, calibrationId: RATED_OPPONENT_CALIBRATION.id, opponentBand: rung.band, opponentRating: rung.rating, opponentRd: rung.rd, learnerSide: "white", startPieceCount: 32, engineIdentityDigest: RATED_OPPONENT_CALIBRATION.engine.containerDigest, state: "open", startedAt: at });
+    history.voidRatedGame(rated.id, "abandoned", "2026-09-24T12:01:00.000Z");
+    const historicalGames = history.ratedGames(keeper.learner.id);
+    const historicalPeriods = history.ratingPeriods(keeper.learner.id);
+    history.close();
+    const before = storedRows(state.database);
+    expect(Object.keys(before).sort()).toEqual(ACCOUNT_DATA_INVENTORY.filter(entry => entry.kind === "table").map(entry => entry.store).sort());
+    const classes = ACCOUNT_DATA_INVENTORY.filter(entry => entry.kind === "table");
+    for (const dataClass of new Set(classes.map(entry => entry.dataClass))) {
+      expect(classes.filter(entry => entry.dataClass === dataClass).some(entry => before[entry.store]!.length > 0), `${dataClass} must be nonempty before backup`).toBe(true);
+    }
+    // Name the critical families as well: one populated class cannot cover an empty sibling.
+    const nonemptyFamilies = [
+      "attempts", "schedules", "repertoire_moves", "pack_drafts", "playtest_documents",
+      "registered_packs", "shape_drafts", "registered_shapes", "run_marks", "classrooms",
+      "classroom_members", "assignments", "assignment_submissions", "run_grants", "live_sessions",
+      "session_journal", "learner_ratings", "rated_games", "rating_periods", "cohort_standings",
+      "standing_members", "campaign_runs", "campaign_run_creations", "campaign_events",
+      "campaign_mutation_commands", "learner_observations", "learner_observation_denominators",
+      "learner_structure_stats",
+    ];
+    for (const table of nonemptyFamilies) expect(before[table], table).not.toHaveLength(0);
+    const backedUp = admin(state, ["backup"]);
+    expect(backedUp.status, backedUp.stdout).toBe(0);
+    const bundle = join(state.backups, String(backedUp.receipt.backupId));
+    expect(admin(state, ["verify", bundle]).receipt).toMatchObject({ result: "succeeded", compatibility: "current" });
+    // Complete media loss, followed by a DIFFERENT initially empty data directory.
+    for (const entry of readdirSync(dirname(state.database))) if (entry.startsWith("chess-tabiya.sqlite")) rmSync(join(dirname(state.database), entry));
+    expect(existsSync(state.database)).toBe(false);
+    const destination = { ...await appliance(), backups: state.backups };
+    expect(existsSync(destination.database)).toBe(false);
+    const restored = admin(destination, ["restore", bundle]);
+    expect(restored.status, restored.stdout).toBe(0);
+    expect(restored.receipt).toMatchObject({ operation: "restore", result: "succeeded", migration: "not_required", preRestoreBackupId: null });
+    expect(storedRows(destination.database)).toEqual(before);
+    const second = startServer(destination, fixtureEnv);
+    await ready(destination, second);
+    // Original credentials and session authority survive; no recreated accounts or ids.
+    expect((await call(destination, keeper.cookie, "GET", "/auth/session")).learner.id).toBe(keeper.learner.id);
+    expect((await call(destination, pupil.cookie, "GET", "/auth/session")).learner.id).toBe(pupil.learner.id);
+    for (const path of paths) expect(await call(destination, keeper.cookie, "GET", path), path).toEqual(beforeReads.get(path));
+    const ratingHistory = await call(destination, keeper.cookie, "GET", "/rating/history");
+    expect(ratingHistory).toEqual({ games: historicalGames, periods: historicalPeriods });
+    expect((await call(destination, keeper.cookie, "GET", "/rating")).rating).not.toBeNull();
+    const exported = await call(destination, keeper.cookie, "POST", "/auth/export", { password: "recovery_keeper-password-long" });
+    for (const section of ["ownedRuns", "sharedAccess", "progress", "marks", "repertoires", "drafts", "publications", "liveAndSocial", "behavioralProfiles"]) expect(exported[section].value, section).not.toHaveLength(0);
+    await call(destination, outsider.cookie, "GET", `/runs/${submitted.id}/events`, undefined, 404);
+    await call(destination, outsider.cookie, "GET", `/packs/drafts/${draft.id}`, undefined, 404);
+    const replayed = await call(destination, keeper.cookie, "POST", `/runs/${bot.id}/opponent-ply`, botRequest);
+    expect(replayed.result.kind).toBe("replayed_idempotent");
+    expect(await call(destination, keeper.cookie, "GET", `/runs/${bot.id}/events`)).toEqual(beforeReads.get(`/runs/${bot.id}/events`));
+    const continued = await call(destination, keeper.cookie, "POST", `/runs/${bot.id}/moves`, { uci: "c7c5" });
+    expect(continued.run.events.length).toBeGreaterThan(botReply.run.events.length);
+    const restoredCampaign = await call(destination, keeper.cookie, "GET", `/campaign-runs/${campaignId}`);
+    const submitReplay = await call(destination, keeper.cookie, "POST", `/campaign-runs/${campaignId}/nodes/f1-b/submit`, submitCommand);
+    expect(submitReplay.result).toEqual(campaignSubmitted.result);
+    expect(await call(destination, keeper.cookie, "GET", `/campaign-runs/${campaignId}`)).toEqual(restoredCampaign);
+    await call(destination, keeper.cookie, "POST", `/campaign-runs/${campaignId}/nodes/f2-a/start`, { expectedRevision: restoredCampaign.campaignRun.revision, commandId: "recovery-campaign-continue" }, 201);
     await stop(second);
   });
 

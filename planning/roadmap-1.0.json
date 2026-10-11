@@ -1981,9 +1981,9 @@
         ],
         "nextAction": "Resolve D3574's Docker capacity/cleanup approval, then complete D3573's actual Make built-image recovery journey without substituting overlay/tmpfs storage or a root runtime. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual generated reader/dispatcher and proxy limits; the 112-id source census is not protection. Resolve D3397's complete CSP and audience-preview contract and D3393's public/internal probe contract; complete deployment image/privacy and operator receipts, then exercise all ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-10-08",
-          "summary": "D3573 now wires all seven actual Make maintenance targets into a test-owned source-image journey, with filtered inherited selectors, matching immutable images, private backup root, recorded-game mutation/restore checks and exact-byte rollback/reboot. All 22 new isolation/receipt/capacity controls pass; actual native Compose preflight and owned cleanup pass. Two native cold boots fail before HTTP. Independent exact-image SQLite reproduction proves errcode 13 and statfs bavail=0 on /data despite correct uid ownership: recurring Docker VM exhaustion, not an application locking defect. The native preflight now refuses that actual condition before HTTP without pruning. Full recovery and host-backup permissions remain held on D3574; narrow old Tabiya builder-cache cleanup awaits owner approval. Normal release-policy/storage/schema checks pass 122 policy, 33 wrapper, 47 native SQLite/CLI/replacement and fifteen scaffold cases plus Compose packaging. D3570/D3571/D3572 remain closed. Ingress/CSP/probe contracts, deployment/privacy/operator receipts, rights/resource proof, owner-device use and official content still block the milestone. No full image or release completion, push or remote CI result is claimed.",
-          "impact": "held",
+          "at": "2026-10-11",
+          "summary": "D608 closes the populated native-process recovery residual under storage-backup-recovery criterion 8. Actual bundled server/worker/CLI creation, backup, source media loss, restore to a different empty directory and restart preserve every application table/row, with each server data class and 28 critical families nonempty. Restarted APIs retain accounts/session authority, branches, documents, publications, marks, schedules, repertoire, classroom/submission grants, social, longitudinal and charged Campaign history. Bot and Campaign command replay cannot append events or duplicate rewards; actual play and the next encounter continue. Historical rated data uses the real storage API with an explicitly abandoned/voided fixture, not mock calibration or an invented result. All seven process journeys, 41 SQLite/replacement and 33 actual Make-wrapper controls pass. The installed-content process suite is assigned to the content tier in both normal recovery/readiness commands, retaining its original deadlines. The initial wrong shape-export and private-access status assumptions are corrected; persisted job completion replaces an incorrect assumption that shutdown finishes the backlog. D3573/D3574 still hold built-image recovery at zero available Docker bytes; no pruning or image substitute is used. Ingress/CSP/probe, cross-version/architecture, rights/resources, owner use, official content and final release journeys remain. No whole milestone, calibration, image, push or current-revision GitHub proof.",
+          "impact": "advanced",
           "evidence": [
             "Makefile",
             "tools/storage-compose.mjs",
@@ -2066,6 +2066,11 @@
               "kind": "rfc",
               "id": "storage-backup-recovery.md",
               "digest": "sha256:273439af23a9d94a0027ffce71d691319b07db29eea0a2feade28e372d3a0092"
+            },
+            {
+              "kind": "work_state",
+              "id": "D608",
+              "digest": "sha256:880390000ed33fc0b6ad322659f86480b02418283f5e1ab8513cabcdd9e7cea1"
             },
             {
               "kind": "rfc",

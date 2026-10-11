@@ -184,14 +184,29 @@ recovers readiness without a server restart.
   Exact bundle controls cover all five consumers, with zero Docker commands on path refusal;
   relative/dot/trailing-slash paths and backup directories containing spaces retain passing controls.
 - `make storage-recovery-check` adds the native SQLite backup/restore, bundled CLI/server and
-  replacement crash-recovery tests to those wrapper controls.
-- `make test-software` covers the unit tier, the process boundary (bundled `main.js` with its
-  worker thread and the `storage-admin.js` CLI), and the replacement crash matrix.
+  replacement crash-recovery tests to those wrapper controls. It runs the SQLite/replacement
+  controls in the software tier and the installed-content process journeys in the content tier.
+- `make test-software` covers the unit tier and the replacement crash matrix.
   The fixtures cover WAL-only backups, every verifier refusal, read-only preflight of a newer
   database, every historical version upgrading through a pre-upgrade bundle, injected migration
   and invariant failures, guarded replacement, an upgrade from the prior release followed by a
   rollback, publication crashes, lock exclusion across processes, and a crash at every replacement
   fault point with recovery itself crashed.
+- `make test-content` includes the bundled `main.js`, real longitudinal worker and
+  `storage-admin.js` process journeys. The populated recovery control creates accounts, branched
+  play, marks/schedules, repertoire moves, pack playtest/publication, shape publication, classroom
+  membership/submission grants, a live session, cohort standing, a registered bot decision and
+  charged Campaign progress through the application. It waits for actual persisted projection
+  jobs, backs up, removes the test-owned source database and restores into a different empty data
+  directory. An independent read compares every application table and row before boot; nonempty
+  class and named-family assertions prevent empty tables from counting as recovery evidence.
+  Restarted APIs retain identities, documents, events and ownership; outsider reads remain denied,
+  bot command replay leaves events unchanged and Campaign replay cannot duplicate its reward.
+  Bot play and the next Campaign encounter then continue. Historical rating data is seeded through
+  the real transactional storage API as an explicitly abandoned/voided record and read through the
+  restored Rating API: this does not claim the mock engine admits calibrated games. Device-local
+  preferences are not server database state. Native-process coverage does not replace image,
+  architecture, prior-release or clean-host release proof. Existing process deadlines are unchanged.
 - `make storage-drill` builds a test-owned image tag and runs the documented Make backup, verify,
   fresh restore, rehearsal, guarded replacement, rollback and recover commands against that image.
   It records a branched game, mutates it after backup, checks restored identities/branches/cursor,

@@ -186,16 +186,19 @@ blocked on D3715; D1164 remains the separate cross-node novelty contract.
 volume, pruning or rebuilding. D3574 remains live, so D3573's full built-image journey is not
 rerun into a known capacity refusal. Existing unrelated running services were not touched.
 
-Next unblocked release task: [[D608]]'s accepted storage-backup-recovery criterion 8.
-The existing bundled server/worker/CLI process journey seeds only an authenticated learner
-and imported run; it is not nonempty recovery proof for every application class. Broaden
-real creation → backup → representative mutation/loss → fresh restore → restarted reads
-to progress, authored/registered artifacts, social/classroom relations, ratings and the
-landed bot/Campaign/longitudinal families. Retain exact identifiers, ownership, branching
-and read/continuation behavior. Reuse `storage-appliance.test.ts` and the actual bundled
-CLI rather than creating a simulated storage authority, guessed SQL rows or another tracker.
-This file-backed work does not depend on Docker capacity and does not discharge image,
-cross-version, multi-architecture or final-release proof. No new schema or API is authorized.
+[[D608]]'s native-process recovery arm is closed locally. The actual bundled server/worker/CLI
+journey creates populated application classes, performs backup → complete source media loss →
+restore into a different empty data directory → restart, and independently compares every
+stored table/row before boot. Restarted APIs retain accounts/session credentials, drafts and
+publications, branches, grants, marks, progress, repertoire, classroom/submission, social,
+longitudinal and charged Campaign data. Bot/Campaign command replay preserves history/rewards,
+then actual play/encounter entry continues. Historical rated data is an explicitly voided storage
+fixture, not a calibrated mock game. Waiting for real persisted job completion is necessary:
+shutdown drains/abandons in-flight work; it does not finish the backlog.
+All seven process journeys, 41 SQLite/replacement and 33 Make-wrapper controls pass. The
+content-sensitive process suite now belongs to the content tier; both ordinary recovery and
+readiness commands select their suites' exact tiers, with no deadline changes. D3573/D3574 and
+the RFC's image, cross-version, architecture and final-release obligations remain held.
 
 [[D3712]] is closed locally: failed/pending Nudge remains available without a fact badge;
 automatic Nudge and Structure recover through an explicit single-flight request under the

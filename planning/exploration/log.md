@@ -25785,3 +25785,47 @@ Campaign was the one capability with no API, route or content. Now:
   no whole capability or milestone is promoted and zero official packs graduate. Protected
   intent and immutable archives are unchanged. No push, current-revision GitHub CI,
   deployment or release completion; the full 1.0 goal stays active.
+
+## 2026-10-11 — D608 populated native application recovery and 1.0 inventory closeout
+
+- Extended the existing storage-backup-recovery criterion 8 process journey, not a new
+  production mechanism. The real bundled server, longitudinal worker and maintenance CLI
+  create populated accounts, branches, progress, marks, repertoire, authoring/publication,
+  classroom/submission grants, live/social, bot and charged Campaign data. Both owners'
+  persisted projection jobs complete before shutdown; drain alone does not finish a backlog.
+  Historical rating storage is an explicitly abandoned/voided transactional fixture, not a
+  calibrated mock opponent or manufactured result.
+- Backup and verification precede complete loss of the test-owned source database. Restore
+  targets a different initially empty data directory. An independent read compares every
+  table and stored row before boot, requires each server data class and 28 named critical
+  families to be nonempty, and checks the complete account table inventory. Sixteen restarted
+  API reads retain their exact data; original credentials and session authority still work,
+  all nine exported sections are populated and unrelated-account reads remain refused.
+  Bot replay leaves events unchanged; Campaign replay preserves the charged result without
+  duplicated rewards. Actual bot play and the next Campaign encounter then continue.
+- Initial fixture assumptions about an official shape-export door and private-read status
+  were corrected to the actual API, not treated as production defects. The installed-content
+  journey belongs to the content tier; storage-recovery-check and application-readiness-check
+  now select their suites' exact tiers. The tier guard originally refused the software
+  assignment and passes after this correction. No deadline, retry or skip was loosened.
+- Focused make storage-recovery-check passes 33 actual Make maintenance-wrapper controls,
+  41 SQLite/replacement checks and all seven bundled-process journeys. Complete normal
+  make roadmap-receipt verify-awake exits zero: 4,876 software/374 files (312.24 s), seven
+  performance/four files (64.39 s), 255 content/26 files (53.98 s), clean workspace types,
+  governance, packaging, application build and corpus checks. Six predecessor process cases
+  moved from software to content; none were dropped. The prior 302-case browser run is
+  historical, not fresh proof for this test/Make/documentation batch.
+- D608 closes its populated native-process residual. The RFC remains implementing with
+  built-image, cross-version, architecture and final-release obligations; D3573/D3574 still
+  hold image recovery at zero available Docker bytes. No pruning, operator-data removal,
+  calibration, full Campaign reward journey, remote CI, push or release is claimed.
+- Ledger, durable work state, queue, recovery/development docs and the existing authoritative
+  roadmap are updated together. The inventory is 3,464 ledger rows: 629 todo, 16 doing,
+  1,076 blocked, 1,582 done and 161 refused; all 1,721 live rows are assigned. UX remains
+  273 complete, 272 live and 24 retired; 462 historical prose-only closures remain weaker
+  evidence. Product RFCs remain 42 implementing, ten awaiting and 23 draft. All fourteen
+  whole capabilities remain incomplete; milestones remain four active/five blocked, with
+  86 production pack documents and zero official graduates. The execution-wave case count
+  is reconciled to the existing 289-case receipt. No additional tracker or raw recording.
+  Protected intent and immutable archives are unchanged; no intent sentence is newly
+  falsified. The full 1.0 goal remains active; this checkpoint closes only the in-flight batch.

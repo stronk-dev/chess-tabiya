@@ -3601,7 +3601,8 @@ storage-maintenance-wrapper-check:
 
 .PHONY: storage-recovery-check
 storage-recovery-check: storage-maintenance-wrapper-check
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-admin.test.ts apps/server/src/storage-replacement.test.ts apps/server/src/storage-appliance.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-admin.test.ts apps/server/src/storage-replacement.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/storage-appliance.test.ts
 
 # `local`: loopback-only HTTP at http://127.0.0.1:$${TABIYA_PORT:-3000}. Zero configuration.
 up:
@@ -3690,7 +3691,8 @@ appliance-drill-staged:
 	$(CI_NODE) tools/staged-appliance-drill.mjs
 
 application-readiness-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/storage-appliance.test.ts apps/server/src/longitudinal-worker.test.ts apps/server/src/config.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-worker.test.ts apps/server/src/config.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/storage-appliance.test.ts
 
 .PHONY: application-startup-cleanup-check
 application-startup-cleanup-check:

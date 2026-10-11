@@ -4872,11 +4872,12 @@
     },
     {
       "id": "D608",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3a922ced3b697cd5f77cca0c20b19aa306a3e8fa3a5af6eedfbcb475db690dcd",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:880390000ed33fc0b6ad322659f86480b02418283f5e1ab8513cabcdd9e7cea1",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "apps/server/src/storage-appliance.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D609",

@@ -133,6 +133,12 @@ authentication, HTTP and module factories. Their permanent isolation control che
 returned catalogues. The two installed-pack cases retain their original five-second deadlines;
 moving a test to the content tier must not silently inherit a longer deadline.
 
+`make storage-recovery-check` uses the same split: SQLite/replacement controls are software;
+the bundled-process journey with populated installed-content authoring, classroom, bot and
+Campaign data is content. Both tiers run in `make verify` and their existing GitHub jobs.
+`make application-readiness-check` also selects each suite's declared tier explicitly, with
+the process suite's original deadlines retained.
+
 `make verify-governance` also runs
 `make register-check`, which joins every active RFC's
 `tabiya-claims` declaration to the shared-resource registers, derives their landed heads
