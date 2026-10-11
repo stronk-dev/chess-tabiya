@@ -8,7 +8,7 @@ import { makeSquare, opposite, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE } from "./semantic-validation-literal-sources.js";
+import { KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
@@ -106,7 +106,7 @@ describe("D3710 source-bound discovered execution", () => {
     const added = raw.filter(value => ids.has(value.id as string));
     expect(added).toHaveLength(16);
     expect(added.filter(value => value.arm === "positive")).toHaveLength(6);
-    const later = new Set(KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id));
+    const later = new Set([...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.filter(source => source.sourceId === "python-chess.recorded.pressure").flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     const prior = raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string));
     expect(prior).toHaveLength(249);
     expect(evidenceDigest(prior)).toBe("b6d4a66c8f02c639dce94ab0d2702df2efdb90e9dc1be889221cf77fd4c14e71");

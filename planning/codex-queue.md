@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3717]] adds eighteen independent recorded bishop-pressure cases:
+four positives and fourteen legal near-miss negatives in both colours. Existing migrated
+profile references and all 289 predecessor cases remain; 307 canonical cases pass over
+81 subjects, zero fully qualified. Integer diagonal occupancy and legal replay check exact
+pawn/bishop/screen/target identities through the production recorded-path operation.
+`make semantic-validation-harassment-check semantic-validation-cited-check typecheck`
+passes 43 focused and 300 aggregate cited checks with clean workspace types. Normal local
+software/performance pass 4,911/seven checks; corrected tracking and the remaining normal
+governance/content/build/browser gates exit zero: 255 content and 302 browser checks,
+one existing optional skip, zero retries and all 150 input/112 composition cells.
+The initial aggregate's stale roadmap anchor is repaired, not waived. No forced retreat, quality label, new learner
+permission, orientation discharge, content migration or whole-capability completion follows.
+
 2026-10-11 — [[D3300]] now has a production work-reuse correction, not just a
 profile. Complete before-position controller indexes are reused privately and
 structural sort keys are computed once. Eleven permanent controls include three

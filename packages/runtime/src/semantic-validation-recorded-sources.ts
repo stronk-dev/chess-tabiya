@@ -4,6 +4,9 @@
  * recorded-continuation convention; positions and expected identities below are literal.
  */
 import { evidenceDigest } from "./evidence-contract.js";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 import type { SemanticCanonicalValue, SemanticRecordedPathInput, SemanticValidationPropositionRecord } from "./semantic-validation.js";
 
 type Fixture = readonly [name: string, fens: readonly string[], moves: readonly string[], operands: Readonly<Record<string, SemanticCanonicalValue>> | null];
@@ -65,10 +68,59 @@ const contactFixtures: readonly Fixture[] = [
   ["contact.not-created-negative.black", ["4k3/8/8/4p3/3P4/8/8/4K3 b - - 0 1", "8/5k2/8/4p3/3P4/8/8/4K3 w - - 1 2", "8/5k2/8/4p3/3P4/8/5K2/8 b - - 2 2", "8/5k2/8/8/3p4/8/5K2/8 w - - 0 3"], ["e8f7", "e1f2", "e5d4"], null],
 ];
 
+// D3717: legal two-edge windows with literal identities, not forced retreat or
+// move quality. The source rules establish pawn attacks and occupied diagonals;
+// the pressure-line convention supplies the declared role/value scope.
+const pressureSetups = [
+  ["competing-knight.white", "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", true],
+  ["competing-knight.black", "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", "d7d6", "e5f6", true],
+  ["competing-bishop.white", "7k/8/2Q5/3N4/2b1b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", true],
+  ["competing-bishop.black", "k7/3p4/8/2B1B3/3n4/2q5/8/7K b - - 0 1", "d7d6", "e5f6", true],
+  ["unrelated-reply.white", "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", "d2d3", "c4b6", false],
+  ["unrelated-reply.black", "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", "d7d6", "c5b3", false],
+  ["lost-diagonal.white", "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f5", false],
+  ["lost-diagonal.black", "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", "d7d6", "e5f4", false],
+  ["no-screen.white", "7k/8/2Q5/8/4b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", false],
+  ["no-screen.black", "k7/3p4/8/4B3/8/2q5/8/7K b - - 0 1", "d7d6", "e5f6", false],
+  ["two-screens.white", "7k/1Q6/2P5/3N4/4b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", false],
+  ["two-screens.black", "k7/3p4/8/4B3/3n4/2p5/1q6/7K b - - 0 1", "d7d6", "e5f6", false],
+  ["friendly-screen.white", "7k/8/2Q5/3n4/4b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", false],
+  ["friendly-screen.black", "k7/3p4/8/4B3/3N4/2q5/8/7K b - - 0 1", "d7d6", "e5f6", false],
+  ["minor-target.white", "7k/8/2N5/3N4/4b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", false],
+  ["minor-target.black", "k7/3p4/8/4B3/3n4/2n5/8/7K b - - 0 1", "d7d6", "e5f6", false],
+  ["higher-screen.white", "7k/8/2R5/3Q4/4b3/8/3P4/K7 w - - 0 1", "d2d3", "e4f3", false],
+  ["higher-screen.black", "k7/3p4/8/4B3/3q4/2r5/8/7K b - - 0 1", "d7d6", "e5f6", false],
+] as const;
+
+const pressureFixtures: readonly Fixture[] = pressureSetups.map(([name, fen, push, reply, emits]) => {
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  const color = position.turn === "white" ? "black" : "white";
+  const fens = [makeFen(position.toSetup())];
+  for (const uci of [push, reply]) {
+    const move = parseUci(uci)!;
+    if (!position.isLegal(move)) throw new Error(`Illegal independent pressure fixture ${name}: ${uci}`);
+    position.play(move); fens.push(makeFen(position.toSetup()));
+  }
+  const square = name.endsWith("white") ? { from: "e4", to: "f3", screen: "d5", target: "c6", pawn: "d3" }
+    : { from: "e5", to: "f6", screen: "d4", target: "c3", pawn: "d6" };
+  const bishop = { color, role: "bishop" }, opponent = color === "white" ? "black" : "white";
+  return [`pressure.${name}`, fens, [push, reply], emits ? {
+    kind: "harassment_pressure_retained",
+    pawn: { square: square.pawn, piece: { color: opponent, role: "pawn" } },
+    minor: { before: { square: square.from, piece: bishop }, after: { square: square.to, piece: bishop } },
+    pressure: {
+      before: { slider: { square: square.from, piece: bishop }, screen: { square: square.screen, piece: { color: opponent, role: "knight" } }, target: { square: square.target, piece: { color: opponent, role: "queen" } } },
+      after: { slider: { square: square.to, piece: bishop }, screen: { square: square.screen, piece: { color: opponent, role: "knight" } }, target: { square: square.target, piece: { color: opponent, role: "queen" } } },
+    },
+    conventionId: "pressure-line@1",
+  } : null];
+});
+
 /** Source text is supplied by the existing retained independent rule manifests. */
-export function recordedValidationSources(capture: { sourceRevision: string; licence: string; url: string; text: string }, contact: { sourceRevision: string; licence: string; url: string; text: string }) {
+export function recordedValidationSources(capture: { sourceRevision: string; licence: string; url: string; text: string }, contact: { sourceRevision: string; licence: string; url: string; text: string }, bishop: { text: string }) {
   return [
     { ...capture, sourceId: "python-chess.recorded.trade", operation: { id: "runtime.semantic.recorded_path", version: 1 } as const, cases: tradeFixtures.map(fixture => recordedCase("derived.exchange.trade_completed", fixture)) },
     { ...contact, text: `${contact.text}\n${capture.text}`, sourceId: "python-chess.recorded.contact", operation: { id: "runtime.semantic.recorded_path", version: 1 } as const, cases: contactFixtures.map(fixture => recordedCase("derived.pawn.sequence.contact_timing", fixture)) },
+    { ...contact, text: `${contact.text}\n${bishop.text}`, sourceId: "python-chess.recorded.pressure", operation: { id: "runtime.semantic.recorded_path", version: 1 } as const, cases: pressureFixtures.map(fixture => recordedCase("derived.pawn.sequence.harassment_pressure", fixture)) },
   ];
 }

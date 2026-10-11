@@ -25941,3 +25941,38 @@ Campaign was the one capability with no API, route or content. Now:
   its residual cold cost. Ledger, docs, queue and existing roadmap carry the
   delivered correction; no whole capability, milestone, pack graduation,
   current-revision GitHub or release-image completion is claimed.
+
+
+## 2026-10-11 (codex) — D3717 recorded bishop-pressure canonical coverage
+
+- Added eighteen independent source-bound cases through the existing production
+  recorded-path operation: four positives and fourteen legal near-misses in both
+  colours, including competing attacked knights/bishops, unrelated replies, lost
+  diagonals, absent/multiple/friendly screens and excluded target/value roles.
+  Neutral legal replay and separate integer diagonal occupancy check the exact
+  pawn, relocated bishop, screen and heavy-piece identities. No forced retreat,
+  intent, move-quality claim, new collector or learner permission follows.
+- Corrected the row's initial overstatement: the v2 profile already had migrated
+  positive/negative references. Those remain; this adds independent finite coverage,
+  not newly present cells. All 289 predecessor canonical records remain unchanged.
+  The current register executes 307 cases (177 positive/130 negative) over 81
+  subjects; 53/48 positive/negative cells are present, 28/33 required and all 81
+  orientation obligations remain. Zero whole subjects qualify.
+- The initial missing-registration controls fail; after registration 43 focused
+  checks pass. The cited aggregate first catches two stale predecessor-population
+  assertions; excluding only the new identities retains the original populations
+  and digest assertions. All 300 cited checks and clean workspace types then pass.
+  Final strict profile-reference checks retain the migrated cases explicitly and
+  refuse extra refs, rather than filtering them out of the assertion.
+- Normal `make roadmap-receipt verify-awake build test-browser-ci-awake` passes
+  4,911 software/376 files and seven performance/four files, then stops on the stale
+  roadmap anchor introduced by the RFC-register count correction. No software
+  deadline, retry, skip, predicate or population changes to repair that mismatch.
+  After synchronizing it, normal `make roadmap-receipt verify-governance verify-content
+  build test-browser-ci-awake` exits zero: 255 content/26 files, clean governance,
+  packaging/build, 302 browser passes across all four tiers, one existing optional
+  Maia skip, zero retries and all 150 input/112 composition cells.
+- Ledger, work state, existing queue/docs/RFC register and roadmap are synchronized
+  for this bounded closeout. Frozen v1, draft orientation/window contracts, source
+  adoption, useful selection, authored content, owner use and release-image/remote
+  verification remain open. The active 1.0 goal is not completed or paused.

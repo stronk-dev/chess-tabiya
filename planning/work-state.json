@@ -30847,6 +30847,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-tactics.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3717",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:021f9f7081e50fe60d7c5711c315978a315a6e1b6e87220382daf3060e15904a",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-harassment.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

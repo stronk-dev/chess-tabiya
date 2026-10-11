@@ -872,7 +872,7 @@
         "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3716 repairs accepted overload recapture-promotion identity: the actual landing occupant may preserve its retained sole duty as a rook/queen. Both-colour legal predecessor controls expose false conflicts; blocked-line controls retain genuine conflicts and all four clauses. The kernel, sealed factory and registered Full Inspector wire presentation pass within 109 focused checks. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,880 software/374 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging/build and 302 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. All 289 canonical cases still pass over 81 subjects, zero fully qualified; 53/48 positive/negative cells present, 28/33 required and all 81 orientation obligations remain. Shared candidate-packet adoption is absent and not added. Semantic-collector D1/D4, frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, useful selection, learner admission, authored packs and historical intermittent failures remain held. No whole capability/milestone, current-revision remote CI or release-image completion.",
+          "summary": "D3717 adds eighteen independent canonical recorded bishop-pressure cases: four positives/fourteen legal near-miss negatives in both colours, with competing attacked minors and exact retained pawn/bishop/screen/target identities. Separate integer diagonal occupancy and legal replay reach the actual production recorded-path operation. All 289 predecessor records and migrated profile refs remain; 307 cases pass over 81 subjects, zero fully qualified. Present/required case arms remain 53/28 positive and 48/33 negative; all 81 orientation obligations remain. Normal software/performance pass 4,911 checks/376 files and seven/four. The initial aggregate stops on the RFC count correction's stale roadmap anchor; synchronized tracking and normal remaining governance/content/build/browser gates exit zero with 255 content/26 files and 302 browser checks, one existing optional skip, zero retries and all 150 input/112 composition cells. Frozen v1, draft orientation/window contracts, complete-state conflicts, source adoption, useful selection, learner eligibility, authored packs, owner use, semantic-collector D1/D4 and historical intermittent causes remain open. No forced retreat, move grade, new collector, whole capability/milestone, current-revision remote CI or release-image completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-validation-authority.md",
@@ -915,7 +915,8 @@
             "packages/runtime/src/semantic-validation-king-zone.test.ts",
             "rfc/semantic-collectors.md",
             "packages/runtime/src/semantic-tactics.test.ts",
-            "packages/runtime/src/special-move-tactics.test.ts"
+            "packages/runtime/src/special-move-tactics.test.ts",
+            "packages/runtime/src/semantic-validation-harassment.test.ts"
           ],
           "anchors": [
             {
@@ -931,7 +932,7 @@
             {
               "kind": "rfc",
               "id": "semantic-validation-authority.md",
-              "digest": "sha256:c6501d6df5847cb00e5810e13e530548f0d06cf17b673a908e9ae21d2d769b45"
+              "digest": "sha256:cb07e6d4a69c5852659a2933a9ec1607871b1ba4b010a08c1653768e39c3e7e3"
             },
             {
               "kind": "work_state",
@@ -969,7 +970,8 @@
             {"kind":"work_state","id":"D3711","digest":"sha256:ecb67b3d2f087013897af3ed3bd83fb9c56b9371617a5ea0268a05196e9d2aa6"},
             {"kind":"work_state","id":"D3714","digest":"sha256:d84acd93e8a1eb63108d5f4af234883a4267b90137cf25cdbae21cc12c4893af"},
             {"kind":"rfc","id":"semantic-collectors.md","digest":"sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"},
-            {"kind":"work_state","id":"D3716","digest":"sha256:06784aa138972e479577ed0595f00bfe2069a5bf5a2df582ce929aef13007e29"}
+            {"kind":"work_state","id":"D3716","digest":"sha256:06784aa138972e479577ed0595f00bfe2069a5bf5a2df582ce929aef13007e29"},
+            {"kind":"work_state","id":"D3717","digest":"sha256:021f9f7081e50fe60d7c5711c315978a315a6e1b6e87220382daf3060e15904a"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

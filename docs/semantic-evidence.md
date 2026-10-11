@@ -397,6 +397,17 @@ king-zone state projection's omission requirement. Orientation stays required an
 subjects are fully qualified. No king safety, opposition, strategic value, learner admission,
 source protocol or pack content changes.
 
+D3717 adds eighteen independently checked two-edge bishop-pressure cases (four positive,
+fourteen negative), retaining every previous canonical case. Both colours include competing
+attacked knights/bishops; unrelated replies, lost diagonals, missing/multiple/friendly screens
+and excluded target/value roles reach completed legal paths without the exact retained relation.
+Separate integer diagonal occupancy and legal replay check the pawn, moved bishop and unchanged
+screen/target identities through the production recorded-path operation. Existing migrated case
+references remain alongside the new source-bound cases. This records a pawn attack followed by
+retained pressure, not forced retreat, intent or move quality. Orientation remains required,
+zero whole subjects qualify, and learner eligibility and authored content are unchanged.
+The canonical register now executes 307 cases (177 positive/130 negative).
+
 D3690 widens the complete-state omission conflict to piece counts, pawn islands
 and reply breadth. Actual white/black bare-king edges retain twelve role counts,
 two zero island readings and one reply reading. A legal mate retains the terminal

@@ -1049,6 +1049,58 @@
               }
             },
             "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.competing-knight.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.competing-knight.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.competing-bishop.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.competing-bishop.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "positive"
           }
         ]
       },
@@ -1058,6 +1110,188 @@
           {
             "kind": "case",
             "id": "migration.harassment.negative",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.unrelated-reply.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.unrelated-reply.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.lost-diagonal.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.lost-diagonal.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.no-screen.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.no-screen.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.two-screens.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.two-screens.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.friendly-screen.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.friendly-screen.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.minor-target.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.minor-target.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.higher-screen.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.pawn.sequence.harassment_pressure",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.recorded.pressure.higher-screen.black",
             "version": 1,
             "subject": {
               "kind": "event",

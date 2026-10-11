@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3716]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3717]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3716]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
-retired; 1,721 live ledger items, all assigned, alongside 1,583 done and 161 refused. The 462
+Current checked inventory through [[D3717]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,584 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,17 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3717]] adds eighteen independent recorded bishop-pressure cases: four positives and
+fourteen legal near-misses in both colours. Exact pawn/bishop/screen/target identities and
+complete diagonal occupancy are checked through the actual recorded-path operation.
+All 289 predecessor cases and the existing migrated profile references remain; 307 canonical
+cases pass over 81 subjects, zero fully qualified. This strengthens finite coverage, not
+orientation, learner admission, source adoption or useful guidance. Normal software/performance
+pass 4,911/seven checks; after correcting the register update's stale roadmap anchor, normal
+remaining governance/content/build/browser gates exit zero: 255 content and 302 browser checks,
+one existing optional skip, zero retries and all 150 input/112 composition cells. No whole
+capability/milestone, current-revision remote CI or release-image completion follows.
 
 [[D3300]]'s output-preserving follow-up now eliminates repeated controller-index
 construction and structural sort-key serialization in the shared production
@@ -205,7 +216,7 @@ disclosure; the new passing evidence controls do not repair that learner flow.
    sampled Maia tasks, durable Stockfish, Review tablebase and selected-piece/square Sight.
    Their existing draft repairs require independent acceptance, then real API/client proof.
 2. Complete semantic qualification and useful selection, not just emission. The current
-   register has 289 passing cases over 81 subjects: 53 positive cells and 48 negative
+   register has 307 passing cases over 81 subjects: 53 positive cells and 48 negative
    cells present, but 28 positive, 33 negative and all 81 orientation obligations remain.
    Four complete-state projections have a genuine omission-contract conflict. “Why this
    move?” search remains a draft upgrade, not a delivered explanatory engine.
@@ -4483,7 +4494,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   289 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   307 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

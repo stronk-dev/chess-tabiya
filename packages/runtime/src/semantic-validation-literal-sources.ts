@@ -248,7 +248,7 @@ const contactRules = {
   text: "attacks_mask pawn branch:\n        if bb_square & self.pawns:\n            color = bool(bb_square & self.occupied_co[WHITE])\n            return BB_PAWN_ATTACKS[color][square]\n\nattacks_mask king branch:\n        elif bb_square & self.kings:\n            return BB_KING_ATTACKS[square]\n",
 } as const;
 const CONTACT_NEGATIVE_FAMILIES = ["occupied_attack", "occupied_defence", "slider_ray", "pawn_contact", "defended_duty"] as const;
-export const RECORDED_CITED_SOURCES = Object.freeze(recordedValidationSources(captureSource, contactRules));
+export const RECORDED_CITED_SOURCES = Object.freeze(recordedValidationSources(captureSource, contactRules, RULE_STATE_CITED_SOURCES[1]!));
 
 // D3667: exact geometric transitions and the EXISTING two-attacked-target duty
 // count, not a claim that a defender is overloaded or that a move is good.

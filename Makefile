@@ -1445,6 +1445,10 @@ foundation-source-author-repair: foundation-source-author-contract foundation-so
 .PHONY: semantic-validation-cited-check
 .PHONY: semantic-validation-discovered-check
 .PHONY: semantic-validation-king-zone-check
+.PHONY: semantic-validation-harassment-check
+semantic-validation-harassment-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-harassment.test.ts packages/runtime/src/semantic-validation-recorded.test.ts
+
 semantic-validation-king-zone-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-king-zone.test.ts
 
@@ -1463,7 +1467,7 @@ semantic-tactics-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts
 
 semantic-validation-cited-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts packages/runtime/src/semantic-validation-harassment.test.ts
 
 .PHONY: castling-evidence-check
 castling-evidence-check:

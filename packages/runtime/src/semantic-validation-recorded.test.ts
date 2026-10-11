@@ -15,7 +15,8 @@ import { parseSemanticValidationCase, type SemanticRecordedPathInput } from "./s
 
 const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
 const byId = new Map(raw.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
-const rows = RECORDED_CITED_SOURCES.flatMap(source => source.cases);
+const pressureSource = RECORDED_CITED_SOURCES.find(source => source.sourceId === "python-chess.recorded.pressure")!;
+const rows = RECORDED_CITED_SOURCES.filter(source => source !== pressureSource).flatMap(source => source.cases);
 
 // Neutral occupancy and legal replay only. No production transition/capture, pawn-contact,
 // recorded-path detector or evidence factory is used to compute the expected facts.
@@ -122,7 +123,12 @@ describe("D3705 independent recorded exchange and pawn-contact cases", () => {
     const subject = source.cases[0]!.proposition.subject;
     const profile = SEMANTIC_VALIDATION_PROFILES.find(profile => evidenceDigest(profile.subject) === evidenceDigest(subject))!;
     for (const [cell, arm] of [[profile.positive, "positive"], [profile.semanticNegative, "semantic_negative"]] as const) {
-      expect(cell).toMatchObject({ disposition: "present", refs: source.cases.filter(row => row.arm === arm).map(row => ({ id: row.proposition.case.id })) });
+      expect(cell.disposition).toBe("present");
+      if (cell.disposition === "present") {
+        const expected = source.cases.filter(row => row.arm === arm).map(row => row.proposition.case.id);
+        const retained = source === pressureSource ? [arm === "positive" ? "migration.harassment.positive" : "migration.harassment.negative"] : [];
+        expect(cell.refs.map(ref => ref.id)).toEqual([...retained, ...expected]);
+      }
     }
     expect(profile.orientation.disposition).toBe("required");
     expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
@@ -142,7 +148,7 @@ describe("D3705 independent recorded exchange and pawn-contact cases", () => {
     expect(added).toHaveLength(20);
     expect(added.filter(row => row.arm === "positive")).toHaveLength(10);
     expect(added.filter(row => row.arm === "semantic_negative")).toHaveLength(10);
-    const later = new Set([...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const later = new Set([...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...pressureSource.cases.map(row => row.proposition.case.id)]);
     const prior = raw.filter(row => !ids.has(row.id as string) && !later.has(row.id as string));
     expect(prior).toHaveLength(229);
     expect(evidenceDigest(prior)).toBe("35a8afec8943785b40f4ef99998f2a57c51b003f3cc56e2a1e2bcc0a7cd729c0");

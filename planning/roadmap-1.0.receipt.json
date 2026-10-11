@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:140f6f95001804d2ea7eabda5bc3a9b20a862d786947c7e980db072b6be8ba39",
+    "roadmap": "sha256:334cc586d6d6443339418eb57b16d5a900687ef04b71e0f969d1569c97afe6b1",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:5e0546fd25da2b96cc2d08d875ce2e95215687f0f332f9ab92e9bccbb0d538d8",
-    "rfcRegister": "sha256:02b90e27cbe7f9ffa1ff8b5408909c02fa55587db0f80ca13283ea9d93baacf5",
+    "workState": "sha256:c72c0f4cbf2bab7a1b4821b2098af399a8efbbba84f397d4443e2a44008a6cf4",
+    "rfcRegister": "sha256:4cd353e8685d40e04fc9775467f470dd04ceb02dfabd867a915b23d9082dd171",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 16,
       "blocked": 1076,
-      "done": 1583,
+      "done": 1584,
       "refused": 161
     },
     "workItems": {
@@ -261,7 +261,7 @@
       "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3716 repairs accepted overload recapture-promotion identity: the actual landing occupant may preserve its retained sole duty as a rook/queen. Both-colour legal predecessor controls expose false conflicts; blocked-line controls retain genuine conflicts and all four clauses. The kernel, sealed factory and registered Full Inspector wire presentation pass within 109 focused checks. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,880 software/374 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging/build and 302 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. All 289 canonical cases still pass over 81 subjects, zero fully qualified; 53/48 positive/negative cells present, 28/33 required and all 81 orientation obligations remain. Shared candidate-packet adoption is absent and not added. Semantic-collector D1/D4, frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, useful selection, learner admission, authored packs and historical intermittent failures remain held. No whole capability/milestone, current-revision remote CI or release-image completion.",
+        "summary": "D3717 adds eighteen independent canonical recorded bishop-pressure cases: four positives/fourteen legal near-miss negatives in both colours, with competing attacked minors and exact retained pawn/bishop/screen/target identities. Separate integer diagonal occupancy and legal replay reach the actual production recorded-path operation. All 289 predecessor records and migrated profile refs remain; 307 cases pass over 81 subjects, zero fully qualified. Present/required case arms remain 53/28 positive and 48/33 negative; all 81 orientation obligations remain. Normal software/performance pass 4,911 checks/376 files and seven/four. The initial aggregate stops on the RFC count correction's stale roadmap anchor; synchronized tracking and normal remaining governance/content/build/browser gates exit zero with 255 content/26 files and 302 browser checks, one existing optional skip, zero retries and all 150 input/112 composition cells. Frozen v1, draft orientation/window contracts, complete-state conflicts, source adoption, useful selection, learner eligibility, authored packs, owner use, semantic-collector D1/D4 and historical intermittent causes remain open. No forced retreat, move grade, new collector, whole capability/milestone, current-revision remote CI or release-image completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
@@ -304,7 +304,8 @@
           "packages/runtime/src/semantic-validation-king-zone.test.ts",
           "rfc/semantic-collectors.md",
           "packages/runtime/src/semantic-tactics.test.ts",
-          "packages/runtime/src/special-move-tactics.test.ts"
+          "packages/runtime/src/special-move-tactics.test.ts",
+          "packages/runtime/src/semantic-validation-harassment.test.ts"
         ],
         "anchors": [
           {
@@ -320,7 +321,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:c6501d6df5847cb00e5810e13e530548f0d06cf17b673a908e9ae21d2d769b45"
+            "digest": "sha256:cb07e6d4a69c5852659a2933a9ec1607871b1ba4b010a08c1653768e39c3e7e3"
           },
           {
             "kind": "work_state",
@@ -406,6 +407,11 @@
             "kind": "work_state",
             "id": "D3716",
             "digest": "sha256:06784aa138972e479577ed0595f00bfe2069a5bf5a2df582ce929aef13007e29"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3717",
+            "digest": "sha256:021f9f7081e50fe60d7c5711c315978a315a6e1b6e87220382daf3060e15904a"
           }
         ]
       },
