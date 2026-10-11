@@ -134,3 +134,21 @@ Final normal local gates pass clean types/build, 4,297 software / 364 files, sev
 performance, governance/packaging, 239 content and 241 browser cases, one optional Maia skip,
 zero retries and 150 input/112 composition cells. D3639 closes with its permanent cited-case
 test path; all broader semantic qualification, review/owner and learner-migration holds remain.
+
+## 2026-10-11 — D3701 direct counts and loose omissions
+
+Accepted Slice B adds sixteen both-colour source-bound cases and nineteen permanent controls.
+Neutral geometry checks complete count populations; legal capture sets prove populated loose
+omissions, including pinned geometric attacks. All 213 predecessor records remain unchanged;
+three retained primary functions match the pinned python-chess source exactly. The normal
+cited suite passes 211 checks; the generated production receipt passes 229 cases (137 positive,
+92 negative), 81 subjects, zero fully qualified. Direct-count positive/negative and loose-piece
+negative arms alone become present; orientation, complete-state negatives, other debts and
+learner eligibility remain. Workspace types and separate normal build pass.
+
+The broader foundation command fails one unchanged castling setup hook (D3702). Full normal
+software verification reports five castling failures and one Review failure (D3703), then is
+explicitly interrupted with exit 130. Failure stacks/causes need diagnosis; no full gate or fresh
+browser pass is claimed. The ledger/work state, register, docs, queues and existing roadmap are
+closed out together for the scoped cases, with both verification failures left open. No collector,
+strategic content, permission, pack bytes, whole capability/milestone, remote CI or release change.

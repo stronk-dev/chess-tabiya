@@ -323,7 +323,86 @@ export const PAWN_DYNAMICS_CITED_SOURCE = Object.freeze({
   cases: pawnDynamicsFixtures.map(fixture => ruleCase("pawn-dynamics", fixture, "stockfish")),
 });
 
+// D3701: geometric contacts are not legal captures. Retained verbatim from the
+// same independent GPL revision (attackers_mask 905–923, is_into_check 1933–1943,
+// is_legal 1998–1999). The source supplies rules, never strategic move quality.
+const attackRuleText = `    def attackers_mask(self, color: Color, square: Square, occupied: Optional[Bitboard] = None) -> Bitboard:
+        occupied = self.occupied if occupied is None else occupied
+
+        rank_pieces = BB_RANK_MASKS[square] & occupied
+        file_pieces = BB_FILE_MASKS[square] & occupied
+        diag_pieces = BB_DIAG_MASKS[square] & occupied
+
+        queens_and_rooks = self.queens | self.rooks
+        queens_and_bishops = self.queens | self.bishops
+
+        attackers = (
+            (BB_KING_ATTACKS[square] & self.kings) |
+            (BB_KNIGHT_ATTACKS[square] & self.knights) |
+            (BB_RANK_ATTACKS[square][rank_pieces] & queens_and_rooks) |
+            (BB_FILE_ATTACKS[square][file_pieces] & queens_and_rooks) |
+            (BB_DIAG_ATTACKS[square][diag_pieces] & queens_and_bishops) |
+            (BB_PAWN_ATTACKS[not color][square] & self.pawns))
+
+        return attackers & self.occupied_co[color]
+`;
+const legalRuleText = `    def is_into_check(self, move: Move) -> bool:
+        king = self.king(self.turn)
+        if king is None:
+            return False
+
+        # If already in check, look if it is an evasion.
+        checkers = self.attackers_mask(not self.turn, king)
+        if checkers and move not in self._generate_evasions(king, checkers, BB_SQUARES[move.from_square], BB_SQUARES[move.to_square]):
+            return True
+
+        return not self._is_safe(king, self._slider_blockers(king), move)
+
+    def is_legal(self, move: Move) -> bool:
+        return not self.is_variant_end() and self.is_pseudo_legal(move) and not self.is_into_check(move)
+`;
+const directCount = (color: string, square: string, count: number) => ({ kind: "direct_attack_count", color, squares: [square], count });
+const countPair = (color: string, square: string, before: number, after: number) => ({ family: "direct_attack_count", before: directCount(color, square, before), after: directCount(color, square, after) });
+const blockedAttackFixtures: readonly RuleFixture[] = [
+  ["blocked.white", "rules.structural.event.direct_attack_count", "7k/8/8/8/3n4/8/1P5P/B6K w - - 7 1", "h2h3", "7k/8/8/8/3n4/7P/1P6/B6K b - - 0 1", null],
+  ["blocked.black", "rules.structural.event.direct_attack_count", "b6k/1p5p/8/3N4/8/8/8/7K b - - 7 1", "h7h6", "b6k/1p6/7p/3N4/8/8/8/7K w - - 0 2", null],
+];
+const attackCountFixtures: readonly RuleFixture[] = [
+  ["gained.white", "rules.structural.event.direct_attack_count", "7k/8/1n6/P7/8/8/3B4/7K w - - 7 1", "d2e3", "7k/8/1n6/P7/8/4B3/8/7K b - - 8 1", countPair("white", "b6", 1, 2)],
+  ["gained.black", "rules.structural.event.direct_attack_count", "7k/3b4/8/8/p7/1N6/8/7K b - - 7 1", "d7e6", "7k/8/4b3/8/p7/1N6/8/7K w - - 8 2", countPair("black", "b3", 1, 2)],
+  ["lost.white", "rules.structural.event.direct_attack_count", "7k/8/1n6/P7/8/4B3/8/7K w - - 7 1", "e3d2", "7k/8/1n6/P7/8/8/3B4/7K b - - 8 1", countPair("white", "b6", 2, 1)],
+  ["lost.black", "rules.structural.event.direct_attack_count", "7k/8/4b3/8/p7/1N6/8/7K b - - 7 1", "e6d7", "7k/3b4/8/8/p7/1N6/8/7K w - - 8 2", countPair("black", "b3", 2, 1)],
+  ["preserved.white", "rules.structural.event.direct_attack_count", "7k/8/1n6/P7/8/8/3B3P/7K w - - 7 1", "h2h3", "7k/8/1n6/P7/8/7P/3B4/7K b - - 0 1", countPair("white", "b6", 1, 1)],
+  ["preserved.black", "rules.structural.event.direct_attack_count", "7k/3b3p/8/8/p7/1N6/8/7K b - - 7 1", "h7h6", "7k/3b4/7p/8/p7/1N6/8/7K w - - 0 2", countPair("black", "b3", 1, 1)],
+  ["pinned.white", "rules.structural.event.direct_attack_count", "4r2k/8/8/8/8/2n5/4N2P/4K3 w - - 7 1", "h2h3", "4r2k/8/8/8/8/2n4P/4N3/4K3 b - - 0 1", countPair("white", "c3", 1, 1)],
+  ["pinned.black", "rules.structural.event.direct_attack_count", "4k3/4n2p/2N5/8/8/8/8/4R2K b - - 7 1", "h7h6", "4k3/4n3/2N4p/8/8/8/8/4R2K w - - 0 2", countPair("black", "c6", 1, 1)],
+  ...blockedAttackFixtures,
+  ["pawn-target.white", "rules.structural.event.direct_attack_count", "7k/8/8/8/3p4/2P5/7P/7K w - - 7 1", "h2h3", "7k/8/8/8/3p4/2P4P/8/7K b - - 0 1", null],
+  ["pawn-target.black", "rules.structural.event.direct_attack_count", "7k/7p/2p5/3P4/8/8/8/7K b - - 7 1", "h7h6", "7k/8/2p4p/3P4/8/8/8/7K w - - 0 2", null],
+];
+const looseOmissionFixtures: readonly RuleFixture[] = [
+  ...blockedAttackFixtures.map(([id, , before, move, after]) => [id, "rules.tactic.event.loose_piece", before, move, after, null] as const),
+  ["pinned-capturer.white", "rules.tactic.event.loose_piece", "4k3/4n3/2N5/8/8/8/7P/4R2K w - - 7 1", "h2h3", "4k3/4n3/2N5/8/8/7P/8/4R2K b - - 0 1", null],
+  ["pinned-capturer.black", "rules.tactic.event.loose_piece", "4r2k/7p/8/8/8/2n5/4N3/4K3 b - - 7 1", "h7h6", "4r2k/8/7p/8/8/2n5/4N3/4K3 w - - 0 2", null],
+];
+export const ATTACK_CITED_SOURCES = Object.freeze([
+  {
+    sourceId: "python-chess.attack-counts", sourceRevision: captureSource.sourceRevision,
+    licence: captureSource.licence, url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py#L905-L923`,
+    text: attackRuleText, operation: { id: "runtime.semantic.structural_edge", version: 1 } as const,
+    cases: attackCountFixtures.map(fixture => ruleCase("attack-counts", fixture)),
+  },
+  {
+    sourceId: "python-chess.loose-omission", sourceRevision: captureSource.sourceRevision,
+    licence: captureSource.licence, url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+    text: `attackers_mask:\n${attackRuleText}\nis_into_check / is_legal:\n${legalRuleText}`,
+    operation: { id: "runtime.semantic.local_edge", version: 1 } as const,
+    cases: looseOmissionFixtures.map(fixture => ruleCase("loose-omission", fixture)),
+  },
+]);
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  ...ATTACK_CITED_SOURCES,
   PAWN_DYNAMICS_CITED_SOURCE,
   ...RULE_STATE_CITED_SOURCES,
   pawnMembershipSource,

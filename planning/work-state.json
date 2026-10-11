@@ -30703,6 +30703,31 @@
       "uxItems": [],
       "owner": "core-loop",
       "blocker": "rfc:public-run-reconstruction.md"
+    },
+    {
+      "id": "D3701",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:52661efb77b55b6e5b370f6b6398da398cfad6af0507ca85f46a40535782b9ce",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-attacks.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3702",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:638df0c8deab322444264c1233223a410c31e4edc90080a3fa5c60c3b5393e92",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D3703",
+      "state": "todo",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6bff573f5de27caaea453d3f9d5f1f1b9c47278bdde6799fa1a7d3527a00d9e8",
+      "uxItems": []
     }
   ]
 }

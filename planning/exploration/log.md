@@ -25426,3 +25426,54 @@ Campaign was the one capability with no API, route or content. Now:
   23 draft. No milestone, whole capability, semantic qualification or pack graduates here.
   Protected intent and immutable archives remain unchanged. No production repair, push,
   deployment, native release-image recovery or 1.0 completion is claimed.
+
+## 2026-10-11 — D3702 castling application-setup failure retained
+
+- The serial normal `make semantic-validation-update evidence-foundation-check typecheck`
+  regenerates all 229 canonical cases successfully and passes the earlier mobility/king-state
+  groups, then stops in `apps/server/src/castling-evidence.test.ts`. One application-construction
+  hook exceeds its unchanged ten-second deadline (11,883 ms observed); the other 23 cases pass.
+  The file records 157,990 ms test duration, 172.27 seconds overall. The requested trailing
+  typecheck was not reached by that failed command; the following complete normal verification
+  separately passes workspace types with zero Svelte errors/warnings.
+- D3702 is assigned TODO to release-engineering and routed through the existing execution queue.
+  Construction uses the installed catalogue; that code observation and current process load
+  do not locate the actual delayed phase or establish causation. D3543/D3510 retain their
+  separately observed setup stalls. No deadline, retry, test population or assertion is weakened.
+  A passing complete-gate replay will not close this original failure by itself.
+- Complete serial `make roadmap-receipt verify-awake build` is running. This entry records the
+  failed foundation result, not completed qualification, a repaired lifecycle or release readiness.
+
+## 2026-10-11 — D3701 scoped attack qualification closed; full verification stays red
+
+- Accepted semantic-validation-authority Slice B now has sixteen both-colour cases: eight
+  direct-count positives, four populated direct-count negatives and four loose-piece omissions.
+  Independent rank/file/ray operands retain gained/lost/preserved counts, multiple and pinned
+  contacts, blockers and pawn-target scope. Complete legal capture sets distinguish a real
+  pinned geometric attacker from a legal capturer; populated negatives are not empty-source
+  controls. Three retained python-chess functions match the exact pinned primary-source bytes.
+- Nineteen permanent controls first fail against the predecessor, then the normal cited suite
+  passes all 211 cases. The production receipt executes all 229 cases (137 positive/92 negative)
+  over 81 subjects, preserving all 213 predecessor records. Only direct-count positive/negative
+  and loose-piece negative cells become present. Zero subjects fully qualify; all orientation,
+  other required arms, complete-state conflicts, source adoption and learner eligibility remain.
+  Canonical records, generated receipts, existing tests/Make targets, RFC register, docs and
+  queues are updated together. No collector, strategic judgement or authored pack changes.
+- Workspace types pass with zero Svelte errors/warnings; separate normal `make build` exits zero.
+  The broader foundation failure remains D3702. The full normal software run reports five failed
+  castling cases (194,517 ms file duration) and one failed Review-map case (34,533 ms; seventeen
+  other cases pass, 246,462 ms file duration). Its final failure stacks are not printed before
+  the explicitly interrupted run exits 130. D3703 records that incomplete Review diagnostic,
+  not a proved chess regression or timeout cause. Both rows are release-engineering TODOs.
+  Full software/performance/content/governance and aggregate build were not completed by that
+  command; no fresh browser run follows. No deadline, assertion, retry or skip is weakened.
+- The existing rollup now distinguishes delivered screens/APIs from all eight completion
+  dimensions and preserves the failed verification. There are 273 completed/272 live/24 retired
+  UX items, 1,720 live ledger items all assigned, 1,571 done and 161 refused. All fourteen whole
+  capabilities remain incomplete; nine milestones remain four active/five blocked. Product RFCs
+  remain 42 implementing/ten awaiting/23 draft; 86 installed packs have zero official graduates.
+  Archived implementation records and historical green counts are not fresh 1.0 proof.
+- Read-only GitHub lookup confirms latest product revision 75bc8744: verify 37795549212 succeeds,
+  browser 37795549157 fails. Local repairs are still unpushed. No exact-revision remote green,
+  native image recovery, capability/milestone promotion, official-content, deployment or release
+  is claimed. Protected intent and immutable archives are unchanged; the full 1.0 goal stays active.

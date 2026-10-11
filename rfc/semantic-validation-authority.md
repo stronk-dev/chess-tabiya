@@ -1722,6 +1722,14 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-11: D3701 executes accepted Slice B with sixteen source-bound cases for
+  direct attack counts and loose-piece omissions. Complete neutral geometry distinguishes
+  multiple, blocked and pinned contacts from legal captures; all 213 predecessor records
+  remain unchanged. The production receipt executes 229 cases (137 positive/92 negative)
+  over the same 81 subjects; zero subjects fully qualify. Three missing positive/negative
+  arms become present; orientation, complete-state negatives, counterfactual/other debt
+  and learner eligibility remain unchanged. Evidence:
+  `packages/runtime/src/semantic-validation-attacks.test.ts`.
 - 2026-10-10: D3688 implements accepted Slice B's sixteen legal material/mobility
   cases through runtime.semantic.local_edge: ten positives and six semantic negatives.
   Exact role vectors, stationary rook-ray destinations and pawn-induced knight local-

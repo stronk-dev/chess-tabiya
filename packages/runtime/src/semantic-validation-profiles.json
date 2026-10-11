@@ -3415,14 +3415,170 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.preserved.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.preserved.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.pinned.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.pinned.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.blocked.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.blocked.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.pawn-target.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.attack-counts.pawn-target.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.direct_attack_count",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",
@@ -5018,9 +5174,61 @@
         ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "semantic-validation D4/D5",
-        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.loose-omission.blocked.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.loose_piece",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.loose-omission.blocked.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.loose_piece",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.loose-omission.pinned-capturer.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.loose_piece",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.loose-omission.pinned-capturer.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.tactic.event.loose_piece",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
         "disposition": "required",

@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3701]] executes accepted semantic-validation-authority Slice B for
+source-bound direct attack counts and loose-piece omissions. Nineteen predecessor-red
+controls now pass with the focused suite (211 total); the normal receipt runs all 229
+cases (137 positive/92 negative), preserving all 213 predecessor records. Neutral geometry
+retains multiple/pinned contacts and blocked/pawn-target negatives; independent legal
+captures keep four populated loose omissions distinct from geometric attacks. Three
+retained primary functions match their exact pinned source. Clean types and the separate
+normal build pass. The broader foundation run fails one unchanged castling setup hook
+([[D3702]]). Full normal verification reports five castling failures and one Review failure
+([[D3703]]) before explicit interruption (exit 130); no complete gate pass is claimed.
+Both failure rows are release-engineering TODOs in the existing execution queue. D3701
+closes only its three missing case arms; no orientation,
+whole-subject qualification, learner permission, pack bytes or strategic claim follows.
+
 2026-10-11 — [[D3700]] now has admitted HTTP reachability, not only a runtime fixture.
 A validated segment-end pack's original branch closes a segment and returns replayable
 reasoning. Forking between checkpoints instead creates a first checkpoint on the new

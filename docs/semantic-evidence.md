@@ -350,6 +350,21 @@ Only this family's positive/negative cells become present; candidate-majority
 conventions are not endorsed and orientation/other qualification debt remains.
 No attack implies a forced retreat, a strategically good move or a promotion result.
 
+D3701 adds sixteen source-bound cases: eight direct-count positives, four populated
+direct-count negatives and four loose-piece omissions, all in both colours. Independent
+rank/file/ray arithmetic checks the complete non-pawn target/count population, including
+one-to-two and two-to-one attacker changes, unchanged contacts, friendly ray blockers,
+pawn-target exclusion and pinned geometric attackers. Independent legal destination sets
+show that the loose-piece cases have no legal capture of any mover-colour non-king piece.
+The pinned-capturer negatives retain a real geometric attack, not an empty board or an
+unavailable source. They do not claim that defender count proves an exchange outcome.
+The three retained python-chess functions match their pinned primary-source bytes exactly.
+All 213 predecessor records remain unchanged; 229 cases pass (137 positive/92 negative).
+Direct-count positive/negative and loose-piece negative cells are present. Orientation,
+counterfactual/other required arms and the complete-state omission conflict remain;
+zero subjects are fully qualified and learner eligibility is unchanged. This is qualification
+work under existing collectors, not a new recommendation, strategy claim or content wave.
+
 D3690 widens the complete-state omission conflict to piece counts, pawn islands
 and reply breadth. Actual white/black bare-king edges retain twelve role counts,
 two zero island readings and one reply reading. A legal mate retains the terminal

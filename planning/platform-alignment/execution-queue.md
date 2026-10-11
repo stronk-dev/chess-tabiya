@@ -4,6 +4,20 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Attack qualification checkpoint — 2026-10-11
+
+[[D3701]] is **DONE LOCALLY FOR THREE CASE ARMS**, under accepted semantic-validation-authority
+Slice B. Sixteen both-colour direct-count/loose-omission cases and nineteen permanent
+controls preserve every predecessor record and distinguish geometric attack from legal
+capture. Focused 211 cases, all 229 canonical cases, workspace types and a separate normal
+build pass. The broader foundation run fails one unchanged application-setup hook. The
+full normal software run reports five castling failures and one Review failure before
+explicit interruption (exit 130). [[D3702]] and [[D3703]] are **TODO**, release-engineering:
+locate the castling construction delay and the Review failure's actual diagnostic before
+claiming a cause or repair; duration alone is not a cause. No full gate pass follows.
+Only three missing case arms close; orientation, whole-subject
+qualification, source adoption, learner permissions and official content remain open.
+
 ## Public reasoning reconstruction — 2026-10-11
 
 [[D3700]] is **BLOCKED ON RFC REVIEW**, core-loop. The actual admitted segment-end

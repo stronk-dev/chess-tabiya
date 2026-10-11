@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:176055f8e873348b8918cf4ad8995ae04ab83721e9309a5dea493a12adb06ef5",
+    "roadmap": "sha256:68750fe57236aa77a3dad1aea543b43af1ba93927b01242b485d0d55c2e70c9c",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:1b9e701d1953af60e18de3dcbdc3b1b4cf490cda455c483017d969c4a5c9f047",
-    "rfcRegister": "sha256:77acc1cc8050a7ea107fd1f376323730b4cb18a35a515fb7100471b7ab7b8ee1",
+    "workState": "sha256:e3e425ecb3df2acd5c60d43116c21c8af65461993d08aa8abb103e5513b5f223",
+    "rfcRegister": "sha256:33aa001c4f5a8ee73cdabe2a7246dc095f3402b4bcfabbd5ad6ae0fc5212284b",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 631,
       "doing": 14,
       "blocked": 1075,
-      "done": 1570,
+      "done": 1571,
       "refused": 161
     },
     "workItems": {
@@ -73,7 +73,7 @@
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+      "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-11",
         "summary": "D3700 now has paired actual HTTP reachability through an admitted segment-end pack, not only a direct runtime fixture. Original-branch reasoning discloses and replays; a fork between checkpoints records a valid saved receipt but its successful withheld response cannot replay. Fifty focused controls and clean workspace types pass. Draft public-run-reconstruction is assigned to Rehearsal/core-loop, pending independent buildability review and acceptance: distinct public read types/projector, immutable detection disclosure, all actual submit/resume/follow/continue consumers, no saved schema, content, segment-policy or canonical-validation change. The expected rejection is evidence, not a fix. Complete normal software verification passes 4,777 cases/370 files, seven unchanged-budget performance cases/four files, types, contract checks, packaging and the included build. Governance initially catches this task's missing RFC checkpoint anchor; after adding the actual RFC/work-state links, complete governance exits zero with 75 assigned product RFCs and all 1,718 live rows assigned. The preceding a28d4795 content/browser result remains historical: 247 content and 294 browser passes, one optional skip, zero retries and all 112 composition cells. D3694/D1685/D3698/D3699 remain repaired locally; D3695 remains author-blocked. No paired exact-revision remote CI, public reconstruction implementation, native release-image, whole capability or milestone completion is claimed.",
@@ -243,7 +243,7 @@
       "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3691 adds 22 source-bound legal pawn-dynamics cases through runtime.semantic.local_edge: both-colour locks, bishop/knight harassment, pawn-protected passers and adjacent-file passed pairs, with populated retained-property, changed-protector/pair-order and wrong-role negatives. Independent neutral operands agree; all 191 predecessor records remain unchanged and seven labelled Stockfish snippets match the pinned source. Twenty-four predecessor-red controls, all 192 focused/799 foundation checks and clean types pass. Complete normal verification/build exits zero: 4734 software cases/370 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files, governance and packaging/build. 213 canonical cases pass (129 positive/84 negative), 81 subjects, zero fully qualified; only this family's positive/negative arms become present. D3690 widens D3687's complete-state omission conflict through actual bare-king/terminal operations; the author handoff retains all four required negative arms and frozen v1. Candidate-majority, orientation/window and other obligations remain open. The previous 291-browser result is historical, not rerun for this validation-only wave. No collector, forced-retreat/strategic claim, learner permission, pack bytes, source availability, whole capability/milestone, remote CI or native release-image promotion.",
+        "summary": "D3701 adds sixteen both-colour source-bound cases for exact direct-attack counts and populated loose-piece omissions. Neutral geometry retains gained/lost/preserved counts, blockers, pawn-target scope and pinned geometric attackers; independent legal destination sets distinguish real attacks from legal captures. All 213 predecessor records remain unchanged and three retained primary functions match their pinned source exactly. Nineteen predecessor-red controls, 211 focused cases and the 229-case production receipt pass (137 positive/92 negative), 81 subjects, zero fully qualified. Only direct-count positive/negative and loose-piece negative arms become present. Workspace types and a separately run normal build pass. The broader foundation run fails one unchanged castling setup hook (D3702). Complete normal software verification then reports five castling failures and one Review failure (D3703) before explicit interruption (exit 130); no full gate or fresh browser pass is claimed. Failure causes remain unlocated. D3687/D3690 complete-state negative conflicts, orientation/window and other obligations remain open. Previous browser results are historical, not rerun for this validation-only wave. No collector, strategic claim, learner permission, pack bytes, source availability, whole capability/milestone, remote CI or native release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
@@ -275,7 +275,9 @@
           "apps/server/src/review-map.test.ts",
           "packages/runtime/src/semantic-validation-rule-state.test.ts",
           "packages/runtime/src/semantic-validation-pawn-dynamics.test.ts",
-          "planning/platform-alignment/semantic-state-negative-contract.md"
+          "planning/platform-alignment/semantic-state-negative-contract.md",
+          "packages/runtime/src/semantic-validation-attacks.test.ts",
+          "apps/server/src/castling-evidence.test.ts"
         ],
         "anchors": [
           {
@@ -291,7 +293,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:1d39ca5238d7974e328651b1e373ae030f3cc9c70ea1501839c92ba747c96a4e"
+            "digest": "sha256:91eae269d756e9517bef70078356552e9a2083351fcca546f06d687254c097a8"
           },
           {
             "kind": "work_state",
@@ -322,6 +324,21 @@
             "kind": "work_state",
             "id": "D3691",
             "digest": "sha256:3abc0a42a62339c2ea95755113d2df7ffad83fee057aedba8b16dc42b9fa9043"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3701",
+            "digest": "sha256:52661efb77b55b6e5b370f6b6398da398cfad6af0507ca85f46a40535782b9ce"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3702",
+            "digest": "sha256:638df0c8deab322444264c1233223a410c31e4edc90080a3fa5c60c3b5393e92"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3703",
+            "digest": "sha256:6bff573f5de27caaea453d3f9d5f1f1b9c47278bdde6799fa1a7d3527a00d9e8"
           }
         ]
       },
