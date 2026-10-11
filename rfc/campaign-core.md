@@ -1,5 +1,17 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
+- **2026-10-11 encounter-help checkpoint:** D3706 binds §7.1's compact effective-tool display to
+  the board's confirmed assistance projection, not the latest map equipment. The server's
+  node_entered inventory cut remains authoritative; current help style still narrows it.
+  Pending and unavailable confirmation remain distinct from a confirmed legal-moves-only kit,
+  with an explicit assistance-only retry in Support style. No new inventory, command, source,
+  permission, reward, curriculum or whole-Campaign completion is introduced. Verification is
+  recorded in the ledger and append-only exploration log: focused 350 software/seven Campaign
+  content checks and types, actual desktop/phone journeys, and the complete normal local gates
+  pass (4,820 software, seven performance, 248 content and 296 browser cases; one optional skip,
+  zero retries). D3708 also reconciles the register resource cell with the existing owner-directed
+  landings; run-schema 0.25 and all successor acceptance gates remain unchanged.
+
 - **2026-10-09 in-game recovery checkpoint:** D3634 completes the §7.1 encounter strip's
   failed/pending read → explicit read-only retry → same saved encounter/recorded seal journey.
   Unconfirmed reads withdraw command revision authority and pause Declare done; response-loss

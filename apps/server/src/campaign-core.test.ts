@@ -365,6 +365,36 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     }
   }, 120_000);
 
+  it("keeps an active encounter's help on its entry cut after map equipment changes", async () => {
+    const { learner } = await boot();
+    const alice = await learner("campaign_help_cut");
+    const created = await alice.call("POST", "/campaigns/browser-fixture-campaign/runs", { campaignVersion: 1, commandId: commandId() });
+    expect(created.status).toBe(201);
+    const campaignId = created.body.result.campaignRunId as string;
+    await sealPackNode(alice, campaignId, "f1-a");
+    const map = (await alice.call("GET", `/campaign-runs/${campaignId}`)).body;
+    expect(map.kit.equipped).toContain("postcommit_nudge");
+    const entered = await startNode(alice, campaignId, "f2-a", map.campaignRun.revision);
+    const runId = entered.result.response.playRunId as string;
+    const { compileAssistanceRequest, selectNamedPreset } = await import("@chess-tabiya/runtime");
+    const request = compileAssistanceRequest({ contextHint: "campaign", preference: { kind: "unset" } });
+    const before = await alice.call("POST", `/runs/${runId}/assistance`, request);
+    expect(before.status).toBe(200);
+    expect(before.body.assistance.modules).toContain("postcommit_nudge");
+    const events = (await run(alice, runId)).events;
+    const changed = await alice.call("PUT", `/campaign-runs/${campaignId}/loadout`, { equippedModuleIds: [], expectedRevision: entered.campaign.campaignRun.revision, commandId: commandId() });
+    expect(changed.status).toBe(200);
+    expect(changed.body.campaign.kit.equipped).toEqual([]);
+    const after = await alice.call("POST", `/runs/${runId}/assistance`, request);
+    expect(after.status).toBe(200);
+    expect(after.body.assistance.modules).toEqual(before.body.assistance.modules);
+    expect(after.body.assistance.campaignReceipt.inventoryEventSeq).toBe(before.body.assistance.campaignReceipt.inventoryEventSeq);
+    const quiet = await alice.call("POST", `/runs/${runId}/assistance`, compileAssistanceRequest({ contextHint: "campaign", preference: selectNamedPreset("campaign", { kind: "unset" }, "quiet").intent }));
+    expect(quiet.status).toBe(200);
+    expect(quiet.body.assistance.modules).toEqual(["rules_floor"]);
+    expect((await run(alice, runId)).events).toEqual(events);
+  });
+
   it("abandons with the exact active encounter and then starts a new run", async () => {
     const { learner } = await boot();
     const alice = await learner("campaign_alice3");

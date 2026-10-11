@@ -6,6 +6,62 @@ import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 
 for (const mobile of [false, true]) {
+  test(`Campaign encounter help follows confirmed entry equipment and help style${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const mapPath = new URL(page.url()).pathname;
+    await playPackNode(page, "f1-a");
+    const runId = await startNode(page, "f2-a");
+    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const help = strip.getByTestId("campaign-encounter-help");
+    await expect(help).toContainText("Help for this encounter: After-move nudge");
+    const edge = await playableBoard(page);
+    const events = await (await page.request.get(`/runs/${runId}/events`)).json();
+    await strip.getByRole("button", { name: "Map", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    await page.getByRole("region", { name: "Your campaign kit" }).getByRole("checkbox", { name: "After-move nudge", exact: true }).uncheck();
+    await expect(page.getByRole("region", { name: "Your campaign kit" }).getByRole("checkbox", { name: "After-move nudge", exact: true })).not.toBeChecked();
+    await page.getByRole("button", { name: "Continue encounter", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`, "u"));
+    await expect(help).toContainText("After-move nudge");
+    await expect(help).toContainText("Equipment changes on the map apply to your next encounter");
+    await page.reload();
+    await expect(help).toContainText("After-move nudge");
+    await playableBoard(page, edge);
+    await page.locator("details.assistance-control summary").click();
+    await page.getByRole("radio", { name: /^Quiet/u }).check();
+    await expect(help).toContainText("Help for this encounter: legal moves only");
+    await expect(help).not.toContainText("After-move nudge");
+
+    // A failed read must not masquerade as a confirmed silent kit. Retry uses the same request.
+    let fail = true;
+    let release!: () => void;
+    const pending = new Promise<void>(resolve => { release = resolve; });
+    await page.route(`**/runs/${runId}/assistance`, async route => {
+      if (fail) {
+        await pending;
+        await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "HTTP_ERROR", message: "Temporary help failure" } }) });
+      }
+      else await route.continue();
+    });
+    await page.reload();
+    try {
+      await expect(help).toContainText("Confirming help for this encounter");
+      await expect(help).not.toContainText("Help for this encounter: legal moves only");
+    } finally { release(); }
+    await expect(help).toContainText("Help could not be confirmed");
+    await expect(help).not.toContainText("Help for this encounter: legal moves only");
+    await page.locator("details.assistance-control summary").click();
+    fail = false;
+    await page.getByRole("button", { name: "Retry confirming help", exact: true }).click();
+    await expect(help).toContainText("Help for this encounter: legal moves only");
+    await expect(page.getByRole("dialog", { name: "Choose help style" })).toHaveCount(0);
+    await expect(page.locator("details.assistance-control summary")).toBeFocused();
+    await playableBoard(page, edge);
+    expect(await (await page.request.get(`/runs/${runId}/events`)).json()).toEqual(events);
+  });
+
   test(`Campaign actions preserve a newer encounter read when an older charge response arrives${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();

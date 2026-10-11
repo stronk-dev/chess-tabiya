@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, tick, untrack } from "svelte";
   import { ApiError } from "./api.js";
+  import { MODULE_LABELS, type BrowserNarrowedAssistanceV1 } from "@chess-tabiya/runtime";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
     CAMPAIGN_MODULE_LABELS,
@@ -22,11 +23,13 @@
     branchId: string;
     /** Bumps whenever the play run changes, so a settled charge re-reads the balance. */
     runRevision: number;
+    assistance?: BrowserNarrowedAssistanceV1 | undefined;
+    assistanceState?: "pending" | "ready" | "unavailable" | undefined;
     onNavigate: (path: string) => void;
     /** Publishes the campaign revision the charged gestures must carry (null when not active). */
     onRevision: (state: { readonly campaignRevision: number; readonly active: boolean } | null) => void;
   }
-  let { campaigns, origin, runId, branchId, runRevision, onNavigate, onRevision }: Props = $props();
+  let { campaigns, origin, runId, branchId, runRevision, assistance, assistanceState = "pending", onNavigate, onRevision }: Props = $props();
 
   let campaign: CampaignProjection | undefined = $state();
   let error: string | undefined = $state();
@@ -44,6 +47,7 @@
   let active = $derived(campaign?.activeEncounter?.playRunId === runId && campaign.activeEncounter.nodeId === origin.nodeId);
   let nodeTitle = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId)?.title ?? origin.nodeId);
   let suppressed = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId)?.suppress ?? []);
+  let confirmedHelp = $derived(assistanceState === "ready" && assistance?.context === "campaign" && assistance.campaignReceipt !== undefined ? assistance : undefined);
 
   $effect(() => {
     void runRevision;
@@ -183,7 +187,17 @@
     <strong class="encounter-title" tabindex="-1" bind:this={title}>Campaign · {nodeTitle}</strong>
     <span class="charges" data-testid="campaign-strip-charges" aria-label={`Earned rewinds: ${campaign.charges.balance} remaining this campaign`}><span aria-hidden="true">⟲ {campaign.charges.balance}</span> Earned rewinds: {campaign.charges.balance} remaining this campaign</span>
     {#if active}
-      <span class="kit">Kit: {campaign.kit.equipped.filter((id) => !suppressed.includes(id)).map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ") || "legal moves only"}{suppressed.length > 0 ? ` · set aside: ${suppressed.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}` : ""}</span>
+      <span class="kit" data-testid="campaign-encounter-help" role="status">
+        {#if confirmedHelp !== undefined}
+          Help for this encounter: {confirmedHelp.modules.filter(id => id !== "rules_floor").map(id => CAMPAIGN_MODULE_LABELS[id as keyof typeof CAMPAIGN_MODULE_LABELS] ?? MODULE_LABELS[id]).join(", ") || "legal moves only"}.
+          {suppressed.length ? ` Set aside: ${suppressed.map(id => CAMPAIGN_MODULE_LABELS[id]).join(", ")}.` : ""}
+          Feedback still needs available evidence. Equipment changes on the map apply to your next encounter.
+        {:else if assistanceState === "pending"}
+          Confirming help for this encounter. Legal moves stay visible meanwhile.
+        {:else}
+          Help could not be confirmed. Only legal moves are shown; retry confirming help in Support style.
+        {/if}
+      </span>
       <div class="row-actions">
         <button type="button" disabled={busy || reading || readError !== undefined} aria-describedby={reading || readError !== undefined ? "campaign-strip-read" : undefined} onclick={() => void declareDone()}>{busy ? "Declaring…" : "Declare done"}</button>
         <button type="button" class="quiet" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Map</button>

@@ -25541,3 +25541,46 @@ Campaign was the one capability with no API, route or content. Now:
 - Frozen v1, draft D3564/D3629, production collectors, source/consumer adoption, permissions,
   authored pack bytes, protected intent and immutable archives are unchanged. No fresh browser,
   exact-revision remote CI, publication, deployment or native release-image proof is claimed.
+
+## 2026-10-11 — Campaign encounter help and progress reconciliation (D3706–D3708)
+
+- D3706 fixes the accepted Campaign core §§5/7.1 display mismatch: the strip used the latest
+  map equipment, while actual assistance uses the frozen node_entered inventory cut and current
+  style/limits. DrillScreen now renders the Campaign context from its own confirmed assistance
+  projection. No second equipment fold, new schema, command or permission authority is added.
+- Pending and failed confirmation are not a successful legal-moves-only kit. Support style
+  offers an assistance-only retry. The first native run exposed a route-capture error in the new
+  test; after that correction, the next run exposed genuine retry focus loss. The retry now
+  retains invocation/current-request ownership, keeps its pending control, returns to the
+  Support-style summary on success and does not steal deliberately moved focus.
+- Focused normal make campaign-help-check passes 350 software checks, seven real-content
+  Campaign HTTP checks and clean workspace types. The first sandboxed invocation stopped at
+  pnpm's dependency-cache write before type-checking; the same authorized Make target then
+  exposed and verified corrections to five type errors. Actual desktop and phone journeys
+  prove map equipment change → same encounter return/reload → Quiet → pending/failure → explicit
+  retry, unchanged saved play events and all 64 square centers hit without resizing the board.
+- Complete serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  4,820 software checks/372 files (312.99 s), seven performance/four files (60.66 s), 248
+  real-content/25 files (32.13 s), types, governance, packaging and build. Browser tiers pass
+  296 cases: 231 smoke, five real-content, 59 matrix and one production-profile test. One
+  existing optional Maia case is skipped; zero retries. All 150 input cells and 112/112
+  composition cells pass unretried. No budget, deadline, skip or authority is weakened.
+- The corpus checks still report 92 clearance documents, 354 blocking/34 resolved/48 accepted
+  entries and no contract errors; installed capability declarations cover 86 production packs,
+  six browser fixtures, the schema example and eleven schema fixtures. No official pack graduates.
+- D3707 reconciles the stale present-tense roadmap critical path to the literal current register:
+  249 cases, 81 subjects, 52 positive/46 negative arms present, 29/35 required and all 81
+  orientation obligations open. Historical 229-case checkpoints remain. Zero whole subjects
+  qualify. D3708 reconciles the Campaign register's resource cell with the RFC's already-recorded
+  owner direction and discharged migration 30/schema 2 claims; run-schema 0.25 stays held and
+  successor acceptance gates remain. Neither correction creates new implementation authority.
+- Existing ledger/state, queue, RFC register, docs and roadmap carry the closeout. No new work
+  document, status mechanism or raw recording is committed. All fourteen whole capabilities
+  remain incomplete; nine milestones remain four active/five blocked; UX remains 273 complete,
+  272 live and 24 retired. Live ledger work remains 1,720 assigned items; done becomes 1,576,
+  including the unchanged 462 weaker historical prose-only closures.
+- D3702/D3703 retain their original intermittent failures and unknown causes; this passing
+  repeat does not diagnose them. D3700, source/consumer adoption, learner eligibility, bot
+  calibration, curriculum and release-image recovery remain open. Protected intent, immutable
+  archives and authored chess bytes are untouched. No push, exact-revision remote CI, deployment,
+  clean-host image proof or whole capability/milestone/release completion is claimed.

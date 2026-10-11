@@ -114,6 +114,8 @@
     comparison?: BranchComparison | undefined;
     comparisonBranchIds?: readonly string[] | undefined;
     contextActions?: Snippet | undefined;
+    /** Campaign context reads the board's confirmed help, never the latest map equipment. */
+    campaignContext?: Snippet<[BrowserNarrowedAssistanceV1 | undefined, "pending" | "ready" | "unavailable"]> | undefined;
     simulation?: SimulationResult | undefined;
     busy?: boolean;
     error?: string | undefined;
@@ -205,6 +207,7 @@
     comparison,
     comparisonBranchIds,
     contextActions,
+    campaignContext,
     simulation,
     busy = false,
     error,
@@ -307,6 +310,7 @@
   let assistance: AssistanceConfig = $derived(compiledAssistance?.config ?? SILENT_ASSISTANCE);
   let assistanceMenuOpen = $state(false);
   let assistanceSummary: HTMLElement | undefined = $state();
+  let assistanceRetry: HTMLButtonElement | undefined = $state();
   let inputBoard: { submitNotation(value: string): BoardInputResult; notationDisabled(): boolean; notationAvailable(): boolean } | undefined = $state();
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
@@ -1461,6 +1465,27 @@
     preferenceUnsaved = !saveWorkflowPreference(activeAssistanceProfile, next, preferenceStorage());
   }
 
+  async function retryConfirmingHelp(): Promise<void> {
+    if (assistanceQueryState !== "unavailable") return;
+    const accessKey = assistanceAccessKey, invoker = document.activeElement;
+    let ownsFocus = invoker === assistanceRetry;
+    const movedFocus = (event: FocusEvent): void => {
+      if (event.target !== invoker && event.target !== document.body) ownsFocus = false;
+    };
+    document.addEventListener("focusin", movedFocus);
+    const recovery = recompileAssistance(), request = assistanceQuery;
+    try {
+      await recovery;
+      if (!ownsFocus || request !== assistanceQuery || accessKey !== assistanceAccessKey || !assistanceMenuOpen
+        || (document.activeElement !== invoker && document.activeElement !== document.body)) return;
+      if (compiledAssistance !== undefined) {
+        assistanceMenuOpen = false;
+        await tick();
+        if (ownsFocus && request === assistanceQuery && accessKey === assistanceAccessKey) assistanceSummary?.focus();
+      } else if (assistanceQueryState === "unavailable") assistanceRetry?.focus();
+    } finally { document.removeEventListener("focusin", movedFocus); }
+  }
+
   function choosePreset(preset: PresetId): void {
     commitPreference(selectNamedPreset(activeAssistanceProfile, preference, preset));
     assistanceMenuOpen = false;
@@ -2455,6 +2480,7 @@
           <summary bind:this={assistanceSummary} aria-haspopup="dialog" aria-label={`Support style: ${presetPillLabel}`}><span class="preset-pill" data-preset-mode={compiledAssistance?.displayMode ?? "pending"}>{presetPillLabel}</span></summary>
           <div class="support-menu">
             <p class="preset-menu-promise">{presetHeadline}</p>
+            {#if assistanceQueryState !== "ready"}<button type="button" bind:this={assistanceRetry} disabled={assistanceQueryState === "pending"} onclick={() => void retryConfirmingHelp()}>{assistanceQueryState === "pending" ? "Confirming help…" : "Retry confirming help"}</button>{/if}
             <fieldset class="preset-options">
               <legend>Help style</legend>
               {#each offeredPresets as option (option.id)}
@@ -3182,6 +3208,8 @@
   </div>
 {/if}
 </div>
+
+{@render campaignContext?.(queriedAccessKey === assistanceAccessKey ? compiledAssistance : undefined, queriedAccessKey === assistanceAccessKey ? assistanceQueryState : "pending")}
 
 <style>
   .drill-region {

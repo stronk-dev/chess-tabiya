@@ -2959,8 +2959,8 @@
       {/if}
       {/if}
       {/snippet}
-      </DrillScreen>
-      {#if session.campaignOrigin}
+      {#snippet campaignContext(assistance, assistanceState)}
+      {#if session.campaignOrigin && session.runState}
         <CampaignStrip
           bind:this={campaignStrip}
           campaigns={campaignApi}
@@ -2968,10 +2968,14 @@
           runId={session.runState.run.id}
           branchId={session.runState.run.activeCursor.branchId}
           runRevision={session.runState.run.events.length}
+          {assistance}
+          {assistanceState}
           onNavigate={navigate}
           onRevision={(state) => { campaignCharge = state === null ? undefined : { runId: session.runState!.run.id, campaignRevision: state.campaignRevision }; }}
         />
       {/if}
+      {/snippet}
+      </DrillScreen>
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
     {/if}

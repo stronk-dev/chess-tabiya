@@ -24,6 +24,13 @@ attach to the current encounter. Keyboard retry returns focus to its error or en
 only while the learner has not moved focus elsewhere. Desktop and phone tests verify the saved
 position, branch, campaign state and board geometry through repeated failure and recovery.
 
+The encounter's **Help for this encounter** summary reads the same confirmed assistance result
+as the board. It is not the map's latest equipment list: equipment is pinned at encounter entry,
+then narrowed by the current help style and limits. Map equipment changes apply to the next
+encounter. Listed tools still require available evidence before presenting feedback. Pending
+confirmation and failed confirmation have distinct copy; **Retry confirming help** in Support
+style repeats only the assistance read, without changing equipment or recorded play.
+
 ## Encounter gesture costs and lost responses
 
 In the verified Campaign encounter, the timeline and checkpoint, completed-line, guard and Support

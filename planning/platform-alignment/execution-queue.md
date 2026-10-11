@@ -4,6 +4,24 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Campaign encounter help — 2026-10-11
+
+[[D3706]] is **DONE LOCALLY**, under accepted Campaign core §§5/7.1 and the implemented
+assistance/preset contracts. The compact strip reads the board's confirmed help, retaining
+the frozen encounter cut and current style narrowing; pending/error are not confirmed silence.
+Actual desktop/phone map equipment change, return/reload, Quiet and explicit failed-read retry
+preserve saved events, board geometry and focus. Focused 350 software/seven content checks and
+clean types pass. Complete serial normal verification/build/all browser tiers pass: 4,820 software,
+seven performance, 248 content and 296 browser cases; one existing optional skip, zero retries,
+all 150 input/112 composition cells. No new source, permission, reward, curriculum, whole
+Campaign/milestone, exact-revision remote CI or release-image completion.
+[[D3707]] is **DONE LOCALLY**: current critical-path counts now match the 249-case/81-subject
+register (52/46 present, 29/35 required, all 81 orientation arms still open); historical
+predecessor checkpoints remain. [[D3708]] is **DONE LOCALLY**: the Campaign register records
+its existing owner-directed foundation and discharged migration/schema claims, retaining the
+live run-schema claim and successor acceptance gates. Neither correction promotes qualification
+or grants new implementation authority.
+
 ## Attack qualification checkpoint — 2026-10-11
 
 [[D3705]] is **DONE LOCALLY FOR FOUR CASE ARMS**, under accepted semantic-validation-authority

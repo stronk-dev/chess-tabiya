@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3705]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3708]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3705]]: 273 UX items complete, 272 live and 24
-retired; 1,720 live ledger items, all assigned, alongside 1,573 done and 161 refused. The 462
+Current checked inventory through [[D3708]]: 273 UX items complete, 272 live and 24
+retired; 1,720 live ledger items, all assigned, alongside 1,576 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,16 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3706]] fixes the Campaign encounter-help display: it now reads the board's confirmed
+assistance instead of the latest map equipment, preserving the encounter's entry cut,
+help-style narrowing, pending/error honesty and explicit retry focus. Actual desktop/phone
+map → encounter → reload journeys preserve saved events and playable squares. Complete
+normal verification/build/all browser tiers pass 4,820 software, seven performance, 248
+content and 296 browser cases, one optional skip, zero retries and all 150 input/112
+composition cells. [[D3707]] corrects the current qualification counts below; [[D3708]]
+corrects the Campaign register's contradictory authorization/resource wording. These are
+bounded local completions, not whole-capability, remote-CI or release-image proof.
 
 The latest D3700 follow-up adds actual admitted HTTP reachability: an original segment-end
 branch's reasoning response replays, but a branch forked between checkpoints retains a
@@ -80,8 +90,8 @@ disclosure; the new passing evidence controls do not repair that learner flow.
    sampled Maia tasks, durable Stockfish, Review tablebase and selected-piece/square Sight.
    Their existing draft repairs require independent acceptance, then real API/client proof.
 2. Complete semantic qualification and useful selection, not just emission. The current
-   register has 229 passing cases over 81 subjects: 50 positive cells and 44 negative
-   cells present, but 31 positive, 37 negative and all 81 orientation obligations remain.
+   register has 249 passing cases over 81 subjects: 52 positive cells and 46 negative
+   cells present, but 29 positive, 35 negative and all 81 orientation obligations remain.
    Four complete-state projections have a genuine omission-contract conflict. “Why this
    move?” search remains a draft upgrade, not a delivered explanatory engine.
 3. Convert those facts into complete default journeys, calibrated bot behavior, valid

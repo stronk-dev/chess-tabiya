@@ -3,7 +3,7 @@
 import { tick } from "svelte";
 import { createClassComponent } from "svelte/legacy";
 import { afterEach, describe, expect, it, vi, type Mock } from "vitest";
-import { presetDeclaration, selectNamedPreset, workflowContextPolicy } from "@chess-tabiya/runtime";
+import { presetDeclaration, selectNamedPreset, workflowContextPolicy, type BrowserNarrowedAssistanceV1 } from "@chess-tabiya/runtime";
 import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
 import CampaignScreen from "./CampaignScreen.svelte";
 import CampaignStrip from "./CampaignStrip.svelte";
@@ -492,6 +492,7 @@ async function strip(submit: () => Promise<Response>, read: () => Promise<Respon
   const onRevision = vi.fn();
   const component = createClassComponent({ component: CampaignStrip, target: document.body, props: {
     campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate: vi.fn(), onRevision,
+    assistance: undefined as BrowserNarrowedAssistanceV1 | undefined, assistanceState: "pending" as "pending" | "ready" | "unavailable",
   } });
   cleanup.push(() => component.$destroy());
   await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
@@ -500,6 +501,20 @@ async function strip(submit: () => Promise<Response>, read: () => Promise<Respon
 
 describe("Campaign in-game read recovery", () => {
   const failedRead = () => Response.json({ error: { code: "HTTP_ERROR", message: "Temporary encounter read failure" } }, { status: 503 });
+
+  it("never presents the latest map equipment as confirmed encounter help", async () => {
+    const view = await strip(async () => Response.json(sealResponse()));
+    const help = () => document.querySelector('[data-testid="campaign-encounter-help"]')!.textContent!;
+    expect(help()).toContain("Confirming help for this encounter");
+    expect(help()).not.toContain("After-move nudge");
+    expect(help()).not.toContain("Help for this encounter: legal moves only");
+    view.component.$set({ assistanceState: "unavailable" }); await settle();
+    expect(help()).toContain("Help could not be confirmed");
+    expect(help()).toContain("retry confirming help in Support style");
+    expect(help()).not.toContain("After-move nudge");
+    view.component.$set({ assistanceState: "ready", assistance: undefined }); await settle();
+    expect(help()).toContain("Help could not be confirmed");
+  });
 
   it("offers an initial read-only retry and restores the same encounter's authority and focus", async () => {
     let failed = true;
