@@ -55,6 +55,15 @@ result to a real branch with origin `simulated`; only then does it enter replay,
 progress, compare, and PGN. Preview ids are writer-scoped, expire after ten
 minutes, and are consumed after one successful entry.
 
+Promotion uses one implementation for ordinary and Campaign entry. Each system move runs the
+same pack orchestration as the preview, retaining checkpoint and objective events in the saved
+branch and its returned event tail. Those events count toward the existing 800-event entry
+limit; a refusal saves nothing and leaves the preview available. A committed Campaign retry
+returns its original result without another branch or charge. No engine work is required.
+This is consequence parity, not a new full step-by-step preview payload: the current preview
+grid still shows final positions. Line Drill's answer-free client source still withholds its
+spine; Outcome/Plan previews do not relax that separate disclosure rule.
+
 Prediction checkpoints record the learner's move before selecting the reply.
 The atomic endpoint persists the exact policy distribution, mass, rank, and
 applied engine identity and returns that same selection for the opponent ply.

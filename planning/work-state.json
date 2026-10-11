@@ -9172,7 +9172,7 @@
       "id": "D1154",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:927efd97ebf0fa1aa6b7eb233f644c47db0622074f5a97042ed7dfaef6c8d325",
+      "sourceDigest": "sha256:f8b9b8cbe8ec33cd09c09c23f6180d2c2228a0fe9a20da6d950e46630ff51bb0",
       "uxItems": [],
       "owner": "core-loop"
     },
@@ -30774,6 +30774,15 @@
       "sourceDigest": "sha256:fb592dfd59e8f97b8540a01b965a49cab2c5a7704d4211cb5dfc1c2420689409",
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3709",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4ee485ad2326f319a46fed7d918090b62a70cb65944d91aca29d074a26073c3f",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-simulation.test.ts",
       "evidenceKind": "path"
     }
   ]

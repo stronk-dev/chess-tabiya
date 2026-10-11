@@ -2552,6 +2552,9 @@ export class RunService {
     if (!moves) throw new ServerError("INVALID_REQUEST", "Unknown simulation branch");
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
+    const pack = this.#requiredRegisteredPack(stored.run);
+    if (pack === undefined) throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
+    const resolvePlanSignature = planSignatureResolver(pack.document, this.#shapes);
     const enter = (base: DrillRun): MutationResult => {
       let entered = fork(base, simulation.sourceNodeId, {
         label: simulation.labels[branchIndex]!,
@@ -2561,7 +2564,11 @@ export class RunService {
       });
       const collected = [...entered.emitted];
       for (const uci of moves) {
-        entered = commitMove(entered.run, uci, { actor: "system", ...(at === undefined ? {} : { at }) });
+        const beforeCommit = entered.run;
+        const committed = commitMove(beforeCommit, uci, { actor: "system", ...(at === undefined ? {} : { at }) });
+        // §7.4: entering an authored line retains the same checkpoint/objective
+        // consequences as its scratch walk, including their actual event cost.
+        entered = orchestratePackMove(pack.document, beforeCommit, committed, resolvePlanSignature);
         collected.push(...entered.emitted);
       }
       if (entered.run.events.length > 800) {
@@ -2579,30 +2586,11 @@ export class RunService {
       this.#simulations.delete(simulationId);
       return charged;
     }
-    let result = fork(stored.run, simulation.sourceNodeId, {
-      label: simulation.labels[branchIndex]!,
-      intent: `Entered authored variation ${simulation.labels[branchIndex]!}`,
-      origin: "simulated",
-      ...(at === undefined ? {} : { at }),
-    });
-    const emitted = [...result.emitted];
-    for (const uci of moves) {
-      const committed = commitMove(result.run, uci, {
-        actor: "system",
-        ...(at === undefined ? {} : { at }),
-      });
-      result = committed;
-      emitted.push(...committed.emitted);
-    }
-    if (result.run.events.length > 800) {
-      throw new ServerError("SIMULATE_BUDGET_EXCEEDED", "Entering this line would leave too little room to continue", {
-        details: { plies: moves.length, events: result.run.events.length, limit: 800 },
-      });
-    }
+    const result = enter(stored.run);
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
     this.#simulations.delete(simulationId);
-    return { run: result.run, emitted: Object.freeze(emitted) };
+    return result;
   }
 
   evidence(runId: string, principalOrSeq?: Principal | number, maybeSeq = 0): EvidencePage {

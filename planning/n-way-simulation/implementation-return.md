@@ -5,6 +5,15 @@
 **Ledger:** D1154  
 **Disposition:** do not add the two client callers until this return is resolved
 
+**Current repair checkpoint, 2026-10-11 — D3709:** the preview and entry callers have since
+landed, and the current scratch walk already orchestrates pack moves. Ordinary and charged
+promotion now share the same entry implementation and retain those authored checkpoint/objective
+events, including their event-budget cost. The original reproduction below is historical,
+not a claim that all seven failures still exist at HEAD. This repair does not supply a complete
+step-by-step scratch comparison payload or declare this whole return closed. Current canonical
+behavior is in `docs/n-way-comparison.md`; permanent service/native controls are
+`apps/server/src/authored-simulation.test.ts` and the D3709 cases in `tests/browser/drill.spec.ts`.
+
 ## Outcome
 
 The server verbs exist, but the accepted scratch-simulation interaction is not buildable from

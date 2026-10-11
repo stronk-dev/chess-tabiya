@@ -3256,6 +3256,77 @@ test("D3692 checkpoint Continue waits for pending move feedback without losing a
   }
 });
 
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  test(`D3709 enters the previewed authored consequence and retains it on reload (${viewport.width}px)`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    // Private mechanics fixture: no published curriculum or strategic explanation is authored.
+    const document = {
+      id: `promotion-mechanics-${randomUUID().slice(0, 8)}`, version: "0.1.0", title: "Authored promotion mechanics", requires: [],
+      // Outcome rehearsal exposes authored previews. Line Drill deliberately withholds its
+      // spine; this control must not bypass that separate answer-disclosure policy.
+      mode: "outcome", phase: "middlegame", start: { fen: "4k3/8/8/8/8/8/7P/6K1 w - - 0 1", side: "white" },
+      objective: { type: "play_until_checkpoint", summary: "Reach the named fixture checkpoint.", successConditions: [{ kind: "reach_checkpoint", checkpointId: "finish" }] },
+      spine: [
+        { id: "h3", moveUci: "h2h3", moveSan: "h3", children: [{ id: "reply-h3", moveUci: "e8f8", moveSan: "Kf8", children: [] }] },
+        { id: "h4", moveUci: "h2h4", moveSan: "h4", children: [{ id: "reply-h4", moveUci: "e8f8", moveSan: "Kf8", children: [] }] },
+      ],
+      checkpoints: [{ id: "finish", label: "Fixture boundary reached", trigger: { atSpineNode: "reply-h3" }, actions: [] }],
+      feedbackPolicy: "segment_end", opponentPolicy: { mode: "theory_strict" },
+      provenance: { reviewStatus: "draft", sources: ["Mechanical transport fixture; no strategic claim."], licence: "CC0-1.0" },
+    };
+    const created = await page.request.post("/packs/drafts", { data: { document } });
+    expect(created.status(), await created.text()).toBe(201);
+    const { draft } = await created.json();
+    await page.goto(`/create/draft/${draft.id}`);
+    await page.getByRole("button", { name: "Save & playtest", exact: true }).click();
+    await expect(page).toHaveURL(/\/play\/run\//u);
+    const url = page.url(), runId = new URL(url).pathname.split("/").at(-1)!;
+    const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    const before = await graph();
+    await showRunActions(page);
+    const previewResponse = page.waitForResponse(response => response.url().endsWith(`/runs/${runId}/simulate`));
+    await page.getByRole("button", { name: "Preview authored lines", exact: true }).click();
+    const preview = await (await previewResponse).json();
+    const dialog = page.getByRole("dialog", { name: "Where these lines lead" });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByLabel("Chessboard", { exact: true })).toHaveCount(2);
+    const chosen = dialog.getByRole("article").filter({ has: page.getByRole("heading", { name: "h3", exact: true }) });
+    const column = preview.comparison.columns[0];
+    expect(preview.comparison.consequences[column.branchId]).toMatchObject({ objectiveState: "achieved", terminal: true, checkpointsReached: ["finish"] });
+    expect((await graph()).branches).toEqual(before.branches);
+    expect((await graph()).activeCursor).toEqual(before.activeCursor);
+    expect((await graph()).nodes).toEqual(before.nodes);
+
+    // Failure before mutation must retain the chosen preview and offer an exact retry.
+    const endpoint = `**/runs/${runId}/simulate-enter`;
+    await page.route(endpoint, route => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Fixture unavailable" } }) }), { times: 1 });
+    await chosen.getByRole("button", { name: "Enter this line", exact: true }).click();
+    await expect(dialog.getByRole("alert")).toContainText("That line was not entered");
+    expect((await graph()).branches).toEqual(before.branches);
+    expect((await graph()).activeCursor).toEqual(before.activeCursor);
+    const enteredResponse = page.waitForResponse(response => response.url().endsWith(`/runs/${runId}/simulate-enter`) && response.status() === 200);
+    await chosen.getByRole("button", { name: "Try this line again", exact: true }).click();
+    const entered = await (await enteredResponse).json() as { run: DrillRun };
+    await expect(dialog).not.toBeVisible();
+    const branch = entered.run.branches.find(branch => branch.origin === "simulated")!;
+    expect(entered.run.branches.filter(branch => branch.origin === "simulated")).toHaveLength(1);
+    const leaf = entered.run.nodes.find(node => node.id === entered.run.activeCursor.nodeId)!;
+    expect(leaf).toMatchObject({ fen: preview.branches[0].leafFen, objectiveState: "achieved" });
+    expect(entered.run.nodes.filter(node => node.branchId === branch.id).map(node => [node.moveUci, node.actor])).toEqual([["h2h3", "system"], ["e8f8", "system"]]);
+    expect(entered.run.events.filter(event => event.type === "checkpoint.reached").map(event => event.data.checkpointId)).toEqual(["finish"]);
+    await expect(page.getByRole("button", { name: "Rehearsal step 2: Kf8, checkpoint Fixture boundary reached", exact: true })).toBeVisible();
+    await returnFromRunActions(page);
+    await page.reload();
+    await expect(page.getByLabel("Chessboard", { exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Rehearsal step 2: Kf8, checkpoint Fixture boundary reached", exact: true })).toBeVisible();
+    const reloaded = await graph();
+    expect(reloaded.branches).toEqual(entered.run.branches);
+    expect(reloaded.activeCursor).toEqual(entered.run.activeCursor);
+    assertRecordedNodesPreserved(entered.run.nodes, reloaded.nodes);
+    await assertRunViewport(page, viewport);
+  });
+}
+
 for (const flipBoard of [false, true]) {
   test(`D3693 legal prediction survives failure and reload without committing the guess (flip=${flipBoard})`, async ({ page }) => {
     // A private, disposable mechanics fixture reuses the authored chess bytes. It does not

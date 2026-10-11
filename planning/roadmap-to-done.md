@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3708]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3709]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -44,7 +44,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Area | Delivered | Still required for full 1.0 |
 |---|---|---|
 | Evidence | Typed collectors, exact events, candidate packets, shared provider execution and grounded presentation | Remaining real source/consumer bindings, semantic qualification, selection/usefulness and truthful availability |
-| Rehearsal | Commit, consequence, rewind, branch, compare, replay, durable resume, admitted legal predictions and lost-response recovery | Complete first-run/return flows, the example's authored prediction sequence, all-context defaults, official examples and release-image proof |
+| Rehearsal | Commit, consequence, rewind, branch, compare, replay, durable resume, admitted legal predictions, lost-response recovery and authored-preview promotion parity | Complete synchronized scratch preview, first-run/return flows, the example's authored prediction sequence, all-context defaults, official examples and release-image proof |
 | Support | Registered modules, preset/ceiling composition, Guided Hint, theory navigation and board evidence | Selected-piece/square source integration, useful quiet/theory/prevention defaults, Inspector fidelity and owner-use discharge |
 | Review | Timeline, move grades, moments, graph, Analyze, retry, Compare and Story/share paths | Full cross-source explanation, missing opening/human/tablebase joins and every game's review-to-rehearsal return |
 | Theory/content | Searchable Library; principle/shape/pack entries; persistent authoring, validation, playtest and community publication | Grounded theory population, training-set progression and a varied graduated official corpus; currently zero official graduates |
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3708]]: 273 UX items complete, 272 live and 24
-retired; 1,720 live ledger items, all assigned, alongside 1,576 done and 161 refused. The 462
+Current checked inventory through [[D3709]]: 273 UX items complete, 272 live and 24
+retired; 1,720 live ledger items, all assigned, alongside 1,577 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,15 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3709]] repairs consequence parity when an authored preview becomes a real branch, for both
+ordinary and charged entry. Chosen checkpoint/objective events survive promotion and reload;
+their full cost counts toward the unchanged entry budget. Permanent HTTP and genuine
+desktop/phone private-Studio failure/retry/promotion/reload controls pass. Complete serial normal
+verification/build/all browser tiers pass 4,825 software, seven performance, 248 content and
+298 browser cases, one existing optional skip, zero retries and all 150 input/112 composition
+cells. [[D1154]] retains the complete synchronized scratch-comparison payload. No whole capability,
+milestone, exact-revision remote CI or release-image completion is claimed.
 
 [[D3706]] fixes the Campaign encounter-help display: it now reads the board's confirmed
 assistance instead of the latest map equipment, preserving the encounter's entry cut,

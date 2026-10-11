@@ -4,6 +4,18 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Authored consequence promotion — 2026-10-11
+
+[[D3709]] is **DONE LOCALLY**, under accepted `rfc/archive/n-way-comparison.md`
+§7.4/A5a. Ordinary and charged entry use one implementation retaining the selected
+preview's checkpoint/objective events; the existing 800-event limit includes them.
+Ten focused controls, clean types and actual desktop/phone failed-entry retry, promotion
+and reload pass. Full serial normal verification/build/all browser tiers pass: 4,825 software,
+seven performance, 248 content and 298 browser cases; one existing optional skip, zero retries,
+all 150 input/112 composition cells. [[D1154]] remains
+open for the complete synchronized scratch-comparison payload. No new source/format,
+Line Drill disclosure, chess claim, Campaign economy or whole-capability completion.
+
 ## Campaign encounter help — 2026-10-11
 
 [[D3706]] is **DONE LOCALLY**, under accepted Campaign core §§5/7.1 and the implemented

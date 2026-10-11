@@ -25584,3 +25584,44 @@ Campaign was the one capability with no API, route or content. Now:
   calibration, curriculum and release-image recovery remain open. Protected intent, immutable
   archives and authored chess bytes are untouched. No push, exact-revision remote CI, deployment,
   clean-host image proof or whole capability/milestone/release completion is claimed.
+
+## 2026-10-11 — Authored preview promotion parity and full progress inventory (D3709)
+
+- Accepted archived n-way-comparison §§7.3–7.4/A5a requires entered authored lines to retain
+  their demonstrated consequences. Scratch simulation already orchestrated moves; both ordinary
+  and charged promotion persisted bare moves. One shared entry walk now runs pack orchestration
+  and preserves the complete checkpoint/objective event tail. No source, format, disclosure,
+  schema, Campaign economy or new chess explanation is introduced.
+- Five permanent HTTP controls compare both chosen authored outcomes through ordinary and real
+  Campaign service/storage entry, saved canonical replay, exact emitted tails, charge-once replay
+  and the existing 800-event limit. A refused over-budget entry preserves storage and the preview
+  on repeated attempts; no engine queue is configured. Two parity controls reproduced the original
+  defect before repair using the earlier Line-mode mechanics fixture. The final valid Outcome-mode
+  fixture respects Line Drill's separate answer-free source policy.
+- Genuine desktop and phone-width private Studio journeys save/playtest, preview both legal lines,
+  refuse an intercepted pre-mutation entry failure, retry the same choice, show its real timeline
+  checkpoint and reload its exact branch/cursor/nodes. These do not claim ordinary lost-response
+  recovery after a committed entry. Initial fixture expectations, Campaign test typing, the public
+  error expectation, invalid fixture mode and a hidden-announcement locator were corrected; no
+  source/disclosure policy, deadline, retry count or assertion was weakened to manufacture parity.
+- Normal make authored-simulation-check passes ten selected controls; clean workspace types and
+  both focused native journeys pass. Complete serial make roadmap-receipt verify-awake build
+  test-browser-ci-awake exits zero: 4,825 software/373 files (312.85 s), seven performance/four
+  files (61.28 s), 248 content/25 files, types, governance, packaging and build. Browser tiers pass
+  298 cases: 233 smoke, five real-content, 59 matrix and one production-profile test. One existing
+  optional Maia case is skipped; zero retries. All 150 input and 112/112 composition cells pass.
+- D1154 now distinguishes delivered labels, scoped preview ids, bounds, authored scratch
+  consequences and final-position cards from its still-missing complete synchronized comparison
+  payload. The historical return is retained rather than treated as seven current defects.
+- Existing docs, execution queue and the authoritative roadmap carry the repair and whole-product
+  inventory. Ledger population is 3,458: 1,720 live, all assigned; 1,577 done and 161 refused.
+  The unchanged 462 historical prose-only closures remain weaker proof. UX remains 273 complete,
+  272 live and 24 retired; product RFCs remain 42 implementing, ten awaiting and 23 draft. All
+  fourteen whole capabilities remain incomplete, milestones four active/five blocked, production
+  content 86 pack documents with zero official graduates, and bots twelve uncalibrated configurations.
+- The current overview names delivered screens/APIs separately from source adoption, qualification,
+  useful Support/Review defaults, skill/style feedback, bot calibration, Campaign curriculum/rewards,
+  official content and clean-host release recovery. D3702/D3703 retain their original unknown causes:
+  passing replay is not diagnosis. No new status mechanism or raw capture is committed. Protected
+  intent and immutable archives are unchanged; this correction does not newly falsify an intent
+  sentence. No push, exact-revision GitHub CI, deployment, image recovery or release completion.
