@@ -94,6 +94,14 @@ removed pawn's prior duty; a recapture still lands on the attacking pawn's actua
 The same distinction survives saved-window reconstruction and the registered Review caption and
 square/path presentation. It does not assert intent, force or move quality.
 
+An overload recapture follows the defender to its actual landing occupant, including promotion.
+A rook/queen promotion that preserves every retained sole duty refutes the conflict, even when
+the original defender was a pawn. A blocked line can still produce a genuine conflict; promotion
+is not a blanket exemption. Both-colour legal controls cover all four promotion alternatives,
+the sealed factory and registered Full Inspector wire presentation (`make semantic-tactics-check`).
+This kernel repair does not add the response predicate to the shared candidate packet or discharge
+the semantic-collector RFC's remaining consumer/use obligations.
+
 **Eligibility** is an exact event-to-consumer permission. It says that an event may reach that
 consumer; it does not say the event is useful, visible or enabled. Every row names its validation
 posture explicitly (`semanticValidation`): `required` compiles eligible only over a `passed`

@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3716]] repairs the accepted overload predicate's recapture-promotion join.
+Both-colour predecessor controls establish false conflicts; the actual landing occupant now
+retains the defender identity across promotion. Four legal promotion alternatives, independent
+sole/retained-duty and positive-exchange witnesses, blocked-line conflict controls, the sealed
+factory and Full Inspector wire presentation pass within 109 focused checks. All four clauses
+remain. This predicate is not adopted by the shared candidate packet; no new binding is added.
+Complete serial normal verification/build/all browser tiers now pass: 4,880 software,
+seven performance, 255 content and 302 browser checks, one existing optional skip, zero retries,
+all 150 input/112 composition cells and clean types/governance/packaging/build. D3716 closes
+locally; the RFC's separate D1/D4 discharges remain awaiting. All 289 canonical cases remain
+passing, zero whole subjects qualify and no remote-CI or release completion follows.
+
 2026-10-11 — [[D3701]] executes accepted semantic-validation-authority Slice B for
 source-bound direct attack counts and loose-piece omissions. Nineteen predecessor-red
 controls now pass with the focused suite (211 total); the normal receipt runs all 229

@@ -211,7 +211,10 @@ export function overloadedDefenderResponseConflict(beforeFen: string, moveUci: s
       reply.play(recapture);
       const replyFen = canonicalFen(reply);
       const replyDuties = defenderDutyReading(replyFen).duties;
-      if (retainedTargets.every((duty) => replyDuties.some((candidate) => candidate.defender.square === capture.to && candidate.defender.piece.role === capturedDuty.defender.piece.role && candidate.target.square === duty.target.square && samePiece(candidate.target.piece, duty.target.piece)))) preservesEveryDuty = true;
+      // The legal recapture binds the same defender to its actual landing occupant.
+      // A promoting pawn can retain its duties as a rook/queen, not as its former role.
+      const recapturingPiece = reply.board.get(destination)!;
+      if (retainedTargets.every((duty) => replyDuties.some((candidate) => candidate.defender.square === capture.to && samePiece(candidate.defender.piece, recapturingPiece) && candidate.target.square === duty.target.square && samePiece(candidate.target.piece, duty.target.piece)))) preservesEveryDuty = true;
       let exposed = false;
       for (const duty of retainedTargets) {
         const targetSquare = parseSquare(duty.target.square)!;

@@ -139,6 +139,10 @@ Campaign data is content. Both tiers run in `make verify` and their existing Git
 `make application-readiness-check` also selects each suite's declared tier explicitly, with
 the process suite's original deadlines retained.
 
+`make semantic-tactics-check` runs the existing semantic and special-move tactic suites,
+including legal recapture-promotion defence duties and both-colour blocked-line controls.
+Both files also run in the normal software CI gate and `make evidence-foundation-check`.
+
 `make verify-governance` also runs
 `make register-check`, which joins every active RFC's
 `tabiya-claims` declaration to the shared-resource registers, derives their landed heads

@@ -1458,6 +1458,10 @@ library-return-check:
 library-return-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep D3686
 
+.PHONY: semantic-tactics-check
+semantic-tactics-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts
+
 semantic-validation-cited-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts
 

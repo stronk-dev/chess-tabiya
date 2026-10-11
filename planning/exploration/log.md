@@ -25829,3 +25829,32 @@ Campaign was the one capability with no API, route or content. Now:
   is reconciled to the existing 289-case receipt. No additional tracker or raw recording.
   Protected intent and immutable archives are unchanged; no intent sentence is newly
   falsified. The full 1.0 goal remains active; this checkpoint closes only the in-flight batch.
+
+## 2026-10-11 — D3716 overload recapture-promotion identity repair
+
+- Under accepted semantic-collectors §2/§3.5, legal both-colour predecessors falsely emit
+  overload conflicts because the recapturing pawn's new rook/queen role cannot match its old
+  pawn role. The join now follows the actual landing occupant. All four clauses remain;
+  blocked-line controls retain genuine conflicts rather than exempting every promotion.
+- Four permanent legal controls cover all promotion alternatives, independent board occupancy,
+  sole and retained duties, positive local exchange, the real sealed factory and registered
+  Full Inspector wire presentation. Initial rook/queen fixtures were co-defended and therefore
+  vacuous; corrected bishop fixtures expose the actual false verdict in both colours. The
+  chessops promoted flag is a fixture-shape correction, not another collector bug. No shared
+  candidate-packet adoption exists or is added; D1/D4 remain awaiting.
+- make semantic-tactics-check passes 109 checks. The normal semantic receipt writer retains
+  all 289 passing canonical cases, 81 subjects and zero fully qualified subjects. Sandbox
+  localhost/lock-write refusals are not product regressions; the authorized ordinary Make
+  run completes without changing budgets, source conventions, retries, skips or pack bytes.
+- Complete serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  4,880 software/374 files (302.39 s), seven performance/four files (61.03 s), 255 content/26
+  files (53.77 s), clean types/governance/packaging/build and 302 browser passes (237 smoke,
+  five content, 59 matrix, one production). One existing optional Maia skip, zero retries,
+  all 150 input and 112 composition cells. No current-revision GitHub or release-image proof.
+- D3716, work state, queue, existing roadmap and semantic/development docs close together.
+  Inventory becomes 3,465 ledger rows: 629 todo, 16 doing, 1,076 blocked, 1,583 done and
+  161 refused; all 1,721 live rows assigned. UX remains 273 complete/272 live/24 retired;
+  462 prose-only historical closures remain weaker evidence. All fourteen capabilities remain
+  incomplete; milestones remain four active/five blocked, 86 packs and zero official graduates.
+  Protected intent and archives are unchanged; no intent sentence is newly falsified.
+  No new tracker or raw research recording. Full 1.0 remains the active goal.

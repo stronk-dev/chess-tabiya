@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:88b746b093dc0c9cd5480fd5837ef0a2ab3e275dddc1b88216f4507018f2a7a9",
+    "roadmap": "sha256:f3c0ddb488e14a9ec079d757ca0cddd566fa12ff1bf4eb158162b561f4975029",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:9279b2ca7ba0585d702bf8c2688e86c8ec64d79988491ed1daec4df10b2a6f84",
+    "workState": "sha256:9168845ad96e0942f55f26de480da4cb734c7c3f791b97ba5ece760a7671e514",
     "rfcRegister": "sha256:02b90e27cbe7f9ffa1ff8b5408909c02fa55587db0f80ca13283ea9d93baacf5",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 16,
       "blocked": 1076,
-      "done": 1582,
+      "done": 1583,
       "refused": 161
     },
     "workItems": {
@@ -261,7 +261,7 @@
       "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3714 adds twenty-four independently source-bound structural king-zone cases: all four corners, entry/exit/preservation and populated both-interior omissions for both colours. Neutral coordinates and legal replay check the complete emitted king population and exact identities/signs. All 265 predecessor cases remain unchanged; 289 canonical cases (173 positive/116 negative) and 280 focused cited checks pass over 81 subjects, zero fully qualified. Positive/negative cells are 53/48 present and 28/33 required; all 81 orientation obligations remain. One initially illegal interior fixture was corrected, not counted as a collector bug or omission. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,877 software/375 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 302 browser cases, one existing optional skip, zero retries and all 150 input/112 composition cells. Frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, learner admission, authored packs and historical intermittent failures remain held. No whole capability/milestone, exact-revision remote CI or release-image completion.",
+        "summary": "D3716 repairs accepted overload recapture-promotion identity: the actual landing occupant may preserve its retained sole duty as a rook/queen. Both-colour legal predecessor controls expose false conflicts; blocked-line controls retain genuine conflicts and all four clauses. The kernel, sealed factory and registered Full Inspector wire presentation pass within 109 focused checks. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,880 software/374 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging/build and 302 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. All 289 canonical cases still pass over 81 subjects, zero fully qualified; 53/48 positive/negative cells present, 28/33 required and all 81 orientation obligations remain. Shared candidate-packet adoption is absent and not added. Semantic-collector D1/D4, frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, useful selection, learner admission, authored packs and historical intermittent failures remain held. No whole capability/milestone, current-revision remote CI or release-image completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-authority.md",
@@ -301,7 +301,10 @@
           "rfc/tactical-collectors.md",
           "packages/runtime/src/tactics.ts",
           "packages/runtime/src/semantic-validation-discovered.test.ts",
-          "packages/runtime/src/semantic-validation-king-zone.test.ts"
+          "packages/runtime/src/semantic-validation-king-zone.test.ts",
+          "rfc/semantic-collectors.md",
+          "packages/runtime/src/semantic-tactics.test.ts",
+          "packages/runtime/src/special-move-tactics.test.ts"
         ],
         "anchors": [
           {
@@ -393,6 +396,16 @@
             "kind": "work_state",
             "id": "D3714",
             "digest": "sha256:d84acd93e8a1eb63108d5f4af234883a4267b90137cf25cdbae21cc12c4893af"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-collectors.md",
+            "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3716",
+            "digest": "sha256:06784aa138972e479577ed0595f00bfe2069a5bf5a2df582ce929aef13007e29"
           }
         ]
       },

@@ -1,5 +1,5 @@
 import { normalizeMove } from "chessops/chess";
-import { parseUci } from "chessops/util";
+import { makeUci, parseSquare, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
@@ -10,6 +10,7 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { parsePresentationReceipt, presentEvidenceItems, presentedSentence, serializePresentedEvidence } from "./presentation-contract.js";
 import { defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, overloadedDefenderResponseConflict } from "./tactics.js";
 import { transitionSemanticFacts } from "./transition.js";
+import { legalCaptureMovesTo, legalExchangeForMove } from "./exchange.js";
 
 function after(fen: string, uci: string): string {
   const position = positionFromFen(fen);
@@ -20,6 +21,57 @@ function after(fen: string, uci: string): string {
 }
 
 describe("semantic tactic anchors", () => {
+  it.each([
+    { name: "black", fen: "7k/8/8/8/R1R5/7K/1p6/b1b4R w - - 0 1", move: "a4a1", defender: "b2", landing: "a1", target: "c1", attacker: "c4", blocked: false },
+    { name: "white", fen: "B1B4r/1P6/7k/r1r5/8/8/8/7K b - - 0 1", move: "a5a8", defender: "b7", landing: "a8", target: "c8", attacker: "c5", blocked: false },
+    { name: "black", fen: "7k/8/8/8/R1R5/7K/1p6/bbb4R w - - 0 1", move: "a4a1", defender: "b2", landing: "a1", target: "c1", attacker: "c4", blocked: true },
+    { name: "white", fen: "BBB4r/1P6/7k/r1r5/8/8/8/7K b - - 0 1", move: "a5a8", defender: "b7", landing: "a8", target: "c8", attacker: "c5", blocked: true },
+  ])("D3716 $name promotion duties respect the actual role and blocker ($blocked)", value => {
+    const next = after(value.fen, value.move);
+    const duties = defenderDutyReading(value.fen).duties;
+    for (const square of [value.landing, value.target]) expect(duties).toContainEqual(expect.objectContaining({
+      defender: expect.objectContaining({ square: value.defender, piece: expect.objectContaining({ color: value.name, role: "pawn" }) }),
+      target: expect.objectContaining({ square }), coDefenders: [],
+    }));
+    const recaptures = legalCaptureMovesTo(positionFromFen(next), parseSquare(value.landing)!, parseSquare(value.defender)!);
+    expect(recaptures.map(makeUci).sort()).toEqual(["b", "n", "q", "r"].map(role => value.defender + value.landing + role));
+    for (const recapture of recaptures) {
+      const role = recapture.promotion!;
+      const replied = positionFromFen(next); replied.play(recapture);
+      expect(replied.board.get(parseSquare(value.landing)!)).toMatchObject({ color: value.name, role });
+      // Independent horizontal occupancy witness: the promoted defender reaches c1/c8
+      // through the empty b-file square, although its role is no longer pawn.
+      expect(replied.board.occupied.has(parseSquare(value.name === "black" ? "b1" : "b8")!)).toBe(value.blocked);
+      expect(replied.board.get(parseSquare(value.target)!)).toMatchObject({ color: value.name, role: "bishop" });
+      const retains = defenderDutyReading(canonicalFen(replied)).duties.some(duty => duty.defender.square === value.landing && duty.target.square === value.target);
+      expect(retains).toBe(!value.blocked && (role === "queen" || role === "rook"));
+      const taking = parseUci(value.attacker + value.target)!;
+      expect(replied.isLegal(taking)).toBe(true);
+      expect(legalExchangeForMove(replied, taking)?.resultUnits).toBeGreaterThan(0);
+    }
+    const capture = transitionSemanticFacts(value.fen, value.move, next).find(fact => fact.family === "capture");
+    const actual = overloadedDefenderResponseConflict(value.fen, value.move, next, capture);
+    expect(actual.kind).toBe(value.blocked ? "conflicts" : "clear");
+    expect(actual.conflicts).toHaveLength(value.blocked ? 1 : 0);
+    if (value.blocked) expect(actual.conflicts[0]).toMatchObject({
+      soleDefender: { square: value.defender, piece: { color: value.name, role: "pawn" } },
+      retainedTargets: [{ square: value.target, piece: { color: value.name, role: "bishop" } }],
+      legalRecaptures: recaptures.map(makeUci),
+      positiveCaptures: recaptures.map(move => expect.objectContaining({ recapture: makeUci(move) })),
+    });
+    const sealed = invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", {
+      duties: invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: value.fen }),
+      capture: invokeEvidenceValueRoute("rules.transition.event.capture@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next })[0]!,
+    });
+    expect(sealed.kind).toBe("available");
+    if (sealed.kind !== "available") throw new Error("Legal promotion alternatives must be computed, not abstained");
+    expect(sealed.value.map(item => item.payload)).toEqual(actual.conflicts);
+    const rendered = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(
+      evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, sealed.value),
+    )))));
+    expect(rendered).toHaveLength(value.blocked ? 1 : 0);
+  });
+
   it("retains exact duties and co-defenders while refusing king targets", () => {
     const reading = defenderDutyReading("r3k3/8/1n6/8/8/8/8/R3K3 w - - 0 1");
     expect(reading.duties).toContainEqual(expect.objectContaining({

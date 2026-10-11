@@ -30838,6 +30838,15 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D3716",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:06784aa138972e479577ed0595f00bfe2069a5bf5a2df582ce929aef13007e29",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-tactics.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
