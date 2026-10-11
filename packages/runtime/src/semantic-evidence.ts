@@ -323,11 +323,14 @@ function operandKeys(value: unknown): readonly string[] {
   return typeof value === "object" && value !== null && !Array.isArray(value) ? Object.keys(value as Record<string, unknown>) : [];
 }
 
-function structuralSubject(value: StructuralObservation): string {
+function structuralSubject(value: StructuralObservation, productionReading: boolean): string {
   const record: Record<string, unknown> = { kind: value.kind };
   for (const key of ["color", "role", "file", "shade", "form", "zone"] as const) if (value[key] !== undefined) record[key] = value[key];
   record.squares = value.kind === "king_zone" ? [] : value.squares;
-  return evidenceDigest(record);
+  // This key never leaves the private join. Production readings have literal JSON operands
+  // and fixed field order, so exact strings suffice; public event/value digests stay unchanged.
+  // Preserve the historical encoder for caller-injected test/research readers.
+  return productionReading ? JSON.stringify(record) : evidenceDigest(record);
 }
 
 function structuralMagnitude(value: StructuralObservation): number {
@@ -343,10 +346,11 @@ export function structuralSemanticEventPayloads(beforeFen: string, moveUci: stri
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
   const before = read(anchor.beforeFen).features.filter((item): item is StructuralObservation & { kind: StructuralSemanticEventOperands["family"] } => STRUCTURAL_EVENT_FAMILIES.includes(item.kind as StructuralSemanticEventOperands["family"]));
   const after = read(anchor.afterFen).features.filter((item): item is StructuralObservation & { kind: StructuralSemanticEventOperands["family"] } => STRUCTURAL_EVENT_FAMILIES.includes(item.kind as StructuralSemanticEventOperands["family"]));
+  const productionReading = read === structuralReading;
   const payloads: StructuralSemanticEventOperands[] = [];
   for (const family of STRUCTURAL_EVENT_FAMILIES) {
-    const left = new Map(before.filter((item) => item.kind === family).map((item) => [structuralSubject(item), item]));
-    const right = new Map(after.filter((item) => item.kind === family).map((item) => [structuralSubject(item), item]));
+    const left = new Map(before.filter((item) => item.kind === family).map((item) => [structuralSubject(item, productionReading), item]));
+    const right = new Map(after.filter((item) => item.kind === family).map((item) => [structuralSubject(item, productionReading), item]));
     for (const key of new Set([...left.keys(), ...right.keys()])) {
       payloads.push(immutable({ before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen, family, before: left.get(key) ?? null, after: right.get(key) ?? null }));
     }

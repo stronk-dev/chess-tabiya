@@ -6,6 +6,13 @@
 
 ## Discovered execution qualification — 2026-10-11
 
+[[D3300]]'s private structural-join hashing correction is **DONE LOCALLY** under the
+existing longitudinal-store full-population contract; the residual cold-cost item
+returns to TODO. No new cache, source, collector meaning or content revision ships.
+The existing `planning/longitudinal-store/d3300-index-reuse-2026-10-11.md` records
+the rejected cache experiment, complete-output comparisons and full gate result.
+No capability, milestone or current-revision remote-CI/release-image gate closes.
+
 [[D3710]]/[[D3711]] are **DONE LOCALLY**, evidence-foundation under accepted
 semantic-validation-authority Slice B and tactical-collectors §3.12. Six independently legal
 rook/bishop/queen checks in both colours reproduce the endpoint omission; ten populated

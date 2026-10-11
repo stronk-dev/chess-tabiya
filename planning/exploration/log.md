@@ -26131,3 +26131,46 @@ Campaign was the one capability with no API, route or content. Now:
 - A final roadmap indentation correction after generation makes the first final
   governance run refuse its stale roadmap status file. Regenerate with the normal
   target and rerun governance; the complete product/build/browser result stands.
+
+## 2026-10-11 (codex) — next admitted full-population cost work (D3300)
+
+- Previous goal turn completes and commits D3719 as 809cf8c8 with the full normal
+  product/build/browser gates. Current tracked tree is clean; existing untracked
+  paths remain outside this work. The full 1.0 goal remains active.
+- Recheck the provider delivery frontier. D3360 already implements the exact
+  authorized run subject; do not recommission it. Whole source-occurrence resolution
+  still requires the separately held Maia, durable Stockfish and opening amendments;
+  no partial availability endpoint or filtered manifest is substituted.
+- Resume existing D3300 under its accepted complete-population contract. Structural
+  event joins rebuild and hash the same before-position family subjects for each legal
+  alternative. Capture the current implementation with the normal ignored baseline
+  target before testing a latest-before-index reuse candidate. Retain all structural
+  families, signs, operands, exact events/factory receipts and opportunity denominators;
+  this is not signal selection, narrowed collection or a new evidence authority.
+- Two both-colour predecessor controls confirm repeated before-subject hashing. The
+  first latest-before-index candidate passes the collector/worker checks and all eight
+  exact-output comparisons, but reduces summed cold time by only 0.65% with mixed
+  samples (five faster, three slower); discard its additional private cache.
+- The simpler candidate replaces only private production structural join hashes with
+  exact strings of the same fixed-order record. That key is not an event identity or
+  source receipt; public evidence hashes and injected-reader compatibility remain.
+  Five new controls plus independent special-move predecessor joins pass within 83
+  collector and 65 actual projector/worker checks. Reinstating the old subject hashing
+  makes four final direct/sole-factory controls fail (104 hashes rather than zero).
+- Eight fresh-process, alternating-order pairs against the unchanged baseline retain
+  complete events, factory/input receipts, rows, all 2,199 legal edges, 196,589 events
+  and forty checkpoints per side. Summed cold time is 44,665.556 → 39,064.189 ms,
+  12.54% lower locally, seven faster / one slower. Host cost varies; no portable speed,
+  completed cold-cost, semantic qualification or source/consumer adoption claim follows.
+  Raw output is not committed; ignored compact comparison data is no CI/progress input.
+  Normal generated validation and complete product/build/browser gates follow.
+- Final normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 4,964 software/376 files, seven performance/four files, 255 content/26
+  files, clean types/governance/packaging/build and 302 browser passes (237 smoke,
+  five real-content, 59 matrix, one packaged-production), one existing optional Maia
+  skip, zero retries and all 150 input/112 composition cells. Generated validation
+  retains 307 passing cases over 81 subjects, zero fully qualified. Update the existing
+  docs, measurement receipt, ledger and roadmap checkpoint together; D3300 returns
+  to its residual cold-cost TODO. No push, GitHub-CI, image recovery, whole capability
+  or milestone completion is claimed. The owner's requested 1.0 inventory follows
+  this bounded finish-up; the existing roadmap remains its authority.

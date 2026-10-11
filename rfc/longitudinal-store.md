@@ -10,6 +10,14 @@
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
 - **Author:** claude
+- **Implementation checkpoint 2026-10-11 — D3300:** private structural-event joins use
+  exact operand strings instead of redundant hashes; public evidence identities, complete
+  populations, payload order and factory/input receipts remain unchanged. Caller-injected
+  readers retain their historical encoder, and no new structural cache is added. Five
+  permanent controls include four predecessor failures; eight complete-output comparisons
+  retain every legal edge and checkpoint. The existing measurement receipt records the
+  rejected cache experiment and local timings. This is an output-preserving implementation
+  correction, not a derivation revision, source qualification or cold-cost completion.
 - **Implementation checkpoint 2026-10-10 — D3683:** startup refusal is one-shot and awaits the
   owned worker's termination before rejecting to application cleanup. Six real-thread controls
   reproduce early settlement on the predecessor, including actual file-backed database cleanup.

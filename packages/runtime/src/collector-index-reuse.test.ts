@@ -6,8 +6,11 @@ import { expect, it, vi } from "vitest";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 import { structuralReading } from "./structure.js";
-import { localSemanticEventClosure } from "./semantic-evidence.js";
+import { localSemanticEventClosure, structuralSemanticEventPayloads } from "./semantic-evidence.js";
+import { STRUCTURAL_EVENT_FAMILIES } from "./evidence-catalog.js";
+import * as evidenceContract from "./evidence-contract.js";
 import { evidenceValueReceipt } from "./evidence-contract.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { squareControlEvents, squareControlReading, type ControlledSquare, type SquareControlEvent, type SquareControlEvents } from "./square-control.js";
 
 function edge(fen: string, uci: string) {
@@ -17,6 +20,93 @@ function edge(fen: string, uci: string) {
   position.play(move);
   return { beforeFen: fen, moveUci: makeUci(move), afterFen: canonicalFen(position) };
 }
+
+// The predecessor's hashed per-family join, independent of the production string keys.
+function structuralReference(input: ReturnType<typeof edge>) {
+  const key = (value: ReturnType<typeof structuralReading>["features"][number]) => {
+    const image: Record<string, unknown> = { kind: value.kind };
+    for (const field of ["color", "role", "file", "shade", "form", "zone"] as const) if (value[field] !== undefined) image[field] = value[field];
+    image.squares = value.kind === "king_zone" ? [] : value.squares;
+    return evidenceContract.evidenceDigest(image);
+  };
+  const before = structuralReading(input.beforeFen).features, after = structuralReading(input.afterFen).features;
+  return STRUCTURAL_EVENT_FAMILIES.flatMap(family => {
+    const left = new Map(before.filter(value => value.kind === family).map(value => [key(value), value]));
+    const right = new Map(after.filter(value => value.kind === family).map(value => [key(value), value]));
+    return [...new Set([...left.keys(), ...right.keys()])].map(subject => ({ before_fen: input.beforeFen,
+      move_uci: input.moveUci, after_fen: input.afterFen, family, before: left.get(subject) ?? null, after: right.get(subject) ?? null }));
+  });
+}
+
+it.each(["w", "b"])("uses exact private %s structural join keys without hashing or caching subjects", (turn) => {
+  const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${turn} KQkq - 0 7201`;
+  const first = edge(fen, turn === "w" ? "e2e4" : "e7e5");
+  const second = edge(fen, turn === "w" ? "d2d4" : "d7d5");
+  const later = edge(first.afterFen, turn === "w" ? "e7e5" : "e2e4");
+  const clock = edge(fen.replace(" 0 7201", " 12 7201"), first.moveUci);
+  const inputs = [first, second, first, later, second, clock];
+  const expected = inputs.map(structuralReference);
+  const digest = evidenceContract.evidenceDigest;
+  let hashed = 0;
+  const spy = vi.spyOn(evidenceContract, "evidenceDigest").mockImplementation(value => {
+    if (value !== null && typeof value === "object" && "kind" in value && "squares" in value) hashed++;
+    return digest(value);
+  });
+  try {
+    inputs.forEach((input, index) => {
+      const actual = structuralSemanticEventPayloads(input.beforeFen, input.moveUci, input.afterFen);
+      expect(JSON.stringify(actual)).toBe(JSON.stringify(expected[index]));
+      expect(hashed).toBe(0);
+      expect(Object.isFrozen(actual)).toBe(true);
+    });
+    const beforeFailure = hashed;
+    expect(() => structuralSemanticEventPayloads(clock.beforeFen, clock.moveUci, second.afterFen)).toThrow();
+    expect(hashed).toBe(beforeFailure);
+    const again = structuralSemanticEventPayloads(clock.beforeFen, clock.moveUci, clock.afterFen);
+    expect(JSON.stringify(again)).toBe(JSON.stringify(expected.at(-1)));
+    expect(hashed).toBe(beforeFailure);
+  } finally { spy.mockRestore(); }
+});
+
+it.each(["w", "b"])("uses private %s structural join keys through the unchanged sealed family factory", turn => {
+  const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${turn} KQkq - 0 7203`;
+  const inputs = [edge(fen, turn === "w" ? "e2e4" : "e7e5"), edge(fen, turn === "w" ? "d2d4" : "d7d5")];
+  const expected = inputs.map(structuralReference);
+  const digest = evidenceContract.evidenceDigest;
+  let hashed = 0;
+  const spy = vi.spyOn(evidenceContract, "evidenceDigest").mockImplementation(value => {
+    if (value !== null && typeof value === "object" && "kind" in value && "squares" in value) hashed++;
+    return digest(value);
+  });
+  try {
+    inputs.forEach((input, index) => {
+      const values = invokeEvidenceValueRoute("rules.structural.event.piece_count@1", input);
+      expect(hashed).toBe(0);
+      expect(JSON.stringify(values.map(value => value.payload))).toBe(JSON.stringify(expected[index]!.filter(value => value.family === "piece_count")));
+      const receipts = values.map(evidenceValueReceipt);
+      expect(values.length).toBeGreaterThan(0);
+      expect(JSON.stringify(invokeEvidenceValueRoute("rules.structural.event.piece_count@1", input).map(evidenceValueReceipt))).toBe(JSON.stringify(receipts));
+      expect(hashed).toBe(0);
+    });
+  } finally { spy.mockRestore(); }
+});
+
+it("never reuses a caller-injected structural reading or mistakes it for the production authority", () => {
+  const input = edge("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 7202", "e2e4");
+  let marker = 100;
+  const read = (fen: string) => ({ ...structuralReading(fen), features: [Object.freeze({ kind: "piece_count" as const, color: "white" as const, role: "pawn" as const, squares: [], count: marker })] });
+  const first = structuralSemanticEventPayloads(input.beforeFen, input.moveUci, input.afterFen, read);
+  marker = 101;
+  const second = structuralSemanticEventPayloads(input.beforeFen, input.moveUci, input.afterFen, read);
+  expect(first).toHaveLength(1);
+  expect(second).toHaveLength(1);
+  expect(first[0]!.before?.count).toBe(100);
+  expect(second[0]!.before?.count).toBe(101);
+  const actual = structuralSemanticEventPayloads(input.beforeFen, input.moveUci, input.afterFen);
+  const reference = structuralSemanticEventPayloads(input.beforeFen, input.moveUci, input.afterFen, fen => structuralReading(fen));
+  expect(JSON.stringify(actual)).toBe(JSON.stringify(reference));
+  expect(actual.length).toBeGreaterThan(20);
+});
 
 // An independent array/Set join, not the production indexed-map implementation.
 function reference(input: ReturnType<typeof edge>): SquareControlEvents {
@@ -162,6 +252,7 @@ it.each([
 ])("keeps exact special-move deltas and turn-clone abstentions: %s %s", (fen, uci) => {
   const input = edge(fen, uci), expected = reference(input);
   const initial = squareControlEvents(input.beforeFen, input.moveUci, input.afterFen);
+  expect(JSON.stringify(structuralSemanticEventPayloads(input.beforeFen, input.moveUci, input.afterFen))).toBe(JSON.stringify(structuralReference(input)));
   for (let repeat = 0; repeat < 2; repeat++) {
     const actual = squareControlEvents(input.beforeFen, input.moveUci, input.afterFen);
     expect(actual).toBe(initial);

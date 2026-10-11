@@ -655,7 +655,7 @@ export const createRulesTacticConsequenceForcedMateAfterMoveV2Evidence = (() => 
 })();
 
 function structuralEventsForEdge(edge: EvidenceEdge) {
-  return memo(`structuralEvents|${edgeKey(edge)}`, () => structuralSemanticEventPayloads(edge.beforeFen, edge.moveUci, edge.afterFen, cachedStructuralReading));
+  return memo(`structuralEvents|${edgeKey(edge)}`, () => structuralSemanticEventPayloads(edge.beforeFen, edge.moveUci, edge.afterFen));
 }
 /** One population factory per structural event family (eleven). */
 export const STRUCTURAL_EVENT_FACTORIES = Object.freeze(Object.fromEntries(STRUCTURAL_EVENT_FAMILIES.map((family) => {

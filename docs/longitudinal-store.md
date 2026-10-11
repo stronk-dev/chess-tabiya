@@ -123,6 +123,15 @@ unseen games, and changes neither the evidence authority nor derivation revision
 prefixes, changed ownership, unchanged checkpoints, absence, immutability and bounded eviction.
 The test-only `createInMemoryTestApplication` has no worker and reports `disabled_test`.
 
+The structural-event collector also uses exact JSON strings for its private subject
+joins instead of hashing them. These strings never become public evidence identities;
+event/value digests, payload order and complete populations remain unchanged. Caller-injected
+research readers retain their historical encoder. No extra structural cache is added.
+Five permanent controls and eight fresh-process full-output comparisons cover this correction;
+summed cold time was 12.54% lower locally (seven faster pairs, one slower), not a portable
+latency guarantee. The existing D3300 measurement receipt retains both the result and
+the rejected cache experiment. Residual cold cost remains open.
+
 ## Reading
 
 `application.longitudinal.read(actorLearnerId, parseLongitudinalReadQuery(...))` (and

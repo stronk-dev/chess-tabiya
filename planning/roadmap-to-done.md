@@ -51,7 +51,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Bots | Twelve persistent, selectable, uncalibrated configurations across three families/four bands; exact replay/rematch | Measured strength/human likeness, richer observable personality, repertoire, phase/endgame/clock behavior and bot history |
 | Learner model | Rating, durable observations/opportunities, private floor-gated habit cards, opening counts and drill-down | Valid skill credit, comparative style references, opening performance and grounded recommendations; no skill marks yet |
 | Campaign | Exposed draft-pilot map, kit/help, preparation, resource-charged actions, encounters, unrated boss, results, resume and Review | Official curriculum, theory/catalogue progression, full reward/long-term collection loop and complete boss/failure journeys |
-| Social play | Live sessions, imports, invitations and native match foundations | Coherent pairing/clock/result/rematch/provider-follow workflows and supported variant journeys |
+| Social play | Live sessions, imports, invitations and playable native friend matches | Coherent pairing/clock/result/rematch/provider-follow workflows and supported variant journeys |
 | Coach/streamer | Classrooms, assignments and actual consented completed/incomplete submission inspection/revocation | Guided setup, complete Academy/Stream compositions, audience preview/voting/delay and broader multi-user journeys |
 | Accessibility | Shared board input, permanent cells, responsive in-run shell, themes and evidence paint | Route-wide post-gesture/zoom/focus/device checks, owner screen-reader use and PWA install/update/offline behavior |
 | Account/data | Authorization, private export/import/delete, native restored branched play and populated installation recovery | Guest/claim, complete object/lifecycle coverage and built-image operator recovery |
@@ -135,6 +135,16 @@ composition cells and clean types/governance/packaging.
 All 307 canonical validation cases pass, 81 subjects, zero qualified. The same
 receipt above carries the follow-up; no source-contract, revision, content, whole capability,
 current-revision remote CI or release-image promotion follows.
+
+The latest [[D3300]] correction removes redundant private structural-subject hashes,
+without adding a cache or changing public evidence identities. Five new controls
+include four predecessor failures. Eight complete-output pairs retain every event,
+receipt, row and checkpoint; summed cold time is 12.54% lower locally, seven faster
+and one slower. The extra cache experiment was rejected at 0.65%. Full normal serial
+gates/build pass 4,964 software, seven performance, 255 content and 302 browser cases,
+one existing optional skip, zero retries, all 150 input/112 composition cells and
+clean types/governance/packaging. Residual cold cost stays TODO; no whole release gate
+advances. The existing D3300 receipt above retains the measurements and limitations.
 
 [[D3300]] fresh-process projection measurement distinguishes the remaining cold
 cost from delivered prefix reuse and bounded drain: the real 80-ply arm takes

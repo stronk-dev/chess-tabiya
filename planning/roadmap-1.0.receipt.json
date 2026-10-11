@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b146676541a551d2e75d029b45233f03ca578277525ad74232f3fb0a0504c74c",
+    "roadmap": "sha256:4454ec238eced2d1c6f40df396c79119827c60b6aea2f8813d3149f3afc959fe",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:6d8721b0e1f96499d9babbe1e1e38c392bfe6721f6ed52e2cb5f0b0892d8e3cc",
+    "workState": "sha256:812628db0ce9e409e4abcf5ee0cca5caf65ce832ba871bfcdd01d6c303571d6f",
     "rfcRegister": "sha256:4cd353e8685d40e04fc9775467f470dd04ceb02dfabd867a915b23d9082dd171",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -927,7 +927,7 @@
       "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
       "latestCheckpoint": {
         "at": "2026-10-11",
-        "summary": "D3300 now also eliminates repeated complete square-control deltas across control and defender-exposure sources under implementing longitudinal-store's full-population/output-equality contract. Only the latest successful exact before-FEN/UCI/after-FEN result is retained; all clock fields, immutable operands, typed availability, failed-request refusals and replacement remain. Four new controls fail on the predecessor; fifteen permanent work-reuse controls, 78 focused collector and 65 projector/store/real-worker checks plus types pass. All eight counterbalanced fresh-process pairs preserve complete events, factory/input receipts and projected rows over 2,199 edges / 196,589 events, with forty checkpoints per side; summed cold time is 5.37% lower locally, seven faster and one slower, not a portable guarantee or completed cold-cost obligation. All 307 canonical cases still pass over 81 subjects, zero qualified. Final normal serial verification/build exits zero: 4,915 software/376 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser passes across all four tiers, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. Generated implementation metadata is refreshed without changing source contracts or chess meaning; D3300 returns to its existing residual cold-cost TODO. Previous bounded drain, startup cleanup, index/sort-key and prefix reuse remain delivered. Residual cold projection, historical intermittent causes, source/consumer discharges, catalogue progression and built-image/cross-version recovery remain open. No whole capability, milestone, source qualification, remote CI or release-image promotion.",
+        "summary": "D3300 removes redundant hashing from private structural-event joins without adding a cache or changing public evidence identities, complete populations, payload order, factory/input receipts or derivation revision. Five new controls include four predecessor failures; 83 collector and 65 projector/store/real-worker checks pass. Eight alternating-order fresh-process pairs preserve complete output over 2,199 legal edges / 196,589 events and forty checkpoints per side; summed cold time is 12.54% lower locally, seven faster / one slower, not a portable promise. The extra cache experiment was rejected at 0.65%. Full normal serial verification/build passes 4,964 software/376 files, seven performance/four files, 255 content/26 files and 302 browser cases, one existing optional skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging. All 307 canonical cases pass, zero subjects fully qualified. D3300 returns to its residual cold-cost TODO. Previous drain, startup cleanup, control-index/delta and prefix reuse remain. Source/consumer discharges, catalogue progression, intermittent causes and built-image recovery remain open; no whole capability, milestone or remote-CI/release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
@@ -952,6 +952,8 @@
           "packages/runtime/src/square-control.ts",
           "packages/runtime/src/structure.ts",
           "packages/runtime/src/collector-index-reuse.test.ts",
+          "packages/runtime/src/semantic-evidence.ts",
+          "packages/runtime/src/evidence-factories.ts",
           "planning/longitudinal-store/d3300-index-reuse-2026-10-11.md",
           "docs/longitudinal-store.md",
           "rfc/longitudinal-store.md",
@@ -988,7 +990,7 @@
           {
             "kind": "work_state",
             "id": "D3300",
-            "digest": "sha256:b6f9f2cf896d746b3d54cd14c1d78c8efec2d5679f6f87f06262fd687881191e"
+            "digest": "sha256:95f842d765fa439eb8f4d34e58cd978c6bf069bdcd35ab19636d00027d8bf07e"
           },
           {
             "kind": "rfc",
