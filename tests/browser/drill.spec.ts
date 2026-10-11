@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 
 import AxeBuilder from "@axe-core/playwright";
@@ -2317,7 +2317,10 @@ test(`incomplete submitted review inspects a ${fixture.interaction} checkpoint w
   await expect(learnerSheet).toBeVisible();
   await expect(learnerSheet.getByRole("button", { name: "Inspect recorded moves" })).toHaveCount(0);
   if (fixture.interaction === "prediction") {
-    await expect(learnerSheet.getByLabel("Chessboard")).toBeVisible();
+    // This example's trigger is after the reply, on White's turn (D3695). Owner access
+    // must not make that dead input look playable. The legal submission has its own native cases.
+    await expect(learnerSheet).toContainText("This checkpoint is on your turn");
+    await expect(learnerSheet.getByLabel("Chessboard")).toHaveCount(0);
     await learnerSheet.getByRole("button", { name: "Continue", exact: true }).click();
     await move(learnerPage, "f2", "f3");
     await expect(learnerPage.getByRole("dialog", { name: "Critical race resolved" })).toBeVisible();
@@ -3252,6 +3255,60 @@ test("D3692 checkpoint Continue waits for pending move feedback without losing a
     release();
   }
 });
+
+for (const flipBoard of [false, true]) {
+  test(`D3693 legal prediction survives failure and reload without committing the guess (flip=${flipBoard})`, async ({ page }) => {
+    // A private, disposable mechanics fixture reuses the authored chess bytes. It does not
+    // rewrite the schema example's turn or pretend its contradictory trigger is discharged.
+    const document = JSON.parse(await readFile(new URL("../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
+    document.id = `prediction-mechanics-${randomUUID().slice(0, 8)}`;
+    document.title = "Prediction mechanics playtest";
+    document.provenance = { reviewStatus: "draft", sources: [] };
+    document.checkpoints[0].interaction = { type: "prediction", flipBoard };
+    const created = await page.request.post("/packs/drafts", { data: { document } });
+    expect(created.status(), await created.text()).toBe(201);
+    const { draft } = await created.json();
+    await page.goto(`/create/draft/${draft.id}`);
+    await page.getByRole("button", { name: "Save & playtest", exact: true }).click();
+    await expect(page).toHaveURL(/\/play\/run\//);
+    const runId = new URL(page.url()).pathname.split("/").at(-1)!;
+    const requests: string[] = [];
+    page.on("request", request => { if (request.method() === "POST") requests.push(new URL(request.url()).pathname); });
+    await move(page, "c1", "e3");
+    const checkpoint = page.getByRole("dialog", { name: "Choose the setup", exact: true });
+    await expect(checkpoint).toBeVisible();
+    await expect(checkpoint.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
+    const before = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+    await page.route(`**/runs/${runId}/prediction`, route => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "ENGINE_UNAVAILABLE", message: "Opponent selector is not configured" } }) }));
+    await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
+    await expect(checkpoint.getByRole("alert")).toContainText("No move was played");
+    expect((await (await page.request.get(`/runs/${runId}/graph`)).json()).graph.nodes).toEqual(before.nodes);
+    await page.unroute(`**/runs/${runId}/prediction`);
+    const recordedResponse = page.waitForResponse(response => new URL(response.url()).pathname === `/runs/${runId}/prediction` && response.request().method() === "POST");
+    await move(page, "e7", "e6", flipBoard ? "black" : "white", checkpoint.getByLabel("Chessboard", { exact: true }));
+    const response = await recordedResponse;
+    expect(response.status(), await response.text()).toBe(200);
+    const receipt = await response.json();
+    const prediction = receipt.emitted.find((event: { type: string }) => event.type === "prediction.recorded");
+    expect(prediction.data).toMatchObject({ predictedUci: "e7e6", nodeId: before.activeCursor.nodeId, distribution: receipt.selection });
+    await expect(checkpoint).toContainText("You predicted e6.");
+    await expect(checkpoint.getByRole("list", { name: "Recorded reply candidates" }).getByRole("listitem")).toHaveCount(receipt.selection.candidates?.length ?? 0);
+    expect((await (await page.request.get(`/runs/${runId}/graph`)).json()).graph.nodes).toEqual(before.nodes);
+    await page.reload();
+    await expect(checkpoint).toContainText("You predicted e6.");
+    await expect(checkpoint).toContainText("not a grade");
+    await checkpoint.getByRole("button", { name: "Continue", exact: true }).click();
+    const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+    expect(after.nodes).toHaveLength(before.nodes.length + 1);
+    expect(after.nodes.at(-1).moveUci).toBe(receipt.selection.moveUci);
+    expect(requests.filter(path => path === "/select-move")).toEqual([]);
+    const unavailable = page.getByRole("dialog", { name: "Predict the reply", exact: true });
+    await expect(unavailable).toContainText("This checkpoint is on your turn");
+    await expect(unavailable.getByLabel("Chessboard", { exact: true })).toHaveCount(0);
+    await unavailable.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(unavailable).toBeHidden();
+  });
+}
 
 test("branch group captures three candidates, rotates, recovers evidence, compares, and exports", async ({ page }) => {
   await schemaPackCard(page)

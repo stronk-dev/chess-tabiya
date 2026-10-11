@@ -2885,6 +2885,7 @@
     node={currentNode}
     {startSide}
     {onPrediction}
+    predictionError={error}
     {onReasoning}
     {onReasoningReview}
     {...(reasoning === undefined ? {} : { reasoning })}

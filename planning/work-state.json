@@ -30632,11 +30632,48 @@
     },
     {
       "id": "D3693",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6c8d658a7fa28c7e195ab3003f6199669bc68ad016ab4e6b1f19cd3e8e86bb05",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3694",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:783288df0e4a9c0ecb9044be79bfd1b9b9b9a6fae2628590e6513e4a150affdf",
+      "sourceDigest": "sha256:ae31269ceaa0a63f13c4d7e935a0432bf2c5af8d095491a7a43abf8affd4e309",
       "uxItems": [],
       "owner": "core-loop"
+    },
+    {
+      "id": "D3695",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:893a288c93d7c4ed7bc8498c62aeb9e90162ad465b1bf898b32bc24d003a9053",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Authorize an opponent-turn checkpoint sequence for the schema example without colliding with Choose the setup"
+    },
+    {
+      "id": "D3696",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1fcf0168759e44932ca9d191d9eac7358251eea91f7aa50dd5d8a6cac016c425",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3697",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0240a8a291c02671f0345edd80293b85048f408ce4723aaab6ae9624a52c5349",
+      "uxItems": [],
+      "evidence": "docs/testing.md",
+      "evidenceKind": "path"
     }
   ]
 }

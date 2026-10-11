@@ -7,6 +7,14 @@ import {
 } from "./board-model.js";
 
 describe("board model", () => {
+  it("D3693 changes perspective without changing the position or legal mover", () => {
+    const fen = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
+    const model = boardModel(fen, "black", undefined, "white");
+    expect(model.orientation).toBe("white");
+    expect(model.turnColor).toBe("black");
+    expect(model.fen).toBe(fen);
+    expect(model.dests.get("e7")).toEqual(["e5", "e6"]);
+  });
   it("derives orientation, legal destinations, last move, and check", () => {
     const initial = boardModel(
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",

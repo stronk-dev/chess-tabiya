@@ -9,7 +9,7 @@
   import type { DrillRun } from "@chess-tabiya/runtime";
   import type { Node } from "@chess-tabiya/runtime";
   import Chessboard from "./Chessboard.svelte";
-  import type { StartSide } from "./board-model.js";
+  import { boardModel, type StartSide } from "./board-model.js";
   import { moveSanFromUci } from "./board-input.js";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
   import { claimProvenance } from "./claim-presentation.js";
@@ -33,6 +33,7 @@
     node?: Node;
     startSide?: StartSide;
     onPrediction?: (uci: string) => void | Promise<void>;
+    predictionError?: string | undefined;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     reasoning?: ReasoningPage;
@@ -64,6 +65,7 @@
     node,
     startSide = "white",
     onPrediction = () => {},
+    predictionError,
     onReasoning = () => {},
     onReasoningReview,
     reasoning,
@@ -85,11 +87,21 @@
   let actionsBusy = $derived(pending || continuing || comparing || rewinding);
   let busyDescription = $derived(pending ? "checkpoint-pending-action" : continuing ? "checkpoint-continue-busy" : comparing ? "checkpoint-compare-busy" : rewinding ? "checkpoint-rewind-busy" : undefined);
   let currentReasoning = $derived(reasoning?.occurrences.find((item) => item.checkpointEventSeq === checkpoint.eventSeq));
-  let recordedPrediction = $derived.by(() => {
+  let predictionEvent = $derived.by(() => {
     const event = run.events.find(candidate => candidate.type === "prediction.recorded" && candidate.seq > checkpoint.eventSeq
       && candidate.data.checkpointId === checkpoint.id && candidate.data.nodeId === checkpoint.nodeId);
-    return event?.type === "prediction.recorded" && node !== undefined ? moveSanFromUci(node.fen, event.data.predictedUci) : undefined;
+    return event?.type === "prediction.recorded" ? event : undefined;
   });
+  let recordedPrediction = $derived(node && predictionEvent ? moveSanFromUci(node.fen, predictionEvent.data.predictedUci) : undefined);
+  let predictedCandidatePresent = $derived(predictionEvent?.data.distribution.candidates?.some(candidate => candidate.moveUci === predictionEvent.data.predictedUci) ?? false);
+  let opponentSide: StartSide = $derived(startSide === "white" ? "black" : "white");
+  let predictionAvailable = $derived(node !== undefined && boardModel(node.fen, startSide).turnColor === opponentSide);
+
+  async function capturePrediction(uci: string): Promise<false> {
+    if (!actionsBusy && predictionAvailable && predictionEvent === undefined) await onPrediction(uci);
+    // A guess is not a committed move. Restore every input projection to the recorded position.
+    return false;
+  }
   let previousReasoning = $derived(reasoning?.previous ?? (reasoning?.occurrences.filter((item) => item.eventSeq !== currentReasoning?.eventSeq).at(-1) ?? null));
   let review = $state<{ readonly checkpointEventSeq: number; readonly proposals: readonly VerifiedReasoningProposal[] } | undefined>();
   let reviewBusy = $state(false);
@@ -151,16 +163,33 @@
         {#if readOnly}
         <h3 id="prediction-title">Learner's recorded prediction</h3>
         <p>{recordedPrediction ? `The learner predicted ${recordedPrediction}.` : "No reply prediction was recorded at this checkpoint."}</p>
+        {:else if predictionEvent}
+        <h3 id="prediction-title">Your recorded prediction</h3>
+        <p>You predicted {recordedPrediction ?? predictionEvent.data.predictedUci}.</p>
+        <p>{predictionEvent.data.predictedMass === null
+          ? predictedCandidatePresent ? "Your move is in the recorded candidate set, but no policy mass was recorded." : "Your move is absent from the recorded candidate set."
+          : `Recorded policy mass: ${predictionEvent.data.predictedMass}. Rank ${predictionEvent.data.predictedRank} of ${predictionEvent.data.candidateCount}.`}</p>
+        <ul aria-label="Recorded reply candidates">
+          {#each predictionEvent.data.distribution.candidates ?? [] as candidate}
+            <li>{moveSanFromUci(node.fen, candidate.moveUci) ?? candidate.moveUci}{#if candidate.mass !== undefined} · mass {candidate.mass}{:else} · no policy mass recorded{/if}</li>
+          {/each}
+        </ul>
+        <p>These are recorded policy choices, not a grade. Continue plays the reply from this same recording.</p>
+        {:else if !predictionAvailable}
+        <h3 id="prediction-title">Reply prediction unavailable here</h3>
+        <p role="status">This checkpoint is on your turn, not the opponent's. No reply can be predicted from this position. Continue without a prediction or rewind.</p>
         {:else}
         <h3 id="prediction-title">Predict the opponent's reply</h3>
         <p>Play the reply you expect. Your prediction stays with this attempt so you can compare it with what happened.</p>
         <Chessboard
           fen={node.fen}
-          startSide={checkpoint.interaction.flipBoard ? (startSide === "white" ? "black" : "white") : startSide}
+          startSide={opponentSide}
+          orientation={checkpoint.interaction.flipBoard ? opponentSide : startSide}
           lastMove={node.moveUci}
           disabled={actionsBusy}
-          onMove={onPrediction}
+          onMove={capturePrediction}
         />
+        {#if predictionError}<p role="alert">{predictionError} No move was played; retry the prediction or continue without it.</p>{/if}
         {/if}
       </section>
     {/if}

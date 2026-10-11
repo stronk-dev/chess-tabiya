@@ -62,6 +62,7 @@ vi.mock("@lichess-org/chessground", () => ({
 
 import CompareView from "./CompareView.svelte";
 import CheckpointSheet from "./CheckpointSheet.svelte";
+import Chessboard from "./Chessboard.svelte";
 import DrillScreen from "./DrillScreen.svelte";
 import * as inspectorEvidence from "./inspector-evidence.js";
 import JustPlayStarter from "./JustPlayStarter.svelte";
@@ -117,6 +118,75 @@ import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const carlsbad = { ...JSON.parse(carlsbadJson), channel: "official" } as ShapeEntryView;
+
+describe("D3693 prediction perspective and capture", () => {
+  it.each([false, true])("distinguishes missing guesses from unweighted recorded candidates (%s)", async (present) => {
+    const started = createRun({ id: "prediction-receipt", packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: pack.start.fen, seed: 4, createdAt: at });
+    let run = reachCheckpoint(commitMove(started, "c1e3", { at }).run, "plan-commitment", at).run;
+    const checkpoint = { ...latestCheckpoint(pack, run)!, interaction: { type: "prediction" as const } };
+    run = appendEvents(run, [{ type: "prediction.recorded", at, data: {
+      nodeId: run.activeCursor.nodeId, checkpointId: checkpoint.id, predictedUci: "e7e6",
+      predictedMass: null, predictedRank: present ? 1 : null, candidateCount: present ? 1 : 0,
+      distribution: { moveUci: "e7e6", policyModeApplied: "theory_strict", candidates: present ? [{ moveUci: "e7e6", rank: 1 }] : [],
+        engine: { id: "fixture", name: "Recorded fixture", version: "1", seedHonored: true } },
+    } }]);
+    const component = mount(CheckpointSheet, { target: target(), props: {
+      run, node: run.nodes.at(-1)!, startSide: "white", checkpoint,
+      canCompare: false, onContinue: vi.fn(), onRewind: vi.fn(), onCompare: vi.fn(), onStop: vi.fn(),
+    } });
+    await tick();
+    expect(document.querySelector(".prediction")?.textContent).toContain(present ? "in the recorded candidate set, but no policy mass was recorded" : "absent from the recorded candidate set");
+    expect(document.querySelector(".prediction")?.textContent).not.toMatch(/undefined|Rank 1/);
+    expect(document.querySelector(".prediction [data-board-input-grid]")).toBeNull();
+    await unmount(component);
+  });
+  it.each([false, true])("permits the opponent's legal move independently of flipBoard=%s", async (flipBoard) => {
+    const started = createRun({ id: "prediction-input", packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: pack.start.fen, seed: 4, createdAt: at });
+    const run = reachCheckpoint(commitMove(started, "c1e3", { at }).run, "plan-commitment", at).run;
+    const onPrediction = vi.fn();
+    const component = mount(CheckpointSheet, { target: target(), props: {
+      run, node: run.nodes.at(-1)!, startSide: "white",
+      checkpoint: { ...latestCheckpoint(pack, run)!, interaction: { type: "prediction", flipBoard } },
+      onPrediction, canCompare: false, onContinue: vi.fn(), onRewind: vi.fn(), onCompare: vi.fn(), onStop: vi.fn(),
+    } });
+    await tick();
+    const config = chessground.configs.at(-1)!;
+    expect(config.orientation).toBe(flipBoard ? "black" : "white");
+    expect(config.movable?.color).toBe("black");
+    expect(config.movable?.dests?.get("e7")).toContain("e6");
+    expect(document.querySelector('[data-board-input-grid]')?.getAttribute("aria-readonly")).not.toBe("true");
+    config.movable?.events?.after?.("e7", "e6", { premove: false });
+    await vi.waitFor(() => expect(onPrediction).toHaveBeenCalledExactlyOnceWith("e7e6"));
+    expect(run.nodes).toHaveLength(2);
+    await unmount(component);
+  });
+
+  it("does not grant another side input by flipping the ordinary board", async () => {
+    const component = mount(Chessboard, { target: target(), props: {
+      fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      startSide: "white", orientation: "black", onMove: vi.fn(),
+    } });
+    await tick();
+    expect(chessground.configs.at(-1)?.movable?.dests?.size).toBe(0);
+    expect(document.querySelector('[data-board-input-grid]')?.getAttribute("aria-readonly")).toBe("true");
+    await unmount(component);
+  });
+
+  it("keeps the default perspective reactive when the seat changes", async () => {
+    const component = createClassComponent({ component: Chessboard, target: target(), props: {
+      fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      startSide: "black", onMove: vi.fn(),
+    } });
+    await tick();
+    component.$set({ startSide: "white" });
+    await tick();
+    expect(chessground.set.mock.calls.at(-1)?.[0].orientation).toBe("white");
+    expect(document.querySelector('[data-board-input-grid]')?.getAttribute("aria-readonly")).toBe("true");
+    component.$destroy();
+  });
+});
 
 describe("D3677 Campaign gesture cost disclosure", () => {
   for (const campaignEncounter of [true, false]) {

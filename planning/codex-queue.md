@@ -1,12 +1,28 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-11 — [[D3693]] owns the separate flipped-prediction input/timing audit.
-The example's checkpoint follows Black's reply; CheckpointSheet supplies that active
-FEN but flips startSide to Black, while Chessboard permits only the side to move.
-Existing Continue/read-only journeys do not establish actual prediction submission.
-Verify the authored timing and exact legal prediction operation, add submission/reload
-coverage, then repair within the accepted contract or return its ambiguity to the author.
-Do not change FEN turn to make a gesture pass. This is not closed by D3692's busy repair.
+2026-10-11 — [[D3697]] closes this task's invalid concurrent local verification:
+verify rebuilt the same web dist served by browser CI, whose error context shows
+STATIC_NOT_BUILT instead of a catalogue. The documented normal command is one serial
+`make verify-awake build test-browser-ci-awake`; do not overlap another rebuild in this
+checkout. The complete serial run now exits zero: 4,747 software, seven performance,
+247 content and 294 browser passes, one existing optional skip, zero retries and all
+112 composition cells. No timeout increase, CI waiver or attribution to historical arrival defects.
+
+2026-10-11 — [[D3693]]/[[D3696]] are repaired locally under the accepted prediction
+and private-playtest contracts. Perspective is independent from move authority, a legal
+opponent guess adds no move, and its durable ungraded receipt remains until Continue,
+which uses the same recorded distribution without another selection. Eighteen focused
+controls and real saved private Studio gestures/failure/retry/reload journeys pass for
+both perspectives. The native tests first exposed private pack lookup's 404; REST now
+resolves the run-pinned bytes and refuses a crossed id before selecting.
+
+Next boundary: [[D3694]], writer/checkpoint-occurrence/position/legality/duplicate admission
+before provider execution, preserving imported source-game semantics. Client guards are
+not this server proof. [[D3695]] is an author follow-up: the example's trigger follows
+Black's reply; placing it before that reply collides with Choose the setup. Retain an honest
+wrong-turn explanation and ordinary actions until its explicit sequence is authored.
+The proposed intent correction is in planning/platform-alignment/execution-queue.md.
+Neither a neutral legal fixture nor Continue discharges the original example's A7 promise.
 
 2026-10-11 — [[D3692]] is repaired locally from its original remote evidence.
 Browser 37795549157 at 75bc8744 shows the first Continue click before the pending

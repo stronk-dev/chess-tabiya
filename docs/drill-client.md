@@ -116,6 +116,20 @@ evaluation job for the active node. Its shipped default is the ratified
 
 ## Feedback withholding
 
+Prediction separates move authority from display perspective. An opponent-turn checkpoint can
+capture the opponent's legal move with either board orientation; flipping an ordinary board does
+not grant another side input. The guess is recorded without adding a move. The sheet shows the
+recorded move, policy mass/rank or honest absence, and the complete recorded candidate set, with
+no grade. Its receipt survives reload. Continue plays that same recorded reply distribution
+through the opponent-ply path without another selection; an unrecorded Continue can still skip.
+Failure leaves the position and checkpoint intact for retry. Private playtests resolve their
+run-pinned pack bytes, not the public catalogue's current id.
+
+The schema example currently reaches its prediction after Black's reply, on the learner's turn.
+The sheet explains why a reply cannot be predicted there and keeps Continue/rewind available; it
+does not rewrite the FEN. D3695 owns an explicit authored checkpoint sequence. D3694 separately
+owns stronger server admission before provider work; the client checks are not that security proof.
+
 Checkpoint actions wait for the session's preceding move/feedback operation, not just
 for a continuation initiated in the sheet. While that operation is pending, the sheet
 stays visible with a waiting explanation and disables Continue, rewind, comparison,

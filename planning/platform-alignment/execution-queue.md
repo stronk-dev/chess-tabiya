@@ -4,6 +4,23 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Prediction author follow-up — 2026-10-11
+
+[[D3695]]: the schema example reaches predict-reply at najdorf-e6, after the opponent reply.
+The accepted n-way-comparison §8.2/A7 instead requires a legal opponent-turn guess before that
+reply is selected. Moving it to Be3 collides with Choose the setup; author the explicit sequence
+rather than changing FEN turn or silently dropping that checkpoint. The repaired generic client
+uses legal opponent authority independently of orientation, retains a durable ungraded receipt
+and plays its recorded distribution on Continue. Private native Studio playtests prove both
+perspectives; they do not discharge the example's original A7 promise.
+
+Proposed intent amendment, **not applied**: `design/03-product-breadth.md` B3 currently says
+“shipped in full — N-way compare, simulate, prediction rendering, deep analysis, export, **and
+branch groups (2026-08-14)**.” Bound that completion to the delivered component paths and retain
+the example's authored prediction sequence as open. No whole Review completion follows from a
+rendered board or Continue. [[D3694]] separately owns server writer/position/occurrence admission
+before provider work; the exact private-pack lookup repair [[D3696]] is not that broader proof.
+
 ## Compatibility and Support checkpoint — 2026-10-07
 
 | [[D3677]] | **DONE 2026-10-10: truthful Campaign gesture costs**, campaign; implementing campaign-core §§2/6/7 | All charged entrances disclose their one-charge cost; ordinary rehearsal, preview and comparison remain free. Nine mounted additions, three predecessor-red entrances and real desktop/phone action/refusal/board checks pass. No economy, reward, source, preset or permission changes; D3681 owns the remaining fixed-message amendment. |

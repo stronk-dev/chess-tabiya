@@ -156,6 +156,13 @@ checkpoint-readiness-check:
 checkpoint-readiness-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3692|branch group captures three candidates"
 
+.PHONY: prediction-workflow-check prediction-workflow-browser-check
+prediction-workflow-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/drill-client-server.test.ts apps/web/src/lib/board-model.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts -t "D3693|D3696|prediction|checkpoint continuation|restores the checkpoint"
+
+prediction-workflow-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3693|D3692|branch group captures three candidates"
+
 test-browser-content:
 	./node_modules/.bin/playwright test --grep "@content"
 

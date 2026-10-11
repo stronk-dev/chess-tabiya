@@ -687,10 +687,10 @@
           "operations"
         ],
         "dependsOn": [],
-        "nextAction": "D3692's original remote checkpoint race is repaired locally; require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. D3693 owns the separate actual prediction-submission gap, not closed by Continue journeys. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+        "nextAction": "D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally; require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. D3694 owns server writer/checkpoint/position admission before prediction provider work; D3695 retains the authored example's wrong-turn sequence. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3692 is repaired from original GitHub trace evidence, not a newer green replay: the first Continue reached a busy controller before move feedback settled, so the second left Predict the reply covering Actions. Checkpoint controls now inherit session readiness and explain the wait. A mounted predecessor-red guard/readiness control and held actual HTTP feedback plus the complete branch-group journey pass. Normal software passes 4735 cases/370 files; seven unchanged-budget performance cases, 247 content cases, clean types, governance, packaging and build pass. Browser sweep measurements are retained in the exploration log. D3693's flipped-prediction submission gap and earlier intermittent causes remain open. No paired green exact-revision remote CI, push, native release-image, whole capability or milestone completion is claimed.",
+          "summary": "D3693 now proves actual legal opponent prediction capture, independently oriented input, durable ungraded full-candidate receipt and exact Continue without another selection. Eighteen focused controls and real saved private Studio gestures/failure/retry/reload journeys pass for both perspectives. Those native cases exposed D3696's private-pack 404; run-pinned resolution and crossed-id refusal before selecting now pass. D3692's session readiness repair stands. D3695 retains the authored example/A7 wrong-turn sequence; D3694 separately owns server pre-admission. Full local gate results are retained in the exploration log. No paired green exact-revision remote CI, push, native release-image, whole capability or milestone completion is claimed.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -703,6 +703,9 @@
             "tests/browser/drill.spec.ts",
             "apps/web/src/lib/screens.test.ts",
             "apps/web/src/lib/CheckpointSheet.svelte",
+            "apps/web/src/lib/session-controller.test.ts",
+            "apps/server/src/drill-client-server.test.ts",
+            "apps/server/src/rest.ts",
             "apps/web/src/lib/DrillScreen.svelte",
             "tests/browser/profile.spec.ts",
             "tools/verify-scaffold.mjs",

@@ -25316,3 +25316,40 @@ Campaign was the one capability with no API, route or content. Now:
   (292 total), one existing optional Maia skip and zero retries. All 150 permanent
   board-input cells and 112 composition cells pass. Final focused readiness checks
   pass three cases; no source or test-budget change follows these results.
+
+## 2026-10-11 — D3693/D3696 actual prediction workflow; complete serial verification and 1.0 inventory
+
+- Under implemented n-way-comparison and board contracts, separate display perspective
+  from move authority. A legal opponent guess records no move; its ungraded move,
+  mass/rank and full-candidate receipt survives reload. Continue uses that exact recorded
+  distribution without another selector call. Default perspective remains reactive;
+  unweighted candidates disclose missing policy mass rather than rendering undefined.
+- Native saved private Studio playtests exercise both perspectives, real gestures,
+  provider failure/retry, unchanged nodes until Continue and durable receipts. They first
+  reproduced PACK_NOT_FOUND. D3696 resolves the authorized run's immutable private pack
+  rather than its public catalogue id, and refuses crossed ids before selection.
+  Eighteen focused controls and both native cases pass; raw candidate ranks remain absent.
+- D3695 retains the authored example/A7 contradiction: its prediction trigger follows
+  Black's reply. Show an honest unavailable explanation, not a dead board or fabricated
+  FEN. Moving it earlier collides with another checkpoint; author follow-up and proposed
+  B3 intent correction are in the existing execution queue. D3694 separately retains
+  server writer/checkpoint-occurrence/position/legality admission before provider work.
+- Earlier broad checks exposed the forbidden raw candidate-rank display and two browser
+  expectations of that example's dead board; production display and truthful expectations
+  were repaired. This task also invalidated a local browser run by concurrently rebuilding
+  its served web dist: the actual error was STATIC_NOT_BUILT. D3697 records the mistake
+  and documents serial normal Make execution, not larger budgets, retries or a new lock.
+- Final normal `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  4,747 software cases/370 files, seven unchanged-budget performance cases/four files,
+  247 real-content cases/25 files, clean types/governance/capability/packaging and build;
+  229 smoke, five content, 59 matrix and one production browser pass (294 total), one
+  existing optional Maia skip, zero retries, all 150 board-input and 112 composition cells.
+- Reconcile the existing roadmap, queue, ledger and execution state, not another tracker:
+  1,719 live ledger items are assigned; 273 UX items complete/272 live/24 retired;
+  all fourteen whole capabilities remain incomplete, milestones four active/five blocked,
+  86 production pack documents and zero official graduates. Semantic qualification remains
+  213 passing cases over 81 subjects, zero fully qualified. Remaining sources, usefulness,
+  calibrated bots, full training/Campaign rewards, official content and release proof stand.
+- No protected intent, immutable archive, pack bytes, qualification or whole-product gate
+  is changed. Local green gates are not paired green GitHub CI at this revision. No push,
+  deployment, native image recovery or 1.0 completion is claimed; the 1.0 goal stays active.

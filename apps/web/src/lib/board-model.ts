@@ -63,12 +63,13 @@ export function boardModel(
   fen: string,
   startSide: StartSide,
   lastMove?: string | null,
+  orientation: StartSide = startSide,
 ): BoardModel {
   const chess = position(fen);
   const parsed = displayedLastMove(fen, lastMove);
   return Object.freeze({
     fen,
-    orientation: startSide,
+    orientation,
     turnColor: chess.turn,
     check: chess.isCheck(),
     ...(parsed === undefined ? {} : { lastMove: parsed }),

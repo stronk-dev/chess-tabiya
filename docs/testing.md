@@ -4,6 +4,26 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+In one local checkout, run the release checks **serially**:
+
+```sh
+make verify-awake build test-browser-ci-awake
+```
+
+Do not start a second build or verification process while browser CI serves that checkout's
+`apps/web/dist`. Vite replaces that directory during build; a concurrent browser can genuinely
+receive `STATIC_NOT_BUILT`. Such a run is invalid, not an excuse for a timeout increase or a
+retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tiers remain intact.
+
+`make prediction-workflow-check` covers independent perspective/move authority, legal opponent
+guess admission, repeated-client-guess refusal, failed prediction/retry, durable receipt resume and playing
+the same distribution without selecting again. It also covers exact private-playtest pack lookup
+and crossed-id refusal before selector execution. `make prediction-workflow-browser-check` runs
+real saved private Studio playtests with both perspectives: genuine pointer guesses, provider
+failure/retry, unchanged nodes until Continue, full candidate receipts, reload and exact reply.
+These tests run in ordinary CI. They do not discharge the schema example's wrong-turn trigger
+(D3695) or the broader server writer/position pre-admission boundary (D3694).
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct

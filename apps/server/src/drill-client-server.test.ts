@@ -13,7 +13,7 @@ import {
   type PolicyConfig,
 } from "@chess-tabiya/runtime";
 import { parsePgn } from "chessops/pgn";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   EvidenceJobQueue,
@@ -21,6 +21,7 @@ import {
   type EvidenceJob,
 } from "./evidence-queue.js";
 import { PackRegistry } from "./pack-registry.js";
+import { OpponentSelector } from "./opponent-selector.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -104,6 +105,34 @@ describe("drill-client pack registry", () => {
 
   afterEach(() => {
     for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it.each([false, true])("D3696 resolves the prediction's immutable private playtest, refusing crossed ids (%s)", async (crossed) => {
+    const environment = await setup(fixture);
+    stores.push(environment.storage);
+    const document = withDerivedRequires(pack({ id: "private-prediction", checkpoints: fixture.checkpoints.map((checkpoint, index) => index === 0
+      ? { ...checkpoint, interaction: { type: "prediction", flipBoard: true } } : checkpoint) }));
+    const record = environment.registry.addPlaytest(document as DrillPackDefinition, await digestDrillPack(document as DrillPackDefinition));
+    expect(() => environment.registry.required(document.id)).toThrow();
+    const run = await environment.service.createPlaytestRun(record, { writerId: "writer-a", learnerId: "__legacy" });
+    const moved = environment.service.move(run.id, "writer-a", "c1e3", { at });
+    const selector = new OpponentSelector({ execute: async () => { throw new Error("unused provider"); }, health: () => { throw new Error("unused health"); } });
+    const select = vi.spyOn(selector, "select").mockResolvedValue({ moveUci: "e7e6", policyModeApplied: "theory_strict",
+      engine: { id: "fixture", name: "Recorded fixture", version: "1", seedHonored: true } });
+    const response = await request(createRestHandler(environment.service, selector), "POST", `/runs/${run.id}/prediction`, {
+      startFen: document.start.fen, historyUci: ["c1e3"], seed: run.branches[0]!.seed,
+      policy: { mode: "theory_strict", policyConfigDigest: run.sessionDigest },
+      packId: crossed ? fixture.id : document.id, nodeId: moved.run.activeCursor.nodeId,
+      checkpointId: "plan-commitment", predictedUci: "e7e6",
+    });
+    expect(response.status, await response.clone().text()).toBe(crossed ? 400 : 200);
+    if (crossed) expect(select).not.toHaveBeenCalled();
+    else {
+      expect(select).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ policy: expect.objectContaining({ spine: record.document.spine }) }));
+      const body = await response.json();
+      expect(body.run.nodes).toEqual(moved.run.nodes);
+      expect(body.emitted.at(-1)).toMatchObject({ type: "prediction.recorded", data: { predictedUci: "e7e6" } });
+    }
   });
 
   it("lints, digests, lists, and serves the living schema fixture", async () => {

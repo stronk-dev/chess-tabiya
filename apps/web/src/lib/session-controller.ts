@@ -644,7 +644,20 @@ export class DrillSessionController {
     }
     this.#patch({ reasoning: undefined, busy: true });
     try {
-      await this.#playOpponentIfNeeded(true);
+      const prediction = this.#requiredRun().run.events.find(event => event.type === "prediction.recorded"
+        && checkpoint?.interaction?.type === "prediction" && event.seq > checkpoint.eventSeq
+        && event.data.checkpointId === checkpoint.id && event.data.nodeId === checkpoint.nodeId);
+      if (prediction?.type === "prediction.recorded") {
+        const result = await operation.store.appendOpponentPly(prediction.data.distribution);
+        if (!this.#sessionOperationIsCurrent(operation)) return false;
+        if (this.#captureCheckpoint(result.emitted) || this.#hasOutcome(result.emitted)) {
+          await this.#refreshAuthoredFeedback();
+          if (!this.#sessionOperationIsCurrent(operation)) return false;
+          await this.#refreshReasoning();
+        }
+      } else {
+        await this.#playOpponentIfNeeded(true);
+      }
       if (!this.#sessionOperationIsCurrent(operation)) return false;
       this.#patch({
         busy: false,
@@ -665,19 +678,29 @@ export class DrillSessionController {
     const operation = this.#sessionOperation();
     const checkpoint = this.#state.checkpoint;
     if (checkpoint?.interaction?.type !== "prediction") throw new Error("No prediction checkpoint is active");
+    const run = this.#requiredRun().run;
+    const node = run.nodes.find(candidate => candidate.id === checkpoint.nodeId);
+    const startSide = packStartSide(this.#requiredPack());
+    if (run.activeCursor.nodeId !== checkpoint.nodeId || node === undefined
+      || boardModel(node.fen, startSide).turnColor === startSide
+      || moveSanFromUci(node.fen, predictedUci) === undefined) {
+      this.#patch({ error: "Reply prediction requires a legal opponent move at this checkpoint." });
+      return;
+    }
+    if (run.events.some(event => event.type === "prediction.recorded" && event.seq > checkpoint.eventSeq
+      && event.data.checkpointId === checkpoint.id && event.data.nodeId === checkpoint.nodeId)) return;
     this.#patch({ busy: true, error: undefined });
     try {
       const request = this.#selectionRequest();
-      const result = await operation.store.prediction({
+      await operation.store.prediction({
         ...request,
         checkpointId: checkpoint.id,
         nodeId: checkpoint.nodeId,
         predictedUci,
       });
       if (!this.#sessionOperationIsCurrent(operation)) return;
-      this.#dismissedCheckpointSeq = checkpoint.eventSeq;
-      this.#patch({ checkpoint: undefined });
-      await operation.store.appendOpponentPly(result.selection);
+      // Keep the immutable receipt visible. Continue (including after reload) plays its exact
+      // returned distribution, without selecting again or treating the guess as a learner move.
       if (this.#sessionOperationIsCurrent(operation)) this.#patch({ busy: false });
     } catch (error) {
       if (this.#sessionOperationIsCurrent(operation)) this.#fail(error);

@@ -38,6 +38,8 @@
   interface Props {
     fen: string;
     startSide: StartSide;
+    /** Display perspective only; startSide retains move authority. */
+    orientation?: StartSide;
     lastMove?: string | null;
     disabled?: boolean;
     showDests?: boolean;
@@ -70,6 +72,7 @@
   let {
     fen,
     startSide,
+    orientation,
     lastMove = null,
     disabled = false,
     showDests = true,
@@ -105,11 +108,12 @@
   const theme = useTheme();
   let resolvedTheme: ResolvedTheme = $state(theme.current);
   let escapeArmed = false;
+  let displayOrientation = $derived(orientation ?? startSide);
   function newController(): BoardInputController {
     return new BoardInputController(
       boardInputPosition(
         fen,
-        startSide,
+        displayOrientation,
         disabled || boardModel(fen, startSide, lastMove).turnColor !== startSide,
         showDests,
         lastMove,
@@ -127,19 +131,19 @@
   let controller = newController();
   let inputState: BoardInputState = $state(controller.state);
 
-  let boardState = $derived(boardModel(fen, startSide, lastMove));
+  let boardState = $derived(boardModel(fen, startSide, lastMove, displayOrientation));
   let inputDisabled = $derived(disabled || boardState.turnColor !== startSide);
-  let inputPosition = $derived(boardInputPosition(fen, startSide, inputDisabled, showDests, lastMove));
+  let inputPosition = $derived(boardInputPosition(fen, displayOrientation, inputDisabled, showDests, lastMove));
   let appliedInputIdentity = "";
   let semanticRows = $derived(semanticBoardRows(inputPosition, inputState, semanticBoardId));
   let boardLabel = $derived.by(() => {
     const moveNumber = fen.trim().split(/\s+/u)[5] ?? "unknown";
     const state = inputDisabled ? "read-only" : "playable";
-    return `Board input. ${startSide} orientation. ${boardState.turnColor} to move. Move ${moveNumber}. ${state}.`;
+    return `Board input. ${displayOrientation} orientation. ${boardState.turnColor} to move. Move ${moveNumber}. ${state}.`;
   });
 
   function config(): Config {
-    const model = boardModel(fen, startSide, lastMove);
+    const model = boardModel(fen, startSide, lastMove, displayOrientation);
     const canMove = !disabled && model.turnColor === startSide;
     return {
       fen: model.fen,
@@ -343,7 +347,7 @@
   });
 
   $effect(() => {
-    const inputIdentity = JSON.stringify([fen, startSide, lastMove, inputDisabled, showDests, resetToken]);
+    const inputIdentity = JSON.stringify([fen, startSide, displayOrientation, lastMove, inputDisabled, showDests, resetToken]);
     fen;
     startSide;
     lastMove;

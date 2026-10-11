@@ -479,6 +479,71 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
+  it("D3693 records a legal reply, retains its receipt across reload, and plays that distribution once", async () => {
+    const document: DrillPackDefinition = { ...pack, checkpoints: pack.checkpoints.map((checkpoint, index) => index === 0
+      ? { ...checkpoint, interaction: { type: "prediction", flipBoard: false } } : checkpoint) };
+    const api = new FakeApi(document);
+    const environment = controller(api);
+    const prediction = vi.spyOn(api, "prediction");
+    const selection = vi.spyOn(api, "selectMove");
+    await environment.controller.startPack(document.id);
+    await environment.controller.move("c1e3");
+    const before = api.run!;
+    await environment.controller.recordPrediction("e7e6");
+    expect(prediction).toHaveBeenCalledOnce();
+    expect(prediction.mock.calls[0]![1]).toMatchObject({ nodeId: before.activeCursor.nodeId, checkpointId: "plan-commitment", predictedUci: "e7e6", historyUci: ["c1e3"] });
+    expect(api.run!.nodes).toEqual(before.nodes);
+    expect(api.run!.activeCursor).toEqual(before.activeCursor);
+    expect(environment.controller.state.checkpoint?.id).toBe("plan-commitment");
+    expect(api.run!.events.at(-1)?.type).toBe("prediction.recorded");
+    await environment.controller.recordPrediction("e7e5");
+    expect(prediction).toHaveBeenCalledOnce();
+    environment.controller.stopSession();
+    await environment.controller.resume("screen-run");
+    expect(environment.controller.state.checkpoint?.id).toBe("plan-commitment");
+    selection.mockClear();
+    expect(await environment.controller.continueCheckpoint()).toBe(true);
+    expect(selection).not.toHaveBeenCalled();
+    expect(api.run!.nodes.at(-1)?.moveUci).toBe("e7e6");
+    expect(api.run!.events.filter(event => event.type === "prediction.recorded")).toHaveLength(1);
+    expect(environment.controller.state.checkpoint?.id).toBe("predict-reply");
+  });
+
+  it("D3693 refuses wrong-turn and illegal guesses before requesting a reply", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    const prediction = vi.spyOn(api, "prediction");
+    await environment.controller.startPack(pack.id);
+    await environment.controller.move("c1e3");
+    await environment.controller.continueCheckpoint();
+    expect(environment.controller.state.checkpoint?.id).toBe("predict-reply");
+    const before = api.run;
+    await environment.controller.recordPrediction("f2f3");
+    expect(prediction).not.toHaveBeenCalled();
+    expect(api.run).toBe(before);
+    expect(environment.controller.state.error).toContain("legal opponent move");
+  });
+
+  it("D3693 preserves a failed prediction for a legal retry without committing the guess", async () => {
+    const document: DrillPackDefinition = { ...pack, checkpoints: pack.checkpoints.map((checkpoint, index) => index === 0
+      ? { ...checkpoint, interaction: { type: "prediction", flipBoard: true } } : checkpoint) };
+    const api = new FakeApi(document);
+    const environment = controller(api);
+    await environment.controller.startPack(document.id);
+    await environment.controller.move("c1e3");
+    const prediction = vi.spyOn(api, "prediction").mockRejectedValueOnce(new Error("selector unavailable"));
+    const before = api.run!.nodes;
+    await environment.controller.recordPrediction("e7e8");
+    expect(prediction).not.toHaveBeenCalled();
+    await environment.controller.recordPrediction("e7e6");
+    expect(environment.controller.state.busy).toBe(false);
+    expect(environment.controller.state.checkpoint?.id).toBe("plan-commitment");
+    expect(api.run!.nodes).toEqual(before);
+    await environment.controller.recordPrediction("e7e6");
+    expect(prediction).toHaveBeenCalledTimes(2);
+    expect(api.run!.nodes).toEqual(before);
+    expect(environment.controller.state.error).toBeUndefined();
+  });
   it.each([true, false])("refreshes fresh-run access without loading its content again (holds lease: %s)", async (holdsLease) => {
     const environment = controller();
     await environment.controller.startPack(pack.id);

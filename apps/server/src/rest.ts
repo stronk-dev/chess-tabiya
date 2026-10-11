@@ -2296,7 +2296,8 @@ export function createRestHandler(
           seed: body.seed,
           ...(body.packId === undefined ? {} : { packId: body.packId }),
         });
-        const pack = parsed.packId === undefined ? undefined : service.pack(parsed.packId);
+        const pack = parsed.packId === undefined ? undefined : service.runPack(route.runId, principal);
+        if (pack !== undefined && pack.document.id !== parsed.packId) throw invalid("Prediction pack does not match the run");
         const selection = await selector.select({
           ...parsed,
           policy: { ...parsed.policy, ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }) },
