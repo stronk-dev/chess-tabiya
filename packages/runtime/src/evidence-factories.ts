@@ -62,6 +62,8 @@ import {
   interferenceObservedOperands,
   legalAlternativeEdges,
   lineBlockerClearanceObservedOperands,
+  recordedDeflectionObservedOperands,
+  recordedLineBlockerClearanceObservedOperands,
   openFileOccupancyOperands,
   capturedZoneDefenderOperands,
   overloadExploitationObservedOperands,
@@ -1793,14 +1795,14 @@ export const createDerivedTacticSequenceDefenderConsequenceV2Evidence = recorded
 export const createDerivedTacticSquareClearanceObservedV2Evidence = recordedSequenceFactory("derived.tactic.square_clearance_observed@2", { edges: EDGES(3) }, (_input, anchors) => squareClearanceObservedOperands(anchors), edgesOf);
 export const createDerivedTacticLineBlockerClearanceObservedV2Evidence = recordedSequenceFactory("derived.tactic.line_blocker_clearance_observed@2", { edges: EDGES(3), exchange: sealed("rules.exchange.predicate.legal_exchange@1") }, (input, anchors) => {
   exactRecordedSequenceInputs(anchors, edgesOf(input), 3, others(input, "exchange"), ["rules.exchange.predicate.legal_exchange"]);
-  return lineBlockerClearanceObservedOperands(anchors).filter((payload) => sameDigest(payload.targetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
+  return recordedLineBlockerClearanceObservedOperands(anchors).filter((payload) => sameDigest(payload.targetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
 }, (input) => [...edgesOf(input), ...others(input, "exchange")]);
 export const createDerivedTacticDeflectionObservedV2Evidence = recordedSequenceFactory("derived.tactic.deflection_observed@2", { edges: EDGES(3), duty: sealed("rules.tactic.reading.defender_duty_set@1"), captures: sealedList(1, null, "rules.transition.event.capture@1"), exchange: sealed("rules.exchange.predicate.legal_exchange@1"), check: optional(sealed("rules.tactic.event.check@1")) }, (input, anchors) => {
   const induction = deflectionObservedInduction(anchors);
   if (induction === undefined) throw new TypeError("Observed deflection has no induction authority");
   if ((induction === "check_induced") !== (input.check !== undefined)) throw new TypeError("Recorded deflection check authority disagrees with its induction arm");
   exactRecordedSequenceInputs(anchors, edgesOf(input), 3, others(input, "duty", "captures", "exchange", "check"), ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange", ...(induction === "check_induced" ? ["rules.tactic.event.check"] : [])]);
-  return deflectionObservedOperands(anchors).filter((payload) => sameDigest(payload.targetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
+  return recordedDeflectionObservedOperands(anchors).filter((payload) => sameDigest(payload.targetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
 }, (input) => [...edgesOf(input), ...others(input, "duty", "captures", "exchange", "check")]);
 export const createDerivedTacticAttractionObservedV2Evidence = recordedSequenceFactory("derived.tactic.attraction_observed@2", { edges: EDGES(3, 5), captures: sealedList(1, null, "rules.transition.event.capture@1"), check: optional(sealed("rules.tactic.event.check@1")) }, (input, anchors) => {
   const payloads = attractionObservedOperands(anchors);

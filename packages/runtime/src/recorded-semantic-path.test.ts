@@ -34,6 +34,7 @@ import {
   assertSemanticEvidenceEvent,
   defenderConsequenceOperands,
   deflectionObservedOperands,
+  lineBlockerClearanceObservedOperands,
   recordedDeflectionObservedSemanticEvent,
   recordedSquareClearanceSemanticEvent,
   recordedTradeCompletedSemanticEvent,
@@ -45,6 +46,8 @@ import {
 } from "./semantic-evidence.js";
 import { defenderDutyReading } from "./tactics.js";
 import * as squareControl from "./square-control.js";
+import { positionFromFen } from "./position-cache.js";
+import { parseSquare } from "chessops/util";
 import type { DrillRun, Node } from "./types.js";
 
 const at = "2026-09-24T00:00:00.000Z";
@@ -66,6 +69,81 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3718 recorded target continuity", () => {
+  const replacements = [
+    { name: "deflection white", projection: "derived.tactic.deflection_observed", fen: "1B5k/r1r5/8/8/8/8/8/R5K1 w - - 0 1", moves: ["b8a7", "c7a7", "a1a7"], square: "a7", role: "rook", defender: "c7" },
+    { name: "deflection black", projection: "derived.tactic.deflection_observed", fen: "r5k1/8/8/8/8/8/R1R5/1b5K b - - 0 1", moves: ["b1a2", "c2a2", "a8a2"], square: "a2", role: "rook", defender: "c2" },
+    { name: "clearance white", projection: "derived.tactic.line_blocker_clearance_observed", fen: "qq5k/8/8/8/Q7/8/8/R5K1 w - - 0 1", moves: ["a4a8", "b8a8", "a1a8"], square: "a8", role: "queen", defender: "b8" },
+    { name: "clearance black", projection: "derived.tactic.line_blocker_clearance_observed", fen: "r5k1/8/8/q7/8/8/8/QQ5K b - - 0 1", moves: ["a5a1", "b1a1", "a8a1"], square: "a1", role: "queen", defender: "b1" },
+  ] as const;
+
+  it.each(replacements)("$name refuses a captured original target in the actual recorded compiler", fixture => {
+    const run = recordedRun(`d3718:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const square = parseSquare(fixture.square)!;
+    const positions = path.map(node => positionFromFen(node.fen));
+    const original = positions[0]!.board.get(square)!;
+    const bait = positions[1]!.board.get(square)!;
+    const replacement = positions[2]!.board.get(square)!;
+    expect(original.role).toBe(fixture.role);
+    expect(bait.color).not.toBe(original.color); // Edge one captured the original target.
+    expect(replacement).toEqual(original); // Same address/colour/role is not retained identity.
+    expect(positions[0]!.board.get(parseSquare(fixture.defender)!)).toEqual(replacement);
+    const result = compileMain(run);
+    expect(result.events.filter(event => exact(event.projection) === v2(fixture.projection))).toEqual([]);
+    expect(result.windows.find(window => exact(window.projection) === v2(fixture.projection) && window.startNodeId === path[0]!.id))
+      .toMatchObject({ status: "no_witness", horizon: 3, endNodeId: path[3]!.id, eventIds: [] });
+    expect(result.events.some(event => event.projection.id === "derived.exchange.trade_completed")).toBe(true);
+  });
+
+  it.each(replacements)("$name cannot mint the same replacement through the sole v2 factory", fixture => {
+    const run = recordedRun(`d3718:factory:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const edges = path.slice(1).map((node, index) => declareRecordedEdgeEvidence(run, path[index]!, node));
+    const anchors = path.slice(1).map((node, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: node.id, beforeFen: path[index]!.fen, moveUci: node.moveUci!, afterFen: node.fen }));
+    const captures = anchors.flatMap(anchor => transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen)
+      .filter(event => event.projection.id === "rules.transition.event.capture").map(event => event.evidence));
+    const exchange = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: anchors[2]!.beforeFen, captureUci: anchors[2]!.moveUci })[0]!;
+    expect((exchange.payload as LegalExchangeResult).resultUnits).toBeGreaterThan(0);
+    const inputs = fixture.projection === "derived.tactic.deflection_observed"
+      ? { edges, exchange, duty: declareDefenderDutyEvidence(anchors[0]!.beforeFen), captures }
+      : { edges, exchange };
+    expect(invokeEvidenceValueRoute(`${fixture.projection}@2`, inputs)).toEqual([]);
+  });
+
+  it.each(replacements)("$name preserves the frozen v1 operand reader rather than rewriting history", fixture => {
+    const run = recordedRun(`d3718:legacy:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const anchors = path.slice(1).map((node, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: node.id, beforeFen: path[index]!.fen, moveUci: node.moveUci!, afterFen: node.fen }));
+    // This is a compatibility control for the historical reader, not an endorsement of its
+    // same-role replacement as a current observed motif. Only exact v2 has a production caller.
+    const legacy = fixture.projection === "derived.tactic.deflection_observed"
+      ? deflectionObservedOperands(anchors) : lineBlockerClearanceObservedOperands(anchors);
+    expect(legacy).toHaveLength(1);
+    expect(legacy[0]!.targetCapture.captured).toMatchObject({ square: fixture.square, role: fixture.role });
+  });
+
+  it.each([
+    { name: "retained deflection white", projection: "derived.tactic.deflection_observed", fen: "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", moves: ["b8a7", "c6a7", "e1e7"], square: "e7" },
+    { name: "retained deflection black", projection: "derived.tactic.deflection_observed", fen: "4r1k1/8/8/8/8/2N5/R3Q3/1b5K b - - 0 1", moves: ["b1a2", "c3a2", "e8e2"], square: "e2" },
+    { name: "retained clearance white", projection: "derived.tactic.line_blocker_clearance_observed", fen: "q3k3/8/8/8/N7/8/8/R3K3 w - - 0 1", moves: ["a4b6", "e8f7", "a1a8"], square: "a8" },
+    { name: "retained clearance black", projection: "derived.tactic.line_blocker_clearance_observed", fen: "r3k3/8/8/n7/8/8/8/Q3K3 b - - 0 1", moves: ["a5b3", "e1f2", "a8a1"], square: "a1" },
+  ] as const)("$name still emits its exact original-target witness", fixture => {
+    const run = recordedRun(`d3718:positive:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const pieces = path.slice(0, 3).map(node => positionFromFen(node.fen).board.get(parseSquare(fixture.square)!));
+    expect(pieces[0]).toBeDefined();
+    expect(pieces[1]).toEqual(pieces[0]); expect(pieces[2]).toEqual(pieces[0]);
+    const result = compileMain(run);
+    const matching = result.events.filter(event => exact(event.projection) === v2(fixture.projection));
+    expect(matching).toHaveLength(1);
+    const payload = matching[0]!.operands as { targetCapture: LegalExchangeResult };
+    expect(payload.targetCapture.captured).toEqual({ square: fixture.square, color: pieces[0]!.color, role: pieces[0]!.role });
+    expect(payload.targetCapture.resultUnits).toBeGreaterThan(0);
+    assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, matching[0]!);
+  });
+});
 
 describe("D3658 demand-bound defender consequence work", () => {
   const fixtures = [

@@ -26017,3 +26017,51 @@ Campaign was the one capability with no API, route or content. Now:
   a start date. The ordinary Make transition without SINCE corrects that invocation;
   the remaining cost item is valid TODO, learner-history owned. Tracking-only final
   refresh follows without modifying the verified product/test sources.
+
+## 2026-10-11 (codex) — D3718 recorded original-target continuity
+
+- Previous goal turn shipped 5788c31a with complete local gates, not just an inventory.
+  The next accepted semantic-collector/recorded-path audit finds a target-identity join:
+  initial and final square/colour/role match despite edge one capturing the original.
+  Existing v2 profiles already have migrated positive/negative refs; the missing scope
+  is independent temporal-identity coverage, not absent profile cells. Record D3718
+  before testing. Sync alone refuses its temporary untriaged row; the normal assignment
+  immediately records evidence-foundation/doing and restores zero untriaged work.
+- Eight both-colour permanent compiler and sole-factory controls fail on the predecessor.
+  Legal bait/blocker capture, enemy same-role replacement and final positive capture
+  produce false deflection/line-clearance events. The ordinary captures/trades are real;
+  only the claimed retained-target relation is false. Shared recorded v2 readers check
+  the original occupant at both intermediate boundaries; frozen v1 remains unchanged.
+- First follow-up reaches all repaired negative boundaries but catches my positive test
+  expecting an undeclared promoted flag in the exchange capture identity. Correct to
+  the exact declared square/colour/role; independent board occupancy still checks the
+  complete original target. Plain typecheck is initially sandbox-refused by pnpm's
+  dependency metadata write; the same normal Make command with permission passes types.
+  Twenty focused runtime/saved-operation tests pass. Review phase-arc controls and the
+  complete normal serial gates are next; no full qualification or release claim yet.
+- All 24 focused controls pass, including saved authorized reconstruction and the actual
+  Review phase arc; full recorded-path files pass 59 tests. The 108-game/6,991-ply census
+  retains eager parity and emits 1,264 events (18 deflection, 18 line clearance); historical
+  2026-09-24 counts are not a paired repair benchmark. Generated validation remains 307
+  passing canonical cases over 81 subjects, zero fully qualified.
+- Complete serial normal make work-state-sync roadmap-receipt verify-awake build
+  test-browser-ci-awake exits zero: clean types/governance/packaging/build, 4,939 software
+  tests/376 files, seven unchanged-budget performance checks/four files, 255 content
+  tests/26 files and 302 browser passes (237 smoke, five content, 59 matrix, one packaged
+  production), one existing optional Maia latency skip, zero retries, 150 input/112
+  composition cells. No deadlines, retries, thresholds, evidence population or accepted
+  policy are weakened. Historical intermittent causes remain open despite this green run.
+- Close only D3718 in the existing ledger/state/queue/docs/dated receipt and replace the
+  foundation milestone's latest checkpoint with this bounded repair; retain its active
+  state and all other milestone states. Initial sync after the terminal glyph correctly
+  refuses stale doing/glyph/digest; the ordinary explicit done transition records path
+  evidence and restores consistency. Final tracking/governance and scoped commit follow.
+  No new tracker, raw research capture, protected intent edit, authored content, push,
+  exact-revision remote CI, full release-image, whole capability/milestone or goal completion.
+- Final normal make roadmap-receipt verify-governance roadmap-progress exits zero:
+  1,585 done / 1,721 live / zero untriaged ledger items; UX 273 complete / 272 live /
+  24 retired. Only the foundation-contracts latest checkpoint changes; all other eight
+  milestone records and all capability records remain unchanged. Inspect the explicit
+  eighteen-file index and commit with ordinary hooks; preserve the three pre-existing
+  untracked paths and publish nothing. The requested whole-product overview is the
+  existing roadmap inventory, not test totals presented as release completion.

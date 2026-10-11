@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3718]] reproduces false recorded v2 deflection/line-clearance
+through eight predecessor-red compiler/sole-factory controls: edge one captures
+the original target, edge two replaces it with the same role/colour, edge three
+captures the replacement. The repair requires target survival at both boundaries
+in the shared v2 readers; frozen v1 readers and valid original-target witnesses remain.
+Saved authorized reconstruction and the real Review phase arc retain every path node,
+ordinary trade and repeatable identity. All 24 focused controls pass; complete serial
+normal verification/build passes 4,939 software/376 files, seven performance/four files,
+255 content/26 files and 302 browser cases, one existing optional Maia skip, zero retries,
+all 150 input/112 composition cells and clean types/governance/packaging. D3718 is closed
+locally; all 307 canonical cases still pass over 81 subjects, zero fully qualified.
+This is predicate fidelity, not new
+motif eligibility, a force/quality claim, a changed selection policy or full RFC completion.
+
 2026-10-11 — [[D3300]]'s second work-reuse correction retains only the latest
 complete immutable square-control delta across the control/defender-exposure sources.
 Four predecessor-red controls now pass within 78 collector and 65 real projector/store/worker

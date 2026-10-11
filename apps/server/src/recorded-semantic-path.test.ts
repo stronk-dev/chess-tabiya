@@ -49,6 +49,28 @@ function productionSources(directory: URL): readonly { readonly path: string; re
 
 describe("recorded semantic path server operation", () => {
   it.each([
+    { projection: "derived.tactic.deflection_observed", fen: "1B5k/r1r5/8/8/8/8/8/R5K1 w - - 0 1", moves: ["b8a7", "c7a7", "a1a7"] },
+    { projection: "derived.tactic.deflection_observed", fen: "r5k1/8/8/8/8/8/R1R5/1b5K b - - 0 1", moves: ["b1a2", "c2a2", "a8a2"] },
+    { projection: "derived.tactic.line_blocker_clearance_observed", fen: "qq5k/8/8/8/Q7/8/8/R5K1 w - - 0 1", moves: ["a4a8", "b8a8", "a1a8"] },
+    { projection: "derived.tactic.line_blocker_clearance_observed", fen: "r5k1/8/8/q7/8/8/8/QQ5K b - - 0 1", moves: ["a5a1", "b1a1", "a8a1"] },
+  ])("D3718 owned saved play refuses a same-role target replacement ($moves)", async value => {
+    const { storage, run } = fixture(value.fen, value.moves);
+    const compile = recordedSemanticPathOperation(storage);
+    const input = { principal: owner, runId: run.id, branchId: run.activeCursor.branchId };
+    const saved = JSON.stringify(storage.read(run.id));
+    const result = await compile(input);
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("valid saved target replacement was refused");
+    expect(result.events.filter(event => event.projection.id === value.projection && event.projection.version === 2)).toEqual([]);
+    expect(result.windows.find(window => window.projection.id === value.projection && window.projection.version === 2 && window.startNodeId === run.nodes[0]!.id))
+      .toMatchObject({ horizon: 3, status: "no_witness", eventIds: [] });
+    expect(result.events.some(event => event.projection.id === "derived.exchange.trade_completed")).toBe(true);
+    expect(await compile(input)).toEqual(result);
+    await expect(compile({ ...input, principal: stranger })).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+    expect(JSON.stringify(storage.read(run.id))).toBe(saved);
+  });
+
+  it.each([
     { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 1", moves: ["d2d3", "e4f3"], before: "e4", after: "f3" },
     { fen: "k7/3p4/8/2N1B3/3n4/2q5/8/7K b - - 0 1", moves: ["d7d6", "e5f6"], before: "e5", after: "f6" },
   ])("D3631 reconstructs the actual bishop reply from owned saved play ($moves)", async value => {

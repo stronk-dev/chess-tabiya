@@ -974,6 +974,24 @@ export function overloadExploitationSemanticEvent(payload: OverloadExploitationO
 // selector only (rfc/evidence-value-authority.md §2.2).
 // ---------------------------------------------------------------------------------------------
 
+/** The original observed target must remain at every intervening boundary, not be replaced. */
+function recordedTargetRetained(anchors: readonly RecordedMoveAnchor[], target: { readonly square: SquareName; readonly piece: Piece }): boolean {
+  return anchors.slice(0, -1).every(anchor => {
+    const occupant = exactPiece(positionFromFen(anchor.afterFen), target.square);
+    return occupant !== undefined && sameOccupant(target.piece, occupant.piece);
+  });
+}
+
+// v1 is frozen. Its operand readers remain unchanged; the exact recorded v2 authority enforces
+// the accepted original-target survival clause in both enumeration and sole-factory recomputation.
+export function recordedDeflectionObservedOperands(values: readonly RecordedMoveAnchor[]): readonly DeflectionObservedOperands[] {
+  return Object.freeze(deflectionObservedOperands(values).filter(payload => recordedTargetRetained(payload.anchors, payload.lostDuty.target)));
+}
+
+export function recordedLineBlockerClearanceObservedOperands(values: readonly RecordedMoveAnchor[]): readonly LineBlockerClearanceObservedOperands[] {
+  return Object.freeze(lineBlockerClearanceObservedOperands(values).filter(payload => recordedTargetRetained(payload.anchors, payload.target)));
+}
+
 function recordedEdgePayloads(edges: readonly DeclaredEvidence<unknown>[]): readonly RecordedEdge[] {
   return edges.map((value) => {
     assertDeclaredEvidence(value);

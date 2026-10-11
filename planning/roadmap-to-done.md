@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3717]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3718]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3717]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
-retired; 1,721 live ledger items, all assigned, alongside 1,584 done and 161 refused. The 462
+Current checked inventory through [[D3718]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,585 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,18 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3718]] repairs false recorded deflection/line clearance when the original target is
+captured and replaced by another piece of the same role. The compiler and sole v2
+factories now require survival at both intermediate boundaries; valid witnesses,
+ordinary trades, frozen v1 and saved path identities remain. Twenty-four permanent
+controls include eight predecessor failures and the real Review phase arc. Complete
+normal serial verification/build passes 4,939 software/376 files, seven performance/four
+files, 255 content/26 files and 302 browser cases, one existing optional skip, zero
+retries, all 150 input/112 composition cells and clean types/governance/packaging.
+All 307 canonical validation cases still pass over 81 subjects, zero fully qualified.
+This closes a correctness defect, not orientation/reach, source adoption, useful guidance,
+the broader RFC discharges, a whole capability/milestone, remote CI or release-image proof.
 
 [[D3717]] adds eighteen independent recorded bishop-pressure cases: four positives and
 fourteen legal near-misses in both colours. Exact pawn/bishop/screen/target identities and

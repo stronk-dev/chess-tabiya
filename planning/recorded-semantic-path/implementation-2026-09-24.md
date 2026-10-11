@@ -70,3 +70,28 @@ line clearance 23, square clearance 374, interference 3, check zwischenzug 7, ov
   `193` pin were already stale at baseline (the manifest had 194 projections before this work). The
   harnesses that imported the removed inventory now alias `SEMANTIC_EVENT_FAMILY_IDS`, which has
   byte-identical content to the old list.
+
+## 2026-10-11 follow-up — original-target continuity (D3718)
+
+The sections above retain the dated implementation snapshot, not current discharge state.
+The current RFC/register records D1 discharged by Review and remains awaiting D2.
+This correction does not declare the remaining module/longitudinal obligations complete.
+
+Eight predecessor-red compiler/factory controls reproduce a captured original target being
+replaced by another enemy piece of the same role before the final capture. Shared recorded
+v2 readers require the original occupant at both intervening boundaries; frozen v1 remains
+unchanged. All 24 both-colour negative, valid-positive, compatibility, authorized saved-game
+and actual Review phase-arc controls pass. Ordinary trades, every path node, byte-repeatability
+and stranger refusal remain. The full recorded-path files pass 59 tests.
+
+The current 108-game/6,991-ply census emits 1,264 events with exact/eager parity. Deflection
+and line clearance emit 18 each; 20/40/80-ply p95 is 24.2/54.1/76.1 ms locally. The earlier
+2026-09-24 numbers are a historical different-code/host observation, not a paired repair
+benchmark. No event-count or portable-speed improvement is inferred from that comparison.
+
+Complete normal serial verification/build exits zero: 4,939 software tests/376 files, seven
+performance checks/four files, 255 content tests/26 files, clean types/governance/packaging and
+302 browser passes (237 smoke, five content, 59 matrix, one packaged-production), one existing
+optional Maia skip, zero retries and 150 input/112 composition cells. All 307 canonical cases
+pass over 81 subjects, zero fully qualified. No authored pack, source contract, derivation
+revision, learner eligibility, whole capability/milestone, remote CI or release image changes.

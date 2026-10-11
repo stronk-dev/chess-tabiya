@@ -30856,6 +30856,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-harassment.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3718",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:728597b3bbed6b92604aa3b64eea9b8ff11ab93dbd51cd90d9a5d49b708bc4e8",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

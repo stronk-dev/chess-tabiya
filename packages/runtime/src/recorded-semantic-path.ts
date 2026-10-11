@@ -23,9 +23,9 @@ import {
   checkZwischenzugObservedOperands,
   defenderConsequenceOperands,
   deflectionObservedInduction,
-  deflectionObservedOperands,
+  recordedDeflectionObservedOperands,
   interferenceObservedOperands,
-  lineBlockerClearanceObservedOperands,
+  recordedLineBlockerClearanceObservedOperands,
   localSemanticEvents,
   overloadExploitationObservedOperands,
   recordedAttractionObservedSemanticEvent,
@@ -289,7 +289,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       for (const value of defenderConsequenceOperands(anchors)) emitted.push(recordedDefenderConsequenceSemanticEvent(value, edges));
       break;
     case "deflection": {
-      const operands = deflectionObservedOperands(anchors);
+      const operands = recordedDeflectionObservedOperands(anchors);
       if (operands.length === 0) break;
       const check = deflectionObservedInduction(anchors) === "check_induced" ? window[0]!.check : undefined;
       for (const value of operands) emitted.push(recordedDeflectionObservedSemanticEvent(value, edges, duty(), captureEvidence, exchangeEvidence(value.targetCapture), check));
@@ -302,7 +302,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       }
       break;
     case "line_clearance":
-      for (const value of lineBlockerClearanceObservedOperands(anchors)) emitted.push(recordedLineBlockerClearanceSemanticEvent(value, edges, exchangeEvidence(value.targetCapture)));
+      for (const value of recordedLineBlockerClearanceObservedOperands(anchors)) emitted.push(recordedLineBlockerClearanceSemanticEvent(value, edges, exchangeEvidence(value.targetCapture)));
       break;
     case "square_clearance":
       for (const value of squareClearanceObservedOperands(anchors)) emitted.push(recordedSquareClearanceSemanticEvent(value, edges));

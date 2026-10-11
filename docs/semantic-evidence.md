@@ -221,6 +221,12 @@ engine principal variation.
   the complete newly attacked minor population, including competing knights or bishops. Only
   relocation preserving the exact slider/screen/target relation emits; a knight reply or a broken
   pressure line remains a completed negative. This describes the sequence, not intent or quality.
+- **Retained targets.** Recorded v2 deflection and line-blocker clearance require the original
+  target to survive both intervening boundaries. Capturing it, then capturing a different piece
+  of the same colour/role on the same square, is a completed `no_witness`, not either motif.
+  The compiler and sole factories use the same target-continuity check; the frozen v1 readers
+  remain unchanged. Both-colour controls cover valid retained targets, same-role replacements,
+  owned saved reconstruction and Review's phase arc (`make recorded-target-continuity-check`).
 - **Receipts.** Every edge start receives exactly one receipt per evaluator row (eleven projections,
   thirteen rows): `emitted`, `no_witness` (an evaluated negative) or `insufficient_continuation`
   (not a negative). Any path or edge corruption refuses the whole path before any detector runs.

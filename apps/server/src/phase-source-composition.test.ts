@@ -135,6 +135,24 @@ describe("recorded and live tablebase slots (§2.2, criterion 7)", () => {
 });
 
 describe("the ordered arc (§3, criteria 4, 11, 12)", () => {
+  it.each([
+    { projection: "derived.tactic.deflection_observed", fen: "1B5k/r1r5/8/8/8/8/8/R5K1 w - - 0 1", moves: ["b8a7", "c7a7", "a1a7"] },
+    { projection: "derived.tactic.deflection_observed", fen: "r5k1/8/8/8/8/8/R1R5/1b5K b - - 0 1", moves: ["b1a2", "c2a2", "a8a2"] },
+    { projection: "derived.tactic.line_blocker_clearance_observed", fen: "qq5k/8/8/8/Q7/8/8/R5K1 w - - 0 1", moves: ["a4a8", "b8a8", "a1a8"] },
+    { projection: "derived.tactic.line_blocker_clearance_observed", fen: "r5k1/8/8/q7/8/8/8/QQ5K b - - 0 1", moves: ["a5a1", "b1a1", "a8a1"] },
+  ])("D3718 Review phase arc retains the real path without a false target motif ($moves)", value => {
+    const run = runFrom(value.fen, value.moves);
+    const result = compilePhaseArc(run, run.activeCursor.branchId, deps());
+    expect(result.kind).toBe("arc");
+    if (result.kind !== "arc") throw new Error("valid recorded replacement path was refused");
+    assertPhaseArc(result.arc);
+    expect(result.arc.path.events.filter(event => event.projection.id === value.projection && event.projection.version === 2)).toEqual([]);
+    expect(result.arc.path.events.some(event => event.projection.id === "derived.exchange.trade_completed")).toBe(true);
+    expect(result.arc.points.map(point => point.position.payload.fen)).toEqual(run.nodes.map(node => node.fen));
+    expect(result.arc.path.pathNodeIds).toEqual(run.nodes.map(node => node.id));
+    expect(compilePhaseArc(run, run.activeCursor.branchId, deps())).toEqual(result);
+  });
+
   it("compiles one point per exact path node with only source-local changes", () => {
     const run = runFrom(INITIAL, ["e2e4", "e7e5", "g1f3", "b8c6", "a2a4"]);
     const result = compilePhaseArc(run, run.activeCursor.branchId, deps());

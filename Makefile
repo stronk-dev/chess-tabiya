@@ -478,6 +478,10 @@ candidate-closure-census:
 # pinned 20/40/80-ply timing arms (RECORDED_PATH_TIMING=report downgrades the budget to a warning
 # on unpinned hosts; the pinned performance tier enforces it).
 .PHONY: recorded-semantic-path-check
+.PHONY: recorded-target-continuity-check
+recorded-target-continuity-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/phase-source-composition.test.ts -t D3718
+
 recorded-semantic-path-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
 	./node_modules/.bin/esbuild apps/server/src/recorded-semantic-path-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/recorded-semantic-path-check.js
