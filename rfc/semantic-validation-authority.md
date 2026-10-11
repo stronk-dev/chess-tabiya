@@ -1722,6 +1722,23 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-10-11: D3714 adds twenty-four independently source-bound structural king-zone
+  cases under accepted Slice B, including all four corners, entry/exit/preservation
+  and both-interior omissions for both colours. Neutral square-name boundary sets and
+  legal replay verify the complete emitted population and exact king identities/signs.
+  Twenty-six initial missing-case/profile controls fail; all 280 focused cited checks
+  and all 289 canonical executions pass after registration. One initially illegal
+  interior fixture was corrected by relocating its opposite king; it is not a collector
+  defect or valid omission. All 265 predecessor cases remain unchanged. Positive/negative
+  cells become present only for rules.structural.event.king_zone@1; orientation remains
+  required, zero subjects fully qualify, and source adoption/learner eligibility stay held.
+  No orientation/window draft implementation, collector meaning or authored pack change.
+  Complete serial normal verification/build/all browser tiers pass 4,877 software/375 files,
+  seven performance/four files, 248 content/25 files and 302 browser cases, one existing
+  optional skip, zero retries and all 150 input/112 composition cells. No whole capability,
+  milestone, exact-revision remote CI or release-image completion follows.
+  Evidence: `packages/runtime/src/semantic-validation-king-zone.test.ts`.
+
 - 2026-10-11: D3710 adds sixteen independent discovered-execution cases under accepted
   Slice B: both colours and all three slider roles, with populated direct-check,
   second-blocker, retained-screen, unrelated-move and moved-slider omissions.

@@ -25716,3 +25716,36 @@ Campaign was the one capability with no API, route or content. Now:
   review, not self-acceptance by their author. Historical intermittent causes stay open despite
   passing repeats. No push, exact-revision GitHub CI, deployment, native image recovery,
   whole-capability or release completion. The 1.0 goal remains active.
+
+## 2026-10-11 — D3714 independent structural king edge/corner case arms
+
+- Continued the accepted semantic-validation-authority Slice B rather than implementing
+  unaccepted source, orientation or recorded-window amendments. Twenty-four cases cover
+  all four corners, corner-to-edge/interior exit, file-edge entry/exit/preservation,
+  stationary corner preservation and populated both-interior omissions in both colours.
+  Independent square-name boundary sets and legal replay verify the entire emitted
+  population, exact before/after king identities and gained/lost/preserved signs. No
+  structural predicate or payload builder is used as the expectation oracle.
+- Twenty-six initial missing-registration controls fail. One separate illegal interior
+  fixture put its kings adjacent after the move; relocating the opposite king corrects
+  that fixture, not a collector defect. All 280 focused cited controls/seven files and
+  clean workspace types pass after registration. The sole canonical writer executes
+  289 cases (173 positive/116 negative), retaining all 265 predecessor records unchanged.
+  The structural king-zone positive/negative cells become present: 53/48 present,
+  28/33 still required, all 81 orientation obligations open and zero subjects fully qualified.
+  Broad king-zone state omission, blocker-blind opposition and learner eligibility remain
+  distinct, unchanged obligations. No source protocol, strategic verdict or pack content changes.
+- Complete serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  4,877 software/375 files (318.85 s), seven unchanged-budget performance/four files
+  (62.52 s), 248 content/25 files (32.11 s), clean types, governance, packaging and build.
+  Browser tiers pass 302 cases: 237 smoke, five real-content, 59 matrix and one production
+  configuration; one existing optional Maia skip, zero retries, all 150 input and 112
+  composition cells. Historical intermittent causes stay open; passing repeats do not
+  diagnose them. Local verification is not exact-revision GitHub or native image proof.
+- Existing Make targets include the new permanent tests. The ledger, durable work-state,
+  queue, implementation docs, RFC changelog and authoritative roadmap close together.
+  Population: 3,463 ledger rows, 1,721 live/all assigned, 1,581 done and 161 refused.
+  UX remains 273 complete/272 live/24 retired; whole capabilities and milestones remain
+  incomplete, with zero official graduates. No new tracking framework or bulk recording.
+  Protected intent and immutable archives are unchanged; no intent sentence is newly
+  falsified. No push, deployment, release-image or whole-feature completion. Goal stays active.

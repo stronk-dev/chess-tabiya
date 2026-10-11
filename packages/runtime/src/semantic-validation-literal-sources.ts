@@ -435,7 +435,51 @@ export const DISCOVERED_CITED_SOURCE = Object.freeze({
   cases: discoveredFixtures.map(fixture => ruleCase("discovered-ray", fixture)),
 });
 
+// D3714: square coordinates only. "Edge" includes a corner; neither name
+// asserts king safety, opposition or a recommendation. The literal move table
+// covers all four corners, rank/file edges, preservation and real interior
+// omissions. FEN assembly is neutral fixture construction, not a detector.
+const kingZoneMoves = [
+  ["enter-a1", "b2", "a1"], ["enter-h1", "g2", "h1"],
+  ["enter-a8", "b7", "a8"], ["enter-h8", "g7", "h8"],
+  ["corner-to-edge", "a1", "b1"], ["corner-to-interior", "h8", "g7"],
+  ["enter-file-edge", "b3", "a3"], ["leave-file-edge", "a3", "b3"],
+  ["along-file-edge", "a3", "a4"], ["interior-negative", "b3", "c3"],
+  ["stationary-interior-negative", "b3", "b3"], ["stationary-corner", "h1", "h1"],
+] as const;
+function kingZoneFen(king: string, color: "white" | "black", pawn: string | undefined, after: boolean): string {
+  const pieces: Record<string, string> = { [king]: color === "white" ? "K" : "k", d5: color === "white" ? "k" : "K" };
+  if (pawn !== undefined) pieces[pawn] = color === "white" ? "P" : "p";
+  const board = Array.from({ length: 8 }, (_, rank) => {
+    let row = "", empty = 0;
+    for (const file of "abcdefgh") {
+      const piece = pieces[`${file}${8 - rank}`];
+      if (piece === undefined) empty++;
+      else { if (empty > 0) row += empty; empty = 0; row += piece; }
+    }
+    return row + (empty > 0 ? empty : "");
+  }).join("/");
+  return `${board} ${after ? color === "white" ? "b" : "w" : color === "white" ? "w" : "b"} - - ${after ? pawn === undefined ? 8 : 0 : 7} ${after && color === "black" ? 2 : 1}`;
+}
+export const KING_ZONE_CITED_SOURCE = Object.freeze({
+  sourceId: "python-chess.king-coordinates",
+  sourceRevision: captureSource.sourceRevision,
+  licence: captureSource.licence,
+  url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+  text: "def square_file(square: Square) -> int:\n    \"\"\"Gets the file index of the square where ``0`` is the a-file.\"\"\"\n    return square & 7\n\ndef square_rank(square: Square) -> int:\n    \"\"\"Gets the rank index of the square where ``0`` is the first rank.\"\"\"\n    return square >> 3\n",
+  operation: { id: "runtime.semantic.structural_edge", version: 1 } as const,
+  cases: (["white", "black"] as const).flatMap(color => kingZoneMoves.map(([id, before, after]) => {
+    const stationary = before === after;
+    const pawnBefore = stationary ? color === "white" ? "a2" : "a7" : undefined;
+    const pawnAfter = stationary ? color === "white" ? "a3" : "a6" : undefined;
+    return ruleCase("king-coordinates", [`${id}.${color}`, "rules.structural.event.king_zone",
+      kingZoneFen(before, color, pawnBefore, false), stationary ? `${pawnBefore}${pawnAfter}` : `${before}${after}`,
+      kingZoneFen(after, color, pawnAfter, true), id.endsWith("negative") ? null : { family: "king_zone" }]);
+  })),
+});
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  KING_ZONE_CITED_SOURCE,
   DISCOVERED_CITED_SOURCE,
   ...RECORDED_CITED_SOURCES,
   ...ATTACK_CITED_SOURCES,

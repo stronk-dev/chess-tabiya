@@ -154,6 +154,17 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3714]] is closed locally for the admitted structural king-zone case arms: all four corners,
+entry/exit/preservation, exact retained king identities and populated both-interior
+omissions, both colours. All 265 predecessors remain; 289 canonical executions and
+280 focused cited checks pass. This is separate from the universal king-zone state's
+omission conflict and blocker-blind opposition. Orientation/source/reach amendments,
+learner qualification and useful selection remain held; no source or pack rewrite.
+Complete serial normal verification/build/all browser tiers pass 4,877 software/375 files,
+seven performance/four files, 248 content/25 files and 302 browser cases, one existing
+optional skip, zero retries and all 150 input/112 composition cells. This fills two case arms,
+not a whole-subject, source-adoption, capability, remote-CI or release-image obligation.
+
 [[D3713]] retains the unmeasured silent-success recovery boundary. Actual legal controls return
 populated pawn/open-file facts, including unchanged empty-file statements on a pawn-free board;
 do not relabel them empty or manufacture an empty receipt. Resolve selection/novelty under the

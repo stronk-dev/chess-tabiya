@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3713]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3714]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3713]]: 273 UX items complete, 272 live and 24
-retired; 1,721 live ledger items, all assigned, alongside 1,580 done and 161 refused. The 462
+Current checked inventory through [[D3714]]: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,581 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,16 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3714]] adds twenty-four independent structural king-zone cases, filling its positive and
+negative cells with actual entry/exit/preservation and both-interior omissions in both colours.
+All 265 predecessors remain; 289 canonical executions pass (173 positive/116 negative),
+with 53/48 positive/negative cells present and 28/33 required. All 81 orientation obligations
+remain and zero subjects fully qualify. Complete serial normal verification/build/all browser
+tiers pass 4,877 software/375 files, seven performance/four files, 248 content/25 files and
+302 browser cases, one existing optional skip, zero retries and all 150 input/112 composition
+cells. Collector meaning, learner eligibility and authored packs stay unchanged; no whole
+capability, milestone, remote-CI or release-image completion follows.
 
 [[D3712]] repairs automatic Support recovery: failed/pending Nudge remains reachable without
 claiming a fact, both automatic modules offer explicit retry, and current subject/help/decision,
@@ -128,8 +138,8 @@ disclosure; the new passing evidence controls do not repair that learner flow.
    sampled Maia tasks, durable Stockfish, Review tablebase and selected-piece/square Sight.
    Their existing draft repairs require independent acceptance, then real API/client proof.
 2. Complete semantic qualification and useful selection, not just emission. The current
-   register has 265 passing cases over 81 subjects: 52 positive cells and 47 negative
-   cells present, but 29 positive, 34 negative and all 81 orientation obligations remain.
+   register has 289 passing cases over 81 subjects: 53 positive cells and 48 negative
+   cells present, but 28 positive, 33 negative and all 81 orientation obligations remain.
    Four complete-state projections have a genuine omission-contract conflict. “Why this
    move?” search remains a draft upgrade, not a delivered explanatory engine.
 3. Convert those facts into complete default journeys, calibrated bot behavior, valid

@@ -372,11 +372,22 @@ Legal replay and separate integer ray geometry check exact screen, slider and ki
 These controls exposed D3711: a king at a slider ray's board-edge endpoint was absent from
 the interior blocker arrays, so the execution join discarded its true before-state latency.
 The join now admits that exact retained endpoint without changing the ray's interior blocker
-meaning. All 249 predecessor cases remain unchanged. The current 265 cases pass (153 positive,
+meaning. All 249 predecessor cases remain unchanged. That checkpoint's 265 cases pass (153 positive,
 112 negative); discovered execution's negative cell becomes present. Orientation and all other
 required qualification, source adoption and learner eligibility obligations remain open;
 zero subjects are fully qualified. This repairs the accepted executed relation, not a claim
 that the move is best, forcing or strategically useful.
+
+D3714 adds twenty-four independently checked structural king-zone cases: entry into all
+four corners, corner-to-edge/interior exit, file-edge entry/exit/preservation, stationary
+corner preservation and populated both-interior omissions, for both colours. Independent
+square-name boundary sets and legal replay check the entire emitted edge/corner population,
+including exact before/after king squares and gained/lost/preserved signs. The canonical
+receipt executes 289 cases (173 positive/116 negative), retaining all 265 predecessors.
+This fills the structural king-zone positive and negative cells, not the distinct broad
+king-zone state projection's omission requirement. Orientation stays required and zero
+subjects are fully qualified. No king safety, opposition, strategic value, learner admission,
+source protocol or pack content changes.
 
 D3690 widens the complete-state omission conflict to piece counts, pawn islands
 and reply breadth. Actual white/black bare-king edges retain twelve role counts,

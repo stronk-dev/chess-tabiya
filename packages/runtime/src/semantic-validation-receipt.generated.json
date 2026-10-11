@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "writer": "make semantic-validation-update",
   "rootDigest": "ab6c29aa2a8cd13ffcd9d864c2ab7911c3f97d8c936b00671c459f21170f7634",
-  "profileDigest": "e374928bba3321c0424e64be64a6f50b117f76b73329fbbf8fb69339354eeea7",
-  "caseDigest": "dca46fa42ddec14790579d9e79503195c76530e4a936ae7bea18e88ce955217e",
+  "profileDigest": "b44ccc31234f3b5b71f6562c459c386fe642210d36ab116100ac9bd7708b2461",
+  "caseDigest": "0cffe61f78367ae5d643d1016d6902581aa64932039931e067f69396b036331a",
   "externalDigest": "9e8167fa91c43b71ccbbefdc66764ed314d382d5bea618061537c95c591cdf28",
   "operations": [
     {
@@ -3089,6 +3089,826 @@
       "authority": {
         "kind": "cited_proposition",
         "propositionSha256": "cc8e4b241b3f7a3f6660e62c28d2d4574c1491a62fdb423d77c28f09f5fee729",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.along-file-edge.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "ae0de2acd43352275072b112087453f169eb59409854994a5fc7018ab18751ba",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "99a18440ab8fa160e2f289a370bb90c7bba0256cdefc41be7aaa95470aeb8271",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "70a92ca3fa5de2cb5c6684fccfa3642149408a25255371f2e91f6394e0e9361f",
+          "payloadDigest": "99a18440ab8fa160e2f289a370bb90c7bba0256cdefc41be7aaa95470aeb8271",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "2e6a16e3ff87cf93a175190bbd0c622de3d7ed0ab35afa2794c84912f7b4ead1",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.along-file-edge.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3fc146e31d227ea765c4a383649d559cb5a732c7cad1b123eedd780739696aac",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "b73d758b1b761b75c21869ce10243a43b87ffd144afaef4260a2e2c6d9d62786",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "77e0938a76f68dc50695462942ad5503f89b3d78dec31e545b8c6250ff890f51",
+          "payloadDigest": "b73d758b1b761b75c21869ce10243a43b87ffd144afaef4260a2e2c6d9d62786",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "28259988ced95de7179ff12c70fd36ce887dfc6ef7e81d667cd993528d490417",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.corner-to-edge.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "c165350499edbcb66c709b846a57831c36972bdca9080ac2bafdc2ce9835d4f5",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "5c1ddae74290ef812e555db493f8c69aa1eeadd867f288f4cffa3c74dd62f183",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "085fc7cbe7f0d345508086645e375916fa8c10601241bdc14988d618a843a911",
+          "payloadDigest": "5c1ddae74290ef812e555db493f8c69aa1eeadd867f288f4cffa3c74dd62f183",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "0b360086070631b295daf1925bd352c3f6d0589232a0540c23169db09b138f27",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "085fc7cbe7f0d345508086645e375916fa8c10601241bdc14988d618a843a911",
+          "payloadDigest": "0b360086070631b295daf1925bd352c3f6d0589232a0540c23169db09b138f27",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ff8fe5178ca1e76b2d8a3bfa1b05c80d80967161a6d93aada8cade3009c0fe5f",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.corner-to-edge.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "61be89fad7f1f0276a75ba640855df98bf64c311731fa77a7e69e3be64ef8afa",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "7b5740c2b942dd8a25ad528f5ac4683c4af3c9867970e45423041e787a85f33f",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "182daf6f83ad16490301716a8e772bd03e8fc55290ab2d86e956e8ad270b0518",
+          "payloadDigest": "7b5740c2b942dd8a25ad528f5ac4683c4af3c9867970e45423041e787a85f33f",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "f1204802dd1037a93b79ade2a6f4b298d7063fff3f83a6adbd12bc44aef8344e",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "182daf6f83ad16490301716a8e772bd03e8fc55290ab2d86e956e8ad270b0518",
+          "payloadDigest": "f1204802dd1037a93b79ade2a6f4b298d7063fff3f83a6adbd12bc44aef8344e",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3db7f5271757135db3283499c0c80bdb9ef971028763f17eeb8e136066026df1",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.corner-to-interior.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "08d69ce170c97086ddb3596b60247cee12f4fe67fd9211f43540298ad6b8a8a2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "52b0e2156317466feadca7f1a7f0c7a1ef18b8445d031a835d5ab8cef1e3e9b3",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "1add8d8d80142e7f5b703ebbd32cf160724710b629356e1e86fe4f9232a235aa",
+          "payloadDigest": "52b0e2156317466feadca7f1a7f0c7a1ef18b8445d031a835d5ab8cef1e3e9b3",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "9b7bbd55a8ad1f8a16410c948869d6cd010863815ff437789be480f703f96f13",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "1add8d8d80142e7f5b703ebbd32cf160724710b629356e1e86fe4f9232a235aa",
+          "payloadDigest": "9b7bbd55a8ad1f8a16410c948869d6cd010863815ff437789be480f703f96f13",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "74da83fb21a019e751fcac947cc914d931a17d6a77a2f81446549f99210f0261",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.corner-to-interior.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "c0659bf54f9cbf0f7d3c3b0405bd8b95f61ccd3cb8a13819b0f7c969ced27816",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "ae055235ae643d9d534435c3ba6ee80fd4a996fa66b9b8ea18fc988e481a56d2",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "684e8aaaf928016dac2b441f3a26576f6d68225d8911fb0377739cc93699bc4c",
+          "payloadDigest": "ae055235ae643d9d534435c3ba6ee80fd4a996fa66b9b8ea18fc988e481a56d2",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "84a87cff612756d1d4dbfcb1ac9f890bec32e35d5c79a03ba1b1f95e49680dee",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "684e8aaaf928016dac2b441f3a26576f6d68225d8911fb0377739cc93699bc4c",
+          "payloadDigest": "84a87cff612756d1d4dbfcb1ac9f890bec32e35d5c79a03ba1b1f95e49680dee",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "037b377ba8ba6f8d353361528c9b1ca909002ef0bdf7bfe52df5011d22d59a7a",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-a1.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "98be56b9be843a2c2a47c9893b41194094e28399f5bf98991ceee3f21c86a1ec",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "373584218d0f52b567f78b85f7b0fdca38377b1eefc61fb7f6a1d03c1c563c49",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "ebcd859e3af22609b5f1138b9a4f7f1104b797c8d545b1a9884426de696a2f89",
+          "payloadDigest": "373584218d0f52b567f78b85f7b0fdca38377b1eefc61fb7f6a1d03c1c563c49",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "0e00ee1743fa86cf2f720909ad58ede5be617736b9ce3084c77fefbafab33308",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "ebcd859e3af22609b5f1138b9a4f7f1104b797c8d545b1a9884426de696a2f89",
+          "payloadDigest": "0e00ee1743fa86cf2f720909ad58ede5be617736b9ce3084c77fefbafab33308",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "5dd3a843fd9ba39a2abfb0e8bb81274a453942fca3a7d5017c068accc6c81d95",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-a1.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "838e5e25c0a141e04df7d3be65de457beadb2039a5369e2da8c4f921e516d1a9",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "12f60a2e5a94ab97933dfa1bd51e6ac7cfcddaf8ea44cd85ac2f970fd9b92211",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "c2594bd78324266ec52cb9a1599e3a2ae8fc31740fd59674d0c26b20eb9ccf00",
+          "payloadDigest": "12f60a2e5a94ab97933dfa1bd51e6ac7cfcddaf8ea44cd85ac2f970fd9b92211",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "904cce7c711532a747b02ae8214e8d9607f7df99bf9ab73fa872c9aab0018541",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "c2594bd78324266ec52cb9a1599e3a2ae8fc31740fd59674d0c26b20eb9ccf00",
+          "payloadDigest": "904cce7c711532a747b02ae8214e8d9607f7df99bf9ab73fa872c9aab0018541",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "24aa4f34d54b97f3e0b0ba3a65efe4a21cc89db7b1cf4f6c6b871449a72e295c",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-a8.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "aa50c199961a3fd2a577416dbadb3d2edf210d9839f0696b00b4a49157e3e7c2",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "cfe1f2b9e5b7d4e3b2651b29c99a29f3dcd764f7ce655dd8db9cfac4539e0170",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "34e01f9f6a9558b19d528391cb2c695e7a46cd9704537aa8fdae7bcca97fe025",
+          "payloadDigest": "cfe1f2b9e5b7d4e3b2651b29c99a29f3dcd764f7ce655dd8db9cfac4539e0170",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "8b6d6eef464c503331306ab79d93b4df8f06a8500484f113827ac591ddf9a33b",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "34e01f9f6a9558b19d528391cb2c695e7a46cd9704537aa8fdae7bcca97fe025",
+          "payloadDigest": "8b6d6eef464c503331306ab79d93b4df8f06a8500484f113827ac591ddf9a33b",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "e743dec368b0ce4a19e818cc9571eccf24e19ca5c2d7f8ab37a002c33ce56bf0",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-a8.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "a2ee9fb896a88e4cb1cab1adcc6667682216d99a755521a7b00e4c3a3fd5d604",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "aac72a3a6f946545381cb313c71e23cffa6d158b1e8218ac8509d7d575d679e0",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "c580f2e1ca80eb32d839649417c027d6c6ac320910a21704e0f26e4595b7691e",
+          "payloadDigest": "aac72a3a6f946545381cb313c71e23cffa6d158b1e8218ac8509d7d575d679e0",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "a2b0d901673def18ac6cfec6c8aef3022a06d37759c7744443fe337c7c310767",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "c580f2e1ca80eb32d839649417c027d6c6ac320910a21704e0f26e4595b7691e",
+          "payloadDigest": "a2b0d901673def18ac6cfec6c8aef3022a06d37759c7744443fe337c7c310767",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "a20da640d265e00ef2f7ad506b5e04f0376236d9e8a461f348591877c9ffb6cf",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-file-edge.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "98dc906a5f41196595ae3d1e24e7ef1ff5e0a37b7eab1789ecc8ff2a5f30ea80",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "67b04d090a1287e746274da93a622b44e4db8e6b9fba519877726f8fda21d951",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "8c7fed9d2a62f5be568fed01575863159dfd414075c1797b20a815e9bb155b09",
+          "payloadDigest": "67b04d090a1287e746274da93a622b44e4db8e6b9fba519877726f8fda21d951",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ccfc789d7c772c6f8a7ecc8a6a2d70d71e50525c07f14b57c59fc4a8c9bf6231",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-file-edge.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "d5fd9d215e5db8d5e38868afc46cee7cb9f2332480cef1a99b5ae67b107bf937",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "7eb552886e36715e5882956758f7eb305f5562eba4107b326d54bf567d59f32a",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "3d287ba9605e48109a2b9365c03822430e12760b04bebf654f4ed6847767b0e7",
+          "payloadDigest": "7eb552886e36715e5882956758f7eb305f5562eba4107b326d54bf567d59f32a",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "0d1dbb9bd1fe669a3f9d74846c4dc950f07dbf39a4b4a3abe73c65232c1fe486",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-h1.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "d3aff1cc809927668a5ba4887866893d4e69f13da8c86aa25ea96db9059b2277",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "029a8ca9c29a63bd5fab484a0a83dee5a305a0ca2e995561729ba45f1df2f3e0",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "c3c435d1d60f93307b90d0ac186f41ab629eb1b9fae22dd3dd2fe74de6729185",
+          "payloadDigest": "029a8ca9c29a63bd5fab484a0a83dee5a305a0ca2e995561729ba45f1df2f3e0",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "c7791c445a81bec859ddb409609203edf801d3e5ddc3e41c1456bda92469a7df",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "c3c435d1d60f93307b90d0ac186f41ab629eb1b9fae22dd3dd2fe74de6729185",
+          "payloadDigest": "c7791c445a81bec859ddb409609203edf801d3e5ddc3e41c1456bda92469a7df",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3147a47bb328436ea0361182cae802a3b719c561cb25087f4661e6fcf3c03b14",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-h1.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "773444b0efcad6b8153a4ffce87d3754dd6b79bd805254f2dad40ff6dbfae094",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "71ecd3bbd66cdd41d0b9fade9b647c8ab76c3b89cd2df08a4f4d0e1b4b60ec2a",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "e49ba25befaca7c5944126f4f48aca613a8ba30acafc8a87bfa5ca0f244be320",
+          "payloadDigest": "71ecd3bbd66cdd41d0b9fade9b647c8ab76c3b89cd2df08a4f4d0e1b4b60ec2a",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "8c4fd5742b0c0c35b949d49e79f37ce7eb35042a82cf1e76a92838385994598d",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "e49ba25befaca7c5944126f4f48aca613a8ba30acafc8a87bfa5ca0f244be320",
+          "payloadDigest": "8c4fd5742b0c0c35b949d49e79f37ce7eb35042a82cf1e76a92838385994598d",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "084eea6470b30aba51b1026df06ee3006e0ef0582a7a41f10834a15c1fb581d5",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-h8.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "95b36ad540bdfea6983648091aa5c2745cea841e634e6ad58cb12f79be4d73d6",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "91b487586d3197c3500f16eca90802fb930237c39d842d58eb5d50bd81f31e30",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "4507c767909374ec2460593cca215f733b7b6f5ad0a37202fd4668ebf990f5e1",
+          "payloadDigest": "91b487586d3197c3500f16eca90802fb930237c39d842d58eb5d50bd81f31e30",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "04934ead5256b563fee8d1984f4d9fa15b7c5455334df00096de944f56c670be",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "4507c767909374ec2460593cca215f733b7b6f5ad0a37202fd4668ebf990f5e1",
+          "payloadDigest": "04934ead5256b563fee8d1984f4d9fa15b7c5455334df00096de944f56c670be",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "4de4aa134748e3bdae837acc4a67a9d889f8318f45a85025071f788fde97c3be",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.enter-h8.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "9942f36d4e5ac082067f4acc1e7b645b0e1092d0b051bf9e3a6f2101be499d3e",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "6886b088482826279ea8eccf563f4a18788e9485d5bb179a7c27fe36b64990ef",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "90df4c9bc8f23fd871947ecc227993bb1d5806e31f3f469016dd7d3665875a59",
+          "payloadDigest": "6886b088482826279ea8eccf563f4a18788e9485d5bb179a7c27fe36b64990ef",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "75039b1500cb3d90868149ccab70121c222be723b94bc659bbb1ef7762a50464",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "90df4c9bc8f23fd871947ecc227993bb1d5806e31f3f469016dd7d3665875a59",
+          "payloadDigest": "75039b1500cb3d90868149ccab70121c222be723b94bc659bbb1ef7762a50464",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "68ce8824b5b187f7f545859e86ddccfacfd728719427975d4ea4f680ee21f951",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.interior-negative.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "e4efedc8f64fe27069bfb34e56e940adee44d51eb90474d99e76c62c7bc26fb3",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 22,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "ebeb331d35bf5ad3710e74258f6d215e237cc7636a96e0db523b1dbba7469334",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.interior-negative.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "eb4f92695adac371b595396a0e8260f9c71d2e71f7bef3bc5574b029fea09047",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 22,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "8e3ec03cf13a8f7b913fde07355a2bcbe9994cc43125344641e8e879dba0f55d",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.leave-file-edge.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "18ea43cebd7fbcb87fe705c3283992b894687c4620023a4927cdb1e6e5bb4cb4",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "89fbd3e3a52157f176afc4de1e2729863389d3bc45c40adeaffe529ebb1a5898",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "70d2dc611c8b5d9e29cebe23b1cad6aa614a7e622199ab469f083915ac31d603",
+          "payloadDigest": "89fbd3e3a52157f176afc4de1e2729863389d3bc45c40adeaffe529ebb1a5898",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "561593ba0eee4261358a846c40f653b5a25c4adb5e4939b05fe44511a624ca43",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.leave-file-edge.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "3f00a1860af70a1ac23d3261fcf63d7fc4b3c8762d0d818f82c6ff9c3f1aa515",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 1,
+      "otherCount": 22,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "615fc87c3f411eac977aba5e91166509886779534b9eed3e3eef8a9ef083e59e",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "e8256638ee1a5c5f0d4a57a19b54fe9aaa3666989884a1b1bd6567d357b7e9ca",
+          "payloadDigest": "615fc87c3f411eac977aba5e91166509886779534b9eed3e3eef8a9ef083e59e",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "3baab5363435e333b6b96a7205f19440b320eb83ab0a760ce1680f6d56f614a6",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.stationary-corner.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "9d9813250fa33138a8a5500e6822bf99af7b5f431eeace5ce87669d1d57961c9",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 25,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "10798c9cd34306e7bb5a5210527bbeace2e1a4cf8afbcdd35468c978acbdcb21",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "0c6190d4b7eabee8bb04694e0b99d903b89db9168d7eb96b149fab8d61c168dd",
+          "payloadDigest": "10798c9cd34306e7bb5a5210527bbeace2e1a4cf8afbcdd35468c978acbdcb21",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "587be3198c0936d7a2ae8046c1ef32090b55850ce5a0cc1e8e13754a1418c951",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "0c6190d4b7eabee8bb04694e0b99d903b89db9168d7eb96b149fab8d61c168dd",
+          "payloadDigest": "587be3198c0936d7a2ae8046c1ef32090b55850ce5a0cc1e8e13754a1418c951",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f1d1711d5b4e896e4e07499118e296d417fa6c01d62a9c71ebab9bc6bcd1df94",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.stationary-corner.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "positive",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "45a65d3eb72031b1dd20eb5663cee8424b0c49c0fdae7bc846cacbb9ec29c685",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 2,
+      "otherCount": 25,
+      "targets": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "854c44ce74ce32983b491409e62d8cf07bb52d686acde6678e7c2a7a3ec6a24f",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "dfc1ee15cc30e9b945eb742c14f1fbf27500a1017fda91c4cff0932689b4b8cb",
+          "payloadDigest": "854c44ce74ce32983b491409e62d8cf07bb52d686acde6678e7c2a7a3ec6a24f",
+          "sourceDigests": []
+        },
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "operandDigest": "841e334cbf6d122ad226aac6a57efc567a13e64e988577fd8265d35d542abf51",
+          "factory": "createRulesStructuralEventKingZoneV1Evidence",
+          "inputDigest": "dfc1ee15cc30e9b945eb742c14f1fbf27500a1017fda91c4cff0932689b4b8cb",
+          "payloadDigest": "841e334cbf6d122ad226aac6a57efc567a13e64e988577fd8265d35d542abf51",
+          "sourceDigests": []
+        }
+      ],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "2b4e233a192817028fe84359b556983372751594533d016156b966b235d4cb83",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.stationary-interior-negative.black",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "a96c14983d3e47775f1daead93afeb2bf338a472a2b2eabae1bb1699a2b42116",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 25,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "e410ed0df7e57e8a2c79b6d7403b5d136d4fe47647ab96648293bd36ee1c7bb6",
+        "witnessSha256": null,
+        "resultSha256": null
+      },
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "case": "cited.python-chess.king-coordinates.stationary-interior-negative.white",
+      "subject": "event:rules.structural.event.king_zone@1",
+      "arm": "semantic_negative",
+      "operation": "runtime.semantic.structural_edge",
+      "inputDigest": "1d944d7f9ec44e5902370ef711ef69bff7e2064e8ffb3453a9bbb0db1b392d15",
+      "invocations": 1,
+      "resultKind": "completed",
+      "unavailableReason": null,
+      "targetCount": 0,
+      "otherCount": 26,
+      "targets": [],
+      "reach": "multiset_retained",
+      "authority": {
+        "kind": "cited_proposition",
+        "propositionSha256": "f7110fc1dc7564134b3bcb3d29c6303a54872020c82eee3b303c2ed32be5a43f",
         "witnessSha256": null,
         "resultSha256": null
       },
@@ -13896,15 +14716,39 @@
       "cells": [
         {
           "arm": "positive",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.king-coordinates.enter-a1.white",
+            "cited.python-chess.king-coordinates.enter-h1.white",
+            "cited.python-chess.king-coordinates.enter-a8.white",
+            "cited.python-chess.king-coordinates.enter-h8.white",
+            "cited.python-chess.king-coordinates.corner-to-edge.white",
+            "cited.python-chess.king-coordinates.corner-to-interior.white",
+            "cited.python-chess.king-coordinates.enter-file-edge.white",
+            "cited.python-chess.king-coordinates.leave-file-edge.white",
+            "cited.python-chess.king-coordinates.along-file-edge.white",
+            "cited.python-chess.king-coordinates.stationary-corner.white",
+            "cited.python-chess.king-coordinates.enter-a1.black",
+            "cited.python-chess.king-coordinates.enter-h1.black",
+            "cited.python-chess.king-coordinates.enter-a8.black",
+            "cited.python-chess.king-coordinates.enter-h8.black",
+            "cited.python-chess.king-coordinates.corner-to-edge.black",
+            "cited.python-chess.king-coordinates.corner-to-interior.black",
+            "cited.python-chess.king-coordinates.enter-file-edge.black",
+            "cited.python-chess.king-coordinates.leave-file-edge.black",
+            "cited.python-chess.king-coordinates.along-file-edge.black",
+            "cited.python-chess.king-coordinates.stationary-corner.black"
+          ]
         },
         {
           "arm": "semantic_negative",
-          "status": "required",
-          "owner": "semantic-validation D4/D5",
-          "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+          "status": "passed",
+          "refs": [
+            "cited.python-chess.king-coordinates.interior-negative.white",
+            "cited.python-chess.king-coordinates.stationary-interior-negative.white",
+            "cited.python-chess.king-coordinates.interior-negative.black",
+            "cited.python-chess.king-coordinates.stationary-interior-negative.black"
+          ]
         },
         {
           "arm": "orientation",
@@ -13931,8 +14775,6 @@
         }
       ],
       "open": [
-        "positive",
-        "semantic_negative",
         "orientation"
       ]
     },

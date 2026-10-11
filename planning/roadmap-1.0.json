@@ -872,7 +872,7 @@
         "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3710 adds sixteen independent discovered-execution cases: six both-colour rook/bishop/queen checks and ten populated nearby negatives. Their exact legal geometry exposes D3711, repaired by admitting the retained ray endpoint without changing interior blocker meaning. All 249 predecessor cases remain unchanged; 265 canonical cases (153 positive/112 negative) pass over 81 subjects, zero fully qualified. Positive/negative cells are 52/47 present and 29/34 required; all 81 orientation obligations remain. 253 cited controls and clean types pass. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,844 software/374 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 298 browser cases, one existing optional skip, zero retries and all 150 input/112 composition cells. Frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, learner admission and authored packs remain held.",
+          "summary": "D3714 adds twenty-four independently source-bound structural king-zone cases: all four corners, entry/exit/preservation and populated both-interior omissions for both colours. Neutral coordinates and legal replay check the complete emitted king population and exact identities/signs. All 265 predecessor cases remain unchanged; 289 canonical cases (173 positive/116 negative) and 280 focused cited checks pass over 81 subjects, zero fully qualified. Positive/negative cells are 53/48 present and 28/33 required; all 81 orientation obligations remain. One initially illegal interior fixture was corrected, not counted as a collector bug or omission. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,877 software/375 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 302 browser cases, one existing optional skip, zero retries and all 150 input/112 composition cells. Frozen v1, draft orientation/window grammar, complete-state conflicts, source/consumer adoption, learner admission, authored packs and historical intermittent failures remain held. No whole capability/milestone, exact-revision remote CI or release-image completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-validation-authority.md",
@@ -911,7 +911,8 @@
             "apps/server/src/castling-evidence.test.ts",
             "rfc/tactical-collectors.md",
             "packages/runtime/src/tactics.ts",
-            "packages/runtime/src/semantic-validation-discovered.test.ts"
+            "packages/runtime/src/semantic-validation-discovered.test.ts",
+            "packages/runtime/src/semantic-validation-king-zone.test.ts"
           ],
           "anchors": [
             {
@@ -962,7 +963,8 @@
             {"kind":"work_state","id":"D3705","digest":"sha256:ccca047ebf1683d0393633e505ee5fea353902be21c820f2aa5a8e02f44df396"},
             {"kind":"rfc","id":"tactical-collectors.md","digest":"sha256:a5ce11ada5223c74703ef300e97975b805a8f96155d11e83ed520984e4ca54f6"},
             {"kind":"work_state","id":"D3710","digest":"sha256:244d6203d65669f5332068efd0fcab3fc2f909660fbec85353e48fab711f730d"},
-            {"kind":"work_state","id":"D3711","digest":"sha256:ecb67b3d2f087013897af3ed3bd83fb9c56b9371617a5ea0268a05196e9d2aa6"}
+            {"kind":"work_state","id":"D3711","digest":"sha256:ecb67b3d2f087013897af3ed3bd83fb9c56b9371617a5ea0268a05196e9d2aa6"},
+            {"kind":"work_state","id":"D3714","digest":"sha256:d84acd93e8a1eb63108d5f4af234883a4267b90137cf25cdbae21cc12c4893af"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

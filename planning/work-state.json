@@ -30819,6 +30819,15 @@
       "sourceDigest": "sha256:bbed287deaed61e2335c8154ba2edc03b8a7d7be0d1a2f8c94bf6a8f49a19d47",
       "uxItems": [],
       "owner": "assistance-and-presentation"
+    },
+    {
+      "id": "D3714",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d84acd93e8a1eb63108d5f4af234883a4267b90137cf25cdbae21cc12c4893af",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-king-zone.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
