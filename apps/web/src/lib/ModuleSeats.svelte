@@ -1,5 +1,6 @@
 <script lang="ts">
   import CampaignGestureCost from "./CampaignGestureCost.svelte";
+  import { tick, untrack } from "svelte";
   // rfc/module-registration.md §2.6/§3 + rfc/play-composition.md §4 — the companion region's module
   // seats. A seat renders only what one strict-parsed, digest-bound packet delivered: collapsed as a
   // badged row, expanded as its card, or quiet when honestly empty. At most one seat is expanded;
@@ -36,8 +37,30 @@
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
 
-  const railSeats = $derived(occupiedRailSeats(seats, packets));
+  const railSeats = $derived(occupiedRailSeats(seats, packets, pending, failed));
   const headSeat = $derived(seats.find((seat) => seat.headSlot));
+
+  let recoveryFocus: { readonly module: PlaySeatModule; readonly button: HTMLButtonElement } | undefined;
+  $effect.pre(() => {
+    const failures = failed, requests = pending;
+    untrack(() => {
+      const focus = recoveryFocus;
+      if (focus === undefined || failures.has(focus.module) || requests.has(focus.module)) return;
+      recoveryFocus = undefined;
+      if (document.activeElement !== focus.button) return;
+      const selector = focus.button.closest(".module-seat")?.querySelector<HTMLButtonElement>(".seat-row");
+      void tick().then(() => {
+        if (document.activeElement !== document.body && document.activeElement !== focus.button) return;
+        if (selector?.isConnected) selector.focus();
+      });
+    });
+  });
+
+  function retry(module: PlaySeatModule, button: HTMLButtonElement): void {
+    if (pending.has(module) || !failed.has(module)) return;
+    recoveryFocus = { module, button };
+    onRequest(module);
+  }
 </script>
 
 <div class="module-seats" class:band data-seat-count={railSeats.length + (staged === undefined || headSeat === undefined ? 0 : 1)}>
@@ -64,7 +87,7 @@
   {/if}
   {#each railSeats as seat (seat.module)}
     {@const packet = packets.get(seat.module)}
-    {@const badge = seatBadge(packet)}
+    {@const badge = pending.has(seat.module) || failed.has(seat.module) ? null : seatBadge(packet)}
     {@const open = expanded === seat.module}
     {@const state = packet === undefined ? "door" : packet.items.length === 0 ? "empty" : "filled"}
     <CompanionSeat id={seat.module} module={seat.module} label={seat.label} shortLabel={COMPACT_SEAT_LABELS[seat.module]}
@@ -73,7 +96,6 @@
             <p role="status">Asking…</p>
           {:else if failed.has(seat.module)}
             <p role="alert">This help could not be loaded. Nothing was checked.</p>
-            {#if !seat.proactive}<button type="button" onclick={() => onRequest(seat.module)}>Try again</button>{/if}
           {:else if packet === undefined}
             {#if doorBlocked[seat.module] !== undefined}
               <p class="door-reason">{doorBlocked[seat.module]}</p>
@@ -113,6 +135,9 @@
               {/if}
             {/if}
             {#if !seat.proactive && doorBlocked[seat.module] === undefined}<button type="button" class="seat-request secondary" onclick={() => onRequest(seat.module)}>Ask again here</button>{/if}
+          {/if}
+          {#if failed.has(seat.module)}
+            <button type="button" aria-disabled={pending.has(seat.module)} onclick={(event) => retry(seat.module, event.currentTarget)}>Try again</button>
           {/if}
     </CompanionSeat>
   {/each}

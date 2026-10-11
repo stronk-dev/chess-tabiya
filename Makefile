@@ -242,7 +242,7 @@ inspector-explicit-lifecycle-browser-check:
 
 .PHONY: support-seat-lifecycle-browser-check
 support-seat-lifecycle-browser-check:
-	./node_modules/.bin/playwright test --grep "Support seats (retire|refuse)"
+	./node_modules/.bin/playwright test --grep "Support seats (retire|refuse|recover)"
 
 .PHONY: postcommit-nudge-browser-check
 postcommit-nudge-browser-check:

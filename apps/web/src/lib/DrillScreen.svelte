@@ -1046,7 +1046,7 @@
 
   /** One module query for `modules`; the result lands only if still current (decision/digest/request). */
   async function queryModuleSeats(query: ModuleQueryRequest, subjectNodeId: string, modules: readonly PlaySeatModule[]): Promise<ParsedModulePacket[] | undefined> {
-    if (!seatAlive || assistanceQueryState !== "ready" || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined || modules.length === 0) return undefined;
+    if (!seatAlive || assistanceQueryState !== "ready" || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined || modules.length === 0 || modules.some(module => seatPending.has(module))) return undefined;
     const runId = run.id;
     const authority = seatAuthority;
     const decisionDigest = seatDecisionDigest;
@@ -1055,7 +1055,9 @@
     const tokens = modules.map((module) => { const token = ++seatRequestCounter; seatRequests.set(module, token); return [module, token] as const; });
     const current = () => seatAlive && seatAuthority === authority && seatDecisionDigest === decisionDigest
       && tokens.some(([module, token]) => seatRequests.get(module) === token);
-    for (const module of modules) { seatPending = withSeat(seatPending, module, true); seatFailed = withSeat(seatFailed, module, false); }
+    const clearedPackets = new Map(seatPackets);
+    for (const module of modules) { seatPending = withSeat(seatPending, module, true); clearedPackets.delete(module); }
+    seatPackets = clearedPackets;
     try {
       const value = await onModuleQuery({ assistance: assistanceRequest, query });
       if (!current()) return undefined;
@@ -1071,6 +1073,7 @@
       for (const [module, token] of tokens) {
         if (seatRequests.get(module) !== token) continue;
         seatPending = withSeat(seatPending, module, false);
+        seatFailed = withSeat(seatFailed, module, false);
         const packet = page.packets.find((candidate) => candidate.module === module);
         const suppression = page.suppressions.find((candidate) => candidate.module === module);
         if (packet !== undefined) { nextPackets.set(module, packet); nextSubjects.set(module, subjectNodeId); packets.push(packet); delete nextDoors[module]; }
@@ -1318,7 +1321,7 @@
   // Retain the disabled door through a temporary settings wait, not its old disclosure.
   // Removing the module in the settled settings unmounts it; pending alone preserves progress.
   let hintSeatPresent = $derived(retainedAssistance?.modules.includes("guided_hint") === true && retainedAssistance.hintCeiling.rung !== "off");
-  let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets).length + (hints !== undefined && hintSeatPresent ? 1 : 0) + 1);
+  let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets, seatPending, seatFailed).length + (hints !== undefined && hintSeatPresent ? 1 : 0) + 1);
   let hintMarks: HintDeliveryMarks | undefined = $state();
   function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
     if (!hintDecisionReady) return undefined;

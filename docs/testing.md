@@ -49,6 +49,16 @@ borrowed-input refusal and all 249 unchanged predecessor cases are also checked.
 run in ordinary software CI and in the existing cited/foundation commands. They repair and
 validate an executed relation, not hint quality, move quality or whole semantic qualification.
 
+`make support-seat-lifecycle-check` covers automatic Nudge/Structure transport and malformed
+response failures, explicit single-flight recovery, exact subject/help/decision, pending focus
+and removal by Quiet. The tablet control uses the real query's populated packet rather than
+assuming that a pawn-free position produces silence. `make support-seat-lifecycle-browser-check`
+includes four desktop/touch-phone failures followed by actual server recovery: rendered components,
+owned focus, responsive geometry and unchanged recorded moves/branches/events. Transport is
+deliberately refused; successful packets are fetched from the application, not invented by the test.
+These cases run in normal software/browser CI. D3713 retains the source-bound silent-success
+journey, and selection usefulness remains separate from transport recovery.
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct

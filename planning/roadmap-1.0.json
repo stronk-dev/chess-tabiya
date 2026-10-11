@@ -1038,10 +1038,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Preserve D3592/D3593's native readiness, one-shot hydration and authoritative access/reload controls. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
+        "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Preserve D3712's actual automatic failure/retry and focus controls; D3713 retains the source-bound silent-success journey and useful selection remains open. Preserve D3592/D3593's native readiness, one-shot hydration and authoritative access/reload controls. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
         "latestCheckpoint": {
-          "at": "2026-10-10",
-          "summary": "D3655 repairs Full Inspector read recovery through the actual compiled packet and mounted/built client. Explicit retry and refresh share opening's single-flight current subject/help/decision admission; missing packets fail instead of becoming blank success, failed refresh clears stale components and departed completion cannot attach. Four original missing-control regressions fail; six new permanent mounted controls, all 15 Inspector lifecycle cases, clean workspace types and six actual desktop/phone-width browser journeys pass. Native focus survives pending recovery, exact request bodies and saved graph/events are unchanged, and the existing normal Make target includes all new recovery cases. D3627's staged legal admission and the prior board controls remain delivered. Normal local tiers pass 4407 software cases/365 files, seven unchanged-budget performance cases/four files, 241 content cases/24 files, types/governance/build and 265 browser cases across all four tiers, one optional Maia skip, zero retries and all 150 input/112 composition cells. The first aggregate stops on roadmap metadata; the corrected remaining tiers pass without changing software bytes. Source/Inspector fidelity/preset/owner-use and intermittent holds remain; no new source, permission, pack bytes, whole milestone, remote CI or 1.0 completion.",
+          "at": "2026-10-11",
+          "summary": "D3712 repairs automatic Support failure recovery under implementing module-registration/play-composition. Pending/failed Nudge retains a reachable seat without a fact badge; both proactive modules retry explicitly under the same current timing, subject, help and decision. Duplicate gestures are single-flight, old packet paint retires, pending focus remains on Retry and populated completion returns to its own selector without late departed attachment or saved-play mutation. Five original mounted regressions fail; all 25 permanent lifecycle controls and four actual desktop/touch-phone transport-failure to real server-packet recovery journeys pass. Normal software passes 4,850 cases/374 files with clean types; these unchanged production bytes also pass seven performance/four files, 248 content/25 files, governance, packaging/build and 302 browser cases across four tiers, one existing optional skip, zero retries and all 150 input/112 composition cells. The final additional tablet control delivers real pawn/file facts, not silence. D3713 therefore retains the genuine silent-success journey; source adoption, useful selection, Inspector fidelity, preset/owner-use and historical intermittent causes remain. D3655 Inspector recovery and prior board controls remain delivered. No source, permission, pack bytes, whole milestone, remote CI or 1.0 completion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/guidance-lifetime.test.ts",
@@ -1197,6 +1197,11 @@
               "kind": "work_state",
               "id": "D3655",
               "digest": "sha256:4632979c4413b3d494f6befcb1bad3c7ec19640e58571a4bb864c96c12e16bab"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3712",
+              "digest": "sha256:9ae554ff55d33e82c72d4e4593c92b13081847edeead9f4b1e6db0ea02b36f2b"
             },
             {
               "kind": "work_state",

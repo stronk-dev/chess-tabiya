@@ -25674,3 +25674,45 @@ Campaign was the one capability with no API, route or content. Now:
   relation and newly falsifies no intent sentence. No push, deployment, native image recovery,
   whole-capability or release completion. The 1.0 goal stays active; the requested inventory
   is the handoff after this batch, not permission to declare the goal achieved.
+
+## 2026-10-11 — D3712 automatic Support recovery and D3713's retained quiet-result gap
+
+- Finished the in-flight automatic Support repair under implementing module-registration
+  §§2.5.2/2.6 and play-composition §4.1. Pending/failed Nudge remains in the shared rail and
+  selector population without a fact badge. Automatic Nudge and Structure now expose explicit
+  single-flight retry under the unchanged current timing, subject, help and decision. Old packet
+  paint retires before a new request; Retry keeps focus during pending delivery and populated
+  success restores its own selector. Existing departure/authority checks still refuse late results.
+- The five original mounted controls reproduce hidden Nudge/missing automatic Retry. All 25
+  permanent lifecycle controls now pass, including malformed response, duplicate gesture and
+  Quiet removal. Four actual desktop/touch-phone transport refusals recover with the server's
+  real packet, exact registered components, focus and responsive geometry while preserving the
+  recorded nodes, branches, cursor and non-evidence events. Initial wrong-label/event-endpoint
+  browser setup mistakes were corrected separately from the production defects.
+- The additional quiet-result investigation did not establish a silent-success journey. Both
+  legal examples thought to be quiet return real pawn/open-file facts; the pawn-free knight
+  position delivers two unchanged empty-file statements. The final tablet control proves that
+  actual populated recovery, not absence. D3713 records the missing genuine empty-result card,
+  tablet-head and focus control; it is todo with an owner, not a reproduced UI failure or a
+  manufactured empty receipt. Useful selection and D1164 novelty remain open author-contract work.
+- Complete serial make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,849
+  software/374 files, seven unchanged-budget performance/four files, 248 content/25 files,
+  types, governance, packaging/build and 302 browser cases: 237 smoke, five real-content,
+  59 matrix and one production-configuration. One existing optional Maia skip, zero retries;
+  all 150 input and 112 composition cells pass. Production bytes are unchanged after that run.
+  Adding the final permanent tablet control is followed by complete make roadmap-receipt
+  verify-awake: 4,850 software/374 files (309.80 s), seven performance/four files (60.84 s),
+  248 content/25 files, clean types and all governance/content/capability checks, exit zero.
+  No deadline, retry, skip, source, preset, permission, schema or pack bytes changed.
+- Existing implementation/testing docs, queue and authoritative roadmap carry the closure and
+  retained gap. Population: 3,462 ledger rows, 1,721 live/all assigned, 1,580 done and 161 refused;
+  462 historical prose-only closures remain weaker proof. UX remains 273 complete, 272 live,
+  24 retired. Product RFCs remain 42 implementing, ten awaiting and 23 draft. All fourteen whole
+  capabilities remain incomplete, four milestones active/five blocked, 86 production pack
+  documents and zero official graduates, twelve uncalibrated bot configurations and no valid
+  skill marks. These are bounded delivery checkpoints, not a completion percentage.
+- Protected intent and immutable archives remain unchanged; the repair restores an existing
+  promise and newly falsifies no intent sentence. Missing source integrations need independent
+  review, not self-acceptance by their author. Historical intermittent causes stay open despite
+  passing repeats. No push, exact-revision GitHub CI, deployment, native image recovery,
+  whole-capability or release completion. The 1.0 goal remains active.

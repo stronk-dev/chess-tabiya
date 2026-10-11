@@ -74,8 +74,9 @@ export function composedSeats(compiled: { readonly modules: readonly ModuleId[];
 }
 
 /** The same admitted rail population drives rendering and the tablet's selector-column count. */
-export function occupiedRailSeats(seats: readonly SeatDeclaration[], packets: ReadonlyMap<PlaySeatModule, ParsedModulePacket>): readonly SeatDeclaration[] {
-  return seats.filter((seat) => !seat.headSlot && !(seat.emptySilent && (packets.get(seat.module)?.items.length ?? 0) === 0));
+export function occupiedRailSeats(seats: readonly SeatDeclaration[], packets: ReadonlyMap<PlaySeatModule, ParsedModulePacket>, pending: ReadonlySet<PlaySeatModule> = new Set(), failed: ReadonlySet<PlaySeatModule> = new Set()): readonly SeatDeclaration[] {
+  return seats.filter((seat) => !seat.headSlot && (pending.has(seat.module) || failed.has(seat.module)
+    || !seat.emptySilent || (packets.get(seat.module)?.items.length ?? 0) > 0));
 }
 
 /** Whether one compiled effect exists (the exact gate a delivery is bound to). */

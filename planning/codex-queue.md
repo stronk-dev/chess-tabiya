@@ -154,6 +154,20 @@ explicitly separate, with future large captures outside ordinary Git.
 
 ## Active delivery order — reconciled 2026-10-08 under [[D3552]]
 
+[[D3713]] retains the unmeasured silent-success recovery boundary. Actual legal controls return
+populated pawn/open-file facts, including unchanged empty-file statements on a pawn-free board;
+do not relabel them empty or manufacture an empty receipt. Resolve selection/novelty under the
+existing author contract, then prove a genuine silent reply's card, tablet-head and focus retirement.
+This is separate from D3712's source-bound failure → populated recovery closure.
+
+[[D3712]] is closed locally: failed/pending Nudge remains available without a fact badge;
+automatic Nudge and Structure recover through an explicit single-flight request under the
+unchanged current subject/help/decision. Pending focus and populated completion are preserved,
+old paint retires and late departed responses cannot attach. All 25 mounted lifecycle controls
+and four actual desktop/touch-phone transport-failure → retry → source-bound rendered-packet
+journeys pass without changing recorded play, sources or presets. D3713 retains silent-success
+coverage; useful selection and the remaining source/consumer integrations are not discharged.
+
 [[D3683]] is closed locally under implementing longitudinal-store §C. Startup refusal waits
 for real worker termination before application/storage cleanup and preserves the first failure
 against later frames. Six predecessor-red real-thread controls, 65 retained projector/worker

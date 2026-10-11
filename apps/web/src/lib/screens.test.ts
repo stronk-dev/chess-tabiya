@@ -2370,6 +2370,103 @@ describe("Layer 3 screens", () => {
   });
 
   describe("Support seat request lifecycle", () => {
+    describe("D3712 automatic seat recovery", () => {
+      function setup(failure: "transport" | "malformed", position = { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", move: "e4d5" }) {
+        const initial = createRun({ id: "automatic-seat-recovery", session: { kind: "position", start: { fen: position.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+        const run = revealFeedback(commitMove(initial, position.move, { at }).run, at).run;
+        const realQuery = testModuleQuery(run);
+        const onModuleQuery = vi.fn(async (body: Parameters<typeof realQuery>[0]): Promise<unknown> => {
+          if (failure === "transport") throw new Error("support transport unavailable");
+          return { page: { runId: run.id } };
+        });
+        const onMove = vi.fn(), onRewind = vi.fn();
+        const component = mountDrill({ target: target(), props: {
+          snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onModuleQuery,
+          assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
+          onMove, onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+          onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+        } });
+        return { component, run, realQuery, onModuleQuery, onMove, onRewind };
+      }
+
+      for (const module of ["postcommit_nudge", "structure_nudge"] as const) {
+        it.each(["transport", "malformed"] as const)(`${module} keeps %s failure visible and explicitly recovers the exact current subject once`, async (failure) => {
+          const screen = setup(failure);
+          await assistanceSettled();
+          const seat = () => document.querySelector(`[data-module="${module}"]`);
+          await vi.waitFor(() => expect(seat()?.querySelector("[role='alert']")?.textContent).toContain("Nothing was checked"));
+          seat()!.querySelector<HTMLButtonElement>(".seat-row")!.click();
+          await tick();
+          const retry = [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!;
+          expect(retry).toBeDefined();
+          expect(seat()!.querySelectorAll("[data-presented]")).toHaveLength(0);
+          expect(seat()!.querySelector(".seat-badge")).toBeNull();
+          expect(screen.onModuleQuery).toHaveBeenCalledTimes(1);
+          const original = structuredClone(screen.run);
+          let release!: (value: unknown) => void;
+          screen.onModuleQuery.mockImplementation(body => new Promise(resolve => { release = resolve; }));
+          retry.focus(); retry.click(); retry.click();
+          await tick();
+          expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
+          expect(seat()!.querySelector("[role='status']")?.textContent).toContain("Asking");
+          expect(retry.isConnected).toBe(true);
+          expect(retry.getAttribute("aria-disabled")).toBe("true");
+          expect(document.activeElement).toBe(retry);
+          const body = screen.onModuleQuery.mock.calls[1]![0];
+          expect(body.query).toEqual({ timing: "post_commit", subjectNodeId: screen.run.activeCursor.nodeId, requested: [module] });
+          expect(body.assistance).toEqual(screen.onModuleQuery.mock.calls[0]![0].assistance);
+          release(await screen.realQuery(body));
+          await vi.waitFor(() => expect(seat()!.querySelector("[data-presented]")).not.toBeNull());
+          expect(seat()!.querySelector("[role='alert']")).toBeNull();
+          expect(seat()!.querySelector("[role='status']")).toBeNull();
+          expect(document.activeElement).toBe(seat()!.querySelector(".seat-row"));
+          expect(screen.run).toEqual(original);
+          expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
+          await unmount(screen.component);
+        });
+      }
+
+      it("keeps genuinely delivered facts and tablet focus instead of assuming a pawn-free position is silent", async () => {
+        vi.stubGlobal("innerWidth", 768);
+        vi.stubGlobal("innerHeight", 1024);
+        const screen = setup("transport", { fen: "7k/7n/8/8/3N4/8/8/K7 w - - 0 1", move: "d4f3" });
+        await assistanceSettled();
+        const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+        await vi.waitFor(() => expect(seat()?.querySelector("[role='alert']") ?? null).not.toBeNull());
+        seat()!.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+        screen.onModuleQuery.mockImplementation(screen.realQuery);
+        const retry = [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!;
+        retry.focus(); retry.click();
+        await vi.waitFor(() => expect(seat()?.querySelectorAll("[data-presented]")).toHaveLength(2));
+        const body = screen.onModuleQuery.mock.calls[1]![0];
+        const page = (await screen.realQuery(body) as { page: import("@chess-tabiya/runtime").ModuleQueryPage }).page;
+        expect(page.packets.find(packet => packet.module === "postcommit_nudge")!.receipt.items).toHaveLength(2);
+        expect(document.querySelector<HTMLDivElement>("#postcommit_nudge-card")!.hidden).toBe(false);
+        expect(document.activeElement).toBe(seat()!.querySelector(".seat-row"));
+        expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
+        expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
+        await unmount(screen.component);
+      });
+
+      it("retires an automatic recovery when Quiet removes its composed effect", async () => {
+        const screen = setup("transport");
+        await assistanceSettled();
+        const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+        await vi.waitFor(() => expect(seat()?.querySelector("[role='alert']") ?? null).not.toBeNull());
+        seat()!.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+        let release!: (value: unknown) => void;
+        screen.onModuleQuery.mockImplementation(() => new Promise(resolve => { release = resolve; }));
+        [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!.click();
+        const body = screen.onModuleQuery.mock.calls[1]![0];
+        [...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].find(input => input.value === "quiet")!.click();
+        await vi.waitFor(() => expect(seat()).toBeNull());
+        release(await screen.realQuery(body)); await tick(); await tick();
+        expect(seat()).toBeNull(); expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
+        expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
+        await unmount(screen.component);
+      });
+    });
+
     async function setup(options: { delayed?: boolean; staleDecision?: boolean; wrongSquare?: boolean } = {}) {
       const initial = createRun({ id: "support-seat-lifecycle", session: { kind: "position", start: { fen: "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3", side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
       const sourceRun = revealFeedback(initial, at).run;

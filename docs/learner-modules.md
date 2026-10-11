@@ -98,6 +98,19 @@ Large relation overlays remain subject to unchanged atomic budgets.
   the Named-structure nudge after a move; Staged-move risk check in the head slot while a staged move
   is held (Revise / play anyway). One seat is expanded at a time; board paint is the expanded seat's
   own facts. The client refuses any page compiled under a different final digest.
+  Pending or failed requests are distinct from a successful silent empty Nudge: their
+  seats remain available without a fact badge. Transport or malformed-response failure
+  offers **Try again** for automatic modules as well as requested ones. Recovery uses the
+  current composed timing, exact subject and assistance/decision authority; repeated gestures
+  do not start parallel requests. The same retry button retains focus while pending and hands
+  focus to its own selector after a populated result. Old packet facts/paint retire before
+  a new query, and a changed help style or departed decision cannot attach its late response.
+  A successful silent empty packet still removes the Nudge seat; failure never becomes an
+  all-clear. `make support-seat-lifecycle-check` and `make support-seat-lifecycle-browser-check`
+  cover the mounted boundary and actual desktop/phone transport-failure recovery.
+  D3713 retains the separate source-bound silent-success journey: the legal recovery
+  examples currently return facts, even on a pawn-free board. They prove populated recovery,
+  not useful selection or focus after a genuinely empty result removes the selected seat.
   Shape-backed Named-structure and Theory pointer cards offer **Open pattern entry**.
   Their registered `play.shape_entry@1` statement retains the exact fired entry ID;
   the link opens that existing Library entry without deriving identity from its title

@@ -836,6 +836,85 @@ test("Guided Nudge after 1.e4 retains real consequences without unchanged king-e
 });
 
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  for (const [module, label] of [["postcommit_nudge", "After-move nudge"], ["structure_nudge", "Named-structure nudge"]] as const) {
+    test(`Support seats recover automatic ${module} failure explicitly without changing play (${viewport.width}px)`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await chooseBot(page, "human-baseline.1400@1");
+      await page.getByRole("button", { name: "Start and keep the game" }).click();
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      await choosePreset(page, /^Guide me/u);
+      await move(page, "e2", "e4");
+      let recovering = false;
+      let release: (() => void) | undefined;
+      let delivered: ModuleQueryPage | undefined;
+      const retryBodies: unknown[] = [];
+      await page.route("**/runs/*/modules/query", async route => {
+        const body = route.request().postDataJSON();
+        if (body.query?.timing !== "post_commit") { await route.continue(); return; }
+        if (!recovering || !body.query.requested.includes(module)) {
+          await route.fulfill({ status: 503, json: { error: { code: "EVIDENCE_UNAVAILABLE", message: "Support could not be loaded." } } });
+          return;
+        }
+        retryBodies.push(body);
+        const response = await route.fetch();
+        expect(response.ok()).toBe(true);
+        delivered = (await response.json() as { page: ModuleQueryPage }).page;
+        await new Promise<void>(resolve => { release = resolve; });
+        await route.fulfill({ response });
+      });
+      await showSupportTools(page);
+      await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+      const selector = page.getByRole("button", { name: label, exact: true });
+      await expect(selector).toBeVisible();
+      if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
+      const seat = page.locator(`[data-module="${module}"]`);
+      await expect(seat.getByRole("alert")).toContainText("Nothing was checked");
+      await expect(seat.locator("[data-presented], .seat-badge")).toHaveCount(0);
+      const runId = page.url().split("/").at(-1)!;
+      const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+      const events = async () => (await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] }).events;
+      const original = await graph();
+      const originalEvents = await events();
+      const subject = original.nodes.find(node => node.moveUci === "e2e4")!;
+      expect(subject).toBeDefined();
+      recovering = true;
+      const retry = seat.getByRole("button", { name: "Try again", exact: true });
+      await retry.click();
+      await expect.poll(() => release !== undefined).toBe(true);
+      await expect(seat.getByRole("status")).toContainText("Asking");
+      await expect(retry).toBeFocused();
+      await expect(retry).toHaveAttribute("aria-disabled", "true");
+      await retry.press("Enter");
+      expect(retryBodies).toHaveLength(1);
+      expect((retryBodies[0] as { query: unknown }).query).toEqual({ timing: "post_commit", subjectNodeId: subject.id, requested: [module] });
+      await assertRunViewport(page, viewport);
+      release!();
+      const packet = delivered!.packets.find(candidate => candidate.module === module)!;
+      expect(packet.disclosure.subject.nodeId).toBe(subject.id);
+      expect(packet.receipt.items.length).toBeGreaterThan(0);
+      await expect(seat.locator("[data-presented]")).toHaveCount(packet.receipt.items.length);
+      for (const [index, item] of packet.receipt.items.entries()) {
+        const rendered = seat.locator("[data-presented]").nth(index);
+        await expect(rendered).toHaveAttribute("data-presented", item.component.id);
+        if (item.component.id === "fact_statement") await expect(rendered).toHaveText(item.component.operand.renderedText);
+        if (item.component.id === "square_set") await expect(rendered).toContainText(item.component.operand.caption.renderedText);
+      }
+      await expect(seat.getByRole("alert")).toHaveCount(0);
+      await expect(selector).toBeFocused();
+      const recovered = await graph();
+      assertOnlyEvidenceAppended(originalEvents, await events());
+      assertRecordedNodesPreserved(original.nodes, recovered.nodes);
+      expect(recovered.activeCursor).toEqual(original.activeCursor);
+      expect(recovered.branches).toEqual(original.branches);
+      await assertRunViewport(page, viewport);
+      await page.unroute("**/runs/*/modules/query");
+      await page.reload(); await expect(page.getByLabel("Chessboard")).toBeVisible();
+      assertRecordedNodesPreserved(recovered.nodes, (await graph()).nodes);
+    });
+  }
+}
+
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
 test(`Guided Nudge branches into another move and Compare reopens the preserved attempt without autoplay (${viewport.width}px)`, async ({ page }, testInfo) => {
   await page.setViewportSize(viewport);
   await chooseBot(page, "human-baseline.1400@1");

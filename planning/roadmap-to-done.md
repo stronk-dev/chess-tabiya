@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3711]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3713]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3711]]: 273 UX items complete, 272 live and 24
-retired; 1,720 live ledger items, all assigned, alongside 1,579 done and 161 refused. The 462
+Current checked inventory through [[D3713]]: 273 UX items complete, 272 live and 24
+retired; 1,721 live ledger items, all assigned, alongside 1,580 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,17 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3712]] repairs automatic Support recovery: failed/pending Nudge remains reachable without
+claiming a fact, both automatic modules offer explicit retry, and current subject/help/decision,
+single-flight, focus and saved play survive actual server recovery. All 25 mounted lifecycle
+controls and four genuine desktop/touch-phone recovery journeys pass. Normal software passes
+4,850 checks/374 files; the same production bytes pass build and all 302 browser cases, one
+existing optional skip, zero retries and all 150 input/112 composition cells. [[D3713]] retains
+the genuinely silent-result journey: the measured legal controls return populated pawn/file
+facts, including unchanged empty-file statements on a pawn-free board. They do not prove useful
+selection, silent-success focus retirement, missing source integration or whole Support completion.
+No whole capability, milestone, exact-revision remote CI or release-image completion is claimed.
 
 [[D3710]] adds sixteen independent discovered-execution cases; their legal rook/bishop/queen
 checks in both colours exposed [[D3711]]'s omitted board-edge target. The repaired execution
