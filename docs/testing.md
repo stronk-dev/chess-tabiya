@@ -24,7 +24,11 @@ cursor/lease races, identical/concurrent replay and imported-game revisits. Clie
 recover missing event tails while refusing conflicting or non-contiguous snapshots. The actual
 server public projection also tests score disclosure versus changed visible measurements,
 rank and mass. D3700's expected-rejection control records a known withheld-reasoning contract
-conflict, not a fixed or complete reasoning journey.
+conflict, not a fixed or complete reasoning journey. The D3700 paired HTTP controls in
+the same focused command prove reachability through an admitted segment-end pack: the
+original branch discloses and replays; a fork between checkpoints withholds and currently
+fails public replay while its saved canonical record stays valid. They are evidence
+controls for the draft public-run-reconstruction contract, not waived browser failures.
 `make prediction-workflow-browser-check` runs
 real saved private Studio playtests with both perspectives: genuine pointer guesses, provider
 failure/retry and a committed-but-lost response, unchanged nodes until Continue, full candidate

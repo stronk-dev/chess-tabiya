@@ -25395,3 +25395,34 @@ Campaign was the one capability with no API, route or content. Now:
   whole capability or milestone is promoted. The latest pushed product has green verify
   but failed browser at 75bc8744; this local result is not paired exact-revision remote CI.
   No push, deployment, native release-image recovery or 1.0 completion is claimed.
+
+## 2026-10-11 — D3700 admitted HTTP reachability and public reconstruction draft
+
+- The earlier direct position fixture demonstrated a projection conflict, not production
+  reachability: the reasoning service only accepts pack play, and ordinary segment-end
+  admission closes its checkpoint segment. Establish the actual boundary before proposing
+  a repair. A disposable, validated transport pack now runs through real creation and
+  reasoning HTTP routes with legal learner/opponent plies. Its original branch closes a
+  segment and returns replayable reasoning; forking between checkpoints instead reaches
+  the new branch's first checkpoint, correctly withholds detections and returns a successful
+  response that canonical replay refuses. Both saved logs replay unchanged. The fixture's
+  words test transport, not authored chess truth. Initial fixture API/type mistakes were
+  corrected; they were not recorded as product refutations.
+- Draft `rfc/public-run-reconstruction.md` separates public read types/reconstruction from
+  canonical saved-event validation, preserves transcripts and existing delivery semantics,
+  and requires actual submit/reload/follow/continue/disclose adoption and immutable refresh.
+  It claims no persisted resource, schema, migration, content, matcher or disclosure-policy
+  change. Independent buildability review and acceptance precede production implementation.
+  D3700 is core-loop/RFC-blocked, not closed; other accepted lanes remain executable.
+- Fifty normal focused controls and clean types pass. Complete normal software verification
+  passes 4,777 cases/370 files and seven unchanged-budget performance cases/four files,
+  contract checks, packaging and its included build. Governance initially refuses the new
+  RFC's missing checkpoint anchor; the exact RFC/work-state links are added, not the check
+  weakened. Complete normal governance then exits zero. Expected-rejection controls document
+  the live bug, not a repaired learner journey. No fresh content/browser result is claimed;
+  a28d4795's 247 content/294 browser passes remain the preceding historical receipt.
+- Update the existing ledger, work state, queues, RFC register and roadmap together. All
+  1,718 live rows remain assigned; 75 product RFCs comprise 42 implementing, ten awaiting and
+  23 draft. No milestone, whole capability, semantic qualification or pack graduates here.
+  Protected intent and immutable archives remain unchanged. No production repair, push,
+  deployment, native release-image recovery or 1.0 completion is claimed.

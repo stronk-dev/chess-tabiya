@@ -4,6 +4,17 @@
 
 **Scope:** research/reconciliation work now; later jobs become executable only through their gates
 
+## Public reasoning reconstruction — 2026-10-11
+
+[[D3700]] is **BLOCKED ON RFC REVIEW**, core-loop. The actual admitted segment-end
+original/branched HTTP pair reproduces withheld-receipt replay failure; both saved
+canonical logs remain valid. `rfc/public-run-reconstruction.md` proposes explicit
+read-only public types and reconstruction, immutable disclosure refresh and the full
+submit/reload/follow/continue/disclose journey. Fifty focused controls and clean types
+pass. Independent buildability review and acceptance precede implementation; do not
+relax saved validation, fake skip/detections, change segment semantics or commission
+already-delivered prediction admission again. Other accepted lanes remain executable.
+
 ## Prediction author follow-up — 2026-10-11
 
 [[D3695]]: the schema example reaches predict-reply at najdorf-e6, after the opponent reply.

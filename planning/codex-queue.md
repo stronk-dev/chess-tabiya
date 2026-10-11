@@ -1,11 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-11 — [[D3700]] is a separate next contract boundary exposed while auditing
-conditional public snapshots: a withheld, unskipped reasoning receipt has no detections,
-so canonical event replay rejects it. The actual server projection control reproduces
-the conflict; saved/disclosed streams replay correctly. Specify the public-view/client
-reconstruction repair without leaking key points or weakening canonical skip consistency.
-This evidence-only test records the known failure and does not close the row.
+2026-10-11 — [[D3700]] now has admitted HTTP reachability, not only a runtime fixture.
+A validated segment-end pack's original branch closes a segment and returns replayable
+reasoning. Forking between checkpoints instead creates a first checkpoint on the new
+branch; recorded detections stay correctly withheld, and its successful response cannot
+replay. Both saved logs remain canonical. Fifty focused controls and clean types pass.
+`rfc/public-run-reconstruction.md` owns the proposed read-only public type/projector,
+immutable disclosure refresh and actual submit/resume/follow/disclose consumers. It is
+**draft; independent buildability review and acceptance precede implementation**. No new
+storage/schema/content, branch-segment rewrite or relaxed canonical validation is proposed.
+The expected-rejection controls are evidence of the bug, not a fix or completed journey.
 
 2026-10-11 — [[D3694]]/[[D3698]] are repaired locally. Prediction now admits the real
 writer/role, active/reached occurrence and legal guess before provider execution, binds the

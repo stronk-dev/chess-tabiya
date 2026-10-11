@@ -131,6 +131,7 @@
       "release": "core",
       "owner": "core-loop",
       "rfcs": [
+        "public-run-reconstruction.md",
         "play-composition.md",
         "pack-training-forms.md"
       ],
@@ -690,10 +691,11 @@
         "nextAction": "D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-11",
-          "summary": "D3694/D1685 now prove pre-provider writer/role, active/reached occurrence, legal opponent guess and exact recorded position/history/branch/session/private-pack admission, asynchronous re-admission and immutable replay. Production HTTP non-grantee/spectator controls and imported source-mainline revisits pass. Native response loss exposed D3698's client event gap; snapshots recover missing contiguous events while refusing conflicts and preserving newer local history. The first complete browser attempt exposed this task's D3699 selection-disclosure regression; its narrow repair admits declared score/WDL omissions while refusing changed already-visible measurements and immutable selection identity. Forty-eight focused controls and ten real native journeys pass, including committed-response loss, retry/reload/exact Continue, Line Drill, spectator following and desktop/phone Support reveal/return. D3700's independently reproduced withheld-reasoning replay conflict remains open; D3695 retains the authored example/A7 wrong-turn sequence. Complete serial normal Make verification passes 4,775 software cases/370 files, seven performance cases/four files, 247 content cases/25 files, clean types/governance/capability/packaging and build; 294 browser passes, one existing optional Maia skip, zero retries and all 112 composition cells. No paired green exact-revision remote CI, push, native release-image, whole capability or milestone completion is claimed.",
+          "summary": "D3700 now has paired actual HTTP reachability through an admitted segment-end pack, not only a direct runtime fixture. Original-branch reasoning discloses and replays; a fork between checkpoints records a valid saved receipt but its successful withheld response cannot replay. Fifty focused controls and clean workspace types pass. Draft public-run-reconstruction is assigned to Rehearsal/core-loop, pending independent buildability review and acceptance: distinct public read types/projector, immutable detection disclosure, all actual submit/resume/follow/continue consumers, no saved schema, content, segment-policy or canonical-validation change. The expected rejection is evidence, not a fix. Complete normal software verification passes 4,777 cases/370 files, seven unchanged-budget performance cases/four files, types, contract checks, packaging and the included build. Governance initially catches this task's missing RFC checkpoint anchor; after adding the actual RFC/work-state links, complete governance exits zero with 75 assigned product RFCs and all 1,718 live rows assigned. The preceding a28d4795 content/browser result remains historical: 247 content and 294 browser passes, one optional skip, zero retries and all 112 composition cells. D3694/D1685/D3698/D3699 remain repaired locally; D3695 remains author-blocked. No paired exact-revision remote CI, public reconstruction implementation, native release-image, whole capability or milestone completion is claimed.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
+            "rfc/public-run-reconstruction.md",
             "apps/server/src/guidance-lifetime.test.ts",
             "apps/server/src/guidance.test.ts",
             "apps/server/src/concept-registry-closure.test.ts",
@@ -761,6 +763,16 @@
             "tools/verify-caddy.test.mjs"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "public-run-reconstruction.md",
+              "digest": "sha256:a3fb5c02fab1f723d700042c9aee7a356cef66bdc45c1df4879bd1d2bb48924d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3700",
+              "digest": "sha256:318615d0ce0079815140e82d6dcad7b618de8f752025beaa0b0d28a86b69fc9b"
+            },
             {
               "kind": "rfc",
               "id": "verifiable-runtime-distribution.md",

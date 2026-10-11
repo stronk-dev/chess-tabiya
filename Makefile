@@ -158,7 +158,7 @@ checkpoint-readiness-browser-check:
 
 .PHONY: prediction-workflow-check prediction-workflow-browser-check
 prediction-workflow-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/drill-client-server.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts apps/web/src/lib/board-model.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/run-state.test.ts -t "D3693|D3694|D3696|D3698|D3699|prediction|guess-the-move|checkpoint continuation|restores the checkpoint"
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/drill-client-server.test.ts apps/server/src/return-scheduling.test.ts apps/server/src/return-scheduling-application.test.ts apps/web/src/lib/board-model.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/run-state.test.ts -t "D3693|D3694|D3696|D3698|D3699|D3700|prediction|guess-the-move|checkpoint continuation|restores the checkpoint"
 
 prediction-workflow-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3693|D3692|branch group captures three candidates|Line Drill crosses a cap|a granted spectator follows|Empty Support returns|Support opens the exact recognized"

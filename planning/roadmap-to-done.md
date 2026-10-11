@@ -61,13 +61,20 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 Current checked inventory through [[D3700]]: 273 UX items complete, 272 live and 24
 retired; 1,718 live ledger items, all assigned, alongside 1,570 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
-discharge and 22 draft; the archive has 75 implemented records and one superseded record, not
+discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked. The installed production
 inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+The latest D3700 follow-up adds actual admitted HTTP reachability: an original segment-end
+branch's reasoning response replays, but a branch forked between checkpoints retains a
+withheld receipt that cannot replay. `rfc/public-run-reconstruction.md` is assigned to
+Rehearsal/core-loop and remains draft pending independent review. Its read-only type and
+reconstruction proposal must preserve canonical storage, transcript visibility and actual
+disclosure; the new passing evidence controls do not repair that learner flow.
 
 1. Finish the shared sources and consumer bindings: installed opening identity,
    sampled Maia tasks, durable Stockfish, Review tablebase and selected-piece/square Sight.

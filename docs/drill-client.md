@@ -141,6 +141,10 @@ become visible at disclosure without changing move, rank, mass or provider ident
 already present in both views cannot change. A slower response never removes a newer local
 event. D3700 remains a separate public-view/canonical-replay conflict for withheld reasoning;
 the source/disclosed receipts are valid, but the hidden detection view cannot yet replay.
+An admitted segment-end pack reproduces it when a new branch reaches its first checkpoint
+after forking between checkpoints; the original branch's otherwise identical response
+closes a segment and replays. `rfc/public-run-reconstruction.md` is a draft repair, not
+implemented public-reader behavior. Saved-event validation and disclosure policy remain strict.
 
 The schema example currently reaches its prediction after Black's reply, on the learner's turn.
 The sheet explains why a reply cannot be predicted there and keeps Continue/rewind available; it

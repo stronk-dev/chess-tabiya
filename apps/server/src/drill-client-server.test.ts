@@ -8,6 +8,7 @@ import {
   reachCheckpoint,
   rulesEvidenceRef,
   readBackReplay,
+  projectRun,
   transitionObjective,
   type EvidencePayload,
   type PolicyConfig,
@@ -105,6 +106,51 @@ describe("drill-client pack registry", () => {
 
   afterEach(() => {
     for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it.each([false, true])("D3700 measures public reasoning replay through admitted segment-end play (fork=%s)", async (branched) => {
+    const document: DrillPackDefinition = {
+      id: "reasoning-segment-replay", version: "0.1.0", title: "Reasoning transport fixture", requires: [],
+      mode: "line", phase: "middlegame", start: { fen: "3rk3/8/8/8/8/8/7P/3Q2K1 w - - 0 1", side: "white" },
+      objective: { type: "play_until_checkpoint", summary: "Record the fixture transcript.", successConditions: [{ kind: "reach_checkpoint", checkpointId: "reason" }] },
+      spine: [{ id: "first", moveUci: "h2h3", moveSan: "h3", children: [{ id: "reply", moveUci: "e8f8", moveSan: "Kf8", children: [{ id: "last", moveUci: "h3h4", moveSan: "h4", children: [] }] }] }],
+      checkpoints: [
+        { id: "before", label: "First checkpoint", trigger: { atPly: 1 }, actions: [] },
+        { id: "reason", label: "Record words", trigger: { atPly: 3 }, actions: [], interaction: { type: "stated_reasoning", keyPoints: [{ id: "words", label: "Fixture words", phrases: ["fixture words"], ground: { kind: "spine_move", spineNodeId: "last" } }] } },
+      ],
+      feedbackPolicy: "segment_end", opponentPolicy: { mode: "theory_strict" },
+      provenance: { sources: ["Disposable transport fixture, not chess instruction."], licence: "CC0-1.0", reviewStatus: "draft" },
+    };
+    const environment = await setup(document);
+    stores.push(environment.storage);
+    const created = await request(environment.handler, "POST", "/runs", runBody(`reasoning-branch-${branched}`, document.id));
+    expect(created.status, await created.clone().text()).toBe(201);
+    const { run } = await created.json() as { run: import("@chess-tabiya/runtime").DrillRun };
+    const first = environment.service.move(run.id, "writer-a", "h2h3", { at }).run;
+    if (branched) environment.service.fork(run.id, "writer-a", first.activeCursor.nodeId, { label: "branch at checkpoint" });
+    environment.service.opponentPly(run.id, "writer-a", {
+      moveUci: "e8f8", policyModeApplied: "theory_strict",
+      engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: true },
+    }, { at });
+    const reached = environment.service.move(run.id, "writer-a", "h3h4", { at }).run;
+    const checkpoint = [...reached.events].reverse().find(event => event.type === "checkpoint.reached")!;
+    const response = await request(environment.handler, "POST", `/runs/${run.id}/reasoning`, {
+      nodeId: reached.activeCursor.nodeId, checkpointEventSeq: checkpoint.seq,
+      transcript: { candidates: [], plan: "fixture words", fears: "" },
+    });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const payload = await response.json() as import("@chess-tabiya/runtime").MutationResult;
+    const saved = environment.storage.read(run.id)!.run;
+    expect(projectRun(saved.events)).toEqual(saved);
+    const event = [...payload.run.events].reverse().find(event => event.type === "reasoning.recorded")!;
+    expect(event).toMatchObject({ data: { skipped: false, transcript: { plan: "fixture words" } } });
+    if (branched) {
+      expect(event).toMatchObject({ data: { detections: [] } });
+      expect(() => projectRun(payload.run.events)).toThrow("inconsistent skip data");
+    } else {
+      expect(event).toMatchObject({ data: { detections: [{ keyPointId: "words", status: "detected" }] } });
+      expect(projectRun(payload.run.events)).toEqual(payload.run);
+    }
   });
 
   async function predictionFixture() {

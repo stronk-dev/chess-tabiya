@@ -30697,11 +30697,12 @@
     },
     {
       "id": "D3700",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2288dc97c3692789366323ff5afd0667f05c50acabcf50ea6b0ffc837bfc2def",
+      "sourceDigest": "sha256:318615d0ce0079815140e82d6dcad7b618de8f752025beaa0b0d28a86b69fc9b",
       "uxItems": [],
-      "owner": "core-loop"
+      "owner": "core-loop",
+      "blocker": "rfc:public-run-reconstruction.md"
     }
   ]
 }
