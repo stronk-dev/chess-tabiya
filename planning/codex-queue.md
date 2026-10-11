@@ -165,11 +165,37 @@ seven performance/four files, 248 content/25 files and 302 browser cases, one ex
 optional skip, zero retries and all 150 input/112 composition cells. This fills two case arms,
 not a whole-subject, source-adoption, capability, remote-CI or release-image obligation.
 
-[[D3713]] retains the unmeasured silent-success recovery boundary. Actual legal controls return
-populated pawn/open-file facts, including unchanged empty-file statements on a pawn-free board;
-do not relabel them empty or manufacture an empty receipt. Resolve selection/novelty under the
-existing author contract, then prove a genuine silent reply's card, tablet-head and focus retirement.
-This is separate from D3712's source-bound failure → populated recovery closure.
+[[D3715]] identifies the source-to-selection blocker underneath [[D3713]], not a missing
+quiet test fixture. The pawn-island factory emits both colours' count states on every legal
+edge; Nudge admits them, the witness filter has no count-change rule, and novelty abstains.
+A legal locked-pawn knight move delivers exactly two unchanged counts. Four actual-operation
+cohorts walk all legal edges in locked-pawn/nonterminal pawn-free positions, both colours;
+the mounted tablet recovery remains populated and focus returns to its selector. All 26
+lifecycle and 165 source/module controls plus clean types pass. Two initial pawn-free fixtures
+were terminal by insufficient material and correctly refused; the controls now retain a
+second knight, not an admission waiver. These are current reach controls, not a quiet-success
+or useful-selection completion. `planning/platform-alignment/semantic-state-negative-contract.md`
+now carries the consumer consequence alongside the distinct qualification conflict.
+The module author must define a proactive change witness while retaining complete state for
+Inspector/drills, including the related preserved pawn/file facts. Do not filter frozen v1,
+invent an empty receipt or implement new signal selection without acceptance. D3713 is
+blocked on D3715; D1164 remains the separate cross-node novelty contract.
+
+2026-10-11 native recovery recheck: the installed development image's non-root statfs reports
+`bavail=0`, `bsize=4096`, `ffree=6298865`: zero usable bytes, without a mounted operator
+volume, pruning or rebuilding. D3574 remains live, so D3573's full built-image journey is not
+rerun into a known capacity refusal. Existing unrelated running services were not touched.
+
+Next unblocked release task: [[D608]]'s accepted storage-backup-recovery criterion 8.
+The existing bundled server/worker/CLI process journey seeds only an authenticated learner
+and imported run; it is not nonempty recovery proof for every application class. Broaden
+real creation → backup → representative mutation/loss → fresh restore → restarted reads
+to progress, authored/registered artifacts, social/classroom relations, ratings and the
+landed bot/Campaign/longitudinal families. Retain exact identifiers, ownership, branching
+and read/continuation behavior. Reuse `storage-appliance.test.ts` and the actual bundled
+CLI rather than creating a simulated storage authority, guessed SQL rows or another tracker.
+This file-backed work does not depend on Docker capacity and does not discharge image,
+cross-version, multi-architecture or final-release proof. No new schema or API is authorized.
 
 [[D3712]] is closed locally: failed/pending Nudge remains available without a fact badge;
 automatic Nudge and Structure recover through an explicit single-flight request under the

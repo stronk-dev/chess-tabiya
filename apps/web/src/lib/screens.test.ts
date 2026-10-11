@@ -2448,6 +2448,32 @@ describe("Layer 3 screens", () => {
         await unmount(screen.component);
       });
 
+      it("D3715: locked pawns still produce unchanged island counts rather than a silent recovery", async () => {
+        vi.stubGlobal("innerWidth", 768);
+        vi.stubGlobal("innerHeight", 1024);
+        const screen = setup("transport", { fen: "7k/pppppppp/PPPPPPPP/8/8/8/3N4/K7 w - - 0 1", move: "d2f3" });
+        await assistanceSettled();
+        const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+        await vi.waitFor(() => expect(seat()?.querySelector("[role='alert']") ?? null).not.toBeNull());
+        seat()!.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+        const body = screen.onModuleQuery.mock.calls[0]![0];
+        const result = await screen.realQuery(body) as { page: import("@chess-tabiya/runtime").ModuleQueryPage };
+        const nudge = result.page.packets.find(packet => packet.module === "postcommit_nudge")!;
+        expect(nudge.receipt.items.map(item => item.evidenceRef?.projection)).toEqual([
+          { id: "rules.structural.event.pawn_islands", version: 1 },
+          { id: "rules.structural.event.pawn_islands", version: 1 },
+        ]);
+        expect(nudge.empty).toBeNull();
+        screen.onModuleQuery.mockImplementation(screen.realQuery);
+        const retry = [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!;
+        retry.focus(); retry.click();
+        await vi.waitFor(() => expect(seat()?.querySelectorAll("[data-presented]")).toHaveLength(2));
+        expect(document.activeElement).toBe(seat()!.querySelector(".seat-row"));
+        expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
+        expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
+        await unmount(screen.component);
+      });
+
       it("retires an automatic recovery when Quiet removes its composed effect", async () => {
         const screen = setup("transport");
         await assistanceSettled();

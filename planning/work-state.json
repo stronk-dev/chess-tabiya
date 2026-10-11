@@ -4872,12 +4872,11 @@
     },
     {
       "id": "D608",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9cc4472dcf278a753df9323b04e9b02206d5593fdce3e329b01c638e860239bc",
+      "sourceDigest": "sha256:3a922ced3b697cd5f77cca0c20b19aa306a3e8fa3a5af6eedfbcb475db690dcd",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:storage-backup-recovery.md"
+      "owner": "release-engineering"
     },
     {
       "id": "D609",
@@ -30814,11 +30813,12 @@
     },
     {
       "id": "D3713",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:bbed287deaed61e2335c8154ba2edc03b8a7d7be0d1a2f8c94bf6a8f49a19d47",
+      "sourceDigest": "sha256:a4df027d49bb658cfc0e3494319466f0fa954676e0a0e9d38b1611f6ddf81fe3",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "owner": "assistance-and-presentation",
+      "blocker": "item:D3715"
     },
     {
       "id": "D3714",
@@ -30828,6 +30828,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-king-zone.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3715",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:38a4c9bec16ff7571dded55c90f7d7e1fb90e5ec46370f5fc60512cc77a9a11c",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }

@@ -53,3 +53,34 @@ All four current negative arms remain `required`. No new learner permission,
 source admission, collector behavior, strategic judgement or content migration
 is shipped here. D3691's finite pawn-dynamics cases are separate admitted Slice B
 work and do not solve this state-event contract.
+
+## Consumer consequence: proactive Nudge (D3715 / D3713)
+
+The October 11 source-to-module probe establishes a separate selection conflict.
+`createRulesStructuralEventPawnIslandsV1Evidence` maps both colours unconditionally;
+`postcommitEdgeEvidence` includes that projection; Nudge accepts it; `witnessedEvidence`
+does not distinguish unchanged counts; and `applyPositionNovelty` conservatively
+abstains on unregistered identities. The two facts fit the ordinary Nudge budget.
+Thus the complete state can fill a card whose declared question is "What did the
+move I just played actually change?", even when these counts did not change.
+
+The legal `d2f3` edge from
+`7k/pppppppp/PPPPPPPP/8/8/8/3N4/K7 w - - 0 1` delivers exactly two island-count
+facts with both counts unchanged at one. A real query and mounted tablet recovery
+retain that populated card and its selector focus; they do not exercise silent
+retirement. Four source-bound cohorts in `module-query.test.ts` walk every legal
+edge in locked-pawn and nonterminal pawn-free positions, in both colours. They
+retain exact edge/colour/count operands and demonstrate current nonempty module
+reach. This finite population is not the proof of the factory's universal shape;
+the unconditional construction above is.
+
+The qualification negative and the Nudge signal contract are different obligations.
+Do not "solve" the latter by making the state collector sparse: Inspector, authored
+conditions and saved evidence still need complete count state. The module author
+must define which preserved state observations may trigger a proactive nudge and
+which remain inspection-only, including the related retained pawn/open-file facts.
+Specify the exact source-bound witness and no-witness controls, keep genuine count
+changes and other concrete consequences, and do not substitute novelty abstention,
+statistical ranking, a source failure or an invented empty packet for quiet success.
+This note does not accept new selection semantics. D3713 is blocked on D3715 until
+the actual module operation can issue the intended silent response.

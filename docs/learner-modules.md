@@ -48,6 +48,14 @@ turn clone stays unavailable. Legal control excludes pawn advances and castling'
 command address, while the exact legal-moves source retains those moves (D3656).
 Large relation overlays remain subject to unchanged atomic budgets.
 
+Post-commit Nudge's `silent` empty behavior is declared, but its current source selection does not
+establish useful quiet delivery. In particular, the pawn-island state factory always retains both
+colours' counts, including zero and unchanged counts. Nudge accepts them without a change-witness
+filter, and unregistered novelty identities conservatively abstain. A legal locked-pawn knight
+move therefore fills the Nudge with two unchanged counts (D3715). The collector's complete state
+is useful to inspection and authored conditions; fixing the proactive signal must not erase it.
+D3713's genuine silent-result focus/seat journey remains blocked on that selection contract.
+
 - **The module query** (`queryModules`, `packages/runtime/src/module-query.ts`, served at
   `POST /runs/:id/modules/query`): the browser sends its requested-assistance receipt and one closed
   timing request (`pre_commit` with an optional selected square, `at_commit` with a staged UCI and

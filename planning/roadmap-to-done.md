@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3714]] · **Machine map:**
+2026-10-11 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3715]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,8 +58,8 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and storage maintenance | Diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host image recovery/release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3714]]: 273 UX items complete, 272 live and 24
-retired; 1,721 live ledger items, all assigned, alongside 1,581 done and 161 refused. The 462
+Current checked inventory through [[D3715]]: 273 UX items complete, 272 live and 24
+retired; 1,722 live ledger items, all assigned, alongside 1,581 done and 161 refused. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
@@ -68,6 +68,20 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3715]] identifies why the attempted quiet Nudge recovery never became quiet: its
+source emits both colours' island-count states, including unchanged and zero counts,
+and the module admits them without a change witness while novelty abstains. Four actual
+legal-edge cohorts and mounted tablet recovery preserve current populated delivery,
+not desired quiet selection. The module-specific signal contract must retain complete
+state for Inspector/drills while specifying what may proactively interrupt play. D3713
+is blocked on that repair; no silent-success or useful-guidance completion is claimed.
+The native development-image capacity recheck still reports zero usable Docker bytes;
+D3574/D3573 remain held, with no pruning or complete image recovery attempted.
+This checkpoint's complete normal local verification passes 4,882 software/375 files,
+seven performance/four files and 248 content/25 files, types, governance, packaging and
+application build, exit zero. Production behavior is unchanged. No fresh browser, image
+recovery, current-revision GitHub CI or whole-capability completion follows.
 
 [[D3714]] adds twenty-four independent structural king-zone cases, filling its positive and
 negative cells with actual entry/exit/preservation and both-interior omissions in both colours.

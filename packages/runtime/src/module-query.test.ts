@@ -304,6 +304,39 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
 describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb and compare coach", () => {
   const assistance = finalized("onramp", "guided");
 
+  it.each([
+    ["locked pawns, White", "7k/pppppppp/PPPPPPPP/8/8/8/3N4/K7 w - - 0 1"],
+    ["locked pawns, Black", "7k/3n4/8/8/8/pppppppp/PPPPPPPP/K7 b - - 0 1"],
+    ["pawn-free, White", "7k/7n/8/8/3N4/8/8/K7 w - - 0 1"],
+    ["pawn-free, Black", "7k/8/8/3n4/8/8/N7/K7 b - - 0 1"],
+  ])("D3715: %s retains per-colour count states on every real legal edge", (_name, fen) => {
+    const legal = exactLegalMoves(fen);
+    expect(legal.length).toBeGreaterThan(0);
+    for (const move of legal) {
+      const run = revealFeedback(positionRun(fen, [move.uci]), at).run;
+      const states = routes.invokeEvidenceValueRoute("rules.structural.event.pawn_islands@1", {
+        beforeFen: run.nodes[0]!.fen, moveUci: move.uci, afterFen: run.nodes[1]!.fen,
+      });
+      // The correct state collector is total even at zero and unchanged counts.
+      // A future Nudge witness repair must not turn this into a sparse collector.
+      expect(states.map(state => (state.payload as { readonly color: string }).color)).toEqual(["white", "black"]);
+      const beforeCount = _name.startsWith("pawn-free") ? 0 : 1;
+      for (const state of states) {
+        expect(state.payload).toMatchObject({ before_fen: run.nodes[0]!.fen, move_uci: move.uci,
+          after_fen: run.nodes[1]!.fen, family: "pawn_islands", before: beforeCount });
+        if (move.role === "knight") expect(state.payload).toMatchObject({ after: beforeCount });
+      }
+      const { page } = queryModules({ run, assistance: finalized("position", "guided", "postcommit_nudge"), role: "learner", session: "position",
+        request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] },
+      });
+      const nudge = packetOf(page, "postcommit_nudge")!;
+      // Check the actual query's authority, NOT a requirement that it must keep
+      // filling Nudge. The desired selection repair may return a silent packet
+      // while the independently checked count-state source remains complete.
+      assertDelivered(nudge, finalized("position", "guided", "postcommit_nudge"));
+    }
+  });
+
   it.each(["missing_policy", "impossible_latency", "extra_raw_binding"] as const)("Theory rejects %s before even local source access", fault => {
     const run = packRun(ITALIAN, ["e1g1"]);
     const compile = execution.compileEvidenceConsumerExecution;

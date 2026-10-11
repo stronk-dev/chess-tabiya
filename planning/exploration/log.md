@@ -25749,3 +25749,39 @@ Campaign was the one capability with no API, route or content. Now:
   incomplete, with zero official graduates. No new tracking framework or bulk recording.
   Protected intent and immutable archives are unchanged; no intent sentence is newly
   falsified. No push, deployment, release-image or whole-feature completion. Goal stays active.
+
+## 2026-10-11 — D3715 Nudge selection diagnosis and D608 recovery queue repair
+
+- A read-only non-root statfs from the installed development image reports bavail=0,
+  bsize=4096 and ffree=6298865 on /data. This is not a fresh operator-volume or current-image
+  recovery proof. D3574/D3573 remain held; no image, cache, volume or unrelated service is removed.
+- The attempted quiet Nudge recovery identifies a selection defect, not a missing fixture.
+  The pawn-island factory emits both colours' complete counts, including zero and unchanged
+  counts. Nudge admits those states without a count-change witness while novelty abstains.
+  A legal locked-pawn d2f3 edge delivers exactly two unchanged counts. Four actual-operation
+  cohorts retain the complete source and query authority on every legal edge; the mounted
+  tablet control proves populated recovery/focus, not silent retirement. Earlier guessed
+  quiet fixtures exposed defence/escape facts; two pawn-free fixtures were terminal by
+  insufficient material and were corrected with a second knight, not an admission waiver.
+- D3715 owns the module-author selection clarification. D3713 is blocked on it; D1164 novelty
+  and D3687/D3690's qualification conflict remain separate. Complete count state stays available
+  to Inspector/drills. No sparse v1 rewrite, invented empty packet, new chess judgement or
+  unaccepted selection semantics is implemented. The source controls do not require future
+  Nudge selection to remain noisy. All 26 lifecycle and 165 source/module focused controls
+  and clean workspace types pass.
+- D608's historical claim of no operator contract is narrowed to the accepted all-class
+  recovery requirement. The bundled-process journey currently seeds a learner/imported run,
+  not representative nonempty data from every application class. It is queued for real
+  creation, CLI backup, loss, fresh restore and restarted reads/continuation without Docker;
+  image, cross-version, multi-platform and final-release obligations remain separate.
+- Complete normal make roadmap-receipt verify-awake exits zero: 4,882 software/375 files
+  (348.75 s), seven unchanged-budget performance/four files (60.11 s), 248 content/25 files
+  (32.58 s), types, governance, packaging, application build and corpus checks. No retries,
+  deadlines, skips, production behavior, schema, source semantics or pack bytes change.
+  The prior 302-case browser run remains historical, not a fresh run for this test-only batch.
+- Ledger, queue, work-state, implementation docs and roadmap agree: 3,464 rows; 1,722 live,
+  all assigned (630 todo, 16 doing, 1,076 blocked); 1,581 done and 161 refused. The 462 weaker
+  historical prose closures remain visible. UX stays 273 complete/272 live/24 retired;
+  no whole capability or milestone is promoted and zero official packs graduate. Protected
+  intent and immutable archives are unchanged. No push, current-revision GitHub CI,
+  deployment or release completion; the full 1.0 goal stays active.
