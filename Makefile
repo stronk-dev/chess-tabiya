@@ -2101,6 +2101,12 @@ learner-rating-isolation-check:
 longitudinal-projector-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-contract.test.ts apps/server/src/longitudinal-projector-cache.test.ts apps/server/src/longitudinal-membership-cache.test.ts apps/server/src/longitudinal-store.test.ts apps/server/src/longitudinal-worker.test.ts
 
+.PHONY: longitudinal-projector-profile
+# D3300: disposable CPU measurement; no raw recordings or production shortcuts.
+longitudinal-projector-profile:
+	./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-profile.mjs --log-level=warning
+	$(CI_NODE) tools/dist/d3300-projector-profile.mjs
+
 .PHONY: longitudinal-worker-start-check
 longitudinal-worker-start-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-worker-start.test.ts

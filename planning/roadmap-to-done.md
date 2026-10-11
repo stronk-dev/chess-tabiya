@@ -69,6 +69,16 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
+[[D3300]] fresh-process projection measurement distinguishes the remaining cold
+cost from delivered prefix reuse and bounded drain: the real 80-ply arm takes
+3.26–4.27 s across both sides/three observations versus about 20 ms warm, retaining
+all legal edges, exact rows and forty checkpoints per side. Initial warmed-reader
+timing is explicitly superseded. The ordinary measurement keeps only an ignored
+compact aggregate, no raw recordings or progress/CI dependency. Locating cost does
+not prove a safe optimization or authorize a narrower evidence path; D3300 remains
+open. Receipt: `planning/longitudinal-store/d3300-cold-profile-2026-10-11.md`.
+No product behavior, capability, milestone or release gate advances by this measurement.
+
 [[D3716]] repairs the accepted overload predicate's promotion identity join: the actual
 recapture occupant can keep the retained defence duty as a rook/queen. Both-colour predecessor
 controls establish false conflicts; blocked-line controls preserve genuine conflicts rather

@@ -25858,3 +25858,42 @@ Campaign was the one capability with no API, route or content. Now:
   incomplete; milestones remain four active/five blocked, 86 packs and zero official graduates.
   Protected intent and archives are unchanged; no intent sentence is newly falsified.
   No new tracker or raw research recording. Full 1.0 remains the active goal.
+
+## 2026-10-11 (codex) — D3300 fresh-process projection cost, not another completion claim
+
+- Continued after the inventory-only goal turn with a fresh measurement of the accepted
+  longitudinal projector. Disposable `tools/d3300-projector-profile.ts` runs through normal
+  `make longitudinal-projector-profile`; separate fresh Node 24 children isolate timing
+  and CPU sampling. Real retained 80-ply imported events, sealed V4 images, current
+  derivation revision 4 and the full shared semantic closure remain. No narrow adapter,
+  simulated collector, missing legal alternatives or altered admission/denominator policy.
+- Two unprofiled observations per side: White 4.266/3.567 s, Black 3.859/3.257 s.
+  Warm repeats are ~20 ms; full uncached recollection after reading/JIT warming is
+  1.993–2.386 s. The first same-process probe's apparent 2.2–2.4 s cold result was
+  warmed at the reading level; the instrument was corrected and that result superseded.
+  These are loaded-host observations, not a distribution, import/queue/SQLite latency,
+  production speed guarantee or release proof.
+- White/Black retain 1,106/1,093 legal edges and 100,434/96,155 semantic events.
+  Full serialized rows agree across ordinary cold, warm and injected uncached paths;
+  nonempty observations/denominators and forty checkpoints per side are asserted.
+  CPU attribution remains dominated by the full local closure (~92% inclusive in
+  White); canonicalization, hashing, reading freezes and event compilation all contribute.
+  Inclusive ancestor samples overlap; no additive/single-function speedup is asserted.
+- Raw CPU recordings never leave memory. Only the ignored small aggregate is written;
+  the receipt is planning/longitudinal-store/d3300-cold-profile-2026-10-11.md. No artifact
+  store, source hash or raw research becomes a requirement for roadmap/CI. Normal Make
+  toolchain selection and docs checks pass. Research profiling is explicit, outside CI.
+- D3300 remains open; the prior assertion that any further improvement needs a contract
+  amendment is unproven. Next: identify actual repeated work and prove event/receipt/row
+  identity, then remeasure fresh processes and real-worker responsiveness/drain. If the
+  authority/composition must truly narrow, obtain acceptance first. Production code,
+  saved games, content, budgets, protected intent, archives and whole milestones unchanged.
+- Final focused regression verification: all 65 existing projector/contract/cache/store/
+  real-worker checks pass across five files (20.01 s). Normal Make toolchain, docs,
+  work-state and roadmap checks pass. This is not another full software/browser gate
+  or current-revision GitHub claim. The measurement is terminal; D3300 returns to its
+  existing learner-history TODO rather than remaining falsely in flight or closing.
+- Final instrument bytes also pass a third isolated measurement: White 3.507 s,
+  Black 3.339 s cold, 18.92/22.06 ms warm and 2.091/2.144 s full recollection.
+  The receipt includes all three observations per side; the counters, exact-output,
+  nonempty-row and checkpoint controls remain unchanged. No speed improvement is claimed.

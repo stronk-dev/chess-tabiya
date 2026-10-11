@@ -13,7 +13,7 @@ test("standalone JavaScript recipes use the existing selected runtime", () => {
 
 // Run the actual recipe's executable selection through Make, not a PATH-string assertion.
 // The fixture executables deliberately disagree and require no installed Node/Corepack version.
-for (const script of ["apps/server/dist/recorded-semantic-path-check.js", "tools/work-state.mjs --sync", "tools/test-tier-check.mjs"]) {
+for (const script of ["apps/server/dist/recorded-semantic-path-check.js", "tools/work-state.mjs --sync", "tools/test-tier-check.mjs", "tools/dist/d3300-projector-profile.mjs"]) {
   test(`Make launches ${script} with the selected Node, not ambient Node`, t => {
     const directory = mkdtempSync(join(tmpdir(), "tabiya-make-toolchain-"));
     t.after(() => rmSync(directory, { recursive: true, force: true }));

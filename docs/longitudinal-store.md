@@ -85,6 +85,16 @@ A historical revision-1 measurement: a 78-ply imported game projects in about 5 
 32 s before D3300); the per-edge cost is dominated by sealing ~200 evidence values per legal
 candidate. Output bytes are unchanged at `OBSERVATION_DERIVATION_REV = 1`
 (`planning/longitudinal-store/d3300-projector-and-drain-2026-09-24.md`).
+Fresh-process revision-4 measurement (2026-10-11) of the real 80-ply performance
+arm takes 3.51–4.27 s for White and 3.26–3.86 s for Black on the loaded development
+host, versus about 20 ms for warm membership reuse. Both retain all legal edges,
+exact output and forty decision checkpoints. `make longitudinal-projector-profile`
+separates fresh-process timing from CPU sampling; it keeps only an ignored compact
+aggregate, never raw CPU recordings. See
+`planning/longitudinal-store/d3300-cold-profile-2026-10-11.md` for scope and controls.
+These timings isolate the projector, not HTTP/queue/database latency. Cold cost
+remains open; locating the cost does not prove further output-preserving improvement
+impossible or authorize narrowing the evidence contract.
 Growing prefixes now reuse complete local v1 projection/sign memberships for exact
 before-FEN/move/after-FEN tuples. The worker retains at most 4,096 immutable entries, FIFO;
 clock fields remain part of identity, failures are recollected, and injected collectors stay

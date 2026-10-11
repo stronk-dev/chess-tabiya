@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3300]] is re-measured, not closed. Fresh-process revision-4
+projection over the real 80-ply arm takes 3.26–4.27 s across both sides/three observations;
+warm repeats take about 20 ms. All 2,199 legal edges and 196,589 semantic events remain,
+with byte-identical rows and forty checkpoints per side. The initial warmed-reader
+probe was not a cold result and is explicitly superseded. Ordinary
+`make longitudinal-projector-profile` keeps only an ignored compact aggregate;
+raw profiles never touch disk and no progress/CI gate depends on it. No source,
+denominator, seal or performance budget is cut. The old claim that further
+improvement necessarily needs a contract change is unproven. Next: measured
+repeat-computation correction with exact-output controls, or accepted authority
+amendment if truly required. Receipt: planning/longitudinal-store/d3300-cold-profile-2026-10-11.md.
+
 2026-10-11 — [[D3716]] repairs the accepted overload predicate's recapture-promotion join.
 Both-colour predecessor controls establish false conflicts; the actual landing occupant now
 retains the defender identity across promotion. Four legal promotion alternatives, independent
