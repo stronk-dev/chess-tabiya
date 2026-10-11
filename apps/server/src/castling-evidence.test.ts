@@ -3,14 +3,43 @@ import type { AddressInfo } from "node:net";
 import { compileAssistanceRequest, parsePresentationReceipt, presentedSentence, type DrillRun, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import type { ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { ShapeRegistry } from "./shape-registry.js";
+import { PrincipleRegistry } from "./principle-registry.js";
+import { PackRegistry } from "./pack-registry.js";
+import { TrainingSetRegistry } from "./training-set-registry.js";
+import { CampaignRegistry } from "./campaign-registry.js";
 
 let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | undefined;
-beforeEach(async () => { fixture = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false })); await fixture.ready; });
-afterEach(async () => { const owned = fixture; fixture = undefined; await owned?.close(); });
+beforeEach(async () => {
+  const started = performance.now();
+  const phases: string[] = [];
+  const observe = async <T>(label: string, load: () => Promise<T>): Promise<T> => {
+    phases.push(`${Math.round(performance.now() - started)}ms ${label} start`);
+    try { return await load(); }
+    finally { phases.push(`${Math.round(performance.now() - started)}ms ${label} settled`); }
+  };
+  const shapes = ShapeRegistry.loadDefault, principles = PrincipleRegistry.loadDefault;
+  const packs = PackRegistry.loadDefault, training = TrainingSetRegistry.loadDefault, campaigns = CampaignRegistry.loadDefault;
+  vi.spyOn(ShapeRegistry, "loadDefault").mockImplementation(() => observe("shapes", () => shapes.call(ShapeRegistry)));
+  vi.spyOn(PrincipleRegistry, "loadDefault").mockImplementation(() => observe("principles", () => principles.call(PrincipleRegistry)));
+  vi.spyOn(PackRegistry, "loadDefault").mockImplementation(options => observe("packs", () => packs.call(PackRegistry, options)));
+  vi.spyOn(TrainingSetRegistry, "loadDefault").mockImplementation(registry => observe("training sets", () => training.call(TrainingSetRegistry, registry)));
+  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation(registry => observe("campaigns", () => campaigns.call(CampaignRegistry, registry)));
+  onTestFailed(() => console.error(`Castling application setup: ${phases.join(" → ")}`));
+  fixture = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
+  await fixture.ready;
+  phases.push(`${Math.round(performance.now() - started)}ms application ready`);
+});
+afterEach(async () => {
+  const owned = fixture;
+  fixture = undefined;
+  try { await owned?.close(); }
+  finally { vi.restoreAllMocks(); }
+});
 
 describe("exact castling legality in authenticated Inspector", () => {
   it.each([

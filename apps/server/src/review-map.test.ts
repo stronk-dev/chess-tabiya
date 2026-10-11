@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
 import { parsePresentationReceipt, presentedSentence, type PresentationReceipt } from "@chess-tabiya/runtime";
 import type { ReviewMap } from "../../web/src/lib/api.js";
 
@@ -65,6 +65,7 @@ function eventKinds(path: string, runId: string): readonly string[] {
 describe("review map through createApplication", { timeout: 30_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
+  let phase: (label: string) => void = () => {};
   // Detach this test's application and directory before awaiting close(): a teardown that outlives
   // its hook must never close or delete the next test's live database (D3300). close() is bounded by
   // the longitudinal drain grace, so the default hook budget holds.
@@ -82,25 +83,37 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   });
 
   async function start(): Promise<{ origin: string; databasePath: string }> {
+    const started = performance.now();
+    const phases: string[] = [];
+    phase = label => { phases.push(`${Math.round(performance.now() - started)}ms ${label}`); };
+    onTestFailed(() => console.error(`Review HTTP lifecycle: ${phases.join(" → ")}`));
+    phase("construct application");
     directory = mkdtempSync(join(tmpdir(), "tabiya-review-map-"));
     const databasePath = join(directory, "review.sqlite");
     application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    phase("application ready; listen");
     await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+    phase("listening");
     return { origin: `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`, databasePath };
   }
 
   async function register(origin: string, handle: string): Promise<string> {
+    phase("register learner");
     const response = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle, password: `${handle}-password-long` }) });
     expect(response.status).toBe(201);
+    phase("learner registered");
     return response.headers.get("set-cookie")!.split(";", 1)[0]!;
   }
 
   async function importReviewedGame(origin: string, cookie: string, writer: string, pgn = GLYPHED_PGN, side: "white" | "black" = "white"): Promise<string> {
+    phase("import game");
     const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": writer }, body: JSON.stringify(body) });
     const imported = await post("/runs/import", { id: "review-import", side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 7, source: { kind: "pgn", pgn } });
     expect(imported.status, await imported.clone().text()).toBe(201);
+    phase("game imported");
     const runId = "review-import";
     expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
+    phase("waiting for recorded review evidence");
     // rfc/review-evidence-compiler.md §4.1: the import-completion pass runs through the Review
     // coordinator over the one provider exchange (the labelled mock engine in this deployment) and
     // attaches every delivery durably; the story read keeps the bounded window moving.
@@ -111,6 +124,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       if (!ready) await new Promise((resolve) => setTimeout(resolve, 20));
     }
     expect(ready).toBe(true);
+    phase("recorded review evidence settled");
     return runId;
   }
 
@@ -381,7 +395,9 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const read = async (): Promise<Remainder> => await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as Remainder;
     const analyze = (nodeId: string) => fetch(`${origin}/runs/${runId}/review-analysis?node=${encodeURIComponent(nodeId)}`, { headers: { cookie } });
 
+    phase("read Review map");
     const review = await read();
+    phase("Review map received");
     // §6: one drawn point per ply at full recorded coverage; the mock records 0 cp → 50 win-points.
     expect(review.evalGraph).toMatchObject({ kind: "complete", side: "white", evaluated: PLIES });
     expect(review.evalGraph.points.every((point) => point.kind === "evaluated" && point.percent === 50)).toBe(true);
@@ -394,12 +410,14 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const tables = tableSnapshot(databasePath);
     const events = eventKinds(databasePath, runId);
     const target = review.rows[10]!;
+    phase("explicit Analyze request");
     const revealed = await analyze(target.nodeId);
     expect(revealed.status, await revealed.clone().text()).toBe(200);
     // The Review pass recorded this position's bounded line (stockfish.principal_variation@1) beside its
     // evaluation; the reveal re-derives it, attributed to the actual engine and the requested bound.
     // The evaluation delivery itself still carries no best move or PV (refusal 7).
     const line = await revealed.json() as { kind: string; sentence: string; caveat: string; entryNodeId: string; engineId: string; bound: unknown; moves: readonly string[] };
+    phase("Analyze body read");
     expect(line).toMatchObject({ kind: "line", source: "bestline", entryNodeId: target.entryNodeId, engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 100 } });
     expect(line.moves).toHaveLength(2);
     expect(line.sentence).toBe(`Mock Stockfish mock-1 (100 ms search) reported this principal variation from the position before ${target.label}: ${line.moves.join(" ")}.`);
@@ -411,6 +429,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
 
     // Retry from that position (as the Review Map does): the reveal is withheld while the retry is open.
     const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "writer-remainder" }, body: JSON.stringify(body) });
+    phase("open retry");
     expect((await post(`/runs/${runId}/lease`, {})).status).toBe(200);
     expect((await post(`/runs/${runId}/rewind`, { nodeId: target.entryNodeId })).status).toBe(200);
     expect((await post(`/runs/${runId}/fork`, { nodeId: target.entryNodeId, label: "story-reentry", intent: "Retry" })).status).toBe(200);
@@ -424,17 +443,20 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("line");
 
     // Play one move on the retry: the compare door appears, and the shipped compare accepts it verbatim.
+    phase("commit retry move");
     const moved = await post(`/runs/${runId}/moves`, { uci: "a2a3" });
     expect(moved.status, await moved.clone().text()).toBe(200);
     const doors = (await read()).compareDoors;
     expect(doors).toHaveLength(1);
     expect(doors[0]!.entryNodeId).toBe(target.entryNodeId);
     expect(doors[0]!.branchIds[0]).toBe(review.branchId);
+    phase("Compare handoff");
     const compared = await post(`/runs/${runId}/compare`, { branchIds: doors[0]!.branchIds });
     expect(compared.status, await compared.clone().text()).toBe(200);
     const comparison = (await compared.json() as { comparison: { columns: { branchId: string }[]; forkNodeId: string } }).comparison;
     expect(comparison.columns.map((column) => column.branchId)).toEqual(doors[0]!.branchIds);
     expect(comparison.forkNodeId).toBe(target.entryNodeId);
+    phase("Compare verified");
   });
 });
 

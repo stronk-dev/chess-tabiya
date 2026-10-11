@@ -30715,19 +30715,30 @@
     },
     {
       "id": "D3702",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:638df0c8deab322444264c1233223a410c31e4edc90080a3fa5c60c3b5393e92",
+      "sourceDigest": "sha256:ff0e37f79131539fb323f5af5ccfa72dd50571a8197f384eb537aff81a926794",
       "uxItems": [],
-      "owner": "release-engineering"
+      "owner": "release-engineering",
+      "since": "2026-10-11"
     },
     {
       "id": "D3703",
-      "state": "todo",
-      "owner": "release-engineering",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6bff573f5de27caaea453d3f9d5f1f1b9c47278bdde6799fa1a7d3527a00d9e8",
-      "uxItems": []
+      "sourceDigest": "sha256:803a254e71fdbb2e119642410bdf2306acb2c3816f74a792152387c878651742",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-10-11"
+    },
+    {
+      "id": "D3704",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a670ab9478a09b90f21f10ab50e338d39450184c2bb85d8e5271206da8c38ec8",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

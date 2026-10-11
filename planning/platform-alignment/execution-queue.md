@@ -6,15 +6,27 @@
 
 ## Attack qualification checkpoint — 2026-10-11
 
+[[D3704]] is **DONE LOCALLY**, evidence-foundation: the aggregate retains the 213-case predecessor
+and separately verifies the sixteen additions and full 229-case successor through real operations.
+The original normal run's 129-versus-137 failure remains recorded. Complete normal
+`make verify-awake build` now exits zero: 4,796 software, seven performance and 247 content checks,
+clean types, governance, packaging and build. D3702/D3703 retain their unknown intermittent causes;
+their failure-only diagnostics replace no catalogue, validator or provider. No fresh browser,
+paired remote green, source/eligibility change, official graduation or whole capability follows.
+
 [[D3701]] is **DONE LOCALLY FOR THREE CASE ARMS**, under accepted semantic-validation-authority
 Slice B. Sixteen both-colour direct-count/loose-omission cases and nineteen permanent
 controls preserve every predecessor record and distinguish geometric attack from legal
 capture. Focused 211 cases, all 229 canonical cases, workspace types and a separate normal
 build pass. The broader foundation run fails one unchanged application-setup hook. The
 full normal software run reports five castling failures and one Review failure before
-explicit interruption (exit 130). [[D3702]] and [[D3703]] are **TODO**, release-engineering:
+explicit interruption (exit 130). [[D3702]] and [[D3703]] are **DOING**, release-engineering:
 locate the castling construction delay and the Review failure's actual diagnostic before
-claiming a cause or repair; duration alone is not a cause. No full gate pass follows.
+claiming a cause or repair; duration alone is not a cause. Failure-only diagnostics now observe
+real catalogue setup and the actual Review HTTP phases. The unchanged focused gates pass
+118 castling/candidate and 88 Review checks, followed by clean types. These repeats do not
+diagnose or retire the original failures. The separate full D3704 follow-up above is now green;
+it does not discharge those two defects.
 Only three missing case arms close; orientation, whole-subject
 qualification, source adoption, learner permissions and official content remain open.
 

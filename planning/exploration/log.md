@@ -25477,3 +25477,32 @@ Campaign was the one capability with no API, route or content. Now:
   browser 37795549157 fails. Local repairs are still unpushed. No exact-revision remote green,
   native image recovery, capability/milestone promotion, official-content, deployment or release
   is claimed. Protected intent and immutable archives are unchanged; the full 1.0 goal stays active.
+
+## 2026-10-11 — finish-up aggregate repair and failure diagnostics
+
+- D3702/D3703 move to doing under release-engineering. Castling records real catalogue-loader
+  start/settled phases on failure; Review records application/listen/auth/import/evidence,
+  Analyze, retry and Compare phases. Acquisition, validators, providers, application ownership
+  and deadlines remain unchanged. Existing focused gates pass 118 castling/candidate and 88
+  Review checks, followed by clean types. Passing repeats are not a cause diagnosis.
+- The completed first normal software run reports exactly one failure and 4,795 passes over
+  371 files: semantic-validation.test.ts still expects 129 positives and receives 137. D3704
+  records and repairs this missed integration. The aggregate retains predecessor 213/129/84,
+  separately checks the sixteen additions (eight positive/eight negative), and requires complete
+  successor 229/137/92. All cases execute through their production operations; the independent
+  geometry, authority refusals and frozen predecessor digest remain.
+- The initial staged follow-up stops before software tests on stale D3702/D3703 roadmap anchors.
+  Their actual current references are reconciled, not bypassed. The final normal
+  make verify-awake build exits zero: 4,796 software checks/371 files, seven isolated performance
+  checks/four files, 247 real-content checks/25 files, types, governance, packaging and build.
+  The existing large web-chunk warning remains. No budget, assertion, retry or skip is weakened.
+- D3704 closes with path-backed proof; D3702/D3703 retain their original failures and unknown
+  causes. The existing roadmap/queue/receipt/state registries carry the current result, not a
+  new work document or raw recording. There are 1,720 live ledger items, all assigned, and
+  1,572 done; 462 historical prose-only closures remain weaker than current execution proof.
+  UX remains 273 completed/272 live/24 retired. All fourteen whole capabilities are incomplete,
+  nine milestones remain four active/five blocked, 86 production packs have zero official
+  graduates, and semantic validation remains 229 cases/81 subjects/zero fully qualified subjects.
+- No fresh browser run, paired exact-revision remote CI, publication, deployment, native image
+  recovery or whole capability/release completion is claimed. Protected intent and immutable
+  archives are unchanged. The full 1.0 goal stays active; the requested overview is a checkpoint.
