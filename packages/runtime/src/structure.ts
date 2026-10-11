@@ -688,7 +688,11 @@ export function renderStructuralObservationChange(value: StructuralObservation):
   return `${subject.charAt(0).toUpperCase()}${subject.slice(1)} appeared${suffix === "" ? "" : ` ${suffix}`}.`;
 }
 function canonicalObservations(values: readonly StructuralObservation[]): readonly StructuralObservation[] {
-  return Object.freeze([...values].sort((a, b) => STRUCTURAL_FEATURE_KINDS.indexOf(a.kind) - STRUCTURAL_FEATURE_KINDS.indexOf(b.kind) || observationKey(a).localeCompare(observationKey(b))));
+  // Decorate once: comparison sort previously serialized the same operands repeatedly.
+  // Preserve the exact kind order, locale comparison and stable ties, returning original values.
+  const keyed = values.map((value) => ({ value, kind: STRUCTURAL_FEATURE_KINDS.indexOf(value.kind), key: observationKey(value) }));
+  keyed.sort((a, b) => a.kind - b.kind || a.key.localeCompare(b.key));
+  return Object.freeze(keyed.map(({ value }) => value));
 }
 
 export function structuralReading(fen: string): StructuralReading {

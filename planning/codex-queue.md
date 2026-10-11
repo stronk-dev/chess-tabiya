@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-11 — [[D3300]] now has a production work-reuse correction, not just a
+profile. Complete before-position controller indexes are reused privately and
+structural sort keys are computed once. Eleven permanent controls include three
+predecessor failures; 74 focused checks and types pass. Twenty-four counterbalanced
+fresh-process pairs preserve every event, factory/input receipt and projected row;
+summed cold time is 4.91% lower locally. No collector, alternative, denominator,
+source, seal, content or derivation revision is removed. Residual cold cost remains
+open; do not commission the delivered bounded drain or prefix reuse again.
+Receipt: planning/longitudinal-store/d3300-index-reuse-2026-10-11.md.
+Final normal serial verification/build/all browser tiers exit zero: 4,891 software,
+seven performance, 255 content and 302 browser cases, one existing optional skip,
+zero retries and all 150 input/112 composition cells. The initial stale generated
+validation refusal was repaired by its normal generator; all 289 cases still pass,
+zero subjects qualify. D3300 returns to TODO for residual cold cost, not done.
+No current-revision remote CI or release-image result is implied.
+
 2026-10-11 — [[D3300]] is re-measured, not closed. Fresh-process revision-4
 projection over the real 80-ply arm takes 3.26–4.27 s across both sides/three observations;
 warm repeats take about 20 ms. All 2,199 legal edges and 196,589 semantic events remain,

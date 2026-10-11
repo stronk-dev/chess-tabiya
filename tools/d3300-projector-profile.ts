@@ -2,16 +2,19 @@
 // Measure the actual complete semantic population. Raw CPU recordings never leave memory.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { Session } from "node:inspector";
 import { arch, cpus, loadavg, platform } from "node:os";
 import { performance } from "node:perf_hooks";
+import { localSemanticEvents } from "@chess-tabiya/runtime";
 
 import { projectObservations, RUNTIME_POPULATION_DEPENDENCIES } from "../apps/server/src/longitudinal-projector.js";
 import { OBSERVATION_DERIVATION_REV } from "../apps/server/src/longitudinal-registry.js";
 import { sealLongitudinalSourceImageV4 } from "../apps/server/src/longitudinal-source.js";
 import { importedRun } from "../apps/server/src/longitudinal-test-fixtures.js";
 import { parsePgnMainline } from "../apps/server/src/pgn-import.js";
+import { evidenceValueReceipt } from "../packages/runtime/src/evidence-contract.js";
 
 type ProfileNode = { id: number; callFrame: { functionName: string }; children?: number[] };
 type Profile = { nodes: ProfileNode[]; samples: number[]; timeDeltas: number[] };
@@ -40,6 +43,7 @@ function summarize(profile: Profile) {
 }
 
 assert.match(process.version, /^v24\./u, "use the pinned Make toolchain");
+assert.equal(RUNTIME_POPULATION_DEPENDENCIES.events, localSemanticEvents, "the instrument must use the production closure");
 const pgn = readFileSync("tools/r2-selection-harness/imported-sample.pgn", "utf8");
 let moves: string[] | undefined;
 for (const game of pgn.split(/\n(?=\[Event )/u)) {
@@ -49,6 +53,31 @@ for (const game of pgn.split(/\n(?=\[Event )/u)) {
   } catch { /* same fixed-corpus selection as the worker performance contract */ }
 }
 assert(moves, "the retained corpus must contain the real 80-ply performance arm");
+if (process.argv[2] === "compare") {
+  const baseline = "tools/dist/d3300-projector-before.mjs";
+  const rows = [];
+  for (const side of ["white", "black"] as const) {
+    const samples = [];
+    for (const order of [[baseline, process.argv[1]!], [process.argv[1]!, baseline], [baseline, process.argv[1]!], [process.argv[1]!, baseline]]) {
+      const pair = order.map((entry) => ({ entry, result: JSON.parse(execFileSync(process.execPath, [entry, "measure", side], {
+        encoding: "utf8", timeout: 60_000,
+      })) }));
+      const before = pair.find((sample) => sample.entry === baseline)!.result;
+      const after = pair.find((sample) => sample.entry !== baseline)!.result;
+      assert.equal(after.outputDigest, before.outputDigest, "whole projected rows changed");
+      assert.equal(after.populationDigest, before.populationDigest, "complete events/receipts changed");
+      assert.equal(after.edges, before.edges);
+      assert.equal(after.semanticEvents, before.semanticEvents);
+      assert.equal(after.decisions, before.decisions);
+      samples.push({ beforeMs: before.coldMs, afterMs: after.coldMs, ratio: after.coldMs / before.coldMs });
+      console.log(JSON.stringify({ side, ...samples.at(-1), exactRowsEventsAndReceipts: true }));
+    }
+    rows.push({ side, samples });
+  }
+  mkdirSync(".cache", { recursive: true });
+  writeFileSync(".cache/d3300-projector-comparison.json", `${JSON.stringify({ measuredAt: new Date().toISOString(), rows }, null, 2)}\n`);
+  process.exit(0);
+}
 // Cold means a fresh process, not merely an empty membership cache after warming all readings.
 // Separate profiled/unprofiled children prevent profiler overhead being mistaken for latency.
 if (process.argv[2] === undefined) {
@@ -57,7 +86,7 @@ if (process.argv[2] === undefined) {
     const profile = JSON.parse(execFileSync(process.execPath, [process.argv[1]!, "profile", side], { encoding: "utf8", timeout: 60_000 }));
     const row = { ...measure, profiledMs: profile.profiledMs, cpu: profile.cpu };
     console.log(JSON.stringify({ side, edges: row.edges, semanticEvents: row.semanticEvents,
-      coldMs: row.coldMs, warmMs: row.warmMs, uncachedMs: row.uncachedMs }));
+      coldMs: row.coldMs, warmMs: row.warmMs, uncachedVerificationMs: row.uncachedVerificationMs }));
     return row;
   });
   const report = { purpose: "D3300 full-population CPU measurement, not release proof", measuredAt: new Date().toISOString(),
@@ -87,10 +116,19 @@ try {
       ? [{ eventSeq: event.seq, nodeId: event.data.node.id, learnerId: "profile-owner" }] : []),
   });
   let edges = 0, events = 0;
+  let fingerprinting = false;
+  const populationHash = createHash("sha256");
   const dependencies = Object.freeze({ ...RUNTIME_POPULATION_DEPENDENCIES,
     events: (...args: Parameters<typeof RUNTIME_POPULATION_DEPENDENCIES.events>) => {
-      const result = RUNTIME_POPULATION_DEPENDENCIES.events(...args);
+      const result = localSemanticEvents(...args);
       edges++; events += result?.length ?? 0;
+      if (fingerprinting) {
+        // Compare actual results, not source files or tracking metadata. No dumps are stored.
+        populationHash.update(JSON.stringify({ edge: args, events: result.map((event) => ({
+          event, receipt: evidenceValueReceipt(event.evidence),
+          inputs: event.derivationInputs.map((input) => evidenceValueReceipt(input)),
+        })) }));
+      }
       return result;
     },
   });
@@ -106,6 +144,7 @@ try {
   const warmMs = performance.now() - started;
   started = performance.now();
   edges = 0; events = 0;
+  fingerprinting = true;
   const uncached = projectObservations(image, { dependencies });
   const uncachedMs = performance.now() - started;
   assert.equal(JSON.stringify(uncached), JSON.stringify(cold));
@@ -115,6 +154,7 @@ try {
   assert(edges > checkpoints.length && events > edges, "a complete real semantic population must actually be collected");
   assert(cold.observations.length > 0 && cold.denominators.length > 0, "do not profile an empty/ineligible history");
   console.log(JSON.stringify({ side, plies: moves.length, decisions: checkpoints.length, edges, semanticEvents: events,
-    uncachedMs, coldMs, warmMs, rowsByteIdentical: true, checkpointsPreserved: true,
+    uncachedVerificationMs: uncachedMs, coldMs, warmMs, rowsByteIdentical: true, checkpointsPreserved: true,
+    outputDigest: createHash("sha256").update(JSON.stringify(cold)).digest("hex"), populationDigest: populationHash.digest("hex"),
     ...(profile === undefined ? {} : { profiledMs: coldMs, cpu: summarize(profile) }) }));
 } finally { session.disconnect(); }

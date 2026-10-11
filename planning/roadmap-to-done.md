@@ -69,6 +69,22 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
+[[D3300]]'s output-preserving follow-up now eliminates repeated controller-index
+construction and structural sort-key serialization in the shared production
+collectors. Eleven permanent controls include three predecessor failures. All 24
+counterbalanced cold pairs preserve complete events, factory/input receipts and
+projected rows, retaining every legal alternative and decision checkpoint; summed
+cold time is 4.91% lower locally. This is incremental implementation progress, not
+a portable speed guarantee or completed cold-cost obligation. No primitive,
+authority, content or derivation revision changes. Receipt:
+`planning/longitudinal-store/d3300-index-reuse-2026-10-11.md`.
+Final normal serial verification/build passes 4,891 software/375 files, seven
+performance/four files, 255 content/26 files and 302 browser cases across all tiers;
+one existing optional skip, zero retries, all 150 input/112 composition cells and
+clean types/governance/packaging. Generated validation was refreshed after its
+initial stale-file refusal; 289 cases still pass and zero subjects qualify.
+D3300 retains its remaining cold-cost TODO; no whole release gate advances.
+
 [[D3300]] fresh-process projection measurement distinguishes the remaining cold
 cost from delivered prefix reuse and bounded drain: the real 80-ply arm takes
 3.26–4.27 s across both sides/three observations versus about 20 ms warm, retaining

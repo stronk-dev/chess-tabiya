@@ -139,6 +139,13 @@ Campaign data is content. Both tiers run in `make verify` and their existing Git
 `make application-readiness-check` also selects each suite's declared tier explicitly, with
 the process suite's original deadlines retained.
 
+`make collector-index-check` runs collector reuse/output controls and the existing
+square-control, structural and semantic suites. Its work-count regressions do not
+depend on wall-clock thresholds. For disposable cost investigation, capture the
+unmodified bundle with `make longitudinal-projector-baseline` **before editing**,
+then run `make longitudinal-projector-compare`; it compares complete result data in
+fresh processes. Both bundles and the small aggregate stay ignored, outside CI.
+
 `make semantic-tactics-check` runs the existing semantic and special-move tactic suites,
 including legal recapture-promotion defence duties and both-colour blocked-line controls.
 Both files also run in the normal software CI gate and `make evidence-foundation-check`.

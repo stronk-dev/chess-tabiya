@@ -2107,6 +2107,19 @@ longitudinal-projector-profile:
 	./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-profile.mjs --log-level=warning
 	$(CI_NODE) tools/dist/d3300-projector-profile.mjs
 
+.PHONY: longitudinal-projector-baseline longitudinal-projector-compare
+# Capture the unmodified implementation before a cost repair; both bundles remain ignored.
+longitudinal-projector-baseline:
+	./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-before.mjs --log-level=warning
+
+longitudinal-projector-compare:
+	./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-profile.mjs --log-level=warning
+	$(CI_NODE) tools/dist/d3300-projector-profile.mjs compare
+
+.PHONY: collector-index-check
+collector-index-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/collector-index-reuse.test.ts packages/runtime/src/square-control.test.ts packages/runtime/src/structure.test.ts packages/runtime/src/semantic-evidence.test.ts
+
 .PHONY: longitudinal-worker-start-check
 longitudinal-worker-start-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-worker-start.test.ts

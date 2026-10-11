@@ -95,6 +95,12 @@ aggregate, never raw CPU recordings. See
 These timings isolate the projector, not HTTP/queue/database latency. Cold cost
 remains open; locating the cost does not prove further output-preserving improvement
 impossible or authorize narrowing the evidence contract.
+The output-preserving D3300 follow-up reuses one before-position's four private
+square-control indexes and serializes structural sort keys once per observation.
+Exact full-event/receipt and projected-row comparison over both players is unchanged;
+24 fresh-process cold pairs show a modest 4.91% summed-time reduction on the loaded
+development host, with one slower pair. This is not cold-cost completion or a changed
+derivation revision. See `planning/longitudinal-store/d3300-index-reuse-2026-10-11.md`.
 Growing prefixes now reuse complete local v1 projection/sign memberships for exact
 before-FEN/move/after-FEN tuples. The worker retains at most 4,096 immutable entries, FIFO;
 clock fields remain part of identity, failures are recollected, and injected collectors stay

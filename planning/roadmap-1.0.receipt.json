@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f3c0ddb488e14a9ec079d757ca0cddd566fa12ff1bf4eb158162b561f4975029",
+    "roadmap": "sha256:140f6f95001804d2ea7eabda5bc3a9b20a862d786947c7e980db072b6be8ba39",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:dee4a92b0b5684aa6480d04ee2c10cea52faae8dac15fcf0b66a3f11e6c76f96",
+    "workState": "sha256:5e0546fd25da2b96cc2d08d875ce2e95215687f0f332f9ab92e9bccbb0d538d8",
     "rfcRegister": "sha256:02b90e27cbe7f9ffa1ff8b5408909c02fa55587db0f80ca13283ea9d93baacf5",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -1033,8 +1033,8 @@
       ],
       "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
       "latestCheckpoint": {
-        "at": "2026-10-10",
-        "summary": "D3683 repairs failed longitudinal startup ownership under implementing longitudinal-store §C: one-shot refusal waits for worker termination before application cleanup closes storage; late ready/progress frames cannot replace the first failure. All six permanent real-thread regressions fail on the predecessor, including actual file-backed application cleanup; all six now pass with 65 existing projector/ready/crash/drain controls and clean workspace types. Projection output, leases, retry limits, storage formats and the two-second drain grace are unchanged. Complete normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4594 software cases/366 files, seven unchanged-budget performance cases/four files, 247 content cases/25 files and 285 browser cases, one optional Maia skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging/build. Final focused startup checks and types pass on the final test bytes. D3300 cold projection, D3591 intermittent performance attribution, source/consumer discharges, catalogue progression and full recovery remain open. No capability, milestone, source qualification, remote CI or release-image promotion.",
+        "at": "2026-10-11",
+        "summary": "D3300 eliminates repeated before-position controller indexes and structural sort-key serialization under implementing longitudinal-store's complete-population/output-equality contract. Eleven permanent controls include three predecessor failures; 74 focused checks and types pass. All 24 counterbalanced fresh-process pairs preserve complete events, factory/input receipts and projected rows; summed cold time is 4.91% lower locally, not a portable guarantee or completed cold-cost obligation. All alternatives, denominators, checkpoints, seals and revision 4 remain. D3683's six real-thread startup/cleanup regressions and bounded two-second drain remain delivered. Complete normal serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 4891 software cases/375 files, seven performance cases/four files, 255 content cases/26 files and 302 browser passes, one existing optional Maia skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging/build. Generated validation was refreshed after its initial stale-file refusal; all 289 cases pass and zero subjects qualify. Residual cold projection, historical intermittent causes, source/consumer discharges, catalogue progression and built-image/cross-version recovery remain open. No whole capability, milestone, source qualification, remote CI or release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
@@ -1056,6 +1056,10 @@
           "apps/server/src/longitudinal-worker.test.ts",
           "apps/server/src/longitudinal-worker-start.test.ts",
           "apps/server/src/longitudinal-worker.ts",
+          "packages/runtime/src/square-control.ts",
+          "packages/runtime/src/structure.ts",
+          "packages/runtime/src/collector-index-reuse.test.ts",
+          "planning/longitudinal-store/d3300-index-reuse-2026-10-11.md",
           "docs/longitudinal-store.md",
           "rfc/longitudinal-store.md",
           "rfc/campaign-core.md",
@@ -1087,6 +1091,11 @@
             "kind": "work_state",
             "id": "D3683",
             "digest": "sha256:2a995bfe9f0467f0ef225b054cd8ed7924bc18ff4eab2a535f60a23ef72caf9a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3300",
+            "digest": "sha256:6d1f6ae2354d4322e852a5469655e8081a862119de77ad33ca21128dc6a85145"
           },
           {
             "kind": "rfc",

@@ -118,10 +118,27 @@ function edgeKey(target: SquareName, controller: SquareController): string {
   return `${target}:${controller.square}:${controller.piece.color}:${controller.piece.role}:${controller.piece.promoted ? 1 : 0}`;
 }
 
-function edges(squares: readonly ControlledSquare[]): Map<string, { readonly target: SquareName; readonly controller: SquareController }> {
+type ControllerEdges = ReadonlyMap<string, { readonly target: SquareName; readonly controller: SquareController }>;
+
+function edges(squares: readonly ControlledSquare[]): ControllerEdges {
   const result = new Map<string, { readonly target: SquareName; readonly controller: SquareController }>();
   for (const square of squares) for (const controller of square.controllers) result.set(edgeKey(square.target, controller), { target: square.target, controller });
   return result;
+}
+
+// A legal-alternative census compares many children with the same complete before reading.
+// Reuse only that reading's four private pseudo/legal indexes, not every after-position map.
+// The source reading is recursively frozen by memoByInput; maps never escape or mutate.
+// Replacing this single entry releases all previous indexes, irrespective of the FEN cache size.
+let indexedBefore: { readonly reading: SquareControlReading; readonly maps: Map<readonly ControlledSquare[], ControllerEdges> } | undefined;
+function beforeEdges(reading: SquareControlReading, squares: readonly ControlledSquare[]): ControllerEdges {
+  if (indexedBefore?.reading !== reading) indexedBefore = { reading, maps: new Map() };
+  let index = indexedBefore.maps.get(squares);
+  if (index === undefined) {
+    index = edges(squares);
+    indexedBefore.maps.set(squares, index);
+  }
+  return index;
 }
 
 /** Exact controller-edge deltas. Legal deltas abstain per color when either complete set is unavailable. */
@@ -146,7 +163,7 @@ export function squareControlEvents(beforeFen: string, moveUci: string, afterFen
       ["pseudo", left.pseudo, right.pseudo],
       ...(left.legal.kind === "available" && right.legal.kind === "available" ? [["legal", left.legal.squares, right.legal.squares] as const] : []),
     ] as const) {
-      const leftEdges = edges(leftSquares), rightEdges = edges(rightSquares);
+      const leftEdges = beforeEdges(before, leftSquares), rightEdges = edges(rightSquares);
       for (const [key, value] of rightEdges) if (!leftEdges.has(key)) events.push(Object.freeze({ beforeFen: before.fen, moveUci: canonicalMove, afterFen: after.fen, color, mode, sign: "gained", ...value }));
       for (const [key, value] of leftEdges) if (!rightEdges.has(key)) events.push(Object.freeze({ beforeFen: before.fen, moveUci: canonicalMove, afterFen: after.fen, color, mode, sign: "lost", ...value }));
     }
