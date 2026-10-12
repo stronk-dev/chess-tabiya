@@ -79,3 +79,37 @@ Canonical description: `docs/provider-health.md`.
 `planning/platform-alignment/provider-health-intent-amendment-2026-09-24.md` reports two intent
 sentences that the tree has now falsified (`design/02:73`, `design/03:330`, "capabilities stay green
 on Maia loss").
+
+## 2026-10-12 — D3751/D3752 live recovery correction
+
+The original raw-run failure notice inserted above the workspace shifts the phone board
+187.56 px; the old width-only browser assertion misses it. The notice, cached response and
+session-change disclosure now use the existing Actions companion. Phone failure opens its
+existing modal, without another sheet or layout sibling. The actual chosen mode controls live
+status/model-limit copy; no recorded band/profile is borrowed by an in-memory mode change.
+
+Five initial mounted/status controls fail on the predecessor and all three original viewport
+pause checks fail when strengthened to full rectangles. Nineteen focused controls and clean
+types pass after repair. Six lifetime cases cover successful change/Retry, another pause,
+navigation, teardown and user focus; repeated clicks issue one request. Ten native browser
+journeys pass: retry and engine→second failure→human→reload at phone/tablet/desktop, plus
+saved-reply disclosure at all three viewports and provider-off corpus/settings. The saved-reply
+fixture adds the existing transport header to an actual application-selected move; it proves
+client disclosure, not backend cache admission. A visible Actions badge, announcement and tab
+description retain that disclosure with the companion collapsed; no unsolicited modal opens.
+The browser reads a populated `run.started` policy and checks it
+unchanged after both switches and reload. Geometry is measured while paused; all 64 physical
+square centers and semantic-grid focus are checked after the phone modal releases inertness.
+
+No schema, provider selection, saved policy, event or calibration change; durable recovery
+and the provider-health release discharges remain open. Full-gate closeout is recorded in the
+existing exploration log and roadmap, not a new capture or work register.
+
+Final ordinary serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+5,237 software/384 files, seven unchanged-budget performance/four files, 255 content/26 files,
+clean types/governance/packaging/build and 345 browser passes (280 smoke, five content, 59 matrix,
+one packaged-production), one existing optional Maia skip, zero retries, all 150 input/112
+unretried composition cells. Earlier full attempts fail the unchanged label sweep and
+learner-rating dependency isolation; renaming the rendered label and removing its unnecessary
+controller type import repairs them without weakening either check. Latest published GitHub
+browser readiness remains red under D3600; these local results do not discharge it.

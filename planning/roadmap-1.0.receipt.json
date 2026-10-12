@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d178bed7ac8a83e12b5dd87fa7c869aeace0ec0d75bfb5dd4ca1db19840890ef",
+    "roadmap": "sha256:ad0a983aa07316884a3c85f25e275e418960ef87abfb8819f1a6466f898fbd1c",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:1ce2c80f3697aa85d5c54927658dfa8465e782905269e54e6e364b92d138ddee",
+    "workState": "sha256:9e707cefe5ad3059f47cc3793b9b94449e07044671d09def2ea18b963e6efc24",
     "rfcRegister": "sha256:c7fd996d0eff48225b3fbcf51ef35021123e24d105a2d14be10eeb10df60d990",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 633,
       "doing": 16,
       "blocked": 1075,
-      "done": 1614,
+      "done": 1617,
       "refused": 161
     },
     "workItems": {
@@ -413,10 +413,13 @@
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
         "at": "2026-10-12",
-        "summary": "D3744 binds ordinary module selectors/cards and Guided Hint to registered learner questions. Tablet selectors retain compact labels and full accessible questions; native expansion, delivered-fact badges, request/rung state and board geometry stay intact. Eight predecessor controls fail; 258 affected checks/types/build and three real browser journeys pass, including maximum load at seven viewports and desktop/phone recognized-theory return. INR-a1, D1454 and D3744 are path-backed done; historical producer controls remain in the explicit Inspector. Fresh full software passes 5212/383 files, seven unchanged-budget performance and 255 content checks. First smoke exposes eight stale feature-name selectors and is interrupted; corrected exact-question selectors retain all behavioral assertions. Fresh normal all-four-tier browser CI exits zero: 338 passes, one existing optional skip, zero retries and 112 successful unretried composition cells, including packaged default. D3741-D3743's preset/focus/delivery controls stand. No evidence, permission, pack or saved-state change; useful selection, source contracts, owner use, intermittent causes and whole-capability/remote-CI/release obligations remain.",
+        "summary": "D3751/D3752 repair raw-opponent recovery under accepted provider-health/play-composition contracts: live status names the chosen session mode and restores recorded-policy copy after reload; pause/cache/change notices move into the existing companion. The predecessor pause moves the phone board 187.56 px while the old width-only check passes. Nineteen focused software controls and clean types pass, including repeated clicks, failed retry, navigation, teardown and focus ownership. Ten native browser journeys pass: phone/tablet/desktop retry and repeat failure/change-back/reload, populated immutable recorded policy, fixed board x/y/width/height, modal release, 64 physical square centers and semantic-grid focus, saved-reply disclosure at all three viewports and provider-off corpus/settings. Cached browser fixtures prove client disclosure over an actual selected move, not backend admission. D3744's registered learner-question labels and D3741-D3743's preset/focus/delivery controls remain delivered. Full ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,237 software/384 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 345 browser passes (280 smoke, five content, 59 matrix, one packaged-production), one existing optional Maia skip, zero retries, all 150 input/112 unretried composition cells. Initial label/isolation failures are repaired without weakening checks. No schema, source, permission, saved-policy, calibrated strength, durable recovery, whole-capability, remote-CI or release promotion; published D3600 warm-readiness remains red.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/preset-menu.ts",
+          "apps/web/src/lib/opponent-copy.test.ts",
+          "tests/browser/provider-health.spec.ts",
+          "docs/provider-health.md",
           "apps/web/src/lib/module-seats.test.ts",
           "apps/web/src/lib/preset-menu.test.ts",
           "apps/web/src/lib/AssistanceSettings.test.ts",
@@ -1931,7 +1934,7 @@
         ],
         "experience": [
           "partial",
-          "The stable board, compiled learner modules, preset-driven seats and Guided Hint ship through the production module query; complete emitter coverage, Inspector fidelity, hint defaults and all-context honest-empty journeys remain."
+          "The stable board, compiled learner modules, preset-driven seats and Guided Hint ship through the production module query. D3752 seats raw-opponent pause/cache/change notices in the existing companion, preserving the full board rectangle through native recovery. Complete emitter coverage, Inspector fidelity, hint defaults and all-context honest-empty journeys remain."
         ],
         "defaults": [
           "blocked",
@@ -2108,7 +2111,7 @@
         ],
         "experience": [
           "partial",
-          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Pack attachment now resolves the saved run's retained document under its read grants. Names/assets, measured personality, opening routes and per-bot history/Review remain. D1416 defers bot tournaments/leagues past 1.0; D1520 retains tournament-ready architecture, not event delivery, as a 1.0 constraint."
+          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Pack attachment now resolves the saved run's retained document under its read grants. D3751 names the actual raw-run session mode after failure/change-back and restores the immutable recorded-policy copy on reload; this is not durable recovery or calibrated identity. Names/assets, measured personality, opening routes and per-bot history/Review remain. D1416 defers bot tournaments/leagues past 1.0; D1520 retains tournament-ready architecture, not event delivery, as a 1.0 constraint."
         ],
         "defaults": [
           "blocked",

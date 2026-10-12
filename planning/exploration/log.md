@@ -26964,3 +26964,49 @@ Campaign was the one capability with no API, route or content. Now:
   useful selection, bot calibration, Campaign curriculum/rewards, expanded image recovery and
   full release journeys remain open. No whole capability/milestone or remote CI is promoted;
   nothing is pushed and the full 1.0 goal remains active.
+
+## 2026-10-12 — D3751/D3752 opponent recovery closeout and D3753 inventory correction
+
+- Raw opponent recovery previously changed the controller's session mode while status,
+  announcements and material-limit copy continued naming the recorded policy. D3751 now
+  projects that existing override without borrowing a saved model band/profile. Actual native
+  phone/tablet/desktop journeys switch human→engine→human through repeated failure, compare
+  the populated `run.started` policy unchanged and reload into recorded-policy copy. No event,
+  provider selection, bot profile, calibrated personality or durable recovery change.
+- D3752 moves failure, cached-reply and session-change notices into the existing Actions
+  companion. The predecessor phone pause moves the board 187.56 px despite passing the old
+  width-only check; all three strengthened predecessor viewport checks fail. Full rectangles
+  now survive pause, Retry, mode changes and saved disclosure. A collapsed Actions badge and
+  accessible announcement retain cached disclosure without opening an unsolicited modal.
+  Nineteen focused controls include single-flight, failed retry, navigation, teardown and
+  user-owned focus. Ten native journeys pass; after modal inertness releases, all 64 physical
+  square centers are hittable and the semantic board owns focus. Cached browser fixtures add
+  the existing response header over an actual selected move; they do not prove server admission.
+- Earlier complete runs stop at unchanged label-sweep and learner-rating isolation checks.
+  The rendered label is renamed and its unnecessary controller type import removed; no
+  allowlist, threshold, timeout or retry is weakened. Final ordinary serial
+  `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero: 5,237 software/
+  384 files, seven unchanged-budget performance/four files, 255 content/26 files, clean
+  types/governance/packaging/build and 345 browser passes (280 smoke, five content, 59 matrix,
+  one packaged-production), one existing optional Maia skip, zero retries, all 150 input
+  cells and all 112 successful unretried composition cells. Existing build warnings remain.
+- D3753 corrects the current inventory: the actual runtime-content planner admits 50 pack
+  documents with 50 distinct ids under the production loader roots, not the 86 previously
+  reported as installed. Candidate documents and browser fixtures are not installed runtime
+  content. Earlier entries remain unchanged as historical claims; no content is removed or
+  graduated. Official graduates remain zero. The roadmap's current overview is corrected.
+- Read-only GitHub checks identify published `c7ec3c3d`: verify succeeds at
+  https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800 and browser fails at
+  https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796. Warm catalogue-to-playable
+  readiness p95/max is 399.2 ms against the unchanged 250 ms budget; all five warm samples
+  exceed it, minimum 280 ms. Each has 41 requests, including one shape catalogue and 25 shape
+  documents. D3600 remains open; these counts locate investigation, not a proved root cause.
+  Local success on unpublished bytes does not clear that failure or qualify a release host.
+- Existing ledger/state/docs/roadmap close this batch together: 3,502 rows, 1,724 live assigned,
+  zero untriaged; 462 historical prose-only closures remain weaker evidence. The 569 UX items
+  remain 276 completed/269 live/24 retired. All fourteen whole capabilities remain incomplete;
+  nine milestones remain four active/five blocked. Two proven state dimensions are not two
+  completed capabilities. Semantic cases remain 343 passing across 81 subjects with zero fully
+  qualified; twelve bot configurations remain uncalibrated; Campaign remains an exposed draft
+  pilot rather than the full curriculum/reward loop. No whole-capability, milestone, remote-CI,
+  content or release promotion; nothing is pushed and the full 1.0 goal remains active.

@@ -45,6 +45,27 @@ async function move(page: Page, from: string, to: string): Promise<void> {
   await page.mouse.up();
 }
 
+async function boardFrame(page: Page): Promise<{ x: number; y: number; width: number; height: number }> {
+  const box = await page.getByLabel("Chessboard").boundingBox();
+  expect(box).not.toBeNull();
+  return box!;
+}
+
+async function expectBoardFrame(page: Page, before: Awaited<ReturnType<typeof boardFrame>>): Promise<void> {
+  const after = await boardFrame(page);
+  for (const key of ["x", "y", "width", "height"] as const) expect(after[key]).toBeCloseTo(before[key], 0);
+}
+
+async function expectPlayableBoard(page: Page): Promise<void> {
+  expect(await page.getByLabel("Chessboard").evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    return Array.from({ length: 64 }, (_, index) => element.contains(document.elementFromPoint(
+      box.x + (index % 8 + .5) * box.width / 8, box.y + (Math.floor(index / 8) + .5) * box.height / 8,
+    ))).every(Boolean);
+  })).toBe(true);
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+}
+
 /** A typed provider failure exactly as the server's error envelope carries it. */
 async function failSelection(route: Route): Promise<void> {
   await route.fulfill({
@@ -85,8 +106,10 @@ for (const viewport of VIEWPORTS) {
     await expect(pause).not.toContainText("process_exit");
     await expect(pause.getByRole("button", { name: "Retry" })).toBeEnabled();
     await expect(pause.getByRole("button", { name: /Change opponent/u })).toBeVisible();
-    const after = (await board.boundingBox())!;
-    expect(after.width).toBeCloseTo(before.width, 0);
+    await expectBoardFrame(page, before);
+    // Phone recovery opens the existing modal companion, not another board-layout sibling.
+    // Its inert board becomes interactive again when recovery returns focus below.
+    if (viewport.name === "phone") await expect(page.getByRole("dialog", { name: "Run companion" })).toBeVisible();
 
     await pause.getByRole("button", { name: "Retry" }).click();
     await expect(pause).toHaveCount(0);
@@ -95,13 +118,29 @@ for (const viewport of VIEWPORTS) {
       const page0 = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: { type: string }[] };
       return page0.events.filter((event) => event.type === "opponent.move_selected").length;
     }).toBe(1);
+    await expectBoardFrame(page, before);
+    await expectPlayableBoard(page);
   });
 }
 
-test("Change opponent plays on against the chosen opponent and says the run record does not retain it", async ({ page }) => {
+for (const viewport of VIEWPORTS) test(`Change opponent names both live modes and reload restores the recorded policy at ${viewport.name} width`, async ({ page }) => {
+  await page.setViewportSize({ width: viewport.width, height: viewport.height });
   await page.goto("/play");
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const before = await boardFrame(page);
+  const runId = page.url().split("/").at(-1)!;
+  const recordedPolicy = async () => {
+    const response = await page.request.get(`/runs/${runId}/events?sinceSeq=0`);
+    expect(response.ok()).toBe(true);
+    const body = await response.json() as { events: { type: string; data: { opponentPolicy?: { mode: string; targetElo?: number } } }[] };
+    const policy = body.events.find((event) => event.type === "run.started")?.data.opponentPolicy;
+    expect(policy).toBeDefined();
+    return policy!;
+  };
+  const originalPolicy = await recordedPolicy();
+  expect(originalPolicy).toMatchObject({ mode: "human_common", targetElo: 1400 });
   let failures = 1;
   const modes: string[] = [];
   await page.route(/\/select-move$/u, async (route) => {
@@ -118,8 +157,63 @@ test("Change opponent plays on against the chosen opponent and says the run reco
   await expect(pause).toBeVisible();
   await pause.getByRole("button", { name: "Change opponent: the engine opponent" }).click();
   await expect(pause).toHaveCount(0);
-  await expect(page.getByTestId("opponent-change")).toHaveText("This session changed opponent after a provider failure; the run record does not retain it.");
+  const notice = page.getByTestId("opponent-change");
+  await expect(notice).toHaveText("Now playing: Engine test · outside the human-like ladder. This session changed opponent after a provider failure; the run record does not retain it.");
+  await expect(notice).toBeFocused();
+  await expect(page.locator("[data-status-announcement]")).toContainText("Engine test · outside the human-like ladder");
+  await expect(page.locator("[data-status-announcement]")).not.toContainText("model settings");
+  await expectBoardFrame(page, before);
   expect(modes).toEqual(["human_common", "strong_engine"]);
+  await page.getByRole("button", { name: "Keep playing", exact: true }).click();
+  await expectPlayableBoard(page);
+  failures = 1;
+  await move(page, "g1", "f3");
+  await expect(pause).toBeVisible();
+  await expectBoardFrame(page, before);
+  await pause.getByRole("button", { name: "Change opponent: a human-style opponent" }).click();
+  await expect(pause).toHaveCount(0);
+  await expect(notice).toHaveText("Now playing: Human-move model · this session. This session changed opponent after a provider failure; the run record does not retain it.");
+  await expect(notice).toBeFocused();
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-move model · this session");
+  await expect(page.locator("[data-status-announcement]")).toContainText("model settings");
+  expect(modes).toEqual(["human_common", "strong_engine", "strong_engine", "human_common"]);
+  expect(await recordedPolicy()).toEqual(originalPolicy);
+  await page.getByRole("button", { name: "Keep playing", exact: true }).click();
+  await expectPlayableBoard(page);
+  await page.reload();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(notice).toHaveCount(0);
+  await expect(page.locator("[data-status-announcement]")).toContainText("Human-move model · band 1400");
+  expect(await recordedPolicy()).toEqual(originalPolicy);
+});
+
+for (const viewport of VIEWPORTS) test(`a saved reply is disclosed without opening or resizing the companion at ${viewport.name} width`, async ({ page }) => {
+  await page.setViewportSize({ width: viewport.width, height: viewport.height });
+  await page.goto("/play");
+  await chooseRawRung(page);
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const before = await boardFrame(page);
+  // Exercise the existing response-header arm over a real application selection, not an
+  // invented move. Server cache admission is covered separately by selector-health tests.
+  await page.route(/\/select-move$/u, async (route) => {
+    const response = await route.fetch();
+    expect(response.ok()).toBe(true);
+    await route.fulfill({ response, headers: { ...response.headers(), "x-tabiya-provider-source": "cached_exact" } });
+  });
+  await move(page, "e2", "e4");
+  await expect(page.locator(".saved-reply-badge")).toBeVisible();
+  await expect(page.locator("[data-status-announcement]")).toContainText("Using a saved response for this position.");
+  await expectBoardFrame(page, before);
+  await expect(page.getByRole("dialog", { name: "Run companion" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Actions", exact: true }).click();
+  await expect(page.getByTestId("opponent-cached")).toHaveText("Using a saved response for this position.");
+  await expectBoardFrame(page, before);
+  const collapse = page.getByRole("button", { name: "Collapse companion", exact: true });
+  if (await collapse.isVisible()) await collapse.click();
+  else await page.getByRole("button", { name: "Support", exact: true }).click();
+  await expectBoardFrame(page, before);
+  await expect(page.locator(".saved-reply-badge")).toBeVisible();
 });
 
 test("provider-off controls stay in place with their reason and a retry affordance", async ({ page }) => {

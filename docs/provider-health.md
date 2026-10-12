@@ -170,7 +170,15 @@ families stay conditional.
   and *Change opponent*, which offers the engine or human-style opponent for the rest of this
   session only. The change is not written to the run. The surface says: "This session changed
   opponent after a provider failure; the run record does not retain it."
-- **Cached reply.** An exact cached reply shows "Using a saved response for this position."
+  Recovery is seated in the existing Actions companion, never inserted above the board. Phone
+  opens the existing modal sheet; recovery and Keep playing return to the preserved board.
+  A session change names the actual chosen mode in its notice and status announcement. Switching
+  back names the human-move mode without borrowing the original policy's band or claiming measured
+  strength. Reload clears the override and restores recorded-policy copy. Controls are single-flight;
+  completion does not steal focus after navigation, teardown or a deliberate focus change.
+- **Cached reply.** The Actions tab retains a visible saved-reply badge even when its companion
+  is collapsed; the status announcement and tab description disclose "Using a saved response for
+  this position." Opening Actions shows that same sentence without another bar or automatic sheet.
 - **Other controls.** Corpus, voice and speech controls stay rendered. A control that is not
   configured shows its reason. A control that fails at runtime shows its reason and a *Retry*
   button.

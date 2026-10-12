@@ -395,6 +395,93 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("D3751 updates live opponent identity and restores recorded copy after session recovery is cleared", async () => {
+    const run = createRun({ id: "session-opponent-copy", session: { kind: "position",
+      start: { fen: "4k3/pp6/8/8/8/8/PP4PP/4K2R w - - 0 1", side: "white" },
+      feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1800 } },
+      sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at });
+    const before = JSON.stringify(run);
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onAssistanceQuery: testAssistanceAuthority,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    try {
+      await tick();
+      component.$set({ opponentChange: { from: "human_common", to: "strong_engine" } }); await tick();
+      expect(document.querySelector("[data-status-announcement]")?.textContent).toContain("Engine test · outside the human-like ladder");
+      expect(document.querySelector("[data-status-announcement]")?.textContent).not.toContain("model settings");
+      expect(document.querySelector('[data-testid="opponent-change"]')?.textContent).toContain("Engine test");
+      component.$set({ opponentChange: { from: "strong_engine", to: "human_common" } }); await tick();
+      expect(document.querySelector("[data-status-announcement]")?.textContent).toContain("Human-move model · this session");
+      expect(document.querySelector("[data-status-announcement]")?.textContent).toContain("model settings");
+      component.$set({ opponentChange: undefined }); await tick();
+      expect(document.querySelector("[data-status-announcement]")?.textContent).toContain("Human-move model · band 1800");
+      expect(document.querySelector('[data-testid="opponent-change"]')).toBeNull();
+      expect(JSON.stringify(run)).toBe(before);
+    } finally { component.$destroy(); }
+  });
+
+  it.each(["pause", "changed", "cached"] as const)("D3752 seats %s in the existing companion rather than the board's layout chain", async (state) => {
+    const run = branchedRun();
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      ...(state === "pause" ? { opponentPause: { reason: "The opponent cannot answer right now.", retryAfterMs: null, mode: "human_common", alternatives: [] }, onRetryOpponent: vi.fn() }
+        : state === "changed" ? { opponentChange: { from: "human_common", to: "strong_engine" } }
+        : { opponentSource: "cached_exact" }),
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    try {
+      await tick();
+      const notice = document.querySelector(`[data-testid="opponent-${state === "pause" ? "pause" : state === "changed" ? "change" : "cached"}"]`)!;
+      expect(notice.closest(".companion-section.action-seat")).not.toBeNull();
+      if (state === "pause") expect(notice.closest(".companion-section")?.classList.contains("compact-active")).toBe(true);
+      if (state === "cached") {
+        expect(document.querySelector(".saved-reply-badge")?.textContent).toContain("saved");
+        expect(document.querySelector("[data-status-announcement]")?.textContent).toContain("Using a saved response for this position.");
+        expect(document.querySelector('.compact-tabs [aria-label="Actions"]')?.getAttribute("title")).toBe("Using a saved response for this position.");
+        expect(notice.closest(".companion-section")?.classList.contains("compact-active")).toBe(false);
+      }
+    } finally { await unmount(component); }
+  });
+
+  it.each(["changed", "retry", "paused", "navigated", "destroyed", "moved-focus"] as const)("D3752 recovery is single-flight and retains focus ownership after %s", async (ending) => {
+    const run = branchedRun();
+    const pause = { reason: "The opponent cannot answer right now.", retryAfterMs: null, mode: "human_common" as const, alternatives: [] };
+    let resolve!: () => void;
+    const pending = new Promise<void>((done) => { resolve = done; });
+    const onRetryOpponent = vi.fn(() => pending);
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onAssistanceQuery: testAssistanceAuthority,
+      opponentPause: pause, onRetryOpponent,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    let destroyed = false;
+    const other = document.createElement("button"); document.body.append(other);
+    try {
+      await tick();
+      const retry = [...document.querySelectorAll("button")].find((button) => button.textContent === "Retry")!;
+      retry.focus(); retry.click(); retry.click(); await tick();
+      expect(onRetryOpponent).toHaveBeenCalledTimes(1);
+      expect(retry.disabled).toBe(true);
+      if (ending === "destroyed") { component.$destroy(); destroyed = true; }
+      else if (ending === "paused") component.$set({ opponentPause: { ...pause, reason: "Still paused" } });
+      else {
+        component.$set({ opponentPause: undefined, ...(ending === "changed" ? { opponentChange: { from: "human_common", to: "strong_engine" } } : {}) });
+        if (ending === "navigated") component.$set({ snapshot: { run: { ...run, id: "another-run" }, access: "writer", pendingEvidence: 0, withheld: false } });
+      }
+      await tick();
+      if (ending === "moved-focus" || ending === "navigated" || ending === "destroyed") other.focus();
+      resolve(); await pending; await tick(); await tick();
+      if (ending === "changed") expect(document.activeElement).toBe(document.querySelector('[data-testid="opponent-change"]'));
+      else if (ending === "retry") expect(document.activeElement).toBe(document.querySelector("[data-board-input-grid]"));
+      else if (ending === "paused") { expect(retry.disabled).toBe(false); expect(document.activeElement).toBe(retry); }
+      else expect(document.activeElement).toBe(other);
+    } finally { if (!destroyed) component.$destroy(); other.remove(); }
+  });
+
   it.each(["button", "shortcut"] as const)("exports the displayed comparison selection through the %s", async input => {
     const run = branchedRun();
     const selected = run.branches.map(branch => branch.id).reverse();

@@ -15,6 +15,19 @@ Do not start a second build or verification process while browser CI serves that
 receive `STATIC_NOT_BUILT`. Such a run is invalid, not an excuse for a timeout increase or a
 retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tiers remain intact.
 
+`make opponent-recovery-check` runs live status, companion placement and single-flight/focus
+controls together with the raw controller's pause/retry/change tests.
+`make opponent-recovery-browser-check` runs native phone/tablet/desktop failure → retry and
+failure → engine → second failure → human → reload journeys. Board x/y/width/height stay fixed
+through recovery; all 64 physical square centers and semantic-grid focus are checked after the
+phone modal companion releases inertness. Tests assert a populated immutable `run.started`
+policy, not a missing graph property. These tests belong to ordinary software/browser CI too;
+they do not prove bot calibration, durable recovery or full provider-off release readiness.
+Saved-response cases retain the actual application-selected move and exercise its existing header
+arm: a collapsed badge and announcement remain visible without auto-opening the companion;
+opening/dismissing the full disclosure preserves the board. Actual cache admission and exactness
+remain server selector-health obligations, not claims earned by this transport fixture.
+
 `make help-style-presentation-check` runs all affected preset/Settings/Campaign/screen tests,
 including all eight admitted choice sets, unchanged declarations/defaults, missing-style
 explanations, restrictions on individual controls, and named/Custom modal focus ownership.

@@ -121,6 +121,13 @@ import-workflow-check:
 import-workflow-browser-check:
 	./node_modules/.bin/playwright test tests/browser/import-workflow.spec.ts
 
+.PHONY: opponent-recovery-check opponent-recovery-browser-check
+opponent-recovery-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/opponent-copy.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/screens.test.ts -t "D3751|D3752|paused opponent|opponent learner copy"
+
+opponent-recovery-browser-check:
+	./node_modules/.bin/playwright test tests/browser/provider-health.spec.ts
+
 test-performance:
 	pnpm test:performance
 

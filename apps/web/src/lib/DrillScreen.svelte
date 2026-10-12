@@ -504,6 +504,24 @@
     if (botReply.layers.some((layer) => layer.action === "degraded")) return "Maia returned a narrower page than this bot expects on the last reply";
     return undefined;
   });
+  const activeOpponentMode = $derived(opponentChange?.to ?? run.opponentPolicy.mode);
+  const activeOpponentLabel = $derived(runOpponentStatus(run.opponentPolicy, opponentChange?.to));
+  let opponentRecoveryPending = $state(false);
+  let opponentRecoveryNotice = $state<HTMLParagraphElement>();
+
+  async function recoverOpponent(event: MouseEvent, task: () => void | Promise<unknown>): Promise<void> {
+    if (busy || opponentRecoveryPending) return;
+    const button = event.currentTarget as HTMLButtonElement, runId = run.id;
+    opponentRecoveryPending = true;
+    try { await task(); }
+    finally { if (seatAlive) opponentRecoveryPending = false; }
+    await tick();
+    if (!seatAlive || run.id !== runId || busy || opponentPause !== undefined
+      || (document.activeElement !== document.body && document.activeElement !== button)) return;
+    // A completed change stays visible; a completed Retry returns to the preserved board.
+    if (opponentRecoveryNotice?.isConnected) opponentRecoveryNotice.focus();
+    else focusBoardFromSupport();
+  }
   let compactViewport = $derived(playViewportClass(viewportSupport.width, viewportSupport.height) === "phone");
   let tabletViewport = $derived(playViewportClass(viewportSupport.width, viewportSupport.height) === "tablet");
   let reflowViewport = $derived(compactViewport && viewportSupport.height > 0 && viewportSupport.height < 680);
@@ -921,11 +939,11 @@
   let assessmentDetail = $derived(grading === undefined ? undefined : assessmentSentence(grading));
   let resistance = $derived([
     ...resistanceSummary(run, currentNode.id, pack),
-    ...(() => { const limit = humanModelMaterialLimit(currentNode.fen, run.opponentPolicy.mode); return limit === undefined ? [] : [limit]; })(),
+    ...(() => { const limit = humanModelMaterialLimit(currentNode.fen, activeOpponentMode); return limit === undefined ? [] : [limit]; })(),
   ]);
   let resistanceDetail = $derived([
     ...resistanceSentences(run, currentNode.id, pack),
-    ...(() => { const limit = humanModelMaterialLimit(currentNode.fen, run.opponentPolicy.mode); return limit === undefined ? [] : [limit]; })(),
+    ...(() => { const limit = humanModelMaterialLimit(currentNode.fen, activeOpponentMode); return limit === undefined ? [] : [limit]; })(),
   ]);
   let checkpointResolution = $derived.by(() => {
     if (
@@ -2417,6 +2435,12 @@
   });
 
   $effect(() => {
+    if (opponentPause === undefined) return;
+    // Required recovery uses the existing Actions seat, never a layout sibling above the board.
+    untrack(() => openCompanion("timeline"));
+  });
+
+  $effect(() => {
     if (!phoneSheetModal) return;
     void tick().then(() => {
       if (companionElement !== undefined && !companionElement.contains(document.activeElement)) companionElement.focus();
@@ -2473,10 +2497,10 @@
   <main class="drill" class:compact={compactViewport} class:reflow={reflowViewport} tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
-      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${runOpponentStatus(run.opponentPolicy)}. ${run.opponentPolicy.mode === "human_common" && run.opponentPolicy.profile === undefined ? HUMAN_MODEL_RUNG_DISCLAIMER : ""}${botReplyNote === undefined ? "" : ` ${botReplyNote}.`} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Watching" : busy ? "Updating" : "Your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Commentary opens at a checkpoint" : ""}`} />
+      <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${activeOpponentLabel}. ${activeOpponentMode === "human_common" && (opponentChange !== undefined || run.opponentPolicy.profile === undefined) ? HUMAN_MODEL_RUNG_DISCLAIMER : ""}${botReplyNote === undefined ? "" : ` ${botReplyNote}.`}${opponentSource === "cached_exact" ? " Using a saved response for this position." : ""} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Watching" : busy ? "Updating" : "Your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Commentary opens at a checkpoint" : ""}`} />
       <div class="status" class:visually-hidden={compactViewport} class:visually-hidden-on-phone={compactViewport} aria-hidden="true">
         <span class="run-name">{pack?.title ?? "Just Play"}</span>
-        <span>{runOpponentStatus(run.opponentPolicy)}</span>
+        <span>{activeOpponentLabel}</span>
         {#if botReplyNote !== undefined}<span class="bot-reply-note">{botReplyNote}</span>{/if}
         <span>{consequenceHorizon(pack)}</span>
         <span class:readonly={snapshot.access === "read_only"}>
@@ -2520,17 +2544,6 @@
 
     {#if busy || rematching || rewindBusy}<span id="bot-rematch-pending" class="visually-hidden">Wait for the current action to finish before starting another game.</span>{/if}
 
-    {#if opponentPause !== undefined}
-      <section class="opponent-pause" role="alert" aria-label="Opponent paused" data-testid="opponent-pause">
-        <p><strong>The opponent is paused.</strong> {learnerProse(opponentPause.reason)} Your move is kept; no opponent move was played for you.</p>
-        <div class="opponent-pause-actions">
-          {#if onRetryOpponent !== undefined}<button type="button" disabled={busy} onclick={() => void onRetryOpponent()}>Retry</button>{/if}
-          {#if onChangeOpponent !== undefined}{#each opponentPause.alternatives as alternative (alternative.mode)}<button type="button" disabled={busy || !alternative.requestable} aria-describedby={alternative.requestable ? undefined : `opponent-alt-${alternative.mode}`} onclick={() => void onChangeOpponent(alternative.mode)}>Change opponent: {alternative.label}</button>{#if !alternative.requestable}<span id={`opponent-alt-${alternative.mode}`} class="honest">{alternative.note}</span>{/if}{/each}{/if}
-        </div>
-      </section>
-    {/if}
-    {#if opponentSource === "cached_exact"}<p class="honest provider-notice" data-testid="opponent-cached">Using a saved response for this position.</p>{/if}
-    {#if opponentChange !== undefined}<p class="honest provider-notice" data-testid="opponent-change">This session changed opponent after a provider failure; the run record does not retain it.</p>{/if}
     {#if error && branchSwitchError === undefined && !campaignEncounter}<p class="error" role="alert">{error}{#if run.opponentPolicy.profile !== undefined && onRetryOpponent !== undefined && snapshot.access !== "read_only"} <button class="retry-opponent" type="button" onclick={() => void onRetryOpponent()}>Ask the bot again</button>{/if}</p>{/if}
     {#if branchSwitchBusy}<p id="branch-switch-status" class="operation-status" role="status">Opening {branchSwitchBusy.label}. Other branch navigation waits until it finishes.</p>{/if}
     {#if branchSwitchError}<p class="error" role="alert">{branchSwitchError}</p>{/if}
@@ -2643,7 +2656,7 @@
           <span class="sheet-handle" aria-hidden="true"></span>
           <button class:active={compactTab === "evidence"} aria-pressed={compactTab === "evidence"} onclick={(event) => openCompanion("evidence", event)}>Support</button>
           <button class:active={compactTab === "branches"} aria-pressed={compactTab === "branches"} onclick={(event) => openCompanion("branches", event)}>Branches</button>
-          <button class:active={compactTab === "timeline"} aria-pressed={compactTab === "timeline"} onclick={(event) => openCompanion("timeline", event)}>Actions</button>
+          <button class:active={compactTab === "timeline"} aria-label="Actions" title={opponentSource === "cached_exact" ? "Using a saved response for this position." : "Run actions"} aria-pressed={compactTab === "timeline"} onclick={(event) => openCompanion("timeline", event)}>Actions{#if opponentSource === "cached_exact"}<small class="saved-reply-badge" aria-hidden="true"> · saved</small>{/if}</button>
           <button class="sheet-close" type="button" aria-label="Collapse companion" onclick={closeCompanion}>Close</button>
         </nav>
 
@@ -2818,6 +2831,21 @@
           </section>
 
           <section class="companion-section action-seat" class:compact-active={compactTab === "timeline"} aria-label="Run actions">
+        {#if opponentPause !== undefined}
+          <section class="opponent-pause" role="alert" aria-label="Opponent paused" data-testid="opponent-pause">
+            <p><strong>The opponent is paused.</strong> {learnerProse(opponentPause.reason)} Your move is kept; no opponent move was played for you.</p>
+            <div class="opponent-pause-actions">
+              {#if onRetryOpponent !== undefined}<button type="button" disabled={busy || opponentRecoveryPending} onclick={(event) => void recoverOpponent(event, onRetryOpponent!)}>Retry</button>{/if}
+              {#if onChangeOpponent !== undefined}{#each opponentPause.alternatives as alternative (alternative.mode)}<button type="button" disabled={busy || opponentRecoveryPending || !alternative.requestable} aria-describedby={alternative.requestable ? undefined : `opponent-alt-${alternative.mode}`} onclick={(event) => void recoverOpponent(event, () => onChangeOpponent!(alternative.mode))}>Change opponent: {alternative.label}</button>{#if !alternative.requestable}<span id={`opponent-alt-${alternative.mode}`} class="honest">{alternative.note}</span>{/if}{/each}{/if}
+            </div>
+          </section>
+        {/if}
+        {#if opponentSource === "cached_exact"}<p class="honest provider-notice" data-testid="opponent-cached">Using a saved response for this position.</p>{/if}
+        {#if opponentChange !== undefined}
+          <!-- svelte-ignore a11y_no_noninteractive_tabindex (completed recovery owns focus after its button retires) -->
+          <p class="honest provider-notice" tabindex="-1" bind:this={opponentRecoveryNotice} data-testid="opponent-change">Now playing: {activeOpponentLabel}. This session changed opponent after a provider failure; the run record does not retain it.</p>
+          <button type="button" disabled={busy || opponentRecoveryPending} onclick={focusBoardFromSupport}>Keep playing</button>
+        {/if}
         {#if campaignEncounter && error && branchSwitchError === undefined}
           <p class="campaign-action-error" role="alert">{error}</p>
         {/if}

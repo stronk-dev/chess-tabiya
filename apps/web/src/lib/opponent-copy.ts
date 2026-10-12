@@ -31,7 +31,11 @@ export function humanModelMaterialLimit(
  * the runtime's family label and model band (the same words its card title uses); owner display
  * names are not chosen yet (D1610), so no persona name is invented.
  */
-export function runOpponentStatus(policy: Pick<RunOpponentPolicy, "mode" | "targetElo" | "profile">): string {
+export function runOpponentStatus(policy: Pick<RunOpponentPolicy, "mode" | "targetElo" | "profile">, sessionMode?: RunOpponentPolicy["mode"]): string {
+  // The in-memory recovery carries a mode, not the current selection's band/profile receipt.
+  // Name that mode without borrowing the recorded policy's band or calibrated identity.
+  if (sessionMode !== undefined) return sessionMode === "human_common"
+    ? "Human-move model · this session" : opponentStatus(sessionMode);
   if (policy.profile !== undefined) return `Bot · ${BOT_FAMILY_LABELS[policy.profile.family]} · model band ${policy.profile.band}`;
   return opponentStatus(policy.mode, policy.targetElo);
 }

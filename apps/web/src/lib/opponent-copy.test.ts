@@ -9,6 +9,13 @@ import {
 import { BOT_PROFILE_CATALOG } from "@chess-tabiya/runtime";
 
 describe("opponent learner copy", () => {
+  it("D3751 names a session override without relabelling the stored model band as its current request", () => {
+    const recorded = { mode: "human_common", targetElo: 1800 } as const;
+    expect(runOpponentStatus(recorded, "strong_engine")).toBe("Engine test · outside the human-like ladder");
+    expect(runOpponentStatus(recorded, "human_common")).toBe("Human-move model · this session");
+    expect(runOpponentStatus(recorded)).toBe("Human-move model · band 1800");
+    expect(recorded).toEqual({ mode: "human_common", targetElo: 1800 });
+  });
   it("D3664 labels model settings without inheriting calibration or measured personality", () => {
     expect(HUMAN_MODEL_RUNG_DISCLAIMER).toContain("model settings");
     expect(HUMAN_MODEL_RUNG_DISCLAIMER).not.toContain("calibrated inside Tabiya");

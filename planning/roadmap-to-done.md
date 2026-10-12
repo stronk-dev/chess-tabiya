@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3750]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3753]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,16 +58,52 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3750]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3753]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
-incomplete; the nine milestones remain four active/five blocked. The installed production
-inventory has 86 pack documents and zero official graduates. D3651 corrects the lower execution
+incomplete; the nine milestones remain four active/five blocked.
+The two proven dimension cells are governance/state and rehearsal/state, not two complete
+capabilities. The remaining dimension cells are 61 partial, 39 blocked, two missing and eight
+not applicable; passing a local test does not automatically promote any of them.
+The installed production runtime bundle admits 50 pack documents with 50 distinct ids and zero official graduates.
+[[D3753]] corrects the previously repeated 86-installed claim against the actual bundle planner
+and production loader roots; candidates and browser fixtures are not installed content. Historical
+log entries remain unchanged; no content is deleted or graduated. D3651 corrects the lower execution
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+Current GitHub check, 2026-10-12: published `c7ec3c3d` passes
+[verify](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800) but fails
+[browser](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796).
+The actual failure is warm catalogue-to-playable readiness, p95 399.2 ms against the unchanged
+250 ms budget; all five warm samples exceed it (minimum 280 ms). Each records 41 requests,
+including one shape catalogue and 25 shape documents. [[D3600]] retains this performance
+obligation; those counts locate work to investigate, not a proved cause or permission to raise
+the budget. Current local commits are unpublished. A local pass cannot discharge exact-revision
+GitHub or release-host readiness.
+
+[[D3751]]/[[D3752]] repair live raw-opponent recovery without adding a persona or durable-policy
+contract. The notice and status name the actual session mode; reload restores recorded-policy
+copy. Failure, saved-response and session-change notices occupy the existing companion instead
+of pushing the board down. The predecessor phone pause moved the board 187.56 px despite passing
+the old width-only check. Permanent mounted controls cover placement, repeated clicks, failed
+retry, navigation, teardown and focus ownership. Native phone/tablet/desktop journeys check the
+full board rectangle, modal release, all square centers, retry, repeat failure/change-back,
+populated unchanged recorded policy and reload. Calibration, source qualification, persistent
+recovery and full Support/defaults remain separate release obligations.
+The final ordinary serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+exits zero: 5,237 software cases/384 files, seven unchanged-budget performance cases/four files,
+255 content cases/26 files, clean types/governance/packaging/build and 345 browser passes
+(280 smoke, five content, 59 matrix and one packaged-production). One existing optional Maia
+case is skipped; zero retries, all 150 input cells and all 112 successful unretried composition
+cells. The ten recovery journeys include saved-reply disclosure at every viewport. That fixture
+uses the existing response header over an actual selected move; it does not prove server cache
+admission. Earlier full attempts failed the unchanged label and learner-rating isolation checks;
+the rendered variable was renamed and the unnecessary controller type import removed, not
+allowlisted. No whole capability/milestone, remote CI or release-image promotion follows.
 
 [[D3750]] repairs the factory input-digest memo's frozen-accessor boundary under accepted
 value authority. Two real factory predecessor controls reproduce stale receipts; two inherited

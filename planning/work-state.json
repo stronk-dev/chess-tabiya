@@ -31150,6 +31150,33 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3751",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0f5900d1db105a4f1c6926e376ee3ef46ef0dcf488f1cb5545a5baaa22dcf0ec",
+      "uxItems": [],
+      "evidence": "tests/browser/provider-health.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3752",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2c8e462bf4b86643e9da1b3de9f8da5e187cbcea24563c5cc752d6f987359882",
+      "uxItems": [],
+      "evidence": "tests/browser/provider-health.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3753",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e69143a55052c336f1cd107b3685e3c35e10e2282321541c9351f3faaa6e5522",
+      "uxItems": [],
+      "evidence": "tools/release/lib/runtime-content.mjs",
+      "evidenceKind": "path"
     }
   ]
 }
