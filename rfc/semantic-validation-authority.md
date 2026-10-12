@@ -1722,7 +1722,29 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
-- 2026-10-11: D3714 adds twenty-four independently source-bound structural king-zone
+- 2026-10-12: D3730 migrates thirty-six independent finite bounded-target case arms under
+  accepted Slices B/C: both colours' exact named bishop/knight capture, immediate original-attacker
+  capture and that captured identity's non-return; defended equal-value exchange and blocked-ray
+  omissions execute completed full batches. Two further cases retain two real material targets
+  and four preserved candidate relations while omitting bounded return. Its negative arm therefore
+  exercises a populated inner boundary as well as source omissions.
+  Restored-diagonal cases cover the three return outcome forms, nonempty legal all-defences
+  and excluded terminal preparation; D3720 independently enumerates their full finite populations.
+  The retained capture/occupancy rules and declared
+  material/pass conventions ground these narrow propositions; no strategic or forcing judgement
+  is added. Thirty-nine controls fail with the predecessor case/profile documents; all 351 focused
+  cited checks, 65 bounded/oracle checks and workspace types pass after registration.
+  All 307 predecessor records remain unchanged, including their retained digest assertions.
+  The generated receipt passes 343 cases (199 positive/144 negative) over 81 subjects, zero fully
+  qualified. Only six positive/negative cells become present; orientation/population debt,
+  inspector-only status, learner admission and all broader discharges remain.
+  Complete ordinary serial verification/build/browser passes 5,047 software/378 files,
+  seven performance/four files, 255 content/26 files and 304 browser checks, one existing optional
+  skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging.
+  The entry-bundle warning remains; no whole release gate or fresh remote CI is claimed.
+  Evidence: `packages/runtime/src/semantic-validation-bounded.test.ts`.
+
+- 2026-10-11: D3714 adds thirty-six independently source-bound structural king-zone
   cases under accepted Slice B, including all four corners, entry/exit/preservation
   and both-interior omissions for both colours. Neutral square-name boundary sets and
   legal replay verify the complete emitted population and exact king identities/signs.

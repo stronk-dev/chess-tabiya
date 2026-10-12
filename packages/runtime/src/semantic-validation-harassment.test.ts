@@ -9,7 +9,7 @@ import { makeSquare, opposite, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { BOUNDED_TARGET_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
@@ -81,7 +81,7 @@ describe("D3717 independent recorded bishop harassment pressure", () => {
 
   it("retains every canonical predecessor byte and registers exactly eighteen new cases", () => {
     const added = new Set(source.cases.map(row => row.proposition.case.id));
-    const prior = raw.cases.filter(row => !added.has(row.id as string));
+    const prior = raw.cases.filter(row => !added.has(row.id as string) && !BOUNDED_TARGET_CITED_SOURCE.cases.some(value => value.proposition.case.id === row.id));
     expect(prior).toHaveLength(289);
     expect(evidenceDigest(prior)).toBe("961d7271b56f50a74bf4da58f20f3c16495688635a3a3a15ed6499bbf6ef82c9");
     expect(raw.cases.filter(row => added.has(row.id as string))).toHaveLength(18);

@@ -113,7 +113,7 @@ the semantic-collector RFC's remaining consumer/use obligations.
 The separate local bounded-target service retains an exact named material capture,
 its immediate preservation/removal for every legal candidate, and existential versus
 all-defences return within the declared horizon. `make bounded-target-contract-production`
-includes twelve independent finite-board controls over complete populations, published
+includes fourteen independent finite-board controls over complete populations, published
 witness/refutation identities, nonempty universal defence sets and visited counts. The
 oracle uses whole-board material balances, not production exchange/target helpers.
 This is regression coverage; the canonical validation authorities and application
@@ -409,7 +409,7 @@ required qualification, source adoption and learner eligibility obligations rema
 zero subjects are fully qualified. This repairs the accepted executed relation, not a claim
 that the move is best, forcing or strategically useful.
 
-D3714 adds twenty-four independently checked structural king-zone cases: entry into all
+D3714 adds thirty-six independently checked structural king-zone cases: entry into all
 four corners, corner-to-edge/interior exit, file-edge entry/exit/preservation, stationary
 corner preservation and populated both-interior omissions, for both colours. Independent
 square-name boundary sets and legal replay check the entire emitted edge/corner population,
@@ -420,7 +420,7 @@ king-zone state projection's omission requirement. Orientation stays required an
 subjects are fully qualified. No king safety, opposition, strategic value, learner admission,
 source protocol or pack content changes.
 
-D3717 adds eighteen independently checked two-edge bishop-pressure cases (four positive,
+D3717 adds thirty-six independently checked two-edge bishop-pressure cases (four positive,
 fourteen negative), retaining every previous canonical case. Both colours include competing
 attacked knights/bishops; unrelated replies, lost diagonals, missing/multiple/friendly screens
 and excluded target/value roles reach completed legal paths without the exact retained relation.
@@ -430,6 +430,28 @@ references remain alongside the new source-bound cases. This records a pawn atta
 retained pressure, not forced retreat, intent or move quality. Orientation remains required,
 zero whole subjects qualify, and learner eligibility and authored content are unchanged.
 The canonical register now executes 307 cases (177 positive/130 negative).
+
+2026-10-12: D3730 adds thirty-six source-bound cases for the three bounded material-target
+projections. Both colours execute the complete registered batch. A loose knight establishes the
+exact bishop/knight capture; capturing the original bishop establishes immediate removal and
+that original identity's non-return. A defended equal-value capture and a blocked diagonal are
+completed negative populations, not unavailable operations. Independent legal occupancy/capture
+checks and D3720's complete-candidate oracle remain separate from the implementation.
+Two additional populated boundaries retain two actual material targets and all four candidate
+relations, each preserved, while correctly omitting bounded return. Thus the return negative is
+not limited to an empty target population.
+The restored-diagonal cases additionally record each non-return/existential/all-defences outcome.
+The complete finite oracle enumerates every legal defence, requires a nonempty reply set and
+rejects mate's zero replies as an all-defences or existential witness.
+All 307 predecessor records remain unchanged; the current register executes 343 cases
+(199 positive/144 negative), over 81 subjects and zero fully qualified. The six positive/negative
+cells become present; orientation, imported-population obligations and inspector-only consumer
+status remain unchanged. These finite cases do not establish whole-subject qualification,
+select a useful hint, grade a move or admit a new learner consumer.
+
+Run `make semantic-validation-bounded-check` for the finite cases and complete-batch oracle;
+`make semantic-validation-cited-check` includes the new cases, and the ordinary software gate
+executes the canonical register and checks its generated receipt.
 
 D3690 widens the complete-state omission conflict to piece counts, pawn islands
 and reply breadth. Actual white/black bare-king edges retain twelve role counts,

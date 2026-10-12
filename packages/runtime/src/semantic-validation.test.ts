@@ -14,7 +14,7 @@ import {
   semanticValidationImportClosure,
 } from "./semantic-validation-authorities.js";
 import { semanticValidationLawProfile } from "./semantic-validation-law.js";
-import { KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, canonicalSemanticEdge, type SemanticValidationOperationResult } from "./semantic-validation-operations.js";
 import { executeSemanticValidationOracle, type SemanticValidationOracleWitness } from "./semantic-validation-oracles.js";
 import { SEMANTIC_VALIDATION_PROFILES, SEMANTIC_VALIDATION_ROOTS, admitValidatedSemanticInstance, semanticValidationSummary, semanticValidationVerdict } from "./semantic-validation-registry.js";
@@ -284,7 +284,8 @@ describe("semantic-validation cases and execution", () => {
     const recordedIds = new Set(RECORDED_CITED_SOURCES.filter(source => source.sourceId !== "python-chess.recorded.pressure").flatMap(source => source.cases.map(row => row.proposition.case.id)));
     const discoveredIds = new Set(DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id));
     const kingZoneIds = new Set(KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id));
-    const historical = receipts.filter(receipt => !kingZoneIds.has(receipt.case) && !pressureIds.has(receipt.case));
+    const boundedIds = new Set(BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id));
+    const historical = receipts.filter(receipt => !boundedIds.has(receipt.case) && !kingZoneIds.has(receipt.case) && !pressureIds.has(receipt.case));
     const predecessor = historical.filter(receipt => !addedIds.has(receipt.case) && !recordedIds.has(receipt.case) && !discoveredIds.has(receipt.case));
     const added = receipts.filter(receipt => addedIds.has(receipt.case));
     expect(predecessor).toHaveLength(213);
@@ -316,7 +317,7 @@ describe("semantic-validation cases and execution", () => {
     expect(kingZones).toHaveLength(24);
     expect(kingZones.filter(receipt => receipt.arm === "positive")).toHaveLength(20);
     expect(kingZones.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(4);
-    const retainedCases = receipts.filter(receipt => !pressureIds.has(receipt.case));
+    const retainedCases = receipts.filter(receipt => !boundedIds.has(receipt.case) && !pressureIds.has(receipt.case));
     expect(retainedCases).toHaveLength(289);
     expect(retainedCases.filter((receipt) => receipt.arm === "positive")).toHaveLength(173);
     expect(retainedCases.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(116);
@@ -324,9 +325,13 @@ describe("semantic-validation cases and execution", () => {
     expect(pressure).toHaveLength(18);
     expect(pressure.filter(receipt => receipt.arm === "positive")).toHaveLength(4);
     expect(pressure.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(14);
-    expect(receipts).toHaveLength(307);
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(177);
-    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(130);
+    const bounded = receipts.filter(receipt => boundedIds.has(receipt.case));
+    expect(bounded).toHaveLength(36);
+    expect(bounded.filter(receipt => receipt.arm === "positive")).toHaveLength(22);
+    expect(bounded.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(14);
+    expect(receipts).toHaveLength(343);
+    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(199);
+    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(144);
   });
 
   it("[5][27] refuses callbacks, prebuilt evidence, forged keys, generated ids and @-suffixed dialects", () => {

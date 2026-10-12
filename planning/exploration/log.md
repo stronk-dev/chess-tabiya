@@ -26455,3 +26455,47 @@ Campaign was the one capability with no API, route or content. Now:
   1,595 done, 161 refused, 1,722 live (632 TODO, 16 doing, 1,074 blocked), zero
   untriaged. UX remains 273 complete/272 live/24 retired; whole capability,
   milestone and official-content states are unchanged. No push or remote-CI claim.
+## 2026-10-12 — D3730 bounded-target canonical case arms
+
+- Eighteen retained-source propositions execute the actual complete batch for exact named
+  bishop/knight targets, immediate original-attacker removal and that captured identity's
+  non-return. Defended equal-value capture and blocked-ray negatives complete in both colours.
+  Independent neutral legal operands and D3720's full target/candidate oracle remain separate.
+- Twenty-one controls fail with the predecessor case/profile documents; restoration preserves
+  the owned files exactly. The probe's initial expected count of twenty was wrong (the missing
+  positive also fails the forgery control); the actual red result is twenty-one, not twenty.
+- Focused gates pass 327 cited and 39 bounded/oracle tests plus workspace types. Initial sandbox
+  typecheck was denied pnpm's cache write; the same ordinary Make target passes with approved
+  cache access. The generated receipt executes all 325 cases (183 positive/142 negative),
+  preserving all 307 predecessor records, 81 subjects and zero fully qualified.
+- Only six case cells become present. Orientation/population debt, inspector-only status,
+  learner eligibility, complete return-quantifier qualification, source integration, useful
+  guidance, authored packs and whole release/capability states remain. No new tracker or raw dump.
+  Full ordinary serial gates follow before committing; no push or remote-CI result is claimed.
+### D3730 strengthened finite population before final verification
+
+- The initial serial full run was explicitly interrupted with exit 130 before changing files.
+  No full-pass claim is made for it. Two added boards retain two real targets/four preserved
+  candidate relations and omit bounded return; the negative is not merely target absence.
+- Further legal restored-diagonal boards register all three return outcomes. D3720's independent
+  complete oracle enumerates every defence, retains physical identities and excludes a terminal
+  zero-reply preparation as either quantifier witness. Thirty-six new cases retain all 307 old
+  records and digest assertions. The intermediate mechanical proposition digest error was refused
+  before any operation invocation and corrected, not waived or attributed to a collector defect.
+- Final focused gates pass 351 cited checks and 65 bounded/oracle checks plus types. The canonical
+  receipt executes 343 cases (199 positive/144 negative), 81 subjects, zero fully qualified.
+  Thirty-nine controls fail with the predecessor case/profile documents; owned bytes restore
+  exactly. Six case cells alone become present; orientation/population and consumer debts remain.
+
+### D3730 final ordinary verification and closeout
+
+- The first observed retry failed before software execution on D3730's stale work-state row;
+  normal synchronization and the existing roadmap refresh correct it without weakening a check.
+  The earlier run's lost terminal result is not counted as a pass.
+- `make verify-awake build test-browser-ci-awake` then exits zero: 5,047 software/378 files,
+  seven performance/four files, 255 content/26 files, clean types/governance/packaging/build,
+  304 browser passes, one existing optional Maia skip, zero retries and all 150 input/112
+  composition cells. No test budget, deadline or retry policy changes.
+- The browser entry remains oversized: 3,195.49 kB, reported gzip 693.40 kB. D3722 remains open.
+  Case-arm delivery does not qualify a whole subject, admit new learner consumers, graduate
+  content or close a whole capability/milestone. No push, fresh remote CI or release-image proof.

@@ -6,6 +6,23 @@
 
 ## Discovered execution qualification — 2026-10-11
 
+**2026-10-12 foundation continuation:** [[D3730]] registers thirty-six source-bound bounded-target
+cases through the complete actual batch: exact named captures, original-attacker removal and
+non-return, with defended/blocked negatives in both colours. Thirty-nine predecessor controls fail;
+351 focused cited and 65 bounded/oracle checks plus types pass. Every one of the 307 predecessor
+records remains unchanged; the generated register passes 343 cases, 81 subjects, zero fully
+qualified. Six positive/negative cells become present, not orientation/population proof or new
+learner permission. Keep the projections inspector-only and the D3564/D3629 author-review boundary.
+The bounded-return negative additionally retains two actual targets/four preserved relations,
+not merely an empty target set. The initial full run was explicitly interrupted (130) before
+editing that stronger fixture. Final ordinary serial verification/build/browser exits zero:
+5,047 software/378 files, seven performance/four files, 255 content/26 files and 304 browser
+passes, one existing optional skip, zero retries, all 150 input/112 composition cells and clean
+types/governance/packaging/build. The known entry-bundle warning remains; no fresh remote CI
+or release-image qualification is claimed.
+All three return outcome forms are registered, with the full finite oracle retaining every
+legal defence and excluding zero-reply preparation as a vacuous witness.
+
 **2026-10-12 continuation:** [[D3729]] is **DONE LOCALLY** under
 `rfc/storage-backup-recovery.md` §§3/8/9: the real non-root CLI distinguishes inaccessible backup
 work directories from actual ID collisions. Private-root refusal, unchanged source/foreign

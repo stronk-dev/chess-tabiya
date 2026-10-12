@@ -8,6 +8,7 @@
  */
 import type { SemanticCanonicalValue, SemanticEdgeInput, SemanticValidationPropositionRecord } from "./semantic-validation.js";
 import { recordedValidationSources } from "./semantic-validation-recorded-sources.js";
+import { boundedValidationSource } from "./semantic-validation-bounded-sources.js";
 
 type RuleFixture = readonly [id: string, projection: string, beforeFen: string, moveUci: string, afterFen: string, operands: Readonly<Record<string, SemanticCanonicalValue>> | null];
 function ruleCase(family: string, fixture: RuleFixture, source = "python-chess") {
@@ -478,7 +479,10 @@ export const KING_ZONE_CITED_SOURCE = Object.freeze({
   })),
 });
 
+export const BOUNDED_TARGET_CITED_SOURCE = Object.freeze(boundedValidationSource(captureSource, RULE_STATE_CITED_SOURCES[1]!));
+
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  BOUNDED_TARGET_CITED_SOURCE,
   KING_ZONE_CITED_SOURCE,
   DISCOVERED_CITED_SOURCE,
   ...RECORDED_CITED_SOURCES,

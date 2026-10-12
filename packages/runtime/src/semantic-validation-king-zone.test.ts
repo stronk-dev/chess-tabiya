@@ -7,7 +7,7 @@ import { makeSquare, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { KING_ZONE_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
@@ -80,7 +80,7 @@ describe("D3714 independent structural king-zone case arms", () => {
   it("retains every predecessor case and registers twenty-four distinct legal inputs", () => {
     const ids = new Set(rows.map(row => row.proposition.case.id));
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(24);
-    const later = new Set(RECORDED_CITED_SOURCES.filter(source => source.sourceId === "python-chess.recorded.pressure").flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    const later = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.filter(source => source.sourceId === "python-chess.recorded.pressure").flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     expect(raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string))).toHaveLength(265);
     expect(rows.filter(row => row.arm === "positive")).toHaveLength(20);
     expect(new Set(rows.map(row => evidenceDigest(row.input))).size).toBe(24);

@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
@@ -148,7 +148,7 @@ describe("D3705 independent recorded exchange and pawn-contact cases", () => {
     expect(added).toHaveLength(20);
     expect(added.filter(row => row.arm === "positive")).toHaveLength(10);
     expect(added.filter(row => row.arm === "semantic_negative")).toHaveLength(10);
-    const later = new Set([...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...pressureSource.cases.map(row => row.proposition.case.id)]);
+    const later = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...pressureSource.cases.map(row => row.proposition.case.id)]);
     const prior = raw.filter(row => !ids.has(row.id as string) && !later.has(row.id as string));
     expect(prior).toHaveLength(229);
     expect(evidenceDigest(prior)).toBe("35a8afec8943785b40f4ef99998f2a57c51b003f3cc56e2a1e2bcc0a7cd729c0");

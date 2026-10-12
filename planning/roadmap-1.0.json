@@ -871,11 +871,14 @@
         ],
         "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
-          "at": "2026-10-11",
-          "summary": "D3721 repairs the sole evidence mint's shallow-freeze bypass under the accepted value-authority contract. Four predecessor failures include an actual fact mutated from two rooks to 99 under its original receipt, a changing frozen accessor and 277 mutable descendant fixture paths. Complete factory profiles now freeze nested ordinary data beneath frozen shells; only verified ordinary-data trees enter the private digest cache. No chess meaning, receipt field, source, permission or pack changes. Eight isolated complete-output comparisons agree; cold projection is 23.06% slower locally and D3300 remains TODO. Complete normal serial verification/build passes 4,980 software/377 files, seven performance/four files, 255 content/26 files, clean types/governance/packaging and 302 browser checks, one existing optional skip, zero retries and all 150 input/112 composition cells. Validation remains 307 passing cases/81 subjects/zero fully qualified. D3719/D3720 original-piece and complete bounded-consequence controls remain delivered. Source/consumer adoption, useful selection, authored corpus, owner use and broader RFC discharges remain open; no whole capability/milestone, remote CI or release-image completion.",
+          "at": "2026-10-12",
+          "summary": "D3730 registers thirty-six source-bound finite cases through the actual complete bounded-target batch: exact named bishop/knight capture, immediate original-attacker capture/preservation and that identity's non-return; defended equal-value and blocked-ray omissions complete in both colours. Thirty-nine predecessor controls fail; 351 focused cited and 65 bounded/oracle checks plus workspace types pass. Every one of the 307 predecessor records and retained digest stays unchanged. The generated register passes 343 cases (199 positive/144 negative), 81 subjects, zero fully qualified. Six positive/negative cells become present; orientation/population debt, inspector-only status, useful selection and learner consumers remain unchanged. D3721 seal integrity and D3719/D3720 continuity/complete-batch controls remain delivered. Complete ordinary serial verification/build/browser exits zero: 5,047 software/378 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 304 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. The entry-bundle warning remains. No whole capability/milestone, fresh remote CI or release-image completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/evidence-value-authority.md",
+            "packages/runtime/src/semantic-validation-bounded.test.ts",
+            "packages/runtime/src/semantic-validation-bounded-sources.ts",
+            "packages/runtime/src/bounded-target-oracle.test.ts",
             "packages/runtime/src/evidence-contract.ts",
             "packages/runtime/src/evidence-contract.test.ts",
             "packages/runtime/src/evidence-value-authority.test.ts",
@@ -914,7 +917,12 @@
             {
               "kind": "rfc",
               "id": "semantic-validation-authority.md",
-              "digest": "sha256:cb07e6d4a69c5852659a2933a9ec1607871b1ba4b010a08c1653768e39c3e7e3"
+              "digest": "sha256:02d863fdb3b8ef4f2d6bdc97d2e158c511f248ecdf5ab71b1a09e316d827ae9c"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3730",
+              "digest": "sha256:a6c3ea498b54b3a7ed09cfbb4a3ca2676d5e47a57f03ee591b8f83129d64ed6d"
             },
             {
               "kind": "rfc",

@@ -7655,6 +7655,1572 @@
     {"id":"cited.python-chess.recorded.pressure.minor-target.white","version":1,"subject":{"kind":"event","projection":{"id":"derived.pawn.sequence.harassment_pressure","version":2}},"arm":"semantic_negative","operation":{"id":"runtime.semantic.recorded_path","version":1},"input":{"kind":"recorded_path","pathReceipt":{"id":"run.record.edge","version":1},"edges":[{"kind":"edge","beforeFen":"7k/8/2N5/3N4/4b3/8/3P4/K7 w - - 0 1","moveUci":"d2d3","afterFen":"7k/8/2N5/3N4/4b3/3P4/8/K7 b - - 0 1"},{"kind":"edge","beforeFen":"7k/8/2N5/3N4/4b3/3P4/8/K7 b - - 0 1","moveUci":"e4f3","afterFen":"7k/8/2N5/3N4/8/3P1b2/8/K7 w - - 1 2"}],"pathDigest":"d50ff84c0c29345bb62f2f518efb16e238d6348c8f95e411bb864127e855cbad"},"expectation":{"kind":"omits"},"authority":{"kind":"cited_proposition","sourceId":"python-chess.recorded.pressure","sourceRevision":"3516d7c6c0879af724c2855fac5a304a4ef40949","licence":"GPL-3.0-or-later","span":{"start":0,"end":1076,"textSha256":"43c7c42c7573ffafdb2771215c6461d247fb02a8f0b807494559b075bd1268a0"},"propositionSha256":"f5c5bbd14ff5501112d245614dae8872f5dd5f97edd59af742e992d88ef1ab46"}},
     {"id":"cited.python-chess.recorded.pressure.minor-target.black","version":1,"subject":{"kind":"event","projection":{"id":"derived.pawn.sequence.harassment_pressure","version":2}},"arm":"semantic_negative","operation":{"id":"runtime.semantic.recorded_path","version":1},"input":{"kind":"recorded_path","pathReceipt":{"id":"run.record.edge","version":1},"edges":[{"kind":"edge","beforeFen":"k7/3p4/8/4B3/3n4/2n5/8/7K b - - 0 1","moveUci":"d7d6","afterFen":"k7/8/3p4/4B3/3n4/2n5/8/7K w - - 0 2"},{"kind":"edge","beforeFen":"k7/8/3p4/4B3/3n4/2n5/8/7K w - - 0 2","moveUci":"e5f6","afterFen":"k7/8/3p1B2/8/3n4/2n5/8/7K b - - 1 2"}],"pathDigest":"7a1a83c1dd9102d78d48b70143e8de68a9e8c8086cee2e1e1571bc679ee06180"},"expectation":{"kind":"omits"},"authority":{"kind":"cited_proposition","sourceId":"python-chess.recorded.pressure","sourceRevision":"3516d7c6c0879af724c2855fac5a304a4ef40949","licence":"GPL-3.0-or-later","span":{"start":0,"end":1076,"textSha256":"43c7c42c7573ffafdb2771215c6461d247fb02a8f0b807494559b075bd1268a0"},"propositionSha256":"4d65a1bbf0af413b89c6bf1d3215fc450055b69f5cd015d19770d7e8edb6fbda"}},
     {"id":"cited.python-chess.recorded.pressure.higher-screen.white","version":1,"subject":{"kind":"event","projection":{"id":"derived.pawn.sequence.harassment_pressure","version":2}},"arm":"semantic_negative","operation":{"id":"runtime.semantic.recorded_path","version":1},"input":{"kind":"recorded_path","pathReceipt":{"id":"run.record.edge","version":1},"edges":[{"kind":"edge","beforeFen":"7k/8/2R5/3Q4/4b3/8/3P4/K7 w - - 0 1","moveUci":"d2d3","afterFen":"7k/8/2R5/3Q4/4b3/3P4/8/K7 b - - 0 1"},{"kind":"edge","beforeFen":"7k/8/2R5/3Q4/4b3/3P4/8/K7 b - - 0 1","moveUci":"e4f3","afterFen":"7k/8/2R5/3Q4/8/3P1b2/8/K7 w - - 1 2"}],"pathDigest":"fd02e1e0934c28e80c48e157e0d7c9dbf37fe58af4770b893c743ae1c5dd23cf"},"expectation":{"kind":"omits"},"authority":{"kind":"cited_proposition","sourceId":"python-chess.recorded.pressure","sourceRevision":"3516d7c6c0879af724c2855fac5a304a4ef40949","licence":"GPL-3.0-or-later","span":{"start":0,"end":1076,"textSha256":"43c7c42c7573ffafdb2771215c6461d247fb02a8f0b807494559b075bd1268a0"},"propositionSha256":"ef296607fdf0e2627b2391679478f686e94870e51597d9a5e9de81b633a39dd0"}},
-    {"id":"cited.python-chess.recorded.pressure.higher-screen.black","version":1,"subject":{"kind":"event","projection":{"id":"derived.pawn.sequence.harassment_pressure","version":2}},"arm":"semantic_negative","operation":{"id":"runtime.semantic.recorded_path","version":1},"input":{"kind":"recorded_path","pathReceipt":{"id":"run.record.edge","version":1},"edges":[{"kind":"edge","beforeFen":"k7/3p4/8/4B3/3q4/2r5/8/7K b - - 0 1","moveUci":"d7d6","afterFen":"k7/8/3p4/4B3/3q4/2r5/8/7K w - - 0 2"},{"kind":"edge","beforeFen":"k7/8/3p4/4B3/3q4/2r5/8/7K w - - 0 2","moveUci":"e5f6","afterFen":"k7/8/3p1B2/8/3q4/2r5/8/7K b - - 1 2"}],"pathDigest":"50e64c21417ac6594c490aaf10627eb2e5b67b3b6d74f86365ba3f24ba1dca4c"},"expectation":{"kind":"omits"},"authority":{"kind":"cited_proposition","sourceId":"python-chess.recorded.pressure","sourceRevision":"3516d7c6c0879af724c2855fac5a304a4ef40949","licence":"GPL-3.0-or-later","span":{"start":0,"end":1076,"textSha256":"43c7c42c7573ffafdb2771215c6461d247fb02a8f0b807494559b075bd1268a0"},"propositionSha256":"2ae7c77f612fb5995bcaec10abe2f03086c8f40318a181d03156b43dfca5d097"}}
+    {"id":"cited.python-chess.recorded.pressure.higher-screen.black","version":1,"subject":{"kind":"event","projection":{"id":"derived.pawn.sequence.harassment_pressure","version":2}},"arm":"semantic_negative","operation":{"id":"runtime.semantic.recorded_path","version":1},"input":{"kind":"recorded_path","pathReceipt":{"id":"run.record.edge","version":1},"edges":[{"kind":"edge","beforeFen":"k7/3p4/8/4B3/3q4/2r5/8/7K b - - 0 1","moveUci":"d7d6","afterFen":"k7/8/3p4/4B3/3q4/2r5/8/7K w - - 0 2"},{"kind":"edge","beforeFen":"k7/8/3p4/4B3/3q4/2r5/8/7K w - - 0 2","moveUci":"e5f6","afterFen":"k7/8/3p1B2/8/3q4/2r5/8/7K b - - 1 2"}],"pathDigest":"50e64c21417ac6594c490aaf10627eb2e5b67b3b6d74f86365ba3f24ba1dca4c"},"expectation":{"kind":"omits"},"authority":{"kind":"cited_proposition","sourceId":"python-chess.recorded.pressure","sourceRevision":"3516d7c6c0879af724c2855fac5a304a4ef40949","licence":"GPL-3.0-or-later","span":{"start":0,"end":1076,"textSha256":"43c7c42c7573ffafdb2771215c6461d247fb02a8f0b807494559b075bd1268a0"},"propositionSha256":"2ae7c77f612fb5995bcaec10abe2f03086c8f40318a181d03156b43dfca5d097"}},
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.loose-knight.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/n1p4r/7k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "b4",
+            "color": "white",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "e7",
+            "color": "black",
+            "role": "knight"
+          },
+          "captureUci": "b4e7"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "7765c3a8d2df12a9476cfe353c6872b63f7a587ac0ca0dcf37549737aec29a7f"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.loose-knight.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/n1p4r/7k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "a6b4",
+          "target": {
+            "payload": {
+              "captureUci": "b4e7"
+            }
+          },
+          "outcome": {
+            "result": "removed",
+            "cause": "attacker_captured",
+            "postCandidateExchange": null
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "e1fccec4c808dac0f7ec7118c8147935bcf95f1852bea2e7dbe9c69ee697a235"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.loose-knight.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/n1p4r/7k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "horizonPlies": 3,
+          "immediate": {
+            "payload": {
+              "candidateUci": "a6b4"
+            }
+          },
+          "outcome": {
+            "kind": "not_reintroduced"
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "1aca1d3b09e7a4e3997d603d32b6fbc3eeca2a39512e580cbc1a6c20953d09fb"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.loose-knight.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/7K/N1P4R/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "b5",
+            "color": "black",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "e2",
+            "color": "white",
+            "role": "knight"
+          },
+          "captureUci": "b5e2"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "cfe73478db9b1795ff66bed5660787f06efbf6ae1da6f1b9c9967edf17d28d4d"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.loose-knight.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/7K/N1P4R/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "a3b5",
+          "target": {
+            "payload": {
+              "captureUci": "b5e2"
+            }
+          },
+          "outcome": {
+            "result": "removed",
+            "cause": "attacker_captured",
+            "postCandidateExchange": null
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "163ba3854164d748de3d1501521bfeb8e5aef296eeead9a186520daba29b48f4"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.loose-knight.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/7K/N1P4R/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "horizonPlies": 3,
+          "immediate": {
+            "payload": {
+              "candidateUci": "a3b5"
+            }
+          },
+          "outcome": {
+            "kind": "not_reintroduced"
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "53918e3fff103e31d589c8f37f61d6f48ebc941c71d6f56054cfc887efd4715e"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.equal-exchange.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n2r/n1p5/7k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "16cb4e74e7f7cf47c2d35a41d520afc0e41a6d2ca49a44a37f1062f1132df8a5"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.equal-exchange.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n2r/n1p5/7k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "201e3e327bdad54b8de8472e0fc55c1afcd157857a6f4bc499f84012bb665590"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.equal-exchange.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n2r/n1p5/7k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "4e5498954eb6271eb849ff85559434a4bb7ab210b663379fd7f61c2f60504985"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.equal-exchange.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/7K/N1P5/4N2R/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "c051ec576447dc0980a72ae97a210d975bb1f22205f0ab8b1b5fd62721456d8c"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.equal-exchange.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/7K/N1P5/4N2R/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "570c20a64a7eb0e24210bd7898536d88574985b583affc482a5c3c5644a5abc3"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.equal-exchange.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/7K/N1P5/4N2R/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "cc6818ab9786b6a368d9bf1e94fd2c8e1e0d0e2357fa4a22578f33f00901b92e"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.blocked-ray.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/n6r/2p4k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "23f9a0d52710e922b6cd49bd34453832b6a62eed201b6fdcbef25d20524e389c"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.blocked-ray.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/n6r/2p4k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "f81132aef516c9b38c53702ac0b6e855621e6b25a8a7dac998cc338f614ced68"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.blocked-ray.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/n6r/2p4k/1B6/8/8/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "db81c6e7e616f3bb0e6435fdf977ec9c1c0ae531644dd3e216d7d4101ec462b6"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.blocked-ray.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/2P4K/N6R/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "a757ea3c221a72c0f59756bee21cafb99ba545fcab7a1e0b9023f4400bdd51e1"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.blocked-ray.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/2P4K/N6R/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "ea39f15e96a3f7414357962d4fd25036e7e51fd8cdda40c21b72c38c6228cb93"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.blocked-ray.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "4k3/8/8/1b6/2P4K/N6R/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "bcb1f76de103bf48a87dec019442221d9cc048e5dab29f429a6e0b6c7a0f6631"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.all-candidates-preserve.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "7k/7n/8/5B2/8/8/8/K6R b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "f5",
+            "color": "white",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "h7",
+            "color": "black",
+            "role": "knight"
+          },
+          "captureUci": "f5h7"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "13575c2195942d82484d47c126a7aad8ca2b5d946ba69a59a292a2238a511214"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.all-candidates-preserve.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "7k/7n/8/5B2/8/8/8/K6R b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "h8g8",
+          "target": {
+            "payload": {
+              "captureUci": "f5h7"
+            }
+          },
+          "outcome": {
+            "result": "preserved",
+            "cause": "preserved",
+            "postCandidateExchange": {
+              "convention": "legal-exchange-for-move@1",
+              "captureUci": "f5h7",
+              "resultUnits": 3,
+              "result": "positive"
+            }
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "f325f81ec7d0dd7ae838e82acade2c78495a17aff45bcca12e81159c5917ec2d"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.all-candidates-preserve.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "7k/7n/8/5B2/8/8/8/K6R b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "febe946c420c35fe88463f077179d447f70a0ab5589500e66b43936a15e35854"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.all-candidates-preserve.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "k6r/8/8/8/5b2/8/7N/7K w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "f4",
+            "color": "black",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "h2",
+            "color": "white",
+            "role": "knight"
+          },
+          "captureUci": "f4h2"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "aec306a7953f7a977f5ab00e57287fe761215386645990254799af8e7bbf174d"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.all-candidates-preserve.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "k6r/8/8/8/5b2/8/7N/7K w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "h1g1",
+          "target": {
+            "payload": {
+              "captureUci": "f4h2"
+            }
+          },
+          "outcome": {
+            "result": "preserved",
+            "cause": "preserved",
+            "postCandidateExchange": {
+              "convention": "legal-exchange-for-move@1",
+              "captureUci": "f4h2",
+              "resultUnits": 3,
+              "result": "positive"
+            }
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "a6faceed0e1fed0930e2b0fc427c150c10d390d27b17a960832cb1ba9b3fa0a3"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.all-candidates-preserve.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "k6r/8/8/8/5b2/8/7N/7K w - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "95277ef22897b1e3f04e271a7701b0179f9d115b3b60510881e25944f83944a1"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.checked-restoration.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/2p5/8/1B6/8/8/K5k1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "b4",
+            "color": "white",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "e7",
+            "color": "black",
+            "role": "knight"
+          },
+          "captureUci": "b4e7"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "b4b4e55c8b01d1dcfc86445981abaece2b1a3bf05c995af97d1068ca695e4911"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.checked-restoration.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/2p5/8/1B6/8/8/K5k1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "c6c5",
+          "target": {
+            "payload": {
+              "captureUci": "b4e7"
+            }
+          },
+          "outcome": {
+            "result": "removed",
+            "cause": "capture_illegal",
+            "postCandidateExchange": null
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "2fa5c9c8e6c5f6fc27464f388e6d947fc6f4c47ffeeed70dd73fba136847980a"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.checked-restoration.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/2p5/8/1B6/8/8/K5k1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "horizonPlies": 3,
+          "immediate": {
+            "payload": {
+              "candidateUci": "c6c5"
+            }
+          },
+          "outcome": {
+            "kind": "survives_every_defence"
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "de8a409724fa38f3d19040b3f7f0e219553127b5c048898ace181ff7cbadc325"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.checked-restoration.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "k5K1/8/8/1b6/8/2P5/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "b5",
+            "color": "black",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "e2",
+            "color": "white",
+            "role": "knight"
+          },
+          "captureUci": "b5e2"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "e57744713f8f814e95d5e41c01899dddd57fbfda9a67dd299efa1faf3f25a3d3"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.checked-restoration.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "k5K1/8/8/1b6/8/2P5/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "c3c4",
+          "target": {
+            "payload": {
+              "captureUci": "b5e2"
+            }
+          },
+          "outcome": {
+            "result": "removed",
+            "cause": "capture_illegal",
+            "postCandidateExchange": null
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "c3215a808e88a7244fabd423957865019e18a2b132181f235b32dfb59f7a7210"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.checked-restoration.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "k5K1/8/8/1b6/8/2P5/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "horizonPlies": 3,
+          "immediate": {
+            "payload": {
+              "candidateUci": "c3c4"
+            }
+          },
+          "outcome": {
+            "kind": "survives_every_defence"
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "7da2cc378a18d493f9a93ac4553e5eda8eb0ba4cfaf5f6b2d961c3537de532ed"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.terminal-restoration.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/2p5/8/1B5R/3B1K2/8/6k1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "b4",
+            "color": "white",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "e7",
+            "color": "black",
+            "role": "knight"
+          },
+          "captureUci": "b4e7"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "74fc6f2fda0de3ff94a490e9f99ee26f4b6110d8f49bb7dcea6314ac1eeaa16f"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.terminal-restoration.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/2p5/8/1B5R/3B1K2/8/6k1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "c6c5",
+          "target": {
+            "payload": {
+              "captureUci": "b4e7"
+            }
+          },
+          "outcome": {
+            "result": "removed",
+            "cause": "capture_illegal",
+            "postCandidateExchange": null
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "426db5f91cdb14b410580c2ee4191ca545045e6a371cc61b8f71b6c8ace9fca5"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.terminal-restoration.black",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "8/4n3/2p5/8/1B5R/3B1K2/8/6k1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "horizonPlies": 3,
+          "immediate": {
+            "payload": {
+              "candidateUci": "c6c5"
+            }
+          },
+          "outcome": {
+            "kind": "reintroduced"
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "fedccf883395b6847e216f7f1757614fc6482912f963cb694b0c921520d68079"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.named_material_target.terminal-restoration.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.named_material_target",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "6K1/8/3b1k2/1b5r/8/2P5/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "attacker": {
+            "square": "b5",
+            "color": "black",
+            "role": "bishop"
+          },
+          "victim": {
+            "square": "e2",
+            "color": "white",
+            "role": "knight"
+          },
+          "captureUci": "b5e2"
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "21c851bd9fc530a7220e64c29c17766937a27fa8a442832748195dda8db4772c"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.immediate.terminal-restoration.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.bounded_target.immediate",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "6K1/8/3b1k2/1b5r/8/2P5/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "candidateUci": "c3c4",
+          "target": {
+            "payload": {
+              "captureUci": "b5e2"
+            }
+          },
+          "outcome": {
+            "result": "removed",
+            "cause": "capture_illegal",
+            "postCandidateExchange": null
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "bd54c89da746e9801fe158f3e785df7b4a189ce7b9ddde4c1f8de40df711f3b9"
+      }
+    },
+    {
+      "id": "cited.python-chess.bounded-target.bounded_return.terminal-restoration.white",
+      "version": 1,
+      "subject": {
+        "kind": "reading",
+        "projection": {
+          "id": "derived.bounded_target.bounded_return",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.bounded_target_batch",
+        "version": 1
+      },
+      "input": {
+        "kind": "bounded_target_source",
+        "sourceFen": "6K1/8/3b1k2/1b5r/8/2P5/4N3/8 w - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "horizonPlies": 3,
+          "immediate": {
+            "payload": {
+              "candidateUci": "c3c4"
+            }
+          },
+          "outcome": {
+            "kind": "reintroduced"
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.bounded-target",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 1457,
+          "textSha256": "2899e7f67783d02283fa3195a27008685cc78222892836facc2ae6aee8d92f78"
+        },
+        "propositionSha256": "bc6d60e94053d527892b8ccbb49a40f7d85c5a005b1dee14d8d17a1ee1a77684"
+      }
+    }
   ]
 }

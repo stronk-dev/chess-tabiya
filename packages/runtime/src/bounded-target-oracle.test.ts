@@ -119,6 +119,7 @@ const FIXTURES = [
   { id: "terminal-preparation", fen: "8/4n3/2p5/8/1B5R/3B1K2/8/6k1 b - - 0 1", expectedTargets: 1 },
   { id: "defended-equal-exchange", fen: "8/4n2r/n1p5/7k/1B6/8/8/4K3 b - - 0 1", expectedTargets: 0 },
   { id: "blocked-diagonal", fen: "8/4n3/n6r/2p4k/1B6/8/8/4K3 b - - 0 1", expectedTargets: 0 },
+  { id: "every-candidate-preserves", fen: "7k/7n/8/5B2/8/8/8/K6R b - - 0 1", expectedTargets: 2 },
 ].flatMap(row => [{ ...row, id: `${row.id}.black` }, { ...row, id: `${row.id}.white`, fen: mirror(row.fen) }]);
 
 describe("D3720 independent complete bounded material populations", () => {

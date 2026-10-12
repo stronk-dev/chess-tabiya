@@ -30960,6 +30960,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/storage-admin.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3730",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a6c3ea498b54b3a7ed09cfbb4a3ca2676d5e47a57f03ee591b8f83129d64ed6d",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-bounded.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
