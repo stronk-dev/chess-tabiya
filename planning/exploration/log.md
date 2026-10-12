@@ -26848,3 +26848,21 @@ Campaign was the one capability with no API, route or content. Now:
   No whole capability/milestone promotion: source contracts, semantic qualification, useful
   selection, calibrated bots, campaign curriculum/rewards, official content, owner use and
   complete release proof remain. No push or exact-revision GitHub/release-image claim.
+
+## 2026-10-12 — D3745 foundation-negative audit and consolidated handoff
+
+- `make semantic-validation-matrix` passes 97 checks/four files. All 127 legal successors
+  of eight positions keep five target families populated; quiet-check omission, mate-check
+  emission, null-move refusal and successor-FEN refusal are actual production controls.
+- The existing D3687/D3690 repair already owned four complete-state families. Sparse
+  square-controller deltas join that same conflict, rather than commissioning another
+  independent contract. Source construction and finite controls are distinguished in
+  `design/research/semantic-validation-closure.md`; its existing coverage row is updated.
+- The authority plan, existing platform-alignment handoff, ledger/state and single roadmap
+  carry the result and remaining author/review obligation. Valid zero values are preserved.
+  This audit changes no collector, profile, canonical case or learner permission, and
+  completes no whole capability/milestone. No protected intent/thesis gate changes.
+- Final canonical semantic, complete governance, roadmap and work-state checks pass; all
+  1,722 live ledger items remain assigned. The canonical 343 cases/81 subjects retain zero
+  fully qualified. No application code change, fresh full application-suite run, push or
+  remote-CI/release claim accompanies this research-only checkpoint.

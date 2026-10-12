@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c7809a84f8a4fc2f367474acdd7a026db720412aa7336cfc43fa34a942443baa",
+    "roadmap": "sha256:54c356cde5ecbdc90d4aee195ffc77a539eb3f82919aa2eebd891c06ed7f9005",
     "workItems": "sha256:dc7987cf83ab97daab5ec1f8669f91903780f3b2483b791dcfcb56f6ace452ab",
-    "workState": "sha256:2e51a5c96f917c942dc809abb1fce6a30d3651545f7c058dcc6952e772fb99e4",
+    "workState": "sha256:5ac983c4a4a12629645936c0a41afd3ba9f5447801c3690efae45238ee5cc546",
     "rfcRegister": "sha256:c7fd996d0eff48225b3fbcf51ef35021123e24d105a2d14be10eeb10df60d990",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 632,
       "doing": 16,
       "blocked": 1074,
-      "done": 1610,
+      "done": 1611,
       "refused": 161
     },
     "workItems": {
@@ -277,7 +277,7 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Resolve D3687/D3690's complete-state negative contract and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-12",
         "summary": "D3730 registers thirty-six source-bound finite cases through the actual complete bounded-target batch: exact named bishop/knight capture, immediate original-attacker capture/preservation and that identity's non-return; defended equal-value and blocked-ray omissions complete in both colours. Thirty-nine predecessor controls fail; 351 focused cited and 65 bounded/oracle checks plus workspace types pass. Every one of the 307 predecessor records and retained digest stays unchanged. The generated register passes 343 cases (199 positive/144 negative), 81 subjects, zero fully qualified. Six positive/negative cells become present; orientation/population debt, inspector-only status, useful selection and learner consumers remain unchanged. D3721 seal integrity and D3719/D3720 continuity/complete-batch controls remain delivered. Complete ordinary serial verification/build/browser exits zero: 5,047 software/378 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 304 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. The entry-bundle warning remains. No whole capability/milestone, fresh remote CI or release-image completion.",

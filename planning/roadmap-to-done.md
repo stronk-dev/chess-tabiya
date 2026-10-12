@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3744]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3745]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,15 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3745]] completes the whole-event negative audit: four complete-state families and the sparse
+square-controller delta family cannot supply whole-family omission on a legal edge. All 127 legal
+successors from eight test positions retain the five families; 97 disposable matrix checks pass,
+including conditional-event and invalid-input controls. Valid zero counts/replies remain evidence.
+[[D3690]] owns the consolidated author repair in the existing state-negative handoff, followed by
+independent review. No qualification arm is waived and no production semantics change. Canonical
+validation remains 343 passing cases/81 subjects, zero fully qualified; this is foundation research
+progress, not another completed capability.
 
 [[D3744]] completes INR-a1 / [[D1454]]'s accepted module-question binding: ordinary selectors and expanded
 cards use registered learner intent, including Guided Hint, while tablet selectors retain compact

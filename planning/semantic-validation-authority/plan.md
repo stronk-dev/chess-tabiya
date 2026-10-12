@@ -37,6 +37,12 @@ registered cases or semantic authority.
     do not omit retained input fields or manufacture orientation authority.
 13. Execute independently grounded authority-bearing family slices B–D, then release exact
     consumers in Slice E. The grammar repair alone does not discharge these slices.
+14. Resolve D3687/D3690's whole-event omission conflict before attempting those negative arms.
+    D3745's production-operation audit covers four complete-state families plus unavoidable
+    square-controller deltas. The existing handoff is
+    `planning/platform-alignment/semantic-state-negative-contract.md`; author amendment and
+    independent review must specify the scoped negative contract and compatibility effects.
+    Ninety-seven disposable matrix checks pass, but add no canonical qualification cases.
 
 ## Boundary
 

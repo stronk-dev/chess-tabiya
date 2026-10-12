@@ -196,3 +196,22 @@ strategic content, permission, pack bytes, whole capability/milestone, remote CI
 - The browser entry remains oversized: 3,195.49 kB, reported gzip 693.40 kB. D3722 remains open.
   Case-arm delivery does not qualify a whole subject, admit new learner consumers, graduate
   content or close a whole capability/milestone. No push, fresh remote CI or release-image proof.
+
+## 2026-10-12 — D3745 whole-event negative feasibility audit
+
+- The existing disposable matrix now tests the production local-edge operation over all 127
+  legal successors from eight positions, plus genuine conditional-event and invalid-input
+  controls. All 97 checks/four files pass. A prior fixture-only `legalReplies` field mistake
+  failed and was corrected to the actual `replies`/`count`/`terminal` shape; not a product bug.
+- Four total-state families retain their existing D3687/D3690 conflict. Square-control adds
+  an unavoidable sparse-delta case: vacated controller identity loses geometric pseudo edges.
+  Zero pawn counts/islands and terminal zero replies remain legitimate populated evidence.
+- The existing state-negative handoff and authority plan now route all five families to one
+  author amendment and independent review. No new RFC, canonical authority case, source
+  filter, profile waiver, consumer permission or raw capture is created. D3745 closes the
+  audit only; D3690 remains blocked on the contract repair.
+- `make semantic-validation-check` passes unchanged: 343 cases/81 subjects, 53 population
+  receipts and eight external receipts, zero fully qualified. `make roadmap-receipt
+  verify-governance` and the final `make roadmap-receipt roadmap-check work-state` pass.
+  No application code changed, so prior production software/browser gates are not presented
+  as newly rerun for this research-only change. No push or remote-CI/release claim.

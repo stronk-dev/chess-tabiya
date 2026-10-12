@@ -30607,7 +30607,7 @@
       "id": "D3690",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:83bf1b460055968f76f48745e343e98c9d721e7ca286a5c368f5ae9aabda2498",
+      "sourceDigest": "sha256:cdf2a4de6dfde72253565e360bb8297468d4714addc4f6ad462c84aef0b487de",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md",
@@ -31094,6 +31094,15 @@
       "sourceDigest": "sha256:88880e3097783969a934c2907511a7308b029ad95cfcaaed7001b652bb546269",
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3745",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:34a0463870937fd537c3b396cc96d40325ddcc607fb306b84986dc4507f9382d",
+      "uxItems": [],
+      "evidence": "tools/d1713-semantic-validation-matrix/state-boundary.test.ts",
       "evidenceKind": "path"
     }
   ]

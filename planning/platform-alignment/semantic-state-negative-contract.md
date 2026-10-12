@@ -1,6 +1,6 @@
 # Complete state events: qualification contract clarification
 
-2026-10-11 · D3687 / D3690 · evidence-foundation · awaiting the
+2026-10-12 · D3687 / D3690 / D3745 · evidence-foundation · awaiting the
 `semantic-validation-authority.md` author's accepted amendment, not implementation authority.
 
 ## The conflict
@@ -53,6 +53,34 @@ All four current negative arms remain `required`. No new learner permission,
 source admission, collector behavior, strategic judgement or content migration
 is shipped here. D3691's finite pawn-dynamics cases are separate admitted Slice B
 work and do not solve this state-event contract.
+
+## D3745: the sparse controller-delta case belongs to the same repair
+
+`rules.square.event.control@1` is not complete state: it reports gained/lost controller
+edges. However, `square-control.ts` includes the controller's origin in edge identity,
+and its pseudo attacks include friendly-occupied target squares. A legal standard-chess
+move relocates at least one physical piece with nonempty geometric attacks. Its vacated
+origin therefore loses controller edges even when destinations were already defended.
+Promotion and castling do not remove that obligation. Simply making other events sparse
+cannot provide a whole-family omission for this fifth projection.
+
+`make semantic-validation-matrix` executes the disposable `state-boundary.test.ts`
+against the real local-edge operation and target selector: all 127 legal successors from
+eight positions retain all five families. The positions cover both initial turns, bare
+kings, en passant, promotions, castling, bishop and queen moves. Zero pawn counts/islands
+and terminal zero replies remain populated. A conditional check event supplies an actual
+quiet-edge omission and mate-edge positive control; null moves and wrong successor FENs
+are refused. All 97 matrix checks pass. This finite sample corroborates the source
+construction; it is not exhaustive position coverage or additional registered authority.
+
+The existing author repair must cover all five families and distinguish literal state,
+unavoidable physical deltas and conditional motifs. Property-specific negatives need exact
+independent operands and a stated scope; they cannot certify the whole payload by testing
+one absent property. Versioned successors require consumer/replay/content compatibility,
+and a plain changed-only filter does not solve square-control. No option is accepted here.
+All five arms remain required; D3690 owns the consolidated repair and D3745 closes only
+the research audit. The canonical 343 cases/81 subjects remain unchanged and none is fully
+qualified. No collector, profile, eligibility or learner permission changes.
 
 ## Consumer consequence: proactive Nudge (D3715 / D3713)
 

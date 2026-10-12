@@ -220,3 +220,58 @@ separate total comparison. All 158 focused foundation tests pass. This closes ex
 ordering only; it does not implement the D3564 vocabulary proposal or promote a semantic
 verdict. `[V]` (`packages/runtime/src/semantic-validation.test.ts`,
 `packages/runtime/src/semantic-validation-runner.ts`, `make evidence-foundation-check`)
+
+## 2026-10-12 — whole-event negative feasibility (D3745)
+
+Accepted validation §3.2 requires each live event root to have a legal same-operation
+negative omitting the entire projection. The current runner's `omits` expectation rejects
+any target observation. D3687/D3690 already identify four incompatible complete-state
+families. This audit adds a fifth, despite its sparse construction. `[V]`
+(`rfc/semantic-validation-authority.md` §3.2;
+`packages/runtime/src/semantic-validation-runner.ts`, `omits`;
+`planning/platform-alignment/semantic-state-negative-contract.md`)
+
+| Event root, version 1 | Actual local-edge output and construction |
+|---|---|
+| `rules.structural.event.piece_count` | Twelve role/colour observations, including unchanged/zero counts; unconditional reading and before/after join |
+| `rules.structural.event.pawn_islands` | Two colour observations, including unchanged/zero counts; unconditional factory mapping |
+| `rules.king.event.zone_state` | Two colour transitions, including empty deltas; unconditional legal-edge mapping |
+| `rules.tactic.consequence.reply_breadth` | One reading even at terminal zero replies; single-result factory |
+| `rules.square.event.control` | Sparse gained/lost edges, but controller origin is part of identity and pseudo attacks include friendly-occupied targets. A moved physical piece loses origin-bound edges |
+
+The table is source-checked `[V]`: `structure.ts` / `computeStructuralReading`,
+`semantic-evidence.ts` / `structuralSemanticEventPayloads`, `king-state.ts` /
+`kingZoneEvents`, the three corresponding factories in `evidence-factories.ts`, and
+`square-control.ts` / `pseudoFor`, `edgeKey`, `squareControlEvents`, all under
+`packages/runtime/src/`. The square-control argument is bounded to the current legal
+standard-chess operation: each movable role has nonempty geometric attacks from its
+vacated origin; promotions and castling still relocate a physical controller. It is not
+a claim about arbitrary variants or merely a report of unchanged controlled destinations.
+
+The disposable `tools/d1713-semantic-validation-matrix/state-boundary.test.ts` invokes
+the real production operation and selector. It enumerates all 127 legal successors from
+eight positions: initial White/Black (20 each), bare kings (8), en passant (7), promotion
+(9), castling (26), bishop (14), queen (23). Every successor retains all five families.
+Mate retains zero-pawn counts/islands and a terminal zero-reply observation. A quiet
+edge omits the conditional check event, while mate emits it; null moves and a wrong
+after-FEN refuse. These are genuine emitter controls, not synthetic empty payloads. `[V]`
+(the disposable fixture; `make semantic-validation-matrix`: 97 passing checks/four files)
+
+An earlier run failed because this research fixture expected `legalReplies` rather than
+the production `replies`/`count`/`terminal` fields. The fixture was corrected against
+`tactics.ts`'s `ReplyBreadth`; no product defect, deadline relaxation or failed-run pass
+is claimed. `[V]` (fixture and actual `ReplyBreadth` declaration)
+
+**Repair handoff, not accepted semantics:** reuse D3690's existing author handoff for
+all five roots. Property-specific negatives must state precisely what independently
+grounded property and operands they falsify; one property cannot qualify the whole
+payload. Versioned successors need replay/consumer/content compatibility; a generic
+changed-only filter cannot make square-control disappear. Invalid input, unavailable
+sources or zero values cannot discharge whole-event omission. `[M]` (repair constraints
+and alternatives; no choice or implementation authority)
+
+This audit registers no canonical cases, rewrites no profile and changes no collector,
+eligibility or learner permissions. The finite population corroborates code construction,
+not exhaustive chess-position coverage. D3745 closes research only; D3687/D3690 retain
+the author/review blocker. No protected intent sentence or thesis gate is overturned. `[V]`
+(owned change set; existing authority plan and state-negative handoff)
