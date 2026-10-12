@@ -73,14 +73,19 @@ export function exchangeCaptureAt(position: Chess, move: Move): { readonly piece
 
 export function legalCaptureMovesTo(position: Chess, target: Square, fromOnly?: Square): readonly NormalMove[] {
   const moves: NormalMove[] = [];
-  for (const [from, destinations] of position.allDests()) {
-    if ((fromOnly !== undefined && from !== fromOnly) || !destinations.has(target)) continue;
+  // Every standard-chess capture attacks its landing square, including en passant.
+  // Geometry is only a prefilter: retain the ordinary legal-destination and promotion
+  // checks for pins, checks and king safety. Do not enumerate unrelated destinations
+  // at each node of every exchange tree ([[D3731]] / D3300).
+  const ctx = position.ctx();
+  for (const from of position.kingAttackers(target, position.turn, position.board.occupied)) {
+    if ((fromOnly !== undefined && from !== fromOnly) || !position.dests(from, ctx).has(target)) continue;
     const roles: readonly (Role | undefined)[] = position.board.getRole(from) === "pawn" && (target < 8 || target >= 56)
       ? PROMOTIONS
       : [undefined];
     for (const promotion of roles) {
       const move: NormalMove = promotion === undefined ? { from, to: target } : { from, to: target, promotion };
-      if (exchangeCaptureAt(position, move) !== undefined && position.isLegal(move)) moves.push(move);
+      if (exchangeCaptureAt(position, move) !== undefined && position.isLegal(move, ctx)) moves.push(move);
     }
   }
   return Object.freeze(moves.sort((left, right) => makeUci(left).localeCompare(makeUci(right))));

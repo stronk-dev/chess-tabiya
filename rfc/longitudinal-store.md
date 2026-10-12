@@ -10,6 +10,14 @@
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
 - **Author:** claude
+- **Implementation checkpoint 2026-10-12 — D3731:** exact-target capture enumeration
+  avoids unrelated destinations while retaining ordinary chessops legality and all
+  promotion roles. The complete sorted capture set, recursive exchange branches,
+  evidence values and projected rows remain the contract; no cache, new convention,
+  derivation revision or narrower population is introduced. Independent full-destination
+  controls and fresh-process whole-output comparison precede ordinary full verification.
+  This is internal implementation under the existing full-population/rebuild requirement,
+  not a draft amendment or cold-cost/whole-RFC completion.
 - **Implementation checkpoint 2026-10-11 — D3300:** private structural-event joins use
   exact operand strings instead of redundant hashes; public evidence identities, complete
   populations, payload order and factory/input receipts remain unchanged. Caller-injected

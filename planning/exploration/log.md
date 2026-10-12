@@ -26499,3 +26499,40 @@ Campaign was the one capability with no API, route or content. Now:
 - The browser entry remains oversized: 3,195.49 kB, reported gzip 693.40 kB. D3722 remains open.
   Case-arm delivery does not qualify a whole subject, admit new learner consumers, graduate
   content or close a whole capability/milestone. No push, fresh remote CI or release-image proof.
+
+## 2026-10-12 — D3731 exact-target capture work
+
+- The accepted complete-population/rebuild contract permits an internal enumeration
+  correction, not a narrower evidence path. `legalCaptureMovesTo` now asks chessops for
+  target attackers and checks their actual legal destinations under one context, retaining
+  captures, en passant, pins/checks/king safety, every promotion and original sorted order.
+  Recursive exchange result algebra, source semantics, public identities and saved play stay.
+- Two permanent work controls fail against the actual predecessor. Fifteen independently
+  broad full-destination fixtures compare all 64 targets and five origin-query arms;
+  both-colour promotion controls retain all four capture promotions. All 120 collector checks
+  pass. The first worker run fails three localhost binds with sandbox EPERM; the same ordinary
+  Make check with approved access passes all 65 real-worker/projector/store cases. Workspace
+  types pass with zero Svelte errors/warnings. No deadline or retry setting changes.
+- Ordinary canonical generation retains 343 passing cases, 81 subjects and zero fully
+  qualified. Only generated implementation metadata changes, not case or profile meanings.
+  Initial eight whole-output pairs agree; those timings overlap focused checks and are not
+  credited as an isolated speed comparison. A serial fresh-process comparison follows after
+  all focused commands finish. Only the existing ignored compact timing aggregate is written;
+  no raw evidence/CPU recording or new tracking system is introduced.
+
+### D3731 final serial comparison, ordinary verification and closeout
+
+- After the focused commands finish, eight alternating-order fresh-process pairs retain every
+  event, factory/input receipt, projected row and forty checkpoints per side over all 2,199
+  legal edges / 196,589 events. Summed cold time is 33,413.981 → 31,882.756 ms, 4.58% lower
+  locally, seven faster / one slower. The slower pair stays in the compact existing receipt;
+  this is not a portable speed promise or D3300 cold-cost completion.
+- `make verify-awake build test-browser-ci-awake` exits zero: 5,066 software/378 files,
+  seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/
+  packaging/build and 304 browser passes, one existing optional Maia skip, zero retries and
+  all 150 input/112 composition cells. No test budget, deadline or retry setting changes.
+- The existing browser entry warning remains: 3,195.54 kB, reported gzip 693.41 kB. D3722 and
+  D3300 remain open. D3731 closes only the unrelated capture-destination work; no primitive,
+  source admission, semantic qualification, official content, whole capability/milestone,
+  remote CI or release-image proof is promoted. Existing ledger/roadmap/work-state closeout,
+  no new tracker or raw recording, no push.

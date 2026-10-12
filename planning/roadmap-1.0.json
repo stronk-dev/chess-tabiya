@@ -1556,8 +1556,8 @@
         ],
         "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
         "latestCheckpoint": {
-          "at": "2026-10-11",
-          "summary": "D3300 removes redundant hashing from private structural-event joins without adding a cache or changing public evidence identities, complete populations, payload order, factory/input receipts or derivation revision. Five new controls include four predecessor failures; 83 collector and 65 projector/store/real-worker checks pass. Eight alternating-order fresh-process pairs preserve complete output over 2,199 legal edges / 196,589 events and forty checkpoints per side; summed cold time is 12.54% lower locally, seven faster / one slower, not a portable promise. The extra cache experiment was rejected at 0.65%. Full normal serial verification/build passes 4,964 software/376 files, seven performance/four files, 255 content/26 files and 302 browser cases, one existing optional skip, zero retries, all 150 input/112 composition cells and clean types/governance/packaging. All 307 canonical cases pass, zero subjects fully qualified. D3300 returns to its residual cold-cost TODO. Previous drain, startup cleanup, control-index/delta and prefix reuse remain. Source/consumer discharges, catalogue progression, intermittent causes and built-image recovery remain open; no whole capability, milestone or remote-CI/release-image promotion.",
+          "at": "2026-10-12",
+          "summary": "D3731 eliminates unrelated legal-destination enumeration from exact-target captures under the accepted complete-population/rebuild contract. Nineteen new permanent controls include two predecessor failures and independent all-64-square capture comparisons across both-colour special moves, checks, pins and origin restrictions. All 120 collector and 65 real-worker/projector/store checks plus types pass. Eight serial alternating-order fresh-process pairs preserve every event, factory/input receipt, projected row and forty checkpoints per side over 2,199 legal edges / 196,589 events. Summed cold time is 4.58% lower locally, seven faster / one slower, not a portable promise. No cache, convention, primitive, population, source admission or derivation revision changes. All 343 canonical cases pass, zero subjects fully qualified. Full ordinary serial verification/build/browser exits zero: 5,066 software/378 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 304 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. D3300 residual cold cost, source/consumer discharges, catalogue progression, intermittent causes and complete image recovery remain open; no whole capability/milestone, remote-CI or release-image promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
@@ -1582,6 +1582,9 @@
             "packages/runtime/src/square-control.ts",
             "packages/runtime/src/structure.ts",
             "packages/runtime/src/collector-index-reuse.test.ts",
+            "packages/runtime/src/exchange.ts",
+            "packages/runtime/src/exchange.test.ts",
+            "packages/runtime/src/mobility.test.ts",
             "packages/runtime/src/semantic-evidence.ts",
             "packages/runtime/src/evidence-factories.ts",
             "planning/longitudinal-store/d3300-index-reuse-2026-10-11.md",
@@ -1621,6 +1624,11 @@
               "kind": "work_state",
               "id": "D3300",
               "digest": "sha256:95f842d765fa439eb8f4d34e58cd978c6bf069bdcd35ab19636d00027d8bf07e"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3731",
+              "digest": "sha256:a7262a53a451c850fdbfd6d12bc561a1ec47b48c199f96a216a93b0cc891fcba"
             },
             {
               "kind": "rfc",

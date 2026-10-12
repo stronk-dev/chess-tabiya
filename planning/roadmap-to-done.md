@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3730]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3731]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -69,6 +69,19 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
+[[D3731]] eliminates unrelated legal-destination work from exact-target captures
+under the existing full-population/rebuild contract. Nineteen new controls include
+two predecessor failures and independently broad all-square special-move/check/pin
+comparisons. All 120 collector and 65 real-worker/projector/store checks plus types
+pass. Eight serial fresh-process pairs preserve every event, factory/input receipt,
+projected row and checkpoint; summed cold time is 4.58% lower locally, seven faster
+and one slower. No cache, convention, primitive, population, source admission or
+derivation revision changes. D3300 residual cold cost stays open; full normal serial
+verification/build/browser passes 5,066 software, seven performance, 255 content and
+304 browser tests, one existing optional skip, zero retries and all 150 input/112
+composition cells. Whole capability/milestone and official-content states
+remain unchanged; no remote-CI or release-image proof is implied.
+
 [[D3730]] closes six bounded-target case arms under accepted semantic-validation Slices B/C:
 thirty-six source-bound positive/negative cases execute complete batches in both colours. Exact
 named captures, original-attacker removal and non-return retain defended/blocked omissions.
@@ -102,10 +115,10 @@ cold cost stays TODO and no milestone or whole capability advances. The existing
 D3300 receipt records the rejected measurements without raw research dumps.
 
 Final ordinary serial verification/build/browser gates on 2026-10-12 exit zero:
-5,047 software/378 files, seven unchanged-budget performance/four files,
+5,066 software/378 files, seven unchanged-budget performance/four files,
 255 content/26 files and 304 browser passes, one existing optional Maia skip,
 zero retries, all 150 input/112 composition cells and clean types/governance/packaging.
-The existing entry-bundle warning remains (3,195.49 kB, reported gzip 693.40 kB). These local results do not establish
+The existing entry-bundle warning remains (3,195.54 kB, reported gzip 693.41 kB). These local results do not establish
 current-revision GitHub CI or complete native release qualification.
 
 [[D3727]] repairs an accepted authored-walk defect: nested forks follow their first child
@@ -4649,7 +4662,7 @@ spine is:
    module, preset, longitudinal and target mechanisms are implemented checkpoints, not missing
    foundations to recommission; their explicit remaining discharges still stand.
 2. Complete collector discharges and semantic families with non-vacuous validation. The current
-   307 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
+   343 canonical cases pass over 81 subjects, but zero subjects have every required arm completed.
 3. Complete real producer → projection → selector → module/bot/Review adoption. Compiled joins and
    many production consumers already ship; missing source acquisition, exact selected-piece
    delivery and remaining bypasses still require actual application/client proof.

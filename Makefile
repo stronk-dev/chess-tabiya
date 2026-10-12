@@ -2130,7 +2130,7 @@ longitudinal-projector-compare:
 
 .PHONY: collector-index-check
 collector-index-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/collector-index-reuse.test.ts packages/runtime/src/square-control.test.ts packages/runtime/src/structure.test.ts packages/runtime/src/semantic-evidence.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/collector-index-reuse.test.ts packages/runtime/src/square-control.test.ts packages/runtime/src/structure.test.ts packages/runtime/src/semantic-evidence.test.ts packages/runtime/src/exchange.test.ts packages/runtime/src/mobility.test.ts
 
 .PHONY: longitudinal-worker-start-check
 longitudinal-worker-start-check:

@@ -30969,6 +30969,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-bounded.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3731",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a7262a53a451c850fdbfd6d12bc561a1ec47b48c199f96a216a93b0cc891fcba",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/exchange.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -132,6 +132,16 @@ summed cold time was 12.54% lower locally (seven faster pairs, one slower), not 
 latency guarantee. The existing D3300 measurement receipt retains both the result and
 the rejected cache experiment. Residual cold cost remains open.
 
+Exact-target capture enumeration now computes legal destinations only for geometric
+attackers of the requested landing square, using one shared chessops legality context.
+Geometry never grants a capture: ordinary destination, capture and promotion checks
+still apply, including en passant, pins, checks and all four promotion roles. The
+complete sorted capture set and every legal-exchange continuation are unchanged;
+there is no new cache, sampling, pruning or local-exchange convention. The permanent
+full-destination reference checks all 64 targets with unrestricted, own, enemy and
+empty origin queries. `make collector-index-check` includes exchange and mobility
+regressions alongside the existing work-reuse checks. D3300 residual cold cost stays open.
+
 ## Reading
 
 `application.longitudinal.read(actorLearnerId, parseLongitudinalReadQuery(...))` (and
