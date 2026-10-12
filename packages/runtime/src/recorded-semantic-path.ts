@@ -18,7 +18,7 @@ function exchangeEvidence(result: LegalExchangeResult): DeclaredEvidence<unknown
 }
 import { harassmentPressureSequence, pawnContactTimingSequence, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import {
-  attractionObservedOperands,
+  recordedAttractionObservedOperands,
   checkSemanticEvent,
   recordedCheckZwischenzugObservedOperands,
   defenderConsequenceOperands,
@@ -296,7 +296,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       break;
     }
     case "attraction":
-      for (const value of attractionObservedOperands(anchors)) {
+      for (const value of recordedAttractionObservedOperands(anchors)) {
         const check = value.checkOrCaptureConsequence.kind === "check" ? window[2]!.check?.evidence : undefined;
         emitted.push(recordedAttractionObservedSemanticEvent(value, edges, captureEvidence, check));
       }

@@ -1,8 +1,8 @@
-import { Chess, normalizeMove } from "chessops/chess";
+import { castlingSide, Chess, normalizeMove } from "chessops/chess";
 import { attacks, between } from "chessops/attacks";
 import { makeFen } from "chessops/fen";
 import type { Color, Move, Piece, Role, SquareName } from "chessops/types";
-import { makeSquare, makeUci, opposite, parseSquare, parseUci } from "chessops/util";
+import { kingCastlesTo, makeSquare, makeUci, opposite, parseSquare, parseUci, rookCastlesTo } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { exactLegalMoves, exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
@@ -666,6 +666,15 @@ export function deflectionObservedOperands(values: readonly RecordedMoveAnchor[]
 
 /** Heavy-piece attraction on the measured three-edge king or five-edge queen/rook horizon. */
 export function attractionObservedOperands(values: readonly RecordedMoveAnchor[]): readonly AttractionObservedOperands[] {
+  return attractionOperands(values, false);
+}
+
+/** Recorded v2 follows both physical castling relocations; frozen v1 retains its old image. */
+export function recordedAttractionObservedOperands(values: readonly RecordedMoveAnchor[]): readonly AttractionObservedOperands[] {
+  return attractionOperands(values, true);
+}
+
+function attractionOperands(values: readonly RecordedMoveAnchor[], physicalFollow: boolean): readonly AttractionObservedOperands[] {
   if (values.length !== 3 && values.length !== 5) throw new TypeError("Attraction requires exactly three or five anchors");
   const anchors = canonicalRecordedPath(values, values.length);
   const first = anchorMove(anchors[0]!);
@@ -679,8 +688,16 @@ export function attractionObservedOperands(values: readonly RecordedMoveAnchor[]
   if (arrival === undefined || !sameOccupant(heavyBefore.piece, arrival.piece)) return Object.freeze([]);
   const follow = anchorMove(anchors[2]!);
   const afterFollow = positionFromFen(anchors[2]!.afterFen);
-  const follower = afterFollow.board.get(follow.move.to);
-  if (follower?.color !== first.position.turn || !attacks(follower, follow.move.to, afterFollow.board.occupied).has(reply.move.to)) return Object.freeze([]);
+  const castle = physicalFollow ? castlingSide(follow.position, follow.move) : undefined;
+  const relocations = castle === undefined ? [follow.move] : [
+    { from: follow.move.from, to: kingCastlesTo(follow.position.turn, castle) },
+    { from: follow.move.to, to: rookCastlesTo(follow.position.turn, castle) },
+  ];
+  if (!relocations.some(move => {
+    const follower = afterFollow.board.get(move.to);
+    return move.from !== move.to && follower?.color === first.position.turn &&
+      attacks(follower, move.to, afterFollow.board.occupied).has(reply.move.to);
+  })) return Object.freeze([]);
   if (heavyBefore.piece.role === "king") {
     if (anchors.length !== 3 || !afterFollow.isCheck()) return Object.freeze([]);
     return Object.freeze([observed<AttractionObservedOperands>({ anchors, horizon: 3, baitMove: anchors[0]!, heavyPiece: Object.freeze({ before: heavyBefore, arrival }), arrivalSquare: arrival.square, checkOrCaptureConsequence: Object.freeze({ kind: "check", move: anchors[2]! }) })]);

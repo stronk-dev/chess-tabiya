@@ -268,6 +268,15 @@ engine principal variation.
   open. The RFC remains `awaiting D3`, not helper-only or complete. Longitudinal cannot use
   occurrence-only sequence rates in place of complete opportunity denominators.
 
+Recorded attraction's v2 follow-up resolves physical castling movement rather than treating the
+king-to-rook UCI endpoint as an occupied destination. A relocated king or secondary rook must
+actually attack the attracted piece's arrival square. A stationary piece is not a relocation;
+castling alone is no witness. The same reader serves the recorded compiler and the sole sealed
+v2 factory. Both the three-edge king-check and five-edge queen/rook-capture horizons retain
+their existing definitions, exact end-node and complete recorded line. The frozen v1 reader
+keeps its predecessor output. D3736's both-colour controls reach actual authenticated Review
+and desktop/phone captions, highlights and paint retirement without modifying saved play.
+
 `make recorded-semantic-path-check` runs the fixtures, the imported-sample census, eager parity and
 the 20/40/80-ply timing arms; the pinned performance tier enforces total p95 ≤ 500 ms.
 

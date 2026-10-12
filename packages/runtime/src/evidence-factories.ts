@@ -54,6 +54,7 @@ import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./re
 import {
   assertSemanticEvidenceEvent,
   attractionObservedOperands,
+  recordedAttractionObservedOperands,
   checkZwischenzugObservedOperands,
   recordedCheckZwischenzugObservedOperands,
   defenderConsequenceOperands,
@@ -1806,7 +1807,7 @@ export const createDerivedTacticDeflectionObservedV2Evidence = recordedSequenceF
   return recordedDeflectionObservedOperands(anchors).filter((payload) => sameDigest(payload.targetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
 }, (input) => [...edgesOf(input), ...others(input, "duty", "captures", "exchange", "check")]);
 export const createDerivedTacticAttractionObservedV2Evidence = recordedSequenceFactory("derived.tactic.attraction_observed@2", { edges: EDGES(3, 5), captures: sealedList(1, null, "rules.transition.event.capture@1"), check: optional(sealed("rules.tactic.event.check@1")) }, (input, anchors) => {
-  const payloads = attractionObservedOperands(anchors);
+  const payloads = recordedAttractionObservedOperands(anchors);
   for (const payload of payloads) if ((payload.checkOrCaptureConsequence.kind === "check") !== (input.check !== undefined)) throw new TypeError("Observed attraction check authority disagrees with its consequence kind");
   exactRecordedSequenceInputs(anchors, edgesOf(input), anchors.length, others(input, "captures", "check"), ["rules.transition.event.capture", ...(input.check === undefined ? [] : ["rules.tactic.event.check"])]);
   return payloads;

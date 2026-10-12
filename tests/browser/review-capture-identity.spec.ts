@@ -9,6 +9,10 @@ const cases = [
   { family: "overload", side: "black", fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", moves: "2... exd3 3. Rxd3 Rxg1+ *", sans: ["exd3", "Rxd3", "Rxg1+"], caption: "exd3 was answered by the recapture Rxd3", squares: ["d3", "g1"] },
   { family: "defender removal", side: "white", fen: "k7/8/8/3pP3/4n3/8/8/1K2R3 w - d6 0 2", moves: "2. exd6 Kb7 3. Rxe4 *", sans: ["exd6", "Kb7", "Rxe4"], caption: "Black's pawn on d5 was captured", squares: ["d5", "e4"] },
   { family: "defender removal", side: "black", fen: "1k2r3/8/8/4N3/3Pp3/8/8/K7 b - d3 0 2", moves: "2... exd3 3. Kb2 Rxe5 *", sans: ["exd3", "Kb2", "Rxe5"], caption: "White's pawn on d4 was captured", squares: ["d4", "e5"] },
+  { family: "D3736 attraction check", side: "white", fen: "4B1k1/8/8/8/8/8/8/4K2R w K - 0 1", moves: "1. Bf7+ Kxf7 2. O-O+ *", sans: ["Bf7+", "Kxf7", "O-O+"], caption: "then O-O+ gave check", squares: ["f7"] },
+  { family: "D3736 attraction check", side: "black", fen: "4k2r/8/8/8/8/8/8/4b1K1 b k - 0 1", moves: "1... Bf2+ 2. Kxf2 O-O+ *", sans: ["Bf2+", "Kxf2", "O-O+"], caption: "then O-O+ gave check", squares: ["f2"] },
+  { family: "D3736 attraction capture", side: "white", fen: "k3Bq2/8/8/8/8/8/8/6KR w K - 0 1", moves: "1. Bf7 Qxf7 2. O-O Kb8 3. Rxf7 *", sans: ["Bf7", "Qxf7", "O-O", "Kb8", "Rxf7"], caption: "then Rxf7 captured", squares: ["f7"] },
+  { family: "D3736 attraction capture", side: "black", fen: "6kr/8/8/8/8/8/8/K3bQ2 b k - 0 1", moves: "1... Bf2 2. Qxf2 O-O 3. Kb1 Rxf2 *", sans: ["Bf2", "Qxf2", "O-O", "Kb1", "Rxf2"], caption: "then Rxf2 captured", squares: ["f2"] },
 ] as const;
 
 async function recorded(page: Page, id: string) {
@@ -21,7 +25,7 @@ async function recorded(page: Page, id: string) {
 }
 
 for (const mobile of [false, true]) for (const value of cases) {
-  test(`Review ${value.side} en passant ${value.family} retains captured identity${mobile ? " @mobile" : ""}`, async ({ page }) => {
+  test(`Review ${value.side} ${value.family.includes("attraction") ? "castling" : "en passant"} ${value.family} retains captured identity${mobile ? " @mobile" : ""}`, async ({ page }) => {
     expect((await page.request.post("/auth/register", { data: {
       handle: `capture_${randomUUID().slice(0, 8)}`, password: "review-capture-test-password",
     } })).status()).toBe(201);
@@ -32,7 +36,7 @@ for (const mobile of [false, true]) for (const value of cases) {
     await expect(page).toHaveURL(/\/review\/game\/import-/);
     const id = new URL(page.url()).pathname.split("/").at(-1)!;
     const moves = page.locator(".move-select");
-    await expect(moves).toHaveCount(3);
+    await expect(moves).toHaveCount(value.sans.length);
     await moves.last().click();
     const fact = page.locator('.evidence [data-component="square_set"]').filter({ hasText: value.caption });
     await expect(fact).toHaveCount(1);

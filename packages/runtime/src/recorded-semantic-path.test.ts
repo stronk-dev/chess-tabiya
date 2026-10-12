@@ -32,6 +32,7 @@ import {
 import { commitMove, createRun, rewind } from "./runtime.js";
 import {
   assertSemanticEvidenceEvent,
+  attractionObservedOperands,
   checkZwischenzugObservedOperands,
   defenderConsequenceOperands,
   deflectionObservedOperands,
@@ -55,6 +56,7 @@ import {
   RECORDED_SEQUENCE_HARD_NEGATIVES as HARD_NEGATIVES,
   RECORDED_ATTRACTION_FIVE as ATTRACTION_FIVE,
   RECORDED_DEFLECTION_CHECK as DEFLECTION_CHECK,
+  RECORDED_CASTLING_ATTRACTION,
 } from "./testing/recorded-sequence-fixtures.js";
 
 const at = "2026-09-24T00:00:00.000Z";
@@ -76,6 +78,35 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3736 recorded attraction follows physical castling movement", () => {
+  it.each(RECORDED_CASTLING_ATTRACTION)("$name retains the exact checking or quiet consequence", fixture => {
+    const run = recordedRun(`d3736:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const end = path.at(-1)!;
+    const after = positionFromFen(end.fen);
+    expect(after.board.get(parseSquare(fixture.rook)!)).toMatchObject({ role: "rook" });
+    if (fixture.moves.length === 3) expect(after.isCheck()).toBe(fixture.emits);
+    const anchors = path.slice(1).map((node, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: node.id, beforeFen: path[index]!.fen, moveUci: node.moveUci!, afterFen: node.fen }));
+    expect(attractionObservedOperands(anchors)).toEqual([]); // Frozen v1 remains byte-compatible.
+    const result = compileMain(run);
+    const events = result.events.filter(event => exact(event.projection) === "derived.tactic.attraction_observed@2");
+    const edges = path.slice(1).map((node, index) => declareRecordedEdgeEvidence(run, path[index]!, node));
+    const captures = anchors.flatMap(anchor => transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen)
+      .filter(event => event.projection.id === "rules.transition.event.capture").map(event => event.evidence));
+    const check = invokeEvidenceValueRoute("rules.tactic.event.check@1", { beforeFen: anchors[2]!.beforeFen, moveUci: anchors[2]!.moveUci, afterFen: anchors[2]!.afterFen })[0];
+    const factory = invokeEvidenceValueRoute("derived.tactic.attraction_observed@2", { edges, captures, ...(check === undefined ? {} : { check }) });
+    expect(factory.map(item => item.payload)).toEqual(events.map(event => event.operands));
+    expect(factory).toHaveLength(fixture.emits ? 1 : 0);
+    expect(events).toHaveLength(fixture.emits ? 1 : 0);
+    if (fixture.emits) {
+      expect(events[0]!.anchor.nodeId).toBe(end.id);
+      expect(events[0]!.operands).toMatchObject({ horizon: fixture.moves.length, arrivalSquare: fixture.arrival, checkOrCaptureConsequence: { kind: fixture.moves.length === 3 ? "check" : "capture" } });
+    }
+    expect(result.windows.find(window => exact(window.projection) === "derived.tactic.attraction_observed@2" && window.startNodeId === path[0]!.id && window.horizon === fixture.moves.length))
+      .toMatchObject({ status: fixture.emits ? "emitted" : "no_witness", horizon: fixture.moves.length, endNodeId: end.id, eventIds: events.map(event => event.id) });
+  });
+});
 
 describe("D3719 recorded recapturer continuity", () => {
   const substitutions = [

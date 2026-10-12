@@ -32,3 +32,14 @@ export const RECORDED_SEQUENCE_HARD_NEGATIVES = Object.freeze([
 
 export const RECORDED_ATTRACTION_FIVE = { fen: "3r3k/8/8/8/8/2N5/2P5/6K1 w - - 0 1", moves: ["c3d5", "d8d5", "c2c4", "h8g8", "c4d5"] } as const;
 export const RECORDED_DEFLECTION_CHECK = { fen: "7k/4q1r1/8/8/8/8/8/R1K1R3 w - - 0 1", moves: ["a1a8", "g7g8", "e1e7"] } as const;
+
+// D3736: independent legal follow-ups, including both colours and stationary-piece controls.
+export const RECORDED_CASTLING_ATTRACTION = Object.freeze([
+  { name: "white", fen: "4B1k1/8/8/8/8/8/8/4K2R w K - 0 1", moves: ["e8f7", "g8f7", "e1h1"], arrival: "f7", rook: "f1", emits: true },
+  { name: "black", fen: "4k2r/8/8/8/8/8/8/4b1K1 b k - 0 1", moves: ["e1f2", "g1f2", "e8h8"], arrival: "f2", rook: "f8", emits: true },
+  { name: "stationary king", fen: "4B1k1/8/8/8/8/8/8/6KR w K - 0 1", moves: ["e8f7", "g8f7", "g1h1"], arrival: "f7", rook: "f1", emits: true },
+  { name: "quiet castling", fen: "1Bk5/8/8/8/8/8/8/4K2R w K - 0 1", moves: ["b8c7", "c8c7", "e1h1"], arrival: "c7", rook: "f1", emits: false },
+  { name: "stationary rook", fen: "1Bk5/8/8/8/8/8/8/4KR2 w F - 0 1", moves: ["b8c7", "c8c7", "e1f1"], arrival: "c7", rook: "f1", emits: false },
+  { name: "white five-edge queen", fen: "k3Bq2/8/8/8/8/8/8/6KR w K - 0 1", moves: ["e8f7", "f8f7", "g1h1", "a8b8", "f1f7"], arrival: "f7", rook: "f7", emits: true },
+  { name: "black five-edge queen", fen: "6kr/8/8/8/8/8/8/K3bQ2 b k - 0 1", moves: ["e1f2", "f1f2", "g8h8", "a1b1", "f8f2"], arrival: "f2", rook: "f2", emits: true },
+] as const);

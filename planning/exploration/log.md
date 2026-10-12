@@ -26642,3 +26642,39 @@ Campaign was the one capability with no API, route or content. Now:
   Current assignment is 3,484 ledger items / 1,723 live / zero untriaged; UX stays 273 complete /
   272 live / 24 retired. Existing chunk warnings, historical intermittent causes, D3734's old
   author-check failures, qualification, official content and complete release proof stay open.
+
+## 2026-10-12 — D3736 recorded attraction retains castling's physical follow-up
+
+- Under accepted semantic-collectors §3.2 and recorded-semantic-path, confirmed that the
+  v2 reader inspected the encoded rook-origin destination instead of the moved castling
+  rook. Three legal king-bait/capture/castling-check controls fail at the predecessor.
+  First probe FENs were correctly refused for opposite-side check and were corrected before
+  claiming the defect. Both-colour five-edge heavy captures independently retain the same gap.
+- One private shared implementation preserves frozen v1 output and gives the recorded v2
+  compiler/sole factory both physical castling relocations. A stationary piece is not moved;
+  quiet/unrelated castling is no witness. No new motif, horizon, module permission, chess grade,
+  pack bytes or persistence contract is added. Fourteen focused compiler/factory/authenticated
+  Review checks pass, including exact end-node/evidence identity and unchanged saved play.
+- Eight actual built desktop/phone Review journeys pass both accepted horizons and colours:
+  captions, full SAN line, exact arrival-square paint, navigation retirement, stable board
+  geometry and saved play. Initial SAN expectations omitted the bait's check symbol; corrected
+  against the legal sequence without changing product rendering or weakening the assertion.
+- `make recorded-semantic-path-check` passes 102 checks and the unchanged 108-path/6,991-ply/
+  1,264-event census with eager byte parity. Local Node-24 total p95 at 20/40/80 plies is
+  24.7/49.9/79.0 ms; this is not a portable performance promise.
+- The first full ordinary gate passes 5,140 software and seven performance cases, then
+  refuses the old generated semantic-validation report after implementation changes.
+  `make semantic-validation-update` regenerates only the existing report: all 343 cases pass
+  over 81 subjects and zero subjects qualify. Case/source populations and requirements are
+  unchanged. A fresh full ordinary serial verification/build/browser run is pending closeout.
+  D3736 remains doing until that result; no raw recording, new tracker, push or release claim.
+- Closeout: the fresh complete `make roadmap-receipt verify-awake build
+  test-browser-ci-awake` run exits zero: 5,140 software, seven unchanged-budget performance,
+  255 content and 316 browser cases; one existing optional live-Maia skip, zero retries,
+  150 permanent input cells and 112 successful composition cells. Types, governance,
+  packaging and build pass. The initial validation-report refusal was repaired by regenerating
+  existing implementation metadata, without changing any of the 343 case results or gates.
+  D3736 is now done with path-backed evidence; work-state has 1,723 live items and zero
+  untriaged. All whole capabilities/milestones and the 273 done/272 live/24 retired UX inventory
+  remain unchanged. Recorded-path still awaits D3 owner use, longitudinal D6 still needs
+  opportunity denominators, and official-content/release qualification remain open.

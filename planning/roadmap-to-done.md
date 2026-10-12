@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3735]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3736]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,19 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3736]] corrects recorded attraction's physical castling follow-up under the existing
+three-edge king-check/five-edge heavy-capture definition. The compiler and sole v2 factory
+retain the relocated rook; stationary pieces and unrelated quiet castling are no witness.
+Fourteen focused compiler/factory/authenticated Review controls and eight desktop/phone
+caption/line/highlight/retirement journeys pass. The frozen v1 reader is unchanged; the
+108-game census remains 1,264 events with eager parity. Full normal local verification/build/
+browser passes 5,140 software, seven performance, 255 content and 316 browser checks, one
+existing optional live-Maia skip, zero retries and all 150 input/112 composition cells. The
+first full run correctly refuses the old generated validation metadata; regeneration preserves
+every case result and the fresh complete run exits zero. This is a real consumer-visible
+foundation correction, not semantic qualification,
+useful Support selection, bot calibration, official content or whole-capability completion.
 
 [[D3735]] replaces misleading Review/longitudinal stand-ins with real saved-source and
 authenticated Review adoption checks across all eleven recorded sequence families and two

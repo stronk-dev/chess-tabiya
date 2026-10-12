@@ -13,7 +13,7 @@ import { normalizeMove } from "chessops/chess";
 import { makeSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 import { positionFromFen } from "../../../packages/runtime/src/chess.js";
-import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES, RECORDED_ATTRACTION_FIVE, RECORDED_DEFLECTION_CHECK } from "../../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
+import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES, RECORDED_ATTRACTION_FIVE, RECORDED_DEFLECTION_CHECK, RECORDED_CASTLING_ATTRACTION } from "../../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
 import type { ReviewMap } from "../../web/src/lib/api.js";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
@@ -216,6 +216,36 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
     const stranger = await register(origin, "sequence_stranger");
     expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
+  });
+
+  it.each(RECORDED_CASTLING_ATTRACTION)("D3736 actual Review retains the castling attraction consequence ($name)", async value => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "castling_attraction_owner");
+    const runId = await importReviewedGame(origin, cookie, "writer-attraction", sequencePgn(value.fen, value.moves), value.name.startsWith("black") ? "black" : "white");
+    const saved = storedRun(databasePath, runId);
+    const before = eventKinds(databasePath, runId);
+    const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const review = await response.json() as ReviewMap;
+    expect(review.rows).toHaveLength(value.moves.length);
+    const projection = "derived.tactic.attraction_observed";
+    const items = parsePresentationReceipt(review.rows.at(-1)!.packet).filter(item => item.adapter.projection.id === projection);
+    expect(items.map(item => item.component.id)).toEqual(value.emits ? ["square_set", "move_path"] : []);
+    const compiled = recordedSemanticPath(saved, saved.activeCursor.branchId);
+    if (compiled.kind !== "available") throw new Error(compiled.reason);
+    const event = compiled.events.find(item => item.projection.id === projection && item.projection.version === 2);
+    expect(event !== undefined).toBe(value.emits);
+    if (event !== undefined) {
+      expect(event.anchor.nodeId).toBe(review.rows.at(-1)!.nodeId);
+      for (const item of items) {
+        expect(item.evidenceRef?.projection).toEqual({ id: projection, version: 2 });
+        expect(item.evidenceRef?.evidenceDigest).toBe(`sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`);
+      }
+      expect(items.map(presentedSentence).join(" ")).toContain(value.arrival);
+    }
+    for (const row of review.rows.slice(0, -1)) expect(row.packet.items.some(item => item.adapter.projection.id === projection)).toBe(false);
+    expect(storedRun(databasePath, runId)).toEqual(saved);
+    expect(eventKinds(databasePath, runId)).toEqual(before);
   });
 
   it("D3735 actual Review fails at a removed recorded-source boundary instead of claiming adoption", async () => {

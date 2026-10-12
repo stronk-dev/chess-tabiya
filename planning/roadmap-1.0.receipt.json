@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:0a925e24a3a63aa7f3fb70160cc4f1fd27c2cb09e7f1a3e1b1c8ee5c7c86007e",
+    "roadmap": "sha256:9b2f59fd37f7cfa2210d4380beb9295154e6fd9569221e992be5bc11479c78d9",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:bdfd48f92e70f8b8db82e048ec319d845ef519babe43c87be35bee11410391f2",
+    "workState": "sha256:f058535513cb450091a104ff40abe660650f8aa3e1aa2535ef1eee9cd80d306b",
     "rfcRegister": "sha256:c7fd996d0eff48225b3fbcf51ef35021123e24d105a2d14be10eeb10df60d990",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 633,
       "doing": 16,
       "blocked": 1074,
-      "done": 1600,
+      "done": 1601,
       "refused": 161
     },
     "workItems": {
@@ -364,16 +364,17 @@
       "nextAction": "Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-12",
-        "summary": "D3735 replaces identical Review/longitudinal stand-ins with actual authorized saved-source and authenticated Review adoption across all eleven recorded sequence families, eleven hard negatives and two additional horizons. Set-equal admission, exact end-node/evidence identity, no phantom output, read authority/no-write and the load-bearing actual PhaseArc boundary pass. The no-write snapshot observes the real import worker's settlement rather than attributing its background publication to Review. Focused Make verification passes 143 checks with clean types; the separate recorded-path check passes 95 checks and 108 imported paths/6,991 plies/1,264 events with eager byte parity and local total p95 25.1/56.8/83.9 ms at 20/40/80 plies. Recorded-path D2/D5 discharge and lifecycle becomes awaiting D3; longitudinal D6 remains open because complete opportunity denominators cannot be replaced by occurrence-only rates. Complete ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,126 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and all four browser tiers with 308 passes, one existing optional live-Maia latency skip, zero retries and all 150 input/112 composition cells. Canonical fixtures, saved bytes, collector semantics, qualification and all whole-capability/release states remain unchanged. Existing warnings, historical intermittent causes and D3734 author-check debt remain. Previous bot and source checkpoints remain historical evidence, not fresh calibration or new source adoption; no remote-CI or release-image promotion.",
+        "summary": "D3736 repairs recorded attraction's physical castling follow-up in the v2 compiler and sole sealed factory, while retaining frozen v1 output and existing family/horizon definitions. Fourteen compiler/factory/authenticated Review controls and eight desktop/phone caption, full-line, highlight and navigation-retirement journeys pass; quiet and stationary-rook negatives remain empty. Recorded-path verification passes 102 checks and the unchanged 108 imported paths/6,991 plies/1,264 events with eager byte parity. Full ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,140 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and all four browser tiers with 316 passes, one existing optional live-Maia latency skip, zero retries and all 150 input/112 composition cells. The first full run correctly refuses old generated validation metadata; the existing update command changes only implementation metadata and preserves all 343 case results, 81 subjects and zero fully qualified subjects. No pack, schema, persistence, permission or whole-capability/release state changes. Recorded-path awaits D3 owner use; longitudinal D6 opportunity denominators, pending source contracts, D3734 author-check debt, historical intermittents and official-content/release proof remain open. Previous checkpoints remain historical evidence, not fresh bot calibration, remote CI or release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/recorded-semantic-path.md",
           "packages/runtime/src/recorded-semantic-path.test.ts",
           "packages/runtime/src/testing/recorded-sequence-fixtures.ts",
-          "apps/server/src/recorded-semantic-path.ts",
-          "apps/server/src/recorded-semantic-path.test.ts",
+          "packages/runtime/src/semantic-evidence.ts",
+          "packages/runtime/src/evidence-factories.ts",
+          "packages/runtime/src/recorded-semantic-path.ts",
           "apps/server/src/review-map.test.ts",
-          "apps/server/src/longitudinal-registry.ts",
+          "tests/browser/review-capture-identity.spec.ts",
           "docs/semantic-evidence.md",
           "planning/exploration/log.md"
         ],
@@ -385,8 +386,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D3735",
-            "digest": "sha256:ecf8af375cdeec1b32b3368541a6bf9b4a65f71fe7674d2410e4fcaa3014eecc"
+            "id": "D3736",
+            "digest": "sha256:400b620e6ecafff38fd3456b5ea4c5099bfed5944e999af0347431df786567b2"
           }
         ]
       },

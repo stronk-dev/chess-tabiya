@@ -101,6 +101,14 @@ These tests also run in ordinary software CI. Two identical local stand-ins no l
 Review/longitudinal integration: longitudinal sequence rates remain deferred until complete
 opportunity semantics exist. This proves Review adoption, not whole semantic qualification.
 
+`make recorded-castling-attraction-check` executes seven legal compiler/factory and seven real
+Review controls for castling attraction: both colours, a stationary king, quiet castling, a
+stationary rook and both accepted horizons. The legacy v1 output remains empty on these controls.
+`make recorded-castling-attraction-browser-check` checks both-colour three-/five-edge Review on
+desktop and touch-phone: exact SAN, complete line, arrival-square highlights, focus/navigation
+retirement, stable geometry and unchanged saved play. These tests are part of the ordinary
+software/browser suites, not a replacement for semantic qualification or release proof.
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct
