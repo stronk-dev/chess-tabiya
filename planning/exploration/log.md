@@ -26897,3 +26897,36 @@ Campaign was the one capability with no API, route or content. Now:
   live rows are assigned. No whole capability/milestone, official content, calibrated bot,
   prior-release, differing-UID Linux-host, dual-architecture release or current-revision GitHub
   discharge. Nothing is pushed. The requested total overview remains in the one current roadmap.
+
+## 2026-10-12 — D3748/D3749 shared import fields and progress closeout
+
+- Review, finished-game authoring, repertoire import and imported Arena legs now share one
+  accessible source-field component. Existing labels, binding, parser/source contracts,
+  submission authority, busy states and retained drafts remain. Their guidance states the actual
+  differences and existing URL-over-paste precedence; saved Story/draft preparation instead
+  describes retry of the already stored game, not a new import. No schema, engine, collector,
+  pack, source or account-data change is introduced.
+- Eight mounted controls cover contracts, unique descriptions, reactive source choice,
+  busy retention, saved-source state and native authoring submission. All 160 affected checks
+  and workspace types pass with zero errors/warnings. The actual desktop/phone journey verifies
+  URL failure/retention, real game import, Story/draft preparation failure and non-duplicating
+  retry, multi-game/variation repertoire creation, and Arena refusal/retained-PGN retry. The
+  first browser assertion incorrectly expected a lowercase short label; it is corrected to the
+  existing "Imported and ready to compare" result, without changing a deadline or behavior.
+- Initial type checking finds the moved fields' obsolete parent CSS selectors and the optional
+  description prop's explicit-undefined type. Both are fixed at their actual owners. D3749
+  corrects the documentation's stale unknown-failure claim to the existing bounded generic
+  copy; the permanent private-detail control remains unchanged.
+- The normal serial `make verify-awake build test-browser-ci-awake` exits zero: its initial
+  full software run passes 5,219 cases/384 files, seven unchanged-budget performance cases,
+  255 real-content cases, types/governance/packaging/build and all four browser tiers. After
+  the saved-source wording repair, final affected checks/types pass and the complete
+  `make test-software` rerun passes 5,220 cases/384 files. Final browser totals are 340 passes,
+  one existing optional Maia skip, zero retries, 150 input cells and all 112 successful
+  unretried composition cells, including the packaged default. Existing bundle warnings remain.
+- Existing roadmap/capability text and the learner-journey checkpoint record the delivery;
+  ledger/state and implemented-system docs flow back in this change set. IMP-a8's broader
+  import/editor IA and D1486's parser/clock policy stay open. All 1,724 live ledger rows remain
+  assigned. D3746's expanded image journey is still blocked on D3747 capacity. No whole
+  capability/milestone, calibrated bot, official content, prior-release, differing-UID host,
+  dual-architecture release or current-revision GitHub discharge. Nothing is pushed.

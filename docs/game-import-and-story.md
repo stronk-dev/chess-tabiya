@@ -44,12 +44,23 @@ the imported run or account, subject to the documented backup limits. Chess.com
 guidance asks for one completed-game export, not an analysis tree containing
 variations.
 
+Review, finished-game authoring, repertoire import and imported Arena legs use
+`ImportSourceFields.svelte` for their PGN inputs. Each field's accessible description
+states its actual contract: a played main line, a repertoire tree, or a main line
+starting at the Arena run's position. Game and study URLs remain distinct. When both
+a URL and PGN are filled, the existing URL precedence is stated beside the fields;
+clearing the URL uses the retained paste. Busy states lock the same controls, and
+failed requests retain their source bytes. Once import has saved a game, the fields
+describe preparation retry rather than promise another import or new source selection.
+This does not change parsing, routes,
+account import, or the separate pack-JSON editor.
+
 The server remains the authority for parsing and source lookup. The client maps
 the server's typed refusals to distinct, actionable messages for one-game,
 mainline-only, variant, size, length, empty-game, starting-position,
 illegal-move, parse, lookup, timeout, and unsupported-source failures. An
-unrecognised typed failure retains the server message rather than being replaced
-with a generic alert.
+unrecognised failure uses bounded generic copy rather than exposing the server's
+private message.
 
 `POST /runs/import` creates the run and its provenance record atomically. Unknown
 request fields fail explicitly. `GET /runs/:id/import` returns the authorized

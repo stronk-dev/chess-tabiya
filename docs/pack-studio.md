@@ -204,6 +204,11 @@ current format number shown by the editor.
 
 ## Seed-door action lifecycle
 
+The finished-game door shares Review's PGN/game-URL source fields and their accessible
+mainline-only guidance. Both inputs remain bound to the seed form; the URL's existing
+precedence is stated when both are filled. This component adds no submission or source
+authority and does not replace the pack-JSON editor.
+
 Position, finished-game, played-run and existing-pack seed doors share one single-flight action.
 Each captures its exact source, requested pack id, current editor selection and Create-route
 generation. Studio accepts only a mutable draft whose record and document both identify that

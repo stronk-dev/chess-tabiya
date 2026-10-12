@@ -1,5 +1,6 @@
 <script lang="ts">
   import Chessboard from "./Chessboard.svelte";
+  import ImportSourceFields from "./ImportSourceFields.svelte";
   import type { PackSummary, RunSummary } from "./api.js";
   import { INITIAL_POSITION_FEN, playAuthoringMove, positionTurn } from "./pack-authoring-seeds.js";
 
@@ -75,9 +76,7 @@
   {:else if door === "game"}
     <form aria-busy={busy} onsubmit={(event) => { event.preventDefault(); void onGame({ title: title.trim(), side, pgn, url: url.trim() }); }}>
       <label>Draft title<input required maxlength="120" disabled={busy} bind:value={title} placeholder="What should this game's rehearsal teach?" /></label>
-      <label>Lichess game URL<input type="url" disabled={busy} bind:value={url} placeholder="https://lichess.org/abcdefgh" /></label>
-      <span>or paste one completed game</span>
-      <label>PGN<textarea rows="7" disabled={busy} bind:value={pgn} placeholder="[Event …]"></textarea></label>
+      <ImportSourceFields kind="game" bind:url bind:pgn disabled={busy} savedSource={savedGamePending} rows={7} />
       <label>Your side<select disabled={busy} bind:value={side}><option value="white">White</option><option value="black">Black</option></select></label>
       <p class="honest">The imported game stays private. Distillation copies recorded moves only and leaves grading, claims, and theory as explicit author work.</p>
       {#if savedGamePending}<p class="honest">The game is already saved. Finish preparing its draft without importing it again.</p>{/if}
@@ -113,7 +112,7 @@
   .seed-doors span { color: var(--muted); line-height: 1.45; }
   form, label { display: grid; gap: .45rem; }
   form { max-width: 48rem; }
-  input, select, textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--paper); color: var(--ink); }
+  input, select { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--paper); color: var(--ink); }
   .seed-fields { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(8rem, .35fr); gap: .7rem; }
   .fen-field { grid-column: 1 / -1; }
   .seed-board { width: min(100%, 30rem); margin-block: .5rem; }

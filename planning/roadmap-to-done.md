@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3747]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3749]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,7 +58,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3744]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3748]]/[[D3749]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
@@ -68,6 +68,19 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3748]] delivers the shared accessible source fields in all four current PGN forms,
+with contract-specific guidance, explicit existing URL precedence and retained failed inputs.
+The real desktop/phone journey creates an imported game, a private draft and a multi-game/
+variation repertoire, then rejects and retries an Arena leg. Eight mounted controls, 160 affected
+checks and clean types pass; saved-source preparation states do not promise or perform another
+import. This is an import UX slice, not completion of IMP-a8's broader
+import/editor IA, D1486's parser/clock policy, account recovery or any whole capability.
+[[D3749]] corrects the stale unknown-error documentation to the existing safe generic behavior.
+Final local software verification passes 5,220 cases/384 files after the saved-source copy repair;
+seven unchanged-budget performance cases, 255 content cases, types/governance/build and all four
+browser tiers pass. Browser results total 340 passes, one existing optional skip, zero retries,
+all 150 input cells and 112 successful unretried composition cells. No push or fresh remote-CI claim.
 
 [[D3746]] expands the existing image recovery journey to D608's populated application fixture,
 independent equality of all database rows, restored privacy/identities and resumed bot/Campaign

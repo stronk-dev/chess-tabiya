@@ -5420,7 +5420,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Four import forms on four screens with no shared vocabulary and no shared component",
       "legacyRoute": "ledger",
-      "note": "[[D1486]]",
+      "note": "[[D1486]]; [[D3748]] supplies shared accessible source fields for the four current PGN forms, preserving game/repertoire/Arena distinctions and URL precedence. The separate pack-JSON editor and broader import IA remain outside this slice; this item is not closed as complete import UX.",
       "sourceDigest": "sha256:19a63c0e4987cf8b988a785ed52fb34b6955c0db5c4a52a7ea6d14801aa3d4a3"
     },
     {

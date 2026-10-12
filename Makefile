@@ -114,6 +114,13 @@ test:
 test-software:
 	pnpm test:software
 
+.PHONY: import-workflow-check import-workflow-browser-check
+import-workflow-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/ImportSourceFields.test.ts apps/web/src/lib/import-presentation.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/game-import.test.ts apps/server/src/repertoire.test.ts
+
+import-workflow-browser-check:
+	./node_modules/.bin/playwright test tests/browser/import-workflow.spec.ts
+
 test-performance:
 	pnpm test:performance
 

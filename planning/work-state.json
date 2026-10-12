@@ -31121,6 +31121,26 @@
       "sourceDigest": "sha256:527be99d5e0f5779aad990e30ac7fa195eb6b2746fc69c2556595b35f0d4cbd4",
       "uxItems": [],
       "owner": "release-engineering"
+    },
+    {
+      "id": "D3748",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c56d2ab933f53601634276e4550b07a16a80fc7e32229460723c3ae62eee86ce",
+      "uxItems": [
+        "IMP-a8"
+      ],
+      "evidence": "apps/web/src/lib/ImportSourceFields.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3749",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8049f6c3e58f96db8c6941f5050f8d7453374adc9dc2fd75adf007dee79ce36b",
+      "uxItems": [],
+      "evidence": "docs/game-import-and-story.md",
+      "evidenceKind": "path"
     }
   ]
 }

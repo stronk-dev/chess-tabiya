@@ -5,6 +5,11 @@ public Lichess study. The importer walks every game, chapter, and variation, rec
 only learner-side moves, and keys answers by normalized position. Transpositions share
 coverage without a move-order-specific card tree.
 
+Its source inputs share the game importer's accessible field component but explicitly
+describe the repertoire contract: several games and analysis variations are retained
+as an opening tree. A filled study URL takes precedence over pasted PGN, and the form
+says so when both are supplied. Clearing that URL leaves the paste available.
+
 Before a fetched study is parsed or stored, its game comments, starting comments,
 numeric annotation glyphs, and comment-encoded board drawings are removed. Headers and
 the complete move/variation tree remain. This keeps someone else's study prose from

@@ -608,7 +608,7 @@
         ],
         "experience": [
           "partial",
-          "Login, destructive previews, twelve-class inventory, download progress and file-preview/password-confirmed import exist. D3567 proves native desktop/phone restore and resumed branched play; D3568 preserves retry after a rejected password. Guest/claim, first-run timing and broader recovery journeys remain unfinished."
+          "Login, destructive previews, twelve-class inventory, download progress and file-preview/password-confirmed import exist. D3567 proves native desktop/phone restore and resumed branched play; D3568 preserves retry after a rejected password. D3748 unifies the four current PGN source fields with accessible contract-specific guidance, explicit existing URL precedence and retained inputs; pack JSON and broader import IA remain separate. Guest/claim, first-run timing and broader recovery journeys remain unfinished."
         ],
         "defaults": [
           "blocked",
@@ -620,7 +620,7 @@
         ],
         "verification": [
           "partial",
-          "D3567 adds permanent native desktop/phone actual archive download, source-account deletion, new-account preview/password refusal/import, preserved branches/cursor, explicit device claim, resumed play and duplicate refusal. D3568 has eight predecessor-red transport controls plus ordinary expiry. Native SQLite tests separately cover private-class round trips and multi-user isolation. D3550's cross-account private-pack admission/restart controls stand. Shared-link lifecycle, guest claim, every future object/schema and complete operator recovery still need proof."
+          "D3567 adds permanent native desktop/phone actual archive download, source-account deletion, new-account preview/password refusal/import, preserved branches/cursor, explicit device claim, resumed play and duplicate refusal. D3568 has eight predecessor-red transport controls plus ordinary expiry. D3748's mounted controls and actual desktop/phone journey exercise all four PGN consumers, URL failure/retention, real game import/draft/repertoire creation and Arena refusal/retry. Native SQLite tests separately cover private-class round trips and multi-user isolation. D3550's cross-account private-pack admission/restart controls stand. Shared-link lifecycle, guest claim, every future object/schema and complete operator recovery still need proof."
         ],
         "release": [
           "blocked",
@@ -1807,8 +1807,8 @@
         ],
         "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-10-11",
-          "summary": "D3728 repairs measured inherited score/line/reference exposure in scratch previews under the accepted comparison disclosure contract. Saved-run disclosure now gates virtual comparisons; virtual checkpoints cannot reveal withheld analysis. Twenty-one focused controls pass; three fail with unfiltered predecessor behavior, including authenticated private playtest/restart/preview/actual entry/rewind. Complete ordinary serial make verify-awake build test-browser-ci-awake exits zero: 4,991 software/377 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 304 browser passes, one existing optional Maia skip, zero retries and 112 composition cells. D3727 nested first-child walks and D3709 ordinary/charged consequence parity stand. D1154 still requires the self-contained readonly scratch transport amendment before full synchronized comparison. Prior Campaign, Library, Review, Studio, Play and classroom checkpoints stand. Source adoption, useful selection, skills, bot calibration, official content, curriculum and complete release recovery remain open. No whole capability/milestone, remote CI or release-image promotion.",
+          "at": "2026-10-12",
+          "summary": "D3748 unifies the four current PGN source forms with accessible contract-specific guidance, explicit existing URL precedence and retained failed inputs. Saved Story/draft preparation states describe the already stored source and retry without a duplicate import. Eight mounted controls, 160 affected checks and clean types pass; actual desktop/phone journeys create a game, private draft and variation/multi-game repertoire, then refuse/retry an Arena leg. All four browser tiers pass 340 cases, one existing optional Maia skip, zero retries and all 112 unretried composition cells. D3749 corrects unknown-failure documentation to existing bounded generic behavior. Prior D3728 preview disclosure, Campaign, Library, classroom, Review and Play checkpoints stand. IMP-a8 broader import/editor IA, D1486 parser/clock policy, source adoption, useful selection, skills, bot calibration, official content, curriculum and release recovery remain open. No whole capability/milestone, remote CI or release-image promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/web/src/lib/DrillScreen.svelte",
@@ -1852,7 +1852,10 @@
             "apps/server/src/authored-simulation.test.ts",
             "apps/server/src/run-pack-application.test.ts",
             "docs/n-way-comparison.md",
-            "rfc/archive/n-way-comparison.md"
+            "rfc/archive/n-way-comparison.md",
+            "apps/web/src/lib/ImportSourceFields.svelte",
+            "apps/web/src/lib/ImportSourceFields.test.ts",
+            "tests/browser/import-workflow.spec.ts"
           ],
           "anchors": [
             {
@@ -1914,6 +1917,16 @@
               "kind": "work_state",
               "id": "D3709",
               "digest": "sha256:4ee485ad2326f319a46fed7d918090b62a70cb65944d91aca29d074a26073c3f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3748",
+              "digest": "sha256:c56d2ab933f53601634276e4550b07a16a80fc7e32229460723c3ae62eee86ce"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3749",
+              "digest": "sha256:8049f6c3e58f96db8c6941f5050f8d7453374adc9dc2fd75adf007dee79ce36b"
             }
           ]
         },
