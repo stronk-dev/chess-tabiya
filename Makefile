@@ -3323,6 +3323,15 @@ web-bundle-report:
 web-runtime-boundary-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/client.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/board-annotation.test.ts apps/web/src/lib/client-runtime-imports.test.ts apps/web/src/lib/capability-response.test.ts
 
+.PHONY: web-screen-delivery-check
+# Route-local loading/retry, full shell journeys and theme integration; also in test-software.
+web-screen-delivery-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/deferred-screen.test.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/theme/theme.test.ts
+
+.PHONY: web-screen-delivery-browser-check
+web-screen-delivery-browser-check:
+	./node_modules/.bin/playwright test tests/browser/screen-delivery.spec.ts
+
 verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
 
 verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract

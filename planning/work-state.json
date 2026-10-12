@@ -30987,6 +30987,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/client.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3733",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:31d8c01148e10433ad5711672d55a8df4c89766b1befbb0fb7aac3c27a84bcfc",
+      "uxItems": [],
+      "evidence": "tests/browser/screen-delivery.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

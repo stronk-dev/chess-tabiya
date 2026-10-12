@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-12 — [[D3733]] closes route-local screen delivery under accepted
+`rfc/archive/app-shell.md`: seven large components load at their actual route,
+with fixed loading/error copy, explicit page reload, preserved navigation and
+generation-bound heading focus. All 143 mounted boundary/shell/theme controls, types
+and four actual built-browser delayed/failure/route-local checks pass. Complete
+static initial JavaScript is 2,049,463 bytes, about 15% below D3732's 2,414,754;
+the 522,120-byte entry is not the whole download. Shared startup validation,
+source admission and existing screen command/data contracts remain. Full ordinary
+serial verification/build/browser passes 5,076 software/381 files, seven unchanged-budget
+performance/four files, 255 content/26 files and 308 browser cases, one existing
+optional Maia skip, zero retries, all 150 input/112 composition cells and clean
+types/governance/packaging. The first full run's undefined theme token is repaired
+and its check added to the focused Make command, not weakened. No whole capability,
+milestone, remote-CI or release-image promotion.
+[[D3722]] retains other eager code and supported-device/deployment measurements.
+
 2026-10-12 — [[D3732]] separates production web imports onto the same runtime
 implementations without loading the private capability catalogue. The full server
 entry and the client's explicit semantic-validation startup check remain.

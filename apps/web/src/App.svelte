@@ -6,18 +6,14 @@
   import { DRILL_PACK_SCHEMA_VERSION } from "@chess-tabiya/schema";
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
-  import DrillScreen from "./lib/DrillScreen.svelte";
-  import CampaignScreen from "./lib/CampaignScreen.svelte";
+  import DeferredScreen from "./lib/DeferredScreen.svelte";
   import CampaignStrip from "./lib/CampaignStrip.svelte";
   import { CampaignApi } from "./lib/campaign-api.js";
   import { writerStorageKey } from "./lib/writer-session.js";
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
-  import LibraryScreen from "./lib/LibraryScreen.svelte";
-  import TheoryEntryScreen from "./lib/TheoryEntryScreen.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import LivePreamble from "./lib/LivePreamble.svelte";
-  import ReviewMapScreen from "./lib/ReviewMapScreen.svelte";
   import { reviewTargetBranch } from "./lib/review-target.js";
   import { learnerMoveCount, rehearsalTurnCount } from "./lib/chronology-copy.js";
   import { attemptVerdictLabel, chessSideLabel, corpusPopulationLabel, difficultRootCountSentence, difficultRootRuleSentence, DUE_FREQUENCY_ORDER_NOTE, dueFrequencySentence, dueVariationSentence, dueWaitingSentence, repertoireGapStateLabel, RETURN_STANDING_EXPLANATION } from "./lib/learner-copy.js";
@@ -30,8 +26,6 @@
   import { assertSavedPackDraft, packRegistrationBlockReason, parsePackPublicationIssues, validPackDraftIdentity } from "./lib/pack-draft-response.js";
   import { validRegisteredShapeIdentity, validShapeDraftIdentity, validShapeValidation } from "./lib/shape-draft-response.js";
   import { parseDueQueue, progressRecommendationSentence } from "./lib/progress-response.js";
-  import RatingScreen from "./lib/RatingScreen.svelte";
-  import ProfileScreen from "./lib/ProfileScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
@@ -1207,15 +1201,25 @@
         routeHasLoaded = true;
         routeLoading = false;
         if (moveFocus) {
+          pendingRouteFocus = generation;
           await tick();
-          if (generation === loadGeneration) {
-            const heading = document.querySelector<HTMLElement>("#main-content main h1");
-            heading?.setAttribute("tabindex", "-1");
-            heading?.focus();
-          }
+          focusDeliveredRoute();
         }
       }
     }
+  }
+
+  // Route data and its component can settle in either order. Retain the shell's
+  // existing heading-focus request until both are visible, without admitting a
+  // late module from an earlier navigation or focusing on a background poll.
+  let pendingRouteFocus: number | undefined;
+  function focusDeliveredRoute(): void {
+    if (pendingRouteFocus !== loadGeneration || routeLoading) return;
+    const heading = document.querySelector<HTMLElement>("#main-content main h1");
+    if (heading === null) return;
+    heading.setAttribute("tabindex", "-1");
+    heading.focus();
+    pendingRouteFocus = undefined;
   }
 
   async function loadPublicRoute(_next: AppRoute): Promise<void> {
@@ -2859,6 +2863,9 @@
           <button type="button" onclick={() => void controller.claimLease()}>Take the board on this device</button>
         </div>
       {/if}
+      <DeferredScreen label="Rehearsal" load={() => import("./lib/DrillScreen.svelte")} onReady={focusDeliveredRoute}>
+      {#snippet children({ default: DrillScreen })}
+      {#if session.runState}
       <DrillScreen
         pack={session.pack}
         {relatedPack}
@@ -2976,12 +2983,23 @@
       {/if}
       {/snippet}
       </DrillScreen>
+      {/if}
+      {/snippet}
+      </DeferredScreen>
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}{#key `${story.runId}:${story.branchId}:${route.name === 'story' ? route.nodeId ?? '' : ''}`}<ReviewMapScreen review={story} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />{/key}
+    {#if story}{#key `${story.runId}:${story.branchId}:${route.name === 'story' ? route.nodeId ?? '' : ''}`}
+      <DeferredScreen label="Game review" load={() => import("./lib/ReviewMapScreen.svelte")} onReady={focusDeliveredRoute}>
+        {#snippet children({ default: ReviewMapScreen })}
+          {#if story}
+          <ReviewMapScreen review={story} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+          {/if}
+        {/snippet}
+      </DeferredScreen>
+    {/key}
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">
@@ -3512,20 +3530,42 @@
       {:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
   {:else if route.name === "campaign" || route.name === "campaign-run"}
-    <CampaignScreen campaigns={campaignApi} campaignRunId={route.name === "campaign-run" ? route.campaignRunId : undefined} onNavigate={navigate} rememberWriter={(runId, writerId) => applicationStorage()?.setItem(writerStorageKey(runId), writerId)} />
+    <DeferredScreen label="Campaign" load={() => import("./lib/CampaignScreen.svelte")} onReady={focusDeliveredRoute}>
+      {#snippet children({ default: CampaignScreen })}
+        <CampaignScreen campaigns={campaignApi} campaignRunId={route.name === "campaign-run" ? route.campaignRunId : undefined} onNavigate={navigate} rememberWriter={(runId, writerId) => applicationStorage()?.setItem(writerStorageKey(runId), writerId)} />
+      {/snippet}
+    </DeferredScreen>
   {:else if route.name === "rating"}
-    <RatingScreen {api} onStart={startRatedGame} onOpenProfile={() => navigate(routePath({ name: "profile" }))} />
+    <DeferredScreen label="Rating" load={() => import("./lib/RatingScreen.svelte")} onReady={focusDeliveredRoute}>
+      {#snippet children({ default: RatingScreen })}
+        <RatingScreen {api} onStart={startRatedGame} onOpenProfile={() => navigate(routePath({ name: "profile" }))} />
+      {/snippet}
+    </DeferredScreen>
   {:else if route.name === "profile"}
-    <ProfileScreen {api} onNavigate={navigate} onStartPack={(packId) => controller.startPack(packId)} />
+    <DeferredScreen label="Your profile" load={() => import("./lib/ProfileScreen.svelte")} onReady={focusDeliveredRoute}>
+      {#snippet children({ default: ProfileScreen })}
+        <ProfileScreen {api} onNavigate={navigate} onStartPack={(packId) => controller.startPack(packId)} />
+      {/snippet}
+    </DeferredScreen>
   {:else if route.name === "pack" || route.name === "shape-entry" || route.name === "principle-entry" || route.name === "opening-entry"}
     <main class="library-surface" aria-labelledby="entry-title">
       {#if session.error}<p class="library-alert" role="alert">{session.error}</p>{/if}
-      <TheoryEntryScreen {api} {route} busy={session.busy} onNavigate={navigate} onRehearse={(packId) => controller.startPack(packId)} onStartDue={(schedule) => startDueSchedule(schedule)} />
+      <DeferredScreen label="Theory" load={() => import("./lib/TheoryEntryScreen.svelte")} onReady={focusDeliveredRoute}>
+        {#snippet children({ default: TheoryEntryScreen })}
+          {#if route.name === "pack" || route.name === "shape-entry" || route.name === "principle-entry" || route.name === "opening-entry"}
+          <TheoryEntryScreen {api} {route} busy={session.busy} onNavigate={navigate} onRehearse={(packId) => controller.startPack(packId)} onStartDue={(schedule) => startDueSchedule(schedule)} />
+          {/if}
+        {/snippet}
+      </DeferredScreen>
     </main>
   {:else if route.name === "library"}
     <main class="library-surface" aria-labelledby="library-title">
       {#if session.error}<p class="library-alert" role="alert">{session.error}</p>{/if}
-      <LibraryScreen {api} {packs} {dueSchedules} busy={session.busy} onNavigate={navigate} onRehearse={(packId) => controller.startPack(packId)} onStartDue={(schedule) => startDueSchedule(schedule)} />
+      <DeferredScreen label="Library" load={() => import("./lib/LibraryScreen.svelte")} onReady={focusDeliveredRoute}>
+        {#snippet children({ default: LibraryScreen })}
+          <LibraryScreen {api} {packs} {dueSchedules} busy={session.busy} onNavigate={navigate} onRehearse={(packId) => controller.startPack(packId)} onStartDue={(schedule) => startDueSchedule(schedule)} />
+        {/snippet}
+      </DeferredScreen>
       <section class="library-games" aria-labelledby="library-games-title"><h2 id="library-games-title">My games</h2>
         <p>Download a game as standard PGN for chess tools, or open it to choose particular branches.</p>
         <p class="honest">Deleting a run removes Tabiya's live copy immediately. Shared runs may remain as read-only history for collaborators, and deployment backups may retain an older copy until their configured retention period ends.</p>

@@ -373,6 +373,46 @@ omitted semantic validation's four-way module-load equality and measured
 2,264,302 bytes; the boundary test rejected it. The delivered entry explicitly
 imports that validation module, and the measurement above retains it.
 
+#### Route-local screen delivery — D3733, 2026-10-12
+
+Rehearsal, Game Review, Campaign, Rating, Profile, Library and theory-entry
+components use ordinary dynamic imports at their actual route. Their props,
+data loaders, commands and evidence admission are unchanged. The shell and
+navigation stay available during delivery. `DeferredScreen` owns one import
+per mounted boundary, so changing route data or callbacks does not restart
+delivery or remount unsaved local state. A departed boundary cannot render a
+late module. Route heading focus waits for both data and component delivery,
+under the existing shell navigation generation; background refreshes do not
+claim focus.
+
+Loading is announced with fixed, atomic status copy. A failed import shows fixed
+copy and a **Reload page** button, not a provider diagnostic or automatic retry.
+Explicit reload retries the page and its ordinary read paths without replaying
+a mutation. It also reacquires the document's current chunk references after a
+deployment; retrying an obsolete chunk URL alone cannot recover a removed asset
+([Vite's load-error guidance](https://vite.dev/guide/build.html#load-error-handling)).
+
+The current no-write diagnostic counts the complete static dependency graph,
+not just the smaller entry filename: 2,049,463 initial JavaScript bytes versus
+the preceding single entry's 2,414,754, about 15% fewer. The 522,120-byte entry
+still eagerly imports 1,527,343 bytes of shared dependencies, including the
+unchanged semantic-validation startup checks. Total JavaScript across all
+chunks is 2,422,710 bytes; the split does not claim to reduce every route's
+eventual total or measured user latency. Required chunks still exceed the
+existing warning threshold. D3722 retains remaining eager delivery and
+supported-device/deployment measurements.
+
+`make web-screen-delivery-check` runs 143 mounted boundary/shell/theme controls;
+workspace types pass. `make web-screen-delivery-browser-check` runs four actual
+built-browser checks: no large-screen downloads at the catalogue, route-local
+and cached return delivery, delayed navigation-away/focus, and failed chunk
+reload on desktop and phone with no command issuance. Broader release and
+whole-journey qualification remain separate. Complete ordinary serial
+`make roadmap-receipt verify-awake build test-browser-ci-awake` passes 5,076 software
+tests/381 files, seven unchanged-budget performance checks/four files, 255 content
+tests/26 files and 308 browser cases, one existing optional Maia skip, zero retries,
+all 150 input/112 composition cells and clean types/governance/packaging/build.
+
 `/settings` is the learner-facing Settings surface, with a sticky section index
 for Appearance, Playing, Account, and About. It edits the same per-browser
 assistance records used by the in-run popover for pack, position, and imported

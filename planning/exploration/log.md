@@ -26558,3 +26558,30 @@ Campaign was the one capability with no API, route or content. Now:
   optional Maia skip, zero retries, all 150 input/112 composition cells. D3732 closes locally;
   D3722 device/deployment cold delivery and whole qualification/release gates remain open.
   Existing ledger, roadmap, work-state and docs carry the closeout; no raw recording or push.
+
+## 2026-10-12 — D3733 route-local screen delivery
+
+- Seven large components now load at their actual route through an ordinary dynamic-import
+  boundary under the accepted application-shell contract. Original props, data loaders, commands,
+  evidence admission and semantic-validation startup checks remain. One request per boundary
+  retains local drafts on surrounding updates; departure retires late delivery. Fixed loading
+  and failure copy preserves navigation; explicit page reload never replays a mutation.
+- Initial mounted checks expose lost route-heading focus and a happy-dom filesystem fixture
+  mismatch. Generation-bound focus now waits for data and component delivery; the fixture reads
+  the actual repository file. Strict types require explicit narrowed guards inside async snippets.
+  The first complete software run catches an undefined theme token; ordinary spacing repairs it,
+  and the unchanged theme check joins the focused Make command. No check/deadline/retry is weakened.
+- All 143 mounted boundary/shell/theme controls and workspace types pass. Four actual desktop/
+  phone browser controls prove route-local/cached chunk requests, navigation away during held
+  delivery, heading focus and explicit failed-chunk reload with no command issuance.
+- The refreshed no-write production diagnostic counts the complete static graph: 2,049,463 initial
+  JavaScript bytes versus 2,414,754 previously (about 15% fewer). The entry alone is 522,120 bytes;
+  shared initial dependencies are 1,527,343 bytes. All chunks total 2,422,710 bytes; neither total
+  route download nor user latency is claimed improved. Existing chunk warnings remain.
+- Complete normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits
+  zero: 5,076 software/381 files, seven unchanged-budget performance/four files, 255 content/26
+  files, clean types/governance/packaging/build and 308 browser passes, one existing optional Maia
+  skip, zero retries, all 150 input/112 composition cells. D3733 closes locally; D3722 retains
+  other eager code and supported-device/deployment cold proof. Whole capabilities, milestones,
+  official content, exact-revision remote CI and release-image qualification do not advance.
+  Existing ledger/roadmap/work-state carry closeout; no raw dumps, new tracker or push.

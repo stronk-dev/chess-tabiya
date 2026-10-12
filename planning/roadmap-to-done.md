@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3732]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3733]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,22 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3733]] defers seven large screen components to their actual route under the
+accepted application-shell contract. Fixed loading/error copy, explicit page
+reload, preserved navigation/local screen state and generation-bound heading focus
+have 143 mounted boundary/shell/theme controls, clean types and four actual
+built-browser delivery/failure checks. Complete ordinary serial verification/build/
+browser passes 5,076 software/381 files, seven unchanged-budget performance/four
+files, 255 content/26 files and 308 browser cases, one existing optional Maia skip,
+zero retries and all 150 input/112 composition cells. The first full run's undefined
+theme token is repaired and covered by the focused Make command; no check is weakened.
+The final no-write diagnostic counts 2,049,463 initial JavaScript bytes, about 15%
+below D3732's 2,414,754; the 522,120-byte entry still eagerly imports 1,527,343 bytes
+of shared dependencies. Total JavaScript is 2,422,710 bytes, not a reduction in every
+route's eventual download or a measured speed promise. Required startup validation
+and the existing bundle warning remain. D3722 other eager delivery/device/deployment
+measurements, all whole-capability/milestone gates and release proof stay open.
 
 [[D3732]] removes the private capability catalogue from browser delivery without
 duplicating implementations. All 115 web edits are import-path replacements;

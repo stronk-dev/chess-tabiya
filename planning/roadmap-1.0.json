@@ -691,7 +691,7 @@
         "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-12",
-          "summary": "D3732 separates production web imports from the private capability catalogue while re-exporting the original implementations. All 115 web edits are import-path replacements; server catalogue checks and client semantic-validation startup equality remain. All 66 focused boundary/parser/privacy controls and workspace types pass. Full ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,070 software/380 files, seven unchanged-budget performance/four files, 255 content/26 files, types/governance/packaging/build and 304 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. The entry is 2,414,754 raw bytes / 609.96 kB reported gzip, about 24% / 12% below the preceding build, not a latency promise. D3722's eager bundle and device/deployment measurements, original intermittent causes, qualification, official content and full release proof remain. Existing core-loop, Campaign and evidence repairs stand; no whole capability/milestone, fresh remote CI or release-image promotion.",
+        "summary": "D3733 defers seven large screen components to their actual route under the accepted application-shell contract, preserving data, commands, evidence admission and semantic startup validation. Fixed loading/error copy, explicit page reload, retired late delivery and generation-bound heading focus pass 143 mounted boundary/shell/theme controls, clean types and four actual desktop/phone browser checks. The first full run's undefined theme token is repaired and caught by the focused Make command; no check is weakened. Complete ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,076 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files, types/governance/packaging/build and 308 browser passes, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. Complete static initial JavaScript is 2,049,463 bytes, about 15% below D3732's 2,414,754; the 522,120-byte entry alone is not the whole download. Total JavaScript is 2,422,710 bytes, not a total-route or measured latency improvement. Existing warnings, D3722 other eager code/device/deployment proof, original intermittent causes, qualification, official content and full release obligations remain. No whole capability/milestone, fresh remote CI or release-image promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/concept-registry.md",
@@ -766,8 +766,13 @@
             "tools/verify-caddy.test.mjs",
             "packages/runtime/src/client.ts",
             "packages/runtime/src/client.test.ts",
-            "apps/web/src/lib/client-runtime-imports.test.ts",
-            "docs/app-shell.md"
+          "apps/web/src/lib/client-runtime-imports.test.ts",
+          "docs/app-shell.md",
+          "apps/web/src/App.svelte",
+          "apps/web/src/lib/DeferredScreen.svelte",
+          "apps/web/src/lib/deferred-screen.test.ts",
+          "apps/web/src/lib/theme/theme.test.ts",
+          "tests/browser/screen-delivery.spec.ts"
           ],
           "anchors": [
             {
@@ -851,11 +856,16 @@
               "id": "D3708",
               "digest": "sha256:fb592dfd59e8f97b8540a01b965a49cab2c5a7704d4211cb5dfc1c2420689409"
             },
-            {
-              "kind": "work_state",
-              "id": "D3732",
-              "digest": "sha256:e205a0da3b349b9c099f7f1fa65e092bd6e92418a6b657c08968c2de5426c4f4"
-            }
+          {
+            "kind": "work_state",
+            "id": "D3732",
+            "digest": "sha256:e205a0da3b349b9c099f7f1fa65e092bd6e92418a6b657c08968c2de5426c4f4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3733",
+            "digest": "sha256:31d8c01148e10433ad5711672d55a8df4c89766b1befbb0fb7aac3c27a84bcfc"
+          }
           ]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
