@@ -1,6 +1,6 @@
-import type { ProviderHealthCapabilities } from "@chess-tabiya/runtime";
+import type { ProviderHealthCapabilities } from "@chess-tabiya/runtime/client";
 import { assertSavedPackDraft } from "./pack-draft-response.js";
-import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime";
+import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime/client";
 import type {
   DrillPackDefinition,
   PackPhase,
@@ -47,8 +47,8 @@ import type {
   ModuleQueryRequest,
   ImportSourceKind,
   ImportSourceRequestKind,
-} from "@chess-tabiya/runtime";
-import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseHintResponse, parseReviewStoryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
+import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseHintResponse, parseReviewStoryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime/client";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
@@ -121,7 +121,7 @@ export interface PackConceptLabel {
   readonly status: "active" | "retired" | "unregistered";
 }
 
-export type { ConceptCatalogueView, ConceptLabelView } from "@chess-tabiya/runtime";
+export type { ConceptCatalogueView, ConceptLabelView } from "@chess-tabiya/runtime/client";
 
 export interface PackDocument {
   readonly document: DrillPackDefinition;
@@ -444,7 +444,7 @@ export interface SessionJournalEntry { readonly sessionId:string;readonly seq:nu
 export interface MoveAuthorship { readonly eventSeq:number;readonly nodeId:string;readonly learnerId:string|null }
 export interface SessionInvitation { readonly id:string;readonly sessionId:string;readonly leg:1|2|null;readonly invitedHandle:string|null;readonly invitedRole:RunRole;readonly externalChallengeUrl:string|null;readonly state:"open"|"accepted"|"revoked";readonly createdAt:string }
 export interface ArenaLeg { readonly sessionId:string;readonly leg:1|2;readonly referencePlayerHandle:string|null;readonly externalChallengeUrl:string|null;readonly pgn:string|null;readonly result:"1-0"|"0-1"|"1/2-1/2"|"*"|null;readonly branchId:string|null;readonly importedAt:string|null }
-export interface RelayedMark { readonly scope:"position"|"branch";readonly brush:import("@chess-tabiya/runtime").MarkBrush;readonly orig:string;readonly dest?:string;readonly drawnBy?:LeaseIdentity;readonly at:string }
+export interface RelayedMark { readonly scope:"position"|"branch";readonly brush:import("@chess-tabiya/runtime/client").MarkBrush;readonly orig:string;readonly dest?:string;readonly drawnBy?:LeaseIdentity;readonly at:string }
 export interface LiveSessionDetail { readonly session:LiveSession;readonly classroom?:{readonly id:string;readonly name:string};readonly role:RunRole;readonly activeNodeId:string;readonly activeFen:string;readonly leaseHeldBy:LeaseIdentity;readonly voteAdapter?:LeaseIdentity;readonly grants:readonly RunGrant[];readonly moveAuthorship:readonly MoveAuthorship[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[];readonly match?:MatchState;readonly marks:readonly RelayedMark[];readonly marksTruncated?:true }
 export interface SessionJoinLink {readonly id:string;readonly scope:"session_join";readonly sessionId:string;readonly matchSlot:"white"|"black"|null;readonly invitedRole:"participant"|"spectator";readonly invitedHandle:string|null;readonly expiresAt:string;readonly usesRemaining:number;readonly createdAt:string;readonly revokedAt:string|null}
 
@@ -662,8 +662,8 @@ export interface HumanSplitPage {
   readonly candidates: readonly NonNullable<OpponentSelection["candidates"]>[number][];
 }
 
-export type { CorpusPopulation, CorpusResult } from "@chess-tabiya/runtime";
-export type CorpusPage = import("@chess-tabiya/runtime").CorpusInspectorPage;
+export type { CorpusPopulation, CorpusResult } from "@chess-tabiya/runtime/client";
+export type CorpusPage = import("@chess-tabiya/runtime/client").CorpusInspectorPage;
 export interface RepertoireSummary {readonly id:string;readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly digest:string;readonly updatedAt:string;readonly scan:null|{readonly scannedAt:string;readonly stale:boolean;readonly truncated:boolean;readonly gapCount:number}}
 export interface RepertoireView extends RepertoireSummary {readonly rootFen:string;readonly sourceKind:"pgn_paste"|"lichess_study";readonly sourceUrl:string|null;readonly licenceNote:string;readonly moves:readonly {readonly positionKey:string;readonly moveUci:string;readonly moveSan:string;readonly representativeFen:string;readonly rank:number;readonly origin:"imported"|"chosen_from_attempt"}[]}
 export interface RepertoireGap {readonly key:string;readonly representativeFen:string;readonly replySan:string;readonly replyUci:string;readonly line:readonly string[];readonly mass?:number;readonly gamesUntilSeen?:number;readonly state:"open"|"addressed"|"answered";readonly runId:string|null;readonly firstMoves:readonly {readonly moveUci:string;readonly moveSan:string}[];readonly answer:{readonly moveUci:string;readonly moveSan:string}|null}
@@ -1123,7 +1123,7 @@ export interface DrillClientApi extends RunApi {
     runId: string,
     branchIds: readonly string[],
   ): Promise<BranchComparison>;
-  branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>>;
+  branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime/client").Decidedness>>>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   reasoning(runId: string, checkpointId: string): Promise<ReasoningPage>;
   reasoningReview?(runId: string, checkpointEventSeq: number): Promise<ReasoningReviewPage>;
@@ -1914,8 +1914,8 @@ export class DrillApi implements DrillClientApi {
     return body.comparison;
   }
 
-  async branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>> {
-    const body = await this.#json<{ readonly decidedness: Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>> }>(
+  async branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime/client").Decidedness>>> {
+    const body = await this.#json<{ readonly decidedness: Readonly<Record<string, import("@chess-tabiya/runtime/client").Decidedness>> }>(
       `/runs/${encoded(runId)}/branch-decidedness`,
       { method: "POST", body: { branchIds } },
     );

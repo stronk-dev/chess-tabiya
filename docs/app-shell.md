@@ -343,6 +343,36 @@ warning thresholds or budgets changed in this investigation. The diagnostic is
 disposable analysis under RFC-0000's exploration gate, not a CI/progress dependency.
 It prints a small report to the terminal and commits no generated recording.
 
+#### Browser dependency separation — D3732, 2026-10-12
+
+Production web imports use `@chess-tabiya/runtime/client`, an explicit re-export
+entry pointing to the same implementations as the full runtime. It does not
+import the private capability catalogue. The server/tooling entry remains
+unchanged, including catalogue construction and module-load checks. Public
+capability parsing, semantic qualification and evidence-value admission remain
+shared; no browser lookalike or purity annotation replaces them.
+
+The same disposable Vite diagnostic measures 2,414,754 raw entry bytes after the
+separation, down from the preceding normal build's approximately 3,195,540 bytes.
+The normal build confirms the same entry and reports 609.96 kB gzip, versus
+693.41 kB previously (about 12% less reported gzip size).
+This is about 24% fewer raw JavaScript bytes, not measured interaction latency.
+The entry still eagerly includes all screens and remains above the existing
+warning threshold. D3722's supported-device/deployment cold-use measurements and
+the broader release qualification remain open.
+
+`make web-runtime-boundary-check` runs permanent software controls that compare
+every client value to the original export,
+bundle both entries to verify the private catalogue is absent only from the
+client, retain the semantic admission dependencies, and reject production web
+imports of the full runtime entry. All 66 focused checks and workspace types pass.
+Full ordinary serial verification/build/browser passes 5,070 software, seven
+performance, 255 content and 304 browser tests, one existing optional skip,
+zero retries, all 150 input/112 composition cells. The first separation candidate
+omitted semantic validation's four-way module-load equality and measured
+2,264,302 bytes; the boundary test rejected it. The delivered entry explicitly
+imports that validation module, and the measurement above retains it.
+
 `/settings` is the learner-facing Settings surface, with a sticky section index
 for Appearance, Playing, Account, and About. It edits the same per-browser
 assistance records used by the in-run popover for pack, position, and imported

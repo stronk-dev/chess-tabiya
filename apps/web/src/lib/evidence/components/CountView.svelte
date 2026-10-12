@@ -1,7 +1,7 @@
 <script lang="ts">
   // rfc/evidence-presentation.md §3.7 — a numerator against the base it was drawn from; the
   // component computes the proportion itself. A zero denominator (or an unmet floor) draws no mark.
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
   import { countView } from "../presented-view.js";
 
   interface Props { component: Extract<ComponentValue, { id: "count_with_denominator" }>; sentence: string }

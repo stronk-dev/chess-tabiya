@@ -3,11 +3,11 @@
   import { onDestroy, onMount } from "svelte";
   import { modalBoundary } from "./modal-boundary.js";
 
-  import type { RunOutcome } from "@chess-tabiya/runtime";
+  import type { RunOutcome } from "@chess-tabiya/runtime/client";
   import type { AuthoredFeedbackItem, RepertoireGap, ShapeEntryView } from "./api.js";
   import type { EvidenceSentence } from "./evidence-sentences.js";
   import OutcomeContext from "./OutcomeContext.svelte";
-  import type { DrillRun } from "@chess-tabiya/runtime";
+  import type { DrillRun } from "@chess-tabiya/runtime/client";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
   import { claimProvenance } from "./claim-presentation.js";
   import HonestControl from "./HonestControl.svelte";

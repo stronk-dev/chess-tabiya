@@ -1,6 +1,6 @@
 // The client's view of the private learner profile (rfc/player-style.md, rfc/skills.md). Every
 // response crosses one strict parser: a malformed or widened payload is refused, never rendered.
-import type { HabitCard, StyleContributorRef, StyleContributors } from "@chess-tabiya/runtime";
+import type { HabitCard, StyleContributorRef, StyleContributors } from "@chess-tabiya/runtime/client";
 
 export type { HabitCard, StyleContributorRef, StyleContributors };
 

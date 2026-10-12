@@ -1,7 +1,7 @@
 <script lang="ts">
   // rfc/review-map.md: the learner-facing whole-game Review Map. Every authored string on this
   // surface is a registered template (`reviewText`); everything else is payload data rendered as is.
-  import { parsePresentationReceipt, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime";
+  import { parsePresentationReceipt, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime/client";
   import { onDestroy, tick } from "svelte";
   import type { DrawShape } from "@lichess-org/chessground/draw";
 

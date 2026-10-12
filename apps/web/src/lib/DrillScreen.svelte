@@ -2,7 +2,7 @@
   import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, PRIMARY_EVIDENCE_MANIFEST, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, declareTransitionReadingEvidence, endgameClassification, endgameSetupMatches, evidenceForConsumer, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presentEvidenceItems, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, PRIMARY_EVIDENCE_MANIFEST, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, declareTransitionReadingEvidence, endgameClassification, endgameSetupMatches, evidenceForConsumer, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presentEvidenceItems, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime/client";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick, untrack, type Snippet } from "svelte";
 
@@ -38,8 +38,8 @@
   import { boardPaint } from "./evidence/presented-view.js";
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
-  import type { HintDeliveryMarks } from "@chess-tabiya/runtime";
-  import { HINT_DISTANCES, moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime";
+  import type { HintDeliveryMarks } from "@chess-tabiya/runtime/client";
+  import { HINT_DISTANCES, moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime/client";
   import type { ModuleSeatAction, ModuleSeatActions } from "./module-seats.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
@@ -68,7 +68,7 @@
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, requestedPresetLabel, saveWorkflowPreference, workflowPreferenceKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
-  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2, type ModuleQueryRequest } from "@chess-tabiya/runtime";
+  import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2, type ModuleQueryRequest } from "@chess-tabiya/runtime/client";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, runOpponentStatus } from "./opponent-copy.js";
@@ -156,7 +156,7 @@
     onPrediction?: (uci: string) => void | Promise<void>;
     importedGuess?: ImportedGuess | undefined;
     onGuessImportedMove?: ((uci: string) => void | Promise<void>) | undefined;
-    onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
+    onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime/client").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onLoadMarks?: (() => Promise<readonly RunMark[]>) | undefined;

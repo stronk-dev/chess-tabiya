@@ -4,7 +4,7 @@
  * module only selects which compiled statement a collapsed tile shows and renders the closed
  * availability vocabulary as learner copy. It declares no family, band, layer or reason enum.
  */
-import { botProfileIsStartable, type BotAvailabilityBlocker, type BotAvailabilityCondition, type BotCardStatementId } from "@chess-tabiya/runtime";
+import { botProfileIsStartable, type BotAvailabilityBlocker, type BotAvailabilityCondition, type BotCardStatementId } from "@chess-tabiya/runtime/client";
 
 import type { BotRosterRow } from "./api.js";
 

@@ -1,4 +1,4 @@
-import type { DrillRun, DrillRunEvent, Node } from "@chess-tabiya/runtime";
+import type { DrillRun, DrillRunEvent, Node } from "@chess-tabiya/runtime/client";
 
 export type RehearsalGuideStage =
   | "decide"

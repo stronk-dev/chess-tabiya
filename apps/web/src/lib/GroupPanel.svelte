@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { branchPath, materialBalanceAt, type BranchGroup, type DrillRun } from "@chess-tabiya/runtime";
+  import { branchPath, materialBalanceAt, type BranchGroup, type DrillRun } from "@chess-tabiya/runtime/client";
 
   import Chessboard from "./Chessboard.svelte";
   import type { StartSide } from "./board-model.js";

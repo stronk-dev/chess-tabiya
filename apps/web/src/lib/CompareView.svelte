@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { comparisonPresentedEngineTrajectory, comparisonNarrative, comparisonStrips, declareStructuralReadingEvidence, evidenceForConsumer, materialBalanceAt, packAbsentEvidenceRef, presentEvidenceItems, PRIMARY_EVIDENCE_MANIFEST, type BranchComparison, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime";
+  import { comparisonPresentedEngineTrajectory, comparisonNarrative, comparisonStrips, declareStructuralReadingEvidence, evidenceForConsumer, materialBalanceAt, packAbsentEvidenceRef, presentEvidenceItems, PRIMARY_EVIDENCE_MANIFEST, type BranchComparison, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime/client";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, type Snippet } from "svelte";
   import Chessboard from "./Chessboard.svelte";
@@ -167,7 +167,7 @@
   function actorLabel(actor: "user" | "opponent" | "system"): string {
     return actor === "user" ? "You" : "Opponent";
   }
-  function objectiveStateLabel(state: import("@chess-tabiya/runtime").ObjectiveState): string {
+  function objectiveStateLabel(state: import("@chess-tabiya/runtime/client").ObjectiveState): string {
     switch (state) {
       case "active": return "The objective is still open.";
       case "preserved": return "This attempt kept the objective intact.";

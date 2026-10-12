@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary } from "@chess-tabiya/runtime";
+import type { LabelVocabulary } from "@chess-tabiya/runtime/client";
 import type { StructuralFeatureKind } from "@chess-tabiya/schema/drill-pack";
 
 /** Structural position fact an author can test (`drill-pack` STRUCTURAL_FEATURE_KINDS). */

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick, untrack } from "svelte";
   import { ApiError } from "./api.js";
-  import { MODULE_LABELS, type BrowserNarrowedAssistanceV1 } from "@chess-tabiya/runtime";
+  import { MODULE_LABELS, type BrowserNarrowedAssistanceV1 } from "@chess-tabiya/runtime/client";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
     CAMPAIGN_MODULE_LABELS,

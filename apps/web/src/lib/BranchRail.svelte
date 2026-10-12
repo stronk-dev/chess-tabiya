@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BranchCard } from "./screen-model.js";
-  import { renderCollapseExplanation, type Decidedness } from "@chess-tabiya/runtime";
+  import { renderCollapseExplanation, type Decidedness } from "@chess-tabiya/runtime/client";
   import { objectiveStateLabel } from "./run-copy.js";
 
   interface Props {

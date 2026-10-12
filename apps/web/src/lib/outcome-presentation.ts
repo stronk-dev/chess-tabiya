@@ -4,7 +4,7 @@ import {
   type DrillRun,
   type ObjectiveState,
   type SelectionEngineIdentity,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 import { objectiveStateLabel } from "./run-copy.js";
 import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
 import { opponentMoveCount } from "./chronology-copy.js";

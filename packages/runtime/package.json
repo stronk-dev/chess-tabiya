@@ -6,6 +6,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./client": "./src/client.ts",
     "./rating": "./src/rating.ts",
     "./run-subject": "./src/run-subject.ts",
     "./provider-exchange-authority": "./src/provider-exchange-authority.ts"

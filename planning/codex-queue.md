@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-12 — [[D3732]] separates production web imports onto the same runtime
+implementations without loading the private capability catalogue. The full server
+entry and the client's explicit semantic-validation startup check remain.
+All 66 boundary/parser/privacy controls and workspace types pass. The normal build
+confirms 2,414,754 raw entry bytes / 609.96 kB reported gzip, about 24% / 12% below
+the preceding build. Full ordinary serial verification/build/browser exits zero:
+5,070 software/380 files, seven performance/four files, 255 content/26 files and
+304 browser passes, one existing optional skip, zero retries, all 150 input/112
+composition cells. D3732 closes locally, not a whole capability or release gate.
+[[D3722]] still owns supported-device/deployment cold-use measurements and the
+remaining eager bundle. No warning suppression, deadline or admission changes.
+
 2026-10-11 — [[D3300]] seal-cost experiments are finished and rejected, not left
 in flight or described as delivered optimizations. Descriptor batching is 14.35%
 slower; transient Set/ancestor-array candidates improve summed cold time only

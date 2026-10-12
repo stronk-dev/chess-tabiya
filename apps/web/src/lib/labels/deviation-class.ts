@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary } from "@chess-tabiya/runtime";
+import type { LabelVocabulary } from "@chess-tabiya/runtime/client";
 
 /** `schemas/drill_pack.schema.json` `$defs.deviation.class`; the TypeScript definition leaves it open. */
 export type DeviationClass = "required_theory" | "accepted_alternative" | "interesting_deviation" | "concept_violation" | "tactical_error";

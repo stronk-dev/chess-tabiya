@@ -18,7 +18,7 @@ import {
   providerAvailabilityNotice,
   type ProviderOperationAvailability,
   type HintResponse,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 import {
   ApiError,
@@ -132,7 +132,7 @@ export interface ImportedGuess {
 }
 
 /** The source-game move played from the active cursor, when the cursor sits on an imported game's mainline. */
-export function importedNextMove(run: import("@chess-tabiya/runtime").DrillRun): { readonly uci: string; readonly san: string } | undefined {
+export function importedNextMove(run: import("@chess-tabiya/runtime/client").DrillRun): { readonly uci: string; readonly san: string } | undefined {
   if (run.sessionKind !== "imported") return undefined;
   const primary = run.branches[0];
   const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId);
@@ -743,7 +743,7 @@ export class DrillSessionController {
     }
   }
 
-  async recordReasoning(input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }): Promise<void> {
+  async recordReasoning(input: { readonly transcript?: import("@chess-tabiya/runtime/client").ReasoningTranscript; readonly skipped?: true }): Promise<void> {
     if (this.#state.busy) return;
     const operation = this.#sessionOperation();
     const checkpoint = this.#state.checkpoint;
@@ -1076,7 +1076,7 @@ export class DrillSessionController {
       candidate.members.some((member) => member.branchId === run.activeCursor.branchId),
     );
     const request = this.#selectionRequest();
-    let selection: import("@chess-tabiya/runtime").OpponentSelection;
+    let selection: import("@chess-tabiya/runtime/client").OpponentSelection;
     let source: "live" | "cached_exact" = "live";
     try {
       if (group !== undefined) {

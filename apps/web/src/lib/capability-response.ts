@@ -7,7 +7,7 @@ import {
   BOT_AVAILABILITY_CONDITIONS,
   parseProviderHealthCapabilities,
   resolveBotProfileReference,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 import { parsePackCapabilitiesPublicProjectionV1 } from "@chess-tabiya/schema/capability";
 

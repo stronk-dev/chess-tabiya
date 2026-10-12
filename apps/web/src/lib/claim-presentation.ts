@@ -1,5 +1,5 @@
 import type { AuthoredFeedbackItem } from "./api.js";
-import { PRIMARY_EVIDENCE_MANIFEST, assertConsumerEvidenceView, claimDeliveryEvidence, compileEvidenceConsumerExecution, evidenceForConsumer, presentEvidenceItems, presentedSentence, type ConsumerEvidenceView } from "@chess-tabiya/runtime";
+import { PRIMARY_EVIDENCE_MANIFEST, assertConsumerEvidenceView, claimDeliveryEvidence, compileEvidenceConsumerExecution, evidenceForConsumer, presentEvidenceItems, presentedSentence, type ConsumerEvidenceView } from "@chess-tabiya/runtime/client";
 
 type ClaimItem = Extract<AuthoredFeedbackItem, { readonly kind: "claim" }>;
 

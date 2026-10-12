@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.6a — one admitted directed relation: the retained edges as chips
   // (the seat draws the same edges as board arrows within its arrow budget). The equivalent sentence
   // names only retained endpoints; gained/lost use line pattern, never a good/bad colour.
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
   import { attribution, relationChips } from "../presented-view.js";
 
   interface Props { component: Extract<ComponentValue, { id: "relation_overlay" }>; sentence: string; onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined }

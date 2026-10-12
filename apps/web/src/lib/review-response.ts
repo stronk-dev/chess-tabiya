@@ -1,4 +1,4 @@
-import { parsePresentationReceipt, presentedSentence, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime";
+import { parsePresentationReceipt, presentedSentence, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime/client";
 
 import type { ReviewAnalysisPage, ReviewMap } from "./api.js";
 

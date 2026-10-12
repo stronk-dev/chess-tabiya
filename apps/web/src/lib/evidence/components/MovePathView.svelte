@@ -1,7 +1,7 @@
 <script lang="ts">
   // rfc/evidence-presentation.md §3.6 — a numbered move list over an ORDERED operand; a searched line
   // carries its convention inside the root. The module ceiling refusal happens before sealing.
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
   import { attribution } from "../presented-view.js";
 
   interface Props { component: Extract<ComponentValue, { id: "move_path" }>; sentence: string }

@@ -13,7 +13,7 @@ import {
   type ProviderAvailabilityNotice,
   type ProviderHealthSnapshot,
   type RunOpponentMode,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 import type { Capabilities } from "./api.js";
 

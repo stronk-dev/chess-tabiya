@@ -3,7 +3,7 @@
   // registered template or a payload sentence. Points are drawn only where a recorded evaluation
   // exists; every stretch without one is drawn as an abstention and stated in words. Every ply is a
   // keyboard stop (one tab stop, arrow keys between points) that selects that move in the list.
-  import { reviewText, type ReviewEvalGraph } from "@chess-tabiya/runtime";
+  import { reviewText, type ReviewEvalGraph } from "@chess-tabiya/runtime/client";
   import { tick } from "svelte";
 
   interface Props {

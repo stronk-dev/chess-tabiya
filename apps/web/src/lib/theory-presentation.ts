@@ -1,4 +1,4 @@
-import type { DrillRun } from "@chess-tabiya/runtime";
+import type { DrillRun } from "@chess-tabiya/runtime/client";
 
 import type { AuthoredFeedbackItem } from "./api.js";
 import { rehearsalStepLabel } from "./chronology-copy.js";

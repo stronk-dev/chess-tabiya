@@ -1,4 +1,4 @@
-import { evidenceConsumerOperation } from "@chess-tabiya/runtime";
+import { evidenceConsumerOperation } from "@chess-tabiya/runtime/client";
 
 import { claimProvenanceDeclared } from "./claim-presentation.js";
 import { renderDeclaredEvidenceRef } from "./evidence-sentences.js";

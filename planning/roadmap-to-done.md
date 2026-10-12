@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3731]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3732]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,18 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3732]] removes the private capability catalogue from browser delivery without
+duplicating implementations. All 115 web edits are import-path replacements;
+server catalogue checks and the client's explicit semantic-validation startup
+equality remain. All 66 focused controls and types pass. Full ordinary serial
+verification/build/browser exits zero: 5,070 software/380 files, seven unchanged-budget
+performance/four files, 255 content/26 files and 304 browser passes, one existing
+optional skip, zero retries, all 150 input/112 composition cells. The normal entry
+is 2,414,754 raw bytes / 609.96 kB reported gzip, about 24% / 12% smaller than the
+preceding build. The existing warning and eager screens remain. D3722 supported-device/
+deployment cold delivery, whole capabilities and release qualification remain open.
+No source permission, semantic qualification, pack, schema or learner policy changes.
 
 [[D3731]] eliminates unrelated legal-destination work from exact-target captures
 under the existing full-population/rebuild contract. Nineteen new controls include

@@ -1,4 +1,4 @@
-import { CORPUS_GUARD, parseConceptLabelView } from "@chess-tabiya/runtime";
+import { CORPUS_GUARD, parseConceptLabelView } from "@chess-tabiya/runtime/client";
 
 import { parseCorpusPopulation } from "./human-evidence-response.js";
 import { RETURN_STANDINGS } from "./api.js";

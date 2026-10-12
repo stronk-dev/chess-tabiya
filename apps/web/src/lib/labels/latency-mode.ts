@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, ProducerDeclaration } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, ProducerDeclaration } from "@chess-tabiya/runtime/client";
 
 export type LatencyMode = ProducerDeclaration["latency"];
 

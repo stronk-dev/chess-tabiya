@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BOT_FAMILY_LABELS, presetDeclaration, type BotProfileReference } from "@chess-tabiya/runtime";
+  import { BOT_FAMILY_LABELS, presetDeclaration, type BotProfileReference } from "@chess-tabiya/runtime/client";
   import type { BotRosterRow } from "./api.js";
   import { botAvailabilityNote, botCardSummary, botIsStartable } from "./bot-picker.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";

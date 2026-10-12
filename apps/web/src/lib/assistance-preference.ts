@@ -16,7 +16,7 @@ import {
   type WorkflowContextId,
   type WorkflowPreferenceReceipt,
   type WorkflowPreferenceV2,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 // rfc/intent-presets.md §5.3/§6 — the one browser-local preference authority. New writes go only to
 // `tabiya.workflow.v2.${context}`; the v1 workflow and assistance keys are read-only migration inputs.

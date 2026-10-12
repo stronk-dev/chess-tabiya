@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.4 — a real plot: an SVG step line with a stated vertical extent
   // and a zero reference, whose pixels come only from the registered scale policy. Every value is
   // also in a keyboard-reachable point list (never only in a `title`). Nothing animates (§7d).
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
   import { attribution, trailGeometry } from "../presented-view.js";
 
   interface Props { component: Extract<ComponentValue, { id: "magnitude_trail" }>; sentence: string }

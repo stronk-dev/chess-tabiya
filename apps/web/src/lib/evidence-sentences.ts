@@ -8,12 +8,12 @@ import {
   type ConsumerEvidenceView,
   type EvidenceReferenceResolution,
   type EvidenceSentence,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 import type { StagedEvidence } from "./api.js";
 
-export type { EvidenceReferenceResolution, EvidenceSentence } from "@chess-tabiya/runtime";
-export { evidenceSentenceTable } from "@chess-tabiya/runtime";
+export type { EvidenceReferenceResolution, EvidenceSentence } from "@chess-tabiya/runtime/client";
+export { evidenceSentenceTable } from "@chess-tabiya/runtime/client";
 
 export function evidencePayloadTable(
   results: readonly StagedEvidence[],

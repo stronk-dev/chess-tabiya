@@ -7,7 +7,7 @@ import {
   parsePresentationReceipt,
   CORPUS_POPULATION_SOURCE,
   type PresentedEvidenceItem,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 import type { CorpusPage, HumanSplitPage } from "./api.js";
 

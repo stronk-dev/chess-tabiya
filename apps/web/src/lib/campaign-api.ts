@@ -1,4 +1,4 @@
-import { BOT_FAMILY_LABELS } from "@chess-tabiya/runtime";
+import { BOT_FAMILY_LABELS } from "@chess-tabiya/runtime/client";
 
 import { ApiError } from "./api.js";
 

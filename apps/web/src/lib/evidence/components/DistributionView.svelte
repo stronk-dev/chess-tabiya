@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.1 — ranked rows, each a label, a proportional bar and the share
   // numeral; the residual is drawn explicitly and the convention line sits inside the root. No row
   // is ever coloured by quality: the highlight only locates the move you played.
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
   import { attribution, distributionRows } from "../presented-view.js";
 
   interface Props { component: Extract<ComponentValue, { id: "distribution" }>; sentence: string }

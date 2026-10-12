@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, PolicyModeApplied } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, PolicyModeApplied } from "@chess-tabiya/runtime/client";
 
 /** Opponent policy mode as applied, including the non-requestable members (`types.ts` PolicyModeApplied). */
 export const POLICY_MODE_APPLIED_LABELS: LabelVocabulary<PolicyModeApplied> = Object.freeze({

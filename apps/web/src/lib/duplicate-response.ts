@@ -1,4 +1,4 @@
-import { projectRun, resolveBotProfileReference, type DrillRun, type RunOpponentPolicy } from "@chess-tabiya/runtime";
+import { projectRun, resolveBotProfileReference, type DrillRun, type RunOpponentPolicy } from "@chess-tabiya/runtime/client";
 
 interface DuplicateSubject {
   readonly id: string;

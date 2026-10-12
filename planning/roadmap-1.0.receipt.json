@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e8c7c5c3c68523ad4157c6782f43b39aa4809f63b8105ad5202f7872f51ec626",
+    "roadmap": "sha256:323f238ea44f8293a14838d060a7286ab3d1a36a10e2376fd6d5ee17531f3ec5",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:ca989d4bda9477d5d09799d7db2b592a6ccd6766f4d573b85de8d96940ac5912",
+    "workState": "sha256:e0e28b8786f8249bdf51d59d999665897d91758a10ffb4838d4bf7630b14f24e",
     "rfcRegister": "sha256:9b47554fa5636cb602750359b0b1d4979385b375dbf99d5ea371c9ad85dd39ea",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 632,
       "doing": 16,
       "blocked": 1074,
-      "done": 1597,
+      "done": 1598,
       "refused": 161
     },
     "workItems": {
@@ -75,8 +75,8 @@
       "dependsOn": [],
       "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
-        "at": "2026-10-11",
-        "summary": "D3710/D3711 complete independent discovered-execution controls and restore exact board-edge targets under the accepted collector contract. Complete serial normal make roadmap-receipt verify-awake build test-browser-ci-awake passes 4,844 software/374 files, seven performance/four files, 248 content/25 files, types, governance, packaging/build and 298 browser cases, one existing optional skip, zero retries and all 150 input/112 composition cells. D3709 authored-preview consequence parity and the existing Campaign/help, prediction, private-pack and saved-play repairs remain delivered. D3702/D3703 and earlier intermittent causes remain open; a green replay is not diagnosis. D1154 full scratch comparison, D3700 public reconstruction and D3695 authored prediction remain open. No exact-revision remote CI, native image recovery, whole capability/milestone or release completion.",
+        "at": "2026-10-12",
+        "summary": "D3732 separates production web imports from the private capability catalogue while re-exporting the original implementations. All 115 web edits are import-path replacements; server catalogue checks and client semantic-validation startup equality remain. All 66 focused boundary/parser/privacy controls and workspace types pass. Full ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,070 software/380 files, seven unchanged-budget performance/four files, 255 content/26 files, types/governance/packaging/build and 304 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. The entry is 2,414,754 raw bytes / 609.96 kB reported gzip, about 24% / 12% below the preceding build, not a latency promise. D3722's eager bundle and device/deployment measurements, original intermittent causes, qualification, official content and full release proof remain. Existing core-loop, Campaign and evidence repairs stand; no whole capability/milestone, fresh remote CI or release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -148,7 +148,11 @@
           "rfc/verifiable-runtime-distribution.md",
           "tools/make-toolchain.test.mjs",
           "tools/play-composition-matrix.test.mjs",
-          "tools/verify-caddy.test.mjs"
+          "tools/verify-caddy.test.mjs",
+          "packages/runtime/src/client.ts",
+          "packages/runtime/src/client.test.ts",
+          "apps/web/src/lib/client-runtime-imports.test.ts",
+          "docs/app-shell.md"
         ],
         "anchors": [
           {
@@ -235,6 +239,11 @@
             "kind": "work_state",
             "id": "D3708",
             "digest": "sha256:fb592dfd59e8f97b8540a01b965a49cab2c5a7704d4211cb5dfc1c2420689409"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3732",
+            "digest": "sha256:e205a0da3b349b9c099f7f1fa65e092bd6e92418a6b657c08968c2de5426c4f4"
           }
         ]
       },

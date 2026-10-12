@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.11/§4 — the honest-empty state as a component: bordered, muted,
   // lighter weight, never an error colour and never zero-height. It alone carries `data-abstention`
   // (§4c), so a withheld value and a real zero are told apart by attribute, not by copy.
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
 
   interface Props { component: Extract<ComponentValue, { id: "abstention" }>; sentence: string }
   let { component, sentence }: Props = $props();

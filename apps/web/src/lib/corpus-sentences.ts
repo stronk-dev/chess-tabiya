@@ -1,4 +1,4 @@
-import { CORPUS_GUARD, presentedSentence } from "@chess-tabiya/runtime";
+import { CORPUS_GUARD, presentedSentence } from "@chess-tabiya/runtime/client";
 import type { CorpusPage } from "./api.js";
 import { corpusPresentation } from "./inspector-evidence.js";
 

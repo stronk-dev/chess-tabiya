@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.3 — one measured number in tabular figures with its unit and the
   // convention (producer, perspective, bound) rendered inside the same root (§5c). The producer id
   // travels only in a data attribute, never as learner text (§5d).
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
 
   interface Props { component: Extract<ComponentValue, { id: "magnitude" }>; sentence: string }
   let { component, sentence }: Props = $props();

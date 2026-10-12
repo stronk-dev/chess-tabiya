@@ -169,20 +169,23 @@ describe("value authority: static closure", () => {
   });
 
   it("keeps the mint helper, receipts, dispatcher, factories and every retired adapter out of the package (§8.2)", () => {
-    const barrel = read("packages/runtime/src/index.ts");
-    const exported = new Set([...barrel.matchAll(/\b([A-Za-z_$][\w$]*)\b/gu)].map((match) => match[1]!));
-    for (const name of ["declareEvidence", "evidenceValueReceipt", "identitySealedEvidenceWithoutValueReceipt", "invokeEvidenceValueRoute", "evidenceValueRouteRegistry", "mint"]) expect(exported.has(name), name).toBe(false);
-    for (const meta of REGISTRY) expect(exported.has(meta.symbol), meta.symbol).toBe(false);
     const oldOperations = new Set(RECEIPT.routes.map((row) => row.oldOperation));
-    for (const name of [...oldOperations, "declareSerializedReviewStoryEvidence", "declarePhaseReadingEvidence", "declareNamedStructureEvidence", "declarePivotalMarkerEvidence", "declareEndgameReadingEvidence", "declareRecordedEngineEvidence", "declareRecordedTablebaseEvidence", "declareMaiaPolicyEvidence", "declareExplorerPositionEvidence", "declareExplorerPopulationEvidence", "declareEvidenceReferenceResolution"]) {
-      expect(exported.has(name), name).toBe(false);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) {
+      const barrel = read(path);
+      const exported = new Set([...barrel.matchAll(/\b([A-Za-z_$][\w$]*)\b/gu)].map((match) => match[1]!));
+      for (const name of ["declareEvidence", "evidenceValueReceipt", "identitySealedEvidenceWithoutValueReceipt", "invokeEvidenceValueRoute", "evidenceValueRouteRegistry", "mint"]) expect(exported.has(name), `${path}: ${name}`).toBe(false);
+      for (const meta of REGISTRY) expect(exported.has(meta.symbol), `${path}: ${meta.symbol}`).toBe(false);
+      for (const name of [...oldOperations, "declareSerializedReviewStoryEvidence", "declarePhaseReadingEvidence", "declareNamedStructureEvidence", "declarePivotalMarkerEvidence", "declareEndgameReadingEvidence", "declareRecordedEngineEvidence", "declareRecordedTablebaseEvidence", "declareMaiaPolicyEvidence", "declareExplorerPositionEvidence", "declareExplorerPopulationEvidence", "declareEvidenceReferenceResolution"]) {
+        expect(exported.has(name), `${path}: ${name}`).toBe(false);
+      }
     }
     const manifest = JSON.parse(read("packages/runtime/package.json")) as { readonly exports: Readonly<Record<string, string>> };
     // The provider scheduler-only subpath carries receipt constructors, not an evidence mint; its sole
     // importer is census-checked in provider-protocol.test.ts.
     // The run-subject subpath computes/validates historical identities; it exports no evidence
     // mint, dispatcher or factory. Keep this closed inventory literal, not a wildcard allowance.
-    expect(Object.keys(manifest.exports).sort()).toEqual([".", "./provider-exchange-authority", "./rating", "./run-subject"]);
+    // The client entry re-exports public implementations only; the same exclusions above apply.
+    expect(Object.keys(manifest.exports).sort()).toEqual([".", "./client", "./provider-exchange-authority", "./rating", "./run-subject"]);
     expect(Object.values(manifest.exports).some((path) => /internal|factories|test-support/u.test(path))).toBe(false);
   });
 });

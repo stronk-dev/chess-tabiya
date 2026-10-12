@@ -14,7 +14,7 @@ import {
   type ComponentValue,
   type ConventionReceipt,
   type PresentedEvidenceItem,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 export interface PresentedView {
   readonly id: ComponentValue["id"];

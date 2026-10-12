@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, TIER_RULE_ID } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, TIER_RULE_ID } from "@chess-tabiya/runtime/client";
 
 export type TierRule = typeof TIER_RULE_ID;
 

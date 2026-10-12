@@ -1,4 +1,4 @@
-import { exactMoveIdentity, type DrillRun } from "@chess-tabiya/runtime";
+import { exactMoveIdentity, type DrillRun } from "@chess-tabiya/runtime/client";
 
 import type { AuthoredFeedbackItem, AuthoredFeedbackPage } from "./api.js";
 

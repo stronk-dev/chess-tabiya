@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.5 — the squares of exactly one admitted fact with the one caption
   // that owns them. Focusing the caption or a square chip announces the same fact; the board paint is
   // drawn by the owning seat from the same sealed operand (never a second query).
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
 
   interface Props { component: Extract<ComponentValue, { id: "square_set" }>; sentence: string; onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined }
   let { component, sentence, onFocusSquares }: Props = $props();

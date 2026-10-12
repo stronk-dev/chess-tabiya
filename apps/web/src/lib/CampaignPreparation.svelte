@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { preferenceDisplayMode, presetDeclaration, renderSuppression, requestedModules, requestedPreset, selectNamedPreset, workflowContextPolicy, type PresetId } from "@chess-tabiya/runtime";
+  import { preferenceDisplayMode, presetDeclaration, renderSuppression, requestedModules, requestedPreset, selectNamedPreset, workflowContextPolicy, type PresetId } from "@chess-tabiya/runtime/client";
   import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
   import { CAMPAIGN_MODULE_LABELS, campaignBotLabel, rewardText, type CampaignModuleId, type CampaignNodeCard, type CampaignProjection } from "./campaign-api.js";
   import { modalBoundary } from "./modal-boundary.js";

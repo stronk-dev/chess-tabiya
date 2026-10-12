@@ -1,7 +1,7 @@
 // rfc/evidence-presentation.md §6b — the label registry: every learner-visible closed union, total by
 // type, behind one frozen index. Rendering code reads labels from here; a raw enum id, a raw record id
 // or a `replaceAll("_", " ")` in learner-visible text is a defect (§6a, §6d; `make label-sweep`).
-import { assertPresentationText, type LabelEntry, type LabelVocabulary, type LabelVocabularyMembers as RuntimeLabelVocabularyMembers } from "@chess-tabiya/runtime";
+import { assertPresentationText, type LabelEntry, type LabelVocabulary, type LabelVocabularyMembers as RuntimeLabelVocabularyMembers } from "@chess-tabiya/runtime/client";
 
 import { OBJECTIVE_STATE_LABELS } from "./objective-state.js";
 import { RUN_OUTCOME_LABELS } from "./run-outcome.js";
@@ -54,7 +54,7 @@ import { STYLE_TIER_STATE_LABELS } from "./style-tier-state.js";
 import { STYLE_TIER_RULE_LABELS } from "./style-tier-rule.js";
 import { UNSUPPORTED_POLICY_MODE_LABELS } from "./unsupported-policy-mode.js";
 import { POLICY_MODE_APPLIED_LABELS } from "./policy-mode-applied.js";
-import type { ObjectiveState, RunOutcome, EvidenceGrounding, ClaimEvidenceType, ReviewSide, RunOpponentMode, EvidenceKind, EvidenceSource, EvidencePlane, AnswerDistance, EvidenceForm, EvidenceRole, ProviderOffBehavior, RunSessionKind, LiveSessionKind, RunFeedbackPolicy, MarkBrush, PivotalKind, ModuleSeatClass, ModuleId, SemanticEventSign, TierState, PolicyModeApplied } from "@chess-tabiya/runtime";
+import type { ObjectiveState, RunOutcome, EvidenceGrounding, ClaimEvidenceType, ReviewSide, RunOpponentMode, EvidenceKind, EvidenceSource, EvidencePlane, AnswerDistance, EvidenceForm, EvidenceRole, ProviderOffBehavior, RunSessionKind, LiveSessionKind, RunFeedbackPolicy, MarkBrush, PivotalKind, ModuleSeatClass, ModuleId, SemanticEventSign, TierState, PolicyModeApplied } from "@chess-tabiya/runtime/client";
 import type { EvidenceExactness } from "./evidence-exactness.js";
 import type { EvidenceConfidence } from "./evidence-confidence.js";
 import type { AvailabilityMode } from "./availability-mode.js";

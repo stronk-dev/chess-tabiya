@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, AnswerDistance } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, AnswerDistance } from "@chess-tabiya/runtime/client";
 
 /** How close a piece of evidence comes to the answer (`evidence-contract.ts` AnswerDistance). */
 export const ANSWER_DISTANCE_LABELS: LabelVocabulary<AnswerDistance> = Object.freeze({

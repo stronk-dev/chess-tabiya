@@ -1,7 +1,7 @@
 <script lang="ts">
   // rfc/evidence-presentation.md §3.9 — one member of a closed vocabulary rendered as its registry
   // label; the valence token comes from the registry, never from the call site.
-  import { LABEL_VOCABULARIES, type ComponentValue, type LabelVocabulary } from "@chess-tabiya/runtime";
+  import { LABEL_VOCABULARIES, type ComponentValue, type LabelVocabulary } from "@chess-tabiya/runtime/client";
 
   interface Props { component: Extract<ComponentValue, { id: "enum_state" }>; sentence: string }
   let { component, sentence }: Props = $props();

@@ -4,7 +4,7 @@
   // drawn by its one registered component, whose text is the component's own equivalent sentence, so
   // the visual and screen-reader renderings are the same bytes. Abstention is structurally distinct
   // from a value: it alone carries `data-abstention` (§4c).
-  import type { PresentedEvidenceItem } from "@chess-tabiya/runtime";
+  import type { PresentedEvidenceItem } from "@chess-tabiya/runtime/client";
 
   import AbstentionView from "./components/AbstentionView.svelte";
   import CitationView from "./components/CitationView.svelte";

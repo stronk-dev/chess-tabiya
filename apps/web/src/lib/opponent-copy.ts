@@ -1,4 +1,4 @@
-import { BOT_FAMILY_LABELS, type RunOpponentPolicy } from "@chess-tabiya/runtime";
+import { BOT_FAMILY_LABELS, type RunOpponentPolicy } from "@chess-tabiya/runtime/client";
 
 export const HUMAN_MODEL_RUNG_DISCLAIMER =
   "Maia band numbers are model settings. They are not FIDE, Lichess, or Chess.com ratings. A bot's strength is shown only after that exact profile is measured.";

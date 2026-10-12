@@ -1,6 +1,6 @@
 <script lang="ts">
   import { learnerProse } from "./labels/index.js";
-  import type { AssistanceConfig, AssistancePermission } from "@chess-tabiya/runtime";
+  import type { AssistanceConfig, AssistancePermission } from "@chess-tabiya/runtime/client";
 
   import type { Capabilities } from "./api.js";
   import { operationConfigured, operationNotice } from "./provider-availability.js";

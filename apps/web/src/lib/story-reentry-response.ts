@@ -1,4 +1,4 @@
-import type { MutationResult } from "@chess-tabiya/runtime";
+import type { MutationResult } from "@chess-tabiya/runtime/client";
 
 export interface StoryReentrySubject {
   readonly runId: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, renderSuppression, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime";
+  import { ASSISTANCE_PREFERENCE_FIELDS, CONFIGURABLE_MODULE_IDS, MODULE_LABELS, permittedAssistance, preferenceDisplayMode, presetDeclaration, renderSuppression, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type ConfigurableModuleId, type PresetId, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2 } from "@chess-tabiya/runtime/client";
   import { onDestroy, onMount } from "svelte";
 
   import type { AccountExportProgress, AccountImportReceipt, AccountInventory, Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";

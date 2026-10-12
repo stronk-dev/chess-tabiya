@@ -6,8 +6,8 @@
   import { recognizedCheckpointActions, type CheckpointNotice } from "./screen-model.js";
   import type { AuthoredFeedbackItem, ReasoningPage, ReasoningReviewPage, ShapeEntryView } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
-  import type { DrillRun } from "@chess-tabiya/runtime";
-  import type { Node } from "@chess-tabiya/runtime";
+  import type { DrillRun } from "@chess-tabiya/runtime/client";
+  import type { Node } from "@chess-tabiya/runtime/client";
   import Chessboard from "./Chessboard.svelte";
   import { boardModel, type StartSide } from "./board-model.js";
   import { moveSanFromUci } from "./board-input.js";
@@ -34,7 +34,7 @@
     startSide?: StartSide;
     onPrediction?: (uci: string) => void | Promise<void>;
     predictionError?: string | undefined;
-    onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
+    onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime/client").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onReasoningReview?: ((checkpointEventSeq: number) => Promise<ReasoningReviewPage>) | undefined;
     reasoning?: ReasoningPage;
     shapes?: readonly ShapeEntryView[];
@@ -109,7 +109,7 @@
   let reviewRequest = 0;
   let mounted = true;
 
-  function matchedWords(detection: import("@chess-tabiya/runtime").ReasoningDetection): string {
+  function matchedWords(detection: import("@chess-tabiya/runtime/client").ReasoningDetection): string {
     if (!currentReasoning?.transcript || !detection.match) return "";
     const source = detection.match.field === "candidates" ? currentReasoning.transcript.candidates[detection.match.index ?? -1] : currentReasoning.transcript[detection.match.field];
     return source?.normalize("NFKC").toLocaleLowerCase("en-US").replaceAll(/\s+/g, " ").trim().slice(detection.match.start, detection.match.end) ?? "";

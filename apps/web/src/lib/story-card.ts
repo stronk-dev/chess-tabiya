@@ -1,4 +1,4 @@
-import { reviewText, type ReviewMapMoment } from "@chess-tabiya/runtime";
+import { reviewText, type ReviewMapMoment } from "@chess-tabiya/runtime/client";
 
 export interface StoryCardDocument {
   readonly width: number;

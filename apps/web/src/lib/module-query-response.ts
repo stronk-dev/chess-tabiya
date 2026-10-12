@@ -18,7 +18,7 @@ import {
   type ModuleId,
   type ModuleSuppressionReason,
   type PresentedEvidenceItem,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 export type ModuleTimingName = "pre_commit" | "at_commit" | "post_commit" | "checkpoint" | "review";
 

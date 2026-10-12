@@ -5,7 +5,7 @@ import {
   type OpponentSelection,
   type SelectionCandidate,
   type SelectionEngineIdentity,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 import { Chess, normalizeMove } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";

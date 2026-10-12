@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.2 — one stacked bar in three segments over a stated perspective.
   // Segments use accent / muted / line weightings, never a good/bad axis. A withheld (below-floor)
   // or empty split draws NO bar: it is a different picture from a real split (§4b).
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
   import { attribution, outcomeSegments } from "../presented-view.js";
 
   interface Props { component: Extract<ComponentValue, { id: "outcome_split" }>; sentence: string }

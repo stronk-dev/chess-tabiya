@@ -1,4 +1,4 @@
-import type { DrillRun } from "@chess-tabiya/runtime";
+import type { DrillRun } from "@chess-tabiya/runtime/client";
 
 import type { RunDerivation } from "./api.js";
 

@@ -26536,3 +26536,25 @@ Campaign was the one capability with no API, route or content. Now:
   source admission, semantic qualification, official content, whole capability/milestone,
   remote CI or release-image proof is promoted. Existing ledger/roadmap/work-state closeout,
   no new tracker or raw recording, no push.
+
+## 2026-10-12 — D3732 browser runtime dependency separation
+
+- All 115 production web edits are exactly import-path replacements. The client entry
+  re-exports original implementations rather than cloned browser logic. The server's full
+  capability catalogue and module-load validation remain; public parsing, factory privacy
+  and semantic admission stay shared. No producer, schema, source permission or pack changes.
+- Type checking catches one omitted inline type reference. Initial software verification
+  fails four controls: closed export/annotation inventories and the new bundler fixture's
+  workspace resolution. Those fixtures are corrected and both entry points receive the same
+  privacy exclusions. A further dependency control rejects omission of semantic validation's
+  four-way startup equality; its explicit import is retained. No failing control is removed.
+- All 66 focused boundary/parser/privacy checks and workspace types pass. The normal Vite
+  build confirms 2,414,754 raw entry bytes / 609.96 kB reported gzip, versus about
+  3,195,540 / 693.41 kB previously (24% / 12% smaller). The rejected candidate's 2,264,302
+  bytes are not credited. Screens remain eager; the warning is unchanged. No speed promise.
+- Full ordinary serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 5,070 software/380 files, seven unchanged-budget performance/four files,
+  255 content/26 files, types/governance/packaging/build and 304 browser passes, one existing
+  optional Maia skip, zero retries, all 150 input/112 composition cells. D3732 closes locally;
+  D3722 device/deployment cold delivery and whole qualification/release gates remain open.
+  Existing ledger, roadmap, work-state and docs carry the closeout; no raw recording or push.

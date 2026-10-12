@@ -2,7 +2,7 @@
   // rfc/evidence-presentation.md §3.12 — author/operator surfaces only: a read-only labelled viewer of
   // one schema-coupled document, with its canonical raw JSON behind an explicit toggle. This module is
   // the single named JSON exemption of the label sweep (criterion 10).
-  import { STRUCTURED_DOCUMENT_SCHEMAS, type ComponentValue } from "@chess-tabiya/runtime";
+  import { STRUCTURED_DOCUMENT_SCHEMAS, type ComponentValue } from "@chess-tabiya/runtime/client";
 
   interface Props { component: Extract<ComponentValue, { id: "structured_document" }>; sentence: string }
   let { component, sentence }: Props = $props();

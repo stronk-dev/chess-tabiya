@@ -1,7 +1,7 @@
 <script lang="ts">
   // rfc/evidence-presentation.md §3.8 — an attributed block: the quoted passage, the registered source
   // title and locator, the licence and the pinned revision, all part of the component itself.
-  import type { ComponentValue } from "@chess-tabiya/runtime";
+  import type { ComponentValue } from "@chess-tabiya/runtime/client";
 
   interface Props { component: Extract<ComponentValue, { id: "citation" }>; sentence: string }
   let { component, sentence }: Props = $props();

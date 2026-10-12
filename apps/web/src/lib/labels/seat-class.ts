@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, ModuleSeatClass } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, ModuleSeatClass } from "@chess-tabiya/runtime/client";
 
 /** Where an assistance module is seated (`module-contract.ts` ModuleSeatClass). */
 export const SEAT_CLASS_LABELS: LabelVocabulary<ModuleSeatClass> = Object.freeze({

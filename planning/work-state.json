@@ -30978,6 +30978,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/exchange.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3732",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e205a0da3b349b9c099f7f1fa65e092bd6e92418a6b657c08968c2de5426c4f4",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/client.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, RunOpponentMode } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, RunOpponentMode } from "@chess-tabiya/runtime/client";
 
 /** Requested opponent resistance (`types.ts` RUN_OPPONENT_MODES). */
 export const OPPONENT_MODE_LABELS: LabelVocabulary<RunOpponentMode> = Object.freeze({

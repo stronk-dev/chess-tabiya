@@ -1,4 +1,4 @@
-import type { ReasoningDetection, ReasoningTranscript } from "@chess-tabiya/runtime";
+import type { ReasoningDetection, ReasoningTranscript } from "@chess-tabiya/runtime/client";
 
 import type { ReasoningKeyPointView } from "./api.js";
 

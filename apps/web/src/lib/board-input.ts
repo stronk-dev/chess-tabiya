@@ -4,7 +4,7 @@ import { parseFen } from "chessops/fen";
 import { makeSan, parseSan } from "chessops/san";
 import { makeSquare, makeUci, parseSquare, parseUci } from "chessops/util";
 
-import { exactLegalMoveMap, exactMoveDestination } from "@chess-tabiya/runtime";
+import { exactLegalMoveMap, exactMoveDestination } from "@chess-tabiya/runtime/client";
 
 import type { PromotionRole } from "./board-model.js";
 import { displayedLastMove } from "./board-model.js";

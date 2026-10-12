@@ -14,7 +14,7 @@
     type HintRequestState,
     type HintResponse,
     type RequestedAssistanceV1,
-  } from "@chess-tabiya/runtime";
+  } from "@chess-tabiya/runtime/client";
 
   import { ApiError, type GuidedHintClient, type HintRequestBody } from "./api.js";
   import CompanionSeat from "./CompanionSeat.svelte";

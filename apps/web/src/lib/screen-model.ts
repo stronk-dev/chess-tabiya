@@ -13,7 +13,7 @@ import {
   type EvidencePayload,
   type Node,
   type ObjectiveState,
-} from "@chess-tabiya/runtime";
+} from "@chess-tabiya/runtime/client";
 
 import { renderEvidenceRef, type EvidenceSentence } from "./evidence-sentences.js";
 import { branchDisplayLabel } from "./run-copy.js";

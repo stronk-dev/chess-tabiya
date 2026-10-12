@@ -1,5 +1,5 @@
 import type { FileTemplateFeature, SquareTemplateFeature, StructuralExpression, StructuralFeature } from "@chess-tabiya/schema/drill-pack";
-import type { StructuralObservation } from "@chess-tabiya/runtime";
+import type { StructuralObservation } from "@chess-tabiya/runtime/client";
 
 function side(color: "white" | "black" | undefined): string { return color === "white" ? "White" : "Black"; }
 function count(value: number | undefined, singular: string, plural = `${singular}s`): string { const actual = value ?? 0; return `${actual} ${actual === 1 ? singular : plural}`; }

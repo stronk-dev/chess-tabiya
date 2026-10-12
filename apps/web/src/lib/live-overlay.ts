@@ -1,5 +1,5 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import type { ObjectiveState } from "@chess-tabiya/runtime";
+import type { ObjectiveState } from "@chess-tabiya/runtime/client";
 
 export interface LiveOverlayObjectiveCopy {
   readonly headline: string;

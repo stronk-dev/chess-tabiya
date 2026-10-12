@@ -1,4 +1,4 @@
-import type { TransitionObservation } from "@chess-tabiya/runtime";
+import type { TransitionObservation } from "@chess-tabiya/runtime/client";
 import type { TransitionFeature } from "@chess-tabiya/schema/drill-pack";
 
 import { IRREVERSIBILITY_SUBKIND_LABELS } from "./labels/irreversibility-subkind.js";

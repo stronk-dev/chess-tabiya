@@ -1,6 +1,6 @@
 // rfc/evidence-presentation.md §6b — one vocabulary, total over its own union type.
 // A union member added without a label here is a compile error; never widen this to Partial.
-import type { LabelVocabulary, EvidencePlane } from "@chess-tabiya/runtime";
+import type { LabelVocabulary, EvidencePlane } from "@chess-tabiya/runtime/client";
 
 /** Evidence plane of a producer or projection (`evidence-contract.ts`). */
 export const EVIDENCE_PLANE_LABELS: LabelVocabulary<EvidencePlane> = Object.freeze({
