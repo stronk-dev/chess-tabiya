@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3745]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3747]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,16 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3746]] expands the existing image recovery journey to D608's populated application fixture,
+independent equality of all database rows, restored privacy/identities and resumed bot/Campaign
+play. The native fixture and recovery controls pass; three permanent release controls reject
+row/inventory/identity corruption and preserve immutable bundle bytes. The actual Docker run builds
+the linux/arm64 image and generates its private temporary fixture, then refuses the current zero
+usable-space condition before boot. [[D3747]] owns this recurring environment hold; neither the
+expanded image proof nor a release gate is complete. Only this run's resources are removed. No
+raw capture is committed and no progress check depends on it. Earlier D3724/D3729 image successes
+remain historical facts, not proof of the new full-population journey.
 
 [[D3745]] completes the whole-event negative audit: four complete-state families and the sparse
 square-controller delta family cannot supply whole-family omission on a legal edge. All 127 legal
@@ -4559,8 +4569,9 @@ describe their current contracts. Native source-appliance play/restart is demons
 complete release install. Exact pushed-revision CI, remaining ingress/probe/operator obligations,
 complete prior-release recovery and multi-architecture release journeys, model/runtime rights,
 resource proof and the official content bundle still block completion. D3574's earlier Docker
-capacity failure remains historical evidence, not the current recovery state: D3724/D3729 pass
-all seven normal Make recovery commands against the local image. Actual differing-UID Linux-host,
+capacity failure remains historical evidence: D3724/D3729 passed all seven normal Make recovery
+commands against the local image. D3746's expanded full-population run now encounters a new
+zero-space refusal, owned by D3747; its actual image verification is pending. Actual differing-UID Linux-host,
 original transport-cause, prior-release and multi-architecture qualification remain open ([[D3738]]).
 
 The 2026-09-05 fifth provider-health author repair closes [[D2753]]–[[D2760]] and self-audit

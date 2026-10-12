@@ -1,17 +1,18 @@
 #!/usr/bin/env node
 // Built-image recovery through documented Make commands. Mock providers deliberately keep this
-// a storage journey, not CPU-bot, published-release, all-data-class or cross-version proof.
+// a storage journey, not CPU-bot calibration, published-release or cross-version proof.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
-import { delimiter, dirname, join, resolve } from "node:path";
+import { basename, delimiter, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { renderSourceDeployment } from "./render-deployment.mjs";
 import { linuxBackupPermissions } from "./release/storage-permissions.mjs";
+import { assertRestoredStorageRows, readStorageRows, verifyRestoredWorkflows } from "./release/storage-population.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PROJECT = /^tabiya-storage-drill-[0-9a-f-]{36}$/u;
@@ -79,10 +80,10 @@ export function storageHttpFailure(path, error) {
 
 /** External synchronous maintenance outlives idle sockets while this client's event loop is
  * blocked. Each recovery probe uses a fresh connection; mutations are never retried. */
-export async function storageHttpRequest(origin, path, body, cookie) {
+export async function storageHttpRequest(origin, path, body, cookie, writerId = "storage-drill-writer") {
   try {
     return await fetch(origin + path, { headers: { origin, "content-type": "application/json",
-      connection: "close", "x-writer-id": "storage-drill-writer", ...(cookie ? { cookie } : {}) },
+      connection: "close", "x-writer-id": writerId, ...(cookie ? { cookie } : {}) },
       ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }), signal: AbortSignal.timeout(15_000) });
   } catch (error) {
     throw storageHttpFailure(path, error);
@@ -149,6 +150,16 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     }
     throw new Error("built server did not reach /readyz");
   }
+  const rows = (volume, database = "/data/chess-tabiya.sqlite", standalone = false) => JSON.parse(compose(volume,
+    "run", "--rm", "-T", "--entrypoint", "node", "storage-admin", "--input-type=module", "-e",
+    `console.log(JSON.stringify(await (${readStorageRows.toString()})(${JSON.stringify(database)}, ${standalone})));`).stdout);
+  let population;
+  async function populationCall(account, path, body, expected = 200) {
+    const response = await storageHttpRequest(origin, path, body, population.accounts[account].cookie, population.writerId);
+    const text = await response.text();
+    assert.equal(response.status, expected, `restored ${account} ${path}: ${text.slice(0, 1000)}`);
+    return JSON.parse(text);
+  }
   try {
     if (suppliedImage === undefined) {
       run("docker", ["build", "--file", "apps/server/Dockerfile", "--tag", tag,
@@ -168,12 +179,28 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     }
     safeToClean = true;
     checked("owned fresh volumes, loopback port and matching immutable server/maintenance image before startup");
+    const fixtureDirectory = join(directory, "population");
+    mkdirSync(fixtureDirectory, { mode: 0o700 });
+    run("make", ["--no-print-directory", "storage-recovery-fixture", `FIXTURE_DIRECTORY=${fixtureDirectory}`], { timeout: 300_000 });
+    population = JSON.parse(readFileSync(join(fixtureDirectory, "population.json"), "utf8"));
+    requireCheck(typeof population.backupId === "string" && basename(population.backupId) === population.backupId
+      && !population.backupId.startsWith("."), "unsafe fixture bundle path");
+    const fixtureBundle = join(backups, population.backupId);
+    cpSync(join(fixtureDirectory, population.backupId), fixtureBundle, { recursive: true, errorOnExist: true, force: false });
     const capacity = JSON.parse(compose(volumeA, "run", "--rm", "-T", "--entrypoint", "node", "storage-admin", "-e",
       "const {bavail,bsize,ffree}=require('node:fs').statfsSync('/data');console.log(JSON.stringify({bavail,bsize,ffree}));").stdout);
     requireStorageCapacity(capacity);
     checked("native data-volume space available to the unchanged non-root image user");
     compose(volumeA, "up", "--detach", "--no-build", "server");
     await ready(volumeA);
+    checked("unchanged packaged server cold-boots on a genuinely empty volume");
+    const seeded = storageReceipt(make(volumeA, "storage-restore-replace", `BACKUP=${fixtureBundle}`, "CONFIRM_DATABASE=/data/chess-tabiya.sqlite"));
+    requireCheck(seeded.result === "succeeded", "populated fixture did not restore through the image CLI");
+    assertRestoredStorageRows(rows(volumeA), population);
+    compose(volumeA, "start", "server");
+    await ready(volumeA);
+    await verifyRestoredWorkflows(populationCall, population);
+    checked("all native-fixture application classes and exact identities are usable through the unchanged image");
     await http("/auth/register", { handle: "drill", password: "drill-password-long" }, 201);
     requireCheck(cookie?.startsWith("tabiya_session="), "local registration cookie missing");
     const capabilities = await http("/capabilities");
@@ -200,11 +227,28 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     await ready(volumeA);
     requireCheck(compose(volumeA, "logs", "server").stdout.includes('"action":"current"'), "current-volume prepare-start missing");
 
+    // Read actual completed jobs, not readiness, before freezing the complete population.
+    const settledDeadline = Date.now() + 90_000;
+    let settled = false;
+    while (Date.now() < settledDeadline) {
+      const exported = await http("/auth/export", { password: "drill-password-long" });
+      const jobs = exported.behavioralProfiles.value.filter(row => row.table === "learner_observation_jobs");
+      if (jobs.length > 0 && jobs.every(({ record }) => record.state === "complete" && record.requested_seq === record.completed_seq)) { settled = true; break; }
+      await new Promise(done => setTimeout(done, 200));
+    }
+    requireCheck(settled, "image projection jobs did not complete before backup");
+    compose(volumeA, "stop", "server");
+    const beforeBackup = { ...population, rows: rows(volumeA) };
+    assertRestoredStorageRows(beforeBackup.rows, beforeBackup);
+    compose(volumeA, "start", "server");
+    await ready(volumeA);
+
     const backup = storageReceipt(make(volumeA, "storage-backup"));
     requireCheck(backup.result === "succeeded" && backup.reason === "manual", "manual Make backup failed");
     await ready(volumeA);
     assert.deepEqual((await http(path + "/graph")).graph, saved);
     const bundle = join(backups, backup.backupId);
+    assertRestoredStorageRows(rows(volumeA, `/backup/${backup.backupId}/database.sqlite`, true), beforeBackup);
     const verify = storageReceipt(make(volumeA, "storage-verify", `BACKUP=${bundle}`));
     requireCheck(verify.result === "succeeded" && verify.compatibility === "current", "Make verification failed");
     assert.deepEqual(readdirSync(bundle).sort(), ["database.sqlite", "manifest.json"]);
@@ -227,11 +271,13 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     const restored = storageReceipt(make(volumeA, "storage-restore", `BACKUP=${bundle}`, `RESTORE_VOLUME=${volumeB}`),
       [`Start the restored installation with: TABIYA_DATA_VOLUME=${volumeB} make up`]);
     requireCheck(restored.result === "succeeded" && restored.preRestoreBackupId === null, "fresh Make restore failed");
+    assertRestoredStorageRows(rows(volumeB), beforeBackup);
     compose(volumeA, "down");
     compose(volumeB, "up", "--detach", "--no-build", "server");
     await ready(volumeB);
     await http("/auth/login", { handle: "drill", password: "drill-password-long" });
     assert.deepEqual((await http(path + "/graph")).graph, saved);
+    await verifyRestoredWorkflows(populationCall, population);
     checked("Make fresh restore + reboot retains exact pre-backup learner, nodes, branches and cursor");
     const rehearsal = storageReceipt(make(volumeB, "storage-upgrade-rehearsal", `BACKUP=${bundle}`));
     requireCheck(rehearsal.result === "succeeded" && rehearsal.checks.includes("readiness"), "Make rehearsal failed");
@@ -253,6 +299,7 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     await ready(volumeB);
     const replaced = storageReceipt(make(volumeB, "storage-restore-replace", `BACKUP=${bundle}`, "CONFIRM_DATABASE=/data/chess-tabiya.sqlite"));
     requireCheck(replaced.result === "succeeded" && typeof replaced.preRestoreBackupId === "string", "guarded Make replacement failed");
+    assertRestoredStorageRows(rows(volumeB), beforeBackup);
     assert.equal(storageReceipt(make(volumeB, "storage-verify", `BACKUP=${join(backups, replaced.preRestoreBackupId)}`)).result, "succeeded");
     checked("direct CLI confirmation refusal and Make replacement with a verified pre_restore bundle");
     compose(volumeB, "start", "server");
@@ -273,6 +320,7 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     const liveHash = compose(volumeB, "run", "--rm", "-T", "--entrypoint", "node", "storage-admin", "-e",
       "console.log(require('node:crypto').createHash('sha256').update(require('node:fs').readFileSync('/data/chess-tabiya.sqlite')).digest('hex'))").stdout.trim();
     assert.equal(liveHash, createHash("sha256").update(readFileSync(join(bundle, "database.sqlite"))).digest("hex"));
+    assertRestoredStorageRows(rows(volumeB), beforeBackup);
     assert.equal(storageReceipt(make(volumeB, "storage-recover")).recovery, "none");
     compose(volumeB, "start", "server");
     await ready(volumeB);
@@ -280,6 +328,8 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     await http("/auth/login", { handle: "drill", password: "drill-password-long" });
     assert.deepEqual((await http(path + "/graph")).graph, saved);
     checked("Make rollback installs exact snapshot bytes; recover/reboot returns the original game");
+    await verifyRestoredWorkflows(populationCall, population, { continuePlay: true });
+    checked("restored authoring/classroom/privacy/export, bot replay/continued play and Campaign replay/progression pass through image HTTP");
   } catch (error) {
     failure = error;
     if (safeToClean) {
@@ -310,7 +360,7 @@ export async function storageDrill({ image: suppliedImage } = {}) {
     if (suppliedImage === undefined) run("docker", ["image", "rm", tag], { allowFailure: true });
   }
   if (failure) throw failure;
-  console.error("storage drill: OK (all seven Make maintenance targets; mock providers; not prior-release or all-data-class image proof)");
+  console.error("storage drill: OK (all seven Make targets; populated application classes, exact row recovery and resumed workflows; mock providers; not prior-release/final-release proof)");
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

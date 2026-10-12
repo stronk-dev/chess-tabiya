@@ -22,7 +22,7 @@ test("recovery probes do not reuse a socket closed during synchronous maintenanc
         return;
       }
       response.setHeader('content-type', 'application/json');
-      response.end(JSON.stringify({ mutations }));
+      response.end(JSON.stringify({ mutations, writerId: request.headers['x-writer-id'] }));
       if (request.url === '/before-maintenance') {
         const socket = request.socket;
         setTimeout(() => socket.destroy(), 100);
@@ -46,7 +46,9 @@ test("recovery probes do not reuse a socket closed during synchronous maintenanc
   // Actual recovery helper: fresh connections across the same block, exactly one POST received.
   const before = await storageHttpRequest(origin, "/before-maintenance");
   assert.equal(before.headers.get("connection"), "close");
-  assert.equal((await before.json()).mutations, 0);
+  assert.deepEqual(await before.json(), { mutations: 0, writerId: "storage-drill-writer" });
+  assert.deepEqual(await storageHttpRequest(origin, "/counts", undefined, undefined, "writer-recovery").then(response => response.json()),
+    { mutations: 0, writerId: "writer-recovery" });
   await new Promise(setImmediate);
   maintenance();
   const after = await storageHttpRequest(origin, "/mutation", {});

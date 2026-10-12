@@ -26866,3 +26866,34 @@ Campaign was the one capability with no API, route or content. Now:
   1,722 live ledger items remain assigned. The canonical 343 cases/81 subjects retain zero
   fully qualified. No application code change, fresh full application-suite run, push or
   remote-CI/release claim accompanies this research-only checkpoint.
+
+## 2026-10-12 — D3746/D3747 populated image recovery checkpoint and current capacity hold
+
+- The existing storage RFC criterion 8/10/11/13 authorizes the expanded journey. D608's real
+  native application fixture now persists its referenced Campaign packs through ordinary community
+  authoring/publication with explicit mechanical provenance and corpus abstention. Only the named
+  Docker/release fixture command emits a private temporary bundle/read expectation; no capture is
+  committed, used by progress or produced by ordinary content CI.
+- The image journey compares every table/column/row independently before boot, requires nonempty
+  classes/families, retains original account and writer identities, checks real restored
+  authoring/classroom/export/privacy APIs and resumes bot/Campaign play with idempotent replay.
+  The same immutable image performs recovery and HTTP checks; no production test endpoint or
+  source-tree fixture mount is added. Three permanent controls reject real row/inventory/identity
+  corruption and preserve standalone bundle bytes; the real HTTP control retains explicit writers.
+- Normal focused gates pass 33 actual-Make wrappers, 42 SQLite/replacement checks, seven populated
+  process journeys, 133 release-policy controls and clean types. Fixture publication initially
+  refuses missing provenance; those mechanical fixtures are corrected, not the validator. The
+  first row-read test exposes SQLite null-prototype objects; the JSON reader normalizes them.
+- The actual linux/arm64 development image builds and generates its fixture, then refuses current
+  zero usable data-volume space before boot. Docker reports 76.93 GB of images and 42.28 GB of
+  volumes. Only the run's owned labelled resources are removed; no global pruning or unidentified
+  data deletion. D3747 owns this new hold, without reopening D3574's earlier genuine clearance.
+  D3746 remains blocked, not complete: its new full-population image journey must still pass.
+- Fresh ordinary `make verify-awake build` exits zero: 5,212 software cases/383 files, seven
+  unchanged-budget performance cases/four files, 255 content cases/26 files, types, governance,
+  packaging, release policy and build. The existing bundle warning remains. No browser rerun
+  accompanies this test/operator-only change; D3744's earlier 338-pass run remains historical.
+- Existing roadmap, generated status, ledger/state and operator docs carry the result. All 1,724
+  live rows are assigned. No whole capability/milestone, official content, calibrated bot,
+  prior-release, differing-UID Linux-host, dual-architecture release or current-revision GitHub
+  discharge. Nothing is pushed. The requested total overview remains in the one current roadmap.

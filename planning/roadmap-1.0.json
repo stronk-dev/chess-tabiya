@@ -667,7 +667,7 @@
         ],
         "verification": [
           "partial",
-          "D3570/D3571/D3572 retain 33 actual-Make cases and deployment packaging. Recovery verification now passes 42 SQLite/replacement checks, seven populated process journeys and 130 release-policy controls. D3573 completes all seven Make commands on the local native linux/arm64 development image with exact branch restore, stale-session refusal and byte-identical rollback/reboot. D3725 requires recovery on each release job's actual pulled platform-digest image. D3729 distinguishes real backup-ID collision from inaccessible work-directory failure. D3726's documented private setup/copy procedure is exercised by actual Linux CLI, GNU install and host-selector controls across differing UIDs; an actual differing-UID Linux host still remains. Fresh-connection recovery probes never retry mutations; D3723 retains its original transport-cause debt. All-data-class image recovery, prior-release rollback, actual dual-architecture release and current-revision remote CI remain open."
+          "D3570/D3571/D3572 retain 33 actual-Make controls. Fresh recovery verification passes 42 SQLite/replacement checks, seven populated process journeys and 133 release-policy controls. Historical local linux/arm64 image runs completed all seven Make recovery commands with exact branches, stale-session refusal and byte-identical rollback/reboot. D3746 expands that journey to all persisted application rows and restored authoring/classroom/privacy/export/bot/Campaign flows; native fixture generation and permanent row controls pass, but its actual image run refuses the recurring zero-space condition before boot (D3747). The expanded image journey is not qualified. D3725 binds recovery to each release job's actual pulled image. D3726's private differing-UID procedure has isolated CLI/selector controls but still requires a Linux host. D3723 original transport cause, prior-release rollback, dual-architecture release and current-revision remote CI remain open."
         ],
         "release": [
           "blocked",
@@ -2003,10 +2003,10 @@
         "dependsOn": [
           "official-content"
         ],
-        "nextAction": "Run D3726's now-documented private directory, administrator selection and offline-copy procedure on an actual differing-UID Linux host; isolated CLI/selector controls are not that discharge. Diagnose D3723's original transport cause without claiming that the fresh-connection mitigation or a green rerun proves it. Then qualify full-population image recovery, prior-release migration/rollback and actual release-native runs on both architectures. Do not substitute tmpfs backups, weaken privacy or run the application as root. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual reader/dispatcher and proxy limits. Resolve D3397's CSP/audience-preview and D3393's public/internal probe contracts. Exercise all ten clean-host release journeys, including provider-off degradation, accessibility, rights/resources and owner-device use.",
+        "nextAction": "Resolve D3747's current Docker capacity hold only through authorized identified-resource cleanup, then finish D3746's unchanged full-population image journey. Run D3726's now-documented private directory, administrator selection and offline-copy procedure on an actual differing-UID Linux host; isolated CLI/selector controls are not that discharge. Diagnose D3723's original transport cause without claiming that the fresh-connection mitigation or a green rerun proves it. Then qualify prior-release migration/rollback and actual release-native runs on both architectures. Do not substitute tmpfs backups, weaken privacy or run the application as root. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual reader/dispatcher and proxy limits. Resolve D3397's CSP/audience-preview and D3393's public/internal probe contracts. Exercise all ten clean-host release journeys, including provider-off degradation, accessibility, rights/resources and owner-device use.",
         "latestCheckpoint": {
           "at": "2026-10-12",
-          "summary": "Under rfc/storage-backup-recovery.md §§3/8/9, D3729 repairs the real CLI's false BACKUP_ID_COLLISION for inaccessible private work directories. Actual EEXIST retains its refusal and foreign contents. The local native linux/arm64 image completes all seven Make recovery commands, preserving exact branches, stale-session refusal and byte-identical rollback/reboot. D3726 now has a documented explicit rootful-Linux setup/copy procedure and actual CLI/GNU-install/host-selector controls across uid 1000/1001, preserving private directories and unchanged foreign ownership. The real operator copy verifies as its owner; an actual differing-UID Linux host remains TODO. One real separate-server test verifies fresh connection behavior and no retry after a delivered mutation loses its response; D3723's original transport cause remains open. Focused normal gates pass 130 release-policy, 33 wrapper, 42 SQLite/replacement and seven populated process checks plus types. D608's all-class process proof and D3725's exact-image release orchestration stand. All-class image, prior-release, both actual release architectures, ingress/CSP/probe, rights/resources, owner use, official content and final journeys remain. No whole capability/milestone, push or remote-CI claim.",
+          "summary": "D3746 adds full-population recovery to the existing immutable-image journey under storage-backup-recovery criterion 8/10/11/13: private native fixture generation, exact equality of every database row, nonempty application classes, restored identity/privacy/export and resumed bot/Campaign workflows. Fresh normal checks pass 33 Make wrapper, 42 SQLite/replacement, seven populated native-process and 133 release-policy controls, plus clean types. The actual linux/arm64 development image builds and generates the fixture, then refuses zero usable data-volume space before boot. D3747 records this recurring environment hold; only owned run resources are removed. Full-population image verification is pending, not a green receipt. Prior D3724/D3729 narrow image successes remain historical. Differing-UID Linux host, original transport cause, prior-release, actual release architectures, security/rights/resources, official content and full release journeys remain. No capability/milestone promotion or push/remote-CI claim.",
           "impact": "advanced",
           "evidence": [
             "Makefile",
@@ -2014,6 +2014,8 @@
             "tools/release/storage-maintenance.test.mjs",
             "tools/appliance-drill.mjs",
             "tools/release/storage-drill.test.mjs",
+            "tools/release/storage-population.mjs",
+            "tools/release/storage-population.test.mjs",
             "tools/release/storage-permissions.mjs",
             "apps/server/src/storage-admin.ts",
             "apps/server/src/storage-admin.test.ts",
@@ -2096,6 +2098,8 @@
               "id": "storage-backup-recovery.md",
               "digest": "sha256:273439af23a9d94a0027ffce71d691319b07db29eea0a2feade28e372d3a0092"
             },
+            {"kind":"work_state","id":"D3746","digest":"sha256:c82f825220da37ea5b0bd56ea1bc920cf66f08233de8a92c33fdd227f203b451"},
+            {"kind":"work_state","id":"D3747","digest":"sha256:527be99d5e0f5779aad990e30ac7fa195eb6b2746fc69c2556595b35f0d4cbd4"},
             {
               "kind": "work_state",
               "id": "D608",

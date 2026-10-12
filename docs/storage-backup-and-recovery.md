@@ -287,11 +287,20 @@ recovers readiness without a server restart.
   architecture, prior-release or clean-host release proof. Existing process deadlines are unchanged.
 - `make storage-drill` builds a test-owned image tag and runs the documented Make backup, verify,
   fresh restore, rehearsal, guarded replacement, rollback and recover commands against that image.
-  It records a branched game, mutates it after backup, checks restored identities/branches/cursor,
-  and compares rolled-back database bytes before reboot. Direct CLI lock and confirmation refusals
+  It generates the populated native fixture above through `make storage-recovery-fixture`, in a
+  fresh private temporary directory. Referenced Campaign packs are persisted through real community
+  authoring/publication routes, explicitly not endorsed as chess content. The fixture is restored
+  through the image CLI; all tables/columns/rows, nonempty data classes, original identities,
+  authoring/classroom reads, export and outsider denials are checked. Resumed fixture mutations
+  retain their original writer identity, not a replacement device's identity. It records an additional
+  branched game, mutates it after backup and compares every row after fresh restore, replacement
+  and rollback. Restored bot/Campaign commands replay without duplicate events/rewards and play
+  continues through image HTTP. Rolled-back database bytes also match before reboot. No fixture
+  capture is committed or used by progress tracking; ordinary content CI needs no Docker and emits
+  no capture. Direct CLI lock and confirmation refusals
   remain separate controls. The image retains its non-root user; backup directories are not made
   world-writable. This is a local development-image storage journey with mock providers, not proof
-  of real-bot behavior, every account data class, a prior-release rollback or both release architectures.
+  of calibrated real-bot behavior, a prior-release rollback or both release architectures.
   The command must finish successfully before it supplies native recovery proof.
   It filters inherited deployment/Make selectors and checks its generated project, fresh volumes,
   matching images, mounts and loopback ports before starting. It checks space available to the image
@@ -369,3 +378,27 @@ zero: 4,994 software, seven unchanged-budget performance, 255 content and 304 br
 one existing optional Maia skip, zero retries and all 150 input/112 composition cells. Types,
 governance, packaging and build pass; the known entry-bundle warning remains. No push or
 current-revision GitHub/native-release claim follows.
+
+### Full-population image journey: verification pending — 2026-10-12
+
+D3746 adds the populated image journey described above under the existing storage RFC. The normal
+recovery checks pass 33 Make wrapper controls, 42 SQLite/replacement checks and all seven native
+process journeys. Its fixture generator also succeeds during the actual image run. Initial fixture
+publication failures were missing mechanical provenance, not permission to loosen the publisher;
+the copied fixture documents now explicitly abstain from corpus judgement and name their source.
+The permanent row reader normalizes SQLite's null-prototype records into ordinary JSON objects;
+the three release controls include a real changed-row rejection and immutable standalone read.
+
+The actual run builds native linux/arm64 development image
+`sha256:eb1a0a12d9f6df5ed60081c983f7216c8d55a3d6bb51d58042f44fa2aa67ce59`,
+then refuses before boot because its non-root data volume has no usable space. Docker reports
+76.93 GB of images and 42.28 GB of volumes. Only the run's owned resources were removed; no global
+pruning or unidentified data deletion occurred. D3747 records the new capacity hold rather than
+rewriting D3574's earlier genuine clearance. **The full-population image journey is not yet proven.**
+After authorized capacity repair it must finish unchanged; prior-release, differing-UID host,
+both actual release architectures and final release journeys remain separate obligations.
+
+Fresh normal `make verify-awake build` exits zero: 5,212 software checks, seven unchanged-budget
+performance checks, 255 content checks, types, governance, packaging, 133 release-policy checks
+and build. This does not turn the capacity-refused image run into a pass. No browser or remote
+GitHub run accompanies this operator/test-only change; the known bundle warning remains.

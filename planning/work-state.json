@@ -31104,6 +31104,23 @@
       "uxItems": [],
       "evidence": "tools/d1713-semantic-validation-matrix/state-boundary.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3746",
+      "state": "blocked",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:c82f825220da37ea5b0bd56ea1bc920cf66f08233de8a92c33fdd227f203b451",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "item:D3747"
+    },
+    {
+      "id": "D3747",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:527be99d5e0f5779aad990e30ac7fa195eb6b2746fc69c2556595b35f0d4cbd4",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

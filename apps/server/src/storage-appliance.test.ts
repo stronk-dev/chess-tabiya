@@ -4,10 +4,10 @@
 // database. Backup → loss → restore → boot proves stable identities through a restarted server,
 // the live server excludes maintenance, and a newer database never reaches an HTTP listener.
 import { spawn, spawnSync, type ChildProcess } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmdirSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { networkInterfaces, tmpdir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 
@@ -270,8 +270,9 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     const keeper = await register("recovery_keeper");
     const pupil = await register("recovery_pupil");
     const outsider = await register("recovery_outsider");
+    const writerId = "writer-recovery";
     async function call(target: Appliance, cookie: string, method: string, path: string, body?: unknown, status = 200) {
-      const response = await fetch(`${target.origin}${path}`, { method, headers: { ...writeHeaders(target, cookie), "x-writer-id": "writer-recovery" }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+      const response = await fetch(`${target.origin}${path}`, { method, headers: { ...writeHeaders(target, cookie), "x-writer-id": writerId }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
       expect(response.status, `${method} ${path}: ${await response.clone().text()}`).toBe(status);
       return await response.json() as Record<string, any>;
     }
@@ -297,6 +298,17 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     expect(draft.validation.valid).toBe(true);
     const playtest = (await owner("POST", `/packs/drafts/${draft.id}/playtest`, {}, 201)).run as DrillRun;
     await owner("POST", `/packs/drafts/${draft.id}/register`, {}, 201);
+    // Persist the fixture's referenced packs through the real authoring/publication routes.
+    // Recovery must not depend on uninstalled source-tree fixture files in the server image.
+    for (const path of fixtureEnv.DRAFT_PACK_FILES.split(",")) {
+      const fixtureDocument = JSON.parse(readFileSync(path, "utf8"));
+      fixtureDocument.provenance = { ...fixtureDocument.provenance, reviewStatus: "draft",
+        sources: [`Mechanical recovery fixture copied from ${path.slice(ROOT.length + 1)}; not chess review`],
+        corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "Mechanical recovery fixture; no corpus judgement or official content endorsement." } };
+      const savedDraft = (await owner("POST", "/packs/drafts", { document: fixtureDocument }, 201)).draft;
+      expect(savedDraft.validation.valid).toBe(true);
+      await owner("POST", `/packs/drafts/${savedDraft.id}/register`, {}, 201);
+    }
     const shapeDocument = structuredClone(await owner("GET", "/shapes/carlsbad"));
     delete shapeDocument.channel;
     delete shapeDocument.publisherHandle;
@@ -379,6 +391,25 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     expect(backedUp.status, backedUp.stdout).toBe(0);
     const bundle = join(state.backups, String(backedUp.receipt.backupId));
     expect(admin(state, ["verify", bundle]).receipt).toMatchObject({ result: "succeeded", compatibility: "current" });
+    // Only the named Docker-tier Make command requests this private, temporary fixture.
+    // Ordinary content CI writes no population capture and consumes no Docker daemon.
+    const fixtureOutput = process.env.TABIYA_STORAGE_FIXTURE_DIRECTORY;
+    if (fixtureOutput !== undefined) {
+      expect(isAbsolute(fixtureOutput)).toBe(true);
+      expect(lstatSync(fixtureOutput).isDirectory()).toBe(true);
+      expect(lstatSync(fixtureOutput).mode & 0o777).toBe(0o700);
+      expect(readdirSync(fixtureOutput)).toEqual([]);
+      cpSync(bundle, join(fixtureOutput, basename(bundle)), { recursive: true, errorOnExist: true, force: false });
+      writeFileSync(join(fixtureOutput, "population.json"), JSON.stringify({
+        backupId: backedUp.receipt.backupId, rows: before,
+        tables: classes.map(({ store, dataClass }) => ({ store, dataClass })), nonemptyFamilies,
+        accounts: { keeper, pupil, outsider }, writerId, reads: [...beforeReads],
+        privatePaths: [`/runs/${submitted.id}/events`, `/packs/drafts/${draft.id}`],
+        ratingHistory: { games: historicalGames, periods: historicalPeriods },
+        bot: { runId: bot.id, request: botRequest, eventCount: botReply.run.events.length },
+        campaign: { runId: campaignId, submitCommand, submitResult: campaignSubmitted.result },
+      }), { flag: "wx", mode: 0o600 });
+    }
     // Complete media loss, followed by a DIFFERENT initially empty data directory.
     for (const entry of readdirSync(dirname(state.database))) if (entry.startsWith("chess-tabiya.sqlite")) rmSync(join(dirname(state.database), entry));
     expect(existsSync(state.database)).toBe(false);

@@ -3778,9 +3778,15 @@ verify-deployment:
 	$(CI_NODE) tools/verify-caddy.mjs
 
 # Release-tier drills over the built image; each uses its own Compose project and volumes.
-.PHONY: storage-drill appliance-drill appliance-drill-staged application-readiness-check staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
+.PHONY: storage-drill storage-recovery-fixture appliance-drill appliance-drill-staged application-readiness-check staged-software-contracts engine-memory-drill engine-sharing-check maia-option-contract-drill
 storage-drill:
 	$(CI_NODE) tools/appliance-drill.mjs storage
+
+# Internal fixture producer for storage-drill: caller creates an empty private temporary directory.
+# The existing content test supplies the population; only this tier requests a temporary capture.
+storage-recovery-fixture:
+	@test -n "$(FIXTURE_DIRECTORY)" || { echo "FIXTURE_DIRECTORY is required (empty private absolute directory)" >&2; exit 2; }
+	TABIYA_STORAGE_FIXTURE_DIRECTORY="$(FIXTURE_DIRECTORY)" ./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/storage-appliance.test.ts -t "D608: restores nonempty application classes"
 
 appliance-drill:
 	pnpm exec esbuild tools/source-appliance-client.ts --bundle --platform=node --format=esm --outfile=.cache/deploy/source-appliance-client.mjs
