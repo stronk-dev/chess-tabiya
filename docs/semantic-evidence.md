@@ -277,6 +277,14 @@ their existing definitions, exact end-node and complete recorded line. The froze
 keeps its predecessor output. D3736's both-colour controls reach actual authenticated Review
 and desktop/phone captions, highlights and paint retirement without modifying saved play.
 
+Recorded square-clearance v2 likewise follows physical relocations at both ends of its existing
+three-edge window. Either castling piece can vacate an exact square; a later quiet B/R/Q relocation
+can arrive on or pass through it, including the secondary castling rook. Replaced or occupied
+origins are not empty vacations and stationary pieces are not moves. Two vacated squares remain
+two exact facts rather than losing one to a king-only move identity. Later captures and unrelated
+castling remain excluded. The compiler and sole v2 factory share this reader; frozen v1 output,
+saved play and the existing renderer/consumer contracts remain unchanged.
+
 `make recorded-semantic-path-check` runs the fixtures, the imported-sample census, eager parity and
 the 20/40/80-ply timing arms; the pinned performance tier enforces total p95 ≤ 500 ms.
 

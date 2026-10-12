@@ -31022,6 +31022,24 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3737",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:20d87ea4c88a4821b7438c7264b92e593f4d4991912e5978579ebd87c91517d9",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3738",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9a09e0bb452c786efc7022a0db1ee306075326b2748a6c6c2ad210b7aa18da6c",
+      "uxItems": [],
+      "evidence": "planning/roadmap-to-done.md",
+      "evidenceKind": "path"
     }
   ]
 }

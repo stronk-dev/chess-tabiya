@@ -57,6 +57,7 @@ import {
   RECORDED_ATTRACTION_FIVE as ATTRACTION_FIVE,
   RECORDED_DEFLECTION_CHECK as DEFLECTION_CHECK,
   RECORDED_CASTLING_ATTRACTION,
+  RECORDED_CASTLING_CLEARANCE,
 } from "./testing/recorded-sequence-fixtures.js";
 
 const at = "2026-09-24T00:00:00.000Z";
@@ -78,6 +79,28 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3737 recorded square clearance follows physical castling movement", () => {
+  it.each(RECORDED_CASTLING_CLEARANCE)("$name retains the vacated square and later slider", fixture => {
+    const run = recordedRun(`d3737:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const anchors = path.slice(1).map((node, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: node.id, beforeFen: path[index]!.fen, moveUci: node.moveUci!, afterFen: node.fen }));
+    const otherSquare = "otherSquare" in fixture ? fixture.otherSquare : undefined;
+    expect(squareClearanceObservedOperands(anchors).map(item => item.vacatedSquare)).toEqual(otherSquare === undefined ? [] : [otherSquare]); // Frozen v1 output.
+    const result = compileMain(run);
+    const events = result.events.filter(event => exact(event.projection) === "derived.tactic.square_clearance_observed@2");
+    expect(events).toHaveLength(fixture.emits ? otherSquare === undefined ? 1 : 2 : 0);
+    for (const event of events) expect(event.anchor.nodeId).toBe(path.at(-1)!.id);
+    if (fixture.emits) expect(events.find(event => (event.operands as { vacatedSquare: string }).vacatedSquare === fixture.square)?.operands).toMatchObject({ vacatedSquare: fixture.square,
+      vacatingPiece: { square: fixture.square, piece: { role: fixture.vacatingRole } },
+      laterSlider: { piece: { role: fixture.sliderRole } } });
+    if (otherSquare !== undefined) expect(events.find(event => (event.operands as { vacatedSquare: string }).vacatedSquare === otherSquare)?.operands).toMatchObject({ vacatingPiece: { piece: { role: "king" } } });
+    const edges = path.slice(1).map((node, index) => declareRecordedEdgeEvidence(run, path[index]!, node));
+    const factory = invokeEvidenceValueRoute("derived.tactic.square_clearance_observed@2", { edges });
+    const ordered = (values: readonly unknown[]) => [...values].sort((left, right) => evidenceDigest(left).localeCompare(evidenceDigest(right)));
+    expect(ordered(factory.map(item => item.payload))).toEqual(ordered(events.map(event => event.operands)));
+  });
+});
 
 describe("D3736 recorded attraction follows physical castling movement", () => {
   it.each(RECORDED_CASTLING_ATTRACTION)("$name retains the exact checking or quiet consequence", fixture => {

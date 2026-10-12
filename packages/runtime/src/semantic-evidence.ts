@@ -617,6 +617,16 @@ function anchorMove(anchor: RecordedMoveAnchor) {
   return { position, move };
 }
 
+/** Canonical castling UCI names the rook origin, not either physical destination. */
+function physicalRelocations({ position, move }: ReturnType<typeof anchorMove>) {
+  const castle = castlingSide(position, move);
+  const relocations = castle === undefined ? [move] : [
+    { from: move.from, to: kingCastlesTo(position.turn, castle) },
+    { from: move.to, to: rookCastlesTo(position.turn, castle) },
+  ];
+  return relocations.filter(relocation => relocation.from !== relocation.to);
+}
+
 function captureFact(anchor: RecordedMoveAnchor): TransitionSemanticEventOperands | undefined {
   const fact = transitionSemanticFacts(anchor.beforeFen, anchor.moveUci, anchor.afterFen).find((value) => value.family === "capture");
   return fact?.family === "capture" ? immutable({ ...fact, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen }) as TransitionSemanticEventOperands : undefined;
@@ -688,11 +698,7 @@ function attractionOperands(values: readonly RecordedMoveAnchor[], physicalFollo
   if (arrival === undefined || !sameOccupant(heavyBefore.piece, arrival.piece)) return Object.freeze([]);
   const follow = anchorMove(anchors[2]!);
   const afterFollow = positionFromFen(anchors[2]!.afterFen);
-  const castle = physicalFollow ? castlingSide(follow.position, follow.move) : undefined;
-  const relocations = castle === undefined ? [follow.move] : [
-    { from: follow.move.from, to: kingCastlesTo(follow.position.turn, castle) },
-    { from: follow.move.to, to: rookCastlesTo(follow.position.turn, castle) },
-  ];
+  const relocations = physicalFollow ? physicalRelocations(follow) : [follow.move];
   if (!relocations.some(move => {
     const follower = afterFollow.board.get(move.to);
     return move.from !== move.to && follower?.color === first.position.turn &&
@@ -744,6 +750,30 @@ export function squareClearanceObservedOperands(values: readonly RecordedMoveAnc
   if (vacatingPiece === undefined || laterSlider?.piece.color !== first.position.turn || !["bishop", "rook", "queen"].includes(laterSlider.piece.role)) return Object.freeze([]);
   if (third.move.to !== first.move.from && !between(third.move.from, third.move.to).has(first.move.from)) return Object.freeze([]);
   return Object.freeze([observed<SquareClearanceObservedOperands>({ anchors, vacatedSquare: vacatingPiece.square, vacatingPiece, laterSlider, laterMove: anchors[2]! })]);
+}
+
+/** Recorded v2 retains each actual vacation and quiet slider relocation, including castling. */
+export function recordedSquareClearanceObservedOperands(values: readonly RecordedMoveAnchor[]): readonly SquareClearanceObservedOperands[] {
+  const anchors = canonicalRecordedPath(values, 3);
+  if (captureFact(anchors[2]!) !== undefined) return Object.freeze([]);
+  const first = anchorMove(anchors[0]!);
+  const third = anchorMove(anchors[2]!);
+  const afterFirst = positionFromFen(anchors[0]!.afterFen);
+  const result: SquareClearanceObservedOperands[] = [];
+  for (const vacation of physicalRelocations(first)) {
+    // A Chess960 swap/replacement is not an empty square, even though its original piece moved.
+    if (afterFirst.board.get(vacation.from) !== undefined) continue;
+    const vacatingPiece = exactPiece(first.position, makeSquare(vacation.from));
+    if (vacatingPiece === undefined) continue;
+    for (const relocation of physicalRelocations(third)) {
+      if (relocation.from === vacation.from) continue;
+      const laterSlider = exactPiece(third.position, makeSquare(relocation.from));
+      if (laterSlider?.piece.color !== first.position.turn || !["bishop", "rook", "queen"].includes(laterSlider.piece.role)) continue;
+      if (relocation.to !== vacation.from && !between(relocation.from, relocation.to).has(vacation.from)) continue;
+      result.push(observed<SquareClearanceObservedOperands>({ anchors, vacatedSquare: vacatingPiece.square, vacatingPiece, laterSlider, laterMove: anchors[2]! }));
+    }
+  }
+  return Object.freeze(result);
 }
 
 /** Interposition breaks an enemy slider duty and the retained target is positively captured. */

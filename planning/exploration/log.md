@@ -26678,3 +26678,71 @@ Campaign was the one capability with no API, route or content. Now:
   untriaged. All whole capabilities/milestones and the 273 done/272 live/24 retired UX inventory
   remain unchanged. Recorded-path still awaits D3 owner use, longitudinal D6 still needs
   opportunity denominators, and official-content/release qualification remain open.
+
+### 2026-10-12 — D3737: physical square-clearance consequences reach Review
+
+- Previous goal turn was progress: D3736 shipped at `8cf000c7` with complete normal local
+  verification and tracker closeout. The current tree starts with no tracked changes; the
+  three existing untracked paths are preserved. Source migrations D3370/D3373/D3376 and
+  module amendments D3578/D3715 remain unaccepted, not implementation opportunities.
+- Under accepted semantic-collectors §3.3 and recorded-semantic-path, four independently
+  replayed both-colour controls reproduce missing square-clearance output: castling vacates
+  a rook origin on edge one or its later rook uses a cleared square on edge three. The shared
+  physical-relocation helper also preserves D3736 attraction; frozen v1 readers keep their
+  old output. No new motif, horizon, source, permission, persisted format or pack change.
+- Twelve permanent compiler/sole-factory and twelve authenticated Review controls pass:
+  six positives retain the actual vacating piece/later slider and plural Chess960 vacancies;
+  six negatives preserve stationary-rook, later-capture and unrelated-square exclusions.
+  Exact end-node/evidence identity and stored play remain. The first plural test assumed factory
+  order equalled the compiler's event-ID order; corrected to compare exact complete payloads
+  in stable order rather than changing either production ordering.
+- Twelve actual built desktop/phone journeys pass exact captions, complete SAN, oriented
+  highlights, focus/navigation retirement, board geometry and unchanged saved play. The initial
+  two-rook PGNs omitted required file disambiguation; actual import rejects `Re1`/`Re8` and
+  accepts corrected `Rae1`/`Rae8`. No deadline, retry or assertion was weakened.
+- Workspace types pass. The first sandboxed package-manager launch cannot write its host cache;
+  the same normal Make command with host-cache/localhost permission passes. The existing generated
+  validation report is refreshed through its normal writer: 343 passing cases, 81 subjects,
+  zero fully qualified; only implementation metadata changes, not expectations or requirements.
+- `make recorded-semantic-path-check` passes 114 checks and the complete 108-path/6,991-ply
+  population, now 1,338 events versus 1,264 at D3736. Exact/eager timing-arm output remains
+  byte-equal; local Node-24 p95 at 20/40/80 plies is 24.0/49.7/85.8 ms, not a portable promise.
+  Additional exact recorded facts are not an engine explanation or evidence of hint usefulness.
+- Full normal serial verification/build/browser is pending; D3737 remains doing. Source and
+  consumer contracts, semantic qualification, meaningful Support selection, bot calibration,
+  official content and release proof remain open. No raw research dump, new tracker or push.
+- Report correction after inspecting the complete generated diff: the metadata-only statement
+  above was too broad. The v2 square-clearance population result changes from 374 to 448 positives
+  and carries its corresponding new result digest; its exact 108-path input stays unchanged.
+  Every other population result, the case expectations/results, requirements and zero-qualified
+  verdict remain unchanged. This is the measured 74-witness gain, not merely a code stamp.
+
+### 2026-10-12 — D3738: Operations current-state summary reconciled
+
+- While preparing the whole-platform overview, the Operations lead still called D3573's
+  seven-command recovery run blocked by D3574's earlier Docker-capacity failure. D3724/D3729's
+  existing path-backed closeouts and image-run log show that the later local image journey passed.
+  Corrected that current-state sentence; the original failure and historical entries remain.
+- Actual differing-UID Linux-host procedure, the original transport cause, prior-release and
+  multi-architecture release qualification remain open. No image test is rerun or release claimed
+  merely to correct prose. D3738 is path-backed done in the existing work-state register.
+- The ordinary work-state sync correctly rejects an untriaged new row; its done transition also
+  rejects an owner field. The normal transition without that inapplicable field restores zero
+  untriaged. Final governance verification follows D3737's ongoing full-browser run.
+
+### 2026-10-12 — D3737 final normal local verification and closeout
+
+- Complete serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  5,164 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files,
+  types, governance, packaging and build. Browser tiers pass 263 smoke, five content, 59 matrix
+  and one packaged-default journey: 328 passes, one existing optional live-Maia measurement
+  skipped, zero retries. All 150 permanent input cells and 112 composition cells pass.
+- D3737 becomes path-backed done; the ledger, docs, existing roadmap/checkpoint and generated
+  registers close out together. The 74 additional recorded witnesses reach actual authenticated
+  Review and desktop/phone captions, complete lines and oriented highlights without changing
+  saved play. Case requirements/results remain; square-clearance population positives increase
+  374→448, and zero of the 81 subjects fully qualify.
+- Whole-capability/milestone states, 273 completed/272 live/24 retired UX items and zero official
+  graduates remain unchanged. Source/consumer amendments, useful Support selection, calibration,
+  recorded D3 owner use and longitudinal D6 opportunity semantics remain open. This is local
+  verification, not a new GitHub run or release-image qualification; nothing is pushed.

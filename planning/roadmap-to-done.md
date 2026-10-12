@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3736]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3738]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,19 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3737]] fixes the existing recorded square-clearance rule at both castling edges: the first
+move can vacate the rook's square, and the later quiet slider can be the secondary castling rook.
+Plural Chess960 vacations remain separate facts; stationary pieces, captures and unrelated
+squares remain excluded. Twenty-four compiler/factory/authenticated Review controls and twelve
+actual desktop/phone journeys pass. The unchanged 108-game/6,991-ply population now yields
+1,338 recorded events, 74 more than D3736, with eager byte parity; all 343 existing validation
+cases retain their results and zero subjects fully qualify. Frozen v1 output and saved play
+remain unchanged. Complete normal serial verification/build/browser passes 5,164 software,
+seven unchanged-budget performance, 255 content and 328 browser cases, one existing optional
+Maia skip, zero retries and all 150 input/112 composition cells. The existing generated report
+retains every case result; its square-clearance population positives change 374→448. This does
+not establish useful selection, bot calibration, official content or whole-capability completion.
 
 [[D3736]] corrects recorded attraction's physical castling follow-up under the existing
 three-edge king-check/five-edge heavy-capture definition. The compiler and sole v2 factory
@@ -4494,8 +4507,10 @@ implemented; `docs/deployment.md`, `docs/storage-backup-and-recovery.md` and `do
 describe their current contracts. Native source-appliance play/restart is demonstrated, not a
 complete release install. Exact pushed-revision CI, remaining ingress/probe/operator obligations,
 complete prior-release recovery and multi-architecture release journeys, model/runtime rights,
-resource proof and the official content bundle still block completion. D3573's complete native
-Make recovery journey is presently blocked by D3574's measured Docker capacity exhaustion.
+resource proof and the official content bundle still block completion. D3574's earlier Docker
+capacity failure remains historical evidence, not the current recovery state: D3724/D3729 pass
+all seven normal Make recovery commands against the local image. Actual differing-UID Linux-host,
+original transport-cause, prior-release and multi-architecture qualification remain open ([[D3738]]).
 
 The 2026-09-05 fifth provider-health author repair closes [[D2753]]–[[D2760]] and self-audit
 [[D2762]]–[[D2764]] at contract tier. Exact named checkpoint exports, separate consumer

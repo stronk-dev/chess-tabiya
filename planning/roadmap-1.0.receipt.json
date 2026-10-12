@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9b2f59fd37f7cfa2210d4380beb9295154e6fd9569221e992be5bc11479c78d9",
+    "roadmap": "sha256:4245754e361d9c70aa5c20a67a79981b0c47bb1c676350dd3be0cb028a6b596d",
     "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:f058535513cb450091a104ff40abe660650f8aa3e1aa2535ef1eee9cd80d306b",
+    "workState": "sha256:b3c2079df49eb5992e4443c17490d3e3b164f3c7e9278e7a0d0994fb06a47646",
     "rfcRegister": "sha256:c7fd996d0eff48225b3fbcf51ef35021123e24d105a2d14be10eeb10df60d990",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 633,
       "doing": 16,
       "blocked": 1074,
-      "done": 1601,
+      "done": 1603,
       "refused": 161
     },
     "workItems": {
@@ -364,7 +364,7 @@
       "nextAction": "Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-12",
-        "summary": "D3736 repairs recorded attraction's physical castling follow-up in the v2 compiler and sole sealed factory, while retaining frozen v1 output and existing family/horizon definitions. Fourteen compiler/factory/authenticated Review controls and eight desktop/phone caption, full-line, highlight and navigation-retirement journeys pass; quiet and stationary-rook negatives remain empty. Recorded-path verification passes 102 checks and the unchanged 108 imported paths/6,991 plies/1,264 events with eager byte parity. Full ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,140 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and all four browser tiers with 316 passes, one existing optional live-Maia latency skip, zero retries and all 150 input/112 composition cells. The first full run correctly refuses old generated validation metadata; the existing update command changes only implementation metadata and preserves all 343 case results, 81 subjects and zero fully qualified subjects. No pack, schema, persistence, permission or whole-capability/release state changes. Recorded-path awaits D3 owner use; longitudinal D6 opportunity denominators, pending source contracts, D3734 author-check debt, historical intermittents and official-content/release proof remain open. Previous checkpoints remain historical evidence, not fresh bot calibration, remote CI or release-image promotion.",
+        "summary": "D3737 repairs square-clearance's two physical castling edges in the recorded v2 compiler and sole factory: rook-origin vacations and later rook arrival/path, including two retained Chess960 vacations. Twenty-four compiler/factory/authenticated Review controls and twelve actual desktop/phone journeys pass exact operands, captions, complete SAN, oriented paint, navigation retirement and saved-play preservation. Six negative controls retain stationary-rook, capture and unrelated-square exclusions. Factory/event-ID order and ambiguous two-rook SAN fixture errors are corrected without changing product ordering or deadlines. Workspace types and all 343 existing semantic validation cases pass; 81 subjects remain zero fully qualified. Recorded-path verification passes 114 checks over the same 108 paths/6,991 plies, now 1,338 events versus 1,264 at D3736, with exact/eager parity and local total p95 24.0/49.7/85.8 ms at 20/40/80 plies. Frozen v1 output and existing predicates, saved schema, packs and permissions remain unchanged. Complete ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,164 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files, types/governance/packaging/build and 328 browser passes, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. The generated report preserves every case result and other population result; square-clearance positives change 374 to 448 over unchanged inputs. This is additional recorded consequence coverage, not useful selection, bot calibration, official-content, whole-capability or release qualification; source/consumer amendment holds and recorded D3/longitudinal D6 remain.",
         "impact": "advanced",
         "evidence": [
           "rfc/recorded-semantic-path.md",
@@ -386,8 +386,8 @@
           },
           {
             "kind": "work_state",
-            "id": "D3736",
-            "digest": "sha256:400b620e6ecafff38fd3456b5ea4c5099bfed5944e999af0347431df786567b2"
+            "id": "D3737",
+            "digest": "sha256:20d87ea4c88a4821b7438c7264b92e593f4d4991912e5978579ebd87c91517d9"
           }
         ]
       },

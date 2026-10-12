@@ -13,6 +13,12 @@ const cases = [
   { family: "D3736 attraction check", side: "black", fen: "4k2r/8/8/8/8/8/8/4b1K1 b k - 0 1", moves: "1... Bf2+ 2. Kxf2 O-O+ *", sans: ["Bf2+", "Kxf2", "O-O+"], caption: "then O-O+ gave check", squares: ["f2"] },
   { family: "D3736 attraction capture", side: "white", fen: "k3Bq2/8/8/8/8/8/8/6KR w K - 0 1", moves: "1. Bf7 Qxf7 2. O-O Kb8 3. Rxf7 *", sans: ["Bf7", "Qxf7", "O-O", "Kb8", "Rxf7"], caption: "then Rxf7 captured", squares: ["f7"] },
   { family: "D3736 attraction capture", side: "black", fen: "6kr/8/8/8/8/8/8/K3bQ2 b k - 0 1", moves: "1... Bf2 2. Qxf2 O-O 3. Kb1 Rxf2 *", sans: ["Bf2", "Qxf2", "O-O", "Kb1", "Rxf2"], caption: "then Rxf2 captured", squares: ["f2"] },
+  { family: "D3737 rook vacation", side: "white", fen: "4k3/8/8/8/8/8/6B1/4K2R w K - 0 1", moves: "1. O-O Kd7 2. Bh1 *", sans: ["O-O", "Kd7", "Bh1"], caption: "White's rook on h1 left h1", squares: ["h1"] },
+  { family: "D3737 rook vacation", side: "black", fen: "4k2r/6b1/8/8/8/8/8/4K3 b k - 0 1", moves: "1... O-O 2. Kd2 Bh8 *", sans: ["O-O", "Kd2", "Bh8"], caption: "Black's rook on h8 left h8", squares: ["h8"] },
+  { family: "D3737 rook arrival", side: "white", fen: "4k3/8/8/8/8/8/8/4KN1R w K - 0 1", moves: "1. Ne3 Kd7 2. O-O *", sans: ["Ne3", "Kd7", "O-O"], caption: "White's knight on f1 left f1", squares: ["f1"] },
+  { family: "D3737 rook arrival", side: "black", fen: "4kn1r/8/8/8/8/8/8/4K3 b k - 0 1", moves: "1... Ne6 2. Kd2 O-O *", sans: ["Ne6", "Kd2", "O-O"], caption: "Black's knight on f8 left f8", squares: ["f8"] },
+  { family: "D3737 two vacations", side: "white", fen: "4k3/8/8/8/8/8/8/RK1R4 w D - 0 1", moves: "1. O-O Kd7 2. Rae1 *", sans: ["O-O", "Kd7", "Rae1"], caption: "White's rook on d1 left d1", squares: ["d1"] },
+  { family: "D3737 two vacations", side: "black", fen: "rk1r4/8/8/8/8/8/8/4K3 b d - 0 1", moves: "1... O-O 2. Kd2 Rae8 *", sans: ["O-O", "Kd2", "Rae8"], caption: "Black's rook on d8 left d8", squares: ["d8"] },
 ] as const;
 
 async function recorded(page: Page, id: string) {
@@ -25,7 +31,7 @@ async function recorded(page: Page, id: string) {
 }
 
 for (const mobile of [false, true]) for (const value of cases) {
-  test(`Review ${value.side} ${value.family.includes("attraction") ? "castling" : "en passant"} ${value.family} retains captured identity${mobile ? " @mobile" : ""}`, async ({ page }) => {
+  test(`Review ${value.side} ${value.family.startsWith("D37") ? "castling" : "en passant"} ${value.family} retains exact recorded consequence${mobile ? " @mobile" : ""}`, async ({ page }) => {
     expect((await page.request.post("/auth/register", { data: {
       handle: `capture_${randomUUID().slice(0, 8)}`, password: "review-capture-test-password",
     } })).status()).toBe(201);
@@ -42,8 +48,8 @@ for (const mobile of [false, true]) for (const value of cases) {
     await expect(fact).toHaveCount(1);
     await expect(fact.locator(".chip")).toHaveText([...value.squares]);
     const paths = page.locator('.evidence [data-component="move_path"]');
-    // Deflection and overload are distinct admitted facts, each retaining this complete line.
-    await expect(paths).toHaveCount(value.family === "overload" ? 2 : 1);
+    // Distinct overload/deflection and plural vacations each retain the same complete line.
+    await expect(paths).toHaveCount(value.family === "overload" || value.family.includes("two vacations") ? 2 : 1);
     for (const path of await paths.all()) await expect(path.locator(".plies li")).toHaveText([...value.sans]);
     const before = await recorded(page, id);
     const paint = page.locator(".stage .cg-shapes circle");

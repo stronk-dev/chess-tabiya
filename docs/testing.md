@@ -109,6 +109,13 @@ desktop and touch-phone: exact SAN, complete line, arrival-square highlights, fo
 retirement, stable geometry and unchanged saved play. These tests are part of the ordinary
 software/browser suites, not a replacement for semantic qualification or release proof.
 
+`make recorded-castling-clearance-check` exercises the actual recorded compiler, sole factory
+and authenticated Review for both castling edges and both colours. Six positives include plural
+Chess960 vacations; six negatives preserve stationary-rook, capture and unrelated-square exclusions.
+`make recorded-castling-clearance-browser-check` checks exact captions, full SAN lines, oriented
+highlights, paint retirement and unchanged saved play on desktop and touch-phone. Both commands
+select permanent cases also included in ordinary software/browser CI.
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct

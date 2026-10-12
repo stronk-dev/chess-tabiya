@@ -39,7 +39,7 @@ import {
   recordedPawnContactTimingSemanticEvent,
   recordedSquareClearanceSemanticEvent,
   recordedTradeCompletedSemanticEvent,
-  squareClearanceObservedOperands,
+  recordedSquareClearanceObservedOperands,
   transitionSemanticEvents,
   type SemanticEvidenceEvent,
   type TransitionSemanticEventOperands,
@@ -305,7 +305,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       for (const value of recordedLineBlockerClearanceObservedOperands(anchors)) emitted.push(recordedLineBlockerClearanceSemanticEvent(value, edges, exchangeEvidence(value.targetCapture)));
       break;
     case "square_clearance":
-      for (const value of squareClearanceObservedOperands(anchors)) emitted.push(recordedSquareClearanceSemanticEvent(value, edges));
+      for (const value of recordedSquareClearanceObservedOperands(anchors)) emitted.push(recordedSquareClearanceSemanticEvent(value, edges));
       break;
     case "interference":
       for (const value of interferenceObservedOperands(anchors)) emitted.push(recordedInterferenceSemanticEvent(value, edges, duty(), exchangeEvidence(value.targetCapture)));
