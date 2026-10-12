@@ -134,6 +134,11 @@ therefore no generic mint API and no caller-payload adapter:
   sealing function. Accessors, custom prototypes and array holes cannot borrow that cache: their
   current bytes are rechecked at admission. A shallow-frozen shell does not make mutable children
   trustworthy. The permanent factory profiles check every emitted payload's nested immutability.
+- The factory's separate input-digest memo accepts only frozen plain records of primitive own data
+  properties. Frozen getters and own/inherited iteration or inherited run-shape hooks cannot borrow
+  that memo; their authority shape is recomputed on each mint. This preserves exact ordinary input
+  bytes without confusing a frozen shell with stable input values. It does not freeze or reconstruct
+  arbitrary authority inputs, or replace the source-specific validators above.
 - Every non-retired catalogue projection has exactly one factory,
   `create{Projection}V{version}Evidence`, of one of four shapes. **Computed** factories take authority
   inputs (a FEN, a validated edge, a recorded run) and compute the payload themselves. **Derived**

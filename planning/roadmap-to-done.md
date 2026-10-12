@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3749]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3750]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,7 +58,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3748]]/[[D3749]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3750]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
@@ -68,6 +68,22 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3750]] repairs the factory input-digest memo's frozen-accessor boundary under accepted
+value authority. Two real factory predecessor controls reproduce stale receipts; two inherited
+iterator/run-shape controls expose the incomplete first repair. Ordinary frozen inputs retain
+their exact receipts. The final memo verifies own primitive data once and rechecks inherited
+shape guards before every reuse; a work-count control rejects repeated descriptor walks.
+No new cache, source, chess convention, projection, receipt field, stored pack/run, learner
+permission or qualification is introduced. Complete-output comparisons and ordinary final
+verification belong to the existing value-authority implementation record; D3300 remains open
+for cold-game cost, and the independent source/orientation/window amendments remain required.
+The final normal serial verification/build/browser command exits zero: 5,226 software cases,
+seven unchanged-budget performance cases, 255 content cases, clean types/governance/build and
+340 browser passes, one existing optional skip, zero retries, all 150 input cells and 112
+successful unretried composition cells. Eight complete-output comparisons preserve all events,
+input receipts and projected rows; summed cold cost is 5.82% higher locally, not an optimization
+or portable rate. No whole capability/milestone, fresh remote CI or release-image promotion.
 
 [[D3748]] delivers the shared accessible source fields in all four current PGN forms,
 with contract-specific guidance, explicit existing URL precedence and retained failed inputs.

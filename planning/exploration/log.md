@@ -26930,3 +26930,37 @@ Campaign was the one capability with no API, route or content. Now:
   assigned. D3746's expanded image journey is still blocked on D3747 capacity. No whole
   capability/milestone, calibrated bot, official content, prior-release, differing-UID host,
   dual-architecture release or current-revision GitHub discharge. Nothing is pushed.
+
+## 2026-10-12 — D3750 exact factory input digests and inventory closeout
+
+- The registered reference-resolution factory reproduces stale input digests from frozen getters
+  and symbol-driven shapes. Two further inherited-shape controls fail on the incomplete first
+  repair. The existing private memo now admits only frozen own primitive data, checks descriptors
+  once and rechecks inherited iteration/run classifiers before every reuse. Six permanent controls
+  pass; ordinary receipts, source/payload semantics and consumer permissions remain unchanged.
+- Final focused Make commands pass 59 contract/factory, 120 collector and 65 actual worker/store/
+  projector checks plus clean types. The initial sandboxed worker run refuses localhost listen
+  with EPERM; the same ordinary command with permission passes without changing assertions,
+  budgets or retries. The descriptor work-count control also fails on the first complete repair
+  (three reads instead of one); the final implementation passes.
+- Eight alternating-order fresh-process comparisons preserve all 2,199 legal edges, 196,589
+  events, full input receipts/projected rows and forty checkpoints per side. Summed cold time
+  is 32,719.662 ms before / 34,623.054 ms after, 5.82% higher locally, three faster/five slower.
+  This proves exact output parity, not a speed improvement or portable regression rate. D3300
+  remains open. Only ignored compact aggregates/bundles are retained; no raw capture is committed
+  or required by progress/CI. Canonical validation refreshes only 62 implementation-digest leaves:
+  all 343 case results, 81 subjects, 53 population/eight external receipts and zero qualified
+  subjects remain unchanged.
+- Full normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  5,226 software/384 files, seven unchanged-budget performance/four files, 255 content/26 files,
+  types/governance/packaging/build and 340 browser passes (275 smoke, five content, 59 matrix,
+  one packaged-production), one existing optional Maia skip, zero retries and all 150 input/
+  112 unretried composition cells. Existing bundle warnings remain.
+- Ledger/state, implemented-system docs, implementation record and the existing roadmap close
+  this local repair together. The current inventory still has fourteen incomplete whole
+  capabilities, four active/five blocked milestones, 276 completed/269 live/24 retired UX items,
+  86 installed pack documents and zero official graduates. Every live ledger row is assigned;
+  462 historical prose-only closures remain weaker evidence. Source/semantic amendments,
+  useful selection, bot calibration, Campaign curriculum/rewards, expanded image recovery and
+  full release journeys remain open. No whole capability/milestone or remote CI is promoted;
+  nothing is pushed and the full 1.0 goal remains active.

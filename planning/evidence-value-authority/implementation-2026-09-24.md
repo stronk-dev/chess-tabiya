@@ -166,3 +166,59 @@ skip, zero retries and all 150 input/112 composition cells. D3721 closes locally
 with its permanent test path. No exact-revision GitHub run, built-image recovery,
 official graduation or whole capability/milestone is claimed. The existing large
 JavaScript-entry warning is recorded separately as D3722, measurement before a fix.
+
+## 2026-10-12 follow-up — stable factory authority inputs (D3750)
+
+The existing input-digest memo checked `Object.values` on a frozen plain authority record.
+A frozen getter could therefore yield a different reference on the next invocation while its
+factory receipt retained the previous input digest. A symbol-driven authority shape could do
+the same with an unchanged payload. Two permanent real reference-resolution factory controls
+fail on the predecessor. The first descriptor-only repair passes those controls but fails two
+additional inherited iterator/run-classifier controls; all four boundaries are now covered.
+These are in-process authority counterexamples, not a measured rate of incorrect learner facts.
+
+The memo now admits only frozen ordinary records of primitive own data properties, with no
+symbol iteration hook or inherited run-shape fields. All other inputs retain the existing
+per-invocation authority-shape/digest path; their validators and payload semantics are not
+changed. An ordinary frozen record, its repeat and its mutable-record counterpart retain the
+same complete receipt. No new cache, source, projection, receipt field, chess convention,
+assistance rule, saved pack/run or caller-usable mint is introduced. This is an input-receipt
+correctness repair, not D3300's cold-cost completion or general input snapshotting.
+
+The first complete repair's focused Make commands pass 58 contract/factory, 120 collector and 65 actual
+projector/store/worker checks, plus workspace types with zero errors/warnings. The first
+sandboxed worker run cannot listen on localhost (EPERM); the same command with local-server
+permission passes without code, budget, retry or assertion changes. The canonical writer
+retains all 343 case outcomes, 81 subjects, 53 population receipts and eight external receipts;
+only nine operation and 53 population implementation digests refresh, independently compared
+against HEAD. Zero subjects become qualified and the existing RFC discharges remain open.
+
+The first repair's eight alternating-order fresh-process comparisons preserve complete events,
+factory/input receipts, projected rows and forty checkpoints per side. Summed cold time is
+37,779.852 ms before / 39,815.867 ms after, 5.39% higher locally (three faster, five slower).
+That timing does not prove portability or an isolated causal attribution. The private cache now
+checks own descriptors only on first admission; a sixth permanent control fails with three
+descriptor reads instead of one on the first repair. Every reuse still rechecks the inherited
+shape guards, and the inherited controls first populate the clean-record cache before adding
+the hook. No accessor or inherited-shape authority can use that fast path. Final comparison
+and ordinary verification must establish the final implementation, not inherit the first run.
+
+Final focused commands pass 59 contract/factory, 120 collector and 65 actual projector/store/worker
+checks plus clean workspace types. Eight final alternating-order fresh-process comparisons retain
+all 2,199 legal edges, 196,589 events, complete factory/input receipts, projected rows and forty
+checkpoints per side. Summed cold time is 32,719.662 ms before / 34,623.054 ms after, **5.82% higher
+locally** (three faster, five slower; ratios 0.836–1.453). The descriptor work-count reduction is
+proved; a cold-game speed improvement is not. The changed load/order observations do not isolate
+the checks' latency or establish a portable regression rate. Keep this cost explicit and D3300
+open; no threshold, population, seal or evidence quality is weakened. Only ignored small aggregate
+reports/bundles are retained, and progress/CI never needs either report or raw profiles. The final
+canonical report again changes only 62 implementation-digest leaves; all outcomes remain unchanged.
+
+Final normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+5,226 software cases/384 files, seven unchanged-budget performance cases/four files, 255 content
+cases/26 files, clean workspace types/governance/packaging/build and 340 browser passes
+(275 smoke, five real-content, 59 matrix, one packaged-production), one existing optional Maia
+skip, zero retries, all 150 input cells and 112 successful unretried composition cells. Existing
+bundle warnings remain. D3750 closes locally with permanent path evidence; D3300 cost, source
+contracts, semantic qualification and RFC discharges stay open. No official graduation,
+whole capability/milestone, exact-revision GitHub or expanded release-image proof is claimed.

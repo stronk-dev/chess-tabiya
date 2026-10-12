@@ -31141,6 +31141,15 @@
       "uxItems": [],
       "evidence": "docs/game-import-and-story.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3750",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5ebabb2086554f9f3e41cec2d99af8a7ceea5caa1b7dee4eca8000473cdbc01e",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

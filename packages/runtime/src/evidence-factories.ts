@@ -374,20 +374,34 @@ function present<T>(payload: T, route: string): T {
 
 /** The local mint helper. Deliberately not exported. */
 // One edge mints ~200 values over the same frozen canonical edge authority ([[D3300]]). A frozen
-// plain record of primitives cannot change, and its authority shape is itself, so its digest is
-// computed once per record; every other authority is shaped and hashed per mint as before.
+// plain record of primitive data properties cannot change, and its authority shape is itself, so
+// its digest is computed once per record. Frozen accessors and symbol-driven shape hooks are not
+// ordinary data; every other authority is shaped and hashed per mint as before.
 const FROZEN_AUTHORITY_DIGESTS = new WeakMap<object, string>();
 
 function authorityDigest(authority: unknown): string {
-  const stable = authority !== null && typeof authority === "object" && Object.isFrozen(authority)
+  if (authority !== null && typeof authority === "object" && Object.isFrozen(authority)
     && Object.getPrototypeOf(authority) === Object.prototype
-    && Object.values(authority).every((entry) => entry === null || (typeof entry !== "object" && typeof entry !== "function"));
-  if (!stable) return evidenceDigest(authorityShape(authority));
-  const cached = FROZEN_AUTHORITY_DIGESTS.get(authority);
-  if (cached !== undefined) return cached;
-  const digest = evidenceDigest(authorityShape(authority));
-  FROZEN_AUTHORITY_DIGESTS.set(authority, digest);
-  return digest;
+    // authorityShape also reads inherited iteration/run classifiers. Those can change even when
+    // every own field is frozen primitive data, so they cannot enter this ordinary-record cache.
+    && !(Symbol.iterator in authority)
+    && ["id", "nodes", "events", "branches"].every((key) => !(key in authority) || Object.hasOwn(authority, key))) {
+    // A cache entry proves this frozen record's own descriptors were checked once. Its own
+    // data cannot change; inherited classifiers above must still be checked before every hit.
+    const cached = FROZEN_AUTHORITY_DIGESTS.get(authority);
+    if (cached !== undefined) return cached;
+    const stable = Reflect.ownKeys(authority).every((key) => {
+      if (typeof key !== "string") return false;
+      const property = Object.getOwnPropertyDescriptor(authority, key)!;
+      return "value" in property && (property.value === null || (typeof property.value !== "object" && typeof property.value !== "function"));
+    });
+    if (stable) {
+      const digest = evidenceDigest(authorityShape(authority));
+      FROZEN_AUTHORITY_DIGESTS.set(authority, digest);
+      return digest;
+    }
+  }
+  return evidenceDigest(authorityShape(authority));
 }
 
 // ---------------------------------------------------------------------------------------------

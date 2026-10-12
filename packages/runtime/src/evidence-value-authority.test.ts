@@ -5,7 +5,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
 import ts from "typescript";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 
@@ -1098,6 +1098,123 @@ const PROFILE_FILE = new URL("fixtures/evidence-value-profiles.json", import.met
 const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
+  it("D3750 a frozen authority getter cannot retain the previous input digest", () => {
+    let reference = "rules:material";
+    const input = Object.freeze({ get reference() { return reference; } });
+    const first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<{ readonly reference: string }>;
+    expect(evidenceValueReceipt(first).inputDigest).toBe(evidenceDigest({ reference }));
+    reference = "rules:checkmate";
+    const second = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<{ readonly reference: string }>;
+    expect(second.payload.reference).toBe(reference);
+    expect(first.payload.reference).toBe("rules:material");
+    expect(evidenceValueReceipt(second).inputDigest).toBe(evidenceDigest({ reference }));
+    expect(evidenceValueReceipt(second).inputDigest).not.toBe(evidenceValueReceipt(first).inputDigest);
+    expect(() => assertDeclaredEvidence(first)).not.toThrow();
+    expect(() => assertDeclaredEvidence(second)).not.toThrow();
+  });
+
+  it("D3750 symbol-driven authority shapes cannot borrow the plain-data digest cache", () => {
+    let iterable = false;
+    let label = "original-authority";
+    const input = Object.freeze({
+      reference: "rules:material",
+      get [Symbol.iterator]() { return iterable ? function* () {} : undefined; },
+      [Symbol.toPrimitive]() { return label; },
+    });
+    const first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    expect(evidenceValueReceipt(first).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
+    iterable = true;
+    const second = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    expect(second.payload).toEqual(first.payload);
+    expect(evidenceValueReceipt(second).inputDigest).toBe(evidenceDigest(label));
+    label = "changed-authority";
+    const third = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    expect(evidenceValueReceipt(third).inputDigest).toBe(evidenceDigest(label));
+    expect(evidenceValueReceipt(third).inputDigest).not.toBe(evidenceValueReceipt(second).inputDigest);
+  });
+
+  it("D3750 ordinary frozen authorities keep exact repeat and mutable-record parity", () => {
+    const input = Object.freeze({ reference: "rules:material" });
+    const first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    const repeated = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    const ordinary = invoke("run.record.evidence_ref_resolution@1", { reference: input.reference }) as DeclaredEvidence<unknown>;
+    expect(repeated.payload).toEqual(first.payload);
+    expect(evidenceValueReceipt(repeated)).toEqual(evidenceValueReceipt(first));
+    expect(evidenceValueReceipt(ordinary)).toEqual(evidenceValueReceipt(first));
+    expect(evidenceValueReceipt(first).inputDigest).toBe(evidenceDigest(input));
+  });
+
+  it("D3750 an inherited iterator shape is not stable merely because own fields are data", () => {
+    const input = Object.freeze({ reference: "rules:material" });
+    const clean = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    const previous = Object.getOwnPropertyDescriptor(Object.prototype, Symbol.iterator);
+    let iterable = false;
+    let first: DeclaredEvidence<unknown>, second: DeclaredEvidence<unknown>;
+    try {
+      Object.defineProperty(Object.prototype, Symbol.iterator, {
+        configurable: true,
+        get() { return this === input && iterable ? function* () {} : undefined; },
+      });
+      first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+      iterable = true;
+      second = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    } finally {
+      if (previous === undefined) Reflect.deleteProperty(Object.prototype, Symbol.iterator);
+      else Object.defineProperty(Object.prototype, Symbol.iterator, previous);
+    }
+    expect(evidenceValueReceipt(first!).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
+    expect(evidenceValueReceipt(second!).inputDigest).toBe(evidenceDigest("[object Object]"));
+    expect(second!.payload).toEqual(first!.payload);
+    expect(evidenceValueReceipt(clean).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
+  });
+
+  it("D3750 an inherited run-shaped authority is re-read rather than cached as own primitive data", () => {
+    const input = Object.freeze({ reference: "rules:material" });
+    const clean = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    const keys = ["id", "nodes", "events", "branches"] as const;
+    const previous = keys.map(key => Object.getOwnPropertyDescriptor(Object.prototype, key));
+    const nodes: unknown[] = [], events: unknown[] = [], branches: unknown[] = [];
+    const values = { id: "authority-fixture", nodes, events, branches };
+    let first: DeclaredEvidence<unknown>, second: DeclaredEvidence<unknown>;
+    try {
+      keys.forEach(key => Object.defineProperty(Object.prototype, key, {
+        configurable: true,
+        get() { return this === input ? values[key] : undefined; },
+      }));
+      first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+      nodes.push({});
+      events.push({});
+      second = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+    } finally {
+      keys.forEach((key, index) => {
+        if (previous[index] === undefined) Reflect.deleteProperty(Object.prototype, key);
+        else Object.defineProperty(Object.prototype, key, previous[index]!);
+      });
+    }
+    expect(evidenceValueReceipt(first!).inputDigest).toBe(evidenceDigest({ run: "authority-fixture", nodes: 0, events: 0 }));
+    expect(evidenceValueReceipt(second!).inputDigest).toBe(evidenceDigest({ run: "authority-fixture", nodes: 1, events: 1 }));
+    expect(second!.payload).toEqual(first!.payload);
+    expect(evidenceValueReceipt(clean).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
+  });
+
+  it("D3750 verifies own primitive data once before repeat cache reuse", () => {
+    const input = Object.freeze({ reference: "rules:material" });
+    const descriptor = Object.getOwnPropertyDescriptor;
+    let reads = 0;
+    const spy = vi.spyOn(Object, "getOwnPropertyDescriptor").mockImplementation((target, key) => {
+      if (target === input) reads++;
+      return descriptor(target, key);
+    });
+    let first: DeclaredEvidence<unknown>, repeated: DeclaredEvidence<unknown>;
+    try {
+      first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+      repeated = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
+      invoke("run.record.evidence_ref_resolution@1", input);
+    } finally { spy.mockRestore(); }
+    expect(reads).toBe(1);
+    expect(evidenceValueReceipt(repeated!)).toEqual(evidenceValueReceipt(first!));
+  });
+
   it("D3721 a real structural factory cannot admit a changed feature under its original receipt", () => {
     const feature = { kind: "piece_count", color: "white", role: "rook", basis: "count", comparison: "equal", count: 2 };
     const value = invoke("rules.structural.predicate.piece_count@1", { fen: INITIAL, feature }) as DeclaredEvidence<{ readonly feature: typeof feature; readonly matched: boolean }>;
