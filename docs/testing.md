@@ -116,6 +116,16 @@ Chess960 vacations; six negatives preserve stationary-rook, capture and unrelate
 highlights, paint retirement and unchanged saved play on desktop and touch-phone. Both commands
 select permanent cases also included in ordinary software/browser CI.
 
+`make recorded-castling-defender-check` executes ten shared legal populations through the
+recorded compiler, sole v2 factory and actual authenticated Review: both-colour ordinary and
+stationary-king castles, unexposed defenders, quiet continuations and non-positive captures.
+Five additional v2 controls retain the exact demand-bound defense-read counts. Frozen v1 output,
+exact end-node/evidence identity and saved play are checked.
+`make recorded-castling-defender-browser-check` checks the four positives on desktop and
+touch-phone: exact defender/target caption, full SAN, oriented paint, navigation retirement,
+stable board and no changes to recorded play. These are permanent ordinary CI cases, not
+semantic qualification or proof that a hint is useful.
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct

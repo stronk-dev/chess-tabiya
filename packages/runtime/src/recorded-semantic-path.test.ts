@@ -35,6 +35,7 @@ import {
   attractionObservedOperands,
   checkZwischenzugObservedOperands,
   defenderConsequenceOperands,
+  recordedDefenderConsequenceOperands,
   deflectionObservedOperands,
   lineBlockerClearanceObservedOperands,
   recordedDeflectionObservedSemanticEvent,
@@ -46,7 +47,7 @@ import {
   type SemanticEvidenceEvent,
   type TransitionSemanticEventOperands,
 } from "./semantic-evidence.js";
-import { defenderDutyReading } from "./tactics.js";
+import { defenderDutyReading, defenderDutyRelocatedEvents } from "./tactics.js";
 import * as squareControl from "./square-control.js";
 import { positionFromFen } from "./position-cache.js";
 import { parseSquare } from "chessops/util";
@@ -58,6 +59,7 @@ import {
   RECORDED_DEFLECTION_CHECK as DEFLECTION_CHECK,
   RECORDED_CASTLING_ATTRACTION,
   RECORDED_CASTLING_CLEARANCE,
+  RECORDED_CASTLING_DEFENDER,
 } from "./testing/recorded-sequence-fixtures.js";
 
 const at = "2026-09-24T00:00:00.000Z";
@@ -79,6 +81,30 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3739 recorded defender consequence follows physical castling movement", () => {
+  it.each(RECORDED_CASTLING_DEFENDER)("$name retains the actual defender and target", fixture => {
+    const run = recordedRun(`d3739:${fixture.name}`, fixture.fen, fixture.moves);
+    const path = branchPath(run, run.activeCursor.branchId);
+    const anchors = path.slice(1).map((node, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: node.id, beforeFen: path[index]!.fen, moveUci: node.moveUci!, afterFen: node.fen }));
+    expect(defenderDutyRelocatedEvents(anchors[1]!.beforeFen, anchors[1]!.moveUci, anchors[1]!.afterFen))
+      .toEqual(expect.arrayContaining([expect.objectContaining({ defenderBefore: expect.objectContaining({ square: fixture.before }), defenderAfter: expect.objectContaining({ square: fixture.after }), target: expect.objectContaining({ square: fixture.target }) })]));
+    expect(defenderConsequenceOperands(anchors)).toEqual([]); // Historical v1 output is frozen.
+    const result = compileMain(run);
+    const events = result.events.filter(event => exact(event.projection) === "derived.tactic.sequence.defender_consequence@2");
+    expect(events).toHaveLength(fixture.emits ? 1 : 0);
+    if (fixture.emits) {
+      expect(events[0]!.anchor.nodeId).toBe(path.at(-1)!.id);
+      expect(events[0]!.operands).toMatchObject({ kind: "defender_relocated_target_captured", defender: { before: { square: fixture.before, piece: { role: "rook" } }, after: { square: fixture.after, piece: { role: "rook" } } }, target: { square: fixture.target, piece: { role: "knight" } }, firstMoveCapturedDefender: false, finalCapture: { captured: { square: fixture.target, role: "knight" } } });
+      assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, events[0]!);
+    }
+    const edges = path.slice(1).map((node, index) => declareRecordedEdgeEvidence(run, path[index]!, node));
+    const factory = invokeEvidenceValueRoute("derived.tactic.sequence.defender_consequence@2", { edges });
+    expect(factory.map(item => item.payload)).toEqual(events.map(event => event.operands));
+    expect(result.windows.find(window => exact(window.projection) === "derived.tactic.sequence.defender_consequence@2" && window.startNodeId === path[0]!.id))
+      .toMatchObject({ status: fixture.emits ? "emitted" : "no_witness", horizon: 3, endNodeId: path.at(-1)!.id, eventIds: events.map(event => event.id) });
+  });
+});
 
 describe("D3737 recorded square clearance follows physical castling movement", () => {
   it.each(RECORDED_CASTLING_CLEARANCE)("$name retains the vacated square and later slider", fixture => {
@@ -270,18 +296,20 @@ describe("D3658 demand-bound defender consequence work", () => {
     { name: "relocated defender", fen: "r3k3/8/1n6/8/2P5/8/8/R3K3 w - - 0 1", moves: ["c4c5", "b6d7", "a1a8"], reads: 3, kind: "defender_relocated_target_captured" },
   ] as const;
 
-  it.each(fixtures)("$name reads only its demanded defense populations", fixture => {
-    const run = recordedRun(`d3658:${fixture.name}`, fixture.fen, fixture.moves);
-    const path = branchPath(run, run.activeCursor.branchId);
-    const anchors = path.slice(1).map((child, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: child.id, beforeFen: path[index]!.fen, moveUci: child.moveUci!, afterFen: child.fen }));
-    const reading = vi.spyOn(squareControl, "squareControlReading");
-    try {
-      const result = defenderConsequenceOperands(anchors);
-      expect(result.map(item => item.kind)).toEqual(fixture.kind === null ? [] : [fixture.kind]);
-      expect(reading).toHaveBeenCalledTimes(fixture.reads);
-      expect(reading.mock.calls.map(([fen]) => fen)).toEqual([anchors[0]!.beforeFen, anchors[0]!.afterFen, anchors[1]!.afterFen].slice(0, fixture.reads));
-    } finally { reading.mockRestore(); }
-  });
+  for (const [version, read] of [["v1", defenderConsequenceOperands], ["D3739 v2", recordedDefenderConsequenceOperands]] as const) {
+    it.each(fixtures)(`${version} $name reads only its demanded defense populations`, fixture => {
+      const run = recordedRun(`d3658:${fixture.name}`, fixture.fen, fixture.moves);
+      const path = branchPath(run, run.activeCursor.branchId);
+      const anchors = path.slice(1).map((child, index) => ({ beforeNodeId: path[index]!.id, afterNodeId: child.id, beforeFen: path[index]!.fen, moveUci: child.moveUci!, afterFen: child.fen }));
+      const reading = vi.spyOn(squareControl, "squareControlReading");
+      try {
+        const result = read(anchors);
+        expect(result.map(item => item.kind)).toEqual(fixture.kind === null ? [] : [fixture.kind]);
+        expect(reading).toHaveBeenCalledTimes(fixture.reads);
+        expect(reading.mock.calls.map(([fen]) => fen)).toEqual([anchors[0]!.beforeFen, anchors[0]!.afterFen, anchors[1]!.afterFen].slice(0, fixture.reads));
+      } finally { reading.mockRestore(); }
+    });
+  }
 
   it("still validates every quiet edge before omitting source work", () => {
     const run = recordedRun("d3658:corrupt", INITIAL, ["e2e4", "e7e5", "g1f3"]);

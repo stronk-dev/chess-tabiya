@@ -5,6 +5,10 @@ import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 
 const cases = [
+  { family: "D3739 defender relocation", side: "white", fen: "3Nk2r/8/8/8/8/8/R6n/K7 w k - 0 1", moves: "1. Nf7 O-O 2. Rxh2 *", sans: ["Nf7", "O-O", "Rxh2"], caption: "Black's rook on h8 moved to f8", squares: ["h8", "h2"] },
+  { family: "D3739 defender relocation", side: "black", fen: "k7/r6N/8/8/8/8/8/3nK2R b K - 0 1", moves: "1... Nf2 2. O-O Rxh7 *", sans: ["Nf2", "O-O", "Rxh7"], caption: "White's rook on h1 moved to f1", squares: ["h1", "h7"] },
+  { family: "D3739 stationary king", side: "white", fen: "3N2kr/8/8/8/8/8/R6n/K7 w k - 0 1", moves: "1. Nf7 O-O 2. Rxh2 *", sans: ["Nf7", "O-O", "Rxh2"], caption: "Black's rook on h8 moved to f8", squares: ["h8", "h2"] },
+  { family: "D3739 stationary king", side: "black", fen: "k7/r6N/8/8/8/8/8/3n2KR b K - 0 1", moves: "1... Nf2 2. O-O Rxh7 *", sans: ["Nf2", "O-O", "Rxh7"], caption: "White's rook on h1 moved to f1", squares: ["h1", "h7"] },
   { family: "overload", side: "white", fen: "k2r2r1/8/8/3pP3/8/8/8/1K4R1 w - d6 0 2", moves: "2. exd6 Rxd6 3. Rxg8+ *", sans: ["exd6", "Rxd6", "Rxg8+"], caption: "exd6 was answered by the recapture Rxd6", squares: ["d6", "g8"] },
   { family: "overload", side: "black", fen: "1k4r1/8/8/8/3Pp3/8/8/K2R2R1 b - d3 0 2", moves: "2... exd3 3. Rxd3 Rxg1+ *", sans: ["exd3", "Rxd3", "Rxg1+"], caption: "exd3 was answered by the recapture Rxd3", squares: ["d3", "g1"] },
   { family: "defender removal", side: "white", fen: "k7/8/8/3pP3/4n3/8/8/1K2R3 w - d6 0 2", moves: "2. exd6 Kb7 3. Rxe4 *", sans: ["exd6", "Kb7", "Rxe4"], caption: "Black's pawn on d5 was captured", squares: ["d5", "e4"] },

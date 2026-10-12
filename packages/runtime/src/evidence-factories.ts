@@ -58,6 +58,7 @@ import {
   checkZwischenzugObservedOperands,
   recordedCheckZwischenzugObservedOperands,
   defenderConsequenceOperands,
+  recordedDefenderConsequenceOperands,
   defenderExposureOperands,
   deflectionObservedInduction,
   deflectionObservedOperands,
@@ -1794,7 +1795,7 @@ export const createDerivedExchangeTradeCompletedV2Evidence = (() => {
 
 export const createDerivedPawnSequenceContactTimingV2Evidence = recordedSequenceFactory("derived.pawn.sequence.contact_timing@2", { edges: EDGES(1, null) }, (_input, anchors) => { const payload = pawnContactTimingSequence(anchors); return payload === undefined ? [] : [payload]; }, edgesOf);
 export const createDerivedPawnSequenceHarassmentPressureV2Evidence = recordedSequenceFactory("derived.pawn.sequence.harassment_pressure@2", { edges: EDGES(2) }, (_input, anchors) => { const payload = harassmentPressureSequence(anchors); return payload === undefined ? [] : [payload]; }, edgesOf);
-export const createDerivedTacticSequenceDefenderConsequenceV2Evidence = recordedSequenceFactory("derived.tactic.sequence.defender_consequence@2", { edges: EDGES(3) }, (_input, anchors) => defenderConsequenceOperands(anchors), edgesOf);
+export const createDerivedTacticSequenceDefenderConsequenceV2Evidence = recordedSequenceFactory("derived.tactic.sequence.defender_consequence@2", { edges: EDGES(3) }, (_input, anchors) => recordedDefenderConsequenceOperands(anchors), edgesOf);
 export const createDerivedTacticSquareClearanceObservedV2Evidence = recordedSequenceFactory("derived.tactic.square_clearance_observed@2", { edges: EDGES(3) }, (_input, anchors) => recordedSquareClearanceObservedOperands(anchors), edgesOf);
 export const createDerivedTacticLineBlockerClearanceObservedV2Evidence = recordedSequenceFactory("derived.tactic.line_blocker_clearance_observed@2", { edges: EDGES(3), exchange: sealed("rules.exchange.predicate.legal_exchange@1") }, (input, anchors) => {
   exactRecordedSequenceInputs(anchors, edgesOf(input), 3, others(input, "exchange"), ["rules.exchange.predicate.legal_exchange"]);

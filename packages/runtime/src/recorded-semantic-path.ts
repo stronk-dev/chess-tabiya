@@ -21,7 +21,7 @@ import {
   recordedAttractionObservedOperands,
   checkSemanticEvent,
   recordedCheckZwischenzugObservedOperands,
-  defenderConsequenceOperands,
+  recordedDefenderConsequenceOperands,
   deflectionObservedInduction,
   recordedDeflectionObservedOperands,
   interferenceObservedOperands,
@@ -286,7 +286,7 @@ function evaluate(row: RecordedPathEvaluatorRow, window: readonly PreparedEdge[]
       break;
     }
     case "defender_consequence":
-      for (const value of defenderConsequenceOperands(anchors)) emitted.push(recordedDefenderConsequenceSemanticEvent(value, edges));
+      for (const value of recordedDefenderConsequenceOperands(anchors)) emitted.push(recordedDefenderConsequenceSemanticEvent(value, edges));
       break;
     case "deflection": {
       const operands = recordedDeflectionObservedOperands(anchors);

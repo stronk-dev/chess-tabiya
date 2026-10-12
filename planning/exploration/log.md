@@ -26746,3 +26746,52 @@ Campaign was the one capability with no API, route or content. Now:
   graduates remain unchanged. Source/consumer amendments, useful Support selection, calibration,
   recorded D3 owner use and longitudinal D6 opportunity semantics remain open. This is local
   verification, not a new GitHub run or release-image qualification; nothing is pushed.
+
+### 2026-10-12 — D3739: castling defender consequences reach actual Review
+
+- Previous goal turn was a status-only overview, not implementation progress. No tracked edits
+  were open; the three pre-existing untracked paths remain untouched. This turn reproduces
+  a concrete accepted foundation defect rather than implementing an unaccepted source amendment.
+- Under breadth-collectors §3.5 and recorded-semantic-path, two legal both-colour predecessor
+  controls fail because the recorded reader follows king-origin/rook-origin UCI instead of the
+  secondary rook's physical relocation. The actual one-edge duty reader independently retains
+  that rook and exact lost target duty. Six negative controls already pass at the predecessor.
+- A shared implementation retains frozen v1 behavior and gives only the recorded v2 compiler
+  and sole factory physical reply relocations. Newly exposed positive exchange, actual lost
+  duty, target survival and positive third-edge capture remain mandatory. No force, intention,
+  causal motif, new horizon, source admission, pack rewrite or saved-state change is introduced.
+- Ten shared populations, including both-colour stationary-king castles, traverse the compiler,
+  sole factory and authenticated Review. Five additional v2 controls preserve exact demand-bound
+  defense population counts. All 25 focused checks and workspace types pass.
+- Eight actual built desktop/phone journeys pass exact captions, full SAN, defender/target chips,
+  oriented board paint, navigation retirement, stable geometry and saved-play preservation.
+- The ordinary recorded-path checker passes 129 controls and the unchanged 108-path/6,991-ply
+  census with 1,338 events and eager byte parity. Local Node-24 p95 at 20/40/80 plies is
+  25.7/58.5/79.3 ms, not a portable promise. The existing compact validation report is regenerated;
+  every diff line is implementation metadata. All 343 case results and population results remain
+  unchanged across 81 subjects and zero fully qualified. No new recording or tracking system.
+- Full normal serial verification/build/browser is pending; D3739 remains doing. Source joins,
+  selection usefulness, bot calibration, official content, owner use and whole release gates remain.
+
+### 2026-10-12 — D3740: validation plan census reconciled
+
+- The active validation plan's current paragraph still stopped at D3663's 93 cases while the
+  generated register and subsequent accepted family slices through D3730 contain 343 passing
+  cases over 81 subjects. Corrected that current paragraph and retained historical checkpoints.
+- Zero subjects fully qualify. No case, test requirement, protected authority, source admission,
+  learner permission or release gate changes. D3740 is path-backed done; this is a prose repair,
+  not a new experiment or independent semantic qualification.
+
+### 2026-10-12 — D3739 final normal verification and closeout
+
+- Complete serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  5,189 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files,
+  workspace types, governance, scaffold, packaging and production build. All four browser tiers
+  pass: 271 smoke, five content, 59 matrix and one packaged-default journey, 336 passes total,
+  one existing optional live-Maia skip and zero retries. All 150 permanent input cells and all
+  112 composition cells pass. The existing large-browser-bundle warning remains.
+- D3739 is path-backed done; ledger, docs, existing roadmap and generated registers close out
+  together. All saved play, frozen v1 output, 343 case results and imported-population results
+  remain unchanged. This closes actual Review's physical-rook consequence omission, not useful
+  hint selection, semantic qualification, source-contract holds, bot calibration or official
+  content. No whole capability/milestone advances, push, new GitHub run or release-image claim.

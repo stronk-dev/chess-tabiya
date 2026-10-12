@@ -31040,6 +31040,24 @@
       "uxItems": [],
       "evidence": "planning/roadmap-to-done.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3739",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:53771f623d521078adcdd9cf4c7e26b4234a539e4db1e0189da64b4eea220222",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3740",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ebfa12e721dee977159603f5630a0474d66334283c98df54b158af59d71231a0",
+      "uxItems": [],
+      "evidence": "planning/semantic-validation-authority/plan.md",
+      "evidenceKind": "path"
     }
   ]
 }

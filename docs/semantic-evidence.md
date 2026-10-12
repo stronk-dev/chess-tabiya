@@ -285,6 +285,16 @@ two exact facts rather than losing one to a king-only move identity. Later captu
 castling remain excluded. The compiler and sole v2 factory share this reader; frozen v1 output,
 saved play and the existing renderer/consumer contracts remain unchanged.
 
+Recorded defender-consequence v2 also follows the reply's physical relocations. A secondary
+castling rook can be the retained defender: it must become newly exposed to a positive legal
+exchange after the first move, actually relocate and lose its exact target duty on the reply,
+then that surviving target must be positively captured on the third edge. A stationary king
+does not hide the rook's movement. Quiet continuations, non-positive captures and defenders
+not newly exposed remain absent. The first-edge lost-duty/captured-defender arm is unchanged;
+no pressure, force, intention or causal deflection is inferred. The compiler and sole v2 factory
+share the reader, while frozen v1 output and saved play remain unchanged. Whole-board defense
+populations remain demand-bound to the necessary final capture and retained duty.
+
 `make recorded-semantic-path-check` runs the fixtures, the imported-sample census, eager parity and
 the 20/40/80-ply timing arms; the pinned performance tier enforces total p95 ≤ 500 ms.
 

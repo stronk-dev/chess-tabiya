@@ -33,6 +33,20 @@ export const RECORDED_SEQUENCE_HARD_NEGATIVES = Object.freeze([
 export const RECORDED_ATTRACTION_FIVE = { fen: "3r3k/8/8/8/8/2N5/2P5/6K1 w - - 0 1", moves: ["c3d5", "d8d5", "c2c4", "h8g8", "c4d5"] } as const;
 export const RECORDED_DEFLECTION_CHECK = { fen: "7k/4q1r1/8/8/8/8/8/R1K1R3 w - - 0 1", moves: ["a1a8", "g7g8", "e1e7"] } as const;
 
+// D3739: a newly exposed defending rook relocates on the reply, then its target is captured.
+export const RECORDED_CASTLING_DEFENDER = Object.freeze([
+  { name: "white rook relocation", fen: "3Nk2r/8/8/8/8/8/R6n/K7 w k - 0 1", moves: ["d8f7", "e8h8", "a2h2"], before: "h8", after: "f8", target: "h2", emits: true },
+  { name: "black rook relocation", fen: "k7/r6N/8/8/8/8/8/3nK2R b K - 0 1", moves: ["d1f2", "e1h1", "a7h7"], before: "h1", after: "f1", target: "h7", emits: true },
+  { name: "white stationary king", fen: "3N2kr/8/8/8/8/8/R6n/K7 w k - 0 1", moves: ["d8f7", "g8h8", "a2h2"], before: "h8", after: "f8", target: "h2", emits: true },
+  { name: "black stationary king", fen: "k7/r6N/8/8/8/8/8/3n2KR b K - 0 1", moves: ["d1f2", "g1h1", "a7h7"], before: "h1", after: "f1", target: "h7", emits: true },
+  { name: "white unexposed defender", fen: "3Nk2r/8/8/8/8/8/R6n/K7 w k - 0 1", moves: ["d8b7", "e8h8", "a2h2"], before: "h8", after: "f8", target: "h2", emits: false },
+  { name: "black unexposed defender", fen: "k7/r6N/8/8/8/8/8/3nK2R b K - 0 1", moves: ["d1b2", "e1h1", "a7h7"], before: "h1", after: "f1", target: "h7", emits: false },
+  { name: "white quiet continuation", fen: "3Nk2r/8/8/8/8/8/R6n/K7 w k - 0 1", moves: ["d8f7", "e8h8", "a2a3"], before: "h8", after: "f8", target: "h2", emits: false },
+  { name: "black quiet continuation", fen: "k7/r6N/8/8/8/8/8/3nK2R b K - 0 1", moves: ["d1f2", "e1h1", "a7a6"], before: "h1", after: "f1", target: "h7", emits: false },
+  { name: "white nonpositive capture", fen: "3Nk2r/8/8/8/8/6b1/R6n/K7 w k - 0 1", moves: ["d8f7", "e8h8", "a2h2"], before: "h8", after: "f8", target: "h2", emits: false },
+  { name: "black nonpositive capture", fen: "k7/r6N/6B1/8/8/8/8/3nK2R b K - 0 1", moves: ["d1f2", "e1h1", "a7h7"], before: "h1", after: "f1", target: "h7", emits: false },
+] as const);
+
 // D3737: physical rook vacation and arrival, independently replayed in both colours.
 export const RECORDED_CASTLING_CLEARANCE = Object.freeze([
   { name: "white rook vacation", fen: "4k3/8/8/8/8/8/6B1/4K2R w K - 0 1", moves: ["e1h1", "e8d7", "g2h1"], square: "h1", vacatingRole: "rook", sliderRole: "bishop", emits: true },

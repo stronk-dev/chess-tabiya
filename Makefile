@@ -483,6 +483,13 @@ recorded-consumer-adoption-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/review-map.test.ts
 
 .PHONY: recorded-castling-attraction-check
+.PHONY: recorded-castling-defender-check recorded-castling-defender-browser-check
+recorded-castling-defender-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/review-map.test.ts -t D3739
+
+recorded-castling-defender-browser-check:
+	./node_modules/.bin/playwright test tests/browser/review-capture-identity.spec.ts --grep D3739
+
 .PHONY: recorded-castling-clearance-check
 recorded-castling-clearance-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/review-map.test.ts -t D3737

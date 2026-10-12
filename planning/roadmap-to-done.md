@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3738]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3740]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,21 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3739]] repairs recorded defender-consequence v2's king-only castling reply identity under
+the existing three-edge rule. Ten legal populations reach the compiler, sole factory and actual
+authenticated Review; ordinary and stationary-king castles retain both-colour rook/target
+identities while unexposed defenders, quiet continuations and non-positive captures stay absent.
+Five v2 controls preserve demand-bound defense work. Twenty-five focused checks, clean workspace
+types, eight desktop/phone caption/line/highlight/retirement journeys and 129 recorded-path
+checks pass. The fixed 108-path/6,991-ply census remains 1,338 events with eager parity;
+all 343 validation case results and all population results remain unchanged, with zero subjects
+fully qualified. Frozen v1 output, packs, saved play and source/consumer permissions stay unchanged.
+The complete normal serial verification/build/browser gate passes 5,189 software, seven
+unchanged-budget performance, 255 content and 336 browser cases, one existing optional Maia
+skip, zero retries and all 150 input/112 composition cells. D3739 is path-backed done.
+This does not discharge useful selection, source contracts, bot calibration, official content
+or any whole capability or release gate.
 
 [[D3737]] fixes the existing recorded square-clearance rule at both castling edges: the first
 move can vacate the rook's square, and the later quiet slider can be the secondary castling rook.
