@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3740]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3743]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,7 +58,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3728]] and [[D608]] recovery: 273 UX items complete, 272 live and 24
+Current checked inventory through [[D3743]] and [[D608]] recovery: 275 UX items complete, 270 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
@@ -68,6 +68,19 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3741]]/[[D3742]] are the current preset-presentation/input checkpoint: admitted choices follow
+Quiet → Theory only → Guide me → Support → Analyze, Campaign kit keeps its workflow-specific
+leading place, and omitted ordinary choices are explained without widening permissions. Matches
+offer enabled Quiet and no inert Open support action. The menu owns initial radio focus on touch
+and keyboard entry. [[D3743]] synchronizes the existing Campaign revision control with actual
+route-lazy component delivery; its assertions and deadlines stay unchanged. All 446 affected
+checks/types and five actual desktop/phone Play/Campaign/native-match journeys pass. The fresh
+normal run passes 5,201 software and seven performance checks, then refuses these three rows'
+missing live routing. This paragraph supplies their existing-roadmap route; the remaining normal
+governance/content/build/all-four-browser-tier command exits zero, including all 112 unretried
+composition cells. ARR-a20/ARR-a21 and D3741–D3743 are path-backed done. No whole capability or
+milestone is promoted; useful selection, source contracts, owner use and official content remain.
 
 [[D3739]] repairs recorded defender-consequence v2's king-only castling reply identity under
 the existing three-edge rule. Ten legal populations reach the compiler, sole factory and actual

@@ -31058,6 +31058,33 @@
       "uxItems": [],
       "evidence": "planning/semantic-validation-authority/plan.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3741",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:724c4c1a13c13664d8d9ad06458608347ea758eb134d80adc388f21a76a9c3f3",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3742",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ce5750ff6c9b94ecf49e25f74dc8cbd505b83c35ad93978ee6076fd08340b360",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3743",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bf90bcc7ab76175e9e591f1732c26ab62150b90d26a54da62c4444ef5be5c895",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

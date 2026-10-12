@@ -4,6 +4,7 @@
   import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
   import { CAMPAIGN_MODULE_LABELS, campaignBotLabel, rewardText, type CampaignModuleId, type CampaignNodeCard, type CampaignProjection } from "./campaign-api.js";
   import { modalBoundary } from "./modal-boundary.js";
+  import { offeredPresetChoices, unavailablePresetNotice } from "./preset-menu.js";
 
   interface Props {
     campaign: CampaignProjection;
@@ -80,13 +81,14 @@
       <h3 id="prep-help-title">How would you like help?</h3>
       <label class="help-style">Help style
         <select aria-label="Help style" value={isCustom ? "custom" : selected} disabled={busy !== undefined}
-          aria-describedby={`prep-help-description${preference.kind === "invalid_fallback" ? " prep-help-recovery" : ""}${helpError ? " prep-help-error" : ""}`}
+          aria-describedby={`prep-help-description prep-preset-availability${preference.kind === "invalid_fallback" ? " prep-help-recovery" : ""}${helpError ? " prep-help-error" : ""}`}
           onchange={(event) => chooseHelp(event.currentTarget)}>
           {#if isCustom}<option value="custom" disabled>Custom (from {presetDeclaration(selected).label})</option>{/if}
-          {#each policy.allowedPresets as preset}<option value={preset}>{presetDeclaration(preset).label}</option>{/each}
+          {#each offeredPresetChoices("campaign") as preset}<option value={preset.id}>{preset.label}</option>{/each}
         </select>
       </label>
       <p id="prep-help-description" class="muted">{isCustom ? "Your individual help choices are kept. Choosing a style replaces Custom; individual lower limits still apply." : `Style requests: ${presetDeclaration(selected).promise}`}</p>
+      <p id="prep-preset-availability" class="muted">{unavailablePresetNotice("campaign")}</p>
       <p class="muted">Help is confirmed when the encounter opens. Your individual limits, earned and equipped tools, encounter restrictions and available evidence still apply. Changing help style does not change your kit.</p>
       {#if preference.kind === "invalid_fallback"}<p id="prep-help-recovery" role="status">{renderSuppression({ kind: "preference_recovery", reason: preference.reason }, "campaign")}</p>{/if}
       {#if helpError}<p id="prep-help-error" role="alert">{helpError}</p>{/if}

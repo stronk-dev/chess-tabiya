@@ -267,7 +267,17 @@ writer/follower protocol roles, and withheld authored material states when comme
 The topbar menu offers exactly the context's allowed help styles as radios. Choosing one writes the
 v2 preference and re-queries the server compiler, so the default modules really change: for example,
 Guide me turns on the ambient opener, passive markers, named-pattern guidance and lit sight. The
-pill says **Custom** whenever Advanced raises a field above the style or adds or removes a module. The
+ordinary display order is Quiet → Theory only → Guide me → Support → Analyze, intersected with
+the workflow's allowed choices. Campaign kit remains Campaign's leading workflow-specific choice;
+this presentation order changes neither defaults nor the runtime registry. Omitted ordinary styles
+are explained beside the chooser and remain absent, not disabled. Match play states that only Quiet
+is available and chess guidance is unavailable, even when there is no requested-help suppression;
+its menu does not advertise an Open support action. The enabled Quiet choice still leaves all
+forbidden Advanced controls unavailable. These are context limits, not invented source failures.
+Opening the menu focuses the selected radio, or the first offered radio for Custom. Subsequent
+focus movement stays with the learner, and Escape closes the modal and returns to its invoker.
+The same order and context explanation appear in Settings and Campaign preparation.
+The pill says **Custom** whenever Advanced raises a field above the style or adds or removes a module. The
 Advanced inspector keeps all nine raw switches plus a ten-module include/exclude list.
 The first row of Support repeats the compiled style's exact declared promise, or states each
 suppression when a context, access or source ceiling removes something—for example,

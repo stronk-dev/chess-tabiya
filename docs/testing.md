@@ -15,6 +15,18 @@ Do not start a second build or verification process while browser CI serves that
 receive `STATIC_NOT_BUILT`. Such a run is invalid, not an excuse for a timeout increase or a
 retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tiers remain intact.
 
+`make help-style-presentation-check` runs all affected preset/Settings/Campaign/screen tests,
+including all eight admitted choice sets, unchanged declarations/defaults, missing-style
+explanations, restrictions on individual controls, and named/Custom modal focus ownership.
+`make help-style-presentation-browser-check` exercises actual desktop/phone Settings → Play
+preference persistence and reload without changing saved play or board dimensions, Campaign
+preparation → encounter without changing earned equipment, and a native two-player match's
+rules-only menu. Tests wait for actual initial modal focus before pressing Escape, rather than
+native details geometry alone. Both targets' tests also belong to ordinary software/browser CI;
+they do not validate preset usefulness or replace owner-use discharge. The Campaign charge-order
+shell control waits for actual initiated route-lazy module delivery before its unchanged mounting
+and revision assertions; generic polling deadlines are not cold-transform performance budgets.
+
 `make authored-simulation-check` covers scratch isolation, selected consequence promotion,
 ordinary and charged entry, nested first-child walking, skipped alternatives, horizon truncation
 and admission refusal of authored children beyond an achieved objective. The nested-walk fix

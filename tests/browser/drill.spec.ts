@@ -18,6 +18,69 @@ import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
 
+for (const mobile of [false, true]) {
+  test(`D3741 help styles keep their disclosure order from Settings into actual Play${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.goto("/settings");
+    await page.locator("summary").filter({ hasText: "Advanced: set help before you start" }).click();
+    const activity = page.getByRole("combobox", { name: "Activity", exact: true });
+    const expected = {
+      position: ["quiet", "theory_only", "guided", "support", "analysis"],
+      pack: ["quiet", "theory_only", "guided", "analysis"],
+      imported: ["quiet", "theory_only", "guided", "analysis"],
+      match: ["quiet"],
+      stream: ["quiet", "theory_only", "guided", "analysis"],
+      academy: ["quiet", "theory_only", "guided"],
+      onramp: ["quiet", "theory_only", "guided"],
+      campaign: ["campaign_kit", "quiet", "theory_only", "guided", "analysis"],
+    };
+    for (const [kind, choices] of Object.entries(expected)) {
+      await activity.selectOption(kind);
+      const group = page.locator(`[data-assistance-context="${kind}"]`);
+      const style = group.getByRole("combobox", { name: "Help style", exact: true });
+      expect(await style.locator("option").evaluateAll(options => options.map(option => (option as HTMLOptionElement).value))).toEqual(choices);
+      await expect(style).toBeEnabled();
+      if (kind !== "position" && kind !== "match") {
+        await expect(group.locator(`#preset-availability-${kind}`)).toContainText("Not offered in this activity: Support");
+        await expect(style).toHaveAttribute("aria-describedby", `preset-availability-${kind}`);
+      }
+      if (kind === "match") {
+        await expect(group).toContainText("Only Quiet is available in a match");
+        await expect(group).not.toContainText("unless you ask");
+        await group.locator("summary").filter({ hasText: "Individual help channels" }).click();
+        await expect(group.getByRole("checkbox", { name: "Named-pattern guidance", exact: true })).toBeDisabled();
+      }
+    }
+    await activity.selectOption("position");
+    await page.locator('[data-assistance-context="position"]').getByRole("combobox", { name: "Help style", exact: true }).selectOption("theory_only");
+    await page.goto("/play");
+    await chooseRawRung(page);
+    await page.getByRole("button", { name: "Start and keep the game" }).click();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await expect(page.locator("details.assistance-control summary")).toHaveAttribute("aria-label", "Support style: Theory only");
+    await expect(page.getByLabel("Active support promise")).toContainText("no evaluation, no candidates, no line");
+    const runId = decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);
+    const before = await (await page.request.get(`/runs/${encodeURIComponent(runId)}/graph`)).json();
+    const board = await page.getByLabel("Chessboard").boundingBox();
+    await page.locator("details.assistance-control summary").click();
+    expect(await page.locator('.preset-options input[type="radio"]').evaluateAll(inputs => inputs.map(input => (input as HTMLInputElement).value))).toEqual(expected.position);
+    // Wait for the modal's actual initial focus, not merely native details geometry.
+    await expect(page.locator('.preset-options input[value="theory_only"]')).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("details.assistance-control summary")).toBeFocused();
+    await choosePreset(page, /^Guide me/u);
+    await expect(page.getByLabel("Active support promise")).toContainText("After you commit, a small consequence nudge");
+    await page.reload();
+    await expect(page.locator("details.assistance-control summary")).toHaveAttribute("aria-label", "Support style: Guide me");
+    expect(await (await page.request.get(`/runs/${encodeURIComponent(runId)}/graph`)).json()).toEqual(before);
+    const after = await page.getByLabel("Chessboard").boundingBox();
+    expect(board).not.toBeNull(); expect(after).not.toBeNull();
+    expect(after!.width).toBeCloseTo(board!.width, 0);
+    expect(after!.height).toBeCloseTo(board!.height, 0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
 function schemaPackCard(page: Page): Locator {
   return page.getByRole("article").filter({
     has: page.getByRole("heading", { name: SCHEMA_PACK_TITLE, exact: true }),

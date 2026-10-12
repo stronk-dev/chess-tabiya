@@ -68,6 +68,7 @@
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadWorkflowPreference, requestedAssistanceConfig, requestedPresetLabel, saveWorkflowPreference, workflowPreferenceKey, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
+  import { helpStyleBoundary, offeredPresetChoices, unavailablePresetNotice } from "./preset-menu.js";
   import { CONFIGURABLE_MODULE_IDS, MODULE_LABELS, ASSISTANCE_PREFERENCE_FIELDS, browserChannelReceipt, compileAssistanceRequest, compiledPresetDisclosure, narrowBrowserChannels, requestedModules, requestedPreset, selectNamedPreset, setPreferenceField, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type ConfigurableModuleId, type FinalizedAssistanceV1, type RequestedAssistanceV1, type WorkflowPreferenceReceipt, type WorkflowPreferenceV2, type ModuleQueryRequest } from "@chess-tabiya/runtime/client";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
@@ -310,6 +311,7 @@
   let assistance: AssistanceConfig = $derived(compiledAssistance?.config ?? SILENT_ASSISTANCE);
   let assistanceMenuOpen = $state(false);
   let assistanceSummary: HTMLElement | undefined = $state();
+  let assistanceOptions: HTMLFieldSetElement | undefined = $state();
   let assistanceRetry: HTMLButtonElement | undefined = $state();
   let inputBoard: { submitNotation(value: string): BoardInputResult; notationDisabled(): boolean; notationAvailable(): boolean } | undefined = $state();
   let openPivotalNodeId: string | undefined = $state();
@@ -1393,11 +1395,22 @@
   let requestedPresetId = $derived(requestedPreset(preference, activeAssistanceProfile) ?? contextPolicy.defaultPreset);
   let requestedConfig = $derived(requestedAssistanceConfig(activeAssistanceProfile, preference));
   let requestedModuleSet = $derived(requestedModules(preference, requestedPresetId));
-  let offeredPresets = $derived(contextPolicy.allowedPresets.map(presetDeclaration));
+  let offeredPresets = $derived(offeredPresetChoices(activeAssistanceProfile));
+  let presetAvailabilityNote = $derived(unavailablePresetNotice(activeAssistanceProfile));
   let presetDisclosure = $derived(compiledAssistance === undefined ? undefined : compiledPresetDisclosure(compiledAssistance));
   let presetPillLabel = $derived(presetDisclosure?.pillLabel ?? requestedPresetLabel(activeAssistanceProfile, preference));
-  let presetHeadline = $derived(presetDisclosure?.headline ?? (assistanceQueryState === "pending" ? "Confirming help for this run. Legal moves stay visible meanwhile." : "Help settings could not be confirmed, so only legal moves are shown."));
+  let presetHeadline = $derived(presetDisclosure === undefined
+    ? (assistanceQueryState === "pending" ? "Confirming help for this run. Legal moves stay visible meanwhile." : "Help settings could not be confirmed, so only legal moves are shown.")
+    : helpStyleBoundary(compiledAssistance!.context) ?? presetDisclosure.headline);
   let presetSentences = $derived(presetDisclosure?.sentences ?? []);
+  // Touch does not necessarily focus a native details summary. Keyboard events
+  // must start inside the open modal; changing a preset must not steal focus.
+  $effect(() => {
+    if (assistanceMenuOpen) {
+      const choices = assistanceOptions;
+      (choices?.querySelector<HTMLInputElement>('input:checked') ?? choices?.querySelector<HTMLInputElement>('input'))?.focus();
+    }
+  });
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
   let boardOverlays: readonly DrawShape[] = $derived.by(() => {
@@ -2482,18 +2495,21 @@
           onkeydown={(event) => { if (assistanceMenuOpen && event.key === "Escape") { event.preventDefault(); event.stopPropagation(); assistanceMenuOpen = false; assistanceSummary?.focus(); } }}>
           <summary bind:this={assistanceSummary} aria-haspopup="dialog" aria-label={`Support style: ${presetPillLabel}`}><span class="preset-pill" data-preset-mode={compiledAssistance?.displayMode ?? "pending"}>{presetPillLabel}</span></summary>
           <div class="support-menu">
-            <p class="preset-menu-promise">{presetHeadline}</p>
+            <p class="preset-menu-promise" id={activeAssistanceProfile === "match" && presetDisclosure !== undefined ? "preset-availability-note" : undefined}>{presetHeadline}</p>
             {#if assistanceQueryState !== "ready"}<button type="button" bind:this={assistanceRetry} disabled={assistanceQueryState === "pending"} onclick={() => void retryConfirmingHelp()}>{assistanceQueryState === "pending" ? "Confirming help…" : "Retry confirming help"}</button>{/if}
-            <fieldset class="preset-options">
+            <fieldset class="preset-options" bind:this={assistanceOptions} aria-describedby={presetAvailabilityNote !== undefined ? "preset-availability-note" : undefined}>
               <legend>Help style</legend>
               {#each offeredPresets as option (option.id)}
-                <label class="preset-option"><input type="radio" name={`help-style-${run.id}`} value={option.id} checked={compiledAssistance?.displayMode !== "custom" && preference.kind !== "migrated_snapshot" && requestedPresetId === option.id} onchange={() => choosePreset(option.id)} /><span><strong>{option.label}</strong><small>{option.promise}</small></span></label>
+                <label class="preset-option"><input type="radio" name={`help-style-${run.id}`} value={option.id} checked={compiledAssistance?.displayMode !== "custom" && preference.kind !== "migrated_snapshot" && requestedPresetId === option.id} onchange={() => choosePreset(option.id)} /><span><strong>{option.label}</strong><small>{activeAssistanceProfile === "match" ? "Legal moves only." : option.promise}</small></span></label>
               {/each}
             </fieldset>
+            {#if presetAvailabilityNote !== undefined && (activeAssistanceProfile !== "match" || presetDisclosure === undefined)}<p id="preset-availability-note" class="honest">{presetAvailabilityNote}</p>{/if}
             {#if compiledAssistance?.displayMode === "custom"}<p class="honest">Custom help is active. Choosing a style above replaces it; Advanced support controls keep it.</p>{/if}
             {#if preferenceUnsaved}<p class="honest">This browser is not saving help settings, so this choice lasts only until you leave.</p>{/if}
-            <p>Open the help available in this workflow. This does not reveal a move. Temporary position help must be opened explicitly and closes after your next move.</p>
-            <button type="button" onclick={(event) => { assistanceMenuOpen = false; openAssistance(event); }}>Open support</button>
+            {#if activeAssistanceProfile !== "match"}
+              <p>Open the help available in this workflow. This does not reveal a move. Temporary position help must be opened explicitly and closes after your next move.</p>
+              <button type="button" onclick={(event) => { assistanceMenuOpen = false; openAssistance(event); }}>Open support</button>
+            {/if}
             <button type="button" onclick={openAdvancedSupport}>Advanced support controls</button>
           </div>
         </details>

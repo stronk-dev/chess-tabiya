@@ -173,12 +173,13 @@ describe("Campaign action ownership", () => {
   function helpStyle() { return document.querySelector<HTMLSelectElement>('[role="dialog"] select[aria-label="Help style"]')!; }
   async function chooseHelp(preset: string) { const select = helpStyle(); select.value = preset; select.dispatchEvent(new Event("change", { bubbles: true })); await settle(); }
 
-  it("offers only Campaign's named defaults without writing preferences on entry", async () => {
+  it("D3741 offers Campaign kit before the ordinary help ladder without writing preferences on entry", async () => {
     const storage = preferenceStore();
     await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
     expect(helpStyle()).not.toBeNull();
     expect(helpStyle().value).toBe("campaign_kit");
-    expect([...helpStyle().options].map(option => option.value)).toEqual(workflowContextPolicy("campaign").allowedPresets);
+    expect([...helpStyle().options].map(option => option.value)).toEqual(["campaign_kit", "quiet", "theory_only", "guided", "analysis"]);
+    expect([...helpStyle().options].map(option => option.value).sort()).toEqual([...workflowContextPolicy("campaign").allowedPresets].sort());
     expect(document.querySelector('[role="dialog"]')?.textContent).toContain("Help is confirmed when the encounter opens");
     expect(storage.setItem).not.toHaveBeenCalled();
   });

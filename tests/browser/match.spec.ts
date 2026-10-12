@@ -90,6 +90,18 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await expect(white.page.getByLabel("Live session rail")).toContainText("Your move");
     await expect(black.page.getByLabel("Live session rail")).toContainText("Their move");
 
+    // D3741: an ordinary default match explains its rules-only posture without a
+    // forged requested-help suppression or an inert Open support action.
+    const help = white.page.locator("details.assistance-control");
+    await help.locator("summary").click();
+    await expect(help).toContainText("Only Quiet is available in a match. Legal moves stay visible; chess guidance is not available during match play.");
+    await expect(help).not.toContainText("unless you ask");
+    await expect(help.getByRole("radio")).toHaveCount(1);
+    await expect(help.getByRole("radio", { name: /^Quiet/u })).toBeEnabled();
+    await expect(help.getByRole("button", { name: "Open support", exact: true })).toHaveCount(0);
+    await white.page.keyboard.press("Escape");
+    await expect(help.locator("summary")).toBeFocused();
+
     await play(white.page, "e2", "e4", "white");
     await expect(black.page.getByText("Active line 1 turn")).toBeVisible({ timeout: 4_000 });
     await expect(black.page.getByLabel("Live session rail")).toContainText("Your move", { timeout: 4_000 });

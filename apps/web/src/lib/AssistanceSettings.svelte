@@ -8,6 +8,7 @@
   import { formatBytes } from "./account-inventory-copy.js";
   import { ASSISTANCE_PROFILES, loadWorkflowPreference, requestedAssistanceConfig, saveWorkflowPreference, type AssistanceProfile } from "./assistance-preference.js";
   import AssistanceControlFields from "./AssistanceControlFields.svelte";
+  import { helpStyleBoundary, offeredPresetChoices, unavailablePresetNotice } from "./preset-menu.js";
   import { operationConfigured, operationNotice, providerInspectorRows, providerRows } from "./provider-availability.js";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import { assertAccountDeletionPreview } from "./account-deletion-preview.js";
@@ -77,9 +78,7 @@
     });
   }
   function profileRefusal(kind: AssistanceProfile): string | undefined {
-    return workflowContextPolicy(kind).moduleCeiling.length === 1
-      ? "Match play permits legal board interaction only. These saved support preferences do not apply during a match."
-      : undefined;
+    return helpStyleBoundary(kind);
   }
   // rfc/intent-presets.md §7: the ordinary view is the per-context help style; the nine raw
   // switches and the module include/exclude list stay reachable under Advanced.
@@ -220,20 +219,22 @@
       {@const isCustom = custom(kind)}
       {@const modules = requestedModules(receipts[kind], selected)}
       {@const receipt = receipts[kind]}
+      {@const availabilityNote = unavailablePresetNotice(kind)}
       <fieldset data-assistance-context={kind}>
         <legend>{labels[kind]}</legend>
         {#if refusal}<p id={`assistance-profile-refusal-${kind}`} class="honest">{refusal}</p>{/if}
+        {#if availabilityNote !== undefined && refusal === undefined}<p id={`preset-availability-${kind}`} class="honest">{availabilityNote}</p>{/if}
         {#if kind === "campaign"}<p class="honest">Campaign encounters use this help style. Your earned and equipped tools, encounter restrictions and available evidence still apply.</p>{/if}
         {#if receipt.kind === "invalid_fallback"}
           <p id={`help-recovery-${kind}`} class="honest" role="status">{renderSuppression({ kind: "preference_recovery", reason: receipt.reason }, kind)}</p>
         {/if}
         <label>Help style
-          <select value={isCustom ? "custom" : selected} disabled={refusal !== undefined} aria-describedby={[refusal ? `assistance-profile-refusal-${kind}` : "", receipt.kind === "invalid_fallback" ? `help-recovery-${kind}` : ""].filter(Boolean).join(" ") || undefined} onchange={(event) => choosePreset(kind, event.currentTarget.value as PresetId)}>
+          <select value={isCustom ? "custom" : selected} aria-describedby={[refusal ? `assistance-profile-refusal-${kind}` : availabilityNote !== undefined ? `preset-availability-${kind}` : "", receipt.kind === "invalid_fallback" ? `help-recovery-${kind}` : ""].filter(Boolean).join(" ") || undefined} onchange={(event) => choosePreset(kind, event.currentTarget.value as PresetId)}>
             {#if isCustom}<option value="custom" disabled aria-describedby={`custom-help-${kind}`}>Custom (from {presetDeclaration(selected).label})</option>{/if}
-            {#each policy.allowedPresets as preset}<option value={preset}>{presetDeclaration(preset).label}</option>{/each}
+            {#each offeredPresetChoices(kind) as preset}<option value={preset.id}>{preset.label}</option>{/each}
           </select>
         </label>
-        <p id={`custom-help-${kind}`} class="honest">{isCustom ? "Custom help. Choosing a style replaces it." : presetDeclaration(selected).promise}</p>
+        {#if isCustom || refusal === undefined}<p id={`custom-help-${kind}`} class="honest">{isCustom ? "Custom help. Choosing a style replaces it." : presetDeclaration(selected).promise}</p>{/if}
         <details class="advanced-assistance">
           <summary>Individual help channels</summary>
           <AssistanceControlFields

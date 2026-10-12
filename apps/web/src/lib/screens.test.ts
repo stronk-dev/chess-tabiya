@@ -1979,7 +1979,7 @@ describe("Layer 3 screens", () => {
     await vi.waitFor(() => expect(footer()).toContain("no chess guidance appears unless you ask"));
     expect(document.querySelector('button[aria-label="Open assistance"]')).toBeNull();
     const options = [...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')];
-    expect(options.map((input) => input.value)).toEqual(["quiet", "guided", "theory_only", "support", "analysis"]);
+    expect(options.map((input) => input.value)).toEqual(["quiet", "theory_only", "guided", "support", "analysis"]);
     expect(options.find((input) => input.value === "quiet")?.checked).toBe(true);
 
     // Guided: the ambient opener (on_request modules) and the named-pattern / marker effects turn on.
@@ -2009,6 +2009,19 @@ describe("Layer 3 screens", () => {
 
     // Match: only Quiet is offered and wider stored intent is stated as a context suppression.
     const matchRun = make("preset-match").run;
+    const defaultMatch = mountDrill({ target: target(), props: {
+      snapshot: { run: matchRun, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, liveSessionKind: "match",
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await vi.waitFor(() => expect(footer()).toContain("Only Quiet is available in a match. Legal moves stay visible; chess guidance is not available during match play."));
+    expect(footer()).not.toContain("unless you ask");
+    expect([...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].map(input => [input.value, input.disabled])).toEqual([["quiet", false]]);
+    expect([...document.querySelectorAll<HTMLButtonElement>('.support-menu button')].some(button => button.textContent === "Open support")).toBe(false);
+    expect(document.querySelector('.support-menu')?.textContent).not.toContain("Temporary position help");
+    expect(document.querySelector('.support-menu')?.textContent).not.toContain("unless you ask");
+    await unmount(defaultMatch);
+    document.body.replaceChildren();
     preferences.set(workflowPreferenceKey("match"), explicitPreference("quiet", { arrows: "sight" }));
     const match = mountDrill({ target: target(), props: {
       snapshot: { run: matchRun, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, liveSessionKind: "match",
@@ -2019,6 +2032,33 @@ describe("Layer 3 screens", () => {
     expect(footer()).not.toContain("no chess guidance appears unless you ask");
     expect([...document.querySelectorAll<HTMLInputElement>('.preset-options input[type="radio"]')].map((input) => input.value)).toEqual(["quiet"]);
     await unmount(match);
+  });
+
+  it.each(["named", "custom"] as const)("D3742 gives an opened support menu initial focus without re-focusing on a response (%s)", async mode => {
+    const run = createRun({
+      id: `help-focus-${mode}`, session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"4".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
+    });
+    const preference = explicitPreference("theory_only", mode === "custom" ? { arrows: "evidence" } : {});
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? preference : null, setItem: vi.fn() },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await assistanceSettled();
+    const menu = document.querySelector<HTMLDetailsElement>('details.assistance-control')!;
+    menu.open = true; menu.dispatchEvent(new Event("toggle"));
+    const initial = menu.querySelector<HTMLInputElement>(`.preset-options input[value="${mode === "custom" ? "quiet" : "theory_only"}"]`)!;
+    await vi.waitFor(() => expect(document.activeElement).toBe(initial));
+    const other = menu.querySelector<HTMLInputElement>('.preset-options input[value="analysis"]')!;
+    other.focus();
+    await tick();
+    expect(document.activeElement).toBe(other);
+    other.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await vi.waitFor(() => expect(menu.open).toBe(false));
+    expect(document.activeElement).toBe(menu.querySelector("summary"));
+    await unmount(component);
   });
 
   it.each(["success", "failure"])("uses the legal-only floor while a help-style change is pending (%s)", async outcome => {

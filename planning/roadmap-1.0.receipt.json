@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8e8e052e90ea7f3eb239ced8e84feb1a6fd70b10cbe440281c33ac553c65dfbc",
-    "workItems": "sha256:14aa5bf7fe21255291f101604e643b70a28e2130cfd1fdf0d9ee97aab1c0a43d",
-    "workState": "sha256:2658779a5488ce6c7f09a8e108a6266a1341c4aa6cd93945dcc888765fd96591",
+    "roadmap": "sha256:25d70906355871ca72622aceb3535c2420b7b8f45db6106fb6221d0ef0e64c19",
+    "workItems": "sha256:4b78b7fd82827dad1105cfe23b80db4d5a14626a04094073077e21e6f9926329",
+    "workState": "sha256:c29e8b5384a39c6a9df3460b53c376201baf5a8d11ac08001435c909e8693384",
     "rfcRegister": "sha256:c7fd996d0eff48225b3fbcf51ef35021123e24d105a2d14be10eeb10df60d990",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,14 +33,14 @@
       "todo": 633,
       "doing": 16,
       "blocked": 1074,
-      "done": 1605,
+      "done": 1608,
       "refused": 161
     },
     "workItems": {
-      "queued": 88,
+      "queued": 86,
       "blocked_owner": 62,
       "blocked_rfc": 122,
-      "completed": 273,
+      "completed": 275,
       "retired": 24
     },
     "dimensionStates": {
@@ -407,10 +407,17 @@
       ],
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-11",
-        "summary": "D3715 diagnoses the selection blocker beneath D3713: the source emits both colours' complete pawn-island counts, including zero/unchanged counts, and Nudge admits them without a change witness while novelty abstains. Four actual legal-edge cohorts retain exact source operands and query authority; a mounted locked-pawn knight recovery displays two unchanged counts and retains selector focus, not silent retirement. All 26 lifecycle and 165 source/module checks plus workspace types pass. The permanent source controls protect complete state without requiring future Nudge selection to remain noisy. Two initial pawn-free fixtures were insufficient-material terminal positions and correctly refused, then corrected with a second knight. D3713 is blocked on the module author's D3715 contract; qualification omission and D1164 novelty remain separate. Prior D3712 populated recovery and D3714's complete local gate stand as historical delivery proof, not a fresh whole-journey or release result. Production, saved-state, pack and source bytes are unchanged; no useful-selection, silent-success, whole capability/milestone, exact-revision remote CI or release-image completion.",
-        "impact": "held",
+        "at": "2026-10-12",
+        "summary": "D3741/D3742 deliver preset presentation across Play, Settings and Campaign preparation: ordinary choices follow Quiet, Theory only, Guide me, Support, Analyze; Campaign kit retains its contextual lead. Only admitted choices are offered, omitted styles have accessible policy explanations, and matches offer enabled Quiet without a guidance promise or inert Open support action. Opening focuses the selected/first-Custom radio without stealing later movement; Escape returns to the invoker. D3743 waits for actual initiated route-lazy module delivery before unchanged charge-order assertions and deadlines. Three predecessor presentation controls and the first phone focus control fail; 446 affected checks/types and five actual journeys pass. The first full software run fails the initial absent-strip check (5200 pass/one fail); fresh final software passes 5201/382 files and seven unchanged-budget performance checks. Governance then refuses the new rows' missing routing; existing-roadmap routing is repaired and remaining normal governance/content/build/all-four-browser-tier verification exits zero, including 112 unretried composition cells. ARR-a20/ARR-a21 and D3741-D3743 are path-backed done. IDs/defaults, policy, source permissions, equipment, saved state and packs stay unchanged. Useful selection, source/consumer contracts, owner use, historical intermittent causes and whole-capability/release obligations remain.",
+        "impact": "advanced",
         "evidence": [
+          "apps/web/src/lib/preset-menu.ts",
+          "apps/web/src/lib/preset-menu.test.ts",
+          "apps/web/src/lib/AssistanceSettings.test.ts",
+          "apps/web/src/lib/CampaignPreparation.svelte",
+          "apps/web/src/lib/campaign-actions.test.ts",
+          "tests/browser/campaign.spec.ts",
+          "tests/browser/match.spec.ts",
           "apps/server/src/guidance-lifetime.test.ts",
           "apps/server/src/guidance.test.ts",
           "apps/server/src/rest.ts",
@@ -555,6 +562,21 @@
           "planning/exploration/log.md"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3741",
+            "digest": "sha256:724c4c1a13c13664d8d9ad06458608347ea758eb134d80adc388f21a76a9c3f3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3742",
+            "digest": "sha256:ce5750ff6c9b94ecf49e25f74dc8cbd505b83c35ad93978ee6076fd08340b360"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3743",
+            "digest": "sha256:bf90bcc7ab76175e9e591f1732c26ab62150b90d26a54da62c4444ef5be5c895"
+          },
           {
             "kind": "work_state",
             "id": "D3562",
@@ -1782,10 +1804,10 @@
       "owner": "core-loop",
       "rfcCount": 3,
       "workItems": {
-        "queued": 4,
+        "queued": 2,
         "blocked_owner": 15,
         "blocked_rfc": 12,
-        "completed": 49,
+        "completed": 51,
         "retired": 4
       },
       "routes": {

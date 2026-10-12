@@ -37,6 +37,38 @@ function deferred<T>(): { readonly promise: Promise<T>; readonly resolve: (value
 
 afterEach(() => document.body.replaceChildren());
 
+describe("D3741 help-style presentation", () => {
+  it("offers the ordinary disclosure ladder without changing the selected default", async () => {
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn(),
+    } });
+    await tick();
+    const styles = document.querySelector<HTMLSelectElement>('[data-assistance-context="position"] select')!;
+    expect([...styles.options].map(option => option.value)).toEqual(["quiet", "theory_only", "guided", "support", "analysis"]);
+    expect(styles.value).toBe("quiet");
+    await unmount(component);
+  });
+
+  it("explains match restrictions beside the enabled sole allowed choice", async () => {
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete: vi.fn(),
+    } });
+    await tick();
+    const activity = document.querySelector<HTMLSelectElement>('select')!;
+    activity.value = "match";
+    activity.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    const fieldset = document.querySelector<HTMLElement>('[data-assistance-context="match"]')!;
+    const styles = fieldset.querySelector<HTMLSelectElement>('select')!;
+    expect([...styles.options].map(option => option.value)).toEqual(["quiet"]);
+    expect(styles.disabled).toBe(false);
+    expect(fieldset.textContent).toContain("Only Quiet is available in a match. Legal moves stay visible; chess guidance is not available during match play.");
+    expect(document.getElementById(styles.getAttribute("aria-describedby")!)?.textContent).toContain("Only Quiet");
+    expect([...fieldset.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')].every(input => input.disabled)).toBe(true);
+    await unmount(component);
+  });
+});
+
 describe("account lifecycle panel", () => {
   it("guides export and categorized deletion through password-confirmed callbacks", async () => {
     const onExport = vi.fn(async () => {});

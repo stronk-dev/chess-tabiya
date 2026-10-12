@@ -241,11 +241,15 @@ describe("settings: preset first, primitives under Advanced", () => {
     expect(activity.value).toBe("position");
 
     const optionsFor = () => [...contexts()[0]!.querySelectorAll(":scope > label select option")].map((option) => (option as HTMLOptionElement).value);
-    const expectedOptions: Partial<Record<string, readonly string[]>> = {
-      position: ["quiet", "guided", "theory_only", "support", "analysis"],
-      pack: ["quiet", "guided", "theory_only", "analysis"],
+    const expectedOptions: Record<string, readonly string[]> = {
+      position: ["quiet", "theory_only", "guided", "support", "analysis"],
+      pack: ["quiet", "theory_only", "guided", "analysis"],
+      imported: ["quiet", "theory_only", "guided", "analysis"],
       match: ["quiet"],
-      academy: ["quiet", "guided", "theory_only"],
+      stream: ["quiet", "theory_only", "guided", "analysis"],
+      academy: ["quiet", "theory_only", "guided"],
+      onramp: ["quiet", "theory_only", "guided"],
+      campaign: ["campaign_kit", "quiet", "theory_only", "guided", "analysis"],
     };
     for (const kind of ASSISTANCE_PROFILES) {
       await chooseActivity(kind);
@@ -264,8 +268,11 @@ describe("settings: preset first, primitives under Advanced", () => {
         .find((input) => input.parentElement?.textContent?.includes("External voice"))!;
       expect(control.disabled).toBe(true);
       const reason = document.getElementById(control.getAttribute("aria-describedby")!)!;
-      expect(reason.textContent).toContain(kind === "match" ? "legal board interaction only" : "External voice is unavailable");
-      if (kind === "match") expect([...fieldset.querySelectorAll("select, input")].every((item) => (item as HTMLInputElement | HTMLSelectElement).disabled)).toBe(true);
+      expect(reason.textContent).toContain(kind === "match" ? "chess guidance is not available during match play" : "External voice is unavailable");
+      if (kind === "match") {
+        expect(fieldset.querySelector<HTMLSelectElement>(":scope > label select")?.disabled).toBe(false);
+        expect([...channels.querySelectorAll("select, input")].every((item) => (item as HTMLInputElement | HTMLSelectElement).disabled)).toBe(true);
+      }
       expect(playing.textContent).not.toMatch(/\bcontexts?\b/iu);
     }
     expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);

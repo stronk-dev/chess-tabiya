@@ -584,7 +584,7 @@ for (const mobile of [false, true]) {
     expect(projection.activeEncounter.nodeId).toBe("f2-a");
   });
 
-  test(`Campaign preparation carries named help into actual encounters without changing earned equipment${mobile ? " @mobile" : ""}`, async ({ page }) => {
+  test(`D3741 Campaign preparation carries named help into actual encounters without changing earned equipment${mobile ? " @mobile" : ""}`, async ({ page }) => {
     test.setTimeout(90_000);
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
@@ -594,7 +594,7 @@ for (const mobile of [false, true]) {
     await page.locator('[data-node="f1-a"]').getByRole("button", { name: "Prepare", exact: true }).click();
     const dialog = page.getByRole("dialog"), style = dialog.getByRole("combobox", { name: "Help style", exact: true });
     await expect(style).toHaveValue("campaign_kit");
-    expect(await style.locator("option").evaluateAll(options => options.map(option => (option as HTMLOptionElement).value))).toEqual(["campaign_kit", "quiet", "guided", "theory_only", "analysis"]);
+    expect(await style.locator("option").evaluateAll(options => options.map(option => (option as HTMLOptionElement).value))).toEqual(["campaign_kit", "quiet", "theory_only", "guided", "analysis"]);
     const before = await projection();
     await style.selectOption("quiet");
     await expect(dialog).toContainText("Help is confirmed when the encounter opens");

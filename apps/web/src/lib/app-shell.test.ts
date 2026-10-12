@@ -279,7 +279,7 @@ afterEach(() => {
 });
 
 describe("application shell", () => {
-  it("keeps the current encounter revision monotone when an older charge receipt settles", async () => {
+  it("D3743 keeps the current encounter revision monotone after real screen delivery when an older charge receipt settles", async () => {
     history.replaceState(null, "", `/play/run/${run.id}`);
     const campaignId = "campaign-revision-order", nodeId = "first-node";
     const campaign: CampaignProjection = {
@@ -304,6 +304,11 @@ describe("application shell", () => {
       api: shellApi, router: new HistoryRouter(window), storage: new MemoryStorage(),
     } });
     try {
+      // The rehearsal component is intentionally route-lazy. Await its actual
+      // initiated module delivery before asserting charge ordering, rather than
+      // turning this functional invariant into a 1-second cold-transform budget.
+      await vi.dynamicImportSettled();
+      await tick();
       await vi.waitFor(() => expect(document.querySelector('[data-testid="campaign-strip-charges"]')?.textContent).toContain("3 remaining"));
       const callbacks = () => setCampaignCharging.mock.calls.at(-1)!;
       expect(callbacks()[0]!(run.id)?.expectedCampaignRevision).toBe(9);

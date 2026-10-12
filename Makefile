@@ -196,6 +196,13 @@ play-composition-conformance-check:
 play-composition-board-controls-check:
 	./node_modules/.bin/playwright test --grep "@matrix (board controls|normal Tab traversal)"
 
+.PHONY: help-style-presentation-check help-style-presentation-browser-check
+help-style-presentation-check:
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts apps/web/src/lib/preset-menu.test.ts apps/web/src/lib/AssistanceSettings.test.ts apps/web/src/lib/assistance-preference.test.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/app-shell.test.ts
+
+help-style-presentation-browser-check:
+	./node_modules/.bin/playwright test --grep 'D3741|two learners alternate a native match'
+
 .PHONY: play-composition-vocabulary-check play-composition-inspector-check
 play-composition-inspector-check:
 	./node_modules/.bin/playwright test --grep "@matrix A4 Inspector"

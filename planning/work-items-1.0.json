@@ -1097,32 +1097,40 @@
     {
       "id": "ARR-a20",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§7.3 E4",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "A refused preset is absent and explained, never greyed out (`match` admits exactly one preset)",
       "legacyRoute": "none",
       "note": "check `SuppressionRecord` is populated at HEAD first",
-      "sourceDigest": "sha256:b408c001ec996ea4cc2480e3f318715b72e7d6d74c31763e76a4cf0b4e4f5131"
+      "sourceDigest": "sha256:b408c001ec996ea4cc2480e3f318715b72e7d6d74c31763e76a4cf0b4e4f5131",
+      "completion": {
+        "completedOn": "2026-10-12",
+        "evidence": "tests/browser/drill.spec.ts"
+      }
     },
     {
       "id": "ARR-a21",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§7.3 E5",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "Order the presets by what they cost the learner, not by internal id",
       "legacyRoute": "none",
       "note": "trivial",
-      "sourceDigest": "sha256:d8232aa0ff8163f625152a5cbe4b87266789c58f4cc184f56d882b0b7e71723c"
+      "sourceDigest": "sha256:d8232aa0ff8163f625152a5cbe4b87266789c58f4cc184f56d882b0b7e71723c",
+      "completion": {
+        "completedOn": "2026-10-12",
+        "evidence": "tests/browser/drill.spec.ts"
+      }
     },
     {
       "id": "ARR-a22",

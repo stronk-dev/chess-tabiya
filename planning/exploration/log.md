@@ -26795,3 +26795,28 @@ Campaign was the one capability with no API, route or content. Now:
   remain unchanged. This closes actual Review's physical-rook consequence omission, not useful
   hint selection, semantic qualification, source-contract holds, bot calibration or official
   content. No whole capability/milestone advances, push, new GitHub run or release-image claim.
+
+### 2026-10-12 — D3741–D3743: help-style presentation, modal focus and functional test delivery
+
+- Accepted intent-presets §7/criterion 2 and play-composition own this slice. Play, Settings and
+  Campaign preparation share Quiet → Theory only → Guide me → Support → Analyze display order;
+  Campaign kit keeps its contextual lead. All eight policy choice sets and defaults stay intact.
+  Omitted styles have accessible explanations. Match offers enabled Quiet without a guidance
+  promise or inert Open support action. Advanced restrictions, suppression details, equipment,
+  saved state, sources and pack bytes stay unchanged.
+- Opening focuses the selected radio, or first offered radio for Custom, without stealing later
+  movement. Escape returns to the invoker. Three predecessor presentation checks fail; the first
+  phone journey exposes missing initial focus. Tests await actual focus, not sleep or a longer
+  deadline. All 446 affected cases/types and five desktop/phone Settings/Play/Campaign/native-match
+  journeys pass, retaining geometry and durable preferences.
+- The first full run has 5,200 software passes and one initial absent-strip failure, before any
+  Campaign charge-order assertion. D3743 awaits actual initiated route-lazy module delivery and
+  Svelte flush; revision assertions and deadlines stay unchanged. Fresh final software passes
+  5,201 cases/382 files and seven unchanged-budget performance cases. Governance then refuses the
+  three rows' missing routing. The existing roadmap supplies that route; the remaining normal
+  governance/content/build/all-four-browser-tier command exits zero, including 59 matrix journeys,
+  112 successful unretried composition cells and the packaged-default journey.
+- D3741–D3743 and ARR-a20/ARR-a21 are path-backed done; UX totals are 275 completed, 270 live and
+  24 retired. Ledger, docs and existing roadmap close out together. Whole capabilities/milestones,
+  useful selection, source/consumer contracts, candidate owner use, original intermittent causes
+  and official content remain incomplete. No push, exact-revision remote CI or release-image claim.
