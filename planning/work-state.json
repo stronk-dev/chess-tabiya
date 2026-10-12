@@ -30833,7 +30833,7 @@
       "id": "D3715",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:38a4c9bec16ff7571dded55c90f7d7e1fb90e5ec46370f5fc60512cc77a9a11c",
+      "sourceDigest": "sha256:23d8de5ff50921bc0b18c21200de78b1e4f4cd5c4bcfabcec06d31cc45fdef84",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
@@ -30996,6 +30996,14 @@
       "uxItems": [],
       "evidence": "tests/browser/screen-delivery.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3734",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f4fd0a6ecdc6d042ecd2a46d98eda0e47d043e36ec0f16f78bbd85b222b76a30",
+      "uxItems": [],
+      "owner": "coordinator"
     }
   ]
 }

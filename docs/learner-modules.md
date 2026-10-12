@@ -55,6 +55,11 @@ filter, and unregistered novelty identities conservatively abstain. A legal lock
 move therefore fills the Nudge with two unchanged counts (D3715). The collector's complete state
 is useful to inspection and authored conditions; fixing the proactive signal must not erase it.
 D3713's genuine silent-result focus/seat journey remains blocked on that selection contract.
+The D3715 change-witness amendment (`rfc/module-registration.md` §4.5a) is drafted, not
+accepted or shipped. Its real-source probe also shows locked-pawn d2–f3 loses a knight's
+king-zone contribution: removing unchanged counts must not be advertised as making that
+whole move silent. Unchanged loose-piece selection and a genuinely empty recovery control
+remain separate work.
 
 - **The module query** (`queryModules`, `packages/runtime/src/module-query.ts`, served at
   `POST /runs/:id/modules/query`): the browser sends its requested-assistance receipt and one closed

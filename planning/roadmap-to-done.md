@@ -69,6 +69,14 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
+D3715 now has an unaccepted, source-bound change-witness amendment in
+`rfc/module-registration.md` §4.5a. The disposable controls preserve complete collector states
+and demonstrate the narrower Nudge selection; they do not ship it or discharge D3713's actual
+empty-result recovery. The probe refutes the proposed locked-pawn d2–f3 silent control because
+it changes a king-zone defender. Independent review/acceptance remains the next step, alongside
+the pending source contracts. D3734 records three stale historical author-check failures;
+no whole capability, milestone or official pack is promoted by this authoring checkpoint.
+
 [[D3733]] defers seven large screen components to their actual route under the
 accepted application-shell contract. Fixed loading/error copy, explicit page
 reload, preserved navigation/local screen state and generation-bound heading focus

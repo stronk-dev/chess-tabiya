@@ -37,6 +37,10 @@
   request-local views and a complete-legality envelope are authored for independent review.
   This amendment is **not accepted** by this RFC's existing implementing status. No production
   binding, permission, default, source or exact-mobility discharge changes until acceptance.
+- **Draft amendment 2026-10-12 — D3715, §4.5a:** the Post-commit Nudge's retained
+  structural states require a change witness. This clarification is **not accepted** by
+  the parent's implementing status. Its disposable source-bound controls check the proposed
+  distinction, not a shipped selection repair; D3713's real empty-result recovery remains open.
 - **Implementation checkpoint 2026-10-07, shape-backed learner actions:** D3538 retains
   the exact fired shape entry ID through the registered presenter and the parsed
   module receipt. Named-structure and Theory pointer cards can open the existing Library
@@ -1589,6 +1593,81 @@ thing in the product to a module today, and it fires **only** under
 | ambient dot tooltip flipping to *"A consequence is ready"* (`DrillScreen.svelte:845`) | **kept** |
 | the `immediate_guard`-only firing condition | **widened by the module's own timing** — `post_commit`, gated by `feedbackDeliveryOpen`, in seven workflow contexts. This is a genuine behaviour change and it is the module's purpose |
 | the sibling `.evidence-reveal` block and its two sentences (`:957-963`) | **kept**, as region-4 chrome, not a module |
+
+#### 4.5a Draft D3715 — a complete state is not a post-move change witness
+
+**Author: Codex, 2026-10-12. Pending independent review and acceptance; no production
+authorization.** This amends only `postcommit_nudge` at `post_commit`, not the source
+projection, generic module witness policy or the interpretation of a saved event.
+
+The legal d2–f3 edge from
+`7k/pppppppp/PPPPPPPP/8/8/8/3N4/K7 w - - 0 1` retains two
+`rules.structural.event.pawn_islands@1` states, both `before: 1, after: 1`.
+`createRulesStructuralEventPawnIslandsV1Evidence` correctly emits both colours, including
+zero; `postcommitEdgeEvidence` currently excludes only unchanged king-zone states.
+`queryModules`' generic `witnessedEvidence` does not exclude unchanged island counts.
+The module can therefore spend its two proactive facts on what did **not** change.
+The existing legal-edge controls in `module-query.test.ts` retain this distinction without
+requiring the erroneous populated Nudge to survive.
+
+**Proposed selection rule:** after exact source acquisition and before module admission,
+novelty, reducers, ordering and budget fitting, both the query and legacy Nudge paths apply
+the same module-specific predicate to their sealed, accepted evidence:
+
+| exact source shape | required witness |
+|---|---|
+| `rules.structural.event.pawn_islands@1` | the named colour's `before !== after` count |
+| currently accepted `rules.structural.event.<family>@1` with `StructuralSemanticEventOperands` | its complete typed `before` observation differs from its complete typed `after` observation, including appearance/disappearance (`null`) |
+| `rules.king.event.zone_state@1`, if acquired and admitted | the existing king relocation or non-empty attacker/defender/shelter/escape delta; no change to `hasKingZoneWitness`'s meaning |
+| other currently accepted evidence | existing source, witness and admission rules; this amendment adds no new accepts or ranking |
+
+The structural row ranges over this module's **current exact accepts**, intersected with
+`STRUCTURAL_EVENT_PROJECTION_IDS`, not a prefix match admitting future families or versions.
+Full observation equality ignores the enclosing FEN/move identity: a legal move changes that
+identity even when the observed property stays unchanged. Compare typed values, not object
+references, JSON field insertion order or a new source-hash mechanism. `sign === "preserved"`
+is insufficient: `structuralEventSign` uses magnitude and can classify different observations
+with the same magnitude as preserved. Existing king-zone handling is subsumed, not bypassed.
+
+This is **change selection, not importance or chess valence**. A changed count does not mean
+good/bad, useful/harmful, forced or the engine's reason. Unchanged island counts do not imply
+unchanged pawn structure; other identity-bearing changes remain eligible under their own
+projection. An unchanged fact can still appear on request in Inspector or support a pack
+predicate. Do not alter factories, collector populations, event signs, persisted operands,
+pack schemas or semantic qualification to manufacture silence. D3687/D3690's complete-state
+validation conflict and D1164's cross-node novelty are separate obligations.
+
+**Implementation and acceptance controls (owed after independent acceptance):**
+
+1. Reuse all legal edges in the four existing locked-pawn/pawn-free, White/Black cohorts.
+   Retain the original two-colour factory population while excluding unchanged counts from
+   Nudge. Do not assert every legal move is silent: a king move or another real change may
+   legitimately qualify. The specific locked-pawn d2–f3 control must lose its unchanged
+   island facts in the real query and legacy operation, but must not be required to become
+   empty: its actual source closure includes a lost d2 knight contribution to the White
+   king zone. Preserve that changed relation. This draft does not specify selection for
+   the closure's retained `rules.tactic.event.loose_piece@1` facts.
+2. Add genuine gained/lost structural and changed-island-count controls. Equal-magnitude
+   but different retained observations must survive; a changed FEN alone must not qualify.
+   Run predecessor code against the no-change controls to demonstrate the defect.
+3. Exercise both Nudge call paths and their ancestor/novelty acquisition. Exclude unchanged
+   states before they consume admission or budgets; do not backfill a short/empty packet.
+   Existing disclosures, exact-subject admission, ceilings and source-unavailable handling
+   remain unchanged.
+4. Through Inspector's real query, retain the same source's complete unchanged states and
+   identities. Packs and saved event bytes remain unchanged. Neither the disposable model
+   nor a passing Nudge test qualifies a semantic root.
+5. Discharge D3713 separately, once a genuinely empty legal control is identified, with
+   an actual API-returned empty packet: selected-card
+   retirement, tablet queue head and focus after Retry disappears. Check desktop/phone and
+   the populated and unavailable controls too; hiding every Nudge must fail positive controls.
+
+Disposable source-bound checks are in
+`tools/d2120-module-registration-author-contract/postcommit-change-witness.test.ts`, run by
+`make postcommit-change-witness-check`. They neither change the production query nor
+claim UI recovery. Independent review must check observation equality, both operation paths,
+the positive controls and the Inspector/pack preservation boundary before this becomes work
+the implementer may take.
 
 #### 4.6 `structure_nudge` — **precursor is split; two halves become the module, one is corrected**
 

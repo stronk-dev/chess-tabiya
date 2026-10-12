@@ -1694,6 +1694,11 @@ module-registration-author-contract-update:
 module-registration-author-contract:
 	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts --reporter=verbose
 
+.PHONY: postcommit-change-witness-check
+postcommit-change-witness-check:
+	./node_modules/.bin/tsc -p tools/d2120-module-registration-author-contract/tsconfig.postcommit.json --noEmit
+	./node_modules/.bin/vitest run --config tools/d2120-module-registration-author-contract/vitest.config.ts tools/d2120-module-registration-author-contract/postcommit-change-witness.test.ts
+
 .PHONY: requested-sight-contract-check
 requested-sight-contract-check:
 	./node_modules/.bin/tsc -p tools/d2120-module-registration-author-contract/tsconfig.selected-sight.json --noEmit

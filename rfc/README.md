@@ -15,6 +15,15 @@ model is not a production mint, binding, gesture proof or discharge of exact-mob
 Independent review must precede source/operation/receipt/client changes; Inspector populations
 and other Sight budgets stay unchanged. Handoff: `planning/learner-modules/registry-return.md`.
 
+**Post-commit change-witness draft amendment, 2026-10-12:** `module-registration.md` §4.5a
+owns D3715's module-specific distinction between a retained state and a change. Four disposable
+real-source controls and strict types pass `make postcommit-change-witness-check`; they also
+refute treating locked-pawn d2–f3 as wholly quiet because it changes a king-zone defender.
+The amendment is **unaccepted**; current factories, saved evidence, pack predicates, Inspector
+and production selection stay unchanged. Independent review precedes implementation; D3713's
+empty-result recovery remains separate. D3734 records three stale failures in the older
+`module-registration-author-contract` aggregate rather than calling that command green.
+
 **Review tablebase draft amendment, 2026-10-10:** `review-evidence-compiler.md` §4.3 owns
 D3580's move-free occurrence projection and source/save/restart/consumer controls. It proposes
 reusing Review's existing coordinator, run-event storage and operation-versioned provider image;

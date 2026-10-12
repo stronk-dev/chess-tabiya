@@ -26585,3 +26585,32 @@ Campaign was the one capability with no API, route or content. Now:
   other eager code and supported-device/deployment cold proof. Whole capabilities, milestones,
   official content, exact-revision remote CI and release-image qualification do not advance.
   Existing ledger/roadmap/work-state carry closeout; no raw dumps, new tracker or push.
+
+## 2026-10-12 — D3715 source-bound Nudge change-witness draft
+
+- Drafted `module-registration.md` §4.5a in place, explicitly unaccepted. A complete retained
+  count is not a move-change witness; selection belongs to Nudge, not the collector or pack
+  format. Shared query/legacy acquisition must preserve Inspector, exact subjects, novelty,
+  budgets, source absence and saved bytes. No production implementation is authorized here.
+- Four disposable controls use actual sole-factory evidence and exact legal successors in
+  both colours, including zero counts, real changed island populations, structural gains/losses
+  and equal-magnitude different king-zone observations. The first probe falsifies an attempted
+  wholly quiet d2–f3 control: it loses the d2 knight's contribution to the White king zone.
+  The draft now preserves that change and explicitly leaves unchanged loose-piece selection
+  and D3713's genuine API empty-result recovery open rather than hiding facts to obtain silence.
+- The initial model's guessed legal-move import/successor field is corrected against the real
+  `legal-moves.ts` and chess position APIs. Final strict types and four source-bound controls
+  pass `make postcommit-change-witness-check`. This is proposal evidence, not a production
+  query/UI test, semantic qualification or approval of the amendment.
+- The older `make module-registration-author-contract` fails three pre-existing controls:
+  answer-image mismatch, stale execution projections and removed `storyMoments`. D3734 owns
+  those stale instruments; no assertion is softened, historical plan regenerated blindly,
+  or failed aggregate reported green. Register, ledger and roadmap carry these distinctions.
+- Next: independent review/acceptance of the bounded amendment and pending source contracts,
+  then actual bindings and positive/negative production journeys. All whole 1.0 gates remain
+  open; no raw recordings, new tracker, push or release claim.
+- Final `make postcommit-change-witness-check verify-governance roadmap-progress` exits zero.
+  The roadmap check catches D3715's changed checkpoint reference during the first governance
+  pass; the existing checkpoint is reconciled and rechecked, without promotion. Tracking now
+  has 3,483 ledger items / 1,723 live / zero untriaged; UX remains 273 complete / 272 live /
+  24 retired. The older author aggregate's three failures remain recorded in D3734.

@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.selected-sight.json",
+  "include": ["postcommit-change-witness.test.ts"]
+}
