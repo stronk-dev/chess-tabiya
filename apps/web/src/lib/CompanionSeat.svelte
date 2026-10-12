@@ -35,7 +35,7 @@
   {#if !headSlot && (!tools || band)}
     {#if onToggle !== undefined}
       <button type="button" class="seat-row" class:queue-selector={band}
-        title={band ? label : undefined} aria-label={controlLabel} aria-describedby={controlDescriptionId} aria-expanded={open}
+        title={label} aria-label={controlLabel} aria-describedby={controlDescriptionId} aria-expanded={open}
         aria-controls={`${id}-card`} disabled={disabled} onclick={onToggle}>
         <span class="seat-label">{band ? shortLabel : label}</span>
         {#if badge !== undefined && badge !== null}<span class="seat-badge" aria-label={`${badge} ${badge === 1 ? "fact" : "facts"}`}>{badge}</span>{/if}
@@ -45,7 +45,7 @@
   <!-- Hidden preserves a mounted Hint's request/rung and existing Support control state. -->
   <div id={`${id}-card`} class="seat-card" class:tools-card={tools} hidden={!shown}
     data-queue-head={band && shown ? id : undefined}>
-    {#if band && shown && !headSlot}<strong class="seat-title">{label}</strong>{/if}
+    {#if shown && !headSlot}<strong class="seat-title">{label}</strong>{/if}
     {@render children()}
   </div>
 </section>
@@ -53,7 +53,8 @@
 <style>
   .module-seat { display:grid; gap:.35rem; margin:0; padding:.55rem .65rem; border:1px solid var(--line); border-radius:.7rem; background:var(--panel); }
   .head-slot { border-color:var(--warning); }
-  .seat-row { display:flex; justify-content:space-between; align-items:center; gap:.5rem; width:100%; padding:0; border:0; background:none; color:var(--ink); font:inherit; font-weight:600; text-align:left; cursor:pointer; }
+  .seat-row { display:flex; justify-content:space-between; align-items:center; gap:.5rem; width:100%; min-height:3.25rem; height:3.25rem; padding:0; border:0; background:none; color:var(--ink); font:inherit; font-size:.82rem; line-height:1.25; font-weight:600; text-align:left; cursor:pointer; }
+  .seat-label { min-width:0; flex:1; overflow-wrap:anywhere; }
   .seat-row:disabled { cursor:default; opacity:.65; }
   .seat-badge { min-width:1.3rem; padding:0 .35rem; border-radius:.65rem; background:var(--accent-soft); color:var(--ink); font:normal .72rem var(--display-font); text-align:center; font-variant-numeric:tabular-nums; }
   .seat-card { display:grid; gap:.35rem; font-size:.78rem; }
@@ -61,11 +62,11 @@
   h2 { margin:0; font:600 1rem/1.2 var(--display-font); }
   .companion-tools, .companion-tools > .tools-card { display:contents; }
   .band { display:contents; }
-  .band > .queue-selector { grid-row:2; min-width:0; min-height:2rem; padding:.3rem .4rem; gap:.25rem; border:1px solid var(--line); border-radius:.5rem; background:var(--paper); font-size:.7rem; justify-content:center; white-space:nowrap; }
+  .band > .queue-selector { grid-row:2; min-width:0; min-height:2rem; height:2rem; padding:.3rem .4rem; gap:.25rem; border:1px solid var(--line); border-radius:.5rem; background:var(--paper); font-size:.7rem; justify-content:center; white-space:nowrap; }
   .band > .queue-selector[aria-expanded="true"] { border-color:var(--accent); color:var(--accent); }
   .band > .seat-card { grid-row:1; grid-column:1/-1; min-width:0; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:.4rem .55rem; border:1px solid var(--line); border-radius:.5rem; background:var(--panel); align-content:start; }
   .band.head-slot > .seat-card { border-color:var(--warning); }
   .band.companion-tools > .tools-card { display:grid; }
   .band > .seat-card[hidden] { display:none; }
-  .seat-title { font:600 .8rem/1.2 var(--display-font); }
+  .seat-title { font:600 .8rem/1.3 var(--display-font); overflow-wrap:anywhere; }
 </style>

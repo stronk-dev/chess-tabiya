@@ -83,6 +83,21 @@ describe("DrillApi Guided Hint wire", () => {
 });
 
 describe("GuidedHintSeat", () => {
+  it("D3744 shows the declared question without advancing a hint", async () => {
+    const run = revealedRun();
+    const client = fakeClient(body => ({ state: "honest_empty", requestId: "f".repeat(32), rung: body.rung, reason: "no_admitted_occurrence" }));
+    const component = mount(GuidedHintSeat, { target: target(), props: {
+      run, ceiling: "square", canWrite: true, client, assistanceRequest,
+    } });
+    await settle();
+    const question = "I am stuck — reveal the least that will unstick me.";
+    expect(document.querySelector('[data-module="guided_hint"]')?.getAttribute("aria-label")).toBe(question);
+    expect(document.querySelector(".seat-title")?.textContent).toBe(question);
+    expect(document.querySelector<HTMLButtonElement>(".hint-actions button")?.textContent?.trim()).toBe("Hint");
+    expect(client.bodies).toEqual([]);
+    await unmount(component);
+  });
+
   it.each(["honest_empty", "source_unavailable"] as const)("offers a passive board handoff for %s without requesting another rung", async state => {
     const run = revealedRun();
     const client = fakeClient((body): HintResponse => state === "honest_empty"

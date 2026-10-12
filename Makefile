@@ -197,6 +197,13 @@ play-composition-board-controls-check:
 	./node_modules/.bin/playwright test --grep "@matrix (board controls|normal Tab traversal)"
 
 .PHONY: help-style-presentation-check help-style-presentation-browser-check
+.PHONY: module-question-check module-question-browser-check
+module-question-check:
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts apps/web/src/lib/module-seats.test.ts apps/web/src/lib/CompanionSeat.test.ts apps/web/src/lib/guided-hint.test.ts apps/web/src/lib/screens.test.ts
+
+module-question-browser-check:
+	./node_modules/.bin/playwright test --grep '@matrix maximum-load modules|Support opens the exact recognized Library pattern'
+
 help-style-presentation-check:
 	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts apps/web/src/lib/preset-menu.test.ts apps/web/src/lib/AssistanceSettings.test.ts apps/web/src/lib/assistance-preference.test.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/app-shell.test.ts
 

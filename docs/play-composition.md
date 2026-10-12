@@ -49,6 +49,12 @@ same expansion authority: opening it collapses the other module card and vice ve
 hint keeps its exact decision and rung while hiding both its card and board marks. Reopening it
 does not request another hint; only **Hint** or **A little more** advances the disclosure.
 
+Ordinary module rows and expanded cards use the registered learner question (`MODULE_POLICIES.intent`),
+not the internal module name. Desktop/phone rows reserve a fixed height for wrapped questions;
+tablet selectors retain compact labels with the complete accessible question and expanded heading.
+Guided Hint keeps its existing Hint/A little more actions. This changes presentation only: no new
+answer, evidence, permission, disclosure rung or request is created by opening or relabelling a card.
+
 Ordinary seats bind delivery to the current recorded decision and compiled help,
 including pending requests that have not produced a badge yet. Navigation, branch,
 preview, help and access changes retire old answers and paint; leaving the screen

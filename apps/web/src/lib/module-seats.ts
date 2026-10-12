@@ -5,7 +5,7 @@
 // one collapses the previous. On-request seats carry no count before a request: the row is the door.
 // Guided Hint keeps its hint-distance delivery protocol, but shares this expansion authority.
 
-import { MODULE_LABELS, MODULE_POLICIES, type CompiledAssistanceEffect, type ModuleId, type PresentedEvidenceItem } from "@chess-tabiya/runtime/client";
+import { MODULE_POLICIES, type CompiledAssistanceEffect, type ModuleId, type PresentedEvidenceItem } from "@chess-tabiya/runtime/client";
 
 import type { ParsedModulePacket } from "./module-query-response.js";
 
@@ -64,7 +64,7 @@ export function composedSeats(compiled: { readonly modules: readonly ModuleId[];
     const policy = MODULE_POLICIES.find((entry) => entry.id === module)!;
     return [Object.freeze({
       module,
-      label: MODULE_LABELS[module],
+      label: policy.intent,
       headSlot: module === "blunder_prevention",
       proactive: effects.some((effect) => effect.arm === "proactive"),
       learnerAction: policy.learnerAction,

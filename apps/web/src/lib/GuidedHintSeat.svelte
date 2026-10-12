@@ -5,6 +5,7 @@
   import { onDestroy, untrack } from "svelte";
   import {
     HINT_DISTANCES,
+    MODULE_POLICIES,
     hintDecisionStamp,
     nextHintRung,
     type DrillRun,
@@ -36,6 +37,8 @@
   }
 
   let { run, ceiling, canWrite, decisionReady = true, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false, onKeepPlaying, keepPlayingBlocked }: Props = $props();
+
+  const intent = MODULE_POLICIES.find(policy => policy.id === "guided_hint")!.intent;
 
   const POLICY_COPY: Readonly<Record<HintPolicyReason, string>> = {
     module_inactive: "This help style does not include hints.",
@@ -185,7 +188,7 @@
   }
 </script>
 
-<CompanionSeat id="guided_hint" module="guided_hint" label="Ask for the least that helps" shortLabel="Hint"
+<CompanionSeat id="guided_hint" module="guided_hint" label={intent} shortLabel="Hint"
   {band} open={expanded} state={visibleDelivery === undefined ? "door" : "filled"} {badge}
   controlLabel={expanded ? "Collapse guided hint" : revealed === null ? "Hint" : "Open guided hint"}
   controlDescriptionId={!decisionReady && canWrite ? "guided-hint-wait" : undefined}

@@ -1019,10 +1019,11 @@
         "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
         "latestCheckpoint": {
           "at": "2026-10-12",
-          "summary": "D3741/D3742 deliver preset presentation across Play, Settings and Campaign preparation: ordinary choices follow Quiet, Theory only, Guide me, Support, Analyze; Campaign kit retains its contextual lead. Only admitted choices are offered, omitted styles have accessible policy explanations, and matches offer enabled Quiet without a guidance promise or inert Open support action. Opening focuses the selected/first-Custom radio without stealing later movement; Escape returns to the invoker. D3743 waits for actual initiated route-lazy module delivery before unchanged charge-order assertions and deadlines. Three predecessor presentation controls and the first phone focus control fail; 446 affected checks/types and five actual journeys pass. The first full software run fails the initial absent-strip check (5200 pass/one fail); fresh final software passes 5201/382 files and seven unchanged-budget performance checks. Governance then refuses the new rows' missing routing; existing-roadmap routing is repaired and remaining normal governance/content/build/all-four-browser-tier verification exits zero, including 112 unretried composition cells. ARR-a20/ARR-a21 and D3741-D3743 are path-backed done. IDs/defaults, policy, source permissions, equipment, saved state and packs stay unchanged. Useful selection, source/consumer contracts, owner use, historical intermittent causes and whole-capability/release obligations remain.",
+          "summary": "D3744 binds ordinary module selectors/cards and Guided Hint to registered learner questions. Tablet selectors retain compact labels and full accessible questions; native expansion, delivered-fact badges, request/rung state and board geometry stay intact. Eight predecessor controls fail; 258 affected checks/types/build and three real browser journeys pass, including maximum load at seven viewports and desktop/phone recognized-theory return. INR-a1, D1454 and D3744 are path-backed done; historical producer controls remain in the explicit Inspector. Fresh full software passes 5212/383 files, seven unchanged-budget performance and 255 content checks. First smoke exposes eight stale feature-name selectors and is interrupted; corrected exact-question selectors retain all behavioral assertions. Fresh normal all-four-tier browser CI exits zero: 338 passes, one existing optional skip, zero retries and 112 successful unretried composition cells, including packaged default. D3741-D3743's preset/focus/delivery controls stand. No evidence, permission, pack or saved-state change; useful selection, source contracts, owner use, intermittent causes and whole-capability/remote-CI/release obligations remain.",
           "impact": "advanced",
           "evidence": [
             "apps/web/src/lib/preset-menu.ts",
+            "apps/web/src/lib/module-seats.test.ts",
             "apps/web/src/lib/preset-menu.test.ts",
             "apps/web/src/lib/AssistanceSettings.test.ts",
             "apps/web/src/lib/CampaignPreparation.svelte",
@@ -1173,6 +1174,11 @@
             "planning/exploration/log.md"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3744",
+              "digest": "sha256:88880e3097783969a934c2907511a7308b029ad95cfcaaed7001b652bb546269"
+            },
             {
               "kind": "work_state",
               "id": "D3741",

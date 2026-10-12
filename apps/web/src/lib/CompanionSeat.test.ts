@@ -20,6 +20,32 @@ it("the tools selector shares expansion without becoming an evidence module", ()
   expect(PLAY_SEAT_MODULES).not.toContain("support_tools");
 });
 
+it.each([false, true])("D3744 exposes the complete question in an expanded card, band=%s", async band => {
+  const label = "What can the opponent's pieces do to me from this position?";
+  const toggle = vi.fn();
+  const flags = new SvelteMap([["open", false]]);
+  mounted.push(mount(CompanionSeat, { target: document.body, props: {
+    id: "threat_radar", module: "threat_radar", label, shortLabel: "Threats", band,
+    get open() { return flags.get("open")!; }, onToggle: toggle, children: body(),
+  } }));
+  await tick();
+  const control = document.querySelector<HTMLButtonElement>(".seat-row")!;
+  expect(control.getAttribute("aria-label")).toBe(label);
+  expect(control.getAttribute("title")).toBe(label);
+  expect(control.getAttribute("aria-controls")).toBe("threat_radar-card");
+  expect(control.querySelector(".seat-label")?.textContent).toBe(band ? "Threats" : label);
+  flags.set("open", true); await tick();
+  expect(document.querySelector(".seat-title")?.textContent).toBe(label);
+  const input = document.querySelector<HTMLInputElement>("input")!;
+  input.value = "kept";
+  flags.set("open", false); await tick();
+  expect(document.querySelector<HTMLDivElement>(".seat-card")!.hidden).toBe(true);
+  flags.set("open", true); await tick();
+  expect(document.querySelector("input")).toBe(input);
+  expect(input.value).toBe("kept");
+  expect(toggle).not.toHaveBeenCalled();
+});
+
 it.each([undefined, null, 0, 2])("the collapsed selector renders only its supplied count %s and never creates a head", async badge => {
   const toggle = vi.fn();
   mounted.push(mount(CompanionSeat, { target: document.body, props: {

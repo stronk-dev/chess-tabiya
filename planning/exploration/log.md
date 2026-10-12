@@ -26820,3 +26820,31 @@ Campaign was the one capability with no API, route or content. Now:
   24 retired. Ledger, docs and existing roadmap close out together. Whole capabilities/milestones,
   useful selection, source/consumer contracts, candidate owner use, original intermittent causes
   and official content remain incomplete. No push, exact-revision remote CI or release-image claim.
+
+### 2026-10-12 — D3744 / D1454: registered learner questions reach ordinary Support
+
+- Accepted module-registration §1.4 / play-composition §4.1 already require learner intent.
+  `composedSeats` used internal feature labels; Guided Hint had separate question-like copy.
+  Ordinary selectors/cards now use registered intent, with compact tablet labels and full
+  accessible questions. Wrapped desktop/phone rows have fixed height; the expanded question
+  remains visible. Hint/A little more actions, requests, badges, one-expanded state, board
+  geometry, source permissions, evidence, stored play and packs are unchanged.
+- Eight predecessor controls fail. All 258 affected software cases, clean workspace types/build
+  and three real browser journeys pass: recognized-theory navigation/return on desktop and phone,
+  plus full real-request maximum load at seven viewports. These checks join ordinary CI, with
+  `make module-question-check` / `make module-question-browser-check` as focused entry points.
+- Normal serial verification passes 5,212 software cases/383 files, seven unchanged-budget
+  performance cases and 255 content cases, types/governance/packaging/build. The first smoke run
+  has eight stale feature-name selector failures and is deliberately interrupted (71 passed,
+  one interrupted, 194 unrun); this is not a green browser reading. Corrected selectors require
+  exact registered questions while retaining recovery, branch, focus and geometry assertions.
+  Fresh `make test-browser-ci-awake` exits zero: 273 smoke, five content, 59 matrix and one
+  packaged-default passes; one existing optional Maia skip, zero retries and all 112 successful
+  unretried composition cells.
+- Source inspection confirms the historical producer list is confined to the explicit Inspector;
+  the full A4 vocabulary/geometry matrix verifies that boundary. D1454/D3744 and INR-a1 close with
+  paths, not prose-only completion. UX totals: 276 complete, 269 live, 24 retired. All 1,722 live
+  ledger items remain assigned. Existing roadmap/checkpoint/docs close out in this change set.
+  No whole capability/milestone promotion: source contracts, semantic qualification, useful
+  selection, calibrated bots, campaign curriculum/rewards, official content, owner use and
+  complete release proof remain. No push or exact-revision GitHub/release-image claim.

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3743]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3744]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,7 +58,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3743]] and [[D608]] recovery: 275 UX items complete, 270 live and 24
+Current checked inventory through [[D3744]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
@@ -68,6 +68,20 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3744]] completes INR-a1 / [[D1454]]'s accepted module-question binding: ordinary selectors and expanded
+cards use registered learner intent, including Guided Hint, while tablet selectors retain compact
+labels and full accessible questions. Eight predecessor controls fail; 258 affected checks,
+types/build and three actual browser journeys pass, including maximum load at seven viewports and
+desktop/phone recognized-theory navigation back to the preserved run. One-expanded state, fixed
+board geometry, requests and evidence/permission limits stay intact. Fresh full software passes
+5,212 cases/383 files, seven unchanged-budget performance and 255 content checks. The first smoke
+run exposes eight stale feature-name selectors and is deliberately interrupted; exact question
+selectors preserve every behavior assertion. Fresh normal all-four-tier browser CI passes 338
+cases, one existing optional skip, zero retries and all 112 unretried composition cells, including
+the packaged default. Historical producer controls remain confined to the explicit Inspector.
+This does not implement selected-source/change-witness amendments or complete useful selection,
+owner use or the Support capability. Local checks are not exact-revision remote CI/release proof.
 
 [[D3741]]/[[D3742]] are the current preset-presentation/input checkpoint: admitted choices follow
 Quiet → Theory only → Guide me → Support → Analyze, Campaign kit keeps its workflow-specific

@@ -27,6 +27,12 @@ they do not validate preset usefulness or replace owner-use discharge. The Campa
 shell control waits for actual initiated route-lazy module delivery before its unchanged mounting
 and revision assertions; generic polling deadlines are not cold-transform performance budgets.
 
+`make module-question-check` checks registered question bindings, native collapsed/expanded controls,
+retained drafts and Guided Hint's unchanged request protocol. `make module-question-browser-check`
+exercises actual desktop/phone theory navigation and the seven-viewport maximum-load module journey:
+full questions, compact tablet labels, one expanded card, real answers and unchanged board geometry.
+These cases also run in ordinary software/browser CI; labels are not proof of useful evidence selection.
+
 `make authored-simulation-check` covers scratch isolation, selected consequence promotion,
 ordinary and charged entry, nested first-child walking, skipped alternatives, horizon truncation
 and admission refusal of authored children beyond an achieved objective. The nested-walk fix

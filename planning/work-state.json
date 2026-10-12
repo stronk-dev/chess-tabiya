@@ -11079,13 +11079,14 @@
     },
     {
       "id": "D1454",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5beabceb3d04be8f461cc22d1753550225ba97d77333693052099ac2b2fbdc45",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:90882734923015801c32683f8854963e16c8a54b765b5074a1d16232e75a1f7d",
       "uxItems": [
         "INR-a1"
       ],
-      "state": "todo",
-      "owner": "assistance-and-presentation"
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1455",
@@ -31084,6 +31085,15 @@
       "sourceDigest": "sha256:bf90bcc7ab76175e9e591f1732c26ab62150b90d26a54da62c4444ef5be5c895",
       "uxItems": [],
       "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3744",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88880e3097783969a934c2907511a7308b029ad95cfcaaed7001b652bb546269",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
     }
   ]

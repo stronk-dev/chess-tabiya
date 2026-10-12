@@ -885,7 +885,7 @@ test("Guided Nudge after 1.e4 retains real consequences without unchanged king-e
   await showSupportTools(page);
   await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
 
-  const selector = page.getByRole("button", { name: "After-move nudge", exact: true });
+  const selector = page.getByRole("button", { name: "What did the move I just played actually change?", exact: true });
   await expect(selector).toBeVisible();
   if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
   const nudge = page.locator('[data-module="postcommit_nudge"]');
@@ -899,7 +899,7 @@ test("Guided Nudge after 1.e4 retains real consequences without unchanged king-e
 });
 
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
-  for (const [module, label] of [["postcommit_nudge", "After-move nudge"], ["structure_nudge", "Named-structure nudge"]] as const) {
+  for (const [module, label] of [["postcommit_nudge", "What did the move I just played actually change?"], ["structure_nudge", "What kind of position is this, and what is that kind generally about?"]] as const) {
     test(`Support seats recover automatic ${module} failure explicitly without changing play (${viewport.width}px)`, async ({ page }) => {
       await page.setViewportSize(viewport);
       await chooseBot(page, "human-baseline.1400@1");
@@ -994,7 +994,7 @@ test(`Guided Nudge branches into another move and Compare reopens the preserved 
   await move(page, "e2", "e4");
   await showSupportTools(page);
   await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
-  const nudgeSelector = page.getByRole("button", { name: "After-move nudge", exact: true });
+  const nudgeSelector = page.getByRole("button", { name: "What did the move I just played actually change?", exact: true });
   await expect(nudgeSelector).toBeVisible();
   if (await nudgeSelector.getAttribute("aria-expanded") !== "true") await nudgeSelector.click();
   const runId = page.url().split("/").at(-1)!;
@@ -1021,7 +1021,7 @@ test(`Guided Nudge branches into another move and Compare reopens the preserved 
   assertRecordedNodesPreserved(original.nodes, alternate.nodes.slice(0, original.nodes.length));
   expect(alternate.activeCursor.branchId).not.toBe(originalBranch);
   await showSupport(page);
-  await page.getByRole("button", { name: "Attempt comparison", exact: true }).click();
+  await page.getByRole("button", { name: "What is the smallest recorded difference between my two attempts?", exact: true }).click();
   const comparison = page.locator('[data-module="compare_coach"]');
   await comparison.getByRole("button", { name: "Show", exact: true }).click();
   await expect(comparison.locator("[data-presented]").first()).toBeVisible();
@@ -1115,7 +1115,7 @@ test(`portable account round trip preserves both attempts and resumes real play$
     await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
     await showSupportTools(page);
     await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
-    const selector = page.getByRole("button", { name: "After-move nudge", exact: true });
+    const selector = page.getByRole("button", { name: "What did the move I just played actually change?", exact: true });
     if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
     await page.locator('[data-module="postcommit_nudge"]').getByRole("button", { name: "Try another move", exact: true }).click();
     await expect(page.locator("[data-board-input-grid]")).toBeFocused();
@@ -1559,7 +1559,7 @@ test("Guide me: a learner-requested hint climbs one rung per press to the propos
   await chooseRawRung(page);
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  const seat = page.getByRole("region", { name: "Ask for the least that helps" });
+  const seat = page.getByRole("region", { name: "I am stuck — reveal the least that will unstick me.", exact: true });
   // Quiet carries no guided_hint: no seat, and nothing is ever requested proactively.
   await expect(seat).toHaveCount(0);
   const hintPosts: string[] = [];
@@ -1611,7 +1611,7 @@ test(`Guided Hint retries ${failure} explicitly without changing its decision or
   await page.getByRole("radio", { name: /Guide me/u }).check();
   if (await page.locator("details.assistance-control").evaluate(element => (element as HTMLDetailsElement).open)) await page.locator("details.assistance-control summary").click();
   await page.getByRole("button", { name: "Show support for this position" }).click();
-  const seat = page.getByRole("region", { name: "Ask for the least that helps" });
+  const seat = page.getByRole("region", { name: "I am stuck — reveal the least that will unstick me.", exact: true });
   const posts: unknown[] = [];
   const trace: string[] = [];
   let failedId: string | undefined;
@@ -4782,7 +4782,7 @@ test(`Empty Support returns to playable board without changing the recorded game
 }
 
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
-test(`Support opens the exact recognized Library pattern and preserves the recorded run on return (${viewport.width}px)`, async ({ page }) => {
+test(`D3744 Support opens the exact recognized Library pattern and preserves the recorded run on return (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
   await startSupportFromFen(page, "r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", "white");
   await move(page, "b1", "c3");
@@ -4795,7 +4795,9 @@ test(`Support opens the exact recognized Library pattern and preserves the recor
   await showSupportTools(page);
   await page.getByRole("button", { name: "Show support for this position" }).click();
   const theory = page.locator('[data-module="theory_breadcrumb"]');
-  await theory.locator(".seat-row").click();
+  const question = "Has anyone written about this position, and where?";
+  await theory.getByRole("button", { name: question, exact: true }).click();
+  await expect(theory.locator(".seat-title")).toHaveText(question);
   const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().method() === "POST" && res.request().postDataJSON().query?.requested?.includes("theory_breadcrumb"));
   await theory.getByRole("button", { name: "Show", exact: true }).click();
   const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(item => item.module === "theory_breadcrumb");
@@ -4825,6 +4827,15 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     { width: 360, height: 680 },
   ] as const;
   const seat = (module: string) => page.locator(`[data-module="${module}"]`);
+  const questions: Readonly<Record<string, string>> = {
+    postcommit_nudge: "What did the move I just played actually change?",
+    sight_on_request: "What is arithmetically true about the square I selected, right now?",
+    threat_radar: "What can the opponent's pieces do to me from this position?",
+    structure_nudge: "What kind of position is this, and what is that kind generally about?",
+    theory_breadcrumb: "Has anyone written about this position, and where?",
+    compare_coach: "What is the smallest recorded difference between my two attempts?",
+    guided_hint: "I am stuck — reveal the least that will unstick me.",
+  };
   // Independent observation of the public receipt, not the client's badge implementation.
   const factCount = (packet: ModuleQueryPage["packets"][number]) => new Set(packet.receipt.items.map((item) => item.evidenceRef === null ? item.componentDigest : `${item.evidenceRef.projection.id}#${item.evidenceRef.evidenceDigest}`)).size;
   const assertPage = (page: ModuleQueryPage, runId: string, finalDigest: string) => {
@@ -4906,6 +4917,8 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     for (const packet of resumed.packets) await expect(seat(packet.module).locator(".seat-badge")).toHaveText(String(factCount(packet)));
     for (const module of ["postcommit_nudge", "sight_on_request", "threat_radar", "structure_nudge", "theory_breadcrumb", "guided_hint", "compare_coach"]) {
       await expect(seat(module), `complete rail population: ${module}`).toHaveCount(1);
+      await expect(seat(module)).toHaveAttribute("aria-label", questions[module]!);
+      if (module !== "guided_hint") await expect(seat(module).locator(".seat-row")).toHaveAttribute("aria-label", questions[module]!);
     }
     // The shipped phone companion is modal: close it through its real affordance before a
     // board gesture. Changing that product policy belongs to D3436, not a forced test click.
@@ -4943,6 +4956,7 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     for (const module of ["postcommit_nudge", "structure_nudge", "theory_breadcrumb", "compare_coach", "threat_radar", "sight_on_request"]) {
       await seat(module).locator(".seat-row").click();
       await expect(seat(module)).toHaveAttribute("data-seat-state", "expanded");
+      await expect(seat(module).locator(".seat-title")).toHaveText(questions[module]!);
       await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
       await expect(seat("guided_hint").locator(".hint-card")).toBeHidden();
       if (viewport.width === 768) await assertTabletQueueHead(page, module);

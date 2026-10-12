@@ -5641,17 +5641,21 @@
     {
       "id": "INR-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§1.2",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Bind `label = declaration.intent` so the rail is a list of questions, not a producer census",
       "legacyRoute": "wave3 #9",
       "note": "[[D1454]]",
-      "sourceDigest": "sha256:0d2830b6588bbe9f4f0baa0a3e3ed43dbd2e2d112408c6fad793a06b948b99ed"
+      "sourceDigest": "sha256:0d2830b6588bbe9f4f0baa0a3e3ed43dbd2e2d112408c6fad793a06b948b99ed",
+      "completion": {
+        "completedOn": "2026-10-12",
+        "evidence": "tests/browser/drill.spec.ts"
+      }
     },
     {
       "id": "INR-a10",
