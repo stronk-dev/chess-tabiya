@@ -1,6 +1,7 @@
 // rfc/recorded-semantic-path §7: the one authenticated, server-owned recorded-path operation.
-// It is injected into Review and longitudinal builders so both consume the same sealed event
-// identity for the same run/branch. It deliberately has no public raw-evidence REST route.
+// This storage adapter is available to authorized builders. Review currently reaches the same
+// runtime compiler through its storage-authorized PhaseArc; longitudinal sequence adoption is
+// deferred until its complete opportunity semantics exist. There is no public raw-evidence route.
 
 import { recordedSemanticPath, type RecordedSemanticPathResult } from "@chess-tabiya/runtime";
 

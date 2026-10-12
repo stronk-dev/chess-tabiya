@@ -7,7 +7,13 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
-import { parsePresentationReceipt, presentedSentence, type PresentationReceipt } from "@chess-tabiya/runtime";
+import { MODULE_CONSUMER_ACCEPTS, parsePresentationReceipt, presentedSentence, recordedSemanticPath, type DrillRun, type PresentationReceipt } from "@chess-tabiya/runtime";
+import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
+import { normalizeMove } from "chessops/chess";
+import { makeSan } from "chessops/san";
+import { parseUci } from "chessops/util";
+import { positionFromFen } from "../../../packages/runtime/src/chess.js";
+import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES, RECORDED_ATTRACTION_FIVE, RECORDED_DEFLECTION_CHECK } from "../../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
 import type { ReviewMap } from "../../web/src/lib/api.js";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
@@ -18,6 +24,7 @@ import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
+import * as phaseSources from "./phase-source-composition.js";
 
 // A pasted broadcast-style PGN: third-party SAN glyphs outside comments, a NAG, and a third-party
 // eval comment. None of it may reach the review surface (§8).
@@ -30,6 +37,37 @@ const GLYPHED_PGN = `[Event "Broadcast"]
 1. e4 e5 2. Nf3?! Nc6 3. Bb5 a6?? 4. Ba4 Nf6! 5. O-O Be7 $2 6. Re1 b5 {[%eval 5.2] Stockfish says this loses} 7. Bb3 d6? 8. c3 O-O 9. h3 Nb8!? 10. d4 Nbd7 11. Nbd2 Bb7 12. Bc2 Re8 13. Nf1 Bf8 14. Ng3 g6 15. a4 c5 16. d5 c4 17. Bg5 h6 18. Be3 Nc5 19. Qd2 h5 20. Bg5 Be7 1-0`;
 const PLIES = 40;
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
+
+const recordedSequenceIds = new Set<string>(RECORDED_SEQUENCE_POSITIVES.map(value => value.projection));
+const admittedSequence = new Set(MODULE_CONSUMER_ACCEPTS.review_map.filter(ref => ref.version === 2 && recordedSequenceIds.has(ref.id)).map(ref => ref.id));
+function sequencePgn(fen: string, moves: readonly string[]): string {
+  const position = positionFromFen(fen);
+  const line = moves.map(uci => {
+    const move = normalizeMove(position, parseUci(uci)!);
+    expect(position.isLegal(move)).toBe(true);
+    const text = `${position.fullmoves}${position.turn === "white" ? "." : "..."} ${makeSan(position, move)}`;
+    position.play(move);
+    return text;
+  }).join(" ");
+  return `[Event "Recorded source adoption"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${fen}"]\n\n${line} *`;
+}
+
+function storedRun(path: string, runId: string): DrillRun {
+  const database = new DatabaseSync(path, { readOnly: true });
+  try {
+    const row = database.prepare("SELECT snapshot_json FROM drill_runs WHERE id=?").get(runId) as { snapshot_json: string };
+    return JSON.parse(row.snapshot_json) as DrillRun;
+  } finally { database.close(); }
+}
+
+function observationJobSettled(path: string, runId: string): boolean {
+  const database = new DatabaseSync(path, { readOnly: true });
+  try {
+    const row = database.prepare("SELECT state, requested_seq, completed_seq FROM learner_observation_jobs WHERE run_id=?").get(runId) as
+      { state: string; requested_seq: number; completed_seq: number } | undefined;
+    return row?.state === "complete" && row.completed_seq === row.requested_seq;
+  } finally { database.close(); }
+}
 
 interface ReviewPayload {
   readonly branchId: string;
@@ -127,6 +165,75 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     phase("recorded review evidence settled");
     return runId;
   }
+
+  it("D3735 declares every current recorded sequence without conflating Review's other v2 values", () => {
+    expect([...admittedSequence].sort()).toEqual([...recordedSequenceIds].sort());
+  });
+
+  it.each([
+    ...RECORDED_SEQUENCE_POSITIVES.map(value => ({ ...value, emits: true })),
+    ...RECORDED_SEQUENCE_HARD_NEGATIVES.map(value => ({ ...value, emits: false })),
+    { ...RECORDED_ATTRACTION_FIVE, projection: "derived.tactic.attraction_observed", emits: true },
+    { ...RECORDED_DEFLECTION_CHECK, projection: "derived.tactic.deflection_observed", emits: true },
+  ])("D3735 actual Review preserves $projection identity and eligibility (emits=$emits)", async value => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "sequence_owner");
+    const runId = await importReviewedGame(origin, cookie, "writer-sequence", sequencePgn(value.fen, value.moves));
+    // Engine settlement is not worker settlement. Observe the real job before taking a
+    // whole-database no-write snapshot; otherwise import's concurrent derivation looks like
+    // a Review mutation. No job is fabricated, bypassed or driven by this read-only poll.
+    await expect.poll(() => observationJobSettled(databasePath, runId), { timeout: 10_000 }).toBe(true);
+    const saved = storedRun(databasePath, runId);
+    const path = recordedSemanticPath(saved, saved.activeCursor.branchId);
+    expect(path.kind).toBe("available");
+    if (path.kind !== "available") throw new Error("actual imported sequence refused");
+    expect(path.events.some(event => event.projection.id === value.projection && event.projection.version === 2)).toBe(value.emits);
+    const before = tableSnapshot(databasePath);
+    const compile = vi.spyOn(phaseSources, "compilePhaseArc");
+    const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const review = await response.json() as ReviewMap;
+    expect(compile).toHaveBeenCalledOnce();
+    expect(review.semanticPath).toMatchObject({ kind: "available", events: path.events.length });
+
+    const expected = path.events.filter(event => admittedSequence.has(event.projection.id));
+    const observed = review.rows.flatMap(row => parsePresentationReceipt(row.packet)
+      .filter(item => item.adapter.projection.version === 2 && admittedSequence.has(item.adapter.projection.id))
+      .map(item => ({ nodeId: row.nodeId, item })));
+    for (const event of expected) {
+      const digest = `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`;
+      const rendered = observed.filter(({ nodeId, item }) => nodeId === event.anchor.nodeId && item.evidenceRef?.evidenceDigest === digest);
+      expect(rendered.length, `recorded ${event.projection.id} at ${event.anchor.nodeId}`).toBeGreaterThan(0);
+      expect(rendered.every(({ item }) => item.adapter.projection.id === event.projection.id && item.adapter.projection.version === 2)).toBe(true);
+    }
+    for (const { nodeId, item } of observed) {
+      expect(expected.some(event => event.anchor.nodeId === nodeId && event.projection.id === item.adapter.projection.id &&
+        `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}` === item.evidenceRef?.evidenceDigest)).toBe(true);
+    }
+    expect(observed.some(({ item }) => item.adapter.projection.id === value.projection)).toBe(value.emits && admittedSequence.has(value.projection));
+    expect(tableSnapshot(databasePath)).toEqual(before);
+    expect(storedRun(databasePath, runId)).toEqual(saved);
+    expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
+    const stranger = await register(origin, "sequence_stranger");
+    expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
+  });
+
+  it("D3735 actual Review fails at a removed recorded-source boundary instead of claiming adoption", async () => {
+    const { origin } = await start();
+    const cookie = await register(origin, "sequence_boundary_owner");
+    const value = RECORDED_SEQUENCE_POSITIVES.find(item => item.projection === "derived.tactic.deflection_observed")!;
+    const runId = await importReviewedGame(origin, cookie, "writer-boundary", sequencePgn(value.fen, value.moves));
+    const compile = vi.spyOn(phaseSources, "compilePhaseArc").mockImplementation(() => { throw new Error("D3735_SOURCE_BOUNDARY_REMOVED"); });
+    const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(compile).toHaveBeenCalledOnce();
+    expect(response.status).toBe(500);
+    expect(await response.text()).not.toContain("D3735_SOURCE_BOUNDARY_REMOVED");
+    compile.mockRestore();
+    const recovered = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
+    expect(recovered.status).toBe(200);
+    const review = await recovered.json() as ReviewMap;
+    expect(review.rows.some(row => parsePresentationReceipt(row.packet).some(item => item.adapter.projection.id === value.projection && item.adapter.projection.version === 2))).toBe(true);
+  });
 
   it.each([
     { fen: "7k/8/2Q5/3N4/2n1b3/8/3P4/K7 w - - 0 37", line: "37. d3 Bf3 *", numbers: [37, 37], labels: ["37. d3", "37… Bf3"], squares: ["d3", "f3"] },

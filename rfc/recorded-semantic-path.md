@@ -1,12 +1,18 @@
 # RFC: Recorded semantic path compiler
 
-- **Status:** awaiting D2 — implemented 2026-09-24 at the owner's direction to implement ready RFCs; D1 discharged the same day when the Review Map became the first production caller
+- **Status:** awaiting D3 — implemented 2026-09-24 at the owner's direction to implement ready RFCs; D1 discharged the same day when the Review Map became the first production caller
   (compiler, exact edge source, v2 successors, exact ref inventory, server operation, checker);
-  D2's complete execution disposition and the downstream longitudinal/eligibility discharges
-  remain open; the [[D1921]]/[[D1929]]
+  D2 and D5 discharged 2026-10-12 by real saved-source and authenticated Review controls across
+  all eleven sequence families. Downstream longitudinal/eligibility discharges remain open; the [[D1921]]/[[D1929]]
   convention predecessor landed the same day and the result now carries a registered receipt. Receipt:
   `planning/recorded-semantic-path/implementation-2026-09-24.md`
 - **Author:** codex
+- **Complete Review adoption checkpoint (2026-10-12, D3735):** The canonical eleven positives,
+  eleven hard negatives and two additional horizons now traverse actual stored-source authority
+  and authenticated Review. Exact end-node and evidence identity are compared against the saved
+  run's compiler output; missing source calls, phantom events, unauthorized reads and read-side
+  mutations fail. Two identical local stand-ins no longer claim criterion 11. D2/D5 discharge;
+  D6 remains open because longitudinal sequence rates require complete opportunity semantics.
 - **Current consumer checkpoint (2026-10-09, D3632/D3633):** Review uses the runtime compiler
   through its PhaseArc and storage-authorised prefix rather than the original direct helper call.
   Each admitted event retains its full registered component group at its own end node. Actual
@@ -463,11 +469,11 @@ only evidence-catalogue changes in scope.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D1067]] recorded-run path compiler and real production caller | `recorded-semantic-path` | implementation plus criterion-13 consumer witness | **2026-09-24** — `RunService.review()` calls `recordedSemanticPathOperation` (`apps/server/src/review-map.test.ts`) |
-| D2 | [[D1710]] execution disposition for the eleven isolated sequence projections changes from helper-only to live only when criterion 13 passes | `recorded-semantic-path` | set-equal execution receipt plus consumer witness | |
+| D1 | [[D1067]] recorded-run path compiler and real production caller | `recorded-semantic-path` | implementation plus criterion-13 consumer witness | **2026-09-24**, current binding clarified **2026-10-12** — `RunService.review()` consumes the same compiler through `compilePhaseArc` and its authorized stored prefix, not the generic storage adapter (`apps/server/src/review-map.test.ts`) |
+| D2 | [[D1710]] execution disposition for the eleven isolated sequence projections changes from helper-only to live only when criterion 13 passes | `recorded-semantic-path` | set-equal execution receipt plus consumer witness | **2026-10-12** — D3735 set-equal eleven-family admission, actual saved-source and authenticated Review positives/negatives, extra horizons and load-bearing source-boundary control; `make recorded-consumer-adoption-check` |
 | D3 | [[D1870]] adds exact learner-module consumer pairs for the observed semantic tactics | `module-registration` | accepted pair declarations plus implementation commit | |
 | D4 | [[D1870]] adds exact pair-keyed presentation for the observed semantic tactics | `evidence-presentation` | accepted component declarations plus implementation commit | |
-| D5 | Review consumes the shared recorded event identity | `review-evidence-compiler` | Review consumer fixture over one run | |
+| D5 | Review consumes the shared recorded event identity | `review-evidence-compiler` | Review consumer fixture over one run | **2026-10-12** — D3735 compares actual Review end-node/projection/evidence identity against the actual saved run across all eleven families; no stand-in builders |
 | D6 | Longitudinal compilation consumes the same recorded event identity | `longitudinal-store` | longitudinal consumer fixture over the Review control run | |
 | D7 | Hypothetical PV semantics remain separately typed and cannot use recorded projections | `hint-distance` ([[D1068]]) | accepted hypothetical-horizon projections and negative source fixture | |
 
@@ -498,6 +504,10 @@ assumed.
 
 ## Changelog
 
+- 2026-10-12: D3735 replaces the misleading two-stand-in criterion-11 test with actual stored-source
+  and authenticated Review adoption across the eleven recorded families and additional horizons.
+  D2/D5 discharge; status is awaiting D3. D6 remains open for complete longitudinal opportunities.
+  Canonical fixtures are shared unchanged; no source/detector/qualification contract is expanded.
 - 2026-09-24 ([[D1921]]/[[D1929]]): the convention predecessor landed
   (`semantic-convention-provenance.md` §1/§4). `conventionReceipt` is now
   `{ status: "registered", registryDigest, refs, eventReceiptDigests, digest }`: the compiled

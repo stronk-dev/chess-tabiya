@@ -26614,3 +26614,31 @@ Campaign was the one capability with no API, route or content. Now:
   pass; the existing checkpoint is reconciled and rechecked, without promotion. Tracking now
   has 3,483 ledger items / 1,723 live / zero untriaged; UX remains 273 complete / 272 live /
   24 retired. The older author aggregate's three failures remain recorded in D3734.
+
+## 2026-10-12 — D3735 actual recorded-source/Review consumer adoption
+
+- Replaced two identical local Review/longitudinal stand-ins with actual saved-source and
+  authenticated Review controls. Eleven canonical positives, eleven hard negatives and two
+  extra horizons share the unchanged runtime fixtures. Set-equal admission, exact end-node/
+  evidence identity, no phantom output, no-write behavior and unauthorized reads are checked.
+  An actual PhaseArc boundary failure proves the production source call is load-bearing.
+- Initial checks exposed incorrect private barrel imports and an overbroad v2 filter including
+  non-sequence Review deltas; both are corrected against actual exports/admission. A whole-DB
+  snapshot caught the import worker's concurrent publication; the control now observes its real
+  settlement before the unchanged no-write assertion. No job or evidence is fabricated.
+- `make typecheck recorded-consumer-adoption-check` passes clean types and 143 checks.
+  `make recorded-semantic-path-check` passes 95 checks, 108 imported paths/6,991 plies/1,264 events,
+  exact/eager parity and local total p95 25.1/56.8/83.9 ms at 20/40/80 plies on Node 24.
+- Recorded-path D2/D5 discharge; status advances to awaiting D3, not implemented/archived.
+  Longitudinal D6 remains open: complete opportunity denominators are absent, so occurrence-only
+  rates and identical stand-ins cannot establish adoption. Qualification, pack/saved-state bytes,
+  current source semantics and every whole capability/milestone/release obligation remain open.
+- Ledger, work-state, RFC register, docs and the existing evidence-spine roadmap checkpoint
+  carry closeout together. No new tracker, raw recording, push or claimed remote CI result.
+- Complete ordinary serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 5,126 software/381 files, seven unchanged-budget performance/four files,
+  255 content/26 files, types/governance/packaging/build and all four browser tiers (308 passes,
+  one existing optional live-Maia latency skip, zero retries), all 150 input/112 composition cells.
+  Current assignment is 3,484 ledger items / 1,723 live / zero untriaged; UX stays 273 complete /
+  272 live / 24 retired. Existing chunk warnings, historical intermittent causes, D3734's old
+  author-check failures, qualification, official content and complete release proof stay open.

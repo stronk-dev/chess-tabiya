@@ -260,8 +260,13 @@ engine principal variation.
   runtime authority through its `compilePhaseArc` path and storage-authorised Review prefix.
   Registered event compositions retain their own end-node identity through the row's presentation
   receipt, including caption-owned squares and recorded moves. Review paints only the focused
-  fact's squares, retiring paint on navigation or replacement. Longitudinal and remaining execution/
-  eligibility discharges stay open; the RFC remains `awaiting D2`, not helper-only or complete.
+  fact's squares, retiring paint on navigation or replacement. D3735 tests actual saved-source
+  and authenticated Review adoption for all eleven recorded families, eleven hard negatives and
+  two extra horizons, preserving event identity and enforcing read authority/no-write behavior.
+  `make recorded-consumer-adoption-check` also proves the source boundary is load-bearing.
+  D2 and Review D5 are discharged; longitudinal D6 and downstream eligibility discharges stay
+  open. The RFC remains `awaiting D3`, not helper-only or complete. Longitudinal cannot use
+  occurrence-only sequence rates in place of complete opportunity denominators.
 
 `make recorded-semantic-path-check` runs the fixtures, the imported-sample census, eager parity and
 the 20/40/80-ply timing arms; the pinned performance tier enforces total p95 ≤ 500 ms.

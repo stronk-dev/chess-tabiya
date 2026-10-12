@@ -92,6 +92,15 @@ deliberately refused; successful packets are fetched from the application, not i
 These cases run in normal software/browser CI. D3713 retains the source-bound silent-success
 journey, and selection usefulness remains separate from transport recovery.
 
+`make recorded-consumer-adoption-check` runs the runtime, authorized stored-source and actual
+authenticated Review controls over the same canonical eleven recorded-sequence positives,
+eleven hard negatives and two extra horizons. It checks exact evidence/end-node identity,
+set-equal family admission, unauthorized reads, no phantom output, no-write behavior after the
+real import worker settles, and failure when the actual PhaseArc source boundary is removed.
+These tests also run in ordinary software CI. Two identical local stand-ins no longer claim
+Review/longitudinal integration: longitudinal sequence rates remain deferred until complete
+opportunity semantics exist. This proves Review adoption, not whole semantic qualification.
+
 `make checkpoint-readiness-check` covers the pending session-to-checkpoint handoff and
 continuation failure/retry. `make checkpoint-readiness-browser-check` deliberately holds
 the move's feedback response open, checks that Continue waits, then crosses both distinct

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3733]] · **Machine map:**
+2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3735]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,6 +68,20 @@ inventory has 86 pack documents and zero official graduates. D3651 corrects the 
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+[[D3735]] replaces misleading Review/longitudinal stand-ins with real saved-source and
+authenticated Review adoption checks across all eleven recorded sequence families and two
+additional horizons. Review's D2/D5 obligations discharge; the recorded-path RFC advances to
+awaiting D3, not complete. Longitudinal D6 still needs complete opportunity semantics and cannot
+infer rates from occurrences alone. The focused gate passes 143 checks with clean types; the
+108-game recorded-path census and exact/eager parity pass. These prove real consumer adoption,
+not semantic qualification or a complete Review/learner capability.
+
+The complete serial local gates pass after this checkpoint: 5,126 software checks, seven
+isolated performance checks, 255 content checks, types/governance/packaging/build and 308 browser
+passes across all four tiers, one existing optional live-Maia latency skip, zero retries and all
+150 input/112 composition cells. This is local proof, not exact-revision GitHub or release-image
+qualification. Historical intermittent causes and D3734's old author-check failures remain open.
 
 D3715 now has an unaccepted, source-bound change-witness amendment in
 `rfc/module-registration.md` §4.5a. The disposable controls preserve complete collector states

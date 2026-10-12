@@ -1,11 +1,12 @@
 import { readdirSync, readFileSync } from "node:fs";
 
-import { commitMove, createRun, type DrillRun, type RecordedSemanticPathResult } from "@chess-tabiya/runtime";
+import { commitMove, createRun, SEMANTIC_EVENT_PROJECTION_REFS, type DrillRun } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { ServerError } from "./errors.js";
-import { recordedSemanticPathOperation, type CompileRecordedSemanticPath } from "./recorded-semantic-path.js";
+import { recordedSemanticPathOperation } from "./recorded-semantic-path.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES, RECORDED_ATTRACTION_FIVE, RECORDED_DEFLECTION_CHECK } from "../../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
 
 const at = "2026-09-24T00:00:00.000Z";
 const ROOT = new URL("../../../", import.meta.url);
@@ -28,15 +29,36 @@ function fixture(fen = "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", moves: readonly 
   return { storage, run };
 }
 
-/** Stand-ins for the injected Review and longitudinal builders: each keeps only the sealed identity. */
-async function reviewBuilder(compile: CompileRecordedSemanticPath, runId: string, branchId: string) {
-  const result = await compile({ principal: owner, runId, branchId });
-  return result.kind === "available" ? { ids: result.events.map((event) => event.id), digest: result.digest } : result;
-}
-async function longitudinalBuilder(compile: CompileRecordedSemanticPath, runId: string, branchId: string) {
-  const result = await compile({ principal: owner, runId, branchId });
-  return result.kind === "available" ? { ids: result.events.map((event) => event.id), digest: result.digest } : result;
-}
+describe("D3735 actual owned-source sequence population", () => {
+  it("covers the complete declared family image without substituting consumer stand-ins", () => {
+    const refs = SEMANTIC_EVENT_PROJECTION_REFS.filter(ref => ref.version === 2).map(ref => ref.id).sort();
+    expect(RECORDED_SEQUENCE_POSITIVES.map(row => row.projection).sort()).toEqual(refs);
+    expect(RECORDED_SEQUENCE_HARD_NEGATIVES.map(row => row.projection).sort()).toEqual(refs);
+  });
+
+  it.each([
+    ...RECORDED_SEQUENCE_POSITIVES.map(value => ({ ...value, emits: true })),
+    ...RECORDED_SEQUENCE_HARD_NEGATIVES.map(value => ({ ...value, emits: false })),
+    { ...RECORDED_ATTRACTION_FIVE, projection: "derived.tactic.attraction_observed", emits: true },
+    { ...RECORDED_DEFLECTION_CHECK, projection: "derived.tactic.deflection_observed", emits: true },
+  ])("saved $projection emits=$emits through the actual authorized source operation", async value => {
+    const { storage, run } = fixture(value.fen, value.moves);
+    const saved = JSON.stringify(storage.read(run.id));
+    const compile = recordedSemanticPathOperation(storage);
+    const input = { principal: owner, runId: run.id, branchId: run.activeCursor.branchId };
+    const result = await compile(input);
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("valid saved sequence was refused");
+    const matched = result.events.filter(event => event.projection.id === value.projection && event.projection.version === 2);
+    expect(matched.length > 0).toBe(value.emits);
+    const windows = result.windows.filter(window => window.projection.id === value.projection && window.projection.version === 2);
+    expect(windows.some(window => window.status === (value.emits ? "emitted" : "no_witness"))).toBe(true);
+    if (!value.emits) expect(windows.some(window => window.status === "emitted")).toBe(false);
+    expect(await compile(input)).toEqual(result);
+    await expect(compile({ ...input, principal: stranger })).rejects.toMatchObject({ code: "RUN_NOT_FOUND" });
+    expect(JSON.stringify(storage.read(run.id))).toBe(saved);
+  });
+});
 
 describe("D3719 saved recapturer continuity", () => {
   it.each([
@@ -123,22 +145,13 @@ describe("recorded semantic path server operation", () => {
     if (result.kind === "available") expect(result.events.map((event) => `${event.projection.id}@${event.projection.version}`)).toEqual(expect.arrayContaining(["derived.tactic.deflection_observed@2", "derived.tactic.overload_exploitation_observed@2"]));
     await expect(compile({ principal: stranger, runId: run.id, branchId: run.activeCursor.branchId })).rejects.toThrowError(expect.objectContaining<Partial<ServerError>>({ code: "RUN_NOT_FOUND" }));
     await expect(compile({ principal: owner, runId: "absent", branchId: run.activeCursor.branchId })).rejects.toThrowError(expect.objectContaining<Partial<ServerError>>({ code: "RUN_NOT_FOUND" }));
-    const unknown: RecordedSemanticPathResult = await compile({ principal: owner, runId: run.id, branchId: "absent" });
+    const unknown = await compile({ principal: owner, runId: run.id, branchId: "absent" });
     expect(unknown).toMatchObject({ kind: "refused", reason: "unknown_branch" });
   });
 
   it("[criterion 12] exposes no public raw-evidence REST route", () => {
     const rest = readFileSync(new URL("apps/server/src/rest.ts", ROOT), "utf8");
     expect(rest).not.toMatch(/recorded-semantic-path|recordedSemanticPath|compileRecordedSemanticPath/u);
-  });
-
-  it("[criterion 11] gives Review and longitudinal builders byte-equal event identity and digest", async () => {
-    const { storage, run } = fixture();
-    const compile = recordedSemanticPathOperation(storage);
-    const review = await reviewBuilder(compile, run.id, run.activeCursor.branchId);
-    const longitudinal = await longitudinalBuilder(compile, run.id, run.activeCursor.branchId);
-    expect(JSON.stringify(longitudinal)).toBe(JSON.stringify(review));
-    expect("ids" in review && review.ids.length).toBeGreaterThan(0);
   });
 
   it("[criterion 13] keeps the RFC out of `implemented` until a production consumer call exists", () => {
