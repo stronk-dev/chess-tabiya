@@ -27344,3 +27344,49 @@ Campaign was the one capability with no API, route or content. Now:
   D3758's actual Review adoption and useful selection remain unaccepted. Latest published revision
   remains c7ec3c3d: verify 38222438800 succeeds, browser 38222438796 fails. No push, remote-CI,
   official-content, whole-capability, milestone or release-ready promotion is claimed.
+
+### 2026-10-13 — D3765 grade consumer audit, D3766 complete presentation and D3767 selected-delivery gap
+
+- The grade RFC records its consumer discharge at 63902370, but D879 still says inert. Its source
+  activation claim is corrected, not promoted to full UX. Twelve convention records now face
+  effective missing/invalid value/source/date checks (72 mutations) instead of a vacuous
+  mutated-object inequality. Existing two-ladder, mate, abstention, perspective and voice controls
+  remain. No constants, grading arithmetic or persistence change.
+- The actual application's labelled mock engine supplies non-flat scores through the real provider
+  exchange/parser/coordinator/store/factory/HTTP chain. Both learner sides receive a grounded Review
+  grade; a populated authenticated rating record really changes at /rating while Review/Nudge
+  responses remain byte-identical. Original run bytes and table counts remain; private/anonymous
+  access refuses. These are software contract fixtures, not engine quality or chess research.
+- The first new HTTP test wrongly assumed Review's separate grade lives in its compiler-family
+  packet; both fail at that incorrect assertion. The correct row admission contract is retained.
+  The next version fails both cases because Nudge's selected facts omit the grade. Real source
+  admission still contains it: D3767 records selection consuming both slots with other exact facts.
+  The final test explicitly distinguishes these boundaries instead of changing rank or budget.
+  All 125 focused consumer controls and clean types pass. The first typecheck's rating import is
+  corrected to the existing /rating subpath; the package isolation rule is not weakened.
+- D3766 finds the real current Nudge adapter loses percentages, context/version and exact mate
+  boundaries; its integer threshold cannot represent practice 2.5, and its mate text invents a
+  White/Black beneficiary from a learner-relative score. The initial 48 predecessor cases all fail.
+  Final code retains the complete sealed grade operand in one strict registered renderer and reuses
+  the existing grade renderer with a human convention label. Old reduced wire parsing remains, not
+  outgoing construction. The expanded 66-case matrix covers both sides/all contexts/cp and mate
+  tiers, receipt round-trip and missing-convention refusal. All 108 adapter/mounted checks pass.
+- Final ordinary software passes 5,411 cases/388 files and the unchanged isolated performance
+  seven/four; types/scaffold/packaging and source/value checks pass. The aggregate stops at two
+  wrong checkpoint anchors: I used whole-file hashes rather than the existing register-row
+  identity. No RFC changed. The canonical parser supplies the right metadata, then normal
+  make roadmap-receipt verify-governance verify-content build test-browser-ci-awake exits zero.
+  Content: 255/26. Browser: 284 smoke, five content, 59 matrix and one packaged-production (349
+  total), one existing optional Maia skip, zero retries; all 150 input and 112 composition cells
+  pass. Warm local arrival p95 is 126.3 ms versus unchanged 250 ms, cold p95 852.8 ms; all 41 requests
+  remain. This is not D3600's published failure cause or closure.
+- Only the existing semantic receipt's 62 implementation leaves refresh: 343 cases/81 subjects,
+  zero fully qualified; 53 population and eight external receipts remain. Factory-profile outputs,
+  conventions, source eligibility, selection, permissions, schema and content are unchanged.
+- The presentation implementation is verified, but D3766's required selected HTTP/UI positive is
+  held on D3767, which is held on D3715's unaccepted selection amendment. D3765/D879 likewise remain
+  open; no grade RFC archival from source admission. All work stays in the existing ledger, queue,
+  state and roadmap. Whole inventory remains 14 incomplete capabilities, four active/five blocked
+  milestones, 276 complete/269 live/24 retired UX items and 50 installed/zero graduated official
+  packs. No push, remote-CI, release-image or 1.0 promotion. The optional independent-review request
+  has no answer at this checkpoint; no subagent or external task message was dispatched.

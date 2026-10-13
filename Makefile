@@ -3938,6 +3938,15 @@ structural-reading-work-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/structure-work.test.ts packages/runtime/src/structure.test.ts packages/runtime/src/structural-evidence.test.ts packages/runtime/src/transition.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/shape-firing.test.ts apps/server/src/capability/pack-capability-contract.test.ts
 	$(MAKE) capability-check typecheck
 
+.PHONY: move-grade-consumer-check
+move-grade-consumer-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/grade.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/review-map.test.ts packages/runtime/src/voice.test.ts apps/server/src/review-map.test.ts
+	$(MAKE) typecheck
+
+.PHONY: nudge-grade-presentation-check
+nudge-grade-presentation-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/web/src/lib/evidence/components.test.ts
+
 .PHONY: legal-move-context-check
 legal-move-context-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/legal-moves.test.ts apps/web/src/lib/opponent-selection-response.test.ts

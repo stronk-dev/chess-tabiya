@@ -7232,11 +7232,12 @@
     },
     {
       "id": "D879",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🏗",
-      "sourceDigest": "sha256:ecbfdb8a769ed818c626c71b0984e656b07188d35fde422d077a40f3460e52e7",
+      "sourceDigest": "sha256:0dca27a54834baef60f22553e4260d2e56790ccb449a8cf9e36d5c1dc946b058",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "owner": "assistance-and-presentation",
+      "blocker": "item:D3767"
     },
     {
       "id": "D880",
@@ -31281,6 +31282,33 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3765",
+      "state": "blocked",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:8c93f663b8ea1f9d5a9b62c2ae385ec1d434506f1f00255c4e98598a26785a5f",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "item:D3767"
+    },
+    {
+      "id": "D3766",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d0b1e333d632191e5c26442abee5cdef675187a0848bc1d7084b50fda5d90391",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "item:D3767"
+    },
+    {
+      "id": "D3767",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:32ba5eba578ffe83a6a1bccee24ffe4a71c5acb363cf394e16f97bf8fa662eb9",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "item:D3715"
     }
   ]
 }

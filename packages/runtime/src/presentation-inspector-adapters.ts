@@ -24,6 +24,7 @@ import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evid
 import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
 import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
 import type { SquareControlReading } from "./square-control.js";
+import { renderMoveQualityGrade } from "./grade.js";
 
 // ---------------------------------------------------------------------------------------------
 // Shared phrasing
@@ -100,6 +101,22 @@ const gradeScore = s.union("kind", {
 });
 const gradeScoreText = (score: ReturnType<typeof gradeScore>): string =>
   "value" in score ? pawnsText(score.value) : `mate in ${Math.abs(score.movesTo)} for ${score.movesTo > 0 ? "White" : "Black"}`;
+
+// Complete grade operands remain learner-relative. They carry no White/Black identity
+// from which a renderer could infer the beneficiary of a positive mate score.
+const gradePercent = (value: unknown, label: string): number => {
+  s.unit(typeof value === "number" ? value / 100 : value, label);
+  return value as number;
+};
+const completeGradeScore = s.obj({ score: gradeScore, winPercent: gradePercent });
+const completeGrade = s.obj({
+  klass: s.lit("inaccuracy", "mistake", "blunder"), arm: s.lit("eval_delta", "mate_lost", "mate_allowed"),
+  before: completeGradeScore, after: completeGradeScore, dropWinPercent: gradePercent,
+  thresholdCrossed: (value: unknown, label: string) => typeof value === "number" ? gradePercent(value, label) : s.lit("mate_lost_tier", "mate_allowed_tier")(value, label),
+  convention: s.obj({ id: s.lit("grade-convention"), version: s.lit(1), context: s.lit("drill", "review", "imported_analysis") }),
+  engineId: s.str, lane: s.lit("recorded", "live"),
+}, { depth: s.nat, requestedMovetimeMs: s.nat });
+const gradeContextLabels = Object.freeze({ drill: "practice convention, version 1", review: "review convention, version 1", imported_analysis: "imported-game review convention, version 1" });
 
 const SEQUENCE_CONTACT_KINDS = s.lit("created_survived_reply", "created_executed_next_own_move");
 
@@ -201,6 +218,10 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
     `A trade on ${value.square}: ${value.first} and ${value.second}.`),
   "inspector.move_quality_grade@1": factRenderer(s.obj({ klass: s.lit("inaccuracy", "mistake", "blunder"), arm: s.lit("eval_delta", "mate_lost", "mate_allowed"), lane: s.lit("recorded", "live"), before: gradeScore, after: gradeScore, dropTenths: s.nat, threshold: s.nullable(s.nat) }), (value) =>
     `${capital(value.klass)} under the declared grade convention: the ${value.lane} engine evaluation went from ${gradeScoreText(value.before)} to ${gradeScoreText(value.after)} across this move, a drop of ${tenths(value.dropTenths)} win-points${value.arm === "eval_delta" ? ` against a threshold of ${value.threshold ?? 0}` : value.arm === "mate_lost" ? " in the lost-mate tier" : " in the allowed-mate tier"}.`),
+  // The reduced predecessor stays readable on old wire receipts. Current Nudge construction
+  // uses the complete registered operand and the one grade renderer, not a second mate table.
+  "inspector.move_quality_grade_complete@1": factRenderer(completeGrade, (value) =>
+    renderMoveQualityGrade(value).replace(`grade-convention@1/${value.convention.context}`, gradeContextLabels[value.convention.context])),
   "inspector.avoidance@1": factRenderer(s.obj({ family: s.lit(...AVOIDANCE_FAMILIES), sign: s.lit("gained", "lost", "preserved", "state"), alternatives: s.nat, withFamily: s.nat }), (value) =>
     `Of the ${plural(value.alternatives, "other legal move")}, ${value.withFamily} would have ${value.family === "pawn_islands" ? PAWN_ISLAND_SIGNS[value.sign] : `${AVOIDANCE_SIGNS[value.sign]} ${AVOIDANCE_LABELS[value.family]}`}; the move played did not.`),
   "inspector.fork_survives@1": factRenderer(s.obj({ attacker: placed, targets: s.arr(placed, { min: 2 }), replies: s.nat, answering: s.nat }), (value) =>
@@ -483,11 +504,8 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const family = String(event.family.projection.id).split(".").at(-1);
     return statement("inspector.avoidance@1", family === "loose_piece" ? "threat-convention@1" : "pawn-structure@1", { family, sign: event.family.sign, alternatives: event.legalAlternatives, withFamily: event.alternativesWithFamily });
   });
-  const grade = single("fact_statement", ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "lane"], ["mechanical_transform"], (evidence) => {
-    const value = payloadOf(evidence);
-    const score = (entry: Payload) => (entry.score.kind === "cp" ? { kind: "cp", value: entry.score.value } : { kind: "mate", movesTo: entry.score.movesTo });
-    return statement("inspector.move_quality_grade@1", "grade-convention@1", { klass: value.klass, arm: value.arm, lane: value.lane, before: score(value.before), after: score(value.after), dropTenths: Math.round(value.dropWinPercent * 10), threshold: typeof value.thresholdCrossed === "number" ? value.thresholdCrossed : null });
-  });
+  const grade = single("fact_statement", ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "depthOrMovetime"], ["copied_byte_equal"], (evidence) =>
+    statement("inspector.move_quality_grade_complete@1", "grade-convention@1", payloadOf(evidence)));
 
   // --- one-edge events with board forms: square set + the recorded move
   const openFileOccupancy = squaresLine(["beforeFen", "moveUci", "piece", "fileClass", "sourceReading"], (evidence) => {

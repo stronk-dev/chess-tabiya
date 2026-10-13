@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3764]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3767]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,21 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3765]]–[[D3767]]: complete Nudge grade operands now preserve percentages,
+fractional thresholds, exact mate tiers and context/version. The registered renderer no longer
+invents White/Black from a learner-relative mate score and renders a human convention label.
+The initial predecessor fails 48 controls; the expanded final matrix passes all 66 grade/side/
+context cases plus mounted checks (108 total). The actual authenticated application renders a
+populated Review grade for either side; genuinely changed rating records leave Review/Nudge
+responses byte-identical. Nudge admits the grade but selects other exact facts into both slots:
+this is D3767's actual selected-delivery gap, not a reason to force a grade or raise budgets.
+D3765/D3766/D879 remain held on that gap and D3715's unaccepted selection contract. No RFC is
+archived or full grade UX called complete. Final software passes 5,411/388 and performance
+seven/four; two incorrect checkpoint links stop governance, then their correction and remaining
+normal gates exit zero: content 255/26, build and 349 browser passes, one optional Maia skip,
+zero retries, all 150 input and 112 composition cells. Local warm p95 is 126.3 ms under 250 ms;
+no remote-CI, qualification, content or whole-capability promotion.
 
 2026-10-13 [[D3763]]/[[D3764]]: structural reading reuses within-call position and attack work,
 reducing the initial-position acquisition count from 157 to five while preserving the registered
@@ -111,7 +126,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3764]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3767]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not

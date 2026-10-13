@@ -4,6 +4,14 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make move-grade-consumer-check` covers the grade convention, both ladders/mate arms, module
+admission, voice guard and actual authenticated Review/Nudge reads. Populated synthetic scores
+remain labelled mock-engine inputs; a real stored rating changes at the authenticated rating
+endpoint while grade responses remain byte-identical. Admission and selected Nudge delivery are
+tested separately: D3767's current selection gap is not hidden by forcing a grade into the budget.
+`make nudge-grade-presentation-check` covers both-side complete grade receipt round-trips and
+mounted components, including fractional thresholds, context and learner-relative mate wording.
+
 `make structural-reading-work-check` covers private same-position reuse and independently checks
 occupied-target geometric counts, alongside the existing predicates, evidence, transitions and
 shape consumers. It also checks the registered interpreter ownership/capability census; moving

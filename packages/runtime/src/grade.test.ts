@@ -11,6 +11,13 @@ import {
 } from "./grade.js";
 
 type GradeEvaluationExtras = Partial<Omit<GradeEvaluation, "lane" | "perspective" | "score" | "sideToMove">>;
+function assertCitedConstants(constants: Readonly<Record<string, unknown>>): void {
+  expect(Object.keys(constants)).toHaveLength(12);
+  for (const record of Object.values(constants)) {
+    expect(record).toMatchObject({ value: expect.any(Number), source: expect.stringMatching(/^https:\/\//u), pinnedAt: "2026-08-22" });
+    expect(Number.isFinite((record as { value: number }).value)).toBe(true);
+  }
+}
 const recorded = (score: GradeEvaluation["score"], extras: GradeEvaluationExtras = {}): GradeEvaluation => ({
   lane: "recorded", engineId: "stockfish-17", score, sideToMove: "white", perspective: "white", depth: 18, ...extras,
 });
@@ -21,13 +28,17 @@ const classify = (before: number, after: number, context: GradeContext) => moveQ
 
 describe("move-quality grades", () => {
   it("pins all twelve convention constants to a source and date", () => {
-    expect(Object.values(GRADE_CONVENTION.constants)).toHaveLength(12);
-    for (const constant of Object.values(GRADE_CONVENTION.constants)) {
-      expect(constant.value).toEqual(expect.any(Number));
-      expect(constant.source).toMatch(/^https:\/\//u);
-      expect(constant.pinnedAt).toBe("2026-08-22");
+    assertCitedConstants(GRADE_CONVENTION.constants);
+  });
+
+  it.each(["value", "source", "pinnedAt"] as const)("D3765 citation check rejects a missing %s on every constant", field => {
+    for (const [key, constant] of Object.entries(GRADE_CONVENTION.constants)) {
+      const missing: Record<string, unknown> = { ...constant };
+      delete missing[field];
+      expect(() => assertCitedConstants({ ...GRADE_CONVENTION.constants, [key]: missing }), key).toThrow();
+      const invalid = { ...constant, [field]: field === "value" ? Number.NaN : "" };
+      expect(() => assertCitedConstants({ ...GRADE_CONVENTION.constants, [key]: invalid }), key).toThrow();
     }
-    expect({ ...GRADE_CONVENTION.constants.reportInaccuracy, source: "" }).not.toEqual(GRADE_CONVENTION.constants.reportInaccuracy);
   });
 
   it("pins both ladders on both sides of every boundary and clamps before conversion", () => {

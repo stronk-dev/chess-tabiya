@@ -42,8 +42,42 @@ import SquareSetView from "./components/SquareSetView.svelte";
 import StructuredDocumentView from "./components/StructuredDocumentView.svelte";
 import TextStatementView from "./components/TextStatementView.svelte";
 import { trailGeometry } from "./presented-view.js";
+import { invokeEvidenceValueRoute } from "../../../../../packages/runtime/src/internal/evidence-value-routes.js";
 
 const D = (seed: string): string => `sha256:${seed.repeat(64).slice(0, 64)}`;
+
+describe("D3766: mounted Nudge grade grounding", () => {
+  it.each(["white", "black"] as const)("renders fractional practice thresholds and learner-relative mate for %s", mover => {
+    for (const [before, after, expected] of [
+      [{ kind: "cp", value: 0 }, { kind: "cp", value: -55 }, "threshold of 2.5"],
+      [{ kind: "mate", movesTo: 2 }, { kind: "cp", value: 800 }, "inside +7.00..+9.99"],
+      [{ kind: "cp", value: -800 }, { kind: "mate", movesTo: -2 }, "opponent mate #2"],
+    ] as const) {
+      const reading = (score: typeof before | typeof after) => invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: {
+        kind: "eval", source: "engine_validated", values: {
+          ...(score.kind === "cp" ? { centipawns: score.value * (mover === "white" ? 1 : -1) } : { mateIn: score.movesTo * (mover === "white" ? 1 : -1) }),
+          perspective: "white", engineId: "labelled grade fixture", requestedMovetimeMs: 100,
+        },
+      } });
+      const result = invokeEvidenceValueRoute("derived.grade.move_quality@1", { before: reading(before), after: reading(after), mover, context: "drill" });
+      if (result.kind !== "available") throw new Error("grade fixture unavailable");
+      expect(result.value).toHaveLength(1);
+      const items = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(
+        presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, result.value)),
+      ))));
+      const target = globalThis.document.createElement("div");
+      globalThis.document.body.append(target);
+      const view = mount(PresentedEvidence, { target, props: { items } });
+      try {
+        flushSync();
+        expect(target.querySelectorAll("[data-presented]")).toHaveLength(1);
+        expect(target.textContent).toContain(expected);
+        expect(target.textContent).toContain("practice convention, version 1");
+        expect(target.textContent).not.toMatch(/White|Black|grade-convention@|inspector\./u);
+      } finally { unmount(view); target.remove(); }
+    }
+  });
+});
 
 describe("shape-backed Support theory navigation", () => {
   it.each(["module.structure_nudge", "module.theory_breadcrumb"])("opens the exact fired entry from the parsed %s receipt", consumer => {

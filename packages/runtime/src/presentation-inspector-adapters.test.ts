@@ -18,6 +18,7 @@ import type { PresentationKit } from "./presentation-contract.js";
 import { INSPECTOR_FACT_RENDERERS, inspectorAdapterSpecs } from "./presentation-inspector-adapters.js";
 import { inspectorFixtureEvidence } from "./testing/inspector-presentation-fixture.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { renderMoveQualityGrade, type MoveQualityGrade } from "./grade.js";
 
 const CONSUMERS = ["module.full_inspector", "module.postcommit_nudge", "module.review_map"] as const;
 const key = (consumer: { readonly id: string; readonly version: number }, projection: { readonly id: string; readonly version: number }) => `${consumer.id}@${consumer.version}\u0000${projection.id}@${projection.version}`;
@@ -25,6 +26,53 @@ const bindingsOf = (consumer: string) => PRIMARY_EVIDENCE_MANIFEST.bindings.filt
 /** The pairs this group registers (constructs read the kit only when invoked). */
 const OWN = new Set(inspectorAdapterSpecs({} as PresentationKit).map((spec) => key(spec.consumer, spec.projection)));
 const FORBIDDEN = [/Tabiya's/u, /detector/iu, /phase bands/iu, /recorded mass/iu, /evidence recorded\./iu, /@\d/u, /\bbest\b/iu, /\bshould\b/iu, /\bwins\b/iu, /\b[a-h][1-8][a-h][1-8][qrbn]?\b/u, /_/u, /sha256/u];
+
+describe("D3766: Nudge keeps the complete grade grounding without inventing a color", () => {
+  const scores = [
+    [{ kind: "cp", value: 100 }, { kind: "cp", value: -100 }],
+    [{ kind: "cp", value: 0 }, { kind: "cp", value: -55 }],
+    [{ kind: "cp", value: 0 }, { kind: "cp", value: -111 }],
+    [{ kind: "cp", value: 0 }, { kind: "cp", value: -169 }],
+    [{ kind: "mate", movesTo: 2 }, { kind: "cp", value: 1100 }],
+    [{ kind: "mate", movesTo: 2 }, { kind: "cp", value: 800 }],
+    [{ kind: "mate", movesTo: 2 }, { kind: "cp", value: 200 }],
+    [{ kind: "mate", movesTo: 2 }, { kind: "mate", movesTo: -4 }],
+    [{ kind: "cp", value: 0 }, { kind: "mate", movesTo: -3 }],
+    [{ kind: "cp", value: -800 }, { kind: "mate", movesTo: -2 }],
+    [{ kind: "cp", value: -1200 }, { kind: "mate", movesTo: -2 }],
+  ] as const;
+  for (const mover of ["white", "black"] as const) for (const context of ["drill", "review", "imported_analysis"] as const) {
+    it.each(scores)(`${mover}/${context} retains every grade operand (%j → %j)`, (before, after) => {
+      const packet = (score: typeof before | typeof after, turn: "white" | "black") => ({ kind: "eval" as const, source: "engine_validated" as const, values: {
+        ...(score.kind === "cp" ? { centipawns: mover === "white" ? score.value : -score.value } : { mateIn: mover === "white" ? score.movesTo : -score.movesTo }),
+        perspective: "white", engineId: "D3766 labelled fixture", requestedMovetimeMs: 100,
+        sideToMove: turn,
+      } });
+      const result = invokeEvidenceValueRoute("derived.grade.move_quality@1", {
+        before: invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: packet(before, mover) }),
+        after: invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: packet(after, mover === "white" ? "black" : "white") }), mover, context,
+      });
+      expect(result.kind).toBe("available");
+      if (result.kind !== "available") throw new Error("grade fixture unavailable");
+      expect(result.value).toHaveLength(1);
+      const value = result.value[0] as DeclaredEvidence<MoveQualityGrade>;
+      const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, [value]));
+      const wire = JSON.parse(JSON.stringify(serializePresentedEvidence(items)));
+      const parsed = parsePresentationReceipt(wire);
+      expect(parsed).toHaveLength(1);
+      const labels = { drill: "practice convention, version 1", review: "review convention, version 1", imported_analysis: "imported-game review convention, version 1" };
+      expect(presentedSentence(parsed[0]!)).toBe(renderMoveQualityGrade(value.payload).replace(`grade-convention@1/${context}`, labels[context]));
+      expect(presentedSentence(parsed[0]!)).not.toMatch(/White|Black|@1|_/u);
+      const item = parsed[0]!;
+      expect(item.component.id).toBe("fact_statement");
+      if (item.component.id !== "fact_statement") throw new Error("grade must be a complete statement");
+      expect(item.component.operand.operands).toEqual(value.payload);
+      const omitted = JSON.parse(JSON.stringify(wire));
+      delete omitted.items[0].component.operand.operands.convention;
+      expect(() => parsePresentationReceipt(omitted)).toThrow();
+    });
+  }
+});
 
 describe("D3579: square-control captions count populated targets, not the 64-cell map", () => {
   it.each(["module.sight_on_request", "module.full_inspector"])("%s retains distinct controlled-square totals", (consumer) => {

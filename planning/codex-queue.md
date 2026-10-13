@@ -1,5 +1,28 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3765]] audits the accepted move-quality-grades contract before coordinator
+closeout. Its D1 records both consumers at `63902370`; D879's stale inert claim is corrected.
+All 125 focused checks/types pass: the actual application/provider parser/storage/HTTP path
+renders Review grades for both sides and stays byte-identical when an authenticated populated rating
+changes. Each of twelve constants has effective missing/invalid value/source/date negatives.
+The first test incorrectly put Review's separate grade into its compiler packet; the corrected
+test retains the real separately admitted row contract. The next populated test finds [[D3767]]:
+Nudge admits the grade but selects two other exact facts. This remains blocked on [[D3715]];
+no budget/rank waiver, forced display, archival or complete grade UX claim.
+
+[[D3766]] repairs the actual Nudge adapter under the accepted co-rendering/presentation
+contract: complete operands, percentages, fractional thresholds, context/version and neutral
+learner-relative mate wording reuse the existing grade renderer. The predecessor fails all
+48 initial adapter controls; the expanded final matrix has 66 both-side/context/grade cases.
+All 108 adapter/mounted checks pass, retaining old wire parsing and every existing binding.
+Final software passes 5,411 cases/388 files and performance seven/four. The aggregate stops
+on two newly added tracking links that used file digests instead of register-row digests;
+correcting those metadata links and running remaining ordinary governance/content/build/browser
+exits zero: 255 content cases/26 files and 349 browser passes, one optional Maia skip, zero
+retries, all 150 input and 112 composition cells. Warm local arrival p95 is 126.3 ms under 250 ms,
+not a D3600 remote closure. D3766's presentation implementation is verified, but the required
+selected HTTP/UI positive stays blocked on D3767; no full grade UX or RFC archival.
+
 2026-10-13 — [[D3764]] is the actual desktop Structure-help recovery failure found by D3763's
 full browser gate. The original trace proves two actual evidence attachments advance head
 5→6→7 while a head-5 reply is held, so the unchanged-decision focus premise was false. The test

@@ -32,6 +32,19 @@ from the compiled projections and refuses a union outside the image or a declare
 no accepted witness. Admission enforces the same image per fact. `derived.grade.move_quality@1`
 (evaluation) is therefore admissible exactly to Post-commit Nudge and Review Map.
 
+Nudge's grade adapter preserves the complete grade operand: both scores and win percentages,
+the drop, numeric or mate-tier threshold, context/version and instrument. Its strict registered
+renderer reuses the grade renderer and replaces the internal convention key with a human label
+(`practice`, `review` or `imported-game review`, version 1). Mate remains learner-relative, not
+guessed as White's or Black's mate. Fractional practice thresholds (2.5) remain numeric, not
+mistaken for invalid integer operands. The older reduced wire renderer stays readable but is
+not used for new Nudge construction (D3766).
+
+That does not prove selection: D3767's populated actual HTTP cases admit a grade while the
+Nudge's two slots select other exact state facts. Review's grade sentence is separately admitted
+on the row, not part of its compiler-family packet. The selection amendment remains unaccepted;
+no rank, budget, arithmetic or permission is changed by this presentation repair.
+
 ## What executes today
 
 Every compiled pair is either `executable` or `blocked_dependencies` with its blockers

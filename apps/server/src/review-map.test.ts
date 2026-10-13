@@ -7,7 +7,9 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
-import { MODULE_CONSUMER_ACCEPTS, parsePresentationReceipt, presentedSentence, recordedSemanticPath, type DrillRun, type PresentationReceipt } from "@chess-tabiya/runtime";
+import { MODULE_CONSUMER_ACCEPTS, compileModulePacket, parsePresentationReceipt, presentedSentence, recordedSemanticPath, renderMoveQualityGrade, type DrillRun, type MoveQualityGrade, type PresentationReceipt } from "@chess-tabiya/runtime";
+import { RATED_OPPONENT_CALIBRATION } from "@chess-tabiya/runtime/rating";
+import { postcommitEdgeEvidence } from "../../../packages/runtime/src/postcommit-nudge.js";
 import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
 import { normalizeMove } from "chessops/chess";
 import { makeSan } from "chessops/san";
@@ -602,6 +604,91 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(await (await nudge(review.rows[5]!.nodeId)).json()).toMatchObject({ kind: "refused", reason: "not_a_learner_move" });
     expect((await nudge("missing-node")).status).toBe(400);
     expect(tableSnapshot(databasePath)).toEqual(before);
+  });
+
+  it.each(["white", "black"] as const)("D3765 actual Review grade and Nudge source admission are populated, read-only and rating-inert (%s)", async side => {
+    // Synthetic scores belong to the labelled engine stand-in, not manufactured chess truth.
+    // The production exchange/parser/coordinator/storage/factory/presenter/HTTP paths still run.
+    const engine = new MockProviderEngineClient({ score: fen => {
+      const position = positionFromFen(fen);
+      const moved = position.board.get(side === "white" ? 28 : 36)?.role === "pawn";
+      const learnerCp = moved ? -100 : 100;
+      const whiteCp = side === "white" ? learnerCp : -learnerCp;
+      return { score: `cp ${position.turn === "white" ? whiteCp : -whiteCp}`, wdl: [0, 1000, 0] };
+    } });
+    const exchange = engine.exchange.bind(engine);
+    vi.spyOn(MockProviderEngineClient.prototype, "exchange").mockImplementation(exchange);
+    const { origin, databasePath } = await start();
+    const handle = `grade_${side}`;
+    const cookie = await register(origin, handle);
+    const fen = side === "white"
+      ? "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 37";
+    const runId = await importReviewedGame(origin, cookie, "writer-grade", sequencePgn(fen, [side === "white" ? "e2e4" : "e7e5"]), side);
+    await expect.poll(() => observationJobSettled(databasePath, runId), { timeout: 10_000 }).toBe(true);
+    const saved = storedRun(databasePath, runId);
+    const nodeId = saved.activeCursor.nodeId;
+    const read = async (path: string): Promise<string> => {
+      const response = await fetch(`${origin}${path}`, { headers: { cookie } });
+      expect(response.status, await response.clone().text()).toBe(200);
+      return response.text();
+    };
+    const reviewPath = `/runs/${runId}/review`;
+    const nudgePath = `/runs/${runId}/nudge?nodeId=${encodeURIComponent(nodeId)}`;
+    const reviewBytes = await read(reviewPath), nudgeBytes = await read(nudgePath);
+    const review = JSON.parse(reviewBytes) as ReviewPayload;
+    expect(review.rows).toHaveLength(1);
+    const sentence = review.rows[0]!.grade!.sentence;
+    expect(sentence).toMatch(/^Blunder/u);
+    for (const part of ["+1.00 (59.1%)", "−1.00 (40.9%)", "18.2 win-points", "threshold of 15", "grade-convention@1/imported_analysis"]) expect(sentence).toContain(part);
+    // The Review row's grade is a separately admitted full sentence, not part of its
+    // compiler-family packet. Do not mistake that established wire shape for missing adoption.
+    const nudge = JSON.parse(nudgeBytes) as { kind: string; facts: { projection: string; sentence: string }[] };
+    expect(nudge.kind).toBe("packet");
+    const node = saved.nodes.find(item => item.id === nodeId)!;
+    const parent = saved.nodes.find(item => item.id === node.parentId)!;
+    const admitted = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: "learner", session: "imported", mode: "admit", evidence: postcommitEdgeEvidence(saved, parent, node) });
+    expect(admitted.kind).toBe("packet");
+    if (admitted.kind !== "packet") throw new Error("Nudge admission refused");
+    const grade = admitted.facts.find(fact => fact.projection.id === "derived.grade.move_quality")!;
+    expect(grade).toBeDefined();
+    const gradeSentence = renderMoveQualityGrade(grade.evidence.payload as MoveQualityGrade);
+    expect(gradeSentence).toMatch(/^Blunder/u);
+    expect(gradeSentence).toContain("18.2 win-points");
+    expect(gradeSentence).toContain("grade-convention@1/drill");
+    // D3767: admission is real, but current state-fact selection consumes the two slots.
+    // This is a recorded product gap, not permission to raise the budget or force a grade.
+    expect(nudge.facts).toHaveLength(2);
+    expect(nudge.facts.some(fact => fact.projection === "derived.grade.move_quality@1")).toBe(false);
+
+    // Vary an actual populated, authenticated rating record, not an ignored extra function arg.
+    const database = new DatabaseSync(databasePath);
+    try {
+      const learner = database.prepare("SELECT id FROM learners WHERE handle=?").get(handle) as { id: string };
+      const at = "2026-10-13T00:00:00Z";
+      database.prepare(`INSERT INTO learner_ratings
+        (learner_id,calibration_id,rating,rd,volatility,seed_band,rated_games,voided_games,abandoned_games,period_no,period_started_at,updated_at)
+        VALUES (?,?,?,40,0.06,NULL,40,0,0,0,?,?)`).run(learner.id, RATED_OPPONENT_CALIBRATION.id, 1300, at, at);
+      const lowRating = await read("/rating");
+      const lowTables = tableSnapshot(databasePath);
+      expect(await read(reviewPath)).toBe(reviewBytes);
+      expect(await read(nudgePath)).toBe(nudgeBytes);
+      expect(tableSnapshot(databasePath)).toEqual(lowTables);
+      database.prepare("UPDATE learner_ratings SET rating=1900 WHERE learner_id=?").run(learner.id);
+      expect(await read("/rating")).not.toBe(lowRating);
+      const highTables = tableSnapshot(databasePath);
+      expect(await read(reviewPath)).toBe(reviewBytes);
+      expect(await read(nudgePath)).toBe(nudgeBytes);
+      expect(tableSnapshot(databasePath)).toEqual(highTables);
+      expect(storedRun(databasePath, runId)).toEqual(saved);
+      expect(JSON.stringify(saved)).not.toMatch(/grade-convention|derived\.grade|"klass"/u);
+      // Unauthorized readers cannot use the grade endpoints as a game-existence oracle.
+      const stranger = await register(origin, `grade_stranger_${side}`);
+      for (const path of [reviewPath, nudgePath]) {
+        expect((await fetch(`${origin}${path}`)).status).toBe(401);
+        expect((await fetch(`${origin}${path}`, { headers: { cookie: stranger } })).status).toBe(404);
+      }
+    } finally { database.close(); }
   });
 
   it("serves the eval graph, the explicit Analyze reveal and the Compare handoff — read-only, withheld during a retry", async () => {
