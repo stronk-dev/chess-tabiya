@@ -27909,3 +27909,35 @@ Campaign was the one capability with no API, route or content. Now:
   tracking before explicit owned-file staging and normal hooks. No new raw research data,
   source convention, module permission, migration, corpus or protected intent change. The goal
   remains active; useful source/module delivery and the complete 1.0 release are unfinished.
+
+### 2026-10-13 — D3781 full registered-case orientation inventory and draft root repair
+
+- Finish the in-flight evidence-foundation research before the requested whole-product overview.
+  Execute all 343 registered operations, not only positive edge fixtures: 251 edge, 56 recorded
+  path and 36 bounded target; all complete, 144 omit targets, 495 target observations survive.
+  Fifty-six of 81 declared subjects are observed; the other 25 remain unmeasured here.
+- Inventory 5,443 retained input leaves without raw FEN/UCI storage: 672 original draft root
+  spellings, 313 root aliases, 34 nested value-equal leaves, 25 other-frame edge leaves and
+  4,399 non-edge leaves. Leaf counts are not usefulness or qualification percentages; nested
+  equality alone proves no frame ownership. The final ignored report is 93,369 bytes and is
+  not a progress or CI dependency. The earlier verbose console report was truncated; read
+  the bounded saved report instead, never treating the failed formatter as a passed check.
+- Extend the existing disposable model and still-unaccepted D3564 §4.1a to seven exact root
+  spellings across three input-relative rules. Actual direct/discovered Check and both castling
+  directions retain total coverage. Two intermediate Check failures reveal omitted promoted
+  metadata in my model; retain it rather than weakening the total walk. After the final actual
+  rule-metadata correction, normal make semantic-validation-matrix exits zero: 106/four files.
+- Update the existing dossier, coverage row, authority plan, draft RFC/register, ledger and
+  queue. First state closeout incorrectly included live owner/since fields and was rejected;
+  repeat through the normal target with done's evidence-only fields. All 1,731 live rows remain
+  assigned, zero untriaged. Research/draft D3781 closes; independent acceptance/production,
+  nested/continuation and recorded/bounded scope contracts remain open under their existing work.
+- No production parser, comparator, canonical case/profile, semantic verdict, learner permission,
+  content, protected intent, publication or release change. Regenerate the compact roadmap
+  receipt and verify current governance and semantic execution before explicit owned-file commit.
+  The preceding 4b8f1918 software/build/browser proof remains historical, not a new run claim.
+- Final normal make roadmap-receipt verify-governance semantic-validation-check exits zero;
+  all 343 canonical cases still pass and all 81 subjects remain incompletely qualified.
+  make roadmap-progress passes with four active/five blocked milestones and unchanged 276
+  completed/269 live/24 retired UX states. A fresh GitHub read confirms published 62c81eb1:
+  verify 38381154735 succeeds, browser 38381154879 fails. No fresh publication or remote fix.

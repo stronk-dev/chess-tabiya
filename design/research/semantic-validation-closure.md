@@ -275,3 +275,55 @@ eligibility or learner permissions. The finite population corroborates code cons
 not exhaustive chess-position coverage. D3745 closes research only; D3687/D3690 retain
 the author/review blocker. No protected intent sentence or thesis gate is overturned. `[V]`
 (owned change set; existing authority plan and state-negative handoff)
+
+## 2026-10-13 — full registered-case retained-input inventory (D3781)
+
+The October-9 D3564 proposal binds three root spellings, but real collectors also emit
+`beforeFen`, `moveUci`, `afterFen` and Check's `triggeringMove`. The existing disposable
+mirror instrument now executes all 343 registered cases through their actual operations,
+selecting each exact subject/version and retaining target absence. This is execution for
+inventory, not independent-authority resolution or qualification. `[V]`
+(`tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts`;
+`packages/runtime/src/semantic-validation-cases.json`; `rfc/semantic-validation-authority.md` §4.1a)
+
+All 343 invocations complete: 251 edge, 56 recorded-path and 36 bounded-target inputs.
+There are 144 absent targets, 495 target observations and 5,443 retained FEN/UCI leaf
+occurrences. The registered cases cover 56 of 81 declared subjects; the other 25 are not
+observed by this inventory. `[V]` (same instrument; `make semantic-validation-matrix`)
+
+| Relationship to the case input | Leaf occurrences | Distinct projections |
+|---|---:|---:|
+| Original three root spellings, equal to the own edge input | 672 | 25 |
+| Other root spellings, equal to the own edge input | 313 | 17 |
+| Nested leaves equal to a root input value | 34 | 5 |
+| Edge-case leaves unequal to root input values | 25 | 6 |
+| Recorded-path or bounded-target case inputs | 4,399 | 14 |
+
+Counts overlap at projection level and count repeated observations, not useful facts or
+coverage percentages. Nested value equality does not establish frame ownership. Unequal
+edge leaves include actual reply/capture/exchange continuation moves, not necessarily bad
+data. Non-edge inputs are not coerced into root-edge bindings. `[V]` (instrument's
+`retainedInputScope`, exact paths in its generated inventory and actual selected payloads)
+
+**Bounded draft repair:** retain three value kinds with seven exact root spellings. Bind
+each leaf to its own legal edge, permit distinct legitimate aliases together, refuse
+duplicate/crossed/nested/unlisted paths, and preserve every other payload leaf. Prototype
+controls include actual direct/discovered Check pairs and both castling directions,
+corrupt inputs/operands and payload immutability. No generic alias inference or omission
+rule is proposed. `[V]` (instrument; amended draft §4.1a)
+
+The whole research matrix passes 106 checks/four files. Two intermediate Check controls
+failed because my model omitted promoted-piece metadata; the total walk caught that
+omission, and the metadata is now retained. An earlier full-console report was truncated
+and could not be parsed; its saved bounded inventory was read instead. The final generated
+report is 93,369 bytes, contains counts/paths rather than raw FEN/UCI values, stays ignored
+under `.cache/`, and is not required by CI or progress checks. `[V]` (instrument, final
+`make semantic-validation-matrix` run and ignored generated report)
+
+**Still required, not solved:** independently accept and implement the root grammar;
+declare exact nested/continuation and recorded/bounded input relationships; supply the
+missing case families and independent orientation/population authorities. The prototype
+cannot qualify a collector or make guidance available. Production grammar, canonical
+cases, profiles and generated semantic verdicts are unchanged: 343 passed execution
+cases do not mean any of the 81 profiles is fully qualified. `[V]` (owned change set,
+existing authority plan and generated semantic validation receipt)

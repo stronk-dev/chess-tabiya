@@ -695,18 +695,21 @@ input relation. Evidence: `design/research/semantic-validation-closure.md` §202
 `tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts`.
 
 Add exactly three input-relative value rules to `SemanticMirrorOperandRule`, discriminated by
-`value`. Each has the literal paths and collection below; it is not the unrestricted path shape
-of the five geometric rules.
+`value`. Each has one of the literal top-level paths and the collection below; it is not the
+unrestricted path shape of the five geometric rules. Source and partner use the same spelling.
 
 | value | sourcePath and partnerPath | own case input field | collection |
 |---|---|---|---|
-| `input_before_fen` | `["before_fen"]` | `beforeFen` | `scalar` |
-| `input_move_uci` | `["move_uci"]` | `moveUci` | `scalar` |
-| `input_after_fen` | `["after_fen"]` | `afterFen` | `scalar` |
+| `input_before_fen` | `["before_fen"]` or `["beforeFen"]` | `beforeFen` | `scalar` |
+| `input_move_uci` | `["move_uci"]`, `["moveUci"]` or `["triggeringMove"]` | `moveUci` | `scalar` |
+| `input_after_fen` | `["after_fen"]` or `["afterFen"]` | `afterFen` | `scalar` |
 
-Unknown values, extra fields, renamed or nested paths, wildcards, another input field's path,
-non-scalar collections and duplicate input-relative rules fail
+Unknown values, extra fields, unlisted aliases, differing source/partner spellings, nested paths,
+wildcards, another input field's path, non-scalar collections and duplicate operand paths fail
 `SEMANTIC_VALIDATION_ORIENTATION_SCHEMA`. The existing geometric rule grammar is unchanged.
+Distinct legitimate spellings may coexist in a payload; each retained leaf needs its own rule
+and independent same-side input equality. Repeating the value kind for distinct permitted paths
+is therefore valid; repeating a path is not. There is no spelling inference or generic alias map.
 No generic `ignore`, input selector, callback, caller-supplied transform or field-exclusion rule
 is introduced. A case need only declare the input-relative rules for leaves its operation really
 emits; every other emitted leaf must still resolve exactly once through the total walk.
@@ -753,7 +756,10 @@ Execution order and comparison are fixed:
    receipt schema, production source or authored-pack migration is needed.
 
 **Acceptance additions to criteria 7/10/11/26.** Permanent tests must execute both castling
-directions through the real runner/comparator after acceptance, not only the disposable model.
+directions and direct/discovered Check through the real runner/comparator after acceptance,
+not only the disposable model. Every permitted root spelling needs a positive, a same-side
+value substitution negative, crossed-spelling and duplicate-path negatives, and a legitimate
+coexisting-spelling positive. Retain promoted-piece metadata in the total walk.
 They must preserve the existing en-passant/promotion legal-partner controls and independently
 corrupt each retained input field on **each** side; corrupt only a clock; corrupt the input and
 operand together; omit or add an operand; omit context; cross the partner; change sign or a
@@ -764,12 +770,33 @@ authority negatives must continue to pass. Independent authority-bearing case/pr
 are a **separate** family slice; neither a passing model nor this grammar repair can satisfy one.
 
 **Current author checkpoint, not acceptance.** The ordinary opt-in
-`make semantic-validation-matrix` passes sixteen research controls. A new predecessor-red
+original `make semantic-validation-matrix` checkpoint passed sixteen research controls. A new predecessor-red
 control demonstrated that the first disposable adapter accepted a corrupted source after FEN
 when its operand copied that same corruption. The adapter now checks both legal fixtures before
 the already-existing partner relation, and the control refuses. Closed-rule parser and immutable
 payload controls also pass. No production parser, runner, case, profile or generated verdict was
 changed; 81 subjects still have zero fully validated verdicts.
+
+**D3781 full-case root-vocabulary repair, 2026-10-13 — still unaccepted.** All 343 current
+registered cases execute in the disposable inventory: 251 edge, 56 recorded-path and 36
+bounded-target inputs; 144 omit their target and 495 target observations are retained. Those
+cases cover 56 of 81 subjects, not the entire declaration population. The October-9 three-path
+draft recognizes 672 FEN/UCI leaves on 25 projections. Root aliases add 313 leaves on 17
+projections; the closed spelling table above repairs that class without changing emitters.
+The prototype also compares real direct/discovered Check inputs and full payloads, not just
+renamed castling payloads. Its initial omitted promoted flag fails total coverage and is retained
+after repair. Current whole matrix: 106 research checks/four files.
+
+This is **not full orientation closure**. Thirty-four nested leaves equal a root input value,
+but equality alone does not establish their frame ownership. Twenty-five one-edge leaves name
+other frames or moves (including replies and exchange lines), and 4,399 leaves come from
+recorded-path/bounded-target inputs. Their exact declared input relationships need the relevant
+accepted scope contracts; none may be dropped, relabelled as a root field or compared by an
+invented callback. The 25 subjects with no registered case remain unmeasured here. No canonical
+case/profile, production parser/comparator, learner eligibility or qualification is changed.
+Evidence: `design/research/semantic-validation-closure.md` D3781 section and the existing
+`tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts`; the small generated field
+inventory stays ignored and is not a progress dependency.
 
 ### 4.2 Closed operation results
 
@@ -1721,6 +1748,13 @@ This remains the durable return record. R1–R4 above are the author's response 
 review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
+
+- 2026-10-13: D3781 inventories every registered case's actual target payload: 343 invocations,
+  56/81 subjects and 5,443 retained input leaves. The still-unaccepted §4.1a root spelling
+  vocabulary expands from three to seven; 106 whole-matrix research checks pass, including
+  actual direct/discovered Check and complete promoted-piece metadata. Nested/continuation,
+  recorded/bounded inputs and 25 unobserved subjects remain separate obligations. No canonical
+  case/profile, production comparator, qualification or learner permission changes.
 
 - 2026-10-12: D3730 migrates thirty-six independent finite bounded-target case arms under
   accepted Slices B/C: both colours' exact named bishop/knight capture, immediate original-attacker

@@ -12,7 +12,8 @@ Historical integration receipt: `planning/evidence-foundation-ux/integration-202
 The subsequent D3563/D3616 castling cases, D3628 recorded/local migration, D3639 literal-rule
 cases, D3663 capture-dependent negatives and subsequent family slices through D3730 extend the
 original population; none completes a profile. D3564's §4.1a amendment is authored on 2026-10-09
-and awaits independent review. Its sixteen passing disposable research checks are not additional
+and awaits independent review. D3781's October-13 full-case inventory expands its closed root
+spellings to seven; the whole disposable matrix passes 106 checks. These are not additional
 registered cases or semantic authority.
 
 ## Order
@@ -32,9 +33,12 @@ registered cases or semantic authority.
    able-to-fail fixtures in RFC §10 against that real prior-commit root.
 10. ✅ Owner-directed Slice A integrated; every incomplete event remains research-only.
 11. ✅ Value-authority sole-factory boundary ships; its independent discharges still apply.
-12. Independently review D3564's draft §4.1a exact-input comparison. After acceptance,
+12. Independently review D3564's draft §4.1a exact-input comparison, including D3781's seven
+    literal root spellings, same-side equality and real Check/castling controls. After acceptance,
     implement the closed parser/comparator/runner repair and permanent production tests;
     do not omit retained input fields or manufacture orientation authority.
+    The full 343-case inventory separately exposes nested/continuation and recorded/bounded
+    input relationships; their accepted scope contracts remain required, not solved by aliases.
 13. Execute independently grounded authority-bearing family slices B–D, then release exact
     consumers in Slice E. The grammar repair alone does not discharge these slices.
 14. Resolve D3687/D3690's whole-event omission conflict before attempting those negative arms.

@@ -31426,6 +31426,15 @@
       "uxItems": [],
       "evidence": "tests/browser/profile-source-refusal.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3781",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:136e016081a44b667b861884eb229e109209b24dd70336d0f476c5bc73efbcfa",
+      "uxItems": [],
+      "evidence": "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

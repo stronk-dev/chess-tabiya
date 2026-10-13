@@ -4,6 +4,13 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Orientation draft root-vocabulary repair, 2026-10-13:** `semantic-validation-authority.md`
+§4.1a now covers the seven exact root spellings measured under D3781, with coexisting aliases
+and total leaf coverage. All 343 registered cases execute; the disposable matrix has 106 checks.
+Nested/other-frame/recorded-path/bounded-source contexts and 25 subjects without cases remain
+separate obligations. The amendment is **unaccepted**; no parser, case/profile or learner
+eligibility changes are authorised by the parent implementing state. Independent review next.
+
 **Review local-source draft amendment, 2026-10-13:** `review-evidence-compiler.md` §4.4
 and `review-map.md` §2a own D3758's 32-ref incoming-edge acquisition and separate useful-selection
 boundary. Both amendments remain **unaccepted**; parent lifecycle states are not permission

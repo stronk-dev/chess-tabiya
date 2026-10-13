@@ -1,5 +1,12 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3781]] closes the full registered-case retained-input orientation inventory:
+343 actual operations, 56/81 subjects and 5,443 retained input leaves. The draft now covers
+seven literal root spellings; 106 disposable checks/four files pass, including real Check and
+castling. D3564 remains unaccepted. Nested/continuation and recorded/bounded scopes plus the
+25 unobserved subjects remain separate required work; no callback, dropped operand, production
+grammar or learner qualification is authorized by this research result.
+
 2026-10-13 — [[D3773]]/[[D3780]] close the existing Profile date/row-admission boundary:
 45 decoder and three mounted date controls fail on the predecessor; all 286 focused cases pass.
 Seven native journeys include actual source refusal → rebuild → exact admitted date, then

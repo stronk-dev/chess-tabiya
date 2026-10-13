@@ -938,9 +938,12 @@
         "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-13",
-          "summary": "D3768 completes 22 disposable terminal-consequence controls. Both-color zero-reply double attacks remain positive fork predicates through collector, sole factory and admitted caption. Actual candidate-to-Hint selection names stalemate as a fork surviving every reply; checkmate selects mate. Sibling mate proof and promotion persistence retain explicit terminal policies. The source-first repair and historical compatibility decision are held for independent contract acceptance. Controlled provider fixtures are not real Stockfish advice, HTTP/UI proof or game incidence. Earlier D3754/D3755 and D3762-D3766 implementation checkpoints stand. No production, qualification, content, milestone, remote-CI or release promotion.",
+          "summary": "D3781 executes all 343 registered cases for retained-input inventory: 56/81 subjects, 495 targets and 5,443 FEN/UCI leaves. The still-unaccepted orientation amendment now covers seven literal root spellings; 106 disposable matrix checks pass, including actual Check/castling with complete metadata and corruption refusals. Nested/continuation, recorded/bounded scopes and 25 unobserved subjects remain required. Production grammar, cases, profiles and qualification are unchanged. D3768's terminal-policy repair and historical compatibility remain held for independent acceptance. Earlier implementation checkpoints stand. No content, milestone, remote-CI or release promotion.",
           "impact": "advanced",
           "evidence": [
+            "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
+            "design/research/semantic-validation-closure.md",
+            "planning/semantic-validation-authority/plan.md",
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
             "design/research/wave-a-contract-closure.md",
             "planning/tactical-collectors/plan.md",
@@ -972,6 +975,11 @@
             "Makefile"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3781",
+              "digest": "sha256:136e016081a44b667b861884eb229e109209b24dd70336d0f476c5bc73efbcfa"
+            },
             {
               "kind": "work_state",
               "id": "D3768",

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3780]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3781]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -60,6 +60,14 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+2026-10-13 [[D3781]]: full registered-case retained-input inventory executes 343 cases over
+56/81 subjects and retains 5,443 FEN/UCI leaves. The orientation draft expands to seven
+literal root spellings; 106 disposable checks/four files pass, including actual Check/castling,
+corruption and complete metadata. Nested/continuation and recorded/bounded scopes and the
+25 unobserved subjects remain required. No production grammar, case, profile, consumer or
+qualification changes. The report stays ignored and is not a progress dependency. D3564
+independent acceptance still gates implementation; all whole-product gates remain unchanged.
 
 2026-10-13 [[D3773]]/[[D3780]]: Profile now says a nullable date is unavailable in this view,
 not absent from the saved recording. The shared history decoder validates all existing display
