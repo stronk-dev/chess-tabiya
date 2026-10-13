@@ -1822,7 +1822,7 @@ evidence-seal-audit:
 # rfc/provider-exchange-and-execution.md: the shared provider exchange's focused contract (digest
 # registry, parsers and parser-implementation digest, seals and the durable boundary, the protocol
 # resource/census, the scheduler, descriptors, operator traversals and the supervisor exchange).
-# Regenerate the parser digest with UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1 after a parser change.
+# Regenerate the parser receipt with make provider-parser-update after a local import change.
 .PHONY: provider-exchange-check provider-traversal run-subject-check maia-occurrence-check
 .PHONY: tablebase-cancellation-check
 .PHONY: evidence-execution-check
@@ -3909,6 +3909,21 @@ play-export-browser-check:
 .PHONY: review-arrival-browser-check
 review-arrival-browser-check:
 	./node_modules/.bin/playwright test --grep "arrival readiness measurements|Guided Nudge branches|cited profile move|completed bot game rematches"
+
+# Disposable D3600 research tooling; not an ordinary CI or release-readiness gate.
+.PHONY: arrival-cpu-profile
+arrival-cpu-profile:
+	./node_modules/.bin/playwright test --config tools/d3600-arrival-profile/playwright.config.ts
+
+.PHONY: legal-move-context-check
+legal-move-context-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/legal-moves.test.ts apps/web/src/lib/opponent-selection-response.test.ts
+
+# Refresh the existing provider-parser receipt after changing its local import closure.
+.PHONY: provider-parser-update
+provider-parser-update: export UPDATE_PROVIDER_PARSER_IMPLEMENTATION := 1
+provider-parser-update:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-parsers.test.ts
 
 .PHONY: pack-loading-check
 pack-loading-check:

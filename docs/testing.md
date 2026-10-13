@@ -386,6 +386,18 @@ plus desktop/phone Nudge, cited Review and same-bot replay. Browser preservation
 permit additive background evidence, but reject changed play fields, lost evidence and
 non-evidence event writes. These focused checks supplement the complete gates above.
 
+`make legal-move-context-check` runs complete legal-move enumeration and opponent-response
+admission controls, including independent all-square parity and the same-position work-count
+regression (D3754). These tests also run in the ordinary software tier.
+After changing the parser's shared legal authority, `make provider-parser-update` refreshes its
+existing implementation receipt. Ordinary verification still checks the exact import closure;
+the update target does not bypass that check during verification.
+
+`make arrival-cpu-profile` is disposable D3600 research tooling, not a CI or release gate.
+It samples only the native-click-to-ready interval at native and throttled CPU rates and prints
+bounded summaries. Throttling does not simulate the GitHub host; sampled native browser work
+is not attributed to JavaScript. No raw recording is committed or required by progress checks.
+
 ARR-a9 measures warm arrival inside the browser, from the native catalogue click through an
 enabled 8×8/64-cell square board and two further animation frames. It gates the unrounded
 five-sample p95 against the unchanged 250 ms limit. The former automation envelope is retained

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ad0a983aa07316884a3c85f25e275e418960ef87abfb8819f1a6466f898fbd1c",
+    "roadmap": "sha256:896600366575cd55e778229db34226fc070039374e429f47bf416a8935a26154",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:9e707cefe5ad3059f47cc3793b9b94449e07044671d09def2ea18b963e6efc24",
+    "workState": "sha256:86089280d8bef1ea49368e1c4b5c0f8dcabdb467999b0c3df77ec70e556094e3",
     "rfcRegister": "sha256:c7fd996d0eff48225b3fbcf51ef35021123e24d105a2d14be10eeb10df60d990",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 633,
       "doing": 16,
       "blocked": 1075,
-      "done": 1617,
+      "done": 1619,
       "refused": 161
     },
     "workItems": {
@@ -279,11 +279,15 @@
       ],
       "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-12",
-        "summary": "D3750 repairs frozen-accessor and inherited-shape input-digest reuse under the accepted evidence-value-authority contract. Two real factory predecessor controls and two failures on the incomplete first repair establish the source class; six permanent controls now pass, including ordinary receipt parity and one-time own-descriptor inspection. All 59 contract/factory, 120 collector and 65 actual projector/store/worker checks plus clean workspace types pass. Eight alternating-order fresh-process comparisons retain 2,199 legal edges, 196,589 events, complete events/input receipts/projected rows and forty checkpoints per side. Summed cold time is 5.82% higher locally (three faster/five slower), not an optimization or portable regression rate; D3300 remains open. The canonical register changes only nine operation and 53 population implementation digests: all 343 case outcomes, 81 subjects, 53 population and eight external receipts remain, zero fully qualified. Complete ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,226 software/384 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 340 browser passes (275 smoke, five content, 59 matrix, one packaged-production), one existing optional Maia skip, zero retries, all 150 input/112 successful unretried composition cells. Existing bundle warnings remain. Prior D3730 case coverage, D3721 sealing and D3719/D3720 complete-batch work remain delivered. No new cache/source/projection/convention/receipt format, content, learner eligibility, whole capability/milestone, remote CI or release-image promotion.",
+        "at": "2026-10-13",
+        "summary": "D3754/D3755 close locally: legal enumeration reuses one immutable position context while retaining every candidate legality check, and historical Review parity checks today's parser receipt before comparing over the original frozen input stamp. The predecessor fails the work-count control; fourteen independent all-square enumerations and all 37 affected controls pass. Four historical Review/Story result digests and declarations remain unchanged; all 59 value-authority checks pass. Current factory profiles refresh 20 of 278 hashes without availability/cardinality changes; semantic refresh changes only 62 implementation-digest leaves, retaining 343 passing cases, 81 subjects and zero fully qualified. Ordinary local verification passes 5,252 software/384 files, seven unchanged-budget performance/four files, 255 content/26 files, types/governance/packaging/build. Browser tiers report 345 passes, one existing optional Maia skip, zero retries and all 150 input/112 composition cells; saved final reports survive the lost aggregate terminal handle and packaged production is repeated explicitly. Disposable D3600 bounded CPU sampling retains all 41 requests; fourfold throttled arrivals are 355.6/222.7/212.9 ms and shape-document windows 6–7.3 ms, not proof of the remote cause. Unchanged local arrival p95 is 121.2 ms versus 122.7 ms before, with similar medians: no demonstrated timing improvement or D3600 closure. Prior delivered checkpoints stand. No source, schema, convention, cache across positions, qualification, content, whole-capability, remote-CI or release promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/evidence-value-authority.md",
+          "packages/runtime/src/legal-moves.ts",
+          "packages/runtime/src/legal-moves.test.ts",
+          "apps/web/src/lib/opponent-selection-response.test.ts",
+          "tools/d3600-arrival-profile/profile.spec.ts",
           "packages/runtime/src/semantic-validation-bounded.test.ts",
           "packages/runtime/src/semantic-validation-bounded-sources.ts",
           "packages/runtime/src/bounded-target-oracle.test.ts",
@@ -307,6 +311,16 @@
           "Makefile"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3754",
+            "digest": "sha256:87fc5d5cfaa3cf7313712ddd7bd5518726238cb4ffa3541e25c62fe5d3a2d172"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3755",
+            "digest": "sha256:2c982b7aae432616865f2d71ffaf0417fa8aec2910b5268b3fb0daba46163b8c"
+          },
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",

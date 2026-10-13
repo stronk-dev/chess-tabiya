@@ -24,7 +24,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "481396260d3a630643efdc7158f520cfd302d09066bbb47c28af81a7ce2f1697"
+      "d638a6cf4ac31d1116bba610409f1dbebf3370ee580bbe2acae69a8bf1925b39"
     ]
   },
   "derived.bounded_target.immediate@1": {
@@ -45,7 +45,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "1da7408717870dd5eca5a745a379e70b1e06860303b8dfe2d5d0e42256810b30"
+      "551b327d1a6c2c32232569623dbfa2caa383a539807a45d6188aed54a7e628b2"
     ]
   },
   "derived.citation.attribution@1": {
@@ -188,28 +188,28 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "b34879aa0e7682cfeaad0cb9a5f6ab6e6d186fe08507937367cb3dbd0c3ad74f"
+      "6616aa1c11d75e4b4f495bdbdeeda59e0047110672560da6096249a8c3e782a7"
     ]
   },
   "derived.explorer.population_summary@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "8e7fa92bce8fc31a1205ccba63c464ffc1fa6806f5c06aa1b0ffd0086a3aae0a"
+      "cd07d16e9a1cf15f0a1b625577f01d575bcd42d9c814a1c6bfddd2dc6c43cf9d"
     ]
   },
   "derived.explorer.position_frequency@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "b2364115b095d1828a131d021163a83f5ee22e9064c80d9ef83e3882d37f2894"
+      "ce9536a19b7d1d6835bd2e2b75ea96091456db513cee2a84d31e112c543e0aa6"
     ]
   },
   "derived.explorer.repertoire_frontier@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "afff06202ecda0694372666406195f00f7faf4eac91faa9eafa0dcfce034e759"
+      "8b94707b09ce2be1cfe86c92b0ebe0239023ebbecc7338558d34a591b9a5cdd7"
     ]
   },
   "derived.grade.move_quality@1": {
@@ -524,14 +524,14 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "225ef769e69dc240b98dc8dc7b212962c303f642caed30ac54ec0da52b467f02"
+      "b1b7d23241bd82239480b2f8e479c61d53939c890e8767161155f47d4aced107"
     ]
   },
   "derived.maia.run_move_occurrence@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "58201cb67db48810a110e06cd5fa79c4b1d40c2f593adbeb1a40df817c07435d"
+      "79e24215845ac0687a82039f9ad1096e5871f2772095295dcd455ad60f32699a"
     ]
   },
   "derived.material.event.role_asymmetry@1": {
@@ -630,35 +630,35 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "41a63a19f95922601b8a15dca23e23fb14572f6109d3bffd62115c79154827f6"
+      "d6254336d6381dba39a3a9d85dc006f7652fcaeaa8c06214cf484c40a64fc9c2"
     ]
   },
   "derived.review.eval_point@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "8dab8ecedb7461e0cf4716a9942443f4848bfda86a18ae4db611cd6720e7d284"
+      "e1667df8c7df1c75ef7703082182efe7bcdb9fb8b2f1fc27457fd5d4987fd4c8"
     ]
   },
   "derived.review.mate_transition@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "3acf41fd4121abb50ff0bf58c66319438371fa93294f37ef8917d7c1606b0368"
+      "bcf39aa66e7e106732496e8a1a24ca155863b4b557399d779613a43f1f2c010d"
     ]
   },
   "derived.review.wdl_point@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "5311bce1c7306bc86c8941b89499d7f5a484dfb9296588a5ef52233e314e5e71"
+      "fed38d8469d811927877086d3b0e6b55cc08c3250652e52893219e3f5ddc662f"
     ]
   },
   "derived.review.wdl_white@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "1bb372134d53738f20e9bba73a51a0ca6e6bba228505af3041c735219b0c0c39"
+      "0694a0237d69feaf868068756bbdad40739e8029b2c50084141dcd9e61ff5be8"
     ]
   },
   "derived.semantic_avoidance.backward_pawn@1": {
@@ -938,7 +938,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "e84ddebe5fd81954ddb057082fe14abe17dd37e369bc5772f5c202458d6bf874"
+      "9381ce1584ccf723db6cb7375635fed25b16c9e4301a6aa8759eaf6cd2d3e810"
     ]
   },
   "human.explorer.position_stats@1": {
@@ -966,7 +966,7 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "e451320e7edd994b5d0ef4ea9251cad5c7387b2d8422b0ffa3547e61b52ce655"
+      "ef8d752135d7c32e35b79f6b352714a96f721e9787d2542d7305cabdce901498"
     ]
   },
   "human.maia.policy@1": {
@@ -994,21 +994,21 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "e4452545984946fa96b12c79d5d60a63fc52f4b7ea88319e21eda0a9c2fbe45d"
+      "aa870675eadce44dbfa5abd8288ddc43c4a8de574be9a2e0f9917866f3d8f1d7"
     ]
   },
   "live.stockfish.position_eval@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "c43692a8938229c2994532f2b0e9512a38e12d42aa5393ff22c7bd64259fd27f"
+      "b7e0838a1b8d0eccec0d518288d10e632997ec6219c4fa9a8bc6af026de3d308"
     ]
   },
   "live.stockfish.principal_variation@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "3ae7e6865841c4cbfeeabdd9b60d0aa967a1720c094bd852250dd6ec0087c1ae"
+      "5d6cd7de7327b84f3722365b61afeed9226d2daec84f3eb175c4dd15b36a8f95"
     ]
   },
   "live.stockfish.pv@1": {
@@ -1050,14 +1050,14 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "b44f766f3389f7cc1592090c24eec2f749331457bb419e9b05a79049fe764ddc"
+      "aa9baca7a2986842a41a9472e4b7f4b34d7c59c7b3967123ee13b63b278bc780"
     ]
   },
   "live.syzygy.position_result@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "b44f766f3389f7cc1592090c24eec2f749331457bb419e9b05a79049fe764ddc"
+      "aa9baca7a2986842a41a9472e4b7f4b34d7c59c7b3967123ee13b63b278bc780"
     ]
   },
   "live.syzygy.probe_result@1": {

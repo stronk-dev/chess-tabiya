@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-12 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3753]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3755]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -28,7 +28,7 @@ is **partial**, not complete. Official content, remaining workflows and release
 proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
-## Product inventory — 2026-10-12
+## Product inventory — 2026-10-13
 
 ### At a glance
 
@@ -58,7 +58,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3753]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3755]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
@@ -75,7 +75,7 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
-Current GitHub check, 2026-10-12: published `c7ec3c3d` passes
+Current GitHub check, 2026-10-13: published `c7ec3c3d` passes
 [verify](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800) but fails
 [browser](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796).
 The actual failure is warm catalogue-to-playable readiness, p95 399.2 ms against the unchanged
@@ -84,6 +84,34 @@ including one shape catalogue and 25 shape documents. [[D3600]] retains this per
 obligation; those counts locate work to investigate, not a proved cause or permission to raise
 the budget. Current local commits are unpublished. A local pass cannot discharge exact-revision
 GitHub or release-host readiness.
+
+The D3600 local native-click CPU profile retains all 41 requests. With fourfold CPU throttling,
+the three arrivals measure 355.6/222.7/212.9 ms, while the 25 shape-document requests finish
+within 6–7.3 ms windows. Capabilities admission is the largest sampled JavaScript function;
+native browser work and first-mount focus/bounds also consume time. This does not establish the
+GitHub cause. [[D3754]] removes repeated same-position king/check/pin context construction in
+the shared legal-move authority, retaining every legality check and complete identities.
+Its predecessor fails the new work-count control; all 14 independent all-square parity cases
+pass. Afterward, the unchanged 19-case local arrival suite passes with warm p95 121.2 ms
+(before: 122.7 ms); similar medians do not establish a timing improvement. D3600 remains open.
+[[D3755]] repairs the historical Review calculation comparison: it first verifies the actual
+current parser receipt, then compares the complete result over the frozen fixture's original
+parser input stamp. Scores, endpoints, other receipts and Story output are not normalized.
+All four historical result digests and frozen declarations remain unchanged; the complete
+59-case value-authority gate passes. Current factory profiles retain their new actual source
+stamp through the existing explicit update target. No historical production value is rewritten.
+
+The current batch passes 5,252 software cases/384 files, seven unchanged-budget performance
+cases/four files, 255 content cases/26 files, types, governance, packaging and build. Browser
+tiers report 345 passes (280 smoke, five content, 59 matrix, one packaged-production), one
+existing optional Maia skip and zero retries. Saved final matrix/production reports survive
+the lost terminal handle; the packaged-production target is repeated explicitly rather than
+claiming an observed exit for the lost aggregate process. Current parser/factory profiles
+refresh their actual input stamp; 20 of 278 profile hashes change without any availability or
+cardinality changes. The semantic refresh changes only 62 implementation-digest leaves:
+343 cases, 81 subjects and zero fully qualified remain unchanged. No full capability, milestone,
+official content, remote CI or release-host readiness is promoted. D3754/D3755 are path-backed
+local closeouts, and D3600 remains open.
 
 [[D3751]]/[[D3752]] repair live raw-opponent recovery without adding a persona or durable-policy
 contract. The notice and status name the actual session mode; reload restores recorded-policy

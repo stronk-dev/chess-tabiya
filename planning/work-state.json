@@ -31177,6 +31177,24 @@
       "uxItems": [],
       "evidence": "tools/release/lib/runtime-content.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3754",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:87fc5d5cfaa3cf7313712ddd7bd5518726238cb4ffa3541e25c62fe5d3a2d172",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/legal-moves.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3755",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2c982b7aae432616865f2d71ffaf0417fa8aec2910b5268b3fb0daba46163b8c",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

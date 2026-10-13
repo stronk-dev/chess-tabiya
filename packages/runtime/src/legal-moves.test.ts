@@ -1,4 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { Chess, normalizeMove } from "chessops/chess";
+import { makeUci } from "chessops/util";
+import { positionFromFen } from "./chess.js";
 
 import {
   exactLegalMoveMap,
@@ -13,6 +16,50 @@ import {
 const INITIAL = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 describe("exact legal move authority", () => {
+  it("D3754 uses one same-position context for every destination and legality check", () => {
+    const legal = vi.spyOn(Chess.prototype, "isLegal");
+    const destinations = vi.spyOn(Chess.prototype, "allDests");
+    try {
+      expect(exactLegalMoves(INITIAL)).toHaveLength(20);
+      expect(destinations).toHaveBeenCalledTimes(1);
+      const context = destinations.mock.calls[0]![0];
+      expect(context).toBeDefined();
+      expect(legal).toHaveBeenCalledTimes(20);
+      for (const call of legal.mock.calls) expect(call[1]).toBe(context);
+    } finally { legal.mockRestore(); destinations.mockRestore(); }
+  });
+
+  it.each([
+    INITIAL,
+    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+    "4k3/4n3/8/8/8/8/8/4R1K1 b - - 0 1",
+    "4k3/8/8/8/8/8/4R3/6K1 b - - 0 1",
+    "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+    "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+    "1r4kr/8/8/8/8/8/8/1R4KR w HBhb - 0 1",
+    "1r4kr/8/8/8/8/8/8/1R4KR b HBhb - 0 1",
+    "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+    "4k3/8/8/r4pPK/8/8/8/8 w - f6 0 1",
+    "4k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+    "4k3/8/8/8/8/8/p7/4K3 b - - 0 1",
+    "7k/6Q1/6K1/8/8/8/8/8 b - - 0 1",
+    "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1",
+  ])("D3754 retains independent all-square legal identity parity: %s", (fen) => {
+    const position = positionFromFen(fen), identities = new Set<string>();
+    // Independent exhaustive oracle: no allDests and no reused context. Normalize aliases
+    // before admitting them to the application's canonical king-takes-rook identity set.
+    for (const from of position.board[position.turn]) {
+      for (let to = 0; to < 64; to++) {
+        const roles = position.board.get(from)?.role === "pawn" && (to < 8 || to >= 56) ? PROMOTION_ROLES : [undefined];
+        for (const promotion of roles) {
+          const move = normalizeMove(position, { from, to, ...(promotion === undefined ? {} : { promotion }) });
+          if (position.isLegal(move)) identities.add(makeUci(move));
+        }
+      }
+    }
+    expect(exactLegalMoves(fen).map((move) => move.uci)).toEqual([...identities].sort((a, b) => a.localeCompare(b)));
+    expect(exactLegalMoveMap(fen).pieces.flatMap((piece) => piece.moves).map((move) => move.uci).sort()).toEqual([...identities].sort());
+  });
   it("retains every side-to-move piece, including empty rows", () => {
     const map = exactLegalMoveMap(INITIAL);
     expect(map.pieces).toHaveLength(16);

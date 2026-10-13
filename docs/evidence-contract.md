@@ -108,6 +108,11 @@ remains SAN. Moves also retain role and all four promotion identities. It is not
 one-exchange local safety. Registration creates no learner binding; the requested-sight module owns
 that later delivery decision.
 
+Enumeration reuses one operation-local king/check/pin context for the unchanged position.
+Every candidate still passes its legality check; this is not a cache across positions. Permanent
+tests compare complete move identities with an independent all-square enumeration, including
+checks, pins, both-color castling, Chess960, en passant, promotions, mate and stalemate (D3754).
+
 `createRulesMobilityReadingLegalMovesV1Evidence(fen)` is the FEN-to-evidence route for this projection.
 It accepts a FEN string and never a caller payload. It calls `exactLegalMoveMap` once and seals that
 exact returned object. The candidate evidence packet (`docs/semantic-evidence.md`) reaches the legal

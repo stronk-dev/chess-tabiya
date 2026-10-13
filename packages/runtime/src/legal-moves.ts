@@ -50,7 +50,10 @@ function semanticDestination(position: Chess, move: Move): Move {
 function movesFor(position: Chess): readonly ExactLegalMove[] {
   const moves: ExactLegalMove[] = [];
   const identities = new Set<string>();
-  for (const [from, destinations] of position.allDests()) {
+  // This operation never plays a move: king/check/pin context is constant throughout
+  // enumeration. Retain every legality check without rebuilding that context per candidate.
+  const context = position.ctx();
+  for (const [from, destinations] of position.allDests(context)) {
     const piece = position.board.get(from);
     if (piece === undefined || piece.color !== position.turn) continue;
     for (const to of destinations) {
@@ -59,7 +62,7 @@ function movesFor(position: Chess): readonly ExactLegalMove[] {
         : [undefined];
       for (const promotion of promotions) {
         const internal: Move = promotion === undefined ? { from, to } : { from, to, promotion };
-        if (!position.isLegal(internal)) continue;
+        if (!position.isLegal(internal, context)) continue;
         const destination = semanticDestination(position, internal);
         const uci = makeUci(internal);
         if (identities.has(uci)) throw new TypeError(`Duplicate legal move UCI: ${uci}`);

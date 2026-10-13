@@ -27010,3 +27010,51 @@ Campaign was the one capability with no API, route or content. Now:
   qualified; twelve bot configurations remain uncalibrated; Campaign remains an exposed draft
   pilot rather than the full curriculum/reward loop. No whole-capability, milestone, remote-CI,
   content or release promotion; nothing is pushed and the full 1.0 goal remains active.
+
+## 2026-10-13 — D3754/D3755 local closeout and full 1.0 inventory
+
+- D3600's disposable browser instrument samples only the actual native click-to-ready interval,
+  with three arrivals at each of native and fourfold CPU throttle. It prints bounded summaries;
+  no raw recording is committed or required by progress/CI. All 41 requests remain. Throttled
+  arrivals measure 355.6/222.7/212.9 ms; shape-document network windows are 6–7.3 ms. Browser
+  native work, first-mount focus/bounds and capabilities admission appear in the sample, but
+  this does not prove the published GitHub failure's cause or simulate its host.
+- D3754 reuses one operation-local immutable king/check/pin context in exact legal enumeration.
+  Every candidate legality check remains. The original code fails the new work-count control;
+  fourteen independent all-square enumerations preserve complete sorted identities across
+  both colours, checks, pins, ordinary/Chess960 castling, en passant, promotions, mate and
+  stalemate. All 37 affected controls pass. The oracle is independently enumerated, not an
+  independent chess engine. The unchanged local 19-case arrival suite passes with warm p95
+  121.2 ms versus 122.7 ms before and similar medians: no demonstrated timing improvement.
+- First ordinary verification fails the existing parser implementation receipt after its
+  legal-authority dependency changes. The explicit normal `make provider-parser-update`
+  refreshes that stamp; ordinary verification never enables the update flag. The next attempt
+  catches stale current factory profiles and a historical Review test mixing today's input
+  stamp with frozen output. D3755 verifies the actual current receipt, then substitutes only
+  the original parser input stamp on the test comparison clone. No score, endpoint, other
+  receipt operand or Story output is normalized. All four frozen result digests/declarations
+  remain unchanged; all 59 value-authority checks pass. Current profiles refresh 20 of 278
+  hashes without availability/cardinality changes. Semantic refresh changes only 62
+  implementation-digest leaves; 343 passing cases, 81 subjects and zero fully qualified remain.
+- Normal serial verification observes clean types, 5,252 software/384 files, seven unchanged-
+  budget performance/four files, 255 content/26 files, governance, packaging and build. Browser
+  tiers report 345 passes: 280 smoke, five content, 59 matrix and one packaged-production,
+  one existing optional Maia skip, zero retries and all 150 input cells. The process handle
+  is lost after the final reports; saved matrix results have zero unexpected/flaky cases and
+  production status is passed. Rather than claim an observed aggregate exit, repeat the normal
+  packaged-production target: one pass, exit zero. The matrix checker separately exits zero
+  with 112/112 successful unretried composition cells. Existing build warnings remain.
+- Fresh read-only GitHub inspection still identifies published c7ec3c3d with verify green and
+  browser red (runs 38222438800/38222438796). Warm readiness 399.2 ms exceeds the unchanged
+  250 ms budget. D3600 remains open; unpublished local passes do not discharge remote readiness.
+- Ledger/state/docs and the existing roadmap close D3754/D3755 together. Current inventory:
+  3,504 ledger rows, 1,724 live assigned, zero untriaged, 1,619 done and 161 refused; 462
+  historical prose-only closures retain weaker proof. UX remains 276 completed/269 live/24
+  retired of 569. All fourteen whole capabilities remain incomplete; four milestones active,
+  five blocked. Fifty installed runtime pack documents, zero official graduates; twelve bot
+  configurations remain uncalibrated and Campaign remains a web-exposed draft pilot.
+  Source/consumer qualification, useful Support/Review, bot calibration, skills, curriculum/
+  rewards and complete release recovery remain work. No schema, convention, source admission,
+  cache across positions, content or whole-capability/milestone/release promotion. No push;
+  the full 1.0 goal remains active. The requested progress overview distinguishes these local
+  correctness slices from end-to-end product completion rather than creating another queue.

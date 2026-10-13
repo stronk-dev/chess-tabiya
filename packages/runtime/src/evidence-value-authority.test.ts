@@ -39,7 +39,8 @@ import { compileSemanticEvidenceEvent, legalAlternativeEdges, loosePieceSemantic
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
 import type { DrillRun } from "./types.js";
 import { evaluationDelivery as reviewEvaluationDelivery } from "./testing/review-evidence-fixture.js";
-import { PROVIDER_EXCHANGE_AUTHORITY } from "./provider-exchange.js";
+import { PROVIDER_EXCHANGE_AUTHORITY, parserImplementationDigest } from "./provider-exchange.js";
+import { digestProviderPayload } from "./provider-digest.js";
 import { normalizeProviderRequest } from "./provider-requests.js";
 import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, principalVariationCapture, principalVariationRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
 import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedIdentityMap } from "./provider-types.js";
@@ -1277,7 +1278,20 @@ describe("value authority: one permanent profile per final factory (§7, criteri
       // Only the projectionId field changes in a transition payload. Ordered sealed endpoints,
       // delta/change values and both Story payloads must reproduce the committed v1 digests.
       const payload = item.payload as Record<string, unknown>;
-      const normalized = predecessor.startsWith("derived.review.") ? { ...payload, projectionId: predecessor } : payload;
+      const normalized = predecessor.startsWith("derived.review.") ? JSON.parse(canonicalizeJson({ ...payload, projectionId: predecessor })) : payload;
+      if (predecessor.startsWith("derived.review.")) {
+        // D3755: the frozen result includes the source stamp of its original input. Check
+        // today's stamp, then substitute exactly that historical input stamp for comparison.
+        // Every score, endpoint, remaining receipt operand and output field stays byte-pinned.
+        for (const endpoint of [normalized.before, normalized.after]) {
+          const receipt = endpoint.payload.evaluation.payload.payloadReceipt;
+          expect(receipt.operation).toBe("stockfish.position_evaluation@1");
+          expect(receipt.parser).toBe("parse.stockfish_position_evaluation@1");
+          expect(receipt.parserImplementationDigest).toBe(parserImplementationDigest(receipt.parser));
+          receipt.parserImplementationDigest = digestProviderPayload({ parser: receipt.parser,
+            closureDigest: "sha256:8f3ffcd90fdd32232538996de90370f18e5dc82ce071b764936479a62cf41e34" });
+        }
+      }
       expect({ availability: "available", cardinality: 1, payloadDigests: [evidenceDigest(normalized)] }, route).toEqual(previous[predecessor]);
     }
   });
