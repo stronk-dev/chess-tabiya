@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3771]] measures assertion/snapshot work inside the native arrival interval.
+Thirty-two counterbalanced actual arrivals retain 41 requests/25 shape documents/one run pack;
+the paired assertion-first excess averages 19.3 ms traced and 15.6 ms untraced. The same original
+readiness and verification function bodies are shared; normal measurement now awaits its native
+observation before verifying, retaining tracing, all five samples and 250 ms. A delayed-board
+calibration fails on the predecessor order with -1 and passes on the correction. All 20 focused
+arrival/return/rematch cases pass, with local p95 106.1 ms; D3600's remote 1092.9 ms cause stays open.
+Final ordinary governance/build/all-four-browser-tier command exits zero: 350 browser passes,
+one optional Maia skip, zero retries, all 150 input/112 composition cells. Research and the
+instrument correction close locally; software/performance/content's last full run remains
+D3769/D3770, not a new run in this test-only change. No product or remote-CI promotion.
+
 2026-10-13 — [[D3600]] now has a terminal published 62c81eb1 result, not only the older c7ec3c3d
 failure. Verify 38381154735 passes all jobs; browser 38381154879 fails smoke with warm p95
 1092.9 ms against the unchanged 250 ms budget. The chronological values round to

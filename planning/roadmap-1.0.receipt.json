@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:84405b3fd7756aa010c2bacb2e92e46d5ae5ae37d785e11f5e1a18a486e1a0e6",
+    "roadmap": "sha256:a8e79ce6b7aa23d52e111e176cbcc261ddb973a22aed43a638756070f19a5bc3",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:a762a543701829a14b7602f0e4a1692c26feaa6003ee6f40797165b0a421fba8",
+    "workState": "sha256:fa79ce972f251a62445c0e8343b3fcb26c598bdcaa2b33b1dff48c658ba67e49",
     "rfcRegister": "sha256:abd0460a4fa175c7c13e898aaf9c4eb556e11a36debf18a236d5a7c03715beff",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 16,
       "blocked": 1084,
-      "done": 1628,
+      "done": 1629,
       "refused": 161
     },
     "workItems": {
@@ -73,12 +73,17 @@
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+      "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-13",
-        "summary": "D3769/D3770 close locally: passing matrix diagnostics keep one current complete 112-cell generation, publish receipts atomically and retire only recognizable obsolete output; 60 permanent controls pass. Actual cleanup removes 139 sets (2.2 GiB to 173 MiB) while retaining current bytes and failure traces. Native refusal/restart ownership runs after the main software pool with all original tests/deadlines; actual discovery retains 388 files exactly once and rejects five mutations. The first full run records its 15-second native timeout; the second catches my early partial Make rule, corrected in the canonical rule with a regression check. Final ordinary full verification/build/all-four-browser-tier command exits zero: 5,411 software/388 files, seven performance/four files, 255 content/26 files, types/governance/packaging and actual 112-cell publication. Local warm p95 is 126.4 ms under 250 ms, not a timing fix. Published 62c81eb1 verify succeeds but browser fails at 1092.9 ms warm p95; D3600 stays open. No application, semantic, qualification, content, whole-capability, milestone, remote-CI or release promotion.",
+        "summary": "D3771 research and instrument correction close locally: 32 rotated native arrivals measure paired assertion-first excess of 19.3 ms traced and 15.6 ms untraced. The original three-frame observer now closes before identical geometry/input assertions; tracing, five samples, all requests and the unrounded 250 ms gate remain. The permanent delayed-board calibration fails at readyMs -1 on the predecessor and passes after repair. All 20 focused cases pass. Final normal governance/build/all-four-browser-tier command exits zero: 350 browser cases, one optional Maia skip, zero retries and 150 input/112 composition cells. The previous full software/performance/content run is D3769/D3770 (5,411/388, seven/four, 255/26), not a fresh run of this test-only batch. Fresh GitHub reads retain published 62c81eb1 verify success and browser failure at 1092.9 ms; the modest local effect does not establish its cause. D3600 remains open. No application, source, qualification, content, whole-capability, milestone, remote-CI or release promotion.",
         "impact": "advanced",
         "evidence": [
+          "tests/browser/arrival-test-support.ts",
+          "tools/d3600-arrival-profile/interference.spec.ts",
+          "tools/d3600-arrival-profile/interference.config.ts",
+          "tools/d3600-arrival-profile/interference-contract.test.mjs",
+          "design/research/ux-arrival-and-start.md",
           "tools/play-composition-matrix.mjs",
           "tools/software-scheduling.test.mjs",
           "vitest.software.config.ts",
@@ -166,6 +171,11 @@
           "apps/server/src/capabilities.test.ts"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3771",
+            "digest": "sha256:a2bc0c77d313de6f80857a1d72873be4aad473ba5ed2c0a0ed0393819493f92a"
+          },
           {
             "kind": "work_state",
             "id": "D3769",

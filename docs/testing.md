@@ -4,6 +4,14 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+Warm arrival closes its native click/three-frame observation before running the retained
+visibility/grid/geometry verification. `make arrival-order-browser-check` catches the previous
+order, which began verification while the observation was still open. Disabled, incomplete,
+hidden/malformed and genuinely slow controls remain in `make review-arrival-browser-check`;
+all five samples, tracing and the unrounded 250 ms gate stay. The opt-in disposable
+`make arrival-interference-research` is a bounded local factor experiment, not proof of GitHub's
+timing cause or release readiness.
+
 `make move-grade-consumer-check` covers the grade convention, both ladders/mate arms, module
 admission, voice guard and actual authenticated Review/Nudge reads. Populated synthetic scores
 remain labelled mock-engine inputs; a real stored rating changes at the authenticated rating

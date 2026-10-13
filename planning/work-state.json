@@ -31336,6 +31336,15 @@
       "uxItems": [],
       "evidence": "tools/software-scheduling.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3771",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a2bc0c77d313de6f80857a1d72873be4aad473ba5ed2c0a0ed0393819493f92a",
+      "uxItems": [],
+      "evidence": "tests/browser/arrival-latency.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

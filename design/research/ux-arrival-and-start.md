@@ -1411,3 +1411,50 @@ or a remote cause. D3600 and the separate supplementary-read D3756 contract rema
 An earlier profile-output formatter failed after consuming its result; its unseen throttled
 samples are not used here. No eligibility, output scope, source admission, selection, cache
 boundary, semantic qualification, pack or timing-budget change.
+
+### D3771: assertion work inside native arrival measurement — 2026-10-13
+
+The ordinary warm sample called `waitForPlayableBoard` between its native click and recording
+the already-running three-frame observation. Installed Playwright 1.62.1 starts tracing on all
+contexts, including those made in `beforeAll`, when `retain-on-failure` is active. `[V]`
+`tests/browser/arrival-latency.spec.ts` predecessor at `375a0704`;
+`node_modules/.pnpm/playwright@1.62.1/node_modules/playwright/lib/index.js` `ArtifactsRecorder`.
+
+`make arrival-interference-research` compares assertion-first/observation-first with actual
+runner tracing on/off. Four rotated blocks each have four fresh authenticated contexts and two
+arrivals per context: 32 arrivals, all retained, plus 16 completeness checks (48 passed).
+Every arrival retains 41 requests, 25 shape documents and one run-pack read. The two readiness
+and geometry helper bodies compare exactly to the committed predecessor via the TypeScript
+AST. This is an opt-in disposable experiment, not an ordinary CI or source-qualification gate. `[V]`
+`tools/d3600-arrival-profile/interference.spec.ts`, `interference.config.ts` and `interference-contract.test.mjs`.
+
+| Trace | Checks within observation | n | Median ms | Mean ms | Maximum ms |
+|---|---|---:|---:|---:|---:|
+| retained on failure | yes | 8 | 108.9 | 112.1 | 187.1 |
+| retained on failure | no | 8 | 94.4 | 92.8 | 112.7 |
+| off | yes | 8 | 91.4 | 94.3 | 114.8 |
+| off | no | 8 | 80.9 | 78.7 | 90.9 |
+
+All values, in block order (first/second sample), rounded only for this prose:
+
+- traced/first: 187.1/89.6; 121.7/96.5; 122.7/77.2; 121.3/80.4;
+- traced/after: 106.9/78.0; 112.7/79.9; 105.2/83.6; 106.2/69.7;
+- untraced/first: 100.2/81.2; 105.5/82.6; 106.6/81.6; 114.8/81.8;
+- untraced/after: 90.1/64.7; 90.9/72.6; 89.2/65.4; 90.7/65.8.
+
+Medians average the middle two values. Paired assertion-first minus observation-first differences
+average 19.3 ms with tracing (seven/eight positive) and 15.6 ms without it (eight/eight positive).
+This local effect is **not an explanation of the published 1092.9 ms failure** or a product
+latency improvement. The initial experiment incorrectly set worker-scoped trace/screenshot
+options inside describe groups; collection refused before measurements. The repaired project
+configuration, not those failed attempts, supplies this population. `[V]` same instrument/output.
+
+The ordinary warm measurement now awaits the unchanged native observation before the same
+geometry/input assertions. Tracing stays on, all five samples and the unrounded 250 ms gate stay.
+A permanent delayed-board calibration observes the moment verification starts: replaying the
+predecessor ordering fails with `readyMs = -1`, and the restored order passes. The independent
+300 ms genuinely slow-arrival control still passes (it remains over budget), as do every
+disabled/incomplete/hidden/malformed-board control. All 20 focused actual arrival/return/rematch
+cases pass; native warm p95 is 106.1 ms locally, with all 41 requests. D3600 remains open. `[V]`
+`tests/browser/arrival-test-support.ts`, `tests/browser/arrival-latency.spec.ts`;
+`make arrival-order-browser-check`, `make review-arrival-browser-check`.

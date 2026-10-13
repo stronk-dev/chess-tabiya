@@ -27483,3 +27483,38 @@ Campaign was the one capability with no API, route or content. Now:
   blocked milestones, fourteen incomplete capabilities, 276 complete/269 live/24 retired UX
   items, 50 installed/zero official graduated packs remain unchanged. No RFC is archived,
   no raw captures are committed, no intent or application code changes, and the full goal remains active.
+
+## 2026-10-13 — D3771 arrival-instrument correction and full 1.0 inventory
+
+- The ordinary warm sample ran locator/geometry assertions while the native three-frame clock
+  was still open. Installed Playwright 1.62.1 traces those operations, including manually created
+  beforeAll contexts. This motivates measurement, not an assumed explanation of D3600.
+- Disposable research shares both original helper bodies unchanged and rotates four traced/
+  untraced, assertion-first/observation-first arms through four blocks with two arrivals each.
+  All 32 samples retain 41 requests, 25 shape documents and one run pack. All 48 research tests
+  pass; paired assertion-first excess averages 19.3 ms traced and 15.6 ms untraced. The initial
+  invalid worker-scoped describe configuration refuses collection before producing data.
+  Full compact values and limits live in the existing arrival dossier; no raw capture is committed.
+- Normal warm measurement now awaits the original observation before identical verification.
+  Tracing, all five samples, all requests and the unrounded 250 ms gate remain unchanged.
+  A new permanent delayed-board calibration fails with readyMs -1 on the predecessor order,
+  then passes after restoration. The independent genuinely slow, disabled/incomplete/hidden/
+  malformed-board negatives remain. All 20 focused arrival/return/rematch cases pass;
+  local native warm p95 is 106.1 ms, not a product optimization or remote-cause proof.
+- Final ordinary `make roadmap-receipt verify-governance build test-browser-ci-awake` exits zero:
+  governance/build, 285 smoke, five content, 59 matrix and one packaged-production browser cases;
+  350 total, one optional Maia skip, zero retries and 150 input/112 composition cells. The prior
+  complete software/performance/content run is D3769/D3770 (5,411/388, seven/four, 255/26);
+  those unchanged suites are not represented as freshly rerun by this test-only batch.
+- A fresh GitHub read still finds published 62c81eb1 verify 38381154735 successful and browser
+  38381154879 failed. D3600 stays open at its 1092.9 ms warm reading; the modest local effect
+  does not explain it. No push, runtime/source/default/permission change, RFC archival,
+  semantic qualification, official-content or whole-capability promotion occurs.
+- Close D3771 with its permanent browser path; keep the existing ledger/queue/log/roadmap as
+  authorities rather than creating another progress document. Inventory: 3,520 ledger items,
+  1,730 assigned live, zero untriaged and 462 historical prose-only closures; 276 complete/
+  269 live/24 retired UX items; four active/five blocked milestones and fourteen incomplete
+  whole capabilities; 50 installed pack documents and zero official graduates. Support,
+  Review, Library, bots, private Profile and draft Campaign have production web doors, but
+  source adoption/qualification, useful selection, calibrated behavior, official curriculum
+  and complete release journeys remain. The full 1.0 goal stays active.

@@ -5,16 +5,10 @@ import { randomUUID } from "node:crypto";
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import { assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
+import { observeWarmArrival, waitForMeasuredPlayableBoard, waitForPlayableBoard, type ArrivalWindow } from "./arrival-test-support.js";
 
 const SAMPLES = 5;
 const WARM_BUDGET_MS = 250; // design/research/ux-arrival-and-start.md §14; unchanged.
-
-interface BrowserArrivalTiming {
-  clickMs: number;
-  readyMs: number;
-}
-
-type ArrivalWindow = Window & { __tabiyaArrivalTiming?: BrowserArrivalTiming };
 
 interface WarmArrivalTiming {
   readonly automationMs: number;
@@ -70,49 +64,6 @@ async function openFirstPosition(page: Page): Promise<void> {
   await page.getByRole("button", { name: /Rehearse this position:/ }).first().click();
 }
 
-async function waitForPlayableBoard(page: Page): Promise<void> {
-  const board = page.getByLabel("Chessboard");
-  const grid = page.locator("[data-board-input-grid]");
-  await expect(board).toBeVisible();
-  await expect(grid).toHaveAttribute("aria-rowcount", "8");
-  await expect(grid).toHaveAttribute("aria-colcount", "8");
-  await expect(grid).not.toHaveAttribute("aria-readonly", "true");
-  await expect(grid.getByRole("gridcell")).toHaveCount(64);
-  await board.evaluate(
-    () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
-  );
-  const geometry = await board.boundingBox();
-  expect(geometry?.width).toBeGreaterThan(0);
-  expect(geometry?.height).toBe(geometry?.width);
-}
-
-// D3592: paired browser-clock observation, not a replacement for native input or assertions.
-// It starts at the real click, excludes automation preparation, and observes the same enabled
-// square board / 64-cell grid through two further frames before recording readiness.
-async function observeWarmArrival(page: Page): Promise<void> {
-  await page.getByRole("button", { name: /Rehearse this position:/ }).first().evaluate((button) => {
-    const timing: BrowserArrivalTiming = { clickMs: -1, readyMs: -1 };
-    (window as ArrivalWindow).__tabiyaArrivalTiming = timing;
-    button.addEventListener("click", () => {
-      timing.clickMs = performance.now();
-      let readyFrames = 0;
-      const observeFrame = (): void => {
-        const board = document.querySelector<HTMLElement>('[aria-label="Chessboard"]');
-        const grid = document.querySelector('[data-board-input-grid]');
-        const rect = board?.getBoundingClientRect();
-        const visible = board !== null && board.getClientRects().length > 0 && getComputedStyle(board).visibility === "visible";
-        const playable = visible && rect !== undefined && rect.width > 0 && rect.width === rect.height &&
-          grid?.getAttribute("aria-rowcount") === "8" && grid.getAttribute("aria-colcount") === "8" &&
-          grid.getAttribute("aria-readonly") !== "true" && grid.querySelectorAll('[role="gridcell"]').length === 64;
-        readyFrames = playable ? readyFrames + 1 : 0;
-        if (readyFrames >= 3) timing.readyMs = performance.now();
-        else if (performance.now() - timing.clickMs < 30_000) requestAnimationFrame(observeFrame);
-      };
-      requestAnimationFrame(observeFrame);
-    }, { once: true, capture: true });
-  });
-}
-
 test.describe.serial("arrival readiness measurements", () => {
   let warmContext: BrowserContext;
   let warmPage: Page;
@@ -165,7 +116,7 @@ test.describe.serial("arrival readiness measurements", () => {
       await observeWarmArrival(warmPage);
       const started = await warmPage.evaluate(() => performance.now());
       await open.click();
-      await waitForPlayableBoard(warmPage);
+      await waitForMeasuredPlayableBoard(warmPage);
       const ended = await warmPage.evaluate(() => performance.now());
       warmAutomation.push(ended - started);
       await warmPage.waitForFunction(() => ((window as ArrivalWindow).__tabiyaArrivalTiming?.readyMs ?? -1) >= 0);
@@ -266,6 +217,34 @@ test.describe.serial("arrival readiness measurements", () => {
     await page.getByRole("button").click();
     await page.evaluate(() => { setTimeout(() => document.querySelector('[data-board-input-grid]')!.removeAttribute("aria-readonly"), 300); });
     await page.waitForFunction(() => ((window as ArrivalWindow).__tabiyaArrivalTiming?.readyMs ?? -1) >= 0);
+    const elapsed = await page.evaluate(() => {
+      const timing = (window as ArrivalWindow).__tabiyaArrivalTiming!;
+      return timing.readyMs - timing.clickMs;
+    });
+    expect(elapsed).toBeGreaterThanOrEqual(WARM_BUDGET_MS);
+  });
+
+  test("readiness verification starts only after the native observation has closed", async ({ page }) => {
+    await page.setContent(`<button>Rehearse this position: calibration</button>
+      <div aria-label="Chessboard" style="width:100px;height:100px"></div>
+      <div data-board-input-grid aria-rowcount="8" aria-colcount="8" aria-readonly="true">${'<div role="gridcell"></div>'.repeat(64)}</div>`);
+    await observeWarmArrival(page);
+    let verificationStarted: Promise<number> | undefined;
+    const guarded = new Proxy(page, {
+      get(target, key) {
+        if (key === "getByLabel") return (...args: Parameters<Page["getByLabel"]>) => {
+          if (args[0] === "Chessboard") verificationStarted = page.evaluate(() => (window as ArrivalWindow).__tabiyaArrivalTiming!.readyMs);
+          return target.getByLabel(...args);
+        };
+        const value = Reflect.get(target, key, target);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
+    await page.getByRole("button").click();
+    await page.evaluate(() => { setTimeout(() => document.querySelector('[data-board-input-grid]')!.removeAttribute("aria-readonly"), 300); });
+    await waitForMeasuredPlayableBoard(guarded);
+    expect(verificationStarted).toBeDefined();
+    expect(await verificationStarted!).toBeGreaterThanOrEqual(0);
     const elapsed = await page.evaluate(() => {
       const timing = (window as ArrivalWindow).__tabiyaArrivalTiming!;
       return timing.readyMs - timing.clickMs;

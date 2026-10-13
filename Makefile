@@ -3935,6 +3935,15 @@ review-arrival-browser-check:
 arrival-cpu-profile:
 	./node_modules/.bin/playwright test --config tools/d3600-arrival-profile/playwright.config.ts
 
+.PHONY: arrival-interference-research
+arrival-interference-research:
+	$(CI_NODE) --test tools/d3600-arrival-profile/interference-contract.test.mjs
+	./node_modules/.bin/playwright test --config tools/d3600-arrival-profile/interference.config.ts
+
+.PHONY: arrival-order-browser-check
+arrival-order-browser-check:
+	./node_modules/.bin/playwright test tests/browser/arrival-latency.spec.ts --grep "readiness verification starts only"
+
 # D3758 disposable source/admission/renderer probe; no production or content qualification claim.
 .PHONY: review-one-edge-adoption-probe
 review-one-edge-adoption-probe:

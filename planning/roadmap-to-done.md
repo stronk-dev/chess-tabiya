@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3767]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3771]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,15 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3771]]: arrival measurement now waits for the unchanged native three-frame
+observation before running the retained verification checks. Thirty-two rotated, traced/untraced
+arrivals find a modest local instrument effect, not the published 1092.9 ms failure's cause.
+The permanent ordering calibration fails on the predecessor; tracing, five samples, complete
+requests and the unrounded 250 ms budget remain. Final normal governance/build and all four
+browser tiers pass: 350 cases, one optional Maia skip, zero retries and 150 input/112 composition
+cells. The last complete software/performance/content run remains D3769/D3770 below, not a new
+claim for this test-only change. No application, semantic, content, capability or release promotion.
 
 2026-10-13 [[D3769]]/[[D3770]]: bounded passing-browser artifact retention and ordered native
 startup tests are implemented and locally closed. All original cases/deadlines remain; actual

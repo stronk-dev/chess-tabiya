@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Native arrival instrument follow-up, 2026-10-13 ([[D3771]]): **measured `[V]` local interference,
+not the remote cause**. All 32 counterbalanced arrivals retain the source requests; verification
+within the observation adds a paired mean 19.3 ms traced / 15.6 ms untraced. Shared readiness
+bodies, all five normal samples, tracing and the 250 ms budget remain. A real calibration fails
+the old verification order; the source/API/product failure remains D3600. See
+`ux-arrival-and-start.md` and `tools/d3600-arrival-profile/`.
+
 Terminal all-reply follow-up, 2026-10-13 ([[D3768]]): **answered `[V]` for the reproduced boundary,
 repair held**. Twenty-two disposable controls cover both-color checkmate/stalemate forks through
 collector/factory/presentation and actual candidate/Hint selection, with explicit mate/promotion
