@@ -473,15 +473,15 @@
         ],
         "state": [
           "partial",
-          "Sessions and imports exist; native pairing, two-player rating, live-source growth, enforced clocks, invitation transitions, and event-ready aggregation remain."
+          "Sessions, imports and native two-seat friend matches exist, with attributed turn possession, consented coaching pause, rehearsal and preserved-mainline resume. Matchmaking, two-player rating, live-source growth, enforced clocks, invitation/result transitions and event-ready aggregation remain."
         ],
         "api": [
           "partial",
-          "Sessions work; provider challenge/follow/result return, native pairing, clocks, variants, and complete invitation lifecycle are unfinished."
+          "Native casual creation/seats, friend links, turn control and pause/resume work through the production application. Provider challenge/follow/result return, matchmaking, rated play, clocks, resignation/draw, variants and complete invitation lifecycle remain unfinished."
         ],
         "experience": [
           "partial",
-          "Live screens exist but creation, joining, voting, Arena, native play, pause consent, errors, and return are not coherent guided workflows."
+          "Live creation names four workflows; native casual friend play has actual multi-account browser proof for alternating turns, pause consent, branching and preserved-mainline return. Complete provider, voting/Arena, rated/clock, invitation/error and review/return workflows remain."
         ],
         "defaults": [
           "blocked",
@@ -1041,9 +1041,14 @@
         "nextAction": "Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
           "at": "2026-10-13",
-          "summary": "D3774 repairs V1 percentage claim backing under the implemented archived contract: complete one-decimal span equality and finite numeric 0–100 sources reject trailing chess prose, coercion and malformed precision. All 84 focused controls pass; the exact predecessor fails 44, including six real startup-registry/authenticated learner-delivery cases. Valid claims deliver, private access refuses and graph/event pages remain equal. Complete normal verification/build/all-four-browser-tier command exits zero: software 5,473/389, performance seven/four, content 255/26 and 352 browser passes, one optional Maia skip, zero retries and 112 unretried composition cells. Local warm arrival p95 is 124 ms under 250 ms, not a published failure closure. No authored content, model, preset, schema or archive changes. D1008 and draft V2 semantic anchors remain open; D3765/D3766/D879 selected delivery, D3715 selection, D3758 Review adoption and the independent source contracts remain held. Prior collector, grade, structure and recovery checkpoints stand. No whole capability/milestone, qualification, content, remote-CI or release promotion.",
+          "summary": "D3778 closes two demonstrated factory-boundary input/result mismatches: root fields are captured once after own-key admission, and structural predicates copy bounded feature data including nested targets before evaluation. All 63 focused controls pass, retaining later-call accessors, ordinary-data parity, sealed provider identity and canonical-edge memo reuse. The initial complete command stops at a stale generated semantic receipt; standard regeneration changes only implementation stamps, not case outcomes or qualification. Final normal verification/build/all four browser tiers exit zero: software 5,484/389, performance seven/four, content 255/26, browser 352 passes, one optional Maia skip, zero retries and all 112 composition cells. Local warm arrival p95 is 106.2 ms under the unchanged 250 ms budget, not remote proof. Prior D3774 and collector/grade/structure checkpoints stand. Useful selection, D3715/D3758/D3578 and source contracts remain held. No chess-definition, qualification, official-content, remote-CI or whole capability/milestone promotion.",
           "impact": "advanced",
           "evidence": [
+            "packages/runtime/src/evidence-value-authority.test.ts",
+            "packages/runtime/src/internal/evidence-value-routes.ts",
+            "packages/runtime/src/semantic-validation-receipt.generated.json",
+            "packages/runtime/src/semantic-validation-receipt.generated.ts",
+            "docs/evidence-contract.md",
             "apps/server/src/sourcing/claim-binding.ts",
             "apps/server/src/sourcing/claim-binding.test.ts",
             "apps/server/src/claim-backing-delivery.test.ts",
@@ -1094,6 +1099,11 @@
             "planning/exploration/log.md"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3778",
+              "digest": "sha256:aa043fea68ffccbc3aecf3948b64876de8ceb44d9211383c6b87323a301df6a2"
+            },
             {
               "kind": "work_state",
               "id": "D3774",

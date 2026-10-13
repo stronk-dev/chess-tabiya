@@ -144,6 +144,14 @@ therefore no generic mint API and no caller-payload adapter:
   that memo; their authority shape is recomputed on each mint. This preserves exact ordinary input
   bytes without confusing a frozen shell with stable input values. It does not freeze or reconstruct
   arbitrary authority inputs, or replace the source-specific validators above.
+- The dispatcher checks declared own enumerable keys before evaluating accessors, then captures
+  each root field once for admission, computation and the receipt. Undeclared symbol/prototype
+  hooks do not replace those inputs. Sealed provider objects, runs and traversal authorities retain
+  their identity; this is not a generic deep copy. Structural predicates separately copy their
+  bounded feature data, including nested distance targets, before evaluation. Their frozen result
+  therefore describes the feature actually tested, even if a caller changes an accessor afterward.
+  Legitimate accessors may supply different inputs on later invocations. These checks establish
+  local input/result coherence, not collector completeness or useful learner selection.
 - Every non-retired catalogue projection has exactly one factory,
   `create{Projection}V{version}Evidence`, of one of four shapes. **Computed** factories take authority
   inputs (a FEN, a validated edge, a recorded run) and compute the payload themselves. **Derived**

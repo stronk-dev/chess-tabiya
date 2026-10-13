@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3778]] closes two demonstrated one-invocation authority/value mismatches
+under implemented value-authority §§2/5: root fields are captured once after declared-key checks,
+and structural features (including nested distance targets) are captured before evaluation.
+All 63 focused controls pass. Legitimate later-call getters, ordinary data, sealed source object
+identity and canonical-edge memo reuse remain; unrelated symbol/prototype hooks no longer replace
+declared reference operands. No HTTP exploit, chess-definition, selection, source-qualification,
+schema or full-capability claim. Complete normal gate results remain in the append-only log.
+
 2026-10-13 — [[D3777]] repairs the position-only castling suites' software/content dependency.
 Each predecessor fails its new explicit empty-catalogue control. The two suites now share the
 existing Local Support acquisition pattern, with real registry constructors and unchanged

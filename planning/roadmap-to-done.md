@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3777]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3778]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,59 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+### Whole-product inventory — 2026-10-13
+
+Tabiya is an integration-stage product, not a 1.0 release candidate. The rehearsal runtime and
+many real application journeys work; none of the fourteen complete capability journeys meets
+all eight release dimensions yet. This snapshot reads the current machine map, implementation
+docs and live registers; it is not a fresh independent audit of every historical closure.
+
+| Area | Implemented and reachable | Remaining full-1.0 work |
+|---|---|---|
+| Evidence | Shared typed producers, structural/tactical/transition and recorded-window facts, provider admission and consumer declarations | Complete source execution, semantic qualification, exact joins and meaningful consumer selection |
+| Rehearsal | Play, consequences, rewind, branches, comparison, replay and resume | Complete training-form progression, first-run teaching, defaults, content and release journeys |
+| Support | Named modules, compiled help styles, staged warnings, progressive Guided Hint, typed board/text components | Selected-Sight coverage, useful quiet Nudge, full Inspector fidelity, all-context defaults, hint preferences and owner-use discharge |
+| Review | Timeline, grades, evaluation graph, recorded semantic events, Analyze, retry and Campaign return | Thirty-two local incoming-edge sources, opening/human/tablebase family delivery, cross-source narrative/selection and every game origin |
+| Theory and packs | Searchable Library, authoring and validation, provenance and graduation machinery | Stable authored capability joins and a varied reviewed official corpus; fifty installed packs are not fifty graduated packs |
+| Bots | Twelve persistent playable configurations, three policy families, replay/rematch and provider failure handling | Strength/trait calibration, opening routes, memory/timing/endgame behavior, identity and complete history/Review |
+| Learner model | Ratings, longitudinal storage, private habit/opening/observation/history views and source drill-down | Validated comparative style, skills/valence content, complete opening performance, recommendations and lifecycle proof |
+| Campaign | Exposed persistent map, kit, encounters, an unrated boss pilot, charges, failure recovery, history and Review | Graduated campaign content, curriculum/theory unlocks, complete rewards and long-term progression, boss/failure and release proof |
+| Human/social play | Imports, live sessions, native two-seat friend matches, friend links and consented pause/rehearsal/mainline return | Matchmaking, clocks, two-player ratings, resignation/draw handling, variants and complete invitation/result/review lifecycle |
+| Coach/streamer | Classroom assignments, submission inspection, reasoning and revocation | Guided setup, complete Academy/Stream compositions, audience/role/delay/reconnect workflows |
+| Accessible client | Shared board controller, responsive stable-board shell, typed presentation and themes | Every-route device/focus/zoom/screen-reader proof, PWA install/update/offline and owner-device discharge |
+| Accounts/data | Authentication, private permissions, portable export/import/delete and restored branched play | Guest/claim, all object classes and integrated backup/recovery/upgrade journeys |
+| Operations | Normal Make gates, software/content separation, pinned packaging, deployment profiles and recovery tooling | Paired current-revision remote CI, complete image/clean-host and both-architecture proof, remaining security and rights obligations |
+| Delivery tracking | Durable ledger/UX/RFC states, ownership and checked roadmap | Stronger evidence for historical prose-only closures and conversion of active slices into complete journeys |
+
+The original evidence-versus-guidance separation now has real runtime and web implementation,
+but registered facts do not automatically become useful assistance. The full contrastive
+“why this engine move?” upgrade remains draft `rfc/semantic-consequence-search.md`; current
+searched-line hints do not establish that general capability. Likewise, playable bot profiles
+do not establish convincing personalities or calibrated ratings.
+
+The checked inventory remains 276 completed / 269 live / 24 retired UX items, four active / five
+blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
+ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
+history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+historical closures still cite prose alone. No overall completion percentage is inferred.
+
+The execution frontier is concrete: independent acceptance and implementation of held source,
+selected-Sight, Nudge and Review contracts; complete learner journeys and bot calibration;
+graduated representative content and Campaign progression; current CI and native release proof.
+CI/release diagnosis remains an active lane alongside those product slices. Publication requires
+separate owner authorization. Current test results are in the dated log, not a release claim.
+
+2026-10-13 [[D3778]]: the factory boundary now captures each declared root field once and
+structural predicates retain the exact bounded feature data they evaluated, including nested
+  distance targets. Two predecessor failures prove actual reference/feature coherence defects;
+all 63 focused controls pass without banning legitimate later-call accessors or cloning sealed
+providers. This closes local factory coherence, not source qualification, meaningful selection,
+an HTTP exploit or a whole product capability. Complete normal verification/build/all four browser
+tiers exit zero: software 5,484/389, performance seven/four, content 255/26, browser 352 passes,
+one optional Maia skip, zero retries and all 112 composition cells. The first stale generated
+receipt refusal is retained in the log; regeneration changes only implementation stamps, not
+case outcomes or qualification. The macro 1.0 completion gates are not promoted by this repair.
 
 2026-10-13 [[D3777]]: the two position-only castling HTTP suites now acquire real empty
 lesson catalogues through the same shared test fixture as Local Support. Application, SQLite,

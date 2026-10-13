@@ -352,16 +352,18 @@ export type EvidenceValueRouteInputs = { readonly [Route in EvidenceValueRoute]:
 /** Generated: each literal route's exact result type. */
 export type EvidenceValueRouteResults = { readonly [Route in EvidenceValueRoute]: ReturnType<Routes[Route]> };
 
-function admitArm(arm: EvidenceInputArm, input: Readonly<Record<string, unknown>>): string | undefined {
+function admitArm(arm: EvidenceInputArm, input: Readonly<Record<string, unknown>>, keysOnly = false): string | undefined {
   const keys = Object.keys(input);
   const required = Object.entries(arm).filter(([, spec]) => spec.optional !== true).map(([key]) => key);
-  const extra = keys.filter((key) => !(key in arm));
-  const missing = required.filter((key) => !(key in input));
+  const extra = keys.filter((key) => !Object.hasOwn(arm, key));
+  const missing = required.filter((key) => !keys.includes(key));
   if (extra.length > 0 || missing.length > 0) return `input keys differ from the route arm (missing: ${missing.join(", ") || "-"}; extra: ${extra.join(", ") || "-"})`;
+  if (keysOnly) return undefined;
   for (const key of keys) {
     const spec = arm[key]!;
-    if (input[key] === undefined && spec.optional === true) continue;
-    const failure = admitInputValue(spec, input[key]);
+    const candidate = input[key];
+    if (candidate === undefined && spec.optional === true) continue;
+    const failure = admitInputValue(spec, candidate);
     if (failure !== undefined) return `${key} ${failure}`;
   }
   return undefined;
@@ -375,9 +377,15 @@ export function invokeEvidenceValueRoute<Route extends EvidenceValueRoute>(route
   if (typeof route !== "string" || !Object.hasOwn(EVIDENCE_VALUE_ROUTES, route)) throw new TypeError(`Unknown evidence value route ${String(route)}`);
   const operation = EVIDENCE_VALUE_ROUTES[route] as unknown as EvidenceValueFactory<unknown, unknown>;
   if (typeof inputs !== "object" || inputs === null || Array.isArray(inputs) || Object.getPrototypeOf(inputs) !== Object.prototype) throw new TypeError(`Evidence route ${route} requires a plain authority-input record`);
-  const failures = operation.meta.arms.map((arm) => admitArm(arm, inputs as Readonly<Record<string, unknown>>));
+  const record = inputs as Readonly<Record<string, unknown>>;
+  const keyFailures = operation.meta.arms.map((arm) => admitArm(arm, record, true));
+  if (keyFailures.every((failure) => failure !== undefined)) throw new TypeError(`Evidence route ${route} refused its authority inputs: ${keyFailures.join(" / ")}`);
+  // Read each declared field once. Admission, computation and the receipt use the same
+  // values; opaque sealed providers/runs retain their identity rather than being deep-cloned.
+  const captured = Object.fromEntries(Object.keys(record).map((key) => [key, record[key]]));
+  const failures = operation.meta.arms.map((arm) => admitArm(arm, captured));
   if (failures.every((failure) => failure !== undefined)) throw new TypeError(`Evidence route ${route} refused its authority inputs: ${failures.join(" / ")}`);
-  return operation(inputs) as EvidenceValueRouteResults[Route];
+  return operation(captured) as EvidenceValueRouteResults[Route];
 }
 
 /** Registry metadata for the permanent gate (route, symbol, shape, arms, dependency, pending). */

@@ -28,7 +28,7 @@ import {
 } from "./evidence-contract.js";
 import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import { attachEvidence } from "./evidence.js";
-import { evidenceFactorySymbol } from "./evidence-factories.js";
+import { evidenceFactorySymbol, validEdge } from "./evidence-factories.js";
 import { createBoundedTargetBatchCounter, createBoundedTargetTraversalAuthority } from "./bounded-target-chess.js";
 import { boundedTargetSourceEvidence } from "./evidence-operations.js";
 import { invokeEvidenceValueRoute, evidenceValueRouteRegistry, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
@@ -1099,6 +1099,72 @@ const PROFILE_FILE = new URL("fixtures/evidence-value-profiles.json", import.met
 const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
+  it("D3778 one reference invocation cannot seal a different authority from its resolved value", () => {
+    let reads = 0;
+    const input = Object.freeze({ get reference() { reads += 1; return reads <= 3 ? "rules:material" : "rules:checkmate"; } });
+    let result: DeclaredEvidence<{ readonly reference: string }> | undefined;
+    try { result = invoke("run.record.evidence_ref_resolution@1", input) as typeof result; }
+    catch (error) { expect(error).toBeInstanceOf(TypeError); }
+    if (result !== undefined) {
+      expect(() => assertDeclaredEvidence(result)).not.toThrow();
+      expect(evidenceValueReceipt(result).inputDigest).toBe(evidenceDigest({ reference: result.payload.reference }));
+    }
+    // Existing D3750 controls below require valid accessors stable during each invocation.
+    expect(result).toBeDefined();
+    expect(reads).toBe(1);
+  });
+
+  it("D3778 a structural predicate must describe the exact feature it actually evaluated", () => {
+    const fen = "4k3/8/8/8/8/P6P/6P1/6K1 w - - 0 1";
+    const route = "rules.structural.predicate.isolated_pawn@1";
+    const plain = (file: "a" | "h") => invoke(route, { fen, feature: { kind: "isolated_pawn", color: "white", file } }) as DeclaredEvidence<{ readonly matched: boolean }>;
+    expect(plain("a").payload.matched).toBe(true);
+    expect(plain("h").payload.matched).toBe(false);
+    let reads = 0;
+    const feature = Object.freeze({ kind: "isolated_pawn", color: "white", get file() { reads += 1; return reads === 1 ? "a" : "h"; } });
+    let result: DeclaredEvidence<{ readonly feature: { readonly file: "a" | "h" }; readonly matched: boolean }> | undefined;
+    try { result = invoke(route, { fen, feature }) as typeof result; }
+    catch (error) { expect(error).toBeInstanceOf(TypeError); }
+    if (result !== undefined) {
+      expect(() => assertDeclaredEvidence(result)).not.toThrow();
+      const retainedFile = result.payload.feature.file;
+      expect(result.payload.matched, `retained file=${retainedFile}`).toBe(plain(retainedFile).payload.matched);
+    }
+    expect(result).toBeDefined();
+    expect(reads).toBe(1);
+  });
+
+  it("D3778 captures a structural feature's nested target before evaluation", () => {
+    const fen = "4k3/8/8/8/8/8/8/6K1 w - - 0 1";
+    let square = "h3";
+    let reads = 0;
+    const feature = {
+      kind: "piece_distance", color: "white", role: "king", comparison: "equal", count: 2,
+      target: Object.freeze({ kind: "square", get square() { reads++; return square; } }),
+    };
+    const value = invoke("rules.structural.predicate.piece_distance@1", { fen, feature }) as DeclaredEvidence<{ readonly feature: typeof feature; readonly matched: boolean }>;
+    expect(reads).toBe(1);
+    expect(value.payload.matched).toBe(true);
+    expect(value.payload.feature.target.square).toBe("h3");
+    square = "a3";
+    expect(value.payload.feature.target.square).toBe("h3");
+    expect(() => assertDeclaredEvidence(value)).not.toThrow();
+    const next = invoke("rules.structural.predicate.piece_distance@1", { fen, feature }) as typeof value;
+    expect(next.payload.feature.target.square).toBe("a3");
+    expect(next.payload.matched).toBe(false);
+    expect(reads).toBe(2);
+  });
+
+  it("D3778 refuses undeclared keys before running their accessors", () => {
+    const extra = vi.fn(() => { throw new Error("undeclared accessor executed"); });
+    expect(() => invoke("run.record.evidence_ref_resolution@1", {
+      reference: "rules:material", get extra() { return extra(); },
+    })).toThrow(/input keys differ/u);
+    expect(extra).not.toHaveBeenCalled();
+    const missing = Object.create({ reference: "rules:material" });
+    expect(() => invoke("run.record.evidence_ref_resolution@1", missing)).toThrow(/plain authority-input record/u);
+  });
+
   it("D3750 a frozen authority getter cannot retain the previous input digest", () => {
     let reference = "rules:material";
     const input = Object.freeze({ get reference() { return reference; } });
@@ -1114,7 +1180,7 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(() => assertDeclaredEvidence(second)).not.toThrow();
   });
 
-  it("D3750 symbol-driven authority shapes cannot borrow the plain-data digest cache", () => {
+  it("D3750/D3778 undeclared symbol protocols do not change a reference lookup's inputs", () => {
     let iterable = false;
     let label = "original-authority";
     const input = Object.freeze({
@@ -1127,11 +1193,11 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     iterable = true;
     const second = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
     expect(second.payload).toEqual(first.payload);
-    expect(evidenceValueReceipt(second).inputDigest).toBe(evidenceDigest(label));
+    expect(evidenceValueReceipt(second).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
     label = "changed-authority";
     const third = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
-    expect(evidenceValueReceipt(third).inputDigest).toBe(evidenceDigest(label));
-    expect(evidenceValueReceipt(third).inputDigest).not.toBe(evidenceValueReceipt(second).inputDigest);
+    expect(evidenceValueReceipt(third).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
+    expect(evidenceValueReceipt(third)).toEqual(evidenceValueReceipt(second));
   });
 
   it("D3750 ordinary frozen authorities keep exact repeat and mutable-record parity", () => {
@@ -1145,7 +1211,7 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(evidenceValueReceipt(first).inputDigest).toBe(evidenceDigest(input));
   });
 
-  it("D3750 an inherited iterator shape is not stable merely because own fields are data", () => {
+  it("D3750/D3778 inherited iterator hooks do not replace declared reference inputs", () => {
     const input = Object.freeze({ reference: "rules:material" });
     const clean = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
     const previous = Object.getOwnPropertyDescriptor(Object.prototype, Symbol.iterator);
@@ -1164,12 +1230,12 @@ describe("value authority: one permanent profile per final factory (§7, criteri
       else Object.defineProperty(Object.prototype, Symbol.iterator, previous);
     }
     expect(evidenceValueReceipt(first!).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
-    expect(evidenceValueReceipt(second!).inputDigest).toBe(evidenceDigest("[object Object]"));
+    expect(evidenceValueReceipt(second!).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
     expect(second!.payload).toEqual(first!.payload);
     expect(evidenceValueReceipt(clean).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
   });
 
-  it("D3750 an inherited run-shaped authority is re-read rather than cached as own primitive data", () => {
+  it("D3750/D3778 inherited run hooks do not replace declared reference inputs", () => {
     const input = Object.freeze({ reference: "rules:material" });
     const clean = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
     const keys = ["id", "nodes", "events", "branches"] as const;
@@ -1192,27 +1258,30 @@ describe("value authority: one permanent profile per final factory (§7, criteri
         else Object.defineProperty(Object.prototype, key, previous[index]!);
       });
     }
-    expect(evidenceValueReceipt(first!).inputDigest).toBe(evidenceDigest({ run: "authority-fixture", nodes: 0, events: 0 }));
-    expect(evidenceValueReceipt(second!).inputDigest).toBe(evidenceDigest({ run: "authority-fixture", nodes: 1, events: 1 }));
+    expect(evidenceValueReceipt(first!).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
+    expect(evidenceValueReceipt(second!).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
     expect(second!.payload).toEqual(first!.payload);
     expect(evidenceValueReceipt(clean).inputDigest).toBe(evidenceDigest({ reference: input.reference }));
   });
 
-  it("D3750 verifies own primitive data once before repeat cache reuse", () => {
-    const input = Object.freeze({ reference: "rules:material" });
+  it("D3750 verifies canonical edge primitive data once before repeat cache reuse", () => {
+    const beforeFen = "4k3/8/8/8/8/8/8/4K2R w K - 0 1";
+    const input = { beforeFen, moveUci: "e1h1", afterFen: after(beforeFen, "e1h1") };
+    const canonical = validEdge(input);
     const descriptor = Object.getOwnPropertyDescriptor;
     let reads = 0;
     const spy = vi.spyOn(Object, "getOwnPropertyDescriptor").mockImplementation((target, key) => {
-      if (target === input) reads++;
+      if (target === canonical) reads++;
       return descriptor(target, key);
     });
     let first: DeclaredEvidence<unknown>, repeated: DeclaredEvidence<unknown>;
     try {
-      first = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
-      repeated = invoke("run.record.evidence_ref_resolution@1", input) as DeclaredEvidence<unknown>;
-      invoke("run.record.evidence_ref_resolution@1", input);
+      first = (invoke("rules.castling.event.rights_lost@1", input) as readonly DeclaredEvidence<unknown>[])[0]!;
+      repeated = (invoke("rules.castling.event.rights_lost@1", input) as readonly DeclaredEvidence<unknown>[])[0]!;
+      invoke("rules.castling.event.rights_lost@1", input);
     } finally { spy.mockRestore(); }
-    expect(reads).toBe(1);
+    expect(first!).toBeDefined();
+    expect(reads).toBe(3);
     expect(evidenceValueReceipt(repeated!)).toEqual(evidenceValueReceipt(first!));
   });
 
@@ -1228,13 +1297,19 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(evidenceValueReceipt(value)).toEqual(receipt);
   });
 
-  it("D3721 frozen accessors cannot borrow the immutable-data digest cache", () => {
+  it("D3721/D3778 structural accessors are captured, without freezing the caller's future input", () => {
     let count = 2;
     const feature = Object.freeze({ kind: "piece_count", color: "white", role: "rook", basis: "count", comparison: "equal", get count() { return count; } });
-    const value = invoke("rules.structural.predicate.piece_count@1", { fen: INITIAL, feature }) as DeclaredEvidence<unknown>;
+    const value = invoke("rules.structural.predicate.piece_count@1", { fen: INITIAL, feature }) as DeclaredEvidence<{ readonly feature: typeof feature; readonly matched: boolean }>;
     expect(() => assertDeclaredEvidence(value)).not.toThrow();
     count = 99;
-    expect(() => assertDeclaredEvidence(value)).toThrow(/receipt disagrees/u);
+    expect(() => assertDeclaredEvidence(value)).not.toThrow();
+    expect(value.payload.feature.count).toBe(2);
+    expect(value.payload.matched).toBe(true);
+    const next = invoke("rules.structural.predicate.piece_count@1", { fen: INITIAL, feature }) as typeof value;
+    expect(next.payload.feature.count).toBe(99);
+    expect(next.payload.matched).toBe(false);
+    expect(evidenceValueReceipt(next).inputDigest).not.toBe(evidenceValueReceipt(value).inputDigest);
   });
 
   it("D3721 every emitted factory payload is recursively immutable, not just its outer shell", () => {

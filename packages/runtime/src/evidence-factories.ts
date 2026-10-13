@@ -567,8 +567,12 @@ export const STRUCTURAL_PREDICATE_FACTORIES = Object.freeze(Object.fromEntries(S
   const symbol = evidenceFactorySymbol(route);
   return [route, factory({ route, symbol, shape: "computed", arms: [{ fen: FEN, feature: value(`a ${kind} StructuralFeature`, (candidate) => isRecord(candidate) && candidate.kind === kind) }], result: "single" }, ({ fen, feature }: { readonly fen: string; readonly feature: StructuralFeature }) => {
     const valid = validFen(fen);
-    const matched = matchesStructuralExpression(valid, { kind: "feature", feature });
-    return mint(route, symbol, Object.freeze({ fen: valid, feature, matched }), { fen, feature });
+    // StructuralFeature is bounded data, including piece_distance's nested target. Capture
+    // it before evaluation so caller accessors cannot change the fact retained afterward.
+    const captured = structuredClone(feature);
+    if (captured.kind !== kind) throw new TypeError(`Evidence route ${route} requires a ${kind} StructuralFeature`);
+    const matched = matchesStructuralExpression(valid, { kind: "feature", feature: captured });
+    return mint(route, symbol, Object.freeze({ fen: valid, feature: captured, matched }), { fen, feature: captured });
   })];
 })) as Readonly<Record<`rules.structural.predicate.${(typeof STRUCTURAL_FEATURE_KINDS)[number]}@1`, EvidenceValueFactory<{ readonly fen: string; readonly feature: StructuralFeature }, DeclaredEvidence<{ readonly fen: string; readonly feature: StructuralFeature; readonly matched: boolean }>>>>);
 

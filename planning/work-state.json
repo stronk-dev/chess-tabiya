@@ -31398,6 +31398,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/castling-open-file.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3778",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:aa043fea68ffccbc3aecf3948b64876de8ceb44d9211383c6b87323a301df6a2",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
