@@ -26,6 +26,14 @@ legal reply; capture, movement of original targets and legal check parries still
 Mate-in-one operands likewise separate the primary mover's landing from the actual checking
 pieces. These are identity repairs, not move grades or new learner-module admissions.
 
+Open-file occupancy follows the physical moving heavy piece, including castling's secondary
+rook and Chess960 swaps. A stationary rook does not fire. The source file must previously have
+been neither open nor mover-half-open; the destination class comes from the exact admitted
+structural reading. This says where the rook moved, not that it improved or controls the file.
+The sole factory, complete candidate packet and authenticated Nudge acquisition retain this
+identity. Selection and qualification are separate; Review's declared pair still lacks its
+incoming-edge delivery (D3758), and Full Inspector does not accept this projection.
+
 Defender relocation also follows a legally promoted pawn into its new role. A lost-duty
 event requires the same surviving target and an actually absent after-state defence;
 promotion alone is not enough. Its existing Inspector binding remains unchanged, and

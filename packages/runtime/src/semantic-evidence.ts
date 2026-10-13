@@ -868,16 +868,23 @@ export function openFileOccupancyOperands(beforeFen: string, moveUci: string, af
   const afterPosition = positionFromFen(anchor.afterFen);
   const move = parseUci(anchor.moveUci);
   if (move === undefined || !("from" in move)) return undefined;
-  const prior = beforePosition.board.get(move.from);
-  const current = afterPosition.board.get(move.to);
-  if (prior === undefined || current === undefined || (prior.role !== "rook" && prior.role !== "queen") || !sameOccupant(prior, current)) return undefined;
-  const beforeFile = makeSquare(move.from)[0]!;
-  const afterFile = makeSquare(move.to)[0]!;
+  // Castling UCI names the king and rook origins. The rook is the moved heavy piece;
+  // swapped origins must be read from their own before/after boards, not the UCI target.
+  const relocation = physicalRelocations({ position: beforePosition, move }).find(value => {
+    const piece = beforePosition.board.get(value.from);
+    return piece?.role === "rook" || piece?.role === "queen";
+  });
+  if (relocation === undefined) return undefined;
+  const prior = beforePosition.board.get(relocation.from)!;
+  const current = afterPosition.board.get(relocation.to);
+  if (current === undefined || !sameOccupant(prior, current)) return undefined;
+  const beforeFile = makeSquare(relocation.from)[0]!;
+  const afterFile = makeSquare(relocation.to)[0]!;
   const eligible = (entry: StructuralObservation, file: string): boolean => entry.file === file && (entry.kind === "open_file" || entry.kind === "half_open_file" && entry.color === prior.color);
   const beforeClass = structuralReading(anchor.beforeFen).features.find((entry) => eligible(entry, beforeFile));
   const afterClass = structuralReading(anchor.afterFen).features.find((entry) => eligible(entry, afterFile));
   if (beforeClass !== undefined || afterClass === undefined || (afterClass.kind !== "open_file" && afterClass.kind !== "half_open_file")) return undefined;
-  return Object.freeze({ beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, piece: Object.freeze({ before: Object.freeze({ square: makeSquare(move.from), piece: prior }), after: Object.freeze({ square: makeSquare(move.to), piece: current }) }), fileClass: afterClass.kind, sourceReading: afterClass });
+  return Object.freeze({ beforeFen: anchor.beforeFen, moveUci: anchor.moveUci, afterFen: anchor.afterFen, piece: Object.freeze({ before: Object.freeze({ square: makeSquare(relocation.from), piece: prior }), after: Object.freeze({ square: makeSquare(relocation.to), piece: current }) }), fileClass: afterClass.kind, sourceReading: afterClass });
 }
 
 /** Brand-sealed one-edge breadth events. All remain eligible only for research.semantic_selection. */

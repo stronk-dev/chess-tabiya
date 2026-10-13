@@ -993,6 +993,15 @@ selected-square, opening or Inspector contracts or D3591/D3600 timing failures.
 remain; no duplicate hydration regression is established. Preserve the failure,
 inspect the bounded request/frame timing and do not call a passing replay a diagnosis.
 
+2026-10-13 supplier/adoption follow-up: [[D3757]] repairs the castling rook's open-file
+occupancy under accepted breadth §3.8. Twelve legal positives, eight hard negatives and
+invalid-edge controls retain exact file sources through sole factories and complete candidate
+populations. The actual Nudge command collects the fact before unchanged selection; this is not
+a useful-guidance or qualification discharge. [[D3758]] records the next missing join: Review
+declares the pair but its row builder never acquires these incoming-edge facts. The Review
+compiler/module owners must define the source and bounded delivery before implementation.
+Do not widen Full Inspector, whose accepted image excludes this projection.
+
 2026-10-13 boundary follow-up: [[D3756]] is reproduced, not fixed. Four native created-run
 controls independently hold/fail assignment and repertoire reads; the board is absent while
 the actual stored nodes/branches/cursor survive. `design/research/ux-arrival-and-start.md` §15

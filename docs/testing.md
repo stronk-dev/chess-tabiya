@@ -389,6 +389,10 @@ non-evidence event writes. These focused checks supplement the complete gates ab
 `make legal-move-context-check` runs complete legal-move enumeration and opponent-response
 admission controls, including independent all-square parity and the same-position work-count
 regression (D3754). These tests also run in the ordinary software tier.
+`make castling-open-file-check` covers physical rook relocation through the exact collector,
+sole evidence factory, complete legal candidates and authenticated Nudge acquisition. Both colors,
+Chess960 swaps, stationary pieces and source/destination exclusions have permanent controls.
+These are ordinary software tests, not proof of useful hint selection or Review delivery.
 After changing the parser's shared legal authority, `make provider-parser-update` refreshes its
 existing implementation receipt. Ordinary verification still checks the exact import closure;
 the update target does not bypass that check during verification.

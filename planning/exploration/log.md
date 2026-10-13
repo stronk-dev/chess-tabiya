@@ -27086,3 +27086,46 @@ Campaign was the one capability with no API, route or content. Now:
   zero with 76 active product RFCs and unchanged capability/milestone/UX states. Read-only
   GitHub inspection confirms the same published c7ec3c3d verify success/browser failure.
   This research-only checkpoint does not claim a fresh complete production test run.
+
+## 2026-10-13 — D3757 castling-rook occupancy repaired; D3758 Review adoption held
+
+- Accepted breadth-collectors §3.8 now follows the physical moved heavy piece, including
+  castling's secondary rook, rather than the UCI primary king. Twelve legal predecessor-positive
+  failures become permanent controls covering both colors, ordinary/Chess960 geometry, stationary
+  kings and swapped origins. Eight legal negatives retain stationary-rook, already-open/half-open
+  source and own-pawn destination exclusions. Illegal moves and mismatched successors refuse.
+- Exact collector operands, sole-factory source readings and complete legal candidate populations
+  retain the same rook/file identity. Twenty actual authenticated HTTP module commands exercise
+  genuine Nudge collection before unchanged selection, the real web response parser, anonymous/
+  foreign refusal and unchanged graph/events. No response or evidence is invented by the spy.
+  `make castling-open-file-check` passes 53 checks; workspace typechecking passes.
+- The attempted Inspector delivery expectation was wrong: its accepted image deliberately excludes
+  this pair. Twelve actual Review controls then expose a separate omitted source: its declared
+  pair has no incoming-edge row acquisition. D3758 remains blocked on the existing Review compiler/
+  module source-adoption and bounded-presentation contract. Tests are corrected to the real Nudge
+  collection boundary, not a fictitious Review/Inspector success; no consumer is widened and no
+  new UI delivery or useful-guidance claim is made.
+- Existing parser/value-profile update targets leave their files unchanged. Semantic refresh
+  changes 62 implementation-digest leaves plus the occupancy population's result digest/count:
+  30 positives instead of 26 across the same 579 sampled imported edges. A recursive before/after
+  comparison corrects the initial mistaken assumption that all 64 changed leaves were stamps;
+  all other population results and all 343 case results remain unchanged. Eighty-one subjects
+  still have zero full qualifications. No chess meaning, version, source eligibility, selection,
+  schema, pack or saved-play change accompanies this identity/coverage repair.
+- The existing full serial `make roadmap-receipt verify-awake build test-browser-ci-awake` run
+  exits zero: 5,297 software tests/386 files, seven unchanged-budget performance tests/four files,
+  255 content tests/26 files, types/governance/packaging/build and all four browser tiers.
+  Browser totals are 345 passes (280 smoke, five content, 59 matrix, one packaged-production),
+  one existing optional Maia skip and zero retries; all 150 input and 112 successful unretried
+  composition cells pass. Existing bundle/color warnings remain. This adds no live-Maia calibration,
+  whole-capability, official-content or release qualification.
+- Read-only GitHub inspection confirms published c7ec3c3d still has verify green/browser red
+  (38222438800/38222438796). D3600's unchanged 250 ms warm-readiness obligation remains open;
+  the current local sample p95 is 134 ms, not proof of the remote cause or its repair.
+- D3757 is path-backed done and D3758 has its existing capability owner/contract blocker.
+  The same-commit ledger, state, docs, queue and roadmap retain all fourteen whole capabilities
+  incomplete, four active/five blocked milestones, 276 complete/269 live/24 retired UX items,
+  1,726 live assigned ledger rows with zero untriaged, 1,620 done and 161 refused. The 462
+  historical prose-only closures retain weaker proof. Fifty installed packs still have zero
+  official graduates; twelve bot configurations remain uncalibrated and Campaign remains a
+  web-exposed draft pilot. No new tracking document, push or goal pause; full 1.0 remains active.

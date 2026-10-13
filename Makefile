@@ -490,6 +490,10 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	$(CI_NODE) apps/server/dist/semantic-evidence-check.js
 
+.PHONY: castling-open-file-check
+castling-open-file-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/castling-open-file.test.ts packages/runtime/src/breadth-semantic.test.ts apps/server/src/castling-open-file.test.ts
+
 .PHONY: candidate-packet-projections candidate-packet-projections-check candidate-closure-census
 # rfc/shared-candidate-evidence-packet.md §5.3/§12: the generated literal closure and its drift check.
 candidate-packet-projections:

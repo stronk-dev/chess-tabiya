@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3756]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3758]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -32,6 +32,14 @@ they do not establish that every prose claim describes the product correctly.
 
 ### At a glance
 
+2026-10-13 foundation follow-up: [[D3757]] repairs physical castling-rook open-file occupancy
+under accepted breadth §3.8, through exact sole-factory operands, complete legal candidates and
+authenticated Nudge acquisition. Selection, eligibility and qualification remain unchanged.
+[[D3758]] records a separate Review adoption gap: its declared pair has no incoming-edge row
+delivery. The existing Review/compiler/module owners must close that contract and actual client
+path; Full Inspector's smaller accepted image must not be widened as a shortcut. Neither finding
+promotes a whole capability or clears D3600's published timing failure.
+
 This is an integrated development platform, not a release candidate. No whole 1.0 capability is
 complete. The rehearsal loop is the most mature part; existing screens and APIs are delivery, but
 they do not close their missing defaults, evidence, content or release obligations.
@@ -58,7 +66,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3756]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3758]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not
@@ -101,7 +109,7 @@ All four historical result digests and frozen declarations remain unchanged; the
 59-case value-authority gate passes. Current factory profiles retain their new actual source
 stamp through the existing explicit update target. No historical production value is rewritten.
 
-The current batch passes 5,252 software cases/384 files, seven unchanged-budget performance
+The D3754/D3755 batch passed 5,252 software cases/384 files, seven unchanged-budget performance
 cases/four files, 255 content cases/26 files, types, governance, packaging and build. Browser
 tiers report 345 passes (280 smoke, five content, 59 matrix, one packaged-production), one
 existing optional Maia skip and zero retries. Saved final matrix/production reports survive
@@ -120,7 +128,8 @@ research checks pass; bounded in-memory timeline summaries retain all 41 request
 establish D3600's remote timing cause. Draft `rfc/rehearsal-route-context.md` separates these
 two recoverable groups without relaxing capability, graph/lease or live-match admission.
 Implementation is blocked on independent acceptance; no production behavior or release state
-changes. Current ledger has 1,725 live assigned items and zero untriaged.
+changes. Its checkpoint had 1,725 live assigned items and zero untriaged; current counts come
+from `make work-state`.
 
 [[D3751]]/[[D3752]] repair live raw-opponent recovery without adding a persona or durable-policy
 contract. The notice and status name the actual session mode; reload restores recorded-policy

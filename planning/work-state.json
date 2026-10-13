@@ -31204,6 +31204,25 @@
       "uxItems": [],
       "owner": "core-loop",
       "blocker": "rfc:rehearsal-route-context.md"
+    },
+    {
+      "id": "D3757",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3177523ebf92f075dbfc74131a404e10a549c2405fa0cf9f9ae66dab412cefd9",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/castling-open-file.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3758",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c2ac656d8c14277f2d6d606fc7d2480d8fecf7a2894225c26ba21e34fa556866",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md",
+      "question": "Define and accept exact incoming-edge Review source adoption and bounded presentation"
     }
   ]
 }
