@@ -7,7 +7,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { Session } from "node:inspector";
 import { arch, cpus, loadavg, platform } from "node:os";
 import { performance } from "node:perf_hooks";
-import { localSemanticEvents } from "@chess-tabiya/runtime";
+import { localSemanticEvents } from "../packages/runtime/src/index.js";
 
 import { projectObservations, RUNTIME_POPULATION_DEPENDENCIES } from "../apps/server/src/longitudinal-projector.js";
 import { OBSERVATION_DERIVATION_REV } from "../apps/server/src/longitudinal-registry.js";

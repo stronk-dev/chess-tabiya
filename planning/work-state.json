@@ -31263,6 +31263,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/longitudinal-worker.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3763",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4702026f893ac35a086e54691e9549970c6e085ac42db8ec305219ebab3a0799",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/structure-work.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3764",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:99dffa4c3b8f8b56f1225dfbc3375c5a1b13af40b8849e85e90e9fc953834657",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

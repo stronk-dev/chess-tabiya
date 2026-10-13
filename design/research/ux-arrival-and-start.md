@@ -1372,3 +1372,42 @@ live-session/match and disclosure admission mandatory, while supplementary reads
 pending/failure states and read-only recovery that cannot recreate or mutate the attempt.
 That behavior change needs independent acceptance of `rfc/rehearsal-route-context.md` before implementation.
 No current latency gate, assisted move, source fact, pack, bot or release qualification changes.
+
+### D3763: repeated structural-reader work — 2026-10-13
+
+The cold starting-position reader obtains 157 position copies on the predecessor. Private
+same-position feature reuse reduces this to five: one bulk-reading position and four retained
+named-expression traversals. A separate permanent control requires one attack-set computation
+per piece for occupied-target counts, plus the existing per-piece reach reading. Ten independent
+per-target geometric oracles retain both-color counts across opening, structural, orthodox/960
+castling, en-passant, promotion, mate, stalemate and bare-king positions. The final private
+per-predicate helpers retain the registered public feature dispatcher. The initial generic helper
+was returned by the full software census as `CAPABILITY_INTERPRETER_ORPHAN` (5,337 pass/one fail);
+no assertion, registry declaration or compatibility rule is weakened. The focused target now also
+includes that capability contract/census: all 80 focused checks, workspace types and the 984-row
+declaration check pass. All 66 longitudinal controls retain revision-5 outputs.
+`[V]` `packages/runtime/src/structure-work.test.ts`; `packages/runtime/src/structure.ts`;
+`make structural-reading-work-check longitudinal-projector-check`.
+
+The existing complete-population benchmark compares the reader body from `d338287d` against
+the repair, keeping every other module, receipt and input current. The baseline builder verifies
+that the committed reader actually replaces the current one without changing the checkout.
+Eight alternating fresh-process pairs retain all event/input receipts and complete projected rows,
+both colors' 40 checkpoints and full legal alternatives. On final code, summed cold time is
+33,535.31→32,952.09 ms (1.74% lower locally), with five pairs faster and three slower; no portable
+latency improvement or whole D3300 completion follows. The rejected generic-helper candidate's
+earlier 4.17%/four-faster-four-slower reading is not substituted for this final measurement.
+The comparison stores only its small aggregate in ignored
+`.cache`, never event dumps. `[V]` `tools/d3300-projector-baseline.mjs`;
+`tools/d3300-projector-profile.ts` `compare`; `make longitudinal-projector-baseline
+BASELINE_REF=d338287d longitudinal-projector-compare`.
+
+The unchanged built-browser profile passes six tests. Native marked arrivals are
+148.5/80.5/73.8 ms; fourfold-throttled arrivals are 380.5/253.0/260.1 ms. All retain 41 requests.
+First throttled arrival contains 37 layout spans totaling 64.767 ms inclusively and 53.036 ms
+of sampled `focus` work. These overlapping/sampled figures are not an additive decomposition
+or a remote cause. D3600 and the separate supplementary-read D3756 contract remain open.
+`[V]` `tools/d3600-arrival-profile/profile.spec.ts`; `make arrival-cpu-profile` after D3763 repair.
+An earlier profile-output formatter failed after consuming its result; its unseen throttled
+samples are not used here. No eligibility, output scope, source admission, selection, cache
+boundary, semantic qualification, pack or timing-budget change.

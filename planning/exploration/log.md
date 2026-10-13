@@ -27296,3 +27296,51 @@ Campaign was the one capability with no API, route or content. Now:
   strategic grading, qualification, content, whole-capability or milestone promotion.
 - GitHub remains on c7ec3c3d: verify 38222438800 succeeds; browser 38222438796 fails at
   399.2 ms warm p95 against 250 ms. D3600 remains open. No push or release readiness is claimed.
+
+### 2026-10-13 — D3763 structural work reuse and D3764 evidence-aware recovery tests
+
+- The existing structural reader repeats same-position clones and geometric attacks. Its
+  permanent predecessor work control fails at 157 acquisitions instead of five. Final code
+  shares private per-predicate arithmetic and two board-wide attack-count traversals; all 18
+  registered feature dispatch arms remain in their original interpreter. Initial-position work
+  is five acquisitions and 44 attack sets. Ten both-color independent geometric oracles retain
+  orthodox/Chess960, en-passant, promotion, terminal and sparse-board cases. The first invalid
+  fullmove counter is corrected as test setup, not treated as a product defect.
+- The first generic-helper extraction passes narrow controls but fails the full software census:
+  5,337 pass/one fail, CAPABILITY_INTERPRETER_ORPHAN. It creates a second undeclared interpreter.
+  The extraction is removed, not admitted or waived. The normal focused target now includes this
+  ownership contract: 80 cases, clean types and all 984 existing declarations pass. Final history
+  output remains identical at derivation 5; all 66 longitudinal controls pass. Semantic validation
+  remains 343 passing cases/81 subjects/zero fully qualified subjects; only implementation leaves
+  in the existing receipt change. No source admission, new cache, scope or qualification change.
+- The existing disposable population benchmark can substitute only a committed structural reader,
+  retaining current receipts and all other modules without changing the checkout. Final eight
+  alternating fresh-process pairs retain complete events/input receipts/projected rows. Summed
+  cost is 33,535.305→32,952.095 ms, 1.74% lower, five faster/three slower. This is not a reliable
+  portable latency win or D3300/D3600 discharge. The earlier 4.17% rejected-candidate reading is
+  not final evidence. Six final browser-profile cases pass: native arrival 148.5/80.5/73.8 ms,
+  fourfold-throttled 380.5/253.0/260.1 ms; substantial native layout/focus work and 41 requests remain.
+- Final ordinary software passes 5,338 cases/388 files, performance seven/four and content 255/26;
+  types/governance/packaging/build pass. The first browser pass stops at desktop Structure retry
+  focus (279 pass/one fail/one optional Maia skip). The actual retained trace proves two real
+  evidence attachments advance head 5→6→7 during the held head-5 response. Required decision
+  invalidation is working; the fixture's unchanged-decision premise is false. Original trace and
+  context remain ignored local diagnostics, not a dependency of progress checks.
+- D3764 changes only the browser tests: wait for actual played-node evaluations and client
+  consumption before unchanged-decision assertions. Four controlled both-module/viewport cases
+  deliberately hold genuine attachments, retain focus before the head advances, reject the old
+  response after advancement and prove a fresh recovery. All ten focused cases pass; no product
+  stamp, cancellation, focus, deadline or retry policy changes. Final ordinary browser replay exits
+  zero: 284 smoke, five content, 59 matrix and one packaged-production case (349 passes), one
+  existing optional Maia skip, zero retries. All 150 input and 112 composition cells pass. Warm
+  local arrival p95 is 131.3 ms under the unchanged 250 ms budget, not a published failure closure.
+- D3763/D3764 close with permanent path-backed tests in the existing queue/ledger/work-state/
+  roadmap. The ledger has 3,513 rows, 1,726 assigned live items, zero untriaged and 462 historical
+  prose-only closures. Both terminal rows must transition together after both glyphs change;
+  separate attempts refuse their inconsistent intermediate state, then the atomic transition
+  and per-row evidence adjustment pass. No new tracker or weakened guard is introduced.
+- Whole inventory remains 14 incomplete capabilities, four active/five blocked milestones,
+  276 completed/269 live/24 retired UX items, 50 installed packs and zero official graduates.
+  D3758's actual Review adoption and useful selection remain unaccepted. Latest published revision
+  remains c7ec3c3d: verify 38222438800 succeeds, browser 38222438796 fails. No push, remote-CI,
+  official-content, whole-capability, milestone or release-ready promotion is claimed.

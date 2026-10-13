@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3762]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3764]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,20 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3763]]/[[D3764]]: structural reading reuses within-call position and attack work,
+reducing the initial-position acquisition count from 157 to five while preserving the registered
+dispatcher, complete readings and saved-history outputs. All 80 focused and 66 longitudinal
+controls pass; the unchanged 984-declaration census rejects the initial duplicate dispatcher,
+which is removed rather than waived. Final software passes 5,338 cases/388 files, performance
+seven/four and content 255/26; types/governance/packaging/build pass. The first browser pass exposes
+a recovery fixture race: real source attachments advance the decision while the test holds an
+older reply. Waiting for those actual attachments and adding four controlled stale-reply cases
+repairs the test, not production invalidation. All four final browser tiers pass: 349 cases,
+one optional Maia skip, zero retries, all 150 input and 112 composition cells. Local warm p95
+is 131.3 ms against 250 ms; eight alternating full-population comparisons are only 1.74% lower
+in summed local cost (five faster/three slower). No portable latency, remote CI, semantic
+qualification, content or whole-capability completion follows; D3300/D3600 remain open.
 
 2026-10-13 [[D3762]]: the occupied-target collector now rejects Chess960 rook→king
 replacement as a retained-piece relation, while legitimate gained/lost targets and scalar
@@ -97,7 +111,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3762]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3764]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not

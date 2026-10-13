@@ -361,8 +361,7 @@ export function pawnSafety(fen: string, color: Color, squareName: SquareName): P
   return pawnSafetyOnPosition(positionFromFen(fen), color, squareName);
 }
 
-function directAttackCount(fen: string, color: Color, target: Square): number {
-  const position = positionFromFen(fen);
+function directAttackCount(position: ReturnType<typeof positionFromFen>, color: Color, target: Square): number {
   let count = 0;
   for (const [square, piece] of position.board) {
     if (piece.color === color && attacks(piece, square, position.board.occupied).has(target)) count++;
@@ -567,43 +566,71 @@ function matchesQuantified(fen: string, expression: Extract<StructuralExpression
   return expression.quantifier === "some" ? results.some(Boolean) : results.every(Boolean);
 }
 
+// Private per-predicate arithmetic, shared by the public dispatcher and bulk reading.
+// These are not another feature-kind interpreter or a public position-injection seam.
+function outpostOnPosition(position: ReturnType<typeof positionFromFen>, color: Color, name: SquareName): boolean {
+  const square = parseSquare(name); if (square === undefined) return false;
+  const relativeRank = color === "white" ? rankOf(square) + 1 : 8 - rankOf(square);
+  return relativeRank >= 4 && relativeRank <= 6 && pawns(position, color).some(p => pawnAttacks(color, p).has(square)) && pawnSafetyOnPosition(position, color, name).safe;
+}
+
+function backwardPawnOnFile(position: ReturnType<typeof positionFromFen>, color: Color, file: FileName): boolean {
+  const fi = fileIndex(file);
+  return pawns(position, color).filter(p => p % 8 === fi).some(pawn => {
+    const rank = rankOf(pawn);
+    const supported = pawns(position, color).some(other => Math.abs((other % 8) - fi) === 1 && (rankOf(other) - rank) * forward(color) <= 0);
+    const stop = pawn + 8 * forward(color);
+    return !supported && stop >= 0 && stop < 64 && pawns(position, opposite(color)).some(enemy => pawnAttacks(opposite(color), enemy).has(stop));
+  });
+}
+
+function isolatedPawnOnFile(position: ReturnType<typeof positionFromFen>, color: Color, file: FileName): boolean {
+  const fi = fileIndex(file), own = pawns(position, color);
+  return own.some(p => p % 8 === fi) && !own.some(p => Math.abs((p % 8) - fi) === 1);
+}
+
+function doubledPawnOnFile(position: ReturnType<typeof positionFromFen>, color: Color, file: FileName): boolean {
+  return pawns(position, color).filter(p => p % 8 === fileIndex(file)).length >= 2;
+}
+
+function passedPawnOnSquare(position: ReturnType<typeof positionFromFen>, color: Color, name: SquareName): boolean {
+  const square = parseSquare(name); if (square === undefined || position.board.get(square)?.role !== "pawn" || position.board.getColor(square) !== color) return false;
+  return !pawns(position, opposite(color)).some(p => Math.abs((p % 8) - (square % 8)) <= 1 && (rankOf(p) - rankOf(square)) * forward(color) > 0);
+}
+
+function openFile(position: ReturnType<typeof positionFromFen>, file: FileName): boolean {
+  return ![...position.board.pawn].some(p => p % 8 === fileIndex(file));
+}
+
+function halfOpenFile(position: ReturnType<typeof positionFromFen>, color: Color, file: FileName): boolean {
+  const fi = fileIndex(file);
+  return !pawns(position, color).some(p => p % 8 === fi) && pawns(position, opposite(color)).some(p => p % 8 === fi);
+}
+
+function kingInZone(position: ReturnType<typeof positionFromFen>, color: Color, zone: "edge" | "corner"): boolean {
+  const square = position.board.kingOf(color);
+  if (square === undefined) return false;
+  const file = square % 8, rank = rankOf(square);
+  const fileEdge = file === 0 || file === 7, rankEdge = rank === 0 || rank === 7;
+  return zone === "corner" ? fileEdge && rankEdge : fileEdge || rankEdge;
+}
+
 export function matchesStructuralFeature(fen: string, feature: StructuralFeature): boolean {
   const position = positionFromFen(fen);
-  if (feature.kind === "pawn_safe_square") return pawnSafety(fen, feature.color, feature.square).safe;
-  if (feature.kind === "outpost") {
-    const square = parseSquare(feature.square); if (square === undefined) return false;
-    const relativeRank = feature.color === "white" ? rankOf(square) + 1 : 8 - rankOf(square);
-    return relativeRank >= 4 && relativeRank <= 6 && [...pawns(position, feature.color)].some((p) => pawnAttacks(feature.color, p).has(square)) && pawnSafety(fen, feature.color, feature.square).safe;
-  }
-  if (feature.kind === "backward_pawn") {
-    const fi = fileIndex(feature.file);
-    return pawns(position, feature.color).filter((p) => p % 8 === fi).some((pawn) => {
-      const rank = rankOf(pawn);
-      const supported = pawns(position, feature.color).some((other) => Math.abs((other % 8) - fi) === 1 && (rankOf(other) - rank) * forward(feature.color) <= 0);
-      const stop = pawn + 8 * forward(feature.color);
-      return !supported && stop >= 0 && stop < 64 && pawns(position, opposite(feature.color)).some((enemy) => pawnAttacks(opposite(feature.color), enemy).has(stop));
-    });
-  }
-  if (feature.kind === "isolated_pawn") {
-    const fi = fileIndex(feature.file); const own = pawns(position, feature.color);
-    return own.some((p) => p % 8 === fi) && !own.some((p) => Math.abs((p % 8) - fi) === 1);
-  }
-  if (feature.kind === "doubled_pawn") return pawns(position, feature.color).filter((p) => p % 8 === fileIndex(feature.file)).length >= 2;
-  if (feature.kind === "passed_pawn") {
-    const square = parseSquare(feature.square); if (square === undefined || position.board.get(square)?.role !== "pawn" || position.board.getColor(square) !== feature.color) return false;
-    return !pawns(position, opposite(feature.color)).some((p) => Math.abs((p % 8) - (square % 8)) <= 1 && (rankOf(p) - rankOf(square)) * forward(feature.color) > 0);
-  }
-  if (feature.kind === "open_file") return ![...position.board.pawn].some((p) => p % 8 === fileIndex(feature.file));
-  if (feature.kind === "half_open_file") {
-    const fi = fileIndex(feature.file);
-    return !pawns(position, feature.color).some((p) => p % 8 === fi) && pawns(position, opposite(feature.color)).some((p) => p % 8 === fi);
-  }
+  if (feature.kind === "pawn_safe_square") return pawnSafetyOnPosition(position, feature.color, feature.square).safe;
+  if (feature.kind === "outpost") return outpostOnPosition(position, feature.color, feature.square);
+  if (feature.kind === "backward_pawn") return backwardPawnOnFile(position, feature.color, feature.file);
+  if (feature.kind === "isolated_pawn") return isolatedPawnOnFile(position, feature.color, feature.file);
+  if (feature.kind === "doubled_pawn") return doubledPawnOnFile(position, feature.color, feature.file);
+  if (feature.kind === "passed_pawn") return passedPawnOnSquare(position, feature.color, feature.square);
+  if (feature.kind === "open_file") return openFile(position, feature.file);
+  if (feature.kind === "half_open_file") return halfOpenFile(position, feature.color, feature.file);
   if (feature.kind === "line_blockers") {
     const from = parseSquare(feature.from), to = parseSquare(feature.to); if (from === undefined || to === undefined) return false;
     return compare(between(from, to).intersect(position.board.occupied).size(), feature.comparison, feature.count);
   }
   if (feature.kind === "direct_attack_count") {
-    const target = parseSquare(feature.square); return target !== undefined && compare(directAttackCount(fen, feature.color, target), feature.comparison, feature.count);
+    const target = parseSquare(feature.square); return target !== undefined && compare(directAttackCount(position, feature.color, target), feature.comparison, feature.count);
   }
   if (feature.kind === "piece_reach_count") {
     const values = [...position.board.pieces(feature.color, feature.role)].map((square) => attacks({ color: feature.color, role: feature.role }, square, position.board.occupied).diff(position.board[feature.color]).size());
@@ -622,13 +649,7 @@ export function matchesStructuralFeature(fen: string, feature: StructuralFeature
     const other = position.board.pieces(opposite(feature.color), feature.role).size();
     return compare(feature.basis === "count" ? own : own - other, feature.comparison, feature.count);
   }
-  if (feature.kind === "king_zone") {
-    const square = position.board.kingOf(feature.color);
-    if (square === undefined) return false;
-    const file = square % 8, rank = rankOf(square);
-    const fileEdge = file === 0 || file === 7, rankEdge = rank === 0 || rank === 7;
-    return feature.zone === "corner" ? fileEdge && rankEdge : fileEdge || rankEdge;
-  }
+  if (feature.kind === "king_zone") return kingInZone(position, feature.color, feature.zone);
   if (feature.kind === "piece_distance") {
     const subjects = [...position.board.pieces(feature.color, feature.role)];
     const targets = feature.target.kind === "square"
@@ -701,19 +722,27 @@ export function structuralReading(fen: string): StructuralReading {
 
 function computeStructuralReading(fen: string): StructuralReading {
   const position = positionFromFen(fen); const values: StructuralObservation[] = [];
+  // One complete geometric traversal serves every occupied-target count. This is the
+  // same pseudo-attack definition, not legal captures, pressure or an all-clear verdict.
+  const attackCounts: Record<Color, number[]> = { white: Array<number>(64).fill(0), black: Array<number>(64).fill(0) };
+  for (const [square, piece] of position.board) for (const target of attacks(piece, square, position.board.occupied)) {
+    attackCounts[piece.color][target] = attackCounts[piece.color][target]! + 1;
+  }
   for (const color of COLORS) for (const role of ROLES) values.push({ kind: "piece_count", color, role, count: position.board.pieces(color, role).size(), squares: [] });
   for (const color of COLORS) for (const file of FILES) {
-    for (const kind of ["backward_pawn", "isolated_pawn", "doubled_pawn"] as const) if (matchesStructuralFeature(fen, { kind, color, file })) values.push({ kind, color, file, squares: [] });
-    if (matchesStructuralFeature(fen, { kind: "half_open_file", color, file })) values.push({ kind: "half_open_file", color, file, squares: [] });
+    if (backwardPawnOnFile(position, color, file)) values.push({ kind: "backward_pawn", color, file, squares: [] });
+    if (isolatedPawnOnFile(position, color, file)) values.push({ kind: "isolated_pawn", color, file, squares: [] });
+    if (doubledPawnOnFile(position, color, file)) values.push({ kind: "doubled_pawn", color, file, squares: [] });
+    if (halfOpenFile(position, color, file)) values.push({ kind: "half_open_file", color, file, squares: [] });
   }
-  for (const file of FILES) if (matchesStructuralFeature(fen, { kind: "open_file", file })) values.push({ kind: "open_file", file, squares: [] });
+  for (const file of FILES) if (openFile(position, file)) values.push({ kind: "open_file", file, squares: [] });
   for (const [square, piece] of position.board) {
     const name = makeSquare(square);
     if (piece.role === "bishop") values.push({ kind: "bishop_on_shade", color: piece.color, shade: shadeOf(square), squares: [name] });
-    if (piece.role === "pawn" && matchesStructuralFeature(fen, { kind: "passed_pawn", color: piece.color, square: name })) values.push({ kind: "passed_pawn", color: piece.color, squares: [name] });
+    if (piece.role === "pawn" && passedPawnOnSquare(position, piece.color, name)) values.push({ kind: "passed_pawn", color: piece.color, squares: [name] });
     if (piece.role !== "pawn" && piece.role !== "king") {
-      const detail = pawnSafety(fen, piece.color, name); if (detail.safe || detail.pushAttackers.length > 0 || detail.captureAttackers.length > 0) values.push({ kind: "pawn_safe_square", color: piece.color, squares: [name], detail });
-      if (matchesStructuralFeature(fen, { kind: "outpost", color: piece.color, square: name })) values.push({ kind: "outpost", color: piece.color, squares: [name], provenanceNote: "Tabiya's strict outpost detector." });
+      const detail = pawnSafetyOnPosition(position, piece.color, name); if (detail.safe || detail.pushAttackers.length > 0 || detail.captureAttackers.length > 0) values.push({ kind: "pawn_safe_square", color: piece.color, squares: [name], detail });
+      if (outpostOnPosition(position, piece.color, name)) values.push({ kind: "outpost", color: piece.color, squares: [name], provenanceNote: "Tabiya's strict outpost detector." });
     }
     if (REACH_ROLES.includes(piece.role as ReachRole)) {
       const count = attacks(piece, square, position.board.occupied).diff(position.board[piece.color]).size();
@@ -728,7 +757,7 @@ function computeStructuralReading(fen: string): StructuralReading {
         if (!span.isEmpty()) values.push({ kind: "line_blockers", squares: [name, makeSquare(endpoint)], count: span.intersect(position.board.occupied).size() });
       }
     }
-    if (piece.role !== "pawn") for (const color of COLORS) { const count = directAttackCount(fen, color, square); if (count > 0) values.push({ kind: "direct_attack_count", color, squares: [name], count }); }
+    if (piece.role !== "pawn") for (const color of COLORS) { const count = attackCounts[color][square]!; if (count > 0) values.push({ kind: "direct_attack_count", color, squares: [name], count }); }
   }
   for (const color of COLORS) for (const form of ["direct", "distant"] as const) {
     if (!opposition(position, color, form)) continue;
@@ -738,7 +767,7 @@ function computeStructuralReading(fen: string): StructuralReading {
   for (const color of COLORS) {
     const square = position.board.kingOf(color);
     if (square === undefined) continue;
-    for (const zone of ["edge", "corner"] as const) if (matchesStructuralFeature(fen, { kind: "king_zone", color, zone })) values.push({ kind: "king_zone", color, zone, squares: [makeSquare(square)] });
+    for (const zone of ["edge", "corner"] as const) if (kingInZone(position, color, zone)) values.push({ kind: "king_zone", color, zone, squares: [makeSquare(square)] });
   }
   const whiteKing = position.board.kingOf("white"), blackKing = position.board.kingOf("black");
   if (whiteKing !== undefined && blackKing !== undefined) values.push({ kind: "piece_distance", role: "king", squares: [makeSquare(whiteKing), makeSquare(blackKing)].sort() as SquareName[], count: emptyBoardDistance("king", whiteKing, blackKing)! });

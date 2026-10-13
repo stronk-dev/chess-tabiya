@@ -2186,7 +2186,11 @@ longitudinal-projector-profile:
 .PHONY: longitudinal-projector-baseline longitudinal-projector-compare
 # Capture the unmodified implementation before a cost repair; both bundles remain ignored.
 longitudinal-projector-baseline:
-	./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-before.mjs --log-level=warning
+	@if [ -n "$(BASELINE_REF)" ]; then \
+		$(CI_NODE) tools/d3300-projector-baseline.mjs "$(BASELINE_REF)"; \
+	else \
+		./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-before.mjs --log-level=warning; \
+	fi
 
 longitudinal-projector-compare:
 	./node_modules/.bin/esbuild tools/d3300-projector-profile.ts --bundle --platform=node --format=esm --outfile=tools/dist/d3300-projector-profile.mjs --log-level=warning
@@ -3928,6 +3932,11 @@ review-one-edge-adoption-probe:
 occupied-target-identity-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/transition.test.ts packages/runtime/src/occupied-target-identity.test.ts packages/runtime/src/semantic-evidence.test.ts apps/server/src/castling-open-file.test.ts
 	$(MAKE) typecheck
+
+.PHONY: structural-reading-work-check
+structural-reading-work-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/structure-work.test.ts packages/runtime/src/structure.test.ts packages/runtime/src/structural-evidence.test.ts packages/runtime/src/transition.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/shape-firing.test.ts apps/server/src/capability/pack-capability-contract.test.ts
+	$(MAKE) capability-check typecheck
 
 .PHONY: legal-move-context-check
 legal-move-context-check:

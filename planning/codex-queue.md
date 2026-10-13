@@ -1,5 +1,33 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3764]] is the actual desktop Structure-help recovery failure found by D3763's
+full browser gate. The original trace proves two actual evidence attachments advance head
+5→6→7 while a head-5 reply is held, so the unchanged-decision focus premise was false. The test
+now waits for real fixture evaluations and browser consumption; four new both-module/viewports
+controls intentionally advance the head, refuse late old paint and recover from the fresh
+decision. All ten focused browser cases pass with original focus/history/geometry assertions
+and deadlines. No production stamp/focus/cancellation rule changes. All four final browser tiers
+pass: 349 cases, one existing optional Maia skip, zero retries; 150 input and 112 composition
+cells pass. Local warm arrival p95 is 131.3 ms against the unchanged 250 ms budget, not a remote
+CI closure. D3764 is closed with permanent test evidence.
+
+2026-10-13 — [[D3763]] investigates repeated same-position work in the existing structural
+reader under its accepted readable/predicate contract. Preserve the complete output and every
+feature scope; use private within-call position/attack reuse, not a new cache or omitted features.
+Permanent predecessor work-count and independent geometric controls must fail/pass respectively
+before repair. The actual predecessor acquires 157 positions instead of five; all 80 final focused
+controls/types and 66 history controls pass after repair. The full software census rejects the
+initial generic helper (5,337 pass/one fail); final code retains the registered dispatcher with
+private per-predicate arithmetic, and all 984 declarations match without a waiver. The focused
+target now includes that contract. Eight final alternating fresh-process pairs retain complete
+events/input receipts and projected rows; summed cold cost is 1.74% lower locally, five faster/
+three slower. Six final actual browser-profile controls pass, retaining substantial native
+layout/focus work. No portable speed or remote-cause claim. Final software passes 5,338 cases/
+388 files, performance seven/four and content 255/26; types/governance/packaging/build pass.
+The first browser pass stops at D3764's false fixture premise; after its test-only repair,
+all four browser tiers exit zero. D3763 closes; D3300/D3600 remain open until their actual
+obligations are measured.
+
 2026-10-13 — [[D3762]] repairs occupied-target semantic identity under the accepted event
 contract. Eight both-color/wings Chess960 negatives fail at runtime and authenticated Nudge
 collection before repair; four gained/lost retained-bishop positives remain. The source now

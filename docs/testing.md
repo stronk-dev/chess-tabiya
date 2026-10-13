@@ -4,6 +4,24 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make structural-reading-work-check` covers private same-position reuse and independently checks
+occupied-target geometric counts, alongside the existing predicates, evidence, transitions and
+shape consumers. It also checks the registered interpreter ownership/capability census; moving
+feature dispatch into an unregistered helper must fail here, not first in the full software gate.
+For a controlled full-population cost comparison, the existing
+`make longitudinal-projector-baseline BASELINE_REF=<commit>` can bundle that commit's structural
+reader without changing the checkout; all other modules/receipts and benchmark inputs stay current.
+`make longitudinal-projector-compare` checks complete event/receipt and projected-row equality
+across alternating fresh-process pairs. This is disposable cost research, not semantic qualification
+or proof of a remote timing failure.
+
+`make support-seat-lifecycle-browser-check` distinguishes two real browser states: an unchanged
+decision retains its retry focus and single flight; actual evidence attachments advance the head
+and retire a held older response. Engine-enabled recovery fixtures wait for their played-move
+evaluations and browser consumption before asserting unchanged-decision focus. Separate controlled
+attachment cells preserve late-response refusal, then prove current-decision recovery for both
+automatic modules at desktop/phone widths. No fixed sleep, deadline increase or stamp waiver.
+
 `make occupied-target-identity-check` runs retained-target controls through the real collector,
 factory, legal candidate population, registered renderer and authenticated Nudge source query.
 Eight both-color/wings Chess960 negatives independently fail before the repair; four gained/lost

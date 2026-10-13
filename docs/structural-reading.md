@@ -47,6 +47,12 @@ compile-time failure followed by a default runtime refusal, closing the former D
 
 ## Reading projection
 
+The bulk reading acquires one private position for its feature checks and computes geometric
+attack counts in one board traversal. Registered named-expression/witness traversal stays on its
+existing path. This is within-call reuse, not another cache: public predicates, complete output,
+memo boundaries and attack-versus-legal-mobility scope are unchanged. The permanent work-count
+control and independent occupied-target oracle run with `make structural-reading-work-check`.
+
 Author predicates and learner observations are different types. Arbitrary thresholds and arbitrary
 line endpoints cannot be finitely enumerated. `structuralReading(fen)` instead emits a bounded,
 canonical observation projection: pawn/file facts, occupied-piece pawn safety and outposts,

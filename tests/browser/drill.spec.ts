@@ -793,6 +793,23 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
   });
 }
 
+/** This engine-enabled fixture queues evaluations for both played moves. A focus test for an
+ * unchanged decision must start after their actual attachments, not race their event-head changes.
+ */
+async function waitForPlayedMoveEvidence(page: Page, runId: string): Promise<RunGraph> {
+  const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+  const initial = await graph();
+  const playedIds = initial.nodes.filter(node => node.moveUci !== null).map(node => node.id);
+  expect(playedIds.length).toBeGreaterThan(0);
+  await expect.poll(async () => {
+    const current = await graph();
+    return playedIds.every(id => current.nodes.find(node => node.id === id)?.evidenceRefs.some(ref => ref.startsWith("engine:")) === true);
+  }).toBe(true);
+  // The browser must have consumed the current-position attachment too, not only the server.
+  await expect(page.getByText("A recorded calculation is available for this position.", { exact: true })).toBeVisible();
+  return graph();
+}
+
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
   test(`D3673 Just Play respects normal/FEN choice through start, play and reload (${viewport.width}px)`, async ({ page }) => {
     await page.setViewportSize(viewport);
@@ -927,13 +944,14 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       });
       await showSupportTools(page);
       await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+      const runId = page.url().split("/").at(-1)!;
+      await waitForPlayedMoveEvidence(page, runId);
       const selector = page.getByRole("button", { name: label, exact: true });
       await expect(selector).toBeVisible();
       if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
       const seat = page.locator(`[data-module="${module}"]`);
       await expect(seat.getByRole("alert")).toContainText("Nothing was checked");
       await expect(seat.locator("[data-presented], .seat-badge")).toHaveCount(0);
-      const runId = page.url().split("/").at(-1)!;
       const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
       const events = async () => (await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] }).events;
       const original = await graph();
@@ -973,6 +991,95 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       await page.unroute("**/runs/*/modules/query");
       await page.reload(); await expect(page.getByLabel("Chessboard")).toBeVisible();
       assertRecordedNodesPreserved(recovered.nodes, (await graph()).nodes);
+    });
+  }
+}
+
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  for (const [module, label] of [["postcommit_nudge", "What did the move I just played actually change?"], ["structure_nudge", "What kind of position is this, and what is that kind generally about?"]] as const) {
+    test(`D3764 Support seats retire a held ${module} reply when real evidence advances the decision (${viewport.width}px)`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await chooseBot(page, "human-baseline.1400@1");
+      await page.getByRole("button", { name: "Start and keep the game" }).click();
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      await choosePreset(page, /^Guide me/u);
+      let releaseEvidence!: () => void;
+      const evidenceGate = new Promise<void>(resolve => { releaseEvidence = resolve; });
+      let heldAttachments = 0;
+      let releaseModule: (() => void) | undefined;
+      let oldPacket: ModuleQueryPage | undefined;
+      let recovery: "none" | "held" | "current" = "none";
+      const retries: ModuleQueryPage[] = [];
+      await page.route("**/runs/*/evidence", async route => {
+        if (route.request().method() === "POST") { heldAttachments++; await evidenceGate; }
+        await route.continue();
+      });
+      await page.route("**/runs/*/modules/query", async route => {
+        const body = route.request().postDataJSON();
+        if (body.query?.timing !== "post_commit") { await route.continue(); return; }
+        if (recovery === "none" || !body.query.requested.includes(module)) {
+          await route.fulfill({ status: 503, json: { error: { code: "EVIDENCE_UNAVAILABLE", message: "Support could not be loaded." } } });
+          return;
+        }
+        const response = await route.fetch();
+        expect(response.ok()).toBe(true);
+        const packet = (await response.json() as { page: ModuleQueryPage }).page;
+        if (recovery === "held") {
+          oldPacket = packet;
+          await new Promise<void>(resolve => { releaseModule = resolve; });
+        } else retries.push(packet);
+        await route.fulfill({ response });
+      });
+      try {
+        await move(page, "e2", "e4");
+        await showSupportTools(page);
+        await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+        const runId = page.url().split("/").at(-1)!;
+        const selector = page.getByRole("button", { name: label, exact: true });
+        await expect(selector).toBeVisible();
+        if (await selector.getAttribute("aria-expanded") !== "true") await selector.click();
+        const seat = page.locator(`[data-module="${module}"]`);
+        await expect(seat.getByRole("alert")).toContainText("Nothing was checked");
+        const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+        const events = async () => (await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] }).events;
+        const before = await graph(), beforeEvents = await events();
+        await expect.poll(() => heldAttachments).toBeGreaterThan(0);
+        recovery = "held";
+        const retry = seat.getByRole("button", { name: "Try again", exact: true });
+        await retry.click();
+        await expect.poll(() => releaseModule !== undefined).toBe(true);
+        await expect(seat.getByRole("status")).toContainText("Asking");
+        await expect(retry).toBeFocused();
+        await expect(retry).toHaveAttribute("aria-disabled", "true");
+        releaseEvidence();
+        const after = await waitForPlayedMoveEvidence(page, runId);
+        const afterEvents = await events();
+        expect(afterEvents.length).toBeGreaterThan(beforeEvents.length);
+        assertOnlyEvidenceAppended(beforeEvents, afterEvents);
+        assertRecordedNodesPreserved(before.nodes, after.nodes);
+        expect(after.activeCursor).toEqual(before.activeCursor);
+        expect(after.branches).toEqual(before.branches);
+        await expect(seat.getByRole("alert")).toContainText("Nothing was checked");
+        const oldResponse = page.waitForResponse(response => response.request().method() === "POST"
+          && new URL(response.url()).pathname.endsWith("/modules/query")
+          && response.request().postDataJSON().query.requested.includes(module));
+        releaseModule!();
+        await oldResponse;
+        await expect(seat.locator("[data-presented], .seat-badge")).toHaveCount(0);
+        recovery = "current";
+        await seat.getByRole("button", { name: "Try again", exact: true }).click();
+        await expect.poll(() => retries.length).toBe(1);
+        const current = retries[0]!.packets.find(packet => packet.module === module)!;
+        const previous = oldPacket!.packets.find(packet => packet.module === module)!;
+        expect(current.disclosure.decisionDigest).not.toBe(previous.disclosure.decisionDigest);
+        expect(current.disclosure.subject).toEqual(previous.disclosure.subject);
+        expect(current.receipt.items.length).toBeGreaterThan(0);
+        await expect(seat.locator("[data-presented]")).toHaveCount(current.receipt.items.length);
+        await expect(selector).toBeFocused();
+        assertRecordedNodesPreserved(before.nodes, (await graph()).nodes);
+        assertOnlyEvidenceAppended(afterEvents, await events());
+        await assertRunViewport(page, viewport);
+      } finally { releaseEvidence(); releaseModule?.(); }
     });
   }
 }
