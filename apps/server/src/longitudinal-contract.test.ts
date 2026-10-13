@@ -7,6 +7,8 @@ import { readFileSync } from "node:fs";
 import { canonicalizeJson, type JsonValue } from "@chess-tabiya/schema/drill-pack";
 import { appendEvents, fork, rewind, type DrillRun } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
+import { OCCUPIED_TARGET_IDENTITY_CASES } from "../../../packages/runtime/src/testing/occupied-target-fixtures.js";
+import { canonicalFen, positionFromFen } from "../../../packages/runtime/src/chess.js";
 
 import {
   assertParsedLongitudinalReadQuery,
@@ -277,7 +279,7 @@ describe("criterion 10 — observed import boundary", () => {
 
 describe("criterion 12 — revision pair", () => {
   it("pairs OBSERVATION_DERIVATION_REV with the registry digest and a fixture-output digest", () => {
-    expect(OBSERVATION_DERIVATION_REV).toBe(4);
+    expect(OBSERVATION_DERIVATION_REV).toBe(5);
     expect(ingestRegistryDigest(LONGITUDINAL_INGEST_REGISTRY)).toBe(LONGITUDINAL_REGISTRY_DIGEST);
     // A zero-incidence registry addition moves the registry digest even though no fixture row changes.
     const addition = [...LONGITUDINAL_INGEST_REGISTRY, { projection: { id: "rules.zero.incidence", version: 1 }, signs: ["gained"], kind: "edge", adapter: "local_semantic_event" }];
@@ -307,18 +309,25 @@ describe("criterion 12 — revision pair", () => {
       expect(gains.every(row => row.occurred === 0)).toBe(true);
       expect(pawn.observations).toContainEqual(expect.objectContaining({ projectionId: "derived.pawn.event.transitions", occurred: 1 }));
     }
-    const output = [projectObservations(image(fixture)), promotion, retained, castling, enPassant, ...pawnRuns];
+    const occupiedTargets = OCCUPIED_TARGET_IDENTITY_CASES.map(value => {
+      const projected = projectObservations(image(play(positionRun(`revision-target-${value.name}`, canonicalFen(positionFromFen(value.fen)), value.side), value.uci)));
+      const defence = projected.observations.filter(row => row.projectionId === "rules.transition.event.occupied_defence");
+      if (value.sign === null) expect(defence.filter(row => row.semanticSign === "gained").every(row => row.occurred === 0)).toBe(true);
+      else expect(defence).toContainEqual(expect.objectContaining({ semanticSign: value.sign, occurred: 1 }));
+      return projected;
+    });
+    const output = [projectObservations(image(fixture)), promotion, retained, castling, enPassant, ...pawnRuns, ...occupiedTargets];
     const digest = `sha256:${createHash("sha256").update(canonicalizeJson(output as unknown as JsonValue)).digest("hex")}`;
     expect(digest).toBe(LONGITUDINAL_FIXTURE_OUTPUT_DIGEST);
   }, 60_000);
 });
 
 /**
- * §D revision pair: opening, promoted/lost duty, retained duty, castling, en-passant and retained pawn gains.
+ * §D revision pair: opening, promotion duty, castling, en-passant, retained pawn gains and exact occupied targets.
  * Any semantic change to the projector, adapters or admitted registry moves this literal; the RFC that
  * owns that change owns the revision bump and the rebuild discharge in the same diff.
  */
-const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:9c604fae1802cb544ed35281a9a517a65fed15ef544de20b7c042c692697d939";
+const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:2e68f632b4389202a9f7752afef507376a96b336da5f626bb3b351fa5ab25c75";
 
 describe("criteria 13, 28 — branded query parser and sealed V4 source identity", () => {
   it("rejects empty, duplicate, unknown and contradictory filters and orders bytewise", () => {

@@ -3924,6 +3924,11 @@ arrival-cpu-profile:
 review-one-edge-adoption-probe:
 	./node_modules/.bin/vitest run --config tools/d1585-module-semantic-closure/vitest.config.ts tools/d1585-module-semantic-closure/review-adoption.test.ts
 
+.PHONY: occupied-target-identity-check
+occupied-target-identity-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/transition.test.ts packages/runtime/src/occupied-target-identity.test.ts packages/runtime/src/semantic-evidence.test.ts apps/server/src/castling-open-file.test.ts
+	$(MAKE) typecheck
+
 .PHONY: legal-move-context-check
 legal-move-context-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/legal-moves.test.ts apps/web/src/lib/opponent-selection-response.test.ts

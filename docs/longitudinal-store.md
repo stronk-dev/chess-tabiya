@@ -8,13 +8,14 @@ re-derivable byte-for-byte and never a second source of truth. Contract: `rfc/lo
 Its first consumer is the private [learner profile](learner-profile.md) (`/learner-profile`, client
 route `/profile`); the store itself still has no route of its own.
 
-Current derivation revision is **4** (D3636, 2026-10-09). This recomputes the existing
-67-member registry after retained pawn-gain identity, castling-rook mobility and preceding special-move corrections; it admits no new family or
+Current derivation revision is **5** (D3762, 2026-10-13). This recomputes the existing
+67-member registry after occupied-target identity, retained pawn-gain identity, castling-rook mobility and preceding special-move corrections; it admits no new family or
 personal attribution. On upgrade, normal application startup atomically removes old derived
-rows and requeues untouched revision-1/2/3 histories. The existing background worker rebuilds
+rows and requeues untouched revision-1/2/3/4 histories. The existing background worker rebuilds
 them; Profile reports incomplete/rebuilding until the current cut completes. No manual rebuild
 is required, and saved moves are unchanged. Permanent file-backed and real-worker startup tests
-cover corrected promotion duty, castling-rook mobility and both-color retained pawn gains,
+cover corrected promotion duty, castling-rook mobility, both-color retained pawn gains and
+populated false Chess960 occupied-target counts,
 exact current-revision reads and idempotent restart.
 
 ## Storage (migration 26)

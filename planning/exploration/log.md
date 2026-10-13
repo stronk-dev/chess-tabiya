@@ -27262,3 +27262,37 @@ Campaign was the one capability with no API, route or content. Now:
 - Read-only GitHub inspection confirms the latest published revision is still c7ec3c3d:
   verify 38222438800 succeeds; browser 38222438796 fails. No push, external write, contract
   acceptance, official-content qualification or whole-capability promotion is claimed.
+
+### 2026-10-13 — D3762 occupied-target repair, saved-history rebuild and 1.0 inventory
+
+- Eight legal Chess960 rook→king replacements across both colors/wings fail at runtime and
+  authenticated Nudge collection on the predecessor (16 failures); four retained-bishop
+  gained/lost positives remain. The accepted identity-preserving contract now checks the
+  target role as well as color/square. Facts, sole factories, complete candidates, registered
+  rendering and real HTTP/client parsing pass all 72 focused controls with clean types.
+- Collector repair alone leaves old derived counts current. The populated both-color upgrade
+  control fails with zero revision resets instead of two. Existing longitudinal §D/§4.4 advances
+  derivation to 5; actual startup/worker rebuilds both histories, removes the false occurrences,
+  retains nonempty observations and both denominators, and leaves saved games byte-identical.
+  Second startup resets zero. All twelve target fixtures join the independently recomputed
+  fixture-output pair. The initial noncanonical test FEN is corrected as fixture setup, not a
+  product defect; all 66 longitudinal controls pass after the revision and literal-output update.
+- The disposable D3758 probe passes 25 controls with a set-equal 32-ref change-witness matrix.
+  Eight games/513 edges offer 10,196 facts; change-only selection still has no quiet rows and
+  median ten/p95 21 facts per move. Sign-only filtering wrongly drops actual checks, captures,
+  castling and rich king changes. Actual Review still lacks these components. Family usefulness,
+  grouping, bounded presentation and source-to-client adoption remain independently unaccepted.
+- Final ordinary serial `make longitudinal-projector-check typecheck roadmap-receipt
+  verify-awake build test-browser-ci-awake` exits zero: software 5,326 cases/387 files,
+  unchanged performance seven/four, content 255/26, clean types/governance/packaging/build and
+  345 browser passes (280 smoke, five content, 59 matrix, one packaged-production), one existing
+  optional Maia skip and zero retries. All 150 input and 112 unretried composition cells pass.
+  Warm local arrival p95 is 121.9 ms under the unchanged 250 ms budget, not a remote closure.
+- D3762 closes with permanent path-backed source and history regressions. Existing roadmap,
+  queue, ledger and work-state carry the closeout. Live ledger: 1,726 assigned items, zero
+  untriaged; 462 older prose-only closures remain weaker proof. Whole inventory remains 14
+  incomplete capabilities, four active/five blocked milestones, 276 completed/269 live/24
+  retired UX items, 50 installed packs and zero official graduates. No source admission,
+  strategic grading, qualification, content, whole-capability or milestone promotion.
+- GitHub remains on c7ec3c3d: verify 38222438800 succeeds; browser 38222438796 fails at
+  399.2 ms warm p95 against 250 ms. D3600 remains open. No push or release readiness is claimed.

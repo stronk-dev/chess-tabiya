@@ -18,7 +18,7 @@ import { parsePresentationReceipt, presentEvidenceItems, presentationAdapter } f
 import { recordedSemanticPath } from "../../packages/runtime/src/recorded-semantic-path.js";
 import { reviewPacketForRun } from "../../packages/runtime/src/review-evidence.js";
 import { reviewMapProjection } from "../../packages/runtime/src/review-map.js";
-import { localSemanticEventClosure } from "../../packages/runtime/src/semantic-evidence.js";
+import { localSemanticEventClosure, type SemanticEvidenceEvent } from "../../packages/runtime/src/semantic-evidence.js";
 import { CASTLING_OPEN_FILE_CASES, CASTLING_OPEN_FILE_NEGATIVES } from "../../packages/runtime/src/testing/castling-open-file-fixtures.js";
 import { importRecord, importedRun, play } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { DrillRun } from "../../packages/runtime/src/types.js";
@@ -28,6 +28,46 @@ const key = (ref: { id: string; version: number }): string => `${ref.id}@${ref.v
 const eligible = new Set(MODULE_CONSUMER_ACCEPTS.review_map.map(key));
 const oneEdge = ONE_EDGE_EVENT_REFS.filter(ref => eligible.has(key(ref)));
 const oneEdgeKeys = new Set(oneEdge.map(key));
+
+// Disposable D3758 selection experiment, NOT a registered selector or usefulness authority.
+// This literal matrix must cover the measured source class, not silently adopt future sources.
+const witnessMatrix: Readonly<Record<string, string>> = Object.freeze({
+  ...Object.fromEntries(["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "king_opposition", "king_zone", "open_file", "passed_pawn", "pawn_islands"].map(id => [`rules.structural.event.${id}@1`, "before_after"])),
+  ...Object.fromEntries(["occupied_attack", "occupied_defence", "slider_ray", "piece_escape", "defended_duty"].map(id => [`rules.transition.event.${id}@1`, "target_delta"])),
+  ...Object.fromEntries(["castled", "last_of_role", "pawn_contact", "checkmate", "promotion", "capture", "developed"].map(id => [`rules.transition.event.${id}@1`, "edge_occurrence"])),
+  "rules.tactic.event.double_attack@1": "edge_occurrence",
+  "rules.tactic.event.check@1": "edge_occurrence",
+  "rules.tactic.event.loose_piece@1": "edge_occurrence",
+  "rules.castling.event.rights_lost@1": "edge_occurrence",
+  "derived.exchange.capture_class@1": "edge_occurrence",
+  "rules.pawn.event.dynamics@1": "edge_occurrence",
+  "derived.pawn.event.transitions@1": "edge_occurrence",
+  "derived.material.event.role_asymmetry@1": "before_after",
+  "rules.king.event.zone_state@1": "king_delta",
+  "derived.king.captured_zone_defender@1": "edge_occurrence",
+  "derived.activity.event.open_file_occupancy@1": "edge_occurrence",
+});
+
+function hasChangeWitness(event: SemanticEvidenceEvent): boolean {
+  const payload = event.operands as Record<string, unknown>;
+  switch (witnessMatrix[key(event.projection)]) {
+    case "before_after":
+      if (!("before" in payload) || !("after" in payload)) throw new Error("missing paired state operands");
+      return JSON.stringify(payload.before) !== JSON.stringify(payload.after);
+    case "target_delta": {
+      const before = payload.targets_before as readonly string[];
+      const after = payload.targets_after as readonly string[];
+      return before.some(square => !after.includes(square)) || after.some(square => !before.includes(square));
+    }
+    case "king_delta": {
+      const king = payload.king as { relocated: boolean };
+      const relations = [payload.attackers, payload.defenders, payload.shelter, payload.escapes] as readonly { gained: readonly unknown[]; lost: readonly unknown[] }[];
+      return king.relocated || relations.some(relation => relation.gained.length > 0 || relation.lost.length > 0);
+    }
+    case "edge_occurrence": return true;
+    default: throw new Error(`unclassified selection source ${key(event.projection)}`);
+  }
+}
 
 function inspect(run: DrillRun) {
   const branchId = run.activeCursor.branchId;
@@ -54,8 +94,19 @@ function inspect(run: DrillRun) {
 }
 
 describe("D3758 disposable Review one-edge adoption probe", () => {
+  it.each([
+    { side: "white" as const, fen: "4k3/8/8/8/8/8/8/2R2K2 w C - 0 1", move: "f1c1", target: "c1" },
+    { side: "black" as const, fen: "2r2k2/8/8/8/8/8/8/4K3 b c - 0 1", move: "f8c8", target: "c8" },
+  ])("D3762 $side castling never labels the replaced rook as the retained defended target", fixture => {
+    const run = play(importedRun(`d3762-${fixture.side}`, fixture.side, canonicalFen(positionFromFen(fixture.fen))), [fixture.move]);
+    const row = inspect(run).rows[0]!;
+    const events = row.events.filter(event => key(event.projection) === "rules.transition.event.occupied_defence@1");
+    expect(events.some(event => (event.operands as { subject: { target: string } }).subject.target === fixture.target)).toBe(false);
+  });
+
   it("derives every exact declared pair and distinguishes acquisition from presentation", () => {
     expect(oneEdge.length).toBeGreaterThan(12);
+    expect(Object.keys(witnessMatrix).sort()).toEqual([...oneEdgeKeys].sort());
     const census = oneEdge.map(ref => {
       const execution = MODULE_PAIR_EXECUTION.find(pair => pair.module === "review_map" && key(pair.projection) === key(ref));
       expect(execution).toBeDefined();
@@ -108,6 +159,9 @@ describe("D3758 disposable Review one-edge adoption probe", () => {
     let edges = 0;
     let maxOffered = 0;
     let totalOffered = 0;
+    const selectionCounts = new Map<string, { offered: number; signOnly: number; witnessed: number; witnessedState: number }>();
+    const density: number[] = [];
+    let preservedSignChangedKingZones = 0;
     const started = performance.now();
     for (const [index, game] of games.entries()) {
       if (gamesUsed === 8) break;
@@ -130,6 +184,21 @@ describe("D3758 disposable Review one-edge adoption probe", () => {
         const offered = row.values.filter(value => oneEdgeKeys.has(key(value.projection)));
         totalOffered += offered.length;
         maxOffered = Math.max(maxOffered, offered.length);
+        let witnessedOnRow = 0;
+        for (const event of row.events.filter(event => oneEdgeKeys.has(key(event.projection)))) {
+          const id = key(event.projection);
+          const count = selectionCounts.get(id) ?? { offered: 0, signOnly: 0, witnessed: 0, witnessedState: 0 };
+          count.offered += 1;
+          if (event.sign === "gained" || event.sign === "lost") count.signOnly += 1;
+          if (hasChangeWitness(event)) {
+            count.witnessed += 1;
+            witnessedOnRow += 1;
+            if (event.sign === "state" || event.sign === "preserved") count.witnessedState += 1;
+            if (id === "rules.structural.event.king_zone@1" && event.sign === "preserved") preservedSignChangedKingZones += 1;
+          }
+          selectionCounts.set(id, count);
+        }
+        density.push(witnessedOnRow);
         for (const ref of oneEdge) {
           const id = key(ref);
           const count = counts.get(id) ?? { offered: 0, renderedComponents: 0, actualComponents: 0 };
@@ -144,6 +213,14 @@ describe("D3758 disposable Review one-edge adoption probe", () => {
     expect(edges).toBeGreaterThan(100);
     expect(totalOffered).toBeGreaterThan(edges);
     expect([...counts.values()].every(count => count.actualComponents === 0)).toBe(true);
+    expect(selectionCounts.size).toBe(32);
+    expect(selectionCounts.get("rules.structural.event.pawn_islands@1")!.witnessed).toBeLessThan(selectionCounts.get("rules.structural.event.pawn_islands@1")!.offered);
+    expect(selectionCounts.get("rules.tactic.event.check@1")!.witnessedState).toBeGreaterThan(0);
+    expect(preservedSignChangedKingZones).toBeGreaterThan(0);
+    density.sort((a, b) => a - b);
+    process.stdout.write(`D3758 exact witness experiment ${JSON.stringify({ edges, preservedSignChangedKingZones,
+      quietRows: density.filter(value => value === 0).length, min: density[0], median: density[Math.floor(density.length / 2)],
+      p95: density[Math.ceil(density.length * 0.95) - 1], max: density.at(-1), counts: Object.fromEntries(selectionCounts) })}\n`);
     process.stdout.write(`D3758 fixed imported population ${JSON.stringify({ games: gamesUsed, edges, totalOffered, maxOffered,
       observedRefs: [...counts.values()].filter(count => count.offered > 0).length,
       elapsedMs: Math.round(performance.now() - started), counts: Object.fromEntries(counts) })}\n`);

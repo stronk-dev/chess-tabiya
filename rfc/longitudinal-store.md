@@ -10,6 +10,15 @@
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
 - **Author:** claude
+- **Implementation checkpoint 2026-10-13 — D3762:** §D/§4.4 require derivation revision 5
+  after the existing occupied-target collector stops joining a departed Chess960 rook to the
+  king replacing it. The 67-member ingest registry, source attribution and complete legal
+  population remain unchanged. Startup invalidates revision-1/2/3/4 derived rows and the
+  existing background worker rebuilds them without changing saved play. Both-color populated
+  revision-4 histories fail the upgrade control without the bump; eight replaced-target
+  negatives and four retained-target gained/lost positives enter the pinned fixture-output pair.
+  This is the existing semantic-repair/rebuild obligation, not a new admission or whole-RFC
+  completion. Final verification is recorded with the implementation closeout.
 - **Implementation checkpoint 2026-10-12 — D3731:** exact-target capture enumeration
   avoids unrelated destinations while retaining ordinary chessops legality and all
   promotion roles. The complete sorted capture set, recursive exchange branches,
@@ -2072,6 +2081,11 @@ head after that renumbering and **not yet written**:
   corruption the store exists to prevent.
 
 ## Changelog
+
+- 2026-10-13: D3762 repairs retained occupied-target identity and advances derivation revision
+  to 5 under §D/§4.4, retaining the constructor registry and attribution. Populated both-color
+  revision-4 counts are rebuilt by actual application startup/worker execution; saved game
+  snapshots and idempotent restart remain intact. No registry expansion or new consumer.
 
 - 2026-10-10: D3683 corrects failed-start resource ownership and first-refusal ordering under
   the existing §C lifecycle. `make longitudinal-worker-start-check` retains six real-thread

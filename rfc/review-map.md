@@ -142,6 +142,15 @@ The following boundaries are mandatory regardless of the eventual family choices
 and its native UI envelope. That is the acceptance work owned by this RFC's existing D1/D928,
 not permission to ship all collected items or declare the module complete.
 
+**2026-10-13 author/review input, not acceptance:** the disposable D3758 experiment now covers
+all 32 refs with a literal set-equal change-witness matrix. Its unchanged eight-game population
+still has no quiet rows (median ten, p95 21 items/move) after removing unchanged state. A sign-only
+filter incorrectly drops checks, captures, castling and changed king-state payloads. The source
+audit also repairs D3762's wrong retained-target identity under its existing contract. See
+`design/research/module-registry-semantic-closure.md` §6 and `make review-one-edge-adoption-probe`.
+This is feasibility evidence for the eventual matrix, not permission to adopt that experiment
+as a useful selector, invent prominence or skip the native presentation decision.
+
 ### §3 — The move list and per-move grades
 
 **The move list is the one genuinely new UI object in this RFC.** It is specified here because it

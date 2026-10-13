@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:833afa529a2eae964e9639008091f51392abc532df47b52f70516056bf3b43da",
+    "roadmap": "sha256:43451341c341e16fe6e5620307aa20a225968eca38b08e1527ecc3f0cc5235e4",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:d5b8125d922496db1ff0b83c0da19401035577672bb371e656c4d24a11db0170",
+    "workState": "sha256:b9396dbbd9da33974ed7b12c31e3ab9b2d07b4def6a91ab05d5d6878d2debc9d",
     "rfcRegister": "sha256:abd0460a4fa175c7c13e898aaf9c4eb556e11a36debf18a236d5a7c03715beff",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 631,
       "doing": 16,
       "blocked": 1079,
-      "done": 1623,
+      "done": 1624,
       "refused": 161
     },
     "workItems": {
@@ -391,7 +391,7 @@
       "nextAction": "Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-13",
-        "summary": "D3758's full local Review acquisition class is now measured: 23 disposable checks replay eight existing games / 513 edges, admitting and rendering 10,196 items from 32 real local refs while actual Review rows contain none of their components. Both-color castling positives and legal near-misses retain exact operands; raw source volume is not usefulness. Compiler draft section 4.4 specifies exact incoming-edge acquisition and one closure per edge; Review Map draft section 2a retains the independent family/witness selection decision. Both amendments remain unaccepted. D3760 corrects the false one-edge v1 two-capture trade execution claim; D3761 reports presentation blockers only for actually absent adapters, preserving all candidate/window source holds. Both permanent predecessor controls fail before repair; 166 focused HTTP/module checks and workspace types pass afterward. Final software tier passes 5,301 cases/386 files plus the unchanged performance and type gates; the first aggregate then fails three missing RFC checkpoint anchors. Those tracker links are repaired, and normal serial make roadmap-receipt verify-governance verify-content build test-browser-ci-awake exits zero: 255 content cases/26 files, governance/build and 345 browser passes, one existing optional Maia skip, zero retries, all 112 unretried composition cells. Warm native arrival p95 is 124.3 ms under the unchanged 250 ms budget locally, not a D3600 remote closure. Prior D3757 supplier and D3739 recorded-consequence delivery remain. No new source acquisition, payload, eligibility, stored play, pack, qualification, whole capability or remote-CI promotion; D3600 remains open.",
+        "summary": "D3762 repairs retained occupied-target identity: eight legal both-color/wings Chess960 rook-to-king replacements fail at both runtime and authenticated collection on the predecessor (16 failures), while four retained-bishop gained/lost positives remain. Collector, sole factory, complete legal candidates, registered renderer and actual Nudge source acquisition pass 72 focused controls and clean types after repair; scalar readings and selection remain unchanged. Existing longitudinal section D/4.4 advances derivation to 5: actual startup/worker rebuilds both populated incorrect revision-4 histories without rewriting saved games; restart is idempotent. The upgrade predecessor fails at zero resets instead of two, and all 66 longitudinal controls pass after repair. D3758's disposable probe now has 25 controls and a set-equal 32-ref change-witness matrix: eight games/513 edges still offer 10,196 facts; change-only filtering has zero quiet rows, median ten/p95 21 facts per move, and none of those components reaches actual Review rows. Source adoption, useful family selection, grouping and native envelope remain unaccepted. Final ordinary serial make longitudinal-projector-check typecheck roadmap-receipt verify-awake build test-browser-ci-awake exits zero: software 5,326 cases/387 files, unchanged performance seven/four, content 255/26, clean types/governance/packaging/build and 345 browser passes, one existing optional Maia skip and zero retries. All 150 input and 112 unretried composition cells pass; warm local arrival p95 is 121.9 ms under the unchanged 250 ms budget. Prior D3757/D3739 source delivery and D3760/D3761 truthful execution inventory remain. No new admission, qualification, pack, whole capability, milestone or remote-CI promotion; D3600 remains open.",
         "impact": "advanced",
         "evidence": [
           "rfc/module-registration.md",
@@ -401,6 +401,14 @@
           "packages/runtime/src/module-registry.test.ts",
           "tools/d1585-module-semantic-closure/review-adoption.test.ts",
           "design/research/module-registry-semantic-closure.md",
+          "packages/runtime/src/transition.ts",
+          "packages/runtime/src/occupied-target-identity.test.ts",
+          "packages/runtime/src/testing/occupied-target-fixtures.ts",
+          "apps/server/src/longitudinal-registry.ts",
+          "apps/server/src/longitudinal-contract.test.ts",
+          "apps/server/src/longitudinal-worker.test.ts",
+          "rfc/longitudinal-store.md",
+          "docs/longitudinal-store.md",
           "docs/learner-modules.md",
           "rfc/breadth-collectors.md",
           "packages/runtime/src/castling-open-file.test.ts",
@@ -452,6 +460,16 @@
             "kind": "rfc",
             "id": "review-map.md",
             "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+          },
+          {
+            "kind": "rfc",
+            "id": "longitudinal-store.md",
+            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3762",
+            "digest": "sha256:24e5c4bca7de895cb3d712f79dff97c48b29a6e4e397dc88432246f3eb311d5a"
           }
         ]
       },

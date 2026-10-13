@@ -31254,6 +31254,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/module-registry.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3762",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:24e5c4bca7de895cb3d712f79dff97c48b29a6e4e397dc88432246f3eb311d5a",
+      "uxItems": [],
+      "evidence": "apps/server/src/longitudinal-worker.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

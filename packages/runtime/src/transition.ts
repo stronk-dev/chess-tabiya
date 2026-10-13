@@ -298,9 +298,12 @@ export function transitionSemanticFacts(beforeFen: string, moveUci: string, afte
   for (const color of ["white", "black"] as const) for (const relation of ["attack", "defence"] as const) {
     const targetColor = relation === "attack" ? opposite(color) : color;
     for (const square of before.board[targetColor].intersect(after.board[targetColor])) {
+      const occupant = before.board.get(square)!;
+      // A named relation change retains the target piece, not merely its occupied square.
+      // Chess960 castling can replace a rook with its own king on that square.
+      if (after.board.get(square)?.role !== occupant.role) continue;
       const beforeActors = actorSquares(before, beforeMap, color, square), afterActors = actorSquares(after, afterMap, color, square);
       if ((beforeActors.length === 0) === (afterActors.length === 0)) continue;
-      const occupant = before.board.get(square)!;
       facts.push({ family: relation === "attack" ? "occupied_attack" : "occupied_defence", sign: beforeActors.length === 0 ? "gained" : "lost", subject: Object.freeze({ color, target: makeSquare(square), occupant: Object.freeze({ color: occupant.color, role: occupant.role }) }), targets_before: beforeActors, targets_after: afterActors });
     }
   }

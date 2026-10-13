@@ -34,6 +34,12 @@ The sole factory, complete candidate packet and authenticated Nudge acquisition 
 identity. Selection and qualification are separate; Review's declared pair still lacks its
 incoming-edge delivery (D3758), and Full Inspector does not accept this projection.
 
+Occupied-target attack/defence events retain the target's color and role as well as its square.
+A Chess960 castle that replaces a rook with its king does not report a new defence of the
+departed rook. Both-color/wings controls cover factories, complete legal candidates, registered
+rendering and authenticated Nudge acquisition, alongside gained/lost retained-bishop positives.
+This corrects named target identity; the separate scalar square-count readings are unchanged.
+
 Defender relocation also follows a legally promoted pawn into its new role. A lost-duty
 event requires the same surviving target and an actually absent after-state defence;
 promotion alone is not enough. Its existing Inspector binding remains unchanged, and
@@ -55,7 +61,7 @@ Retained-piece mobility follows the physical castling rook as well as ordinary B
 The rook's before/after squares and legal/local-non-losing destination changes survive factories,
 candidate packets and Inspector serialization. A stationary castling rook remains `moved: false`;
 changed destinations do not imply relocation. Existing saved histories rebuild through longitudinal
-derivation revision 4 without changing recorded play, projection membership or learner permissions.
+derivation revision 5 without changing recorded play, projection membership or learner permissions.
 
 Castling rights-loss causes use the normalized castling side, not encoded king travel distance:
 adjacent-rook and stationary-king Chess960 moves are `castled`, while ordinary king steps remain
@@ -81,7 +87,7 @@ Pawn protection and connected-pair gains follow the exact moved pawn across its 
 an advance does not create an existing property again. Pair identity is unordered, so a changed
 enumeration order also cannot become a gain. Genuine newly protected passers remain gains and
 passed-pawn advancement remains a separate fact. The same repair reaches sealed factories,
-complete candidate packets, saved-run reconstruction and revision-4 learner-history rebuilds.
+complete candidate packets, saved-run reconstruction and current learner-history rebuilds.
 
 The current semantic-collector checkpoint adds the exact defender-duty reading, defender
 removal/relocation events, the four-clause overload-response predicate, a bounded forced-mate proof,

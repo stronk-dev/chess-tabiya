@@ -12,11 +12,16 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { buildSync } from "esbuild";
 import { afterEach, describe, expect, it } from "vitest";
+import { OCCUPIED_TARGET_IDENTITY_CASES } from "../../../packages/runtime/src/testing/occupied-target-fixtures.js";
+import { canonicalFen, positionFromFen } from "../../../packages/runtime/src/chess.js";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { parseLongitudinalReadQuery } from "./longitudinal-contract.js";
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
+import { projectObservations, RUNTIME_POPULATION_DEPENDENCIES } from "./longitudinal-projector.js";
+import { runLongitudinalBatch } from "./longitudinal-worker-core.js";
+import { LongitudinalStore } from "./longitudinal-store.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { LONGITUDINAL_WORKER_DEFAULTS, fileBackedDatabaseIdentity, validateLongitudinalWorkerConfig } from "./longitudinal-worker-config.js";
 import { LONGITUDINAL_DRAIN_GRACE_MS, LongitudinalProjectionWorker } from "./longitudinal-worker.js";
@@ -69,6 +74,56 @@ function fakeThread(directory: string, body: string): URL {
 }
 
 describe("criteria 16, 29 — the production-composed file-backed worker", { timeout: 120_000 }, () => {
+  it("D3762 rebuilds revision-4 false occupied-target counts without changing either saved game", async () => {
+    const databasePath = join(temp(), "target-history.sqlite");
+    const seed = new SQLiteRunStorage(databasePath, { onMigration: () => {} });
+    const owner = learner(seed, "target-history-owner");
+    for (const value of OCCUPIED_TARGET_IDENTITY_CASES.slice(0, 2)) {
+      seed.create(play(positionRun(`target-${value.side}`, canonicalFen(positionFromFen(value.fen)), value.side), value.uci), owner);
+    }
+    // Historical fixture: reproduce the projection/sign membership independently observed in
+    // D3762's failing predecessor. This dependency never enters production or evidence minting.
+    const legacy = {
+      ...RUNTIME_POPULATION_DEPENDENCIES,
+      events: (beforeFen: string, moveUci: string, afterFen: string) => {
+        const events = RUNTIME_POPULATION_DEPENDENCIES.events(beforeFen, moveUci, afterFen)!;
+        return moveUci === "f1c1" || moveUci === "f8c8"
+          ? [...events, { projection: { id: "rules.transition.event.occupied_defence", version: 1 }, sign: "gained" }]
+          : events;
+      },
+    };
+    const raw = new DatabaseSync(databasePath);
+    const legacyStore = new LongitudinalStore(raw);
+    for (let index = 0; index < 2; index += 1) {
+      expect(runLongitudinalBatch(legacyStore, LONGITUDINAL_WORKER_DEFAULTS, "historical-fixture", {
+        project: (image, checkpoint) => projectObservations(image, { checkpoint, dependencies: legacy }),
+      }).completed).toBe(1);
+    }
+    const saved = raw.prepare("SELECT id, snapshot_json FROM drill_runs ORDER BY id").all();
+    expect(raw.prepare("SELECT run_id, occurred FROM learner_observations WHERE projection_id='rules.transition.event.occupied_defence' AND semantic_sign='gained' ORDER BY run_id").all())
+      .toEqual([{ run_id: "target-black", occurred: 1 }, { run_id: "target-white", occurred: 1 }]);
+    raw.exec("UPDATE learner_observation_denominators SET derived_rev=4; UPDATE learner_observations SET derived_rev=4; UPDATE learner_structure_stats SET derived_rev=4; UPDATE learner_observation_jobs SET derived_rev=4");
+    raw.close();
+    seed.close();
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    expect(application.startupReceipt.longitudinal).toMatchObject({ scanned: 2, created: 0, revisionReset: 2 });
+    const rebuilt = await until(() => {
+      const result = application!.longitudinal.read(owner.learnerId!, parseLongitudinalReadQuery({ learnerId: owner.learnerId!, derivationRev: OBSERVATION_DERIVATION_REV, through: { kind: "all_complete" }, filter: {} }));
+      return result.kind === "complete" ? result : undefined;
+    });
+    expect(rebuilt.cuts).toHaveLength(2);
+    expect(rebuilt.observations.filter(row => row.projectionId === "rules.transition.event.occupied_defence" && row.semanticSign === "gained").every(row => row.occurred === 0)).toBe(true);
+    expect(rebuilt.observations.length).toBeGreaterThan(0);
+    expect(rebuilt.denominators.reduce((total, row) => total + row.decisions, 0)).toBe(2);
+    const closing = application; application = undefined; await closing.close();
+    const after = new DatabaseSync(databasePath);
+    expect(after.prepare("SELECT id, snapshot_json FROM drill_runs ORDER BY id").all()).toEqual(saved);
+    expect(after.prepare("SELECT DISTINCT derived_rev FROM learner_observation_jobs").all()).toEqual([{ derived_rev: OBSERVATION_DERIVATION_REV }]);
+    after.close();
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    expect(application.startupReceipt.longitudinal).toMatchObject({ scanned: 2, created: 0, revisionReset: 0 });
+  });
+
   it("reconciles before readiness, projects imported games off the event loop, reports ready and drains", async () => {
     const directory = temp();
     const databasePath = join(directory, "app.sqlite");

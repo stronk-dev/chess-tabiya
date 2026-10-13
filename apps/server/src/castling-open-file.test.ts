@@ -2,6 +2,7 @@ import type { AddressInfo } from "node:net";
 import { compileAssistanceRequest, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CASTLING_OPEN_FILE_CASES, CASTLING_OPEN_FILE_NEGATIVES } from "../../../packages/runtime/src/testing/castling-open-file-fixtures.js";
+import { OCCUPIED_TARGET_IDENTITY_CASES } from "../../../packages/runtime/src/testing/occupied-target-fixtures.js";
 import * as routes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { assertDeclaredEvidence } from "../../../packages/runtime/src/evidence-contract.js";
 import { parseModuleQueryPage } from "../../web/src/lib/module-query-response.js";
@@ -72,4 +73,56 @@ describe("D3757 authenticated castling-rook evidence", () => {
       expect(anonymous.status).toBe(401);
       expect(await saved()).toEqual(before);
     });
+});
+
+describe("D3762 authenticated occupied-target collection", () => {
+  it.each(OCCUPIED_TARGET_IDENTITY_CASES)("collects the retained target, never a replaced rook: $name", async value => {
+    const app = fixture!.current()!;
+    await new Promise<void>((resolve, reject) => { app.server.once("error", reject); app.server.listen(0, "127.0.0.1", resolve); });
+    const origin = `http://127.0.0.1:${(app.server.address() as AddressInfo).port}`;
+    const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "target_owner", password: "target-owner-password" }) });
+    expect(registered.status).toBe(201);
+    await registered.text();
+    const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+    const headers = { "content-type": "application/json", "x-writer-id": "target-writer", cookie };
+    const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers, body: JSON.stringify(body) });
+    const created = await post("/runs", { id: "target-evidence", session: { kind: "position", start: { fen: value.fen, side: value.side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1 });
+    expect(created.status, await created.clone().text()).toBe(201);
+    const moved = await post("/runs/target-evidence/moves", { uci: value.uci });
+    expect(moved.status, await moved.clone().text()).toBe(200);
+    expect((await post("/runs/target-evidence/reveal", {})).status).toBe(200);
+    const saved = async () => {
+      const graph = await fetch(`${origin}/runs/target-evidence/graph`, { headers });
+      const events = await fetch(`${origin}/runs/target-evidence/events`, { headers });
+      expect(graph.status).toBe(200); expect(events.status).toBe(200);
+      return { graph: (await graph.json() as { graph: { activeCursor: { nodeId: string } } }).graph, events: await events.json() };
+    };
+    const before = await saved();
+    const collected: unknown[] = [];
+    let calls = 0;
+    const original = routes.invokeEvidenceValueRoute;
+    vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation((...args) => {
+      const result = original(...args);
+      if (args[0] === "rules.transition.event.occupied_defence@1" && typeof args[1] === "object" && args[1] !== null && "moveUci" in args[1] && args[1].moveUci === value.uci) {
+        calls += 1;
+        for (const evidence of result as readonly Parameters<typeof assertDeclaredEvidence>[0][]) {
+          assertDeclaredEvidence(evidence);
+          const payload = evidence.payload as { subject: { target: string } };
+          if (payload.subject.target === value.target) collected.push(payload);
+        }
+      }
+      return result;
+    });
+    const response = await post("/runs/target-evidence/modules/query", {
+      assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }),
+      query: { timing: "post_commit", subjectNodeId: before.graph.activeCursor.nodeId, requested: [] },
+    });
+    expect(response.status, await response.clone().text()).toBe(200);
+    const body = await response.json() as { page: ModuleQueryPage };
+    expect(parseModuleQueryPage(body, { runId: "target-evidence", subjectNodeId: before.graph.activeCursor.nodeId, finalDigest: body.page.effectiveConfigDigest }).packets.some(packet => packet.module === "postcommit_nudge")).toBe(true);
+    expect(calls).toBeGreaterThan(0);
+    if (value.sign === null) expect(collected).toEqual([]);
+    else expect(collected).toContainEqual(expect.objectContaining({ sign: value.sign, subject: { color: value.side, target: value.target, occupant: { color: value.side, role: "bishop" } } }));
+    expect(await saved()).toEqual(before);
+  });
 });

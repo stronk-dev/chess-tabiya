@@ -4,6 +4,17 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make occupied-target-identity-check` runs retained-target controls through the real collector,
+factory, legal candidate population, registered renderer and authenticated Nudge source query.
+Eight both-color/wings Chess960 negatives independently fail before the repair; four gained/lost
+retained-bishop positives prevent a blanket suppression. These tests also run in software CI.
+`make longitudinal-projector-check` additionally verifies the revision-5 fixture pair and actual
+application upgrade from populated incorrect revision-4 counts: both saved games remain unchanged,
+the real worker corrects the counts, and a second restart does no extra revision reset.
+The separate `make review-one-edge-adoption-probe` is disposable research, not a release gate:
+its complete-family change-witness experiment does not establish useful selection or actual
+Review delivery.
+
 In one local checkout, run the release checks **serially**:
 
 ```sh

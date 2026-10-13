@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3761]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3762]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,21 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3762]]: the occupied-target collector now rejects Chess960 rook→king
+replacement as a retained-piece relation, while legitimate gained/lost targets and scalar
+readings remain. The permanent predecessor fails at runtime and authenticated collection;
+72 focused checks, workspace types and the 25-case disposable Review probe pass after repair.
+The existing longitudinal rebuild contract advances derivation to 5; actual startup/worker
+corrects populated revision-4 counts for both colors without rewriting saved games. Restart
+is idempotent, and all 66 longitudinal controls pass, including the upgrade predecessor failure.
+D3758's literal 32-ref change-witness experiment still leaves median ten/p95 21 facts per move
+and no quiet rows. Useful selection and the actual Review consumer remain separately gated.
+Final ordinary serial verification exits zero: software 5,326 cases/387 files, performance
+seven/four and content 255/26; clean types/governance/packaging/build and 345 browser passes,
+one existing optional Maia skip, zero retries, all 150 input and 112 unretried composition cells.
+Local warm arrival p95 is 121.9 ms under the unchanged 250 ms budget; D3600's published failure
+remains open. No whole capability changes.
 
 2026-10-07 progress reconciliation ([[D3537]]): production application and mounted
 client bindings confirm live compiled Support modules, Review Map, Library, bot
@@ -82,7 +97,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3758]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3762]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not

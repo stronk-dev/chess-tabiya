@@ -187,7 +187,7 @@ population. Every edge is inspected, including both sides, terminal moves and pr
 | Mean / maximum offered local items per move | 19.88 / 36 |
 | These refs' components in the actual Review rows | 0 |
 | Pawn-island items | 1,026: two count states per edge |
-| King-zone-state items / registered components | 1,026 / 2,052 |
+| Rich king-zone-state items / registered components | 1,026 / 2,052 |
 | Piece-escape items | 2,092 |
 | Open-file occupancy items / registered components | 26 / 52 |
 
@@ -227,3 +227,55 @@ dependency reporting, not a producer or learner disclosure. `[V]`
 `packages/runtime/src/module-registry.test.ts` D3761 assertion;
 `packages/runtime/src/presentation-inspector-adapters.ts` exact Nudge/Review pair table;
 `make local-module-execution-check`.
+
+## 6. Full-family change-witness experiment and target repair — 2026-10-13
+
+The existing disposable probe now carries a literal matrix for all **32** proposed local refs,
+with set-equality against the measured source class. It compares complete before/after operands
+for nine structural refs and material-role asymmetry, target sets for five transition relations,
+king relocation/identity deltas for the rich king-zone ref, and actual edge occurrences for the
+remaining sixteen. This is an executable selection experiment, **not** a registered selector,
+usefulness authority or new module admission. `[V]` `review-adoption.test.ts` `witnessMatrix`,
+`hasChangeWitness` and exact source-class assertion.
+
+On the same eight games / 513 edges, the measured change-only population has **zero quiet rows**:
+minimum 2, median 10, p95 21, maximum 30 items per move. Pawn-island states reduce from 1,026 to
+40 changes, but piece-escape events remain 2,092 and slider-ray events remain 792. Removing
+unchanged states alone cannot establish concise, useful feedback. `[V]` the fixed imported
+population arm of `make review-one-edge-adoption-probe`.
+
+Filtering only `sign = gained | lost` is also unsound as a general change rule: it drops all
+32 checks, 99 captures, 12 castles and 495 rich king-state changes in this population. The
+coarse structural king-zone family has 46 changed payloads, of which 29 retain `preserved` sign;
+these describe its location category, **not** 29 defender turnovers. Rich king-zone identities
+have their separate delta operands. Signs and numeric counts are not interchangeable with
+complete state change, and neither implies move quality. `[V]` same population's per-ref counters;
+`packages/runtime/src/structural-evidence.ts`; `packages/runtime/src/king-state.ts`.
+
+The audit found D3762 at the source: `transitionSemanticFacts` joined occupied squares of the
+same color but named their **before** occupant. Eight legal Chess960 castles across both colors
+and wings replace a rook with its king, causing false defence-gained facts about the departed
+rook. All eight controls fail against the predecessor in both runtime and authenticated Nudge
+acquisition (**16 failures**); four retained-bishop gained/lost controls pass at each boundary.
+The accepted identity-preserving event contract permits the narrow role-retention repair, not
+a new selection policy. After repair, all **72** focused permanent controls, workspace types and
+**25** disposable Review controls pass. Scalar transition readings, admission, qualification,
+saved play and the eight-game 10,196-item acquisition population remain unchanged. `[V]`
+`packages/runtime/src/transition.ts`; `packages/runtime/src/occupied-target-identity.test.ts`;
+`apps/server/src/castling-open-file.test.ts`; `rfc/archive/semantic-evidence-selection.md` §8;
+`make occupied-target-identity-check review-one-edge-adoption-probe`.
+
+Remaining acceptance work is explicit: family-specific usefulness, overlap/grouping, a bounded
+selected-move presentation envelope and absence wording, followed by actual HTTP/native UI
+delivery. These measurements do not choose those policies or qualify the entire source class.
+`[V]` `rfc/review-map.md` §2a; `rfc/review-evidence-compiler.md` §4.4.
+
+The downstream lifecycle check finds that collector repair alone leaves existing revision-4
+learner counts unchanged: the populated both-color upgrade control reports zero revision resets
+where two are required. Under the existing longitudinal §D/§4.4 obligation, revision 5 invalidates
+old derived rows and rebuilds through the actual application worker; both incorrect occurrences
+disappear while nonempty observations, both decision denominators and byte-identical saved games
+remain. A second startup has zero revision resets. All twelve target controls join the computed
+fixture-output pair without changing the 67-member ingest registry. `[V]`
+`apps/server/src/longitudinal-worker.test.ts` D3762; `apps/server/src/longitudinal-contract.test.ts`
+criterion 12; `apps/server/src/longitudinal-registry.ts`; `rfc/longitudinal-store.md` §D/§4.4.

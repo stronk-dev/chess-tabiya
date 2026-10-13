@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3762]] repairs occupied-target semantic identity under the accepted event
+contract. Eight both-color/wings Chess960 negatives fail at runtime and authenticated Nudge
+collection before repair; four gained/lost retained-bishop positives remain. The source now
+requires the same target role as well as color/square, without altering scalar readings or
+selection. All 72 focused permanent checks and types pass. The existing longitudinal rebuild
+obligation advances derivation to 5; actual startup/worker removes false revision-4 counts from
+both saved histories without changing recorded games, and restart is idempotent. All 66
+longitudinal controls pass, including the independently failing upgrade predecessor.
+D3758's 25-case disposable full-family
+experiment has a set-equal 32-ref change-witness matrix, but still median ten/p95 21 items/move
+and no quiet rows. Its selection/usefulness/native envelope remains unaccepted, not queued for
+blind implementation. Final ordinary serial verification exits zero: software 5,326 cases/387
+files, performance seven/four, content 255/26, clean types/governance/packaging/build and 345
+browser passes, one existing optional Maia skip and zero retries. All 150 input and 112
+unretried composition cells pass; local warm arrival p95 is 121.9 ms, not a D3600 remote closure.
+
 2026-10-13 — [[D3758]] is a complete local Review acquisition class, not a castling-only
 string patch. Twenty-three disposable source/admission/renderer controls replay eight existing
 games / 513 edges: 32 real refs render, zero of those components reach actual Review rows,
