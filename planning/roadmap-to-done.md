@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3771]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3773]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,18 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3772]]: Profile totals/history now exclude inconsistent recorded counts and
+complete-but-unread source subsets, explaining each without changing saved play. Both-color
+stored-source controls and actual built-server desktop/touch refusal → existing operator rebuild
+→ Refresh journeys pass, with private-account isolation and unchanged saved rows. Software
+passes 5,414/388 and performance seven/four; the aggregate then catches my missing D3773 queue
+link. Routing that row and continuing the remaining normal gates exits zero: governance,
+content 255/26, build and all four browser tiers, with 112 unretried composition cells and one
+existing optional Maia skip. Local warm arrival p95 is 104.8 ms under the unchanged 250 ms
+budget, not closure of the published failure. [[D3773]] remains a separately owned date-label
+follow-up; D3670's numbering amendment remains unaccepted. No full capability, milestone,
+official-content, semantic qualification, remote CI or release promotion.
 
 2026-10-13 [[D3670]] now has actual authenticated desktop/touch source-to-Profile evidence:
 three of four controlled references are misnumbered in each viewport, although the saved parent
@@ -163,7 +175,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3767]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3772]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not

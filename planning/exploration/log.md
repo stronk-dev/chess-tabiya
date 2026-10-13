@@ -27557,3 +27557,58 @@ Campaign was the one capability with no API, route or content. Now:
   blocked; D3670 is now explicitly held on player-style §8.1 acceptance, not unstarted source
   research. No new ledger row, whole capability/milestone completion or official content is
   claimed. The goal remains active; requested restart/review authority is not presumed.
+
+## 2026-10-13 — D3772 Profile source refusal from stored data through native recovery
+
+- Previous goal turn made progress: measured D3670 changed its next action to independent
+  contract acceptance, and the full-image attempt established Docker's unresponsive boundary.
+  Do not restart Docker or dispatch reviewers without the pending permissions. Seek accepted
+  product work rather than silently implementing those held amendments.
+- D3772 finds a defect inside the accepted Profile contract: a denominator/source mismatch
+  excludes the run fact and metrics, but header/history still call its complete processing cut
+  counted and history omits the existing reason. Record the ledger row before implementation.
+  The first normal `make learner-profile-check` passes 207 and fails the new actual stored-data
+  regression: expected one counted/one unavailable, received two counted/zero unavailable.
+- Header totals and history now require an admitted run fact, not only a complete job. A mismatch
+  names the count disagreement; an interrupted subset read names temporary unavailable counts
+  rather than pretending the run is broken or counted. Snapshot acquisition, per-card arithmetic,
+  floors, privacy and source bytes stay unchanged. No stored-data or wire migration occurs.
+- Both player colors retain healthy runs and exclude a controlled corrupted denominator. A real
+  storage save between two reads advances one cut; the store refuses that subset, and a remaining
+  complete-but-unread cut no longer masquerades as counted. A subsequent normal read recovers it.
+  The corrected full Profile target passes 210 cases/11 files. These controlled corruptions do
+  not measure ordinary incidence or alter the feature's semantic qualification.
+- Two new ordinary native browser cases run the actual built main.js in their own private
+  temporary databases, with the real worker/API and shipped UI. No Profile response is mocked.
+  Corrupt one denominator, observe one counted/one unavailable in HTTP and desktop/touch Profile,
+  verify a separate account has zero access to the owner's rows, run the existing built
+  longitudinal-rebuild CLI, then Refresh to two counted. Exact saved drill_run rows remain
+  unchanged. Owned processes/connections/directories are cleaned; no operator database or Docker
+  is used. All seven focused Profile browser journeys pass. The final full browser gate follows
+  the small teardown-hardening edit made after that focused result.
+- Canonical docs and the active RFC changelog describe only this existing-contract repair.
+  D3670 §8.1 remains unaccepted, source/selection/qualification holds remain, and no official
+  content or whole capability is promoted. Complete ordinary verification/build/browser follows
+  before closing D3772; pending permissions and the full 1.0 goal remain intact.
+
+- Final D3772 verification: software passes 5,414 cases/388 files and performance seven/four.
+  The aggregate then stops at work-index because my newly recorded D3773 had an owner/state
+  but no queue link. Add that existing queue route, retaining its todo state; the remaining normal
+  governance/content/build/all-four-browser-tier command exits zero. Content passes 255/26;
+  the matrix passes all 59 cases and publishes 112/112 unretried cells; packaged production
+  passes its actual default rehearsal. The existing optional Maia browser case remains skipped;
+  no retry or deadline is added. Local warm native arrival p95 is 104.8 ms, not a published-CI
+  or provider qualification claim. The source/refusal/rebuild desktop and phone cases pass in
+  this final run after teardown hardening.
+- D3772 closes with permanent source and native evidence; D3773's null-date wording remains
+  queued to client-platform, distinct from the unaccepted D3670 source-numbering amendment.
+  The existing roadmap records this complete repair without promoting any whole capability.
+  All 1,731 live ledger items are assigned: 630 todo, 16 doing, 1,085 blocked; zero untriaged.
+  Full 1.0 still has fourteen incomplete capabilities, four active/five blocked milestones,
+  276 complete/269 live/24 retired UX items, 50 installed packs and zero official graduates.
+  The overview is reconciled to these existing authorities, not a new tracker or estimated
+  completion percentage. No push, Docker restart, delegation or release occurs; goal stays active.
+- Closeout metadata check catches the new player-style evidence path without its existing RFC
+  register anchor. Add the exact current register-row anchor, retaining the check; no RFC status,
+  research/source contract or product byte changes. Regenerate and validate the existing receipt
+  before committing. This tracking repair is not additional application verification.

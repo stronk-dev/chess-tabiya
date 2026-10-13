@@ -31346,6 +31346,23 @@
       "uxItems": [],
       "evidence": "tests/browser/arrival-latency.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3772",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cfd77db12b0eb65de6748473ebea5a874d16112f5eea8125b1ddd77cf38b0327",
+      "uxItems": [],
+      "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3773",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1ef43ccab6b477f8c33dcbe3d27cfec3186d55f979a2cad040957c6e816b968e",
+      "uxItems": [],
+      "owner": "client-platform"
     }
   ]
 }

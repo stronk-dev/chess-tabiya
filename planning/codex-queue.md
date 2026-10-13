@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3773]] is queued to client-platform under the existing Profile/client contract:
+`readableDate(null)` must describe an unavailable date in this view, not claim the saved run
+never recorded one. Extend D3772's actual source-refusal journey with the native label and
+retain positive real-date formatting before changing copy. No new timestamp or inferred date.
+
+2026-10-13 — [[D3772]] repairs source-refused Profile counts under the already implemented
+player-style/source-read contract, independently of [[D3670]]'s unaccepted numbering amendment.
+The predecessor excludes the corrupted run's metrics but still says both runs are counted.
+Header/history now require an admitted fact; mismatch and complete-but-unread subset states
+are distinct unavailable rows with plain explanations. Both player colors and a real source cut
+advancing between reads pass. The initial full focused target is 207 pass/one predecessor failure;
+the corrected target is 210 pass. Seven focused native journeys include a separately owned built
+main.js, actual SQLite corruption, actual worker/API/Profile, existing operator CLI rebuild and
+desktop/touch refresh, preserving saved rows and private access. No source or metric is mocked
+in those two new native cases. Full software passes 5,414/388 and performance seven/four.
+The aggregate then catches D3773's missing queue link; after routing it, ordinary governance,
+content (255/26), build and all four browser tiers exit zero, with 112 unretried composition
+cells and the existing optional Maia skip. D3772 is locally closed; no remote or release claim.
+
 2026-10-13 — [[D3670]] is reproduced through actual authenticated creation, legal commits,
 worker projection and native desktop/touch Profile. Each four-reference population has three
 wrong labels; the saved parent FEN contains the missing counter/color. Existing `player-style`

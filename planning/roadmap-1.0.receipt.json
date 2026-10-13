@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d7deffb0f3a6f6e442860ce20f68fa2db526a150a4c87abc22b62f00bb1c7f0e",
+    "roadmap": "sha256:c341eb891a3c04719bd8bc22ccdd0dcb24c71195dee083627deddb3df8e471ca",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:6ce12912cdb168765ef90a8184792f062032d82c1cf9d1660b45f39d5d384737",
+    "workState": "sha256:034c6a9a96a7d232402bfcd084a1b711db845e1093de676898c0fdd5d707f1dc",
     "rfcRegister": "sha256:9abb48269a669f333e7449fa1a452b573f0a528eab94dee62a65b303cb517475",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 630,
       "doing": 16,
       "blocked": 1085,
-      "done": 1629,
+      "done": 1630,
       "refused": 161
     },
     "workItems": {
@@ -1364,10 +1364,15 @@
       ],
       "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-10-12",
-        "summary": "D3748 unifies the four current PGN source forms with accessible contract-specific guidance, explicit existing URL precedence and retained failed inputs. Saved Story/draft preparation states describe the already stored source and retry without a duplicate import. Eight mounted controls, 160 affected checks and clean types pass; actual desktop/phone journeys create a game, private draft and variation/multi-game repertoire, then refuse/retry an Arena leg. All four browser tiers pass 340 cases, one existing optional Maia skip, zero retries and all 112 unretried composition cells. D3749 corrects unknown-failure documentation to existing bounded generic behavior. Prior D3728 preview disclosure, Campaign, Library, classroom, Review and Play checkpoints stand. IMP-a8 broader import/editor IA, D1486 parser/clock policy, source adoption, useful selection, skills, bot calibration, official content, curriculum and release recovery remain open. No whole capability/milestone, remote CI or release-image promotion.",
+        "at": "2026-10-13",
+        "summary": "D3772 repairs Profile source-refusal totals/history under the accepted existing contract. Both-color stored mismatches and a cut advancing during subset acquisition exclude unavailable facts with distinct explanations. Actual built-server/worker/API/desktop/touch journeys use the existing operator CLI to rebuild and refresh, preserving saved rows and private-account isolation. Initial focused predecessor fails; 210 focused and 5,414/388 full software cases pass, as do seven/four performance cases. The aggregate then catches D3773's missing queue route; after routing it, remaining normal governance, content 255/26, build and all four browser tiers exit zero, with 112 unretried composition cells and the existing optional Maia skip. D3773's date-label follow-up remains queued; D3670 recorded numbering remains unaccepted. Earlier D3748/D3749 import and Campaign/Library/classroom/Review/Play checkpoints stand. Useful selection, skills, bot calibration, official content, curriculum and release recovery remain open. No whole capability/milestone, qualification, remote CI or release-image promotion.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/learner-profile.ts",
+          "apps/server/src/learner-profile.test.ts",
+          "tests/browser/profile-source-refusal.spec.ts",
+          "docs/learner-profile.md",
+          "rfc/player-style.md",
           "apps/web/src/lib/DrillScreen.svelte",
           "apps/web/src/lib/screens.test.ts",
           "apps/web/src/lib/session-controller.ts",
@@ -1415,6 +1420,16 @@
           "tests/browser/import-workflow.spec.ts"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3772",
+            "digest": "sha256:cfd77db12b0eb65de6748473ebea5a874d16112f5eea8125b1ddd77cf38b0327"
+          },
+          {
+            "kind": "rfc",
+            "id": "player-style.md",
+            "digest": "sha256:9939e4a13fd7b1b6a1c6ebc52d43f58f82ae3399c9f1af4fcd37a500e231a347"
+          },
           {
             "kind": "work_state",
             "id": "D3677",
@@ -2326,7 +2341,7 @@
         ],
         "experience": [
           "partial",
-          "Rating and the private profile render floor-gated habit cards, opening result counts, observations and history drill-down. Some metrics abstain and the skill valence register is empty; complete skills, comparative style, opening performance and recommendations remain."
+          "Rating and the private profile render floor-gated habit cards, opening result counts, observations and history drill-down. D3772 makes totals/history exclude inconsistent recorded counts and complete-but-unread source facts with distinct explanations, retaining playable saved games. Some metrics abstain and the skill valence register is empty; complete skills, comparative style, opening performance and recommendations remain."
         ],
         "defaults": [
           "blocked",
@@ -2338,7 +2353,7 @@
         ],
         "verification": [
           "partial",
-          "Rating isolation, durable-store and native profile controls pass; full mutation/invalidation, lifecycle, actor attribution, rebuild, privacy, cold-game cost, recommendation and all-metric presentation proof remain."
+          "Rating isolation, durable-store and native profile controls pass. D3772 adds both-color stored mismatch and cut-advance regressions plus actual built-server/worker/API/desktop/touch refusal, existing operator CLI rebuild and refresh, unchanged saved rows and independent-account isolation. Full mutation/invalidation, lifecycle, actor attribution, rebuild, privacy, cold-game cost, recommendation and all-metric presentation proof remain."
         ],
         "release": [
           "blocked",

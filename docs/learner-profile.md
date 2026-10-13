@@ -60,6 +60,17 @@ from the store's own decision algebra (`normativeDecisions`) at the exact comple
 whose recount disagrees with the store's `played` denominators is left out as `store_mismatch`.
 Runs still being processed are named and not counted.
 
+Completed processing alone does not make a run counted in the Profile. Its recorded source must
+also pass the Profile's recount. A mismatch is excluded from the header totals, habit/opening/
+observation populations and counted history; history explains that its counts need rebuilding
+without changing the saved game. If a subset read loses its completed cut during acquisition,
+any remaining complete-but-unread run is also not counted in that response, with a distinct
+temporary loading explanation rather than a mismatch verdict. **Refresh profile** performs only
+a new read. The operator's existing `make longitudinal-rebuild WRITE=1` can repair observation
+rows from the saved events; refreshing does not itself rebuild, rewrite play or grant access.
+Actual built-server desktop/touch journeys cover refusal → operator rebuild → refresh, with
+unchanged saved run rows and an independent account seeing none of the owner's data.
+
 ## Habit cards
 
 `STYLE_METRICS` holds the twelve R12/R21 metrics; `make style-registry-check` keeps it set-equal to

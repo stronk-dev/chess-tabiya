@@ -394,7 +394,7 @@ learner-profile-check:
 
 .PHONY: learner-profile-browser-check
 learner-profile-browser-check:
-	./node_modules/.bin/playwright test --grep "private profile opens|cited profile move|profile evidence and sharing"
+	./node_modules/.bin/playwright test --grep "private profile opens|cited profile move|profile evidence and sharing|Profile refuses inconsistent source counts"
 
 .PHONY: return-journey-check return-journey-browser-check
 return-journey-check:

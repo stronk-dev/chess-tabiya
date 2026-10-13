@@ -2,9 +2,10 @@
 // longitudinal store: file-backed SQLite, the real decision algebra, the worker's batch executor.
 import { rmSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
 
 import { appendOpponentPly, commitMove, STYLE_METRICS, type DrillRun, type MeasuredHabitCard } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { assertLongitudinalStorePresent, LearnerProfileService } from "./learner-profile.js";
 import { projectObservations } from "./longitudinal-projector.js";
@@ -77,6 +78,63 @@ describe("player-style criterion 14 — the store precondition is asserted, not 
 });
 
 describe("the profile abstains until each card's own denominator clears", () => {
+  it.each(["white", "black"] as const)("D3772 excludes a %s source-refused run from both counted totals and history while preserving valid runs", async side => {
+    const fixture = setup();
+    const owner = learner(fixture.storage, "owner");
+    fixture.storage.create(game("valid-source", FIANCHETTO, side), owner);
+    fixture.storage.create(game("mismatched-source", FIANCHETTO, side), owner);
+    drain(fixture.workerStore());
+    const profileService = await service(fixture);
+    const before = profileService.profile({ learnerId: "owner", handle: "owner" });
+    expect(before.store).toMatchObject({ runs: 2, counted: 2, unavailable: 0 });
+    const inspection = new DatabaseSync(fixture.path);
+    try {
+      const changed = inspection.prepare("UPDATE learner_observation_denominators SET decisions = decisions + 1 WHERE run_id = ? AND decision_class = 'played'").run("mismatched-source");
+      expect(changed.changes).toBeGreaterThan(0);
+    } finally { inspection.close(); }
+    const profile = profileService.profile({ learnerId: "owner", handle: "owner" });
+    expect(profile.population).toMatchObject({ measuredGames: 1, playedDecisions: 3 });
+    expect(profile.store).toMatchObject({ runs: 2, counted: 1, unavailable: 1, pending: 0, failed: 0 });
+    expect(profile.store.statement).toContain("1 of your 2 saved runs is counted");
+    expect(profile.store.statement).toContain("1 is not counted");
+    const history = profile.history.items.find(row => row.runId === "mismatched-source")!;
+    expect(history).toMatchObject({ state: "unavailable", status: "store_mismatch", playedDecisions: null, opening: null, outcome: null });
+    expect(history.detail).toContain("Recorded counts do not match the saved moves");
+    expect(profile.history.items.find(row => row.runId === "valid-source")).toMatchObject({ state: "counted", status: "counted_game", playedDecisions: 3 });
+    for (const card of profile.style.cards) expect(card.contributors.shown.every(ref => ref.runId !== "mismatched-source")).toBe(true);
+    expect(profileService.historyPage({ learnerId: "owner", handle: "owner" }, 0, 25).items).toEqual(profile.history.items);
+  });
+
+  it("D3772 does not call an unread complete cut counted after another cut advances during the subset read", async () => {
+    const fixture = setup();
+    const owner = learner(fixture.storage, "owner");
+    fixture.storage.create(game("advance-during-read", FIANCHETTO), owner);
+    fixture.storage.create(game("ready-but-unread", FIANCHETTO), owner);
+    drain(fixture.workerStore());
+    fixture.storage.create(positionRun("still-pending"), owner);
+    const original = fixture.storage.readLongitudinalSnapshot.bind(fixture.storage);
+    let calls = 0;
+    const read = vi.spyOn(fixture.storage, "readLongitudinalSnapshot").mockImplementation((actor, query) => {
+      if (calls++ === 1) {
+        const before = fixture.storage.read("advance-during-read")!.run;
+        fixture.storage.save(commitMove(before, "e2e4", { at: AT }).run, owner);
+      }
+      return original(actor, query);
+    });
+    try {
+      const profileService = await service(fixture);
+      const first = profileService.profile({ learnerId: "owner", handle: "owner" });
+      expect(read).toHaveBeenCalledTimes(2);
+      expect(first.store).toMatchObject({ runs: 3, counted: 0, pending: 1, unavailable: 2 });
+      expect(first.population.measuredGames).toBe(0);
+      expect(first.observations.rows).toEqual([]);
+      expect(first.history.items.find(row => row.runId === "ready-but-unread")).toMatchObject({ state: "unavailable", status: null, detail: "We couldn't load this run's counts for this profile. Refresh the profile to check again." });
+      const refreshed = profileService.profile({ learnerId: "owner", handle: "owner" });
+      expect(refreshed.store).toMatchObject({ runs: 3, counted: 1, pending: 2, unavailable: 0 });
+      expect(refreshed.history.items.find(row => row.runId === "ready-but-unread")).toMatchObject({ state: "counted", status: "counted_game" });
+    } finally { read.mockRestore(); }
+  });
+
   it("renders reason and distance below the floor, blocked reasons for unlanded inputs, and the games measured so far", async () => {
     const fixture = setup();
     const owner = learner(fixture.storage, "owner");

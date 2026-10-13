@@ -369,6 +369,13 @@ Proposed — id assigned at landing; head was **D1297** at drafting.
 
 ## Changelog
 
+- 2026-10-13 — D3772 repairs existing source-refusal presentation under §§3/8: complete processing
+  is not counted Profile evidence without an admitted run fact. Header/history agree on mismatch
+  and unread-subset exclusion, explain them separately and retain saved play. No wire fields,
+  metrics/floors, stored schema, automatic repair or numbering-amendment acceptance changes.
+  Both-color stored-source regressions and actual built-server/CLI/desktop/touch recovery belong
+  to the ordinary production verification, not §8.1's disposable author model.
+
 - 2026-10-13 — drafted §8.1 for D3670 after actual authenticated desktop/touch reproduction:
   complete recorded-edge numbering through every contributor builder, nested wire parser and
   Profile link. Independent review required; parent implementation status is unchanged. No

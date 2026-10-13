@@ -652,9 +652,7 @@ export class LearnerProfileService {
     return snapshot.runs.filter((run): run is RunFact & { readonly game: GameFact } => run.game !== null);
   }
 
-  #runStatus(run: RunFact, rejected: ReadonlyMap<string, ProfileRunStatus>): ProfileRunStatus {
-    const explicit = rejected.get(run.runId);
-    if (explicit !== undefined) return explicit;
+  #runStatus(run: RunFact): Exclude<ProfileRunStatus, "store_mismatch"> {
     if (run.game !== null) return "counted_game";
     if (run.playedDecisions === 0) return "no_decisions_of_yours";
     return "not_from_start_position";
@@ -664,18 +662,22 @@ export class LearnerProfileService {
     const facts = new Map(snapshot.runs.map((run) => [run.runId, run] as const));
     const rows = snapshot.cuts.map((cut): ProfileHistoryRow => {
       const fact = facts.get(cut.runId);
-      if (cut.kind === "complete" && fact !== undefined) {
-        const status = this.#runStatus(fact, snapshot.rejected);
+      if (cut.kind === "complete" && fact !== undefined && !snapshot.rejected.has(cut.runId)) {
+        const status = this.#runStatus(fact);
         return Object.freeze({
           runId: cut.runId, observedAt: fact.observedAt, sessionKind: fact.sessionKind, packId: fact.packId, state: "counted", status,
           playedDecisions: fact.playedDecisions,
           opening: fact.game === null || fact.game.opening === null ? null : Object.freeze({ eco: fact.game.opening.eco, name: fact.game.opening.name }),
           outcome: snapshot.results.get(cut.runId) ?? null,
-          detail: status === "counted_game" ? null : status === "not_from_start_position" ? `A ${sessionKindPlain(fact.sessionKind)} that did not begin from the standard starting position: its moves count only in the recorded observations below.` : status === "no_decisions_of_yours" ? "No move in this run is attributed to you (imported games' moves belong to the players who made them)." : "This run's recorded decisions disagree with the observation store; it is left out until the store is rebuilt.",
+          detail: status === "counted_game" ? null : status === "not_from_start_position" ? `A ${sessionKindPlain(fact.sessionKind)} that did not begin from the standard starting position: its moves count only in the recorded observations below.` : "No move in this run is attributed to you (imported games' moves belong to the players who made them).",
         });
       }
       if (cut.kind === "complete") {
-        return Object.freeze({ runId: cut.runId, observedAt: null, sessionKind: null, packId: null, state: "counted", status: snapshot.rejected.get(cut.runId) ?? null, playedDecisions: null, opening: null, outcome: null, detail: null });
+        const status = snapshot.rejected.get(cut.runId) ?? null;
+        return Object.freeze({ runId: cut.runId, observedAt: null, sessionKind: null, packId: null, state: "unavailable", status, playedDecisions: null, opening: null, outcome: null,
+          detail: status === "store_mismatch"
+            ? "Recorded counts do not match the saved moves. This run is left out of your profile until its counts are rebuilt. The saved game is unchanged."
+            : "We couldn't load this run's counts for this profile. Refresh the profile to check again." });
       }
       if (cut.kind === "pending") return Object.freeze({ runId: cut.runId, observedAt: null, sessionKind: null, packId: null, state: "pending", status: null, playedDecisions: null, opening: null, outcome: null, detail: cut.retryAt === undefined ? "Being processed; it will count once processing finishes." : `Processing will be retried after ${cut.retryAt}.` });
       if (cut.kind === "failed") return Object.freeze({ runId: cut.runId, observedAt: null, sessionKind: null, packId: null, state: "failed", status: null, playedDecisions: null, opening: null, outcome: null, detail: `Processing stopped after ${cut.attempts} attempts (${cut.failureCode}); this run is not counted.` });
@@ -807,9 +809,10 @@ export class LearnerProfileService {
   profile(principal: Principal): LearnerProfileView {
     const snapshot = this.#snapshot(principal);
     const games = this.#games(snapshot);
+    const admittedRuns = new Set(snapshot.runs.filter(run => !snapshot.rejected.has(run.runId)).map(run => run.runId));
     const counts = { counted: 0, pending: 0, failed: 0, unavailable: 0 };
     for (const cut of snapshot.cuts) {
-      if (cut.kind === "complete") counts.counted += 1;
+      if (cut.kind === "complete" && admittedRuns.has(cut.runId)) counts.counted += 1;
       else if (cut.kind === "pending") counts.pending += 1;
       else if (cut.kind === "failed") counts.failed += 1;
       else counts.unavailable += 1;
