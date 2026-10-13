@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3779]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3780]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -52,7 +52,7 @@ do not establish convincing personalities or calibrated ratings.
 The checked inventory remains 276 completed / 269 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,731 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
@@ -60,6 +60,21 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+2026-10-13 [[D3773]]/[[D3780]]: Profile now says a nullable date is unavailable in this view,
+not absent from the saved recording. The shared history decoder validates all existing display
+fields through actual Profile/history/opening client methods. Forty-five decoder and three
+mounted date controls fail on the predecessor; all 286 final focused cases/11 files, clean types
+and seven native journeys pass. Actual built-server desktop/touch runs prove source refusal →
+operator rebuild → original date, then corrupted transported-count refusal → explicit retry,
+with complete recording equality and private-account isolation. Initial event-route/button-URL
+test mistakes are corrected and logged. D3670's numbering contract remains unaccepted; no new
+wire field, inferred timestamp, semantic status rule, full Profile or release promotion. Complete
+normal verification/build/all four browser tiers exit zero: software 5,560/389 files, performance
+seven/four, content 255/26 and 352 browser passes, one optional Maia skip, zero retries and 112
+composition cells. Local warm p95 is 112.1 ms under the unchanged 250 ms budget. GitHub's current
+published verify succeeds/browser fails at 62c81eb1; no remote repair. All 269 live UX items and
+the macro gates stand.
 
 2026-10-13 [[D3779]]: the published arrival failure is localized to run creation and the
 initial opponent commit, not the twenty-five fast shape reads. A bounded local HTTP/SQLite/worker

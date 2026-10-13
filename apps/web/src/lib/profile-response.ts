@@ -1,5 +1,6 @@
 // The client's view of the private learner profile (rfc/player-style.md, rfc/skills.md). Every
-// response crosses one strict parser: a malformed or widened payload is refused, never rendered.
+// API read crosses its corresponding parser before display. History validates its declared
+// display operands; shared-card parsing additionally refuses undeclared keys.
 import type { HabitCard, StyleContributorRef, StyleContributors } from "@chess-tabiya/runtime/client";
 
 export type { HabitCard, StyleContributorRef, StyleContributors };
@@ -178,11 +179,21 @@ function habitCard(value: unknown, path: string): HabitCard {
 
 function historyRow(value: unknown, path: string): ProfileHistoryRow {
   const item = object(value, path);
-  text(item.runId, `${path}.runId`);
-  oneOf(item.state, ["counted", "pending", "failed", "unavailable"] as const, `${path}.state`);
-  if (item.opening !== null) { const opening = object(item.opening, `${path}.opening`); text(opening.eco, `${path}.opening.eco`); text(opening.name, `${path}.opening.name`); }
-  if (item.outcome !== null) oneOf(item.outcome, ["win", "loss", "draw"] as const, `${path}.outcome`);
-  return item as unknown as ProfileHistoryRow;
+  return {
+    runId: text(item.runId, `${path}.runId`),
+    observedAt: nullable(item.observedAt, `${path}.observedAt`, text),
+    sessionKind: nullable(item.sessionKind, `${path}.sessionKind`, (kind, at) => oneOf(kind, ["pack", "position", "imported"] as const, at)),
+    packId: nullable(item.packId, `${path}.packId`, text),
+    state: oneOf(item.state, ["counted", "pending", "failed", "unavailable"] as const, `${path}.state`),
+    status: nullable(item.status, `${path}.status`, (status, at) => oneOf(status, ["counted_game", "not_from_start_position", "no_decisions_of_yours", "store_mismatch"] as const, at)),
+    playedDecisions: nullable(item.playedDecisions, `${path}.playedDecisions`, count),
+    opening: nullable(item.opening, `${path}.opening`, (value, at) => {
+      const opening = object(value, at);
+      return { eco: text(opening.eco, `${at}.eco`), name: text(opening.name, `${at}.name`) };
+    }),
+    outcome: nullable(item.outcome, `${path}.outcome`, (outcome, at) => oneOf(outcome, ["win", "loss", "draw"] as const, at)),
+    detail: nullable(item.detail, `${path}.detail`, text),
+  };
 }
 
 function page<T>(value: unknown, path: string, parse: (item: unknown, at: string) => T): ProfilePage<T> {

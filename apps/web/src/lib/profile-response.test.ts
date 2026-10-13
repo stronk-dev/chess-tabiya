@@ -1,9 +1,46 @@
 import { describe, expect, it } from "vitest";
 
 import { profileFixture } from "./profile-fixture.test-support.js";
-import { parseLearnerProfile, parseSharedCard, parseStyleCardPage } from "./profile-response.js";
+import { parseLearnerProfile, parseOpeningDetail, parseProfileHistory, parseSharedCard, parseStyleCardPage } from "./profile-response.js";
 
 describe("learner profile response parser", () => {
+  describe.each(["profile", "history", "opening"] as const)("%s history operands", (door) => {
+    function parseRow(row: unknown) {
+      const fixture = profileFixture();
+      const history = { ...fixture.profile.history, items: [row] };
+      if (door === "profile") return parseLearnerProfile({ profile: { ...fixture.profile, history } }).history.items[0];
+      if (door === "opening") return parseOpeningDetail({ row: fixture.profile.openings.rows[0], games: history }).games.items[0];
+      return parseProfileHistory({ history }).items[0];
+    }
+
+    it.each(["runId", "observedAt", "sessionKind", "packId", "state", "status", "playedDecisions", "opening", "outcome", "detail"])("refuses missing %s", (field) => {
+      const row: Record<string, unknown> = { ...profileFixture().profile.history.items[0]! };
+      delete row[field];
+      expect(() => parseRow(row)).toThrow(new RegExp(`\\.${field}`));
+    });
+
+    it.each([
+      ["observedAt", 42], ["observedAt", {}], ["sessionKind", "blitz"], ["packId", []],
+      ["status", "victorious"], ["playedDecisions", -1], ["playedDecisions", 0.5],
+      ["playedDecisions", "28"], ["detail", {}], ["opening", false],
+    ])("refuses mistyped %s=%j", (field, value) => {
+      const row = { ...profileFixture().profile.history.items[0]!, [field as string]: value };
+      expect(() => parseRow(row)).toThrow();
+    });
+
+    it.each(["pending", "failed", "unavailable"])("retains a legitimate nullable %s row", (state) => {
+      const row = { runId: "not-readable", observedAt: null, sessionKind: null, packId: null, state,
+        status: state === "unavailable" ? "store_mismatch" : null, playedDecisions: null,
+        opening: null, outcome: null, detail: "Not counted in this view." };
+      expect(parseRow(row)).toEqual(row);
+    });
+
+    it("retains every operand of an admitted row", () => {
+      const row = profileFixture().profile.history.items[0]!;
+      expect(parseRow(row)).toEqual(row);
+    });
+  });
+
   it.each(["games", "decisions", "floor", "interval", "window"])("refuses a share with missing %s instead of asserting an incomplete numeric image", (field) => {
     const share: Record<string, unknown> = { metric: "m@1", title: "t", sentence: "s", scope: "x", text: "y", games: 25, decisions: 1, floor: 25, interval: { lower: 0, upper: 1, level: 0.95 }, window: { from: "a", to: "b" } };
     delete share[field];

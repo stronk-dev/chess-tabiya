@@ -2008,9 +2008,13 @@
         "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-13",
-          "summary": "D3775 repairs existing simulation admission/publication: one-line limits refuse before walking, and complete comparison/response projection precedes ephemeral publication. Three permanent predecessor regressions fail; all 26 focused cases pass, preserving saved state and legitimate entry. Stable software passes 5,478/389 and performance seven/four. Content catches the now-covered refusal still listed as debt; removing only that entry and rerunning governance/content/build/all four browser tiers exits zero: 255 content/26 files, 352 browser passes, one optional Maia skip, zero retries and all 112 composition cells. D3777's initial startup citation refusal remains recorded; its catalogue dependency is now repaired under the release-truth checkpoint. D1154/D3776 still need the complete synchronized scratch source/API/decoder transport amendment. D3772's actual Profile refusal/rebuild journeys and earlier import, Campaign/Library/classroom/Review/Play checkpoints stand. D3773 date copy and D3670 unaccepted numbering remain open. Useful selection, skills, bot calibration, official content, curriculum and release recovery remain open. No whole capability/milestone, qualification, remote CI or release-image promotion.",
+          "summary": "D3773/D3780 close the existing Profile timestamp and complete history-row type boundary. Forty-five shared decoder and three mounted date controls fail on the predecessor; 286 final focused cases/11 files and clean types pass. Seven native journeys include actual built-server desktop/touch source refusal, operator rebuild, exact admitted-date restoration, malformed transported-count refusal and explicit retry, preserving complete saved recordings and private-account isolation. Initial test event-route/button-URL mistakes are corrected, not product repairs. No new wire field, timestamp inference, ISO grammar, semantic status combination or contributor numbering. D3670 remains unaccepted. D3775's simulation repair, D3772's counts and prior learner checkpoints stand; D1154/D3776's complete scratch transport, useful selection, skills, bot calibration, official content, curriculum and release recovery remain open. Complete normal verification/build/all four browser tiers exit zero: 5,560 software/389 files, seven performance/four files, 255 content/26 files and 352 browser passes, one optional Maia skip, zero retries and all 112 composition cells. Local warm p95 is 112.1 ms under the unchanged 250 ms budget; published verify succeeds/browser fails at 62c81eb1. No whole capability/milestone, semantic qualification, remote CI or release-image promotion.",
           "impact": "advanced",
           "evidence": [
+            "apps/web/src/lib/ProfileScreen.svelte",
+            "apps/web/src/lib/ProfileScreen.test.ts",
+            "apps/web/src/lib/profile-response.ts",
+            "apps/web/src/lib/profile-response.test.ts",
             "apps/server/src/learner-profile.ts",
             "apps/server/src/learner-profile.test.ts",
             "tests/browser/profile-source-refusal.spec.ts",
@@ -2065,7 +2069,17 @@
           "anchors": [
             {
               "kind": "work_state",
-              "id": "D3775",
+            "id": "D3773",
+            "digest": "sha256:67f6a95638f7bfcc0168db0a3221ac8db1e4b12267cda01797f93ec893792bb9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3780",
+            "digest": "sha256:ee38d730c15988023039b226ef76ce08e16271ccae8cc38215bd5296f6a32861"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3775",
               "digest": "sha256:8e1747608b781ea344e8ada31327bf771e5be4fd674f1b838f4621ddc6ca2cf7"
             },
             {

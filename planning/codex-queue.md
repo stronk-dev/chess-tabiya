@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3773]]/[[D3780]] close the existing Profile date/row-admission boundary:
+45 decoder and three mounted date controls fail on the predecessor; all 286 focused cases pass.
+Seven native journeys include actual source refusal → rebuild → exact admitted date, then
+transported malformed-count refusal → explicit retry, on desktop/touch with complete saved
+recording equality and private-account isolation. Clean types pass. No inferred date, new wire
+field, cross-field status rule or full Profile claim. D3670 remains unaccepted; complete normal
+gate results belong to this batch's append-only log.
+
 2026-10-13 — [[D3779]] closes diagnostic localization, narrowing [[D3600]] from an aggregate request maximum to actual published
 write boundaries. Artifact 11804142264 retains all warm-context network entries: the outlier's
 POST /runs waits 299.712 ms and its initial opponent POST /runs/:id/moves waits 598.110 ms;
@@ -54,10 +62,9 @@ build and all four browser tiers exit zero: software 5,473/389, performance seve
 [[D1008]]'s coincident-word/number problem and draft claim-semantic-anchors remain open; this
 repair does not accept V2, rewrite content or weaken author attribution. D3773 remains queued.
 
-2026-10-13 — [[D3773]] is queued to client-platform under the existing Profile/client contract:
-`readableDate(null)` must describe an unavailable date in this view, not claim the saved run
-never recorded one. Extend D3772's actual source-refusal journey with the native label and
-retain positive real-date formatting before changing copy. No new timestamp or inferred date.
+2026-10-13 — [[D3773]] is locally closed with D3780 above under the existing Profile/client
+contract. Native source refusal and rebuilt-date positives preserve the canonical creation date;
+all pending/failed/unavailable copy and both links have permanent mounted controls.
 
 2026-10-13 — [[D3772]] repairs source-refused Profile counts under the already implemented
 player-style/source-read contract, independently of [[D3670]]'s unaccepted numbering amendment.

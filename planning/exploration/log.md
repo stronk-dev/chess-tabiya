@@ -27863,3 +27863,49 @@ Campaign was the one capability with no API, route or content. Now:
   assigned; the diagnostic closure changes no UX completion or official-content count. Explicit
   owned-file commit follows final tracking checks; leave the three pre-existing untracked paths
   untouched. No push, deployment, goal pause or full-1.0 completion.
+
+## 2026-10-13 — D3773/D3780 complete Profile history display operands and truthful unavailable dates
+
+- Previous goal turn is progress: 9f0d340a commits arrival localization and the full readable
+  inventory. Revalidate tracked-clean main and the same three untracked paths. Held source,
+  Sight, Nudge and Review amendments remain unaccepted; choose existing cleared Profile/client
+  work rather than borrowing parent status. Goal remains full 1.0, active and unbudgeted.
+- D3773's existing nullable-date copy reveals D3780: historyRow validates four groups and asserts
+  the rest. Record the new row before tests. An overlong patch anchor initially refuses without
+  changing files; the shorter verified heading succeeds. Normal registration catches the newly
+  unassigned row and then my omitted doing start date; adding its lane/start date restores zero
+  untriaged. No competing tracker, new wire schema or protected intent edit.
+- Forty-five permanent decoder negatives fail on the predecessor across all three actual parser
+  doors, plus three mounted pending/failed/unavailable date controls. The complete first focused
+  target is 237 pass/48 fail. First native probe fails because I wrongly read events from the
+  graph response; correct it to the real events API. Both corrected desktop/touch predecessors
+  then fail the actual date label while their canonical run.started dates exist.
+- Parse each existing history field with the current nullable/text/count/enum helpers, preserving
+  all four states and admitted rows. No new ISO grammar or cross-field semantic status rule.
+  Null dates say unavailable in this view; real dates retain locale formatting. A mounted
+  malformed initial read rejects raw operands and recovers on explicit retry. The API methods
+  for Profile/history/opening all call these existing parsers; no new decoder side path.
+- Two intermediate focused runs catch my button test expectations, first the wrong button and
+  then a missing /run route segment. Assert the actual existing Review and rehearsal paths and
+  both actions; do not change routing. Each intermediate is 283 pass/three test-only failures.
+  The final normal focused/typecheck command exits zero: 286 tests/11 files, seven browser
+  journeys, zero type errors/warnings. Native desktop/touch uses the actual built server, SQLite,
+  worker and operator CLI to restore the exact date after source refusal. A genuine authenticated
+  HTTP response is then fault-injected only at its count operand; the client rejects it, keeps
+  raw text out of the page and recovers on explicit retry. Both complete saved run snapshots
+  remain byte-equal, and an independent account sees none of the owner's runs.
+- D3773/D3780 close locally with that boundary evidence; D3670 remains held. Update existing
+  docs, queue, state and roadmap. All 1,731 live rows remain assigned, zero untriaged. Every
+  whole capability/milestone, source qualification, official-content and release hold stands.
+  Freeze source inputs for complete normal verification/build/all-browser gates before commit.
+- Complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  software 5,560/389 files, performance seven/four, content 255/26, clean types/governance/
+  packaging/build and 352 browser passes (287 smoke, five content, 59 matrix, one packaged
+  production), one unchanged optional Maia skip, zero retries and all 112 composition cells.
+  Local warm native-arrival p95 is 112.1 ms under unchanged 250 ms, not portable speed or the
+  remote cause. Fresh gh run listing confirms published 62c81eb1 verify 38381154735 success and
+  browser 38381154879 failure. No push, actual Docker image/recovery or release proof is claimed.
+- Append this measured result and reconcile the existing checkpoint/receipt, then verify final
+  tracking before explicit owned-file staging and normal hooks. No new raw research data,
+  source convention, module permission, migration, corpus or protected intent change. The goal
+  remains active; useful source/module delivery and the complete 1.0 release are unfinished.

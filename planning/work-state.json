@@ -31358,11 +31358,12 @@
     },
     {
       "id": "D3773",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1ef43ccab6b477f8c33dcbe3d27cfec3186d55f979a2cad040957c6e816b968e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:67f6a95638f7bfcc0168db0a3221ac8db1e4b12267cda01797f93ec893792bb9",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "tests/browser/profile-source-refusal.spec.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3774",
@@ -31415,6 +31416,15 @@
       "sourceDigest": "sha256:f08c86dbf56c8cf9592867eb223780d4bc243b658b033ab2ad3d1b3e2ef709fb",
       "uxItems": [],
       "evidence": "tests/browser/arrival-requests.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3780",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ee38d730c15988023039b226ef76ce08e16271ccae8cc38215bd5296f6a32861",
+      "uxItems": [],
+      "evidence": "tests/browser/profile-source-refusal.spec.ts",
       "evidenceKind": "path"
     }
   ]

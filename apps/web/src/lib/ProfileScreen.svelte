@@ -86,7 +86,7 @@
   }
 
   function readableDate(value: string | null): string {
-    if (value === null) return "date not recorded";
+    if (value === null) return "date unavailable in this view";
     const parsed = new Date(value);
     return Number.isNaN(parsed.valueOf()) ? value : parsed.toLocaleDateString();
   }

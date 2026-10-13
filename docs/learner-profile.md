@@ -44,6 +44,14 @@ and duplicate identities; habit details also retain the displayed card's measure
 Refresh clears drill-downs and discards pending responses from the previous view. These checks
 do not certify a habit or promise a transactional snapshot across requests.
 
+History rows share one complete client decoder across Profile, history pagination and opening
+details. Missing or mistyped dates, session/status fields, counts and explanatory text refuse
+the read through its existing retry surface, rather than becoming asserted display data.
+A nullable date says **date unavailable in this view**: it does not claim the saved recording
+has no timestamp. Admitted dates retain native locale formatting; a refused source can regain
+its original date after an operator rebuild and explicit refresh. This adds no timestamp inference,
+new wire fields or contributor-numbering policy.
+
 Move-level references open `/review/game/:runId?node=:nodeId`. Review resolves the node's actual
 stored branch, selects that move and retains it on reload. Inspecting a reference does not commit,
 rewind or fork the game. Missing/inaccessible references produce an unavailable message, not a

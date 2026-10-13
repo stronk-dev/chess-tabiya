@@ -47,6 +47,53 @@ async function consentToShare(target: HTMLElement): Promise<void> {
 }
 
 describe("profile surface", () => {
+  it("refuses malformed initial history without exposing its operands and recovers on explicit retry", async () => {
+    const fixture = profileFixture();
+    const malformed = { profile: { ...fixture.profile, history: { ...fixture.profile.history,
+      items: [{ ...fixture.profile.history.items[0]!, playedDecisions: "opaque-bad-count" }] } } };
+    const learnerProfile = vi.fn().mockImplementationOnce(async () => parseLearnerProfile(malformed))
+      .mockImplementation(async () => parseLearnerProfile(fixture));
+    const { target, component, onNavigate } = render({ learnerProfile });
+    try {
+      await settle();
+      expect(target.querySelector("[role=alert]")?.textContent).toContain("Your profile could not be loaded");
+      expect(target.querySelector(".history-list")).toBeNull();
+      expect(target.textContent).not.toContain("opaque-bad-count");
+      button(target, "Try again").click(); await settle();
+      expect(learnerProfile).toHaveBeenCalledTimes(2);
+      expect(target.querySelector("[role=alert]")).toBeNull();
+      expect(target.querySelectorAll(".history-list > li")).toHaveLength(1);
+      expect(onNavigate).not.toHaveBeenCalled();
+    } finally { unmount(component); }
+  });
+
+  it.each(["pending", "failed", "unavailable"] as const)("describes a %s date as unavailable here while keeping admitted dates and links", async (state) => {
+    const fixture = profileFixture();
+    const admitted = fixture.profile.history.items[0]!;
+    const learnerProfile = async () => parseLearnerProfile({ profile: { ...fixture.profile,
+      history: { ...fixture.profile.history, hiddenCount: 24, items: [admitted,
+        { runId: "not-readable", observedAt: null, sessionKind: null, packId: null, state,
+          status: state === "unavailable" ? "store_mismatch" : null, playedDecisions: null,
+          opening: null, outcome: null, detail: "Not counted in this view." }] },
+    } });
+    const { target, component, onNavigate } = render({ learnerProfile });
+    try {
+      await settle();
+      const rows = target.querySelectorAll(".history-list > li");
+      expect(rows).toHaveLength(2);
+      expect(rows[0]!.textContent).toContain(new Date(admitted.observedAt).toLocaleDateString());
+      expect(rows[0]!.textContent).not.toContain("date unavailable in this view");
+      expect(rows[1]!.textContent).toContain("date unavailable in this view");
+      expect(rows[1]!.textContent).not.toContain("date not recorded");
+      (rows[1]!.querySelector("button") as HTMLButtonElement).click();
+      expect(onNavigate).toHaveBeenCalledWith("/review/game/not-readable");
+      const rehearse = [...rows[1]!.querySelectorAll("button")].find(candidate => candidate.textContent?.trim() === "Open in rehearsal")!;
+      rehearse.click();
+      expect(onNavigate).toHaveBeenCalledWith("/play/run/not-readable");
+      expect(onNavigate).toHaveBeenCalledTimes(2);
+    } finally { unmount(component); }
+  });
+
   it.each(["wrong-offset", "changed-total"])("keeps the saved history on a %s continuation", async (defect) => {
     const fixture = profileFixture();
     const row = fixture.profile.history.items[0]!;
