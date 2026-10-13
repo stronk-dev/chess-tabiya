@@ -2428,8 +2428,8 @@ export class RunService {
     if (pack === undefined) throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
     const maxBranches = options.maxBranches ?? 8;
     const maxPlies = options.maxPlies ?? 40;
-    if (!Number.isSafeInteger(maxBranches) || maxBranches < 1 || maxBranches > 8 || !Number.isSafeInteger(maxPlies) || maxPlies < 1 || maxPlies > 40) {
-      throw new ServerError("SIMULATE_TOO_LARGE", "Simulation is limited to 8 branches and 40 total plies", {
+    if (!Number.isSafeInteger(maxBranches) || maxBranches < 2 || maxBranches > 8 || !Number.isSafeInteger(maxPlies) || maxPlies < 1 || maxPlies > 40) {
+      throw new ServerError("SIMULATE_TOO_LARGE", "Simulation requires 2–8 branches and at most 40 total plies", {
         details: { variations: maxBranches, plies: maxPlies },
       });
     }
@@ -2510,15 +2510,14 @@ export class RunService {
         ...(subvariationsSkipped === 0 ? {} : { subvariationsSkipped }),
       });
     }
-    const simulationId = randomUUID();
-    this.#simulations.set(simulationId, { runId, writerId, sourceNodeId, moves, labels, createdAt: Date.now() });
     const comparison = compareBranches(scratch, branchIds, {
       pack: expandPackAuthoredBoundary(
         pack.document,
         planSignatureResolver(pack.document, this.#shapes),
       ),
     });
-    return Object.freeze({
+    const simulationId = randomUUID();
+    const result = Object.freeze({
       simulationId,
       // A virtual checkpoint cannot disclose the saved run's inherited analysis.
       comparison: feedbackDisclosed(stored.run) ? comparison : comparisonWithoutEngineFeedback(comparison),
@@ -2530,6 +2529,9 @@ export class RunService {
         ...branchDetails[indexValue],
       }))),
     });
+    // A failed comparison or response projection must not publish unreachable scratch state.
+    this.#simulations.set(simulationId, { runId, writerId, sourceNodeId, moves, labels, createdAt: Date.now() });
+    return result;
   }
 
   enterSimulation(

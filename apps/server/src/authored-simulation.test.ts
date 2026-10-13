@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { attachEvidence, branchPath, compareBranches, feedbackDisclosed, fork, projectRun, rewind, transitionObjective, type BranchComparison, type CampaignDocument, type MutationResult } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import * as runtime from "@chess-tabiya/runtime";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { CampaignRegistry } from "./campaign-registry.js";
 import { CampaignService } from "./campaign-service.js";
 import { withDerivedRequires } from "./capability/pack-capabilities.js";
@@ -29,7 +30,7 @@ const principal = { learnerId: "__legacy", handle: "__legacy" };
 const writerId = "writer-preview";
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
 const stores: SQLiteRunStorage[] = [];
-afterEach(() => { for (const storage of stores.splice(0)) storage.close(); });
+afterEach(() => { vi.restoreAllMocks(); for (const storage of stores.splice(0)) storage.close(); });
 
 async function setup(charged: boolean, fixture: DrillPackDefinition = document) {
   const packs = await PackRegistry.fromDocuments([{ source: "promotion-test", value: withDerivedRequires(fixture) }]);
@@ -66,6 +67,68 @@ function consequences(comparison: BranchComparison, branchId: string) {
   // Missed checkpoints are relative to the compared set. The unchosen scratch branch
   // must not be persisted just to reproduce that set's comparative absence list.
   return { objectiveState: value.objectiveState, terminal: value.terminal, checkpointsReached: value.checkpointsReached };
+}
+
+describe("D3775 simulation admission and publication", () => {
+  it("refuses a one-line comparison before walking or publishing scratch state", async () => {
+    const { storage, runId, call } = await setup(false);
+    const before = storage.read(runId)!.run;
+    const forkSpy = vi.spyOn(runtime, "fork");
+    const compareSpy = vi.spyOn(runtime, "compareBranches");
+    const publicationSpy = vi.spyOn(Map.prototype, "set");
+    const response = await call("simulate", { maxBranches: 1, at });
+    expect(response.status, await response.clone().text()).toBe(422);
+    expect(await response.json()).toMatchObject({ error: { code: "SIMULATE_TOO_LARGE" } });
+    expect(forkSpy).not.toHaveBeenCalled();
+    expect(compareSpy).not.toHaveBeenCalled();
+    expect(publicationSpy.mock.calls.filter(([, value]) => isScratchEntry(value, runId))).toHaveLength(0);
+    expect(storage.read(runId)!.run).toEqual(before);
+  });
+
+  for (const fault of ["comparison", "leaf metadata"] as const) {
+    it(`does not publish an entry when ${fault} construction fails`, async () => {
+      const { storage, runId, call } = await setup(false);
+      const before = storage.read(runId)!.run;
+      const constructionSpy = fault === "comparison"
+        ? vi.spyOn(runtime, "compareBranches").mockImplementationOnce(() => { throw new TypeError("controlled comparison failure"); })
+        : vi.spyOn(runtime, "branchPath").mockImplementationOnce(() => { throw new TypeError("controlled leaf metadata failure"); });
+      const publicationSpy = vi.spyOn(Map.prototype, "set");
+      const response = await call("simulate", { at });
+      expect(response.status, await response.clone().text()).toBe(500);
+      expect(constructionSpy).toHaveBeenCalled();
+      expect(publicationSpy.mock.calls.filter(([, value]) => isScratchEntry(value, runId))).toHaveLength(0);
+      expect(storage.read(runId)!.run).toEqual(before);
+    });
+  }
+
+  for (const maxBranches of [2, 8]) {
+    it(`publishes one complete ${maxBranches}-limit preview and preserves chosen-line entry`, async () => {
+      const { storage, runId, call } = await setup(false);
+      const before = storage.read(runId)!.run;
+      const publicationSpy = vi.spyOn(Map.prototype, "set");
+      const response = await call("simulate", { maxBranches, at });
+      expect(response.status, await response.clone().text()).toBe(200);
+      const preview = await response.json() as ReturnType<RunService["simulate"]>;
+      const publications = publicationSpy.mock.calls.filter(([, value]) => isScratchEntry(value, runId));
+      expect(publications).toHaveLength(1);
+      expect(publications[0]![0]).toBe(preview.simulationId);
+      expect(preview.comparison.columns).toHaveLength(2);
+      expect(preview.branches.map(branch => branch.index)).toEqual([0, 1]);
+      expect(storage.read(runId)!.run).toEqual(before);
+      const entered = await call("simulate-enter", { simulationId: preview.simulationId, branchIndex: 1, at });
+      expect(entered.status, await entered.clone().text()).toBe(200);
+      const saved = storage.read(runId)!.run;
+      expect(branchPath(saved, saved.activeCursor.branchId).at(-1)!.fen).toBe(preview.branches[1]!.leafFen);
+      expect(projectRun(saved.events)).toEqual(saved);
+    });
+  }
+});
+
+function isScratchEntry(value: unknown, runId: string): boolean {
+  if (typeof value !== "object" || value === null) return false;
+  const entry = value as Record<string, unknown>;
+  return entry.runId === runId && entry.writerId === writerId && typeof entry.sourceNodeId === "string"
+    && Array.isArray(entry.moves) && Array.isArray(entry.labels) && typeof entry.createdAt === "number";
 }
 
 describe("D3709 authored preview promotion", () => {

@@ -1,5 +1,26 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3777]] records a real software-tier dependency leak: a position-only
+occupied-target HTTP fixture boots the unrelated default corpus and fails its Najdorf log
+citation. The first full D3775 run has 5,477 pass/one startup refusal; its castling assertion
+never runs. This agent edited the consumed log during verification. Finish all input edits
+before rerunning; a stable repeat does not identify the original read or close the corpus
+coupling. Own the fixture repair under existing D1533/D1538, preserving actual HTTP/source
+assertions and the separate real-content acceptance tier.
+
+2026-10-13 — [[D3775]] closes one-line simulation admission and early scratch publication
+under the existing two-through-eight comparison contract. Three permanent predecessor
+regressions fail; all 26 focused cases pass, retaining saved-state and legitimate entry controls.
+Stable software passes 5,478/389 and performance seven/four. Content catches the stale
+SIMULATE_TOO_LARGE debt entry; removing only that now-covered code and rerunning ordinary
+governance/content/build/all four browser tiers exits zero: 255 content/26 files, 352 browser
+passes, one optional Maia skip, zero retries, all 112 composition cells. D3777 remains open;
+local warm p95 105.9 ms is not the published failure's cause/closure. The 8/40 limits,
+actor/orchestration, disclosure, promotion and Campaign charging remain unchanged.
+[[D3776]] is source-inspected client-admission work inside [[D1154]]'s full readonly scratch
+transport amendment; it is not a completed malformed-response/wrong-move experiment. Research
+and contract acceptance precede the complete synchronized source/API/decoder/client work.
+
 2026-10-13 — [[D3774]] closes the existing V1 percentage span boundary in claim backing:
 44 permanent predecessor controls fail, including six actual startup-to-authenticated-delivery
 cases. Whole-span canonical equality and numeric source checks preserve valid percentages and

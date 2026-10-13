@@ -59,6 +59,11 @@ result to a real branch with origin `simulated`; only then does it enter replay,
 progress, compare, and PGN. Preview ids are writer-scoped, expire after ten
 minutes, and are consumed after one successful entry.
 
+An explicit branch limit must be two through eight: a one-line request cannot produce a
+comparison and is refused before the scratch walk. The ephemeral entry is published only
+after its comparison and complete branch metadata have been constructed; a construction
+failure leaves neither saved changes nor an unreachable entry.
+
 Scratch comparison uses the **saved run's** machine-feedback disclosure state and the same
 server projection as ordinary comparison. A checkpoint reached only in memory cannot open that
 boundary: inherited scores, best lines, summary scores and machine objective references stay

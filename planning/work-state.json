@@ -31372,6 +31372,31 @@
       "uxItems": [],
       "evidence": "apps/server/src/claim-backing-delivery.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3775",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5e4a615789e5358fc68838ba385c69670d68e078ef6b91e1529a2a9fdc50703b",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-simulation.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3776",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3f60bf2f8bfac6f4f1f80fe51b8d49431d00984f5d7fb3dd2fa5f1f7a7766507",
+      "uxItems": [],
+      "owner": "core-loop"
+    },
+    {
+      "id": "D3777",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d6edaa9d9387ee67f94bc3b7b1c43ab270b537e6ccc3251d1183a669ece180e1",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

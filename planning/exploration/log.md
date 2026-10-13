@@ -27657,3 +27657,60 @@ Campaign was the one capability with no API, route or content. Now:
   coincidence problem and unaccepted V2 remain open; the other V1 normalization families are
   unchanged. The existing evidence-spine checkpoint records this repair without promoting a
   whole capability, qualification, official content or release. D3773 remains queued; goal active.
+
+## 2026-10-13 — D3775 simulation admission/publication and 1.0 inventory
+
+- Finish the in-flight accepted-contract repair before the owner's requested whole-platform
+  overview. D3775's actual request returns an internal 500 when maxBranches is one; permanent
+  controlled comparison/leaf-construction failures each observe an already-published scratch
+  entry. All three negative controls fail on the predecessor, while valid entry controls pass.
+- Require two through eight branches before the authored walk, and finish comparison,
+  disclosure projection and branch metadata before publishing the ephemeral entry. No new
+  endpoint, transport, saved event, source, actor, disclosure, Campaign charge or bound change.
+  All 26 focused cases pass, retaining exact saved-state and replay/promotion controls.
+- D3776 is explicitly a source-inspected response-admission risk, not a measured wrong move.
+  It belongs to D1154's complete readonly scratch source/API/decoder amendment; final-position
+  cards are not the full synchronized preview. Both rows are routed to the existing core-loop
+  authority. Initial assignment uses one atomic batch because two sequential assignments would
+  each leave the sibling untriaged. During closeout, sync refuses the glyph/state mismatch and
+  done refuses the live OWNER parameter; the ordinary explicit transition without OWNER succeeds.
+  These are visible guard refusals, not green closeout checks.
+- Reconcile the existing roadmap/state/receipt, not a new tracker. Fresh GitHub listing still
+  shows published 62c81eb1: verify success and browser failure. Current local fixes are unpublished;
+  a local pass cannot close D3600. Complete normal verification/build/browser is running before
+  commit. No push, Docker restart, delegation, capability promotion or goal-status change occurs.
+- The first full command exits nonzero at software: 5,477 pass/one failure, 389 files,
+  397.87 seconds. D3762's black queenside ordinary fixture fails during default application
+  construction, not its castling assertion: Najdorf's accepted condition citation into this
+  log cannot resolve. The exact old line still exists afterward; this agent appended to the
+  consumed log while verification was running. That is not a stable-input qualification run,
+  nor proof of the precise failed filesystem read. D3777 owns the unrelated real-corpus
+  dependency under D1533/D1538. Preserve the failure, finish edits, then rerun serially without
+  changing consumed inputs or raising deadlines. Build/browser have not run in this attempt.
+- Repository hygiene inspection confirms D3513's cleanup was of unpublished captures, not
+  all published history: HEAD still tracks 209 semantic-search files / 382,573,451 bytes,
+  including nineteen files over five MB. Do not claim all old raw research was removed;
+  progress checks depend on compact reports, not these older published recordings.
+- The stable-input repeat passes all 5,478 software cases/389 files and seven performance
+  cases/four files, with clean types, packaging and governance. Content then refuses the stale
+  refusal-debt list: D3775's new real request now directly tests SIMULATE_TOO_LARGE, so that code
+  is no longer uncovered. Remove just that entry from the current debt list; retain the original
+  ceiling, equality guard and every assertion. Content's initial result is 254 pass/one failure.
+  Production and software-test bytes are unchanged after their passing run. Rerun the affected
+  governance/content gates, then build and all four browser tiers before commit; do not claim
+  the failed aggregate exited zero or that a green repeat closed D3777's corpus coupling.
+- The final affected-tier command `make roadmap-receipt verify-governance verify-content build
+  test-browser-ci-awake` exits zero: governance, 255 content cases/26 files, packaging/build and
+  all four browser tiers (287 smoke, five content, 59 matrix, one packaged production = 352
+  passes), one optional Maia skip, zero retries and all 112 successful unretried composition
+  cells. Stable software/performance's terminal passes remain 5,478/389 and seven/four above;
+  neither production nor software-test bytes changed afterward. Warm native arrival p95 is
+  105.9 ms under the unchanged 250 ms budget, not proof of D3600's remote cause or repair.
+- Update the existing ledger, queue, docs, core journey checkpoint and receipt in this commit.
+  D3775 closes locally; D3776/D1154 transport, D3777 test isolation, source qualification,
+  useful selection, bot calibration, official content and release proof remain open. All 1,733
+  live ledger rows are assigned, zero untriaged; the macro inventory remains fourteen incomplete
+  capabilities, four active/five blocked milestones, 276 complete/269 live/24 retired UX items,
+  50 installed packs and zero official graduates. This is a checked current inventory, not a
+  fresh independent audit of all 1,632 closed rows; 462 historical prose-only closures remain.
+  Nothing is pushed or deployed, and the full 1.0 goal remains active.

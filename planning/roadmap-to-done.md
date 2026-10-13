@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3774]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3777]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,19 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3775]]: simulation now refuses a one-line limit before walking and publishes
+its ephemeral entry only after complete comparison/response construction. Three permanent
+predecessor failures reproduce the actual 500 and early publication; all 26 focused cases pass,
+including unchanged saved-state and legitimate entry. Stable software passes 5,478/389 and
+performance seven/four. Content then catches the newly covered refusal still listed as debt;
+removing that stale entry and rerunning governance/content/build/all four browser tiers exits
+zero: 255 content/26 files, 352 browser passes, one optional Maia skip, zero retries and 112
+composition cells. The initial startup citation refusal is retained under [[D3777]], whose
+software/corpus coupling remains open. [[D1154]]/[[D3776]] still own the full synchronized
+scratch source/API/decoder preview; this repair does not complete that journey or any whole
+capability. Fresh GitHub listing retains published verify success/browser failure, not a remote
+repair. All 1,733 live rows are assigned; 276 UX items complete, 269 live and 24 retired.
 
 2026-10-13 [[D3774]]: the existing percentage binder no longer accepts a numeric prefix with
 unsupported chess prose or coerces malformed source values into instrument evidence. Both
