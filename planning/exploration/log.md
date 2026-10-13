@@ -27981,3 +27981,40 @@ Campaign was the one capability with no API, route or content. Now:
   skipped. Local warm p95 is 103.9 ms under unchanged 250 ms, not remote cause or speedup proof.
   Record this result in the existing checkpoint and verify final tracking before explicit owned-file
   staging/normal hooks. The published GitHub and full-image holds remain; the 1.0 goal stays active.
+
+### 2026-10-13 — owner-requested finish and whole-product inventory
+
+- The owner asks to finish in-flight work, then explain total 1.0 progress before another wave.
+  Confirm 49179aff is the committed production checkpoint, tracked main is clean and twelve
+  local commits follow origin/main. Leave the three pre-existing untracked paths untouched.
+  The full D3783 product verification above is the latest result; no new product run is claimed
+  for this documentation-only closeout.
+- Read the live roadmap/ledger/UX/RFC registers and implemented-system docs. Normal
+  make roadmap-progress passes: fourteen incomplete whole capabilities, four active/five
+  blocked milestones, 276 completed/269 live/24 retired UX items and 76 product RFCs
+  (42 implementing, ten awaiting, 24 draft). The two proven cells are governance/state and
+  rehearsal/state, not two complete product capabilities. Zero official packs graduate;
+  462 historical closures still have prose-only backing. Do not convert these counts to
+  a product completion percentage or present this inventory as an independent re-audit
+  of every historical closure.
+- Fresh authorized gh run list confirms published 62c81eb1: verify 38381154735 succeeds,
+  browser 38381154879 fails. Correct release-truth's stale 17ef2a7c local-proof citation
+  to the committed D3783 checkpoint and retained full normal gate result. The published
+  browser cause and exact-revision paired remote proof remain open. No push/deploy occurs.
+- Record D3784 before implementation: Campaign home reads only the current catalogue,
+  disables Resume on unavailable packs and cannot list a removed definition's saved run.
+  The existing authenticated active-summary endpoint reads pinned saved documents; accepted
+  campaign-core §7.1 already owns the required recovery. Source inspection is not a measured
+  native failure. Assign this next slice to Campaign, retaining missing-source refusal,
+  retry, privacy and reload proof obligations. No production code changes in this closeout.
+- The first transition cannot assign an unsynchronized row; normal sync exposes it and
+  intentionally refuses the zero-untriaged ceiling. Remove todo's invalid since field
+  and complete the normal owner assignment: 3,533 ledger rows, 631 todo, sixteen doing,
+  1,085 blocked, 1,640 done, 161 refused; all 1,732 live items assigned, zero untriaged.
+  Update the existing roadmap, queue and compact generated receipt rather than add another
+  status document. The full 1.0 goal remains active and incomplete.
+- Final normal make roadmap-receipt verify-governance exits zero: routing, durable states,
+  roadmap, registers, intent parity, tier separation, documentation and staged-process
+  controls pass. git diff --check is clean. Stage only this seven-file inventory closeout
+  and inspect its cached file list before committing; no implementation, raw research,
+  archive, untracked agent data, push or deployment is included.

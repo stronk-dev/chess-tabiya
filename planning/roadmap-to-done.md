@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3783]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3784]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -52,7 +52,7 @@ do not establish convincing personalities or calibrated ratings.
 The checked inventory remains 276 completed / 269 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,731 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
@@ -60,6 +60,25 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+**Inventory closeout, 2026-10-13:** the last in-flight production change is committed at
+`49179aff`; there are no tracked implementation edits left unfinished. Its complete normal
+local verification passes 5,564 software cases, seven performance cases, 255 content cases
+and all four browser tiers, with 112 successful unretried composition cells. This inventory
+does not rerun or relabel that product proof. Fresh GitHub reads still show published
+`62c81eb1` verification success and browser failure. Twelve subsequent local commits are
+unpublished before this documentation closeout; nothing has been pushed by this agent.
+The release-truth checkpoint is corrected to cite the latest local proof instead of
+`17ef2a7c`. The shared board controller and rehearsal state are substantial implemented
+foundations; the two proven dimension cells are not two finished 1.0 capabilities.
+
+[[D3784]] is newly recorded, assigned Campaign debt, not shipped work: home currently lists
+only installed definitions and disables Resume when a pack is unavailable. The existing
+active-summary API already reads the learner's saved pinned documents. The next accepted
+Campaign recovery slice must use that authority and prove removed/replaced definitions,
+missing packs, retry, reload and privacy without claiming unavailable encounters can start.
+This source-inspected gap is not yet a measured native failure. The requested inventory comes
+before starting that next implementation wave.
 
 2026-10-13 [[D3782]]/[[D3783]]: both proposed shared-freezer optimizations are rejected:
 sixteen cold pairs preserve complete output but are all slower. The separate memo/mint

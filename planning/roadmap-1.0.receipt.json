@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bc5fece1002bb121179a080d6e68cfc159b5c51b6d2781dc39fda6b381560a4c",
+    "roadmap": "sha256:d727e7359a028f2a6dd02d15f99c21d82b61f49779b0ee7ae5a2d5f3b17007e2",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:80367ae4f00d1fc1ae4484dc60322391048c696b49a6b0f19bac3cdb16851346",
+    "workState": "sha256:4305bcdad9b9a6117c88ad8824141eccb2ddf5568f6250482b77ddb85f3b6ce4",
     "rfcRegister": "sha256:6b1522e1965be77bde5f56e042a5b8b08114294345a8e3035a9eaef4ea551fa8",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 630,
+      "todo": 631,
       "doing": 16,
       "blocked": 1085,
       "done": 1640,
@@ -76,7 +76,7 @@
       "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-13",
-        "summary": "D3779 identifies the published warm outlier's 299.712 ms run creation and 598.110 ms initial opponent commit; its shape reads are individually below 11 ms. Five actual local HTTP/SQLite/worker phase pairs do not reproduce these waits. Normal browser reports now retain bounded critical-route phases with private ids removed and unknown phases null, collected after native observation. Four contracts and fourteen actual arrival cases pass with all 41 requests/five samples and the unchanged 250 ms budget; local p95 is 115.1 ms, not remote proof. Source actor/transaction/worker/readiness behavior is unchanged. D3777 fixture isolation, D3771 ordering and retention/scheduling checkpoints stand. Last complete product proof remains 17ef2a7c: software 5,484/389, performance seven/four, content 255/26 and 352 browser passes, one optional Maia skip, zero retries, 112 composition cells. Published 62c81eb1 still has verify success/browser failure. D3600's actual CPU/lock/filesystem/runner cause and paired remote qualification remain open; no product speedup, source qualification, full capability/milestone or release promotion.",
+        "summary": "D3779 identifies the published warm outlier's 299.712 ms run creation and 598.110 ms initial opponent commit; its shape reads are individually below 11 ms. Five actual local HTTP/SQLite/worker phase pairs do not reproduce these waits. Normal browser reports retain bounded critical-route phases with private ids removed and unknown phases null, collected after native observation. The last complete local product verification is now 49179aff/D3783, not the superseded 17ef2a7c checkpoint: software 5,564/389, performance seven/four, content 255/26 and all four browser tiers pass, one optional Maia skip, zero retries and 112 successful composition cells. Its local warm p95 is 103.9 ms under the unchanged 250 ms budget, not remote proof or a speedup claim. October-13 fresh GitHub reads still show published 62c81eb1 verify 38381154735 success and browser 38381154879 failure; the twelve following local implementation/research commits are unpublished at this inventory. D3777 fixture isolation, D3771 observation ordering and retention/scheduling checkpoints stand. D3600's actual CPU/lock/filesystem/runner cause and paired remote qualification remain open. D3784 records a source-inspected Campaign home/resume gap for a separate accepted implementation slice, not a new completion. No full capability/milestone, semantic qualification, content or release promotion.",
         "impact": "advanced",
         "evidence": [
           "tests/browser/arrival-requests.ts",

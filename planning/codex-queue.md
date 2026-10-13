@@ -1,5 +1,13 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3784]] is the next accepted Campaign recovery slice, not shipped work.
+Home reads only the current catalogue: a missing pack disables Resume and a removed
+definition hides the saved run. Use the existing authenticated active-summary endpoint and
+the saved title/identity for the resume door. Prove definition removal/replacement, missing
+packs, explicit retry, stale-response retirement, reload and private-account isolation across
+client, actual HTTP/storage and desktop/phone; do not make unavailable new encounters playable.
+The owner requested a whole-product inventory before starting another implementation wave.
+
 2026-10-13 — [[D3783]] closes the actual descendant-hook/parent-freeze ordering defect.
 Two predecessor controls expose stale cached bytes after equal-looking mutable replacement;
 the parent now freezes first. Four permanent controls and all 67 mint/120 collector/66 real
