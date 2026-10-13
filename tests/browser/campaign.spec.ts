@@ -442,7 +442,7 @@ for (const mobile of [false, true]) {
     await page.getByRole("button", { name: "Retry loading campaigns", exact: true }).click();
     await expect(page.getByRole("alert")).not.toBeVisible();
     await expect(page.getByRole("heading", { name: "Campaign", exact: true })).toBeFocused();
-    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Resume run", exact: true }).click();
+    await page.locator(`[data-saved-campaign="${campaignId}"]`).getByRole("button", { name: "Resume run", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
     await expect(page.getByRole("button", { name: "Continue encounter", exact: true })).toBeVisible();
     expect(catalogueReads).toBe(2);
@@ -743,7 +743,7 @@ for (const mobile of [false, true]) {
     const campaignId = created.campaignId, mapPath = `/campaign/${campaignId}`;
     const resume = async () => {
       await page.locator('#primary-navigation a[href="/campaign"]').click();
-      await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Resume run" }).click();
+      await page.locator(`[data-saved-campaign="${campaignId}"]`).getByRole("button", { name: "Resume run" }).click();
       await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
     };
     await resume();

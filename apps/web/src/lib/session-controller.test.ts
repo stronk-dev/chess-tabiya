@@ -601,6 +601,25 @@ describe("DrillSessionController", () => {
   });
 
   describe("pinned pack attachment", () => {
+    it("names missing exact pack bytes rather than a stale run, and retries without replacing recorded play", async () => {
+      const environment = controller();
+      await environment.controller.startPack(pack.id);
+      const before = structuredClone(environment.api.requiredRun());
+      environment.controller.stopSession();
+      const retained = vi.spyOn(environment.api, "runPack").mockRejectedValueOnce(new ApiError(409, "PACK_UNRESOLVABLE", "opaque pack ids"));
+      await environment.controller.resume(before.id);
+      expect(environment.controller.state.runState).toBeUndefined();
+      expect(environment.controller.state.error).toContain("exact drill pack used by this saved run is unavailable");
+      expect(environment.controller.state.error).not.toContain("run changed");
+      expect(environment.controller.state.error).not.toContain("opaque");
+      expect(environment.api.requiredRun()).toEqual(before);
+      await environment.controller.resume(before.id);
+      expect(environment.controller.state.error).toBeUndefined();
+      expect(environment.controller.state.runState?.run).toEqual(before);
+      expect(retained).toHaveBeenCalledTimes(2);
+      environment.controller.destroy();
+    });
+
     it.each(["resume", "duplicate"] as const)("uses retained run bytes for %s after catalogue replacement or withdrawal", async (operation) => {
       const environment = controller();
       await environment.controller.startPack(pack.id);

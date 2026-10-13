@@ -1120,6 +1120,40 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it.each([false, true])("recovers a missing-pack route without late attachment after departure: %s", async leave => {
+    history.replaceState(null, "", `/play/run/${run.id}`);
+    const base = api();
+    const pending = deferred<Awaited<ReturnType<DrillClientApi["runPack"]>>>();
+    const retained = vi.fn(base.runPack).mockRejectedValueOnce(new ApiError(409, "PACK_UNRESOLVABLE", "opaque source ids"))
+      .mockImplementationOnce(() => pending.promise);
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: { ...base, runPack: retained }, router, storage: new MemoryStorage() } });
+    try {
+      await vi.waitFor(() => expect(document.body.textContent).toContain("exact drill pack used by this saved run is unavailable"));
+      const buttons = [...document.querySelectorAll<HTMLButtonElement>("button")];
+      expect(buttons.some(button => button.textContent === "Return to Play")).toBe(true);
+      expect(buttons.some(button => button.textContent === "Open saved campaigns")).toBe(true);
+      const retry = buttons.find(button => button.textContent === "Try again")!;
+      retry.click(); retry.click();
+      await vi.waitFor(() => expect(retained).toHaveBeenCalledTimes(2));
+      if (leave) {
+        router.navigate("/play");
+        await vi.waitFor(() => expect(document.querySelector(".open-pack")).not.toBeNull());
+      }
+      pending.resolve({ document: pack, digest });
+      if (leave) {
+        await tick(); await Promise.resolve(); await tick();
+        expect(location.pathname).toBe("/play");
+        expect(document.querySelector("[data-board-input-grid]")).toBeNull();
+      } else {
+        await vi.waitFor(() => expect(document.querySelector("[data-board-input-grid]")).not.toBeNull());
+        expect(location.pathname).toBe(`/play/run/${run.id}`);
+        expect(document.body.textContent).not.toContain("Run unavailable");
+      }
+      expect(retained).toHaveBeenCalledTimes(2);
+    } finally { pending.resolve({ document: pack, digest }); await unmount(component); }
+  });
+
   it.each([false, true])("keeps a local start one-shot and hydrates a later return (departure during handoff: %s)", async (departDuringHandoff) => {
     history.replaceState(null, "", "/play");
     const base = api();

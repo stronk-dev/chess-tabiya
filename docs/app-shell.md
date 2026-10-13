@@ -234,6 +234,14 @@ behavior: after committing their ply they follow the run, then automatically cla
 when their learner owns the new side to move. Their board is oriented to their seat;
 objective and comparison perspective stay pinned to the run's reference side.
 
+When mandatory run attachment fails, **Run unavailable** offers the existing route retry,
+**Return to Play** and **Open saved campaigns**. Retry is single-flight and its late completion
+cannot attach after navigation. `PACK_UNRESOLVABLE` explains that the exact saved pack version
+is unavailable and needs operator restoration; it is not described as a changed run. The saved
+recording remains intact, and retry does not create a replacement attempt or bypass pack,
+capability, graph/lease or related-match admission. Mounted controls cover held retry and
+departure; actual Campaign restart/restoration journeys cover the real retained recording.
+
 ## Capability registry
 
 `GET /capabilities` combines static runtime information with live deployment

@@ -8,6 +8,23 @@ storage migration 30, campaign-schema lanes 2 and 3.
 
 ## Recovering a failed read
 
+Campaign home reads the installed catalogue and the learner-owned saved summaries separately,
+then displays their complete read result. **Continue your campaign** uses the saved run's title
+and identity, not a replacement installed definition. Removing a definition or an encounter pack
+does not remove this resume door. **Start a new campaign** stays separate: unavailable content
+cannot start, and an active run must be finished or abandoned before another run of that campaign.
+If the two reads disagree about a catalogue's reported active run, **Refresh campaigns** rereads
+them without creating anything. Failed/malformed reads never become an empty saved shelf.
+
+Opening a saved map remains read-only. Missing-pack explanations stay visible even on locked
+nodes or an active encounter; progression reasons are separate. If an existing encounter's exact
+pack bytes cannot be resolved, Play explains that absence rather than claiming the run changed.
+**Open saved campaigns** returns to the saved-run list; **Try again** reopens only the current
+saved run after the operator restores that exact pack version. Current replacement bytes are not
+substituted. Native desktop/touch tests perform actual built-server definition replacement,
+removal, source refusal and restoration over the same SQLite database, preserving every saved
+Campaign row and complete play recording, with independent-account isolation.
+
 Campaign home and a saved map offer **Retry loading campaigns** / **Retry loading campaign**
 after a failed read. Failure never renders as an empty installed catalogue. Retry rereads only
 the original route, is single-flight, clears obsolete content and returns focus to the page

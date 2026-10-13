@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3784]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3785]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,7 +19,7 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-### Whole-product inventory — 2026-10-13
+### Whole-product inventory — refreshed 2026-10-14
 
 Tabiya is an integration-stage product, not a 1.0 release candidate. The rehearsal runtime and
 many real application journeys work; none of the fourteen complete capability journeys meets
@@ -35,7 +35,7 @@ docs and live registers; it is not a fresh independent audit of every historical
 | Theory and packs | Searchable Library, authoring and validation, provenance and graduation machinery | Stable authored capability joins and a varied reviewed official corpus; fifty installed packs are not fifty graduated packs |
 | Bots | Twelve persistent playable configurations, three policy families, replay/rematch and provider failure handling | Strength/trait calibration, opening routes, memory/timing/endgame behavior, identity and complete history/Review |
 | Learner model | Ratings, longitudinal storage, private habit/opening/observation/history views and source drill-down | Validated comparative style, skills/valence content, complete opening performance, recommendations and lifecycle proof |
-| Campaign | Exposed persistent map, kit, encounters, an unrated boss pilot, charges, failure recovery, history and Review | Graduated campaign content, curriculum/theory unlocks, complete rewards and long-term progression, boss/failure and release proof |
+| Campaign | Exposed persistent map, kit, encounters, an unrated boss pilot, charges, history/Review and saved-run/source-restoration recovery independent of installed definitions | Graduated campaign content, curriculum/theory unlocks, complete rewards and long-term progression, remaining boss/failure and release proof |
 | Human/social play | Imports, live sessions, native two-seat friend matches, friend links and consented pause/rehearsal/mainline return | Matchmaking, clocks, two-player ratings, resignation/draw handling, variants and complete invitation/result/review lifecycle |
 | Coach/streamer | Classroom assignments, submission inspection, reasoning and revocation | Guided setup, complete Academy/Stream compositions, audience/role/delay/reconnect workflows |
 | Accessible client | Shared board controller, responsive stable-board shell, typed presentation and themes | Every-route device/focus/zoom/screen-reader proof, PWA install/update/offline and owner-device discharge |
@@ -49,10 +49,10 @@ but registered facts do not automatically become useful assistance. The full con
 searched-line hints do not establish that general capability. Likewise, playable bot profiles
 do not establish convincing personalities or calibrated ratings.
 
-The checked inventory remains 276 completed / 269 live / 24 retired UX items, four active / five
+The checked inventory is 277 completed / 268 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,731 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
@@ -72,13 +72,22 @@ The release-truth checkpoint is corrected to cite the latest local proof instead
 `17ef2a7c`. The shared board controller and rehearsal state are substantial implemented
 foundations; the two proven dimension cells are not two finished 1.0 capabilities.
 
-[[D3784]] is newly recorded, assigned Campaign debt, not shipped work: home currently lists
-only installed definitions and disables Resume when a pack is unavailable. The existing
-active-summary API already reads the learner's saved pinned documents. The next accepted
-Campaign recovery slice must use that authority and prove removed/replaced definitions,
-missing packs, retry, reload and privacy without claiming unavailable encounters can start.
-This source-inspected gap is not yet a measured native failure. The requested inventory comes
-before starting that next implementation wave.
+That inventory first recorded [[D3784]] as source-inspected debt. The subsequent accepted
+implementation now separates saved active runs from installed definitions and uses their
+pinned title/identity. Actual built-server desktop/touch replacement/removal, source refusal
+and restoration, reload and privacy preserve every Campaign row and complete play recording.
+The first native pass exposes [[D3785]]: unavailable exact pack bytes looked like a changed
+run and left no retry/return door. Fixed copy and existing route recovery retain exact-pack
+refusal, then reopen the original encounter after operator restoration. Missing-source reasons
+remain visible on the map even when nodes are locked or active. CMP-a8's pre-start
+finish-or-abandon guidance now states the real per-campaign guard, not a invented global limit.
+Focused verification passes 306 software/eight content cases and clean types; two native
+desktop/phone journeys pass. Complete normal verification/build/all four browser tiers
+exit zero: 5,597 software/390 files, seven performance/four, 256 content/26 and 354 browser
+passes, one optional Maia skip, zero retries, all 150 input/112 successful composition cells.
+Local warm p95 is 113.6 ms under unchanged 250 ms; fresh published GitHub status remains
+verify success/browser failure, not a remote repair.
+No curriculum, reward, new endpoint, source qualification or whole-Campaign completion follows.
 
 2026-10-13 [[D3782]]/[[D3783]]: both proposed shared-freezer optimizations are rejected:
 sixteen cold pairs preserve complete output but are all slower. The separate memo/mint
@@ -329,7 +338,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3774]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3784]]/[[D3785]] recovery: 277 UX items complete, 268 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not

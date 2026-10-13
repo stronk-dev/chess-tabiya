@@ -31133,9 +31133,7 @@
       "state": "done",
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:c56d2ab933f53601634276e4550b07a16a80fc7e32229460723c3ae62eee86ce",
-      "uxItems": [
-        "IMP-a8"
-      ],
+      "uxItems": [],
       "evidence": "apps/web/src/lib/ImportSourceFields.test.ts",
       "evidenceKind": "path"
     },
@@ -31456,11 +31454,23 @@
     },
     {
       "id": "D3784",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:00249acbff4075415a61de539661cae15c4a1fc1486ba982429ebdc66c65a71d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:56a049ce44fb866c1cee3751b47a8cadccd12cdb8c6c7bab4cf2c937e9ece2c1",
+      "uxItems": [
+        "CMP-a8"
+      ],
+      "evidence": "tests/browser/campaign-resume.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3785",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2e54ec0b3f2ec21bee0c96f26b81f1cc433d62614245c68a6376da8c4316239c",
       "uxItems": [],
-      "owner": "campaign"
+      "evidence": "tests/browser/campaign-resume.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

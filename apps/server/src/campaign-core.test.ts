@@ -3,7 +3,7 @@ import type { AddressInfo } from "node:net";
 import { fileURLToPath } from "node:url";
 
 import { runEventHeadDigest, type DrillRun } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it, onTestFailed } from "vitest";
+import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
 
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import type { ChessTabiyaApplication } from "./application.js";
@@ -76,6 +76,39 @@ async function sealPackNode(client: Client, campaignRunId: string, nodeId: strin
 }
 
 describe("campaign core through the application (rfc/campaign-core.md)", () => {
+  it("keeps saved summary/map reads when installed pack availability is lost, while refusing a new encounter", async () => {
+    const { learner } = await boot();
+    const alice = await learner("campaign_source_owner");
+    const other = await learner("campaign_source_other");
+    const created = await alice.call("POST", "/campaigns/browser-fixture-campaign/runs", { campaignVersion: 1, commandId: commandId() });
+    expect(created.status, JSON.stringify(created.body)).toBe(201);
+    const id = created.body.result.campaignRunId as string;
+    const before = (await alice.call("GET", `/campaign-runs/${id}`)).body;
+    const get = PackRegistry.prototype.get;
+    // Controlled source availability over the real authenticated router/store. Actual
+    // installation removal/restart is separately exercised by the native browser test.
+    const availability = vi.spyOn(PackRegistry.prototype, "get").mockImplementation(function (this: PackRegistry, packId) {
+      return packId === "line-boundary-browser" ? undefined : get.call(this, packId);
+    });
+    try {
+      const catalogue = (await alice.call("GET", "/campaigns")).body.campaigns.find((row: { id: string }) => row.id === "browser-fixture-campaign");
+      expect(catalogue).toMatchObject({ available: false, activeRunId: id, unavailablePacks: ["line-boundary-browser"] });
+      const active = await alice.call("GET", "/campaigns/active");
+      expect(active.status).toBe(200);
+      expect(active.body.runs).toEqual([{ campaignRunId: id, campaignId: "browser-fixture-campaign", title: "Browser fixture campaign", revision: 1, chargeBalance: before.charges.balance, activeEncounter: null }]);
+      const map = (await alice.call("GET", `/campaign-runs/${id}`)).body;
+      expect(map.campaignRun).toEqual(before.campaignRun);
+      expect(map.charges).toEqual(before.charges);
+      expect(map.acts[0].layers[0].choices.every((node: { unavailable: string; selectable: boolean }) => node.unavailable === "pack_unavailable" && !node.selectable)).toBe(true);
+      const refused = await alice.call("POST", `/campaign-runs/${id}/nodes/f1-a/start`, { expectedRevision: 1, commandId: commandId() });
+      expect(refused.status).toBe(503);
+      expect(refused.body.error.code).toBe("CAMPAIGN_SOURCE_UNAVAILABLE");
+      expect((await alice.call("GET", `/campaign-runs/${id}`)).body).toEqual(map);
+      expect((await other.call("GET", "/campaigns/active")).body.runs).toEqual([]);
+      expect((await other.call("GET", `/campaign-runs/${id}`)).status).toBe(404);
+    } finally { availability.mockRestore(); }
+  });
+
   // Whole installed-corpus compatibility belongs to the content tier, not the fixture-only
   // registry suite. Preserve the predecessor's own limit; moving tiers is not a latency fix.
   it("the installed draft pilot validates against the installed packs and is community, never official", async () => {

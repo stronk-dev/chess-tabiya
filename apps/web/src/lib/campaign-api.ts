@@ -99,6 +99,38 @@ export interface CampaignCatalogueEntry {
   readonly marks: readonly string[];
 }
 
+/** The saved document, not today's installed definition, owns this resume summary. */
+export interface CampaignActiveRun {
+  readonly campaignRunId: string;
+  readonly campaignId: string;
+  readonly title: string;
+  readonly revision: number;
+  readonly chargeBalance: number;
+  readonly activeEncounter: { readonly nodeId: string; readonly playRunId: string; readonly title: string } | null;
+}
+
+function parseActiveCampaigns(value: unknown): { readonly runs: readonly CampaignActiveRun[] } {
+  const record = (item: unknown): item is Record<string, unknown> => typeof item === "object" && item !== null && !Array.isArray(item);
+  const text = (item: unknown): item is string => typeof item === "string" && item.trim() !== "";
+  const count = (item: unknown): item is number => typeof item === "number" && Number.isSafeInteger(item) && item >= 0;
+  if (!record(value) || !Array.isArray(value.runs)) throw new Error("Invalid saved campaigns");
+  const seen = new Set<string>();
+  const runs = value.runs.map((row: unknown): CampaignActiveRun => {
+    if (!record(row) || !text(row.campaignRunId) || !text(row.campaignId) || !text(row.title)
+      || !count(row.revision) || !count(row.chargeBalance) || seen.has(row.campaignRunId)) throw new Error("Invalid saved campaign");
+    seen.add(row.campaignRunId);
+    let activeEncounter: CampaignActiveRun["activeEncounter"] = null;
+    if (row.activeEncounter !== null) {
+      const encounter = row.activeEncounter;
+      if (!record(encounter) || !text(encounter.nodeId) || !text(encounter.playRunId) || !text(encounter.title)) throw new Error("Invalid saved encounter");
+      activeEncounter = Object.freeze({ nodeId: encounter.nodeId, playRunId: encounter.playRunId, title: encounter.title });
+    }
+    return Object.freeze({ campaignRunId: row.campaignRunId, campaignId: row.campaignId, title: row.title,
+      revision: row.revision, chargeBalance: row.chargeBalance, activeEncounter });
+  });
+  return Object.freeze({ runs: Object.freeze(runs) });
+}
+
 export interface CampaignRunResult {
   readonly campaign: CampaignProjection;
   readonly path: readonly ({ readonly nodeId: string; readonly act: string; readonly layer: number; readonly title: string; readonly playRunId: string } & (
@@ -170,8 +202,8 @@ export class CampaignApi {
   }
 
   catalogue(): Promise<{ readonly campaigns: readonly CampaignCatalogueEntry[] }> { return this.#json("/campaigns"); }
-  active(): Promise<{ readonly runs: readonly { readonly campaignRunId: string; readonly campaignId: string; readonly title: string; readonly revision: number; readonly chargeBalance: number; readonly activeEncounter: { readonly nodeId: string; readonly playRunId: string; readonly title: string } | null }[] }> {
-    return this.#json("/campaigns/active");
+  async active(): Promise<{ readonly runs: readonly CampaignActiveRun[] }> {
+    return parseActiveCampaigns(await this.#json<unknown>("/campaigns/active"));
   }
   rewards(): Promise<{ readonly awards: readonly { readonly campaignId: string; readonly durableRewardId: string; readonly awardedAt: string }[] }> { return this.#json("/campaign-rewards"); }
   create(campaignId: string, campaignVersion: number, commandId: string): Promise<CampaignCommandResult> {

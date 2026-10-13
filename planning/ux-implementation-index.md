@@ -441,7 +441,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | CMP-a5 | §3.3c-bis | **Act II is the shortest act** (11 → 8 → 24 ply). Either the act structure or the middlegame horizons are wrong | none | an authoring decision | |
 | CMP-a6 | §3.3d | Act III's `perfect_tablebase` is unbeatable and must be disclosed before entry, in the briefing copy | none | | |
 | CMP-a7 | §3.3e | One sentence on *"Declare done"*: it locks the node and the attempts are kept | none | | |
-| CMP-a8 | §4.3c | Say *"one run at a time — finish it or abandon it"*; the campaign cannot accumulate a backlog | none | `CAMPAIGN_RUN_ACTIVE_EXISTS` is a shipped typed error | 🏆 |
+| CMP-a8 | §4.3c | Say one active run per campaign: finish it or abandon it before starting another run of that campaign | ledger | Closed under [[D3784]]: Campaign home states the accepted per-campaign guard before Start and repeats the finish/abandon guidance beside an active saved run. `campaign-resume.test.ts`, `campaign-core.test.ts` and native `campaign-resume.spec.ts` preserve the guard and exact saved-version return; no global one-run limit is invented | 🏆 |
 | CMP-a9 | §4.3d-bis | Survival nodes over-state the envelope; present their contribution as *"up to"* — decide before the first survival node ships | none | | |
 | CMP-a10 | §4.3e | Tell a learner who leaves an encounter what happened to it — one sentence | none | open question 3 ships the free reading | |
 | CMP-a11 | §5.1 | **The deck framing is three-quarters false**: no synergy, no power, no run-to-run difference. Do not ship synergy discovery or *"pays off in combination"* copy | ledger | [[D277]]; R11 refuted the conjunction | |

@@ -4398,18 +4398,22 @@
     {
       "id": "CMP-a8",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§4.3c",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
-      "summary": "Say *\"one run at a time — finish it or abandon it\"*; the campaign cannot accumulate a backlog",
-      "legacyRoute": "none",
-      "note": "`CAMPAIGN_RUN_ACTIVE_EXISTS` is a shipped typed error",
+      "summary": "Say one active run per campaign: finish it or abandon it before starting another run of that campaign",
+      "legacyRoute": "ledger",
+      "note": "Closed under [[D3784]]: Campaign home states the accepted per-campaign guard before Start and repeats the finish/abandon guidance beside an active saved run. `campaign-resume.test.ts`, `campaign-core.test.ts` and native `campaign-resume.spec.ts` preserve the guard and exact saved-version return; no global one-run limit is invented",
       "tournamentReady": true,
-      "sourceDigest": "sha256:f6658bc576c98b400253440b1d98786e23e7af46e4fd715c5103f7a04a0f3472"
+      "sourceDigest": "sha256:9977052861f74b3886738212e013f1fc79a1fd4d119bf15f0386c6113d92fd1a",
+      "completion": {
+        "completedOn": "2026-10-13",
+        "evidence": "tests/browser/campaign-resume.spec.ts"
+      }
     },
     {
       "id": "CMP-a9",
@@ -5420,7 +5424,7 @@
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Four import forms on four screens with no shared vocabulary and no shared component",
       "legacyRoute": "ledger",
-      "note": "[[D1486]]; [[D3748]] supplies shared accessible source fields for the four current PGN forms, preserving game/repertoire/Arena distinctions and URL precedence. The separate pack-JSON editor and broader import IA remain outside this slice; this item is not closed as complete import UX.",
+      "note": "[[D1486]]",
       "sourceDigest": "sha256:19a63c0e4987cf8b988a785ed52fb34b6955c0db5c4a52a7ea6d14801aa3d4a3"
     },
     {

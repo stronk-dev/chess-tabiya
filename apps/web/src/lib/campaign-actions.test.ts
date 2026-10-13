@@ -48,6 +48,7 @@ async function screen(action: Action, mutation: () => Promise<Response>, resultR
   const fetcher = vi.fn(async (path: string, init?: RequestInit): Promise<Response> => {
     if (init?.method !== "GET") return mutation();
     if (path === "/campaigns") return Response.json({ campaigns: [{ id: "fixture", version: 1, title: "First campaign", channel: "community", nodeCount: 9, available: true, unavailablePacks: [], activeRunId: null, completedRuns: 0, marks: [] }] });
+    if (path === "/campaigns/active") return Response.json({ runs: [] });
     if (path.endsWith("/result")) return resultRead?.() ?? Response.json({ campaign: response("abandon").campaign, path: [], prestigeEligible: false, awards: [] });
     return Response.json(path.endsWith(RUN) ? projection : fixture("next-campaign"));
   });
@@ -81,7 +82,9 @@ describe("Campaign arrival read recovery", () => {
 
   it("distinguishes a failed catalogue from empty and retries the read without creating a campaign", async () => {
     let failed = true;
-    const fetcher = vi.fn(async () => failed ? failedRead() : catalogueResponse());
+    const fetcher = vi.fn(async (path: string) => path === "/campaigns/active"
+      ? Response.json({ runs: [{ campaignRunId: RUN, campaignId: "fixture", title: "First campaign", revision: 1, chargeBalance: 1, activeEncounter: null }] })
+      : failed ? failedRead() : catalogueResponse());
     const view = await arrival(undefined, fetcher);
     await vi.waitFor(() => expect(document.querySelector('[role="alert"]')).not.toBeNull());
     expect(document.body.textContent).not.toContain("No campaigns are installed here");
@@ -90,12 +93,12 @@ describe("Campaign arrival read recovery", () => {
     await vi.waitFor(() => expect(button("Resume run")).toBeDefined());
     await vi.waitFor(() => expect(document.activeElement).toBe(document.querySelector("h1")));
     expect(document.querySelector('[role="alert"]')).toBeNull();
-    expect(fetcher.mock.calls).toHaveLength(2);
+    expect(fetcher.mock.calls).toHaveLength(4);
     expect(view.onNavigate).not.toHaveBeenCalled();
     expect(view.rememberWriter).not.toHaveBeenCalled();
     button("Resume run").click();
     expect(view.onNavigate).toHaveBeenCalledWith(`/campaign/${RUN}`);
-    expect(fetcher.mock.calls).toHaveLength(2);
+    expect(fetcher.mock.calls).toHaveLength(4);
   });
 
   it("retries the exact saved map once while loading and preserves its active encounter", async () => {
@@ -158,7 +161,7 @@ describe("Campaign arrival read recovery", () => {
   });
 
   it("renders empty only after a successful catalogue read", async () => {
-    await arrival(undefined, vi.fn(async () => Response.json({ campaigns: [] })));
+    await arrival(undefined, vi.fn(async path => Response.json(path === "/campaigns/active" ? { runs: [] } : { campaigns: [] })));
     await vi.waitFor(() => expect(document.body.textContent).toContain("No campaigns are installed here"));
     expect(button("Retry loading campaigns")).toBeUndefined();
     expect(document.querySelector('[role="alert"]')).toBeNull();

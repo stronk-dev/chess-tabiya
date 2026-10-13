@@ -14,6 +14,7 @@
     newCampaignCommandId,
     rewardText,
     verdictText,
+    type CampaignActiveRun,
     type CampaignCatalogueEntry,
     type CampaignModuleId,
     type CampaignNodeCard,
@@ -35,6 +36,7 @@
   let { campaigns, campaignRunId, onNavigate, rememberWriter, assistanceStorage }: Props = $props();
 
   let catalogue: readonly CampaignCatalogueEntry[] = $state([]);
+  let savedRuns: readonly CampaignActiveRun[] = $state([]);
   let campaign: CampaignProjection | undefined = $state();
   let result: CampaignRunResult | undefined = $state();
   let loading = $state(true);
@@ -101,6 +103,7 @@
     error = undefined;
     campaign = undefined;
     catalogue = [];
+    savedRuns = [];
     result = undefined;
     resultError = false;
     resultLoading = false;
@@ -109,9 +112,10 @@
     confirmAbandon = false;
     try {
       if (requestedRunId === undefined) {
-        const next = await campaigns.catalogue();
+        const [next, active] = await Promise.all([campaigns.catalogue(), campaigns.active()]);
         if (current !== generation) return;
         catalogue = next.campaigns;
+        savedRuns = active.runs;
         campaign = undefined;
         result = undefined;
       } else {
@@ -272,7 +276,7 @@
     if (layerState === "locked") return "Opens when the previous layer is sealed.";
     if (layerState === "sealed") return "Another path was chosen on this layer.";
     if (campaign?.activeEncounter !== null && !card.active) return "Finish the active encounter first.";
-    return unavailableText(card);
+    return undefined;
   }
 </script>
 
@@ -289,21 +293,49 @@
       <p>Your saved campaigns are unchanged. Retry to load them.</p>
       <button type="button" disabled={loading} onclick={retryLoad}>Retry loading campaigns</button>
     {/if}
+    {#if savedRuns.length > 0}
+      <section class="saved-campaigns" aria-labelledby="saved-campaigns-title">
+        <h2 id="saved-campaigns-title">Continue your campaign</h2>
+        <p class="honest">Your saved runs stay here even if the installed campaigns change. Opening a map does not start an encounter; missing content is explained on the map.</p>
+        <div class="catalogue">
+          {#each savedRuns as saved (saved.campaignRunId)}
+            <article class="campaign-card" data-saved-campaign={saved.campaignRunId}>
+              <h3>{saved.title}</h3>
+              {#if saved.activeEncounter}<p>Encounter in progress: {saved.activeEncounter.title}</p>{/if}
+              <p class="meta">Earned rewinds: {saved.chargeBalance} remaining this campaign</p>
+              <button type="button" disabled={busy !== undefined} onclick={() => onNavigate(`/campaign/${encodeURIComponent(saved.campaignRunId)}`)}>Resume run</button>
+            </article>
+          {/each}
+        </div>
+      </section>
+    {/if}
+    <section class="installed-campaigns" aria-labelledby="installed-campaigns-title">
+    <h2 id="installed-campaigns-title">Start a new campaign</h2>
+    <p class="honest">Each campaign has one active run. Finish or abandon it before starting another run of that campaign.</p>
     <div class="catalogue">
       {#each catalogue as entry (`${entry.id}@${entry.version}`)}
+        {@const saved = savedRuns.find(run => run.campaignId === entry.id)}
         <article class="campaign-card" data-campaign={entry.id}>
-          <h2>{entry.title}</h2>
+          <h3>{entry.title}</h3>
           <p class="meta">{entry.channel === "official" ? "Official" : "Community draft"} · {entry.nodeCount} nodes across three acts{entry.completedRuns > 0 ? ` · completed ${entry.completedRuns}×` : ""}</p>
           {#if entry.marks.length > 0}<p class="meta">Marks: {entry.marks.map((mark) => mark.startsWith("prestige") ? "Prestige" : "Completion").join(", ")}</p>{/if}
           {#if !entry.available}<p class="honest" id={`unavailable-${entry.id}`}>Unavailable here: {entry.unavailablePacks.join(", ")} not installed.</p>{/if}
-          <button type="button" disabled={!entry.available || busy !== undefined} aria-describedby={!entry.available ? `unavailable-${entry.id}` : undefined} onclick={() => void begin(entry)}>
-            {entry.activeRunId !== null ? "Resume run" : busy === `create:${entry.id}@${entry.version}` ? "Starting…" : "Start a run"}
-          </button>
+          {#if saved}
+            <p class="honest">Resume the saved run above. Finish or abandon it before starting another run of this campaign.</p>
+          {:else if entry.activeRunId !== null}
+            <p class="honest">An active run was reported when this catalogue was read. Refresh to check your saved campaigns.</p>
+            <button type="button" disabled={loading || busy !== undefined} onclick={retryLoad}>Refresh campaigns</button>
+          {:else}
+            <button type="button" disabled={!entry.available || busy !== undefined} aria-describedby={!entry.available ? `unavailable-${entry.id}` : undefined} onclick={() => void begin(entry)}>
+              {busy === `create:${entry.id}@${entry.version}` ? "Starting…" : "Start a run"}
+            </button>
+          {/if}
         </article>
       {:else}
         {#if !loading && !loadFailed}<p class="honest">No campaigns are installed here.</p>{/if}
       {/each}
     </div>
+    </section>
   {:else if campaign}
     <header class="map-header">
       <div>
@@ -360,6 +392,7 @@
                 <article class="node-card" class:boss={card.boss} class:sealed={card.seal !== null} data-node={card.nodeId}>
                   <h3>{card.boss ? "Boss · " : ""}{card.title}</h3>
                   <p class="meta">{card.kind === "boss_game" ? "Full game" : "Rehearsal pack"}{card.phase ? ` · ${card.phase}` : ""}</p>
+                  {#if card.unavailable !== null}<p class="honest">{unavailableText(card)}</p>{/if}
                   {#if card.opponent}<p class="meta">Opponent: {campaignBotLabel(card.opponent.profileId)} · {card.rating === "unrated" ? "unrated" : "rated when clean"}</p>{/if}
                   <p>{rewardText(card.reward)}</p>
                   {#if card.suppress.length > 0}<p class="suppress">Sets aside: {card.suppress.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}</p>{/if}
@@ -432,6 +465,8 @@
   .eyebrow { color: var(--muted); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
   .honest, .meta { color: var(--muted); }
   .catalogue { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1rem; }
+  .saved-campaigns, .installed-campaigns { margin-top: 1.5rem; }
+  .campaign-card h3, .campaign-card p { overflow-wrap: anywhere; }
   .campaign-card, .node-card, .resume, .result, .kit { padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--panel); min-width: 0; }
   .map-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: end; }
   .charges { display: grid; gap: .2rem; justify-items: end; font-variant-numeric: tabular-nums; }

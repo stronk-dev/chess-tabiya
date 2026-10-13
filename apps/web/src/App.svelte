@@ -2988,7 +2988,13 @@
       {/snippet}
       </DeferredScreen>
     {:else}
-      <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
+      <main class="shell-view">
+        <h1>Run unavailable.</h1>
+        <p role="alert">{session.error ?? "The run could not be loaded."}</p>
+        <button class="primary" type="button" disabled={session.busy} onclick={retryVisibleRoute}>Try again</button>
+        <button type="button" onclick={() => navigate("/play")}>Return to Play</button>
+        <button type="button" onclick={() => navigate("/campaign")}>Open saved campaigns</button>
+      </main>
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}

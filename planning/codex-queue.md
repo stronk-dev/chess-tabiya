@@ -1,12 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-13 — [[D3784]] is the next accepted Campaign recovery slice, not shipped work.
-Home reads only the current catalogue: a missing pack disables Resume and a removed
-definition hides the saved run. Use the existing authenticated active-summary endpoint and
-the saved title/identity for the resume door. Prove definition removal/replacement, missing
-packs, explicit retry, stale-response retirement, reload and private-account isolation across
-client, actual HTTP/storage and desktop/phone; do not make unavailable new encounters playable.
-The owner requested a whole-product inventory before starting another implementation wave.
+2026-10-14 — [[D3784]]/[[D3785]] close the accepted saved-Campaign recovery journey.
+Home admits the existing active summaries and separates their pinned title/identity from new
+installed campaigns. Missing sources stay visible on the map and still refuse entry. Actual
+built-server desktop/touch restarts replace/remove the definition and packs, then restore the
+exact pack; saved Campaign and play rows remain identical and another account cannot read them.
+Malformed transport, retry, route departure and run-source restoration are covered. D3785 is
+the measured missing-pack stale-error/dead-end found by the native pass, not permission to load
+replacement pack bytes. Focused 306 software/eight content cases and types pass. Complete
+normal verification/build/all four browser tiers exit zero: 5,597 software, seven performance,
+256 content and 354 browser passes; one optional Maia skip, zero retries, all 150 input/112
+composition cells. CMP-a8 completes; 277 UX items are complete and 268 remain live. No
+curriculum, reward, source qualification, remote/image proof or whole-Campaign closure.
 
 2026-10-13 — [[D3783]] closes the actual descendant-hook/parent-freeze ordering defect.
 Two predecessor controls expose stale cached bytes after equal-looking mutable replacement;

@@ -28018,3 +28018,57 @@ Campaign was the one capability with no API, route or content. Now:
   controls pass. git diff --check is clean. Stage only this seven-file inventory closeout
   and inspect its cached file list before committing; no implementation, raw research,
   archive, untracked agent data, push or deployment is included.
+
+### 2026-10-14 — D3784/D3785 saved Campaign and exact-pack recovery
+
+- Previous goal turn made progress: owner-requested inventory, source-inspected D3784 and
+  corrected release-truth tracking landed at 3b5e8b37. Revalidate tracked-clean main and take
+  the already accepted campaign-core §7.1 recovery slice, without borrowing unaccepted
+  curriculum, source or presentation amendments. No new worktree or delegation.
+- Thirty permanent home/client tests produce 28 predecessor failures. Home now reads the
+  existing authenticated active summaries and current catalogue, validates every saved
+  display/navigation operand, and separates the saved title/identity from replacement
+  definitions. Missing-pack availability cannot disable saved Resume. New unavailable starts
+  remain disabled; disagreement between independent reads offers read-only Refresh. Failed
+  reads stay failed/retryable, and departed completions cannot replace the next route.
+- Actual built-server/SQLite/worker native tests create and physically play an encounter,
+  replace the installed definition on restart, remove the definition and its explicit packs,
+  and reopen the saved map. Initial replacement fixture leaves its durable marks at version 1;
+  startup correctly refuses it. Fix the fixture's reward references, not registry validation.
+- The second native pass fails on desktop and phone at actual /runs/:id/pack 409
+  PACK_UNRESOLVABLE: Play calls the unchanged recording stale and offers no recovery action.
+  Record D3785 before implementing the existing source-error/route-recovery repair. Preserve
+  exact-pack refusal; never substitute the current version or broaden read/write access.
+- Both final native desktop/touch journeys pass after truthful missing-version copy and
+  existing Try again/Play/saved-Campaign navigation. Actual operator restoration of the exact
+  pack reopens the same encounter. Compare all Campaign rows, command/creation/award records
+  and complete play snapshots across restarts/reads. Another authenticated account sees no
+  active summaries and receives 404 for the owner's map. Malformed genuine transported
+  balances refuse with explicit retry; source records remain unchanged. This transport control
+  is not fabricated server-source proof. Missing reasons remain visible on locked/active cards.
+- Correct the mounted test's inferred props to include its optional route; focused final
+  verification passes 306 software/four files, eight content/one file and clean types. Add
+  held retry/departure and duplicate-click shell controls. CMP-a8 completes with pre-start
+  and active-run guidance for the existing per-campaign guard, not a global one-run policy.
+  Update implemented docs, queue and existing roadmap/state: 277 complete/268 live/24 retired
+  UX items; all 1,731 live ledger rows assigned, zero untriaged. Both defects are locally
+  closed on their native proof. Full ordinary gates remain required before commit.
+- No new endpoint, schema, stored Campaign field, reward, authored chess claim, exact-pack
+  bypass, protected intent, source qualification, push/deploy or whole capability completion.
+  Freeze consumed inputs for the complete normal verification/build/all-browser command.
+- The complete normal make roadmap-receipt verify-awake build test-browser-ci-awake exits
+  zero: software 5,597/390 files, seven unchanged-budget performance/four files, content
+  256/26, clean types, packaging/governance/build and 354 browser passes (289 smoke, five
+  content, 59 matrix, one packaged-production). One existing optional Maia skip, zero retries,
+  all 150 input/112 successful composition cells. The quiet software phase has active Node 24
+  workers; scoped process inspection confirms activity, and the same live handle completes.
+  No restart, overlapping build, source edit, timeout inflation or test exclusion occurs.
+- Local warm p95 is 113.6 ms under unchanged 250 ms; fresh authorized GitHub reads still
+  show 62c81eb1 verify success/browser failure. No push or remote repair is claimed. Refresh
+  the existing checkpoint and rollup with this actual outcome, then run final governance
+  and normal staged hooks before explicit owned-file commit. The full 1.0 goal stays active.
+- Final normal governance exits zero. Refresh both latest checkpoint dates to October 14
+  and condense the Campaign capability description around implemented journeys and remaining
+  obligations rather than keep its older full-run counts as current. Normal roadmap receipt/check
+  then exits zero and git diff --check is clean. Stage exactly the 23 owned code/test/doc/tracker
+  files; leave the three pre-existing untracked paths and all archive bytes untouched.

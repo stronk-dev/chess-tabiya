@@ -194,6 +194,7 @@ const RUN_ERROR_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
   VOICE_UNAVAILABLE: "Narrated guidance is not available right now. The grounded written guidance is unchanged.",
   SIMULATION_EXPIRED: "That preview has expired. Open the authored-line preview again.",
   RUN_NOT_FOUND: "This rehearsal is no longer available. Return to Play and choose another.",
+  PACK_UNRESOLVABLE: "The exact drill pack used by this saved run is unavailable. Your recorded play is kept. Ask the operator to restore that pack version, then try again.",
   STORY_UNAVAILABLE: "This game's story is not ready yet. Return to the run or try again later.",
   UNSUPPORTED_RUN_SCHEMA: "This run was created by an incompatible Tabiya version. Update this deployment before reopening it.",
 });
