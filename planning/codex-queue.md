@@ -1,5 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3758]] is a complete local Review acquisition class, not a castling-only
+string patch. Twenty-three disposable source/admission/renderer controls replay eight existing
+games / 513 edges: 32 real refs render, zero of those components reach actual Review rows,
+10,196 offered facts (maximum 36/move) forbid an unconditional raw dump. Compiler §4.4 now
+drafts exact incoming-edge adoption and one-closure-per-edge work; Review Map §2a retains the
+separate D1/D928 family-by-family useful-selection decision. Independent acceptance and real
+HTTP/native UI delivery are still required. [[D3760]] repairs only the false one-edge v1 trade
+execution classification under the existing A5 rule; actual v2 recorded Review trade remains.
+No new tracker, raw capture, official content, qualification or full capability promotion.
+[[D3761]] separately removes false missing-renderer blockers from source-held candidate/window
+pairs under the same accepted A5 rule. It never enables those sources or waives their holds.
+Both repairs are closed locally: 5,301 software checks, unchanged performance/types, 255 content
+checks and 345 browser passes, one existing optional Maia skip, zero retries. Missing RFC
+checkpoint links stopped the aggregate after software; the repaired remaining normal gates
+exit zero. D3758's source delivery/useful-selection amendments stay blocked on acceptance.
+
 2026-10-13 — [[D3759]] removes only the discarded clone of the already parsed pack
 capability projection under the accepted shared-parser/shell contracts. Preserve the exact
 public data, strict refusal, independent frozen output and fresh provider health on each read.

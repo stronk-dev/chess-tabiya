@@ -34,6 +34,12 @@ derivation abstains. `derived.story.eval_shift@1` is retired.
 
 ## The packet
 
+The current selected-move panel presents the engine packet subset and recorded-path events;
+it does not acquire the 32 eligible one-edge local projections (D3758). Registered Review
+renderers alone are not delivery. The full-class source and selection proposals are draft
+`rfc/review-evidence-compiler.md` §4.4 and `rfc/review-map.md` §2a, not current behavior.
+The two-capture trade's v1 projection is not a one-edge source; recorded Review uses v2.
+
 `createReviewPrefixAuthority(storage)` is the sole constructor of the recorded-prefix subject: it
 reads the parsed stored run and import record, requires contiguous events, hashes the event prefix
 and complete path, and derives learner side and outcome. `reviewPacketSourcePlan` derives the exact

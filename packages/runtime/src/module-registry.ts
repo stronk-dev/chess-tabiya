@@ -214,6 +214,7 @@ export function moduleDeclaration(id: ModuleId): ModuleDeclaration {
  * recorded multi-edge window, so neither is a one-edge output.
  */
 const SEQUENCE_EVENT_IDS = new Set([
+  "derived.exchange.trade_completed",
   "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure", "derived.tactic.sequence.defender_consequence",
   "derived.tactic.deflection_observed", "derived.tactic.attraction_observed", "derived.tactic.line_blocker_clearance_observed",
   "derived.tactic.square_clearance_observed", "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
@@ -275,13 +276,14 @@ export type ModulePairExecution =
   | { readonly module: ModuleId; readonly projection: VersionedEvidenceId; readonly status: "blocked_dependencies"; readonly blockers: readonly ModuleDependencyBlocker[] };
 
 function pairBlockers(module: ModuleDeclaration, projection: VersionedEvidenceId): readonly ModuleDependencyBlocker[] {
+  const presentable = presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
+  const presentationBlockers = presentable ? [] : [PRESENTATION_BLOCKER];
   if (module.id === "postcommit_nudge") {
-    if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, PRESENTATION_BLOCKER];
-    if (SEQUENCE_EVENT_IDS.has(projection.id)) return [WINDOW_BLOCKER, PRESENTATION_BLOCKER];
+    if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, ...presentationBlockers];
+    if (SEQUENCE_EVENT_IDS.has(projection.id)) return [WINDOW_BLOCKER, ...presentationBlockers];
   }
   // evidence-presentation Checkpoint B: a pair with a registered pair-keyed adapter is blocked only
   // by its missing acquisition; the query operation and its disclosure receipts have landed.
-  const presentable = presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
   if (module.id === "review_map") return presentable ? [REVIEW_OPERATION_BLOCKER] : [REVIEW_OPERATION_BLOCKER, PRESENTATION_BLOCKER];
   return presentable ? [SOURCE_BLOCKER] : [SOURCE_BLOCKER, PRESENTATION_BLOCKER];
 }

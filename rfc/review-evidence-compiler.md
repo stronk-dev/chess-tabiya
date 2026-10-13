@@ -1,5 +1,10 @@
 # RFC: Review evidence compiler
 
+- **Draft amendment 2026-10-13 — [[D3758]]:** §4.4 specifies exact local incoming-edge
+  acquisition for Review. This amendment is **not accepted** by the parent's implementing
+  status. The companion Review Map §2a owns learner selection; source acquisition alone does
+  not authorize a raw-fact dump or change the moment ranking.
+
 - **Draft amendment 2026-10-10 — [[D3580]]:** §4.3 specifies a move-free Review tablebase
   projection and the existing operation-versioned provider save/reload boundary. It is **not
   accepted** and authorizes no production acquisition. The parent remains implementing; its
@@ -794,6 +799,87 @@ Independent acceptance, these controls and normal affected test tiers precede pr
 [[D3580]] remains open until the real delivery and consumer path pass; writing this section does
 not complete tablebase coverage, full Review, semantic qualification or 1.0.
 
+### 4.4 Draft amendment: local incoming-edge adoption ([[D3758]])
+
+**Research gate:** `design/research/module-registry-semantic-closure.md` §5 and
+`make review-one-edge-adoption-probe`. The actual shared factories, module admission and exact
+pair-keyed renderers can retain these values without inventing a collector or chess explanation.
+The existing Review packet/row path does not acquire them. This is source feasibility, not proof
+of usefulness, whole-subject qualification or an acceptable cost on a release host.
+
+#### Exact acquisition image
+
+The amendment adds exactly these existing v1 projections to the packet's accepted input bindings,
+literal source-adapter registry and projection list, all in family `semantic`, grain
+`incoming_edge`. No prefix matching, all-projection reflection or automatic future adoption:
+
+| Exact v1 ids (each suffixed `@1`) | Count |
+|---|---|
+| `rules.structural.event.backward_pawn`, `doubled_pawn`, `half_open_file`, `isolated_pawn`, `king_opposition`, `king_zone`, `open_file`, `passed_pawn`, `pawn_islands` (all share the first row's `rules.structural.event.` prefix) | 9 |
+| `rules.transition.event.occupied_attack`, `occupied_defence`, `slider_ray`, `piece_escape`, `defended_duty`, `castled`, `last_of_role`, `pawn_contact`, `checkmate`, `promotion`, `capture`, `developed` (all share `rules.transition.event.`) | 12 |
+| `rules.tactic.event.double_attack`, `rules.tactic.event.check`, `rules.tactic.event.loose_piece` | 3 |
+| `rules.castling.event.rights_lost` | 1 |
+| `derived.exchange.capture_class` | 1 |
+| `rules.pawn.event.dynamics`, `derived.pawn.event.transitions` | 2 |
+| `derived.material.event.role_asymmetry` | 1 |
+| `rules.king.event.zone_state`, `derived.king.captured_zone_defender` | 2 |
+| `derived.activity.event.open_file_occupancy` | 1 |
+
+The literal 32-ref image must be set-equal to the corrected
+`ONE_EDGE_EVENT_REFS ∩ MODULE_CONSUMER_ACCEPTS.review_map`; disagreement requires an explicit
+amendment, not silent adoption. `derived.exchange.trade_completed@1` is excluded: it requires
+two capture/move anchors and never occurs in `localSemanticEventClosure`. Review already acquires
+its recorded-path v2 successor. Complete-alternative avoidance, deeper search, human/corpus,
+opening, tablebase, authored claims and new tactical naming are not authorized by this image.
+
+#### Computation, occurrence and native absence
+
+1. For a non-root slot, resolve the parent/child from the compiler's storage-derived prefix.
+   Use that parent's FEN, that child's complete legal UCI and its resulting FEN. A root never
+   gets an incoming-edge slot; a transposition never substitutes another node's incoming move.
+2. Call the existing `localSemanticEventClosure` once per edge per packet compilation and share
+   its result across the 32 adapter invocations in that compilation. Do not call it 32 times,
+   enumerate unplayed alternatives or introduce a persistent/global cache. The existing window
+   remains a scheduling boundary, not a different evidence identity.
+3. Each adapter selects only its literal projection from that shared result. Keep complete
+   factory-owned payloads, derivation inputs, zero values, both colours and source abstentions.
+   No grade, significance, intention, prevention or strategic benefit is inferred from presence.
+4. Preserve private source-result construction. Extend the internal registered parser callback
+   to receive the slot and execution context alongside the payload. For a local adapter, the
+   executable parser verifies that the payload is one of the exact factory-owned results for
+   this slot/projection in the memoized closure; arbitrary JSON, edited operands and a genuine
+   item copied from a different edge must fail. Existing provider parsers retain their checks.
+   This is an internal callback change, not a new packet wire protocol or caller mint API.
+5. A completed adapter with no event is `honest_empty/no_observation`. The closure's explicit
+   loose-piece `invalid_turn_clone` remains `unavailable/input_abstained` for that adapter,
+   never an empty tactical result. Unscheduled work remains unscheduled. Every slot participates
+   in the existing family fold; 32 missing sources cannot be described as collected-and-empty.
+6. The packet retains all acquired items even when the learner-facing selection withholds them.
+   No stored run/event/pack change, provider job, migration or new projection is needed.
+
+#### Able-to-fail implementation checks
+
+- Exact literal bindings/adapters/grains and declaration set-equality, including the two-edge
+  trade exclusion; count-preserving wrong-version and wrong-family substitutions fail.
+- Work-count control: one closure invocation per acquired edge, zero at root, no complete-legal
+  candidate expansion and no second compilation caused by another adapter of the same edge.
+- All twelve D3757 positives and eight legal near-misses through the actual compiler, authenticated
+  Review HTTP route and parsed client receipt. Rook/source/file operands survive both colours,
+  ordinary and Chess960 castling; stationary-rook and already-open cases remain absent.
+- Genuine wrong-edge/branch/run values, changed payload, malformed/missing/extra slots and a
+  repeated-position incoming move cannot cross the source/packet boundary. Test a different
+  edge with the same projection, not only an unsealed JSON forge.
+- Native zero, no-observation and unavailable controls; caller role/session refusal; recorded
+  graph, cursor, events and installed packs remain unchanged across reads/retries/restart.
+- Complete fixed eight-game population replay and an isolated cost/work comparison against
+  the existing packet path. The research probe's combined elapsed time is not a product budget.
+- Review Map §2a's actual desktop/phone selection, quiet-state, bounded geometry, Retry/Compare
+  and Analyze boundaries. Inspector and Story keep their current source images and rankings.
+
+Independent acceptance precedes production acquisition. D3758 closes only after the real
+source-to-client path and the separately owned useful-selection contract pass; a draft, renderer
+probe or acquisition-only packet does not discharge it.
+
 ## 5. Story compatibility repair
 
 The server-local compatibility compiler consumes typed `ReviewEnginePoint` items and emits only the
@@ -1180,6 +1266,11 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-10-13: D3758 draft §4.4 specifies the full 32-ref local incoming-edge acquisition class,
+  exact occurrence/native absence, one-call-per-edge work and real consumer tests. D3760 corrects
+  the old v1 two-capture trade classification; it is not another local source. Acquisition and
+  Review selection remain separate; no amendment acceptance or full Review completion follows.
 
 - 2026-10-10: D3580 draft §4.3 adds the narrow tablebase occurrence, existing operation-versioned
   event handoff, mixed-family scheduling, privacy and actual restart/Review controls. It remains

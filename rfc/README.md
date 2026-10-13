@@ -4,6 +4,12 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Review local-source draft amendment, 2026-10-13:** `review-evidence-compiler.md` §4.4
+and `review-map.md` §2a own D3758's 32-ref incoming-edge acquisition and separate useful-selection
+boundary. Both amendments remain **unaccepted**; parent lifecycle states are not permission
+to acquire all local facts or dump them into the selected-move card. D3760's accepted-contract
+inventory repair excludes the legacy two-capture trade from the one-edge source set.
+
 Status cells and RFC body Status lines begin with one of the seven lifecycle tokens after Markdown
 emphasis is stripped. Dates and text after the first separator are prose; only an `awaiting` cell's
 first `D<n>` token is machine-read as its discharge pointer.

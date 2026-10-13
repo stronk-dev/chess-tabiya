@@ -2286,6 +2286,15 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-13 — D3760 corrects the accepted A5 acquisition claim: v1 trade completion requires
+  two capture/move anchors and is not in the one-edge source closure. Its Nudge eligibility is
+  unchanged, its source remains a recorded-window blocker, and the real Review v2 successor
+  remains executable. D3758's full local Review acquisition is drafted in compiler §4.4 with
+  selection separately owned by Review Map §2a/D1/D928; those amendments are not accepted.
+- 2026-10-13 — D3761 derives the Nudge candidate/window presentation blocker from actual exact
+  adapter absence. No registered renderer is falsely named missing; source holds and admission
+  remain unchanged. The invariant checks every blocked compiled module pair, not just trade.
+
 - 2026-10-09 — **Draft D3578 selected-square amendment (§4.2a), not accepted.** Chooses explicit
   four-source selected derivations instead of a generic adapter-context escape hatch; proposes
   request-local views and a sole-pair complete legal-set budget while preserving other ceilings

@@ -3919,6 +3919,11 @@ review-arrival-browser-check:
 arrival-cpu-profile:
 	./node_modules/.bin/playwright test --config tools/d3600-arrival-profile/playwright.config.ts
 
+# D3758 disposable source/admission/renderer probe; no production or content qualification claim.
+.PHONY: review-one-edge-adoption-probe
+review-one-edge-adoption-probe:
+	./node_modules/.bin/vitest run --config tools/d1585-module-semantic-closure/vitest.config.ts tools/d1585-module-semantic-closure/review-adoption.test.ts
+
 .PHONY: legal-move-context-check
 legal-move-context-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/legal-moves.test.ts apps/web/src/lib/opponent-selection-response.test.ts

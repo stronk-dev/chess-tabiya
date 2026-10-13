@@ -139,3 +139,91 @@ research job, and the registry must not be accepted until it exists and is revie
 - The Explorer summary reports population facts only. It does not turn frequency into quality,
   theory, intent or a recommendation.
 - No protected design, production contract, manifest, renderer, content or RFC status changed.
+
+## 5. Review incoming-edge acquisition class — 2026-10-13 ([[D3758]])
+
+`make review-one-edge-adoption-probe` runs 23 disposable checks in the existing research
+instrument directory. It invokes the actual `localSemanticEventClosure`, `compileModulePacket`
+(Review admission mode), `evidenceForConsumer` and `presentEvidenceItems`, and compares their
+results with the actual `reviewPacketForRun` → `reviewMapProjection` → parsed row receipts.
+It does not add a production source adapter or substitute prototype output into an HTTP reply.
+`[V]` `tools/d1585-module-semantic-closure/review-adoption.test.ts`.
+
+### The missing consumer is a class, not a castling string
+
+The predecessor's exact `ONE_EDGE_EVENT_REFS ∩ MODULE_CONSUMER_ACCEPTS.review_map` contains
+33 refs. All have registered Review renderers; all are acquisition-blocked. One ref is falsely
+classified: `derived.exchange.trade_completed@1` requires two captures and two move anchors,
+and has no call from the one-edge closure. D3760's accepted-contract inventory correction excludes
+that ref from the one-edge set and gives its Nudge pair the existing recorded-window blocker.
+The live recorded Review path already acquires the v2 successor. Thus the actual proposed local
+acquisition class is **32 existing v1 refs**, not 33. `[V]` `packages/runtime/src/module-registry.ts`
+(`SEQUENCE_EVENT_IDS`, `MODULE_OPERATIONS`, `MODULE_PAIR_EXECUTION`);
+`packages/runtime/src/semantic-evidence.ts` (`tradeCompletedSemanticEvent`,
+`localSemanticEventClosure`); `packages/runtime/src/module-registry.test.ts` D3760 control.
+
+The source-bound castling arms use all twelve D3757 legal positives and eight legal near-misses.
+The input FENs are canonicalized through the existing authority before run creation, including
+Chess960 rights; an initial noncanonical-input rejection was a probe setup error, not a product
+defect. The actual registered admission/rendering path retains the exact physical rook/file
+operands on all twelve positives, and none of those occupancy components reaches the current
+Review row. All eight near-misses remain absent. Role refusal, serialized-evidence forgery and
+foreign-run packet controls also pass; recorded runs remain byte-identical across inspection.
+`[V]` `review-adoption.test.ts` castling and boundary arms; source fixtures at
+`packages/runtime/src/testing/castling-open-file-fixtures.ts`.
+
+### Fixed imported population and the raw-dump risk
+
+The first eight nonempty legal games of the existing
+`tools/r2-selection-harness/imported-sample.pgn` are replayed through real imported runs. This
+is a **513-edge** population, not the separate historical 658-edge C4 or 579-edge occupancy
+population. Every edge is inspected, including both sides, terminal moves and promotion.
+`[V]` `review-adoption.test.ts` fixed imported population arm.
+
+| Measurement | Result |
+|---|---|
+| Existing local refs actually observed | 32 / 32 after the trade classification repair |
+| Items admitted by the actual Review module in the probe | 10,196 |
+| Mean / maximum offered local items per move | 19.88 / 36 |
+| These refs' components in the actual Review rows | 0 |
+| Pawn-island items | 1,026: two count states per edge |
+| King-zone-state items / registered components | 1,026 / 2,052 |
+| Piece-escape items | 2,092 |
+| Open-file occupancy items / registered components | 26 / 52 |
+
+Every item from those 32 refs admitted in the probe has registered rendering. Several own two
+components, so components are not evidence counts. Two count states per move establish source
+volume, not whether any individual move deserves a hint. The complete inspect/replay/prototype
+batch takes about 8.7–8.9 seconds locally, including the existing Review path and separate
+closure execution. That is **not** an isolated collector latency or a production cost guarantee.
+No engine/corpus/model provider, network request, grading invention or raw capture is used.
+`[V]` same executable population arm and `packages/runtime/src/presentation-contract.ts`
+`presentEvidenceItems`.
+
+### Contract consequence and unresolved choice
+
+Source feasibility is established: reuse the exact local authority over the recorded parent/child,
+memoize once per edge inside a packet compilation, then preserve each factory-owned value and
+native absence through exact incoming-edge slots. Copying all items into `row.facts` is not a
+useful-selection repair. The compiler's draft §4.4 specifies acquisition; Review Map's draft §2a
+retains the separate D1/D928 family-by-family witness/selection decision. The proposals are not
+accepted by their parents' existing lifecycle states. `[V]` `rfc/review-evidence-compiler.md` §4.4;
+`rfc/review-map.md` §2a; `packages/runtime/src/review-map.ts` `packetComponents` currently limits
+the panel to four engine refs while recorded-path events arrive separately.
+
+This pass proves neither full subject qualification, useful explanations, final ranking nor
+desktop/phone source-to-client delivery. The prototype still needs actual adapter/parser/occurrence
+negative tests at the private packet boundary before production acquisition. D3758 remains blocked
+on independent acceptance and the complete consumer path; D3760 repairs only the false one-edge
+execution inventory. `[V]` the named RFC acceptance checks and D3758/D3760 ledger rows.
+
+The follow-up D3761 invariant finds a second execution-table defect: source-held Nudge windows
+and avoidance always append `PRESENTATION_BLOCKER`, even though exact adapters are already
+registered. The predecessor fails on the v1 trade pair; the repaired invariant checks every
+blocked module pair for missing-renderer reason **if and only if** the exact adapter is absent.
+All 166 focused checks pass without releasing a candidate/window source hold. This changes
+dependency reporting, not a producer or learner disclosure. `[V]`
+`packages/runtime/src/module-registry.ts` `pairBlockers`;
+`packages/runtime/src/module-registry.test.ts` D3761 assertion;
+`packages/runtime/src/presentation-inspector-adapters.ts` exact Nudge/Review pair table;
+`make local-module-execution-check`.

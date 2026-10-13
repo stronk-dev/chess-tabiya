@@ -27199,3 +27199,66 @@ Campaign was the one capability with no API, route or content. Now:
   skill credit, official content and full portable recovery/release journeys remain required.
   The installed bundle remains 50 packs with zero official graduates. No capability promotion,
   protected intent change, additional tracker or recording is introduced.
+
+### 2026-10-13 — D3758 complete Review local-source class and D3760 grain repair
+
+- Class audit uses the existing disposable module-closure instrument and actual local factories,
+  Review admission, registered presentation and actual Review packet/row projection. All twelve
+  legal castling positives/eight near-misses plus role/authenticity/foreign-run/readonly controls
+  pass. Initial Chess960 noncanonical FEN refusals are probe setup errors, repaired through the
+  existing canonical authority, not new product findings.
+- Twenty-three research checks replay all 513 moves of the first eight nonempty existing imported
+  games: 10,196 admitted local items, maximum 36 per edge, 32 observed refs and zero of their
+  components in actual Review rows. Both-colour pawn-island and king-zone states occur on every
+  edge. All registered compositions retain their owning evidence, including paired components.
+  The combined batch runs in about 8.7–8.9 seconds locally, not an isolated collector budget.
+- The predecessor inventory claims 33 refs: v1 trade completion is falsely classified as one-edge
+  despite requiring two captures/move anchors and having no local-closure call. D3760 records the
+  bug before the repair. The new permanent regression fails against the predecessor while all
+  165 other focused checks pass; with the classification repair all 166 checks and workspace
+  types pass. Actual localhost HTTP controls require the same Make command's network approval;
+  the initial sandbox EPERM is not reported as an application failure.
+- Compiler draft §4.4 specifies the exact 32-ref source class, incoming-edge identity, native
+  absence and one-closure-per-edge work; Review Map draft §2a requires the separate family/witness
+  selection decision and actual HTTP/desktop/phone delivery. Both amendments are explicitly
+  unaccepted. D3758 remains blocked; D3760 changes no evidence payload, eligibility, stored play,
+  pack, Story ranking or moment selection. No raw capture or new tracker; full gates in flight.
+
+### 2026-10-13 — D3761 truthful source-held presentation dependencies
+
+- The exact adapter audit finds registered Nudge renderers for trade, avoidance and sequence
+  projections while `pairBlockers` unconditionally names presentation as missing. D3761 is
+  ledgered before repair. The new whole-table invariant fails on the predecessor's v1 trade
+  pair; all 165 other focused checks pass. The first full run also encounters that new negative
+  and is deliberately interrupted at software verification (exit 130), not counted as a pass.
+- Candidate/window source blockers now retain their existing holds and add presentation only
+  when the exact adapter is absent. Every blocked module pair is checked, not just the first
+  counterexample. Both final repairs pass all 166 focused module/actual HTTP controls and clean
+  workspace types. The separate 23-check Review probe passes serially afterward, retaining
+  explicit loose-piece invalid-turn-clone absence and valid zero pawn-island counts.
+- A fresh full ordinary serial verification/build/browser command is running on final production
+  code. No source acquisition, contract acceptance, payload/eligibility change, content, useful
+  selection, remote CI, whole-capability or milestone promotion follows from dependency reporting.
+
+### 2026-10-13 — D3760/D3761 local closeout and complete product inventory
+
+- Final production software passes 5,301 cases across 386 files, clean workspace types and the
+  unchanged isolated performance gates. The aggregate then stops at governance: three newly
+  cited active RFCs lack checkpoint anchors. Their exact register links are added; no check is
+  bypassed. Normal serial `make roadmap-receipt verify-governance verify-content build
+  test-browser-ci-awake` subsequently exits zero.
+- Content: 255 cases/26 files plus corpus contracts. Build and all browser tiers pass: 280 smoke,
+  five content, 59 matrix and one packaged-production case (345 total), one existing optional
+  Maia skip and zero retries. Composition retains all 112 successful unretried cells; warm native
+  arrival p95 is 124.3 ms against the unchanged 250 ms budget. This local replay does not prove
+  the cause or closure of D3600's published failure. The separate D3758 research target retains
+  its 23 passing checks and is not added to ordinary software CI.
+- D3760/D3761 close with permanent path-backed regressions; D3758 remains blocked on independently
+  accepted source adoption and useful per-family selection, then actual HTTP/native delivery.
+  The current 1.0 inventory stays in the existing roadmap, not another work document. It records
+  14 incomplete whole capabilities, four active/five blocked milestones, 276 completed/269 live
+  UX items, 50 installed packs and zero official graduates. The 3,510-row ledger now has 1,726
+  live items, all assigned, and 462 older prose-only closures remain weaker historical evidence.
+- Read-only GitHub inspection confirms the latest published revision is still c7ec3c3d:
+  verify 38222438800 succeeds; browser 38222438796 fails. No push, external write, contract
+  acceptance, official-content qualification or whole-capability promotion is claimed.

@@ -1,5 +1,13 @@
 # D1585 module semantic closure harness
 
+## D3758 Review follow-up — disposable, not ordinary CI
+
+`make review-one-edge-adoption-probe` runs only `review-adoption.test.ts`. It compares the real
+local collectors/admission/renderers with actual Review row receipts, over all twelve castling
+positives/eight near-misses and every move in eight existing imported games. It retains no raw
+recordings and proves neither useful selection nor a shipped source adapter. Current results
+and the two-capture trade exclusion are in `design/research/module-registry-semantic-closure.md` §5.
+
 Disposable research instrument for D1585, D1586, D1587, D1589 and D1591. It does not implement
 learner modules. It tests the returned RFC's semantic seams against the compiled evidence manifest:
 

@@ -38,6 +38,13 @@ Every compiled pair is either `executable` or `blocked_dependencies` with its bl
 (`MODULE_PAIR_EXECUTION`). A pair is executable exactly when a production operation acquires its
 sealed source **and** an exact pair-keyed presentation adapter presents it.
 
+Two-capture `derived.exchange.trade_completed@1` is a window dependency, not a one-edge
+Post-commit Nudge source (D3760). Its declared eligibility remains; the actual recorded-path
+Review operation supplies the v2 successor. The one-edge source inventory must not call the
+legacy pair executable merely because it has a renderer.
+Source-held avoidance/window pairs name a presentation dependency only when their exact adapter
+is actually missing (D3761). Existing registered renderers do not release candidate/window holds.
+
 That table establishes acquisition and adapter registration, not useful delivery at every requested
 square. D3578 records four Sight sources excluded by the current selected-square scope and a
 complete legal-destination set that can exceed the six-mark budget. The narrow contract return is

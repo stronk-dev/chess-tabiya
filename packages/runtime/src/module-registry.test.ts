@@ -257,6 +257,7 @@ describe("module registration — the compiled production registry", () => {
       const acquired = MODULE_OPERATIONS.some((operation) => operation.module === pair.module && operation.projections.some((projection) => key(projection) === key(pair.projection)));
       expect(pair.status === "executable", `${pair.module} ${key(pair.projection)}`).toBe(adapter && acquired);
       if (pair.status === "blocked_dependencies" && !adapter) expect(pair.blockers.some((blocker) => blocker.owner === "evidence-presentation")).toBe(true);
+      if (pair.status === "blocked_dependencies") expect(pair.blockers.some(blocker => blocker.owner === "evidence-presentation"), `D3761 ${pair.module} ${key(pair.projection)} reports actual adapter absence`).toBe(!adapter);
     }
     // The pre-/at-commit disclosure receipt and the query operation have landed: no pair is blocked on them.
     expect(MODULE_PAIR_EXECUTION.some((pair) => pair.status === "blocked_dependencies" && pair.blockers.some((blocker) => blocker.owner === "intent-presets"))).toBe(false);
@@ -285,6 +286,15 @@ describe("module registration — the compiled production registry", () => {
     }
     expect(ONE_EDGE_EVENT_REFS.every((value) => value.version === 1 && !value.id.startsWith("derived.semantic_avoidance.") && !value.id.endsWith("_observed"))).toBe(true);
     expect(ONE_EDGE_EVENT_REFS.every((value) => SEMANTIC_EVENT_PROJECTION_REFS.some((ref) => key(ref) === key(value)))).toBe(true);
+  });
+
+  it("D3760 never advertises the two-capture trade as a one-edge source", () => {
+    expect(ONE_EDGE_EVENT_REFS.some(value => key(value) === "derived.exchange.trade_completed@1")).toBe(false);
+    const pair = MODULE_PAIR_EXECUTION.find(value => value.module === "postcommit_nudge" && key(value.projection) === "derived.exchange.trade_completed@1");
+    expect(pair?.status).toBe("blocked_dependencies");
+    if (pair?.status !== "blocked_dependencies") throw new Error("two-edge trade must retain its source blocker");
+    expect(pair.blockers.some(blocker => blocker.owner === "recorded-semantic-path")).toBe(true);
+    expect(MODULE_PAIR_EXECUTION.some(value => value.module === "review_map" && key(value.projection) === "derived.exchange.trade_completed@2" && value.status === "executable")).toBe(true);
   });
 
   it("keeps the module consumer ceilings derived from the one policy table", () => {

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3759]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3761]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -29,6 +29,22 @@ proof still block 1.0. Structural/digest checks validate tracking consistency;
 they do not establish that every prose claim describes the product correctly.
 
 ## Product inventory — 2026-10-13
+
+2026-10-13 full-class Review follow-up: [[D3758]] is now reproduced across 32 real local
+projections, not only rook occupancy. Twenty-three disposable source/admission/renderer controls
+replay every move of eight existing games / 513 edges: 10,196 items can render, but none of these
+components reaches the actual Review row. The proposed compiler §4.4 covers exact incoming-edge
+acquisition; Review Map §2a keeps the D1/D928 useful-selection decision separate, because dumping
+about twenty items per move is not the requested UX. Both amendments remain unaccepted.
+[[D3760]] repairs the existing registry's false claim that the v1 two-capture trade is a one-edge
+source, retaining eligibility and the actual recorded Review v2 path. The new predecessor control
+fails before the repair; all 166 focused module/HTTP checks and workspace types pass afterward.
+This is a source-grain inventory repair and completed research, not shipped Review acquisition,
+new motifs, semantic qualification, official content or a whole-capability promotion.
+[[D3761]] also corrects the same execution table's false presentation blockers on source-held
+candidate/window pairs: exact registered adapters are not missing dependencies. All source holds
+remain. Its predecessor negative fails on the v1 trade pair; the invariant covers every blocked
+module pair. Final software passes 5,301 cases/386 files plus unchanged performance/types. The aggregate then stops on three missing RFC checkpoint links; correcting those links and rerunning ordinary governance/content/build/browser exits zero: 255 content cases/26 files and 345 browser passes, one existing optional Maia skip, zero retries and all 112 unretried composition cells. Warm local arrival p95 is 124.3 ms, not a published D3600 closure.
 
 ### At a glance
 

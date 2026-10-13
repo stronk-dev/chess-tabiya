@@ -31222,7 +31222,7 @@
       "id": "D3758",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c2ac656d8c14277f2d6d606fc7d2480d8fecf7a2894225c26ba21e34fa556866",
+      "sourceDigest": "sha256:acbaaf689f8013535e29c7b5e6b811c2d1d440c136ec320bf89f0dee2824741c",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md",
@@ -31235,6 +31235,24 @@
       "sourceDigest": "sha256:ca0a62ce5917c993b351a91158b76e9e86c102c557bd0cc9dfdd6e6eecc2b97d",
       "uxItems": [],
       "evidence": "apps/web/src/lib/capability-response.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3760",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4093d548b94299e35679eada351fb77083fb53366fb1ced98fbc6d1e2f1bdaf6",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/module-registry.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3761",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:76807b0478a91eb922a5bdaee3ab082ba32df1c9714b335ff9657811f2c582f8",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/module-registry.test.ts",
       "evidenceKind": "path"
     }
   ]

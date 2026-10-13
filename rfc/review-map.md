@@ -1,5 +1,9 @@
 # RFC: Review Map — the learner-facing review surface
 
+- **Draft amendment 2026-10-13 — [[D3758]]:** §2a specifies the consumer boundary for the
+  compiler's proposed local incoming-edge sources. It is **not accepted** by this parent's
+  awaiting status. The delivered screen and existing discharge states are unchanged.
+
 - **Status:** awaiting D1–D6 — implemented 2026-09-24 at the owner's direction in session (build now as a parallel agent, no further review cycle); acceptance criteria 1–14 have able-to-fail tests and [[D1409]] is enforced in `voiceCheck` (judgement arm). The owner rulings (D1, D2) and the cross-lane amendments (D3, D4, D6) remain open; D5 (the module-registry invocation) is discharged at `63902370`. Receipt: `planning/review/implementation-2026-09-24.md`. Drafted 2026-08-23 on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*).
 - **Author:** claude (drafted from `planning/review/rfc-derivation.md`, 646 lines, the HEAD derivation of every surface this document consumes)
 - **Created:** 2026-08-23
@@ -102,6 +106,41 @@ Every region has a **declared abstention state**. Abstention is a first-class re
 an error: *"zero moments is valid"* (`o7-handoff.md` research constraint 3), and `review_map`'s own
 availability honesty is mandatory because R7 measured **0 of 29** middlegame/endgame mainlines with
 consecutive recorded evaluations (`rfc/learner-modules.md:721-723`).
+
+### §2a — Draft local-source selection boundary ([[D3758]])
+
+The compiler §4.4's 32 local projections are **candidates**, not 32 new unconditional facts in
+the evidence panel. Its research population offers 10,196 items on 513 moves (maximum 36 on one
+move), including both colours' pawn-island and king-zone states on every move. Copying these
+into `row.facts` would recreate the refused raw-evidence dump.
+
+Before this amendment is accepted, the existing D1/D928 source-local selection obligation must
+name the exact per-family change/witness rules, any bounded prominence order and native absence
+wording for the learner's selected move. The selection is not engine grading, inferred intent or
+a claim of causality. General lift statistics do not choose the explanation for an individual move.
+Do not borrow the unaccepted Post-commit Nudge change-witness amendment as implementation authority.
+
+The following boundaries are mandatory regardless of the eventual family choices:
+
+- All acquired candidates remain in the typed packet; selection never erases complete source
+  state, changes the collector or changes what a pack condition can inspect.
+- The actual selected row consumes only its own exact admitted items through `compileModulePacket`
+  and the registered `module.review_map@1` adapters. A separately recomputed UI closure, free-text
+  fallback, generic derived sentence or Inspector expansion is not a delivery path.
+- Keep each selected event's complete component composition together, including named pieces,
+  squares and move paths. Never zip flattened components against event indices.
+- A legal move with no admitted *meaningful* local change can remain quiet. Unchanged count
+  states, provider absence and compiler-unrequested work are distinct; none may stand in for
+  "nothing interesting happened". An available event does not automatically create a moment.
+- The 0..3 whole-game moment selector, Story/share ranking and move-quality convention remain
+  unchanged. This amendment covers selected-move explanations, not a new statistical moment rank.
+- Native desktop/phone tests must use an actual HTTP-produced receipt, verify the chosen event's
+  complete operands, preserve the board rectangle/hit targets, and exercise move selection,
+  stale replies, Retry, Compare and Analyze without widening a live retry's assistance.
+
+**Still unresolved, not silently chosen:** the complete family-by-family witness/selection matrix
+and its native UI envelope. That is the acceptance work owned by this RFC's existing D1/D928,
+not permission to ship all collected items or declare the module complete.
 
 ### §3 — The move list and per-move grades
 
@@ -418,6 +457,10 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
    an owner.
 
 ## Changelog
+
+- 2026-10-13 — D3758 draft §2a separates exact incoming-edge collection from useful selected-move
+  explanation. The 32-source compiler proposal does not expand moments, Inspector or Story and
+  does not waive the still-open per-family selection decision. No acceptance or discharge.
 
 - 2026-10-10 — D3668 recorded numbering repair under §§2–4/§6/§7: rows, graph and
   moment labels, Retry/Compare accessible names and Analyze's line/absence captions
