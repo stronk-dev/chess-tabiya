@@ -178,6 +178,84 @@ Therefore: a production card **exposes the versioned reference id**, stays descr
 
 **Drill-down.** Every card links to its exact contributing game/ply references. A truncated list states **how many examples are hidden** — never silently truncated.
 
+#### §8.1 Recorded move numbering — D3670 draft amendment, 2026-10-13
+
+**Unaccepted.** The parent's implementing status does not authorize this wire/source amendment.
+The bounded native experiment `make profile-numbering-research` creates four real owned
+positions (White/Black first, fullmove 1/37), commits each pawn move through HTTP, waits for
+the real projector and opens the actual Profile observation list. In both desktop and touch
+Chromium, three of four labels are wrong: every reference says `Move 1.`. The source run
+retains the correct parent FEN, but `StyleContributorRef` and its server/client builders lose
+the counter and mover. This settles the source/acquisition question, not product completion
+or a claim about natural motif frequency. Evidence: `tools/d3670-profile-numbering/` and
+`design/research/learner-profile-reference-numbering.md`.
+
+Keep the existing reference identity and add only these read-time fields:
+
+```ts
+interface StyleContributorRef {
+  readonly runId: string;
+  readonly nodeId: string;
+  readonly ply: number;                 // local run ply, never a chess move number
+  readonly moveSan: string | null;
+  readonly observedAt: string;
+  readonly moveNumber: number | null;   // positive safe integer, or a root position
+  readonly mover: "white" | "black" | null;
+}
+```
+
+For a move, one private contributor builder receives the run reconstructed at the store's
+**completed event cut** and its actual node. Resolve its actual parent and reuse
+`recordedEdgePayload` to validate the recorded edge. Read `fullmoves` and `turn` from that
+edge's canonical **before FEN**. A Black move advances the child FEN's fullmove counter;
+using the child counter without correcting its frame is wrong. Do not use local-ply parity,
+the learner's side, the present cursor, SAN text or a standard-start assumption.
+
+For an actual root node with no move, both new fields are null and the UI says `Position`,
+not `Move 0`. Missing/nonmember nodes or broken recorded edges reject the affected read via
+its existing generic failure/retry boundary; they must not become fabricated root references
+through `ply ?? 0` or `moveSan ?? null`.
+
+Use the same complete builder/index for decision refs, configuration refs, denominator-game
+refs, opening entropy refs, opening previews/details and observation occurrence pages.
+`RunFact.nodes` must preserve the complete reference fields at that same completed cut;
+its current ply/SAN-only index and the three hand-written opening-reference constructors
+cannot remain alternate numbering authorities. Pagination identity/order, exact node links,
+hidden counts, metrics, floors, ownership and account export/deletion remain unchanged.
+
+The client parser validates both new fields in every nested reference, not only the detail
+page: a move requires a positive safe integer and one exact color; a root requires both null
+and null SAN. Missing fields, mixed-null pairs, zero/fractional/nonfinite numbers and invalid
+colors refuse before rendering. There is no parity or learner-side fallback for old wire
+bytes. This is an atomic server/client API change, not a stored-data migration: no persistent
+schema, observation derivation revision, projection, source receipt or chess convention changes.
+Old frontend builds may ignore the additive fields; the new client refuses an old server.
+
+Render move links as `Move N. SAN (ply P)` for White and `Move N… SAN (ply P)` for Black;
+retain the existing date and exact Review/rehearsal actions. Position refs retain those same
+actions and local-ply attribution without an invented move number. Sharing still excludes
+private references. No numbering field enters a grade, hint, style value, tier or reward.
+
+**Acceptance of this amendment requires:**
+
+1. Permanent source and authenticated application tests for all four measured starts,
+   both-color following moves and Black's counter increment; a same-local-ply/different-start
+   pair must differ. A valid ancestor/sibling reference uses its cited edge, not the cursor.
+2. Every producer path above uses the one builder, including an actual root and a configuration
+   first reached after the opponent's move. Missing node, crossed parent, corrupt FEN/UCI/SAN
+   and a contributor beyond the completed cut refuse; unchanged valid source cuts stay valid.
+3. Strict client negatives exercise both direct pages and nested profile/card/opening refs.
+   A corrupted value cannot survive because the outer parser returns the raw object.
+4. Actual desktop/phone Profile drill-downs show correct labels, pagination/reload preserves
+   them, and both actions still open the exact cited node/run. The predecessor must fail the
+   desired-label assertions; today's green characterization asserts the defect instead.
+5. A populated stored account and frozen measured-card inputs retain exact metric arithmetic,
+   floors, denominators, shares and database rows. No data migration or regrading is introduced.
+
+Independent review precedes production edits; D3670 remains open until the complete source,
+wire/parser and native UI path passes. D3669's sealed Story-title input is a separate contract;
+do not widen it or alter Story titles in this change.
+
 **Privacy is load-bearing and inherited, not invented.** R12's continuous vector re-identifies **35 of 36 accounts** across disjoint halves (`player-style-metrics.md:151-157`), which makes a style vector **behavioral identifying data**. The accepted store already answers this structurally: *"No table stores a per-learner metric vector, archetype, axis label, or composite"*, no cross-learner read path exists, and export is owner-only (`rfc/longitudinal-store.md:440-459`). **This RFC inherits those three pins and adds none of its own** — and adds sharing consent as an acceptance criterion (criterion 11), per R12's requirement that the vector *"must feed R18's export/delete/share-by-consent audit before production"*.
 
 **Sharing** is explicit and per-card. A share card may render measured rows; it may not render a type, an axis, or a composite.
@@ -290,6 +368,11 @@ Proposed — id assigned at landing; head was **D1297** at drafting.
 - 🐞 **[[D1055]]'s routing note and this RFC's existence are in tension** — the note says foundation and measurement precede the surface RFC; the owner rejected the cut that note produced. Recorded so the next reader sees both.
 
 ## Changelog
+
+- 2026-10-13 — drafted §8.1 for D3670 after actual authenticated desktop/touch reproduction:
+  complete recorded-edge numbering through every contributor builder, nested wire parser and
+  Profile link. Independent review required; parent implementation status is unchanged. No
+  production, persistent data, metric, Story or release change is authorized by the experiment.
 
 - 2026-10-07 — §8 evidence-trail repair (D3541): `ProfileScreen.svelte` paginates opening/observation details with exact counts, per-detail loading/retry and stale/mismatched-page refusal. Move references retain the cited node through the actual recorded branch and reload (`review-target.ts`, router, App and ReviewMapScreen). Mounted continuation/refresh controls, actual owner-only HTTP pages and desktop/phone browser journeys cover this path. No new metric, floor, personality, skill credit or progression input is introduced; this is not full player-style completion.
 

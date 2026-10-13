@@ -27518,3 +27518,42 @@ Campaign was the one capability with no API, route or content. Now:
   Review, Library, bots, private Profile and draft Campaign have production web doors, but
   source adoption/qualification, useful selection, calibrated behavior, official curriculum
   and complete release journeys remain. The full 1.0 goal stays active.
+
+## 2026-10-13 — populated image hold and D3670 source-to-Profile numbering
+
+- Continue from the committed inventory; the previous goal turn made verified progress. Held
+  source/selection/qualification amendments remain held, not self-accepted to obtain more code.
+- The unchanged normal `make storage-drill` is live until its original 900-second Docker build
+  deadline. It ends with canceled daemon _ping and ETIMEDOUT/143 before image inspection,
+  capacity measurement, fixture generation or any Compose startup/volume step. The read-only
+  Docker inspection is confirmed live but never answers; stop only its exact owned shell/CLI
+  processes. Docker and operator/application data are untouched. Its current capacity is unknown;
+  do not repeat October 12's numbers as a new measurement. D3747 records the distinct present
+  environment hold, and D3746's full-population image proof remains incomplete.
+- Request approval to restart Docker Desktop (which can interrupt containers) and to delegate
+  genuinely independent reviews of the held foundation amendments. No approval is inferred,
+  no Docker restart or subagent dispatch occurs, and no other actor's hung inspection is stopped.
+- Existing D3670 becomes a bounded source-to-native experiment. Create four owned sparse legal
+  positions through authenticated HTTP, starting White/Black at fullmove 1/37, commit their pawn
+  moves and wait for the actual projector. Each desktop/touch Profile list has three incorrect
+  move labels out of four; all refs retain the exact run/node/ply/SAN but omit counter/mover.
+  Zero standard-start games are measured. The common actual observation only carries the refs;
+  this does not qualify its semantics or measure natural incidence.
+- Draft player-style §8.1 keeps local ply distinct from chess numbering, derives number/color
+  from an actual recorded parent edge at the store's completed cut, unifies every builder/index,
+  distinguishes actual roots from missing data and specifies all nested parser/native-link
+  criteria. No production API/type/renderer, stored schema, metric, floor, privacy, Story title,
+  semantic authority or source hash changes. The parent remains implementing; this amendment
+  explicitly awaits independent acceptance. The question is settled and its lawful next action
+  changes from unspecified source work to review, not a false implementation closeout.
+- The first disposable author-model run fails its sibling arm on my nonexistent rewindTo call
+  (24 pass/one fail). Correct to the actual rewind/fork API, retaining the assertion; final normal
+  `make profile-numbering-research` passes 25 model controls plus both native browser journeys.
+  The green characterization asserts today's broken labels, not the desired repaired labels.
+  Compact findings live in design/research/learner-profile-reference-numbering.md; no raw research
+  capture or private account data is committed. Normal governance follows this closeout.
+- Final ordinary `make roadmap-receipt verify-governance` exits zero after source-state and
+  checkpoint reconciliation. All 1,730 live rows remain assigned: 629 todo, 16 doing, 1,085
+  blocked; D3670 is now explicitly held on player-style §8.1 acceptance, not unstarted source
+  research. No new ledger row, whole capability/milestone completion or official content is
+  claimed. The goal remains active; requested restart/review authority is not presumed.

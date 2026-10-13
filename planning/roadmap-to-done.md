@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-13 [[D3670]] now has actual authenticated desktop/touch source-to-Profile evidence:
+three of four controlled references are misnumbered in each viewport, although the saved parent
+FEN carries the correct counter/color. Draft player-style §8.1 specifies the complete builder,
+index, wire/parser and native-link correction; 25 disposable model controls and two actual
+characterization journeys pass. It is not accepted or implemented. [[D3746]]'s unchanged image
+recovery attempt ends at Docker's original 900-second build deadline before image inspection
+or Compose startup; current capacity is unknown. [[D3747]] retains the environment hold, and
+restart approval is requested rather than interrupting operator containers. No source, UI,
+content, capability, image or release completion changes.
+
 2026-10-13 [[D3771]]: arrival measurement now waits for the unchanged native three-frame
 observation before running the retained verification checks. Thirty-two rotated, traced/untraced
 arrivals find a modest local instrument effect, not the published 1092.9 ms failure's cause.

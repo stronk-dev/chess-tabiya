@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a8e79ce6b7aa23d52e111e176cbcc261ddb973a22aed43a638756070f19a5bc3",
+    "roadmap": "sha256:d7deffb0f3a6f6e442860ce20f68fa2db526a150a4c87abc22b62f00bb1c7f0e",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:fa79ce972f251a62445c0e8343b3fcb26c598bdcaa2b33b1dff48c658ba67e49",
-    "rfcRegister": "sha256:abd0460a4fa175c7c13e898aaf9c4eb556e11a36debf18a236d5a7c03715beff",
+    "workState": "sha256:6ce12912cdb168765ef90a8184792f062032d82c1cf9d1660b45f39d5d384737",
+    "rfcRegister": "sha256:9abb48269a669f333e7449fa1a452b573f0a528eab94dee62a65b303cb517475",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -30,9 +30,9 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 630,
+      "todo": 629,
       "doing": 16,
-      "blocked": 1084,
+      "blocked": 1085,
       "done": 1629,
       "refused": 161
     },
@@ -1362,7 +1362,7 @@
         "stable-board-and-presets",
         "production-api-closure"
       ],
-      "nextAction": "Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
+      "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-12",
         "summary": "D3748 unifies the four current PGN source forms with accessible contract-specific guidance, explicit existing URL precedence and retained failed inputs. Saved Story/draft preparation states describe the already stored source and retry without a duplicate import. Eight mounted controls, 160 affected checks and clean types pass; actual desktop/phone journeys create a game, private draft and variation/multi-game repertoire, then refuse/retry an Arena leg. All four browser tiers pass 340 cases, one existing optional Maia skip, zero retries and all 112 unretried composition cells. D3749 corrects unknown-failure documentation to existing bounded generic behavior. Prior D3728 preview disclosure, Campaign, Library, classroom, Review and Play checkpoints stand. IMP-a8 broader import/editor IA, D1486 parser/clock policy, source adoption, useful selection, skills, bot calibration, official content, curriculum and release recovery remain open. No whole capability/milestone, remote CI or release-image promotion.",
@@ -1573,11 +1573,11 @@
       "dependsOn": [
         "official-content"
       ],
-      "nextAction": "Resolve D3747's current Docker capacity hold only through authorized identified-resource cleanup, then finish D3746's unchanged full-population image journey. Run D3726's now-documented private directory, administrator selection and offline-copy procedure on an actual differing-UID Linux host; isolated CLI/selector controls are not that discharge. Diagnose D3723's original transport cause without claiming that the fresh-connection mitigation or a green rerun proves it. Then qualify prior-release migration/rollback and actual release-native runs on both architectures. Do not substitute tmpfs backups, weaken privacy or run the application as root. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual reader/dispatcher and proxy limits. Resolve D3397's CSP/audience-preview and D3393's public/internal probe contracts. Exercise all ten clean-host release journeys, including provider-off degradation, accessibility, rights/resources and owner-device use.",
+      "nextAction": "Restore a responsive Docker daemon with operator approval, remeasure usable capacity and resolve any shortage only through identified authorized cleanup before finishing D3746's unchanged full-population image journey. D3747's October-13 build ends at its original 900-second deadline before image inspection; do not reuse October-12 capacity numbers as current. Run D3726's now-documented private directory, administrator selection and offline-copy procedure on an actual differing-UID Linux host; isolated CLI/selector controls are not that discharge. Diagnose D3723's original transport cause without claiming that the fresh-connection mitigation or a green rerun proves it. Then qualify prior-release migration/rollback and actual release-native runs on both architectures. Do not substitute tmpfs backups, weaken privacy or run the application as root. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's actual reader/dispatcher and proxy limits. Resolve D3397's CSP/audience-preview and D3393's public/internal probe contracts. Exercise all ten clean-host release journeys, including provider-off degradation, accessibility, rights/resources and owner-device use.",
       "latestCheckpoint": {
-        "at": "2026-10-12",
-        "summary": "D3746 adds full-population recovery to the existing immutable-image journey under storage-backup-recovery criterion 8/10/11/13: private native fixture generation, exact equality of every database row, nonempty application classes, restored identity/privacy/export and resumed bot/Campaign workflows. Fresh normal checks pass 33 Make wrapper, 42 SQLite/replacement, seven populated native-process and 133 release-policy controls, plus clean types. The actual linux/arm64 development image builds and generates the fixture, then refuses zero usable data-volume space before boot. D3747 records this recurring environment hold; only owned run resources are removed. Full-population image verification is pending, not a green receipt. Prior D3724/D3729 narrow image successes remain historical. Differing-UID Linux host, original transport cause, prior-release, actual release architectures, security/rights/resources, official content and full release journeys remain. No capability/milestone promotion or push/remote-CI claim.",
-        "impact": "advanced",
+        "at": "2026-10-13",
+        "summary": "D3746's unchanged full-population image journey is attempted again on October 13 but cannot reach image inspection or any Compose volume/startup step. Docker's API does not answer inspections/builds; the original 900-second build deadline ends with canceled _ping and ETIMEDOUT/143. Current usable capacity is unknown, not another measured zero. Only this agent's exact stalled read-only diagnostic processes are stopped; no Docker restart, operator pruning or application-data change occurs. Restart approval is requested, not assumed. October-12 zero-space and earlier narrow image successes remain historical. Full-population image, differing-UID host, prior-release, both actual release architectures and complete operator discharges remain open. No fresh image/architecture proof, deadline/retry relaxation, capability/milestone, push/remote-CI or release promotion.",
+        "impact": "held",
         "evidence": [
           "Makefile",
           "tools/storage-compose.mjs",
@@ -1676,7 +1676,7 @@
           {
             "kind": "work_state",
             "id": "D3747",
-            "digest": "sha256:527be99d5e0f5779aad990e30ac7fa195eb6b2746fc69c2556595b35f0d4cbd4"
+            "digest": "sha256:6576a50ae3dc677b2a84cd288c9995fdc1d7815f58d5673b9f4271c9be32f9e6"
           },
           {
             "kind": "work_state",
@@ -2692,7 +2692,7 @@
         ],
         "verification": [
           "partial",
-          "D3570/D3571/D3572 retain 33 actual-Make controls. Fresh recovery verification passes 42 SQLite/replacement checks, seven populated process journeys and 133 release-policy controls. Historical local linux/arm64 image runs completed all seven Make recovery commands with exact branches, stale-session refusal and byte-identical rollback/reboot. D3746 expands that journey to all persisted application rows and restored authoring/classroom/privacy/export/bot/Campaign flows; native fixture generation and permanent row controls pass, but its actual image run refuses the recurring zero-space condition before boot (D3747). The expanded image journey is not qualified. D3725 binds recovery to each release job's actual pulled image. D3726's private differing-UID procedure has isolated CLI/selector controls but still requires a Linux host. D3723 original transport cause, prior-release rollback, dual-architecture release and current-revision remote CI remain open."
+          "D3570/D3571/D3572 retain 33 actual-Make controls. Fresh recovery verification passes 42 SQLite/replacement checks, seven populated process journeys and 133 release-policy controls. Historical local linux/arm64 image runs completed all seven Make recovery commands with exact branches, stale-session refusal and byte-identical rollback/reboot. D3746 expands that journey to all persisted application rows and restored authoring/classroom/privacy/export/bot/Campaign flows; native fixture generation and permanent row controls pass, but its actual image run refuses the recurring zero-space condition before boot (D3747). The expanded image journey is not qualified. D3725 binds recovery to each release job's actual pulled image. D3726's private differing-UID procedure has isolated CLI/selector controls but still requires a Linux host. D3723 original transport cause, prior-release rollback, dual-architecture release and current-revision remote CI remain open. October-13 D3746 cannot reach image inspection because Docker's API does not respond; the original build deadline expires. Capacity is currently unknown, and no recovery/release proof is earned."
         ],
         "release": [
           "blocked",

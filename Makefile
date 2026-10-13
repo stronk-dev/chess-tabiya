@@ -3944,6 +3944,12 @@ arrival-interference-research:
 arrival-order-browser-check:
 	./node_modules/.bin/playwright test tests/browser/arrival-latency.spec.ts --grep "readiness verification starts only"
 
+# Disposable D3670 characterization; does not alter Profile or manufacture a numbering source.
+.PHONY: profile-numbering-research
+profile-numbering-research:
+	./node_modules/.bin/vitest run --config tools/d3670-profile-numbering/vitest.config.ts
+	./node_modules/.bin/playwright test --config tools/d3670-profile-numbering/playwright.config.ts
+
 # D3758 disposable source/admission/renderer probe; no production or content qualification claim.
 .PHONY: review-one-edge-adoption-probe
 review-one-edge-adoption-probe:

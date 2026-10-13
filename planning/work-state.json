@@ -30432,11 +30432,12 @@
     },
     {
       "id": "D3670",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e7c18fdc32d4294dec0e87bc71d21e9da81b10d07c21938d36097cd524a524ec",
+      "sourceDigest": "sha256:e5a8729799aa4aae1626f0ea66ca4afc7dff3dba0d6817c0a656dbc3d8d9c46f",
       "uxItems": [],
-      "owner": "learner-history"
+      "owner": "learner-history",
+      "blocker": "rfc:player-style.md"
     },
     {
       "id": "D3671",
@@ -31123,7 +31124,7 @@
       "id": "D3747",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:527be99d5e0f5779aad990e30ac7fa195eb6b2746fc69c2556595b35f0d4cbd4",
+      "sourceDigest": "sha256:6576a50ae3dc677b2a84cd288c9995fdc1d7815f58d5673b9f4271c9be32f9e6",
       "uxItems": [],
       "owner": "release-engineering"
     },

@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3670]] is reproduced through actual authenticated creation, legal commits,
+worker projection and native desktop/touch Profile. Each four-reference population has three
+wrong labels; the saved parent FEN contains the missing counter/color. Existing `player-style`
+§8.1 now drafts the complete source/index/builder, nested wire/parser, root and native-link repair.
+All 25 disposable model controls and both browser characterizations pass after correcting the
+model's initial nonexistent rewindTo call. The amendment is **unaccepted**; independent review
+precedes production edits. No new style metric, source hash, stored schema or Story widening.
+
+[[D3746]]'s unchanged `make storage-drill` terminates before image inspection: Docker build
+times out at its original 900-second limit with canceled _ping and ETIMEDOUT/143. The read-only
+daemon inspection also never answers and only its owned processes are stopped. [[D3747]] now
+records this environment state separately from October 12's measured zero capacity. Do not
+claim fresh image/architecture proof, prune unidentified volumes, restart Docker without approval
+or change a deadline. Restart and independent-review delegation permissions have been requested.
+
 2026-10-13 — [[D3771]] measures assertion/snapshot work inside the native arrival interval.
 Thirty-two counterbalanced actual arrivals retain 41 requests/25 shape documents/one run pack;
 the paired assertion-first excess averages 19.3 ms traced and 15.6 ms untraced. The same original

@@ -72,6 +72,12 @@ cause. All-class image, prior-release, both release architectures and full opera
 remain open. This is delivery under existing §§3/8/9, not a new amendment or full completion;
 see `docs/storage-backup-and-recovery.md`.
 
+**Profile contributor numbering draft amendment, 2026-10-13:** `player-style.md` §8.1 owns
+D3670's source-to-link correction. Native desktop/touch characterization finds three incorrect
+labels in each four-reference population; the completed-cut parent FEN already contains the
+needed number/color. The amendment covers all builders, nested parsers, roots and exact links.
+It is **unaccepted**; the parent's implementing state does not authorize the wire change.
+
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |

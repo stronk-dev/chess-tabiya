@@ -75,6 +75,11 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Profile reference numbering, 2026-10-13 ([[D3670]]): **answered `[V]` source-to-native defect**.
+Both desktop and touch Profile show three wrong labels among four real position references;
+the recorded parent contains the number/color but every wire ref loses them. See
+`learner-profile-reference-numbering.md`; `player-style.md` §8.1 is drafted, not accepted.
+
 Native arrival instrument follow-up, 2026-10-13 ([[D3771]]): **measured `[V]` local interference,
 not the remote cause**. All 32 counterbalanced arrivals retain the source requests; verification
 within the observation adds a paired mean 19.3 ms traced / 15.6 ms untraced. Shared readiness
