@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3759]] removes only the discarded clone of the already parsed pack
+capability projection under the accepted shared-parser/shell contracts. Preserve the exact
+public data, strict refusal, independent frozen output and fresh provider health on each read.
+Closed locally with 107 focused controls and complete serial verification/build/browser:
+5,300 software, seven performance, 255 content and 345 browser passes, one existing optional
+skip, zero retries. Native warm p95 is 122.4 ms against the unchanged 250 ms budget;
+this does not establish a speed improvement or license a cache, supplementary-route changes
+or closing [[D3600]] on a local replay.
+
 2026-10-13 — execution qualification for [[D1154]], [[D3498]] and [[D3526]]:
 the existing defects are not permission to invent their missing contracts.
 [[D3498]] and [[D3526]] are durably **blocked** on amendments to `hint-distance.md`

@@ -3923,6 +3923,10 @@ arrival-cpu-profile:
 legal-move-context-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/legal-moves.test.ts apps/web/src/lib/opponent-selection-response.test.ts
 
+.PHONY: capability-admission-check
+capability-admission-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/capability-response.test.ts apps/web/src/lib/api.test.ts apps/server/src/capabilities.test.ts packages/schema/src/capability/capability.test.ts
+
 # Refresh the existing provider-parser receipt after changing its local import closure.
 .PHONY: provider-parser-update
 provider-parser-update: export UPDATE_PROVIDER_PARSER_IMPLEMENTATION := 1

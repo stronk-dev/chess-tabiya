@@ -15,6 +15,14 @@ Do not start a second build or verification process while browser CI serves that
 receive `STATIC_NOT_BUILT`. Such a run is invalid, not an excuse for a timeout increase or a
 retry. GitHub jobs use separate checkouts. Benchmark budgets and all browser tiers remain intact.
 
+`make capability-admission-check` runs the shared pack-capability parser, complete
+browser response admission/API tests and actual server-router → `DrillApi` controls.
+It proves strict rejection, isolated immutable output, fresh provider-health reads
+and removal of the discarded raw projection copy. The tests also run in ordinary
+software CI. Native arrival remains covered by `make review-arrival-browser-check`
+and full browser CI with its unchanged five-sample 250 ms budget; a work-count
+test or green local replay does not establish the cause of a published timing failure.
+
 `make opponent-recovery-check` runs live status, companion placement and single-flight/focus
 controls together with the raw controller's pause/retry/change tests.
 `make opponent-recovery-browser-check` runs native phone/tablet/desktop failure → retry and

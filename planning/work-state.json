@@ -31227,6 +31227,15 @@
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md",
       "question": "Define and accept exact incoming-edge Review source adoption and bounded presentation"
+    },
+    {
+      "id": "D3759",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ca0a62ce5917c993b351a91158b76e9e86c102c557bd0cc9dfdd6e6eecc2b97d",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/capability-response.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

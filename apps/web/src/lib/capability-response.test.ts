@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import { parseCapabilities } from "./capability-response.js";
@@ -49,6 +49,35 @@ const capabilities = Object.freeze({
 });
 
 describe("capability response authority", () => {
+  it("D3759 copies the raw response only outside the independently parsed pack projection", () => {
+    const clone = vi.spyOn(globalThis, "structuredClone");
+    try {
+      expect(parseCapabilities(capabilities)).toEqual(capabilities);
+      expect(clone).toHaveBeenCalledOnce();
+      expect(clone.mock.calls[0]![0]).not.toHaveProperty("packCapabilities");
+      expect(Object.keys(clone.mock.calls[0]![0] as object)).toEqual(Object.keys(capabilities).filter((key) => key !== "packCapabilities"));
+    } finally { clone.mockRestore(); }
+  });
+
+  it("D3759 keeps complete output isolated from mutable input and rereads changing availability", () => {
+    const input = structuredClone(capabilities);
+    const expected = structuredClone(input);
+    const parsed = parseCapabilities(input);
+    Object.assign(input.packCapabilities.rows[0]!.reachability, { kind: "supported" });
+    input.evidenceManifest.availability[0]!.reason = "changed after admission";
+    Object.assign(input.policyProfiles.human_common, { profiles: [] });
+    expect(parsed).toEqual(expected);
+    expect(parsed.packCapabilities).not.toBe(input.packCapabilities);
+    expect(parsed.packCapabilities.rows[0]!.capability).not.toBe(input.packCapabilities.rows[0]!.capability);
+    expect(Object.isFrozen(parsed.packCapabilities.rows[0]!.capability.version)).toBe(true);
+    expect(Object.isFrozen(parsed.evidenceManifest.availability[0])).toBe(true);
+    const changed = structuredClone(capabilities);
+    Object.assign(changed.packCapabilities.rows[0]!, { reachability: { kind: "supported" } });
+    expect(parseCapabilities(changed).packCapabilities.rows[0]!.reachability).toEqual({ kind: "supported" });
+    expect(parsed.packCapabilities.rows[0]!.reachability.kind).toBe("temporarily_unavailable");
+    expect(() => parseCapabilities(input)).toThrow(TypeError);
+  });
+
   it("accepts and deeply freezes the reduced public capability contract", () => {
     const parsed = parseCapabilities(capabilities);
     expect(parsed).toEqual(capabilities);

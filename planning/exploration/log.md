@@ -27152,3 +27152,50 @@ Campaign was the one capability with no API, route or content. Now:
 - Final `make verify-governance` exits zero, including work routing/state, resource/status parity,
   roadmap, intent parity, tier isolation and staged-process controls. No tracked implementation
   changes are left by this qualification pass; the pre-existing untracked files are not staged.
+
+### 2026-10-13 — D3759 capability admission without a discarded copy
+
+- Rechecked GitHub: published c7ec3c3d still has verify success and browser failure at
+  38222438800/38222438796. The actual warm samples remain 280/298.8/327.8/327.9/399.2 ms;
+  the 250 ms budget is unchanged. Network escalation reads the existing log successfully;
+  there is no authentication/token claim or permission to push.
+- `make arrival-cpu-profile` completes all six existing disposable controls. Current native
+  arrival profiling still locates capabilities parsing, layout, focus and shape requests;
+  it does not identify the GitHub cause. D3756's actual held/failed assignment/repertoire
+  boundaries remain reproduced and its amendment remains draft. No raw CPU/timeline is saved.
+- D3759 records redundant work at a concrete symbol: the strict shared pack-capability parser
+  already constructs independent frozen output, while the browser copies the raw projection
+  once more and replaces that copy. Remove only that discarded subtree from structuredClone;
+  validate the complete current reply on every invocation. No response cache, changed wire
+  semantics, access/ceiling shortcut or skipped source admission.
+- One permanent work-count regression fails against the predecessor (105 other focused checks
+  pass). Mutable-input isolation, unchanged complete values and actual server-router → DrillApi
+  controls pass, including a real health settlement observed by the next GET, no-store headers,
+  the complete supported capability set and independently frozen output. The normal focused
+  Make command passes 107 checks; workspace types pass. Full serial gates remain in flight.
+- The existing ledger, work-state, docs, queue and roadmap hold this bounded implementation;
+  D3600 remains doing and all whole-capability, content, calibration and release obligations stand.
+
+### 2026-10-13 — D3759 verified closeout and whole-product inventory
+
+- The complete ordinary serial `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: 5,300 software cases/386 files, seven unchanged-budget performance cases/four files,
+  255 content cases/26 files, clean workspace types, governance, packaging and build. All four
+  browser tiers pass 345 cases (280 smoke, five content, 59 matrix, one packaged-production),
+  with one existing optional Maia skip, zero retries, all 150 input cells and 112 successful
+  unretried composition cells. No new skip, deadline change or evidence suppression.
+- Native warm readiness p95 is 122.4 ms against 250 ms. Similar earlier local results do not
+  establish a speed improvement, the GitHub cause or D3600 completion. Published c7ec3c3d retains
+  its successful verify and failed browser run; no push or new remote/release proof is claimed.
+- D3759 closes only the discarded copy. The current ledger has 3,508 rows, 1,726 live,
+  zero untriaged, 631 todo, sixteen doing, 1,079 blocked, 1,621 done and 161 refused.
+  The 569 UX items remain 276 complete, 269 live and 24 retired. The 462 historical prose-only
+  closures are not fresh proof. All fourteen whole capabilities remain incomplete; nine
+  milestones remain four active/five blocked. Product RFCs remain 42 implementing, ten awaiting
+  and 24 draft; no document is accepted or archived by this bounded implementation.
+- Existing production surfaces remain delivered: rehearsal, compiled Support, Review Map,
+  Library/Studio, selectable bots, private Profile, draft Campaign, native friends and professional
+  slices. Source qualification/adoption, useful guidance, calibrated bots, curriculum/rewards,
+  skill credit, official content and full portable recovery/release journeys remain required.
+  The installed bundle remains 50 packs with zero official graduates. No capability promotion,
+  protected intent change, additional tracker or recording is introduced.

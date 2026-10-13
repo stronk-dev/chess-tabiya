@@ -316,6 +316,14 @@ historical latency figures are not a current release-performance claim.
 
 ### Delivery measurement — D3722, 2026-10-11
 
+Capability response admission retains one strict shared parser for every current
+`packCapabilities` reply. D3759 removes a redundant raw-subtree copy: that parser
+already produces independent frozen rows, so the browser clones only the other
+response fields before attaching them. This is not a response cache; each GET
+still validates its complete new reply and current provider health. Work-count,
+mutable-input isolation and actual server-router → `DrillApi` controls cover the
+boundary. It does not by itself prove D3600's arrival-budget repair.
+
 The normal `make build` emits `assets/index-DIAsdLNb.js`: 3,188,862 bytes,
 693.13 kB gzip reported by Vite, and the existing large-chunk warning. The optional
 `make web-bundle-report` uses the installed Vite configuration and the same web

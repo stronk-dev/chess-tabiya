@@ -163,5 +163,10 @@ export function parseCapabilities(value: unknown): Capabilities {
   const surfaces = record(item.surfaces, "capabilities/surfaces"); exact(surfaces, SURFACES, "capabilities/surfaces"); SURFACES.forEach((surface) => oneOf(surfaces[surface], ["available", "unavailable-here"] as const, `capabilities/surfaces/${surface}`)); validateManifest(item.evidenceManifest);
   // rfc/pack-capability-contract.md §4.2: the one shared wire authority; no local lookalike.
   const packCapabilities = parsePackCapabilitiesPublicProjectionV1(item.packCapabilities);
-  return deepFreeze({ ...structuredClone(item), packCapabilities }) as unknown as Capabilities;
+  // The strict parser above already copied/froze this subtree. Do not clone its raw
+  // input a second time just to discard that copy. Every other field still gets an
+  // independent clone; every invocation still validates the complete current reply.
+  const remainingFields = { ...item };
+  delete remainingFields.packCapabilities;
+  return deepFreeze({ ...structuredClone(remainingFields), packCapabilities }) as unknown as Capabilities;
 }

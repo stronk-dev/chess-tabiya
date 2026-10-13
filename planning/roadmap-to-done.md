@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3758]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3759]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -82,6 +82,19 @@ log entries remain unchanged; no content is deleted or graduated. D3651 corrects
 waves so they no longer commission already-landed persistence, APIs and composition as missing.
 
 ### What still controls the release date
+
+2026-10-13 implementation follow-up: [[D3759]] removes only the discarded raw
+pack-capability copy after the shared parser already built independent frozen
+output. All current-response validation and provider-health freshness remain.
+Permanent predecessor work-count, input-isolation and real server-router/client
+controls pass. Complete ordinary serial `make roadmap-receipt verify-awake build
+test-browser-ci-awake` exits zero: 5,300 software cases/386 files, seven unchanged-budget
+performance cases/four files, 255 content cases/26 files, clean types/governance/packaging/build
+and 345 browser passes, one existing optional Maia skip and zero retries. All 150 input and
+112 successful unretried composition cells pass. Warm native arrival p95 is 122.4 ms;
+similar earlier local results do not establish a timing improvement or the published
+failure's cause. No cache, supplementary-route amendment, semantic change, whole-capability
+promotion or D3600 remote-failure closure.
 
 2026-10-13 execution qualification: [[D3498]]'s deterministic-first/optional-voice
 lifecycle and [[D3526]]'s exact tactical witness composition are blocked on their

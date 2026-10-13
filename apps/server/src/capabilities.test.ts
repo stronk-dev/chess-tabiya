@@ -2,7 +2,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { runtimeBuildInfo } from "@chess-tabiya/runtime";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { DrillApi } from "../../web/src/lib/api.js";
 
 import {
   assertAdvertisedCapabilityDispositions,
@@ -18,7 +19,7 @@ import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { projectBotRoster } from "./bot-roster.js";
-import { testRegistry } from "./provider-health.test-support.js";
+import { driveTo, testRegistry } from "./provider-health.test-support.js";
 
 function ready(identity: EngineIdentity): EngineHealth {
   return {
@@ -59,6 +60,42 @@ function healthClient(
 }
 
 describe("engine capabilities", () => {
+  it("D3759 admits complete actual HTTP capabilities without recopying the parsed pack rows or caching health", async () => {
+    const health = await testRegistry({ "maia-inference": "available", "stockfish-analysis": "available" });
+    const capabilities = new EngineCapabilities(healthClient({}), [], { health });
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    const handler = createRestHandler(new RunService(storage), undefined, capabilities);
+    const bodies: unknown[] = [];
+    const api = new DrillApi("http://server.test", async (input, init) => {
+      const response = await handler(new Request(input, init));
+      expect(response.status).toBe(200);
+      expect(response.headers.get("cache-control")).toBe("no-store");
+      bodies.push(await response.clone().json());
+      return response;
+    });
+    const clone = vi.spyOn(globalThis, "structuredClone");
+    try {
+      const before = await api.capabilities();
+      expect(before).toEqual(bodies[0]);
+      expect(before.packCapabilities.rows.length).toBeGreaterThan(100);
+      const admissionCopy = clone.mock.calls.find(([value]) => value !== null && typeof value === "object" && "policyProfiles" in value);
+      expect(admissionCopy).toBeDefined();
+      expect(admissionCopy![0]).not.toHaveProperty("packCapabilities");
+      const rawBytes = JSON.stringify(bodies[0]).length;
+      const copyBytes = JSON.stringify(admissionCopy![0]).length;
+      expect(copyBytes).toBeLessThan(rawBytes);
+      expect(Object.isFrozen(before.packCapabilities.rows)).toBe(true);
+      expect(before.providerHealth.providers.find((row) => row.instanceId === "maia-inference")?.state).toBe("available");
+      await driveTo(health, "maia-inference", { failed: "network" });
+      const after = await api.capabilities();
+      expect(after).toEqual(bodies[1]);
+      expect(after.providerHealth.providers.find((row) => row.instanceId === "maia-inference")?.state).not.toBe("available");
+      expect(before.providerHealth.providers.find((row) => row.instanceId === "maia-inference")?.state).toBe("available");
+      expect(before.packCapabilities.rows.map((row) => row.capability)).toEqual(after.packCapabilities.rows.map((row) => row.capability));
+      expect(bodies).toHaveLength(2);
+    } finally { clone.mockRestore(); storage.close(); }
+  });
+
   it("reports the owner-lifted variant capability as pending rather than refused", () => {
     expect(CAPABILITY_DISPOSITIONS.find((row) => row.capability === "UCI_Chess960")).toMatchObject({
       disposition: "unmeasured",

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:0cf5fd3d64096d45d9cd5c01e97ab58ea47e18762385207390c2da16ddd92ddd",
+    "roadmap": "sha256:f8eea3b8930ae1174361206323ee34a3c80720e7b6ebb92bc2e07d98813c62ef",
     "workItems": "sha256:5dcb81a1adbdc066bdb148786c1e7ea6c872c1f7f3a36f51d5d412c381dd1ac5",
-    "workState": "sha256:909a4043ea1c362027f7865049ae81425ebf6afa33be1f4b5a337493afd243ac",
+    "workState": "sha256:8c39aa306a8fe5e30d677ef156a7242efc691708240aa04d81e23cef8ef00577",
     "rfcRegister": "sha256:b8ee7fd8207e1d990c48c4ecf738a4aa27d03d19b2a6b3c8ff57b3cdfa6789be",
     "uxIndex": "sha256:4c18c516955d3e32e5204760bc57ea2091dc5d3895c8f1c7e8e65328970cee66",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 631,
       "doing": 16,
       "blocked": 1079,
-      "done": 1620,
+      "done": 1621,
       "refused": 161
     },
     "workItems": {
@@ -75,8 +75,8 @@
       "dependsOn": [],
       "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Locate D3600's original 253.8 ms warm native-arrival failure and D3591's longitudinal-worker stall without changing either 250 ms budget or closing them on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
-        "at": "2026-10-12",
-        "summary": "D3733 defers seven large screen components to their actual route under the accepted application-shell contract, preserving data, commands, evidence admission and semantic startup validation. Fixed loading/error copy, explicit page reload, retired late delivery and generation-bound heading focus pass 143 mounted boundary/shell/theme controls, clean types and four actual desktop/phone browser checks. The first full run's undefined theme token is repaired and caught by the focused Make command; no check is weakened. Complete ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,076 software/381 files, seven unchanged-budget performance/four files, 255 content/26 files, types/governance/packaging/build and 308 browser passes, one existing optional Maia skip, zero retries, all 150 input/112 composition cells. Complete static initial JavaScript is 2,049,463 bytes, about 15% below D3732's 2,414,754; the 522,120-byte entry alone is not the whole download. Total JavaScript is 2,422,710 bytes, not a total-route or measured latency improvement. Existing warnings, D3722 other eager code/device/deployment proof, original intermittent causes, qualification, official content and full release obligations remain. No whole capability/milestone, fresh remote CI or release-image promotion.",
+        "at": "2026-10-13",
+        "summary": "D3759 removes only the discarded raw pack-capability copy after the shared strict parser constructs independent frozen rows, under pack-capability-contract section 4.2 and the application-shell contract. The predecessor fails the work-count regression; complete-output, mutable-input isolation/refusal and real server-router to DrillApi health-transition controls pass. All 107 focused checks and workspace types pass. Complete ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,300 software cases/386 files, seven unchanged-budget performance cases/four files, 255 content cases/26 files, clean types/governance/packaging/build and 345 browser passes, one existing optional Maia skip, zero retries, all 150 input and 112 successful unretried composition cells. Native warm arrival p95 is 122.4 ms against the unchanged 250 ms budget; similar earlier local results do not prove a timing improvement or explain the published GitHub failure. Current c7ec3c3d verify passes and browser fails at 399.2 ms warm p95; D3600 remains open. Prior route-lazy delivery stands. No response cache, source/semantic/permission change, useful-selection or qualification claim, official-content, whole-capability, milestone, remote-CI or release promotion.",
         "impact": "advanced",
         "evidence": [
           "rfc/concept-registry.md",
@@ -157,7 +157,10 @@
           "apps/web/src/lib/DeferredScreen.svelte",
           "apps/web/src/lib/deferred-screen.test.ts",
           "apps/web/src/lib/theme/theme.test.ts",
-          "tests/browser/screen-delivery.spec.ts"
+          "tests/browser/screen-delivery.spec.ts",
+          "apps/web/src/lib/capability-response.ts",
+          "apps/web/src/lib/capability-response.test.ts",
+          "apps/server/src/capabilities.test.ts"
         ],
         "anchors": [
           {
@@ -254,6 +257,11 @@
             "kind": "work_state",
             "id": "D3733",
             "digest": "sha256:31d8c01148e10433ad5711672d55a8df4c89766b1befbb0fb7aac3c27a84bcfc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3759",
+            "digest": "sha256:ca0a62ce5917c993b351a91158b76e9e86c102c557bd0cc9dfdd6e6eecc2b97d"
           }
         ]
       },
