@@ -19,6 +19,14 @@ uniformity, legal-move censuses and unique moves; engine centipawns and depth; a
 outcome shares, move shares, windows, and rating bands. `explorer_position_census` is the ledger
 record that carries the last family.
 
+Percentage spans match the complete, trimmed one-decimal scalar or percentage display
+(`31.4` or `31.4%`), not a numeric prefix. Their recorded value must itself be a finite numeric
+percentage in 0–100 at that precision; strings, nulls, booleans and arrays are not coerced into
+readings. Appending a verdict to the percentage cannot make that prose instrument-attributed.
+Separately declared author prose still follows the ordinary principle/attribution rules.
+`make claim-backing-check` covers these boundaries and actual startup-registry → authenticated
+feedback delivery, including valid sibling claims, private access and unchanged graph/events.
+
 A missing ledger is reported twice on purpose: once as the missing sidecar and once for every
 machine-labelled claim that consequently has no backing. The sidecar failure must not mask the
 size or location of the unbacked-claim population.

@@ -1548,6 +1548,10 @@ castling-evidence-check:
 trapped-piece-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --project=desktop-chromium --grep D3652
 
+.PHONY: claim-backing-check
+claim-backing-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/sourcing/claim-binding.test.ts apps/server/src/claim-backing-delivery.test.ts apps/server/src/authoring-execution.test.ts
+
 evidence-foundation-check: mobility-check king-state-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/pawn-dynamics.test.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-migration.test.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts

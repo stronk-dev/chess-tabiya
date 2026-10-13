@@ -31363,6 +31363,15 @@
       "sourceDigest": "sha256:1ef43ccab6b477f8c33dcbe3d27cfec3186d55f979a2cad040957c6e816b968e",
       "uxItems": [],
       "owner": "client-platform"
+    },
+    {
+      "id": "D3774",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0d59b99ee950679233105afd918afbc2e36225b89c6a14418af77394a332970a",
+      "uxItems": [],
+      "evidence": "apps/server/src/claim-backing-delivery.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

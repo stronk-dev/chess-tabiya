@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3774]] closes the existing V1 percentage span boundary in claim backing:
+44 permanent predecessor controls fail, including six actual startup-to-authenticated-delivery
+cases. Whole-span canonical equality and numeric source checks preserve valid percentages and
+independently attributed author prose; all 84 focused cases pass. Complete normal verification,
+build and all four browser tiers exit zero: software 5,473/389, performance seven/four, content
+255/26, browser 352 pass/one optional Maia skip, zero retries and 112 composition cells.
+[[D1008]]'s coincident-word/number problem and draft claim-semantic-anchors remain open; this
+repair does not accept V2, rewrite content or weaken author attribution. D3773 remains queued.
+
 2026-10-13 — [[D3773]] is queued to client-platform under the existing Profile/client contract:
 `readableDate(null)` must describe an unavailable date in this view, not claim the saved run
 never recorded one. Extend D3772's actual source-refusal journey with the native label and

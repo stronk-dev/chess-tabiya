@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { sha256 } from "./canonical.js";
 import { consumeClaimBindingRecords, validateClaimBindings } from "./claim-binding.js";
+import { evidenceSupports } from "./check.js";
 import { legalSuccessors } from "./legal-moves.js";
 import type { ClaimBinding, EvidenceLedger, SourcingIssue } from "./types.js";
 
@@ -30,6 +31,75 @@ function codes(document: DrillPackDefinition, evidence: EvidenceLedger): readonl
 }
 
 describe("claim bindings",()=>{
+  describe("D3774 whole percentage spans", () => {
+    const assertions = ["explorer.moveSharePct@v1", "explorer.scorePct@v1"] as const;
+    function percentage(span: string, kind: typeof assertions[number], value: unknown = 31.4) {
+      const document = pack(`Recorded percentage ${span}.`);
+      const claim = binding(document.feedbackClaims![0]!.text, { spans: [{ span, assertion: { kind, args: { fen: START, san: "e4", side: "white" } } }] });
+      const evidence = ledger([claim]);
+      const record = evidence.records[0]!;
+      const values = kind === "explorer.scorePct@v1" ? { ...record.values, whitePct: value }
+        : { ...record.values, topMoves: [{ san: "e4", uci: "e2e4", playedCount: 314, sharePct: value }] };
+      return { document, evidence: { ...evidence, records: [{ ...record, values }] } };
+    }
+
+    for (const kind of assertions) {
+      it.each([
+        "31.4% so Black is better here", "31.4% and a winning attack", "31.4%garbage",
+        "31.4 percent", "31.4e0%", "031.4%", "31.40%", "31.4%%", "31.4.%",
+      ])("%s is not an instrument span for " + kind, span => {
+        // Unsupported chess prose is a deliberately false attribution fixture, not instruction.
+        const { document, evidence } = percentage(span, kind);
+        const issues: SourcingIssue[] = [];
+        expect(validateClaimBindings(document, evidence, issues)).toEqual([]);
+        expect(issues.map(item => item.code)).toContain("CLAIM_SPAN_CONTRADICTED");
+        const supportIssues: SourcingIssue[] = [];
+        evidenceSupports(document, evidence, undefined, supportIssues);
+        expect(supportIssues.map(item => item.code)).toContain("EVIDENCE_TYPE_UNBACKED");
+      });
+
+      it.each([
+        ["31.4", "31.4%"], [null, "0.0%"], [false, "0.0%"], [true, "1.0%"],
+        ["", "0.0%"], [[31.4], "31.4%"], [[], "0.0%"], [-1, "-1.0%"],
+        [100.1, "100.1%"], [31.45, "31.45%"],
+      ] as const)("does not coerce source %j into a percentage for " + kind, (value, span) => {
+        const { document, evidence } = percentage(span, kind, value);
+        const issues: SourcingIssue[] = [];
+        expect(validateClaimBindings(document, evidence, issues)).toEqual([]);
+        expect(issues.map(item => item.code)).toContain("CLAIM_SPAN_CONTRADICTED");
+      });
+
+      it.each([0, 0.1, 31.4, 50, 99.9, 100])("retains canonical %s-percent scalar and display for " + kind, value => {
+        for (const span of [value.toFixed(1), `${value.toFixed(1)}%`, ` ${value.toFixed(1)}% `]) {
+          const { document, evidence } = percentage(span, kind, value);
+          const before = structuredClone({ document, evidence });
+          const issues: SourcingIssue[] = [];
+          const admitted = validateClaimBindings(document, evidence, issues);
+          expect(issues).toEqual([]);
+          expect(admitted).toHaveLength(1);
+          expect(admitted[0]).toMatchObject({ disposition: "ledger_bound", instrumentKinds: ["explorer_position_census"] });
+          expect({ document, evidence }).toEqual(before);
+        }
+      });
+    }
+
+    it("keeps separately declared author prose attributed rather than forbidding it", () => {
+      const text = "The recorded share is 31.4%. This is an author-only fixture statement.";
+      const document = pack(text, ["corpus_observed", "author_principle"]);
+      const evidence = ledger([binding(text, { spans: [
+        { span: "31.4%", assertion: { kind: "explorer.moveSharePct@v1", args: { fen: START, san: "e4" } } },
+        { span: "This is an author-only fixture statement.", authored: true },
+      ] })]);
+      const issues: SourcingIssue[] = [];
+      expect(validateClaimBindings(document, evidence, issues)).toEqual([expect.objectContaining({
+        disposition: "author_attributed", authorSpans: ["This is an author-only fixture statement."],
+      })]);
+      expect(issues).toEqual([]);
+      expect(codes({ ...document, feedbackClaims: [{ ...document.feedbackClaims![0]!, evidenceTypes: ["corpus_observed"] }] }, evidence))
+        .toContain("CLAIM_AUTHOR_LABEL_REQUIRED");
+    });
+  });
+
   it("backs an authored sentence without replacing it",()=>{
     const document=pack(), evidence=ledger([binding(document.feedbackClaims![0]!.text)]), issues:SourcingIssue[]=[];
     const result=validateClaimBindings(document,evidence,issues);

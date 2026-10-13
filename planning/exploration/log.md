@@ -27612,3 +27612,48 @@ Campaign was the one capability with no API, route or content. Now:
   register anchor. Add the exact current register-row anchor, retaining the check; no RFC status,
   research/source contract or product byte changes. Regenerate and validate the existing receipt
   before committing. This tracking repair is not additional application verification.
+
+## 2026-10-13 — D3774 whole-span percentage backing through learner delivery
+
+- Previous goal turn made progress: D3772's stored-source/API/native Profile repair committed
+  at 120bf114, and the existing roadmap was reconciled. Current source upgrades remain explicitly
+  held; do not implement or self-accept them to make a wide census green. Inspection confirms
+  the authoring consumers already have complete execution preflight; do not recommission it.
+- D3774 finds parseFloat/Number prefix and coercion acceptance in the implemented V1 claim
+  backing contract. The first fixture's colon creates an unrelated author segment and makes
+  its canonical positives fail; correct that fixture to an ordinary unsplit sentence. The
+  sandbox also refuses localhost binding; use the normal Make target with localhost permission,
+  without changing any environment, deadline or test meaning. The corrected predecessor has
+  38 failed negative controls/38 passed cases across the two initial files.
+- Enforce archived claim-backing §3.4's existing one-decimal whole-span normalization for both
+  Explorer percentage assertions. Source values remain numeric, finite, in 0–100 and at that
+  precision; no string/null/boolean/array coercion or trailing prose. Exact numeric/display
+  positives, trim and input non-mutation remain. Separately attributed author prose is still
+  allowed; this neither manufactures chess judgement nor implements draft V2 semantic anchors.
+- Eight new HTTP controls start the actual application over owned temporary synthetic pack/
+  ledger files, register two accounts, create private runs and read authored feedback. Canonical
+  claims deliver; prose-prefix, coerced-source and precision-invalid claims cannot earn a binding
+  or be delivered. Unauthorized/stranger reads refuse and complete graph/event pages remain
+  equal. The initial fixture accesses a nonexistent application.storage field; correct it to
+  the actual HTTP graph/event operations, not a new production test accessor. This uses the
+  explicit in-memory test composition, not native worker/image/lifecycle qualification.
+- All 84 final focused cases pass. Re-run those permanent controls once against the exact old
+  normalizer: 44 fail/40 pass, including all six malformed startup-to-authenticated-delivery
+  cases. Restore the identical repair immediately afterward. The false “winning attack” is
+  explicitly negative test text, never content. No authored pack or archive bytes change.
+- Complete normal verification/build/browser follows before local closeout. D3773 stays queued;
+  source contracts, qualification, content, calibration and full 1.0 obligations stay open.
+- Final complete ordinary `make roadmap-receipt verify-awake build test-browser-ci-awake`
+  exits zero: software 5,473/389, performance seven/four, content 255/26, clean types/governance/
+  packaging/build and all four browser tiers (287 smoke, five content, 59 matrix, one packaged
+  production = 352 passes), one existing optional Maia skip and zero retries. All 112 successful
+  unretried composition cells publish. Warm local native arrival p95 is 124 ms under the unchanged
+  250 ms budget; no published-CI cause/closure is inferred. No canonical metadata refresh, authored
+  pack, archive, model, preset, schema or migration change is needed.
+- Source inspection confirms pack artifacts retain documents, not persisted claimBackings;
+  current registry construction computes bindings, and community/playtest fallbacks carry no
+  machine-backed claims. This is source inspection, not a new persisted-run or image discharge.
+  D3774 closes with permanent source and actual authenticated delivery evidence. D1008's semantic
+  coincidence problem and unaccepted V2 remain open; the other V1 normalization families are
+  unchanged. The existing evidence-spine checkpoint records this repair without promoting a
+  whole capability, qualification, official content or release. D3773 remains queued; goal active.

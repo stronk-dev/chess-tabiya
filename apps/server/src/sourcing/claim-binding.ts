@@ -146,7 +146,13 @@ function wordNumber(raw: string): number | undefined { const parts = raw.toLower
 function normalizes(span: string, assertion: ClaimAssertion, value: unknown): boolean {
   const raw = span.trim();
   if (assertion.kind === "engine.centipawns@v1") return raw.replace("+", "") === (Number(value) / 100).toFixed(2);
-  if (assertion.kind.includes("Pct@v1")) return Number.parseFloat(raw.replace("%", "")) === Number(value);
+  if (assertion.kind.includes("Pct@v1")) {
+    // claim-backing §3.4: one decimal, whole-span equality, no prose inference.
+    // Do not turn a numeric prefix (or a coerced null/string/array) into evidence.
+    if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 100) return false;
+    const scalar = value.toFixed(1);
+    return Number(scalar) === value && (raw === scalar || raw === `${scalar}%`);
+  }
   if (typeof value === "number") return Number(raw.replaceAll(",", "")) === value || wordNumber(raw) === value;
   if (assertion.kind.includes("Category") || assertion.kind === "tablebase.category@v1" || assertion.kind === "tablebase.lineUniformCategory@v1") {
     const forms: Readonly<Record<string,string>> = { drawn:"draw", lost:"loss", won:"win" }; return (forms[raw.toLowerCase()] ?? raw.toLowerCase()) === String(value).toLowerCase();

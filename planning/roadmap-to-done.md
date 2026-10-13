@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3773]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3774]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,17 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+2026-10-13 [[D3774]]: the existing percentage binder no longer accepts a numeric prefix with
+unsupported chess prose or coerces malformed source values into instrument evidence. Both
+percentage assertions retain canonical positives and separate author attribution. All 84 focused
+controls pass; the exact predecessor fails 44, including six real startup-registry/authenticated
+HTTP delivery controls. Complete normal verification/build/browser exits zero: software
+5,473/389, performance seven/four, content 255/26 and browser 352 passes, one optional Maia skip,
+zero retries and 112 unretried composition cells. Local warm arrival p95 is 124 ms under 250 ms,
+not a remote-failure closure. No pack, schema, model, preset or archive bytes change. D1008's
+broader semantic-anchor problem, consumer selection, qualification, official content and all
+whole-capability/release obligations remain open.
 
 2026-10-13 [[D3772]]: Profile totals/history now exclude inconsistent recorded counts and
 complete-but-unread source subsets, explaining each without changing saved play. Both-color
@@ -175,7 +186,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3772]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3774]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not
