@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
-import { dirname, isAbsolute, relative, resolve } from "node:path";
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const VIEWPORTS = Object.freeze(["1440x900", "1366x768", "1280x720", "768x1024", "430x932", "390x844", "360x680"]);
@@ -13,6 +13,55 @@ export const STATES = Object.freeze([
 export const CELL_NAMES = Object.freeze(VIEWPORTS.flatMap(viewport => STATES.map(state => `play-composition-${viewport}-${state}`)));
 const hash = bytes => `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
 const signature = Buffer.from("89504e470d0a1a0a", "hex");
+const generatedFiles = new Set(["browser-results.json", ...CELL_NAMES.flatMap(name => [`${name}.png`, `${name}.json`, `${name}.vocabulary.json`])]);
+
+function compositionDirectory(root, create = false) {
+  const base = resolve(realpathSync(root), "test-results");
+  const output = join(base, "composition");
+  for (const directory of [base, output]) {
+    if (!existsSync(directory) && create) mkdirSync(directory);
+    if (!lstatSync(directory).isDirectory() || realpathSync(directory) !== directory) throw new Error("COMPOSITION_OUTPUT_DIRECTORY_UNSAFE");
+  }
+  return output;
+}
+
+function regularBytes(path) {
+  if (!lstatSync(path).isFile()) throw new Error("COMPOSITION_OUTPUT_FILE_UNSAFE");
+  return readFileSync(path);
+}
+
+function assertRetainedFile(path, digest) {
+  if (lstatSync(path, { throwIfNoEntry: false }) !== undefined && hash(regularBytes(path)) !== digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
+}
+
+/** Only obsolete complete copies made by this writer; never Playwright failures or operator files. */
+export function pruneCompositionEvidence(root) {
+  const output = compositionDirectory(root);
+  const receipt = JSON.parse(regularBytes(join(output, "receipt.json")));
+  if (receipt.version !== 1 || !/^sha256:[a-f0-9]{64}$/u.test(receipt.reportDigest) || receipt.requiredCells !== CELL_NAMES.length || receipt.provenCells !== CELL_NAMES.length || !Array.isArray(receipt.cells) || receipt.cells.length !== CELL_NAMES.length) throw new Error("COMPOSITION_CURRENT_RECEIPT_INVALID");
+  const current = receipt.reportDigest.slice(7);
+  const currentDirectory = join(output, current);
+  if (!lstatSync(currentDirectory).isDirectory() || realpathSync(currentDirectory) !== currentDirectory) throw new Error("COMPOSITION_OUTPUT_DIRECTORY_UNSAFE");
+  if (hash(regularBytes(join(currentDirectory, "browser-results.json"))) !== receipt.reportDigest) throw new Error("COMPOSITION_CURRENT_RECEIPT_INVALID");
+  for (const [index, cell] of receipt.cells.entries()) {
+    if (cell.name !== CELL_NAMES[index]) throw new Error("COMPOSITION_CURRENT_RECEIPT_INVALID");
+    for (const [record, suffix] of [[cell, ".png"], [cell.conformance, ".json"], [cell.vocabulary, ".vocabulary.json"]]) {
+      const path = `test-results/composition/${current}/${cell.name}${suffix}`;
+      if (!record || record.path !== path || hash(regularBytes(join(currentDirectory, `${cell.name}${suffix}`))) !== record.digest) throw new Error("COMPOSITION_CURRENT_RECEIPT_INVALID");
+    }
+  }
+  const removed = [];
+  for (const entry of readdirSync(output, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.name === current || !/^[a-f0-9]{64}$/u.test(entry.name)) continue;
+    const directory = join(output, entry.name);
+    const files = readdirSync(directory, { withFileTypes: true });
+    if (files.length !== generatedFiles.size || files.some(file => !file.isFile() || !generatedFiles.has(file.name))) continue;
+    if (hash(readFileSync(join(directory, "browser-results.json"))) !== `sha256:${entry.name}`) continue;
+    rmSync(directory, { recursive: true });
+    removed.push(entry.name);
+  }
+  return removed;
+}
 
 /** Join only this run's successful, unretried real attachments to the complete closed population. */
 export function collectCompositionEvidence(report, { root, read = readFileSync, realpath = realpathSync } = {}) {
@@ -83,39 +132,56 @@ export function collectCompositionEvidence(report, { root, read = readFileSync, 
   });
 }
 
-export function publishCompositionEvidence(root, reportBytes) {
+export function publishCompositionEvidence(root, reportBytes, { writeReceipt = writeFileSync } = {}) {
   const cells = collectCompositionEvidence(JSON.parse(reportBytes.toString("utf8")), { root });
   const reportDigest = hash(reportBytes);
   // Outside Playwright's cleared outputDir and the replaced HTML reporter directory: later browser
   // tiers cannot erase a passing matrix. Validate/read everything before publishing any new receipt.
   const generation = `test-results/composition/${reportDigest.slice(7)}`;
+  const output = compositionDirectory(root, true);
+  const receiptPath = join(output, "receipt.json");
+  if (existsSync(receiptPath) && !lstatSync(receiptPath).isFile()) throw new Error("COMPOSITION_OUTPUT_FILE_UNSAFE");
   mkdirSync(resolve(root, generation), { recursive: true });
+  if (!lstatSync(resolve(root, generation)).isDirectory() || realpathSync(resolve(root, generation)) !== join(output, reportDigest.slice(7))) throw new Error("COMPOSITION_OUTPUT_DIRECTORY_UNSAFE");
   const records = cells.map(({ bytes, conformance, vocabulary, ...cell }) => {
     const path = `${generation}/${cell.name}.png`;
     const target = resolve(root, path);
-    if (existsSync(target) && hash(readFileSync(target)) !== cell.digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
+    assertRetainedFile(target, cell.digest);
     writeFileSync(target, bytes);
     const conformancePath = `${generation}/${cell.name}.json`;
     const conformanceTarget = resolve(root, conformancePath);
-    if (existsSync(conformanceTarget) && hash(readFileSync(conformanceTarget)) !== conformance.digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
+    assertRetainedFile(conformanceTarget, conformance.digest);
     writeFileSync(conformanceTarget, conformance.bytes);
     const vocabularyPath = `${generation}/${cell.name}.vocabulary.json`;
     const vocabularyTarget = resolve(root, vocabularyPath);
-    if (existsSync(vocabularyTarget) && hash(readFileSync(vocabularyTarget)) !== vocabulary.digest) throw new Error("COMPOSITION_RETAINED_EVIDENCE_CHANGED");
+    assertRetainedFile(vocabularyTarget, vocabulary.digest);
     writeFileSync(vocabularyTarget, vocabulary.bytes);
     return { ...cell, path, conformance: { path: conformancePath, digest: conformance.digest, controls: conformance.controls, boxes: conformance.boxes }, vocabulary: { path: vocabularyPath, digest: vocabulary.digest, ordinaryTextNodes: vocabulary.ordinaryTextNodes, inspectorTextNodes: vocabulary.inspectorTextNodes } };
   });
+  assertRetainedFile(resolve(root, generation, "browser-results.json"), reportDigest);
   writeFileSync(resolve(root, generation, "browser-results.json"), reportBytes);
   const receipt = { version: 1, reportDigest, requiredCells: 112, provenCells: records.length, cells: records };
-  writeFileSync(resolve(root, "test-results/composition/receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`);
+  const staging = mkdtempSync(join(output, ".publish-"));
+  try {
+    const temporary = join(staging, "receipt.json");
+    writeReceipt(temporary, `${JSON.stringify(receipt, null, 2)}\n`);
+    renameSync(temporary, receiptPath);
+  } finally {
+    rmSync(staging, { recursive: true });
+  }
+  pruneCompositionEvidence(root);
   return receipt;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
   try {
-    const receipt = publishCompositionEvidence(root, readFileSync(resolve(root, "test-results/browser-results.json")));
-    console.log(`play-composition: ${receipt.provenCells}/${receipt.requiredCells} successful unretried cells; test-results/composition/receipt.json`);
+    if (process.argv[2] === "--clean") {
+      console.log(`play-composition: retired ${pruneCompositionEvidence(root).length} obsolete generated sets; current receipt retained`);
+    } else {
+      const receipt = publishCompositionEvidence(root, readFileSync(resolve(root, "test-results/browser-results.json")));
+      console.log(`play-composition: ${receipt.provenCells}/${receipt.requiredCells} successful unretried cells; test-results/composition/receipt.json`);
+    }
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

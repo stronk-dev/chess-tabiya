@@ -19,6 +19,24 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-13 [[D3769]]/[[D3770]]: bounded passing-browser artifact retention and ordered native
+startup tests are implemented and locally closed. All original cases/deadlines remain; actual
+discovery retains all 388 software files. The first full run times out at native restart, the
+second catches my early partial Make rule, and the corrected canonical rule passes its original
+capability assertion. Final normal complete verification/build/all-four-browser-tier command
+exits zero: software 5,411/388, performance seven/four, content 255/26, types/governance/packaging
+and actual 112-cell matrix publication. The cleanup removes 139 obsolete sets, 2.2 GiB→173 MiB,
+without changing the then-current receipt or removing failure/operator data. Local warm p95 is
+126.4 ms under 250 ms; published 62c81eb1 still fails at 1092.9 ms. D3600 remains open; no
+whole-capability, official-content, qualification or release promotion.
+
+2026-10-13 [[D3768]]: terminal-consequence research reproduces a vacuous positive fork predicate
+for both-color checkmate/stalemate. Actual candidate/Hint selection calls stalemate a fork that
+survives every reply, while the sibling mate and promotion controls retain explicit terminal
+policies. All 22 disposable controls pass. The source-first repair and historical compatibility
+decision await independent contract acceptance; no production or release gate changes. Current
+implementation verification remains the D3765–D3767 batch below, not these research tests.
+
 2026-10-13 [[D3765]]–[[D3767]]: complete Nudge grade operands now preserve percentages,
 fractional thresholds, exact mate tiers and context/version. The registered renderer no longer
 invents White/Black from a learner-relative mate score and renders a human convention label.
@@ -165,14 +183,23 @@ contract is already buildable. These are known product gaps, not new features or
 changes to the release scope. The existing ledger and work-state remain the owners;
 no additional tracker or capability promotion is introduced.
 
-Current GitHub check, 2026-10-13: published `c7ec3c3d` passes
-[verify](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800) but fails
-[browser](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796).
-The actual failure is warm catalogue-to-playable readiness, p95 399.2 ms against the unchanged
+Current GitHub check, 2026-10-13: `62c81eb1` was published by another actor during local
+D3768–D3770 work. Its [verify](https://github.com/stronk-dev/chess-tabiya/actions/runs/38381154735)
+and [browser](https://github.com/stronk-dev/chess-tabiya/actions/runs/38381154879) runs are terminal:
+all verify jobs pass, but browser smoke fails at warm arrival p95 1092.9 ms versus 250 ms.
+The five unrounded samples round to 364.4/1092.9/243.7/245/228 ms; three meet the budget,
+unlike c7ec3c3d's five misses. All retain 41 requests/25 shape documents; the slowest sample's
+longest request is 598.1 ms. These aggregates change the investigation, not establish its cause.
+Smoke reports 281 pass, one failure, one optional skip and two dependent calibration cases
+not run; later content/matrix/packaged browser stages do not run. D3600 remains open.
+The new research/retention/scheduling changes are not in that published revision. This agent did
+not push. The historical `c7ec3c3d` [verify](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800)
+passed and [browser](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796) failed.
+That actual failure is warm catalogue-to-playable readiness, p95 399.2 ms against the unchanged
 250 ms budget; all five warm samples exceed it (minimum 280 ms). Each records 41 requests,
 including one shape catalogue and 25 shape documents. [[D3600]] retains this performance
 obligation; those counts locate work to investigate, not a proved cause or permission to raise
-the budget. Current local commits are unpublished. A local pass cannot discharge exact-revision
+the budget. The current local changes are unpublished. A local pass cannot discharge exact-revision
 GitHub or release-host readiness.
 
 The D3600 local native-click CPU profile retains all 41 requests. With fourfold CPU throttling,

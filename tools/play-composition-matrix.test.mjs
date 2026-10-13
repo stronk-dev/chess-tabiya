@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { CELL_NAMES, VIEWPORTS, collectCompositionEvidence, publishCompositionEvidence } from "./play-composition-matrix.mjs";
+import { CELL_NAMES, VIEWPORTS, collectCompositionEvidence, pruneCompositionEvidence, publishCompositionEvidence } from "./play-composition-matrix.mjs";
 
 function assertSoftwareMatrixPrerequisite(make) {
   const rule = make.match(/^verify-software:([^\n]*)$/mu);
@@ -46,6 +46,82 @@ test("publishes exactly 112 distinct cells, with byte-bound PNGs surviving later
   for (const cell of receipt.cells) assert.equal(JSON.parse(readFileSync(join(root, cell.conformance.path), "utf8")).cell, cell.name);
   for (const cell of receipt.cells) assert.equal(JSON.parse(readFileSync(join(root, cell.vocabulary.path), "utf8")).cell, cell.name);
   assert.deepEqual(JSON.parse(readFileSync(join(root, "test-results/composition/receipt.json"), "utf8")), receipt);
+});
+
+test("retains only the current complete generation after repeated successful matrices", t => {
+  const { root, report } = fixture(t);
+  let receipt;
+  for (let run = 0; run < 10; run++) receipt = publishCompositionEvidence(root, Buffer.from(JSON.stringify({ ...report, run })));
+  assert.deepEqual(readdirSync(join(root, "test-results/composition")).sort(), [receipt.reportDigest.slice(7), "receipt.json"].sort());
+  for (const cell of receipt.cells) for (const path of [cell.path, cell.conformance.path, cell.vocabulary.path]) assert.ok(readFileSync(join(root, path)).length > 0);
+});
+
+test("partial receipt writes preserve the previous complete matrix and do not prune it", t => {
+  const { root, report } = fixture(t);
+  const previous = publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
+  const receiptPath = join(root, "test-results/composition/receipt.json");
+  const priorBytes = readFileSync(receiptPath);
+  assert.throws(() => publishCompositionEvidence(root, Buffer.from(JSON.stringify({ ...report, run: 2 })), {
+    writeReceipt(path, bytes) { writeFileSync(path, bytes.slice(0, 12)); throw new Error("simulated disk-full write"); },
+  }), /simulated disk-full/u);
+  assert.ok(readFileSync(receiptPath).equals(priorBytes));
+  for (const cell of previous.cells) assert.ok(existsSync(join(root, cell.path)));
+  assert.ok(readdirSync(join(root, "test-results/composition")).every(name => !name.startsWith(".publish-")));
+  publishCompositionEvidence(root, Buffer.from(JSON.stringify({ ...report, run: 3 })));
+  assert.equal(readdirSync(join(root, "test-results/composition")).length, 2);
+});
+
+test("cleanup preserves unknown files, generations with operator files, linked directories and failures", t => {
+  const { root, report } = fixture(t);
+  const previous = publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
+  const output = join(root, "test-results/composition");
+  const priorDirectory = join(output, previous.reportDigest.slice(7));
+  writeFileSync(join(priorDirectory, "operator-note.txt"), "keep me");
+  const incomplete = join(output, "a".repeat(64));
+  mkdirSync(incomplete); writeFileSync(join(incomplete, "browser-results.json"), "not a generated matrix");
+  const failure = join(root, "test-results/kept-failure");
+  mkdirSync(failure); writeFileSync(join(failure, "trace.zip"), "kept diagnostic");
+  symlinkSync(failure, join(output, "b".repeat(64)));
+  writeFileSync(join(output, "operator-note.txt"), "keep me too");
+  const current = publishCompositionEvidence(root, Buffer.from(JSON.stringify({ ...report, run: 2 })));
+  assert.ok(existsSync(join(root, current.cells[0].path)));
+  for (const path of [join(priorDirectory, "operator-note.txt"), join(incomplete, "browser-results.json"), join(failure, "trace.zip"), join(output, "operator-note.txt")]) assert.ok(existsSync(path));
+});
+
+for (const corrupt of ["receipt", "report", "png", "conformance", "vocabulary", "path", "missing", "linked_file"]) {
+  test(`cleanup refuses ${corrupt} current evidence before deleting an old generation`, t => {
+    const { root, report } = fixture(t);
+    const previous = publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
+    const priorDirectory = join(root, "test-results/composition", previous.reportDigest.slice(7));
+    // Preserve a second set until this explicit cleanup; the marker is then removed.
+    const marker = join(priorDirectory, "operator-note.txt"); writeFileSync(marker, "keep");
+    const current = publishCompositionEvidence(root, Buffer.from(JSON.stringify({ ...report, run: 2 })));
+    rmSync(marker);
+    const receiptPath = join(root, "test-results/composition/receipt.json");
+    const cell = current.cells[0];
+    if (corrupt === "receipt") writeFileSync(receiptPath, "not json");
+    if (corrupt === "report") writeFileSync(join(root, "test-results/composition", current.reportDigest.slice(7), "browser-results.json"), "changed");
+    if (corrupt === "png") writeFileSync(join(root, cell.path), "changed");
+    if (corrupt === "conformance") writeFileSync(join(root, cell.conformance.path), "changed");
+    if (corrupt === "vocabulary") writeFileSync(join(root, cell.vocabulary.path), "changed");
+    if (corrupt === "path") { current.cells[0].path = "operator-data.png"; writeFileSync(receiptPath, JSON.stringify(current)); }
+    if (corrupt === "missing") rmSync(join(root, cell.path));
+    if (corrupt === "linked_file") { const foreign = join(root, "operator-data.png"); writeFileSync(foreign, readFileSync(join(root, cell.path))); rmSync(join(root, cell.path)); symlinkSync(foreign, join(root, cell.path)); }
+    assert.throws(() => pruneCompositionEvidence(root));
+    for (const old of previous.cells) assert.ok(existsSync(join(root, old.path)));
+  });
+}
+
+test("publication and cleanup refuse a linked managed output directory", t => {
+  const { root, report } = fixture(t);
+  publishCompositionEvidence(root, Buffer.from(JSON.stringify(report)));
+  const output = join(root, "test-results/composition");
+  const foreign = join(root, "operator-data");
+  renameSync(output, foreign); symlinkSync(foreign, output);
+  const prior = readFileSync(join(foreign, "receipt.json"));
+  assert.throws(() => publishCompositionEvidence(root, Buffer.from(JSON.stringify({ ...report, run: 2 }))), /DIRECTORY_UNSAFE/u);
+  assert.throws(() => pruneCompositionEvidence(root), /DIRECTORY_UNSAFE/u);
+  assert.ok(readFileSync(join(foreign, "receipt.json")).equals(prior));
 });
 
 for (const mutation of ["missing", "duplicate", "foreign", "wrong_type", "two_authorities", "wrong_cell", "wrong_viewport", "failed_predicate", "vacuous", "negative_count", "unknown_scroller", "wrong_axis", "malformed", "different_result"]) {

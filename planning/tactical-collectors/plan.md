@@ -30,3 +30,34 @@ preset, workflow or authorable-vocabulary edits.
 - Breadth collectors require their separate independent acceptance review.
 - D829–D835/D931 are closed by the implemented contracts and permanent fixtures. The pre-landing
   implementation map remains as the trace of the exact ten-id boundary.
+
+## D3768 terminal-consequence return — 2026-10-13
+
+The disposable 22-case `make tactical-terminal-research` reproduces an empty-universal fork
+through the collector, sole factory, admitted presentation and actual candidate/Guided Hint
+selector. Both-color stalemate is selected as a fork surviving every reply; checkmate selects
+the mate family instead. Mate proof and promotion persistence already have explicit, different
+terminal policies. `design/research/wave-a-contract-closure.md` records the measured boundary.
+
+This does not reopen the original 30-projection landing or accept a behavior change. D3768 is
+held on independently accepted terminal semantics under `rfc/tactical-collectors.md`, coordinated
+with `rfc/hint-distance.md`. The source-first author repair must specify:
+
+1. A reply-survival claim needs a nonempty complete legal-reply population as well as no
+   refutation. Keep the true geometric/exchange-filtered double attack and terminal reply facts.
+2. Terminal is a total negative survival result with zero real refutations, not a fabricated
+   refuting UCI or an unavailable source. Existing `replyBreadth.terminal` distinguishes it from
+   a refuted nonterminal fork. The renderer must explain terminality instead of implying a future
+   consequence; the hint selector must not produce the reply-survival horizon for it.
+3. Preserve the explicit mate result and promotion policy. Do not apply a blanket “zero replies
+   means false” rule to checkmate proof, or raise hint budgets/change family ordering.
+4. Resolve compatibility before changing computed bytes: name whether this is a reviewed bug
+   clarification of the live convention or requires a successor projection/convention; enumerate
+   historical stored/derived consumers and any required rebuild. Do not silently reinterpret an
+   old receipt or force edits across authored packs without a migration contract.
+5. Add permanent collector/factory/candidate and real delivery/rendering negatives for both-color
+   checkmate/stalemate, plus the existing nonterminal positives/refutations. Measure the current
+   fixed population and retain exact nonterminal outputs. The disposable green characterization
+   tests deliberately assert today's result; they are not acceptance tests for the proposed fix.
+
+No production change is authorized until that repaired contract is independently accepted.

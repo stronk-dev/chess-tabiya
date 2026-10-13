@@ -15,6 +15,12 @@ exchange-filtered double attack, complete one-reply breadth, and exact check. Mo
 comes from the exact consumer table: fork survival is also accepted by Post-commit Nudge and
 Review Map, not exclusively Inspector/machine evidence.
 
+Known boundary: D3768's terminal double attacks have zero replies yet a matched fork-survival
+predicate. Both-color checkmate/stalemate factory and presentation controls reproduce this;
+promotion persistence explicitly returns false on zero replies. A reviewed terminal rule and
+historical-compatibility decision are required before changing the current convention. See
+`design/research/wave-a-contract-closure.md`; this is not qualified future-consequence evidence.
+
 Tactical identities follow physical piece destinations, not encoded UCI endpoints. Castling
 retains its canonical king-to-rook move identity while resolving both the king's landing and
 the rook's relocation, including stationary cases. Defender-duty events can retain either

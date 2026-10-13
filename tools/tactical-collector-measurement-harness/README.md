@@ -14,3 +14,8 @@ make tactical-collector-measurement
 
 The deterministic report is written to `output.md`. A zero is a measurement result, not
 permission to weaken a predicate or manufacture content.
+
+`make tactical-terminal-research` runs only the disposable D3768 terminal boundary experiment
+in `terminal.test.ts`; it does not regenerate `output.md`. It characterizes current fork,
+presentation and candidate-to-hint behavior, with sibling mate/promotion controls. It is not
+ordinary software CI, an accepted semantic repair, qualification or real-engine advice.

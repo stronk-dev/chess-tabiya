@@ -27390,3 +27390,96 @@ Campaign was the one capability with no API, route or content. Now:
   milestones, 276 complete/269 live/24 retired UX items and 50 installed/zero graduated official
   packs. No push, remote-CI, release-image or 1.0 promotion. The optional independent-review request
   has no answer at this checkpoint; no subagent or external task message was dispatched.
+
+### 2026-10-13 — D3768 terminal reply-survival research
+
+- Recorded the question before instrument work and assigned it in the existing ledger/state.
+  Four final legal both-color checkmate/stalemate edges produce exact double attacks and zero
+  legal replies. The current collector and sole factory nevertheless mint matched fork survival.
+  Registered admitted presentation retains “0 of the 0 legal replies” rather than terminality.
+- Controlled provider-exchange fixtures exercise actual complete candidate packets, Hint selection
+  and disclosure. Checkmate selects mate-in-one; stalemate selects the fork-survival pattern that
+  says it stands after every reply. This is not real Stockfish advice, HTTP/browser proof or
+  ordinary-game incidence. The existing literal universal predicate explains the result; no
+  unaccepted semantic correction is made behind an unchanged convention id.
+- Sibling controls distinguish proved checkmate/refuted stalemate in bounded mate proof. A
+  promotion-ready mover pawn after stalemate has available/true pass and available/false reply
+  persistence. Four nonterminal promotion forks preserve exact positives/refuting replies.
+  All 22 disposable controls pass with normal `make tactical-terminal-research`.
+- Several initial proposed stalemate fixtures fail actual legality, terminality or double-attack
+  assertions. The final instrument checks these boundaries before consequence assertions;
+  invalid proposed fixtures are not reported as product findings.
+- The measured report is appended to `design/research/wave-a-contract-closure.md`, with coverage,
+  the existing tactical plan/source-first author handoff, queue and roadmap updated. D3768 stays
+  blocked on independent terminal and historical-compatibility contract acceptance; the research
+  row is not falsely closed as a production repair. No source code, RFC status, validation
+  qualification, pack, raw recording or release gate changes. The full 1.0 goal remains active.
+- Final normal `make roadmap-receipt tactical-terminal-research verify-governance` exits zero:
+  all 22 research cases, routing/assignment, RFC/register, roadmap, test-tier and staged-process
+  controls pass. No application source changed; the last full software/content/browser results
+  remain the preceding D3765–D3767 batch, not a new run. A fresh read of GitHub confirms published
+  c7ec3c3d still has successful verify 38222438800 and failed browser 38222438796. No push or
+  remote-failure closure is claimed; D3600 remains open.
+
+### 2026-10-13 — D3769 bounded browser diagnostic retention and D3770 native test isolation
+
+- The first attempt to stage D3768 fails because Git cannot write a loose object on the full
+  host volume. No files are staged or committed. Read-only inspection finds 2.2 GiB of ignored
+  passing composition generations, accumulated by the writer after every successful matrix.
+  This is not evidence that they account for the host's entire disk use. Host space becomes
+  available independently before this agent cleans any output; no Docker/application data is
+  removed and D3747 is not discharged by this incident.
+- D3769 preserves the accepted current complete 112-cell matrix outside Playwright's replaced
+  directories, publishes its receipt through an atomic rename, then retires only recognizable
+  old generated sets. Current receipt/report/PNG/conformance/vocabulary must verify before any
+  cleanup. Unknown/operator files, linked directories and failed traces stay intact. The
+  repeated-success predecessor retains ten sets and fails; all 60 final permanent controls pass,
+  including partial receipt writes and corruption/missing/link refusals. The normal optional
+  `make clean-browser-artifacts` uses the same guarded implementation.
+- Actual cleanup removes 139 obsolete generated sets: composition output falls from 2.2 GiB
+  to 173 MiB, current receipt SHA-256 c3c401dc3b229afa59cd6b24604ab0889cdaa1281ab87c5d8f3f6d32143955d1
+  stays unchanged, and the D3764 failure trace remains 2.8 MiB. Unrecognized old-format output
+  is deliberately not guessed away. Removed generated copies are not retained for recovery;
+  the tests can regenerate artifacts. No raw artifact is added to Git or progress dependencies.
+- The first complete ordinary verification stops at software: 5,410 pass/one failure in 388
+  files. D3770 is the native refused-startup→healthy-restart test's unchanged 15-second deadline,
+  not a cleanup assertion. Isolated unchanged six-case checks pass (13.54/12.21 seconds total
+  test work); they are diagnostic controls, not permission to silently retry or call the full
+  suite green. Production/application code and the six tests remain unchanged.
+- The normal software config now uses explicit inherited Vitest projects: main two-worker pool
+  at group 0, native startup ownership with one worker at group 1. Actual discovery preserves
+  all 388 files exactly once; five missing/duplicate/overlap/worker/deadline mutations fail.
+  Normal Make commands stay unchanged; no test or production deadline, retry, source policy,
+  content/performance assignment or production behavior is relaxed. Full verification is pending.
+- During this work another actor publishes 62c81eb1. Actual GitHub reads confirm verify
+  38381154735 and browser 38381154879 are in progress; governance/content jobs pass while
+  final software/browser outcomes remain unknown. The new retention/scheduling changes are
+  not in that revision. This agent never pushes; historical D3600 evidence remains open.
+- The second complete software run retains all 388 files/5,411 cases and passes native startup
+  after the main group. Its one failure is my new early partial Make prerequisite declaration:
+  the existing capability contract reads the canonical first rule and correctly refuses its
+  missing instruments. Move scheduling into the existing canonical rule, not weaken the test.
+  The new normal scheduling check now also verifies that canonical rule. All 152 focused
+  capability cases and all 60 matrix controls pass; a final full run follows the actual fix.
+- A later read finds both published runs terminal: verify 38381154735 succeeds; browser
+  38381154879 fails warm arrival at p95 1092.9 ms versus 250 ms. Its five chronological samples
+  round to 364.4/1092.9/243.7/245/228 ms. Three meet the budget, unlike the older five-miss result;
+  all keep 41 requests and 25 shape documents. The slowest sample has a 598.1 ms longest request,
+  but the aggregates do not establish the cause. Smoke reports 281 passes, one failure, one
+  optional skip and two dependent controls not run; later browser tiers do not run. D3600 remains
+  open and the current local changes are unpublished; no budget/sample filtering or timing claim.
+- Final ordinary serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits
+  zero after the actual fixes. Software: 5,411/388; isolated performance: seven/four; content:
+  255/26. Types/governance/packaging/build and all four browser tiers pass. Native matrix has
+  59 passing journeys, all 112 successful unretried composition cells and actual publication
+  through the repaired writer; packaged default has one passing journey. The full browser
+  configuration remains unchanged. Native warm p95 is 126.4 ms under the unchanged 250 ms
+  budget; cold p95 is 888.2 ms and all 41 requests remain. No remote timing repair is proved.
+- D3769/D3770 are path-backed done; D3768 remains blocked on its independent terminal contract.
+  Both terminal rows transition together, then get their respective permanent evidence paths;
+  the state tool refuses invalid live-only fields rather than saving inconsistent transitions.
+  All work stays in the existing ledger/queue/log/roadmap. Population: 3,519 ledger rows,
+  1,730 assigned live, zero untriaged, 462 historical prose-only closures. Four active/five
+  blocked milestones, fourteen incomplete capabilities, 276 complete/269 live/24 retired UX
+  items, 50 installed/zero official graduated packs remain unchanged. No RFC is archived,
+  no raw captures are committed, no intent or application code changes, and the full goal remains active.

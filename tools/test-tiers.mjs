@@ -33,3 +33,8 @@ export const PERFORMANCE_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/opening-catalogue-performance.test.ts",
   "packages/runtime/src/recorded-semantic-path.performance.test.ts",
 ]);
+
+// Still software contracts, but native restart ownership must run after the main pool settles.
+export const SERIAL_SOFTWARE_CONTRACT_TESTS = Object.freeze([
+  "apps/server/src/application-startup-cleanup.test.ts",
+]);

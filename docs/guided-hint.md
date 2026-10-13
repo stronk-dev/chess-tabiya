@@ -74,6 +74,11 @@ Until it lands, the stored-preference term of the minimum is simply absent.
 
 ## How a hint is built
 
+Known terminal gap (D3768): controlled provider fixtures through the actual candidate compiler
+and selector produce a reply-surviving fork hint for a stalemating double attack, although there
+are no replies. Checkmate selects mate instead. This is a source semantic boundary awaiting
+independent contract repair, not a real-engine recommendation or completed coaching behavior.
+
 1. **Registry** (`packages/runtime/src/hint-registry.ts`). There are seven families, set-equal to
    D1397's frozen list: mate in one, forced mate, double attack, fork survives reply, discovered
    execution, loose piece (`lost` only), and promotion pressure (persistent only). There are also

@@ -282,6 +282,14 @@ inspector-lifecycle-browser-check:
 play-composition-matrix-contract:
 	$(CI_NODE) --test tools/play-composition-matrix.test.mjs
 
+.PHONY: software-scheduling-check
+software-scheduling-check:
+	$(CI_NODE) --test tools/software-scheduling.test.mjs
+
+.PHONY: clean-browser-artifacts
+clean-browser-artifacts:
+	$(CI_NODE) tools/play-composition-matrix.mjs --clean
+
 test-browser-production:
 	./node_modules/.bin/playwright test --config playwright.production.config.ts
 
@@ -2451,6 +2459,10 @@ social-play-fresh-review:
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
 
+.PHONY: tactical-terminal-research
+tactical-terminal-research:
+	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts tools/tactical-collector-measurement-harness/terminal.test.ts
+
 breadth-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/breadth-collector-measurement-harness/vitest.config.ts
 
@@ -3400,7 +3412,7 @@ web-screen-delivery-check:
 web-screen-delivery-browser-check:
 	./node_modules/.bin/playwright test tests/browser/screen-delivery.spec.ts
 
-verify-software: typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
+verify-software: software-scheduling-check typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check
 
 verify-governance: git-size-check research-artifacts-manifest-check research-artifacts-test register-check shared-resource-catalogue semantic-convention-source-check semantic-convention-history-check semantic-validation-owner-transition-check status-parity work-index work-state work-item-check roadmap-check intent-parity test-tier-check docs-check staged-process-contracts-test semantic-collector-cut-contract
 

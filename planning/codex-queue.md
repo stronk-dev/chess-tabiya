@@ -1,5 +1,46 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3600]] now has a terminal published 62c81eb1 result, not only the older c7ec3c3d
+failure. Verify 38381154735 passes all jobs; browser 38381154879 fails smoke with warm p95
+1092.9 ms against the unchanged 250 ms budget. The chronological values round to
+364.4/1092.9/243.7/245/228 ms: three pass, two miss, all retain 41 requests and 25 shape documents.
+The slowest sample's longest request is 598.1 ms; this aggregate does not prove which work caused
+the delay. Smoke passes 281 other cases, with one optional skip and two serial controls not run;
+later browser tiers do not execute. Preserve the original budgets and all samples; current local
+retention/scheduling repairs are not in that published revision and are not a timing fix.
+
+2026-10-13 — [[D3770]] records the first full D3769 verification's actual software failure:
+5,410 pass/one 15-second timeout at the native refused-startup→healthy-restart case. The unchanged
+isolated six-case target passes; that is not a full-suite green or proof of an application leak.
+The normal software configuration now orders that real native ownership file after the main
+two-worker pool, using one worker and unchanged case/deadline semantics. Actual Vitest discovery
+proves all 388 software files still run exactly once; missing/duplicate/overlap/worker/deadline
+mutations fail. The first integration of its prerequisite adds an early partial Make rule;
+the existing capability test catches it, and the canonical rule is repaired without weakening
+the test. Both scheduling controls and 152 focused capability cases pass. Final normal full
+software 5,411/388, performance seven/four, content 255/26, types/governance/build and all four
+browser tiers pass. D3770 closes locally; no timeout increase, application change or remote-CI closure.
+
+2026-10-13 — [[D3769]] repairs the accepted current-run matrix's unbounded diagnostic retention
+after Git staging fails on host capacity. The predecessor keeps ten generations in the repeated
+success control. All 60 final permanent controls pass with bounded retention, atomic receipt
+replacement, partial-write preservation, current-evidence verification and unknown/link/failure
+preservation. Actual guarded cleanup removes 139 obsolete generated sets: composition output
+falls from 2.2 GiB to 173 MiB, the current receipt remains byte-identical and the retained D3764
+failure trace stays present. Host capacity becomes available independently before this cleanup;
+do not claim these diagnostics explain the entire disk use or prune Docker/application data.
+Final normal complete verification/build/all-four-browser-tier command exits zero, and actual
+matrix publication retains all 112 successful unretried cells through the repaired writer.
+D3769 closes with permanent test and native publication evidence, not a release-ready claim.
+
+2026-10-13 — [[D3768]] completes the terminal-consequence experiment: 22 disposable controls
+show both-color zero-reply double attacks remain positive fork predicates through the sole factory
+and registered caption. Actual candidate/Hint selection labels stalemate as reply-surviving fork;
+checkmate selects mate. Explicit mate and promotion terminal policies remain correct in their
+controls. The source-first repair/compatibility handoff is in `planning/tactical-collectors/plan.md`.
+Independently accept its terminal rule before implementation; do not merely hide the caption,
+change rank/budget, reinterpret historical evidence or call this characterization qualification.
+
 2026-10-13 — [[D3765]] audits the accepted move-quality-grades contract before coordinator
 closeout. Its D1 records both consumers at `63902370`; D879's stale inert claim is corrected.
 All 125 focused checks/types pass: the actual application/provider parser/storage/HTTP path

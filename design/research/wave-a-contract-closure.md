@@ -43,3 +43,40 @@ and explicit absence. `[M]`
 The amendment can now be independently reviewed and then the ten projections can land. Breadth
 still follows the complete Wave-A landing under its accepted ordering; this pass does not silently
 relax that dependency. `[V]` (`rfc/breadth-collectors.md` Depends-on and §1)
+
+## Terminal all-reply boundary — 2026-10-13 ([[D3768]])
+
+`make tactical-terminal-research` runs 22 disposable controls in
+`tools/tactical-collector-measurement-harness/terminal.test.ts`. Both-color legal checkmate
+and stalemate edges have a genuine exchange-filtered double attack, zero legal replies and
+`forkSurvivesReply.matched === true`. The sole factory retains that result, and the admitted
+registered caption says “0 of the 0 legal replies answer the double attack.” `[V]`
+(`packages/runtime/src/tactics.ts` `forkSurvivesReply`; the named executable controls).
+
+The actual candidate compiler and Guided Hint selector consume controlled provider-exchange
+fixtures for those same edges. Checkmate selects `mate_in_one`; stalemate selects
+`fork_survives_reply`, whose pattern disclosure says “a double attack that still stands after
+every reply.” This proves a source-to-selector/rendering path, **not** real Stockfish recommending
+these moves, an HTTP/browser journey, incidence in ordinary games, or learned usefulness. `[V]`
+(`terminal.test.ts` candidate-to-hint cases; `testing/hint-fixture.ts`; `hint-horizon.ts`).
+
+The sibling policies are not interchangeable. On the same four terminal edges, the bounded mate
+proof explicitly distinguishes proved checkmate from refuted stalemate. On both stalemate
+fixtures with a mover-owned promotion-ready pawn added, pass availability is true but promotion
+reply persistence is available/false. Four nonterminal promotion forks retain their genuine
+positive/refutable results and exact refuting UCIs. `[V]` (`terminal.test.ts`; `mate-proof.ts`;
+`tactics.ts` `promotionPressureReading`).
+
+The fork's empty universal quantification follows the literal current §3.7 formula; the sibling
+promotion rule explicitly rejects vacuous truth. Therefore this is a **missing terminal semantic
+rule**, not authority to silently redefine the accepted fork convention. `[V]`
+(`rfc/tactical-collectors.md` §§3.7/3.14). The proposed source-first repair and historical-output
+decision are routed to `planning/tactical-collectors/plan.md` under D3768. Independent contract
+acceptance is required before production changes. No projection, source eligibility, hint rank,
+budget, pack, validation qualification or RFC lifecycle is changed by this experiment.
+
+The first proposed stalemate fixtures were wrong: a knight checked the opposite king; a later
+position permitted capture of the pinner; another let one target block the other. The final
+controls assert legal move, terminal/check state and both positive-exchange targets before
+asserting the consequence. Those failed fixture attempts are not product findings. `[V]`
+(`terminal.test.ts` final boundary assertions).

@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Terminal all-reply follow-up, 2026-10-13 ([[D3768]]): **answered `[V]` for the reproduced boundary,
+repair held**. Twenty-two disposable controls cover both-color checkmate/stalemate forks through
+collector/factory/presentation and actual candidate/Hint selection, with explicit mate/promotion
+and nonterminal controls. The current all-reply fork is vacuously positive; source-first terminal
+semantics and historical compatibility need independent acceptance. See
+`wave-a-contract-closure.md` and `tools/tactical-collector-measurement-harness/terminal.test.ts`.
+
 | Area | Feeds | Status | Report |
 |---|---|---|---|
 | Review local incoming-edge adoption class | D3758, D3760, D3762; Review/Support evidence consumers | **bounded hands-on `[V]` 2026-10-13**: 25 disposable checks replay eight existing games/513 edges. All 32 real local refs render through registered admission, but no components reach actual Review rows; 10,196 offered items expose the raw-dump risk. The set-equal change-witness experiment still leaves median ten/p95 21 items per move and no quiet rows; signs alone lose real occurrences. False one-edge trade inventory and Chess960 target identity are separately repaired; full Review acquisition/selection remains unaccepted | `module-registry-semantic-closure.md` §§5–6; `tools/d1585-module-semantic-closure/review-adoption.test.ts`; `make review-one-edge-adoption-probe occupied-target-identity-check` |

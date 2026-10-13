@@ -31309,6 +31309,33 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "item:D3715"
+    },
+    {
+      "id": "D3768",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0d2f80e4679ab9fb8d1467bb2bcd1f24350b2808307604ecc0fd5f7ee1ad895e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:tactical-collectors.md"
+    },
+    {
+      "id": "D3769",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:098785f6cb99ee8134f0a362028ffd866ea12aa2a756db04da1843382177e16e",
+      "uxItems": [],
+      "evidence": "tools/play-composition-matrix.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3770",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:da338980901c6987b3d42959a2eaaae08c7b0bcac9ee1136feb0464e0c383d56",
+      "uxItems": [],
+      "evidence": "tools/software-scheduling.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

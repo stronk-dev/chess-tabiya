@@ -41,11 +41,30 @@ The separate `make review-one-edge-adoption-probe` is disposable research, not a
 its complete-family change-witness experiment does not establish useful selection or actual
 Review delivery.
 
+`make tactical-terminal-research` is disposable D3768 research outside ordinary application CI.
+Its 22 checks characterize today's terminal fork result through actual authorities and Hint
+selection, with mate/promotion and nonterminal controls. Green means the recorded behavior is
+reproduced, not that the terminal fork semantics are correct or their repair has shipped.
+
 In one local checkout, run the release checks **serially**:
 
 ```sh
 make verify-awake build test-browser-ci-awake
 ```
+
+Passing matrix artifacts retain one complete current 112-cell generation, not an ever-growing
+copy of every local run. Publication replaces the receipt atomically before retiring recognizable
+obsolete copies. An invalid report or partial receipt write preserves the previous passing set.
+Failed Playwright traces and unknown/operator files are not cleaned. `make clean-browser-artifacts`
+applies the same guarded cleanup to accumulated old passing sets without changing the current
+receipt; it refuses missing/corrupt current evidence or a linked managed output directory.
+
+The software command includes two [ordered Vitest projects](https://vitest.dev/config/sequence.html#sequence-grouporder):
+the main two-worker pool, then one worker for native startup/refusal/restart ownership. The native
+file is not skipped or moved outside software CI. `make software-scheduling-check` checks actual
+Vitest discovery against the complete application/package test population minus the content and
+performance tiers, refusing omissions, duplicates, overlapping groups and timeout inflation.
+The original six startup tests and their 15-second per-case deadline remain unchanged.
 
 Do not start a second build or verification process while browser CI serves that checkout's
 `apps/web/dist`. Vite replaces that directory during build; a concurrent browser can genuinely
