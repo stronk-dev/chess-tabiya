@@ -12,6 +12,7 @@ import { PackRegistry } from "./pack-registry.js";
 import { TrainingSetRegistry } from "./training-set-registry.js";
 import { CampaignRegistry } from "./campaign-registry.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 
 const FEN = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
 const modules = ["sight_on_request", "threat_radar", "blunder_prevention", "structure_nudge", "theory_breadcrumb"] as const;
@@ -40,18 +41,12 @@ beforeEach(async () => {
   // registries through their constructors/validators. Only the content acquisition is replaced;
   // application composition, SQLite, authentication, routing and module factories remain real.
   // The two installed-pack controls live unchanged in local-module-content.test.ts.
-  const shapes = new ShapeRegistry();
-  const principles = new PrincipleRegistry();
   const packBuild = PackRegistry.fromDocuments;
-  vi.spyOn(ShapeRegistry, "loadDefault").mockImplementation(() => observe("fixture shapes", async () => shapes));
-  vi.spyOn(PrincipleRegistry, "loadDefault").mockImplementation(() => observe("fixture principles", async () => principles));
-  vi.spyOn(PackRegistry, "loadDefault").mockImplementation(options => observe("fixture packs", () => PackRegistry.fromDocuments([], options)));
+  installEmptyApplicationCatalogues(observe);
   vi.spyOn(PackRegistry, "fromDocuments").mockImplementation((...args) => {
     preparedPackCounts.push(args[0].length);
     return observe("pack validation/construction", () => packBuild(...args));
   });
-  vi.spyOn(TrainingSetRegistry, "loadDefault").mockImplementation(packs => observe("fixture training sets", () => TrainingSetRegistry.fromDocuments([], packs)));
-  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation(packs => observe("fixture campaigns", () => CampaignRegistry.fromDocuments([], packs)));
   let ready = false;
   onTestFailed(() => console.error(`Local Support setup: ${ready ? `application ready in ${setupElapsedMs}ms` : "application construction did not finish"}; ${phases.join(" → ")}`));
   const owned = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));

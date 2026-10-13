@@ -1,12 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-13 — [[D3777]] records a real software-tier dependency leak: a position-only
-occupied-target HTTP fixture boots the unrelated default corpus and fails its Najdorf log
-citation. The first full D3775 run has 5,477 pass/one startup refusal; its castling assertion
-never runs. This agent edited the consumed log during verification. Finish all input edits
-before rerunning; a stable repeat does not identify the original read or close the corpus
-coupling. Own the fixture repair under existing D1533/D1538, preserving actual HTTP/source
-assertions and the separate real-content acceptance tier.
+2026-10-13 — [[D3777]] repairs the position-only castling suites' software/content dependency.
+Each predecessor fails its new explicit empty-catalogue control. The two suites now share the
+existing Local Support acquisition pattern, with real registry constructors and unchanged
+application/SQLite/authenticated HTTP/factory assertions. Affected targets pass 66, 119 and 166
+cases plus the two unchanged installed-pack content cases and clean types. Complete normal
+`make roadmap-receipt verify-awake` exits zero: software 5,480/389, performance seven/four,
+content 255/26 and clean types/governance/packaging. This test-only change has no new browser or
+image proof; production/browser bytes are unchanged from 31f43203. The first D3775 run's 5,477-pass/one-citation-refusal
+outcome remains recorded, and neither its exact read nor D3702/D3600's causes are diagnosed.
+Keep verification inputs stable until the process is terminal. No production code, native
+qualification, source semantics, deadline or citation validation changes.
 
 2026-10-13 — [[D3775]] closes one-line simulation admission and early scratch publication
 under the existing two-through-eight comparison contract. Three permanent predecessor
@@ -14,7 +18,8 @@ regressions fail; all 26 focused cases pass, retaining saved-state and legitimat
 Stable software passes 5,478/389 and performance seven/four. Content catches the stale
 SIMULATE_TOO_LARGE debt entry; removing only that now-covered code and rerunning ordinary
 governance/content/build/all four browser tiers exits zero: 255 content/26 files, 352 browser
-passes, one optional Maia skip, zero retries, all 112 composition cells. D3777 remains open;
+passes, one optional Maia skip, zero retries, all 112 composition cells. The later D3777 repair
+closes catalogue coupling while retaining the original startup refusal;
 local warm p95 105.9 ms is not the published failure's cause/closure. The 8/40 limits,
 actor/orchestration, disclosure, promotion and Campaign charging remain unchanged.
 [[D3776]] is source-inspected client-admission work inside [[D1154]]'s full readonly scratch

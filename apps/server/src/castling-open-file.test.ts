@@ -9,13 +9,32 @@ import { parseModuleQueryPage } from "../../web/src/lib/module-query-response.js
 import type { ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
+import { ShapeRegistry } from "./shape-registry.js";
+import { PrincipleRegistry } from "./principle-registry.js";
+import { PackRegistry } from "./pack-registry.js";
+import { TrainingSetRegistry } from "./training-set-registry.js";
+import { CampaignRegistry } from "./campaign-registry.js";
 
 let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | undefined;
 beforeEach(async () => {
+  installEmptyApplicationCatalogues();
   fixture = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
   await fixture.ready;
 });
 afterEach(async () => { const owned = fixture; fixture = undefined; try { await owned?.close(); } finally { vi.restoreAllMocks(); } });
+
+it("D3777 position-only castling controls own empty catalogues, not installed pack citations", async () => {
+  expect(fixture?.current()).toBeDefined();
+  for (const load of [ShapeRegistry.loadDefault, PrincipleRegistry.loadDefault, PackRegistry.loadDefault, TrainingSetRegistry.loadDefault, CampaignRegistry.loadDefault]) {
+    expect(vi.isMockFunction(load)).toBe(true);
+    const calls = vi.mocked(load);
+    expect(calls).toHaveBeenCalledTimes(1);
+    const result = calls.mock.results[0]!;
+    expect(result.type).toBe("return");
+    expect((await result.value).list()).toEqual([]);
+  }
+});
 
 describe("D3757 authenticated castling-rook evidence", () => {
   it.each([...CASTLING_OPEN_FILE_CASES.map(value => ({ ...value, present: true })),

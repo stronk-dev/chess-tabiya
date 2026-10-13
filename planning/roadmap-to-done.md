@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+2026-10-13 [[D3777]]: the two position-only castling HTTP suites now acquire real empty
+lesson catalogues through the same shared test fixture as Local Support. Application, SQLite,
+authentication, HTTP and source/factory assertions remain unchanged. Both predecessor boundary
+controls fail; affected targets pass 66, 119 and 166 cases, with two unchanged actual installed-pack
+content controls and clean types. Complete normal `make roadmap-receipt verify-awake` exits zero:
+software 5,480/389, performance seven/four, content 255/26 and clean types/governance/packaging.
+No new browser/image proof is claimed for these test-only edits; production/browser bytes remain
+unchanged from 31f43203. The original startup refusal remains logged and its exact read is not
+diagnosed; D3702/D3600 remain open. All 1,732 live ledger rows remain assigned, zero untriaged.
+This is test isolation, not a production speedup, semantic qualification or milestone promotion.
+
 2026-10-13 [[D3775]]: simulation now refuses a one-line limit before walking and publishes
 its ephemeral entry only after complete comparison/response construction. Three permanent
 predecessor failures reproduce the actual 500 and early publication; all 26 focused cases pass,

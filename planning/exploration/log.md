@@ -27714,3 +27714,41 @@ Campaign was the one capability with no API, route or content. Now:
   50 installed packs and zero official graduates. This is a checked current inventory, not a
   fresh independent audit of all 1,632 closed rows; 462 historical prose-only closures remain.
   Nothing is pushed or deployed, and the full 1.0 goal remains active.
+
+## 2026-10-13 — D3777 position-only HTTP catalogue isolation
+
+- The previous goal turn made progress: 31f43203 commits D3775's real simulation admission/
+  publication repair and complete tracking. Main starts tracked-clean with six unpublished
+  commits; the three existing untracked paths remain outside this work. No push or worktree.
+- Inspect the live execution frontier before acting. Selected-Sight, useful Nudge/Review selection,
+  Maia/Stockfish/opening sources and complete scratch transport retain explicit unaccepted
+  amendments; implementing parent status is not their authority. Older convention-adapter
+  findings also need current-source reconciliation rather than reviving removed generic adapters.
+- Take the accepted D1533/D1538 test-isolation repair under D3777. New permanent controls fail
+  separately on both predecessor suites: open-file/occupied-target has no fixture acquisition
+  boundary (65 pass/one fail), while Inspector's observed loader returns 25 installed shapes
+  instead of an empty registry (118 pass/one fail). Neither failure is a castling calculation.
+- Reuse Local Support's existing empty-catalogue pattern in one small test-only helper. All five
+  lesson registries use real constructors/validators; production code and configuration are
+  unchanged. Both castling suites and Local Support use it, retain owned teardown and diagnostics,
+  and keep every original real application, SQLite, auth, HTTP, evidence and saved-state assertion.
+  No detector/source response is mocked and no timeout is raised. The original installed-pack
+  cases stay unchanged in local-module-content.test.ts.
+- Normal affected commands pass 66, 119 and 166 cases and both content controls; workspace types
+  pass twice. These are per-target results, not a summed distinct population or product latency
+  measurement. The original D3775 startup citation refusal and D3702/D3600 failures remain;
+  removing unrelated acquisition does not identify their exact filesystem or timing cause.
+- Update the existing ledger, queue, testing docs and release checkpoint, then run complete normal
+  verification with inputs held stable. No browser or release-image result is earned yet in this
+  test-only change; prior 31f43203 product/browser evidence remains historical proof.
+- Complete normal `make roadmap-receipt verify-awake` exits zero: software 5,480/389,
+  performance seven/four, content 255/26 and clean types/governance/packaging. Inputs stay stable
+  throughout. Production, browser, content, schema and source bytes are unchanged; no fresh
+  browser/image/native semantic qualification is claimed. The prior product/browser proof remains
+  31f43203's 352 passes/one optional Maia skip/zero retries and 112 composition cells.
+- D3777 closes its two-suite catalogue dependency with permanent predecessor-red controls;
+  the original startup read and D3702/D3600 causes remain unlocated. Keep the original failed
+  outcome in the log. Refresh the existing release-truth and core-journey checkpoints to say the
+  dependency is now repaired, without promoting a whole capability or milestone. All 1,732 live
+  ledger rows are assigned, zero untriaged. Independent-review delegation has been requested,
+  not presumed granted; no subagent, worktree, push, deployment or goal pause occurs.

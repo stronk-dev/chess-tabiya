@@ -31377,7 +31377,7 @@
       "id": "D3775",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:5e4a615789e5358fc68838ba385c69670d68e078ef6b91e1529a2a9fdc50703b",
+      "sourceDigest": "sha256:8e1747608b781ea344e8ada31327bf771e5be4fd674f1b838f4621ddc6ca2cf7",
       "uxItems": [],
       "evidence": "apps/server/src/authored-simulation.test.ts",
       "evidenceKind": "path"
@@ -31392,11 +31392,12 @@
     },
     {
       "id": "D3777",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d6edaa9d9387ee67f94bc3b7b1c43ab270b537e6ccc3251d1183a669ece180e1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:32126cea7a44dbbc4f1809f0e120fd283fe8200c77bc9695707a658f3df2453b",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "apps/server/src/castling-open-file.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -4,6 +4,16 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+Position-only castling and Local Support software fixtures share
+`apps/server/src/empty-application-catalogues.test-support.ts`. It replaces only the five lesson
+catalogue loaders with real empty registry constructors/validators. Application composition,
+SQLite, authentication, HTTP, module admission and evidence factories remain real. Permanent
+controls inspect the exact returned registries; teardown restores the acquisition spies.
+Installed-pack acceptance stays in the separate content tier and native browser/release flows.
+This helper is never production configuration or a substitute for worker/image qualification.
+Keep consumed code, fixtures and cited documents unchanged until a verification run finishes;
+editing a planning log during startup can invalidate a supposedly stable-input run.
+
 Warm arrival closes its native click/three-frame observation before running the retained
 visibility/grid/geometry verification. `make arrival-order-browser-check` catches the previous
 order, which began verification while the observation was still open. Disabled, incomplete,
