@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3778]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3779]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -60,6 +60,17 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+2026-10-13 [[D3779]]: the published arrival failure is localized to run creation and the
+initial opponent commit, not the twenty-five fast shape reads. A bounded local HTTP/SQLite/worker
+probe does not reproduce those delays. Normal reports now retain the exact route timing phases
+without private run IDs; four diagnostic contracts and fourteen focused browser cases pass.
+Final normal governance and all four browser tiers exit zero: 352 browser passes, one optional
+Maia skip, zero retries and all 112 composition cells. Full-run local warm p95 is 224.7 ms;
+the focused run's 115.1 ms remains a separate result. Both pass the unchanged 250 ms gate,
+neither repairs or explains the published GitHub failure. Production code is unchanged;
+17ef2a7c remains the last full software/performance/content verification. D3600 and release
+qualification remain open. No new raw captures or progress dependency on recordings.
 
 2026-10-13 [[D3778]]: the factory boundary now captures each declared root field once and
 structural predicates retain the exact bounded feature data they evaluated, including nested

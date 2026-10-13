@@ -27815,3 +27815,51 @@ Campaign was the one capability with no API, route or content. Now:
 - Tracking-only `make roadmap-receipt verify-governance verify-content` also exits zero, including
   255 content cases/26 files and both unchanged corpus boundaries. All thirteen owned files are
   staged explicitly; the three pre-existing untracked paths remain outside the change.
+
+## 2026-10-13 — D3779 published arrival write attribution and bounded CI diagnostics
+
+- Previous goal turn makes progress: 17ef2a7c commits the measured input/result repair and
+  whole-product inventory, with complete normal gates. Revalidate tracked-clean main (eight
+  unpublished commits), the same three untracked paths and the exact published GitHub failure.
+  Broad source/selected-Sight/Nudge/Review changes retain explicit unaccepted contracts; no parent
+  implementing token substitutes for acceptance. No subagent, worktree, push or deployment.
+- Inspect run 38381154879/artifact 11804142264 in a fresh temporary directory. Its retained
+  network log contains 349 observations, including the failed warm sample's 299.712 ms creation
+  and 598.110 ms initial opponent commit, predominantly response wait. Its twenty-five shape
+  reads remain below 11 ms. This is measured transport localization, not CPU, fsync, lock or
+  remaining-frame attribution. Record D3779 before implementing any diagnostic; D3600 stays open.
+- Add a disposable actual-application/file-backed-SQLite/production-worker phase probe via normal
+  Make. The first attempt correctly refuses an omitted selector session digest; fix the probe to
+  the current client/actual selector contract. A result formatter fails after consuming one run,
+  so its unseen output is not a passing receipt. A CPU experiment then refuses cross-clock clipping;
+  discard CPU attribution, retaining the simpler one-clock elapsed-phase probe. No application
+  source, worker disabling, sampling algorithm, actor, transaction or timer changes.
+- Final Make probe completes five actual creation/selection/opponent commits. Local create headers
+  range 2.056–5.827 ms, moves 3.735–8.931 ms; maximum observed BEGIN is 3.772 ms and COMMIT 0.288 ms.
+  These include local scheduling/transport and do not reproduce CI. The worker reports seven
+  completed jobs by the last sample, not all ten complete. Its 23,076-byte ignored report contains
+  bounded phase aggregates only; the owned temporary application/database and wrappers are released.
+- Normal arrival reporting now adds exact-route start/wait/receive phases after the unchanged
+  native observation has closed. Remove private run ids, retain unknown phases as null, refuse
+  diagnostic overflow, and do not infer HTTP methods/server CPU from Resource Timing. Four permanent
+  helper contracts and fourteen original native arrival/calibration cases pass; each actual warm
+  sample emits both critical-route rows and all 41 requests. Warm p95 is 115.1 ms locally under
+  unchanged unrounded 250 ms. Make smoke runs the contracts through its canonical prerequisite;
+  complete tier checking remains green. All samples, tracing and over-budget negatives remain.
+- Land research in the existing arrival dossier/coverage matrix, update testing docs and current
+  ledger/queue/state/release checkpoint/receipt. D3779 closes diagnostic localization; D3600
+  remains assigned for actual-environment cause and paired remote qualification. This is not a
+  collector, source or product-speed repair and does not promote any full capability/milestone.
+  Finish edits before broad verification, keeping consumed inputs stable.
+- Final normal `make roadmap-receipt verify-governance test-browser-ci-awake` exits zero:
+  287 smoke, five content, 59 matrix and one packaged-production browser passes (352 total),
+  one unchanged optional Maia skip, zero retries and all 112 composition cells. Full-run warm
+  p95 is 224.7 ms; retain the separate focused 115.1 ms result, all five samples and 41 requests
+  per sample. These local results do not close the published failure. The six Make toolchain
+  contracts also pass. No production source changed, so 17ef2a7c remains the last full
+  software/performance/content proof rather than claiming those suites were rerun here.
+- Reconcile the existing readable overview, not a new tracker. All fourteen whole capabilities
+  remain incomplete, four milestones active and five blocked. All 1,732 live ledger rows remain
+  assigned; the diagnostic closure changes no UX completion or official-content count. Explicit
+  owned-file commit follows final tracking checks; leave the three pre-existing untracked paths
+  untouched. No push, deployment, goal pause or full-1.0 completion.

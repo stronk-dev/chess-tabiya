@@ -31407,6 +31407,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3779",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f08c86dbf56c8cf9592867eb223780d4bc243b658b033ab2ad3d1b3e2ef709fb",
+      "uxItems": [],
+      "evidence": "tests/browser/arrival-requests.ts",
+      "evidenceKind": "path"
     }
   ]
 }

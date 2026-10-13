@@ -160,7 +160,7 @@ test-browser:
 	pnpm test:browser
 	$(CI_NODE) tools/play-composition-matrix.mjs
 
-test-browser-smoke:
+test-browser-smoke: arrival-diagnostics-check
 	./node_modules/.bin/playwright test --grep-invert "@content|@matrix"
 
 .PHONY: checkpoint-readiness-check checkpoint-readiness-browser-check
@@ -3939,6 +3939,12 @@ review-arrival-browser-check:
 arrival-cpu-profile:
 	./node_modules/.bin/playwright test --config tools/d3600-arrival-profile/playwright.config.ts
 
+# Disposable D3779/D3600 server-side write phases; real SQLite/worker, no raw CPU output.
+.PHONY: arrival-server-profile
+arrival-server-profile: build
+	./node_modules/.bin/esbuild tools/d3600-arrival-profile/server-profile.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/d3600-arrival-profile/dist/server-profile.mjs --log-level=warning
+	$(CI_NODE) tools/d3600-arrival-profile/dist/server-profile.mjs
+
 .PHONY: arrival-interference-research
 arrival-interference-research:
 	$(CI_NODE) --test tools/d3600-arrival-profile/interference-contract.test.mjs
@@ -3947,6 +3953,13 @@ arrival-interference-research:
 .PHONY: arrival-order-browser-check
 arrival-order-browser-check:
 	./node_modules/.bin/playwright test tests/browser/arrival-latency.spec.ts --grep "readiness verification starts only"
+
+.PHONY: arrival-diagnostics-check arrival-diagnostics-browser-check
+arrival-diagnostics-check:
+	$(CI_NODE) --test tools/d3600-arrival-profile/request-contract.test.mjs
+
+arrival-diagnostics-browser-check: arrival-diagnostics-check
+	./node_modules/.bin/playwright test tests/browser/arrival-latency.spec.ts
 
 # Disposable D3670 characterization; does not alter Profile or manufacture a numbering source.
 .PHONY: profile-numbering-research

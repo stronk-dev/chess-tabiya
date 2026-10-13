@@ -6,6 +6,7 @@ import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import { assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 import { observeWarmArrival, waitForMeasuredPlayableBoard, waitForPlayableBoard, type ArrivalWindow } from "./arrival-test-support.js";
+import { summarizeArrivalRequests } from "./arrival-requests.js";
 
 const SAMPLES = 5;
 const WARM_BUDGET_MS = 250; // design/research/ux-arrival-and-start.md §14; unchanged.
@@ -15,7 +16,7 @@ interface WarmArrivalTiming {
   readonly beforeClickMs: number;
   readonly clickToReadyMs: number;
   readonly afterReadyMs: number;
-  readonly requests: { readonly total: number; readonly shapeCatalogues: number; readonly shapeDocuments: number; readonly runPacks: number; readonly longestMs: number };
+  readonly requests: ReturnType<typeof summarizeArrivalRequests>;
 }
 
 interface Distribution {
@@ -120,28 +121,27 @@ test.describe.serial("arrival readiness measurements", () => {
       const ended = await warmPage.evaluate(() => performance.now());
       warmAutomation.push(ended - started);
       await warmPage.waitForFunction(() => ((window as ArrivalWindow).__tabiyaArrivalTiming?.readyMs ?? -1) >= 0);
-      warmTiming.push(await warmPage.evaluate(({ started, ended }) => {
+      const observed = await warmPage.evaluate(({ started, ended }) => {
         const timing = (window as ArrivalWindow).__tabiyaArrivalTiming!;
         const requests = (performance.getEntriesByType("resource") as PerformanceResourceTiming[])
           .filter((entry) => entry.initiatorType === "fetch" && entry.startTime >= timing.clickMs && entry.startTime <= timing.readyMs);
-        const paths = requests.map((entry) => new URL(entry.name).pathname);
         return {
           automationMs: ended - started,
           beforeClickMs: timing.clickMs - started,
           clickToReadyMs: timing.readyMs - timing.clickMs,
           afterReadyMs: ended - timing.readyMs,
-          requests: {
-            total: requests.length,
-            shapeCatalogues: paths.filter((path) => path === "/shapes").length,
-            shapeDocuments: paths.filter((path) => path.startsWith("/shapes/")).length,
-            runPacks: paths.filter((path) => /^\/runs\/[^/]+\/pack$/u.test(path)).length,
-            longestMs: Math.max(0, ...requests.map((entry) => entry.duration)),
-          },
+          clickMs: timing.clickMs, readyMs: timing.readyMs,
+          resources: requests.map(entry => ({ name: entry.name, initiatorType: entry.initiatorType,
+            startTime: entry.startTime, requestStart: entry.requestStart, responseStart: entry.responseStart,
+            responseEnd: entry.responseEnd, duration: entry.duration })),
         };
-      }, { started, ended }));
+      }, { started, ended });
+      const { clickMs, readyMs, resources, ...timing } = observed;
+      warmTiming.push({ ...timing, requests: summarizeArrivalRequests(resources, clickMs, readyMs) });
       warmValues.push(warmTiming.at(-1)!.clickToReadyMs);
       expect(warmTiming.at(-1)!.requests.runPacks).toBe(1);
       expect(warmTiming.at(-1)!.requests.shapeCatalogues).toBeLessThanOrEqual(1);
+      expect(warmTiming.at(-1)!.requests.criticalRoutes.map(entry => entry.route)).toEqual(["/runs", "/runs/:id/moves"]);
       if (sample === 0) {
         const runId = new URL(warmPage.url()).pathname.split("/").at(-1)!;
         const before = (await (await warmPage.request.get(`/runs/${runId}/graph`)).json() as RunGraph).graph;

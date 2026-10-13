@@ -1458,3 +1458,73 @@ disabled/incomplete/hidden/malformed-board control. All 20 focused actual arriva
 cases pass; native warm p95 is 106.1 ms locally, with all 41 requests. D3600 remains open. `[V]`
 `tests/browser/arrival-test-support.ts`, `tests/browser/arrival-latency.spec.ts`;
 `make arrival-order-browser-check`, `make review-arrival-browser-check`.
+
+## 17. Published write-path attribution and bounded diagnostics — 2026-10-13
+
+[[D3779]] narrows [[D3600]], not its release verdict. The primary input is GitHub run
+[38381154879](https://github.com/stronk-dev/chess-tabiya/actions/runs/38381154879), published
+`62c81eb1`, artifact `11804142264` (`playwright-report`, 5,538,081 downloaded bytes).
+The summary's failed trace retains 349 warm-context network observations even though its
+browser-action trace contains only the final report test, not the earlier successful samples.
+The artifact is inspected in temporary storage; no trace, cookie, request body or CPU recording
+is added to Git. `[V]` artifact `test-results/arrival-latency.json` and its sibling `trace.zip`,
+members `0-trace.network`, `0-trace.trace` and `test.trace`.
+
+For the 1,092.9 ms warm outlier, the matching initial-run requests show:
+
+| Operation | Total transport ms | Response wait ms | Body receive ms |
+|---|---:|---:|---:|
+| POST /runs | 299.712 | 298.799 | 0.913 |
+| POST /runs/:id/moves, initial opponent selection | 598.110 | 597.314 | 0.796 |
+| POST /select-move | 3.641 | — | — |
+
+All twenty-five shape-document reads in that request group are individually below 11 ms.
+The retained request body carries an opponent selection, not a learner gesture; current client
+source likewise obtains and commits that initial reply before entering the board. This localizes
+the slow transport intervals to mandatory run-write responses. It does **not** identify exclusive
+CPU work, fsync, SQLite lock contention, the residual native-frame cost, or a production repair.
+Do not add nested timings to manufacture an exclusive cost decomposition. `[V]` same artifact;
+`apps/web/src/lib/session-controller.ts` initial opponent request/commit; `apps/server/src/service.ts`
+create/opponentPly; `apps/server/src/storage.ts` create/save/upsertAttempts.
+
+`make arrival-server-profile` is disposable research over the actual application, HTTP, file-backed
+SQLite and production longitudinal worker. Five authenticated create/selector/commit pairs use
+the same served fixture and actual selector; returned node count and cursor must advance. It wraps
+service/storage/watermark and BEGIN/COMMIT calls for inclusive elapsed phases, not CPU attribution.
+All prototypes, owned application resources and temporary database are released afterward. Its
+23,076-byte ignored `.cache/d3779-write-profile.json` contains only bounded aggregates. `[V]`
+`tools/d3600-arrival-profile/server-profile.ts`; final normal Make run, Node v24.21.0.
+
+| Sample | Create response headers ms | Move response headers ms | Largest BEGIN ms | Largest COMMIT ms |
+|---|---:|---:|---:|---:|
+| 0 | 5.291 | 8.931 | 1.232 | 0.288 |
+| 1 | 2.312 | 4.827 | 0.016 | 0.276 |
+| 2 | 2.294 | 4.601 | 0.012 | 0.247 |
+| 3 | 5.827 | 3.735 | 3.772 | 0.228 |
+| 4 | 2.056 | 3.744 | 0.005 | 0.223 |
+
+These include local request scheduling/transport; they are not identical to HAR server-wait
+measurements, a GitHub-runner simulation or a browser-arrival measurement. The real worker reports
+seven completed jobs by the last sampled response, with no failures/conflicts; pending work is not
+claimed complete. Local replay does not reproduce the hundreds-of-ms write waits. `[V]` same run.
+
+The first probe omitted the selector's required session digest and was correctly refused before
+the move. A later CPU experiment included profiler-start work; a clock-domain check then rejected
+its proposed clipping. A result formatter also failed after consuming one run's output. None is
+accepted CPU evidence. The final tool uses one elapsed clock and no CPU sampler. `[V]` same tool's
+terminal outcomes, recorded in `planning/exploration/log.md`.
+
+The normal arrival report now retains bounded exact-route timing for `/runs` and `/runs/:id/moves`,
+with run identity removed and unknown response phases explicitly null. Native observation closes
+before collection, so no listener/profiler is added to the timed window. Resource Timing does not
+expose HTTP methods; those fields are route observations, not invented POST/CPU classifications.
+Four permanent contracts cover delayed writes, unchanged counts, window/route exclusion, unknown
+phases, private-id removal and refusal of overflow. All fourteen original browser samples/calibrations
+pass with 41 requests each and both route rows; local warm p95 is 115.1 ms under unchanged 250 ms.
+`[V]` `tests/browser/arrival-requests.ts`; `tests/browser/arrival-latency.spec.ts`;
+`make arrival-diagnostics-browser-check test-tier-check`.
+
+**Next:** observe the two write phases on the actual failing execution environment and distinguish
+transaction waiting from service/projection work before implementation. The original failure and
+every source/actor/transaction/readiness assertion remain; D3600 stays open. This closes diagnostic
+localization, not source qualification, a faster learner journey, remote CI or 1.0 release proof.

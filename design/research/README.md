@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Published arrival write-path attribution, 2026-10-13 ([[D3779]]): **measured `[V]` transport
+localization, not root-cause closure**. The actual failed artifact identifies 299.712 ms creation
+and 598.110 ms initial opponent commit, while shape reads stay below 11 ms. Real local HTTP/
+SQLite/worker phase replay does not reproduce the waits; bounded route diagnostics now retain
+those phases in every ordinary arrival report without changing samples or the budget. See
+`ux-arrival-and-start.md` §17; D3600 remains open.
+
 Profile reference numbering, 2026-10-13 ([[D3670]]): **answered `[V]` source-to-native defect**.
 Both desktop and touch Profile show three wrong labels among four real position references;
 the recorded parent contains the number/color but every wire ref loses them. See

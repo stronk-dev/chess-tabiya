@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3779]] closes diagnostic localization, narrowing [[D3600]] from an aggregate request maximum to actual published
+write boundaries. Artifact 11804142264 retains all warm-context network entries: the outlier's
+POST /runs waits 299.712 ms and its initial opponent POST /runs/:id/moves waits 598.110 ms;
+the twenty-five shape GETs are individually below 11 ms. Five actual local HTTP/SQLite/worker
+pairs do not reproduce those waits. Normal reports now retain bounded critical-route phases;
+four contracts and fourteen actual arrival cases pass with unchanged counts/samples/250 ms.
+Inspect the real service/storage/projection/worker phases on the failing environment before
+choosing a fix. Use bounded disposable profiling, preserve
+all source/actor/transaction semantics and the normal 250 ms gate. These are response-wait
+measurements, not exclusive CPU, fsync or lock measurements. Nothing is remotely repaired yet.
+
 2026-10-13 — [[D3778]] closes two demonstrated one-invocation authority/value mismatches
 under implemented value-authority §§2/5: root fields are captured once after declared-key checks,
 and structural features (including nested distance targets) are captured before evaluation.

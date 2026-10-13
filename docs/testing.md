@@ -20,7 +20,12 @@ order, which began verification while the observation was still open. Disabled, 
 hidden/malformed and genuinely slow controls remain in `make review-arrival-browser-check`;
 all five samples, tracing and the unrounded 250 ms gate stay. The opt-in disposable
 `make arrival-interference-research` is a bounded local factor experiment, not proof of GitHub's
-timing cause or release readiness.
+failure cause. `make arrival-diagnostics-browser-check` runs the actual request summarizer's
+four contracts and all original arrival cases. Normal smoke also checks the summarizer; its report
+retains bounded `/runs` and `/runs/:id/moves` transport phases without run IDs. Unknown phases
+remain null; timings are not server CPU/lock/fsync attribution. The native observation, all samples
+and 250 ms threshold are unchanged. `make arrival-server-profile` separately probes real local
+HTTP/SQLite/worker phases and writes only a small ignored aggregate, not a release receipt.
 
 `make move-grade-consumer-check` covers the grade convention, both ladders/mate arms, module
 admission, voice guard and actual authenticated Review/Nudge reads. Populated synthetic scores
