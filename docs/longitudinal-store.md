@@ -96,6 +96,10 @@ aggregate, never raw CPU recordings. See
 These timings isolate the projector, not HTTP/queue/database latency. Cold cost
 remains open; locating the cost does not prove further output-preserving improvement
 impossible or authorize narrowing the evidence contract.
+The October-13 D3782 freezer-sharing candidates are rejected: both preserve the full
+population but are slower in every counterbalanced cold pair. The separate memo/mint
+freezers remain. D3783 changes only mint freeze ordering to prevent descendant hooks
+replacing parent data; it does not reduce the semantic population or claim a speedup.
 The output-preserving D3300 follow-up reuses one before-position's four private
 square-control indexes and serializes structural sort keys once per observation.
 Exact full-event/receipt and projected-row comparison over both players is unchanged;

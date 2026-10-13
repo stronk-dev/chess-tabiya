@@ -538,6 +538,9 @@ function freezeData(value: unknown, visiting: WeakSet<object>): boolean {
   if (IMMUTABLE_DATA.has(value)) return true;
   if (visiting.has(value)) return false;
   visiting.add(value);
+  // Fix this object's slots before visiting a descendant: its freeze/proxy hooks may otherwise
+  // replace a visited sibling with mutable data and let stale bytes enter the digest cache.
+  Object.freeze(value);
   const prototype = Object.getPrototypeOf(value);
   let stable = Array.isArray(value) ? prototype === Array.prototype : prototype === Object.prototype || prototype === null;
   for (const key of Reflect.ownKeys(value)) {
@@ -552,7 +555,6 @@ function freezeData(value: unknown, visiting: WeakSet<object>): boolean {
       if (!Object.hasOwn(value, index)) { stable = false; break; }
     }
   }
-  Object.freeze(value);
   visiting.delete(value);
   if (stable) IMMUTABLE_DATA.add(value);
   return stable;

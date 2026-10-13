@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — [[D3783]] closes the actual descendant-hook/parent-freeze ordering defect.
+Two predecessor controls expose stale cached bytes after equal-looking mutable replacement;
+the parent now freezes first. Four permanent controls and all 67 mint/120 collector/66 real
+worker/projector checks plus types pass. Eight full-output pairs preserve every event/receipt,
+row and checkpoint. This is internal trust repair, not an HTTP exploit, speedup or eligibility claim.
+
+2026-10-13 — [[D3782]] completes the freezer-sharing comparison and rejects both candidates:
+all sixteen cold pairs are slower despite complete output parity. Candidate code/tests are
+removed and the original memo restored. Keep the negative finding in the existing D3300
+measurement receipt; do not recommission it from a duplicate-work count alone. Cold cost remains
+open; no source narrowing, new persistent authority, qualification or performance promise.
+
 2026-10-13 — [[D3781]] closes the full registered-case retained-input orientation inventory:
 343 actual operations, 56/81 subjects and 5,443 retained input leaves. The draft now covers
 seven literal root spellings; 106 disposable checks/four files pass, including real Check and

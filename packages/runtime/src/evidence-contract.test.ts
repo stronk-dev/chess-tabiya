@@ -67,6 +67,50 @@ function code(value: EvidenceContractDeclarations): string | undefined {
 }
 
 describe("evidence manifest compiler", () => {
+  it.each(["hidden", "symbol"])("D3783 retains %s parent children during descendant descriptor hooks", kind => {
+    const key = kind === "symbol" ? Symbol("protected-child") : "hidden";
+    const original = { count: 1 }, replacement = { count: 1 };
+    let replaced: boolean | undefined;
+    const parent: Record<PropertyKey, unknown> = {};
+    parent.first = new Proxy({ count: 0 }, {
+      getOwnPropertyDescriptor(target, property) {
+        replaced = Reflect.set(parent, key, replacement);
+        return Reflect.getOwnPropertyDescriptor(target, property);
+      },
+    });
+    Object.defineProperty(parent, key, { value: original, writable: true, configurable: true, enumerable: false });
+    const declared = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, parent);
+    expect(replaced).toBe(false);
+    expect(declared.payload[key]).toBe(original);
+    expect(Object.isFrozen(original)).toBe(true);
+    replacement.count = 2;
+    expect(() => assertDeclaredEvidence(declared)).not.toThrow();
+  });
+
+  it.each(["record", "array"])("D3783 freezes %s parent slots before descendant freeze hooks", kind => {
+    const replacement = { count: 1 };
+    let parent: { child: object } | object[];
+    let replaced: boolean | undefined;
+    const child = new Proxy({ count: 1 }, {
+      preventExtensions(target) {
+        replaced = Reflect.set(parent, kind === "array" ? "0" : "child", replacement);
+        return Reflect.preventExtensions(target);
+      },
+    });
+    parent = kind === "array" ? [child] : { child };
+    const originalBytes = JSON.stringify(parent);
+    const declared = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, parent);
+    expect(JSON.stringify(declared.payload)).toBe(originalBytes);
+    replacement.count = 2;
+    // Independent fresh-data digest, not the payload's own cached canonical bytes.
+    const actualDigest = evidenceDigest(JSON.parse(JSON.stringify(declared.payload)));
+    expect(evidenceValueReceipt(declared).payloadDigest).toBe(actualDigest);
+    expect(replaced).toBe(false);
+    expect(kind === "array" ? (declared.payload as object[])[0] : (declared.payload as { child: object }).child).toBe(child);
+    expect(Object.isFrozen(child)).toBe(true);
+    expect(() => assertDeclaredEvidence(declared)).not.toThrow();
+  });
+
   it("D3721 keeps aliased, hidden and symbol descendants frozen without copying their identity", () => {
     const symbol = Symbol("fixture");
     const hidden = { count: 2 };

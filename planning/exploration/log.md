@@ -27941,3 +27941,43 @@ Campaign was the one capability with no API, route or content. Now:
   make roadmap-progress passes with four active/five blocked milestones and unchanged 276
   completed/269 live/24 retired UX states. A fresh GitHub read confirms published 62c81eb1:
   verify 38381154735 succeeds, browser 38381154879 fails. No fresh publication or remote fix.
+
+### 2026-10-13 — D3782 rejected cost candidates; D3783 parent-freeze trust repair
+
+- Previous goal turn made progress: D3781 research/draft vocabulary and authoritative tracking
+  landed at 2a8ec863. Revalidate tracked-clean main and held source/Support/Review/bot contracts;
+  no parent implementing state is borrowed as permission for unaccepted amendments.
+- Select the accepted D3300 complete-population cost obligation. Normal Make captures the
+  unchanged baseline and fresh CPU/timing observations: White/Black 3.666/3.558 s cold,
+  20.86/20.69 ms warm; freezeData 16.4/18.6% self and memo freezing about 5%. No raw CPU data
+  reaches disk. The guessed evidence-contract-check target is absent; use the actual existing
+  evidence-value-authority target thereafter. New-row sync is intentionally refused until assigned.
+- First shared-freezer candidate sees two genuine predecessor control failures, then passes
+  67 mint/120 collector/66 actual worker-projector cases and clean types. Every one of eight
+  complete-output timing pairs is slower (1.137–1.272x). Bulk-descriptor variant passes 69 mint
+  controls but all eight pairs are slower, with 55.0% greater summed cold time. Strengthen the
+  temporary reflection control to observe both APIs. Reject both candidates; remove all owned
+  helper/import/candidate-test changes and verify original memo/mint files restored before repair.
+- Record D3783 first, then prove the restored predecessor mint caches stale payload bytes when
+  a descendant freeze hook swaps an equal-looking mutable record/array slot. Two permanent
+  controls fail against independently reconstructed data. Move only the existing parent freeze
+  before descendant traversal; hidden/symbol descriptor-hook controls preserve original children.
+  All 67 mint/120 collector/66 actual worker-projector cases and types pass. Eight alternating
+  fresh-process pairs preserve all 2,199 legal edges, 196,589 events, exact receipts/rows and forty
+  checkpoints per side. Local timing has six faster/two slower pairs; do not call it a speedup.
+- Normal semantic-validation-update executes all 343 cases over 81 incompletely qualified subjects.
+  Inspect every generated JSON difference: only nine operation implementation stamps and 53
+  population predicate implementation stamps change; cases, outcomes and qualifications do not.
+  Update existing docs, measurement receipt, queue, ledger, state and roadmap. Sequential closeout
+  is refused on the other stale terminal row; the normal batch transition resolves both, with
+  separate path evidence afterward. Zero untriaged, 1,731 live. D3300 cold cost remains open.
+- Freeze product inputs for complete ordinary verification/build/all-browser gates before commit.
+  Internal adversarial objects do not establish an HTTP exploit. No new freezer/cache/authority,
+  source or semantic permission, chess definition, content, protected intent, push or release claim.
+- Complete ordinary make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  software 5,564/389 files, performance seven/four, content 255/26, clean types, packaging and
+  governance, then smoke/content/59 matrix/one packaged-production browser tiers all pass.
+  All 112 composition cells are successful and unretried; the existing optional Maia arm stays
+  skipped. Local warm p95 is 103.9 ms under unchanged 250 ms, not remote cause or speedup proof.
+  Record this result in the existing checkpoint and verify final tracking before explicit owned-file
+  staging/normal hooks. The published GitHub and full-image holds remain; the 1.0 goal stays active.

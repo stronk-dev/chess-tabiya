@@ -31435,6 +31435,24 @@
       "uxItems": [],
       "evidence": "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3782",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa3866fb640e9ff8b7ec76854d750bf31d60eb79fbca36c47e5e0f587984e667",
+      "uxItems": [],
+      "evidence": "planning/longitudinal-store/d3300-cold-profile-2026-10-11.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3783",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fbd14b9790339dbf9a22ca2d842f7b3f7495a09dd3711bfe6cb094b2304206b1",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-contract.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

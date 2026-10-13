@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3781]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3783]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -60,6 +60,19 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+2026-10-13 [[D3782]]/[[D3783]]: both proposed shared-freezer optimizations are rejected:
+sixteen cold pairs preserve complete output but are all slower. The separate memo/mint
+freezers remain. A distinct actual parent-slot replacement flaw is repaired by freezing
+parents before descendant hooks. Two predecessor stale-digest controls fail; four permanent
+record/array/hidden/symbol controls and 67 mint/120 collector/66 real worker-projector checks
+plus types pass. Eight additional full-output pairs retain all 2,199 edges, 196,589 events,
+receipts, rows and forty checkpoints per player. All 343 canonical cases retain outcomes;
+generated implementation stamps update normally. This is internal trust repair, not an HTTP
+exploit, cold-cost completion, source qualification, whole capability or release promotion.
+Complete normal verification/build/all four browser tiers exit zero: 5,564 software cases,
+seven performance, 255 content and all 112 unretried composition cells. Local warm p95 is
+103.9 ms under unchanged 250 ms; the published GitHub failure remains unresolved.
 
 2026-10-13 [[D3781]]: full registered-case retained-input inventory executes 343 cases over
 56/81 subjects and retains 5,443 FEN/UCI leaves. The orientation draft expands to seven

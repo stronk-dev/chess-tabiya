@@ -139,6 +139,9 @@ therefore no generic mint API and no caller-payload adapter:
   sealing function. Accessors, custom prototypes and array holes cannot borrow that cache: their
   current bytes are rechecked at admission. A shallow-frozen shell does not make mutable children
   trustworthy. The permanent factory profiles check every emitted payload's nested immutability.
+  Parent slots freeze before visiting descendants, so a child's freeze/descriptor hook cannot
+  swap in equal-looking mutable data after inspection (D3783). Record, array, hidden and symbol
+  controls use independently reconstructed bytes; accessor and sparse-array revalidation remain.
 - The factory's separate input-digest memo accepts only frozen plain records of primitive own data
   properties. Frozen getters and own/inherited iteration or inherited run-shape hooks cannot borrow
   that memo; their authority shape is recomputed on each mint. This preserves exact ordinary input
