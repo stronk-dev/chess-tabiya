@@ -14,12 +14,15 @@ import { createApplication } from "../../apps/server/src/application.js";
 import { LongitudinalStore } from "../../apps/server/src/longitudinal-store.js";
 import { RunService } from "../../apps/server/src/service.js";
 import { SQLiteRunStorage } from "../../apps/server/src/storage.js";
+import { installArrivalServerDiagnostics } from "../../tests/browser/server-diagnostics.mjs";
 
 assert.match(process.version, /^v24\./u, "use make arrival-server-profile");
 type Span = { phase: string; startMs: number; durationMs: number };
 type Window = { started: number; spans: Span[] };
 let active: Window | undefined;
 const restore: (() => void)[] = [];
+const requestPhases: unknown[] = [];
+restore.push(installArrivalServerDiagnostics({ report: (row: unknown) => { requestPhases.push(row); } }));
 function wrap(prototype: object, key: string, label = key): void {
   const descriptor = Object.getOwnPropertyDescriptor(prototype, key);
   assert(descriptor && typeof descriptor.value === "function", `missing production phase ${label}`);
@@ -101,10 +104,11 @@ try {
       longestCreate: row.create.spans.reduce((a, b) => a.durationMs > b.durationMs ? a : b),
       longestMove: row.move.spans.reduce((a, b) => a.durationMs > b.durationMs ? a : b), worker: row.worker })}`);
   }
+  assert.equal(requestPhases.length, 10, "retain diagnostics for all five genuine create/commit pairs");
   // Only bounded phase aggregates, never a raw profile, trace or run.
   mkdirSync(".cache", { recursive: true });
   writeFileSync(".cache/d3779-write-profile.json", `${JSON.stringify({ measuredAt: new Date().toISOString(), node: process.version,
-    purpose: "D3779 local write phases; not a CI-host reproduction or release receipt", rows }, null, 2)}\n`);
+    purpose: "D3779 local write phases; not a CI-host reproduction or release receipt", rows, requestPhases }, null, 2)}\n`);
 } finally {
   active = undefined;
   restore.reverse().forEach(reset => reset());

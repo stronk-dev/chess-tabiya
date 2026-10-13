@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3785]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3786]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -60,6 +60,15 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+October-14 [[D3786]] closes the browser-server diagnostic gap: actual test-only request windows,
+inclusive main-thread CPU and complete SQLite phases now reach ordinary CI logs. Seven direct
+controls and full normal verification/build/all four browser tiers pass, retaining 5,597 software,
+seven performance and 256 content cases, all 150 input/112 unretried composition cells and local
+warm p95 128.6 ms under unchanged 250 ms. Three actual local windows distinguish a slow COMMIT,
+delay outside the small SQL spans and substantial main-thread CPU. These are not the published
+failure's underlying cause; D3600, remote qualification and image recovery remain open. No
+durability setting, source, deployment, chess feature or whole-product gate changes.
 
 **Inventory closeout, 2026-10-13:** the last in-flight production change is committed at
 `49179aff`; there are no tracked implementation edits left unfinished. Its complete normal

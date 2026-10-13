@@ -3965,6 +3965,7 @@ arrival-order-browser-check:
 .PHONY: arrival-diagnostics-check arrival-diagnostics-browser-check
 arrival-diagnostics-check:
 	$(CI_NODE) --test tools/d3600-arrival-profile/request-contract.test.mjs
+	$(CI_NODE) --test tools/d3600-arrival-profile/server-diagnostics.test.mjs
 
 arrival-diagnostics-browser-check: arrival-diagnostics-check
 	./node_modules/.bin/playwright test tests/browser/arrival-latency.spec.ts

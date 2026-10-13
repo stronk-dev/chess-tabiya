@@ -31471,6 +31471,15 @@
       "uxItems": [],
       "evidence": "tests/browser/campaign-resume.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3786",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ec1aec9a433f7ba043421faa92171b0827c58fca929f23f52c079490be5f5efe",
+      "uxItems": [],
+      "evidence": "tools/d3600-arrival-profile/server-diagnostics.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

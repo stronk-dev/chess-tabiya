@@ -82,6 +82,13 @@ SQLite/worker phase replay does not reproduce the waits; bounded route diagnosti
 those phases in every ordinary arrival report without changing samples or the budget. See
 `ux-arrival-and-start.md` §17; D3600 remains open.
 
+Actual browser-server observation, 2026-10-14 ([[D3786]]): **measured `[V]` instrument
+calibration, not remote-cause closure**. Seven direct controls include actual second-connection
+SQLite contention, response transparency, context/privacy and CPU units. All fourteen original
+native arrival cases pass and genuine server rows reach the normal browser log; main-thread CPU
+is inclusive, not exclusive handler attribution. Deployments, samples and 250 ms stay unchanged.
+See `ux-arrival-and-start.md` §18; the next failing runner must supply the actual cause evidence.
+
 Profile reference numbering, 2026-10-13 ([[D3670]]): **answered `[V]` source-to-native defect**.
 Both desktop and touch Profile show three wrong labels among four real position references;
 the recorded parent contains the number/color but every wire ref loses them. See

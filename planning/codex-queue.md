@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3786]] equips the next [[D3600]] execution with test-only actual-server
+request windows, inclusive main-thread CPU and complete SQLite BEGIN/COMMIT/ROLLBACK phases.
+Normal browser startup explicitly pipes the bounded private-data-free rows to CI logs;
+deployment is untouched. Seven transparency/privacy/context/real-lock controls and all fourteen
+unchanged native arrival cases pass. The deliberate lock calibrates the instrument, not a claimed
+GitHub cause. Complete ordinary verification/build/all four browser tiers exit zero, retaining
+5,597 software/seven performance/256 content cases, all 150 input/112 unretried composition cells
+and local warm p95 128.6 ms. Actual full-run rows expose differing SQL/non-SQL/CPU profiles;
+observe these phases on the published failing runner before choosing a fix. D3600 remains open;
+no budget/durability change, remote repair, release promotion or push.
+
 2026-10-14 — [[D3784]]/[[D3785]] close the accepted saved-Campaign recovery journey.
 Home admits the existing active summaries and separates their pinned title/identity from new
 installed campaigns. Missing sources stay visible on the map and still refuse entry. Actual

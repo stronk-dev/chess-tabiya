@@ -1528,3 +1528,70 @@ pass with 41 requests each and both route rows; local warm p95 is 115.1 ms under
 transaction waiting from service/projection work before implementation. The original failure and
 every source/actor/transaction/readiness assertion remain; D3600 stays open. This closes diagnostic
 localization, not source qualification, a faster learner journey, remote CI or 1.0 release proof.
+
+## 18. Actual browser-server wait diagnostics — 2026-10-14
+
+[[D3786]] supplies the missing server-side observation for the next execution of [[D3600]],
+not its cause or repair. A fresh unchanged local five-pair HTTP/SQLite/worker probe again has
+single-digit-millisecond responses. The revised probe retains all ten write observations;
+creation windows are 1.913–4.224 ms and move windows 3.287–8.156 ms. Main-thread CPU is
+1.458–4.186 ms / 3.224–6.583 ms respectively. The largest observed BEGIN is 1.525 ms and
+COMMIT 0.238 ms; the actual worker completes nine jobs by the final response, with zero
+failures/conflicts. These are inclusive local observations, not the published runner's wait.
+`[V]` `make arrival-server-profile`; ignored `.cache/d3779-write-profile.json`, requestPhases;
+`tools/d3600-arrival-profile/server-profile.ts`.
+
+The ordinary browser launch now preloads a **test-only** observer over its genuine built
+main.js. Exact POST /runs and /runs/:id/moves windows retain UTC start, outcome/status,
+elapsed time, main-thread CPU and synchronous SQLite BEGIN/COMMIT/ROLLBACK aggregate counts,
+total and maximum elapsed durations. No CPU sampling or clock-domain clipping is used.
+Main-thread CPU includes other activity during that window: it is not exclusive handler CPU,
+and SQL elapsed time cannot be subtracted to manufacture an exclusive decomposition. Missing
+CPU is null. Request contexts isolate SQL calls; fixed-size aggregates retain every call.
+No private id, SQL text, body, cookie/header or raw trace is logged. Ordinary deployment and
+the release image do not import the observer. `[V]` `tests/browser/server-diagnostics.mjs`,
+`server-diagnostics-preload.mjs`; `playwright.config.ts`; `docs/testing.md`.
+
+Seven controls prove exact-route exclusion, immutable response behaviour, complete 141-BEGIN
+recording, cleanup, concurrent-context isolation, CPU units/unknown handling and sink failure.
+A real second SQLite connection holds a write lock until the observed request enters BEGIN;
+the observer retains at least 100 ms BEGIN wait and much less main-thread CPU. That is a
+deliberately imposed **instrument calibration**, not evidence of GitHub lock contention.
+The first test uses an incorrect root Dockerfile path and fails; correcting it to the actual
+server Dockerfile restores the deployment-separation check. `[V]`
+`tools/d3600-arrival-profile/server-diagnostics.test.mjs`; `make arrival-diagnostics-check`.
+
+The initial browser pass succeeds but retains no server rows: Playwright's default stdout
+is discarded. Explicit piping repairs that observation gap and a permanent launch control
+checks it. The final actual built-server pass shows the bounded rows in the browser log;
+all fourteen original arrival cases pass, with warm p95 121.9 ms, all five samples/41 requests,
+25 shape documents, one pack, tracing/calibrations and the unchanged unrounded 250 ms gate.
+One local move window records 18.792 ms elapsed, 5.814 ms main-thread CPU and 5.026 ms
+largest COMMIT; it does not reproduce the published hundreds-of-ms waits. `[V]`
+`make arrival-diagnostics-browser-check`; `tests/browser/arrival-latency.spec.ts`.
+
+**Next:** pair the timestamped server rows with transport/readiness observations on the actual
+failing runner. A slow BEGIN/COMMIT would locate a direct SQL wait; a fast server window would
+instead leave transport/pre-handler scheduling in scope. Neither case alone proves the
+underlying filesystem/CPU/worker cause. No push occurs and D3600 remains open.
+
+Complete normal `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+5,597 software cases/390 files, seven unchanged-budget performance/four files, 256 content/26,
+clean types/packaging/governance, all four browser tiers, 59 matrix/one packaged-production case,
+150 input and 112 successful unretried composition cells. The existing optional Maia arm stays
+skipped; local warm p95 is 128.6 ms under the unchanged 250 ms gate. `[V]` same terminal run.
+
+The same genuine built server emits these illustrative local windows (not a population statistic):
+
+| UTC request start, 2026-10-13 | Route | Window ms | Main-thread CPU ms | Largest BEGIN ms | Largest COMMIT ms |
+|---|---|---:|---:|---:|---:|
+| 23:40:34.980 | creation | 80.422 | 3.612 | 0.011 | 76.208 |
+| 23:40:49.416 | creation | 157.799 | 9.697 | 5.854 | 5.741 |
+| 23:46:53.283 | opponent move | 67.891 | 63.972 | 0.020 | 0.229 |
+
+The first directly locates a slow synchronous COMMIT, not its filesystem/scheduling cause.
+The second's small SQL spans do not explain its elapsed window; the third retains substantial
+main-thread CPU without attributing it exclusively to that handler. These observations prevent
+assuming every slow response has one cause or batching away transactions on count alone.
+They are not D3600's published outlier and change no durability setting or gate. `[V]` same
+normal command's `ARRIVAL_SERVER_PHASES` stdout rows at the exact timestamps above.

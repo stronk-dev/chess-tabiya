@@ -28072,3 +28072,52 @@ Campaign was the one capability with no API, route or content. Now:
   obligations rather than keep its older full-run counts as current. Normal roadmap receipt/check
   then exits zero and git diff --check is clean. Stage exactly the 23 owned code/test/doc/tracker
   files; leave the three pre-existing untracked paths and all archive bytes untouched.
+
+### 2026-10-14 — D3786 browser-server wait observation
+
+- Previous turn is the owner-requested inventory/status check, not an implementation advance.
+  Revalidate clean tracked main at 0db93dfd and take D3600's unresolved published write wait.
+  Preserve its 250 ms gate; no new worktree, delegation, source semantics or push.
+- Fresh local actual HTTP/SQLite/worker replay still has single-digit-ms write responses.
+  The first default-sandbox run cannot listen at loopback (EPERM); rerun the unchanged normal
+  Make target with approved localhost permission. This refusal is not product latency evidence.
+- Record D3786 before adding test-only request-window/main-thread CPU/SQLite timing observation.
+  Normal sync exposes the new untriaged row and refuses the zero ceiling; assign the new row
+  through the existing normal transition to release-engineering/doing, restoring zero untriaged.
+- Seven direct controls preserve response bytes/status/cookies and actual SQL calls, isolate
+  interleaved contexts, retain every phase without raw data, restore prototypes and distinguish
+  unknown CPU. An actual second connection's deliberately held lock verifies BEGIN-wait
+  observation without pretending to be GitHub's cause. Initial root Dockerfile lookup is wrong;
+  correct the test to apps/server/Dockerfile, not the product packaging contract.
+- Five real production-application pairs retain all ten new observations, with worker nine
+  completed/zero failures/zero conflicts by the final response. Keep only the existing small
+  ignored aggregate; no raw trace, CPU profile or measurement-store dependency enters Git.
+- First fourteen-case native run succeeds but default Playwright stdout discards server rows.
+  Explicitly pipe stdout, bind it with a launch control, and rerun: actual built-main server
+  observations now reach the browser log, all fourteen original cases pass and warm p95 is
+  121.9 ms with all five samples/41 requests and unchanged calibration/tracing/250 ms gate.
+- Update the existing dossier, coverage, testing docs and queue. CPU is inclusive main-thread
+  activity in the request window, never exclusive handler work; SQL durations cannot produce a
+  subtractive CPU attribution. D3600 stays open for actual runner data and cause. Freeze inputs
+  for the complete normal verification/build/all-browser command before final closeout.
+- The same live verification handle finishes normally: 5,597 software/390 files, seven unchanged
+  performance/four, 256 content/26, clean types/packaging/governance/build and all four browser
+  tiers pass. Matrix 59 and packaged production one pass; 150 input/112 successful unretried
+  composition cells remain, with the existing optional Maia skip. Local warm p95 is 128.6 ms.
+  No restart, overlapping verification/build, source edit, deadline inflation or exclusion occurs.
+- Actual full-run diagnostic rows locate differing local waits: creation 80.422 ms includes a
+  76.208 ms COMMIT with 3.612 ms main-thread CPU; another creation is 157.799 ms with small SQL
+  spans and 9.697 ms CPU; one move is 67.891 ms with 63.972 ms CPU. Preserve exact timestamps
+  in the existing dossier as illustrations, not population statistics or GitHub cause proof.
+- Close only D3786 on its executable observer controls, retain D3600 doing, and refresh the existing
+  checkpoint/roadmap/receipt. No production/durability/chess/source change, raw recording, push,
+  architecture/image proof or whole-product completion. The full 1.0 goal remains active.
+- The first terminal transition incorrectly supplies a live owner field and is refused without
+  persisting it. Correct the normal done transition to carry only path evidence. A governance
+  pass started before this final transition correctly catches its stale work-state receipt;
+  regenerate the compact receipt after the settled transition, bind D3786's checkpoint and
+  rerun final governance over unchanged final tracking. No product input or full-run result changes.
+- Final normal roadmap receipt/governance exits zero, with 3,535 ledger rows, 1,731 live and zero
+  untriaged. git diff --check is clean. Stage only this observer/test/doc/tracker batch and inspect
+  its exact cached list before normal commit hooks; leave the three pre-existing untracked paths
+  and all archive bytes untouched. No new raw research data or external publication.

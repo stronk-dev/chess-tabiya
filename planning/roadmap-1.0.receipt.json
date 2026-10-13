@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5ff035bd9e466507f6d358755da29c1ed665d355aae6815fb974cbd972fbd62b",
+    "roadmap": "sha256:af45b229a1fb64850d3ff585b89980ca68634b4508a4f5c0adeb539fafd4de4e",
     "workItems": "sha256:81193a14b2bcc09b6a5c94a5eacf7dfeb528337c6fd38af8cd939c8c7c326ffc",
-    "workState": "sha256:883a0b006b5b0409d225754195cfd4c26db596609e1de15a942529deba102ab9",
+    "workState": "sha256:6e3276f20bd13fd3764c6e1ed26495102ac8c1701ded0fe6f1da37ca01a0bff2",
     "rfcRegister": "sha256:6b1522e1965be77bde5f56e042a5b8b08114294345a8e3035a9eaef4ea551fa8",
     "uxIndex": "sha256:2818bb8f3a028e2360e4c9623fccbffbd0e80e4bcece02a6638a18706835dafc",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 16,
       "blocked": 1085,
-      "done": 1642,
+      "done": 1643,
       "refused": 161
     },
     "workItems": {
@@ -76,11 +76,13 @@
       "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "The D3784/D3785 recovery batch passes the complete normal local verification/build/all-browser command: software 5,597/390, performance seven/four, content 256/26 and 354 browser passes across all four tiers. One optional Maia skip, zero retries, all 150 input and 112 successful composition cells remain. Local warm p95 is 113.6 ms under unchanged 250 ms; this is not remote proof or a speedup claim. Fresh October-14 GitHub reads still show published 62c81eb1 verify 38381154735 success and browser 38381154879 failure. This recovery batch remains local and unpublished. D3779's identified 299.712 ms creation/598.110 ms initial opponent waits and fast shape reads remain diagnostic facts, not a proved CPU/lock/filesystem/runner cause. D3777 fixture isolation, D3771 observation ordering and retention/scheduling checkpoints stand. D3600's cause and paired exact-revision remote qualification remain open. No full capability/milestone, semantic qualification, official content, image or release promotion.",
+        "summary": "D3786 closes the browser-server observation gap, not D3600's cause: exact test-only creation/move request windows now retain inclusive main-thread CPU and complete SQLite BEGIN/COMMIT/ROLLBACK phases in normal CI stdout. Seven direct privacy/transparency/context/CPU/real-lock controls and all fourteen original arrival cases pass. Actual full-run rows distinguish a 76.2 ms COMMIT, a mostly-outside-SQL 157.8 ms creation window and a high-CPU 67.9 ms move window; none identifies GitHub's underlying cause. Complete normal verification/build/all four browser tiers exit zero: software 5,597/390, performance seven/four, content 256/26, 59 matrix and one packaged-production case, all 150 input/112 successful unretried composition cells. One optional Maia skip; local warm p95 128.6 ms retains the unchanged 250 ms gate. Prior Campaign recovery and test isolation/observation checkpoints stand. Published 62c81eb1 verify success/browser failure, paired current-revision remote qualification and complete image recovery remain open. No deployment/chess/durability change, raw recording, push, whole capability/milestone or release promotion.",
         "impact": "advanced",
         "evidence": [
           "tests/browser/arrival-requests.ts",
           "tools/d3600-arrival-profile/request-contract.test.mjs",
+          "tools/d3600-arrival-profile/server-diagnostics.test.mjs",
+          "tests/browser/server-diagnostics.mjs",
           "tools/d3600-arrival-profile/server-profile.ts",
           "apps/server/src/empty-application-catalogues.test-support.ts",
           "apps/server/src/castling-open-file.test.ts",
@@ -176,6 +178,11 @@
           "apps/server/src/capabilities.test.ts"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3786",
+            "digest": "sha256:ec1aec9a433f7ba043421faa92171b0827c58fca929f23f52c079490be5f5efe"
+          },
           {
             "kind": "work_state",
             "id": "D3779",

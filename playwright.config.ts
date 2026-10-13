@@ -32,6 +32,7 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
+    stdout: "pipe",
     command:
       `pnpm build && NODE_ENV=development ENGINE_MODE=mock TABIYA_DEPLOYMENT_PROFILE=local DATABASE_PATH=$(mktemp -d)/tabiya-browser.sqlite ` +
       "DRAFT_PACK_FILES=schemas/drill_pack.example.json,schemas/fixtures/drill-pack/terminal-outcome.browser.json," +
@@ -41,7 +42,7 @@ export default defineConfig({
       "schemas/fixtures/drill-pack/campaign-boss.browser.json " +
       "DRAFT_CAMPAIGN_FILES=tests/browser/fixtures/campaign.browser.json " +
       `PORT=${port} ` +
-      "node apps/server/dist/main.js",
+      "node --import ./tests/browser/server-diagnostics-preload.mjs apps/server/dist/main.js",
     url: `http://127.0.0.1:${port}/healthz`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

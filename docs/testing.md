@@ -27,6 +27,20 @@ remain null; timings are not server CPU/lock/fsync attribution. The native obser
 and 250 ms threshold are unchanged. `make arrival-server-profile` separately probes real local
 HTTP/SQLite/worker phases and writes only a small ignored aggregate, not a release receipt.
 
+The normal Playwright server launch preloads `tests/browser/server-diagnostics-preload.mjs`
+and explicitly pipes server stdout into the test/CI log (Playwright otherwise discards it).
+For exact POST creation/move routes it emits one bounded `ARRIVAL_SERVER_PHASES` log row:
+UTC start time, response outcome/status, elapsed request window, inclusive **main-thread** CPU,
+and complete synchronous SQLite BEGIN/COMMIT/ROLLBACK count/total/maximum durations. CPU
+includes other main-thread activity inside that window; it is not exclusive handler attribution.
+Missing CPU stays null. These observations can distinguish a directly slow SQLite call from
+elapsed time outside it; they cannot alone identify fsync, runner scheduling or an engine cause.
+No run id, SQL text, body, header, cookie or raw recording is logged. Deployable main.js and
+the release image do not preload this test observer. Normal smoke runs the transparency,
+interleaving, privacy and actual second-connection write-lock controls first. A deliberately
+held lock calibrates the observer; it is not evidence that GitHub's failure has that cause.
+The native samples and timing gate remain unchanged; a passing local probe is not remote closure.
+
 `make move-grade-consumer-check` covers the grade convention, both ladders/mate arms, module
 admission, voice guard and actual authenticated Review/Nudge reads. Populated synthetic scores
 remain labelled mock-engine inputs; a real stored rating changes at the authenticated rating
