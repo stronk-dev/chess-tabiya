@@ -397,6 +397,11 @@ the update target does not bypass that check during verification.
 It samples only the native-click-to-ready interval at native and throttled CPU rates and prints
 bounded summaries. Throttling does not simulate the GitHub host; sampled native browser work
 is not attributed to JavaScript. No raw recording is committed or required by progress checks.
+The same disposable target clips an in-memory Chromium timeline to explicit click/ready marks,
+prints at most twelve inclusive event groups and four bounded layout initiators, and discards
+the raw trace. Inclusive groups can nest and are not an additive cost model. Four D3756 controls
+also hold/fail real assignment/repertoire reads over actual created runs and check unchanged
+stored play; they reproduce the current defect, not its repair. These are outside ordinary CI.
 
 ARR-a9 measures warm arrival inside the browser, from the native catalogue click through an
 enabled 8×8/64-cell square board and two further animation frames. It gates the unrounded

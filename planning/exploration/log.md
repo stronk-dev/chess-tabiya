@@ -27058,3 +27058,31 @@ Campaign was the one capability with no API, route or content. Now:
   cache across positions, content or whole-capability/milestone/release promotion. No push;
   the full 1.0 goal remains active. The requested progress overview distinguishes these local
   correctness slices from end-to-end product completion rather than creating another queue.
+
+## 2026-10-13 — D3756 arrival boundary measured; repair remains draft
+
+- Four native created-run controls independently hold/fail assignment and repertoire reads.
+  The board remains absent or the route shows its page error, although an authenticated graph
+  read succeeds and stored nodes/branches/cursor remain unchanged. Releasing a held genuine
+  read reveals the enabled board. The initial probe's nonexistent `graph.runId` assertion fails;
+  correcting it to the published `graph.id` repairs the instrument, not the product.
+- The disposable target passes all six browser checks. Final native arrivals measure
+  131.7/73.9/82.8 ms; fourfold-throttled arrivals measure 405.3/279.8/252.6 ms. All 41 requests
+  remain. An in-memory timeline prints bounded inclusive groups and layout initiators only;
+  raw CPU/timeline recordings are neither saved nor required by progress or CI. Inclusive
+  groups nest and are not additive; tracing adds overhead and does not simulate GitHub's host.
+  Forced layout includes Chessground bounds and initial keyboard focus. A larger unstacked
+  layout reports 1,257 dirty document objects, not an established specific DOM cause.
+- D3756 is reproduced, not fixed. Draft `rfc/rehearsal-route-context.md` proposes two independent
+  supplementary read groups with companion pending/failure and GET-only retry. Mandatory
+  capability, graph/lease, live-session/match and disclosure admission remain mandatory.
+  Independent acceptance is required before production changes; existing queue/register/roadmap
+  own the handoff. D3600's published 250 ms readiness failure remains open and unexplained.
+- D3756 is blocked on that named draft, not silently closed. All 1,725 live ledger items retain
+  owners, with zero untriaged; all fourteen whole capabilities remain incomplete and milestones
+  remain four active/five blocked. No production code, pack, source policy or release state changes.
+  No push; the full 1.0 goal remains active.
+- Final `make roadmap-receipt verify-governance` exits zero; `make roadmap-progress` also exits
+  zero with 76 active product RFCs and unchanged capability/milestone/UX states. Read-only
+  GitHub inspection confirms the same published c7ec3c3d verify success/browser failure.
+  This research-only checkpoint does not claim a fresh complete production test run.

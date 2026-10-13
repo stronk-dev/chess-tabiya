@@ -31195,6 +31195,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3756",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:074824ff0f5e6df2a27348fb471a884f1cbe0032795b90cedd8b526b76a82a82",
+      "uxItems": [],
+      "owner": "core-loop",
+      "blocker": "rfc:rehearsal-route-context.md"
     }
   ]
 }

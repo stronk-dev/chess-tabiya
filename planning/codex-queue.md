@@ -993,6 +993,14 @@ selected-square, opening or Inspector contracts or D3591/D3600 timing failures.
 remain; no duplicate hydration regression is established. Preserve the failure,
 inspect the bounded request/frame timing and do not call a passing replay a diagnosis.
 
+2026-10-13 boundary follow-up: [[D3756]] is reproduced, not fixed. Four native created-run
+controls independently hold/fail assignment and repertoire reads; the board is absent while
+the actual stored nodes/branches/cursor survive. `design/research/ux-arrival-and-start.md` §15
+records bounded CPU/native timeline evidence and limits. `rfc/rehearsal-route-context.md` is
+draft: independently review before implementing its two supplementary read groups, companion
+states and GET-only recovery. Required graph/lease/capability/live-match admission stays mandatory.
+Do not close D3600 from this dependency finding or lower its 250 ms threshold.
+
 [[D3598]] is closed locally under accepted return-scheduling §§4/6: the twenty-card
 intake replenishes after dismissal, with separate read-only refresh recovery and
 current-view/focus controls. Five predecessor-red controls, 113 focused cases and

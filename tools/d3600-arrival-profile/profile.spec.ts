@@ -11,6 +11,16 @@ interface ProfileNode {
   children?: number[];
 }
 
+interface TimelineEvent {
+  name: string;
+  ph: string;
+  ts: number;
+  dur?: number;
+  pid: number;
+  tid: number;
+  args?: unknown;
+}
+
 for (const rate of [1, 4]) test(`D3600 CPU profile, throttle ${rate}`, async ({ page, context }) => {
   await page.goto("/play");
   await page.getByRole("button", { name: "Create an account" }).click();
@@ -29,6 +39,7 @@ for (const rate of [1, 4]) test(`D3600 CPU profile, throttle ${rate}`, async ({ 
       await expect(open).toBeVisible();
       await open.evaluate((button) => {
         button.addEventListener("click", () => {
+          performance.mark("D3600_click");
           const state = { click: performance.now(), ready: -1 };
           (window as Window & { arrivalProfile?: typeof state }).arrivalProfile = state;
           let frames = 0;
@@ -42,16 +53,47 @@ for (const rate of [1, 4]) test(`D3600 CPU profile, throttle ${rate}`, async ({ 
               && grid?.getAttribute("aria-rowcount") === "8" && grid.getAttribute("aria-colcount") === "8"
               && grid.getAttribute("aria-readonly") !== "true" && grid.querySelectorAll('[role="gridcell"]').length === 64;
             frames = playable ? frames + 1 : 0;
-            if (frames >= 3) state.ready = performance.now();
+            if (frames >= 3) { state.ready = performance.now(); performance.mark("D3600_ready"); }
             else if (performance.now() - state.click < 30_000) requestAnimationFrame(observe);
           };
           requestAnimationFrame(observe);
         }, { once: true, capture: true });
       });
+      // Retain the timeline only in memory. V8's `(program)` samples cannot tell layout,
+      // paint and other native work apart; these exact user marks bound the main-thread spans.
+      const timeline: TimelineEvent[] = [];
+      const collect = ({ value }: { value: TimelineEvent[] }): void => { timeline.push(...value); };
+      cdp.on("Tracing.dataCollected", collect);
+      await cdp.send("Tracing.start", { categories: "devtools.timeline,blink.user_timing,disabled-by-default-devtools.timeline.stack", transferMode: "ReportEvents" });
       await cdp.send("Profiler.start");
       await open.click();
       await page.waitForFunction(() => ((window as Window & { arrivalProfile?: { ready: number } }).arrivalProfile?.ready ?? -1) >= 0);
       const { profile } = await cdp.send("Profiler.stop") as { profile: { nodes: ProfileNode[]; samples: number[]; timeDeltas: number[]; startTime: number } };
+      const tracingDone = new Promise<void>((resolve) => cdp.once("Tracing.tracingComplete", () => resolve()));
+      await cdp.send("Tracing.end");
+      await tracingDone;
+      cdp.off("Tracing.dataCollected", collect);
+      const clickMark = timeline.find((event) => event.name === "D3600_click");
+      const readyMark = timeline.find((event) => event.name === "D3600_ready");
+      expect(clickMark).toBeDefined(); expect(readyMark).toBeDefined();
+      const native = new Map<string, { count: number; inclusiveMs: number; longestMs: number }>();
+      for (const event of timeline) {
+        if (event.pid !== clickMark!.pid || event.tid !== clickMark!.tid || event.ph !== "X" || event.dur === undefined) continue;
+        const overlap = Math.max(0, Math.min(event.ts + event.dur, readyMark!.ts) - Math.max(event.ts, clickMark!.ts));
+        if (overlap <= 0) continue;
+        const group = native.get(event.name) ?? { count: 0, inclusiveMs: 0, longestMs: 0 };
+        group.count++; group.inclusiveMs += overlap / 1000; group.longestMs = Math.max(group.longestMs, overlap / 1000);
+        native.set(event.name, group);
+      }
+      const mainThreadTimeline = Object.fromEntries([...native].sort((a, b) => b[1].inclusiveMs - a[1].inclusiveMs).slice(0, 12));
+      const layoutSites = timeline.filter((event) => event.name === "Layout" && event.pid === clickMark!.pid
+        && event.tid === clickMark!.tid && event.ph === "X" && event.dur !== undefined
+        && event.ts < readyMark!.ts && event.ts + event.dur > clickMark!.ts)
+        .sort((a, b) => b.dur! - a.dur!).slice(0, 4).map((event) => ({
+          ms: event.dur! / 1000, afterClickMs: (event.ts - clickMark!.ts) / 1000,
+          // Bounded human-readable initiators only; never emit or retain the raw timeline.
+          initiator: JSON.stringify(event.args).slice(0, 1200),
+        }));
       const { metrics } = await cdp.send("Performance.getMetrics") as { metrics: { name: string; value: number }[] };
       const navigationStart = metrics.find((metric) => metric.name === "NavigationStart")!.value;
       const boundary = await page.evaluate(() => (window as Window & { arrivalProfile: { click: number; ready: number } }).arrivalProfile);
@@ -95,10 +137,58 @@ for (const rate of [1, 4]) test(`D3600 CPU profile, throttle ${rate}`, async ({ 
         }
         return { clickToReadyMs: state.ready - state.click, lastFetchEndMs: Math.max(0, ...requests.map((entry) => entry.responseEnd - state.click)), requests: requests.length, groups: Object.fromEntries(groups) };
       });
-      console.log(`D3600_PROFILE ${JSON.stringify({ rate, sample, ...timing, top })}`);
+      console.log(`D3600_PROFILE ${JSON.stringify({ rate, sample, ...timing, mainThreadTimeline, layoutSites, top })}`);
     }
   } finally {
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
     await cdp.detach();
   }
 });
+
+// D3756: actual created runs survive these failures. These reproduce the current boundary;
+// they deliberately do not stand in for a production repair or add a CI timing threshold.
+for (const endpoint of ["assignments", "repertoires"]) {
+  for (const outcome of ["held", "failed"]) test(`D3756 ${endpoint} ${outcome} gates a created rehearsal`, async ({ page }) => {
+    await page.goto("/play");
+    await page.getByRole("button", { name: "Create an account" }).click();
+    await page.getByLabel("Handle").fill(`arrival_boundary_${randomUUID().slice(0, 8)}`);
+    await page.getByLabel("Password").fill("arrival-boundary-password");
+    await page.getByRole("button", { name: "Register" }).click();
+    await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+    let entered!: () => void, release!: () => void;
+    const requested = new Promise<void>((resolve) => { entered = resolve; });
+    const pending = new Promise<void>((resolve) => { release = resolve; });
+    await page.route(`**/${endpoint}`, async (route) => {
+      entered();
+      if (outcome === "held") { await pending; await route.continue(); }
+      else await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "SERVICE_UNAVAILABLE", message: "private diagnostic sentinel" } }) });
+    });
+    try {
+      await page.getByRole("button", { name: /Rehearse this position:/ }).first().click();
+      await requested;
+      await expect(page).toHaveURL(/\/play\/run\/[^/]+$/);
+      const runId = new URL(page.url()).pathname.split("/").at(-1)!;
+      const response = await page.request.get(`/runs/${runId}/graph`);
+      expect(response.ok()).toBe(true);
+      const before = (await response.json()).graph;
+      expect(before.id).toBe(runId);
+      expect(before.nodes.length).toBeGreaterThan(0);
+      await expect(page.getByLabel("Chessboard")).toHaveCount(0);
+      if (outcome === "held") {
+        await expect(page.getByText("Loading Tabiya…", { exact: true })).toBeVisible();
+        release();
+        await expect(page.getByLabel("Chessboard")).toBeVisible();
+        await expect(page.locator("[data-board-input-grid]")).not.toHaveAttribute("aria-readonly", "true");
+      } else {
+        await expect(page.getByRole("heading", { name: "This page is temporarily unavailable." })).toBeVisible();
+        await expect(page.getByRole("button", { name: "Try again", exact: true })).toBeVisible();
+        await expect(page.locator("body")).not.toContainText("private diagnostic sentinel");
+      }
+      const after = (await (await page.request.get(`/runs/${runId}/graph`)).json()).graph;
+      expect(after.nodes).toEqual(before.nodes);
+      expect(after.branches).toEqual(before.branches);
+      expect(after.activeCursor).toEqual(before.activeCursor);
+      console.log(`D3756_BOUNDARY ${JSON.stringify({ endpoint, outcome, retainedRun: true, blocksBoard: true })}`);
+    } finally { release(); }
+  });
+}

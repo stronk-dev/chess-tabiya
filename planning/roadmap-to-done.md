@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3755]] · **Machine map:**
+2026-10-13 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3756]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -58,10 +58,10 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3755]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
+Current checked inventory through [[D3756]] and [[D608]] recovery: 276 UX items complete, 269 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
-discharge and 23 draft; the archive has 75 implemented records and one superseded record, not
+discharge and 24 draft; the archive has 75 implemented records and one superseded record, not
 75 freshly re-audited complete product capabilities. All fourteen whole capabilities remain
 incomplete; the nine milestones remain four active/five blocked.
 The two proven dimension cells are governance/state and rehearsal/state, not two complete
@@ -112,6 +112,15 @@ cardinality changes. The semantic refresh changes only 62 implementation-digest 
 343 cases, 81 subjects and zero fully qualified remain unchanged. No full capability, milestone,
 official content, remote CI or release-host readiness is promoted. D3754/D3755 are path-backed
 local closeouts, and D3600 remains open.
+
+[[D3756]] reproduces a separate arrival resilience defect: four native created-run controls
+hold or fail assignment/repertoire reads while the actual stored run remains intact. These
+supplementary reads prevent the board appearing or replace it with the page error. Six disposable
+research checks pass; bounded in-memory timeline summaries retain all 41 requests and do not
+establish D3600's remote timing cause. Draft `rfc/rehearsal-route-context.md` separates these
+two recoverable groups without relaxing capability, graph/lease or live-match admission.
+Implementation is blocked on independent acceptance; no production behavior or release state
+changes. Current ledger has 1,725 live assigned items and zero untriaged.
 
 [[D3751]]/[[D3752]] repair live raw-opponent recovery without adding a persona or durable-policy
 contract. The notice and status name the actual session mode; reload restores recorded-policy
@@ -578,7 +587,7 @@ skip, zero retries and all 150 input/112 composition cells. No whole capability,
 exact-revision remote CI or release-image completion is claimed.
 
 The older 'mostly drafts' progress snapshot no longer describes the implementation register:
-42 product RFCs are implementing and ten await discharge, against 23 drafts. Real delivery
+42 product RFCs are implementing and ten await discharge, against 24 drafts. Real delivery
 includes the board/input and preset/module infrastructure, Review/retry, Library/Studio,
 persistent bot games, private Profile and the exposed draft Campaign. The remaining bottleneck
 is completing and integrating those pieces, not locating the work. Routes and schemas do not

@@ -132,6 +132,7 @@
       "owner": "core-loop",
       "rfcs": [
         "public-run-reconstruction.md",
+        "rehearsal-route-context.md",
         "play-composition.md",
         "pack-training-forms.md"
       ],

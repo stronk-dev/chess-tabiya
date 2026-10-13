@@ -1313,3 +1313,62 @@ boundaries make it evidence of the same order of magnitude, not a regression bas
 **Verdict:** ARR-a9 is complete. No latency fix is licensed by this result. The warm acceptance gate
 passes; cold-tail monitoring remains useful, but no cold threshold was preregistered and one is not
 invented after seeing the data.
+
+## 15. Arrival critical-path and supplementary-read boundary — 2026-10-13
+
+This supersedes §14's passing result only as a current readiness claim, not as historical
+measurement. Published `c7ec3c3d` fails the unchanged 250 ms warm budget at 399.2 ms;
+its paired verification succeeds. `[V]` GitHub runs
+<https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796> and
+<https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800>, inspected 2026-10-13.
+[[D3600]] remains open; local replay cannot establish that failure's cause or repair.
+
+### Bounded native timeline
+
+`make arrival-cpu-profile` executes the actual built app over loopback with mock opponents,
+desktop Chromium at 1440×1000, three arrivals each at native and fourfold CPU throttle.
+V8 samples and main-thread timeline spans are clipped to native click/three-frame playable
+board marks. Only bounded summaries print; neither raw timeline nor CPU recording is saved.
+Tracing/stack capture adds overhead and throttling is not a GitHub-host simulation. `[V]`
+`tools/d3600-arrival-profile/profile.spec.ts` and its config, executed over `8901e904` plus
+the disposable instrument changes.
+
+The final run's native arrivals are 131.7/73.9/82.8 ms; throttled arrivals are
+405.3/279.8/252.6 ms. Each retains 41 requests, including two capability reads and 25 shape
+documents. Native layouts number 36/11/11 and total 15.381/7.034/7.819 ms; throttled layouts
+number 36/11/11 and total 65.026/33.230/29.674 ms. Timeline groups are inclusive and may nest:
+they must not be added to manufacture an exclusive latency decomposition. `[V]` same instrument.
+
+The preceding stack-enabled run binds forced layouts to Chessground's `updateBounds`
+(`wrap.getBoundingClientRect`) and `DrillScreen`'s initial keyboard-region focus. The largest
+later-arrival layout has no JavaScript stack and reports 1,257 dirty objects in the document;
+their specific DOM cause is not established by that count. This is not proof that a particular
+collector, fetch or focus call causes the remote excess. `[V]`
+same instrument `layoutSites`, built asset snippets and `apps/web/src/lib/DrillScreen.svelte`
+`onMount`; `apps/web/src/lib/Chessboard.svelte` board mount. No focus or geometry policy changes.
+
+### D3756: actual independent-read failure
+
+The run branch of `App.svelte.loadRoute` awaits assignments, repertoire collection and all
+repertoire gap pages before attaching route context/showing the board. These supply completed
+assignment offers and an optional repertoire-answer offer, not the graph's role/lease or live
+match authority. A rejection becomes the full-page route failure. `[V]`
+`apps/web/src/App.svelte` run branch, `completedAssignmentOffers`, `activeRepertoireGap` and
+`DrillScreen` props.
+
+Four actual native-start controls independently hold or return HTTP 503 from `/assignments`
+and `/repertoires` after registration. In every cell the server has already created the run,
+the URL names that run, and a separate authenticated graph read succeeds with nonempty nodes.
+While a read is held the board is absent; releasing the genuine read reveals an enabled board.
+A failed read instead renders the page error and retry, without leaking the private diagnostic
+sentinel. Nodes, branches and cursor are identical before/after. `[V]`
+`tools/d3600-arrival-profile/profile.spec.ts` four `D3756` controls; six total tests pass.
+The first probe used nonexistent `graph.runId` and failed all four controls; correcting it to
+the published `graph.id` is an instrument repair, not a product repair.
+
+**Result:** D3756 is a reproduced resilience defect and a demonstrated critical-path dependency,
+not proof of D3600's timing cause. `[V]` The required repair must keep capability, graph/lease,
+live-session/match and disclosure admission mandatory, while supplementary reads have honest
+pending/failure states and read-only recovery that cannot recreate or mutate the attempt.
+That behavior change needs independent acceptance of `rfc/rehearsal-route-context.md` before implementation.
+No current latency gate, assisted move, source fact, pack, bot or release qualification changes.
