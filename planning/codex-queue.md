@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-13 — execution qualification for [[D1154]], [[D3498]] and [[D3526]]:
+the existing defects are not permission to invent their missing contracts.
+[[D3498]] and [[D3526]] are durably **blocked** on amendments to `hint-distance.md`
+and `module-registration.md`, respectively. Their existing proposals define the
+required lifecycle and exact-witness boundaries; authoring and independent acceptance
+must precede implementation. [[D1154]] remains **todo for authoring only**: the
+scratch transport amendment in `planning/n-way-simulation/implementation-return.md`
+has no registered active successor yet. The existing authored preview/entry callers
+and orchestration repairs are delivered; the historical instruction not to bind
+the endpoints is not current. What remains is a self-contained readonly comparison
+view for the synchronized stepper, without admitting it to saved play or leaking
+withheld evidence. Do not conflate it with canonical public-run reconstruction
+([[D3700]]) or declare the complete preview finished from its final-position cards.
+No new product behavior, acceptance, owner ruling or whole-capability completion.
+
 2026-10-12 — [[D3733]] closes route-local screen delivery under accepted
 `rfc/archive/app-shell.md`: seven large components load at their actual route,
 with fixed loading/error copy, explicit page reload, preserved navigation and

@@ -28878,11 +28878,13 @@
     },
     {
       "id": "D3498",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:ab5a43431c39a718d9aa43f56b84f6e987793a11457fc26895a0421cdd4d4059",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:hint-distance.md",
+      "question": "Accept deterministic-first delivery and separately settled optional voice without mutating sealed receipts"
     },
     {
       "id": "D3499",
@@ -29128,11 +29130,13 @@
     },
     {
       "id": "D3526",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:745f9bcb9f8a2352b3f1321072557f0aba00786653c479ee888ddd6d7ff7c5d4",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md",
+      "question": "Accept exact witness-level tactical composition preserving distinct facts and both provenance chains"
     },
     {
       "id": "D3527",

@@ -83,6 +83,15 @@ waves so they no longer commission already-landed persistence, APIs and composit
 
 ### What still controls the release date
 
+2026-10-13 execution qualification: [[D3498]]'s deterministic-first/optional-voice
+lifecycle and [[D3526]]'s exact tactical witness composition are blocked on their
+existing Hint/module RFC amendments, not ready implementation tasks. [[D1154]]'s
+remaining synchronized scratch preview needs an authored and accepted readonly
+transport amendment; its current todo is authoring, not a claim that the wire/view
+contract is already buildable. These are known product gaps, not new features or
+changes to the release scope. The existing ledger and work-state remain the owners;
+no additional tracker or capability promotion is introduced.
+
 Current GitHub check, 2026-10-13: published `c7ec3c3d` passes
 [verify](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438800) but fails
 [browser](https://github.com/stronk-dev/chess-tabiya/actions/runs/38222438796).

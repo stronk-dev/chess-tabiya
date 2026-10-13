@@ -27129,3 +27129,26 @@ Campaign was the one capability with no API, route or content. Now:
   historical prose-only closures retain weaker proof. Fifty installed packs still have zero
   official graduates; twelve bot configurations remain uncalibrated and Campaign remains a
   web-exposed draft pilot. No new tracking document, push or goal pause; full 1.0 remains active.
+
+### 2026-10-13 — qualify the next implementation work before the full progress handoff
+
+- Re-read the accepted scratch-simulation contract, its current server/client and historical
+  implementation return. D1154 still lacks self-contained scratch board states for a synchronized
+  comparison, but the endpoint callers and preview/promotion orchestration are delivered. Its
+  remaining todo is authoring the readonly transport amendment, not implementing an invented
+  public run format; D3700's canonical public reconstruction is a separate contract.
+- D3498's deterministic-first Hint/optional-voice lifecycle and D3526's exact tactical witness
+  composition already explicitly require amendments. Move these two durable states from todo
+  to blocked on their actual active Hint/module RFCs, preserving the capability owners and naming
+  the exact acceptance questions. No product code, accepted contract or scope changes.
+- The existing queue and roadmap now distinguish these authoring actions from ready production
+  work. `make roadmap-receipt work-state roadmap-progress` passes: 3,507 ledger rows, 1,726 live,
+  zero untriaged, 631 todo, sixteen doing, 1,079 blocked, 1,620 done and 161 refused. The 569 UX
+  items remain 276 completed, 269 live and 24 retired. All fourteen capabilities remain incomplete;
+  nine milestones remain four active/five blocked. No new tracker or recording.
+- The completed c8a15e9e implementation retains its full local serial software/content/build/
+  browser verification recorded above. This is an execution-state correction, not another code
+  change, new remote CI proof, release qualification, pause or declaration of 1.0 completion.
+- Final `make verify-governance` exits zero, including work routing/state, resource/status parity,
+  roadmap, intent parity, tier isolation and staged-process controls. No tracked implementation
+  changes are left by this qualification pass; the pre-existing untracked files are not staged.
