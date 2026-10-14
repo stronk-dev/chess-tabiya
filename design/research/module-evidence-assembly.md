@@ -253,3 +253,56 @@ root/interior/future/sibling/broken-path boundaries, unchanged saved state and b
 authenticated query/client parsing, and native selection → view → reload → return. Resolve
 shared-resource claims before declaring any new wire version. Independent acceptance precedes
 implementation; D3791/D3792 remain open. `[M]`
+
+### Individual-fact census — 2026-10-14, D3795/D3796
+
+**Scope/method:** the same opt-in `make inspector-demand-research` now inventories all 75
+exact refs from `MODULE_CONSUMER_ACCEPTS.full_inspector`. Actual route metadata separates
+24 position, six incoming-edge, ten recorded-window, six saved-packet and 29 dependency-input
+refs. Forty have real local/recorded measurements; the remaining 35 are explicitly unmeasured,
+not false no-witnesses. Eight existing imported games provide 513 legal edges; eight roots and
+three exact mate/stalemate/kings-only controls total 524 positions. Canonical positive/negative
+recorded sequences use the real path compiler. Each complete fact is measured alone through
+actual source construction, witness filtering, module admission, registered presentation and
+unchanged fit. Source receipt identity and saved recorded runs remain unchanged. This is an
+isolated pipeline census, not full query/HTTP/UI or semantic qualification. `[V]`
+(`tools/d3792-inspector-demand/census.ts`; `tools/r2-selection-harness/imported-sample.pgn`;
+`packages/runtime/src/evidence-catalog.ts`, `RECORDED_PATH_SUCCESSOR_REFS`;
+`packages/runtime/src/internal/evidence-value-routes.ts`; `module-query.ts`;
+`testing/recorded-sequence-fixtures.ts`.)
+
+| Complete source fact | Witnessed instances | Fits alone | Overflows alone |
+|---|---:|---:|---:|
+| Ray classification | 479 | 261 | 218 |
+| Square control | 524 | 0 | 524 |
+| Piece destinations reading | 502 | 25 | 477 |
+| Piece destinations event | 1,564 | 1,551 | 13 |
+| King-zone state | 524 | 25 | 499 |
+| Defender-duty set | 521 | 77 | 444 |
+
+All rows are `[V]` from the actual registered `@1` facts and `fitModulePresentation` in the
+above command. Events can emit more than one instance per edge. The optional report is a
+bounded <64 KiB aggregate in ignored `.cache/d3792-inspector-demand/census.json`; it contains
+no raw games, FENs or provider captures and is not a CI/progress input. Other sampled fits
+do not establish universal size bounds or usefulness.
+
+**Separate exception and repair:** before the repair all 524 legal-move maps were admitted,
+but five valid zero-move maps threw at the square-set adapter. Four newly played both-color
+mate/stalemate runs reproduce the actual query exception (terminal roots are rightly refused
+and are not valid run fixtures). The accepted adapter lights movable pieces and requires a
+nonempty square set. Its witness gate now matches that population, while the complete source
+map and adjacent legal positives remain unchanged. The census now witnesses/presents/fits
+519 maps, leaves five without that presentation witness, and reports zero adapter refusals.
+Focused 206 tests, actual authenticated application/SQLite/foreign-account controls, strict
+types and four native desktop/phone move → terminal result → Inspector → return/reload
+cases pass. `[V]` (`packages/runtime/src/module-query.test.ts`;
+`apps/server/src/terminal-inspector.test.ts`; `tests/browser/drill.spec.ts`;
+`make recorded-inspector-check terminal-inspector-browser-check typecheck`.)
+
+**Contract consequence:** family focus helps mixed-pool contention but cannot expose a
+complete atomic bundle that exceeds limits on its own. D3792 needs exact bounded detail
+presentation as well as pre-acquisition demand and truthful budget-limited state, with
+request/response compatibility independently accepted. Enlarging budgets, silently truncating
+source operands or calling withheld facts “no witness” does not answer this finding. `[M]`
+D3795 closes the bounded research question; D3796 closes the concrete exception only.
+D3791/D3792, dependency/provider measurements and whole Inspector qualification remain open.

@@ -25,6 +25,7 @@ import {
   parseModuleQueryRequest,
   passFen,
   queryModules,
+  witnessedEvidence,
   type ModuleQueryPacket,
   type ModuleQueryRequest,
 } from "./module-query.js";
@@ -77,6 +78,33 @@ function assertDelivered(packet: ModuleQueryPacket, assistance: FinalizedAssista
 
 const ITALIAN = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 4 5";
 const MAROCZY = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
+
+describe("D3796: terminal Inspector is an actual successful query, not a rendering exception", () => {
+  it.each([
+    ["7k/8/5K2/6Q1/8/8/8/8 w - - 0 1", "g5g7"],
+    ["7k/8/6K1/5Q2/8/8/8/8 w - - 0 1", "f5f7"],
+    ["8/8/8/8/6q1/5k2/8/7K b - - 0 1", "g4g2"],
+    ["8/8/8/8/5q2/6k1/8/7K b - - 0 1", "f4f2"],
+  ])("keeps the complete recorded position and returns a valid Inspector packet: %s / %s", (fen, move) => {
+    const movable = routes.invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen });
+    expect(witnessedEvidence(movable as Parameters<typeof witnessedEvidence>[0])).toBe(true);
+    const run = revealFeedback(positionRun(fen, [move]), at).run, before = JSON.stringify(run);
+    const terminalFen = run.nodes.find(node => node.id === run.activeCursor.nodeId)!.fen;
+    const source = routes.invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: terminalFen }) as Parameters<typeof witnessedEvidence>[0];
+    const sourceBefore = JSON.stringify(source);
+    expect((source.payload as { pieces: { moves: unknown[] }[] }).pieces.every(piece => piece.moves.length === 0)).toBe(true);
+    expect(witnessedEvidence(source)).toBe(false);
+    const assistance = finalized("position", "analysis", "full_inspector");
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position",
+      request: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } });
+    const packet = packetOf(page, "full_inspector");
+    expect(packet).toBeDefined();
+    assertDelivered(packet!, assistance);
+    expect(packet!.receipt.items.some(item => item.evidenceRef?.projection.id === "rules.mobility.reading.legal_moves")).toBe(false);
+    expect(JSON.stringify(source)).toBe(sourceBefore);
+    expect(JSON.stringify(run)).toBe(before);
+  });
+});
 
 describe("D3627: exact staged-move admission", () => {
   const whitePromotion = "3r3k/2P5/8/8/8/8/8/K7 w - - 0 1";

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3794]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3796]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -60,6 +60,23 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+October-14 inventory closeout: D3795 now inventories all 75 accepted Inspector refs; 40 real
+local/recorded measurements leave 35 provider/dependency refs explicitly unmeasured. Six types
+overflow even alone, so focused families are not a complete delivery solution. D3796 separately
+repairs the reproduced terminal query exception without changing complete legal source maps.
+Focused 206 tests, authenticated both-color SQLite reads and foreign-account refusal, four
+native desktop/phone played mate/stalemate → Inspector → return/reload cases and strict types
+pass. D3791/D3792 remain blocked on an independently accepted demand/detail contract. The ledger
+now has 1,651 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
+prose-only closures and every whole-product/content/release gate remain. Fresh GitHub reads
+still show published `62c81eb1` verify success/browser failure. No new feature wave is started
+before the owner's requested total inventory.
+
+Final frozen-input normal verification/build/all four browser tiers exit zero: 5,621 software,
+seven performance, 256 real-content and 360 browser passes; one optional Maia skip, zero
+retries and all 112 composition cells. Local warm p95 is 107.5 ms under unchanged 250 ms.
+This closes the in-flight local checkpoint, not remote CI, Docker/release or full 1.0.
 
 October-14 [[D3793]]/[[D3794]] complete CMP-a12's existing earned-tool/help-style journey,
 not Campaign curriculum or new rewards. Result/map/preparation name the actual current style's

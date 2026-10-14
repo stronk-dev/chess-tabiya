@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector individual-fact delivery, 2026-10-14 ([[D3795]]/[[D3796]]): **answered `[V]` for
+the measured real-input population, not complete coverage**. Inventory 75 accepted refs;
+40 measured / 35 provider/dependency refs unmeasured. Six types overflow even alone; square
+control fits 0/524 sampled positions. The separate zero-move adapter exception is reproduced
+and repaired at actual query/authenticated/native boundaries. See `module-evidence-assembly.md`
+§Individual-fact census; D3791/D3792 remain blocked. Optional bounded aggregate only, no raw dump
+or CI/progress dependency.
+
 Recorded Inspector delivery, 2026-10-14 ([[D3791]]/[[D3792]]): **answered `[V]` for the fixed
 ten-family population; production repair blocked**. Current query and a genuine recorded-source
 candidate each display 0/10 positive successors; a derived-family-focused candidate displays

@@ -31552,6 +31552,24 @@
       "uxItems": [],
       "evidence": "tests/browser/campaign.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3795",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d855ec44b5651e152ca5736a87fdfd295a16c6a212df70c510b8f6b57bc21b3a",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3796",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a4ba61d8bbf728fc064a1c32c62ad617054a83c092425a682768a681be950619",
+      "uxItems": [],
+      "evidence": "apps/server/src/terminal-inspector.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

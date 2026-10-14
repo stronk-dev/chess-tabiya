@@ -4170,6 +4170,56 @@ function isFullInspectorResponse(response: { url(): string; request(): { postDat
   return response.url().endsWith("/modules/query") && response.request().postDataJSON().query?.requested?.includes("full_inspector") === true;
 }
 
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  for (const [ending, fen, moveUci] of [
+    ["mate", "7k/8/5K2/6Q1/8/8/8/8 w - - 0 1", "g5g7"],
+    ["stalemate", "7k/8/6K1/5Q2/8/8/8/8 w - - 0 1", "f5f7"],
+  ] as const) {
+    test(`D3796 terminal Inspector opens after played ${ending} (${viewport.width}px)`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      const id = `terminal-inspector-${randomUUID()}`;
+      const writer = `terminal-writer-${randomUUID()}`;
+      const headers = { "x-writer-id": writer };
+      // Start legally, select help before the result modal, then play the actual native move.
+      const created = await page.request.post("/runs", { headers, data: { id, session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1 } });
+      expect(created.status(), await created.text()).toBe(201);
+      await page.evaluate(({ id, writer }) => localStorage.setItem(`chess-tabiya:run:${id}:writer-id`, writer), { id, writer });
+      await page.goto(`/play/run/${id}`);
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      await choosePreset(page, /Analyze/u);
+      await move(page, moveUci.slice(0, 2), moveUci.slice(2, 4), "white");
+      const result = page.getByRole("dialog", { name: ending === "mate" ? "You won." : "Draw.", exact: true });
+      await expect(result).toBeVisible();
+      const saved = async () => Promise.all(["graph", "events"].map(async action => {
+        const response = await page.request.get(`/runs/${id}/${action}`);
+        expect(response.ok()).toBe(true); return response.json();
+      }));
+      // Normal post-move acquisition is asynchronous. Its completed attachment belongs to
+      // the baseline; do not mistake that write for an Inspector mutation or ignore it.
+      await expect.poll(async () => {
+        const response = await page.request.get(`/runs/${id}/events`);
+        expect(response.ok()).toBe(true);
+        const value = await response.json() as { events: { type: string }[] };
+        return value.events.some(event => event.type === "evidence.attached");
+      }).toBe(true);
+      const before = await saved();
+      for (const reload of [false, true]) {
+        if (reload) await page.reload();
+        const pending = page.waitForResponse(isFullInspectorResponse);
+        await page.getByRole("button", { name: /^Inspect analysis details/u }).click();
+        const response = await pending;
+        expect(response.status()).toBe(200);
+        const packet = (await response.json() as { page: ModuleQueryPage }).page.packets.find(item => item.module === "full_inspector")!;
+        await assertFullInspectorPacket(page, packet);
+        expect(packet.receipt.items.some(item => item.evidenceRef?.projection.id === "rules.mobility.reading.legal_moves")).toBe(false);
+        await page.getByRole("button", { name: "Return to play", exact: true }).click();
+        await expect(result).toBeVisible();
+        expect(await saved()).toEqual(before);
+      }
+    });
+  }
+}
+
 async function assertFullInspectorPacket(page: Page, packet: ModuleQueryPage["packets"][number]): Promise<void> {
   const inspector = page.locator(".full-inspector");
   const mounted = inspector.locator("[data-presented]");

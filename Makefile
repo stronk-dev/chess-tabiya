@@ -524,7 +524,11 @@ recorded-consumer-adoption-check:
 
 .PHONY: recorded-inspector-check inspector-demand-research
 recorded-inspector-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/module-query.test.ts packages/runtime/src/module-registry.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/server/src/module-query.test.ts apps/server/src/recorded-semantic-path.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/module-query.test.ts packages/runtime/src/module-registry.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/server/src/module-query.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/terminal-inspector.test.ts
+
+.PHONY: terminal-inspector-browser-check
+terminal-inspector-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep 'D3796 terminal Inspector'
 
 # Disposable author evidence, explicitly outside ordinary CI/progress and production source edits.
 inspector-demand-research:
@@ -532,6 +536,7 @@ inspector-demand-research:
 	$(CI_NODE) .cache/d3792-inspector-demand/baseline.mjs baseline
 	$(CI_NODE) .cache/d3792-inspector-demand/acquired.mjs acquired
 	$(CI_NODE) .cache/d3792-inspector-demand/derived_family.mjs derived_family
+	$(CI_NODE) .cache/d3792-inspector-demand/census.mjs
 
 .PHONY: recorded-castling-attraction-check
 .PHONY: recorded-castling-defender-check recorded-castling-defender-browser-check

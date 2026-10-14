@@ -1064,14 +1064,16 @@
         "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
           "at": "2026-10-14",
-          "summary": "D3791/D3792 isolate recorded Inspector's delivery gap. Existing ten successors/adapters are not acquired; actual compiler acquisition admits the positive fixtures yet renders 0/10 because nine lose the fact backstop and contact timing loses mark fit. A disposable derived-family-focused candidate renders 10/10 with zero of ten paired-negative false positives, exact compiler identities, saved-state equality and unchanged 20/400/20/8 limits. Research and 201 actual baseline query/adapter/server checks pass. Production query, source image and permanent tests remain unchanged; D3791 is blocked on D3792's independently specified family-demand/limited-result contract. The small optional research outputs are ignored and not CI/progress dependencies. D3787's rejected cache candidate and four retained source guards, D3788's current Review adoption correction and earlier source/selection holds stand. No new detector, HTTP/client/native feature, accepted RFC, semantic qualification, official content, milestone, remote CI, image or release claim follows.",
-          "impact": "held",
+          "summary": "D3795 broadens the Inspector census to all 75 accepted refs: 40 real local/recorded measurements and 35 explicitly unmeasured provider/dependency refs. Eight games/513 edges plus roots/controls provide 524 positions. Six complete fact types overflow even alone; square-control fits none of 524. Family focus is not the whole D3792 repair. D3796 independently fixes the actual played mate/stalemate query exception: empty legal maps remain complete valid source evidence but have no movable-square presentation witness. Focused 206 tests, strict types, actual both-color authenticated application/SQLite and foreign-account controls, plus four native desktop/phone move/result/Inspector/return/reload cases pass. The census now has zero adapter refusals. Final frozen-input normal verification/build/all four browser tiers exit zero: 5,621 software/391 files, seven unchanged-budget performance/four files, 256 content/26 files and 360 browser passes, one optional Maia skip, zero retries and 112/112 composition cells. Local warm p95 is 107.5 ms under unchanged 250 ms. D3791/D3792 remain blocked on independently accepted pre-acquisition demand, bounded detail, truthful limited outcomes and wire compatibility, then complete HTTP/client/native delivery. Original ten-positive/ten-negative candidate results stand under unchanged budgets. No semantic qualification, new detector, source data change, content graduation, complete capability, remote CI, image or release claim follows.",
+          "impact": "advanced",
           "evidence": [
             "packages/runtime/src/evidence-contract.ts",
             "design/research/recorded-semantic-path-cost.md",
             "design/research/module-evidence-assembly.md",
             "tools/d3792-inspector-demand/build.mjs",
             "tools/d3792-inspector-demand/probe.ts",
+            "tools/d3792-inspector-demand/census.ts",
+            "apps/server/src/terminal-inspector.test.ts",
             "planning/recorded-semantic-path/plan.md",
             "tools/d1931-recorded-path-source-harness/exchange-cost.ts",
             "tools/d1931-recorded-path-source-harness/exchange-candidate.mjs",
@@ -1141,6 +1143,16 @@
               "kind": "work_state",
               "id": "D3792",
               "digest": "sha256:2dcb0bea09180fcdfc2996fe14a373b9028110c61ba1bfaa91058cf22be9ae51"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3795",
+              "digest": "sha256:d855ec44b5651e152ca5736a87fdfd295a16c6a212df70c510b8f6b57bc21b3a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3796",
+              "digest": "sha256:a4ba61d8bbf728fc064a1c32c62ad617054a83c092425a682768a681be950619"
             },
             {
               "kind": "work_state",

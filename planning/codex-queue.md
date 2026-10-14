@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3795]] research and [[D3796]] terminal repair are complete locally.
+All 75 Inspector refs are inventoried; 40 measured / 35 explicitly unmeasured. Six atomic
+fact types overflow even alone; family focus cannot be the complete D3792 fix. Four actual
+terminal runtime failures reproduce; rendering-witness admission now keeps zero-move square
+lighting out without deleting source maps. Focused 206 tests, both-color authenticated reads,
+foreign-account refusal, strict types and four desktop/phone native terminal Inspector/reload
+journeys pass. D3791/D3792 remain blocked pending independently accepted demand/detail grammar,
+then complete authenticated/client/native source delivery. No bigger budget, generic truncation,
+raw-data dump, Nudge widening or qualification claim. Existing strategic inventory is authoritative;
+finish this checkpoint and report full 1.0 status before opening another wave.
+
 2026-10-14 — [[D3793]]/[[D3794]] are complete locally. Result/map/preparation share the
 canonical current help-style request; Quiet/Custom exclusions do not remove equipment and
 failed saves do not change the map's choice. The board's request is separate from confirmed

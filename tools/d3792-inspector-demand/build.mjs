@@ -56,3 +56,5 @@ for (const variant of ["baseline", "acquired", "derived_family"]) {
   });
 }
 console.log("D3792: three disposable bundles built; production sources unchanged");
+await build({ entryPoints: [resolve("tools/d3792-inspector-demand/census.ts")], outfile: resolve(destination, "census.mjs"),
+  bundle: true, platform: "node", format: "esm", nodePaths: [resolve("packages/runtime/node_modules")] });

@@ -28294,3 +28294,40 @@ Campaign was the one capability with no API, route or content. Now:
   and compact receipt, then inspect the explicit staged list and use normal commit hooks.
   Curriculum/rewards beyond the existing contract, official content, source qualification,
   all-context completion, owner use, remote CI/image and full 1.0 remain open. No push.
+
+### 2026-10-14 — D3795 individual-fact census / D3796 terminal Inspector; inventory checkpoint
+
+- Owner asks to finish in-flight work and provide a total 1.0 overview before another wave.
+  Keep the full 1.0 goal active; this is a bounded checkpoint, not goal completion or a pause.
+- Extend the existing disposable Inspector harness, no new progress system: inventory all 75
+  accepted refs, measure 40 real local/recorded sources over eight games/513 edges/524 positions,
+  leave 35 provider/dependency refs explicitly unmeasured. Six fact types overflow even alone;
+  square-control fits 0/524. Optional <64 KiB ignored aggregate, no raw corpus/provider captures
+  in Git or CI/progress. Family-only feasibility does not close D3792 detail delivery.
+- Before the repair five valid complete zero-move source maps reach a square-set adapter that
+  throws. Four actual played both-color mate/stalemate module queries reproduce the exception.
+  Initially terminal-root fixtures fail legitimately; replace them with legally played edges,
+  not a weakened terminal-start rule. The existing witness gate now requires a movable piece,
+  retaining complete source maps, adjacent positives, all budgets and source/chess policy.
+- Focused normal make recorded-inspector-check passes 206 cases. Actual authenticated application,
+  SQLite, both colors and foreign-account refusal pass. Native tests initially lack required
+  writer identity, try settings behind the result modal, shadow the move helper, then compare
+  before the normal post-move engine attachment. Correct those fixture assumptions: choose
+  Analyze before the native terminal move, use the actual result-to-inspection door, wait for
+  the real attachment before strict baseline equality. No force-click, ignored state fields,
+  longer deadline or weakened rule. Four desktop/phone native Inspector/return/reload cases and
+  normal strict types pass. Census now has zero adapter refusals.
+- Close only D3795 research and D3796 defect in existing ledger/state/docs/coverage/queue;
+  D3791/D3792 remain blocked. Update the existing strategic checkpoint, not the capability gate.
+  Fresh gh run list still reads Oct13 published 62c81eb1: verify38381154735 success,
+  browser38381154879 failure. No push or remote repair claim. Freeze inputs for full normal
+  verification/build/four browser tiers before the explicit-file commit and owner overview.
+
+- The frozen-input normal make roadmap-receipt verify-awake build test-browser-ci-awake
+  run exits zero: 5,621 software/391 files, seven unchanged-budget performance/four files,
+  256 real-content/26 files, types/build/packaging/governance, 295 main browser + five content
+  + 59 matrix + one packaged-production cases = 360 passes. One optional Maia skip, zero
+  retries and 112/112 successful unretried composition cells. Local warm p95 107.5 ms remains
+  under unchanged 250 ms. This is local proof, not remote-cause closure or release/image
+  qualification. No source/test edit occurred during the full run. Finish the existing
+  strategic receipt and explicit-file commit; no new feature wave or push.

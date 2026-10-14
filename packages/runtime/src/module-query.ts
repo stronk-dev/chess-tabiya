@@ -227,6 +227,9 @@ export function witnessedEvidence(evidence: DeclaredEvidence<unknown>): boolean 
     case "derived.tactic.promotion_pressure": return nonEmpty("pawns");
     case "rules.structural.reading.space": return (payload.colors as readonly { readonly zones: readonly { readonly squares: readonly unknown[] }[] }[]).some((entry) => entry.zones.some((zone) => zone.squares.length > 0));
     case "rules.phase.development": { const undeveloped = payload.undeveloped as { readonly white: readonly unknown[]; readonly black: readonly unknown[] }; return undeveloped.white.length + undeveloped.black.length > 0; }
+    // This adapter lights movable pieces, not an all-clear verdict. A complete terminal
+    // legal map remains valid source evidence but has no square for this presentation.
+    case "rules.mobility.reading.legal_moves": return (payload.pieces as readonly { readonly moves: readonly unknown[] }[]).some((entry) => entry.moves.length > 0);
     case "rules.mobility.reading.piece_destinations": return (payload.colors as readonly { readonly kind: string; readonly pieces?: readonly { readonly legal: readonly unknown[] }[] }[]).some((entry) => entry.kind === "available" && (entry.pieces ?? []).some((unit) => unit.legal.length > 0));
     case "rules.structural.reading.pawn_connectivity": return (payload.colors as readonly { readonly islandCount: number }[]).some((entry) => entry.islandCount > 0);
     case "rules.tactic.reading.defender_duty_set": return nonEmpty("duties");

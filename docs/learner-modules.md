@@ -64,6 +64,15 @@ it is research, not the shipping query or native UI. Production remains unchange
 explicit family-demand and truthful budget-limited-result contract. See the dated section in
 `design/research/module-evidence-assembly.md`; no executable-pair promotion follows.
 
+The broader sole-fact census (D3795) inventories all 75 accepted refs and measures 40 with real
+local/recorded inputs; 35 provider/dependency refs remain unmeasured. Six readings/events can
+overflow even alone, so family focus is not the complete detail-delivery contract. Inspector's
+legal-move renderer lights movable pieces: the witness gate requires at least one actual move
+(D3796). Complete zero-move source maps remain valid; terminal queries return their other
+admitted facts instead of throwing or manufacturing an all-clear statement. Both-color actual
+authenticated reads and native desktop/phone played mate/stalemate, return and reload pass.
+No source factory, chess rule, budget, capability or saved run changes.
+
 Source-held avoidance/window pairs name a presentation dependency only when their exact adapter
 is actually missing (D3761). Existing registered renderers do not release candidate/window holds.
 
