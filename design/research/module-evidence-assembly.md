@@ -497,3 +497,65 @@ new underlying-cause evidence. Do not repeat that artifact analysis or substitut
 replay for a remote repair. Pair timestamped server/transport observations on a newly authorised
 published execution before choosing a durability/worker fix. `[V]` (`gh run view --log-failed`;
 `design/research/ux-arrival-and-start.md` §§17–18.) No push occurs.
+
+### Six typed detail schemas and temporal/scope controls — 2026-10-14, D3802–D3804
+
+The presentation companion now specifies the six literal view/factory/renderer identities,
+closed envelopes and contexts, all eighteen member alternatives, flattening order, readable
+subject-qualified templates, neutral component composition and inherited source limitations.
+No new producer, registered factory/adapter, component type, API or semantic subject is shipped.
+Parent implementing state remains no authority for the unaccepted amendments. `[V]`
+(`rfc/evidence-presentation.md` §Draft companion — bounded source-member Inspector detail;
+`rfc/module-registration.md` §4.11a.)
+
+Strict opt-in `make inspector-demand-research inspector-source-contract-research` passes typed
+member parsing and serialization over the existing real census: 4,184 source values, 226,557
+members, all eighteen alternatives observed. Independent reconstruction recovers every complete
+ordered ray/duty, controller/target population including empties/unavailability, piece destination
+set, all eight event sets and king-zone/shelter/escape operand image. No helper treats a plain
+parsed object as admitted evidence. 126 negatives reject extra/missing fields, wrong sources,
+duplicates, removals and **still-well-shaped substituted identities**. The latter pass the shape
+parser but fail the join to the genuine complete source. This is source fidelity, not an
+independent oracle for the collectors' chess semantics, envelope/receipt or native proof. `[V]`
+(`tools/d3792-inspector-demand/detail-schema.ts`, `verifyDraftMembers`; `census.ts`.)
+
+Two legally computed curated controls, separate from the fixed corpus population, disprove
+overbroad model prose. With White king g1/rook h1 and rights H, `g1h1` is a legal stationary
+castle, but the adjacent king escape set is empty. The old “No legal king escape” caption fails;
+it now names adjacent legal turn-clone escapes and says this is not every king move. With a
+knight b1→a3 under the control's pawn attacks, both local-exchange sets are empty while zeroSafe
+is false: the flag means before nonempty AND after empty, not current emptiness. A first test
+finds no such event in the fixed eight-game sample and correctly fails; the explicit legal
+control is then checked without claiming corpus frequency. The old current-state caption fails
+on that control. Later membership captions also fail before repair because they omit the piece
+subject. They now retain color and before/after roles/squares on every member. Source data and
+predicates remain unchanged. `[V]` (`census.ts`, `castleFen`, `emptyExchangeFen`; `detail-model.ts`;
+`king-state.ts`, `escapes`; `mobility.ts`, `pieceDestinationEvents`.)
+
+Optional promoted markers remain literal board markers, never inferred promotion history.
+Required king identities also survive empty/unavailable captions. New text costs are measured,
+not inherited from D3797's earlier shorter templates:
+
+| Model family | Maximum batch words / marks / conservative arrows |
+|---|---|
+| Rays | 155 / 12 / 8 |
+| Square control | 149 / 14 / 8 |
+| Piece destinations | 141 / 14 / 8 |
+| Destination changes | 261 / 10 / 0 |
+| King zone | 149 / 13 / 8 |
+| Defender duties | 283 / 14 / 8 |
+
+Table `[V]` from the same command. Eight-member batches and all 134,144 focused control requests
+still fit unchanged current limits; focus maximum is 105 words/six marks/five conservative arrows,
+with all 2,112 clone-unavailable reasons retained. These are model estimates, not registered
+component-budget receipts. The initial proposed composition is a typed fact statement and neutral
+endpoint marks, not arbitrary recommendation arrows. Actual atomic component fit still needs proof.
+The ignored <64 KiB aggregate records only counts; no member/source bytes or raw trace is added.
+
+Initial generic type-selector attempts fail strict compilation; explicit typed grouping repairs
+them without an unknown/double-assertion escape hatch. Frozen final typing/research passes, along
+with 37 unchanged factory controls and D3801's 88 request/range positives/399 refusals. D3802's
+bounded schema authoring and D3803/D3804's research-caption defects close only. Real permitted-prefix
+suppliers, acquisition/cancellation, production factory/component/envelope/response/native controls
+and genuinely independent acceptance remain D3792/source-owner work. No pack, default, live source,
+qualification, whole capability/milestone, CI repair or release promotion follows. `[V]` same sources.

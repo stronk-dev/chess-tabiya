@@ -17,6 +17,11 @@
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
 - **Created:** 2026-08-24
+- **Draft companion amendment 2026-10-14 — D3802:** bounded source-member Inspector detail
+  below supplies six literal operand/factory/parser/renderer schemas for module-registration
+  §4.11a. Disposable typed-member/source-reconstruction controls are research, not registered
+  production factories or adapter authority. This amendment remains unaccepted; the parent's
+  implementing state does not authorise it or close source/response/native obligations.
 - **Draft amendment 2026-10-10 — D3309/D3654:** the detailed structural Inspector contract
   below adds sixteen reading successors and `inspector.position_structure@2`. It preserves all
   existing `@1` declarations, factories, adapters and operations, including board Sight. Authored
@@ -1970,6 +1975,173 @@ both call sites without creating a second admission path? Independent review mus
 compiler, parser, renderer and consumers, including the zero-count and pawn-geometry negatives.
 No further product policy or owner choice is presumed necessary for preserving measured facts.
 
+## Draft companion — bounded source-member Inspector detail (D3802)
+
+**Unaccepted.** `rfc/module-registration.md` §4.11a owns demand, source context, access, paging,
+response and disclosure. This section owns only the six derived payloads and registered readable
+presentation. D3795/D3797 establish intrinsic overflow and bounded member feasibility; D3802's
+typed reconstruction checks retain the source operand image. Neither instrument establishes
+semantic qualification, real acquisition, production seals, response admission or native usability.
+The old full-source producers, consumers/adapters and pack predicates remain byte-compatible.
+
+### Six exact identities and sole constructors
+
+Every new projection below is version 1. Register it only to `module.full_inspector@2`, together
+with the original source image owned by §4.11a. Factories consume exactly one **admitted complete
+source** plus closed scope/start; they compute the members themselves and retain that literal
+input through the normal derived-evidence authority. They accept no rows, prose, renderer ID,
+arbitrary JSON path, source key as authority, or caller-produced convention/presentation receipt.
+Keep the weakest input grounding/exactness, source scope, declared answer content and qualification.
+Rendering a legal-destination field must not relabel candidate information as observation to evade
+its ceiling. No binding to voice, Nudge, bots, skills, ordinary Sight or pack truth follows.
+
+| Projection suffix after `derived.inspector.detail.` | Sole source | Proposed factory | Registered renderer |
+|---|---|---|---|
+| `rays` | `rules.tactic.reading.ray_classification@1` | `createInspectorRaysDetailV1Evidence` | `inspector.detail.rays@1` |
+| `square_control` | `rules.square.reading.control@1` | `createInspectorControlDetailV1Evidence` | `inspector.detail.square_control@1` |
+| `piece_destinations` | `rules.mobility.reading.piece_destinations@1` | `createInspectorDestinationsDetailV1Evidence` | `inspector.detail.piece_destinations@1` |
+| `destination_changes` | `rules.mobility.event.piece_destinations@1` | `createInspectorDestinationChangesDetailV1Evidence` | `inspector.detail.destination_changes@1` |
+| `king_zone` | `rules.king.reading.zone_state@1` | `createInspectorKingZoneDetailV1Evidence` | `inspector.detail.king_zone@1` |
+| `defender_duties` | `rules.tactic.reading.defender_duty_set@1` | `createInspectorDutiesDetailV1Evidence` | `inspector.detail.defender_duties@1` |
+
+These are proposed symbols, not claims that exported implementations already exist. Extend the
+existing sole-factory, derived-input, payload and pair-keyed presentation registries after acceptance;
+never copy the disposable plan's private WeakSet into a production evidence mint. Existing exact
+source/version checks apply before operand access. Compilation must reject empty/wrong inputs,
+forged/spread copies and unsupported source/view pairs; a typed interface alone is not a seal.
+
+### Closed envelopes and retained context
+
+Each payload has **exactly** `sourceProjection`, `context`, `scope`, `range`, `fullSourceTotal`
+and `members`. SourceProjection is the sole literal ref from the table, not a freely chosen source.
+Scope is `whole` for five views; square control alone additionally permits the existing closed
+`control_target{color,mode,target}`. Range is exactly §4.11a's `{start,count,total,next}`.
+Every member has exactly `ordinal`, `sourceOrdinal`, `kind`, `value`; ordinal is the selected
+scope's index and sourceOrdinal the original complete member image's index. All are nonnegative
+safe integers; selected ordinals equal start through start+count−1; original ordinals are unique
+and retain order. Count equals members.length, at most eight. FullSourceTotal counts complete
+members, **not** chess motifs or source facts. Empty/unavailable sentinels are counted as members.
+Scope filtering changes selected total, never the full-source total or the original reading.
+
+Required context is copied from the admitted source, not supplied by the browser:
+
+| View | Exact context fields |
+|---|---|
+| Rays, square control, defender duties | `fen` |
+| Piece destinations | `fen`, `conventionId` (literal `local-non-losing@1`) |
+| Destination changes | `beforeFen`, `moveUci`, `afterFen`, `color`, complete `piece{before{square,role},after{square,role}}`, `moved`, `zeroSafe` |
+| King zone | `fen`, `zoneConventionId` (`king-zone@1`), `shelterConventionId` (`king-shelter@1`) |
+
+FEN/edge context remains machine correlation, not a raw-string learner paragraph. A renderer uses
+the recorded piece/phase context to identify each displayed relation. Any displayed move notation
+uses the existing validated edge-to-SAN path, never printing canonical UCI as learner prose.
+Every batch must remain understandable without a first-page context row. Destination-membership
+captions repeat the piece's before/after role and square; empty king-group/escape captions name
+the specific side and king square. No missing color defaults to Black.
+
+### Eighteen literal member shapes
+
+`Piece` is the existing `{color,role,promoted?}`: color White/Black, the six exact role values,
+and an optional boolean promoted flag retained when present. Never turn absent into false or
+infer promotion history. Say “marked promoted” when displaying that flag. A placed piece is
+exactly `{square,piece}`; occupied witnesses use exactly `{square,occupant}`. SquareName is an
+actual a1–h8 coordinate. Every nested object/array is closed and checked; no `unknown`, generic
+document, optional observation bag or caller text survives into these production payloads.
+The explicit `DetailValues`/`DetailContexts` author image in
+`tools/d3792-inspector-demand/detail-schema.ts` uses the actual source types; it is disposable.
+
+| View / member kind | Exact value fields and constraints |
+|---|---|
+| Rays / `ray` | Complete `RayClassification`: slider placed piece; blocker/target occupied witnesses; ordered raySquares; kind exactly absolute_pin/relative_pin/skewer/xray_attack/xray_defense; optional complete comparison{frontRole,backRole,frontValue,backValue}. No comparison field is guessed |
+| Duties / `defender_duty` | Complete `DefenderDuty`: conventionId `defence-duty@1`, defender, target, complete ordered coDefenders (all placed pieces) |
+| Control / `control_relation` | color, mode geometric/legal, target, complete controller{square,piece}; controller color equals color |
+| Control / `control_empty_target` | color, mode, target; successful absence for this exact target only |
+| Control / `control_unavailable` | color, literal mode legal, reason invalid_turn_clone; not an empty legal control set |
+| Destinations / `destination_membership` | color, complete piece{square,occupant}, target, boolean legal/localNonLosing; retain membership in each original set; localNonLosing implies legal |
+| Destinations / `destinations_empty_piece` | color, complete piece; both sets empty for that piece, not an unsafe-piece grade |
+| Destinations / `destinations_empty_color` | literal kind available, color, pieces=[] |
+| Destinations / `destinations_unavailable` | literal kind unavailable, color, reason invalid_turn_clone, pieces=[] |
+| Changes / `destination_event_context` | color, complete before/after piece, moved, zeroSafe; matches retained context exactly |
+| Changes / `destination_event_membership` | target, membership containing all eight exact booleans legalBefore/After/Gained/Lost and safeBefore/After/Gained/Lost; every delta matches its before/after bits |
+| King / `king_zone_member` | complete king{square,piece}, square |
+| King / `king_zone_relation` | complete king, participant placed piece, square, group attacker/defender |
+| King / `king_empty_group` | complete king, group attacker/defender/shelter |
+| King / `king_shelter` | complete king, shelter placed piece |
+| King / `king_escape` | complete king, square; adjacent legal turn-clone escape only |
+| King / `king_escapes_empty` | complete king, escapes{kind:available,squares:[]} |
+| King / `king_escapes_unavailable` | complete king, escapes{kind:unavailable,reason:invalid_turn_clone,squares:[]} |
+
+No membership target occurs twice in a given piece/set image. Reassembling all members under
+whole scope must recover the complete source's ordered rays/duties, color/mode/target/controller
+sets including empties, legal/local-exchange sets, all eight event sets, king participants and
+their complete controlled-zone lists, shelter and escape availability. Missing/duplicated/extra
+members, changed nested identities, set bits, roles or conventions refuse. The complete source
+still supplies its context/receipt; a well-shaped caller row never supplies authority.
+
+Flattening order is source order: rays/duties in their array order; control colors then geometric/
+legal modes, source targets, source controllers (one empty or unavailable sentinel where required);
+destinations colors then pieces, legal-first ordered union with local-exchange members retained;
+changes context first then sorted union of all eight target sets; kings in source order, zone,
+attacker/defender relations, shelter, escapes and their required empty/unavailable sentinels.
+Factories compute this order and range from the complete source each time. Only square control
+can focus by exact color/mode/target; an unavailable clone remains unavailable at the requested
+target. No generic field selector or relevance ordering is introduced.
+
+### Readable registered rendering and the two demonstrated scope errors
+
+The six FactOperandsByRenderer entries use their exact envelope types. Their six registered
+templates render range/selected/full-source counts and every retained member operand. Component
+construction and receipt parsing recompute the same text from those operands; no prewritten
+member sentence is accepted. Rays name slider/blocker/target, all ray squares and any declared
+comparison, with convention-labelled material values rather than engine evaluation. Duties name
+the defender/target and **all** co-defenders, explicitly geometric, never advice to recapture.
+Control names side/mode/target/controller and states legal turn-clone/en-passant-cleared limits.
+Destination “safe” field names render as local non-losing exchange membership, not move safety.
+
+D3803's actual legal stationary castle on g1 is available while adjacent king escapes are empty.
+Consequently king captions always name **adjacent legal turn-clone escapes** and preserve
+unavailability; an empty set does not mean no legal king move, mate, or whole-position safety.
+D3804's actual knight b1→a3 control has both local-exchange sets empty and zeroSafe=false.
+That flag means **lost the last local-exchange destination** (before nonempty AND after empty),
+not currently zero. Context captions render that transition; all later membership captions still
+identify the before/after piece. Do not repair either by changing the source predicate/boolean.
+
+The initial component composition is a registered `fact_statement` plus a neutral `square_set`
+when witness squares exist; no empty square component. The same registered statement owns its
+caption. Paint the declared relation endpoints, not guessed future squares: rays slider/blocker/
+target; duties defender/target (co-defenders remain fully named); control controller/target or
+empty target; destinations origin/target; changes before/after/target; king king/participant/zone
+or escape square as applicable. Deduplicate squares in this visual set only, not source members.
+Unavailable/empty groups without witnesses render text alone. No grade colors or recommendation
+arrows follow from legal/local-exchange membership. A future arrow composition owes exact
+source-backed relationship declarations and independent acceptance; the prototype's conservative
+arrow-count estimates are not registered component authority.
+
+Fit the whole equivalent sentence/caption/marks bundle under unchanged Full Inspector limits.
+Never drop a comparison, co-defender, bit, qualification or caption just to fit. If the complete
+next member cannot fit, §4.11a returns detail_limited rather than a cropped row. Eight is a maximum,
+not a required count. Preserve actual source and all original consumer/pack bytes.
+
+### Able-to-fail acceptance, still required before delivery
+
+1. Exact six factory/payload/parser/renderer declarations and complete module.full_inspector@2
+   pair coverage; old consumer/adapters remain supported. A sibling/old projection cannot satisfy
+   a detail source. All eighteen member alternatives have positive and malformed nested cases.
+2. Actual source→sole factory→compiler→registered components→serialized/client parser tests
+   reconstruct every source operand, including optional promoted flags, empty/unavailable cases,
+   ordered identities, source contexts and convention/qualification/answer-content inheritance.
+   A spread/caller payload, arbitrary sentence or matching shape cannot mint admitted evidence.
+3. Whole and focused pages preserve full/selected totals, original ordinals and every member;
+   exact source/context/range/disclosure substitution refuses. The current disposable tests are
+   member grammar and source reconstruction only, not production envelope/receipt admission.
+4. Mounted and native desktop/phone/keyboard Inspector opens source→detail→focus/page→return;
+   every page has readable subject/context and no raw identifiers, overflow, board change,
+   stale paint or assistance bypass. All six actual atomic component bundles pass current budgets.
+5. Keep the legal castle/empty adjacent-escape and empty-before/after zeroSafe=false controls;
+   they fail the old captions. No claim of new chess semantics or semantic qualification follows.
+   Close D3792 only after this and module-registration's source/access/response/native obligations
+   and independent acceptance—not on a disposable model or a green schema alone.
+
 ## Questions resolved for this draft
 
 1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the
@@ -2027,6 +2199,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-10-14 — D3802 supplies six closed source-retaining detail payload/factory/parser/renderer
+  schemas and eighteen member alternatives, companion to module-registration §4.11a. Strict
+  disposable member reconstruction is not production authority or semantic qualification.
+  D3803/D3804's genuine scope/temporal controls repair only the research captions: adjacent-only
+  king escapes, the lost-last-destination flag and complete later-page piece context. Source
+  predicates stay unchanged; independent acceptance and actual source/response/native proof remain.
 
 - 2026-10-10 — **D3309/D3654 detailed structural Inspector amendment authored, not accepted.**
   Sixteen closed reading successors, a separate consumer/operation, required scope qualifiers,

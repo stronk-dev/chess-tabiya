@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — D3802 takes the six exact Inspector detail schemas in the presentation owner,
+with strict typed-member and source-reconstruction controls over the genuine census. D3803
+separately checks/fixes the research king-escape caption's adjacent-only scope. Both are
+research/draft work, not production authorisation; D3792 supplier/response/native and independent
+acceptance obligations remain. Preserve all sources, memberships, limitations and old versions.
+
+Result: D3802's six schemas and eighteen member alternatives are authored, unaccepted; strict
+typed/source reconstruction covers 4,184 values/226,557 members with 126 corruption refusals.
+D3803/D3804's legal controls fail the old research captions and pass their scoped/temporal repair.
+Next specify actual permitted-prefix suppliers/acquisition/receiver/cancellation and real response
+admission before independent review. Do not ship the disposable parser/model or self-accept the
+parent amendment. No production source/default/content/qualification/release gate changes.
+
 2026-10-14 — D3801 authors D3792's closed Inspector operation context/response/paging/disclosure
 grammar after the supplier inventory. Use actual exported assistance/presentation types and
 source-specific scope compatibility. Disposable grammar controls remain outside production and

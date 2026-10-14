@@ -31615,6 +31615,33 @@
       "uxItems": [],
       "evidence": "rfc/module-registration.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3802",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:257e87851f001e6725ce1f325f4713cd477a9c89f34aac1089f1a8bac02fe0bc",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3803",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6b56c88523a795e4a81e3b80a575113b6bdcef30ad0c25cadbf3a393196bccfd",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3804",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c3b7ef5f02f4c2b8e3b440861323c8f0072c1b6accac10a50a9e054a425ae31f",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
     }
   ]
 }

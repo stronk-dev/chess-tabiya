@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector six-view schema authoring, 2026-10-14 ([[D3802]]–[[D3804]]): **bounded prerequisite
+answered; unaccepted and not delivered**. Typed parsing/reconstruction covers 4,184 genuine
+values / 226,557 members / all eighteen shapes, with 126 source/shape corruption refusals.
+Separate legal controls repair adjacent-only king-escape and lost-last-destination model wording,
+including complete later-member subject identity. Existing budgets still fit the richer text.
+Production source/factory/component/response/native and independent acceptance remain D3792 work.
+See `module-evidence-assembly.md` §Six typed detail schemas and temporal/scope controls.
+
 Inspector closed operation authoring, 2026-10-14 ([[D3801]]): **bounded draft prerequisite
 answered, not accepted/delivered**. All 75 exact refs have context compatibility checks; 88
 positive grammar/range controls and 399 refusals pass with actual stage-1 assistance parsing.

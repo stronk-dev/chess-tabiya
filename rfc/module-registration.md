@@ -2067,8 +2067,9 @@ No 1.0 completion or execution-pair promotion follows from this draft.
 
 **Authoring still required before buildability acceptance:** turn the D3799 supplier inventory
 into exact production acquisition/absence/receiver/cancellation obligations, including its held
-provider versions; the six literal payload/factory/renderer schemas in the owning presentation
-amendment; and independent review of the newly authored source-context/response/paging/disclosure
+provider versions; independent review of D3802's six literal payload/factory/renderer schemas
+in evidence-presentation, with actual envelope/source/component admission controls; and independent
+review of the newly authored source-context/response/paging/disclosure
 grammar, including real source/response admission controls (not just request-shape tests).
 The request and six-type boundary
 above are a bounded draft, not an executable contract or authority to implement a guessed response.
@@ -2603,6 +2604,10 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-14 — D3802's evidence-presentation companion now authors the six detail schemas and
+  eighteen closed member alternatives; actual source/component/envelope/native admission and
+  independent acceptance remain. D3803/D3804 repair research scope/temporal wording only.
 
 - 2026-10-14 — D3801 authors the closed D3792 context/response/source-summary/member paging and
   disclosure image, using actual RequestedAssistanceV1. Strict disposable request/range controls

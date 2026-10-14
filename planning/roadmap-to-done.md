@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3801]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3804]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,7 +68,7 @@ repairs the reproduced terminal query exception without changing complete legal 
 Focused 206 tests, authenticated both-color SQLite reads and foreign-account refusal, four
 native desktop/phone played mate/stalemate → Inspector → return/reload cases and strict types
 pass. D3791/D3792 remain blocked on an independently accepted demand/detail contract. The ledger
-now has 1,656 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
+now has 1,659 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
 prose-only closures and every whole-product/content/release gate remain. Fresh GitHub reads
 still show published `62c81eb1` verify success/browser failure. No new feature wave is started
 before the owner's requested total inventory.
@@ -102,6 +102,15 @@ distinct disclosure grammar in the same unaccepted draft. Strict disposable cont
 not source/access/response/native proof. Six exact detail schemas, permitted-prefix suppliers,
 acquisition/receiver/cancellation, real response checks and independent acceptance remain.
 No product source/default/content/capability/release change; the milestone stays held.
+
+[[D3802]]–[[D3804]] finish six detail schemas and two research-caption repairs, not delivery.
+The unaccepted presentation companion now defines eighteen closed member alternatives and
+complete context/factory/parser/renderer contracts. Strict source reconstruction covers 4,184
+values / 226,557 members, with 126 corruptions refused. Legal curated controls retain adjacent-only
+king escapes despite available stationary castling, and zeroSafe's lost-last-destination meaning
+despite empty before/after sets. Later members keep their piece identity. Richer text still fits
+unchanged budgets; actual source acquisition/prefixes, factory/component/envelope/response/native
+proof and independent acceptance remain D3792 work. Production/release gates are unchanged.
 
 October-14 [[D3793]]/[[D3794]] complete CMP-a12's existing earned-tool/help-style journey,
 not Campaign curriculum or new rewards. Result/map/preparation name the actual current style's

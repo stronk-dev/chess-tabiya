@@ -5,7 +5,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { parsePgn, startingPosition } from "chessops/pgn";
 import { makeFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
-import { makeUci } from "chessops/util";
+import { makeUci, parseUci } from "chessops/util";
+import { positionFromFen } from "../../packages/runtime/src/chess.js";
 import { createRun, commitMove } from "../../packages/runtime/src/runtime.js";
 import { canonicalRunStart } from "../../packages/runtime/src/session.js";
 import { MODULE_CONSUMER_ACCEPTS, PRIMARY_EVIDENCE_MANIFEST, RECORDED_PATH_SUCCESSOR_REFS } from "../../packages/runtime/src/evidence-catalog.js";
@@ -18,6 +19,8 @@ import { presentEvidenceItems } from "../../packages/runtime/src/presentation-co
 import { recordedSemanticPath } from "../../packages/runtime/src/recorded-semantic-path.js";
 import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES } from "../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
 import { detailPlan, detailPage, detailBatch, focusControl, DETAIL_REFS } from "./detail-model.js";
+import type { KingZoneReading } from "../../packages/runtime/src/king-state.js";
+import { parseDraftMember, verifyDraftMembers, MEMBER_SOURCE } from "./detail-schema.js";
 import type { Color, SquareName } from "chessops/types";
 import { exactLegalMoves } from "../../packages/runtime/src/legal-moves.js";
 
@@ -68,6 +71,9 @@ const rows = refs.map(ref => {
 });
 const byRef = new Map(rows.map(row => [row.projection, row]));
 const detail = DETAIL_REFS.map(projection => ({ projection, values: 0, pages: 0, batches: 0, unavailableRows: 0, maxWords: 0, maxMarks: 0, maxArrows: 0, batchMaxWords: 0, batchMaxMarks: 0, batchMaxArrows: 0, refusalControls: 0 }));
+let zeroBeforeAndAfter = 0;
+let typedValues = 0, typedMembers = 0, typedRefusals = 0;
+const typedKinds = new Set<string>();
 const controlFocus = { requests: 0, unavailable: 0, batches: 0, maxMembers: 0, maxBatches: 0, maxWords: 0, maxMarks: 0, maxArrows: 0 };
 function values(value: unknown): readonly DeclaredEvidence<unknown>[] {
   if (Array.isArray(value)) return value.flatMap(values);
@@ -86,6 +92,46 @@ function measure(evidence: DeclaredEvidence<unknown>, sample: string): void {
   row.offered++;
   const plan = detailPlan(evidence);
   if (plan !== undefined) {
+    const typed = verifyDraftMembers(evidence, plan.rows); typedValues++; typedMembers += typed.length;
+    for (const member of typed) {
+      assert.deepEqual(parseDraftMember(key(evidence.projection), JSON.parse(JSON.stringify(member))), member);
+      if (typedKinds.has(member.kind)) continue;
+      typedKinds.add(member.kind);
+      assert.throws(() => parseDraftMember(key(evidence.projection), { ...member, text: "manufactured" })); typedRefusals++;
+      assert.throws(() => parseDraftMember(key(evidence.projection), { kind: member.kind, value: { ...member.value, injected: "manufactured" } })); typedRefusals++;
+      const missing = structuredClone(member); delete (missing.value as Record<string, unknown>)[Object.keys(missing.value)[0]!];
+      assert.throws(() => parseDraftMember(key(evidence.projection), missing)); typedRefusals++;
+      assert.throws(() => parseDraftMember("not-the-source@1", member)); typedRefusals++;
+      if (typed.length > 0) {
+        assert.throws(() => verifyDraftMembers(evidence, [...typed, member])); typedRefusals++;
+        assert.throws(() => verifyDraftMembers(evidence, typed.filter(row => row !== member))); typedRefusals++;
+        const substituted = structuredClone(member);
+        const substituteIdentity = (value: unknown): boolean => {
+          if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+          const row = value as Record<string, unknown>;
+          for (const field of ["square", "target"]) if (typeof row[field] === "string" && /^[a-h][1-8]$/u.test(row[field])) {
+            row[field] = row[field] === "a1" ? "a2" : "a1"; return true;
+          }
+          for (const child of Object.values(row)) if (substituteIdentity(child)) return true;
+          if (row.color === "white" || row.color === "black") { row.color = row.color === "white" ? "black" : "white"; return true; }
+          return false;
+        };
+        assert(substituteIdentity(substituted.value), "source-binding negative changed no identity");
+        parseDraftMember(key(evidence.projection), substituted); // still structurally valid
+        assert.throws(() => verifyDraftMembers(evidence, typed.map(row => row === member ? substituted : row))); typedRefusals++;
+      }
+    }
+    if (key(evidence.projection) === "rules.mobility.event.piece_destinations@1") {
+      const value = evidence.payload as import("../../packages/runtime/src/mobility.js").PieceDestinationsEvent;
+      for (const member of plan.rows.filter(row => row.kind === "destination_event_membership")) {
+        const text = detailPage(plan, member.ordinal, plan.digest).text;
+        assert(text.includes(`${value.color} ${value.piece.before.role}`) && text.includes(value.piece.before.square) && text.includes(value.piece.after.square), "destination member lost its source piece context");
+      }
+      if (value.safeBefore.length === 0 && value.safeAfter.length === 0) {
+        assert.equal(value.zeroSafe, false); zeroBeforeAndAfter++;
+        assert.match(detailPage(plan, 0, plan.digest).text, /lost its last local non-losing exchange destination no/iu);
+      }
+    }
     const result = detail.find(entry => entry.projection === key(evidence.projection))!;
     const before = JSON.stringify(evidence);
     result.values++;
@@ -204,11 +250,42 @@ const epPlan = detailPlan(epSource)!;
 const epFocused = focusControl(epPlan, "white", "legal", "d6");
 assert.equal(epFocused.rows.filter(member => member.kind === "control_relation").length, 0);
 assert.match(detailBatch(epFocused, 0, epFocused.digest).text, /turn-clone \(en passant cleared\)/u);
+// D3803: a stationary Chess960 castle is a legal king move, not an adjacent escape.
+const castleFen = "k7/8/8/8/2b5/8/5PPP/6KR w H - 0 1";
+assert(exactLegalMoves(castleFen).some(move => move.uci === "g1h1" && move.to === "g1"));
+const kingSource = invokeEvidenceValueRoute("rules.king.reading.zone_state@1", { fen: castleFen });
+const kingReading = kingSource.payload as KingZoneReading;
+const whiteKing = kingReading.kings.find(king => king.color === "white")!;
+assert.deepEqual(whiteKing.escapes, { kind: "available", squares: [] });
+const kingPlan = detailPlan(kingSource)!;
+const emptyKingRow = kingPlan.rows.find(row => row.kind === "king_escapes_empty" && (row.value as { king: { square: string } }).king.square === "g1")!;
+assert.match(detailPage(kingPlan, emptyKingRow.ordinal, kingPlan.digest).text, /adjacent legal turn-clone escapes/iu);
+verifyDraftMembers(kingSource, kingPlan.rows);
+// D3804 separate legal control: every old/new knight destination loses local material.
+const emptyExchangeFen = "4k3/8/2p5/1p6/1p6/2pp4/2p5/1N2K3 w - - 0 1";
+const emptyExchangePosition = positionFromFen(emptyExchangeFen);
+const emptyExchangeMove = parseUci("b1a3")!;
+assert(emptyExchangePosition.isLegal(emptyExchangeMove)); emptyExchangePosition.play(emptyExchangeMove);
+const emptyExchangeEvents = values(invokeEvidenceValueRoute("rules.mobility.event.piece_destinations@1", {
+  beforeFen: emptyExchangeFen, moveUci: "b1a3", afterFen: makeFen(emptyExchangePosition.toSetup()),
+}));
+const emptyExchangeSource = emptyExchangeEvents.find(item => (item.payload as import("../../packages/runtime/src/mobility.js").PieceDestinationsEvent).piece.before.square === "b1")!;
+assert(emptyExchangeSource !== undefined, "legal counter-control emitted no destination change");
+const emptyExchangeEvent = emptyExchangeSource.payload as import("../../packages/runtime/src/mobility.js").PieceDestinationsEvent;
+assert.deepEqual(emptyExchangeEvent.safeBefore, []); assert.deepEqual(emptyExchangeEvent.safeAfter, []);
+assert.equal(emptyExchangeEvent.zeroSafe, false); assert.notDeepEqual(emptyExchangeEvent.legalBefore, emptyExchangeEvent.legalAfter);
+const emptyExchangePlan = detailPlan(emptyExchangeSource)!;
+verifyDraftMembers(emptyExchangeSource, emptyExchangePlan.rows);
+assert.match(detailPage(emptyExchangePlan, 0, emptyExchangePlan.digest).text, /lost its last local non-losing exchange destination no/iu);
+zeroBeforeAndAfter++;
 const report = { scope: "disposable individual-fact fit over real imported/local/recorded inputs; provider/dependency refs unmeasured, not query/HTTP/UI or semantic qualification", importedGames: games.length, importedEdges,
   localSamples: samples.length, acceptedRefs: rows.length, measuredRefs: rows.filter(row => row.calls > 0 || row.offered > 0).length,
   oversizedRefs: rows.filter(row => row.intrinsicOverflows > 0).map(row => row.projection), refusedAdapters: rows.filter(row => row.adapterRefusals > 0).map(row => row.projection), detail, controlFocus, enPassantScopeControl: "actual legal move retained; clone-control absence explicitly labelled", rows };
+const typedDetail = { typedValues, typedMembers, typedKinds: [...typedKinds].sort(), unobservedKinds: Object.keys(MEMBER_SOURCE).filter(kind => !typedKinds.has(kind)), typedRefusals, zeroBeforeAndAfter };
+Object.assign(report, { typedDetail }); // aggregate only; never source/member bytes
 const output = `${JSON.stringify(report, null, 2)}\n`;
 assert(Buffer.byteLength(output) < 64 * 1024, "aggregate exceeded its small-report bound");
 writeFileSync(".cache/d3792-inspector-demand/census.json", output);
 console.log(JSON.stringify({ importedGames: report.importedGames, importedEdges, acceptedRefs: report.acceptedRefs, measuredRefs: report.measuredRefs, oversizedRefs: report.oversizedRefs, refusedAdapters: report.refusedAdapters }));
 console.log(JSON.stringify({ disposableDetailOnly: true, detail, controlFocus }));
+console.log(JSON.stringify({ typedDetailOnly: true, ...typedDetail }));

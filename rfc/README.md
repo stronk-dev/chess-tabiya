@@ -10,8 +10,9 @@ and exact target/color/mode focus fit unchanged limits on the sampled population
 new operation and six literal detail views are **unaccepted**, not production bindings.
 The 35 suppliers are inventoried under D3799; D3801 authors closed context/response/paging/
 disclosure with disposable grammar controls, not source/access/response proof. Exact acquisition/
-permitted-prefix suppliers, six payload/renderer schemas and real response controls remain
-authoring/buildability obligations; no permanent-unavailable stubs, source
+permitted-prefix suppliers and real response/component controls remain authoring/buildability
+obligations. D3802's six payload/renderer schemas are authored in evidence-presentation with
+eighteen typed member alternatives, not accepted or production. No permanent-unavailable stubs, source
 retirement, scope/exactness promotion or parent-state authorization. Independent review next
 after those obligations are authored; no shared resource claim or lifecycle change.
 

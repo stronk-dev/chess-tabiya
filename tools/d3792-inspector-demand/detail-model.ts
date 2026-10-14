@@ -31,7 +31,7 @@ function immutableCopy(value: unknown): unknown {
   freeze(copy);
   return copy;
 }
-const piece = (value: { color: string; role: string }, square: string) => `${value.color} ${value.role} on ${square}`;
+const piece = (value: { color: string; role: string; promoted?: boolean }, square: string) => `${value.color} ${value.role} on ${square}${value.promoted === undefined ? "" : value.promoted ? " (marked promoted)" : " (not marked promoted)"}`;
 const exactKeys = (value: object, allowed: readonly string[]) => assert.deepEqual(Object.keys(value).sort(), [...allowed].sort());
 
 export function detailPlan(source: DeclaredEvidence<unknown>): Plan | undefined {
@@ -107,9 +107,9 @@ export function detailPlan(source: DeclaredEvidence<unknown>): Plan | undefined 
       exactKeys(value, ["beforeFen", "moveUci", "afterFen", "color", "piece", "legalBefore", "legalAfter", "legalGained", "legalLost", "safeBefore", "safeAfter", "safeGained", "safeLost", "moved", "zeroSafe"]);
       const fields = ["legalBefore", "legalAfter", "legalGained", "legalLost", "safeBefore", "safeAfter", "safeGained", "safeLost"] as const;
       const destinations = [...new Set(fields.flatMap(field => [...value[field]]))].sort();
-      add("destination_event_context", { color: value.color, piece: value.piece, moved: value.moved, zeroSafe: value.zeroSafe }, `${value.color} ${value.piece.before.role}: ${value.piece.before.square} before, ${value.piece.after.square} after; moved ${value.moved ? "yes" : "no"}; zero destinations in the local non-losing exchange set ${value.zeroSafe ? "yes" : "no"}.`, [value.piece.before.square, value.piece.after.square]);
+      add("destination_event_context", { color: value.color, piece: value.piece, moved: value.moved, zeroSafe: value.zeroSafe }, `${value.color} ${value.piece.before.role}: ${value.piece.before.square} before, ${value.piece.after.square} after; moved ${value.moved ? "yes" : "no"}; lost its last local non-losing exchange destination ${value.zeroSafe ? "yes" : "no"}.`, [value.piece.before.square, value.piece.after.square]);
       const selected = destinations.map(target => ({ target, membership: Object.fromEntries(fields.map(field => [field, value[field].includes(target)])) }));
-      for (const member of selected) add("destination_event_membership", member, `${member.target}: legal before/after ${member.membership.legalBefore ? "yes" : "no"}/${member.membership.legalAfter ? "yes" : "no"}; legal gained/lost ${member.membership.legalGained ? "yes" : "no"}/${member.membership.legalLost ? "yes" : "no"}; local exchange before/after ${member.membership.safeBefore ? "yes" : "no"}/${member.membership.safeAfter ? "yes" : "no"}; local exchange gained/lost ${member.membership.safeGained ? "yes" : "no"}/${member.membership.safeLost ? "yes" : "no"}.`, [value.piece.before.square, value.piece.after.square, member.target]);
+      for (const member of selected) add("destination_event_membership", member, `${value.color} ${value.piece.before.role} on ${value.piece.before.square} before, ${value.piece.after.role} on ${value.piece.after.square} after; ${member.target}: legal before/after ${member.membership.legalBefore ? "yes" : "no"}/${member.membership.legalAfter ? "yes" : "no"}; legal gained/lost ${member.membership.legalGained ? "yes" : "no"}/${member.membership.legalLost ? "yes" : "no"}; local exchange before/after ${member.membership.safeBefore ? "yes" : "no"}/${member.membership.safeAfter ? "yes" : "no"}; local exchange gained/lost ${member.membership.safeGained ? "yes" : "no"}/${member.membership.safeLost ? "yes" : "no"}.`, [value.piece.before.square, value.piece.after.square, member.target]);
       for (const field of fields) assert.deepEqual(selected.filter(member => member.membership[field]).map(member => member.target), [...value[field]].sort());
       break;
     }
@@ -120,7 +120,7 @@ export function detailPlan(source: DeclaredEvidence<unknown>): Plan | undefined 
         exactKeys(king, ["color", "king", "zone", "attackers", "defenders", "shelter", "escapes"]);
         for (const square of king.zone) add("king_zone_member", { king: king.king, square }, `${square} belongs to the recorded zone of ${piece(king.king.piece, king.king.square)}.`, [king.king.square, square]);
         for (const [kind, participants] of [["attacker", king.attackers], ["defender", king.defenders]] as const) {
-          if (participants.length === 0) add("king_empty_group", { king: king.king, group: kind }, `No ${kind} is recorded for this king zone.`);
+          if (participants.length === 0) add("king_empty_group", { king: king.king, group: kind }, `${piece(king.king.piece, king.king.square)}: no ${kind} is recorded for this king zone.`);
           for (const participant of participants) {
             const members = participant.zoneSquares.map(square => ({ king: king.king, participant: { piece: participant.piece, square: participant.square }, square, group: kind }));
             for (const member of members) add("king_zone_relation", member, `${piece(participant.piece, participant.square)} is a recorded ${kind} of ${member.square} in this king zone.`, [king.king.square, participant.square, member.square], 1);
@@ -128,10 +128,10 @@ export function detailPlan(source: DeclaredEvidence<unknown>): Plan | undefined 
           }
         }
         for (const shelter of king.shelter) add("king_shelter", { king: king.king, shelter }, `${piece(shelter.piece, shelter.square)} is in the recorded king-shelter set.`, [king.king.square, shelter.square]);
-        if (king.shelter.length === 0) add("king_empty_group", { king: king.king, group: "shelter" }, "The recorded king-shelter set is empty.");
-        if (king.escapes.kind === "unavailable") add("king_escapes_unavailable", { king: king.king, escapes: king.escapes }, "Legal king escapes are unavailable because this turn clone is invalid.");
-        else if (king.escapes.squares.length === 0) add("king_escapes_empty", { king: king.king, escapes: king.escapes }, "No legal king escape is recorded in this reading.");
-        else for (const square of king.escapes.squares) add("king_escape", { king: king.king, square }, `${piece(king.king.piece, king.king.square)} has a recorded legal escape to ${square}.`, [king.king.square, square], 1);
+        if (king.shelter.length === 0) add("king_empty_group", { king: king.king, group: "shelter" }, `${piece(king.king.piece, king.king.square)}: the recorded king-shelter set is empty.`);
+        if (king.escapes.kind === "unavailable") add("king_escapes_unavailable", { king: king.king, escapes: king.escapes }, `${piece(king.king.piece, king.king.square)}: adjacent legal turn-clone escapes are unavailable because this turn clone is invalid.`);
+        else if (king.escapes.squares.length === 0) add("king_escapes_empty", { king: king.king, escapes: king.escapes }, `${piece(king.king.piece, king.king.square)}: no adjacent legal turn-clone escapes are recorded (en passant cleared), not a claim that every king move is unavailable.`);
+        else for (const square of king.escapes.squares) add("king_escape", { king: king.king, square }, `${piece(king.king.piece, king.king.square)} has a recorded adjacent legal turn-clone escape to ${square} (en passant cleared).`, [king.king.square, square], 1);
       }
       break;
     }

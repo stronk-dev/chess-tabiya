@@ -28418,3 +28418,36 @@ Campaign was the one capability with no API, route or content. Now:
 - Update existing coverage/queue/ledger/state/roadmap. Production and prior full local proof are
   unchanged; no fresh full/browser, content, semantic qualification, complete milestone/capability,
   image, remote CI or release claim. No deployment, worktree, delegation or goal completion.
+
+### 2026-10-14 — D3802 six detail schemas; D3803/D3804 scope/temporal model repairs
+
+- Previous goal turn makes progress at 4c4f5112. Continue its actual held prerequisite rather
+  than implement unaccepted wiring: evidence-presentation now owns six literal detail schemas,
+  complete envelopes/contexts, eighteen member alternatives, sole factory/renderer contracts,
+  order, neutral components and source/qualification/answer-content inheritance. No parent-state
+  authority, new source, component type, pack byte or production binding is claimed.
+- Strict disposable member parsing reconstructs complete source operand images across the same
+  4,184 genuine values and 226,557 members. All eighteen kinds occur; 126 extra/missing/wrong
+  source/duplicate/removal/still-well-shaped identity substitutions refuse. No parsed object
+  becomes admitted evidence. A generic selector fails TypeScript; explicit typed grouping repairs
+  it without a double-assertion escape hatch. This is fidelity, not semantic or envelope authority.
+- D3803's legally computed stationary g1h1 castle is available while adjacent escapes are empty.
+  The old empty caption fails after proving both source facts. Research captions now name the
+  specific king and adjacent-only legal turn-clone/en-passant-cleared scope, not every king move.
+- D3804 first reproduces missing piece context on later membership captions. The fixed corpus
+  has no zero-before/zero-after event; its non-vacuity guard correctly fails. A separate legal
+  knight b1→a3 control verifies both local-exchange sets empty and zeroSafe=false; the old current-
+  state caption then fails. Repair describes lost-last-destination and every member's before/after
+  piece identity. No source predicates/sets/flags change and no corpus frequency is inferred.
+- Frozen normal make inspector-demand-research inspector-source-contract-research exits zero:
+  strict types, every old reach/negative/source/member/focus/immutability control, 126 new refusals,
+  88/399 request/range controls and 37 permanent factory tests. Richer text fits unchanged limits:
+  batch maxima 155/149/141/261/149/283 words, focus max105/six marks/five conservative arrows.
+  Model arrows are estimates, not registered component proof. Bounded ignored aggregate only;
+  no raw source/member/trace data enters Git or ordinary CI/progress.
+- Close only D3802's bounded authoring and D3803/D3804's research-caption defects. Update existing
+  coverage/queue/ledger/state/roadmap. Actual permitted-prefix suppliers, source acquisition/
+  receiver/cancellation, production factory/component/envelope/response/native checks and genuinely
+  independent acceptance remain D3792/source-owner work. Prior full local proof is unchanged;
+  no fresh full/browser, 1.0 capability/milestone, content, semantic qualification, remote CI/image
+  or release promotion. No push, deployment, worktree, delegation or goal completion.
