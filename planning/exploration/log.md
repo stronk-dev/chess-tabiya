@@ -28600,3 +28600,27 @@ Campaign was the one capability with no API, route or content. Now:
   skip and zero retries. All 150 input and 112 composition cells pass; warm p95 110.1 ms retains
   the unchanged 250 ms budget. No input edits occur during this run. This closes the local
   Campaign slice, not D3810's published failure, D3600's prior cause, Docker recovery or 1.0.
+
+### 2026-10-14 — D3810 actual trace joins and stable-layout prerequisite
+
+- Campaign D3809 is committed at fdc22e77 after full local gates and hooks. The complete normal
+  run also passes all four existing D3764 held-attachment/late-response controls; none is removed.
+- Join the exact failed run's network bodies and call timings, not only the screenshot. Theory
+  returns at head 5. Two real evidence attachments append events 6/7; the later proactive query
+  returns only Nudge, and the old Theory card retires. Recorded move/cursor and disclosure cut
+  remain unchanged. This explains retirement, not a new engine/runtime performance defect.
+- The layout case now opens feedback first, then reuses waitForPlayedMoveEvidence to require
+  actual attachments for all played nodes and browser consumption before its Theory query.
+  Opening feedback first matters: withheld evidence is intentionally not applied by polling.
+  Require the help window still open; preserve all seven projections, full action visibility,
+  exact board rectangles, absence/source notes, deadlines and independent retirement controls.
+- Normal make support-empty-browser-check passes all five actual cases; the seven-viewport
+  case takes 22.1 seconds rather than racing the one-second poll. This is not a fixed delay,
+  source mock, timeout increase or assertion removal. Full matrix/governance follow before
+  commit. D3810 remains assigned/open for remote requalification; D3600's original cause and
+  every complete 1.0/release gate remain open. Diagnostic artifacts remain outside Git.
+- Normal make roadmap-receipt verify-governance test-browser-matrix exits zero after frozen
+  inputs: every governance check and all 59 matrix cases pass, with 112/112 successful unretried
+  composition cells and all 150 input cells. Production, software and content bytes are unchanged
+  from fdc22e77's full proof. Only the browser setup and its closeout change; no fresh whole
+  software run, remote pass, source retirement exception or release completion is claimed.

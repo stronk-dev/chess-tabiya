@@ -21,8 +21,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 Published CI checkpoint: [[D3810]] owns `78fd302f`'s empty-Theory state-09 interaction failure.
 Verify 38560140789 succeeds; browser 38560140733 passes smoke/content but fails one matrix case
-(58 pass). The recovery button first has viewport ratio zero, then disappears. Cause is not
-established; no deadline/assertion or release-state change is justified by this reading.
+(58 pass). Its actual 360×680 trace joins the Theory result at head 5 to two later engine-evidence
+attachments at heads 6/7 and retirement of the earlier result. The stable-layout case now opens
+feedback and awaits actual played-move attachments/browser consumption before requesting Theory.
+All five focused empty-Support cases pass with all original projections, full-visibility and
+late-response refusal controls retained. Normal governance and all 59 matrix cases pass, with
+112/112 successful unretried composition cells and all 150 input cells. Production/software/
+content bytes remain those of fdc22e77's full proof; remote requalification, original D3600 cause
+and complete release-truth remain open.
 
 [[D3809]] completes CMP-a13's restriction disclosure across map, preparation, pending/failed
 encounter help and saved completion under accepted campaign-core §§3.3/7.1. Four predecessor-red

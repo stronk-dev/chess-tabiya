@@ -5331,6 +5331,15 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     await expect(page.getByRole("region", { name: "Temporary help" })).toContainText(
       "Support is available for this position until you commit your next move.",
     );
+    // D3810: the engine-enabled fixture still has two real evaluation attachments queued.
+    // Opening feedback permits their application; each changes the decision authority and
+    // correctly retires earlier module results. Test this layout after their actual application
+    // and browser consumption, not in a race with the one-second poll. D3764 independently
+    // keeps the held-attachment/late-response refusal controls in the normal browser tier.
+    await waitForPlayedMoveEvidence(page, decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!));
+    await expect(page.getByRole("region", { name: "Temporary help" })).toContainText(
+      "Support is available for this position until you commit your next move.",
+    );
     await seat("theory_breadcrumb").locator(".seat-row").click();
     await seat("theory_breadcrumb").getByRole("button", { name: "Show" }).click();
     const theory = seat("theory_breadcrumb").locator(".seat-card");

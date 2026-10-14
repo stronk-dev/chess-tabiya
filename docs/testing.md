@@ -4,6 +4,17 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+The stable empty-Theory composition case opens feedback, then waits for both actually played
+moves' engine attachments and browser consumption before requesting its layout result. Feedback
+must open first: ordinary polling deliberately does not apply withheld evidence. A result read
+before those attachments belongs to an older event head and must retire, not be retained to make
+a layout assertion pass. D3810's published trace records exactly that race at 360×680 (head 5 →
+6 → 7). The same case retains all seven projections, full action visibility, unchanged board
+rectangles and deadlines. D3764's four desktop/phone held-attachment controls separately retain
+actual late-response refusal. `make support-empty-browser-check` runs the stable-layout case and
+the ordinary rewind/return journeys; normal matrix CI still runs the case. A local correction
+does not establish paired current-revision GitHub qualification.
+
 Position-only castling and Local Support software fixtures share
 `apps/server/src/empty-application-catalogues.test-support.ts`. It replaces only the five lesson
 catalogue loaders with real empty registry constructors/validators. Application composition,

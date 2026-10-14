@@ -31699,11 +31699,12 @@
     },
     {
       "id": "D3810",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:17b1bfd118df60fdfaf224a20c3fb83dff5956a7b746e96074bf2378ab5fb8f0",
+      "sourceDigest": "sha256:47f6851c024a3cbd1891b800d1bb6694a06694815eb0b618b7d363c2118c2d19",
       "uxItems": [],
-      "owner": "release-engineering"
+      "owner": "release-engineering",
+      "since": "2026-10-14"
     }
   ]
 }
