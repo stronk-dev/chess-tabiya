@@ -2,17 +2,36 @@
 
 ## State
 
-**2026-09-24: accepted by owner direction and implemented; status `awaiting D1`.** A production
-Review/module/longitudinal consumer (criterion 13) is still needed. The [[D1921]]/[[D1929]]
-convention predecessor abstains explicitly in the result. Receipt: `implementation-2026-09-24.md`.
-The history below is retained.
+**Current, 2026-10-14: implemented; status `awaiting D3`.** D1's production caller and D2/D5's
+eleven-family source/Review adoption are discharged in the current RFC (D3735, October 12).
+`RunService.review()` uses `compilePhaseArc` and the storage-authorized prefix; the current normal
+consumer target passes 212 checks. The convention predecessor is implemented and results carry
+registered value/convention receipts. The September-24 implementation receipt and older drafting
+history below do not override these current facts. [[D3788]] corrects this plan's stale State.
+
+[[D3787]] rejects compile-local exchange-source reuse without a consistent measured benefit.
+The production compiler remains unchanged; four permanent source-equivalence/corruption controls
+remain. No new semantic eligibility, module binding, content or release completion follows.
+
+## Remaining discharges
+
+1. D3 — accepted exact learner-module consumer pairs and actual module invocation, owned by
+   `module-registration`. Do not borrow unaccepted source/selection amendments.
+2. D4 — exact pair-keyed presentation, owned by `evidence-presentation`.
+3. D6 — longitudinal adoption with complete opportunity semantics, not occurrence-only rates,
+   owned by `longitudinal-store`.
+4. D7 — separately typed hypothetical/PV sources, owned by `hint-distance` (D1068).
+5. Preserve source qualification and integrated release obligations. Current 343 cases over
+   81 subjects do not establish a fully qualified profile or complete product capability.
+
+## Historical pre-acceptance state
 
 Draft product RFC amended after independent buildability review and follow-up measurement.
 [[D1927]]/[[D1928]]/[[D1930]]–[[D1932]] now have executable contract repairs; the
 [[D1921]]/[[D1929]] value/convention predecessor and repeat review still block acceptance. No
 implementation is authorised.
 
-## Repair order
+## Historical pre-acceptance repair order
 
 1. **Amended:** total, cycle-safe `branchPath` proves one complete branch tip-to-root chain and
    `branchPaths` delegates instead of trusting node-array order.
@@ -34,7 +53,7 @@ implementation is authorised.
 6. Complete the [[D1921]]/[[D1929]] predecessor, then repeat independent buildability review over
    the amended graph, edge, v2 migration, digest and execution contract.
 
-## Boundary
+## Historical pre-acceptance boundary
 
 Review artifacts and disposable falsifiers only. No runtime, evidence catalogue, schema, content,
 server, web, protected design or archive bytes may change before acceptance.

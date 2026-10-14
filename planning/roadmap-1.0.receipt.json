@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:af45b229a1fb64850d3ff585b89980ca68634b4508a4f5c0adeb539fafd4de4e",
+    "roadmap": "sha256:4752dc461546111514fc7e0260dd52da22cfaa84c916bea37424f3a80b319c33",
     "workItems": "sha256:81193a14b2bcc09b6a5c94a5eacf7dfeb528337c6fd38af8cd939c8c7c326ffc",
-    "workState": "sha256:6e3276f20bd13fd3764c6e1ed26495102ac8c1701ded0fe6f1da37ca01a0bff2",
+    "workState": "sha256:652a87980f9b054f7d8aae56d5ea265490e1eb5925e53f0f054feb8d4d360067",
     "rfcRegister": "sha256:6b1522e1965be77bde5f56e042a5b8b08114294345a8e3035a9eaef4ea551fa8",
     "uxIndex": "sha256:2818bb8f3a028e2360e4c9623fccbffbd0e80e4bcece02a6638a18706835dafc",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 16,
       "blocked": 1085,
-      "done": 1643,
+      "done": 1645,
       "refused": 161
     },
     "workItems": {
@@ -451,11 +451,15 @@
       ],
       "nextAction": "Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
-        "at": "2026-10-13",
-        "summary": "D3783 prevents descendant freeze/descriptor hooks replacing parent slots with equal-looking mutable data that later disagrees with cached receipt bytes. Two predecessor controls fail; four permanent record/array/hidden/symbol controls and all 67 mint, 120 collector and 66 actual worker/projector checks plus types pass. Eight fresh-process pairs preserve every event/receipt, row and checkpoint over 2,199 legal edges and 196,589 events. All 343 canonical case outcomes remain; only implementation stamps change. D3782 rejects both slower freezer-sharing candidates and restores the original memo; D3300 cold cost stays open. Full normal gate results belong to the dated log, not a performance or remote claim. Prior implementation checkpoints and useful-selection/source/qualification holds stand. No whole-capability, official-content or release promotion.",
+        "at": "2026-10-14",
+        "summary": "D3787 settles exact recorded-exchange source reuse: duplication is real, but four alternating pairs preserve every complete result/value/input/convention receipt over 89 paths/1,857 edges without consistent benefit; two faster/two slower and 0.57% greater summed cost. The reproducible research-bundle-only repeat is highly variable, not a speedup claim. Remove the candidate Map/callback and preserve original production code; four complete-source equivalence/corruption controls remain. D3788 corrects the plan's stale awaiting-D1/no-Review statement; current D1/D2/D5 adoption is proved and D3/D4/D6/D7 stay open. Focused path/actual consumer targets pass 133/212 cases, types and all 343 canonical cases remain current without metadata changes. Complete normal verification passes 5,601 software/390 files, seven unchanged-budget performance/four, 256 content/26, packaging and governance. No fresh browser/image proof is claimed for unchanged product bytes. Earlier D3783/D3782 and source/selection/qualification holds stand; no new runtime feature, cache, raw recording, D3300/D3600 closure, content or whole-capability/release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
+          "design/research/recorded-semantic-path-cost.md",
+          "planning/recorded-semantic-path/plan.md",
+          "tools/d1931-recorded-path-source-harness/exchange-cost.ts",
+          "tools/d1931-recorded-path-source-harness/exchange-candidate.mjs",
           "packages/runtime/src/evidence-contract.test.ts",
           "planning/longitudinal-store/d3300-cold-profile-2026-10-11.md",
           "packages/runtime/src/evidence-value-authority.test.ts",
@@ -513,6 +517,16 @@
           "planning/exploration/log.md"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3787",
+            "digest": "sha256:31920471b544dfe13883b8172e9ce5c70b2c2149035abb5a2e634f7782d473ba"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3788",
+            "digest": "sha256:089158e9177b13a3867165a3fe2bc317a303c0c64dc9bd121fac2c485f432285"
+          },
           {
             "kind": "work_state",
             "id": "D3783",

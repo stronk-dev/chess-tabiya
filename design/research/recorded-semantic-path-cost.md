@@ -99,3 +99,55 @@ storage, transport, rendering or an external provider. The imported population i
 stratified but not a worst-case adversarial chess population. Node-24 and release-container
 reproduction remain required. None of those limits can make 826.3/1,434.0 ms a pass under the
 preregistered result; they affect the successor mechanism and production envelope.
+
+## 7. Exact exchange-source reuse rejected — 2026-10-14
+
+[[D3787]] asks whether matching tactical families should share an exact legal-exchange source.
+A permanent work-count probe fails on the unchanged compiler: the canonical deflection/overload
+sequence requests the same literal FEN/UCI source twice. An invocation-local candidate reduces
+that to one while still comparing each complete operand against the sole factory's payload;
+separate-call/run controls and result/captured-piece/chosen-line corruption refusals pass.
+`[V]` `packages/runtime/src/recorded-semantic-path.test.ts`; initial normal target: 129 pass/one
+work-count failure; candidate target: 134 pass plus full imported census/eager parity/timing arms.
+
+Four alternating fresh-process pairs compare the genuine original and candidate compilers over
+the accepted 12-path 20/40/80-ply sample plus all current canonical recorded-sequence positives,
+hard negatives and castling populations: 89 paths, 1,857 edges, 394 events and 24,141 windows.
+Every full input/result, operand, event/value/input/convention receipt and result digest matches.
+Run reconstruction is outside the measured interval and can prime position caches; this is
+initial compiler work in fresh processes, not wholly cold rules caches or server latency.
+Only compact aggregates remain ignored; no raw run/event/CPU dump is stored. `[V]`
+`tools/d1931-recorded-path-source-harness/exchange-cost.ts`; `make recorded-exchange-compare`.
+
+| Original compiler ms | Candidate ms | Candidate/original |
+|---:|---:|---:|
+| 2443.860 | 2420.785 | 0.9906 |
+| 2413.247 | 2458.231 | 1.0186 |
+| 2440.550 | 2422.167 | 0.9925 |
+| 2425.832 | 2477.618 | 1.0213 |
+
+Two pairs are faster and two slower; summed candidate cost is 0.57% higher. **No consistent speed
+benefit is established.** Remove the candidate Map/callback changes and candidate-only work-count
+tests, retaining the original production compiler. Keep four permanent source guards: both genuine
+families have the same exact source payload/receipt, and a conflicting result, captured identity
+or chosen line cannot borrow the other family's valid source. These are package-internal controls,
+not an HTTP exploit, new chess definition or semantic qualification. `[V]` restored source diff is
+empty; final `make recorded-semantic-path-check`: 133 cases pass, all 108 paths/6,991 plies/1,338
+events and eager parity retained; 20/40/80-ply p95 is 25.2/51.5/83.3 ms under unchanged 500 ms.
+
+For reproducibility the rejected variant exists **only** in the disposable bundler's guarded
+in-memory source transformation. The normal opt-in Make target rebuilds both current-original and
+candidate bundles without touching the checkout, refuses identical bundles and repeats the full
+comparison. Initial builder attempts correctly fail on the unsupported Unicode regex flag and
+unresolved chessops; use a supported filter and the runtime workspace's declared dependency path,
+not shell overrides, an externalized library or a new root dependency. `[V]`
+`exchange-candidate.mjs`; normal Make target's terminal outcomes.
+
+That reproduction retains every output/receipt but has unstable timings: ratios
+1.2537/1.0327/1.1039/0.5898, with a 9,338.424 ms baseline outlier. Do not select the last favourable
+pair or aggregate this noisy batch into a speedup claim. Both batches survive in this summary;
+the second small ignored aggregate replaces the first local scratch output. The rejection stands.
+`[V]` same repeatable target, `.cache/d3787-recorded-exchange.json`.
+
+This settles one cost question. It does not finish D3300 (the local-alternative projector is a
+different operation), D3600, semantic validation, useful selection, official content or 1.0.

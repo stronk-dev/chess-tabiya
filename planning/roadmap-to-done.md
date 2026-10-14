@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3786]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3788]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -69,6 +69,14 @@ warm p95 128.6 ms under unchanged 250 ms. Three actual local windows distinguish
 delay outside the small SQL spans and substantial main-thread CPU. These are not the published
 failure's underlying cause; D3600, remote qualification and image recovery remain open. No
 durability setting, source, deployment, chess feature or whole-product gate changes.
+
+October-14 [[D3787]]/[[D3788]] settle one recorded-source cost question and correct a stale
+operation plan, not missing chess features. Complete-result comparisons show no consistent
+benefit from exact exchange-source reuse; production stays unchanged with four stronger source
+guards. Full normal verification passes 5,601 software/seven performance/256 content cases,
+types/packaging/governance; actual consumer checks pass 212 and all 343 canonical cases remain.
+Current Review adoption is no longer called missing; module/presentation/longitudinal/hypothetical
+discharges remain. No new cache, raw recording, source qualification or whole-product completion.
 
 **Inventory closeout, 2026-10-13:** the last in-flight production change is committed at
 `49179aff`; there are no tracked implementation edits left unfinished. Its complete normal

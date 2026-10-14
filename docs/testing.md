@@ -41,6 +41,15 @@ interleaving, privacy and actual second-connection write-lock controls first. A 
 held lock calibrates the observer; it is not evidence that GitHub's failure has that cause.
 The native samples and timing gate remain unchanged; a passing local probe is not remote closure.
 
+`make recorded-exchange-compare` is opt-in D3787 cost research, outside ordinary CI and progress
+inputs. It rebuilds the current original compiler and a rejected invocation-local source-reuse
+variant into ignored bundles; the guarded variant changes no repository source. Four alternating
+fresh-process pairs compare complete results and value/input/convention receipts over 89 legal
+paths, not only event counts. Run construction is untimed and may prime position caches.
+Only a small ignored aggregate is retained; no raw recording enters Git. This does not establish
+semantic qualification or a performance promise. The normal recorded-path suite retains the
+separate matched-family source-equivalence and complete operand-corruption controls.
+
 `make move-grade-consumer-check` covers the grade convention, both ladders/mate arms, module
 admission, voice guard and actual authenticated Review/Nudge reads. Populated synthetic scores
 remain labelled mock-engine inputs; a real stored rating changes at the authenticated rating

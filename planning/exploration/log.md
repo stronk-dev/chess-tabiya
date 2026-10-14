@@ -28121,3 +28121,46 @@ Campaign was the one capability with no API, route or content. Now:
   untriaged. git diff --check is clean. Stage only this observer/test/doc/tracker batch and inspect
   its exact cached list before normal commit hooks; leave the three pre-existing untracked paths
   and all archive bytes untouched. No new raw research data or external publication.
+
+### 2026-10-14 — D3787 recorded exchange-source comparison; D3788 plan reconciliation
+
+- Prior goal turn advances CI diagnosis at 8f6e77c4, with complete normal gates and clean tracked
+  main. Remote cause and publication remain held. Take the accepted recorded-path shared-source
+  cost question, recording D3787 before experiment; normal sync/assignment retains zero untriaged.
+- The canonical deflection/overload control fails on the predecessor (same source twice, expected
+  once); 129 other cases pass. Capture the original compiler bundle, then test invocation-local
+  reuse with complete per-operand checks. Candidate passes 134 cases and the normal imported
+  census/eager parity/unchanged timing arms. No global cache or source/convention change.
+- Four alternating fresh-process pairs preserve every complete input/result/value/input/convention
+  receipt over 89 paths, 1,857 edges, 394 events and 24,141 windows. Two faster/two slower pairs
+  sum to 0.57% greater candidate cost. Reject the Map/callback changes, removing candidate-only
+  assertions; actual production source diff is empty. Keep four source-equivalence/corruption
+  controls and pass 133 final path checks plus full 108-path/6,991-ply census and 500 ms arms.
+- Make the rejected variant reproducible only as a guarded in-memory research bundle. Initial
+  Unicode-filter and chessops resolution failures are real builder errors, not product findings;
+  fix the filter and configure its declared runtime workspace dependency path, not shell overrides.
+  The normal repeat passes complete equality but has unstable ratios 0.5898–1.2537 and a large
+  baseline outlier. Record both batches, not a selected favourable pair or promised speedup.
+- Actual saved-source/authenticated Review adoption passes 212 checks; clean types and all 343
+  canonical cases/81 subjects pass with generated files unchanged and zero qualified profiles.
+  Record D3788 before fixing the plan's stale current no-caller/awaiting-D1 assertion. Preserve
+  historical drafting text and identify current D1/D2/D5 discharges and pending D3/D4/D6/D7.
+- Update the existing cost dossier/coverage, canonical docs, plan/log and queue. No new runtime
+  feature, author claim, source eligibility, persisted schema, protected intent, raw capture,
+  D3300/D3600 cause, official content, whole-product completion, worktree, delegation or push.
+- Freeze all consumed inputs for normal make roadmap-receipt verify-awake. The same live handle
+  exits zero: software 5,601/390 files, performance seven/four at unchanged limits, content 256/26,
+  clean types, packaging, governance and final corpus checks. No restart/overlap, source change,
+  exclusion or budget relaxation occurs. Product bytes are unchanged from 8f6e77c4; do not rerun
+  and relabel the previous complete browser proof as a new feature or remote/image qualification.
+- Close D3787 as settled research and D3788 as the exact plan correction, with separate path
+  evidence; keep D3300/D3600 and every larger discharge open. Refresh the existing source-bound
+  checkpoint/receipt and verify final tracking before explicit owned-file staging/normal hooks.
+  The full 1.0 goal remains active and incomplete; no publication occurs.
+- Final governance catches a duplicate already-present recorded-path test reference in the
+  refreshed checkpoint. Remove only the duplicate and regenerate the compact receipt; the
+  uniqueness guard, source anchors and all product/qualification requirements remain unchanged.
+- Final normal roadmap receipt/governance exits zero; 3,537 ledger rows, 1,731 live, zero
+  untriaged, and git diff --check clean. Stage only this research/test/doc/tracker batch, inspect
+  its cached list and use normal hooks. The original runtime compiler, generated semantic data,
+  archive bytes and three pre-existing untracked paths remain untouched.

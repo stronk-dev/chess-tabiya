@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3787]] settles exact exchange-source reuse: duplication is real, but four
+fresh-process pairs over 89 paths retain every result/value/input/convention receipt and show
+no consistent cost benefit (two faster/two slower, 0.57% greater summed cost). Reject the Map/
+callback changes; production is unchanged. Four source-equivalence/corruption controls remain;
+133 path and 212 actual consumer checks, types and all 343 canonical cases pass. The opt-in
+reproduction changes only ignored bundles and has highly variable timing; no cherry-picked gain.
+[[D3788]] corrects the operation plan's stale awaiting-D1/no-Review assertion: current D1/D2/D5
+are discharged; D3/D4/D6/D7 remain owned. Do not recommission the existing consumer or this cache
+experiment. No source/selection/qualification/content, D3300/D3600, milestone or release closure.
 2026-10-14 — [[D3786]] equips the next [[D3600]] execution with test-only actual-server
 request windows, inclusive main-thread CPU and complete SQLite BEGIN/COMMIT/ROLLBACK phases.
 Normal browser startup explicitly pipes the bounded private-data-free rows to CI logs;

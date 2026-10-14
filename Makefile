@@ -554,6 +554,15 @@ recorded-semantic-path-check:
 	./node_modules/.bin/esbuild apps/server/src/recorded-semantic-path-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/recorded-semantic-path-check.js
 	$(CI_NODE) apps/server/dist/recorded-semantic-path-check.js
 
+# D3787 disposable exact-output/cold-cost comparison; outside normal CI and progress inputs.
+.PHONY: recorded-exchange-baseline recorded-exchange-compare
+recorded-exchange-baseline:
+	./node_modules/.bin/esbuild tools/d1931-recorded-path-source-harness/exchange-cost.ts --bundle --platform=node --format=esm --outfile=tools/dist/recorded-exchange-before.mjs --log-level=warning
+
+recorded-exchange-compare: recorded-exchange-baseline
+	$(CI_NODE) tools/d1931-recorded-path-source-harness/exchange-candidate.mjs
+	$(CI_NODE) tools/dist/recorded-exchange-after.mjs compare
+
 .PHONY: semantic-search-input-readiness semantic-search-manifest semantic-search-stockfish-capture semantic-search-stockfish-check semantic-search-stockfish-child-capture semantic-search-stockfish-child-check semantic-search-stockfish-child-beam semantic-search-maia-capture semantic-search-maia-check semantic-search-maia-child-capture semantic-search-maia-child-check semantic-search-maia-child-prefix semantic-search-maia-configured-window semantic-search-maia-direct-check semantic-search-maia-direct-frontier semantic-search-root-frame semantic-search-exact-replies semantic-search-fork-controls semantic-search-bishop-pressure semantic-search-target-register semantic-search-target-comparison-frame semantic-search-material-immediate semantic-search-destination-immediate semantic-search-destination-reply-witness semantic-search-semantic-touch semantic-search-semantic-reserve semantic-search-relation-event semantic-search-relation-event-reserve semantic-search-local-contrast semantic-search-local-rank-concordance semantic-search-provider-line-arm semantic-search-exact-arm-forcing
 semantic-search-input-readiness:
 	$(CI_NODE) tools/d3262-search-calibration/input-readiness.mjs

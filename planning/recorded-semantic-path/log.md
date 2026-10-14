@@ -76,3 +76,26 @@ D1933 prediction reproduced in a live tool: the D2146 route map keyed projection
 relabelled the v1 trade adapter as `@2`; it now keys by exact ref. Status is `awaiting D1` because no
 Review, module or longitudinal operation consumes the compiler yet. The convention predecessor
 abstains explicitly in the result. Receipt: `implementation-2026-09-24.md`.
+
+## 2026-10-14 — D3787 exact exchange-source comparison
+
+The original canonical deflection/overload sequence invokes the same legal-exchange FEN/UCI
+twice. A compile-local candidate preserves every complete operand check, event and receipt;
+134 focused cases and the ordinary imported census/eager parity/timing arms pass. Four fresh
+alternating pairs preserve complete outputs over 89 paths/1,857 edges/394 events/24,141 windows,
+but two are slower and summed cost rises 0.57%. Reject the cache/callback changes and remove
+candidate-only assertions; the production compiler is byte-identical to its predecessor.
+
+Keep four permanent source-equivalence/corruption controls, with 133 focused cases and unchanged
+108-path census/500 ms timing gate passing. A guarded research-bundle-only variant keeps the
+comparison reproducible without editing production. Initial bundler filter/dependency errors
+are repaired through the normal Make target. Its repeat is highly variable (0.5898–1.2537×);
+do not cherry-pick its favourable outlier or claim speedup. Only compact ignored scratch output
+is retained; the existing cost dossier records both runs. No semantic/admission/content/consumer
+change, qualification, D3300/D3600 closure, push or release promotion.
+
+The same pass records D3788 before correcting the plan's stale no-caller/awaiting-D1 state.
+Current actual consumer checks pass 212 cases; types and all 343 canonical cases remain green
+without generated metadata changes. The RFC's D1/D2/D5 discharges are current; D3/D4/D6/D7
+remain explicit work. Preserve the old drafting state/order/boundary under historical headings,
+not as implementation prohibitions or permission to ignore remaining source qualification.

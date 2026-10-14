@@ -4,10 +4,11 @@ import { describe, expect, it, vi } from "vitest";
 
 import { branchPath, branchPaths, resolveBranchPath } from "./branch-path.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_FAMILY_IDS, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
-import { EvidenceManifestError, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceConventionReceipt, evidenceDigest, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { EvidenceManifestError, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceConventionReceipt, evidenceDigest, evidenceValueReceipt, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import type { LegalExchangeResult } from "./exchange.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import * as valueRoutes from "./internal/evidence-value-routes.js";
 import type { RecordedEdge } from "./recorded-edge.js";
 
 /** Test-only compiler fixture: a correctly-shaped wrapper whose receipt names a non-edge factory. */
@@ -49,6 +50,7 @@ import {
 } from "./semantic-evidence.js";
 import { defenderDutyReading, defenderDutyRelocatedEvents } from "./tactics.js";
 import * as squareControl from "./square-control.js";
+import * as semanticEvidence from "./semantic-evidence.js";
 import { positionFromFen } from "./position-cache.js";
 import { parseSquare } from "chessops/util";
 import type { DrillRun, Node } from "./types.js";
@@ -81,6 +83,45 @@ function available(result: RecordedSemanticPathResult): Extract<RecordedSemantic
 function compileMain(run: DrillRun) {
   return available(recordedSemanticPath(run, run.activeCursor.branchId));
 }
+
+describe("D3787 complete exchange operands remain validated across matched families", () => {
+  it("grounds both matched families in the same exact capture value and receipt", () => {
+    const fixture = POSITIVES.find(value => value.projection === "derived.tactic.deflection_observed")!;
+    const run = recordedRun("d3787:shared-capture", fixture.fen, fixture.moves);
+    const invoke = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      const result = compileMain(run);
+      expect(result.events.some(event => event.projection.id === "derived.tactic.deflection_observed")).toBe(true);
+      expect(result.events.some(event => event.projection.id === "derived.tactic.overload_exploitation_observed")).toBe(true);
+      const events = result.events.filter(event => event.projection.id === "derived.tactic.deflection_observed" || event.projection.id === "derived.tactic.overload_exploitation_observed");
+      const captures = events.flatMap(event => event.derivationInputs.filter(input => exact(input.projection) === "rules.exchange.predicate.legal_exchange@1"));
+      expect(captures).toHaveLength(2);
+      expect(JSON.stringify(captures[0])).toBe(JSON.stringify(captures[1]));
+      expect(evidenceValueReceipt(captures[0]!)).toEqual(evidenceValueReceipt(captures[1]!));
+      expect(evidenceValueReceipt(captures[0]!)).toBeDefined();
+    } finally { invoke.mockRestore(); }
+  });
+
+  it.each(["result", "captured", "line"] as const)("refuses a conflicting %s operand on a FEN/UCI pair used by another family", field => {
+    const fixture = POSITIVES.find(value => value.projection === "derived.tactic.deflection_observed")!;
+    const run = recordedRun(`d3787:conflict:${field}`, fixture.fen, fixture.moves);
+    const original = semanticEvidence.overloadExploitationObservedOperands;
+    const operands = vi.spyOn(semanticEvidence, "overloadExploitationObservedOperands").mockImplementation(anchors => original(anchors).map(value => {
+      const capture = value.secondTargetCapture;
+      const secondTargetCapture = field === "result" ? { ...capture, resultUnits: capture.resultUnits + 1 }
+        : field === "captured" ? { ...capture, captured: { ...capture.captured, square: "a8" as const } }
+          : { ...capture, chosenLine: capture.chosenLine.map((step, index) => index === 0 ? { ...step, delta: step.delta + 1 } : step) };
+      return { ...value, secondTargetCapture };
+    }));
+    const invoke = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      expect(() => compileMain(run)).toThrow("exchange operand is not reproduced by the exchange authority");
+      const captures = invoke.mock.calls.filter(([ref]) => ref === "rules.exchange.predicate.legal_exchange@1");
+      expect(captures.length).toBeGreaterThan(0);
+      expect(new Set(captures.map(([, query]) => JSON.stringify(query))).size).toBe(1);
+    } finally { invoke.mockRestore(); operands.mockRestore(); }
+  });
+});
 
 describe("D3739 recorded defender consequence follows physical castling movement", () => {
   it.each(RECORDED_CASTLING_DEFENDER)("$name retains the actual defender and target", fixture => {

@@ -270,6 +270,10 @@ engine principal variation.
 - **Execution shape.** One `transitionSemanticEvents` compile and one `checkSemanticEvent` probe per
   edge; defender duty is memoised per window-start FEN within one call; full `localSemanticEvents`
   fan-out is never used except by the eager byte-parity oracle.
+- **Exchange operands.** Each matching family still reproduces and validates its complete legal
+  exchange operand through the sole factory. Sharing FEN/UCI does not permit a different result,
+  captured piece or chosen line. Invocation-local source reuse was measured and rejected without
+  a consistent cost benefit (D3787); no new memo or cross-call source authority ships.
 - **Identity.** Events order by end ply, start ply, projection and id. The digest covers the manifest
   digest, the compiled convention-registry digest, the ordered exact edges and each event's input
   value digests and sealed convention-receipt digest, run, branch, origin, path, event ids and

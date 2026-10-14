@@ -31480,6 +31480,24 @@
       "uxItems": [],
       "evidence": "tools/d3600-arrival-profile/server-diagnostics.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3787",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:31920471b544dfe13883b8172e9ce5c70b2c2149035abb5a2e634f7782d473ba",
+      "uxItems": [],
+      "evidence": "design/research/recorded-semantic-path-cost.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3788",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:089158e9177b13a3867165a3fe2bc317a303c0c64dc9bd121fac2c485f432285",
+      "uxItems": [],
+      "evidence": "planning/recorded-semantic-path/plan.md",
+      "evidenceKind": "path"
     }
   ]
 }

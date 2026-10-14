@@ -75,6 +75,12 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded exchange-source work, 2026-10-14 ([[D3787]]): **answered `[V]`, optimization rejected**.
+The shared tactical fixture genuinely recomputes one capture source twice. A private reuse
+candidate preserves all results/receipts over 89 paths/1,857 edges but has no consistent cost
+benefit; a second reproduction is highly variable. Keep the unchanged compiler and four complete
+source-operand guards. See `recorded-semantic-path-cost.md` §7; no new semantics or qualification.
+
 Published arrival write-path attribution, 2026-10-13 ([[D3779]]): **measured `[V]` transport
 localization, not root-cause closure**. The actual failed artifact identifies 299.712 ms creation
 and 598.110 ms initial opponent commit, while shape reads stay below 11 ms. Real local HTTP/
