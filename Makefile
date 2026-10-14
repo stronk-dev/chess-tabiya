@@ -544,6 +544,7 @@ inspector-demand-research:
 	$(CI_NODE) .cache/d3792-inspector-demand/derived_family.mjs derived_family
 	$(CI_NODE) .cache/d3792-inspector-demand/census.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/source-matrix.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/draft-wire.mjs
 
 .PHONY: recorded-castling-attraction-check
 .PHONY: recorded-castling-defender-check recorded-castling-defender-browser-check

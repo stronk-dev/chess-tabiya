@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector closed operation authoring, 2026-10-14 ([[D3801]]): **bounded draft prerequisite
+answered, not accepted/delivered**. All 75 exact refs have context compatibility checks; 88
+positive grammar/range controls and 399 refusals pass with actual stage-1 assistance parsing.
+Closed response/paging/disclosure is authored, not response/source authority proof. Six exact
+detail schemas, permitted-prefix suppliers and independent review remain D3792 obligations.
+See `module-evidence-assembly.md` §Closed Inspector operation author image; no production import,
+raw recordings or ordinary CI/progress dependency.
+
 Inspector supplier inventory, 2026-10-14 ([[D3799]]/[[D3800]]): **answered `[V]` input/supplier/
 scope inventory, not delivery**. All remaining 35 exact refs have traced arms and suppliers;
 only six are acquired here. Permanent contract fixtures invoke all 35, produce values for 34

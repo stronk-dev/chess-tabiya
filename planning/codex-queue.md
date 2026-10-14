@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — D3801 authors D3792's closed Inspector operation context/response/paging/disclosure
+grammar after the supplier inventory. Use actual exported assistance/presentation types and
+source-specific scope compatibility. Disposable grammar controls remain outside production and
+ordinary CI; source execution and six detail schemas are not discharged by wire validation.
+D3600 still needs a failing-run server observation: current published logs predate D3786;
+do not repeat the same artifact attribution or guess a durability/worker fix from it.
+
+Result: D3801's bounded author image is complete, unaccepted and not production. Strict
+disposable grammar checks cover every one of 75 sources (88 positive / 399 refusal controls).
+Next finish the six literal detail payload/factory/renderer schemas in the presentation owner,
+then permitted-prefix acquisition/receiver/cancellation and real response admission obligations,
+then genuinely independent review. Do not self-accept or implement the draft parser. Existing
+full-source versions, semantic qualification, support/Review delivery and release holds remain.
+
 2026-10-14 closeout — D3799 inventories all remaining 35 exact supplier/input/scope joins;
 D3800 repairs the unaccepted draft's universal-node premise. Only six are acquired by today's
 Inspector. Contract controls invoke 35, emit fixture values for 34 and preserve opening's

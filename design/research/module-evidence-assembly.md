@@ -460,3 +460,40 @@ Actual acquisition/legal-path/provider measurements, six exact detail schemas, c
 response/disclosure grammar and independent review remain D3792 work. No production code,
 pack, default, provider, qualification or release gate changes. These disposable bounded
 aggregates stay outside ordinary CI/progress; no raw-data archive or second registry is added.
+
+### Closed Inspector operation author image — 2026-10-14, D3801
+
+The D3792 draft now specifies literal request contexts, strict response alternatives, bounded
+source-summary/member paging and the distinct disclosure body. The assistance request uses
+the actual exported `RequestedAssistanceV1`, not the draft's nonexistent receipt type name.
+Six exact detail refs are separate from the 75 original source topics. Source collection totals,
+per-page displayed/deferred counts, selected member ordinals and original source ordinals remain
+distinct. An oversized member is `detail_limited`, never a zero-progress successful page. `[V]`
+(`rfc/module-registration.md` §4.11a; `assistance-exchange.ts`; `module-query.ts`;
+`tools/d3792-inspector-demand/draft-wire.ts`.)
+
+Normal `make inspector-demand-research inspector-source-contract-research` passes strict types,
+all existing real-source/model controls and the unchanged 37 factory controls. The disposable
+wire instrument exercises all 75 exact source refs against six context kinds: 88 positive
+request/range controls and 399 refusals. It rejects mismatched scopes, extra nested fields,
+unregistered/unsupported detail refs, same-branch comparison, malformed stamps, invalid ordinal/
+continuation/focus and zero-progress/overlapping/inconsistent next ranges. It checks the actual
+stage-1 assistance parser and serialized round trips. These are grammar controls, not request
+authorization, recorded-prefix correctness, response admission, source execution, new registered
+adapters or a production seal. No endpoint uses this tool. `[V]` (same command/tool.)
+
+The server still owes real permitted-prefix reconstruction and supplier acquisition for each
+scope. Existing Compare helper selects the latest sibling and uses whole branches; that cannot
+stand in for the newly explicit attempt/endpoints. Branch factory signatures likewise do not
+by themselves prove arbitrary permitted-prefix supply. Context tests intentionally do not claim
+those operations. The six exact payload/factory/renderer schemas, real response/disclosure
+controls, source owner migrations and independent acceptance remain before implementation.
+`[V]` (`module-query.ts`, `moduleComparisonForSubject`; `evidence-factories.ts`, `pivotalFactory`;
+RFC §4.11a.) D3801 closes the bounded authoring prerequisite, not D3792 delivery or 1.0.
+
+D3600's published run is re-read at 38381154879: it still predates D3786's server diagnostics;
+the 1,092.9 ms outlier and previously recorded 299.712/598.110 ms mandatory writes supply no
+new underlying-cause evidence. Do not repeat that artifact analysis or substitute a local green
+replay for a remote repair. Pair timestamped server/transport observations on a newly authorised
+published execution before choosing a durability/worker fix. `[V]` (`gh run view --log-failed`;
+`design/research/ux-arrival-and-start.md` §§17–18.) No push occurs.

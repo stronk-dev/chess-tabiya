@@ -8,8 +8,10 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 owns D3792 without reinterpreting `module.query_page@1`. D3797's six-source member/batch model
 and exact target/color/mode focus fit unchanged limits on the sampled population. The proposed
 new operation and six literal detail views are **unaccepted**, not production bindings.
-All 35 unmeasured suppliers, exact payload/renderer schemas and response/paging/disclosure
-grammar remain authoring/buildability obligations; no permanent-unavailable stubs, source
+The 35 suppliers are inventoried under D3799; D3801 authors closed context/response/paging/
+disclosure with disposable grammar controls, not source/access/response proof. Exact acquisition/
+permitted-prefix suppliers, six payload/renderer schemas and real response controls remain
+authoring/buildability obligations; no permanent-unavailable stubs, source
 retirement, scope/exactness promotion or parent-state authorization. Independent review next
 after those obligations are authored; no shared resource claim or lifecycle change.
 

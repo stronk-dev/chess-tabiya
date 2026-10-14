@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3800]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3801]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,7 +68,7 @@ repairs the reproduced terminal query exception without changing complete legal 
 Focused 206 tests, authenticated both-color SQLite reads and foreign-account refusal, four
 native desktop/phone played mate/stalemate → Inspector → return/reload cases and strict types
 pass. D3791/D3792 remain blocked on an independently accepted demand/detail contract. The ledger
-now has 1,655 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
+now has 1,656 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
 prose-only closures and every whole-product/content/release gate remain. Fresh GitHub reads
 still show published `62c81eb1` verify success/browser failure. No new feature wave is started
 before the owner's requested total inventory.
@@ -95,6 +95,13 @@ versus later witness. Production acquisition, held-version migration, six detail
 closed context/response/disclosure authoring remain explicit D3792 work before independent
 review. Strict opt-in research passes; production is unchanged. The milestone remains held,
 not completed, and the prior full local test result is not relabelled as a fresh browser run.
+
+[[D3801]] then authors the closed Inspector context/request/response/source/member paging and
+distinct disclosure grammar in the same unaccepted draft. Strict disposable controls cover all
+75 refs, 88 positive cases and 399 refusals, with actual requested-assistance parsing. This is
+not source/access/response/native proof. Six exact detail schemas, permitted-prefix suppliers,
+acquisition/receiver/cancellation, real response checks and independent acceptance remain.
+No product source/default/content/capability/release change; the milestone stays held.
 
 October-14 [[D3793]]/[[D3794]] complete CMP-a12's existing earned-tool/help-style journey,
 not Campaign curriculum or new rewards. Result/map/preparation name the actual current style's

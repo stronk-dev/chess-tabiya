@@ -1790,15 +1790,17 @@ The request is closed and serializable:
 ```ts
 type InspectorRequest = {
   protocol: "inspector.query_page@1";
-  assistance: RequestedAssistanceReceiptV1;
+  assistance: RequestedAssistanceV1;
   query: {
     branchId: string;
     nodeId: string;
     decisionDigest: string;
     view:
-      | { kind: "inventory" }
-      | { kind: "source"; projection: InspectorSourceRef }
-      | { kind: "detail"; projection: InspectorSourceRef; sourceKey: string;
+      | { kind: "inventory"; start: number }
+      | { kind: "source"; projection: InspectorSourceRef; context: InspectorSourceContext;
+          start: number; collectionKey: string | null }
+      | { kind: "detail"; projection: InspectorSourceRef; context: InspectorSourceContext;
+          sourceKey: string;
           scope: { kind: "whole" } | {
             kind: "control_target"; color: "white" | "black";
             mode: "geometric" | "legal"; target: SquareName;
@@ -1807,7 +1809,25 @@ type InspectorRequest = {
         };
   };
 };
+
+type InspectorSourceContext =
+  | { kind: "position" }
+  | { kind: "incoming_edge" }
+  | { kind: "recorded_window" }
+  | { kind: "branch"; throughNodeId: string }
+  | { kind: "comparison"; otherBranchId: string; otherNodeId: string }
+  | { kind: "completed_review"; throughNodeId: string };
 ```
+
+`RequestedAssistanceV1` is the actual exported stage-1 type, parsed by
+`parseRequestedAssistanceV1`; it is not an authoritative/effective receipt. The server derives
+both later stages and the current workflow from stored/access context. All objects are closed
+at every nesting level. IDs are nonempty strings; decisionDigest has the existing lowercase
+`sha256:` plus 64-hex form; every `start` is a nonnegative safe integer.
+No client FEN, source payload, role, permission, source status, callbacks or prose is accepted.
+Unknown protocol or field refuses before source work. The closed request/context and paging
+shapes are exercised by disposable `tools/d3792-inspector-demand/draft-wire.ts`; it is not a
+production parser, source factory, access check or implementation authorization.
 
 `InspectorSourceRef` is the exact versioned-ref union derived from Inspector's accepted source
 image, not a free string. Separate the original source image from the six new detail views;
@@ -1871,11 +1891,113 @@ preceding context. Opening requires its installed/runtime identity source; an EC
 is not a substitute. Story rank requires the whole admitted moment collection. Comparison
 retains both exact attempts and access checks for each.
 
-The request above still anchors selection at `nodeId`; it does not yet contain a closed
-serializable branch/comparison/game context grammar. Author that grammar, scope compatibility,
-access/disclosure rules and stale/cancellation controls before acceptance. Missing required
-context must yield an explicit missing-context outcome, not `no_witness`, silent widening or
-guessed context. This correction grants no production authority and changes no accepted source.
+**Closed context compatibility (D3801):** branch context is required by the four pivotal refs
+and deepest-opening ref; comparison by the two Compare refs; completed Review by Story rank.
+Authored shape firing accepts position or recorded branch. Recorded successors and the ten v1
+move-sequence refs require recorded-window context. Exact incoming-edge factories and the five
+dependent discovered/fork/overload-conflict/forced-mate refs require incoming-edge context.
+Remaining FEN, packet, page and sourcing-ledger refs require position context. The disposable
+grammar derives this cover from the actual accepted image/factory arms and refuses an unclassified
+source; adding a ref cannot silently default to position. Detail accepts only the six sole sources
+in the table below. These are context requirements, not statements of current runtime acquisition.
+
+The server resolves all context IDs on the authorised stored run, never caller evidence:
+
+- Position uses exactly the selected node. Incoming edge uses its actual legal parent/commit.
+  A root produces `missing_context/no_incoming_edge`, not an invented edge or no-witness.
+- Recorded window uses validated emitted windows ending at the selected node, with exact source
+  versions and actual anchor ranges. The client cannot choose a hypothetical path/window length.
+- Branch resolves the selected branch through `throughNodeId`, requires the selected node on that
+  prefix, and grants only a prefix already visible under the viewer's disclosure/assistance.
+  An inaccessible later witness is withheld, never treated as proof or successful absence.
+- Comparison resolves both distinct recorded branch attempts and exact endpoint nodes. The
+  second endpoint must belong to its declared branch; both contexts must be authorised. Derive
+  the actual `BranchComparison` from those recorded prefixes. Do not silently choose the most
+  recently created sibling as the existing helper does, or accept a caller comparison payload.
+- Completed Review resolves the admitted completed game's exact branch/end prefix; selection
+  must belong to it. The completion/learner-side/source join is the existing Review authority,
+  not the current Play cursor or a client result tag. Incomplete games yield missing context.
+
+Missing required context is distinct from source absence and no-witness. Foreign/nonexistent or
+off-branch IDs refuse without revealing another run's facts. This proposed grammar changes no
+existing module query, source predicate, automatic selection or disclosure policy.
+
+**Closed response and bounded paging (D3801 author image):** `inspector.query_page@1` has two
+top-level alternatives. `refused` contains only `protocol`, `kind`, `code`, where code is exactly
+`invalid_request | not_found | withheld | stale | unsupported_version`. No private run/branch/source
+data accompanies a refusal. HTTP is 422/404/403/409/422 respectively; unsupported old deployments
+remain the client's explicit unsupported-version state rather than fallback output.
+
+`page` contains only `protocol`, `kind`, `runId`, `branchId`, `nodeId`, the existing
+`ModuleDecisionStamp`, `requestedConfigDigest`, `effectiveConfigDigest`, `disclosure` and `body`.
+The requested selection and current decision cursor are distinct and both retained. Body is:
+
+| Body kind | Exact additional fields | Meaning |
+|---|---|---|
+| `inventory` | `range`, `topics[{projection,family,state}]` | Exact eligible registered topics; family is one of the existing eight IDs, state only `not_requested`; no source work/count claim |
+| `source` | `projection`, `context`, `outcome` | One requested source, complete execution outcome |
+| `detail` | `projection`, `context`, `sourceKey`, `scope`, `range`, `fullSourceTotal`, `sourceOrdinals`, `presentation` | One bounded batch of complete typed members |
+| `detail_limited` | `projection`, `context`, `sourceKey`, `scope`, `ordinal`, `sourceOrdinal`, `selectedTotal`, `fullSourceTotal`, `exceeded` | A complete member cannot fit; no zero-progress page or silently cropped substitute |
+
+Every range is exactly `{start,count,total,next}`. All numeric fields are nonnegative safe
+integers, count at most eight, start/count inside total, and `next` is exactly `start+count`
+when more remain, otherwise null. A successful nonempty population never returns zero count.
+An empty population is only `{start:0,count:0,total:0,next:null}`. Over-budget individual members
+use `detail_limited`, not a self-loop cursor. Source-order members never reorder by usefulness.
+
+Source outcome is closed:
+
+- `missing_context` has only `reason`, exactly `no_incoming_edge | no_recorded_window |
+  no_second_attempt | no_completed_review`.
+- `unavailable` has only `reason`, exactly `source_absent | provider_unavailable |
+  authored_source_absent | source_version_held | invalid_turn_clone`. Each requires actual
+  source-owner absence/refusal evidence; no universal stub satisfies acquisition obligations.
+- `failed` has only `reason`, exactly `source_contract_invalid | provider_failed |
+  source_lookup_failed`. Broken bindings are failures, not chess absence.
+- `no_witness` has no additional fields and requires successful complete source execution.
+- `available` has exactly `collectionKey`, `range`, `collected`, `displayed`, `deferred`,
+  `facts` and `presentation`. Facts are bounded ordered occurrence summaries, each exactly
+  `{sourceKey,disposition,exceeded,detail}`. Disposition is `presented | deferred`; exceeded
+  dimensions are unique members of `facts | words | marks | arrows`. Detail is null or the
+  exact one of six new view refs belonging to this source. No source payload/raw JSON travels
+  in this summary. Presentation is the existing strictly parsed `PresentationReceipt`.
+
+`collected` is the full collection's fact total and equals range.total; `displayed+deferred`
+equals this page's count, not the full collection. The facts length equals range.count with
+unique source keys. Presented occurrences have no exceeded dimensions; a budget-deferred
+occurrence has nonempty exceeded dimensions. Components retain their registered whole-fact
+ownership. A source with no supported bounded detail door stays explicitly limited; it cannot
+be cropped or count as fully read. Detail range counts members; `sourceOrdinals` has exactly
+range.count entries and retains each member's original source ordinal. Under target focus these
+need not equal consecutive selected ordinals. Full-source total remains distinct from selected total.
+
+Initial source reads use start zero and null collectionKey. Continuations require a nonempty
+previous collection key and positive start, recomputed against the complete ordered occurrence
+collection and current decision/context. A changed collection refuses stale; no token authorises
+access. No new cache or paging state is persisted. Retained source reads reconstruct from their
+actual source authorities. Any owner-authorised acquisition advancing the run first requires a
+new current decision/refresh; it is not excused from stale checks. Actual acquisition paths and
+their cancellation remain source-owner implementation obligations, not established by this grammar.
+
+**Disclosure binding:** `inspector.disclosure_receipt@1` is exactly `protocol`, `runId`, `branchId`,
+`nodeId`, `decisionDigest`, `requestedConfigDigest`, `effectiveConfigDigest`, `view`, `range`,
+`collectionKey`, ordered `sourceKeys`, ordered `sourceOrdinals`, `detailProjection`, ordered
+`componentDigests`, and `digest`. Use the existing canonical presentation-digest construction
+over this namespace/body without digest. Bind the actual returned range/source occurrences as
+well as the exact request view/context; a request cursor alone does not bind the returned page.
+Inventory has null collection/detail, empty source/ordinal/component lists; absent/failed source
+outcomes have null range/collection/detail and empty lists. Detail binds its one original source,
+selected original ordinals and sole view ref. Limited detail binds its original source/ordinal
+and has no component. Client verifies all response/request/receipt equalities and parses each
+registered presentation receipt; server constructs them only through admitted source/renderers.
+No caller receipt or digest can supply access, facts or rendering authority.
+
+Every final response rechecks access, effective configuration, decision and source context after
+asynchronous work. Close, navigation, selection, branch, help or disclosure changes retire pending
+completion and board paint. Old/new protocol mismatches, extra/missing nested fields, duplicate
+occurrence keys, substituted source/context/range/component, wrong supported view and invalid
+continuations refuse. Six exact payload/renderer schemas and actual authenticated/native response
+admission still need independent acceptance; the disposable request/range checks do not prove them.
 
 **Truthful states:** retain `not_requested`, `unavailable`, `failed` and `no_witness` as distinct
 source outcomes. `no_witness` requires successful complete source execution with no admitted
@@ -1946,7 +2068,8 @@ No 1.0 completion or execution-pair promotion follows from this draft.
 **Authoring still required before buildability acceptance:** turn the D3799 supplier inventory
 into exact production acquisition/absence/receiver/cancellation obligations, including its held
 provider versions; the six literal payload/factory/renderer schemas in the owning presentation
-amendment; and the closed source-context/response/source-summary pagination/disclosure grammar.
+amendment; and independent review of the newly authored source-context/response/paging/disclosure
+grammar, including real source/response admission controls (not just request-shape tests).
 The request and six-type boundary
 above are a bounded draft, not an executable contract or authority to implement a guessed response.
 
@@ -2480,6 +2603,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-14 — D3801 authors the closed D3792 context/response/source-summary/member paging and
+  disclosure image, using actual RequestedAssistanceV1. Strict disposable request/range controls
+  cover all 75 refs (88 positive, 399 refusals), not access/source/response authority. Six detail
+  schemas, real permitted-prefix suppliers/response checks and independent acceptance remain.
 
 - 2026-10-14 — D3799 supplies the 35-ref input/supplier/scope inventory and observes unchanged
   factory controls, not runtime delivery. D3800 corrects §4.11a's universal-node premise:

@@ -7,5 +7,5 @@
       "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
     }
   },
-  "include": ["census.ts", "detail-model.ts", "source-matrix.ts", "source-observer.ts", "vitest.sources.config.ts"]
+  "include": ["census.ts", "detail-model.ts", "source-matrix.ts", "source-observer.ts", "vitest.sources.config.ts", "draft-wire.ts"]
 }

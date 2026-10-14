@@ -1064,7 +1064,7 @@
         "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
           "at": "2026-10-14",
-          "summary": "D3799 inventories all 35 remaining exact suppliers, inputs and scopes; only six are acquired here as saved packets. The 37 unchanged contract controls invoke 35 and yield fixture values for 34; opening abstains. Synthetic/provider fixtures are not live/legal-play proof. D3800 repairs the draft's universal-node premise without changing production. Closed context/acquisition/detail/response/disclosure authoring and independent acceptance remain D3792 work. D3797/D3798's bounded representation and D3796's terminal repair stand. Strict opt-in research passes; bounded ignored aggregates only, no ordinary CI/progress dependency. Prior a5bff1f3 full local proof remains historical: 5,621 software, seven performance, 256 content, 360 browser passes, one optional skip, zero retries and 112 composition cells. No milestone, capability, content or release promotion.",
+          "summary": "D3801 authors D3792's closed source-context/request/response/paging/disclosure draft using actual RequestedAssistanceV1. Strict disposable controls cover all 75 sources, 88 positive cases and 399 refusals; prior real source/model and 37 factory controls reproduce. These are request/range grammar checks, not source/access/response/native authority. Six exact detail schemas, permitted-prefix suppliers (not latest-sibling whole-branch Compare), acquisition/receiver/cancellation, real response controls and independent acceptance remain before production. D3799's 35-supplier inventory and six actual saved-packet acquisitions stand; opening remains unavailable. Production unchanged; no ordinary CI/progress/raw-recording dependency. Prior a5bff1f3 full local proof remains historical: 5,621 software, seven performance, 256 content, 360 browser passes, one optional skip, zero retries and 112 composition cells. Published D3600 failure predates server diagnostics; no cause/repair inferred. No complete capability, milestone, qualification, content, remote CI or release promotion.",
           "impact": "held",
           "evidence": [
             "packages/runtime/src/evidence-contract.ts",
@@ -1075,6 +1075,7 @@
             "tools/d3792-inspector-demand/census.ts",
             "tools/d3792-inspector-demand/detail-model.ts",
             "tools/d3792-inspector-demand/source-matrix.ts",
+            "tools/d3792-inspector-demand/draft-wire.ts",
             "tools/d3792-inspector-demand/source-observer.ts",
             "tools/d3792-inspector-demand/vitest.sources.config.ts",
             "tools/d3792-inspector-demand/tsconfig.json",
@@ -1178,6 +1179,11 @@
               "kind": "work_state",
               "id": "D3800",
               "digest": "sha256:0ce1490fc8bf1d038a21a969f5a6dc0122cf9b4bed58995b8fd852f102bbe3f8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3801",
+              "digest": "sha256:5f12f5f42dfeef7039c57304dd6c1ebf781fbd03e7a1bc07b89409c8e396dcdb"
             },
             {
               "kind": "work_state",
