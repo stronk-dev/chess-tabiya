@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector recorded-window source scopes, 2026-10-14 ([[D3814]]/[[D3815]]): **bounded algorithm
+prerequisite answered; unaccepted and not delivered**. Four real candidate-query branch controls
+repair its wrong resolver discriminant. A source-owner prefix variant passes 452 legal scopes/
+312 original-graph refusals; a requested-family/end-node variant preserves exact sealed facts
+over 452 scopes plus 264 reads on eight actual stored imports. At most five edges are prepared;
+missing history and complete-but-empty remain distinct. Existing v1 whole-tip calls and Inspector
+membership stay unchanged. Production types, operation/parser, other suppliers, live providers,
+worker/receiver/native proof and independent acceptance remain open. See `module-evidence-assembly.md`
+§Exact recorded-prefix and requested-window suppliers; no raw recording or ordinary CI dependency.
+
 Inspector account/context author model, 2026-10-14 ([[D3813]]): **bounded prerequisite answered;
 unaccepted and not delivered**. Forty-four disposable controls use actual sessions/grants and
 file-backed SQLite, retain the full current run with bounded graph-derived paths and acquire four

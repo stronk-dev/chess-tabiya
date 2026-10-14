@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+[[D3814]] repairs a demonstrated inherited-node branch-selection fault in the disposable query,
+not production. [[D3815]] then establishes original-run prefix and requested-family/end-node source
+behavior: 452 canonical/mirrored/castling requests, 312 original-graph refusals and 264 requests on
+eight actual stored imports. At most five edges are prepared; missing recorded context is not
+complete-but-empty. The unaccepted §4.11a names the proposed exact window supplier and a distinct
+private result/operation, retaining all whole-tip callers, v1 holds and Inspector membership.
+Source/response/worker/native implementation and independent acceptance remain open; production
+and the preceding full local test result are unchanged.
+
 [[D3813]] completes a bounded Inspector context/receiver authoring prerequisite, not a new
 product operation. Forty-four controls use real account sessions/grants and file-backed SQLite,
 retain the full current run with exact selected prefixes and acquire four actual mobility events

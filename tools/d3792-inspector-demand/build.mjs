@@ -12,7 +12,7 @@ function replaceOnce(source, before, after) {
 }
 const windowRead = `
   const currentPath = resolveBranchPath(run, run.activeCursor.branchId);
-  const branchId = currentPath.kind === "available" && currentPath.nodes.some(node => node.id === subject.node.id)
+  const branchId = currentPath.kind === "resolved" && currentPath.nodes.some(node => node.id === subject.node.id)
     ? run.activeCursor.branchId : subject.node.branchId;
   const recorded = recordedSemanticPath(run, branchId);`;
 const windowRoute = `
@@ -22,9 +22,9 @@ const windowRoute = `
           && event.anchor.runId === run.id && event.anchor.nodeId === subject.node.id).map(event => event.evidence);
         return items.length === 0 ? Object.freeze({ kind: "no_witness", projection: name }) : Object.freeze({ kind: "available", projection: name, items: Object.freeze(items) });
       }`;
-for (const variant of ["baseline", "acquired", "derived_family"]) {
+for (const variant of ["baseline", "acquired", "derived_family", "branch_scope"]) {
   await build({
-    entryPoints: [resolve("tools/d3792-inspector-demand/probe.ts")], outfile: resolve(destination, `${variant}.mjs`),
+    entryPoints: [resolve(`tools/d3792-inspector-demand/${variant === "branch_scope" ? "scope-selection" : "probe"}.ts`)], outfile: resolve(destination, `${variant}.mjs`),
     bundle: true, platform: "node", format: "esm", nodePaths: [resolve("packages/runtime/node_modules")],
     plugins: variant === "baseline" ? [] : [{
       name: "disposable-inspector-window-candidate",
@@ -39,10 +39,12 @@ for (const variant of ["baseline", "acquired", "derived_family"]) {
             source = replaceOnce(source, 'import { branchPath } from "./branch-path.js";', 'import { branchPath, resolveBranchPath } from "./branch-path.js";\nimport { recordedSemanticPath } from "./recorded-semantic-path.js";');
             source = replaceOnce(source, 'MODULE_QUERY_OPERATION, PACKET_ROUTE_KINDS, SIGHT_SOURCE_ROUTES,', 'MODULE_QUERY_OPERATION, PACKET_ROUTE_KINDS, RECORDED_WINDOW_SOURCE_ROUTES, SIGHT_SOURCE_ROUTES,');
             const packetRead = '  const packets = run.events.flatMap((event) => event.type === "evidence.attached" && event.data.nodeId === subject.node.id ? [event.data.payload] : []);';
-            source = replaceOnce(source, packetRead, packetRead + windowRead);
+            source = replaceOnce(source, packetRead, packetRead + windowRead +
+              (variant === "branch_scope" ? "\n  __D3814_BRANCH_OBSERVER.push(branchId);" : ""));
+            if (variant === "branch_scope") source += "\nexport const __D3814_BRANCH_OBSERVER: string[] = [];\n";
             const routeStart = '    const name = `${ref.id}@${ref.version}`;\n    try {';
             source = replaceOnce(source, routeStart, routeStart + windowRoute);
-            if (variant === "derived_family") {
+            if (variant === "derived_family" || variant === "branch_scope") {
               const pool = '    const evidence = scoped.filter(witnessed);';
               // Presentation-only feasibility: this filter is AFTER acquisition. It does not
               // prove demand-driven work, HTTP grammar, family lifecycle or production UI.
@@ -55,7 +57,7 @@ for (const variant of ["baseline", "acquired", "derived_family"]) {
     }],
   });
 }
-console.log("D3792: three disposable bundles built; production sources unchanged");
+console.log("D3792: three query variants and one branch-scope control built; production sources unchanged");
 await build({ entryPoints: [resolve("tools/d3792-inspector-demand/draft-wire.ts")], outfile: resolve(destination, "draft-wire.mjs"),
   bundle: true, platform: "node", format: "esm", nodePaths: [resolve("packages/runtime/node_modules")] });
 await build({ entryPoints: [resolve("tools/d3792-inspector-demand/census.ts")], outfile: resolve(destination, "census.mjs"),

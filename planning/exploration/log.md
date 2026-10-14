@@ -28750,3 +28750,44 @@ Campaign was the one capability with no API, route or content. Now:
   source cleans its owned temporary SQLite directory. The target is opt-in, outside ordinary
   CI and progress execution. Production and D3812's preceding full local proof are unchanged;
   no new full-suite/browser result, remote pass, official content, push or goal pause/completion.
+
+### 2026-10-14 — D3814/D3815 exact recorded supplier scopes and demand
+
+- Continue actual source-owner work after D3813. Record D3814's research-instrument defect and
+  D3815's scoped-supplier question first; explicit assignment restores the two synced rows to
+  zero untriaged without weakening the ratchet. No production before independent acceptance.
+- An observer inside the actual disposable candidate query catches its wrong resolver-kind
+  comparison: inherited child selection reads Main. The new negative fails with the exact
+  branch mismatch. Use resolved, not available; four own/inherited/root/off-path source controls
+  then pass. Canonical ten-family baseline/acquired/focused reach remains 0/0/10 with zero
+  paired-negative reach. Stored bytes remain unchanged. D3814 closes only the tool defect.
+- Guarded in-memory recorded source variants validate the original full graph before clipping,
+  legal-replay granted edges with actual original node references and preserve exact v2 values.
+  The unchanged whole-tip baseline must fail the specific zero-edge prefix expectation.
+  Prefix controls pass 452 scopes across 104 canonical/hard-negative/mirrored/castling runs,
+  312 malformed-graph refusals and three branch controls; 90 event occurrences and 7,282
+  insufficient-continuation receipts retain exact original-source meaning.
+- Then make demand source-specific, not a whole-prefix dump: admit one exact v2 family, choose
+  only its complete rows ending at the requested node, prepare at most five trailing edges and
+  only required capture/check dependencies. Across 452 requests, 60 event occurrences preserve
+  complete original-source values/receipts; 304 missing-context and 92 complete-but-empty remain
+  distinct. Unrequested past/future/family windows never appear; v1 cannot be relabelled.
+- Actual RunService.importGame and parsed SQLite sources add eight games/513 edges, alternating
+  learner side, 264 exact requested-family/endpoint reads and unchanged stored bytes. Two
+  occurrences emit; the sparse result is reported, not widened into usefulness/coverage. This
+  import probe uses the accepted test-only writer overload, not authentication or Review proof.
+- Existing module-registration §4.11a now specifies the proposed exact window supplier, ordered
+  admission, distinct private result/operation and context/no-witness mapping. Whole-tip calls,
+  identities, v1 holds and Inspector's ten-successor membership remain. D3815 closes its bounded
+  authoring prerequisite; D3792 stays open/unaccepted for actual types/helper/parser, other scoped
+  suppliers, providers, worker/cancellation/performance, response/component/native receivers.
+  Generated source variants are transpiled experiments, not production type or receipt proof.
+- Initial strict checks require explicit observer/oracle type annotations; those are tool-only
+  corrections. Final frozen normal make inspector-demand-research inspector-recorded-prefix-research
+  inspector-recorded-context-research inspector-source-contract-research roadmap-receipt
+  verify-governance exits zero, retaining D3813's 44 actual-account controls and all 37 unchanged
+  factory controls. git diff --check is clean. Update existing dossier/coverage/ledger/state/
+  roadmap/receipt only; no competing tracker or raw recording. All 1,732 live items stay assigned,
+  and all whole capabilities, content/qualification/release gates remain unchanged. Production
+  and its preceding full local proof are unchanged; no new full-suite/browser/remote result,
+  published source, official pack, push or goal pause/completion is claimed.

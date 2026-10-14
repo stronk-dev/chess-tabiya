@@ -31733,6 +31733,24 @@
       "uxItems": [],
       "evidence": "design/research/module-evidence-assembly.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3814",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:15779aefecd7d469695648a3ce5c4ba54d3937b50f85d1d2625b114f6d17af0d",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3815",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:44adbca7f0ca4d32479443b1d05c49cc620969d3d05f4513a058eebef7b65df9",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
     }
   ]
 }

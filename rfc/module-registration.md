@@ -2012,6 +2012,66 @@ Client receiver/native paint tests remain separate obligations. It does not prov
 live provider cancellation, response parsing, source-occurrence retention or browser delivery.
 No source-attachment exception, synthetic run or re-labelled whole-tip receipt is admitted.
 
+**D3814/D3815 recorded-window source-owner proposal — still unaccepted:** the earlier
+disposable acquisition candidate compared `resolveBranchPath.kind` with `available` instead
+of `resolved`. Four actual candidate-query controls now cover own/inherited/root/off-path
+selection; the inherited-node control first fails on the wrong creating branch. Correcting
+the instrument leaves its canonical ten-family reach result unchanged. It is not an explicit
+endpoint supplier or production query repair.
+
+The scoped recorded-window supplier is proposed as
+`recordedSemanticWindowSource({run, branchId, throughNodeId, projection})`, a new runtime
+helper owned by this amendment's source execution. `run` is the unchanged full stored image
+retained by the admitted server context; branch/endpoint/projection are independently captured
+primitive fields from the exact parsed request and grant. It accepts only an exact registered
+v2 row from the existing recorded-path evaluator table. It is **not** a new optional scope
+argument silently added to `recordedSemanticPath`/its v1 result identity. All existing whole-tip
+callers and historical result identities remain unchanged. No new semantic projection,
+convention, stored record, schema or provider protocol is introduced.
+
+Runtime execution validates the original graph and endpoint, then legal-replays every edge in
+the granted prefix through the existing `run.record.edge@1` factory with the original node
+references. Exact projection admission precedes any edge factory. Preparing detector inputs is
+a separate step: choose only the requested projection's complete evaluator rows **ending at
+throughNodeId**, and prepare the union of their required trailing edges. Never prepare a later
+edge, another family's row, every earlier window, or a full branch and then filter its result.
+The present table needs at most five prepared edges; full graph/prefix validation is not thereby
+bounded to five or exempted. Captures are prepared only for trade/deflection/attraction/checking
+zwischenzug/overload-exploitation; check inputs only for deflection/attraction/checking zwischenzug.
+Defender-duty/exchange inputs remain those rows' exact lazy source-owner dependencies. A family
+with no complete row performs no detector preparation and has missing context, not no-witness.
+
+The proposed private result is a closed union with distinct `window_available`, `window_missing`
+and `window_refused` kinds, deliberately not assignable to the whole-path result. Available
+contains exact `{runId,branchId,throughNodeId,projection}` scope, existing sealed v2 events,
+complete `RecordedPathWindowReceipt`s, omitted-horizon numbers, existing convention closure and
+one identity computed with the existing canonical digest function under the new operation
+`recorded-semantic-window@1`. Its identity binds scope, exact completed/omitted row image and
+event/source/convention closure. It is not a public token or new cache. Missing contains that
+scope, `no_recorded_window`, required horizons and available-prefix edge count. Refused contains
+only the existing original-graph/legal-edge reason or `endpoint_not_on_branch`/
+`projection_unsupported`; private diagnostics never cross the Inspector refusal wire.
+
+The Inspector adapter maps missing to `missing_context/no_recorded_window`; available with
+at least one complete window but no events to `no_witness`; and emitted events only through
+their exact admitted module refs/presentation path. The generic compiler retains all eleven
+families, but Inspector admits its existing ten v2 successors, not the excluded trade family.
+The ten v1 sequence obligations remain independently held; do not relabel their payloads as v2
+or remove them. Other consumers, especially longitudinal opportunities, keep their own contracts.
+The scope result never grades, ranks, selects useful moments or supplies hypothetical lines.
+
+`make inspector-recorded-prefix-research` executes guarded in-memory source variants. The
+unchanged baseline fails the exact zero-edge prefix control. The prefix variant passes 452
+prefixes over 104 legal canonical/mirrored/castling runs and 312 original-graph refusals. The
+requested-family variant matches existing complete event values/receipts over the same 452
+requests, plus 264 requests across eight actual server-imported/stored games (513 edges).
+It distinguishes 304 missing-context requests from 92 complete-but-empty requests and prepares
+at most five edges; seven/eight-ply examples do not cause whole-prefix detector preparation.
+These measurements establish the algorithm's bounded source behavior, not compiled production
+types, the proposed operation identity/result parser, authenticated Inspector source acquisition,
+worker cancellation, source performance discharge or HTTP/component/native receiver proof.
+The prototype uses unmistakable research-only identities, never production scope receipts.
+
 Refuse wrong/off-branch/foreign endpoints and withheld spans before collector/provider reads.
 After async acquisition or computation, recheck the **current full stored authority**, access,
 effective configuration, decision, original graph endpoints and exact retained source occurrence.

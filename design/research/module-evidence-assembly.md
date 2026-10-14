@@ -653,3 +653,58 @@ responses belonging to an old selection/configuration/account or closed Inspecto
 must not introduce a global server selection store or present these controls as actual browser
 receiver proof. `[M]` (boundary synthesis); `[V]` tool's explicit current callback, no HTTP/client
 operation, and `rfc/module-registration.md` §4.11a's separate server/client obligations.
+
+### Exact recorded-prefix and requested-window suppliers — 2026-10-14, D3814/D3815
+
+The previous disposable query's `currentPath.kind === "available"` test is wrong: the actual
+total graph resolver returns `resolved`. An added observer inside the **actual candidate query**
+first selects Main instead of the active child's inherited node. Changing that discriminant
+passes four own/inherited/root/off-path controls over a real stored branched run. Canonical
+one-branch figures remain 0/10 baseline, 0/10 acquired and 10/10 family-focused reach with zero
+paired-negative reach. Those figures are not evidence of endpoint-correct source scope. `[V]`
+(`tools/d3792-inspector-demand/build.mjs`, `scope-selection.ts`; normal
+`make inspector-demand-research` predecessor/final results).
+
+`make inspector-recorded-prefix-research` builds guarded in-memory variants of the actual source
+compiler; every replacement asserts its unique original anchor and no production file changes.
+The unchanged baseline must fail **specifically** on the zero-edge prefix assertion, not an
+unrelated build/startup error. A prefix variant retains the full original run/node references,
+validates its original branch before extracting the grant and uses the real edge/event factories.
+It passes 452 prefixes across 104 legal canonical/hard-negative/color-mirrored/castling runs.
+All eleven canonical families have positives. Ninety event occurrences exactly match eligible
+complete original-source windows, 7,282 incomplete-continuation receipts remain distinct from
+no-witness, and 312 off-prefix duplicate/missing-parent/cycle graphs refuse before preparation.
+Three inherited/off-branch/unknown-branch controls pass. `[V]` (`build-prefix.mjs`,
+`prefix-source.ts`, `recorded-source-cases.ts`; source `recorded-semantic-path.ts`/`recorded-edge.ts`;
+normal command terminal result).
+
+Prefix correctness alone is insufficient for demand-driven Inspector acquisition. The second
+variant admits one exact v2 projection and prepares only that family's complete rows ending
+at the selected node, before evaluating them. Capture/check preparation is skipped where not
+required, while graph and legal-prefix validation remain. Exact event/window/receipt parity
+passes across the same 452 requests: 60 emitted occurrences, 304 without a complete window,
+92 complete-but-empty and at most five prepared edges. There are 292 capture-free and 324
+check-free requests. Older v1 refs are explicitly unsupported by this v2 supplier, not relabelled.
+These are algorithm/source controls, not a new production factory or availability promise. `[V]`
+(`window-source.ts`, `build-prefix.mjs`; existing evaluator table and source factories).
+
+The same instrument calls actual RunService.importGame over the fixed eight-game PGN sample,
+then reads the production parser's stored `sessionKind: imported` runs, alternating learner side.
+All 264 source requests (three endpoints × eleven refs × eight games; 513 played edges) exactly
+match existing whole-source windows/events at those endpoints and preserve stored bytes. Two
+event occurrences emit; rare motifs are not assumed to fire. This uses the accepted test-only
+writer overload and an in-memory SQLite database: **not authenticated Review or HTTP/native
+Inspector proof**. `[V]` (`window-source.ts`; `tools/r2-selection-harness/imported-sample.pgn`;
+`apps/server/src/service.ts`, `storage.ts`; normal command).
+
+The proposed source callable/result/admission order in module-registration §4.11a is author
+synthesis `[M]`. It preserves whole-tip callers, gives the targeted source a distinct operation
+and non-assignable result union, and maps insufficient history to missing context rather than
+no-witness. Inspector's ten admitted successors remain ten; the shared source's eleventh trade
+family is not added to that consumer. Prototype identity strings are explicitly research-only;
+the generated variants are transpiled experiments, not a proof of proposed production type or
+parser correctness. Production source execution, remaining scoped suppliers, live providers,
+worker cancellation/performance, receiver/UI and independent acceptance remain open. No raw
+run, database, event dump or trace is retained in Git; these tools emit bounded aggregate counts,
+outside ordinary CI/progress. No semantic qualification, pack/default, capability or release gate
+is promoted.

@@ -544,6 +544,14 @@ inspector-recorded-context-research:
 	./node_modules/.bin/esbuild tools/d3792-inspector-demand/recorded-context.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/recorded-context.mjs --log-level=warning
 	$(CI_NODE) .cache/d3792-inspector-demand/recorded-context.mjs
 
+# Source-owner prototype only; the unchanged baseline must refuse the bounded-work expectation.
+.PHONY: inspector-recorded-prefix-research
+inspector-recorded-prefix-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	$(CI_NODE) tools/d3792-inspector-demand/build-prefix.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/prefix_candidate.mjs candidate
+	$(CI_NODE) .cache/d3792-inspector-demand/window_candidate.mjs
+
 inspector-source-contract-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
 	./node_modules/.bin/vitest run --config tools/d3792-inspector-demand/vitest.sources.config.ts
@@ -555,6 +563,7 @@ inspector-demand-research:
 	$(CI_NODE) .cache/d3792-inspector-demand/baseline.mjs baseline
 	$(CI_NODE) .cache/d3792-inspector-demand/acquired.mjs acquired
 	$(CI_NODE) .cache/d3792-inspector-demand/derived_family.mjs derived_family
+	$(CI_NODE) .cache/d3792-inspector-demand/branch_scope.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/census.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/source-matrix.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/draft-wire.mjs
