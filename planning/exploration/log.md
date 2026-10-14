@@ -28331,3 +28331,43 @@ Campaign was the one capability with no API, route or content. Now:
   under unchanged 250 ms. This is local proof, not remote-cause closure or release/image
   qualification. No source/test edit occurred during the full run. Finish the existing
   strategic receipt and explicit-file commit; no new feature wave or push.
+
+### 2026-10-14 — D3797 bounded Inspector member views / D3798 typed research repair
+
+- Previous goal turn made concrete progress at a5bff1f3. Continue the evidence-to-consumer
+  foundation rather than promoting the inventory or choosing unaccepted production work.
+  Register D3797 before the disposable experiment. Original source values and all 75 source
+  obligations remain; the 35 unmeasured dependencies are not fabricated or retired.
+- Six closed source-specific member constructors operate over 4,184 real values in the same
+  imported/terminal population. 226,557 complete modeled members form 30,691 bounded batches,
+  all within actual Inspector limits. Member ordering/coverage, source equality and all 25,104
+  bad ordinal/changed-source/counterfeit-plan controls pass. Copied member data is immutable.
+  No production factory/renderer/receipt or chess qualification follows from these models.
+- Blind paging of a complete control map is not useful UX. Every target/color/mode focus is
+  separately checked: 134,144 requests, at most five members and one batch, 90 words/six marks/
+  five arrows. All 2,112 unavailable clone requests retain their reason. A real en-passant
+  control shows the accepted source clears ep: preserve the actual legal move separately and
+  name the clone limit, never upgrade proxy data into full legal-move truth. Defender duties
+  stay geometric and local exchange membership never becomes whole-position safety.
+- Add strict typing to the opt-in Make target. It exposes D3798's nonexistent run.createdAt;
+  use the explicit fixed fixture timestamp and assert every recorded event time. Initial model
+  variable/type errors are corrected before the final frozen passing run. Old reach remains
+  0/10, 0/10, 10/10 with no paired-negative false positives; all original overflow findings
+  reproduce. Optional aggregate remains below 64 KiB; no raw members enter Git or CI/progress.
+- Author only the bounded unaccepted D3792 section 4.11a in the existing module RFC: explicit
+  source demand, separate Inspector wire, six literal source-retaining view identities, truthful
+  source/limited states and no scope/grounding/exactness laundering. It is not buildable or
+  accepted yet: author all 35 suppliers, six payload/renderer schemas and the complete response/
+  paging/disclosure grammar, then independent review. No parent-state authorization or guessed
+  implementation. Source/selected-Sight/Nudge/Review discharges and full 1.0 remain open.
+- Close D3797 research and D3798 instrument defect only. Update existing dossier/coverage,
+  queue/roadmap/state and run strict research plus normal staged-process/governance checks.
+  Production is byte-unchanged from a5bff1f3; its prior full local gates are historical proof,
+  not a new browser run. No publish, deploy, worktree, agent delegation or goal completion.
+
+- Final frozen normal make inspector-demand-research roadmap-receipt staged-process-contracts
+  verify-governance exits zero. The opt-in target includes strict TypeScript, all real source/
+  member/batch/focus/counterfeit/immutability controls and the en-passant scope regression.
+  Register/status/work-state/roadmap/intent/history/test-tier guards remain green; all 1,733 live
+  rows stay assigned, and only the two bounded research/instrument rows close. No ordinary
+  software/content/browser rerun is claimed for these production-byte-identical changes.

@@ -41,6 +41,11 @@
   structural states require a change witness. This clarification is **not accepted** by
   the parent's implementing status. Its disposable source-bound controls check the proposed
   distinction, not a shipped selection repair; D3713's real empty-result recovery remains open.
+- **Draft amendment 2026-10-14 — D3792, §4.11a:** explicit Inspector demand and bounded
+  source-member detail, grounded by D3795/D3797. This amendment is **not accepted** by the
+  parent implementing status. The six-source detail model is not a production factory,
+  renderer, protocol or discharge; exact source suppliers and independent buildability review
+  still precede implementation.
 - **Implementation checkpoint 2026-10-07, shape-backed learner actions:** D3538 retains
   the exact fired shape entry ID through the registered presenter and the parsed
   module receipt. Named-structure and Theory pointer cards can open the existing Library
@@ -1755,6 +1760,158 @@ per exact consumer pair rather than two caller-owned prose paths.
 Class-3 operand losses close here as renderer work: `wdl`/`pv`/tablebase detail render their values
 with attribution, not *"wdl evidence recorded."* (leak L14).
 
+#### 4.11a Draft D3792 — explicit source demand and bounded source-member detail
+
+**State: unaccepted.** This subsection supersedes no shipped protocol or adapter. D3795
+inventories 75 accepted refs, measures 40 with real local/recorded inputs and leaves 35
+provider/dependency refs explicitly unmeasured. Six complete facts overflow even alone.
+D3797 establishes representation feasibility over 4,184 genuine source values, not useful
+selection, source execution, production presentation or semantic qualification. See
+`design/research/module-evidence-assembly.md` §Bounded source-member detail.
+
+**What changes:** one Advanced Inspector can browse the existing eight families, explicitly
+read a named source topic, then inspect complete typed members of one source fact. It is not
+an automatic source dashboard or a new default for Play. Ordinary modules, Nudge's one-edge
+scope, source meanings, source receipts and all existing module budgets remain unchanged.
+No current pack needs editing to add this presentation: authored predicates continue to
+consume their complete original source values.
+
+**Compatibility and operation ownership:** add the distinct read operation
+`POST /runs/:id/inspector/query`, request/response protocol `inspector.query_page@1`, owned
+by this section. Do not add fields to or reinterpret `module.query_page@1`. Old module queries,
+clients, presentation receipts and source bindings remain supported. Only Full Inspector's
+new client uses the new operation; an older deployment gives a visible unsupported-version
+state, never a silent fallback to raw evidence or the unfiltered old packet. This adds no
+pack/run/storage schema, migration, semantic convention or independently allocated shared
+schema/enum resource. Any later decision to introduce such a resource owes its own claim.
+
+The request is closed and serializable:
+
+```ts
+type InspectorRequest = {
+  protocol: "inspector.query_page@1";
+  assistance: RequestedAssistanceReceiptV1;
+  query: {
+    branchId: string;
+    nodeId: string;
+    decisionDigest: string;
+    view:
+      | { kind: "inventory" }
+      | { kind: "source"; projection: InspectorSourceRef }
+      | { kind: "detail"; projection: InspectorSourceRef; sourceKey: string;
+          scope: { kind: "whole" } | {
+            kind: "control_target"; color: "white" | "black";
+            mode: "geometric" | "legal"; target: SquareName;
+          };
+          start: number;
+        };
+  };
+};
+```
+
+`InspectorSourceRef` is the exact versioned-ref union derived from Inspector's accepted source
+image, not a free string. Separate the original source image from the six new detail views;
+views cannot recursively become acquisition topics. `inventory` does no collector/provider work and lists source topics
+in the existing family/registration order. No family has an observed fact count until its
+source was read. Selecting a topic demands only that projection's complete declared dependency
+path; it does not acquire every producer before filtering. A detail continuation reuses or
+reconstructs that same exact source occurrence, never accepts caller-supplied evidence, row
+data, text, role, ceiling, source availability or callback.
+
+Family chrome must say how many source topics were read out of the eligible inventory; reading
+one topic cannot label the whole family `no_witness` or fully inspected. Keep each topic's exact
+status rather than aggregate away the other `not_requested` entries.
+
+Before acquisition, derive access, rated/live locks, workflow context and effective assistance
+through the same authorities as the existing module query. Require the effective Full Inspector
+review effect and an open disclosure boundary. Resolve the requested node on the permitted
+recorded branch prefix; no guessed ancestor, sibling/future window or raw operand-helper
+construction. The recorded compiler supplies only its actual emitted facts ending at this
+node. Root/no-witness, broken boundary, provider absence and failed acquisition stay distinct.
+Compile the complete registered consumer before any lazy catalogue/provider read. Disabled,
+withheld, foreign, invalid-scope and stale requests perform zero source work.
+
+**Source execution:** retain all 75 refs and their exact requirements. Local and edge factories
+receive the authoritative FEN/edge; recorded successors use `recordedSemanticPath`, not v1
+payload relabelling. Saved engine/tablebase values resolve exact retained occurrences. Other
+providers, authored inputs, comparisons and derived dependencies must name their actual typed
+supplier and source owner. The existing 35 unmeasured refs are explicit acceptance debt:
+complete their supplier/input/absence/receiver/cancellation/positive-fixture matrix before this
+amendment can be accepted. Do not satisfy that obligation with permanently unavailable stubs,
+invented provider output, removal from the accepted image or a renderer-only inventory. Upstream
+source/version holds remain; this amendment cannot authorize their unaccepted migrations.
+
+**Truthful states:** retain `not_requested`, `unavailable`, `failed` and `no_witness` as distinct
+source outcomes. `no_witness` requires successful complete source execution with no admitted
+witness; it cannot mean “fitter dropped it.” Available output distinguishes collected, displayed
+and deferred fact counts. An actual budget-limited result carries the existing exceeded dimensions
+and the specific source fact's detail door; it never says that source found nothing. An invalid
+binding/factory contract is a typed operation failure, not chess absence. Focused legal-control
+unavailability remains visible even beside available geometric control.
+
+**Detail is derivation, not a cropped original fact:** add only these six literal projections,
+each with its exact original source as a required input:
+
+| New detail projection, version 1 | Sole source | Complete members |
+|---|---|---|
+| `derived.inspector.detail.rays` | `rules.tactic.reading.ray_classification@1` | One full ray, ray squares and optional material comparison |
+| `derived.inspector.detail.square_control` | `rules.square.reading.control@1` | One typed controller/target relation or explicit empty target; legal availability retained |
+| `derived.inspector.detail.piece_destinations` | `rules.mobility.reading.piece_destinations@1` | Origin/destination legal and local-exchange membership; complete availability/empty records |
+| `derived.inspector.detail.destination_changes` | `rules.mobility.event.piece_destinations@1` | Piece context and destination membership in all eight retained before/after/gained/lost sets |
+| `derived.inspector.detail.king_zone` | `rules.king.reading.zone_state@1` | Zone membership, attacker/defender relations, shelter and escape/availability members |
+| `derived.inspector.detail.defender_duties` | `rules.tactic.reading.defender_duty_set@1` | Full defender/target duty including all co-defenders; explicitly geometric, not legal recapture advice |
+
+Their six sole factories receive admitted complete sources plus the closed view scope/start,
+compute their own members and retain their literal inputs. No generic source slicer, arbitrary
+JSON path, caller text or “derived sentence” projection is admitted. Register these views only
+to exact `module.full_inspector@2`, with the original source answer image, weakest grounding and
+exactness inherited without promotion. They do not release any unqualified semantic subject or
+bind to voice, Nudge, bots, skills or pack truth. `evidence-presentation` owns their closed
+operand parsers, registered renderers and typed components; this section owns the operation,
+demand, scope and lifecycle. Both contracts must be coherent before implementation.
+
+Original scope/conventions/limitations also survive. In particular, square control's accepted
+legal turn-clone rule clears en passant; it is not the actual complete legal-move map. The
+proposed detail names that limit explicitly. D3797's legal en-passant counter-control demonstrates
+why target focus must not silently upgrade a source proxy into full rules legality.
+
+Each view holds at most eight **complete** members, stops before any existing fact/word/mark/
+arrow limit, and labels its selected range, selected total and full-source total. A source or
+member that cannot fit is explicitly limited; no arrow, caption, comparison or membership flag
+is silently removed. `control_target` is legal only for the square-control view and requires
+an exact square, side and mode. It means that target's controllers, not pawn advances, all moves
+of a selected piece or a quality judgement. The complete original reading remains unchanged.
+Other focus kinds require separate source-backed specification, not a generic field selector.
+
+`sourceKey` is server-issued from the exact run/branch/node, projection and retained value/input/
+source occurrence receipts. `start` is a non-negative safe integer selecting a member in this
+specific source/scope; out-of-range, changed source or decision yields a typed stale/invalid
+response before any continuation work. No paging state is persisted. Deterministic member order
+is source order or explicitly declared square/set order, never usefulness/lift/prominence ranking.
+No member may duplicate or disappear across continuations.
+
+Response correlation uses the existing decision/effective-config authority and strict sealed
+presentation parsing, but a distinct `inspector.disclosure_receipt@1` body must also bind the
+exact source, scope, selected range and ordered component digests. Do not reuse the old receipt
+namespace for a changed body. Recheck access/decision before publishing an async result; source
+attachment that advances the recorded decision requires refresh, not a special stale waiver.
+Close, selection, branch, help, source and disclosure changes retire pending views; accessibility
+and board paint inherit the same ceiling. The existing modal/focus/board ownership remains.
+
+**Acceptance remains red at HEAD:** prove all 75 real suppliers or an explicitly authorised
+source retirement; the ten recorded positive/hard-negative families; all six complete detail
+images and round trips; exact-scoped empties/unavailability; zero-work refusals and cancellation;
+old/new protocol rejection/compatibility; forged plan/payload/text/component and cross-source/
+scope/ordinal refusals; immutable saved play/source values; and actual authenticated application,
+client parser, desktop/phone/keyboard open → choose → read → focus/page → reload → return.
+The model's 134,144 control-focus cases are representation evidence, not those production checks.
+No 1.0 completion or execution-pair promotion follows from this draft.
+
+**Authoring still required before buildability acceptance:** the 35 source-input/supplier rows;
+the six literal payload/factory/renderer schemas in the owning presentation amendment; and the
+closed response/source-summary pagination/disclosure grammar. The request and six-type boundary
+above are a bounded draft, not an executable contract or authority to implement a guessed response.
+
 ### §5 — Budgets and `emptyBehavior` are the shipped invariants
 
 #### 5.1 Budgets are backstops, and the instrument is the point
@@ -2285,6 +2442,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-14 — D3792 §4.11a bounded Inspector demand/detail draft added after D3795/D3797's
+  real-source census. Distinct operation/wire; six explicit source-retaining view projections;
+  source/focus/budget states and no qualification laundering. This is not accepted or buildable
+  yet: 35 supplier rows, exact presentation schemas and the closed response/paging/disclosure
+  grammar still need authoring and independent review. Parent implementing state is unchanged.
 
 - 2026-10-13 — D3760 corrects the accepted A5 acquisition claim: v1 trade completion requires
   two capture/move anchors and is not in the one-edge source closure. Its Nudge eligibility is

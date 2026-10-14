@@ -306,3 +306,63 @@ request/response compatibility independently accepted. Enlarging budgets, silent
 source operands or calling withheld facts “no witness” does not answer this finding. `[M]`
 D3795 closes the bounded research question; D3796 closes the concrete exception only.
 D3791/D3792, dependency/provider measurements and whole Inspector qualification remain open.
+
+### Bounded source-member detail — 2026-10-14, D3797/D3798
+
+The existing opt-in `make inspector-demand-research` now type-checks the census/model before
+bundling. It runs six closed, disposable source-member constructors over the same 524 real
+positions and their emitted destination events: 4,184 genuine source values. These are view
+models, **not** production evidence, schemas, registered renderers or presentation receipts.
+They retain the complete original source and scope/total/member identity; each displayed row
+copies its complete relevant relation and never labels the subset as the whole reading. `[V]`
+(`tools/d3792-inspector-demand/detail-model.ts`, `census.ts`, `tsconfig.json`; `Makefile`.)
+
+| Source | Complete modeled members | Bounded batches | Maximum batch words / marks / arrows |
+|---|---:|---:|---|
+| Ray classification | 5,391 | 1,544 | 119 / 12 / 8 |
+| Square control | 154,466 | 19,538 | 125 / 14 / 8 |
+| Piece destinations reading | 22,796 | 3,081 | 117 / 14 / 8 |
+| Piece destinations event | 14,253 | 2,368 | 189 / 10 / 0 |
+| King-zone state | 16,347 | 2,263 | 117 / 13 / 8 |
+| Defender-duty set | 13,304 | 1,897 | 181 / 14 / 8 |
+
+All table entries are `[V]` from the above normal command. The 226,557 member representations
+are checked in-memory, not recorded to Git. At most eight complete members occupy one batch,
+stopping before the actual current Inspector budgets. Concatenated batch ordinals equal the
+complete member image with no gaps or duplicates. Source values remain byte-equal. Invalid
+ordinals, changed-source keys and counterfeit plans refuse in 25,104 controls. Copied row
+data is recursively immutable; plans come only from private admitted constructors. Those
+guards establish representation integrity, not a production receipt or semantic authority.
+
+**Usability boundary:** blindly paging through every control is not a satisfactory UI.
+Explicit target/color/geometric-versus-legal focus is tested for every square in every reading:
+134,144 requests, at most five members, one batch, 90 words, six marks and five arrows.
+2,112 requests retain unavailable legal-clone reasons rather than inventing an empty legal set.
+Invalid target/color/mode refuse. These are source-specific scopes, not a generic JSON path or
+piece-move inference. No pointer/touch/keyboard, actual HTTP or mounted UI is claimed. `[V]`
+(`focusControl`, `detailBatch`; `census.ts`, `controlFocus`.)
+
+The additional real en-passant control proves an important limit: `e5d6` is in the actual
+complete legal-move map, while the accepted square-control turn clone deliberately clears en
+passant and retains no legal-clone controller at d6. The detail explicitly names that clone
+limit. Likewise defender duties are geometric, and local non-losing exchange membership is
+not whole-position safety or move quality. A focused presentation cannot promote source scope
+or exactness. `[V]` (`census.ts`, `epFen`; `square-control.ts`, `turnClone`; `tactics.ts`,
+`computeDefenderDutyReading`; `rfc/breadth-collectors.md` §2; `detail-model.ts`.)
+
+Strict typing discovers D3798: the prior census used nonexistent `run.createdAt` for committed
+fixture times. It now passes the explicit fixture timestamp and asserts every recorded event
+retains it. The original source/admission/fit findings and ten-family reach/negative results
+reproduce; source/production code is unchanged. Initial model scope/type mistakes are repaired
+before the final frozen run, not hidden by esbuild or longer deadlines. `[V]`
+(`census.ts`; the strict first recipe in `make inspector-demand-research`.)
+
+**Author consequence:** `rfc/module-registration.md` §4.11a now holds the bounded **unaccepted**
+D3792 draft: explicit source demand, separate wire compatibility, truthful source/budget states,
+six literal source-retaining detail views and the no-scope/qualification-promotion rule.
+The remaining 35 source suppliers, exact six payload/renderer schemas and closed response/
+paging/disclosure grammar are explicit authoring requirements before independent buildability
+acceptance. The model must not become a production mint, generic slicer or “derived sentence.”
+Other focused views require their own source-backed specification. `[M]` No producer, source
+meaning, pack bytes, assistance default, classifier qualification, whole capability or release
+state changes. D3791/D3792 stay blocked.

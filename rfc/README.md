@@ -4,6 +4,15 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Inspector demand/detail bounded draft, 2026-10-14:** `module-registration.md` §4.11a
+owns D3792 without reinterpreting `module.query_page@1`. D3797's six-source member/batch model
+and exact target/color/mode focus fit unchanged limits on the sampled population. The proposed
+new operation and six literal detail views are **unaccepted**, not production bindings.
+All 35 unmeasured suppliers, exact payload/renderer schemas and response/paging/disclosure
+grammar remain authoring/buildability obligations; no permanent-unavailable stubs, source
+retirement, scope/exactness promotion or parent-state authorization. Independent review next
+after those obligations are authored; no shared resource claim or lifecycle change.
+
 **Orientation draft root-vocabulary repair, 2026-10-13:** `semantic-validation-authority.md`
 §4.1a now covers the seven exact root spellings measured under D3781, with coexisting aliases
 and total leaf coverage. All 343 registered cases execute; the disposable matrix has 106 checks.

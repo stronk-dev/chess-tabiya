@@ -17,6 +17,9 @@ import { fitModulePresentation, inspectorFamily, witnessedEvidence, type ModuleB
 import { presentEvidenceItems } from "../../packages/runtime/src/presentation-contract.js";
 import { recordedSemanticPath } from "../../packages/runtime/src/recorded-semantic-path.js";
 import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES } from "../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
+import { detailPlan, detailPage, detailBatch, focusControl, DETAIL_REFS } from "./detail-model.js";
+import type { Color, SquareName } from "chessops/types";
+import { exactLegalMoves } from "../../packages/runtime/src/legal-moves.js";
 
 type Sample = { label: string; fen: string; edge?: { beforeFen: string; moveUci: string; afterFen: string } };
 const samples: Sample[] = [];
@@ -64,6 +67,8 @@ const rows = refs.map(ref => {
     firstOverflow: null as null | { sample: string; cost: ModuleBudgetTuple; exceeded: readonly string[] } };
 });
 const byRef = new Map(rows.map(row => [row.projection, row]));
+const detail = DETAIL_REFS.map(projection => ({ projection, values: 0, pages: 0, batches: 0, unavailableRows: 0, maxWords: 0, maxMarks: 0, maxArrows: 0, batchMaxWords: 0, batchMaxMarks: 0, batchMaxArrows: 0, refusalControls: 0 }));
+const controlFocus = { requests: 0, unavailable: 0, batches: 0, maxMembers: 0, maxBatches: 0, maxWords: 0, maxMarks: 0, maxArrows: 0 };
 function values(value: unknown): readonly DeclaredEvidence<unknown>[] {
   if (Array.isArray(value)) return value.flatMap(values);
   if (typeof value === "object" && value !== null && !("payload" in value)) {
@@ -79,6 +84,68 @@ function measure(evidence: DeclaredEvidence<unknown>, sample: string): void {
   const row = byRef.get(key(evidence.projection));
   if (row === undefined) return;
   row.offered++;
+  const plan = detailPlan(evidence);
+  if (plan !== undefined) {
+    const result = detail.find(entry => entry.projection === key(evidence.projection))!;
+    const before = JSON.stringify(evidence);
+    result.values++;
+    for (const member of plan.rows) {
+      const checkImmutable = (value: unknown): void => {
+        if (typeof value !== "object" || value === null) return;
+        assert(Object.isFrozen(value), "detail member contains mutable data");
+        for (const child of Object.values(value)) checkImmutable(child);
+      };
+      checkImmutable(member.value);
+      assert.equal(Reflect.set(member.value as object, "injected", "untrusted"), false);
+      const page = detailPage(plan, member.ordinal, plan.digest);
+      result.pages++;
+      result.unavailableRows += member.kind.endsWith("unavailable") ? 1 : 0;
+      result.maxWords = Math.max(result.maxWords, page.budget.words);
+      result.maxMarks = Math.max(result.maxMarks, page.budget.marks);
+      result.maxArrows = Math.max(result.maxArrows, page.budget.arrows);
+    }
+    const coverage: number[] = [];
+    let start: number | null = plan.rows.length === 0 ? null : 0;
+    while (start !== null) {
+      const batch = detailBatch(plan, start, plan.digest);
+      coverage.push(...batch.ordinals);
+      result.batches++;
+      result.batchMaxWords = Math.max(result.batchMaxWords, batch.budget.words);
+      result.batchMaxMarks = Math.max(result.batchMaxMarks, batch.budget.marks);
+      result.batchMaxArrows = Math.max(result.batchMaxArrows, batch.budget.arrows);
+      start = batch.next;
+    }
+    assert.deepEqual(coverage, plan.rows.map(member => member.ordinal), "batch lost/duplicated a member");
+    if (row.projection === "rules.square.reading.control@1") {
+      for (const color of ["white", "black"] as const) for (const mode of ["geometric", "legal"] as const) for (let square = 0; square < 64; square++) {
+        const target = `${"abcdefgh"[square % 8]}${1 + Math.floor(square / 8)}` as SquareName;
+        const focused = focusControl(plan, color, mode, target);
+        controlFocus.requests++;
+        controlFocus.unavailable += focused.rows.some(member => member.kind.endsWith("unavailable")) ? 1 : 0;
+        controlFocus.maxMembers = Math.max(controlFocus.maxMembers, focused.rows.length);
+        let cursor: number | null = 0, batches = 0;
+        const actual: number[] = [];
+        while (cursor !== null) {
+          const page = detailBatch(focused, cursor, focused.digest);
+          actual.push(...page.sourceOrdinals);
+          batches++; controlFocus.batches++;
+          controlFocus.maxWords = Math.max(controlFocus.maxWords, page.budget.words);
+          controlFocus.maxMarks = Math.max(controlFocus.maxMarks, page.budget.marks);
+          controlFocus.maxArrows = Math.max(controlFocus.maxArrows, page.budget.arrows);
+          cursor = page.next;
+        }
+        assert.deepEqual(actual, focused.rows.map(member => member.sourceOrdinal));
+        controlFocus.maxBatches = Math.max(controlFocus.maxBatches, batches);
+      }
+      assert.throws(() => focusControl(plan, "white", "legal", "z9" as SquareName));
+      assert.throws(() => focusControl(plan, "other" as Color, "legal", "e4"));
+      assert.throws(() => focusControl(plan, "white", "wrong" as "legal", "e4"));
+    }
+    for (const invalid of [-1, plan.rows.length, 0.5, NaN]) { assert.throws(() => detailPage(plan, invalid, plan.digest)); result.refusalControls++; }
+    assert.throws(() => detailPage(plan, 0, "wrong-source")); result.refusalControls++;
+    assert.throws(() => detailPage({ ...plan, rows: [] }, 0, plan.digest)); result.refusalControls++;
+    assert.equal(JSON.stringify(evidence), before);
+  }
   if (!witnessedEvidence(evidence)) return;
   row.witnessed++;
   const digest = evidenceValueReceipt(evidence).payloadDigest;
@@ -117,8 +184,10 @@ for (const row of rows.filter(row => row.source === "position" || row.source ===
   }
 }
 for (const fixture of [...RECORDED_SEQUENCE_POSITIVES, ...RECORDED_SEQUENCE_HARD_NEGATIVES]) {
+  const at = "2026-10-14T00:00:00.000Z";
   let run = createRun({ id: `solo-${fixture.projection}`, session: { kind: "position", start: canonicalRunStart({ fen: fixture.fen, side: fixture.fen.split(" ")[1] === "b" ? "black" : "white" }), feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-10-14T00:00:00.000Z" });
-  for (const move of fixture.moves) run = commitMove(run, move, { at: run.createdAt }).run;
+  for (const move of fixture.moves) run = commitMove(run, move, { at }).run;
+  assert(run.events.every(event => event.at === at), "recorded fixture time is not deterministic");
   const saved = JSON.stringify(run), path = recordedSemanticPath(run, run.activeCursor.branchId);
   assert.equal(path.kind, "available");
   if (path.kind !== "available") throw new Error("Canonical recorded path refused");
@@ -126,10 +195,20 @@ for (const fixture of [...RECORDED_SEQUENCE_POSITIVES, ...RECORDED_SEQUENCE_HARD
   assert.equal(JSON.stringify(run), saved);
 }
 assert.equal(new Set(rows.map(row => row.projection)).size, accepted.size);
+// The accepted turn-clone control convention clears ep even for the moving side. Do not
+// relabel it as the actual complete legal-move set when narrowing to a single target.
+const epFen = "7k/8/8/3pP3/8/8/8/K7 w - d6 0 1";
+assert(exactLegalMoves(epFen).some(move => move.uci === "e5d6"));
+const epSource = invokeEvidenceValueRoute("rules.square.reading.control@1", { fen: epFen }) as DeclaredEvidence<unknown>;
+const epPlan = detailPlan(epSource)!;
+const epFocused = focusControl(epPlan, "white", "legal", "d6");
+assert.equal(epFocused.rows.filter(member => member.kind === "control_relation").length, 0);
+assert.match(detailBatch(epFocused, 0, epFocused.digest).text, /turn-clone \(en passant cleared\)/u);
 const report = { scope: "disposable individual-fact fit over real imported/local/recorded inputs; provider/dependency refs unmeasured, not query/HTTP/UI or semantic qualification", importedGames: games.length, importedEdges,
   localSamples: samples.length, acceptedRefs: rows.length, measuredRefs: rows.filter(row => row.calls > 0 || row.offered > 0).length,
-  oversizedRefs: rows.filter(row => row.intrinsicOverflows > 0).map(row => row.projection), refusedAdapters: rows.filter(row => row.adapterRefusals > 0).map(row => row.projection), rows };
+  oversizedRefs: rows.filter(row => row.intrinsicOverflows > 0).map(row => row.projection), refusedAdapters: rows.filter(row => row.adapterRefusals > 0).map(row => row.projection), detail, controlFocus, enPassantScopeControl: "actual legal move retained; clone-control absence explicitly labelled", rows };
 const output = `${JSON.stringify(report, null, 2)}\n`;
 assert(Buffer.byteLength(output) < 64 * 1024, "aggregate exceeded its small-report bound");
 writeFileSync(".cache/d3792-inspector-demand/census.json", output);
 console.log(JSON.stringify({ importedGames: report.importedGames, importedEdges, acceptedRefs: report.acceptedRefs, measuredRefs: report.measuredRefs, oversizedRefs: report.oversizedRefs, refusedAdapters: report.refusedAdapters }));
+console.log(JSON.stringify({ disposableDetailOnly: true, detail, controlFocus }));

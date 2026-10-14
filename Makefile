@@ -532,6 +532,7 @@ terminal-inspector-browser-check:
 
 # Disposable author evidence, explicitly outside ordinary CI/progress and production source edits.
 inspector-demand-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
 	$(CI_NODE) tools/d3792-inspector-demand/build.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/baseline.mjs baseline
 	$(CI_NODE) .cache/d3792-inspector-demand/acquired.mjs acquired

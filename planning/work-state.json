@@ -31570,6 +31570,24 @@
       "uxItems": [],
       "evidence": "apps/server/src/terminal-inspector.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3797",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:34d595a2c10286bc79a55b9bdecd2e96b92bce9948cf71a981394db464fab92d",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3798",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:99a4e93ef3d40ab66d7320a277989b0414f83da416504220f73be76b5fdb61fe",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/census.ts",
+      "evidenceKind": "path"
     }
   ]
 }

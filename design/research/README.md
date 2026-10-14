@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Bounded Inspector detail, 2026-10-14 ([[D3797]]/[[D3798]]): **answered `[V]` representation
+feasibility, not production delivery**. Six closed constructors cover 4,184 real source values;
+226,557 complete modeled members fit bounded batches. All 134,144 target/color/mode control
+views fit one batch, retaining clone unavailability and explicit en-passant-cleared limits.
+Strict types, source equality, coverage and counterfeit/cursor refusals pass. D3792's bounded
+draft is unaccepted and still owes supplier/schema/response authoring. See the dated section in
+`module-evidence-assembly.md`; no raw members or ordinary CI/progress dependency.
+
 Inspector individual-fact delivery, 2026-10-14 ([[D3795]]/[[D3796]]): **answered `[V]` for
 the measured real-input population, not complete coverage**. Inventory 75 accepted refs;
 40 measured / 35 provider/dependency refs unmeasured. Six types overflow even alone; square

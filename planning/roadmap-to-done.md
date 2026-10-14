@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3796]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3798]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,7 +68,7 @@ repairs the reproduced terminal query exception without changing complete legal 
 Focused 206 tests, authenticated both-color SQLite reads and foreign-account refusal, four
 native desktop/phone played mate/stalemate → Inspector → return/reload cases and strict types
 pass. D3791/D3792 remain blocked on an independently accepted demand/detail contract. The ledger
-now has 1,651 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
+now has 1,653 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
 prose-only closures and every whole-product/content/release gate remain. Fresh GitHub reads
 still show published `62c81eb1` verify success/browser failure. No new feature wave is started
 before the owner's requested total inventory.
@@ -77,6 +77,14 @@ Final frozen-input normal verification/build/all four browser tiers exit zero: 5
 seven performance, 256 real-content and 360 browser passes; one optional Maia skip, zero
 retries and all 112 composition cells. Local warm p95 is 107.5 ms under unchanged 250 ms.
 This closes the in-flight local checkpoint, not remote CI, Docker/release or full 1.0.
+
+D3797/D3798 then complete bounded representation research and its typed instrument repair,
+not a new product view. Six source-specific models retain 4,184 genuine values and 226,557
+complete members under existing limits; all 134,144 target/color/mode control scopes fit one
+small batch and preserve clone unavailability/limitations. The D3792 §4.11a draft is unaccepted
+and still owes 35 actual suppliers, six exact presentation schemas and closed response/paging/
+disclosure authoring before independent review. Production and the preceding full local proof
+are unchanged; no new source, pack, default, qualified subject or release gate is promoted.
 
 October-14 [[D3793]]/[[D3794]] complete CMP-a12's existing earned-tool/help-style journey,
 not Campaign curriculum or new rewards. Result/map/preparation name the actual current style's

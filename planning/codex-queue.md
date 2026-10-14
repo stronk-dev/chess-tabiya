@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3797]] takes the next foundation step after the requested inventory:
+measure projection-specific complete detail rows for D3795's six intrinsically oversized
+Inspector facts. Preserve the complete original source and distinguish a displayed member
+from the entire reading; no generic JSON truncation, bigger budget or shipped partial-fact
+adapter. Cover all actual members, legality/availability and exact source identity, then author
+D3792's bounded demand/detail/limited-result amendment in the existing RFC. Independent
+acceptance still precedes production; the parent implementing state does not authorize it.
+
+Result: D3797/D3798 are complete as bounded research/instrument work. Six source-specific
+models retain 226,557 members across 4,184 actual values; batches fit unchanged budgets.
+Every target/color/mode control scope fits one batch and preserves source limitations. Strict
+types also repair the nonexistent timestamp field. No production source/view is added.
+D3792's §4.11a draft is now explicit but not buildable/accepted: next author the 35 exact
+supplier/input/absence rows, six literal payload/renderer schemas and closed response/paging/
+disclosure grammar, then obtain independent review. Do not bypass those holds using the model,
+fake unavailable stubs, a generic slicer, parent implementing status or callback-owned prose.
+
 2026-10-14 — [[D3795]] research and [[D3796]] terminal repair are complete locally.
 All 75 Inspector refs are inventoried; 40 measured / 35 explicitly unmeasured. Six atomic
 fact types overflow even alone; family focus cannot be the complete D3792 fix. Four actual
