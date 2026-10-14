@@ -24,6 +24,17 @@ export function botIsStartable(row: BotRosterRow): boolean {
   return botProfileIsStartable(row.startable);
 }
 
+/** A receipt container is not a successful strength measurement or a human-likeness verdict. */
+export function botStrengthLabel(row: BotRosterRow): string {
+  const strength = row.card.strength;
+  if (strength.kind === "uncalibrated") return "Uncalibrated";
+  switch (strength.verdicts.strength) {
+    case "calibrated_relative": return "Relative strength measured";
+    case "unresolved": return "Strength unresolved";
+    case "invalid": return "Strength measurement invalid";
+  }
+}
+
 /** Learner copy for the row's availability, or `undefined` when it is simply available. */
 export function botAvailabilityNote(row: BotRosterRow): string | undefined {
   const startable = row.startable;

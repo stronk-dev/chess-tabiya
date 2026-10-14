@@ -4021,6 +4021,35 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it.each([
+    ["unresolved", "Strength unresolved"],
+    ["invalid", "Strength measurement invalid"],
+    ["calibrated_relative", "Relative strength measured"],
+  ] as const)("D3822 shows the actual %s strength verdict without claiming whole-bot calibration", async (verdict, label) => {
+    const roster = botRosterFixture().map(row => row.reference.id === "human-baseline.1400@1" ? {
+      ...row, card: { ...row.card, strength: {
+        kind: "calibrated" as const, verdicts: { strength: verdict, distribution: "insufficient" as const, bandIdentity: "insufficient" as const },
+        relativeElo: verdict === "calibrated_relative" ? -12.5 : null,
+        ci95: verdict === "calibrated_relative" ? [-40.1, 15.2] as const : null,
+        reference: "raw Maia band 1400", harness: "synthetic calibration control", measuredAt: "2026-10-15",
+        games: 800, timeControl: "fixture only", humanReferenceScope: "fixture only", humanLikeLabelAllowed: false,
+      } },
+    } : row);
+    const onStart = vi.fn();
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart, roster } });
+    await tick();
+    const tile = document.querySelector('[data-bot-profile="human-baseline.1400@1"]')!;
+    expect(tile.querySelector("em")!.textContent).toBe(label);
+    expect(tile.querySelector("em")!.textContent).not.toBe("Calibrated");
+    const radio = tile.querySelector<HTMLInputElement>("input")!;
+    radio.click(); radio.focus(); await tick();
+    expect(document.activeElement).toBe(radio);
+    expect(radio.getAttribute("aria-describedby")!.split(" ")).toContain("bot-strength-human-baseline.1400@1");
+    expect(onStart).not.toHaveBeenCalled();
+    expect(document.querySelector('[data-bot-profile="human-baseline.1000@1"] em')!.textContent).toBe("Uncalibrated");
+    await unmount(component);
+  });
+
   it("D3821 shows the declared personal-adaptation limit once at the selected opponent", async () => {
     const onStart = vi.fn();
     const roster = botRosterFixture().map(row => ({ ...row, card: { ...row.card, statements: [

@@ -556,7 +556,23 @@ export interface BotCardWire {
   readonly title: string;
   readonly controlledTraits: readonly BotClassifierId[];
   readonly statements: readonly { readonly id: BotCardStatementId; readonly text: string; readonly sources: readonly BotCardSourceId[] }[];
-  readonly strength: { readonly kind: "uncalibrated" } | { readonly kind: "calibrated"; readonly humanLikeLabelAllowed: boolean; readonly [key: string]: unknown };
+  readonly strength: { readonly kind: "uncalibrated" } | {
+    readonly kind: "calibrated";
+    readonly verdicts: {
+      readonly strength: "calibrated_relative" | "unresolved" | "invalid";
+      readonly distribution: "human_reference_equivalent" | "controlled_divergence" | "rejected" | "insufficient";
+      readonly bandIdentity: "supported" | "refuted" | "insufficient";
+    };
+    readonly relativeElo: number | null;
+    readonly ci95: readonly [number, number] | null;
+    readonly reference: string;
+    readonly harness: string;
+    readonly measuredAt: string;
+    readonly games: number;
+    readonly timeControl: string;
+    readonly humanReferenceScope: string;
+    readonly humanLikeLabelAllowed: boolean;
+  };
   readonly decorative: null;
 }
 

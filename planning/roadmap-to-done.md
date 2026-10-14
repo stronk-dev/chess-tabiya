@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3822]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3823]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+[[D3822]]/[[D3823]] complete the accepted calibration-card repair, not calibration itself.
+The compiler and complete capability decoder preserve three independent verdicts, finite ordered
+figures and citations; failed/unresolved strength cannot advertise a figure or human likeness.
+The picker and detailed copy expose those conclusions in human terms. Thirteen predecessor
+failures, 40 focused cases including sparse intervals, the preceding complete card/compiler/catalogue suite, clean types and
+two built desktop/touch recovery/play/reload controls pass. Those native cards are synthetic
+supported-variant fixtures, never installed measurements. Final frozen normal verification/build/
+all four browser tiers pass: 5,731 software, seven performance, 257 content, 59 matrix tests and
+112/112 unretried composition cells plus packaged-production proof. Both defects are closed.
+
 [[D3821]] completes OPP-a14's accepted fixed-profile disclosure through the compiled card,
 capabilities/client parser and visible pre-start picker. All twelve cards carry one source-backed
 statement; profile switching, keyboard scrolling and actual desktop/phone start/play/reload/return
@@ -26,8 +36,7 @@ preserve focus, saved moves and profile identity. Full frozen normal verificatio
 browser tiers pass: 5,691 software, seven performance, 257 content, 59 matrix cases and 112/112
 unretried composition cells. This does not calibrate profiles, add personalities or choose the
 pending first-use default. D3821 and OPP-a14 are closed; the full Bots capability remains partial.
-[[D3822]] separately owns the latent calibration-container label: a receipt with unresolved or
-invalid strength must not be advertised as calibrated. Current receipts remain empty.
+The latent calibration-container label above is repaired; current receipts remain empty.
 
 [[D3820]] closes the bounded comparison-source prerequisite. The unchanged constructor fails
 the exact endpoint. A guarded constructor prototype passes 116 controls on 62 prefix pairs,
@@ -206,12 +215,12 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Owner-requested finish and overview: D3821's in-flight production disclosure is verified and
-closed; D3818's result-attribution repair and D3819/D3820's bounded source research remain intact.
-The current local result is 5,691 software, seven performance and 257 content tests, all browser
+Current local checkpoint: D3822/D3823's accepted calibration evidence-to-card repair is verified
+and closed; D3821 disclosure, D3818 result attribution and D3819/D3820 source research stand.
+The current local result is 5,731 software, seven performance and 257 content tests, all browser
 tiers including 59 matrix cases/112 unretried composition cells and packaged-production proof.
 A fresh GitHub read confirms the published revision is still 78fd302f:
 [verify succeeded](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140789),

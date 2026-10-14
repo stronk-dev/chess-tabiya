@@ -31810,11 +31810,21 @@
     },
     {
       "id": "D3822",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f39491812e1ebbfd49ccf82b4e00d6b37fe8afe417fbec2d468785b438b6a8ca",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f65b03022769924ab4e29e3b498d0d3029b42cc7a89af0c38e0036b9969657ea",
       "uxItems": [],
-      "owner": "bot-play"
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3823",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0bb3f88d99f25937b9f2142633b058fb09b9cb5e53e25667ed622b2acc54894b",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

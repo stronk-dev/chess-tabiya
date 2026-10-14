@@ -3936,6 +3936,19 @@ bot-label-check:
 	$(MAKE) typecheck
 
 .PHONY: bot-card-disclosure-check bot-card-disclosure-browser-check
+.PHONY: bot-calibration-card-check bot-calibration-card-browser-check
+.PHONY: browser-bot-calibration-controls
+browser-bot-calibration-controls:
+	./node_modules/.bin/esbuild tests/browser/bot-calibration-controls.ts --bundle --platform=node --format=esm --log-level=warning --outfile=.cache/browser-bot-calibration-controls.mjs
+
+test-browser test-browser-smoke: browser-bot-calibration-controls
+
+bot-calibration-card-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/bot-card.test.ts apps/web/src/lib/capability-response.test.ts apps/web/src/lib/screens.test.ts -t "D3822|D3823"
+
+bot-calibration-card-browser-check: browser-bot-calibration-controls
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3822|D3823"
+
 bot-card-disclosure-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "D3821"
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/bot-card.test.ts apps/server/src/bot-policy-compiler.test.ts apps/server/src/bot-profile-catalog.test.ts

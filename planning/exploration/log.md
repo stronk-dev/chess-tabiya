@@ -29046,3 +29046,63 @@ Campaign was the one capability with no API, route or content. Now:
   complete useful Support/Review delivery, calibrated personalities or general why-move search.
   Finish this batch and give the requested overview before another implementation wave. The
   full 1.0 goal is neither paused nor marked complete by this inventory.
+
+### 2026-10-15 — D3822/D3823 complete calibration evidence-to-card repair, in flight
+
+- Previous goal turn is progress: e82e4958 closes D3821/OPP-a14 with full normal local proof and
+  the owner-requested inventory. Revalidate HEAD/clean tracked source. The source/Sight/Nudge/
+  Review amendments remain unaccepted; ask permission for a separate reviewer without treating
+  UI acceptance of the question as human approval. No subagent is spawned or amendment accepted.
+- Inspect D3822's actual accepted §7 path before editing. The compiler also admits NaN/infinity,
+  reversed/non-finite intervals and missing relative references; the full web decoder accepts
+  only kind plus a boolean. Ledger/assign D3823 first. An assignment before syncing the new
+  population refuses; ordinary sync then assignment restores zero untriaged without raising
+  the ceiling. D3822/D3823 are doing under bot-play.
+- Thirteen permanent predecessor failures reproduce malformed measured cards, unsafe API
+  permission and all three falsely calibrated labels. Preserve the existing schema/vocabulary/
+  profile/source/selection/calibration policy. Compiler admission validates complete receipt
+  shape and finite ordered fields; full capabilities validate three separate verdicts/citation,
+  null figures for failure and exact human-like permission. Explicit web typing replaces the
+  open dictionary. Human copy retains all measured scopes/citations without raw verdict tokens.
+- All 36 supported verdict combinations cross the real compiler/whole-roster web decoder.
+  Thirty-eight focused cases, 77 full card/compiler/catalogue cases, two preceding mounted
+  disclosure controls and clean workspace types pass. Native code first fails on a missing
+  bracket, then on a raw server-module JSON import. Repair only test syntax/loading: a normal
+  Make prerequisite bundles the actual compiler/catalogue together into ignored .cache output,
+  preserving its catalogue object-identity check. No production JSON import is changed.
+- Two built desktop/touch cases pass all three supported strength states, bounded labels and
+  complete citation copy, an inconsistent permission refusal, explicit recovery, actual selected
+  bot play and reload with original nodes/cursor, then genuine uncalibrated return. Synthetic
+  calibration controls are not installed records or scientific calibration. Full normal gates
+  follow on frozen source before closure; no real receipt, behavior/default/rating/content or
+  whole capability/semantic qualification/remote/release promotion and no push.
+
+- The first full run passes 5,729 software and seven performance cases. During final read,
+  identify sparse intervals: Array.every skips holes. Stop the confirmed own session with Ctrl-C;
+  its exit130 is an operator interruption, not a passed full chain. Two permanent controls then
+  reproduce an untyped renderer crash in the server and wrongly admitted sparse CI in the web
+  decoder. Validate both actual interval slots before rendering/cloning. Repaired focused/full
+  verification follows; do not reuse the interrupted run as proof of these changed bytes.
+- The repaired normal focused target passes all forty cases and workspace types with zero
+  warnings. Preserve the interrupted run and start full normal verification on these fixed bytes.
+
+### 2026-10-15 — D3822/D3823 final production-boundary proof and closeout
+
+- Repaired-source normal make roadmap-receipt verify-awake build test-browser-ci-awake exits
+  zero. All 5,731 software/391 files, seven performance/four files, 257 content/26 files,
+  workspace types, schema/packaging/governance/build and all four browser tiers pass. The new
+  desktop and actual touch journeys pass in the full suite. Matrix 59/59 and all 112/112
+  successful unretried composition cells plus packaged-production proof pass. Source and
+  consumed fixtures/documents remain frozen until terminal completion; no budgets are waived.
+- Close D3822/D3823 through the existing state command and actual regression paths; retain all
+  initial failures, syntax/source-import repairs, operator interruption and sparse negatives.
+  UX282 complete/263 live/24 retired stays unchanged; all 1,732 live ledger rows remain assigned,
+  with 1,679 done and 161 refused. No extra work register or new raw measurement data is added.
+- Update the existing Bot experience/checkpoint and canonical docs. The production calibration
+  registry remains empty. Supported-variant fixtures do not prove strength/human likeness;
+  profile behavior, sampling/guard, source/schema/conventions, rating/default, scientific
+  calibration thresholds and names/art remain unchanged. No whole capability/milestone,
+  semantic qualification, official content, current-revision remote or release promotion.
+- No independent reviewer permission arrived, so no subagent was spawned and no held amendment
+  self-accepted. Continue lawful work from the existing frontier; full 1.0 remains active.
+  No push, deployment, publication or goal pause/completion is part of this closeout.

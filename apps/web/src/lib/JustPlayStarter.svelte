@@ -1,7 +1,7 @@
 <script lang="ts">
   import { BOT_FAMILY_LABELS, presetDeclaration, type BotProfileReference } from "@chess-tabiya/runtime/client";
   import type { BotRosterRow } from "./api.js";
-  import { botAvailabilityNote, botCardSummary, botIsStartable } from "./bot-picker.js";
+  import { botAvailabilityNote, botCardSummary, botIsStartable, botStrengthLabel } from "./bot-picker.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
 
   interface StartInput {
@@ -85,7 +85,7 @@
               <label class:checked={opponent === `bot:${row.reference.id}`} class:unavailable={!startable} data-bot-profile={row.reference.id}>
                 <input type="radio" name="opponent" value={`bot:${row.reference.id}`} bind:group={opponent} disabled={!startable} aria-labelledby={`bot-title-${row.reference.id}`} aria-describedby={description} />
                 <span><strong id={`bot-title-${row.reference.id}`}>{row.card.title}</strong><small id={`bot-summary-${row.reference.id}`}>{botCardSummary(row)}</small></span>
-                <em id={`bot-strength-${row.reference.id}`}>{row.card.strength.kind === "uncalibrated" ? "Uncalibrated" : "Calibrated"}</em>
+                <em id={`bot-strength-${row.reference.id}`}>{botStrengthLabel(row)}</em>
                 {#if note !== undefined}<small class="availability" id={`bot-note-${row.reference.family}-${row.reference.band}`}>{note}</small>{/if}
                 {#if promise !== undefined}<span class="bot-promise" id={`bot-promise-${row.reference.id}`} data-card-statement={promise.id}>{promise.text}</span>{/if}
               </label>
@@ -170,7 +170,7 @@
   .bot-grid input:focus-visible + span, .opponent-grid input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
   .bot-grid span, .opponent-grid span, .engine-choice span { display: grid; gap: .25rem; }
   .bot-grid small, .opponent-grid small, .engine-choice small { color: var(--muted); line-height: 1.3; }
-  .bot-grid em { align-self: start; color: var(--muted); font: 600 .65rem ui-monospace, monospace; font-style: normal; text-transform: uppercase; }
+  .bot-grid em { align-self: start; max-inline-size: 12ch; text-align: end; color: var(--muted); font: 600 .65rem ui-monospace, monospace; font-style: normal; text-transform: uppercase; }
   .bot-grid .availability { grid-column: 1 / -1; }
   .bot-promise { grid-column: 1 / -1; margin: .25rem 0 0; color: var(--ink); font-size: .85rem; line-height: 1.45; }
   .opponent-grid b, .engine-choice b { align-self: end; color: var(--accent); font: 700 1rem ui-monospace, monospace; }

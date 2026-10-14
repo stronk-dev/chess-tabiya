@@ -1,5 +1,15 @@
 # Testing and CI
 
+`make bot-calibration-card-check` exercises all 36 supported strength/distribution/band combinations,
+malformed receipt/card refusals and mounted verdict labels. The native counterpart compiles its
+synthetic controls with the actual server card compiler into ignored `.cache/` output; the normal
+smoke/all-browser Make targets prepare the same helper. No raw server module with JSON imports is
+loaded through Playwright's source runner, no lookalike card compiler is written and no calibration
+receipt is installed. Built desktop/touch journeys override only one capability card, prove three
+distinct strength states and scoped citations, reject an inconsistent permission, recover explicitly,
+then play/reload with unchanged saved nodes/cursor and return to the genuine uncalibrated roster.
+These fixtures prove supported wire/UI behavior, not measured strength or human likeness.
+
 `make bot-card-disclosure-check` verifies all twelve compiled fixed-profile statements and their
 grounding through the actual web roster parser, the complete card/compiler/catalog tests and
 mounted selection/refresh/absence controls, then workspace types. The browser counterpart checks

@@ -31,6 +31,67 @@ function receipt(entry: BotProfileCatalogEntry, overrides: Partial<BotCalibratio
 }
 
 describe("grounded bot cards (bot-policy §7 / A9; bot-roster §7 / criterion 4)", () => {
+  it.each(["calibrated_relative", "unresolved", "invalid"] as const)("D3823 retains all twelve distribution/band combinations for %s", verdict => {
+    const entry = profile("pawn-forward.1400@1");
+    for (const distribution of ["human_reference_equivalent", "controlled_divergence", "rejected", "insufficient"] as const) {
+      for (const bandIdentity of ["supported", "refuted", "insufficient"] as const) {
+        const strength: BotCalibrationReceipt["strength"] = verdict === "calibrated_relative"
+          ? { verdict, reference: "raw Maia band 1400", relativeElo: 0, ci95: [0, 0] }
+          : { verdict, reference: "raw Maia band 1400" };
+        const source = receipt(entry, { strength, distribution, bandIdentity });
+        const rows = projectBotRoster(undefined, { [entry.behaviorDigest]: source }).profiles;
+        const card = rows.find(row => row.reference.id === entry.reference.id)!.card;
+        expect(card.strength).toMatchObject({ verdicts: { strength: verdict, distribution, bandIdentity }, humanLikeLabelAllowed: verdict === "calibrated_relative" && distribution === "human_reference_equivalent" && bandIdentity === "supported" });
+        expect(() => validateRoster(JSON.parse(JSON.stringify(rows)))).not.toThrow();
+        expect(card.statements.at(-1)!.text).not.toMatch(/calibrated_relative|human_reference_equivalent|controlled_divergence/u);
+        expect(card.statements.at(-1)!.text).toContain(source.humanReferenceScope);
+      }
+    }
+  });
+  it.each([
+    ["extra receipt prose", (value: BotCalibrationReceipt) => ({ ...value, bio: "A very human bot" })],
+    ["extra strength prose", (value: BotCalibrationReceipt) => ({ ...value, strength: { ...value.strength, caption: "A great player" } })],
+    ["array strength", (value: BotCalibrationReceipt) => ({ ...value, strength: Object.assign([], value.strength) })],
+    ["missing harness", (value: BotCalibrationReceipt) => ({ ...value, harness: undefined })],
+  ] as const)("D3823 refuses %s at receipt admission", (_name, corrupt) => {
+    const entry = profile("human-baseline.1400@1");
+    expect(() => compileBotCard(entry, corrupt(receipt(entry)))).toThrow(BotCardError);
+  });
+  it.each([
+    ["non-finite strength", { relativeElo: NaN }],
+    ["infinite strength", { relativeElo: Infinity }],
+    ["non-finite interval", { ci95: [-40, NaN] }],
+    ["sparse interval", { ci95: new Array<number>(2) }],
+    ["infinite interval", { ci95: [-Infinity, 15] }],
+    ["reversed interval", { ci95: [15, -40] }],
+    ["missing reference", { reference: undefined }],
+    ["empty reference", { reference: "  " }],
+  ] as const)("D3823 refuses %s before publishing a measured card", (_name, changes) => {
+    const entry = profile("guarded-human.1400@1");
+    const source = receipt(entry);
+    expect(() => compileBotCard(entry, { ...source, strength: { ...source.strength, ...changes } })).toThrow(BotCardError);
+  });
+  it.each(["unresolved", "invalid"] as const)("D3822 renders %s as a failed strength verdict, not a calibration success", verdict => {
+    const entry = profile("human-baseline.1400@1");
+    const source = receipt(entry, { strength: { verdict, reference: "raw Maia band 1400" }, distribution: "insufficient", bandIdentity: "insufficient" });
+    const card = compileBotCard(entry, source);
+    expect(card.strength).toMatchObject({ kind: "calibrated", verdicts: { strength: verdict }, relativeElo: null, ci95: null, humanLikeLabelAllowed: false });
+    const calibration = card.statements.find(statement => statement.id === "card.calibration")!;
+    expect(calibration.sources).toEqual(["calibration.receipt"]);
+    expect(calibration.text).toContain(verdict === "invalid" ? "Strength measurement invalid" : "Strength unresolved");
+    expect(calibration.text).toContain("not enough evidence");
+    expect(calibration.text).not.toMatch(/\bElo\b|calibrated_relative|human_reference_equivalent|band identity insufficient/u);
+    expect(() => validateRoster(JSON.parse(JSON.stringify(projectBotRoster(undefined, { [entry.behaviorDigest]: source }).profiles)))).not.toThrow();
+  });
+  it("D3823 refuses a missing three-verdict card and an inconsistent human-like permission at the real web decoder", () => {
+    const entry = profile("human-baseline.1400@1");
+    const rows = JSON.parse(JSON.stringify(projectBotRoster(undefined, { [entry.behaviorDigest]: receipt(entry) }).profiles));
+    const row = rows.find((value: { reference: { id: string } }) => value.reference.id === entry.reference.id)!;
+    row.card.strength.humanLikeLabelAllowed = true;
+    expect(() => validateRoster(rows)).toThrow(TypeError);
+    row.card.strength = { kind: "calibrated", humanLikeLabelAllowed: false };
+    expect(() => validateRoster(rows)).toThrow(TypeError);
+  });
   it.each(BOT_PROFILE_CATALOG)("D3821 $reference.id discloses fixed settings without personal adaptation", entry => {
     const card = compileBotCard(entry);
     const statements = card.statements.filter(value => value.id === "card.no_memory");

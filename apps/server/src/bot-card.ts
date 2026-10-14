@@ -71,11 +71,22 @@ export class BotCardError extends TypeError {
 
 function parseCalibration(value: unknown, entry: BotProfileCatalogEntry): BotCalibrationReceipt {
   if (value === null || typeof value !== "object" || Array.isArray(value)) throw new BotCardError("calibration receipt must be an object");
+  const shape = (object: object, required: readonly string[], optional: readonly string[] = []) => {
+    if (required.some(key => !Object.hasOwn(object, key)) || Object.keys(object).some(key => !required.includes(key) && !optional.includes(key))) throw new BotCardError("calibration receipt has an invalid shape");
+  };
+  shape(value, ["behaviorDigest", "strength", "distribution", "bandIdentity", "harness", "measuredAt", "games", "timeControl", "humanReferenceScope"]);
   const receipt = value as BotCalibrationReceipt;
+  if (receipt.strength === null || typeof receipt.strength !== "object" || Array.isArray(receipt.strength)) throw new BotCardError("calibration strength must be an object");
+  shape(receipt.strength, ["verdict", "reference"], ["relativeElo", "ci95"]);
   if (receipt.behaviorDigest !== entry.behaviorDigest) throw new BotCardError("calibration receipt keys a different behaviour digest");
   if (!["calibrated_relative", "unresolved", "invalid"].includes(receipt.strength?.verdict)) throw new BotCardError("calibration strength verdict is outside the closed vocabulary");
   if (!["human_reference_equivalent", "controlled_divergence", "rejected", "insufficient"].includes(receipt.distribution)) throw new BotCardError("calibration distribution verdict is outside the closed vocabulary");
   if (!["supported", "refuted", "insufficient"].includes(receipt.bandIdentity)) throw new BotCardError("calibration band-identity verdict is outside the closed vocabulary");
+  if (typeof receipt.strength.reference !== "string" || receipt.strength.reference.trim() === "") throw new BotCardError("calibration strength lacks its reference");
+  if (receipt.strength.relativeElo !== undefined && !Number.isFinite(receipt.strength.relativeElo)) throw new BotCardError("calibration strength must be finite");
+  if (receipt.strength.ci95 !== undefined && (!Array.isArray(receipt.strength.ci95)
+    || receipt.strength.ci95.length !== 2 || ![receipt.strength.ci95[0], receipt.strength.ci95[1]].every(value => typeof value === "number" && Number.isFinite(value))
+    || receipt.strength.ci95[0] > receipt.strength.ci95[1])) throw new BotCardError("calibration interval must have two finite ordered bounds");
   if (receipt.strength.verdict === "calibrated_relative"
     && (typeof receipt.strength.relativeElo !== "number" || receipt.strength.ci95 === undefined || receipt.strength.ci95.length !== 2)) {
     throw new BotCardError("a calibrated relative strength must carry its figure and 95% interval");
@@ -141,9 +152,18 @@ function calibrationStatement(strength: BotCardStrength): BotCardStatement {
     return statement("card.calibration", "Uncalibrated: no strength number is shown until games measure this exact profile.", ["calibration.absent"]);
   }
   const figure = strength.relativeElo === null || strength.ci95 === null
-    ? `strength ${strength.verdicts.strength}`
+    ? strength.verdicts.strength === "invalid" ? "Strength measurement invalid" : "Strength unresolved"
     : `${strength.relativeElo >= 0 ? "+" : ""}${strength.relativeElo.toFixed(1)} Elo against ${strength.reference} (95% CI ${strength.ci95[0].toFixed(1)} to ${strength.ci95[1].toFixed(1)})`;
-  return statement("card.calibration", `Measured ${figure} by ${strength.harness} on ${strength.measuredAt} over ${strength.games.toLocaleString("en-US")} games, ${strength.timeControl}; distribution ${strength.verdicts.distribution}, band identity ${strength.verdicts.bandIdentity}.`, ["calibration.receipt"]);
+  const distribution: Record<BotCalibrationReceipt["distribution"], string> = {
+    human_reference_equivalent: "matches the human reference",
+    controlled_divergence: "intentionally differs from the human reference",
+    rejected: "does not pass the human-reference test",
+    insufficient: "not enough evidence",
+  };
+  const band: Record<BotCalibrationReceipt["bandIdentity"], string> = {
+    supported: "supported by the measurement", refuted: "not supported by the measurement", insufficient: "not enough evidence",
+  };
+  return statement("card.calibration", `${figure}; tested by ${strength.harness} on ${strength.measuredAt} over ${strength.games.toLocaleString("en-US")} games, ${strength.timeControl}. Human-move distribution: ${distribution[strength.verdicts.distribution]} (${strength.humanReferenceScope}). Model-band identity: ${band[strength.verdicts.bandIdentity]}.`, ["calibration.receipt"]);
 }
 
 export interface BotCard {

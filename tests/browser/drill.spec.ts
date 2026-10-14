@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
+import type { BotCalibrationReceipt } from "../../apps/server/src/bot-card.js";
 
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type APIResponse, type Locator, type Page, type TestInfo } from "@playwright/test";
@@ -5746,6 +5747,70 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: 
     await chooseBot(page, "human-baseline.1400@1");
     await expect(page.locator('[data-bot-profile="human-baseline.1400@1"] .bot-promise')).toContainText("your rating or past results");
     await expect(page.locator('[data-card-statement="card.no_memory"]')).toHaveCount(1);
+  });
+}
+
+for (const phone of [false, true]) {
+  test(`D3822 D3823 bot calibration shows separate verdicts and rejects malformed evidence${phone ? " @mobile" : " desktop"}`, async ({ page }) => {
+    const { calibrationControlCard } = await import(new URL("../../.cache/browser-bot-calibration-controls.mjs", import.meta.url).href) as typeof import("./bot-calibration-controls.js");
+    await register(page);
+    if (!phone) await page.setViewportSize({ width: 1440, height: 1000 });
+    const entry = BOT_PROFILE_CATALOG.find(value => value.reference.id === "human-baseline.1400@1")!;
+    // Synthetic supported-variant control only: no receipt is installed or game calibrated.
+    let verdict: BotCalibrationReceipt["strength"]["verdict"] = "unresolved";
+    let corrupt = false;
+    await page.route("**/capabilities", async route => {
+      const response = await route.fetch();
+      const body = await response.json();
+      const row = body.policyProfiles.human_common.profiles.find((value: { reference: { id: string } }) => value.reference.id === entry.reference.id);
+      row.card = calibrationControlCard(entry.reference.id, verdict);
+      if (corrupt) row.card = { ...row.card, strength: { ...row.card.strength, humanLikeLabelAllowed: true } };
+      await route.fulfill({ response, json: body });
+    });
+    const tile = page.locator('[data-bot-profile="human-baseline.1400@1"]');
+    for (const [next, expected] of [["calibrated_relative", "Relative strength measured"], ["unresolved", "Strength unresolved"], ["invalid", "Strength measurement invalid"]] as const) {
+      verdict = next;
+      await page.goto("/play");
+      await expect(tile.locator("em")).toHaveText(expected);
+      if (phone) await tile.tap(); else await chooseBot(page, entry.reference.id);
+      await expect(tile.locator("input")).toBeChecked();
+      const details = page.locator('.bot-card [data-card-statement="card.calibration"]');
+      await expect(details).toContainText("Human-move distribution: not enough evidence");
+      await expect(details).toContainText("Model-band identity: not enough evidence");
+      await expect(details).toContainText("synthetic calibration control");
+      if (next === "calibrated_relative") await expect(details).toContainText("-12.5 Elo against raw Maia band 1400 (95% CI -40.1 to 15.2)");
+      else await expect(details).not.toContainText("Elo");
+      await expect(details).not.toContainText("calibrated_relative");
+      await expect(page.locator('[data-bot-profile="human-baseline.1000@1"] em')).toHaveText("Uncalibrated");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      expect(await tile.locator("em").evaluate(element => {
+        const a = element.getBoundingClientRect(), b = element.closest("label")!.getBoundingClientRect();
+        return a.left >= b.left && a.right <= b.right && a.top >= b.top && a.bottom <= b.bottom;
+      })).toBe(true);
+    }
+    corrupt = true;
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "This page is temporarily unavailable." })).toBeVisible();
+    await expect(page.locator("[data-bot-profile]")).toHaveCount(0);
+    corrupt = false;
+    await page.getByRole("button", { name: "Try again", exact: true }).click();
+    await expect(tile.locator("em")).toHaveText("Strength measurement invalid");
+    if (phone) await tile.tap(); else await chooseBot(page, entry.reference.id);
+    const start = page.getByRole("button", { name: "Start and keep the game" });
+    if (phone) await start.tap(); else await start.click();
+    await expect(page).toHaveURL(/\/play\/run\//u);
+    await move(page, "e2", "e4", "white");
+    await expect(page.locator(".timeline")).toContainText("Active line 2 turns");
+    const graphPath = `${new URL(page.url()).pathname.replace("/play/run/", "/runs/")}/graph`;
+    const before = (await (await page.request.get(graphPath)).json()).graph;
+    await page.reload();
+    await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1400");
+    const after = (await (await page.request.get(graphPath)).json()).graph;
+    assertRecordedNodesPreserved(before.nodes, after.nodes);
+    expect(after.activeCursor).toEqual(before.activeCursor);
+    await page.unroute("**/capabilities");
+    await page.goto("/play");
+    await expect(tile.locator("em")).toHaveText("Uncalibrated");
   });
 }
 

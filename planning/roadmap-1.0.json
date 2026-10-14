@@ -339,7 +339,7 @@
         ],
         "experience": [
           "partial",
-          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. D3821 exposes the single compiled fixed-profile/no-adaptation promise at the selected choice, with keyboard-scrollable details, retained selection focus and actual desktop/phone play/reload proof. Completed-game same-bot replay has desktop/touch recovery, exact fresh-attempt admission, preserved source and departure controls. Pack attachment resolves the saved run's retained document under its read grants. D3751 names the actual raw-run session mode after failure/change-back and restores recorded-policy copy on reload; this is not durable recovery or calibrated identity. Names/assets, measured personality, opening routes and per-bot history/Review remain. D3822 separately owns the latent failed-calibration-container label. D1416 defers bot tournaments/leagues past 1.0; D1520 retains tournament-ready architecture, not event delivery, as a 1.0 constraint."
+          "The Play picker exposes twelve uncalibrated profiles across three behavior families and four model bands. D3821 exposes one compiled fixed-profile/no-adaptation promise with keyboard-scrollable details, retained selection focus and desktop/phone play/reload proof. D3822/D3823 repair receipt/verdict decoding and calibration labels; synthetic native controls establish supported variant/refusal/recovery behavior, not actual calibration. Completed-game same-bot replay retains exact fresh-attempt admission and source/departure controls. Pack attachment resolves the saved document under its read grants. D3751 names actual raw-run session mode and restores recorded-policy copy on reload, not durable recovery or calibrated identity. Names/assets, measured personality, opening routes and per-bot history/Review remain. D1416 defers bot tournaments/leagues past 1.0; D1520 retains tournament-ready architecture as a 1.0 constraint."
         ],
         "defaults": [
           "blocked",
@@ -2200,8 +2200,8 @@
         ],
         "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-10-14",
-          "summary": "D3821 and OPP-a14 close the accepted fixed-profile disclosure: one compiled card.no_memory statement is grounded in the exact catalogue and memory absence and appears at the selected choice. All other facts remain; keyed keyboard-scrollable details reset only on profile change, preserve same-profile refresh and retain radio focus; missing data manufactures no promise. Fourteen predecessor failures, sixty card/compiler/catalog cases, two mounted cases and clean workspace types pass. Actual desktop/phone all-twelve-card selection, Tab/End scrolling, start/play/reload/return preserves saved nodes, cursor and profile; phone selection/start uses real taps. A two-frame geometry-probe fault is corrected with simultaneous bounds and no relaxed assertion. Frozen normal verification/build/all four browser tiers exit zero: 5,691 software/391 files, seven performance/four files, 257 content/26 files, 59 matrix cases, 112/112 unretried composition cells and packaged-production proof. D3822's latent failed-calibration-container label remains todo; real calibration receipts are empty. Prior Review/Campaign/Profile proof stands. No bot behavior, source/schema/calibration/names/default, unaccepted implementation, whole capability/milestone, remote or release promotion.",
+          "at": "2026-10-15",
+          "summary": "D3822/D3823 close the accepted calibration evidence-to-card repair. Thirteen original failures and two additional sparse-interval failures reproduce malformed measured cards, a bool-only decoder and false Calibrated labels. Compiler/complete web decoding retain three separate verdicts, finite actual interval slots, scopes/citations, null failed figures and exact human-like permission. Human labels/copy do not collapse conclusions. Forty focused cases cover 36 supported verdict combinations, corruptions and mounted labels; prior complete card/compiler/catalogue and disclosure checks stand. Two built desktop/touch synthetic-variant controls prove bounded labels, bad-read refusal, explicit recovery, real play/reload with retained nodes/cursor and genuine uncalibrated return. Test syntax/source-import faults are fixed only in the harness. The first full run's 5,729 software/seven performance passes remain an interrupted checkpoint; sparse negatives are fixed before the final frozen normal verification/build/all four browser tiers exit zero: 5,731 software/391 files, seven performance/four files, 257 content/26 files, 59 matrix cases, 112/112 unretried composition cells and packaged-production proof. Earlier Review/Campaign/Profile work stands. Real calibration remains absent; no behavior/default/rating/source/schema/convention, scientific threshold, semantic qualification/content/whole capability/milestone, remote or release promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/bot-policy.md",
@@ -2211,6 +2211,10 @@
             "apps/server/src/bot-policy-compiler.test.ts",
             "apps/server/src/bot-profile-catalog.test.ts",
             "apps/web/src/lib/JustPlayStarter.svelte",
+            "apps/web/src/lib/bot-picker.ts",
+            "apps/web/src/lib/capability-response.ts",
+            "apps/web/src/lib/capability-response.test.ts",
+            "tests/browser/bot-calibration-controls.ts",
             "docs/bot-policy.md",
             "planning/bot-roster/implementation-receipt-2026-09-24.md",
             "rfc/review-evidence-compiler.md",
@@ -2297,6 +2301,16 @@
               "kind": "work_state",
               "id": "D3821",
               "digest": "sha256:1064d572a131e5c933c270a7f10157a7a1c878b0f961f32a955480f82723a921"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3822",
+              "digest": "sha256:f65b03022769924ab4e29e3b498d0d3029b42cc7a89af0c38e0036b9969657ea"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3823",
+              "digest": "sha256:0bb3f88d99f25937b9f2142633b058fb09b9cb5e53e25667ed622b2acc54894b"
             },
             {
               "kind": "rfc",

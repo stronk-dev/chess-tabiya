@@ -73,3 +73,32 @@ close with these actual paths; the append-only exploration log retains the initi
 No actual calibration or complete
 bot/personality/roster milestone is implied. D3822 separately owns the latent failed-calibration
 container label; production calibration receipts remain empty.
+
+## Calibration evidence and visible verdicts — 2026-10-15, D3822/D3823
+
+The existing receipt/card grammar now refuses non-finite figures, non-finite/reversed intervals,
+missing references and unknown receipt fields. The web decoder reads the full three-verdict and
+citation image rather than only a boolean. Failed/unresolved strength has no figure; the human-like
+permission must equal the exact three favourable verdicts. The picker labels relative strength,
+unresolved strength and invalid strength separately, and compiler prose translates distribution
+and band verdicts while retaining human-reference scope/citations. No model or sampling changes.
+
+Thirteen predecessor failures reproduce the initial class. Thirty-eight focused tests cover all
+36 supported verdict combinations, malformed compiler/full-capability inputs and three mounted
+labels. The complete card/compiler/catalogue suite passes 77 cases; existing disclosure tests and
+workspace types remain green. Two actual built desktop/touch controls use explicitly synthetic
+cards compiled by the real server code; they do not install measurements. They cover all three
+strength states, whole-read refusal/retry, bounded labels, play/reload with retained nodes/cursor
+and return to the genuine uncalibrated roster. A syntax error and source-runner JSON import error
+are corrected only in the test harness. Full normal verification is required before closeout.
+
+A later final read finds sparse interval holes skipped by Array.every. Stop the confirmed first
+full run after 5,729 software/seven performance passes, then reproduce both decoder acceptance
+and an untyped server renderer crash with two permanent controls. Checking both actual slots
+repairs the class; all forty focused cases and types pass. Final repaired-code full gates follow.
+
+Final frozen normal verification/build/all four browser tiers exit zero: 5,731 software/391
+files, seven performance/four files, 257 content/26 files, all 59 matrix tests, 112/112 unretried
+composition cells and packaged-production proof. D3822/D3823 close on actual production/test
+paths. The earlier interrupted 5,729-case run remains recorded separately. No profile settings,
+source/version/schema, calibration thresholds, rating/default or whole Bot/release gates change.

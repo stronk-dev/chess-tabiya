@@ -199,6 +199,17 @@ no measured behaviour beyond the first 20 plies. No calibration receipt exists, 
 `uncalibrated` and shows no strength number; a receipt renders its three verdicts, and
 `humanLikeLabelAllowed` needs all three favourable.
 
+Receipt admission validates the existing closed fields, finite strength figures, finite ordered
+intervals and a nonempty relative reference. The web capability decoder validates the complete
+three-verdict/citation image, requires null figures for failed/unresolved strength and verifies
+the human-like permission against all three verdicts. Missing or inconsistent data refuses the
+whole capabilities read through its ordinary retry; it is not silently upgraded or stripped.
+The picker says **Relative strength measured**, **Strength unresolved** or **Strength measurement
+invalid**, not “Calibrated” merely because a receipt exists. Detailed compiler copy translates
+distribution and band verdicts into human wording and retains the human-reference scope and
+measurement citation. A strength measurement alone claims neither human likeness nor band
+identity. These are D3822/D3823's receipt/presentation repairs, not actual calibration results.
+
 `/capabilities` advertises the roster as `policyProfiles.human_common.profiles`: each row's exact
 reference, behaviour digest, card and `startable` (`available` | `conditional` with closed
 conditions | `unavailable` with closed blockers). The web parser

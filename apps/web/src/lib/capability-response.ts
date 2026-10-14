@@ -132,7 +132,26 @@ export function validateRoster(value: unknown): void {
     const statementIds = card.statements.map((rawStatement, statementIndex) => { const statementLabel = `${rowLabel}/card/statements/${statementIndex}`, statement = record(rawStatement, statementLabel); exact(statement, ["id", "text", "sources"], statementLabel); nonempty(statement.text, `${statementLabel}/text`); uniqueVocabulary(statement.sources, BOT_CARD_SOURCE_IDS, `${statementLabel}/sources`, 1); return oneOf(statement.id, BOT_CARD_STATEMENT_IDS, `${statementLabel}/id`); });
     if (new Set(statementIds).size !== statementIds.length) throw new TypeError(`${rowLabel}/card/statements contain duplicates`);
     const strength = record(card.strength, `${rowLabel}/card/strength`); const kind = oneOf(strength.kind, ["uncalibrated", "calibrated"] as const, `${rowLabel}/card/strength/kind`);
-    if (kind === "uncalibrated") exact(strength, ["kind"], `${rowLabel}/card/strength`); else boolean(strength.humanLikeLabelAllowed, `${rowLabel}/card/strength/humanLikeLabelAllowed`);
+    if (kind === "uncalibrated") exact(strength, ["kind"], `${rowLabel}/card/strength`);
+    else {
+      const strengthLabel = `${rowLabel}/card/strength`;
+      exact(strength, ["kind", "verdicts", "relativeElo", "ci95", "reference", "harness", "measuredAt", "games", "timeControl", "humanReferenceScope", "humanLikeLabelAllowed"], strengthLabel);
+      const verdicts = record(strength.verdicts, `${strengthLabel}/verdicts`);
+      exact(verdicts, ["strength", "distribution", "bandIdentity"], `${strengthLabel}/verdicts`);
+      const strengthVerdict = oneOf(verdicts.strength, ["calibrated_relative", "unresolved", "invalid"] as const, `${strengthLabel}/verdicts/strength`);
+      const distribution = oneOf(verdicts.distribution, ["human_reference_equivalent", "controlled_divergence", "rejected", "insufficient"] as const, `${strengthLabel}/verdicts/distribution`);
+      const bandIdentity = oneOf(verdicts.bandIdentity, ["supported", "refuted", "insufficient"] as const, `${strengthLabel}/verdicts/bandIdentity`);
+      if (strengthVerdict === "calibrated_relative") {
+        if (typeof strength.relativeElo !== "number" || !Number.isFinite(strength.relativeElo)) throw new TypeError(`${strengthLabel}/relativeElo must be finite`);
+        if (!Array.isArray(strength.ci95) || strength.ci95.length !== 2
+          || ![strength.ci95[0], strength.ci95[1]].every(value => typeof value === "number" && Number.isFinite(value))
+          || strength.ci95[0] > strength.ci95[1]) throw new TypeError(`${strengthLabel}/ci95 must have two finite ordered bounds`);
+      } else if (strength.relativeElo !== null || strength.ci95 !== null) throw new TypeError(`${strengthLabel} cannot show a strength number without a successful strength verdict`);
+      for (const key of ["reference", "harness", "measuredAt", "timeControl", "humanReferenceScope"] as const) nonempty(strength[key], `${strengthLabel}/${key}`);
+      integer(strength.games, `${strengthLabel}/games`, 1);
+      boolean(strength.humanLikeLabelAllowed, `${strengthLabel}/humanLikeLabelAllowed`);
+      if (strength.humanLikeLabelAllowed !== (strengthVerdict === "calibrated_relative" && distribution === "human_reference_equivalent" && bandIdentity === "supported")) throw new TypeError(`${strengthLabel}/humanLikeLabelAllowed does not match its three verdicts`);
+    }
     validateStartability(row.startable, `${rowLabel}/startable`);
   });
   if (ids.size !== BOT_PROFILE_CATALOG.length || BOT_PROFILE_CATALOG.some((entry) => !ids.has(entry.reference.id))) throw new TypeError(`${label} is not set-equal to bot-profile-catalog@1`);

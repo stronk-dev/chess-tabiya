@@ -49,6 +49,36 @@ const capabilities = Object.freeze({
 });
 
 describe("capability response authority", () => {
+  it.each([
+    ["missing verdicts", { verdicts: undefined }],
+    ["unknown strength verdict", { verdicts: { strength: "excellent", distribution: "insufficient", bandIdentity: "insufficient" } }],
+    ["unknown distribution", { verdicts: { strength: "calibrated_relative", distribution: "looks_human", bandIdentity: "supported" } }],
+    ["unknown band identity", { verdicts: { strength: "calibrated_relative", distribution: "human_reference_equivalent", bandIdentity: "confident" } }],
+    ["extra field", { bio: "A human-like player" }],
+    ["non-finite strength", { relativeElo: NaN }],
+    ["null measured strength", { relativeElo: null }],
+    ["null measured interval", { ci95: null }],
+    ["reversed interval", { ci95: [20, -20] }],
+    ["non-finite interval", { ci95: [-20, Infinity] }],
+    ["sparse interval", { ci95: new Array<number>(2) }],
+    ["missing reference", { reference: undefined }],
+    ["missing harness", { harness: undefined }],
+    ["missing date", { measuredAt: undefined }],
+    ["zero games", { games: 0 }],
+    ["missing time control", { timeControl: undefined }],
+    ["missing human-reference scope", { humanReferenceScope: undefined }],
+    ["inconsistent human-like permission", { humanLikeLabelAllowed: true }],
+    ["figure on failed strength", { verdicts: { strength: "invalid", distribution: "insufficient", bandIdentity: "insufficient" } }],
+  ])("D3823 rejects %s in the full capabilities decoder", (_name, changes) => {
+    const input = structuredClone(capabilities);
+    Object.assign(input.policyProfiles.human_common.profiles[0]!.card, { strength: {
+      kind: "calibrated", verdicts: { strength: "calibrated_relative", distribution: "insufficient", bandIdentity: "insufficient" },
+      relativeElo: 0, ci95: [0, 0], reference: "raw Maia band 1400", harness: "synthetic calibration control",
+      measuredAt: "2026-10-15", games: 800, timeControl: "fixture only", humanReferenceScope: "fixture only", humanLikeLabelAllowed: false,
+      ...changes,
+    } });
+    expect(() => parseCapabilities(input)).toThrow(TypeError);
+  });
   it("D3759 copies the raw response only outside the independently parsed pack projection", () => {
     const clone = vi.spyOn(globalThis, "structuredClone");
     try {

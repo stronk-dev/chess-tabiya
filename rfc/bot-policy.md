@@ -1,5 +1,15 @@
 # RFC: Bot policy
 
+- **Calibration-card checkpoint 2026-10-15:** D3822/D3823 repair the existing §7/A9 receipt-to-card
+  boundary. Finite ordered measurements and complete citations are required; API decoding retains
+  all three verdicts and checks the human-like permission. A receipt container no longer renders
+  a blanket Calibrated badge; strength failure/uncertainty and distribution/band conclusions remain
+  separate in human wording. Focused/native proof and final normal gates belong to the ledger/log.
+  No calibration record, new threshold, profile/selection behavior, rating, name/default or whole
+  Bot discharge is introduced; production calibration remains absent.
+  Final normal verification/build/all four browser tiers pass: 5,731 software, seven performance,
+  257 content, 59 matrix cases and 112/112 unretried composition cells; both rows close locally.
+
 - **Fixed-profile disclosure checkpoint 2026-10-14:** D3821 implements OPP-a14 under existing
   O8.3/§7/§8/A9/A13, not a new policy layer. The compiler's single no-memory statement also
   cites the exact fixed catalogue profile; Play renders it at the selected choice, with concise
