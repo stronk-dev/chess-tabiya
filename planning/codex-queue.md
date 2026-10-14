@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — D3805 takes D3792's actual permitted-prefix supplier prerequisite. Exercise genuine
+runtime branches, explicit two-attempt endpoints, current disclosure and historical event replay;
+do not pass a masked/shallow-cloned DrillRun to whole-branch factories. Land evidence and the
+closed supplier obligations in existing dossier/RFC. Independent acceptance remains required.
+
+Result: D3805's actual SQLite/runtime controls establish the supplier boundaries, not a new
+scoped operation. D3792 now explicitly separates current authority from permitted paths and
+requires exact source-owner callables, full witness spans, real late-source/receiver/cancellation
+and response/native fixtures. Finish those contracts and obtain independent acceptance; no
+filtered Run, old whole-tip receipt relabel, permanent stub, source retirement or self-acceptance.
+
 2026-10-14 — D3802 takes the six exact Inspector detail schemas in the presentation owner,
 with strict typed-member and source-reconstruction controls over the genuine census. D3803
 separately checks/fixes the research king-escape caption's adjacent-only scope. Both are

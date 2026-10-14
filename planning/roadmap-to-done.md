@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3804]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3805]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -68,7 +68,7 @@ repairs the reproduced terminal query exception without changing complete legal 
 Focused 206 tests, authenticated both-color SQLite reads and foreign-account refusal, four
 native desktop/phone played mate/stalemate → Inspector → return/reload cases and strict types
 pass. D3791/D3792 remain blocked on an independently accepted demand/detail contract. The ledger
-now has 1,659 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
+now has 1,660 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
 prose-only closures and every whole-product/content/release gate remain. Fresh GitHub reads
 still show published `62c81eb1` verify success/browser failure. No new feature wave is started
 before the owner's requested total inventory.
@@ -111,6 +111,14 @@ king escapes despite available stationary castling, and zeroSafe's lost-last-des
 despite empty before/after sets. Later members keep their piece identity. Richer text still fits
 unchanged budgets; actual source acquisition/prefixes, factory/component/envelope/response/native
 proof and independent acceptance remain D3792 work. Production/release gates are unchanged.
+
+[[D3805]] proves actual supplier boundaries with three legal runtime/SQLite branches, not a
+new supplier. Whole-tip/default-peer methods cannot satisfy exact endpoints; historical replay
+loses current reveal/alternatives. A sibling write retires an old subject while the main path
+stays unchanged. The draft separates current authority from granted paths and names exact
+source-owner/receiver/cancellation/version obligations. Normal strict research passes; actual
+scope authority, authentication/live sources, exact-endpoint execution and production/native/
+independent acceptance remain open. No production, qualification or release promotion.
 
 October-14 [[D3793]]/[[D3794]] complete CMP-a12's existing earned-tool/help-style journey,
 not Campaign curriculum or new rewards. Result/map/preparation name the actual current style's

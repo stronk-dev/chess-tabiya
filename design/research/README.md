@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector supplier boundaries, 2026-10-14 ([[D3805]]): **bounded research answered, not delivered**.
+Actual runtime/file-backed SQLite proves whole-tip/default-peer behavior and historical replay
+losing current reveal/alternatives. Two markers lie beyond the requested prefix; a sibling write
+retires the old subject without changing the main path. Current authority and granted span must
+stay separate. Authentication, late/live sources, scoped operations and independent acceptance
+remain D3792 work. See `module-evidence-assembly.md` §Actual supplier boundaries; no raw database/
+run or normal CI/progress dependency.
+
 Inspector six-view schema authoring, 2026-10-14 ([[D3802]]–[[D3804]]): **bounded prerequisite
 answered; unaccepted and not delivered**. Typed parsing/reconstruction covers 4,184 genuine
 values / 226,557 members / all eighteen shapes, with 126 source/shape corruption refusals.

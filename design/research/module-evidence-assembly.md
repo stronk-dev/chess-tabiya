@@ -559,3 +559,44 @@ bounded schema authoring and D3803/D3804's research-caption defects close only. 
 suppliers, acquisition/cancellation, production factory/component/envelope/response/native controls
 and genuinely independent acceptance remain D3792/source-owner work. No pack, default, live source,
 qualification, whole capability/milestone, CI repair or release promotion follows. `[V]` same sources.
+
+### Actual supplier boundaries — 2026-10-14, D3805
+
+`make inspector-supplier-scope-research` creates three genuine legal runtime branches, stores
+them through actual file-backed SQLite and reads the parsed production image. It uses the
+accepted test-only writer overload: storage/runtime evidence, not authentication. Seven main
+path nodes versus four requested prefix nodes establish these boundaries. `[V]`
+(`tools/d3792-inspector-demand/supplier-scope.ts`; `apps/server/src/storage.ts`;
+`module-query.ts`, `compare.ts`, `recorded-semantic-path.ts`, `pivotal.ts`, `review-evidence.ts`
+under `packages/runtime/src/`; normal command terminal success.)
+
+| Existing supplier | Actual observation | D3792 consequence |
+|---|---|---|
+| Module comparison helper | Chooses newest sibling, not requested peer | A default helper cannot supply explicit peer selection |
+| Explicit compareBranches | Both whole recorded tips, not earlier endpoints | Correct branch IDs alone do not bound the comparison |
+| Recorded semantic / pivotal | Complete seven-node branch; two pawn-break markers beyond four-node prefix | Selected node/anchor filtering does not establish bounded witnesses |
+| Sole Review constructor | Whole tip; extra throughNodeId refuses before storage read | Whole-tip receipt cannot become a bounded subject |
+| Genuine event-time replay | Loses current reveal and both later-created alternatives | Historical run state is not current authority plus selected evidence span |
+
+An inherited shared node belongs to the child's actual path despite its creating branch being
+Main; use graph membership, not node.branchId equality. A duplicate off-prefix node still refuses
+through the original total graph authority: clipping first must not hide it. All reads preserve
+stored bytes. An actual sibling write then leaves the main path unchanged, closes current reveal
+and retires the old Review subject; a newly issued subject validates. Node/FEN existence alone
+is not current source/disclosure authority. `[V]` same tool/code.
+
+Initial import resolution and bundled default content path fail; explicit public source import
+and actual installed-registry injection repair the tool, not production. Quiet h3/a6 fails the
+non-vacuity control; real legal d4/exd4 contact/capture supplies two markers. A stale-error regexp
+fails on the genuine refusal; check its REVIEW_PREFIX_REFUSED code instead. Owned temporary
+fixture cleanup runs on failures/success. Failed probes are not source-delivery evidence. `[V]`
+same tool's first/refined/final runs.
+
+The unaccepted §4.11a now separates current stored/viewer authority from graph-derived granted
+paths, ordered endpoints and complete witness spans. It requires exact source-owner callables,
+receiver/cancellation/version contracts and real scope tests—not a filtered DrillRun, latest
+sibling, old whole-tip receipt or source retirement. D3805 answers only this boundary question.
+Authentication, late/live-source admission, new scope authority, exact-endpoint execution and
+production response/native proof remain open. No production, qualification, pack/default,
+capability/milestone, remote CI/image or release change. No raw database/run/trace is committed;
+the tool emits bounded counts and cleans its own temporary fixture, outside ordinary CI/progress.

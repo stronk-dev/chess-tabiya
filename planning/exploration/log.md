@@ -28451,3 +28451,36 @@ Campaign was the one capability with no API, route or content. Now:
   independent acceptance remain D3792/source-owner work. Prior full local proof is unchanged;
   no fresh full/browser, 1.0 capability/milestone, content, semantic qualification, remote CI/image
   or release promotion. No push, deployment, worktree, delegation or goal completion.
+
+### 2026-10-14 — D3805 actual stored supplier boundaries, no scoped-source implementation
+
+- Previous goal turn makes progress at 00dd677c. Three legal runtime-created branches are saved
+  and parsed through actual file-backed SQLite. The tool uses the accepted test-only writer
+  overload: no authentication/HTTP/native claim, provider fiction or raw stored-run dump.
+- Normal make inspector-supplier-scope-research passes strict typing and real storage controls:
+  newest-sibling helper differs from requested peer; explicit comparison, semantic, pivotal and
+  Review suppliers read whole tips; two markers lie beyond the four-node requested prefix of the
+  seven-node main branch. Extra throughNodeId refuses before storage access. Shared-prefix nodes
+  remain members of child paths despite their creating branch being Main.
+- Genuine chronological replay loses current reveal and both saved alternatives. Original graph
+  validation rejects an off-prefix duplicate, and reads preserve stored bytes. A real sibling
+  SQLite write leaves the main path unchanged, closes reveal and retires the old Review subject;
+  a newly issued subject validates. Node/FEN existence is not current source/disclosure authority.
+- Initial public-import/content-path faults are repaired through the actual source entry and
+  explicit installed registry, not a production loader change or stub. Quiet-pawn control fails
+  non-vacuity; real d4/exd4 contact/capture supplies two markers. A wrong stale-error regexp fails;
+  assert the genuine REVIEW_PREFIX_REFUSED code. Owned temporary cleanup covers failures/success.
+- Frozen normal supplier-scope, inspector-demand and source-contract research targets exit zero:
+  strict types, actual SQLite, all old source/member/focus/negative/immutability controls, 126 member
+  refusals, 88/399 grammar controls and 37 permanent factory tests. No raw fixture/database/trace
+  enters Git, and no ordinary CI/progress dependency is added.
+- Unaccepted module-registration §4.11a now separates current stored/viewer authority from granted
+  graph paths/endpoints/witnesses, and names source-group supplier, receiver/cancellation/version
+  obligations. Do not mint a filtered DrillRun, relabel old receipts, infer the latest sibling,
+  borrow later witnesses, hide graph faults or retire any source. Close only D3805's bounded
+  boundary question. Actual scope authority/callables, authentication/live/late sources, production
+  factory/component/envelope/response/native controls and independent acceptance remain open.
+- Update existing coverage/queue/ledger/state/roadmap. Production/source semantics/defaults/packs
+  and prior full local proof are unchanged. No fresh full/browser, qualified subject, complete
+  capability/milestone, remote CI/image or release claim; no push, deployment, worktree, delegation
+  or goal completion.

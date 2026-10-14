@@ -31642,6 +31642,15 @@
       "uxItems": [],
       "evidence": "design/research/module-evidence-assembly.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3805",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:30b8f79b533d6404ba0914fcfe32bd0749e35feaf3558f914aad6f01a5682a59",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
     }
   ]
 }

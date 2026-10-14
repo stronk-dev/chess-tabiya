@@ -531,6 +531,12 @@ terminal-inspector-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep 'D3796 terminal Inspector'
 
 .PHONY: inspector-source-contract-research
+.PHONY: inspector-supplier-scope-research
+inspector-supplier-scope-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	./node_modules/.bin/esbuild tools/d3792-inspector-demand/supplier-scope.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/supplier-scope.mjs --log-level=warning
+	$(CI_NODE) .cache/d3792-inspector-demand/supplier-scope.mjs
+
 inspector-source-contract-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
 	./node_modules/.bin/vitest run --config tools/d3792-inspector-demand/vitest.sources.config.ts

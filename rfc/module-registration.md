@@ -1918,6 +1918,66 @@ The server resolves all context IDs on the authorised stored run, never caller e
   must belong to it. The completion/learner-side/source join is the existing Review authority,
   not the current Play cursor or a client result tag. Incomplete games yield missing context.
 
+**Supplier boundary established by D3805:** the actual SQLite-backed three-branch probe shows
+that `moduleComparisonForSubject` chooses the newest sibling, `compareBranches` uses both full
+tips, `recordedSemanticPath`/pivotal/Review use the full recorded branch, and the sole Review
+constructor refuses an extra throughNodeId before storage access. A genuine chronological replay
+to the selected move loses later current reveal and both saved alternatives. It is not a scoped
+current source authority. See the dated dossier and opt-in `make inspector-supplier-scope-research`.
+These are existing whole-branch contracts, not defects to bypass with a shallow/filtered DrillRun.
+
+Before this amendment can be accepted, specify and independently review one server-owned
+`resolveInspectorRecordedContext` operation (proposed name, not an existing export) plus each
+source-owner's supported scoped operation. The resolver reads the actual parser-sealed stored run
+and current viewer/disclosure/assistance through existing authorities. It validates the requested
+original branches with the total branch-path authority **before** extracting permitted paths.
+It never sorts nodes into a guessed path or hides duplicate/cyclic/missing graph material by
+filtering first. The selected node and every endpoint must be on its declared actual branch path;
+inherited shared-prefix nodes remain valid even though their creating node.branchId differs.
+Comparison branch IDs are distinct and column order is the requested primary then peer, not
+the most recent sibling. A comparison endpoint must reach that attempt's recorded fork; earlier
+shared-prefix position reads remain valid but cannot invent an as-yet-unreached branch attempt.
+
+Keep **current authority** and **granted evidence span** separate. The proposed process-local,
+privately admitted context retains the unchanged full stored source image, current decision/viewer
+authority, exact requested selection, ordered branch/endpoint pairs and the graph-derived bounded
+node/edge paths. It is not serialized caller data, a new stored run, a new cache or permission
+token. Current permission cannot come from historical replay. Every source operation may consume
+only its declared granted paths/occurrences, not arbitrarily call whole-branch helpers on the full
+image and filter marker anchors afterward. Option-collapse must retain its complete prior/first/
+later witness span; no later witness beyond the grant is borrowed.
+
+| Source group | Required scoped supplier obligation |
+|---|---|
+| Local position / incoming edge | Actual selected FEN or parent/legal commit/after-node from the validated graph; root has no incoming edge; no inferred ancestor/sibling operand |
+| Recorded windows / v1 sequences | Source-owner operation over validated actual granted edges, ending at the selected node. Retain exact versioned factories/anchors and complete contiguous witness spans; never fabricate a partial DrillRun |
+| Authored shapes | Actual registered compiled entries and permitted recorded path; preserve provenance/trigger inputs, no caller-authored shape or guessed entry |
+| Pivotal / deepest opening | Endpoint-aware source-owner path operation. Preserve full witness context, source/declaration limits and original versions; opening still requires its missing runtime identity source |
+| Comparison | Source-owner computation over the two exact permitted attempts/endpoints, common recorded fork and original orientation. Every timeline, outcome, evaluation and line overlay obeys its own permitted path, not just the displayed columns |
+| Completed Review / Story | Storage-authorised source-owner subject at the exact admitted completed boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
+| Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
+
+Each supplier row still owes its exact callable/input/absence/receiver/cancellation and boundary
+fixtures; the operation names in this paragraph are requirements, not claims of landed code.
+New source-owner signatures/receipts or projection meanings require explicit accepted contracts
+and version declarations; this amendment does not silently reinterpret v1 whole-branch suppliers
+or retire any of the 75 source obligations. Existing full-tip calls remain supported.
+
+Refuse wrong/off-branch/foreign endpoints and withheld spans before collector/provider reads.
+After async acquisition or computation, recheck the **current full stored authority**, access,
+effective configuration, decision, original graph endpoints and exact retained source occurrence.
+The actual probe's SQLite write retires the old Review subject while its selected node still exists;
+mere node existence or an unchanged FEN is not a current source/disclosure check. No stale waiver
+is granted for a source attachment. Close, departure and changed scope retire pending publication
+and board paint without deleting saved alternatives or source data.
+
+Acceptance must exercise valid inherited prefixes, zero-length-at-fork and distinct comparisons,
+late source arrivals (real owner-admitted sources, not mock authenticity), original/branched native
+and imported completed boundaries, malformed original graphs, unavailable/withheld contexts,
+source/config/access advances and cancellation at each receiver. The current probe proves storage/
+runtime boundaries and stale-subject retirement only; authentication, live provider/late-source
+admission, exact-endpoint source execution and production response/native proof remain open.
+
 Missing required context is distinct from source absence and no-witness. Foreign/nonexistent or
 off-branch IDs refuse without revealing another run's facts. This proposed grammar changes no
 existing module query, source predicate, automatic selection or disclosure policy.
@@ -2604,6 +2664,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-14 — D3805's actual SQLite/runtime probe establishes whole-branch supplier boundaries,
+  newest-sibling mismatch, current disclosure versus chronological replay and storage-advance
+  retirement. §4.11a now requires a separately admitted current-authority/granted-span resolver
+  and exact source-owner operations; no filtered-run mint, old-receipt reinterpretation, new
+  source semantics, production implementation or self-acceptance follows.
 
 - 2026-10-14 — D3802's evidence-presentation companion now authors the six detail schemas and
   eighteen closed member alternatives; actual source/component/envelope/native admission and
