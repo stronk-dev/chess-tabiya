@@ -78,6 +78,33 @@ seven performance, 256 real-content and 360 browser passes; one optional Maia sk
 retries and all 112 composition cells. Local warm p95 is 107.5 ms under unchanged 250 ms.
 This closes the in-flight local checkpoint, not remote CI, Docker/release or full 1.0.
 
+**Owner-requested finish and total inventory, 2026-10-14:** in-flight changes are committed
+through `38d1d2c5`; there are no tracked edits awaiting completion. The last six commits are
+one production Inspector repair and five research/contract-authoring checkpoints. They are not
+six newly delivered features. The full local result above belongs to the production checkpoint
+`a5bff1f3`; later Inspector research leaves production unchanged. A fresh `make roadmap-progress`
+confirms the counts in this inventory, with all R1–R10 checks green. A fresh GitHub read still
+finds verify `38381154735` successful and browser `38381154879` failed on published `62c81eb1`.
+No current-HEAD remote qualification is claimed, and nothing is pushed for this inventory.
+
+The implementation has moved substantially beyond schemas and endpoints: the stable board and
+module seats, staged warnings and Hint, recorded Review events/Analyze/retry, persistent bot
+play/rematch, private Profile drill-down, saved Campaign/encounter recovery, and storage/operator
+tools all have production journeys. Those are partial product deliveries, not reasons to mark
+their whole capabilities complete. Conversely, research samples and canonical detector controls
+do not establish fully qualified semantics, useful hint selection, calibrated personalities,
+graduated content or a release appliance. There are still no complete 1.0 capabilities, no
+fully qualified semantic subjects and no official pack graduates.
+
+Continue from the existing execution program, not another work document: complete independent
+acceptance and actual source-to-consumer delivery for held Sight/Nudge/Inspector/Review changes;
+finish their useful learner workflows and collector discharges; complete measured bot behavior,
+Campaign curriculum/rewards and learner skills; graduate representative official content on
+stable contracts; and close clean-host, lifecycle and release-image proof. CI diagnosis proceeds
+alongside these slices. Draft amendments remain gated, while already accepted implementation
+can proceed independently. This inventory closes the current work batch; it neither pauses nor
+completes the full 1.0 goal.
+
 D3797/D3798 then complete bounded representation research and its typed instrument repair,
 not a new product view. Six source-specific models retain 4,184 genuine values and 226,557
 complete members under existing limits; all 134,144 target/color/mode control scopes fit one

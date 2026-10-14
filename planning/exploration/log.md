@@ -28484,3 +28484,27 @@ Campaign was the one capability with no API, route or content. Now:
   and prior full local proof are unchanged. No fresh full/browser, qualified subject, complete
   capability/milestone, remote CI/image or release claim; no push, deployment, worktree, delegation
   or goal completion.
+
+### 2026-10-14 — owner-requested in-flight closeout and whole-product inventory
+
+- Confirm all in-flight changes committed through 38d1d2c5 and no tracked edits awaiting
+  completion. Retain the three existing untracked paths; do not silently delete or absorb them.
+  The last six commits comprise one production repair and five research/authoring checkpoints,
+  not six learner features. No new implementation wave is started during this inventory.
+- Fresh normal make roadmap-progress passes R1–R10: fourteen capabilities, nine milestones,
+  76 active product RFCs, 569 UX items, 22 route obligations and 24 API families. Four milestones
+  are active and five blocked. UX is 278 completed/267 live/24 retired. All 1,733 live ledger
+  items are assigned; 462 historical closures remain prose-only. No complete capability,
+  qualified semantic subject or official pack graduate is newly claimed.
+- Fresh gh run list reads the published October-13 pair on 62c81eb1: verify 38381154735 succeeds,
+  browser 38381154879 fails. Current local changes are unpublished. The previously completed
+  full local proof belongs to a5bff1f3; subsequent research does not change production. This
+  read neither diagnoses the remote cause nor re-runs/relabels product verification.
+- Update the existing authoritative roadmap's total inventory and continuation order, not a
+  competing tracker. Separate real shipped journeys from draft contracts, useful selection,
+  semantic qualification, calibration, official content and native release obligations.
+  Finish this work batch and report the whole-platform status to the owner. The full 1.0 goal
+  remains active and incomplete; no push, deployment, new worktree or delegation.
+- Normal make verify-governance and git diff --check pass for this documentation-only closeout.
+  No new full software/content/browser run is claimed. The existing compact roadmap receipt
+  remains byte-identical; no work-item, capability or milestone completion is invented.
