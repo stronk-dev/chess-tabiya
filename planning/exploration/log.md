@@ -28248,3 +28248,49 @@ Campaign was the one capability with no API, route or content. Now:
   this unchanged-product research batch. Correct the dossier's wording to validated recorded
   boundaries (runtime), not principal authentication (still owed at the future HTTP boundary).
   Stage only the explicit research/doc/tracker list, inspect it and run normal commit hooks.
+
+### 2026-10-14 — D3793 Campaign earned-tool demand; D3794 real context placement
+
+- Continue from the committed inventory. Inspector's source-to-useful-delivery contract remains
+  blocked, not silently implemented. Take the accepted Campaign §§3.2/5/7.1 and existing preset
+  request boundary: recorded seals, income, restriction restoration and Review already work.
+  Record D3793 before implementing the missing map/result per-tool help-style explanation.
+- Three new controls initially report two real missing-display failures and one test-helper
+  scope error. Move the existing helper to shared test scope; all three then fail for the actual
+  absent UI. The result's current request is not server-confirmed source availability. Share
+  canonical request labels/statuses across result/map/preparation; no economy, storage, wire,
+  module admission, collector or source policy changes. Failed saves retain the map's old request;
+  Custom's exact exclusion does not become the named preset's module set.
+- Focused software and package types expose the test component's omitted typed optional prop;
+  correct the test declaration, not the production type. Five new controls and the existing
+  population pass: 358 software/eight files, clean types and eight real Campaign-content cases.
+  The first native two failures assert the superseded literal Equipped caption; require the
+  exact requested-by-style caption instead, retaining checked/unchecked state and real mutations.
+- Screenshot review rejects the passing DOM-only result proof: both captures show no earned
+  result. Record D3794. The actual campaignContext snippet is after the full-height play root,
+  not inside its companion. Move it into the always-mounted Actions region after source/pause
+  notices, retaining closed-pane read/revision/charge authority and existing modality/defaults.
+- Old tests now expose three fixture assumptions, not production failures: a nested alert's role
+  query excludes its closed pane; phone board-hit checks run while the modal intentionally makes
+  it inert; a generic dialog is mistaken for encounter preparation. Explicitly open Actions for
+  visible result/keyboard-retry controls, return to the board before genuine hit/move checks and
+  identify preparation by its actual Back-to-map action. Nonvisual state reads explicitly include
+  hidden context; they cannot substitute for the new visible-result/placement/geometry assertions.
+- All eleven native Actions cases, two confirmed-help cases, eight preparation cases and both
+  result cases pass under unchanged deadlines and no retries. Real desktop/phone unlock → Quiet
+  request → reload/open Actions → saved result → map → Guide me → next confirmed encounter →
+  reload preserves Campaign state/equipment and saved play. Actual result screenshots now show
+  the requested/equipped distinction; opening/scrolling the pane keeps the exact board rectangle.
+  PNGs use normal ignored path attachments, not embedded research dumps. Freeze consumed inputs
+  for full normal verification/build/four browser tiers before commit; no whole-Campaign,
+  curriculum, official content, semantic qualification, remote CI or release claim follows.
+
+- The same frozen-input normal make roadmap-receipt verify-awake build test-browser-ci-awake
+  handle exits zero. Types, software 5,616/390 files, seven unchanged-budget performance/four,
+  real content, packaging/governance/build and all four browser tiers pass; the final 59 matrix
+  cases publish all 112 successful unretried cells and packaged production passes. Local warm
+  p95 is 107 ms under unchanged 250 ms, not a remote repair or speedup promise. Close only
+  D3793/D3794 and CMP-a12 with actual source/test paths; update the existing strategic checkpoint
+  and compact receipt, then inspect the explicit staged list and use normal commit hooks.
+  Curriculum/rewards beyond the existing contract, official content, source qualification,
+  all-context completion, owner use, remote CI/image and full 1.0 remain open. No push.

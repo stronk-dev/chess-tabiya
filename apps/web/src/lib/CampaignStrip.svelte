@@ -1,12 +1,14 @@
 <script lang="ts">
   import { onMount, tick, untrack } from "svelte";
   import { ApiError } from "./api.js";
-  import { MODULE_LABELS, type BrowserNarrowedAssistanceV1 } from "@chess-tabiya/runtime/client";
+  import { MODULE_LABELS, type BrowserNarrowedAssistanceV1, type WorkflowPreferenceReceipt } from "@chess-tabiya/runtime/client";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
     campaignEncounterResult,
+    campaignHelpRequest,
+    campaignToolRequestText,
     newCampaignCommandId,
     assertCampaignCommand,
     type CampaignProjection,
@@ -25,11 +27,14 @@
     runRevision: number;
     assistance?: BrowserNarrowedAssistanceV1 | undefined;
     assistanceState?: "pending" | "ready" | "unavailable" | undefined;
+    /** Current canonical local request, independent of the entered inventory/source confirmation. */
+    helpPreference?: WorkflowPreferenceReceipt | undefined;
     onNavigate: (path: string) => void;
     /** Publishes the campaign revision the charged gestures must carry (null when not active). */
     onRevision: (state: { readonly campaignRevision: number; readonly active: boolean } | null) => void;
   }
-  let { campaigns, origin, runId, branchId, runRevision, assistance, assistanceState = "pending", onNavigate, onRevision }: Props = $props();
+  let { campaigns, origin, runId, branchId, runRevision, assistance, assistanceState = "pending", helpPreference, onNavigate, onRevision }: Props = $props();
+  const helpRequest = $derived(campaignHelpRequest(helpPreference));
 
   let campaign: CampaignProjection | undefined = $state();
   let error: string | undefined = $state();
@@ -172,10 +177,15 @@
       {#if sealed.endedRestrictions.length > 0}<p>This encounter’s restriction ended for: {sealed.endedRestrictions.join(", ")}.</p>{/if}
       <div class="result-kit">
         <strong>Your current campaign kit</strong>
+        {#if helpRequest.kind === "requested"}<p>Current help style: {helpRequest.label}.</p>
+        {:else}<p>The current help-style request is unavailable; help is confirmed when the next encounter opens.</p>{/if}
         {#if sealed.tools.length > 0}
-          <ul>{#each sealed.tools as tool (tool.label)}<li>{tool.label} — {tool.equipped ? "equipped" : "not equipped"}</li>{/each}</ul>
+          <ul>{#each sealed.tools as tool (tool.moduleId)}<li>{tool.label} — {tool.equipped ? "equipped" : "not equipped"}
+            {#if tool.equipped}<p>{campaignToolRequestText(helpRequest, tool.moduleId)}</p>{/if}
+          </li>{/each}</ul>
         {:else}<p>No tools earned yet.</p>{/if}
         <p>Your help style, the next encounter and available evidence still determine what appears. Change equipment on the map.</p>
+        <p>Changing help style does not spend earned rewinds or change equipment.</p>
       </div>
       {#if sealed.completed}<span>The campaign run is complete.</span>{/if}
     </div>

@@ -4041,17 +4041,21 @@
     {
       "id": "CMP-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§5.3b",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
       "summary": "The unlock ceremony must state whether the module is active under the current preset, and what switching costs",
       "legacyRoute": "none",
       "note": "strings plus reading `effectiveCampaignModules`",
-      "sourceDigest": "sha256:ab1d8f7e8f1cdf066ea3f86c0e205d9a631a81f43e116d41139329de6711aebb"
+      "sourceDigest": "sha256:ab1d8f7e8f1cdf066ea3f86c0e205d9a631a81f43e116d41139329de6711aebb",
+      "completion": {
+        "completedOn": "2026-10-14",
+        "evidence": "tests/browser/campaign.spec.ts"
+      }
     },
     {
       "id": "CMP-a13",

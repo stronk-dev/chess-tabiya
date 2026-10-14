@@ -167,7 +167,10 @@ is not a promise that its evidence is available. Receipts are identity-verified;
 `/campaign` lists campaigns and active runs; `/campaign/:campaignRunId` is the map (acts → layers →
 node cards with reward, suppression, opponent and seal), the kit with equip toggles, a bounded
 encounter-preparation panel, abandon with confirmation, and the run result. Inside an encounter the
-run page shows the campaign strip (node, `⟲ N` before any spend, kit, **Declare done**); when the
+run page's **Actions** region shows the campaign strip (node, `⟲ N` before any spend, kit,
+**Declare done**). It stays mounted when that region is closed, retaining read/revision authority,
+but never sits after the full-height play shell. Reopen Actions to view the saved encounter result
+after reload; on phones Close returns to the playable board. When the
 rules end a boss game, the terminal sheet carries “Declare done and return to the campaign map”.
 
 Prepare opens a bounded, independently scrolling dialog with the encounter's copied objective,
@@ -190,6 +193,16 @@ rewind reward or tool unlock. It shows the current balance and owned/equipped to
 the encounter restrictions that ended without promising those tools are now active. The next
 encounter, selected help style and available evidence still determine what appears. Continue
 returns to the map; a completed campaign instead offers its run result.
+
+Result, map and preparation distinguish current equipment from the current help-style request.
+An equipped tool excluded by Quiet or Custom remains earned and equipped, with that reason
+shown beside it. Requested does not mean source-confirmed or active: encounter restrictions,
+individual limits and available evidence still apply, and newly earned equipment is for later
+encounters rather than the completed encounter's pinned entry cut. Result reads the board's
+current canonical preference separately from confirmed assistance; an absent request is stated,
+not replaced with an invented default. Preparation publishes a style to the map only after its
+save succeeds; cross-tab preference changes update the map's request, never equipment or charges.
+Choosing another help style spends no earned rewinds and appends no Campaign mutation.
 
 Reload reconstructs this result from the retained seal and pinned campaign economy; it does not
 submit again. On an exact command replay, a later canonical map may show a newer balance/kit,

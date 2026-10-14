@@ -117,7 +117,7 @@
     comparisonBranchIds?: readonly string[] | undefined;
     contextActions?: Snippet | undefined;
     /** Campaign context reads the board's confirmed help, never the latest map equipment. */
-    campaignContext?: Snippet<[BrowserNarrowedAssistanceV1 | undefined, "pending" | "ready" | "unavailable"]> | undefined;
+    campaignContext?: Snippet<[BrowserNarrowedAssistanceV1 | undefined, "pending" | "ready" | "unavailable", WorkflowPreferenceReceipt]> | undefined;
     simulation?: SimulationResult | undefined;
     busy?: boolean;
     error?: string | undefined;
@@ -2886,6 +2886,7 @@
         {#if campaignEncounter && error && branchSwitchError === undefined}
           <p class="campaign-action-error" role="alert">{error}</p>
         {/if}
+        {@render campaignContext?.(queriedAccessKey === assistanceAccessKey ? compiledAssistance : undefined, queriedAccessKey === assistanceAccessKey ? assistanceQueryState : "pending", preference)}
         <div class="mark-controls" aria-label="Board marks">
           <label>Marks stay with <select value={markScope} disabled={markBusy !== undefined} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
           <span>{displayedMarks.length}/64 marks</span>
@@ -3292,8 +3293,6 @@
   </div>
 {/if}
 </div>
-
-{@render campaignContext?.(queriedAccessKey === assistanceAccessKey ? compiledAssistance : undefined, queriedAccessKey === assistanceAccessKey ? assistanceQueryState : "pending")}
 
 <style>
   .drill-region {

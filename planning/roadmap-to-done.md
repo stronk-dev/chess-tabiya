@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3792]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3794]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -49,7 +49,7 @@ but registered facts do not automatically become useful assistance. The full con
 searched-line hints do not establish that general capability. Likewise, playable bot profiles
 do not establish convincing personalities or calibrated ratings.
 
-The checked inventory is 277 completed / 268 live / 24 retired UX items, four active / five
+The checked inventory is 278 completed / 267 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
 history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
@@ -60,6 +60,19 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+October-14 [[D3793]]/[[D3794]] complete CMP-a12's existing earned-tool/help-style journey,
+not Campaign curriculum or new rewards. Result/map/preparation name the actual current style's
+request separately from equipment and confirmed encounter help. Quiet/Custom exclusions keep
+tools earned/equipped; failed saves keep the old map request. Campaign context is now inside
+the always-mounted Actions region rather than below the full-height play shell. Actual visible
+desktop/phone unlock → Quiet → result/reload → map → Guide me → next confirmed encounter/reload
+preserves Campaign state, equipment and recorded play. Opening/scrolling keeps the exact board
+rectangle; phone Close restores input. Five new permanent controls and final full normal
+verification/build/all four browser tiers pass, with 5,616 software/seven performance and all
+112 unretried composition cells. Local warm p95 is 107 ms under unchanged 250 ms; remote failure
+remains open. No new source, preference/schema/wire, economy, default/modal, official content,
+whole capability/milestone, remote/image qualification or publication follows.
 
 October-14 [[D3791]]/[[D3792]] expose a remaining foundation-to-UX gap without pretending to
 ship its repair. Inspector accepts ten recorded successors but does not acquire them. Genuine
@@ -381,7 +394,7 @@ not twelve calibrated personalities; the Campaign pilot is not the full curricul
 | Operations | Separate software/performance/content/browser gates, packaging, deployment profiles and all seven Make recovery commands passing on a local image | Private Linux backup ownership, diagnosed intermittent failures, exact-revision remote CI, security contract closure, rights and complete clean-host release proof |
 | Tracking | Every live ledger/UX item assigned; one roadmap distinguishes checkpoints from completion | Audit weaker historical closures and stale descriptions; ownership and green structural checks alone do not prove delivery |
 
-Current checked inventory through [[D3784]]/[[D3785]] recovery: 277 UX items complete, 268 live and 24
+Current checked inventory through [[D3793]]/[[D3794]]: 278 UX items complete, 267 live and 24
 retired; current ledger counts and assignment come from `make work-state`. The 462
 historical prose-only closures are not fresh proof. Product RFCs: 42 implementing, ten awaiting
 discharge and 24 draft; the archive has 75 implemented records and one superseded record, not

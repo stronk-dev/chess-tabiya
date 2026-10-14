@@ -3,7 +3,7 @@
 import { tick } from "svelte";
 import { createClassComponent } from "svelte/legacy";
 import { afterEach, describe, expect, it, vi, type Mock } from "vitest";
-import { presetDeclaration, selectNamedPreset, workflowContextPolicy, type BrowserNarrowedAssistanceV1 } from "@chess-tabiya/runtime";
+import { presetDeclaration, selectNamedPreset, setPreferenceModule, workflowContextPolicy, type BrowserNarrowedAssistanceV1, type WorkflowPreferenceReceipt } from "@chess-tabiya/runtime";
 import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
 import CampaignScreen from "./CampaignScreen.svelte";
 import CampaignStrip from "./CampaignStrip.svelte";
@@ -43,6 +43,13 @@ function deferred<T>() {
 }
 const button = (text: string) => [...document.querySelectorAll<HTMLButtonElement>("button")].find(item => item.textContent?.trim() === text)!;
 async function settle() { await Promise.resolve(); await tick(); await Promise.resolve(); await tick(); }
+
+function preferenceStore() {
+  const bytes = new Map<string, string>();
+  return { bytes, getItem: vi.fn((key: string) => bytes.get(key) ?? null), setItem: vi.fn((key: string, value: string) => { bytes.set(key, value); }) };
+}
+function helpStyle() { return document.querySelector<HTMLSelectElement>('[role="dialog"] select[aria-label="Help style"]')!; }
+async function chooseHelp(preset: string) { const select = helpStyle(); select.value = preset; select.dispatchEvent(new Event("change", { bubbles: true })); await settle(); }
 
 async function screen(action: Action, mutation: () => Promise<Response>, resultRead?: () => Promise<Response>, projection = fixture(), assistanceStorage?: PreferenceStorage) {
   const fetcher = vi.fn(async (path: string, init?: RequestInit): Promise<Response> => {
@@ -169,13 +176,6 @@ describe("Campaign arrival read recovery", () => {
 });
 
 describe("Campaign action ownership", () => {
-  function preferenceStore() {
-    const bytes = new Map<string, string>();
-    return { bytes, getItem: vi.fn((key: string) => bytes.get(key) ?? null), setItem: vi.fn((key: string, value: string) => { bytes.set(key, value); }) };
-  }
-  function helpStyle() { return document.querySelector<HTMLSelectElement>('[role="dialog"] select[aria-label="Help style"]')!; }
-  async function chooseHelp(preset: string) { const select = helpStyle(); select.value = preset; select.dispatchEvent(new Event("change", { bubbles: true })); await settle(); }
-
   it("D3741 offers Campaign kit before the ordinary help ladder without writing preferences on entry", async () => {
     const storage = preferenceStore();
     await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
@@ -497,6 +497,7 @@ async function strip(submit: () => Promise<Response>, read: () => Promise<Respon
   const component = createClassComponent({ component: CampaignStrip, target: document.body, props: {
     campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate: vi.fn(), onRevision,
     assistance: undefined as BrowserNarrowedAssistanceV1 | undefined, assistanceState: "pending" as "pending" | "ready" | "unavailable",
+    helpPreference: undefined as WorkflowPreferenceReceipt | undefined,
   } });
   cleanup.push(() => component.$destroy());
   await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
@@ -629,6 +630,63 @@ describe("Campaign earned encounter results", () => {
       acts: [{ id: "act1" as const, layers: [{ layer: 1 as const, state: "sealed" as const, choices: [{ ...card, reward, suppress: options.suppressed ? ["postcommit_nudge" as const] : [] }] }] }],
     } };
   }
+
+  it("D3793 distinguishes an earned equipped tool from Quiet's request and updates without a command", async () => {
+    const view = await strip(async () => Response.json(withReward({ kind: "module_unlock", moduleId: "postcommit_nudge" })));
+    view.component.$set({ helpPreference: selectNamedPreset("campaign", { kind: "unset" }, "quiet").intent });
+    expect(await view.component.declareDone()).toBe(true);
+    const kit = () => document.querySelector(".result-kit")!.textContent!;
+    expect(kit()).toContain("Current help style: Quiet");
+    expect(kit()).toContain("Not requested by Quiet — remains equipped");
+    const before = view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET").length;
+    view.component.$set({ helpPreference: selectNamedPreset("campaign", { kind: "unset" }, "guided").intent });
+    await settle();
+    expect(kit()).toContain("Requested by Guide me");
+    expect(kit()).not.toContain("now active");
+    expect(kit()).toContain("does not spend earned rewinds or change equipment");
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(before);
+  });
+
+  it("D3793 never substitutes a default style for an unavailable current result preference", async () => {
+    const view = await strip(async () => Response.json(withReward({ kind: "module_unlock", moduleId: "postcommit_nudge" })));
+    expect(await view.component.declareDone()).toBe(true);
+    const kit = document.querySelector(".result-kit")!.textContent!;
+    expect(kit).toContain("The current help-style request is unavailable");
+    expect(kit).not.toContain("Requested by Campaign kit");
+  });
+
+  it("D3793 preserves Custom's exact module exclusion while an earned tool stays equipped", async () => {
+    const view = await strip(async () => Response.json(withReward({ kind: "module_unlock", moduleId: "postcommit_nudge" })));
+    const guided = selectNamedPreset("campaign", { kind: "unset" }, "guided").intent;
+    view.component.$set({ helpPreference: setPreferenceModule("campaign", guided, "postcommit_nudge", false).intent });
+    expect(await view.component.declareDone()).toBe(true);
+    expect(document.querySelector(".result-kit")!.textContent).toContain("Not requested by Custom — remains equipped");
+    expect(document.querySelector(".result-kit")!.textContent).not.toContain("Requested by Guide me");
+  });
+
+  it("D3793 carries a saved style from preparation to the map without equipping or spending", async () => {
+    const storage = preferenceStore();
+    const view = await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    await chooseHelp("quiet");
+    button("Back to map").click(); await settle();
+    const kit = document.querySelector(".kit")!.textContent!;
+    expect(kit).toContain("Current help style: Quiet");
+    expect(kit).toContain("Not requested by Quiet — remains equipped");
+    expect(document.querySelector<HTMLInputElement>(".kit input")!.checked).toBe(true);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+  });
+
+  it("D3793 keeps the map's old request after a refused preference save", async () => {
+    const storage = preferenceStore();
+    const view = await screen("start", async () => Response.json(response("start")), undefined, fixture(), storage);
+    storage.setItem.mockImplementation(() => { throw new Error("storage refused"); });
+    await chooseHelp("quiet");
+    expect(document.querySelector("#prep-help-error")!.textContent).toContain("Could not save your help style");
+    button("Back to map").click(); await settle();
+    expect(document.querySelector(".kit")!.textContent).toContain("Current help style: Campaign kit");
+    expect(document.querySelector(".kit")!.textContent).not.toContain("Not requested by Quiet");
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+  });
 
   it("separates a resource reward from act income instead of claiming a tool unlock", async () => {
     const view = await strip(async () => Response.json(withReward({ kind: "resource_grant", resourceId: "campaign_rewind_charge", amount: 3 })));

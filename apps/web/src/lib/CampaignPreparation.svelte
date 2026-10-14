@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { preferenceDisplayMode, presetDeclaration, renderSuppression, requestedModules, requestedPreset, selectNamedPreset, workflowContextPolicy, type PresetId } from "@chess-tabiya/runtime/client";
+  import { preferenceDisplayMode, presetDeclaration, renderSuppression, requestedPreset, selectNamedPreset, workflowContextPolicy, type PresetId } from "@chess-tabiya/runtime/client";
   import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
-  import { CAMPAIGN_MODULE_LABELS, campaignBotLabel, rewardText, type CampaignModuleId, type CampaignNodeCard, type CampaignProjection } from "./campaign-api.js";
+  import { CAMPAIGN_MODULE_LABELS, campaignBotLabel, campaignHelpRequest, campaignToolRequestText, rewardText, type CampaignModuleId, type CampaignNodeCard, type CampaignProjection } from "./campaign-api.js";
   import { modalBoundary } from "./modal-boundary.js";
   import { offeredPresetChoices, unavailablePresetNotice } from "./preset-menu.js";
 
@@ -15,8 +15,9 @@
     onStart: () => void;
     onClose: () => void;
     assistanceStorage?: PreferenceStorage | undefined;
+    onHelpChange?: ((preference: ReturnType<typeof loadWorkflowPreference>) => void) | undefined;
   }
-  let { campaign, card, busy, error, onEquip, onStart, onClose, assistanceStorage }: Props = $props();
+  let { campaign, card, busy, error, onEquip, onStart, onClose, assistanceStorage, onHelpChange }: Props = $props();
   const policy = workflowContextPolicy("campaign");
   function preferenceStorage(): PreferenceStorage | undefined {
     if (assistanceStorage !== undefined) return assistanceStorage;
@@ -27,8 +28,7 @@
   let helpError = $state<string | undefined>();
   const selected = $derived(requestedPreset(preference, "campaign") ?? policy.defaultPreset);
   const isCustom = $derived(preferenceDisplayMode(preference, selected) === "custom");
-  const helpLabel = $derived(isCustom ? "Custom" : presetDeclaration(selected).label);
-  const requestedTools = $derived(requestedModules(preference, selected));
+  const helpRequest = $derived(campaignHelpRequest(preference));
 
   function chooseHelp(select: HTMLSelectElement): void {
     const preset = select.value as PresetId;
@@ -38,6 +38,7 @@
     // that only exists in this soon-to-be-destroyed preparation view when persistence refuses.
     if (saveWorkflowPreference("campaign", next, preferenceStorage())) {
       preference = next.intent;
+      onHelpChange?.(preference);
       helpError = undefined;
     } else {
       helpError = "Could not save your help style. Your previous choice is still selected. Try again or start with it.";
@@ -89,7 +90,7 @@
       </label>
       <p id="prep-help-description" class="muted">{isCustom ? "Your individual help choices are kept. Choosing a style replaces Custom; individual lower limits still apply." : `Style requests: ${presetDeclaration(selected).promise}`}</p>
       <p id="prep-preset-availability" class="muted">{unavailablePresetNotice("campaign")}</p>
-      <p class="muted">Help is confirmed when the encounter opens. Your individual limits, earned and equipped tools, encounter restrictions and available evidence still apply. Changing help style does not change your kit.</p>
+      <p class="muted">Help is confirmed when the encounter opens. Your individual limits, earned and equipped tools, encounter restrictions and available evidence still apply. Changing help style does not spend earned rewinds or change equipment.</p>
       {#if preference.kind === "invalid_fallback"}<p id="prep-help-recovery" role="status">{renderSuppression({ kind: "preference_recovery", reason: preference.reason }, "campaign")}</p>{/if}
       {#if helpError}<p id="prep-help-error" role="alert">{helpError}</p>{/if}
     </section>
@@ -108,7 +109,7 @@
                 }} />
               <span>{CAMPAIGN_MODULE_LABELS[id]}</span>
             </label>
-            <p id={`prep-tool-${id}`} class="muted">{suppressed ? "Set aside for this encounter, even if equipped." : !campaign.kit.equipped.includes(id) ? "Not equipped — select to equip." : !requestedTools.includes(id) ? `Not requested by ${helpLabel} — remains equipped.` : "Equipped"}</p>
+            <p id={`prep-tool-${id}`} class="muted">{suppressed ? "Set aside for this encounter, even if equipped." : !campaign.kit.equipped.includes(id) ? "Not equipped — select to equip." : campaignToolRequestText(helpRequest, id)}</p>
           </li>
         {:else}
           <li>Legal moves only — no tools earned yet.</li>

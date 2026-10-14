@@ -1,5 +1,26 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3793]]/[[D3794]] are complete locally. Result/map/preparation share the
+canonical current help-style request; Quiet/Custom exclusions do not remove equipment and
+failed saves do not change the map's choice. The board's request is separate from confirmed
+entered-inventory/source assistance. Campaign context now lives in the existing always-mounted
+Actions region, not after the full-height play root. Actual desktop/phone visible results,
+unlock/style/next-encounter/reload, input return, retry focus, lost responses and departed commands
+preserve Campaign and play state. Five new controls, 358 focused software/eight content checks
+and clean types pass; final serial normal verification/build/all four browser tiers exit zero,
+including 5,616 software, seven performance and 112/112 unretried composition cells. CMP-a12
+closes with its native path evidence. No new source, schema, wire, economy, modal/default,
+curriculum, content graduation, whole-Campaign, remote-CI or release claim follows.
+
+Prior work order, retained: [[D3793]] takes CMP-a12's accepted earned-tool/help-style journey while the
+Inspector contract remains blocked. Existing seals, income, restriction restoration and Review
+already work; do not recreate them. Result/map/preparation must name whether the current style
+requests an equipped tool without claiming source/encounter availability. The board supplies its
+current canonical preference separately from confirmed assistance; no old entered-inventory cut
+may become future equipment authority. Keep reward/economy/preferences and all transport schemas
+unchanged. Actual unlock, style change without charge/equipment mutation, next preparation/help,
+reload, failure and responsive input are the completion boundary.
+
 2026-10-14 — [[D3791]] is the accepted Full Inspector recorded-window acquisition slice.
 Its ten exact v2 refs and adapters already exist; use the recorded-path compiler, never
 operand helpers, and bind emitted facts to the inspected node on its resolved branch.

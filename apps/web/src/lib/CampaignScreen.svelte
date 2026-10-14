@@ -5,12 +5,16 @@
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import CampaignPreparation from "./CampaignPreparation.svelte";
   import type { PreferenceStorage } from "./assistance-preference.js";
+  import { loadWorkflowPreference, workflowPreferenceKey } from "./assistance-preference.js";
+  import { renderSuppression } from "@chess-tabiya/runtime/client";
   import {
     ACT_LABELS,
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
     assertCampaignCommand,
     campaignBotLabel,
+    campaignHelpRequest,
+    campaignToolRequestText,
     newCampaignCommandId,
     rewardText,
     verdictText,
@@ -34,6 +38,17 @@
     assistanceStorage?: PreferenceStorage | undefined;
   }
   let { campaigns, campaignRunId, onNavigate, rememberWriter, assistanceStorage }: Props = $props();
+
+  function preferenceStorage(): PreferenceStorage | undefined {
+    if (assistanceStorage !== undefined) return assistanceStorage;
+    if (import.meta.env.MODE === "test") return undefined;
+    try { return globalThis.localStorage ?? undefined; } catch { return undefined; }
+  }
+  let helpPreference = $state(loadWorkflowPreference("campaign", preferenceStorage()));
+  const helpRequest = $derived(campaignHelpRequest(helpPreference));
+  function refreshHelpPreference(event: StorageEvent): void {
+    if (event.key === null || event.key === workflowPreferenceKey("campaign")) helpPreference = loadWorkflowPreference("campaign", preferenceStorage());
+  }
 
   let catalogue: readonly CampaignCatalogueEntry[] = $state([]);
   let savedRuns: readonly CampaignActiveRun[] = $state([]);
@@ -280,6 +295,8 @@
   }
 </script>
 
+<svelte:window onstorage={refreshHelpPreference} />
+
 <section class="campaign-view" aria-labelledby="campaign-title">
   {#if campaignRunId === undefined}
     <header>
@@ -417,19 +434,24 @@
 
     <section class="kit" aria-labelledby="kit-title">
       <h2 id="kit-title">Your campaign kit</h2>
+      <p>Current help style: {helpRequest.kind === "requested" ? helpRequest.label : "request unavailable"}.</p>
+      {#if helpPreference.kind === "invalid_fallback"}<p role="status">{renderSuppression({ kind: "preference_recovery", reason: helpPreference.reason }, "campaign")}</p>{/if}
+      <p class="honest">Changing help style does not spend earned rewinds or change equipment. Choose a style in encounter preparation; individual limits, encounter restrictions and available evidence still apply. Help is confirmed when the encounter opens.</p>
       {#if campaign.kit.owned.length === 0}
         <p class="honest">No tools earned yet. Playing a node — whatever its outcome — earns its reward.</p>
       {:else}
         <ul>
           {#each campaign.kit.owned as moduleId (moduleId)}
-            <li><label><input type="checkbox" checked={campaign.kit.equipped.includes(moduleId)} disabled={busy !== undefined || campaign.campaignRun.status !== "active"} onchange={(event) => { const input = event.currentTarget; void toggleEquip(moduleId, input.checked).then(() => { if (input.isConnected) input.checked = campaign?.kit.equipped.includes(moduleId) ?? false; }); }} /> {CAMPAIGN_MODULE_LABELS[moduleId]}</label></li>
+            <li><label><input type="checkbox" checked={campaign.kit.equipped.includes(moduleId)} disabled={busy !== undefined || campaign.campaignRun.status !== "active"} aria-describedby={`map-tool-${moduleId}`} onchange={(event) => { const input = event.currentTarget; void toggleEquip(moduleId, input.checked).then(() => { if (input.isConnected) input.checked = campaign?.kit.equipped.includes(moduleId) ?? false; }); }} /> {CAMPAIGN_MODULE_LABELS[moduleId]}</label>
+              <p id={`map-tool-${moduleId}`} class="honest">{campaign.kit.equipped.includes(moduleId) ? campaignToolRequestText(helpRequest, moduleId) : "Not equipped — select to equip."}</p>
+            </li>
           {/each}
         </ul>
       {/if}
     </section>
 
     {#if preparing}
-      <CampaignPreparation {campaign} card={preparing} {busy} {error} {assistanceStorage} onEquip={toggleEquip} onStart={() => void startEncounter(preparing!)} onClose={() => void closePreparation()} />
+      <CampaignPreparation {campaign} card={preparing} {busy} {error} {assistanceStorage} onHelpChange={(next) => { helpPreference = next; }} onEquip={toggleEquip} onStart={() => void startEncounter(preparing!)} onClose={() => void closePreparation()} />
     {/if}
 
     {#if campaign.campaignRun.status === "active"}

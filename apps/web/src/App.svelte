@@ -2967,7 +2967,7 @@
       {/if}
       {/if}
       {/snippet}
-      {#snippet campaignContext(assistance, assistanceState)}
+      {#snippet campaignContext(assistance, assistanceState, helpPreference)}
       {#if session.campaignOrigin && session.runState}
         <CampaignStrip
           bind:this={campaignStrip}
@@ -2978,6 +2978,7 @@
           runRevision={session.runState.run.events.length}
           {assistance}
           {assistanceState}
+          {helpPreference}
           onNavigate={navigate}
           onRevision={(state) => { campaignCharge = state === null ? undefined : { runId: session.runState!.run.id, campaignRevision: state.campaignRevision }; }}
         />

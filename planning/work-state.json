@@ -31534,6 +31534,24 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D3793",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a684573d784f3dcf4d004d7f33f1920a7c58db83109ed51df84718ce12e80663",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3794",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cc41a86be2f77b0379c3970a0792af0a34d611e51891e7ab7b81b2d25f97e41d",
+      "uxItems": [],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

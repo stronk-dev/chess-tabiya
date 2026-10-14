@@ -4,6 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
 import type { DrillRun } from "../../packages/runtime/src/types.js";
 import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 import type { RunGraph } from "../../apps/web/src/lib/api.js";
+import { showRunActions, returnFromRunActions } from "./play-helpers.js";
 
 for (const mobile of [false, true]) {
   test(`Campaign encounter help follows confirmed entry equipment and help style${mobile ? " @mobile" : ""}`, async ({ page }) => {
@@ -13,11 +14,12 @@ for (const mobile of [false, true]) {
     const mapPath = new URL(page.url()).pathname;
     await playPackNode(page, "f1-a");
     const runId = await startNode(page, "f2-a");
-    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
     const help = strip.getByTestId("campaign-encounter-help");
     await expect(help).toContainText("Help for this encounter: After-move nudge");
     const edge = await playableBoard(page);
     const events = await (await page.request.get(`/runs/${runId}/events`)).json();
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Map", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
     await page.getByRole("region", { name: "Your campaign kit" }).getByRole("checkbox", { name: "After-move nudge", exact: true }).uncheck();
@@ -102,7 +104,8 @@ for (const mobile of [false, true]) {
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
       const collapse = page.getByRole("button", { name: "Collapse companion", exact: true });
       if (await collapse.isVisible()) await collapse.click();
-      await page.getByRole("complementary", { name: "Campaign encounter" }).getByRole("button", { name: "Map", exact: true }).click();
+      await showRunActions(page);
+      await page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true }).getByRole("button", { name: "Map", exact: true }).click();
       await expect(page).toHaveURL(new RegExp(`/campaign/${campaignId}$`, "u"));
       otherTab = await page.context().newPage();
       await otherTab.goto(`/campaign/${campaignId}`);
@@ -190,6 +193,7 @@ async function register(page: Page): Promise<void> {
 }
 
 async function move(page: Page, from: string, to: string): Promise<void> {
+  await returnFromRunActions(page);
   const board = page.getByLabel("Chessboard");
   await expect(board).toBeVisible();
   await board.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
@@ -209,6 +213,8 @@ function currentRunId(page: Page): string {
 }
 
 async function playableBoard(page: Page, expectedEdge?: number): Promise<number> {
+  // A phone companion deliberately makes the board inert. Verify actual input after closing it.
+  await returnFromRunActions(page);
   const board = page.getByLabel("Chessboard");
   await board.scrollIntoViewIfNeeded();
   const geometry = await board.evaluate(element => {
@@ -246,12 +252,15 @@ async function startNode(page: Page, nodeId: string): Promise<string> {
 /** A line-boundary fixture node: learner Be3, the authored reply e6, then declare done. */
 async function playPackNode(page: Page, nodeId: string): Promise<void> {
   const runId = await startNode(page, nodeId);
-  const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+  const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
+  await showRunActions(page);
   await expect(strip.getByTestId("campaign-strip-charges")).toBeVisible();
   await move(page, "c1", "e3");
   await expect.poll(() => moveCount(page, runId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done" }).click();
   await expect(strip.getByText("Played to the authored boundary", { exact: false })).toBeVisible();
+  await showRunActions(page);
   await strip.getByRole("button", { name: /Continue to the map|See the run result/u }).click();
   await expect(page).toHaveURL(/\/campaign\//u);
 }
@@ -274,7 +283,9 @@ async function holdCampaignAction(page: Page, path: RegExp) {
   return { get campaignId() { return body!.campaign.campaignRun.id; }, async leaveAndDeliver() {
     await expect.poll(() => body !== undefined).toBe(true);
     // Preparation is modal: return to its map before using shell navigation.
-    if (await page.getByRole("dialog").isVisible()) await page.getByRole("button", { name: "Back to map", exact: true }).click();
+    const preparation = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Back to map", exact: true }) });
+    if (await preparation.isVisible()) await preparation.getByRole("button", { name: "Back to map", exact: true }).click();
+    await returnFromRunActions(page);
     if (new URL(page.url()).pathname.startsWith("/play/run/")) {
       await page.getByRole("button", { name: "Tabiya", exact: true }).click();
       await expect(page).toHaveURL(/\/play$/u);
@@ -384,12 +395,14 @@ for (const mobile of [false, true]) {
       else await route.continue();
     });
     await page.reload();
-    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
+    await showRunActions(page);
     await expect(strip.getByRole("alert")).toContainText("Temporary encounter state failure");
     await expect(strip.getByRole("alert")).toContainText("This read has not changed your encounter");
     await expect(strip.getByRole("button", { name: "Declare done", exact: true })).not.toBeVisible();
     await playableBoard(page, edge);
     const retry = strip.getByRole("button", { name: "Retry loading encounter", exact: true });
+    await showRunActions(page);
     await retry.focus();
     await retry.press("Enter");
     await expect(retry).toBeEnabled();
@@ -410,6 +423,7 @@ for (const mobile of [false, true]) {
     expect(graphAfter.branches).toEqual(graphBefore.branches);
     expect(graphAfter.activeCursor).toEqual(graphBefore.activeCursor);
     expect(commands).toEqual([]);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Declare done", exact: true }).click();
     await expect(strip.locator(".node-result")).toContainText("Your recorded attempts are kept");
     expect(commands).toEqual([`POST /campaign-runs/${campaignId}/nodes/f1-a/submit`]);
@@ -483,8 +497,9 @@ for (const mobile of [false, true]) {
     const runId = await startNode(page, "f1-b");
     await move(page, "c1", "e3");
     await expect.poll(() => moveCount(page, runId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
-    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
     const edge = await playableBoard(page);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Declare done", exact: true }).click();
     const result = strip.locator(".node-result");
     await expect(result).toContainText("Your recorded attempts are kept");
@@ -499,6 +514,8 @@ for (const mobile of [false, true]) {
     const before = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
     const graphBefore = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
     await page.reload();
+    await showRunActions(page);
+    await expect(result).toBeVisible();
     await expect(result).toContainText("1 earned rewind from this encounter’s reward");
     await playableBoard(page, edge);
     const after = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
@@ -508,6 +525,7 @@ for (const mobile of [false, true]) {
     assertRecordedNodesPreserved(graphBefore.nodes, graphAfter.nodes);
     expect(graphAfter.branches).toEqual(graphBefore.branches);
     expect(graphAfter.activeCursor).toEqual(graphBefore.activeCursor);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Review encounter", exact: true }).click();
     await expect(page).toHaveURL(/\/review\/game\//u);
     await page.getByRole("link", { name: "Return to campaign map", exact: true }).click();
@@ -515,13 +533,17 @@ for (const mobile of [false, true]) {
     const secondRun = await startNode(page, "f2-a");
     await move(page, "c1", "e3");
     await expect.poll(() => moveCount(page, secondRun), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Declare done", exact: true }).click();
     await expect(result).toContainText("Unlocked Square facts on request");
     await expect(result).toContainText("Square facts on request — equipped");
     await expect(result).toContainText("available evidence still determine what appears");
     await page.reload();
+    await showRunActions(page);
+    await expect(result).toBeVisible();
     await expect(result).toContainText("Square facts on request — equipped");
     await playableBoard(page, edge);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Continue to the map", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
     await expect(page.getByRole("checkbox", { name: "Square facts on request" })).toBeChecked();
@@ -565,7 +587,7 @@ for (const mobile of [false, true]) {
     await prepare.click();
     await expect(kit).not.toBeChecked();
     await kit.check();
-    await expect(dialog.getByText("Equipped", { exact: true })).toBeVisible();
+    await expect(dialog.getByText("Requested by Campaign kit.", { exact: true })).toBeVisible();
     await expect(kit).toBeEnabled();
     if (!mobile) await page.setViewportSize({ width: 640, height: 360 });
     const bounds = await dialog.evaluate(element => {
@@ -584,7 +606,7 @@ for (const mobile of [false, true]) {
     expect(projection.activeEncounter.nodeId).toBe("f2-a");
   });
 
-  test(`D3741 Campaign preparation carries named help into actual encounters without changing earned equipment${mobile ? " @mobile" : ""}`, async ({ page }) => {
+  test(`D3741 D3793 Campaign preparation carries earned-tool requests through seal, map and actual encounters${mobile ? " @mobile" : ""}`, async ({ page }) => {
     test.setTimeout(90_000);
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
@@ -618,19 +640,45 @@ for (const mobile of [false, true]) {
       for (const square of ["c1", "e3"]) await page.touchscreen.tap(board.x + (square.charCodeAt(0) - 97 + .5) * board.width / 8, board.y + (8 - Number(square[1]) + .5) * board.height / 8);
     } else await move(page, "c1", "e3");
     await expect.poll(() => moveCount(page, firstRun)).toBeGreaterThanOrEqual(2);
-    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Declare done", exact: true }).click();
     await expect(strip).toContainText("Unlocked After-move nudge");
+    const resultKit = strip.locator(".result-kit");
+    await expect(resultKit).toContainText("Current help style: Quiet");
+    await expect(resultKit).toContainText("Not requested by Quiet — remains equipped");
+    await expect(resultKit).toContainText("does not spend earned rewinds or change equipment");
+    const sealedAtQuiet = await projection();
+    await page.reload();
+    const boardBeforeResult = await page.getByLabel("Chessboard").boundingBox();
+    await showRunActions(page);
+    expect(await strip.evaluate(element => element.closest(".action-seat") !== null)).toBe(true);
+    await resultKit.scrollIntoViewIfNeeded();
+    await expect(resultKit).toBeVisible();
+    expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(boardBeforeResult);
+    await expect(resultKit).toContainText("Not requested by Quiet — remains equipped");
+    expect(await projection()).toEqual(sealedAtQuiet);
+    const screenshotName = `campaign-earned-quiet-${mobile ? "phone" : "desktop"}`;
+    const screenshotPath = test.info().outputPath(`${screenshotName}.png`);
+    await page.screenshot({ path: screenshotPath, animations: "disabled" });
+    await test.info().attach(screenshotName, { path: screenshotPath, contentType: "image/png" });
+    await returnFromRunActions(page);
     await playableBoard(page, edge);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Continue to the map", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${mapPath}$`, "u"));
+    const mapKit = page.getByRole("region", { name: "Your campaign kit", exact: true });
+    await expect(mapKit).toContainText("Current help style: Quiet");
+    await expect(mapKit).toContainText("Not requested by Quiet — remains equipped");
     await page.locator('[data-node="f2-a"]').getByRole("button", { name: "Prepare", exact: true }).click();
     await expect(style).toHaveValue("quiet");
     await expect(dialog.getByRole("checkbox", { name: "After-move nudge", exact: true })).toBeChecked();
     await expect(dialog.locator("#prep-tool-postcommit_nudge")).toHaveText("Not requested by Quiet — remains equipped.");
     const earned = await projection();
     await style.selectOption("guided");
-    await expect(dialog.locator("#prep-tool-postcommit_nudge")).toHaveText("Equipped");
+    await expect(dialog.locator("#prep-tool-postcommit_nudge")).toHaveText("Requested by Guide me.");
+    await expect(mapKit).toContainText("Current help style: Guide me");
+    await expect(mapKit).toContainText("Requested by Guide me");
     expect(await projection()).toEqual(earned);
     const guidedResponse = page.waitForResponse(response => response.url().endsWith("/assistance") && response.request().method() === "POST");
     await dialog.getByRole("button", { name: "Start encounter", exact: true }).click();
@@ -762,7 +810,8 @@ for (const mobile of [false, true]) {
     } else await move(page, "c1", "e3");
     await expect.poll(() => moveCount(page, runId)).toBeGreaterThanOrEqual(2);
     const sealed = await holdCampaignAction(page, /\/campaign-runs\/[^/]+\/nodes\/f1-a\/submit$/u);
-    await page.getByRole("complementary", { name: "Campaign encounter" }).getByRole("button", { name: "Declare done", exact: true }).click();
+    await showRunActions(page);
+    await page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true }).getByRole("button", { name: "Declare done", exact: true }).click();
     await sealed.leaveAndDeliver();
     await resume();
     await expect(page.locator('[data-node="f1-a"]')).toContainText("Played to the authored boundary");
@@ -801,15 +850,18 @@ test("Campaign actions replay a lost declaration response without a second rewar
     if (inputs.length === 1) { await route.abort("failed"); return; }
     await route.fulfill({ response });
   });
-  const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+  const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done", exact: true }).click();
   await expect(strip.getByRole("alert")).toContainText("could not be declared done");
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done", exact: true }).click();
   await expect(strip.locator(".node-result")).toContainText("Played to the authored boundary");
   expect(inputs).toHaveLength(2); expect(inputs[1]).toBe(inputs[0]); expect(replays).toEqual([false, true]);
   const projection = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
   expect(projection.charges.balance).toBe(2);
   expect(projection.kit.owned).toEqual(["postcommit_nudge"]);
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Continue to the map" }).click();
   await page.reload();
   await expect(page.getByTestId("campaign-charges")).toContainText("⟲ 2");
@@ -831,16 +883,19 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   await expect(page.locator('[data-node="f3-boss"]')).toContainText("Sets aside: Step-by-step hint");
 
   const firstRunId = await startNode(page, "f1-a");
-  const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+  const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
   await expect(strip.getByTestId("campaign-strip-charges")).toContainText("Earned rewinds: 1 remaining this campaign");
   // Declaring done on the untouched root is refused: participation is required, never graded.
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done" }).click();
   await expect(strip.getByRole("alert")).toContainText("no move after the run root");
   await move(page, "c1", "e3");
   await expect.poll(() => moveCount(page, firstRunId), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done" }).click();
   await expect(strip.getByText("Played to the authored boundary", { exact: false })).toBeVisible();
   await expect(strip.getByText("Unlocked After-move nudge", { exact: false })).toBeVisible();
+  await showRunActions(page);
   await strip.getByRole("button", { name: "Continue to the map" }).click();
 
   // Resume after reload: the map is server state, not tab state.
@@ -891,7 +946,7 @@ for (const mobile of [false, true]) {
     const mapUrl = page.url();
     const campaignId = currentRunId(page);
     const firstRun = await startNode(page, "f1-a");
-    const strip = page.getByRole("complementary", { name: "Campaign encounter" });
+    const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
     if (mobile) {
       const tapSquare = async (square: string) => {
         const box = await page.getByLabel("Chessboard").boundingBox();
@@ -902,8 +957,10 @@ for (const mobile of [false, true]) {
       await tapSquare("e3");
     } else await move(page, "c1", "e3");
     await expect.poll(() => moveCount(page, firstRun)).toBeGreaterThanOrEqual(2);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Declare done", exact: true }).click();
     await expect(strip.getByRole("button", { name: "Open recorded encounter" })).toBeVisible();
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Continue to the map" }).click();
     const recordedMoves = async (runId: string) => {
       const response = await page.request.get(`/runs/${encodeURIComponent(runId)}/events`);
@@ -947,6 +1004,7 @@ for (const mobile of [false, true]) {
 
     const unfinishedRun = await startNode(page, "f2-b");
     const untouchedMoves = await recordedMoves(unfinishedRun);
+    await showRunActions(page);
     await strip.getByRole("button", { name: "Map", exact: true }).click();
     await page.getByRole("button", { name: "Abandon this run…" }).click();
     await page.getByRole("button", { name: "Confirm abandon" }).click();

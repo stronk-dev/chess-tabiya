@@ -1,4 +1,4 @@
-import { BOT_FAMILY_LABELS } from "@chess-tabiya/runtime/client";
+import { BOT_FAMILY_LABELS, preferenceDisplayMode, presetDeclaration, requestedModules, requestedPreset, type ModuleId, type WorkflowPreferenceReceipt } from "@chess-tabiya/runtime/client";
 
 import { ApiError } from "./api.js";
 
@@ -245,6 +245,23 @@ export function rewardText(reward: CampaignRunReward | null): string {
   return "Unlocks a theory passage";
 }
 
+/** Presentation of the existing canonical request, never encounter/source authority. */
+export function campaignHelpRequest(preference: WorkflowPreferenceReceipt | undefined):
+  { readonly kind: "unavailable" } | { readonly kind: "requested"; readonly label: string; readonly modules: readonly ModuleId[] } {
+  if (preference === undefined) return { kind: "unavailable" };
+  const preset = requestedPreset(preference, "campaign");
+  if (preset === undefined) return { kind: "unavailable" };
+  return { kind: "requested", label: preferenceDisplayMode(preference, preset) === "custom" ? "Custom" : presetDeclaration(preset).label,
+    modules: requestedModules(preference, preset) };
+}
+
+export function campaignToolRequestText(request: ReturnType<typeof campaignHelpRequest>, id: CampaignModuleId): string {
+  if (request.kind === "unavailable") return "Help-style request unavailable.";
+  return request.modules.includes(id)
+    ? `Requested by ${request.label}.`
+    : `Not requested by ${request.label} — remains equipped.`;
+}
+
 /** Node-result copy comes from its retained seal and pinned economy, not balance differences.
  * A command replay may carry a later map: the income stays this node's, kit/balance stay current.
  * The same view can be rebuilt after reload without a second submit or another durable record.
@@ -260,7 +277,7 @@ export function campaignEncounterResult(campaign: CampaignProjection, nodeId: st
     if (reward?.kind === "resource_grant" && (!Number.isSafeInteger(reward.amount) || reward.amount < 1)) throw new Error("Invalid campaign result reward");
     const tools = campaign.kit.owned.map(id => {
       if (!Object.hasOwn(CAMPAIGN_MODULE_LABELS, id)) throw new Error("Unknown campaign tool");
-      return { label: CAMPAIGN_MODULE_LABELS[id], equipped: campaign.kit.equipped.includes(id) };
+      return { moduleId: id, label: CAMPAIGN_MODULE_LABELS[id], equipped: campaign.kit.equipped.includes(id) };
     });
     return {
       title: card.title,
