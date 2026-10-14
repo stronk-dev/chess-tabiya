@@ -31715,6 +31715,15 @@
       "uxItems": [],
       "evidence": "docs/storage-backup-and-recovery.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3812",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:78a538f0684968abca208946074a0a0968ee57dc0597ba69210cb51b32a25f7f",
+      "uxItems": [],
+      "evidence": "docs/app-shell.md",
+      "evidenceKind": "path"
     }
   ]
 }

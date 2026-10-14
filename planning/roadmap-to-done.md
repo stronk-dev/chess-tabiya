@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3811]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3812]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,16 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3812]] defers existing Settings and Studio editors through the existing accepted screen
+boundary. Eight native desktop/phone controls retain actual account/preferences recovery,
+unsaved JSON, focus and widget callbacks. Initial JavaScript's complete static graph falls
+2,059,959 → 1,966,179 bytes; total JavaScript slightly increases. Required runtime/admission
+checks remain, and no device latency, source qualification or whole capability is inferred.
+Full normal verification/build/all four browser tiers pass: 5,632 software, seven performance,
+257 content, all 59 matrix cases/150 input/112 unretried composition cells and packaged production.
+The stronger eight-case delivery rerun also compares the saved draft after real automatic lint.
+D3722 and all whole capability/content/release gates remain open; nothing is pushed.
 
 Current image recovery: [[D3746]]/[[D3747]]/[[D3811]] close the local full-population image slice.
 The original restore refused the boss fixture's checkout-only ruling, correctly retaining its

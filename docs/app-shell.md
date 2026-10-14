@@ -418,12 +418,44 @@ eventual total or measured user latency. Required chunks still exceed the
 existing warning threshold. D3722 retains remaining eager delivery and
 supported-device/deployment measurements.
 
-`make web-screen-delivery-check` runs 143 mounted boundary/shell/theme controls;
-workspace types pass. `make web-screen-delivery-browser-check` runs four actual
+October-14 D3812 extends the same boundary to Settings and Studio tools. Settings loads its
+appearance, accessibility, streamer and account controls together at `/settings`; its section
+links retain their original styling. Pack vocabulary/provenance and the recursive shape editor
+load only in their existing Studio seats. They consume the current parent-held JSON/callbacks,
+not a delivery-time snapshot. Delayed delivery preserves unsaved JSON and focused input; widget
+edits still update the parent document without saving or publishing it. The existing failure/
+explicit-reload and departed-route rules apply. No evidence, schema, source-admission or account
+permission is changed.
+
+The same no-write production diagnostic measures initial JavaScript, including all transitive
+static dependencies, at **1,966,179 bytes versus 2,059,959** immediately before this change
+(93,780 fewer, about 4.6%). The entry falls from 521,222 to 429,662 bytes. Settings (44,787),
+pack editors (15,099) and shape editor (30,483) are actual non-eager chunks. Total JavaScript
+increases from 2,443,517 to 2,447,152 bytes; this is deferral, not total-size reduction or a
+measured cold-use speedup. The 1,375,335-byte runtime chunk, required semantic startup checks
+and the unchanged warning threshold remain. D3722's device/deployment measurements stay open.
+
+The focused normal gate passes 145 shell/boundary/theme cases and clean workspace types.
+Eight actual desktop/phone delivery checks include the new Settings failure/reload path and
+held Studio asset. They preserve preferences, unsaved text and focus, and retain the exact
+request list: Settings resumes its existing read-only `POST /auth/deletion-preview`, never
+account deletion/import. The wider native account, theme and complete Studio journeys remain
+in ordinary browser CI.
+
+The held-editor control also waits for automatic validation of the widget's actual new source,
+admits only the exact read-shaped lint POSTs, then compares the complete saved draft response
+against its pre-edit bytes. This avoids treating the debounce as evidence that no save occurred.
+Full frozen ordinary verification/build/all four browser tiers pass: 5,632 software, seven
+performance, 257 content, all 59 matrix cases with 150 input/112 unretried composition cells,
+and packaged production. The eight strengthened delivery checks then pass with production
+unchanged. Local warm p95 is 108.4 ms against the unchanged 250 ms limit, not remote proof.
+
+At the original October-12 checkpoint, `make web-screen-delivery-check` passed 143
+mounted boundary/shell/theme controls and workspace types. The browser target passed four actual
 built-browser checks: no large-screen downloads at the catalogue, route-local
 and cached return delivery, delayed navigation-away/focus, and failed chunk
 reload on desktop and phone with no command issuance. Broader release and
-whole-journey qualification remain separate. Complete ordinary serial
+whole-journey qualification remain separate. That checkpoint's complete ordinary serial
 `make roadmap-receipt verify-awake build test-browser-ci-awake` passes 5,076 software
 tests/381 files, seven unchanged-budget performance checks/four files, 255 content
 tests/26 files and 308 browser cases, one existing optional Maia skip, zero retries,

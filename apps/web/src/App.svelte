@@ -29,17 +29,10 @@
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
-  import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import StatusAnnouncement from "./lib/StatusAnnouncement.svelte";
-  import StreamerModeSettings from "./lib/StreamerModeSettings.svelte";
   import { loadStreamerMode, saveStreamerMode, streamerModeActive, toggledStreamerMode, type StreamerMode } from "./lib/streamer-mode.js";
   import "./lib/streamer-mode.css";
-  import AppearanceSettings from "./lib/AppearanceSettings.svelte";
-  import AccessibilitySettings from "./lib/AccessibilitySettings.svelte";
   import DistillDraftForm from "./lib/DistillDraftForm.svelte";
-  import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
-  import ShapePlanSignatureEditor from "./lib/ShapePlanSignatureEditor.svelte";
-  import PackVocabularyEditor from "./lib/PackVocabularyEditor.svelte";
   import CreateSeedChooser from "./lib/CreateSeedChooser.svelte";
   import ImportSourceFields from "./lib/ImportSourceFields.svelte";
   import { authoringSlug, clonePackForAuthoring, positionPackScaffold } from "./lib/pack-authoring-seeds.js";
@@ -3303,8 +3296,11 @@
           <p class="honest">Registration publishes immutable bytes. Resolve each blocking condition in the document before registering.</p>
         </aside>
       </div>
-      <PackVocabularyEditor documentJson={studioJson} shapes={authoringShapes} principles={authoringPrinciples} concepts={authoringConcepts} onDocumentJson={(documentJson) => studioJson = documentJson} />
-      <PackProvenanceEditor documentJson={studioJson} onDocumentJson={(documentJson) => studioJson = documentJson} />
+      <DeferredScreen label="Pack editing tools" load={() => import("./lib/PackAuthoringEditors.svelte")}>
+        {#snippet children({ default: Editors })}
+          <Editors documentJson={studioJson} shapes={authoringShapes} principles={authoringPrinciples} concepts={authoringConcepts} onDocumentJson={(documentJson) => studioJson = documentJson} />
+        {/snippet}
+      </DeferredScreen>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
       </section>
       {/if}
@@ -3337,7 +3333,11 @@
           <fieldset class="shape-editor-fields" inert={shapeMutationBusy !== undefined} aria-busy={shapeMutationBusy !== undefined}>
             <legend>Shape definition</legend>
             <label for="shape-studio-json">Shape JSON</label><textarea id="shape-studio-json" bind:value={shapeStudioJson} disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} spellcheck="false"></textarea>
-            <ShapePlanSignatureEditor documentJson={shapeStudioJson} onDocumentJson={(documentJson) => shapeStudioJson = documentJson} />
+            <DeferredScreen label="Shape editing tools" load={() => import("./lib/ShapePlanSignatureEditor.svelte")}>
+              {#snippet children({ default: Editor })}
+                <Editor documentJson={shapeStudioJson} onDocumentJson={(documentJson) => shapeStudioJson = documentJson} />
+              {/snippet}
+            </DeferredScreen>
             <label>Probe FEN <input bind:value={shapeProbeFen} disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} placeholder="Optional position to test the trigger" /></label>
             <div class="row-actions">
               <button type="button" disabled={shapeMutationBusy !== undefined} aria-describedby={shapeMutationBusy !== undefined ? "shape-action-busy" : undefined} onclick={() => void createShapeDraft()}>Create shape draft</button>
@@ -3604,11 +3604,11 @@
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Preferences and account</p><h1 id="settings-title">Settings</h1>
-      <nav class="settings-toc" aria-label="Settings sections"><a href="#appearance-settings">Appearance</a><a href="#accessibility-settings">Accessibility</a><a href="#streamer-mode-settings">Streamer mode</a><a href="#playing-settings">Playing</a>{#if learner}<a href="#account-settings">Account</a>{/if}<a href="#about-deployment">About</a></nav>
-      <AppearanceSettings />
-      <AccessibilitySettings />
-      <StreamerModeSettings mode={streamerMode} onChange={setStreamerMode} />
-      <AssistanceSettings {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} loadAccountInventory={api.accountInventory === undefined ? undefined : () => api.accountInventory!()} previewAccountImport={api.previewAccountImport === undefined ? undefined : (bundle) => api.previewAccountImport!(bundle)} commitAccountImport={api.importAccount === undefined ? undefined : (password, bundle) => api.importAccount!(password, bundle)} />
+      <DeferredScreen label="Settings" load={() => import("./lib/SettingsScreen.svelte")}>
+        {#snippet children({ default: Settings })}
+          <Settings streamerMode={streamerMode} onStreamerModeChange={setStreamerMode} {capabilities} {learner} plannedSurfaceIds={PLANNED_SURFACES as readonly SurfaceId[]} onSignOut={signOut} onExport={exportAccountWithPassword} loadDeletionPreview={() => api.accountDeletionPreview?.() ?? Promise.reject(new Error("Deletion preview is unavailable."))} onDelete={deleteAccountWithPassword} loadAccountInventory={api.accountInventory === undefined ? undefined : () => api.accountInventory!()} previewAccountImport={api.previewAccountImport === undefined ? undefined : (bundle) => api.previewAccountImport!(bundle)} commitAccountImport={api.importAccount === undefined ? undefined : (password, bundle) => api.importAccount!(password, bundle)} />
+        {/snippet}
+      </DeferredScreen>
     </main>
   {:else if route.name === "not-found"}
     <main class="shell-view empty-state" aria-labelledby="not-found-title">
@@ -3664,9 +3664,6 @@
   .session-banner { display: grid; gap: 0.25rem; min-width: 0; margin-block: 0.5rem; padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--panel); font-size: 0.8rem; overflow-wrap: anywhere; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
-  .settings-toc { position: sticky; z-index: 2; top: 0; display: flex; flex-wrap: wrap; gap: .45rem; padding: .65rem; border: 1px solid var(--line); border-radius: .75rem; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(.5rem); }
-  .settings-toc a { padding: .45rem .65rem; border-radius: .5rem; color: var(--ink); text-decoration: none; }
-  .settings-toc a:hover, .settings-toc a:focus-visible { background: var(--accent-soft); }
   .home > h1 { max-width: 15ch; }
   .home-lede { max-width: 42rem; color: var(--muted); font-size: 1.1rem; }
   .resume-card, .start-card { max-width: 42rem; margin: 2.5rem 0 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); box-shadow: var(--shadow); }

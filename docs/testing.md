@@ -4,6 +4,16 @@ Tabiya separates tests by the contract they prove. A failure should identify the
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.
 
+`make web-screen-delivery-browser-check` exercises the actual built route assets, including
+Settings and Studio editors. The initial catalogue requests none of those private chunks.
+Failed Settings delivery preserves account/preferences; explicit reload restores the controls
+and performs only the existing read-shaped deletion-preview POST. A held Pack editor consumes
+the latest unsaved parent JSON on arrival, keeps textarea focus, and its edits update that same
+document without saving or publishing. It waits for the actual automatic lint response and
+compares the complete saved draft before/after; lint's POST is a read, not a save. The permanent
+shell source guard rejects eager private
+component imports. Normal browser CI also retains full account/theme/Studio lifecycle coverage.
+
 The stable empty-Theory composition case opens feedback, then waits for both actually played
 moves' engine attachments and browser consumption before requesting its layout result. Feedback
 must open first: ordinary polling deliberately does not apply withheld evidence. A result read

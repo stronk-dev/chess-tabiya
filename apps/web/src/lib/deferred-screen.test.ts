@@ -88,11 +88,14 @@ describe("route-local component delivery", () => {
     expect(target.textContent).toBe("");
   });
 
-  it("does not add eager imports of the seven deferred screens to the app shell", () => {
+  it("keeps route screens and private editors out of eager shell imports", () => {
     const source = readFileSync("apps/web/src/App.svelte", "utf8");
-    for (const name of ["DrillScreen", "ReviewMapScreen", "CampaignScreen", "RatingScreen", "ProfileScreen", "TheoryEntryScreen", "LibraryScreen"]) {
+    for (const name of ["DrillScreen", "ReviewMapScreen", "CampaignScreen", "RatingScreen", "ProfileScreen", "TheoryEntryScreen", "LibraryScreen", "SettingsScreen", "PackAuthoringEditors", "ShapePlanSignatureEditor"]) {
       expect(source).not.toMatch(new RegExp(`import\\s+${name}\\s+from`));
       expect(source).toContain(`import("./lib/${name}.svelte")`);
+    }
+    for (const name of ["AssistanceSettings", "AppearanceSettings", "AccessibilitySettings", "StreamerModeSettings", "PackVocabularyEditor", "PackProvenanceEditor"]) {
+      expect(source).not.toMatch(new RegExp(`import\\s+${name}\\s+from`));
     }
   });
 });

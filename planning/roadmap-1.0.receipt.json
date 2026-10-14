@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1e4cf244f5fcadb13afc3213e0bcd765d7943f489fe7e93496792c73d9b5ad59",
+    "roadmap": "sha256:a18932785742c70c3e90b1151f125a3801c539be5e24e1184893f1768a5a96d8",
     "workItems": "sha256:448b9783d376582c3765171656de35da790a9e854337d6a2d781ab3997c02a5a",
-    "workState": "sha256:577ecb48423e6b12442075c3ea2f31920596380969f0ccf515895c6bafadde18",
+    "workState": "sha256:24e66dc1f9d367dd343be477c991636e8db07059e445e12097310f5fd66a6c51",
     "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
     "uxIndex": "sha256:8d1e718ab156df60877f1002fb9484fa4dc55ce6a72259183f18f8c9a3c73a62",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 17,
       "blocked": 1086,
-      "done": 1667,
+      "done": 1668,
       "refused": 161
     },
     "workItems": {
@@ -729,10 +729,16 @@
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "D3793/D3794 complete CMP-a12's existing earned-tool/help-style journey and correct actual Campaign placement. Result/map/preparation share the canonical current request, separate from equipment and confirmed entered-inventory/source assistance. Quiet/Custom exclusions keep tools earned/equipped; absent requests stay unavailable and failed saves preserve the map's prior choice. Screenshot review rejects a passing DOM-only proof: Campaign context was below the full-height play shell. It now remains mounted inside Actions after source/pause notices, retaining closed-pane read/revision/charge authority. Actual desktop/phone unlock, Quiet result/reload, map, Guide me, next confirmed encounter/reload and retry/departure/lost-response controls preserve Campaign state, equipment and recorded play. Explicit opening/scrolling shows the result without moving the exact board rectangle; phone Close restores input. Five new permanent controls, 358 focused software/eight content checks and clean types pass. Final frozen serial normal verification/build/all four browser tiers exit zero: software 5,616/390, seven unchanged-budget performance/four, real content and all 112 successful unretried composition cells. Local warm p95 107 ms retains 250 ms. D3789/D3790 empty-help navigation and earlier provider/preset checkpoints stand. Curriculum/rewards beyond the existing contract, official content, useful Nudge/Sight/Inspector/Review selection, source qualification, all-context and owner-use obligations remain. No new source, schema/wire/preference, economy, modal/default, whole capability/milestone, remote/image qualification or publication.",
+        "summary": "D3812 defers existing Settings and Studio tools through the accepted delivery boundary, retaining all evidence/value/semantic validation, original section styling, parent-held unsaved JSON and callbacks. Actual initial static JavaScript falls 2,059,959 to 1,966,179 bytes; total JavaScript slightly increases and the 1,375,335-byte runtime chunk remains. All 145 focused shell/theme cases and types pass. Eight native desktop/phone controls prove private assets absent from the catalogue, Settings failure/reload with unchanged preferences and only the existing deletion-preview read, and held editor arrival preserving current text/focus. The strengthened editor test waits for actual read-only lint and compares the entire unchanged saved draft. Full frozen normal verification/build/all four browser tiers pass 5,632 software, seven performance, 257 content, 59 matrix, packaged production and all 150 input/112 unretried composition cells, with one existing optional Maia skip and zero retries. Warm p95 108.4 ms retains 250 ms. No production change occurs before the strengthened eight-case rerun. Earlier Campaign finish/restriction/tool/help recovery and board/preset checkpoints stand. D3722 actual device/deployment cost, source execution/qualification, useful Sight/Nudge/Inspector/Review, all-context/owner-use, official content and remote release obligations remain. No whole capability/milestone or release promotion; no push.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/RehearsalAction.svelte",
+          "apps/web/src/lib/SettingsScreen.svelte",
+          "apps/web/src/lib/PackAuthoringEditors.svelte",
+          "apps/web/src/lib/ShapePlanSignatureEditor.svelte",
+          "apps/web/src/lib/deferred-screen.test.ts",
+          "tests/browser/screen-delivery.spec.ts",
+          "docs/app-shell.md",
           "apps/web/src/lib/CampaignStrip.svelte",
           "apps/web/src/lib/CampaignScreen.svelte",
           "apps/web/src/lib/campaign-api.ts",
@@ -893,6 +899,11 @@
           "planning/exploration/log.md"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3812",
+            "digest": "sha256:78a538f0684968abca208946074a0a0968ee57dc0597ba69210cb51b32a25f7f"
+          },
           {
             "kind": "work_state",
             "id": "D3793",

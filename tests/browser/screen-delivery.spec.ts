@@ -1,9 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
 
-const SCREEN_ASSET = /\/assets\/(DrillScreen|ReviewMapScreen|CampaignScreen|RatingScreen|ProfileScreen|TheoryEntryScreen|LibraryScreen)-[^/]+\.js$/u;
+const SCREEN_ASSET = /\/assets\/(DrillScreen|ReviewMapScreen|CampaignScreen|RatingScreen|ProfileScreen|TheoryEntryScreen|LibraryScreen|SettingsScreen|PackAuthoringEditors|ShapePlanSignatureEditor)-[^/]+\.js$/u;
 const RATING_ASSET = /\/assets\/RatingScreen-[^/]+\.js$/u;
 const CAMPAIGN_ASSET = /\/assets\/CampaignScreen-[^/]+\.js$/u;
+const SETTINGS_ASSET = /\/assets\/SettingsScreen-[^/]+\.js$/u;
+const PACK_EDITORS_ASSET = /\/assets\/PackAuthoringEditors-[^/]+\.js$/u;
 
 async function register(page: Page): Promise<void> {
   await page.goto("/play");
@@ -53,6 +55,84 @@ test("delayed screen delivery preserves navigation and cannot revive a departed 
 });
 
 for (const mobile of [false, true]) {
+  test(`Settings delivery failure recovers without changing account or help preferences${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    const privateAssets: string[] = [];
+    page.on("request", request => { if (SETTINGS_ASSET.test(new URL(request.url()).pathname) || PACK_EDITORS_ASSET.test(new URL(request.url()).pathname)) privateAssets.push(request.url()); });
+    await register(page);
+    expect(privateAssets).toEqual([]);
+    const preferences = await page.evaluate(() => Object.entries(localStorage));
+    const commands: string[] = [];
+    page.on("request", request => { if (["POST", "PUT", "DELETE"].includes(request.method())) commands.push(new URL(request.url()).pathname); });
+    let fail = true;
+    await page.route(SETTINGS_ASSET, async route => fail ? route.abort("failed") : route.continue());
+    await page.goto("/settings");
+    await expect(page.getByRole("alert")).toHaveText("Settings could not load. Reload this page to try again. Your saved work is unchanged.");
+    await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Play", exact: true })).toBeVisible();
+    expect(await page.evaluate(() => Object.entries(localStorage))).toEqual(preferences);
+    expect(commands).toEqual([]);
+    fail = false;
+    const deletionPreview = page.waitForResponse(response => new URL(response.url()).pathname === "/auth/deletion-preview");
+    await page.getByRole("button", { name: "Reload page", exact: true }).click();
+    await expect(page.getByRole("combobox", { name: "App theme", exact: true })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Settings sections", exact: true })).toBeVisible();
+    await expect(page.locator("#account-settings")).toBeVisible();
+    expect((await deletionPreview).status()).toBe(200);
+    // This existing POST is a read-only deletion preview, not account deletion or import.
+    // Assert the entire write-shaped request list rather than filtering it out silently.
+    expect(commands).toEqual(["/auth/deletion-preview"]);
+    expect(await page.evaluate(() => Object.entries(localStorage))).toEqual(preferences);
+  });
+
+  test(`late Studio editor delivery uses the current unsaved document without stealing focus${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    let release!: () => void;
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    await page.route(PACK_EDITORS_ASSET, async route => { await gate; await route.continue(); });
+    await page.goto("/create");
+    await page.getByRole("button", { name: /^Position/ }).click();
+    await page.getByLabel("Draft title", { exact: true }).fill("Late editor delivery fixture");
+    await page.getByRole("button", { name: "Create ten-field draft", exact: true }).click();
+    try {
+      await expect(page.getByText("Loading Pack editing tools…", { exact: true })).toBeVisible();
+      const draftPath = new URL(page.url()).pathname.replace("/create/draft/", "/packs/drafts/");
+      const savedResponse = await page.request.get(draftPath);
+      expect(savedResponse.status()).toBe(200);
+      const savedBefore = await savedResponse.json();
+      const editor = page.getByLabel("Pack JSON", { exact: true });
+      const document = JSON.parse(await editor.inputValue());
+      document.provenance.sources = ["Mechanical late-delivery fixture; no chess review"];
+      const unsaved = JSON.stringify(document, null, 2);
+      await editor.fill(unsaved);
+      await editor.focus();
+      const writeShapedRequests: { method: string; path: string }[] = [];
+      page.on("request", request => {
+        if (["POST", "PUT", "DELETE"].includes(request.method())) writeShapedRequests.push({ method: request.method(), path: new URL(request.url()).pathname });
+      });
+      const arrived = page.waitForResponse(PACK_EDITORS_ASSET);
+      release();
+      await arrived;
+      const sources = page.locator("#pack-provenance-sources");
+      await expect(sources).toHaveValue("Mechanical late-delivery fixture; no chess review");
+      await expect(editor).toHaveValue(unsaved);
+      await expect(editor).toBeFocused();
+      const editedSource = "Edited through the delivered widget; no chess review";
+      const validated = page.waitForResponse(response => response.request().method() === "POST"
+        && new URL(response.url()).pathname === `${draftPath}/lint`
+        && response.request().postDataJSON()?.document?.provenance?.sources?.[0] === editedSource);
+      await sources.fill(editedSource);
+      await expect.poll(async () => JSON.parse(await editor.inputValue()).provenance.sources).toEqual([editedSource]);
+      expect((await validated).status()).toBe(200);
+      expect(writeShapedRequests.length).toBeGreaterThan(0);
+      // Automatic lint uses POST too. Keep every request, admit only that exact read operation,
+      // then compare the persisted draft after it completes instead of racing its debounce.
+      for (const request of writeShapedRequests) expect(request).toEqual({ method: "POST", path: `${draftPath}/lint` });
+      const savedAfter = await page.request.get(draftPath);
+      expect(savedAfter.status()).toBe(200);
+      expect(await savedAfter.json()).toEqual(savedBefore);
+    } finally { release(); }
+  });
+
   test(`failed screen chunk offers an explicit reload without issuing a command${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     let fail = true;

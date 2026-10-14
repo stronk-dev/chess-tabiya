@@ -28662,3 +28662,39 @@ Campaign was the one capability with no API, route or content. Now:
   active/five blocked, 42 implementing/ten awaiting/24 draft product RFCs and zero official
   graduates. Historical prose-only closures remain 462. Refresh the existing top-level inventory
   and receipt before commit; no new competing work document or full-suite/browser rerun claim.
+
+### 2026-10-14 — D3812 route-local Settings/Studio delivery
+
+- Recheck the accepted local consumer-execution frontier before duplicating foundation work:
+  Inspector readings, authored predicates/claim bindings and shape firing already preflight their
+  complete consumers. The broad source/selection amendments remain independently gated.
+- The actual no-write Vite report confirms Settings and recursive authoring editors are still
+  eager. Record D3812 before editing. Reuse DeferredScreen rather than another loading system;
+  Settings groups its existing controls/section links with preserved CSS, while existing pack
+  and shape seats receive the current parent document and callbacks after import.
+- Normal web-screen-delivery-check/typecheck passes 145 cases and clean types. First native run
+  fails the new exact label locator despite the real App-theme combobox being present; use its
+  exact role/name. Second run exposes the instrument's false no-POST expectation: Settings has
+  always read deletion preview by POST. Await that real response and assert the complete exact
+  list, not a filtered waiver. No production refusal or deadline is changed.
+- Final focused actual built-browser gate passes eight desktop/phone cases, including failed
+  Settings chunk → explicit reload → account controls with unchanged preferences and only the
+  existing deletion-preview read; held Pack editor → current unsaved JSON → unchanged focus →
+  real widget callback with no save/publication command. The initial catalogue fetches no private
+  screen chunks, and the prior delayed departure/cache/reload controls remain.
+- Same production diagnostic before/after: entry 521,222 → 429,662 bytes; complete initial static
+  JavaScript graph 2,059,959 → 1,966,179 (93,780 fewer, about 4.6%). Total JS 2,443,517 → 2,447,152.
+  Settings/pack/shape editor chunks are 44,787/15,099/30,483 bytes and not eager. Unchanged runtime
+  chunk is 1,375,335 bytes. No purity annotation, dropped validation, larger warning limit or
+  measured device/latency claim. D3722 remains open; full normal gates follow on frozen inputs.
+- Full frozen normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  5,632 software/391 files, seven performance/four, 257 content/26, all browser tiers including
+  59 matrix and packaged production, one existing optional Maia skip, zero retries, all 150 input
+  and 112 successful unretried composition cells. Warm p95 108.4 ms retains the 250 ms limit.
+  Required semantic qualification remains 343 passing cases/81 subjects/zero fully qualified.
+- After that terminal result, strengthen only the new Studio test: await automatic lint for the
+  exact edited document, admit every observed write-shaped request only as its exact read-only
+  lint POST, and compare the complete persisted draft response before/after. This removes the
+  debounce race from the no-save claim. All eight normal delivery browser cases pass again;
+  production bytes are unchanged from the full run. Close D3812, refresh the existing roadmap/
+  receipt, and run final docs/staged guards before committing. No push or whole 1.0 promotion.
