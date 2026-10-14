@@ -753,3 +753,47 @@ wire/context controls are rerun after the draft repair. Initial type/build/sourc
 request-origin mistakes were corrected in the instrument, not by weakening production checks;
 the final actual-source controls are the measurement above. No raw records are retained in Git,
 no ordinary CI/progress gate depends on this opt-in instrument, and no release gate is promoted.
+
+### Comparison endpoints must reach every source owner — 2026-10-14, D3820
+
+The unchanged `compareBranches` uses full branch paths. `comparisonFacts` intentionally
+recomputes recorded facts from the full run/fork/branch; `structureDeltaEntries` and piece-route
+construction also revisit full paths independently of displayed column leaves. Therefore a
+cropped display is not scoped source admission. `[V]` (`packages/runtime/src/compare.ts`,
+`compare-strip-values.ts`, `evidence-factories.ts` comparisonFacts/Compare factories).
+
+`make inspector-comparison-source-research` builds guarded in-memory variants; every replacement
+asserts its unique current source anchor, production files stay unchanged. The unchanged baseline
+must fail on the exact requested endpoint, not unrelated startup. A constructor-only prototype
+passes 116 controls over 62 endpoint pairs/four legal fixtures (both colors, actual mates and
+nonterminal alternatives). It validates original paths before clipping, preserves requested
+column order and full-tip output, bounds rows/timelines/checkpoints/evals/lines/outcomes to their
+own paths and retains byte-identical original runs. Arity, foreign endpoint, before-own-fork,
+duplicate/unknown branch and duplicate/cyclic/missing-later-parent graphs refuse. Fork-only
+and unequal-length pairs execute. `[V]` (`tools/d3792-inspector-demand/build-comparison.mjs`,
+`comparison-source.ts`; actual runtime commit/fork/rewind and branch-path operations).
+
+The key non-closure is measured rather than inferred: the unchanged structural factory returns
+32 observations beyond the constructor's requested endpoints. Source narrowing must happen
+before the comparison-wide intersection, not after fact selection. The structural-owner variant
+passes 246 controls on the same 62 pairs with 1,020 complete ordered items and no later items.
+A separately expressed prefix-population calculation uses current structural readings to check
+scope/completeness; it does not establish independent chess-semantic correctness. Whole-tip
+structural populations retain that same formula and no empty-population substitute passes. `[V]`
+(same tools; `structureDeltaEntries` and `createDerivedCompareStructureDeltaV1Evidence`).
+
+Provider annotations/checkpoints/objective transitions in the fixtures are labelled synthetic
+recorded controls, not live Stockfish or authored chess truth. The actual mate outcomes come from
+legal production move commits. No account/HTTP/provider/browser permission or new factory type
+is tested. The guarded candidate's values are research outputs, not evidence that existing
+production v1 factories admit scoped subjects. A first strict check found a wrong type-import
+location; it was corrected to the actual export before measurements. `[V]` tools and Make target.
+
+Author synthesis `[M]`: source operations and all consumers need privately admitted exact two-
+endpoint inputs, preserving original/current authority separately from their evidence spans.
+Recorded-fact verification, structural intersection and piece routes must not reopen whole tips;
+new bindings/identity/version obligations need explicit accepted contracts. Existing whole-tip
+callers and all 75 Inspector source obligations stand. D3820 closes this bounded prerequisite
+only; D3792 remains open/unaccepted. No production, qualification, defaults, packs or release
+gate changes. Reports are bounded stdout aggregates; bundles are ignored, and ordinary CI/progress
+does not execute this research target.

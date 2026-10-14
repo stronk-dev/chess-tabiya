@@ -1978,6 +1978,33 @@ later witness span; no later witness beyond the grant is borrowed.
 | Recorded Review / Story | Storage-authorised source-owner subject at the exact admitted recorded boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
 | Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
 
+**D3820 comparison source-owner boundary (2026-10-14):** opt-in
+`make inspector-comparison-source-research` first proves the unchanged constructor fails the
+exact requested endpoint. Its guarded constructor prototype passes 116 controls over 62
+endpoint pairs/four legal both-color fixtures, including actual mate outcomes, fork-only
+and unequal-length prefixes, reversed columns and original late-graph corruption refusals.
+Every row, objective/checkpoint timeline, eval/line overlay and outcome stays on its own prefix;
+full-tip comparison output and the original run remain unchanged. Recorded eval/checkpoint/
+objective controls are explicitly synthetic, not live provider or strategic evidence.
+
+That constructor alone is insufficient: `comparisonFacts` recomputes full `recordedBranchFacts`,
+and `structureDeltaEntries` independently scans both complete branches. Passing the bounded
+comparison to the unchanged structural factory returns 32 later observations. A second guarded
+source-owner experiment narrows BOTH paths before the cross-column intersection. Its 246
+controls retain the complete expected ordered population, 1,020 items over the same 62 pairs,
+without later observations or an empty-population shortcut. The expectation uses current
+structural readings to test source scope, not an independent oracle for those chess predicates.
+
+Before acceptance, author the source-owner callable and its privately admitted two-endpoint
+input/result plus every consuming factory binding. A bounded display `BranchComparison` is
+not that input or a proof of current permission. In particular, record-fact recomputation,
+engine verification, structural intersection and piece routes must each consume their granted
+paths, not reopen whole branches or trim already-selected output. Retain existing whole-tip
+operations. New input arms, operation/receipt identities and any required shared version claims
+must be explicit and independently accepted; neither prototype supplies production typing,
+current v1 scoped receipts, response admission or HTTP/native receiver proof. Do not reinterpret
+a full-tip receipt or silently replace any of Inspector's 75 source obligations.
+
 Each supplier row still owes its exact callable/input/absence/receiver/cancellation and boundary
 fixtures; the operation names in this paragraph are requirements, not claims of landed code.
 New source-owner signatures/receipts or projection meanings require explicit accepted contracts

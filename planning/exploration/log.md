@@ -28952,3 +28952,37 @@ Campaign was the one capability with no API, route or content. Now:
   unaccepted implementation, goal pause/completion or 1.0 promotion.
 - Final normal make roadmap-receipt verify-governance exits zero. Current preservation and the
   historical snapshot checks remain opt-in; ordinary CI/progress gains no raw-data dependency.
+
+### 2026-10-14 — D3820 comparison scope must reach source owners before selection
+
+- Previous goal turn is progress: D3817's preservation repair is committed at b20a16d8.
+  Revalidate the current tree. Semantic profiles still require orientation and the five
+  complete-state negative arms need their existing unaccepted contract repair; do not invent
+  omissions, waive required arms or self-accept amendments. Continue D3792's source prerequisites.
+- Register/assign D3820 before research. Normal strict opt-in comparison source command uses
+  guarded in-memory edits only. The unchanged constructor must fail the exact endpoint assertion,
+  not a startup error. First strict typing finds a wrong RunEvidenceItem import; correct it to
+  the real evidence-factories export without changing production types.
+- Constructor-only prototype passes 116 controls on 62 endpoint pairs/four legal both-color
+  fixtures: actual mates, fork-only/unequal prefixes, requested/reversed column order, exact rows,
+  objective/checkpoint/engine/line/outcome scope and original duplicate/cycle/missing-later-parent
+  graph refusals. Full-tip comparisons and original run bytes remain. Eval/checkpoint/objective
+  annotations are synthetic recorded controls, not live providers or authored chess judgement.
+- It does NOT close source acquisition: the unchanged structural factory revisits whole branches
+  and returns 32 later items. A separate source-owner variant clips both original validated paths
+  before cross-column intersection. All 246 controls pass with 1,020 complete ordered items and
+  no later observations; a prefix-population scope oracle uses current structural readings and
+  does not independently validate the underlying chess predicates. Existing production factories
+  remain unscoped; candidate values are research output, not admitted current-v1 scope receipts.
+- Amend the existing draft/dossier/coverage/roadmap rather than another tracker. All record-fact,
+  engine, structural and route owners need explicit private granted-path inputs/operations and
+  actual factory/identity/version contracts; cropped BranchComparison or filtered selected facts
+  cannot supply those. D3820 closes only the bounded prerequisite. D3792, scoped production types,
+  source/access/receiver/live-provider/cancellation and independent acceptance remain open.
+- No production/schema/default/pack/qualification changes or new raw records. Research bundles
+  stay ignored and normal CI/progress does not invoke this target. UX281 complete/264 live/24
+  retired; 1,732 live ledger rows remain assigned, zero untriaged, four milestones active/five
+  blocked, zero official graduates or fully qualified semantic subjects. D3818 remains the latest
+  full production software/browser proof. No push, remote/release qualification or goal pause/close.
+- Final normal make roadmap-receipt verify-governance exits zero; no production source changes
+  occur and no full software/browser rerun or current-revision remote result is claimed.

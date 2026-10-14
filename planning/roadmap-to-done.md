@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3819]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3820]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,16 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3820]] closes the bounded comparison-source prerequisite. The unchanged constructor fails
+the exact endpoint. A guarded constructor prototype passes 116 controls on 62 prefix pairs,
+including actual mates and original late-graph refusals, but legacy structural acquisition still
+returns 32 later items. Source-owner narrowing before both-column intersection passes 246
+controls with 1,020 complete ordered items and no later observations. Original full-tip output
+and saved bytes remain. The draft now explicitly requires all record-fact, engine, structural
+and route owners to consume their grants; a cropped BranchComparison is not scope admission.
+Exact callables/factory bindings/types/identities, permissions/receivers/live providers and
+independent acceptance remain D3792 work. No production, qualification or 1.0 promotion.
 
 [[D3819]] closes the bounded actual Review-source prerequisite: 33 authenticated HTTP/SQLite
 controls across sixteen native/imported/retry/Campaign cases pass. Unfinished lines can supply

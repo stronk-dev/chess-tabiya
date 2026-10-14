@@ -552,6 +552,14 @@ inspector-review-scope-research:
 	$(CI_NODE) .cache/d3792-inspector-demand/review-scope.mjs
 
 # Source-owner prototype only; the unchanged baseline must refuse the bounded-work expectation.
+.PHONY: inspector-comparison-source-research
+inspector-comparison-source-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	$(CI_NODE) tools/d3792-inspector-demand/build-comparison.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/comparison_candidate.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/comparison_structural.mjs structural
+
+# Source-owner prototype only; the unchanged baseline must refuse the bounded-work expectation.
 .PHONY: inspector-recorded-prefix-research
 inspector-recorded-prefix-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit

@@ -31787,6 +31787,15 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/review-scope.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3820",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:da0de6edc2ce72b7ccafbbda154d26a6abcb9056f8c03ca0e2957f64453fc24c",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/comparison-source.ts",
+      "evidenceKind": "path"
     }
   ]
 }
