@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a18932785742c70c3e90b1151f125a3801c539be5e24e1184893f1768a5a96d8",
+    "roadmap": "sha256:2735bc4663037dc6fbca1dd05ceb2ceccc310c4379e80a3849ba7234b7626c58",
     "workItems": "sha256:448b9783d376582c3765171656de35da790a9e854337d6a2d781ab3997c02a5a",
-    "workState": "sha256:24e66dc1f9d367dd343be477c991636e8db07059e445e12097310f5fd66a6c51",
+    "workState": "sha256:1aaf26fdac7be4f8433004ff3bac6d12252b663b027d5d45d79e5db87ebdda1f",
     "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
     "uxIndex": "sha256:8d1e718ab156df60877f1002fb9484fa4dc55ce6a72259183f18f8c9a3c73a62",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 17,
       "blocked": 1086,
-      "done": 1668,
+      "done": 1669,
       "refused": 161
     },
     "workItems": {
@@ -457,7 +457,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "D3805's actual file-backed SQLite/three-branch controls establish supplier boundaries: module Compare chooses newest peer, explicit Compare/semantic/pivotal/Review consume whole tips and two markers lie beyond the requested four-node prefix of seven. Historical event replay loses current reveal and both alternatives; an actual sibling write leaves the main path unchanged but closes reveal and retires the old subject. Original graph faults refuse and reads preserve stored bytes. The unaccepted draft now separates current authority from granted paths/endpoints/witnesses and requires exact source-owner callables, receiver/cancellation/version contracts and scope fixtures, not a filtered DrillRun or old receipt relabel. Normal strict supplier/demand/source-contract research passes, including 126 member refusals, 88/399 grammar controls and 37 factory tests. Authentication/live/late sources, new scope authority, exact-endpoint source execution, production envelope/component/response/native checks and independent acceptance remain open. No source/default/pack, qualified subject, whole capability/milestone, remote CI/image or release promotion; no raw recording or ordinary CI/progress dependency. Production and prior full local proof remain unchanged.",
+        "summary": "D3813 completes a bounded Inspector account/context author model: 44 strict controls use three real accounts/sessions/grants and file-backed SQLite, retain the complete current run while granting exact four-of-seven-node prefixes, preserve requested peer order/inherited nodes and acquire four real sole-factory mobility events from the selected edge. Original graph faults and suspended owner selection/context/preference/role/grant/identity/logout/head/cancellation changes refuse; a same-path nested-mutation negative first fails and then refuses after independent field capture. The still-unaccepted module-registration section 4.11a specifies proposed server-private resolver/revalidation inputs and separates actual stored access from the disposable owner-state callback: the server cannot know unsent UI changes, so client receivers remain required. Related supplier-scope and 37 unchanged factory controls pass. D3805's whole-tip/default-peer and stale-subject findings stand. Completed/imported Review, live/late provider admission/cancellation, all scoped whole suppliers and actual response/component/HTTP/native proof remain D3792 work before independent acceptance. No production/source/version/default/pack, qualified subject, whole capability/milestone, remote CI/image or release promotion; no raw recording or ordinary CI/progress dependency. D3812's full local production proof is unchanged.",
         "impact": "held",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -469,6 +469,7 @@
           "tools/d3792-inspector-demand/detail-model.ts",
           "tools/d3792-inspector-demand/detail-schema.ts",
           "tools/d3792-inspector-demand/supplier-scope.ts",
+          "tools/d3792-inspector-demand/recorded-context.ts",
           "tools/d3792-inspector-demand/source-matrix.ts",
           "tools/d3792-inspector-demand/draft-wire.ts",
           "tools/d3792-inspector-demand/source-observer.ts",

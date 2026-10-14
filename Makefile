@@ -537,6 +537,13 @@ inspector-supplier-scope-research:
 	./node_modules/.bin/esbuild tools/d3792-inspector-demand/supplier-scope.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/supplier-scope.mjs --log-level=warning
 	$(CI_NODE) .cache/d3792-inspector-demand/supplier-scope.mjs
 
+# Disposable D3813 account/scope author model, not an ordinary CI or product completion gate.
+.PHONY: inspector-recorded-context-research
+inspector-recorded-context-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	./node_modules/.bin/esbuild tools/d3792-inspector-demand/recorded-context.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/recorded-context.mjs --log-level=warning
+	$(CI_NODE) .cache/d3792-inspector-demand/recorded-context.mjs
+
 inspector-source-contract-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
 	./node_modules/.bin/vitest run --config tools/d3792-inspector-demand/vitest.sources.config.ts

@@ -600,3 +600,56 @@ Authentication, late/live-source admission, new scope authority, exact-endpoint 
 production response/native proof remain open. No production, qualification, pack/default,
 capability/milestone, remote CI/image or release change. No raw database/run/trace is committed;
 the tool emits bounded counts and cleans its own temporary fixture, outside ordinary CI/progress.
+
+### Authenticated recorded-context author model — 2026-10-14, D3813
+
+Normal `make inspector-recorded-context-research` passes strict TypeScript and 44 disposable
+controls. It creates three actual accounts with IdentityService's normal scrypt/session path,
+an owned file-backed SQLite run and real spectator/participant grants through RunService.
+No legacy writer overload or invented principal authorizes the reads. The source fixture has
+three legally played branches; seven full main-path nodes remain stored while a four-node
+prefix is granted. This proves this model's account/scope behavior, not a production endpoint.
+`[V]` (`tools/d3792-inspector-demand/recorded-context.ts`; `apps/server/src/identity.ts`,
+`authorization.ts`, `service.ts`, `storage.ts`; normal command terminal result).
+
+| Boundary | Executed control |
+|---|---|
+| Current authority vs source span | Full canonical run/current reveal retained; no historical replay or partial DrillRun |
+| Exact selection | Requested peer wins over newest sibling; inherited nodes work; reordered node arrays yield the same paths |
+| Original graph | Duplicate node/branch, missing parent and cycle beyond the requested endpoint refuse before source work |
+| Branch/edge contexts | Root lacks an incoming edge; off-branch and too-short endpoints refuse; an endpoint exactly at the fork remains valid |
+| Existing local supplier | Actual mobility-event factory receives the selected committed edge and emits four sealed events identical to direct acquisition |
+| Account access | Missing/invalid sessions and foreign accounts invoke zero acquisition callbacks; actual grant revocation and logout retire held results |
+| Late model receiver | Owner selection, same-path context, effective preference, role, identity and full event-head changes refuse after actual suspension/resumption |
+| Cancellation/withholding | Signal reaches acquisition; already-cancelled and closed-feedback requests do zero callback work; cancelled pending results are not returned |
+
+All source reads preserve the complete stored run bytes. The explicit sibling-write control
+changes the current head while leaving the requested main path identical; the old request
+refuses, the refreshed closed-feedback request remains withheld, and an actual reveal permits
+a new exact-prefix read. Grants and sessions are intentionally mutated only within this owned
+temporary fixture. Its directory/database are cleaned on success and failure. `[V]` same tool.
+
+An added same-path context mutation first fails with “Missing expected rejection”: the author
+model retained a mutable nested context even though its outer selection was frozen. Snapshotting
+the exact fields closes that model defect; the new negative remains. Initial type checks also
+catch a widened context literal and a non-exported public receipt import; corrections are tool-only.
+Final related supplier-scope research and all 37 unchanged factory controls pass. `[V]` same
+commands plus `tools/d3792-inspector-demand/supplier-scope.ts`/`vitest.sources.config.ts`.
+
+The draft §4.11a now names proposed server-private resolver/revalidation callables, their exact
+input ownership, immutable capture and ordered graph/scope/receiver steps. These remain author
+proposals, **not implemented or independently accepted operations**. `[M]` (author synthesis of
+the controls above). D3813 closes only this bounded prerequisite; D3792 still owes actual
+whole supplier support, source/version admission, completed/imported Review authority, provider
+exchange/cancellation and response/component/browser proofs. No providers were configured;
+the completed-Review arm explicitly refuses as unmodelled. A generic successful callback is
+not evidence that a real provider or whole-branch supplier accepts these scopes. `[V]` tool;
+remaining contract obligations in `rfc/module-registration.md` §4.11a.
+
+The callback supplying current selection/preference/cookie is the **disposable owner model**.
+The existing server does not know UI changes that are not sent to it. A server implementation
+revalidates the stored run/access and original parsed request; the client separately rejects
+responses belonging to an old selection/configuration/account or closed Inspector. The draft
+must not introduce a global server selection store or present these controls as actual browser
+receiver proof. `[M]` (boundary synthesis); `[V]` tool's explicit current callback, no HTTP/client
+operation, and `rfc/module-registration.md` §4.11a's separate server/client obligations.

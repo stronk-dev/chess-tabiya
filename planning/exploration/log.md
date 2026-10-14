@@ -28715,3 +28715,38 @@ Campaign was the one capability with no API, route or content. Now:
 - Fresh read-only GitHub query confirms published 78fd302f: verify 38560140789 succeeds and
   browser 38560140733 fails. Local D3810 repair is not remote qualification. No push, new whole
   software/browser rerun, release claim, goal completion or pause follows from this inventory.
+
+### 2026-10-14 — D3813 bounded authenticated Inspector context author model
+
+- Continue the evidence-to-consumer frontier after the requested inventory, not another product
+  status pass. Record D3813 before tooling. First state transition correctly refuses the missing
+  sidecar row; sync adds it as unassigned and refuses the zero ceiling, then explicit assignment
+  restores zero untriaged. No ratchet or tracking rule is weakened.
+- Disposable recorded-context.ts uses three actual IdentityService accounts/scrypt/sessions,
+  actual host/spectator/participant grants and file-backed SQLite with its real owner lease.
+  Keep the complete current run separate from granted four-of-seven-node main prefixes; retain
+  explicit peer order, inherited nodes and graph validation before extraction. No historical
+  replay, filtered DrillRun, new source mint, public token or production API is introduced.
+- Execute the existing sole mobility-event factory over the exact admitted incoming edge:
+  four real sealed values equal direct source acquisition. Root/off-branch/pre-fork contexts,
+  malformed original graphs and missing/foreign sessions refuse. Suspend actual callback
+  acquisition, then test selection/context/preference/role/grant/identity/logout/head/cancel
+  changes. Reads preserve complete saved bytes; the explicit sibling write retires the request
+  despite an unchanged main path, and actual reveal permits a newly admitted prefix read.
+- The added same-path context-mutation negative first fails with Missing expected rejection.
+  Independent immutable field capture closes the author-model flaw. Initial strict checks also
+  catch a widened literal and receipt import from the wrong public export; both are tool-only
+  corrections. Final normal inspector-recorded-context-research passes 44 controls; related
+  inspector-supplier-scope-research and all 37 unchanged source-contract tests pass.
+- Draft module-registration §4.11a now names proposed private resolver/revalidation callables
+  and exact current-authority/scope/receiver ordering. The model's current-owner callback is
+  explicitly not unsent UI state available to the server: client response/paint fences remain.
+  Completed/imported Review, all scoped whole suppliers, actual provider retention/cancellation
+  and production HTTP/component/native receivers remain D3792 work before independent acceptance.
+  D3813 closes only its bounded authoring prerequisite. No whole capability or milestone moves.
+- Normal make roadmap-receipt verify-governance exits zero on frozen author/model inputs;
+  git diff --check is clean. Existing dossier/coverage/ledger/state/roadmap/receipt are updated,
+  with 1,732 live rows assigned and zero untriaged. No raw recording is committed; the 20.6 KB
+  source cleans its owned temporary SQLite directory. The target is opt-in, outside ordinary
+  CI and progress execution. Production and D3812's preceding full local proof are unchanged;
+  no new full-suite/browser result, remote pass, official content, push or goal pause/completion.

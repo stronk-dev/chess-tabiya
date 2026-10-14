@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector account/context author model, 2026-10-14 ([[D3813]]): **bounded prerequisite answered;
+unaccepted and not delivered**. Forty-four disposable controls use actual sessions/grants and
+file-backed SQLite, retain the full current run with bounded graph-derived paths and acquire four
+real sole-factory mobility events from the selected edge. Malformed graphs, account revocation,
+late owner-state/head changes and cancellation refuse; an added same-path nested mutation first
+fails, then refuses after independent field capture. Completed Review, live providers, exact scoped
+whole suppliers and actual HTTP/client receivers remain open. The server cannot observe unsent UI
+selection changes; the client owner must fence those separately. See `module-evidence-assembly.md`
+§Authenticated recorded-context author model; no raw recording or ordinary CI/progress dependency.
+
 Inspector supplier boundaries, 2026-10-14 ([[D3805]]): **bounded research answered, not delivered**.
 Actual runtime/file-backed SQLite proves whole-tip/default-peer behavior and historical replay
 losing current reveal/alternatives. Two markers lie beyond the requested prefix; a sibling write

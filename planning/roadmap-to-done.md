@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+[[D3813]] completes a bounded Inspector context/receiver authoring prerequisite, not a new
+product operation. Forty-four controls use real account sessions/grants and file-backed SQLite,
+retain the full current run with exact selected prefixes and acquire four actual mobility events
+from the granted edge. A same-path mutable-context negative first fails, then refuses after field
+capture. The unaccepted §4.11a names proposed resolver/revalidation inputs and separates server
+run/access checks from client owner-state checks; the server does not know unsent UI changes.
+Whole scoped suppliers, completed/imported Review, live providers and actual HTTP/client/native
+proof remain D3792 work. Production and D3812's full local proof are unchanged.
+
 [[D3812]] defers existing Settings and Studio editors through the existing accepted screen
 boundary. Eight native desktop/phone controls retain actual account/preferences recovery,
 unsaved JSON, focus and widget callbacks. Initial JavaScript's complete static graph falls

@@ -31724,6 +31724,15 @@
       "uxItems": [],
       "evidence": "docs/app-shell.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3813",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0b688f69a02af816162e12e6f0c48f3341a4a07fda416b6e81858f1aa081b4bc",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
     }
   ]
 }

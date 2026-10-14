@@ -1963,6 +1963,55 @@ New source-owner signatures/receipts or projection meanings require explicit acc
 and version declarations; this amendment does not silently reinterpret v1 whole-branch suppliers
 or retire any of the 75 source obligations. Existing full-tip calls remain supported.
 
+**D3813 bounded resolver/receiver author model — still unaccepted:**
+`make inspector-recorded-context-research` exercises real IdentityService sessions, requireRead,
+RunService.assistanceAuthority and file-backed SQLite over three legal branches. Forty-four
+controls preserve the complete current run while granting a four-node prefix of a seven-node
+main path, requested peer order and inherited-prefix selection. A real sole mobility-event
+factory emits four source-bound events from the granted incoming edge. This is bounded author
+evidence, not the proposed production resolver, all-source execution or HTTP/native proof.
+
+The proposed **server-private** callable is
+`RunService.resolveInspectorRecordedContext({runId, principal, requested, selection, signal})`.
+Here `principal` comes from the existing authenticated request boundary; `requested` is the
+existing RequestedAssistanceV1, not caller-supplied finalized authority; `selection` contains
+exactly `branchId`, `nodeId`, `decisionDigest` and the already parsed source context above.
+The service owns storage, current assistance origin/access and actual provider-health lookup.
+It returns an admitted process-local context, a closed refusal, or the declared missing-context
+result; it does not return chess text, provider values or a new public/stored token.
+
+Resolver order is authentication/read access, current decision, authoritative assistance and
+effective explicit Inspector effect, original graph validation for **all requested branches**,
+then prefix extraction. Capture selection/context fields into independent immutable records;
+retaining a mutable request reference is insufficient. The model's added negative first passes
+a branch→recorded-window mutation through the receiver because both have the same path; copying
+the fields makes that negative refuse. A frozen outer object alone does not freeze its context.
+Position grants one selected node, incoming edge its actual parent/child, recorded-window a
+contiguous prefix ending at selection, and branch its explicit through-node prefix containing
+selection. Comparison grants ordered primary/peer prefixes after both reach their recorded forks;
+the exact fork node is valid, a node before it is not an attempt. Source owners still validate
+their complete legal witness ranges and versions. This does not create a new completed-Review
+authority: that arm remains owned by the existing Review source contract and is unmodelled here.
+
+The proposed request owner calls
+`RunService.revalidateInspectorRecordedContext(context, {principal, requested, selection, signal})`
+after every asynchronous source result and before response serialization. Reauthenticate through
+the request's existing identity boundary, rederive run access/origin/assistance and validate the
+current original paths; compare captured learner/role, full current decision, final assistance,
+selection/context fields and granted occurrences. Forward the same AbortSignal to acquisition.
+The server retains the original immutable parsed request, **not a new global current-selection
+or preference store**. UI selection, preference and account changes that leave an old HTTP
+connection open are not server-observable. The client must separately compare its existing
+Inspector request owner, current selection/configuration and disclosure before consumption or
+paint, even if the server returns a valid old-request response. The model's mutable `current`
+callback simulates that owner boundary; it is not evidence the server knows unreported UI state.
+Closed/disposed UI requests may retire consumption even without a server disconnect. This model
+demonstrates suspended acquisition refusal after owner selection, same-path context, preference,
+role, grant revocation, identity, logout, sibling event-head, disclosure or cancellation changes.
+Client receiver/native paint tests remain separate obligations. It does not prove
+live provider cancellation, response parsing, source-occurrence retention or browser delivery.
+No source-attachment exception, synthetic run or re-labelled whole-tip receipt is admitted.
+
 Refuse wrong/off-branch/foreign endpoints and withheld spans before collector/provider reads.
 After async acquisition or computation, recheck the **current full stored authority**, access,
 effective configuration, decision, original graph endpoints and exact retained source occurrence.
