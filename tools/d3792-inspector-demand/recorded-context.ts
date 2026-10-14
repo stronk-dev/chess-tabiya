@@ -24,7 +24,7 @@ type Selection = Readonly<{ runId: string; branchId: string; nodeId: string; dec
   context: DraftSourceContext }>;
 type GrantedPath = Readonly<{ branchId: string; throughNodeId: string; nodes: readonly Node[] }>;
 type Refusal = "invalid_graph" | "invalid_scope" | "stale" | "withheld" | "cancelled" |
-  "access" | "no_incoming_edge" | "completed_review_not_modelled";
+  "access" | "no_incoming_edge" | "recorded_review_not_modelled";
 class ContextRefusal extends Error {
   constructor(readonly reason: Refusal) { super(reason); }
 }
@@ -70,7 +70,7 @@ function grantedPaths(run: DrillRun, selection: Selection): readonly GrantedPath
       // Each endpoint has reached its own fork; actual common-fork/Compare source work is separate.
       return Object.freeze([primary, peer]);
     }
-    case "completed_review": return refuse("completed_review_not_modelled");
+    case "recorded_review": return refuse("recorded_review_not_modelled");
   }
 }
 
@@ -220,8 +220,8 @@ try {
   checked(() => assert.throws(() => model.resolve(signal), reason("invalid_scope")));
   selected({ context: { kind: "comparison", otherBranchId: peer, otherNodeId: mainPath[1]!.id } });
   checked(() => assert.throws(() => model.resolve(signal), reason("invalid_scope")));
-  selected({ context: { kind: "completed_review", throughNodeId: endpoint } });
-  checked(() => assert.throws(() => model.resolve(signal), reason("completed_review_not_modelled")));
+  selected({ context: { kind: "recorded_review", throughNodeId: endpoint } });
+  checked(() => assert.throws(() => model.resolve(signal), reason("recorded_review_not_modelled")));
   selected({});
   checked(() => assert.throws(() => grantedPaths({ ...run, nodes: [...run.nodes, run.nodes.at(-1)!] }, base), reason("invalid_graph")));
   checked(() => assert.throws(() => grantedPaths({ ...run, nodes: run.nodes.map(node => node.id === mainPath.at(-1)!.id ? { ...node, parentId: "missing" } : node) }, base), reason("invalid_graph")));

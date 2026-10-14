@@ -1816,7 +1816,7 @@ type InspectorSourceContext =
   | { kind: "recorded_window" }
   | { kind: "branch"; throughNodeId: string }
   | { kind: "comparison"; otherBranchId: string; otherNodeId: string }
-  | { kind: "completed_review"; throughNodeId: string };
+  | { kind: "recorded_review"; throughNodeId: string };
 ```
 
 `RequestedAssistanceV1` is the actual exported stage-1 type, parsed by
@@ -1881,7 +1881,7 @@ Source scope is part of the proposed operation's contract, not inferred from `no
 | Recorded window | The contiguous validated played path ending at the selected node, with its exact versioned anchors | A hypothetical or relabelled v1/v2 sequence |
 | Branch | The permitted recorded branch path and the source's own witness range | A point-in-time position reading |
 | Comparison | Two authorised recorded attempts and their actual `BranchComparison` | A one-attempt `no_witness` result |
-| Whole game | The authorised completed Review's admitted moments | A fabricated list derived from the selected node |
+| Whole game | The storage-authorised recorded Review's complete admitted moments | A fabricated list derived from the selected node, or a completion prerequisite |
 
 Pivotal option-collapse marks the first low-option decision but needs a later recorded same-side
 decision to establish persistence. Its anchor and last witness node are different. Reviewing
@@ -1892,7 +1892,7 @@ is not a substitute. Story rank requires the whole admitted moment collection. C
 retains both exact attempts and access checks for each.
 
 **Closed context compatibility (D3801):** branch context is required by the four pivotal refs
-and deepest-opening ref; comparison by the two Compare refs; completed Review by Story rank.
+and deepest-opening ref; comparison by the two Compare refs; recorded Review by Story rank.
 Authored shape firing accepts position or recorded branch. Recorded successors and the ten v1
 move-sequence refs require recorded-window context. Exact incoming-edge factories and the five
 dependent discovered/fork/overload-conflict/forced-mate refs require incoming-edge context.
@@ -1914,9 +1914,30 @@ The server resolves all context IDs on the authorised stored run, never caller e
   second endpoint must belong to its declared branch; both contexts must be authorised. Derive
   the actual `BranchComparison` from those recorded prefixes. Do not silently choose the most
   recently created sibling as the existing helper does, or accept a caller comparison payload.
-- Completed Review resolves the admitted completed game's exact branch/end prefix; selection
-  must belong to it. The completion/learner-side/source join is the existing Review authority,
-  not the current Play cursor or a client result tag. Incomplete games yield missing context.
+- Recorded Review resolves the storage-authorised recorded line's exact admitted boundary;
+  selection must belong to it. The existing Review authority admits revealed unfinished native,
+  imported and retry lines, and exact submitted Campaign consequences. Outcome (`unfinished`,
+  recorded result or actual terminal) does not determine source existence. Successful execution
+  with no moments is an empty source, not missing context. Neither source existence nor a compiled
+  Inspector effect grants Inspector delivery: the current disclosure, role, Campaign entitlement
+  and module-query refusals remain. No client result tag or current Play cursor replaces this join.
+
+**D3819 actual-source boundary (2026-10-14):** opt-in
+`make inspector-review-scope-research` passes 33 controls over sixteen actual authenticated
+HTTP/SQLite cases. It observes the private, sealed Story-rank source only after the existing
+Review checks. Two original-import reads after a live retry succeed with an Inspector effect
+but the actual module query still returns `ASSISTANCE_WITHHELD`; the submitted Campaign source
+also exists without an Inspector effect. An unfinished revealed line supplies nonempty moments;
+a separate successful empty source has none. Completion, source availability, compiled effect
+and query delivery are therefore separate axes, not interchangeable permission tokens.
+
+The proposed supplier must reuse the current server-owned read boundary without changing
+`feedbackDeliveryOpen`, cloning a Run to force disclosure or letting a Review grant authorize
+live Play. Resolve permission before collector work; the existing Review constructor acquires
+semantic evidence and is not a free permission predicate. Its current operation accepts only
+the whole recorded branch tip, not `throughNodeId`. Exact earlier-boundary source operations,
+Inspector access composition, revalidation/cancellation and native receiver proofs remain
+unaccepted D3792 obligations. The disposable observer is not that supplier or a new endpoint.
 
 **Supplier boundary established by D3805:** the actual SQLite-backed three-branch probe shows
 that `moduleComparisonForSubject` chooses the newest sibling, `compareBranches` uses both full
@@ -1954,7 +1975,7 @@ later witness span; no later witness beyond the grant is borrowed.
 | Authored shapes | Actual registered compiled entries and permitted recorded path; preserve provenance/trigger inputs, no caller-authored shape or guessed entry |
 | Pivotal / deepest opening | Endpoint-aware source-owner path operation. Preserve full witness context, source/declaration limits and original versions; opening still requires its missing runtime identity source |
 | Comparison | Source-owner computation over the two exact permitted attempts/endpoints, common recorded fork and original orientation. Every timeline, outcome, evaluation and line overlay obeys its own permitted path, not just the displayed columns |
-| Completed Review / Story | Storage-authorised source-owner subject at the exact admitted completed boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
+| Recorded Review / Story | Storage-authorised source-owner subject at the exact admitted recorded boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
 | Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
 
 Each supplier row still owes its exact callable/input/absence/receiver/cancellation and boundary
@@ -2117,7 +2138,7 @@ use `detail_limited`, not a self-loop cursor. Source-order members never reorder
 Source outcome is closed:
 
 - `missing_context` has only `reason`, exactly `no_incoming_edge | no_recorded_window |
-  no_second_attempt | no_completed_review`.
+  no_second_attempt | no_recorded_review`.
 - `unavailable` has only `reason`, exactly `source_absent | provider_unavailable |
   authored_source_absent | source_version_held | invalid_turn_clone`. Each requires actual
   source-owner absence/refusal evidence; no universal stub satisfies acquisition obligations.

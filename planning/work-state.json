@@ -31777,6 +31777,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/review-evidence.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3819",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:55d85aca4abc52e81c38834cb745227265fbb5af8485345a980bb852e43a6e30",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/review-scope.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:84ec225dbd7dd7925c3dc6cbf2c5ffb18b3fbc81aefbf437cf8e7ebb34dec622",
+    "roadmap": "sha256:4e236daa6b7bd2c4bf37474fdead884807d55f2143dacb1108a0ee9cbe0d8f31",
     "workItems": "sha256:448b9783d376582c3765171656de35da790a9e854337d6a2d781ab3997c02a5a",
-    "workState": "sha256:7d3de044a10d2bfd13833f7bd0ea87058372abd506dbd48696a37b79ce1bbff6",
+    "workState": "sha256:1fa8f0f888df150812866219ff17da85f79c2ddfc49020e6b08dd46c4149347c",
     "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
     "uxIndex": "sha256:8d1e718ab156df60877f1002fb9484fa4dc55ce6a72259183f18f8c9a3c73a62",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 17,
       "blocked": 1086,
-      "done": 1673,
+      "done": 1674,
       "refused": 161
     },
     "workItems": {
@@ -457,7 +457,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "D3814's actual disposable-query observer reproduces the wrong creating-branch supplier on an inherited child node; the resolver-kind correction passes four own/inherited/root/off-path controls with unchanged canonical ten-family reach and negatives. D3815's guarded source-owner prototypes retain the original full run, validate graphs before clipping and preserve exact sealed event/window values: 452 prefixes across 104 legal canonical/mirrored/castling runs, 312 graph refusals, three branch controls and 264 requested-family reads on eight actual stored imports/513 edges. Targeted acquisition prepares at most five required edges, skips unrelated capture/check preparation and distinguishes 304 missing-context requests from 92 complete-but-empty requests. The unaccepted module-registration section 4.11a names the proposed exact scoped window callable and distinct private result/identity without changing recorded-semantic-path whole-tip callers, v1 holds or Inspector membership. D3813's 44 real-account/context controls and D3805's boundary findings stand. Production types/helper/identity/parser, other scoped suppliers, completed Review, live providers, worker/cancellation/performance and HTTP/component/native receivers still require implementation and independent acceptance. No production/source/version/default/pack, qualified subject, whole capability/milestone, remote CI/image or release promotion; no raw recording or ordinary CI/progress execution dependency. D3812's full local production proof is unchanged.",
+        "summary": "D3819 finishes the actual Review-source prerequisite: 33 authenticated HTTP/file-backed SQLite controls over sixteen native/imported/retry/Campaign cases separate outcome, admitted sealed Story source, compiled Inspector effect and actual module delivery. Two original-import reads after a live retry succeed while Inspector correctly refuses; submitted Campaign Review exists without Inspector entitlement. Original imported nodes/evidence remain intact. The draft uses recorded_review rather than requiring completion and retains current disclosure/role/Campaign refusals. Earlier-boundary supplier, separate permission resolution, exact scoped source operations, live providers/cancellation and actual HTTP/native receivers remain unaccepted D3792 debt. D3813's 44 account/context controls, D3815's exact prefix/window controls and source holds stand; draft grammar and source contracts are rerun. No production bytes, source meanings, defaults, packs, qualification or whole capability/milestone are changed. Latest production proof is D3818's full normal local verification/build/all browser tiers; no current remote or release qualification and no raw recording/ordinary CI dependency.",
         "impact": "held",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -470,6 +470,9 @@
           "tools/d3792-inspector-demand/detail-schema.ts",
           "tools/d3792-inspector-demand/supplier-scope.ts",
           "tools/d3792-inspector-demand/recorded-context.ts",
+          "tools/d3792-inspector-demand/build-review.mjs",
+          "tools/d3792-inspector-demand/review-observer.ts",
+          "tools/d3792-inspector-demand/review-scope.ts",
           "tools/d3792-inspector-demand/build-prefix.mjs",
           "tools/d3792-inspector-demand/prefix-source.ts",
           "tools/d3792-inspector-demand/window-source.ts",
@@ -604,6 +607,11 @@
             "kind": "work_state",
             "id": "D3805",
             "digest": "sha256:30b8f79b533d6404ba0914fcfe32bd0749e35feaf3558f914aad6f01a5682a59"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3819",
+            "digest": "sha256:55d85aca4abc52e81c38834cb745227265fbb5af8485345a980bb852e43a6e30"
           },
           {
             "kind": "work_state",

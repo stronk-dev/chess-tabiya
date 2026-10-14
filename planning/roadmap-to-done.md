@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3818]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3819]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,15 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3819]] closes the bounded actual Review-source prerequisite: 33 authenticated HTTP/SQLite
+controls across sixteen native/imported/retry/Campaign cases pass. Unfinished lines can supply
+sealed Story rank; two original-import reads after a live retry succeed while actual Inspector
+queries correctly refuse despite a compiled effect. Submitted Campaign Review also exists without
+Inspector entitlement. The draft now says recorded_review, retaining outcome/source/effect/delivery
+as separate axes. Current whole-tip construction is not an earlier-endpoint supplier or a free
+permission predicate. D3792 still owes exact scoped operations, access composition, live providers,
+cancellation and actual receivers plus independent acceptance. No production change or 1.0 promotion.
 
 [[D3818]] repairs imported-result attribution through the accepted Review prefix and retry
 contracts. Four predecessor failures reproduce borrowed results and rejected opposite-result
@@ -169,13 +178,14 @@ ten awaiting discharge and 24 draft documents; its 75 archived implementation re
 history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Earlier owner-requested finish and overview, reconciled through 4fda413e (historical): the in-flight batch is
-committed, with no tracked edits awaiting completion. D3746/D3747/D3811 close the local recovery
-batch; D3812 subsequently passes full normal verification/build/all four browser tiers, followed
-by the stronger eight-case delivery rerun described above. The earlier fdc22e77 result is history,
-not the latest local checkpoint. A fresh October-14 GitHub read still finds published 78fd302f's
-verify 38560140789 successful and browser 38560140733 failed. The five local commits, including
-the D3810 matrix repair, have not been pushed or remotely qualified. No 1.0 promotion.
+Owner-requested finish and overview: D3818's production result-attribution repair is committed
+at 4bb7c067 with full normal local verification/build/all four browser tiers green. D3819 finishes
+the subsequent bounded source research and draft correction; it changes no production bytes.
+The current local result is 5,677 software, seven performance and 257 content tests, all browser
+tiers including 59 matrix cases/112 unretried composition cells and packaged-production proof.
+The last checked published revision is still 78fd302f: verify succeeded, browser failed; its
+D3810 matrix repair is verified locally but not remotely. Local commits are unpushed and no
+current-revision remote or release qualification is claimed. No 1.0 promotion.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
 selected-Sight, Nudge and Review contracts; complete learner journeys and bot calibration;

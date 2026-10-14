@@ -708,3 +708,48 @@ worker cancellation/performance, receiver/UI and independent acceptance remain o
 run, database, event dump or trace is retained in Git; these tools emit bounded aggregate counts,
 outside ordinary CI/progress. No semantic qualification, pack/default, capability or release gate
 is promoted.
+
+### Actual recorded Review is not completed-game or Inspector permission — 2026-10-14, D3819
+
+`make inspector-review-scope-research` passes 33 controls across sixteen cases using real
+account cookies, local HTTP, file-backed SQLite, actual `createApplication`, source admission
+and module-query routes. A uniquely anchored in-memory observer captures the existing private
+`#storyContext` only after its original checks; it changes no production source, endpoint or
+response. The tool validates the private Review packet and Story-rank evidence, complete
+subject/HTTP path agreement and preservation of original imported nodes/evidence prefixes.
+Providers are labelled application mocks, not live Stockfish/Maia research. `[V]`
+(`tools/d3792-inspector-demand/review-scope.ts`, `review-observer.ts`, `build-review.mjs`;
+`apps/server/src/service.ts` #storyContext/assistanceAuthority/moduleQuery;
+`packages/runtime/src/review-evidence.ts`, `module-query.ts`).
+
+| Actual case class | Review/source | Outcome | Requested Inspector delivery |
+|---|---|---|---|
+| Revealed native line, quiet or containing admitted moments | Available | unfinished | Available under analysis preference |
+| Actual native checkmate | Available | board_terminal | Available under analysis preference |
+| Imported mainline before retry | Available | unfinished or recorded_result | Available under analysis preference |
+| Original imported mainline while current retry is undisclosed | Available with complete original moments | Original unfinished or recorded_result | Withheld/409 despite compiled effect |
+| Revealed imported retry | Available | Its own unfinished outcome | Available under analysis preference |
+| Exact submitted Campaign consequence | Available; empty Story rank in this fixture | unfinished | Withheld/409, no Inspector effect under Campaign kit |
+| Unrevealed native/retry, foreign account, unknown branch, unsubmitted Campaign | Refused before private source capture | Not acquired | No source work |
+
+The table is observed behavior, not a new permission rule. An empty admitted source and a
+missing source context are distinct. One unfinished native line supplies two actual moments;
+the quiet control supplies zero. Both original-import reads after live retry return valid
+Review while the actual module route refuses; the compiled effect alone is not delivery.
+Foreign access retains privacy/404 and other boundary refusals retain409. `[V]` tool and
+accepted `rfc/review-evidence-compiler.md` §4 / `rfc/review-map.md` §§1/4/8.
+
+Author synthesis: the draft context is `recorded_review`, not `completed_review`. Resolve
+current read and module authority separately before collecting evidence. Do not force Play's
+disclosure flag true, replace the full stored run with a filtered one or infer permission from
+a client result/effect. The current source constructor supports the whole admitted branch tip
+only. An earlier endpoint still requires an exact source-owner operation, not trimmed whole-tip
+moments with a reused receipt. `[M]`; proposal in `rfc/module-registration.md` §4.11a.
+
+The observer is guarded transpiled research, not proof of a proposed production interface,
+scope resolver, live provider, browser receiver or semantic qualification. D3819 closes this
+bounded prerequisite only; D3792 remains unaccepted and open. Strict tool types and predecessor
+wire/context controls are rerun after the draft repair. Initial type/build/source-positive and
+request-origin mistakes were corrected in the instrument, not by weakening production checks;
+the final actual-source controls are the measurement above. No raw records are retained in Git,
+no ordinary CI/progress gate depends on this opt-in instrument, and no release gate is promoted.

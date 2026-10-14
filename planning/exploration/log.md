@@ -28877,3 +28877,43 @@ Campaign was the one capability with no API, route or content. Now:
   anchors are supplied. Bind those existing register rows and the closed D3818 source row;
   ordinary make roadmap-receipt verify-governance then exits zero. This is closeout bookkeeping,
   not a product/source/test change or a weakened gate.
+
+### 2026-10-14 — D3819 finish actual Review-source research and owner-requested 1.0 inventory
+
+- The owner asks to finish the in-flight work before a total progress overview. No new feature
+  wave is started. D3818's committed production repair/full local proof remains the last software
+  and browser checkpoint; this batch changes research tooling, a draft and existing trackers only.
+- Opt-in make inspector-review-scope-research uses actual createApplication, authenticated local
+  HTTP, file-backed SQLite and a uniquely guarded in-memory observer after the private Review
+  checks. Thirty-three controls over sixteen cases pass. Unfinished native/imported/retry lines
+  provide sealed Story rank; quiet empty rank is successful execution, not missing context.
+  Both original-import reads after a live undisclosed retry keep Review but correctly refuse the
+  actual Inspector query despite its compiled effect. Exact submitted Campaign Review exists
+  without Inspector entitlement. Foreign/branch/disclosure/submission refusals occur before
+  private source capture, and original imported nodes/evidence prefixes remain unchanged.
+- The final probe labels application mocks, not live providers; guarded transpilation is not a
+  production supplier/interface proof. Earlier instrument failures include strict types, regexp
+  build syntax, quiet-line positive selection and imported request-origin assumptions; repair
+  those assumptions rather than production access checks. A compact bounded JSON is printed;
+  no raw recording is retained and ordinary CI/progress does not invoke the research target.
+- Correct the unaccepted module-registration section 4.11a/draft grammar from completed_review
+  to recorded_review. Preserve outcome/source/effect/delivery as distinct axes, current Play
+  disclosure, role and Campaign ceilings. Current source construction is whole-tip only and
+  performs collector work; it is not a free permission predicate or an earlier-endpoint supplier.
+  D3792's scoped operations/access composition/live providers/cancellation/native receivers and
+  independent acceptance remain open. No self-acceptance or production change.
+- Strict context controls pass44, unchanged source contracts37 and the whole disposable demand
+  command passes canonical ten-family/negative/detail controls plus closed grammar88/399.
+  Work-state initially refuses the ledger/state mismatch; the explicit done transition then
+  rejects a redundant owner field. Correct the command to the existing terminal-state contract.
+  Governance catches an anchor read before that correction; bind the finalized state, not a waiver.
+- Refresh the existing roadmap/dossier/coverage/state/receipt instead of another work document.
+  Inventory: 3,568 ledger rows, 1,733 live all assigned, 1,674 done, 161 refused, zero untriaged;
+  462 historical prose-only closures remain explicit. UX281 complete/264 live/24 retired;
+  four milestones active/five blocked, no complete whole capability, official graduate or fully
+  qualified semantic subject. This is integration-stage progress, not release-candidate status.
+  No push, remote/release qualification, goal pause or completion.
+- Final normal make roadmap-receipt verify-governance roadmap-progress exits zero, including
+  register/status/work-state/UX/roadmap/intent/test-tier/docs and staged-process controls. The
+  production/software/browser source is unchanged from 4bb7c067's full proof; do not describe
+  this bounded research/governance rerun as a new full production or remote CI result.

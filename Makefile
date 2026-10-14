@@ -544,6 +544,13 @@ inspector-recorded-context-research:
 	./node_modules/.bin/esbuild tools/d3792-inspector-demand/recorded-context.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/recorded-context.mjs --log-level=warning
 	$(CI_NODE) .cache/d3792-inspector-demand/recorded-context.mjs
 
+# Disposable observation of the actual private source during authenticated Review reads.
+.PHONY: inspector-review-scope-research
+inspector-review-scope-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	$(CI_NODE) tools/d3792-inspector-demand/build-review.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/review-scope.mjs
+
 # Source-owner prototype only; the unchanged baseline must refuse the bounded-work expectation.
 .PHONY: inspector-recorded-prefix-research
 inspector-recorded-prefix-research:

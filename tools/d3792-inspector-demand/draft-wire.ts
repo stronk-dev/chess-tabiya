@@ -29,7 +29,7 @@ export type DraftSourceContext =
   | { kind: "position" } | { kind: "incoming_edge" } | { kind: "recorded_window" }
   | { kind: "branch"; throughNodeId: string }
   | { kind: "comparison"; otherBranchId: string; otherNodeId: string }
-  | { kind: "completed_review"; throughNodeId: string };
+  | { kind: "recorded_review"; throughNodeId: string };
 export type DraftDetailScope = { kind: "whole" } | {
   kind: "control_target"; color: "white" | "black"; mode: "geometric" | "legal"; target: string };
 export type DraftView =
@@ -42,7 +42,7 @@ export interface DraftRequest {
   query: { branchId: string; nodeId: string; decisionDigest: string; view: DraftView };
 }
 export interface DraftRange { start: number; count: number; total: number; next: number | null }
-export type DraftContextFailure = "no_incoming_edge" | "no_recorded_window" | "no_second_attempt" | "no_completed_review";
+export type DraftContextFailure = "no_incoming_edge" | "no_recorded_window" | "no_second_attempt" | "no_recorded_review";
 export type DraftSourceOutcome =
   | { kind: "missing_context"; reason: DraftContextFailure }
   | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "source_version_held" | "invalid_turn_clone" }
@@ -87,7 +87,7 @@ function context(value: unknown): DraftSourceContext {
   const row = record(value);
   switch (row.kind) {
     case "position": case "incoming_edge": case "recorded_window": exact(row, ["kind"]); break;
-    case "branch": case "completed_review": exact(row, ["kind", "throughNodeId"]); text(row.throughNodeId); break;
+    case "branch": case "recorded_review": exact(row, ["kind", "throughNodeId"]); text(row.throughNodeId); break;
     case "comparison": exact(row, ["kind", "otherBranchId", "otherNodeId"]); text(row.otherBranchId); text(row.otherNodeId); break;
     default: assert.fail("unknown context");
   }
@@ -95,7 +95,7 @@ function context(value: unknown): DraftSourceContext {
 }
 export function allowedContexts(projection: string): readonly DraftSourceContext["kind"][] {
   assert(sources.has(projection));
-  if (projection === "derived.story.rank@2") return ["completed_review"];
+  if (projection === "derived.story.rank@2") return ["recorded_review"];
   if (projection.startsWith("derived.compare.")) return ["comparison"];
   if (projection.startsWith("derived.pivotal.") || projection === "derived.opening.deepest_reached@1") return ["branch"];
   if (projection === "theory.shapes.firing@1") return ["position", "branch"];
@@ -180,7 +180,7 @@ expectScopes([
 expectScopes(["derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@1", "derived.pivotal.human_divergence@1",
   "derived.pivotal.option_collapse@1", "derived.opening.deepest_reached@1"], ["branch"]);
 expectScopes(["derived.compare.structure_delta@1", "derived.compare.eval_delta@1"], ["comparison"]);
-expectScopes(["derived.story.rank@2"], ["completed_review"]);
+expectScopes(["derived.story.rank@2"], ["recorded_review"]);
 expectScopes(["theory.shapes.firing@1"], ["position", "branch"]);
 assert.deepEqual([...scopeFixture.keys()].sort(), [...sources].sort());
 for (const [ref, kinds] of scopeFixture) assert.deepEqual(allowedContexts(ref), kinds, `scope assignment drift: ${ref}`);
@@ -192,7 +192,7 @@ const pass = (value: unknown) => { assert.deepEqual(parseDraftRequest(JSON.parse
 const reject = (value: unknown) => { assert.throws(() => parseDraftRequest(value)); refusals++; };
 const contexts: readonly DraftSourceContext[] = [{ kind: "position" }, { kind: "incoming_edge" }, { kind: "recorded_window" },
   { kind: "branch", throughNodeId: "n4" }, { kind: "comparison", otherBranchId: "other", otherNodeId: "n3" },
-  { kind: "completed_review", throughNodeId: "n9" }];
+  { kind: "recorded_review", throughNodeId: "n9" }];
 pass(request({ kind: "inventory", start: 0 }));
 for (const projection of sources) for (const candidate of contexts) {
   const value = request({ kind: "source", projection, context: candidate, start: 0, collectionKey: null });
