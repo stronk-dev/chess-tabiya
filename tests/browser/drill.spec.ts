@@ -4853,6 +4853,95 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
 }
 
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
+test(`D3789 empty Support rewinds with explicit failure recovery and preserves both attempts (${viewport.width}px)`, async ({ page }) => {
+  await page.setViewportSize(viewport);
+  await startSupportFromFen(page, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "white");
+  await move(page, "e2", "e4");
+  const runId = page.url().split("/").at(-1)!;
+  const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+  const events = async () => (await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] }).events;
+  await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
+  // This raw run deliberately has no judge. Its module query is real, but must not wait
+  // for unrelated engine attachments that this workflow never schedules.
+  const openEmptyTheory = async () => {
+    await showSupportTools(page);
+    const reveal = page.getByRole("button", { name: "Show support for this position", exact: true });
+    if (await reveal.isVisible()) await reveal.click();
+    const theory = page.locator('[data-module="theory_breadcrumb"]');
+    await theory.locator(".seat-row").click();
+    const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().postDataJSON()?.query?.requested?.includes("theory_breadcrumb"));
+    await theory.getByRole("button", { name: "Show", exact: true }).click();
+    const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(item => item.module === "theory_breadcrumb")!;
+    expect(packet.receipt.items).toHaveLength(0);
+    expect(packet.empty?.kind).toBe("stated_absence");
+    await expect(theory.locator("[data-empty]")).toHaveText(packet.empty!.sentence!);
+    return theory;
+  };
+  const theory = await openEmptyTheory();
+  const before = await graph(), beforeEvents = await events();
+  const root = before.nodes.find(node => node.parentId === null)!;
+  const board = await page.getByLabel("Chessboard", { exact: true }).boundingBox();
+  const bodies: unknown[] = [];
+  let release!: () => void;
+  await page.route(`**/runs/${runId}/rewind`, async route => {
+    bodies.push(route.request().postDataJSON());
+    await new Promise<void>(resolve => { release = resolve; });
+    await route.fulfill({ status: 503, json: { error: { code: "UNAVAILABLE", message: "Injected failure before any mutation" } } });
+  });
+  try {
+    const rewind = theory.getByRole("button", { name: "Rewind to a decision", exact: true });
+    await rewind.click();
+    await expect(theory.getByRole("button", { name: "Rewinding…", exact: true })).toBeDisabled();
+    await expect.poll(() => bodies.length).toBe(1);
+    expect(bodies[0]).toEqual({ nodeId: root.id, branchId: before.activeCursor.branchId });
+    // A repeated activation cannot dispatch another persisted gesture while the first is held.
+    await theory.locator("[data-empty-rewind]").dispatchEvent("click");
+    expect(bodies).toHaveLength(1);
+    release();
+    await expect(rewind).toBeEnabled();
+    await expect(theory.getByRole("alert")).toContainText("try again");
+    expect(await graph()).toEqual(before);
+    expect(await events()).toEqual(beforeEvents);
+    await page.unroute(`**/runs/${runId}/rewind`);
+    const response = page.waitForResponse(res => res.url().endsWith(`/runs/${runId}/rewind`) && res.request().method() === "POST");
+    await rewind.click();
+    const accepted = await response;
+    expect(accepted.ok()).toBe(true);
+    expect(accepted.request().postDataJSON()).toEqual(bodies[0]);
+    await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+    await expect(page.locator(".workspace")).not.toHaveAttribute("inert", "");
+    const rewound = await graph();
+    assertRecordedNodesPreserved(before.nodes, rewound.nodes);
+    expect(rewound.branches).toEqual(before.branches);
+    expect(rewound.activeCursor).toEqual({ nodeId: root.id, branchId: before.activeCursor.branchId });
+    expect((await events()).slice(0, beforeEvents.length)).toEqual(beforeEvents);
+    expect(await page.getByLabel("Chessboard", { exact: true }).boundingBox()).toEqual(board);
+    await assertRunViewport(page, viewport);
+    // The recovered board must accept a different move and retain, rather than replace, the old line.
+    await move(page, "d2", "d4");
+    await expect.poll(async () => (await graph()).nodes.some(node => node.moveUci === "d2d4")).toBe(true);
+    await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(2);
+    const branched = await graph();
+    expect(branched.activeCursor.branchId).not.toBe(before.activeCursor.branchId);
+    for (const node of before.nodes) expect(branched.nodes.find(saved => saved.id === node.id)).toEqual(node);
+    await page.reload();
+    await expect(page.getByLabel("Chessboard", { exact: true })).toBeVisible();
+    const otherTheory = await openEmptyTheory();
+    const second = page.waitForResponse(res => res.url().endsWith(`/runs/${runId}/rewind`) && res.request().method() === "POST");
+    await otherTheory.getByRole("button", { name: "Rewind to a decision", exact: true }).click();
+    const secondResponse = await second;
+    expect(secondResponse.ok()).toBe(true);
+    expect(secondResponse.request().postDataJSON()).toEqual({ nodeId: root.id, branchId: branched.activeCursor.branchId });
+    await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+    assertRecordedNodesPreserved(branched.nodes, (await graph()).nodes);
+    expect((await graph()).branches).toEqual(branched.branches);
+    await assertRunViewport(page, viewport);
+  } finally {
+    release?.();
+    await page.unroute(`**/runs/${runId}/rewind`);
+  }
+});
+
 test(`Empty Support returns to playable board without changing the recorded game (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
   await startSupportFromFen(page, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "white");
@@ -5198,6 +5287,25 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     await expect(theory.locator(".stated-empty")).toHaveText("Nothing is written about this position.");
     await expect(theory).toContainText("Not consulted: the cited catalogue is not installed in this deployment.");
     await expect(theory.locator("[data-presented]")).toHaveCount(0);
+    // D3790: the two actual loop doors must be obvious before the longer source notes,
+    // not merely reachable by a browser's automatic scroll into view.
+    const keepPlaying = theory.getByRole("button", { name: "Keep playing", exact: true });
+    const rewind = theory.getByRole("button", { name: "Rewind to a decision", exact: true });
+    if (viewport.width >= 720 && viewport.width <= 1023) {
+      // The accepted tablet band reserves a short scrolling head, not another rail.
+      // One explicit internal scroll must expose BOTH verbs; never shrink/scroll the board.
+      await theory.evaluate(element => {
+        const button = element.querySelector("[data-keep-playing]")!;
+        element.scrollTop += button.getBoundingClientRect().top - element.getBoundingClientRect().top - 4;
+      });
+    }
+    await expect(keepPlaying).toBeInViewport({ ratio: 1 });
+    await expect(rewind).toBeInViewport({ ratio: 1 });
+    expect(await theory.evaluate(element => {
+      const keep = element.querySelector("[data-keep-playing]")!, rewind = element.querySelector("[data-empty-rewind]")!;
+      return keep.parentElement === rewind.parentElement && [...element.querySelectorAll(".unavailable")]
+        .every(note => Boolean(rewind.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING));
+    })).toBe(true);
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await attachCompositionCell(page, testInfo, viewport, "09-evidence-unavailable-honest-empty");
 

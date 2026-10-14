@@ -31,6 +31,7 @@
   import { corpusContextSentences } from "./corpus-sentences.js";
   import { corpusEvidence, corpusPresentation, humanSplitEvidence } from "./inspector-evidence.js";
   import ModuleSeats from "./ModuleSeats.svelte";
+  import RehearsalAction from "./RehearsalAction.svelte";
   import CompanionSeat from "./CompanionSeat.svelte";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
@@ -886,12 +887,6 @@
     }
     return ids;
   });
-  let previousSupportRewindNodeId = $derived(
-    [...historyFrom(run, run.activeCursor.nodeId)]
-      .reverse()
-      .find((node) => node.id !== run.activeCursor.nodeId && timelineRewindNodeIds.has(node.id))
-      ?.id,
-  );
   let entries = $derived(timelineEntries(run, pack));
   let path = $derived(historyFrom(run, run.activeCursor.nodeId));
   let firings = $derived(shapeFiringEvidence(shapes, path));
@@ -1157,6 +1152,47 @@
       || packet.items.length !== 0 || (packet.empty?.kind !== "stated_absence" && packet.empty?.kind !== "unavailable_source")) return;
     void focusBoardFromSupport();
   }
+
+  // Empty help is not a verdict about the move. Return to the nearest actually played learner
+  // decision on this path, never an engine suggestion or a node borrowed from another branch.
+  const emptyRewindAction: ModuleSeatAction | undefined = $derived.by(() => {
+    const played = [...historyFrom(run, run.activeCursor.nodeId)].reverse().find(node => node.actor === "user" && node.parentId !== null);
+    if (played?.parentId === undefined || played.parentId === null) return undefined;
+    const target = { nodeId: played.parentId, branchId: run.activeCursor.branchId };
+    const authority = seatAuthority, runId = run.id;
+    const blockedReason = seatActionBlock()
+      ?? (assistanceQueryState !== "ready" || forkBusy || groupBusy ? "Wait for this position and its help settings to finish updating."
+        : stagedCue !== undefined ? "Revise or confirm the staged move before rewinding." : undefined);
+    return {
+      label: "Rewind to a decision", pendingLabel: "Rewinding…",
+      description: "Go back before your last move. Your played line stays saved.",
+      pending: rewindBusy, blockedReason, error: rewindErrorFor(target),
+      onInvoke: () => {
+        if (!seatAlive || seatAuthority !== authority || run.id !== runId || seatActionBlock() !== undefined
+          || assistanceQueryState !== "ready" || forkBusy || groupBusy || stagedCue !== undefined) return;
+        void rewindRun(target).then(async accepted => {
+          if (!accepted || !seatAlive || run.id !== runId || run.activeCursor.nodeId !== target.nodeId || run.activeCursor.branchId !== target.branchId) return;
+          await tick();
+          if (seatAlive && run.id === runId && run.activeCursor.nodeId === target.nodeId && run.activeCursor.branchId === target.branchId) await focusBoardFromSupport();
+        });
+      },
+    };
+  });
+  const emptyRewindUnavailable = $derived(emptyRewindAction === undefined ? "There is no earlier played decision to rewind to." : undefined);
+  const emptyRewindActions = $derived.by(() => {
+    const action = emptyRewindAction;
+    if (action === undefined) return {};
+    const actions: Partial<Record<PlaySeatModule, ModuleSeatAction>> = {};
+    for (const [module, packet] of seatPackets) {
+      if (packet.items.length !== 0 || (packet.empty?.kind !== "stated_absence" && packet.empty?.kind !== "unavailable_source")) continue;
+      actions[module] = { ...action, onInvoke: () => {
+        if (seatPackets.get(module) !== packet || packet.disclosure.runId !== run.id
+          || packet.disclosure.decisionDigest !== seatDecisionDigest || packet.disclosure.effectiveConfigDigest !== compiledAssistance?.finalDigest) return;
+        action.onInvoke();
+      } };
+    }
+    return actions;
+  });
 
   let seatActions: ModuleSeatActions = $derived.by(() => {
     const actions: Partial<Record<"postcommit_nudge" | "compare_coach", ModuleSeatAction>> = {};
@@ -2675,6 +2711,8 @@
                 doorBlocked={seatDoorReasons}
                 staged={stagedCue}
                 actions={seatActions}
+                {emptyRewindActions}
+                {emptyRewindUnavailable}
                 onKeepPlaying={keepPlayingFromSeat}
                 {keepPlayingBlocked}
                 onToggle={toggleSeat}
@@ -2686,6 +2724,7 @@
             {/if}
             {#if hints !== undefined && hintSeatPresent}
               <GuidedHintSeat band={tabletViewport} {run} ceiling={hintCeiling} {canWrite} decisionReady={hintDecisionReady} client={hints} assistanceRequest={hintAssistanceRequest} onMarks={(marks) => hintMarks = marks} expanded={stagedCue === undefined && seatExpanded === "guided_hint"} onToggle={() => toggleSeat("guided_hint")}
+                {emptyRewindAction} {emptyRewindUnavailable} {campaignEncounter}
                 {keepPlayingBlocked} onKeepPlaying={() => { if (seatAlive && keepPlayingBlocked === undefined) void focusBoardFromSupport(); }} />
             {/if}
               <CompanionSeat id="support_tools" label="Support tools and help-style promise" shortLabel="More"
@@ -2770,16 +2809,14 @@
                 <p>Position pattern</p>
                 <h2 id="support-empty-title">Nothing recognizes this structure yet</h2>
                 <p>That is not a dead end. Play it and see what the consequence exposes, or return to an earlier decision and try another idea.</p>
-                <div class="support-empty-actions">
+                {#snippet keepPlayingControl()}
                   <button class="primary" type="button" disabled={busy || rewindBusy || !canWrite || terminalEvent !== undefined} aria-describedby={busy || rewindBusy || !canWrite || terminalEvent !== undefined ? "support-keep-playing-disabled" : undefined} onclick={focusBoardFromSupport}>Keep playing</button>
-                  {#if busy || rewindBusy || !canWrite || terminalEvent !== undefined}<span id="support-keep-playing-disabled" class="honest">{!canWrite ? "This read-only view cannot play a move." : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
-                  {#if previousSupportRewindNodeId !== undefined}
-                    <CampaignGestureCost {campaignEncounter} id="support-rewind-cost" />
-                    <button type="button" disabled={busy || rewindBusy || !canWrite} aria-describedby={[campaignEncounter ? "support-rewind-cost" : "", busy || rewindBusy || !canWrite ? "support-rewind-disabled" : ""].filter(Boolean).join(" ") || undefined} onclick={() => void rewindRun({ nodeId: previousSupportRewindNodeId! })}>{rewindBusy ? "Rewinding…" : "Rewind to a decision"}</button>
-                    {#if busy || rewindBusy || !canWrite}<span id="support-rewind-disabled" class="honest">{!canWrite ? "This read-only view cannot rewind the run." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
-                    {#if rewindErrorFor({ nodeId: previousSupportRewindNodeId })}<p role="alert">{rewindErrorFor({ nodeId: previousSupportRewindNodeId })}</p>{/if}
-                  {/if}
-                </div>
+                {/snippet}
+                {#if emptyRewindAction !== undefined}<RehearsalAction action={emptyRewindAction} id="support-empty" {campaignEncounter} empty before={keepPlayingControl} />
+                {:else}<div class="support-empty-actions">{@render keepPlayingControl()}</div>
+                  {#if emptyRewindUnavailable !== undefined}<p class="honest">{emptyRewindUnavailable}</p>{/if}
+                {/if}
+                {#if busy || rewindBusy || !canWrite || terminalEvent !== undefined}<span id="support-keep-playing-disabled" class="honest">{!canWrite ? "This read-only view cannot play a move." : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : rewindBusy ? "Wait for this rewind to finish." : "Wait for the current move to finish."}</span>{/if}
               </section>
             {/if}
             <OutcomeContext {assessment} {resistance} grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />

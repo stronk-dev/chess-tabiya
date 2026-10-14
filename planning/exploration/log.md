@@ -28164,3 +28164,45 @@ Campaign was the one capability with no API, route or content. Now:
   untriaged, and git diff --check clean. Stage only this research/test/doc/tracker batch, inspect
   its cached list and use normal hooks. The original runtime compiler, generated semantic data,
   archive bytes and three pre-existing untracked paths remain untouched.
+
+### 2026-10-14 — D3789 empty help returns to rehearsal; D3790 visible paired actions
+
+- The preceding inventory is read-only, not delivery. Take INR-a7's lawful in-run navigation
+  slice; record D3789 and assign it before implementation. Existing accepted module/chrome and
+  branch-runtime contracts suffice: no new evidence, endpoint, schema or chess judgement.
+- Four mounted predecessor controls fail because empty Theory has no rewind. A Campaign test
+  double also fails because it has no Campaign assistance origin; do not call that a product
+  defect. Correct the fixture scope, test Campaign cost at the typed Hint/component boundary and
+  preserve the existing charged run controller. A root Theory request cannot be made before
+  a learner move; use actual root Hint source absence for that boundary instead. Fix an incorrect
+  fork-helper argument rather than modifying runtime behavior to fit it.
+- Shared navigation resolves the preceding played learner decision on the active path, checks
+  exact current packet/decision/configuration/access, and uses the existing single-flight rewind.
+  It preserves all nodes/branches and returns board focus after releasing phone modal inertness.
+  Root/read-only/stale/teardown, both-color, exact failure/retry and selected-branch controls pass.
+  Keep source absence, request failure and successful silent output distinct.
+- The first native probe improperly waits for engine attachments in a raw run with no judge.
+  Remove that unrelated wait; retain actual HTTP/SQLite/worker acquisition, full saved play,
+  failure before mutation, exact retry, successful different move, branches and reload. Both
+  desktop/phone journeys and the old passive handoff pass, without timeout or assertion inflation.
+- First complete normal verification/build/all four browser tiers pass 5,611 software/seven
+  performance/256 content/356 browser cases, one existing optional Maia skip and zero retries.
+  Inspect current matrix screenshots anyway: source notes and preservation prose separate the
+  two verbs and bury rewind below the phone fold. Record and assign D3790 before correction.
+- Group the verbs immediately after the empty sentence and before unchanged source reasons;
+  shorten preservation copy and retain Campaign costs and disabled/error descriptions. Filled
+  cards retain their prior ordering. A blanket no-scroll tablet assertion fails its accepted
+  short scrolling head; require one explicit internal scroll to expose both verbs together,
+  while desktop/phone require full visibility without action scrolling. Preserve board geometry
+  and original deadlines. Five native preflight cases/seven viewports pass; inspect both final
+  desktop/phone images before repeating the aggregate.
+- Freeze all consumed inputs for the final ordinary serial make roadmap-receipt verify-awake
+  build test-browser-ci-awake. The same live handle exits zero: clean types, software 5,611/390,
+  seven unchanged-budget performance/four, content 256/26, packaging/governance and 356 browser
+  passes (291 smoke, five content, 59 matrix, one packaged-production). One existing optional Maia
+  skip, zero retries, all 150 input/112 successful unretried composition cells. Final local warm
+  p95 is 108.7 ms under unchanged 250 ms, not remote cause/qualification or a speedup promise.
+- Close D3789/D3790 with path evidence and update the existing queue/docs/roadmap. INR-a7's wider
+  all-surface coverage, useful Nudge/Sight/Review selection, all source/qualification/content and
+  owner-use discharges remain open. No protected intent, archive, source/policy/version, authored
+  pack, new research dump, worktree, delegation, push, whole capability or release promotion.

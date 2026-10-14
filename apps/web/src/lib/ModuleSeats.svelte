@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import { tick, untrack } from "svelte";
   // rfc/module-registration.md §2.6/§3 + rfc/play-composition.md §4 — the companion region's module
   // seats. A seat renders only what one strict-parsed, digest-bound packet delivered: collapsed as a
@@ -7,7 +6,7 @@
   // every change is companion-internal, never stage layout. The head slot belongs to the one
   // board-adjacent cue (blunder_prevention) and appears only while a staged move is held.
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
-  import { learnerProse } from "./labels/index.js";
+  import RehearsalAction from "./RehearsalAction.svelte";
   import CompanionSeat from "./CompanionSeat.svelte";
   import type { ParsedModulePacket } from "./module-query-response.js";
   import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type ModuleSeatActions, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
@@ -24,6 +23,8 @@
     doorBlocked: Readonly<Partial<Record<PlaySeatModule, string>>>;
     staged: StagedCue | undefined;
     actions?: ModuleSeatActions;
+    emptyRewindActions?: Readonly<Partial<Record<PlaySeatModule, import("./module-seats.js").ModuleSeatAction>>>;
+    emptyRewindUnavailable?: string | undefined;
     onKeepPlaying?: ((module: PlaySeatModule, packet: ParsedModulePacket) => void) | undefined;
     keepPlayingBlocked?: string | undefined;
     onToggle: (module: PlaySeatModule) => void;
@@ -32,7 +33,7 @@
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, emptyRewindActions = {}, emptyRewindUnavailable, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
@@ -109,29 +110,27 @@
             {:else if packet.empty !== null && (packet.empty.kind === "stated_absence" || packet.empty.kind === "unavailable_source")}
               <p class="stated-empty" data-empty={packet.empty.kind}>{packet.empty.sentence}</p>
             {/if}
-            {#each unavailableSentences(packet) as sentence}<p class="unavailable">{sentence}</p>{/each}
-            {#if onKeepPlaying !== undefined && packet.items.length === 0 && packet.empty !== null && (packet.empty.kind === "stated_absence" || packet.empty.kind === "unavailable_source")}
-              <div class="seat-actions">
+            {#if packet.items.length === 0 && packet.empty !== null && (packet.empty.kind === "stated_absence" || packet.empty.kind === "unavailable_source")}
+              {#snippet keepPlaying()}
+              {#if onKeepPlaying !== undefined}
                 <button type="button" data-keep-playing disabled={keepPlayingBlocked !== undefined}
                   aria-describedby={keepPlayingBlocked === undefined ? undefined : `${seat.module}-keep-playing-status`}
                   onclick={() => onKeepPlaying?.(seat.module, packet)}>Keep playing</button>
-              </div>
-              {#if keepPlayingBlocked !== undefined}<p id={`${seat.module}-keep-playing-status`} class="door-reason">{keepPlayingBlocked}</p>{/if}
+              {/if}
+              {/snippet}
+              {@const action = emptyRewindActions[seat.module]}
+              {#if action !== undefined}<RehearsalAction {action} id={`${seat.module}-empty`} {campaignEncounter} empty before={keepPlaying} />
+              {:else}<div class="seat-actions">{@render keepPlaying()}</div>
+                {#if emptyRewindUnavailable !== undefined}<p class="door-reason">{emptyRewindUnavailable}</p>{/if}
+              {/if}
+              {#if onKeepPlaying !== undefined && keepPlayingBlocked !== undefined}<p id={`${seat.module}-keep-playing-status`} class="door-reason">{keepPlayingBlocked}</p>{/if}
             {/if}
+            {#each unavailableSentences(packet) as sentence}<p class="unavailable">{sentence}</p>{/each}
             {#if seat.module === "postcommit_nudge" && packet.items.length > 0}<p>{NUDGE_CLOSING}</p>{/if}
             {#if packet.items.length > 0 && (seat.module === "postcommit_nudge" || seat.module === "compare_coach")}
               {@const action = actions[seat.module]}
               {#if action !== undefined}
-                <p>{action.description}</p>
-                <CampaignGestureCost {campaignEncounter} id={`${seat.module}-rewind-cost`} />
-                <div class="seat-actions">
-                  <button type="button" class="primary" data-rehearsal-action disabled={action.pending || action.blockedReason !== undefined}
-                    aria-describedby={[campaignEncounter ? `${seat.module}-rewind-cost` : "", action.pending || action.blockedReason !== undefined ? `${seat.module}-action-status` : action.error !== undefined ? `${seat.module}-action-error` : ""].filter(Boolean).join(" ") || undefined}
-                    onclick={action.onInvoke}>{action.pending ? action.pendingLabel : action.label}</button>
-                </div>
-                {#if action.pending}<p id={`${seat.module}-action-status`} role="status">{action.pendingLabel} Your recorded lines are kept.</p>
-                {:else if action.blockedReason !== undefined}<p id={`${seat.module}-action-status`} class="door-reason">{learnerProse(action.blockedReason)}</p>{/if}
-                {#if action.error !== undefined}<p id={`${seat.module}-action-error`} role="alert">{action.error}</p>{/if}
+                <RehearsalAction {action} id={seat.module} {campaignEncounter} />
               {/if}
             {/if}
             {#if !seat.proactive && doorBlocked[seat.module] === undefined}<button type="button" class="seat-request secondary" onclick={() => onRequest(seat.module)}>Ask again here</button>{/if}

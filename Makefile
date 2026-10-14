@@ -237,7 +237,7 @@ play-composition-client-check:
 
 .PHONY: support-empty-browser-check
 support-empty-browser-check:
-	./node_modules/.bin/playwright test --grep "Empty Support returns"
+	./node_modules/.bin/playwright test --grep "Empty Support returns|D3789|@matrix module seats render"
 
 .PHONY: inspector-subject-check inspector-subject-browser-check inspector-corpus-subject-check inspector-corpus-browser-check
 inspector-subject-check:

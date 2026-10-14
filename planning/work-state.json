@@ -31498,6 +31498,24 @@
       "uxItems": [],
       "evidence": "planning/recorded-semantic-path/plan.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3789",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4d5041ae3acef5f953726cb92ed2a0692ff6a8dfe5cb9277f0095dc745afc455",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3790",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:587d7d859318149d333d96fb4e857e24851ede921c58ff4ec353da46354f090a",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

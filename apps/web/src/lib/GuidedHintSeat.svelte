@@ -19,6 +19,8 @@
 
   import { ApiError, type GuidedHintClient, type HintRequestBody } from "./api.js";
   import CompanionSeat from "./CompanionSeat.svelte";
+  import RehearsalAction from "./RehearsalAction.svelte";
+  import type { ModuleSeatAction } from "./module-seats.js";
 
   interface Props {
     run: DrillRun;
@@ -34,9 +36,12 @@
     band?: boolean;
     onKeepPlaying?: (() => void) | undefined;
     keepPlayingBlocked?: string | undefined;
+    emptyRewindAction?: ModuleSeatAction | undefined;
+    emptyRewindUnavailable?: string | undefined;
+    campaignEncounter?: boolean;
   }
 
-  let { run, ceiling, canWrite, decisionReady = true, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false, onKeepPlaying, keepPlayingBlocked }: Props = $props();
+  let { run, ceiling, canWrite, decisionReady = true, client, assistanceRequest, onMarks, pollIntervalMs = 50, expanded = true, onToggle, band = false, onKeepPlaying, keepPlayingBlocked, emptyRewindAction, emptyRewindUnavailable, campaignEncounter = false }: Props = $props();
 
   const intent = MODULE_POLICIES.find(policy => policy.id === "guided_hint")!.intent;
 
@@ -108,6 +113,13 @@
     if (!alive || !canWrite || !decisionReady || busy || keepPlayingBlocked !== undefined || response !== delivered
       || (delivered.state !== "honest_empty" && delivered.state !== "source_unavailable")) return;
     onKeepPlaying?.();
+  }
+
+  function rewindFromEmpty(delivered: HintResponse, action: ModuleSeatAction): void {
+    if (!alive || !canWrite || !decisionReady || busy || response !== delivered || emptyRewindAction !== action
+      || action.pending || action.blockedReason !== undefined
+      || (delivered.state !== "honest_empty" && delivered.state !== "source_unavailable")) return;
+    action.onInvoke();
   }
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -202,7 +214,7 @@
     <button type="button" disabled={!canWrite || !decisionReady || busy || next === undefined} aria-describedby={!decisionReady && canWrite ? "guided-hint-wait" : next === undefined && revealed !== null ? "guided-hint-limit" : undefined} onclick={() => void ask()}>
       {busy ? "Looking…" : revealed === null ? "Hint" : "A little more"}
     </button>
-    {#if onKeepPlaying !== undefined && response !== undefined && (response.state === "honest_empty" || response.state === "source_unavailable")}
+    {#if emptyRewindAction === undefined && onKeepPlaying !== undefined && response !== undefined && (response.state === "honest_empty" || response.state === "source_unavailable")}
       {@const delivered = response}
       <button type="button" data-keep-playing disabled={!canWrite || !decisionReady || busy || keepPlayingBlocked !== undefined}
         aria-describedby={keepPlayingBlocked !== undefined ? "guided-hint-keep-playing-status" : !decisionReady && canWrite ? "guided-hint-wait" : undefined}
@@ -213,6 +225,21 @@
     {#if !canWrite}<span class="honest">This read-only view cannot ask for hints.</span>{/if}
     {#if !decisionReady && canWrite}<span id="guided-hint-wait" class="honest" role="status">Wait for this position and its help settings to finish updating.</span>{/if}
   </div>
+  {#if response !== undefined && (response.state === "honest_empty" || response.state === "source_unavailable")}
+    {@const delivered = response}
+    {#if emptyRewindAction !== undefined}
+      {@const action = emptyRewindAction}
+      {#snippet keepPlayingControl()}
+        {#if onKeepPlaying !== undefined}
+          <button type="button" data-keep-playing disabled={!canWrite || !decisionReady || busy || keepPlayingBlocked !== undefined}
+            aria-describedby={keepPlayingBlocked !== undefined ? "guided-hint-keep-playing-status" : !decisionReady && canWrite ? "guided-hint-wait" : undefined}
+            onclick={() => keepPlaying(delivered)}>Keep playing</button>
+        {/if}
+      {/snippet}
+      <RehearsalAction action={{ ...action, blockedReason: action.blockedReason ?? (!canWrite ? "This read-only view cannot rewind the run." : !decisionReady || busy ? "Wait for this position and its help settings to finish updating." : undefined), onInvoke: () => rewindFromEmpty(delivered, action) }} id="guided-hint-empty" {campaignEncounter} empty before={keepPlayingControl} />
+      {#if onKeepPlaying !== undefined && keepPlayingBlocked !== undefined}<p id="guided-hint-keep-playing-status" class="honest">{keepPlayingBlocked}</p>{/if}
+    {:else if emptyRewindUnavailable !== undefined}<p class="honest">{emptyRewindUnavailable}</p>{/if}
+  {/if}
   </div>
 </CompanionSeat>
 

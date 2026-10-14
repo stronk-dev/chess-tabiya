@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3789]] implements the missing rewind half of empty Support's loop under
+the accepted module/play-composition and branch-runtime navigation contracts. Module,
+Guided Hint and unrecognized-pattern empties share pending/error/Campaign-cost chrome;
+the existing rewind operation alone owns persistence/charging. Exact current packet and
+decision/access checks refuse stale actions; roots do not invent a target, silence stays
+silent, and request failures retain their distinct retry. Both-color mounted controls
+and actual desktop/phone HTTP/SQLite/worker failure → retry → preserved original line →
+new branch → reload → exact selected-branch rewind pass. INR-a7's wider all-surface
+coverage and Nudge selection remain open. [[D3790]] corrects the actual screenshot's
+separated/below-fold actions: both verbs precede source notes and share one row. The
+seven-viewport control preserves the tablet's explicitly scrolling head rather than
+shrinking its board; both controls are fully visible together. Five native preflight
+cases and the current screenshot review pass. Final changed-byte normal verification,
+build and all four browser tiers exit zero: 5,611 software/seven performance/256 content/
+356 browser cases, one existing optional Maia skip, zero retries, all 150 input/112
+composition cells and warm p95 108.7 ms under the unchanged 250 ms gate. Both rows are
+closed with path evidence;
+do not treat this as a source, preset, whole-capability or release completion.
+
 2026-10-14 — [[D3787]] settles exact exchange-source reuse: duplication is real, but four
 fresh-process pairs over 89 paths retain every result/value/input/convention receipt and show
 no consistent cost benefit (two faster/two slower, 0.57% greater summed cost). Reject the Map/

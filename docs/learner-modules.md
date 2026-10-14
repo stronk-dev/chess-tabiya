@@ -166,6 +166,23 @@ remain separate work.
   The delivered packet must still be current; read-only, pending, previewed, staged
   and ended positions cannot use it to bypass the normal play controls. Phone
   modal inertness is released before board focus, without changing recorded events.
+  Empty module cards, empty/source-unavailable Guided Hint and the unrecognized-pattern
+  card additionally offer **Rewind to a decision** when this path contains a played
+  learner move (D3789). This is ordinary navigation to before the last such move,
+  on the selected branch—not a claim that another move is better or that help existed
+  there. All recorded lines remain saved. The shared `RehearsalAction.svelte` chrome
+  preserves pending, disabled explanations, exact-target failure/retry and Campaign's
+  existing one-earned-rewind disclosure; the existing run controller alone performs
+  the mutation/charge. Root positions state that there is no earlier played decision.
+  D3790 groups the two verbs immediately after the empty sentence, before source notes
+  and the shorter preservation copy. Native matrix controls require both fully visible
+  on desktop/phone and together after one internal scroll in the accepted tablet head;
+  the board does not move. Filled-card ordering and source reasons are unchanged.
+  Silent modules stay silent, and transport failure retains its separate request retry.
+  Both-color mounted controls and actual desktop/phone empty Theory → failed rewind →
+  retry → different branch → reload journeys cover the current path and saved play.
+  Hint-source absence is additionally covered through its typed client boundary;
+  this does not claim useful Nudge selection, all-context completion or a new provider.
   The ordinary bot's phone rematch action lives in Support tools instead of wrapping over
   the board. Desktop rematch remains in the header; its noninteractive context is bounded
   within its own wrapping column while the full status announcement remains available to assistive technology.

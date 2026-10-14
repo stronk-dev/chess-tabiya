@@ -1675,10 +1675,11 @@ describe("Layer 3 screens", () => {
   });
 
   describe("module rehearsal actions", () => {
-    function actionRun(): DrillRun {
-      const initial = createRun({ id: "module-actions", session: { kind: "position", start: { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
-      const played = commitMove(initial, "e4d5", { at }).run;
-      return revealFeedback(appendOpponentPly(played, { moveUci: "d8d5", policyModeApplied: "human_common", engine: { id: "action-fixture", name: "Fixture opponent", version: "1", seedHonored: true, eloHonored: false } }, { at }).run, at).run;
+    function actionRun(side: "white" | "black" = "white"): DrillRun {
+      const fen = side === "white" ? "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2" : "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2";
+      const initial = createRun({ id: "module-actions", session: { kind: "position", start: { fen, side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+      const played = commitMove(initial, side === "white" ? "e4d5" : "e5d4", { at }).run;
+      return revealFeedback(appendOpponentPly(played, { moveUci: side === "white" ? "d8d5" : "d1d4", policyModeApplied: "human_common", engine: { id: "action-fixture", name: "Fixture opponent", version: "1", seedHonored: true, eloHonored: false } }, { at }).run, at).run;
     }
     function actionScreen(run: DrillRun, access: RunStateSnapshot["access"] = "writer", callbacks: Partial<ComponentProps<typeof DrillScreen>> = {}) {
       const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access, pendingEvidence: 0, withheld: false }]]);
@@ -1735,6 +1736,112 @@ describe("Layer 3 screens", () => {
       expect(screen.onSwitchBranch).not.toHaveBeenCalled();
       expect(screen.onModuleQuery).toHaveBeenCalledTimes(requests);
       expect(screen.snapshots.get("current")!.run.events).toEqual(original.events);
+      await unmount(screen.component);
+    });
+
+    it.each(["white", "black"] as const)("D3789 rewinds %s empty Theory to the played learner decision and preserves the entire line", async side => {
+      const original = actionRun(side);
+      const screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = await openEmptyTheory();
+      const button = seat.querySelector<HTMLButtonElement>("[data-empty-rewind]");
+      expect(button).not.toBeNull();
+      expect(button!.textContent).toBe("Rewind to a decision");
+      expect(button!.parentElement).toBe(seat.querySelector("[data-keep-playing]")!.parentElement);
+      for (const note of seat.querySelectorAll(".unavailable")) {
+        expect(button!.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+      }
+      const target = original.nodes.find(node => node.actor === "user")!.parentId!;
+      button!.click();
+      await vi.waitFor(() => expect(screen.onRewind).toHaveBeenCalledExactlyOnceWith({ nodeId: target, branchId: original.activeCursor.branchId }));
+      await vi.waitFor(() => expect(document.activeElement).toBe(document.querySelector("[data-board-input-grid]")));
+      const restored = screen.snapshots.get("current")!.run;
+      expect(restored.nodes).toEqual(original.nodes);
+      expect(restored.branches).toEqual(original.branches);
+      expect(restored.events.slice(0, original.events.length)).toEqual(original.events);
+      expect(restored.activeCursor).toEqual({ nodeId: target, branchId: original.activeCursor.branchId });
+      expect(screen.onSwitchBranch).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("D3789 retains the exact empty-card target through a failed rewind and explicit retry", async () => {
+      const original = actionRun();
+      let finish: (accepted: boolean) => void = () => undefined;
+      const onRewind = vi.fn(() => new Promise<boolean>(resolve => { finish = resolve; }));
+      const screen = actionScreen(original, "writer", { onRewind });
+      await assistanceSettled();
+      const seat = await openEmptyTheory();
+      const button = seat.querySelector<HTMLButtonElement>("[data-empty-rewind]");
+      expect(button).not.toBeNull();
+      button!.click();
+      button!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(onRewind).toHaveBeenCalledOnce();
+      expect(button!.disabled).toBe(true);
+      expectDisabledControlsExplained();
+      finish(false);
+      await vi.waitFor(() => expect(button!.disabled).toBe(false));
+      expect(seat.querySelector('[role="alert"]')?.textContent).toContain("try again");
+      expect(screen.snapshots.get("current")!.run).toBe(original);
+      button!.click();
+      await tick();
+      expect(onRewind).toHaveBeenCalledTimes(2);
+      expect(onRewind.mock.calls[1]).toEqual(onRewind.mock.calls[0]);
+      finish(false);
+      await unmount(screen.component);
+    });
+
+    it.each(["read_only", "decision", "unmount"] as const)("D3789 refuses a retained empty-card rewind after %s", async change => {
+      const original = actionRun();
+      const screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = await openEmptyTheory();
+      const button = seat.querySelector<HTMLButtonElement>("[data-empty-rewind]");
+      expect(button).not.toBeNull();
+      if (change === "read_only") screen.replace(original, "read_only");
+      if (change === "decision") screen.replace(revealFeedback(commitMove(original, "g1f3", { at }).run, at).run);
+      if (change === "unmount") await unmount(screen.component);
+      await tick();
+      button!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      if (change === "read_only") { expect(button!.disabled).toBe(true); expectDisabledControlsExplained(); }
+      if (change !== "unmount") await unmount(screen.component);
+    });
+
+    it("D3789 explains the missing rewind at the first decision without inventing a target", async () => {
+      const original = actionRun();
+      const root = original.nodes.find(node => node.parentId === null)!;
+      const run = revealFeedback(rewind(original, root.id, at).run, at).run;
+      const screen = actionScreen(run, "writer", { hints: {
+        request: async body => ({ state: "source_unavailable", requestId: "f".repeat(32), rung: body.rung, reason: "provider_unavailable" }),
+        poll: async () => ({ state: "cancelled", requestId: "f".repeat(32), rung: "pattern" }),
+        cancel: async () => ({ state: "cancelled", requestId: "f".repeat(32), rung: "pattern" }),
+      } });
+      await assistanceSettled();
+      const seat = document.querySelector('[data-module="guided_hint"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click();
+      await vi.waitFor(() => expect(seat.querySelector(".hint-message")?.textContent).toContain("not available"));
+      expect(seat.querySelector("[data-empty-rewind]")).toBeNull();
+      expect(seat.textContent).toContain("There is no earlier played decision to rewind to.");
+      expect(seat.querySelector<HTMLButtonElement>("[data-keep-playing]")?.disabled).toBe(false);
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("D3789 targets the selected branch's preceding decision, not another saved attempt", async () => {
+      const original = actionRun();
+      const root = original.nodes.find(node => node.parentId === null)!;
+      const branched = fork(rewind(original, root.id, at).run, root.id, { label: "Different idea", at }).run;
+      const run = revealFeedback(commitMove(branched, "g1f3", { at }).run, at).run;
+      const screen = actionScreen(run);
+      await assistanceSettled();
+      const seat = await openEmptyTheory();
+      seat.querySelector<HTMLButtonElement>("[data-empty-rewind]")!.click();
+      await vi.waitFor(() => expect(screen.onRewind).toHaveBeenCalledExactlyOnceWith({ nodeId: root.id, branchId: run.activeCursor.branchId }));
+      expect(screen.snapshots.get("current")!.run.nodes).toEqual(run.nodes);
+      expect(screen.snapshots.get("current")!.run.branches).toEqual(run.branches);
+      expect(screen.snapshots.get("current")!.run.activeCursor.branchId).not.toBe(original.activeCursor.branchId);
       await unmount(screen.component);
     });
 

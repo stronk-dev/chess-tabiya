@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4752dc461546111514fc7e0260dd52da22cfaa84c916bea37424f3a80b319c33",
+    "roadmap": "sha256:6d118061df6211bba80c0c0efa79fce9e75bd754a5463aa97985bc802d331d0d",
     "workItems": "sha256:81193a14b2bcc09b6a5c94a5eacf7dfeb528337c6fd38af8cd939c8c7c326ffc",
-    "workState": "sha256:652a87980f9b054f7d8aae56d5ea265490e1eb5925e53f0f054feb8d4d360067",
+    "workState": "sha256:4a4068d8375727965f88c44c55f36a2b210271ecdb301d1c2a3b241a279c7a7c",
     "rfcRegister": "sha256:6b1522e1965be77bde5f56e042a5b8b08114294345a8e3035a9eaef4ea551fa8",
     "uxIndex": "sha256:2818bb8f3a028e2360e4c9623fccbffbd0e80e4bcece02a6638a18706835dafc",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 16,
       "blocked": 1085,
-      "done": 1645,
+      "done": 1647,
       "refused": 161
     },
     "workItems": {
@@ -645,10 +645,12 @@
       ],
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-12",
-        "summary": "D3751/D3752 repair raw-opponent recovery under accepted provider-health/play-composition contracts: live status names the chosen session mode and restores recorded-policy copy after reload; pause/cache/change notices move into the existing companion. The predecessor pause moves the phone board 187.56 px while the old width-only check passes. Nineteen focused software controls and clean types pass, including repeated clicks, failed retry, navigation, teardown and focus ownership. Ten native browser journeys pass: phone/tablet/desktop retry and repeat failure/change-back/reload, populated immutable recorded policy, fixed board x/y/width/height, modal release, 64 physical square centers and semantic-grid focus, saved-reply disclosure at all three viewports and provider-off corpus/settings. Cached browser fixtures prove client disclosure over an actual selected move, not backend admission. D3744's registered learner-question labels and D3741-D3743's preset/focus/delivery controls remain delivered. Full ordinary serial make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,237 software/384 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 345 browser passes (280 smoke, five content, 59 matrix, one packaged-production), one existing optional Maia skip, zero retries, all 150 input/112 unretried composition cells. Initial label/isolation failures are repaired without weakening checks. No schema, source, permission, saved-policy, calibrated strength, durable recovery, whole-capability, remote-CI or release promotion; published D3600 warm-readiness remains red.",
+        "at": "2026-10-14",
+        "summary": "D3789/D3790 make empty Support actionable through existing navigation: module and Guided Hint empty/source-unavailable cards plus unrecognized-pattern help offer the preceding played learner decision on the selected branch, preserving lines and Campaign cost/retry authority. Roots invent no target; exact current packet/decision/access and staged/busy checks refuse stale navigation. Ten new permanent cases and 289 focused client checks/types pass. Actual desktop/phone HTTP/SQLite/worker journeys prove empty Theory, pre-mutation failure, exact retry, preserved original line, a different branch, reload and selected-branch rewind. Screenshot review rejects the first passing below-fold layout; both verbs now precede unchanged source notes. Native seven-viewport controls require fully visible grouped actions on desktop/phone and one explicit internal scroll in the accepted tablet head, without moving the board. Final complete normal verification/build/all four browser tiers exit zero: 5,611 software/390 files, seven unchanged-budget performance/four, 256 content/26 and 356 browser passes, one existing optional Maia skip, zero retries, all 150 input/112 unretried composition cells. Warm p95 108.7 ms retains 250 ms. Previous provider-recovery/preset checkpoints stand. INR-a7's wider all-surface delivery, useful Nudge/Sight/Review selection, source/qualification/content and owner-use discharges remain open. No new producer, schema, wire field, move advice, whole capability/milestone, image/remote-CI qualification or publication.",
         "impact": "advanced",
         "evidence": [
+          "apps/web/src/lib/RehearsalAction.svelte",
+          "docs/learner-modules.md",
           "apps/web/src/lib/preset-menu.ts",
           "apps/web/src/lib/opponent-copy.test.ts",
           "tests/browser/provider-health.spec.ts",
@@ -804,6 +806,16 @@
           "planning/exploration/log.md"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3789",
+            "digest": "sha256:4d5041ae3acef5f953726cb92ed2a0692ff6a8dfe5cb9277f0095dc745afc455"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3790",
+            "digest": "sha256:587d7d859318149d333d96fb4e857e24851ede921c58ff4ec353da46354f090a"
+          },
           {
             "kind": "work_state",
             "id": "D3744",

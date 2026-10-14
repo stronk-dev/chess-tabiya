@@ -127,6 +127,36 @@ describe("GuidedHintSeat", () => {
     expect(onKeepPlaying).toHaveBeenCalledOnce();
   });
 
+  it.each(["honest_empty", "source_unavailable"] as const)("D3789 offers a guarded rewind for %s without requesting an answer", async state => {
+    const run = revealedRun();
+    const client = fakeClient((body): HintResponse => state === "honest_empty"
+      ? { state, requestId: "f".repeat(32), rung: body.rung, reason: "no_admitted_occurrence" }
+      : { state, requestId: "f".repeat(32), rung: body.rung, reason: "provider_unavailable" });
+    const onInvoke = vi.fn();
+    const action = { label: "Rewind to a decision", pendingLabel: "Rewinding…", description: "Your line stays saved.", pending: false, onInvoke };
+    const states = new SvelteMap([["ready", true]]);
+    const component = mount(GuidedHintSeat, { target: target(), props: {
+      run, ceiling: "square", canWrite: true, client, assistanceRequest, emptyRewindAction: action, campaignEncounter: true,
+      get decisionReady() { return states.get("ready")!; },
+    } });
+    await settle();
+    document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+    await settle();
+    const button = document.querySelector<HTMLButtonElement>("[data-empty-rewind]")!;
+    expect(button).not.toBeNull();
+    expect(document.getElementById(button.getAttribute("aria-describedby")!)?.textContent).toContain("one earned rewind");
+    button.click(); await settle();
+    expect(onInvoke).toHaveBeenCalledOnce();
+    expect(client.bodies).toHaveLength(1);
+    states.set("ready", false); await settle();
+    button.dispatchEvent(new MouseEvent("click", { bubbles: true })); await settle();
+    expect(onInvoke).toHaveBeenCalledOnce();
+    expect(button.disabled).toBe(true);
+    await unmount(component);
+    button.dispatchEvent(new MouseEvent("click", { bubbles: true })); await settle();
+    expect(onInvoke).toHaveBeenCalledOnce();
+  });
+
   it.each([true, false])("does not request until the current decision is ready (expanded %s)", async expanded => {
     const states = new SvelteMap<string, boolean>([["ready", false]]);
     const run = revealedRun();

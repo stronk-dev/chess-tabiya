@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3788]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3790]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -60,6 +60,21 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+October-14 [[D3789]]/[[D3790]] complete empty Support's missing rewind path on its existing
+module/Hint/unrecognized-pattern surfaces. Navigation returns to the selected path's preceding
+played learner decision without discarding any line; roots invent no target, current decision
+and access are checked, and existing Campaign cost and exact failure/retry remain. Ten new
+permanent cases, 289 focused client checks/types and actual desktop/phone empty Theory → failed
+rewind → exact retry → different branch → reload journeys pass. Screenshot review rejects the
+first passing layout's below-fold action; both verbs now precede unchanged source notes.
+Seven-viewport controls keep them fully visible on desktop/phone and together after one internal
+scroll in the accepted tablet head, with the board unchanged. Final full normal verification,
+build and all four browser tiers exit zero: 5,611 software/390 files, seven performance/four,
+256 content/26 and 356 browser passes, one optional Maia skip, zero retries and all 150 input/
+112 composition cells. Warm p95 is 108.7 ms under unchanged 250 ms. INR-a7's wider all-surface
+coverage, useful selection, source qualification, content, owner use and release remain open;
+no new source, schema, wire field, milestone completion or publication follows.
 
 October-14 [[D3786]] closes the browser-server diagnostic gap: actual test-only request windows,
 inclusive main-thread CPU and complete SQLite phases now reach ordinary CI logs. Seven direct
