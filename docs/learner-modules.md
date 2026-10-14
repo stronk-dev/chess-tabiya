@@ -55,6 +55,15 @@ Two-capture `derived.exchange.trade_completed@1` is a window dependency, not a o
 Post-commit Nudge source (D3760). Its declared eligibility remains; the actual recorded-path
 Review operation supplies the v2 successor. The one-edge source inventory must not call the
 legacy pair executable merely because it has a renderer.
+
+Full Inspector likewise accepts ten recorded-window successors with registered adapters but
+does not acquire their compiler output (D3791). A disposable source-wiring candidate admits
+the positives yet displays none because the mixed pool exhausts fact/mark budgets (D3792).
+A family-focused candidate displays all ten canonical positives without raising those budgets;
+it is research, not the shipping query or native UI. Production remains unchanged pending an
+explicit family-demand and truthful budget-limited-result contract. See the dated section in
+`design/research/module-evidence-assembly.md`; no executable-pair promotion follows.
+
 Source-held avoidance/window pairs name a presentation dependency only when their exact adapter
 is actually missing (D3761). Existing registered renderers do not release candidate/window holds.
 

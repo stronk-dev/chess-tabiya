@@ -31516,6 +31516,24 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3791",
+      "state": "blocked",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:b1cd877f7f1bbcc5427ffc696dd57db5d5b2deba0ea06c12951acbe845484176",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "item:D3792"
+    },
+    {
+      "id": "D3792",
+      "state": "blocked",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:2dcb0bea09180fcdfc2996fe14a373b9028110c61ba1bfaa91058cf22be9ae51",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }

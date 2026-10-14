@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3790]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3792]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -52,7 +52,7 @@ do not establish convincing personalities or calibrated ratings.
 The checked inventory is 277 completed / 268 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,731 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
@@ -60,6 +60,17 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+October-14 [[D3791]]/[[D3792]] expose a remaining foundation-to-UX gap without pretending to
+ship its repair. Inspector accepts ten recorded successors but does not acquire them. Genuine
+source acquisition alone still renders 0/10 canonical positives: nine lose the fact backstop,
+one the mark fit. An opt-in family-focused query candidate renders 10/10 with zero of ten
+paired-negative false positives, exact source receipts, saved-state equality and unchanged
+budgets. Production is unchanged; source delivery is blocked on an independently specified
+family-demand/limited-result contract, then authenticated HTTP/client/native acceptance.
+The compact reproducible research is not an ordinary CI/progress dependency, semantic
+qualification, new chess feature, accepted RFC or completed capability. The existing roadmap
+remains the full-product inventory; no competing progress document is introduced.
 
 October-14 [[D3789]]/[[D3790]] complete empty Support's missing rewind path on its existing
 module/Hint/unrecognized-pattern surfaces. Navigation returns to the selected path's preceding

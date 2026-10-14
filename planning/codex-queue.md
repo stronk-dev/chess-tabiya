@@ -1,5 +1,28 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 — [[D3791]] is the accepted Full Inspector recorded-window acquisition slice.
+Its ten exact v2 refs and adapters already exist; use the recorded-path compiler, never
+operand helpers, and bind emitted facts to the inspected node on its resolved branch.
+Keep Nudge's v1 one-edge scope, all current budgets, source identities, disclosure and
+role gates. Complete source/admission/render fixtures plus actual native selection/reload
+must precede any executable-pair promotion or closeout. D1870's broader consumers and
+recorded-path D3/D4/D6/D7 remain separately accountable; no qualification follows.
+[[D3792]] now gates its useful delivery: the real source-wiring candidate admits all ten
+canonical recorded-motif positives but renders none. Nine are removed by the pre-fit
+fact cap; contact timing survives that cap but loses its mark budget. Restore production
+rather than landing invisible collection or changing precedence/budgets without authority.
+Research is complete: `make inspector-demand-research` reproduces current/acquired/focused
+positive reach 0/10, 0/10 and 10/10 with zero paired-negative false positives, exact emitted
+identities, unchanged saved play and unchanged budgets. Bundles/reports stay ignored; ordinary
+CI and progress do not depend on them. Production query, source table and permanent tests are
+restored byte-identical to the preceding feature commit. The bounded author handoff is in
+`design/research/module-evidence-assembly.md`'s October-14 section. D3791 is blocked on
+D3792; D3792 is blocked on the existing module-registration contract. Specify and independently
+accept family demand, actual pre-acquisition narrowing, truthful limited-result states and
+closed wire compatibility before production HTTP/client/native implementation. No new RFC
+has been accepted and neither defect is closed. Finish this research checkpoint for the
+requested full-product inventory, rather than leaving an invisible implementation in flight.
+
 2026-10-14 — [[D3789]] implements the missing rewind half of empty Support's loop under
 the accepted module/play-composition and branch-runtime navigation contracts. Module,
 Guided Hint and unrecognized-pattern empties share pending/error/Campaign-cost chrome;

@@ -522,6 +522,17 @@ candidate-closure-census:
 recorded-consumer-adoption-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/review-map.test.ts
 
+.PHONY: recorded-inspector-check inspector-demand-research
+recorded-inspector-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/module-query.test.ts packages/runtime/src/module-registry.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/server/src/module-query.test.ts apps/server/src/recorded-semantic-path.test.ts
+
+# Disposable author evidence, explicitly outside ordinary CI/progress and production source edits.
+inspector-demand-research:
+	$(CI_NODE) tools/d3792-inspector-demand/build.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/baseline.mjs baseline
+	$(CI_NODE) .cache/d3792-inspector-demand/acquired.mjs acquired
+	$(CI_NODE) .cache/d3792-inspector-demand/derived_family.mjs derived_family
+
 .PHONY: recorded-castling-attraction-check
 .PHONY: recorded-castling-defender-check recorded-castling-defender-browser-check
 recorded-castling-defender-check:

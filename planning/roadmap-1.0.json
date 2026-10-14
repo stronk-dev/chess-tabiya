@@ -1061,14 +1061,17 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
+        "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
           "at": "2026-10-14",
-          "summary": "D3787 settles exact recorded-exchange source reuse: duplication is real, but four alternating pairs preserve every complete result/value/input/convention receipt over 89 paths/1,857 edges without consistent benefit; two faster/two slower and 0.57% greater summed cost. The reproducible research-bundle-only repeat is highly variable, not a speedup claim. Remove the candidate Map/callback and preserve original production code; four complete-source equivalence/corruption controls remain. D3788 corrects the plan's stale awaiting-D1/no-Review statement; current D1/D2/D5 adoption is proved and D3/D4/D6/D7 stay open. Focused path/actual consumer targets pass 133/212 cases, types and all 343 canonical cases remain current without metadata changes. Complete normal verification passes 5,601 software/390 files, seven unchanged-budget performance/four, 256 content/26, packaging and governance. No fresh browser/image proof is claimed for unchanged product bytes. Earlier D3783/D3782 and source/selection/qualification holds stand; no new runtime feature, cache, raw recording, D3300/D3600 closure, content or whole-capability/release promotion.",
-          "impact": "advanced",
+          "summary": "D3791/D3792 isolate recorded Inspector's delivery gap. Existing ten successors/adapters are not acquired; actual compiler acquisition admits the positive fixtures yet renders 0/10 because nine lose the fact backstop and contact timing loses mark fit. A disposable derived-family-focused candidate renders 10/10 with zero of ten paired-negative false positives, exact compiler identities, saved-state equality and unchanged 20/400/20/8 limits. Research and 201 actual baseline query/adapter/server checks pass. Production query, source image and permanent tests remain unchanged; D3791 is blocked on D3792's independently specified family-demand/limited-result contract. The small optional research outputs are ignored and not CI/progress dependencies. D3787's rejected cache candidate and four retained source guards, D3788's current Review adoption correction and earlier source/selection holds stand. No new detector, HTTP/client/native feature, accepted RFC, semantic qualification, official content, milestone, remote CI, image or release claim follows.",
+          "impact": "held",
           "evidence": [
             "packages/runtime/src/evidence-contract.ts",
             "design/research/recorded-semantic-path-cost.md",
+            "design/research/module-evidence-assembly.md",
+            "tools/d3792-inspector-demand/build.mjs",
+            "tools/d3792-inspector-demand/probe.ts",
             "planning/recorded-semantic-path/plan.md",
             "tools/d1931-recorded-path-source-harness/exchange-cost.ts",
             "tools/d1931-recorded-path-source-harness/exchange-candidate.mjs",
@@ -1129,6 +1132,16 @@
             "planning/exploration/log.md"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3791",
+              "digest": "sha256:b1cd877f7f1bbcc5427ffc696dd57db5d5b2deba0ea06c12951acbe845484176"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3792",
+              "digest": "sha256:2dcb0bea09180fcdfc2996fe14a373b9028110c61ba1bfaa91058cf22be9ae51"
+            },
             {
               "kind": "work_state",
               "id": "D3787",

@@ -193,3 +193,63 @@ The lawful order is: finish the missing producer/path authorities and shared pro
 amend module acceptance to include the evidence intended for learner features; specify this
 assembly operation; complete exact pair-keyed presentation; then implement module queries and
 seats. Building seats earlier would merely give honest styling to empty packets. `[M]`
+
+## 2026-10-14 — recorded Inspector acquisition is not delivery (D3791/D3792)
+
+**Question:** do the ten already accepted recorded-window successors reach Full Inspector?
+This is a bounded current-source measurement, not a refresh of the historical 207-pair census
+above. The current accepts and exact adapters exist, but `inspectorSources` acquires only
+position, incoming-edge and saved-packet routes; it never invokes `recordedSemanticPath`.
+The latter already constructs the ten exact successors from validated recorded boundaries.
+`[V]` (`packages/runtime/src/module-query.ts`, `inspectorSources`;
+`packages/runtime/src/module-query-sources.ts`, `moduleQuerySourceRoutes`;
+`packages/runtime/src/presentation-inspector-adapters.ts`;
+`rfc/module-registration.md` §1.3.1; `rfc/recorded-semantic-path.md` §§3/7.)
+
+**Method:** `make inspector-demand-research` bundles three guarded, disposable in-memory
+variants of the real query. It edits no application source. Each uses the ten canonical
+positive sequences and their ten hard negatives, excluding trade completion because Inspector
+does not accept that successor. The acquisition candidate invokes the existing compiler and
+selects only emitted events ending at the inspected node on its resolved recorded branch.
+The third candidate additionally narrows the acquired pool to Inspector's existing `derived`
+family *before reduction*. All retain the real assistance authority, admission, reducers,
+registered adapters, strict presentation receipt, exact emitted evidence identity and unchanged
+saved run. Fixed fixture results are not all-domain semantic qualification, HTTP/authentication,
+native UX or demand-driven acquisition proof. `[V]`
+(`tools/d3792-inspector-demand/build.mjs`, `probe.ts`;
+`packages/runtime/src/testing/recorded-sequence-fixtures.ts`.)
+
+| Variant | Positive families displayed / tested | Hard-negative false positives / tested |
+|---|---:|---:|
+| Current production query | 0 / 10 | 0 / 10 |
+| Recorded source acquired, existing mixed pool | 0 / 10 | 0 / 10 |
+| Same acquisition, derived-family-only reduction | 10 / 10 | 0 / 10 |
+
+In the acquisition candidate, the ten positive queries admit 21–115 facts. Nine requested
+successors disappear at the existing 20-fact backstop; contact timing survives that backstop
+but its atomic bundle exceeds the remaining mark budget. The focused candidate displays
+2–5 facts, 49–137 words, 1–7 marks and no arrows, below the unchanged Inspector limits
+20/400/20/8. All displayed target receipts match the compiler's exact emitted evidence,
+and every query preserves saved state. Missing overflow-recorder observations in a candidate
+without truncation are `null`, not a fabricated admitted count of zero. `[V]`
+(`make inspector-demand-research`; the small ignored `.cache/d3792-inspector-demand/*.json`
+reports are optional rerun output, not tracked inputs or CI/progress dependencies.)
+
+**Conclusion:** collection alone cannot close D3791. Keep production and executable-pair
+statuses unchanged. D3792 needs a bounded Inspector contract that makes each existing family
+explicitly inspectable and distinguishes collected-but-budget-limited from source no-witness.
+It must preserve admission, source ceilings and current budgets, not choose a global motif
+ranking or widen Nudge's single-edge scope. `[M]` This experiment only establishes the
+focused-view feasibility on its fixed population; it does **not** justify shipping the
+post-acquisition filter as demand-driven collection or declaring every motif useful.
+
+**Author handoff (not accepted production policy):** amend the existing module-registration
+Inspector section, rather than open another competing roadmap. Pin the exact request/response
+grammar and compatibility before changing parsers; narrow source work before acquisition;
+retain mixed available/unavailable/refused outcomes; report source witness separately from
+fact/word/mark/arrow truncation; and keep one focused modal with existing board/focus ownership.
+Acceptance must include all ten real positive/negative receipts, withheld/disabled zero work,
+root/interior/future/sibling/broken-path boundaries, unchanged saved state and budgets, actual
+authenticated query/client parsing, and native selection → view → reload → return. Resolve
+shared-resource claims before declaring any new wire version. Independent acceptance precedes
+implementation; D3791/D3792 remain open. `[M]`

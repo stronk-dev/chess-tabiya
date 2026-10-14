@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded Inspector delivery, 2026-10-14 ([[D3791]]/[[D3792]]): **answered `[V]` for the fixed
+ten-family population; production repair blocked**. Current query and a genuine recorded-source
+candidate each display 0/10 positive successors; a derived-family-focused candidate displays
+10/10, with 0/10 paired-negative false positives and unchanged budgets/saved play. This is not
+demand-driven source work, HTTP/native proof or semantic qualification. See
+`module-evidence-assembly.md` §2026-10-14 and the opt-in `make inspector-demand-research`.
+No raw recording is committed or required by CI/progress; independently specify the existing
+Inspector family's inspection/limited-result boundary before implementation.
+
 Recorded exchange-source work, 2026-10-14 ([[D3787]]): **answered `[V]`, optimization rejected**.
 The shared tactical fixture genuinely recomputes one capture source twice. A private reuse
 candidate preserves all results/receipts over 89 paths/1,857 edges but has no consistent cost

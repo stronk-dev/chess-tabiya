@@ -28206,3 +28206,45 @@ Campaign was the one capability with no API, route or content. Now:
   all-surface coverage, useful Nudge/Sight/Review selection, all source/qualification/content and
   owner-use discharges remain open. No protected intent, archive, source/policy/version, authored
   pack, new research dump, worktree, delegation, push, whole capability or release promotion.
+
+### 2026-10-14 — D3791/D3792 recorded Inspector delivery; inventory checkpoint
+
+- Take the accepted ten-successor Inspector acquisition question and record D3791 before
+  implementation. Twenty temporary actual-query probes initially fail because the compiler
+  is never invoked. A real source-binding candidate makes all ten hard negatives pass, but
+  all ten positive families remain absent from presentation. Do not land acquisition as a
+  completed learner feature or promote the operation census on that result.
+- Record D3792 before investigating reduction. The positive queries admit 21–115 facts;
+  nine recorded targets lose the twenty-fact backstop, while contact timing survives that
+  cap and then exceeds the remaining mark budget. This is a delivery gap, not detector absence.
+- Restore production query/source/permanent-test files to the preceding feature commit.
+  Keep only guarded disposable in-memory variants under tools/d3792-inspector-demand and
+  their explicit normal Make target. Bundles and tiny optional reports stay in ignored .cache;
+  ordinary CI/progress consumes neither. No raw positions/lines/source payload dump is committed.
+- Reproduce current/acquired/derived-family-focused reach 0/10, 0/10 and 10/10, with zero
+  paired-negative false positives, exact recorded evidence identities, strict receipt parsing,
+  unchanged complete saved runs and original 20/400/20/8 limits. The focus filter is applied
+  after acquisition: this proves fixed-population presentation feasibility, not demand-driven
+  source work, all-domain semantics, authentication, native UI or new policy authorization.
+- The normal recorded-inspector-check passes 201 cases/five runtime/adapter/actual-server
+  files. A subsequent probe assertion makes all four unchanged maxima explicit. The dossier,
+  coverage row, actual-behavior docs, existing tactical queue and strategic checkpoint now
+  retain the gap and bounded author handoff. D3791 is blocked on D3792; D3792 is blocked on
+  the existing module-registration contract. Neither is closed; independent family-demand,
+  source-versus-budget absence, wire compatibility and HTTP/native acceptance are still owed.
+- The owner requests a complete 1.0 inventory after finishing this in-flight checkpoint.
+  Keep the goal active, not paused or falsely completed. Fresh GitHub reads retain Oct-13
+  62c81eb1 verify 38381154735 success and browser 38381154879 failure; newer local work is
+  unpublished. Run final normal verification before committing this research/tracker batch.
+  No protected intent, archive, accepted RFC, production/chess behavior, semantic qualification,
+  official content, release gate, raw recording, worktree, delegation or publication changes.
+
+- Final frozen-input make inspector-demand-research roadmap-receipt verify-awake exits zero:
+  all three research variants retain their results and explicit unchanged maxima; clean package
+  types, software 5,611/390 files, unchanged-budget performance seven/four, content 256/26,
+  packaging and governance pass. Live state reads 1,733 assigned with zero untriaged; both
+  delivery defects remain blocked, not closed. The earlier 356-pass four-tier browser/build
+  proof belongs to the preceding production feature; no new browser/image run is claimed for
+  this unchanged-product research batch. Correct the dossier's wording to validated recorded
+  boundaries (runtime), not principal authentication (still owed at the future HTTP boundary).
+  Stage only the explicit research/doc/tracker list, inspect it and run normal commit hooks.
