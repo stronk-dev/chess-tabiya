@@ -56,6 +56,14 @@ export interface CampaignNodeCard {
   readonly unavailable: "pack_unavailable" | "opponent_unavailable" | null;
 }
 
+/** Encounter rules are independent of source/honesty withholding and never change the kit. */
+export function campaignRestrictionText(card: Pick<CampaignNodeCard, "boss" | "suppress" | "seal">): string | undefined {
+  if (card.suppress.length === 0) return undefined;
+  const tools = card.suppress.map(id => CAMPAIGN_MODULE_LABELS[id]).join(", ");
+  if (card.seal !== null) return `This ${card.boss ? "boss’s" : "encounter’s"} restriction ended for: ${tools}. Your earned tools and equipment are kept. Your help style, the next encounter and available evidence still determine what appears.`;
+  return `This ${card.boss ? "boss" : "encounter"} sets aside: ${tools}. These tools will not provide help in this encounter. Your earned tools and equipment are kept.`;
+}
+
 export interface CampaignProjection {
   readonly campaignRun: {
     readonly id: string;

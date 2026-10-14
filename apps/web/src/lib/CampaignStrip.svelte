@@ -9,6 +9,7 @@
     CampaignApi,
     campaignEncounterResult,
     campaignHelpRequest,
+    campaignRestrictionText,
     campaignToolRequestText,
     newCampaignCommandId,
     assertCampaignCommand,
@@ -53,8 +54,8 @@
   let subject: string | undefined;
 
   let active = $derived(campaign?.activeEncounter?.playRunId === runId && campaign.activeEncounter.nodeId === origin.nodeId);
-  let nodeTitle = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId)?.title ?? origin.nodeId);
-  let suppressed = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId)?.suppress ?? []);
+  let nodeCard = $derived(campaign?.acts.flatMap((act) => act.layers.flatMap((layer) => layer.choices)).find((card) => card.nodeId === origin.nodeId));
+  let nodeTitle = $derived(nodeCard?.title ?? origin.nodeId);
   let confirmedHelp = $derived(assistanceState === "ready" && assistance?.context === "campaign" && assistance.campaignReceipt !== undefined ? assistance : undefined);
 
   $effect(() => {
@@ -230,17 +231,21 @@
           </p>
         </div>
       </div>
-      <span class="kit" data-testid="campaign-encounter-help" role="status">
+      <div class="encounter-help-context">
+        {#if nodeCard !== undefined && nodeCard.suppress.length > 0}
+          <p class="campaign-restriction">{campaignRestrictionText(nodeCard)}</p>
+        {/if}
+        <span class="kit" data-testid="campaign-encounter-help" role="status">
         {#if confirmedHelp !== undefined}
           Help for this encounter: {confirmedHelp.modules.filter(id => id !== "rules_floor").map(id => CAMPAIGN_MODULE_LABELS[id as keyof typeof CAMPAIGN_MODULE_LABELS] ?? MODULE_LABELS[id]).join(", ") || "legal moves only"}.
-          {suppressed.length ? ` Set aside: ${suppressed.map(id => CAMPAIGN_MODULE_LABELS[id]).join(", ")}.` : ""}
           Feedback still needs available evidence. Equipment changes on the map apply to your next encounter.
         {:else if assistanceState === "pending"}
           Confirming help for this encounter. Legal moves stay visible meanwhile.
         {:else}
           Help could not be confirmed. Only legal moves are shown; retry confirming help in Support style.
         {/if}
-      </span>
+        </span>
+      </div>
     {:else}
       <span>This run was a campaign encounter.</span>
       <button type="button" class="quiet" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Open the campaign map</button>
@@ -260,6 +265,8 @@
   .campaign-strip { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
   .campaign-strip .charges { font-variant-numeric: tabular-nums; }
   .campaign-strip .kit { color: var(--muted); }
+  .encounter-help-context { flex-basis: 100%; min-width: 0; display: grid; gap: .4rem; padding-block: .25rem; }
+  .campaign-restriction { flex-basis: 100%; margin: 0; overflow-wrap: anywhere; }
   .node-result { display: grid; gap: .4rem; min-width: 0; flex-basis: 100%; overflow-wrap: anywhere; }
   .node-result p { margin: 0; }
   .result-kit { padding: .6rem; border: 1px solid var(--line); border-radius: .4rem; }

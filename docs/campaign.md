@@ -211,6 +211,16 @@ the encounter restrictions that ended without promising those tools are now acti
 encounter, selected help style and available evidence still determine what appears. Continue
 returns to the map; a completed campaign instead offers its run result.
 
+Map and preparation name the exact boss/encounter restriction and explain that its tools will
+provide no help there, without attributing that rule to the learner. In play, that rule stays
+beside—but separate from—pending/failed help confirmation, so a source failure cannot erase
+the authored restriction or masquerade as its cause. The grouped text has scrolling-edge
+spacing and remains fully visible on desktop/phone without moving the board. Sealed map cards
+say that the restriction ended; kit ownership/equipment are unchanged, and the next encounter,
+help style and available evidence still determine delivery. The browser fixture now suppresses
+an actually earned/equipped tool, then proves its admission in the next encounter, not just a
+notice about an unearned tool. No Campaign command, economy or assistance permission changes.
+
 Result, map and preparation distinguish current equipment from the current help-style request.
 An equipped tool excluded by Quiet or Custom remains earned and equipped, with that reason
 shown beside it. Requested does not mean source-confirmed or active: encounter restrictions,

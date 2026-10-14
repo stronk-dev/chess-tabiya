@@ -7,6 +7,92 @@ import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import { showRunActions, returnFromRunActions } from "./play-helpers.js";
 
 for (const mobile of [false, true]) {
+  test(`Campaign actions retain boss restrictions through failed help and restore the saved kit${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const campaignId = currentRunId(page);
+    await playPackNode(page, "f1-a");
+    await playPackNode(page, "f2-b");
+    const before = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+    expect(before.kit.owned).toContain("postcommit_nudge");
+    expect(before.kit.equipped).toContain("postcommit_nudge");
+    const card = page.locator('[data-node="f3-boss"]');
+    await expect(card.locator(".campaign-restriction")).toContainText("This boss sets aside");
+    await card.getByRole("button", { name: "Prepare", exact: true }).click();
+    const briefing = page.getByRole("dialog", { name: /Boss/u });
+    await expect(briefing.locator(".campaign-restriction")).toContainText("will not provide help in this encounter");
+    await expect(briefing.getByRole("checkbox", { name: "After-move nudge", exact: true })).toBeChecked();
+    await expect(briefing.getByRole("checkbox", { name: "After-move nudge", exact: true })).toBeDisabled();
+
+    let fail = true, release!: () => void;
+    const pending = new Promise<void>(resolve => { release = resolve; });
+    const path = "**/runs/*/assistance";
+    await page.route(path, async route => {
+      if (!fail) { await route.continue(); return; }
+      await pending;
+      await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "HTTP_ERROR", message: "Temporary help failure" } }) });
+    });
+    try {
+      await briefing.getByRole("button", { name: "Start encounter", exact: true }).click();
+      await expect(page).toHaveURL(/\/play\/run\//u);
+      const runId = currentRunId(page);
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      const board = page.getByLabel("Chessboard"), rectangle = await board.boundingBox();
+      const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
+      const restriction = strip.locator(".campaign-restriction");
+      const help = strip.getByTestId("campaign-encounter-help");
+      const helpContext = strip.locator(".encounter-help-context");
+      await showRunActions(page);
+      await helpContext.scrollIntoViewIfNeeded();
+      await expect(restriction).toBeVisible();
+      await expect(restriction).toContainText("Step-by-step hint, After-move nudge");
+      await expect(help).toContainText("Confirming help");
+      expect(await board.boundingBox()).toEqual(rectangle);
+      const recorded = (await (await page.request.get(`/runs/${runId}/events`)).json()).events;
+      release();
+      await expect(help).toContainText("Help could not be confirmed");
+      await expect(restriction).toContainText("tools and equipment are kept");
+      await helpContext.scrollIntoViewIfNeeded();
+      await expect(restriction).toBeInViewport({ ratio: 1 });
+      await expect(help).toBeInViewport({ ratio: 1 });
+      await page.screenshot({ path: test.info().outputPath("campaign-boss-help-failed.png") });
+      expect(await board.boundingBox()).toEqual(rectangle);
+
+      fail = false;
+      await returnFromRunActions(page);
+      await page.locator("details.assistance-control summary").click();
+      const confirmedResponse = page.waitForResponse(response => response.url().endsWith(`/runs/${runId}/assistance`) && response.request().method() === "POST");
+      await page.getByRole("button", { name: "Retry confirming help", exact: true }).click();
+      await expect(help).toContainText("Help for this encounter: legal moves only");
+      const confirmed = (await (await confirmedResponse).json()).assistance;
+      expect(confirmed.modules).not.toContain("postcommit_nudge");
+      const restricted = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+      expect(restricted.kit.owned).toEqual(before.kit.owned);
+      expect(restricted.kit.equipped).toEqual(before.kit.equipped);
+      assertOnlyEvidenceAppended(recorded, (await (await page.request.get(`/runs/${runId}/events`)).json()).events);
+      await playableBoard(page, rectangle!.width);
+      await move(page, "c1", "e3");
+      await expect.poll(() => moveCount(page, runId)).toBeGreaterThanOrEqual(2);
+      await showRunActions(page);
+      await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+      await expect(strip.locator(".node-result")).toContainText("restriction ended for: Step-by-step hint, After-move nudge");
+      await strip.getByRole("button", { name: "Continue to the map", exact: true }).click();
+      await page.reload();
+      await expect(card.locator(".campaign-restriction")).toContainText("This boss’s restriction ended");
+      await expect(card.locator(".campaign-restriction")).not.toContainText("sets aside");
+      const nextResponse = page.waitForResponse(response => response.url().endsWith("/assistance") && response.request().method() === "POST");
+      await startNode(page, "f4-a");
+      await expect(help).toContainText("Help for this encounter: After-move nudge");
+      expect((await (await nextResponse).json()).assistance.modules).toContain("postcommit_nudge");
+      await expect(restriction).toHaveCount(0);
+      const next = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+      expect(next.kit.owned).toEqual(before.kit.owned);
+      expect(next.kit.equipped).toEqual(before.kit.equipped);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    } finally { fail = false; release(); await page.unroute(path); }
+  });
+
   test(`Campaign actions explain free leave/resume and a completion already sent${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
@@ -953,7 +1039,7 @@ test(`Campaign: enter, play encounters and a registered-bot boss, see results, r
 
   // Criterion 4: the balance is visible before any spend, on the map and in the encounter strip.
   await expect(page.getByTestId("campaign-charges")).toContainText("⟲ 1");
-  await expect(page.locator('[data-node="f3-boss"]')).toContainText("Sets aside: Step-by-step hint");
+  await expect(page.locator('[data-node="f3-boss"]')).toContainText("This boss sets aside: Step-by-step hint");
 
   const firstRunId = await startNode(page, "f1-a");
   const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });

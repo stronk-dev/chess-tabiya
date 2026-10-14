@@ -345,7 +345,7 @@ describe("Campaign action ownership", () => {
     const input = dialog.querySelector<HTMLInputElement>("input")!;
     expect(input.checked).toBe(true);
     expect(input.disabled).toBe(true);
-    expect(dialog.textContent).toContain("These tools stay in your kit");
+    expect(dialog.textContent).toContain("Your earned tools and equipment are kept");
     expect(dialog.textContent).toContain("Set aside for this encounter, even if equipped");
     expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "PUT")).toHaveLength(0);
     button("Back to map").click(); await settle();
@@ -505,6 +505,51 @@ async function strip(submit: () => Promise<Response>, read: () => Promise<Respon
   await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
   return { component, fetcher, onRevision, onNavigate, onEncounterState };
 }
+
+describe("Campaign restriction disclosure", () => {
+  function restricted(projection: CampaignProjection): CampaignProjection {
+    return { ...projection, acts: projection.acts.map(act => ({ ...act, layers: act.layers.map(layer => ({ ...layer,
+      choices: layer.choices.map(card => ({ ...card, boss: true, suppress: ["postcommit_nudge"] })),
+    })) })) };
+  }
+
+  it.each(["pending", "unavailable"] as const)("keeps the boss restriction separate from %s help confirmation", async assistanceState => {
+    const projection = restricted(encounterFixture());
+    const saved = JSON.stringify(projection);
+    const view = await strip(async () => Response.json(sealResponse()), async () => Response.json(projection));
+    view.component.$set({ assistanceState }); await settle();
+    const restriction = document.querySelector(".campaign-restriction");
+    expect(restriction?.textContent).toContain("This boss sets aside: After-move nudge");
+    expect(restriction?.textContent).toContain("will not provide help in this encounter");
+    expect(restriction?.textContent).toContain("tools and equipment are kept");
+    expect(restriction?.closest('[data-testid="campaign-encounter-help"]')).toBeNull();
+    expect(document.querySelector('[data-testid="campaign-encounter-help"]')?.textContent).toContain(assistanceState === "pending" ? "Confirming help" : "Help could not be confirmed");
+    expect(JSON.stringify(projection)).toBe(saved);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+  });
+
+  it("discloses the boss and effect before entry without changing owned or equipped tools", async () => {
+    const projection = restricted(fixture()), saved = JSON.stringify(projection);
+    const view = await screen("start", async () => Response.json(response("start")), undefined, projection);
+    const restriction = document.querySelector('[role="dialog"] .campaign-restriction');
+    expect(restriction?.textContent).toContain("This boss sets aside: After-move nudge");
+    expect(restriction?.textContent).toContain("will not provide help in this encounter");
+    expect(document.querySelector<HTMLInputElement>('[role="dialog"] input')?.checked).toBe(true);
+    expect(document.querySelector<HTMLInputElement>('[role="dialog"] input')?.disabled).toBe(true);
+    expect(JSON.stringify(projection)).toBe(saved);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+  });
+
+  it("labels a sealed map restriction as ended, not as current help or a source promise", async () => {
+    const projection = restricted(sealResponse().campaign);
+    await screen("loadout", async () => Response.json(response("loadout")), undefined, projection);
+    const restriction = document.querySelector(".node-card .campaign-restriction");
+    expect(restriction?.textContent).toContain("This boss’s restriction ended for: After-move nudge");
+    expect(restriction?.textContent).toContain("next encounter and available evidence");
+    expect(restriction?.textContent).not.toContain("sets aside");
+    expect(restriction?.textContent).not.toContain("now active");
+  });
+});
 
 describe("Campaign finish and leave consequences", () => {
   it("describes the irreversible campaign choice at Declare done and free unfinished resume at Map", async () => {

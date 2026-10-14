@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { preferenceDisplayMode, presetDeclaration, renderSuppression, requestedPreset, selectNamedPreset, workflowContextPolicy, type PresetId } from "@chess-tabiya/runtime/client";
   import { loadWorkflowPreference, saveWorkflowPreference, workflowPreferenceKey, type PreferenceStorage } from "./assistance-preference.js";
-  import { CAMPAIGN_MODULE_LABELS, campaignBotLabel, campaignHelpRequest, campaignToolRequestText, rewardText, type CampaignModuleId, type CampaignNodeCard, type CampaignProjection } from "./campaign-api.js";
+  import { CAMPAIGN_MODULE_LABELS, campaignBotLabel, campaignHelpRequest, campaignRestrictionText, campaignToolRequestText, rewardText, type CampaignModuleId, type CampaignNodeCard, type CampaignProjection } from "./campaign-api.js";
   import { modalBoundary } from "./modal-boundary.js";
   import { offeredPresetChoices, unavailablePresetNotice } from "./preset-menu.js";
 
@@ -76,7 +76,7 @@
     {#if card.opponent}<p>You play a full game from the authored start against {campaignBotLabel(card.opponent.profileId)}. Only the rules end it.</p>{/if}
     <p>{rewardText(card.reward)} — earned when you declare the encounter done, whatever the outcome.</p>
     {#if card.suppress.length > 0}
-      <p class="suppression">This encounter sets aside: {card.suppress.map(id => CAMPAIGN_MODULE_LABELS[id]).join(", ")}. These tools stay in your kit.</p>
+      <p class="campaign-restriction suppression">{campaignRestrictionText(card)}</p>
     {/if}
     <section aria-labelledby="prep-help-title">
       <h3 id="prep-help-title">How would you like help?</h3>

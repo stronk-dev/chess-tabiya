@@ -1,5 +1,14 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
+- **2026-10-14 restriction disclosure checkpoint:** D3809 completes CMP-a13 under §§3.3/7.1.
+  Map/preparation name the boss/encounter and effect; in-play rules stay distinct from pending
+  or failed help confirmation. Saved map seals name the ended restriction without promising
+  available guidance. Actual desktop/phone earned/equipped tool suppression, held/failed help,
+  retry, seal/reload and the next encounter retain kit/play and exact board geometry. Four
+  predecessor-red controls, 374 focused software checks/types and seventeen native cases pass.
+  No new source, command, economy, default, curriculum or whole-Campaign discharge. Full
+  ordinary verification is recorded in the exploration log before commit.
+
 - **2026-10-11 encounter-help checkpoint:** D3706 binds §7.1's compact effective-tool display to
   the board's confirmed assistance projection, not the latest map equipment. The server's
   node_entered inventory cut remains authoritative; current help style still narrows it.

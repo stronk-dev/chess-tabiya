@@ -4,6 +4,13 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Campaign restriction checkpoint, 2026-10-14:** D3809 completes CMP-a13 under the existing
+`campaign-core.md` §§3.3/7.1 contract, not an amendment or full RFC completion. Restrictions
+remain independent of pending/failed source confirmation and end visibly on saved map cards.
+Actual earned/equipped-tool boss and next-encounter browser coverage retains kit/play/geometry;
+full ordinary verification is recorded in the exploration log. Curriculum/rewards and the
+remaining Campaign/release discharges stand.
+
 **Inspector demand/detail bounded draft, 2026-10-14:** `module-registration.md` §4.11a
 owns D3792 without reinterpreting `module.query_page@1`. D3797's six-source member/batch model
 and exact target/color/mode focus fit unchanged limits on the sampled population. The proposed

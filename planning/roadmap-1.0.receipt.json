@@ -2,11 +2,11 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:841d1fd60f1bc6f8a30d3adc78fe9b782c3d2dcbc2cf2592015447f5299dd0c3",
-    "workItems": "sha256:b71defa0f23fbd4c5b5cca07c59813ecc9a580304ee24217be8d81cd5c8277b4",
-    "workState": "sha256:472090a783dfb5be11bf7aafea61b93e245af5b840e2fd18c8f981dfb1313c66",
-    "rfcRegister": "sha256:b611ca59b70511232b01c4733ff3c4ebdced41c25ce26bdf622e765c602de1e5",
-    "uxIndex": "sha256:9a800e098633ad8e5ef68d706ac67ada4b00d63d81ad8732ed9656e18771c786",
+    "roadmap": "sha256:fab3deb162159170f50702ac4ccba341834e917be634ddf7dad6c0abf88ed4c2",
+    "workItems": "sha256:448b9783d376582c3765171656de35da790a9e854337d6a2d781ab3997c02a5a",
+    "workState": "sha256:b13dcc960ad4c958faa997ec888e59aa941fab180ff868c290bdfa290ce25346",
+    "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
+    "uxIndex": "sha256:8d1e718ab156df60877f1002fb9484fa4dc55ce6a72259183f18f8c9a3c73a62",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
     "rest": "sha256:c52d7266bfe5d6c35f232651cff87e3bbe41ee745a9b5a174ea31702dbfd5c91"
@@ -30,17 +30,17 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 630,
+      "todo": 631,
       "doing": 16,
       "blocked": 1087,
-      "done": 1663,
+      "done": 1664,
       "refused": 161
     },
     "workItems": {
-      "queued": 81,
+      "queued": 80,
       "blocked_owner": 62,
       "blocked_rfc": 122,
-      "completed": 280,
+      "completed": 281,
       "retired": 24
     },
     "dimensionStates": {
@@ -1546,10 +1546,11 @@
       "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "D3806/D3807/D3808 complete CMP-a7/CMP-a10 under campaign-core: finish seals the Campaign choice while preserving chess attempts; Map explains free unfinished resume, pending completion, unconfirmed response and failed/pending reads without promising cancellation. Actual desktop/phone fork, leave, map/reload, same-run resume and delayed accepted seal preserve both branches, recorded moves and the exact board rectangle. Screenshot review rejects the first below-fold phone controls; grouped decisions fit together before kit details. The first full chain catches a missing route citation, then the browser gate catches the new terminal paragraph collapsing the intro into an auto grid column. Full-width Campaign grouping fixes that regression with unchanged deadlines. Four mounted strip controls, one terminal control, 370 focused software cases, types and fifteen actual native Campaign cases pass, including both desktop and phone boss/seal/map/abandon journeys and readable-width controls. D3808 then separates terminal display availability from withdrawn charge authority: pending/failed reads retain the same disabled host control and offer single-flight read-only reload inside the modal. Two mounted and desktop/phone held/failed/recovered-read controls retain focus, identity and saved state. Final repaired-code full gates are recorded in the append-only exploration log. UX is now 280 complete/265 live/24 retired. D3784/D3785 saved-source recovery and prior Profile/learner checkpoints stand. Useful selection, qualified sources, skill credit, calibrated bots, Campaign curriculum/rewards, official content and release recovery remain open. No new API, schema, command, modal, source, economy or default; no whole capability/milestone, remote CI, image or release promotion.",
+        "summary": "D3809 completes CMP-a13 under campaign-core §§3.3/7.1: one boss/encounter rule renderer names the exact restriction before entry and on the map, independently of source/honesty withholding. In-play rules remain visible through pending/failed help; saved seals name the ended restriction without promising available guidance. Four predecessor-red controls, 374 focused software cases/types and seventeen actual native Campaign cases pass. The browser fixture now suppresses an actually earned/equipped tool, then proves its admission in the next encounter after held/failed help, retry, seal and map/reload. Kit and recorded chess stay intact; board rectangles remain exact. Screenshot review adds grouped explanations and scroll-edge spacing, retaining full-visibility assertions and unchanged deadlines. Final full normal gates are recorded in the append-only log before commit. UX is 281 complete/264 live/24 retired. D3806–D3808 finish/leave and terminal recovery, D3784/D3785 saved-source recovery and prior Profile checkpoints stand. D3810 separately records published 78fd302f's matrix failure; no remote closure. Useful selection, qualified sources, skill credit, calibrated bots, Campaign curriculum/rewards, official content and release recovery remain open. No new API, schema, command, source, economy or default; no whole capability/milestone, remote CI, image or release promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/CampaignScreen.svelte",
+          "tests/browser/fixtures/campaign.browser.json",
           "apps/web/src/lib/campaign-api.ts",
           "apps/web/src/lib/TerminalSheet.svelte",
           "apps/web/src/lib/terminal-sheet.test.ts",
@@ -1611,6 +1612,11 @@
           "tests/browser/import-workflow.spec.ts"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3809",
+            "digest": "sha256:e8acba6f797e203932ac852130053c09158b384ce1b314177946e6b8cc477832"
+          },
           {
             "kind": "work_state",
             "id": "D3808",
@@ -2599,10 +2605,10 @@
       "owner": "campaign",
       "rfcCount": 4,
       "workItems": {
-        "queued": 24,
+        "queued": 23,
         "blocked_owner": 6,
         "blocked_rfc": 19,
-        "completed": 10,
+        "completed": 11,
         "retired": 4
       },
       "routes": {

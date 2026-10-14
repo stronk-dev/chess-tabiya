@@ -28566,3 +28566,37 @@ Campaign was the one capability with no API, route or content. Now:
   skip, zero retries; all 112 composition cells pass unretried. No code is edited during this
   successful run. Subsequent closeout edits only record the result. Local success is not paired
   current-revision GitHub qualification, Docker recovery, official content or full 1.0.
+
+### 2026-10-14 — D3809 complete Campaign restriction disclosure; D3810 remote matrix failure
+
+- Resume the active full 1.0 goal after the requested total inventory. D3809 implements only
+  accepted campaign-core §§3.3/7.1/CMP-a13, not a held source or curriculum amendment. Four new
+  permanent controls fail on the predecessor: pending/failed help hides the boss rule, briefing
+  lacks its effect, and a sealed map card continues to describe an active restriction.
+- One renderer now names the boss/encounter and its exact tools before entry and on the map.
+  The in-play rule stays separate from source/honesty withholding; saved seals describe its end.
+  Kit, commands, economy, requests and permissions are unchanged. 374 focused software checks
+  and strict types pass. The first native attempt fails my new test's nonexistent GET assistance
+  query; inspect the app's actual POST response instead. Seventeen focused native cases then
+  pass, including actual earned/equipped tool suppression, held/failed help, retry, seal/reload
+  and admission in the next encounter, without changing kit or recorded chess.
+- Screenshot review exposes separated source-status text below the phone fold. Group both
+  explanations; the strengthened native full-visibility check then catches a clipped scroll
+  edge. Add spacing, not tolerance/deadline/retry relaxation. All seventeen actual desktop/phone
+  cases pass with exact board rectangles retained. Full ordinary gates follow before commit.
+- Published 78fd302f verify 38560140789 passes all three jobs. Browser 38560140733 passes
+  smoke/content but fails one matrix case (58 pass): state-09 Keep playing first has viewport
+  ratio zero, then disappears. D3810 owns this separate failure; D3600's older timing cause is
+  not closed. Its 104 MB diagnostic artifact stays in a dedicated /private/tmp directory, not
+  Git or ordinary progress inputs. The final 360x680 screenshot shows Theory back at Show;
+  trace confirms reveal and an empty response preceded retirement, not its cause.
+- Close only D3809/CMP-a13, retain D3810 as assigned open work, and update the existing roadmap,
+  registers and docs. No protected intent change, raw research dump, publication, release or
+  whole-capability promotion; the full 1.0 goal remains active and incomplete.
+- Final frozen normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  5,632 software cases/391 files, seven performance cases/four files, 256 content cases/26 files,
+  strict types, packaging, labels and governance. All four browser tiers pass: main journeys,
+  five content cases, 59 matrix cases and one packaged-production case, with one optional Maia
+  skip and zero retries. All 150 input and 112 composition cells pass; warm p95 110.1 ms retains
+  the unchanged 250 ms budget. No input edits occur during this run. This closes the local
+  Campaign slice, not D3810's published failure, D3600's prior cause, Docker recovery or 1.0.

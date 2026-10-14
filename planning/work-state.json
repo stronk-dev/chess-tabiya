@@ -31685,6 +31685,25 @@
       ],
       "evidence": "tests/browser/campaign.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3809",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e8acba6f797e203932ac852130053c09158b384ce1b314177946e6b8cc477832",
+      "uxItems": [
+        "CMP-a13"
+      ],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3810",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:17b1bfd118df60fdfaf224a20c3fb83dff5956a7b746e96074bf2378ab5fb8f0",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

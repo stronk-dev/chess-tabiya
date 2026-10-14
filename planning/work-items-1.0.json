@@ -4065,17 +4065,21 @@
     {
       "id": "CMP-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§5.3c-1…4",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
       "summary": "Four suppressor-boss rules: disclosed before entry by name and effect; suppression attributed to the boss, **never** to the learner; restoration visible on the seal; and the suppression sentence must never share a template with the honesty-withholding sentence",
-      "legacyRoute": "none",
-      "note": "criterion 7 already makes card disclosure failable",
-      "sourceDigest": "sha256:a3229c5bc81c4abbaa22958b6ec4c1f25864fefca1207d0a1a470f9dc48ea2ab"
+      "legacyRoute": "complete",
+      "note": "[[D3809]] — map/preparation and separate pending/failed-help rule; actual desktop/phone earned-tool suppression, saved seal/reload and next encounter, unchanged kit/play/board",
+      "sourceDigest": "sha256:c6dd09d7ee25f086b5e233a6464734ab8d23f7b10c3278234dedead378b2a2a8",
+      "completion": {
+        "completedOn": "2026-10-14",
+        "evidence": "tests/browser/campaign.spec.ts"
+      }
     },
     {
       "id": "CMP-a14",

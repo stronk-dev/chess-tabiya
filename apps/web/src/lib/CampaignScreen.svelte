@@ -14,6 +14,7 @@
     assertCampaignCommand,
     campaignBotLabel,
     campaignHelpRequest,
+    campaignRestrictionText,
     campaignToolRequestText,
     newCampaignCommandId,
     rewardText,
@@ -413,7 +414,7 @@
                   {#if card.unavailable !== null}<p class="honest">{unavailableText(card)}</p>{/if}
                   {#if card.opponent}<p class="meta">Opponent: {campaignBotLabel(card.opponent.profileId)} · {card.rating === "unrated" ? "unrated" : "rated when clean"}</p>{/if}
                   <p>{rewardText(card.reward)}</p>
-                  {#if card.suppress.length > 0}<p class="suppress">Sets aside: {card.suppress.map((id) => CAMPAIGN_MODULE_LABELS[id]).join(", ")}</p>{/if}
+                  {#if card.suppress.length > 0}<p class="campaign-restriction suppress">{campaignRestrictionText(card)}</p>{/if}
                   {#if card.seal !== null}
                     <p class="seal">{verdictText(card.seal)}</p>
                     <CampaignEncounterHistory {campaigns} campaignRunId={campaign.campaignRun.id} nodeId={card.nodeId} runId={card.seal.playRunId} campaignDocumentDigest={campaign.campaignRun.documentDigest} {onNavigate} />

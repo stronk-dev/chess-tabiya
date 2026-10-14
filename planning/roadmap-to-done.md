@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3808]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3810]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,22 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+Published CI checkpoint: [[D3810]] owns `78fd302f`'s empty-Theory state-09 interaction failure.
+Verify 38560140789 succeeds; browser 38560140733 passes smoke/content but fails one matrix case
+(58 pass). The recovery button first has viewport ratio zero, then disappears. Cause is not
+established; no deadline/assertion or release-state change is justified by this reading.
+
+[[D3809]] completes CMP-a13's restriction disclosure across map, preparation, pending/failed
+encounter help and saved completion under accepted campaign-core §§3.3/7.1. Four predecessor-red
+controls, 374 focused software cases/types and seventeen native desktop/phone cases pass. Actual
+earned/equipped tool suppression, failed help, retry, seal/reload and the next encounter retain
+kit/play and exact board geometry. Grouped text and scroll-edge spacing keep both explanations
+visible. Full frozen ordinary verification/build/all four browser tiers pass: 5,632 software,
+seven performance, 256 content, 59 matrix and one packaged-production case; one optional Maia
+skip, zero retries and all 112 composition cells. No source/command/reward/default or full
+Campaign completion. The latest UX count is 281 complete/264 live/24 retired; all 1,734 live
+ledger items are assigned. No 1.0 capability or release gate is promoted.
 
 October-14 [[D3806]]/[[D3807]] complete CMP-a7/CMP-a10's accepted Campaign finish/leave slice.
 The next full browser run exposes [[D3808]]: charge-authority withdrawal detaches the terminal
@@ -73,10 +89,10 @@ but registered facts do not automatically become useful assistance. The full con
 searched-line hints do not establish that general capability. Likewise, playable bot profiles
 do not establish convincing personalities or calibrated ratings.
 
-The checked inventory is 280 completed / 265 live / 24 retired UX items, four active / five
+The checked inventory is 281 completed / 264 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,734 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,

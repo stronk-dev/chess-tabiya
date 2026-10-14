@@ -78,7 +78,8 @@
               },
               "boss": true,
               "suppress": [
-                "guided_hint"
+                "guided_hint",
+                "postcommit_nudge"
               ]
             }
           ]
