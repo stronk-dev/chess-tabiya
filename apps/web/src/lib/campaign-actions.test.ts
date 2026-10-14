@@ -494,18 +494,94 @@ async function strip(submit: () => Promise<Response>, read: () => Promise<Respon
     ? Response.json({ kind: "available", runId: PLAY, nodeId: NODE, campaignDocumentDigest: DIGEST, route: `/play/run/${PLAY}`, reviewNodeId: "recorded-tip", reviewBranchId: "main", reviewRoute: `/review/game/${PLAY}?branch=main&node=recorded-tip` })
     : init?.method === "GET" ? read() : submit());
   const onRevision = vi.fn();
+  const onNavigate = vi.fn();
+  const onEncounterState = vi.fn();
   const component = createClassComponent({ component: CampaignStrip, target: document.body, props: {
-    campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate: vi.fn(), onRevision,
+    campaigns: new CampaignApi(fetcher), origin: { campaignRunId: RUN, nodeId: NODE }, runId: PLAY, branchId: "main", runRevision: 1, onNavigate, onRevision,
     assistance: undefined as BrowserNarrowedAssistanceV1 | undefined, assistanceState: "pending" as "pending" | "ready" | "unavailable",
-    helpPreference: undefined as WorkflowPreferenceReceipt | undefined,
+    helpPreference: undefined as WorkflowPreferenceReceipt | undefined, onEncounterState,
   } });
   cleanup.push(() => component.$destroy());
   await vi.waitFor(() => expect(button("Declare done")?.disabled).toBe(false));
-  return { component, fetcher, onRevision };
+  return { component, fetcher, onRevision, onNavigate, onEncounterState };
 }
+
+describe("Campaign finish and leave consequences", () => {
+  it("describes the irreversible campaign choice at Declare done and free unfinished resume at Map", async () => {
+    const view = await strip(async () => Response.json(sealResponse()));
+    const finish = button("Declare done"), leave = button("Map");
+    const description = (control: HTMLButtonElement) => (control.getAttribute("aria-describedby") ?? "").split(" ").map(id => document.getElementById(id)?.textContent ?? "").join(" ");
+    expect(description(finish)).toContain("this campaign result cannot be changed");
+    expect(description(finish)).toContain("recorded attempts are kept");
+    expect(description(leave)).toContain("keeps this encounter in progress");
+    expect(description(leave)).toContain("at no extra cost");
+    leave.click(); await settle();
+    expect(view.onNavigate).toHaveBeenCalledWith(`/campaign/${RUN}`);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method !== "GET")).toHaveLength(0);
+  });
+
+  it("does not promise that leaving cancels a completion already sent", async () => {
+    const pending = deferred<Response>();
+    const view = await strip(() => pending.promise);
+    const declaring = view.component.declareDone(); await settle();
+    const notice = document.getElementById("campaign-leave-consequence");
+    expect(notice?.textContent).toContain("Going to the map does not cancel it");
+    expect(notice?.textContent).not.toContain("keeps this encounter in progress");
+    button("Map").click(); await settle();
+    expect(view.onNavigate).toHaveBeenCalledWith(`/campaign/${RUN}`);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "POST")).toHaveLength(1);
+    cleanup.pop()!(); pending.resolve(Response.json(sealResponse()));
+    expect(await declaring).toBe(false);
+  });
+
+  it("keeps a lost response uncertain until a read confirms the saved seal", async () => {
+    let sealed = false;
+    const view = await strip(async () => { throw new TypeError("Lost completion response"); }, async () => Response.json(sealed ? sealResponse().campaign : encounterFixture()));
+    expect(await view.component.declareDone()).toBe(false); await settle();
+    expect(document.getElementById("campaign-leave-consequence")?.textContent).toContain("may already be sealed");
+    expect(document.getElementById("campaign-leave-consequence")?.textContent).not.toContain("keeps this encounter in progress");
+    sealed = true; view.component.$set({ runRevision: 2 });
+    await vi.waitFor(() => expect(document.querySelector(".node-result")).not.toBeNull());
+    expect(document.getElementById("campaign-leave-consequence")).toBeNull();
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "POST")).toHaveLength(1);
+  });
+
+  it("does not describe a retained encounter as confirmed unfinished while its read is pending or failed", async () => {
+    const pending = deferred<Response>(); let later = false;
+    const view = await strip(async () => Response.json(sealResponse()), () => later ? pending.promise : Promise.resolve(Response.json(encounterFixture())));
+    later = true; view.component.$set({ runRevision: 2 }); await settle();
+    expect(document.getElementById("campaign-leave-consequence")?.textContent).toContain("Encounter state is not confirmed");
+    pending.resolve(Response.json({ error: { code: "HTTP_ERROR", message: "Read failed" } }, { status: 503 })); await settle();
+    expect(document.getElementById("campaign-leave-consequence")?.textContent).toContain("Encounter state is not confirmed");
+    expect(document.getElementById("campaign-leave-consequence")?.textContent).not.toContain("keeps this encounter in progress");
+    expect(button("Declare done").disabled).toBe(true);
+    button("Map").click(); await settle();
+    expect(view.onNavigate).toHaveBeenCalledWith(`/campaign/${RUN}`);
+    expect(view.fetcher.mock.calls.filter(([, init]) => init?.method === "POST")).toHaveLength(0);
+  });
+});
 
 describe("Campaign in-game read recovery", () => {
   const failedRead = () => Response.json({ error: { code: "HTTP_ERROR", message: "Temporary encounter read failure" } }, { status: 503 });
+
+  it("publishes display availability separately from authority and recovers with a single read, not a command", async () => {
+    let read: () => Promise<Response> = async () => Response.json(encounterFixture());
+    const view = await strip(async () => Response.json(sealResponse()), () => read());
+    expect(view.onEncounterState).toHaveBeenLastCalledWith({ runId: PLAY, status: "active" });
+    const pending = deferred<Response>(); read = () => pending.promise;
+    const first = view.component.refreshEncounterState();
+    await view.component.refreshEncounterState(); await settle();
+    expect(view.onRevision).toHaveBeenLastCalledWith(null);
+    expect(view.onEncounterState).toHaveBeenLastCalledWith({ runId: PLAY, status: "pending" });
+    expect(view.fetcher.mock.calls).toHaveLength(2);
+    pending.resolve(failedRead()); await first;
+    expect(view.onEncounterState).toHaveBeenLastCalledWith({ runId: PLAY, status: "failed" });
+    read = async () => Response.json(encounterFixture());
+    await view.component.refreshEncounterState();
+    expect(view.onEncounterState).toHaveBeenLastCalledWith({ runId: PLAY, status: "active" });
+    expect(view.onRevision).toHaveBeenLastCalledWith({ campaignRevision: 1, active: true });
+    expect(view.fetcher.mock.calls.every(([, init]) => init?.method === "GET")).toBe(true);
+  });
 
   it("never presents the latest map equipment as confirmed encounter help", async () => {
     const view = await strip(async () => Response.json(sealResponse()));
@@ -769,9 +845,11 @@ describe("Campaign encounter declaration ownership", () => {
     const view = await strip(() => late.promise);
     const declaring = view.component.declareDone();
     const before = view.onRevision.mock.calls.length;
+    const statesBefore = view.onEncounterState.mock.calls.length;
     cleanup.pop()!(); late.resolve(Response.json(sealResponse()));
     expect(await declaring).toBe(false);
     expect(view.onRevision.mock.calls).toHaveLength(before);
+    expect(view.onEncounterState.mock.calls).toHaveLength(statesBefore);
   });
 
   it("does not publish a previous branch's declaration after the subject changes", async () => {

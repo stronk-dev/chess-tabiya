@@ -372,6 +372,7 @@
     {#if campaign.activeEncounter}
       <aside class="resume" aria-label="Active encounter">
         <p>Encounter in progress: <strong>{campaign.activeEncounter.title}</strong></p>
+        <p>Your saved moves and attempts are kept. Continuing this encounter costs no additional earned rewinds.</p>
         <button type="button" onclick={() => onNavigate(`/play/run/${encodeURIComponent(campaign!.activeEncounter!.playRunId)}`)}>Continue encounter</button>
       </aside>
     {/if}

@@ -4011,17 +4011,22 @@
     {
       "id": "CMP-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§4.3e",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
       "summary": "Tell a learner who leaves an encounter what happened to it — one sentence",
-      "legacyRoute": "none",
-      "note": "open question 3 ships the free reading",
-      "sourceDigest": "sha256:a5956ed06ba5144028a1c087278c7ab41af6b7d787d6201a74f6b123a16c8861"
+      "legacyRoute": "ledger",
+      "note": "Closed under [[D3806]]: Map explains retained unfinished/free resume and no refund of previous spends; the active map repeats preservation. Pending and unconfirmed completion/read states do not promise cancellation or definite unfinished state. Actual desktop/phone leave/resume keeps both branches and all moves; delayed accepted completion resolves through the saved map result",
+      "tournamentReady": true,
+      "sourceDigest": "sha256:3e8c9783001cf159fdc05c2b2a7c28fc1937d14e7016968b6c02af2639d37792",
+      "completion": {
+        "completedOn": "2026-10-14",
+        "evidence": "tests/browser/campaign.spec.ts"
+      }
     },
     {
       "id": "CMP-a11",
@@ -4388,16 +4393,22 @@
     {
       "id": "CMP-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "campaign",
       "owner": "campaign",
-      "assignment": "capability:campaign",
+      "assignment": "closed",
       "sourceDocument": "ux-campaign.md",
       "sourceSection": "§3.3e",
       "sourceHeading": "Campaign and progression — `ux-campaign.md`",
       "summary": "One sentence on *\"Declare done\"*: it locks the node and the attempts are kept",
-      "legacyRoute": "none",
-      "sourceDigest": "sha256:aa3db19f65de0b601ca03458b67e6a9e8da82521291a2077323ed4642abd6c7f"
+      "legacyRoute": "ledger",
+      "note": "Closed under [[D3806]]/[[D3807]]/[[D3808]]: actual encounter and boss-terminal actions explain the permanent Campaign choice, not a locked/deleted recording. Grouped visible/accessible copy and stable disabled/read-recovery controls preserve button identity and focus through failed confirmation. Desktop/phone real-game finish/map/reload proof preserves saved attempts",
+      "tournamentReady": true,
+      "sourceDigest": "sha256:4298f5c232b60fcd0a8279c3f8c61b03fd2d6d80dfae5597f860375544dd3fa8",
+      "completion": {
+        "completedOn": "2026-10-14",
+        "evidence": "tests/browser/campaign.spec.ts"
+      }
     },
     {
       "id": "CMP-a8",

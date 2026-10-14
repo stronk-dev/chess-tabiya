@@ -2,6 +2,7 @@
 
 import { createRun } from "@chess-tabiya/runtime";
 import { mount, unmount } from "svelte";
+import { createClassComponent } from "svelte/legacy";
 import { describe, expect, it, vi } from "vitest";
 
 import TerminalSheet from "./TerminalSheet.svelte";
@@ -31,6 +32,52 @@ function target(): HTMLElement {
 }
 
 describe("terminal assignment hand-in", () => {
+  it("keeps the same finish and reload controls through pending, failed and restored encounter reads", async () => {
+    const onAction = vi.fn(), onRefresh = vi.fn();
+    const action = { label: "Declare done and return to the campaign map", busy: false, onAction, onRefresh };
+    const component = createClassComponent({ component: TerminalSheet, target: target(), props: {
+      outcome: "win", authoredItems: [], evidence: [], canRewind: false,
+      onRewind: () => undefined, onStop: () => undefined, run: terminalRun("campaign-read-recovery"),
+      campaignEncounter: true, campaignAction: { ...action, refreshing: true, unavailableText: "Confirming encounter state." },
+    } });
+    try {
+      const buttons = () => [...document.querySelectorAll<HTMLButtonElement>("button")];
+      const finish = buttons().find(button => button.textContent === action.label)!;
+      const refresh = buttons().find(button => button.textContent === "Reloading encounter…")!;
+      expect(finish.disabled).toBe(true); refresh.focus(); refresh.click();
+      expect(onRefresh).not.toHaveBeenCalled();
+      component.$set({ campaignAction: { ...action, refreshing: false, unavailableText: "Read failed. Reload before declaring done." } });
+      await vi.waitFor(() => expect(refresh.textContent).toBe("Reload encounter state"));
+      expect(finish.isConnected).toBe(true); expect(finish.disabled).toBe(true);
+      expect(document.activeElement).toBe(refresh);
+      refresh.click(); expect(onRefresh).toHaveBeenCalledTimes(1);
+      component.$set({ campaignAction: { ...action, refreshing: false } });
+      await vi.waitFor(() => expect(finish.disabled).toBe(false));
+      expect(buttons().find(button => button.textContent === action.label)).toBe(finish);
+      expect(document.activeElement).toBe(refresh);
+      finish.click(); expect(onAction).toHaveBeenCalledTimes(1);
+    } finally { component.$destroy(); }
+  });
+
+  it("describes a permanent campaign choice without implying the recorded game is deleted or locked", async () => {
+    const onAction = vi.fn();
+    const component = mount(TerminalSheet, { target: target(), props: {
+      outcome: "win", authoredItems: [], evidence: [], canRewind: false,
+      onRewind: () => undefined, onStop: () => undefined, run: terminalRun("campaign-result"),
+      campaignEncounter: true,
+      campaignAction: { label: "Declare done and return to the campaign map", busy: false, onAction },
+    } });
+    try {
+      const done = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Declare done and return to the campaign map")!;
+      const note = document.getElementById(done.getAttribute("aria-describedby") ?? "");
+      expect(note?.textContent).toContain("this campaign result cannot be changed");
+      expect(note?.textContent).toContain("recorded attempts are kept");
+      expect(note?.parentElement?.contains(done)).toBe(true);
+      expect(document.querySelector(".next-step.campaign-result")).not.toBeNull();
+      done.click(); expect(onAction).toHaveBeenCalledTimes(1);
+    } finally { await unmount(component); }
+  });
+
   it("keeps opposite-side replay single-flight and presents a bounded retry", async () => {
     let rejectFlip!: (reason?: unknown) => void;
     const onFlip = vi.fn(() => new Promise<void>((_resolve, reject) => { rejectFlip = reject; }));

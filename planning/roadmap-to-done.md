@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3805]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3808]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,30 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+October-14 [[D3806]]/[[D3807]] complete CMP-a7/CMP-a10's accepted Campaign finish/leave slice.
+The next full browser run exposes [[D3808]]: charge-authority withdrawal detaches the terminal
+control. Separate ephemeral read state now retains host controls through pending/failed reads,
+disabled with a reason, and the modal provides single-flight read-only reload. Current authority,
+role, inactivity and departure checks remain; display state authorizes no command. Two additional
+mounted controls, 370 focused software cases/types and fifteen native cases pass, retaining the
+same button and focus through held → failed → recovered reads without changing saved play.
+Final frozen normal verification/build/all four browser tiers pass: 5,628 software, seven
+performance, 256 content and 363 browser cases; one optional Maia skip, zero retries and all
+112 composition cells. Earlier failures remain recorded. This closes the local slice, not
+remote CI, release-image recovery, Campaign curriculum/rewards, source qualification or 1.0.
+Actual encounter and terminal controls explain permanent Campaign sealing separately from
+preserved chess attempts, free unfinished resume and pending/unconfirmed completion. Four mounted
+strip controls and one terminal control pass; real desktop/phone branch → leave → map/reload →
+resume → delayed accepted submit → saved result/reload preserves both attempts and the exact
+board rectangle. Both action/description groups fit the panel before kit details. The first full
+chain stops on a missed D3806 route citation, corrected here; the next browser run catches the
+new standalone terminal paragraph squeezing the intro into an auto grid column. Grouped copy
+and a full-width Campaign decision block fix it without weakening visibility or deadlines.
+Fifteen focused native cases now include the complete boss/seal/map/abandon journey on desktop
+and phone; screenshots and width controls pass with 368 focused software cases and clean types.
+The final repaired-code full verification is recorded in the exploration log; no whole Campaign,
+milestone, content, source qualification or release gate is promoted.
 
 ### Whole-product inventory — refreshed 2026-10-14
 
@@ -49,7 +73,7 @@ but registered facts do not automatically become useful assistance. The full con
 searched-line hints do not establish that general capability. Likewise, playable bot profiles
 do not establish convincing personalities or calibrated ratings.
 
-The checked inventory is 278 completed / 267 live / 24 retired UX items, four active / five
+The checked inventory is 280 completed / 265 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
 history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
@@ -68,7 +92,7 @@ repairs the reproduced terminal query exception without changing complete legal 
 Focused 206 tests, authenticated both-color SQLite reads and foreign-account refusal, four
 native desktop/phone played mate/stalemate → Inspector → return/reload cases and strict types
 pass. D3791/D3792 remain blocked on an independently accepted demand/detail contract. The ledger
-now has 1,660 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
+now has 1,663 path/prose-backed done rows and 1,733 assigned live rows; the 462 historical
 prose-only closures and every whole-product/content/release gate remain. Fresh GitHub reads
 still show published `62c81eb1` verify success/browser failure. No new feature wave is started
 before the owner's requested total inventory.

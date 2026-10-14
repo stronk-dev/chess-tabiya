@@ -2154,11 +2154,13 @@
         "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-10-14",
-          "summary": "D3784/D3785 complete the existing saved-Campaign/source-recovery slice: home admits active summaries independently of new installed definitions; pinned title/identity survive replacement/removal, and missing sources remain refused and explained. Missing exact encounter packs no longer look like a changed run or leave a dead end. Existing route retry/navigation recovers after actual pack restoration without substituting another version. Twenty-eight predecessor controls fail; 306 focused software/eight content cases and types pass. Actual built-server desktop/phone restarts, source refusal/restoration, malformed transport/retry, reload and private-account controls preserve all Campaign rows and complete play recordings. Held retry/departure controls pass. CMP-a8's precise per-campaign active-run guidance completes; the UX register is 277 complete/268 live/24 retired. Complete normal verification/build/all four browser tiers exit zero: 5,597 software/390 files, seven performance/four, 256 content/26 and 354 browser passes, one optional Maia skip, zero retries, all 150 input/112 composition cells. Local warm p95 is 113.6 ms under unchanged 250 ms, not a speedup or remote proof. Prior Profile, rehearsal and learner checkpoints stand. D3670, useful selection, skills, bot calibration, official curriculum/content and release recovery remain open. Fresh GitHub reads retain published verify success/browser failure at 62c81eb1. No whole capability/milestone, qualification or release promotion.",
+          "summary": "D3806/D3807/D3808 complete CMP-a7/CMP-a10 under campaign-core: finish seals the Campaign choice while preserving chess attempts; Map explains free unfinished resume, pending completion, unconfirmed response and failed/pending reads without promising cancellation. Actual desktop/phone fork, leave, map/reload, same-run resume and delayed accepted seal preserve both branches, recorded moves and the exact board rectangle. Screenshot review rejects the first below-fold phone controls; grouped decisions fit together before kit details. The first full chain catches a missing route citation, then the browser gate catches the new terminal paragraph collapsing the intro into an auto grid column. Full-width Campaign grouping fixes that regression with unchanged deadlines. Four mounted strip controls, one terminal control, 370 focused software cases, types and fifteen actual native Campaign cases pass, including both desktop and phone boss/seal/map/abandon journeys and readable-width controls. D3808 then separates terminal display availability from withdrawn charge authority: pending/failed reads retain the same disabled host control and offer single-flight read-only reload inside the modal. Two mounted and desktop/phone held/failed/recovered-read controls retain focus, identity and saved state. Final repaired-code full gates are recorded in the append-only exploration log. UX is now 280 complete/265 live/24 retired. D3784/D3785 saved-source recovery and prior Profile/learner checkpoints stand. Useful selection, qualified sources, skill credit, calibrated bots, Campaign curriculum/rewards, official content and release recovery remain open. No new API, schema, command, modal, source, economy or default; no whole capability/milestone, remote CI, image or release promotion.",
           "impact": "advanced",
           "evidence": [
             "apps/web/src/lib/CampaignScreen.svelte",
             "apps/web/src/lib/campaign-api.ts",
+            "apps/web/src/lib/TerminalSheet.svelte",
+            "apps/web/src/lib/terminal-sheet.test.ts",
             "apps/web/src/lib/campaign-resume.test.ts",
             "tests/browser/campaign-resume.spec.ts",
             "apps/web/src/lib/ProfileScreen.svelte",
@@ -2217,6 +2219,21 @@
             "tests/browser/import-workflow.spec.ts"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3808",
+              "digest": "sha256:edadfc2725bb9252360af0847076c57a209fe5308307b8e8fb6c428c6c6063a8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3806",
+              "digest": "sha256:1b7d1549763f6e9cfd2873bbb66c70b5c8f2b1650084c1dd0f0b63b814b65b7a"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3807",
+              "digest": "sha256:8eeea4186a6ceaaf8ffabc4b57238f51984892038aab7696d559ffb88ab49227"
+            },
             {
               "kind": "work_state",
               "id": "D3784",

@@ -4,6 +4,7 @@
   import { MODULE_LABELS, type BrowserNarrowedAssistanceV1, type WorkflowPreferenceReceipt } from "@chess-tabiya/runtime/client";
   import CampaignEncounterHistory from "./CampaignEncounterHistory.svelte";
   import {
+    CAMPAIGN_DECLARE_DONE_NOTE,
     CAMPAIGN_MODULE_LABELS,
     CampaignApi,
     campaignEncounterResult,
@@ -12,6 +13,7 @@
     newCampaignCommandId,
     assertCampaignCommand,
     type CampaignProjection,
+    type CampaignEncounterState,
   } from "./campaign-api.js";
 
   // rfc/campaign-core.md §7.1 "In-run context": the campaign rail seat beside the board. It renders
@@ -32,8 +34,9 @@
     onNavigate: (path: string) => void;
     /** Publishes the campaign revision the charged gestures must carry (null when not active). */
     onRevision: (state: { readonly campaignRevision: number; readonly active: boolean } | null) => void;
+    onEncounterState?: ((state: CampaignEncounterState) => void) | undefined;
   }
-  let { campaigns, origin, runId, branchId, runRevision, assistance, assistanceState = "pending", helpPreference, onNavigate, onRevision }: Props = $props();
+  let { campaigns, origin, runId, branchId, runRevision, assistance, assistanceState = "pending", helpPreference, onNavigate, onRevision, onEncounterState }: Props = $props();
   const helpRequest = $derived(campaignHelpRequest(helpPreference));
 
   let campaign: CampaignProjection | undefined = $state();
@@ -44,7 +47,7 @@
   let readNotice: HTMLParagraphElement | undefined = $state();
   let busy = $state(false);
   let sealed: ReturnType<typeof campaignEncounterResult> = $state();
-  let submission: { campaign: CampaignProjection; campaignRunId: string; nodeId: string; input: { runId: string; branchId: string; expectedRevision: number; commandId: string } } | undefined;
+  let submission: { campaign: CampaignProjection; campaignRunId: string; nodeId: string; input: { runId: string; branchId: string; expectedRevision: number; commandId: string } } | undefined = $state.raw();
   let generation = 0;
   let readGeneration = 0;
   let subject: string | undefined;
@@ -91,6 +94,7 @@
     readError = undefined;
     // A retained map is useful context, not authority for another charged or seal command.
     onRevision(null);
+    onEncounterState?.({ runId, status: "pending" });
     try {
       const next = await campaigns.read(requestedId);
       if (!ownsView(current, requestedSubject) || request !== readGeneration) return;
@@ -100,6 +104,7 @@
       sealed = result;
       if (result !== undefined) { submission = undefined; error = undefined; }
       onRevision(next.activeEncounter?.playRunId === runId && next.activeEncounter.nodeId === origin.nodeId ? { campaignRevision: next.campaignRun.revision, active: true } : null);
+      onEncounterState?.({ runId, status: next.activeEncounter?.playRunId === runId && next.activeEncounter.nodeId === origin.nodeId ? "active" : "inactive" });
       if (ownsFocus) {
         await tick();
         if (ownsFocus && ownsView(current, requestedSubject) && request === readGeneration && (document.activeElement === invoker || document.activeElement === document.body)) title?.focus();
@@ -107,6 +112,7 @@
     } catch (caught) {
       if (ownsView(current, requestedSubject) && request === readGeneration) {
         readError = caught instanceof ApiError ? caught.message : "Campaign state could not be loaded.";
+        onEncounterState?.({ runId, status: "failed" });
         if (ownsFocus) {
           await tick();
           if (ownsFocus && ownsView(current, requestedSubject) && request === readGeneration && (document.activeElement === invoker || document.activeElement === document.body)) readNotice?.focus();
@@ -121,6 +127,12 @@
   function retryRead(): void {
     if (reading || busy) return;
     void refresh(document.activeElement instanceof HTMLElement ? document.activeElement : undefined);
+  }
+
+  /** The terminal dialog owns its focus; this read must not focus the hidden Actions pane. */
+  export async function refreshEncounterState(): Promise<void> {
+    if (reading || busy) return;
+    await refresh();
   }
 
   export function declareError(): string | undefined {
@@ -152,6 +164,7 @@
       sealed = result;
       campaign = done.campaign;
       onRevision(null);
+      onEncounterState?.({ runId, status: "inactive" });
       return true;
     } catch (caught) {
       if (!ownsView(current, requestedSubject)) return false;
@@ -197,6 +210,26 @@
     <strong class="encounter-title" tabindex="-1" bind:this={title}>Campaign · {nodeTitle}</strong>
     <span class="charges" data-testid="campaign-strip-charges" aria-label={`Earned rewinds: ${campaign.charges.balance} remaining this campaign`}><span aria-hidden="true">⟲ {campaign.charges.balance}</span> Earned rewinds: {campaign.charges.balance} remaining this campaign</span>
     {#if active}
+      <div class="encounter-actions">
+        <div class="encounter-choice">
+          <button type="button" disabled={busy || reading || readError !== undefined} aria-describedby={`campaign-finish-consequence${reading || readError !== undefined ? " campaign-strip-read" : ""}`} onclick={() => void declareDone()}>{busy ? "Declaring…" : "Declare done"}</button>
+          <p id="campaign-finish-consequence">{CAMPAIGN_DECLARE_DONE_NOTE}</p>
+        </div>
+        <div class="encounter-choice">
+          <button type="button" class="quiet" aria-describedby="campaign-leave-consequence" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Map</button>
+          <p id="campaign-leave-consequence">
+            {#if busy}
+              Declare done has been sent. Going to the map does not cancel it; check the map for its saved state.
+            {:else if submission !== undefined}
+              The completion response was not confirmed. The encounter may already be sealed; return to the map to check its saved state.
+            {:else if reading || readError !== undefined}
+              Encounter state is not confirmed. Returning to the map checks saved progress; it does not cancel commands already sent.
+            {:else}
+              Going to the map keeps this encounter in progress. Resume it there at no extra cost; earned rewinds already spent are not refunded.
+            {/if}
+          </p>
+        </div>
+      </div>
       <span class="kit" data-testid="campaign-encounter-help" role="status">
         {#if confirmedHelp !== undefined}
           Help for this encounter: {confirmedHelp.modules.filter(id => id !== "rules_floor").map(id => CAMPAIGN_MODULE_LABELS[id as keyof typeof CAMPAIGN_MODULE_LABELS] ?? MODULE_LABELS[id]).join(", ") || "legal moves only"}.
@@ -208,10 +241,6 @@
           Help could not be confirmed. Only legal moves are shown; retry confirming help in Support style.
         {/if}
       </span>
-      <div class="row-actions">
-        <button type="button" disabled={busy || reading || readError !== undefined} aria-describedby={reading || readError !== undefined ? "campaign-strip-read" : undefined} onclick={() => void declareDone()}>{busy ? "Declaring…" : "Declare done"}</button>
-        <button type="button" class="quiet" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Map</button>
-      </div>
     {:else}
       <span>This run was a campaign encounter.</span>
       <button type="button" class="quiet" onclick={() => onNavigate(`/campaign/${encodeURIComponent(origin.campaignRunId)}`)}>Open the campaign map</button>
@@ -236,4 +265,8 @@
   .result-kit { padding: .6rem; border: 1px solid var(--line); border-radius: .4rem; }
   .result-kit ul { margin: .4rem 0; padding-left: 1.25rem; }
   .row-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .encounter-actions { flex-basis: 100%; min-width: 0; display: grid; gap: .5rem; }
+  .encounter-actions p { margin: 0; overflow-wrap: anywhere; }
+  .encounter-choice { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: .6rem; align-items: start; }
+  .encounter-choice button { white-space: normal; min-width: 0; }
 </style>

@@ -129,7 +129,7 @@
     /** rfc/campaign-core.md §5 / intent-presets D6: the server-verified Campaign encounter context. */
     campaignEncounter?: boolean | undefined;
     /** The active campaign encounter's "Declare done" when the rules have ended the game. */
-    campaignTerminalAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
+    campaignTerminalAction?: import("./campaign-api.js").CampaignTerminalAction | undefined;
     seatedInContest?: boolean | undefined;
     reviewing?: boolean | undefined;
     firstRehearsal?: boolean | undefined;

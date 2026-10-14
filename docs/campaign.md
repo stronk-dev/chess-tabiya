@@ -173,6 +173,23 @@ but never sits after the full-height play shell. Reopen Actions to view the save
 after reload; on phones Close returns to the playable board. When the
 rules end a boss game, the terminal sheet carries “Declare done and return to the campaign map”.
 
+The encounter's finish and map actions are paired with visible, accessible consequence descriptions
+before the longer kit details. Declare done permanently seals the Campaign choice, not the chess
+recording: recorded attempts remain available. Map leaves an unsealed encounter in progress, with
+free resume and no refund of earned rewinds already spent. The active map repeats the saved-play/
+free-resume explanation. Pending completion and an unconfirmed response have different copy:
+navigation cannot cancel a command already sent and does not prove that it failed. A pending or
+failed state read likewise makes no definite unfinished claim; a successful read of the seal
+replaces these notices with the recorded result. The boss-terminal action shares the finish
+description. No confirmation modal or additional Campaign command is introduced.
+
+Terminal controls use the strip's ephemeral read state, not the presence of charge authority.
+Pending and failed reads keep the host's finish control mounted, disabled and explained;
+confirmed inactivity removes it. **Reload encounter state** performs only the existing Campaign
+read, with no parallel retry, command or charge. It stays focusable while pending and retains
+focus across failure and recovery. The finish operation still checks the strip's confirmed
+authority and original command ownership; read/display state cannot authorize a declaration.
+
 Prepare opens a bounded, independently scrolling dialog with the encounter's copied objective,
 reward, suppression preview and earned-rewind cost. Its Help style selector uses the same canonical
 Campaign preference as Settings and the encounter. Only permitted named styles appear; migrated

@@ -1,5 +1,6 @@
 <script lang="ts">
   import CampaignGestureCost from "./CampaignGestureCost.svelte";
+  import { CAMPAIGN_DECLARE_DONE_NOTE, type CampaignTerminalAction } from "./campaign-api.js";
   import { onDestroy, onMount } from "svelte";
   import { modalBoundary } from "./modal-boundary.js";
 
@@ -61,7 +62,7 @@
     repertoireAnswerError?: string | undefined;
     onChooseRepertoireAnswer?: ((repertoireId:string,gapKey:string,moveUci:string,ifMatch:string)=>Promise<void>) | undefined;
     /** rfc/campaign-core.md §7.1: an active campaign encounter's "Declare done" inside this sheet. */
-    campaignAction?: { readonly label: string; readonly busy: boolean; readonly error?: string | undefined; readonly onAction: () => void } | undefined;
+    campaignAction?: CampaignTerminalAction | undefined;
   }
 
   let { outcome, authoredItems, evidence, canRewind, onRewind, rewinding = false, rewindError, campaignEncounter = false, onStop, readOnly = false, onInspectRun, assessment, resistance = [], grade, run, shapes = [], onStory, onRematch, rematching = false, rematchError, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer, campaignAction }: Props = $props();
@@ -160,7 +161,7 @@
       <OutcomeContext {assessment} {resistance} {grade} />
     {/if}
 
-    <section class="next-step" aria-labelledby="terminal-next-step-title">
+    <section class="next-step" class:campaign-result={campaignAction !== undefined} aria-labelledby="terminal-next-step-title">
       <div>
         <p class="eyebrow">What next</p>
         <h3 id="terminal-next-step-title">{readOnly ? "Inspect this recorded attempt." : "Keep the attempt, then choose where to return."}</h3>
@@ -168,7 +169,10 @@
       </div>
       {#if campaignAction}
         <div class="primary-actions">
-          <button class="primary" type="button" disabled={campaignAction.busy} onclick={campaignAction.onAction}>{campaignAction.busy ? "Declaring…" : campaignAction.label}</button>
+          <p id="terminal-campaign-finish">{CAMPAIGN_DECLARE_DONE_NOTE}</p>
+          {#if campaignAction.unavailableText}<p id="terminal-campaign-unavailable" role="status">{campaignAction.unavailableText}</p>{/if}
+          <button class="primary" type="button" disabled={campaignAction.busy || campaignAction.unavailableText !== undefined} aria-describedby={`terminal-campaign-finish${campaignAction.unavailableText !== undefined ? " terminal-campaign-unavailable" : ""}`} onclick={campaignAction.onAction}>{campaignAction.busy ? "Declaring…" : campaignAction.label}</button>
+          {#if campaignAction.onRefresh}<button type="button" disabled={campaignAction.busy} aria-disabled={campaignAction.refreshing || undefined} onclick={() => { if (!campaignAction?.refreshing && !campaignAction?.busy) campaignAction?.onRefresh?.(); }}>{campaignAction.refreshing ? "Reloading encounter…" : "Reload encounter state"}</button>{/if}
           {#if campaignAction.error}<p role="alert">{campaignAction.error}</p>{/if}
         </div>
       {/if}
@@ -303,6 +307,7 @@
   .assignment-hand-in p { margin: 0.35rem 0; }
   .submission-confirm { margin-top: 0.8rem; padding: 0.9rem; border: 2px solid var(--accent); border-radius: 0.8rem; background: var(--panel); }
   .next-step { display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, auto); gap: 1rem; align-items: end; margin-top: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--paper); }
+  .next-step.campaign-result { grid-template-columns: minmax(0, 1fr); }
   .next-step h3 { margin: .25rem 0 .4rem; font: 500 1.3rem/1.1 var(--display-font); }
   .next-step p { margin: 0; line-height: 1.45; }
   .primary-actions { display: grid; gap: .5rem; }

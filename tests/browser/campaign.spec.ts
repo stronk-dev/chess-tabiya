@@ -7,6 +7,76 @@ import type { RunGraph } from "../../apps/web/src/lib/api.js";
 import { showRunActions, returnFromRunActions } from "./play-helpers.js";
 
 for (const mobile of [false, true]) {
+  test(`Campaign actions explain free leave/resume and a completion already sent${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    await register(page);
+    await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
+    await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
+    const campaignId = currentRunId(page);
+    const runId = await startNode(page, "f1-a");
+    await move(page, "c1", "e3");
+    await expect.poll(() => moveCount(page, runId)).toBeGreaterThanOrEqual(2);
+    await showRunActions(page);
+    await page.getByRole("button", { name: "Fork branch", exact: true }).click();
+    const fork = page.getByRole("dialog", { name: "Name the experiment." });
+    await fork.getByLabel("What are you trying?").fill("Keep this second attempt");
+    await fork.getByRole("button", { name: "Create branch", exact: true }).click();
+    await expect(fork).not.toBeVisible();
+    const before = await (await page.request.get(`/campaign-runs/${campaignId}`)).json();
+    const recorded = await (await page.request.get(`/runs/${runId}/events`)).json() as { events: DrillRun["events"] };
+    const graph = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    expect(Object.values(graph.branches)).toHaveLength(2);
+    const board = page.getByLabel("Chessboard");
+    const rectangle = await board.boundingBox();
+    const strip = page.getByRole("complementary", { name: "Campaign encounter", includeHidden: true });
+    await showRunActions(page);
+    const finishNote = strip.locator("#campaign-finish-consequence"), leaveNote = strip.locator("#campaign-leave-consequence");
+    await finishNote.scrollIntoViewIfNeeded();
+    await expect(finishNote).toContainText("this campaign result cannot be changed");
+    await expect(finishNote).toContainText("recorded attempts are kept");
+    await strip.locator(".encounter-actions").scrollIntoViewIfNeeded();
+    await expect(leaveNote).toContainText("at no extra cost");
+    const block = await strip.locator(".encounter-actions").boundingBox();
+    const panel = await page.getByRole("region", { name: "Run actions", exact: true }).boundingBox();
+    expect(block).not.toBeNull(); expect(panel).not.toBeNull();
+    expect(block!.y).toBeGreaterThanOrEqual(panel!.y);
+    expect(block!.y + block!.height).toBeLessThanOrEqual(panel!.y + panel!.height);
+    expect(await board.boundingBox()).toEqual(rectangle);
+    await page.screenshot({ path: test.info().outputPath("campaign-finish-leave.png") });
+    await strip.getByRole("button", { name: "Map", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/campaign/${campaignId}$`, "u"));
+    await expect(page.getByRole("complementary", { name: "Active encounter" })).toContainText("costs no additional earned rewinds");
+    expect(await (await page.request.get(`/campaign-runs/${campaignId}`)).json()).toEqual(before);
+    await page.reload();
+    await page.getByRole("button", { name: "Continue encounter", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`, "u"));
+    await page.reload();
+    await playableBoard(page);
+    const resumed = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+    assertRecordedNodesPreserved(graph.nodes, resumed.nodes);
+    expect(resumed.branches).toEqual(graph.branches);
+    assertOnlyEvidenceAppended(recorded.events, (await (await page.request.get(`/runs/${runId}/events`)).json()).events);
+
+    // The real server seals the chosen attempt; only its response delivery is delayed.
+    const held = await holdCampaignAction(page, /\/campaign-runs\/[^/]+\/nodes\/f1-a\/submit$/u);
+    try {
+      await showRunActions(page);
+      await strip.getByRole("button", { name: "Declare done", exact: true }).click();
+      await expect.poll(() => held.accepted).toBe(true);
+      await expect(leaveNote).toContainText("Going to the map does not cancel it");
+      await expect(leaveNote).not.toContainText("keeps this encounter in progress");
+      await strip.getByRole("button", { name: "Map", exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`/campaign/${campaignId}$`, "u"));
+      await expect(page.locator('[data-node="f1-a"]')).toContainText("Played to the authored boundary");
+      held.release(); await held.delivery;
+      await page.reload();
+      await expect(page.getByRole("button", { name: "Continue encounter", exact: true })).toHaveCount(0);
+      const after = (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+      assertRecordedNodesPreserved(graph.nodes, after.nodes);
+      expect(after.branches).toEqual(graph.branches);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    } finally { held.release(); await held.delivery; }
+  });
+
   test(`Campaign encounter help follows confirmed entry equipment and help style${mobile ? " @mobile" : ""}`, async ({ page }) => {
     await register(page);
     await page.locator('[data-campaign="browser-fixture-campaign"]').getByRole("button", { name: "Start a run" }).click();
@@ -280,7 +350,7 @@ async function holdCampaignAction(page: Page, path: RegExp) {
     await route.fulfill({ response });
     delivered();
   });
-  return { get campaignId() { return body!.campaign.campaignRun.id; }, async leaveAndDeliver() {
+  return { get campaignId() { return body!.campaign.campaignRun.id; }, get accepted() { return body !== undefined; }, release, delivery, async leaveAndDeliver() {
     await expect.poll(() => body !== undefined).toBe(true);
     // Preparation is modal: return to its map before using shell navigation.
     const preparation = page.getByRole("dialog").filter({ has: page.getByRole("button", { name: "Back to map", exact: true }) });
@@ -854,6 +924,7 @@ test("Campaign actions replay a lost declaration response without a second rewar
   await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done", exact: true }).click();
   await expect(strip.getByRole("alert")).toContainText("could not be declared done");
+  await expect(strip.locator("#campaign-leave-consequence")).toContainText("may already be sealed");
   await showRunActions(page);
   await strip.getByRole("button", { name: "Declare done", exact: true }).click();
   await expect(strip.locator(".node-result")).toContainText("Played to the authored boundary");
@@ -867,7 +938,8 @@ test("Campaign actions replay a lost declaration response without a second rewar
   await expect(page.getByTestId("campaign-charges")).toContainText("⟲ 2");
 });
 
-test("Campaign: enter, play encounters and a registered-bot boss, see results, resume after reload", async ({ page }) => {
+for (const mobile of [false, true]) {
+test(`Campaign: enter, play encounters and a registered-bot boss, see results, resume after reload${mobile ? " @mobile" : ""}`, async ({ page }) => {
   test.setTimeout(240_000);
   await register(page);
   await page.goto("/campaign");
@@ -877,6 +949,7 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   await card.getByRole("button", { name: "Start a run" }).click();
   await expect(page).toHaveURL(/\/campaign\/campaign-run-/u);
   const mapUrl = page.url();
+  const campaignRunId = currentRunId(page);
 
   // Criterion 4: the balance is visible before any spend, on the map and in the encounter strip.
   await expect(page.getByTestId("campaign-charges")).toContainText("⟲ 1");
@@ -919,6 +992,49 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   const sheet = page.getByRole("dialog");
   await expect(sheet.getByRole("heading", { name: "You won." })).toBeVisible();
   await expect(sheet.getByText("a rewind spends an earned rewind", { exact: false })).toBeVisible();
+  await expect(sheet.locator("#terminal-campaign-finish")).toContainText("this campaign result cannot be changed");
+  const finishButton = sheet.getByRole("button", { name: "Declare done and return to the campaign map" });
+  const finishElement = await finishButton.elementHandle();
+  const reload = sheet.getByRole("button", { name: /Reload encounter state|Reloading encounter…/u });
+  const campaignBeforeRead = await (await page.request.get(`/campaign-runs/${campaignRunId}`)).json();
+  const playBeforeRead = await (await page.request.get(`/runs/${bossRunId}/events`)).json() as { events: DrillRun["events"] };
+  let failRead = true, heldRead = true, readStarted = false;
+  let releaseRead!: () => void;
+  const readGate = new Promise<void>(resolve => { releaseRead = resolve; });
+  const campaignReadPath = `**/campaign-runs/${campaignRunId}`;
+  await page.route(campaignReadPath, async route => {
+    if (route.request().method() !== "GET" || !failRead) { await route.continue(); return; }
+    readStarted = true;
+    if (heldRead) { heldRead = false; await readGate; }
+    await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "HTTP_ERROR", message: "Temporary terminal encounter read failure" } }) });
+  });
+  try {
+    await reload.focus(); await reload.click();
+    await expect.poll(() => readStarted).toBe(true);
+    await expect(finishButton).toBeDisabled();
+    await expect(sheet.locator("#terminal-campaign-unavailable")).toContainText("Confirming encounter state");
+    expect(await finishElement!.evaluate(element => element.isConnected)).toBe(true);
+    await expect(reload).toBeFocused();
+    releaseRead();
+    await expect(sheet.locator("#terminal-campaign-unavailable")).toContainText("could not be confirmed");
+    await expect(finishButton).toBeDisabled();
+    expect(await finishElement!.evaluate(element => element.isConnected)).toBe(true);
+    await expect(reload).toBeFocused();
+    failRead = false; await reload.click();
+    await expect(finishButton).toBeEnabled();
+    expect(await finishElement!.evaluate(element => element.isConnected)).toBe(true);
+    await expect(reload).toBeFocused();
+    expect(await (await page.request.get(`/campaign-runs/${campaignRunId}`)).json()).toEqual(campaignBeforeRead);
+    assertOnlyEvidenceAppended(playBeforeRead.events, (await (await page.request.get(`/runs/${bossRunId}/events`)).json()).events);
+  } finally { releaseRead(); await page.unroute(campaignReadPath); }
+  const decision = sheet.locator(".next-step");
+  const paragraph = await decision.locator(":scope > div").first().locator("p").last().boundingBox();
+  const decisionBox = await decision.boundingBox();
+  expect(paragraph).not.toBeNull(); expect(decisionBox).not.toBeNull();
+  expect(paragraph!.width).toBeGreaterThan(decisionBox!.width * .7);
+  await finishButton.scrollIntoViewIfNeeded();
+  await expect(sheet.locator("#terminal-campaign-finish")).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("campaign-terminal-finish.png") });
   await sheet.getByRole("button", { name: "Declare done and return to the campaign map" }).click();
   await expect(page).toHaveURL(/\/campaign\//u);
   await expect(page.locator('[data-node="f6-boss"]')).toContainText("Game won by checkmate");
@@ -936,6 +1052,7 @@ test("Campaign: enter, play encounters and a registered-bot boss, see results, r
   await expect(page.getByRole("heading", { name: "Campaign abandoned" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Start another run" })).toBeVisible();
 });
+}
 
 for (const mobile of [false, true]) {
   test(`Campaign history preserves seals and abandoned attempts through deletion${mobile ? " @mobile" : ""}`, async ({ page }) => {

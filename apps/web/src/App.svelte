@@ -8,7 +8,7 @@
 
   import DeferredScreen from "./lib/DeferredScreen.svelte";
   import CampaignStrip from "./lib/CampaignStrip.svelte";
-  import { CampaignApi } from "./lib/campaign-api.js";
+  import { CampaignApi, type CampaignEncounterState } from "./lib/campaign-api.js";
   import { writerStorageKey } from "./lib/writer-session.js";
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
@@ -150,6 +150,7 @@
   const campaignApi = new CampaignApi();
   let campaignCharge: { readonly runId: string; readonly campaignRevision: number } | undefined = $state();
   let campaignStrip: CampaignStrip | undefined = $state();
+  let campaignEncounterState: CampaignEncounterState | undefined = $state();
   let campaignSheetBusy = $state(false);
   let campaignSheetError: string | undefined = $state();
   async function declareFromTerminalSheet(): Promise<void> {
@@ -948,6 +949,7 @@
     const generation = ++loadGeneration;
     campaignSheetBusy = false;
     campaignSheetError = undefined;
+    campaignEncounterState = undefined;
     routeLoading = true;
     routeError = undefined;
     storyRefreshBusy = false;
@@ -2888,7 +2890,12 @@
         seatedInContest={session.viewer?.seatedInContest}
         reviewing={session.viewer?.reviewing}
         campaignEncounter={session.campaignOrigin != null && session.viewer?.role === "host"}
-        campaignTerminalAction={campaignCharge?.runId === session.runState.run.id ? { label: "Declare done and return to the campaign map", busy: campaignSheetBusy, error: campaignSheetError, onAction: () => void declareFromTerminalSheet() } : undefined}
+        campaignTerminalAction={session.campaignOrigin != null && session.viewer?.role === "host" && campaignEncounterState?.runId === session.runState.run.id && campaignEncounterState.status !== "inactive" ? {
+          label: "Declare done and return to the campaign map", busy: campaignSheetBusy, error: campaignSheetError,
+          unavailableText: campaignEncounterState.status === "pending" ? "Confirming encounter state. Wait before declaring done." : campaignEncounterState.status === "failed" ? "Encounter state could not be confirmed. Reload it before declaring done." : undefined,
+          refreshing: campaignEncounterState.status === "pending",
+          onAction: () => void declareFromTerminalSheet(), onRefresh: () => void campaignStrip?.refreshEncounterState(),
+        } : undefined}
         firstRehearsal={session.runState.run.id === firstRehearsalRunId}
         onMove={(uci) => controller.move(uci)}
         onReveal={() => controller.reveal()}
@@ -2981,6 +2988,7 @@
           {helpPreference}
           onNavigate={navigate}
           onRevision={(state) => { campaignCharge = state === null ? undefined : { runId: session.runState!.run.id, campaignRevision: state.campaignRevision }; }}
+          onEncounterState={(state) => { campaignEncounterState = state; }}
         />
       {/if}
       {/snippet}

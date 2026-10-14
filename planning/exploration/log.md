@@ -28508,3 +28508,61 @@ Campaign was the one capability with no API, route or content. Now:
 - Normal make verify-governance and git diff --check pass for this documentation-only closeout.
   No new full software/content/browser run is claimed. The existing compact roadmap receipt
   remains byte-identical; no work-item, capability or milestone completion is invented.
+
+### 2026-10-14 — D3806 Campaign finish/leave; D3807 terminal-layout repair
+
+- Previous goal turn closes the inventory at 78fd302f. Continue accepted Campaign §§4.3–4.4/7.1
+  and Open question 3, not the unaccepted Inspector amendment. Declare done now describes the
+  permanent Campaign choice separately from saved chess attempts. Map explains retained active
+  play/free resume and no refund of earlier spends; its active-map return repeats preservation.
+  Pending submit, unconfirmed response and failed/pending reads cannot promise cancellation or
+  definite unfinished state. Command identity, rewards, economy and read authority are unchanged.
+- Three new mounted controls fail before implementation. Four strip controls and one terminal
+  control now pass, with 368 focused software checks and clean types. Actual desktop/phone fork,
+  leave, map/reload, same-run resume and delayed accepted seal preserve both branches, recorded
+  moves and the exact board rectangle. Initial screenshots show clipped phone controls; regroup
+  each decision with its description ahead of kit details and verify their entire block fits.
+- The first full chain passes 5,626 software/seven performance cases but stops on a missed D3806
+  route citation. Correct the existing roadmap, not the checker. Governance/content/build then
+  pass; the full browser tier finds D3807: the new standalone terminal paragraph auto-places into
+  a second grid column and squeezes the intro until cost copy is hidden. Retain that failed run
+  (296 passes/one failure/one optional skip), repair grouping/full-width Campaign layout and add
+  the actual boss journey on phone. Fifteen focused native cases and both terminal screenshots
+  now pass, including paragraph-width, seal/map/reload and confirmed abandonment.
+- Close only D3806/D3807 and CMP-a7/CMP-a10 with production paths. The existing UX register is
+  280 complete/265 live/24 retired; ledger live work remains assigned. Update the existing
+  complete-learner-journeys checkpoint, not a new tracker. No protected intent sentence is
+  falsified, and no new RFC authority, command, schema, source, default, curriculum or reward
+  is introduced. Full repaired-code verification follows before commit; no push/deployment,
+  worktree/delegation, whole capability/milestone, content graduation or goal completion.
+
+### 2026-10-14 — D3808 stable terminal availability and in-modal read recovery
+
+- The next full run passes software/performance/governance/content/build but the browser tier
+  fails a different boundary: the Campaign finish button detaches during scroll. The grid repair
+  stands. App's presence condition reads campaignCharge, which the strip correctly withdraws
+  at every read; a transient read therefore removes the control and changes Campaign cost copy.
+- Separate ephemeral pending/active/failed/inactive display state from revision authority. Only
+  the matching host's encounter gets the terminal control; pending/failed reads disable it with
+  a reason, while confirmed inactivity removes it. Existing server/revision/subject/departure
+  and private declaration ownership remain. No display callback may authorize a command.
+- Add single-flight read-only Reload encounter state inside the terminal modal, not a pointer
+  to inaccessible Actions behind it. Keep its native button focusable while pending, refuse
+  repeated activation and retain focus/identity through failure and recovery. No mutation,
+  new wire/storage/source, charge, command or source-confirmation bypass is introduced.
+- Two additional mounted controls and the actual desktop/phone boss journeys deliberately hold,
+  fail and restore the read. They retain the same finish element, correct disabled explanations,
+  reload focus, saved Campaign rows and complete recorded play, then seal/return/reload/abandon.
+  Focused 370 software checks, clean types and fifteen native cases pass. The full failure is
+  retained; no increased timeout, test retry or removed assertion. Final full gates follow.
+- The next normal full run passes 5,628 software/seven performance cases, then the unchanged
+  label guard flags the new UI prose field unavailableReason as enum-shaped display data.
+  Name it unavailableText consistently in the new component contract/callers/tests; its values
+  are fixed human explanations, not a source enum. No allowlist entry or checker relaxation.
+- Final frozen normal make roadmap-receipt verify-awake build test-browser-ci-awake exits zero:
+  5,628 software cases/391 files, seven performance cases/four files, 256 real-content cases/26
+  files, clean types/packaging/labels/governance and all four browser tiers. Browser totals are
+  363 passes (298 main, five content, 59 matrix, one packaged production), one optional Maia
+  skip, zero retries; all 112 composition cells pass unretried. No code is edited during this
+  successful run. Subsequent closeout edits only record the result. Local success is not paired
+  current-revision GitHub qualification, Docker recovery, official content or full 1.0.

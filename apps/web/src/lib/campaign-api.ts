@@ -6,6 +6,25 @@ import { ApiError } from "./api.js";
 // sends a learner id, a loadout it did not choose, an origin, a balance or a verdict: every mutation
 // carries only a durable command id plus the revision it saw.
 
+/** The Campaign seal is permanent; the saved chess recording is not locked or deleted. */
+export const CAMPAIGN_DECLARE_DONE_NOTE = "Declare done seals this campaign choice. Your recorded attempts are kept, but this campaign result cannot be changed.";
+
+/** Read/display state only. It never authorizes a Campaign command. */
+export interface CampaignEncounterState {
+  readonly runId: string;
+  readonly status: "pending" | "active" | "inactive" | "failed";
+}
+
+export interface CampaignTerminalAction {
+  readonly label: string;
+  readonly busy: boolean;
+  readonly error?: string | undefined;
+  readonly unavailableText?: string | undefined;
+  readonly refreshing?: boolean | undefined;
+  readonly onAction: () => void;
+  readonly onRefresh?: (() => void) | undefined;
+}
+
 export type CampaignVerdict = "achieved" | "failed" | "transitioned" | "open";
 export type CampaignModuleId =
   | "sight_on_request" | "blunder_prevention" | "threat_radar" | "postcommit_nudge" | "structure_nudge"

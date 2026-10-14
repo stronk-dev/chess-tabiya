@@ -31651,6 +31651,40 @@
       "uxItems": [],
       "evidence": "design/research/module-evidence-assembly.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3806",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1b7d1549763f6e9cfd2873bbb66c70b5c8f2b1650084c1dd0f0b63b814b65b7a",
+      "uxItems": [
+        "CMP-a10",
+        "CMP-a7"
+      ],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3807",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8eeea4186a6ceaaf8ffabc4b57238f51984892038aab7696d559ffb88ab49227",
+      "uxItems": [
+        "CMP-a7"
+      ],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3808",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:edadfc2725bb9252360af0847076c57a209fe5308307b8e8fb6c428c6c6063a8",
+      "uxItems": [
+        "CMP-a7"
+      ],
+      "evidence": "tests/browser/campaign.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

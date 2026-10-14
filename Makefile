@@ -3940,7 +3940,7 @@ campaign-help-browser-check:
 	./node_modules/.bin/playwright test --grep "Campaign encounter help"
 
 campaign-actions-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/modal-boundary.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/branch-groups.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-actions.test.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/terminal-sheet.test.ts apps/web/src/lib/modal-boundary.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/run-state.test.ts apps/web/src/lib/session-controller.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/branch-groups.test.ts
 
 .PHONY: campaign-preparation-browser-check campaign-result-browser-check
 campaign-preparation-browser-check:
@@ -3950,7 +3950,7 @@ campaign-result-browser-check:
 	./node_modules/.bin/playwright test --grep "Campaign encounter result"
 
 campaign-actions-browser-check:
-	./node_modules/.bin/playwright test --grep "Campaign actions"
+	./node_modules/.bin/playwright test --grep "Campaign actions|Campaign: enter"
 
 campaign-history-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/campaign-history.test.ts apps/web/src/lib/review-map-screen.test.ts apps/web/src/lib/router.test.ts
