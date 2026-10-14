@@ -121,12 +121,13 @@ ten awaiting discharge and 24 draft documents; its 75 archived implementation re
 history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Owner-requested finish and overview: D3746/D3747/D3811 close the in-flight local recovery batch.
-The final affected normal recovery, release-policy, type and governance command exits zero,
-including 33 Make controls, 42 SQLite/replacement cases and eight native/regression cases.
-The last full production/browser checkpoint remains fdc22e77; this test-only repair does not
-relabel it as a fresh whole-suite run. Latest published 78fd302f still has verify success/browser
-failure; the local matrix repair awaits remote requalification. No push or 1.0 promotion.
+Owner-requested finish and overview, reconciled through 4fda413e: the in-flight batch is
+committed, with no tracked edits awaiting completion. D3746/D3747/D3811 close the local recovery
+batch; D3812 subsequently passes full normal verification/build/all four browser tiers, followed
+by the stronger eight-case delivery rerun described above. The earlier fdc22e77 result is history,
+not the latest local checkpoint. A fresh October-14 GitHub read still finds published 78fd302f's
+verify 38560140789 successful and browser 38560140733 failed. The five local commits, including
+the D3810 matrix repair, have not been pushed or remotely qualified. No 1.0 promotion.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
 selected-Sight, Nudge and Review contracts; complete learner journeys and bot calibration;
@@ -151,7 +152,7 @@ seven performance, 256 real-content and 360 browser passes; one optional Maia sk
 retries and all 112 composition cells. Local warm p95 is 107.5 ms under unchanged 250 ms.
 This closes the in-flight local checkpoint, not remote CI, Docker/release or full 1.0.
 
-**Owner-requested finish and total inventory, 2026-10-14:** in-flight changes are committed
+**Earlier owner-requested finish and total inventory, 2026-10-14 (historical checkpoint):** in-flight changes are committed
 through `38d1d2c5`; there are no tracked edits awaiting completion. The last six commits are
 one production Inspector repair and five research/contract-authoring checkpoints. They are not
 six newly delivered features. The full local result above belongs to the production checkpoint

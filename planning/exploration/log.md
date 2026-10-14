@@ -28698,3 +28698,20 @@ Campaign was the one capability with no API, route or content. Now:
   debounce race from the no-save claim. All eight normal delivery browser cases pass again;
   production bytes are unchanged from the full run. Close D3812, refresh the existing roadmap/
   receipt, and run final docs/staged guards before committing. No push or whole 1.0 promotion.
+
+### 2026-10-14 — owner-requested batch finish and whole-product inventory
+
+- The in-flight batch is committed through 4fda413e. Fresh status has no tracked edits and five
+  local unpushed commits; the three pre-existing untracked paths remain untouched. No new feature
+  or research wave is started before this requested overview.
+- Reconcile the existing roadmap's earlier finish paragraph: fdc22e77 is no longer the latest
+  full local checkpoint; D3812's complete normal run and stronger delivery rerun are recorded
+  above. Mark the earlier same-day inventory explicitly historical. Do not add another tracker.
+- Fresh normal make roadmap-progress work-state docs-check exits zero. The inventory remains
+  fourteen incomplete whole capabilities, four active/five blocked milestones, 281 complete/
+  264 live/24 retired UX items, 1,732 assigned live ledger rows and zero official pack graduates.
+  Forty-two implementing/ten awaiting/24 draft product RFCs are not completed product journeys;
+  462 historical prose-only closures remain weaker evidence, not newly audited delivery.
+- Fresh read-only GitHub query confirms published 78fd302f: verify 38560140789 succeeds and
+  browser 38560140733 fails. Local D3810 repair is not remote qualification. No push, new whole
+  software/browser rerun, release claim, goal completion or pause follows from this inventory.
