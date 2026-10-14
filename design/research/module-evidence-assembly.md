@@ -366,3 +366,97 @@ acceptance. The model must not become a production mint, generic slicer or “de
 Other focused views require their own source-backed specification. `[M]` No producer, source
 meaning, pack bytes, assistance default, classifier qualification, whole capability or release
 state changes. D3791/D3792 stay blocked.
+
+### Remaining Inspector supplier matrix — 2026-10-14, D3799/D3800
+
+This inventories the 35 refs not measured as real local/recorded inputs by D3795; it is not
+35 newly delivered sources. `make inspector-demand-research` checks equality against the
+existing 75-ref image, records exact factory arms and locates non-test literal callers.
+Its ignored report is 42,940 bytes; 28 refs have literal call locators, not reach proofs.
+Dynamic pivotal dispatch illustrates why no literal locator does not mean no caller. `[V]`
+(`tools/d3792-inspector-demand/source-matrix.ts`; `evidence-catalog.ts`;
+`module-query-sources.ts`; `pivotal.ts`, `pivotalMarkerEvidenceItems`.)
+
+The separate opt-in `make inspector-source-contract-research` observes unchanged permanent
+factory controls: 37 tests, all 35 refs invoked, 34 with fixture values and opening unavailable.
+It writes only route/count/input-key aggregates to an ignored 8,490-byte report. These are
+contract executions, not live providers, authenticated Inspector reach or qualification.
+`pivotalFixtures` fabricates option-collapse nodes and human distributions; `runFixtures`
+adds synthetic checkpoint/objective events and engine fixtures. None establishes legal-play
+or real-provider observation. `[V]` (`source-observer.ts`, `vitest.sources.config.ts` beneath
+`tools/d3792-inspector-demand/`; `evidence-value-authority.test.ts`, the named fixture builders.)
+
+Keys below are literal factory arms, not caller-authored wire payloads. `moves` means a
+contiguous validated list of sealed `run.record.move@1`, never raw UCI or relabelled v2 edges.
+Other dependent inputs retain exact declared sealed projections. Authority codes: **P** provider
+exchange, **R** recorded path, **A** registered authored provenance, **O** runtime opening identity,
+**C** semantic convention. These name consumed authorities; module-registration owns adoption.
+All table rows are source-inspected `[V]` against `evidence-factories.ts` and operations below.
+
+| Exact accepted ref | Factory keys | Supplier / scope | Inspector today / authority |
+|---|---|---|---|
+| `derived.tactic.discovered_executed@1` | `latency,rays` | `discoveredExecutedSemanticEvents`; actual incoming edge | Not acquired; local |
+| `derived.tactic.fork_survives_reply@1` | `breadth,doubleAttack` | `forkSurvival`; actual candidate/reply breadth | Not acquired; local |
+| `derived.pawn.sequence.contact_timing@1` | `moves` | `pawnContactTimingSemanticEvent`; v1 window | Not acquired; R |
+| `derived.pawn.sequence.harassment_pressure@1` | `moves` | `harassmentPressureSemanticEvent`; v1 window | Not acquired; R |
+| `derived.tactic.sequence.defender_consequence@1` | `moves` | `defenderConsequenceSemanticEvent`; v1 window | Not acquired; R |
+| `live.stockfish.eval@1` | `packet` | Exact-node retained eval attachment | Acquired; legacy P |
+| `live.stockfish.wdl@1` | `packet` | Exact-node retained WDL attachment | Acquired; legacy P |
+| `live.stockfish.pv@1` | `packet` | Exact-node retained best-line attachment | Acquired; legacy P |
+| `human.maia.policy@1` | `page` OR `nodeId,run` | Typed old page or matching recorded opponent selection | Not acquired; legacy P |
+| `human.maia.candidate_wdl@1` | `page` | Same page, only candidates carrying WDL | Not acquired; legacy P |
+| `human.explorer.population@1` | `page` | Typed old CorpusPage, node/result/committed SAN | Not acquired; legacy P |
+| `live.syzygy.result@1` | `packet` | Exact-node retained tablebase attachment | Acquired; legacy P |
+| `live.syzygy.category@1` | `packet` | Retained tablebase category fields | Acquired; legacy P |
+| `live.syzygy.distance@1` | `packet` | Retained tablebase category/distance fields | Acquired; legacy P |
+| `recorded.engine.eval@1` | `ledger` | `recordedReadingEvidence`; sealed sourcing engine record | Not acquired; P |
+| `recorded.tablebase.result@1` | `ledger` | Same; sealed sourcing tablebase record | Not acquired; P |
+| `theory.shapes.firing@1` | `entries,path` | Registered compiled authored shapes + actual recorded path | Not acquired here; A |
+| `derived.pivotal.irreversibility@1` | `branchId,run` | `pivotalMarkerEvidenceItems`; branch transitions | Not acquired here; R |
+| `derived.pivotal.phase_change@1` | `branchId,run` | Same; branch phase history, preceding definite phase | Not acquired here; R |
+| `derived.pivotal.human_divergence@1` | `branchId,run` | Same; recorded human-common distribution/path | Not acquired here; P |
+| `derived.pivotal.option_collapse@1` | `branchId,run` | Same; three same-color decisions, later persistence witness | Not acquired here; R |
+| `derived.compare.structure_delta@1` | `branchId,comparison,run` | `compareSources` / strips; exact two-attempt comparison | Not acquired here; local |
+| `derived.compare.eval_delta@1` | Same | Same plus matching recorded engine attachments | Not acquired here; P |
+| `derived.story.rank@2` | `moments` | Story operation; whole admitted Review moment collection | Not acquired here; Story |
+| `derived.opening.deepest_reached@1` | `branchId,run` | Factory abstains; runtime identity source absent | Unavailable; O |
+| `derived.tactic.deflection_observed@1` | `captures,check?,duty,exchange,moves` | `deflectionObservedSemanticEvent`; v1 window/dependencies | Not acquired; R |
+| `derived.tactic.attraction_observed@1` | `captures,check?,moves` | `attractionObservedSemanticEvent`; v1 window/dependencies | Not acquired; R |
+| `derived.tactic.line_blocker_clearance_observed@1` | `exchange,moves` | `lineBlockerClearanceSemanticEvent`; v1 window | Not acquired; R |
+| `derived.tactic.square_clearance_observed@1` | `moves` | `squareClearanceObservedSemanticEvent`; v1 window | Not acquired; R |
+| `derived.tactic.interference_observed@1` | `duty,exchange,moves` | `interferenceSemanticEvent`; v1 window | Not acquired; R |
+| `derived.tactic.check_zwischenzug_observed@1` | `capture,check,exchange,moves` | `checkZwischenzugSemanticEvent`; v1 window | Not acquired; R |
+| `derived.tactic.overload_exploitation_observed@1` | `captures,duty,exchange,moves` | `overloadExploitationSemanticEvent`; v1 window | Not acquired; R |
+| `derived.tactic.overloaded_defender_response_conflict@1` | `capture,duties` | Factory: actual capture, before-position duties, recapture constraints; no direct production-call locator | Not acquired; local |
+| `rules.tactic.consequence.forced_mate_after_move@1` | `beforeFen,breadth,maxAttackerMoves` | Current Hint/Review; sealed reply breadth + bounded horizon | Not acquired here; C |
+| `rules.tactic.consequence.forced_mate_after_move@2` | Same | Same operations, exact versioned proof/refutation/unknown | Not acquired here; C |
+
+Supplier anchors: `semantic-evidence.ts` (named sequence/discovered wrappers);
+`candidate-population.ts`, `forkSurvival`; `evidence-operations.ts`, `recordedReadingEvidence`
+and `positionGuidanceEvidence`; `module-query.ts`, `inspectorSources`, `compareSources`;
+`apps/server/src/review/source-adapters.ts`; `compare-strips.ts`; `story.ts`; `hint-distance.ts`;
+`pivotal.ts`; and the sole factories in `evidence-factories.ts`. The observer exercises Maia's
+page arm, not its alternative run arm, and does not exercise both optional-check arms. `[V]`
+
+Saved packets initiate no live provider request; no matching packet is source absence, not an
+empty result. Sourcing records are not run engine attachments. Shapes need actual registered
+authored entries. Old provider refs check/digest old bytes, not modern operation-keyed receipts.
+Migration holds D3363/D3370/D3373 remain. Ten v1 sequence meanings and recorded v2 successors
+remain distinct under accepted §1.3.1; do not duplicate them into one packet or retire v1 by
+relabeling. Opening's abstention is a genuine missing runtime source owned by D3376 and
+`rfc/installed-opening-evidence.md`, not solved by an ECO/name. `[V]` (`evidence-factories.ts`,
+`PROVIDER_PENDING`, `MOVES`, opening factories; `rfc/module-registration.md` §1.3.1.)
+
+**D3800:** position, incoming edge, recorded window, branch, comparison and whole-game sources
+need distinct contexts. Option-collapse marks the first low decision after a later same-side
+decision remains low; truncating at the marked node removes its witness. One attempt is not a
+comparison, and one node is not Story. The unaccepted §4.11a now states these scopes and separates
+missing context from successful no-witness. Closed context grammar remains an authoring debt,
+not guessed production behavior. `[V]` (`pivotal.ts`, `pivotalMarkerPayloads`; `module-query.ts`;
+`story.ts`; amended RFC §4.11a.)
+
+D3799 closes supplier inventory; D3800 repairs the draft premise. Neither closes delivery.
+Actual acquisition/legal-path/provider measurements, six exact detail schemas, closed context/
+response/disclosure grammar and independent review remain D3792 work. No production code,
+pack, default, provider, qualification or release gate changes. These disposable bounded
+aggregates stay outside ordinary CI/progress; no raw-data archive or second registry is added.

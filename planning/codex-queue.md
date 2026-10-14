@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-14 closeout — D3799 inventories all remaining 35 exact supplier/input/scope joins;
+D3800 repairs the unaccepted draft's universal-node premise. Only six are acquired by today's
+Inspector. Contract controls invoke 35, emit fixture values for 34 and preserve opening's
+unavailability; synthetic/provider fixtures do not establish real source delivery. No production
+change. Next D3792 authoring: exact acquisition/absence/receiver/cancellation obligations and
+held-version handling; six literal detail schemas; closed context/response/paging/disclosure
+grammar; independent review, then application/client/native implementation. No new feature wave
+before the owner's requested total progress inventory. Research closeout is not feature closure.
+
+2026-10-14 — [[D3799]] takes the remaining Inspector source matrix before more draft payload
+work: derive the 35 exact unmeasured refs/input arms from the registry, trace each real supplier
+and versioned owner, and exercise available real local/recorded/application paths. Separate
+actual source availability/adoption from fixtures, legacy incompatibility and missing producer
+inputs. Do not solve an unsupported source by returning a permanent empty/unavailable stub or
+manufacturing provider packets. Land in the existing dossier/RFC author matrix; independent
+acceptance remains required and all current source/semantic/RFC obligations stay visible.
+
 2026-10-14 — [[D3797]] takes the next foundation step after the requested inventory:
 measure projection-specific complete detail rows for D3795's six intrinsically oversized
 Inspector facts. Preserve the complete original source and distinguish a displayed member

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7cf2e20526219bcc58e443e95d12625a1c9ad74a360d6fa6b7567ce0c78f1849",
+    "roadmap": "sha256:aa832cfae7aea09f1245b30d19e998af18ae6f8fdc888d2a8d9d4c1f19fdc947",
     "workItems": "sha256:4113d8540f5dbbd4cde2d3a59c781b4063f069ed8b0e3c83e881e92fc1b05d97",
-    "workState": "sha256:b205c5da2c221391fb694b63f954765b34f718a949f1a6a5e5ad77b1332c5f2a",
+    "workState": "sha256:0f2e2eee43e1d088d54d4ff3b7504391d2e19563ff71641c30c8538bb6e3332e",
     "rfcRegister": "sha256:34bbb3f678d47d69fd49fa60e2aa03a37164dd85ffe482ad8eb21692774a61fb",
     "uxIndex": "sha256:2818bb8f3a028e2360e4c9623fccbffbd0e80e4bcece02a6638a18706835dafc",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 16,
       "blocked": 1087,
-      "done": 1653,
+      "done": 1655,
       "refused": 161
     },
     "workItems": {
@@ -452,8 +452,8 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "D3797 establishes bounded Inspector detail feasibility over 4,184 real values: six closed source-specific constructors retain 226,557 complete modeled members in 30,691 batches below unchanged limits. All 134,144 target/color/mode control scopes fit one batch; 2,112 unavailable clones keep their reasons. Invalid ordinal/source/plan/scope controls, immutable data, coverage/source equality and strict types pass. A real en-passant counter-control preserves the actual legal move while explicitly naming the accepted control clone's ep-cleared limit; no proxy exactness is promoted. D3798 repairs the research harness's nonexistent timestamp field and checks every recorded event time. D3792 section 4.11a is now a bounded unaccepted draft, not buildable: 35 actual suppliers, six presentation schemas and closed response/paging/disclosure grammar still need authoring and independent review. D3791 remains blocked; no production query, source, view, pack, default or qualification changes. Prior D3795's 75-ref/40-measured inventory and six intrinsic overflows, D3796's terminal repair and a5bff1f3's full local proof remain: 5,621 software, seven performance, 256 content, 360 browser passes/one optional skip/zero retries, 112 composition cells, warm p95 107.5 ms under 250 ms. This turn's optional aggregate is below 64 KiB and not a CI/progress dependency. No fresh browser, new detector, complete capability, remote CI, image or release claim follows.",
-        "impact": "advanced",
+        "summary": "D3799 inventories all 35 remaining exact suppliers, inputs and scopes; only six are acquired here as saved packets. The 37 unchanged contract controls invoke 35 and yield fixture values for 34; opening abstains. Synthetic/provider fixtures are not live/legal-play proof. D3800 repairs the draft's universal-node premise without changing production. Closed context/acquisition/detail/response/disclosure authoring and independent acceptance remain D3792 work. D3797/D3798's bounded representation and D3796's terminal repair stand. Strict opt-in research passes; bounded ignored aggregates only, no ordinary CI/progress dependency. Prior a5bff1f3 full local proof remains historical: 5,621 software, seven performance, 256 content, 360 browser passes, one optional skip, zero retries and 112 composition cells. No milestone, capability, content or release promotion.",
+        "impact": "held",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
           "design/research/recorded-semantic-path-cost.md",
@@ -462,6 +462,9 @@
           "tools/d3792-inspector-demand/probe.ts",
           "tools/d3792-inspector-demand/census.ts",
           "tools/d3792-inspector-demand/detail-model.ts",
+          "tools/d3792-inspector-demand/source-matrix.ts",
+          "tools/d3792-inspector-demand/source-observer.ts",
+          "tools/d3792-inspector-demand/vitest.sources.config.ts",
           "tools/d3792-inspector-demand/tsconfig.json",
           "apps/server/src/terminal-inspector.test.ts",
           "planning/recorded-semantic-path/plan.md",
@@ -553,6 +556,16 @@
             "kind": "work_state",
             "id": "D3798",
             "digest": "sha256:99a4e93ef3d40ab66d7320a277989b0414f83da416504220f73be76b5fdb61fe"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3799",
+            "digest": "sha256:0bd4e7fb5049d46c5c13c79b9c5deb1e3e18f3c0afee13aa1d1b1254b6661614"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3800",
+            "digest": "sha256:0ce1490fc8bf1d038a21a969f5a6dc0122cf9b4bed58995b8fd852f102bbe3f8"
           },
           {
             "kind": "work_state",

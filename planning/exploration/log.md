@@ -28371,3 +28371,26 @@ Campaign was the one capability with no API, route or content. Now:
   Register/status/work-state/roadmap/intent/history/test-tier guards remain green; all 1,733 live
   rows stay assigned, and only the two bounded research/instrument rows close. No ordinary
   software/content/browser rerun is claimed for these production-byte-identical changes.
+
+### 2026-10-14 — D3799 supplier inventory and D3800 draft scope closeout
+
+- Finish the in-flight source audit before the owner's total 1.0 inventory. All remaining 35
+  Inspector refs have exact factory arms, traced supplier operations, consumed authorities and
+  source scopes in the existing module-evidence-assembly dossier. Literal call anchors are
+  locators, not runtime reach; six are currently acquired here, all exact-node saved packets.
+- Normal strict `make inspector-source-contract-research inspector-demand-research` exits zero.
+  The unchanged 37 permanent controls invoke all 35 refs; 34 produce fixture values, opening
+  abstains. Synthetic nodes/provider distributions are explicitly fixture-only. No live provider
+  or legal-path qualification follows. The original real census/model/focus/negative controls
+  reproduce. Reports remain ignored, bounded aggregates, not ordinary CI/progress dependencies.
+- D3800 repairs only the unaccepted module-registration §4.11a: positions, edges, windows,
+  branches, two-attempt comparisons and whole-game Story cannot share a universal-node premise.
+  Option-collapse's marked node and later persistence witness are different. Missing context
+  must not become no-witness. Closed context grammar still requires authoring and review.
+- Close D3799's inventory question and D3800's draft-premise repair with path evidence. D3792
+  retains acquisition/absence/receiver/cancellation, held-version handling, six exact detail
+  schemas, closed context/response/paging/disclosure and independent acceptance. No production
+  code, pack, default, schema, qualification, capability, milestone or release change.
+- Update existing coverage, queue, ledger, state and roadmap; no new work index. Production is
+  byte-identical to the preceding full local checkpoint; no fresh full/browser run is claimed.
+  No push, deployment, worktree, delegation or goal completion.

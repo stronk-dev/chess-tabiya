@@ -31588,6 +31588,24 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/census.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3799",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0bd4e7fb5049d46c5c13c79b9c5deb1e3e18f3c0afee13aa1d1b1254b6661614",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3800",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0ce1490fc8bf1d038a21a969f5a6dc0122cf9b4bed58995b8fd852f102bbe3f8",
+      "uxItems": [],
+      "evidence": "design/research/module-evidence-assembly.md",
+      "evidenceKind": "path"
     }
   ]
 }

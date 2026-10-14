@@ -530,6 +530,11 @@ recorded-inspector-check:
 terminal-inspector-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep 'D3796 terminal Inspector'
 
+.PHONY: inspector-source-contract-research
+inspector-source-contract-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	./node_modules/.bin/vitest run --config tools/d3792-inspector-demand/vitest.sources.config.ts
+
 # Disposable author evidence, explicitly outside ordinary CI/progress and production source edits.
 inspector-demand-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
@@ -538,6 +543,7 @@ inspector-demand-research:
 	$(CI_NODE) .cache/d3792-inspector-demand/acquired.mjs acquired
 	$(CI_NODE) .cache/d3792-inspector-demand/derived_family.mjs derived_family
 	$(CI_NODE) .cache/d3792-inspector-demand/census.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/source-matrix.mjs
 
 .PHONY: recorded-castling-attraction-check
 .PHONY: recorded-castling-defender-check recorded-castling-defender-browser-check

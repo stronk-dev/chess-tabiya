@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector supplier inventory, 2026-10-14 ([[D3799]]/[[D3800]]): **answered `[V]` input/supplier/
+scope inventory, not delivery**. All remaining 35 exact refs have traced arms and suppliers;
+only six are acquired here. Permanent contract fixtures invoke all 35, produce values for 34
+and leave opening unavailable; synthetic/provider fixtures prove no live/legal-play reach.
+The unaccepted draft distinguishes branch/comparison/game scope from one-node readings.
+Actual acquisition and closed schemas/context/response still remain D3792 work. See the dated
+matrix in `module-evidence-assembly.md`; bounded optional reports only, no CI/progress dependency.
+
 Bounded Inspector detail, 2026-10-14 ([[D3797]]/[[D3798]]): **answered `[V]` representation
 feasibility, not production delivery**. Six closed constructors cover 4,184 real source values;
 226,557 complete modeled members fit bounded batches. All 134,144 target/color/mode control

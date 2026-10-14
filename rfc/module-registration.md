@@ -1825,9 +1825,11 @@ status rather than aggregate away the other `not_requested` entries.
 Before acquisition, derive access, rated/live locks, workflow context and effective assistance
 through the same authorities as the existing module query. Require the effective Full Inspector
 review effect and an open disclosure boundary. Resolve the requested node on the permitted
-recorded branch prefix; no guessed ancestor, sibling/future window or raw operand-helper
-construction. The recorded compiler supplies only its actual emitted facts ending at this
-node. Root/no-witness, broken boundary, provider absence and failed acquisition stay distinct.
+recorded branch; no guessed ancestor, sibling, unplayed future or raw operand-helper construction.
+For incoming-edge and recorded-window sources, the compiler supplies only its actual emitted
+facts ending at this node. That rule does not turn branch, comparison or whole-game sources
+into position readings. Root/no-witness, broken boundary, provider absence and failed acquisition
+stay distinct.
 Compile the complete registered consumer before any lazy catalogue/provider read. Disabled,
 withheld, foreign, invalid-scope and stale requests perform zero source work.
 
@@ -1840,6 +1842,40 @@ complete their supplier/input/absence/receiver/cancellation/positive-fixture mat
 amendment can be accepted. Do not satisfy that obligation with permanently unavailable stubs,
 invented provider output, removal from the accepted image or a renderer-only inventory. Upstream
 source/version holds remain; this amendment cannot authorize their unaccepted migrations.
+
+**D3799 supplier inventory, D3800 scope correction:** the complete 35-ref worksheet is in
+`design/research/module-evidence-assembly.md` §Remaining Inspector supplier matrix. It names
+each exact input arm, supplier, scope and authority, not merely a matching call-site anchor.
+The opt-in contract observer executes all 35 unchanged factories: 34 emit fixture values;
+opening remains unavailable. Those fixtures include synthetic provider/recording data and
+therefore prove neither live source acquisition nor legal recorded-path reach. Only six of
+these 35 refs are acquired by today's Inspector, all from exact-node saved packets. Keep the
+other source obligations open; contract fixture success does not satisfy runtime delivery.
+
+Source scope is part of the proposed operation's contract, not inferred from `nodeId`:
+
+| Source scope | Authoritative context | Missing context is not |
+|---|---|---|
+| Position | The permitted selected node's FEN and exact retained provider occurrence | A successful empty reading |
+| Incoming edge | Its actual parent, legal committed move and after-node | A root with an invented predecessor |
+| Recorded window | The contiguous validated played path ending at the selected node, with its exact versioned anchors | A hypothetical or relabelled v1/v2 sequence |
+| Branch | The permitted recorded branch path and the source's own witness range | A point-in-time position reading |
+| Comparison | Two authorised recorded attempts and their actual `BranchComparison` | A one-attempt `no_witness` result |
+| Whole game | The authorised completed Review's admitted moments | A fabricated list derived from the selected node |
+
+Pivotal option-collapse marks the first low-option decision but needs a later recorded same-side
+decision to establish persistence. Its anchor and last witness node are different. Reviewing
+the already-played later witness may establish the marker; a live request before that witness
+may not borrow it or claim absence from a truncated execution. Branch phase transitions retain
+preceding context. Opening requires its installed/runtime identity source; an ECO/name label
+is not a substitute. Story rank requires the whole admitted moment collection. Comparison
+retains both exact attempts and access checks for each.
+
+The request above still anchors selection at `nodeId`; it does not yet contain a closed
+serializable branch/comparison/game context grammar. Author that grammar, scope compatibility,
+access/disclosure rules and stale/cancellation controls before acceptance. Missing required
+context must yield an explicit missing-context outcome, not `no_witness`, silent widening or
+guessed context. This correction grants no production authority and changes no accepted source.
 
 **Truthful states:** retain `not_requested`, `unavailable`, `failed` and `no_witness` as distinct
 source outcomes. `no_witness` requires successful complete source execution with no admitted
@@ -1907,9 +1943,11 @@ client parser, desktop/phone/keyboard open → choose → read → focus/page �
 The model's 134,144 control-focus cases are representation evidence, not those production checks.
 No 1.0 completion or execution-pair promotion follows from this draft.
 
-**Authoring still required before buildability acceptance:** the 35 source-input/supplier rows;
-the six literal payload/factory/renderer schemas in the owning presentation amendment; and the
-closed response/source-summary pagination/disclosure grammar. The request and six-type boundary
+**Authoring still required before buildability acceptance:** turn the D3799 supplier inventory
+into exact production acquisition/absence/receiver/cancellation obligations, including its held
+provider versions; the six literal payload/factory/renderer schemas in the owning presentation
+amendment; and the closed source-context/response/source-summary pagination/disclosure grammar.
+The request and six-type boundary
 above are a bounded draft, not an executable contract or authority to implement a guessed response.
 
 ### §5 — Budgets and `emptyBehavior` are the shipped invariants
@@ -2442,6 +2480,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-14 — D3799 supplies the 35-ref input/supplier/scope inventory and observes unchanged
+  factory controls, not runtime delivery. D3800 corrects §4.11a's universal-node premise:
+  branch/comparison/game contexts and marker versus witness remain distinct. Closed context,
+  acquisition and presentation/response authoring still required; amendment remains unaccepted.
 
 - 2026-10-14 — D3792 §4.11a bounded Inspector demand/detail draft added after D3795/D3797's
   real-source census. Distinct operation/wire; six explicit source-retaining view projections;
