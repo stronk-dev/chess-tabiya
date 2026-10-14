@@ -172,6 +172,57 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect([...admittedSequence].sort()).toEqual([...recordedSequenceIds].sort());
   });
 
+  it.each(["white", "black"] as const)("D3818 Review and Story retain separate imported and retry outcomes through authenticated HTTP (%s)", async side => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, `review-results-${side}`);
+    const writer = `review-results-${side}-writer`;
+    const runId = await importReviewedGame(origin, cookie, writer,
+      '[Event "Original result belongs to its line"]\n[Result "1-0"]\n\n1. e4 e5 1-0', side);
+    const post = (path: string, body: unknown) => fetch(`${origin}${path}`, {
+      method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": writer }, body: JSON.stringify(body),
+    });
+    const read = async (branchId: string) => {
+      const response = await fetch(`${origin}/runs/${runId}/review?branch=${encodeURIComponent(branchId)}`, { headers: { cookie } });
+      expect(response.status, await response.clone().text()).toBe(200);
+      return response.json() as Promise<ReviewMap>;
+    };
+    const original = storedRun(databasePath, runId), main = original.branches[0]!.id;
+    const mainNodes = original.nodes.map(node => ({ ...node }));
+    const root = original.nodes.find(node => node.parentId === null)!;
+    expect((await post(`/runs/${runId}/rewind`, { nodeId: root.id })).status).toBe(200);
+    expect((await post(`/runs/${runId}/fork`, { nodeId: root.id, label: "story-reentry", intent: "Retry original decision" })).status).toBe(200);
+    const retry = storedRun(databasePath, runId).activeCursor.branchId;
+    for (const uci of ["f2f3", "e7e5"]) expect((await post(`/runs/${runId}/moves`, { uci })).status).toBe(200);
+    expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
+    const unfinished = await read(retry);
+    expect(unfinished.outcome).toEqual({ kind: "unfinished" });
+    expect(unfinished.source).toMatchObject({ result: "1-0" }); // retained archive, not a result authority
+    const story = await fetch(`${origin}/runs/${runId}/story?branch=${encodeURIComponent(retry)}`, { headers: { cookie } });
+    expect(story.status).toBe(200);
+    expect((await story.json() as { subject: { outcome: unknown } }).subject.outcome).toEqual({ kind: "unfinished" });
+    for (const uci of ["g2g4", "d8h4"]) expect((await post(`/runs/${runId}/moves`, { uci })).status).toBe(200);
+    expect((await post(`/runs/${runId}/reveal`, {})).status).toBe(200);
+    const terminal = await read(retry);
+    expect(terminal.outcome).toEqual({ kind: "board_terminal", result: side === "white" ? "loss" : "win" });
+    const shared = await post(`/runs/${runId}/share`, { branchId: retry });
+    expect(shared.status).toBe(201);
+    const token = (await shared.json() as { token: string }).token;
+    const publicStory = await fetch(`${origin}/api/shared/${token}/story`);
+    expect(publicStory.status).toBe(200);
+    const publicResult = await publicStory.json() as { outcome: unknown; receipt: { outcome: unknown } };
+    expect(publicResult.outcome).toEqual(terminal.outcome);
+    expect(publicResult.receipt.outcome).toMatchObject(terminal.outcome);
+    expect(publicResult.receipt).not.toHaveProperty("subject");
+    expect((await read(main)).outcome).toEqual({ kind: "recorded_result", result: "1-0" });
+    const after = storedRun(databasePath, runId);
+    expect(after.nodes.filter(node => mainNodes.some(originalNode => originalNode.id === node.id))).toEqual(mainNodes);
+    expect(after.events.slice(0, original.events.length)).toEqual(original.events);
+    const strangerCookie = await register(origin, `review-results-stranger-${side}`);
+    const foreign = await fetch(`${origin}/runs/${runId}/review?branch=${encodeURIComponent(retry)}`, { headers: { cookie: strangerCookie } });
+    expect(foreign.status).toBe(404);
+    expect(await foreign.json()).toMatchObject({ error: { code: "RUN_NOT_FOUND" } });
+  });
+
   it.each([
     ...RECORDED_SEQUENCE_POSITIVES.map(value => ({ ...value, emits: true })),
     ...RECORDED_SEQUENCE_HARD_NEGATIVES.map(value => ({ ...value, emits: false })),

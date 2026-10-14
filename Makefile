@@ -2837,6 +2837,10 @@ review-evidence-author-contract:
 review-evidence-runtime-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/review-evidence.test.ts apps/server/src/review-map.test.ts apps/server/src/feedback-policy.test.ts packages/runtime/src/review-evidence.test.ts
 
+.PHONY: review-result-browser-check
+review-result-browser-check:
+	./node_modules/.bin/playwright test tests/browser/review-result-attribution.spec.ts
+
 .PHONY: review-evidence-fresh-review
 review-evidence-fresh-review: review-evidence-author-contract
 	$(CI_NODE) --test tools/d2631-review-evidence-fresh-review/contract.test.mjs

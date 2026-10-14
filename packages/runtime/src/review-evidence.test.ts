@@ -31,6 +31,7 @@ import { reviewPointComparability, whiteWdl, type ReviewEnginePoint } from "./re
 import { parseReviewStoryReceipt, projectPublicReviewStory, rankStoryMoments, renderReviewStoryReceipt, reviewStoryMoments } from "./story.js";
 import { REVIEW_AT, attachDelivery, evaluationDelivery, importRecord, importedRun, mainPath, play } from "./testing/review-evidence-fixture.js";
 import type { DrillRun } from "./types.js";
+import { fork, rewind } from "./runtime.js";
 
 const ROOT = new URL("../../../", import.meta.url);
 const LINE = ["e2e4", "e7e5", "g1f3", "b8c6", "f1c4", "g8f6"];
@@ -51,6 +52,38 @@ const pointOf = (run: DrillRun, nodeIndex: number): DeclaredEvidence<ReviewEngin
 };
 
 describe("review evidence compiler: typed shared delivery and Review projections", () => {
+  it.each(["white", "black"] as const)("D3818 does not lend the original imported result to an unfinished retry (%s)", side => {
+    let run = play(importedRun(`d3818-unfinished-${side}`, side), ["e2e4", "e7e5"]);
+    const main = run.branches[0]!.id;
+    run = rewind(run, mainPath(run)[0]!.id, REVIEW_AT).run;
+    run = fork(run, run.activeCursor.nodeId, { at: REVIEW_AT }).run;
+    run = play(run, ["d2d4", "d7d5"]);
+    const authorize = createReviewPrefixAuthority({ loadRun: () => run, loadImportRecord: () => importRecord(run, "1-0") });
+    const retry = authorize({ runId: run.id, branchId: run.activeCursor.branchId });
+    expect(retry.outcome).toEqual({ kind: "unfinished" });
+    expect(authorize({ runId: run.id, branchId: main }).outcome).toMatchObject({ kind: "recorded_result", result: "1-0" });
+    const packet = compileReviewPacketForSubject(retry, { engine: new Map(), shapes: [] });
+    expect(packet.nodes.flatMap(node => node.items).some(item => item.projection.id === "run.record.imported_result")).toBe(false);
+    expect(renderReviewStoryReceipt(packet).subject.outcome).toEqual({ kind: "unfinished" });
+  });
+
+  it.each(["white", "black"] as const)("D3818 an alternate checkmate has its own result, not an import contradiction (%s)", side => {
+    let run = play(importedRun(`d3818-terminal-${side}`, side), ["e2e4", "e7e5"]);
+    const main = run.branches[0]!.id;
+    run = rewind(run, mainPath(run)[0]!.id, REVIEW_AT).run;
+    run = fork(run, run.activeCursor.nodeId, { at: REVIEW_AT }).run;
+    run = play(run, ["f2f3", "e7e5", "g2g4", "d8h4"]);
+    const authorize = createReviewPrefixAuthority({ loadRun: () => run, loadImportRecord: () => importRecord(run, "1-0") });
+    expect(authorize({ runId: run.id, branchId: run.activeCursor.branchId }).outcome).toMatchObject({ kind: "board_terminal", result: side === "white" ? "loss" : "win" });
+    expect(authorize({ runId: run.id, branchId: main }).outcome).toMatchObject({ kind: "recorded_result", result: "1-0" });
+  });
+
+  it.each(["white", "black"] as const)("D3818 still refuses a contradicted original mainline result (%s)", side => {
+    const run = play(importedRun(`d3818-original-conflict-${side}`, side), ["f2f3", "e7e5", "g2g4", "d8h4"]);
+    const authorize = createReviewPrefixAuthority({ loadRun: () => run, loadImportRecord: () => importRecord(run, "1-0") });
+    expect(() => authorize({ runId: run.id, branchId: run.branches[0]!.id })).toThrow(/import record result disagrees/u);
+  });
+
   it.each(["path", "plan", "sources", "compile", "convenience", "aggregate", "story", "wire"] as const)("refuses stale stored prefixes at the %s entry point", boundary => {
     let run = evaluatedGame(["cp 20", "cp 35"]);
     const authorize = createReviewPrefixAuthority({ loadRun: () => run, loadImportRecord: () => importRecord(run, "*") });

@@ -28827,3 +28827,53 @@ Campaign was the one capability with no API, route or content. Now:
   official pack graduated. D3813–D3815 remain bounded research, not production Inspector delivery.
   No new feature wave, raw recording, push, current-revision GitHub/release-image qualification,
   goal pause or completion. The owner-requested total overview follows this committed closeout.
+
+### 2026-10-14 — D3818 imported-result attribution across real Review and retry journeys
+
+- Continue the full 1.0 goal from the completed inventory. Inspect the held source/module
+  amendments without self-accepting them; the completed-Review prerequisite exposes a separate
+  defect within accepted review-evidence-compiler §4/criterion 15 and review-map §§4/8.
+  The prefix constructor lends the PGN result to every branch and compares a retry's real
+  terminal result with the original mainline result. Four both-color permanent controls fail:
+  unfinished retries inherit 1-0, and legal opposite-result checkmates throw REVIEW_PREFIX_REFUSED.
+- Bind the import result only to importedMainlineBranchId. Keep validating the stored import
+  identity, derive other branches' outcomes from their actual on-path terminal events, and retain
+  refusal when the ORIGINAL mainline contradicts its result. The visible Review header now reads
+  packet.subject.outcome, not a second calculation over raw record.result. Original source metadata,
+  moves, event prefixes, public formats, grades, selection, schemas and assistance remain intact.
+- Six runtime cases and both-color actual authenticated HTTP/SQLite controls cover unfinished and
+  terminal retries, original-mainline return, Story/public receipt result and foreign-account
+  privacy. Initial default-sandbox run retains four genuine predecessor failures plus localhost
+  EPERM failures; the normal permitted target executes the production HTTP boundary. The first
+  added foreign-account expectation wrongly assumes 403; the existing private-run policy is
+  RUN_NOT_FOUND/404, so correct the test without changing authorization. Focused 157 cases and
+  all workspace types pass. No deadline, failure contract or assertion is weakened.
+- Four native desktop/phone both-color journeys import through the real UI, issue ordinary legal
+  retry commands through HTTP, render/reload an unfinished alternative, finish Fool's Mate, navigate
+  actual moves, use the real Share review button and reopen the original. Private/public results
+  agree and original nodes/event prefix remain unchanged. Strengthened focused browser target
+  passes all four, zero retries. It claims rendered Review proof, not five-mode piece input.
+- Explicit provider-parser/profile/value/semantic maintenance passes: eighteen parser and 67
+  value-authority controls; parser/factory files remain unchanged. Only the semantic implementation
+  record refreshes. All 343 canonical cases pass across 81 subjects; zero fully qualified.
+- First full run passes 5,675 software tests and fails two new share assertions: the PUBLIC receipt
+  deliberately has receipt.outcome, not the private receipt.subject. Correct that expectation and
+  assert subject is absent; no public/private format or production change follows. Final frozen
+  ordinary make roadmap-receipt verify-awake build test-browser-ci-awake exits zero: 5,677 software
+  tests/391 files, seven performance/four files, 257 real-content/26 files, governance/build and all
+  four browser tiers, including all 59 matrix cases, 112/112 successful unretried composition cells
+  and the packaged-production learner journey. Existing optional Maia skip and bundle warning remain.
+- A post-run Playwright --list count (309 main-tier entries) replaces its transient JSON with a
+  listing. Restore the actual report through normal make test-browser-matrix, not a metadata edit:
+  all 59 tests and 112 cells pass again on unchanged source. No progress/CI source depends on raw
+  captures and no recording is added to Git. Preserve the failed runs and this operator mistake.
+- D3818 closes with production path evidence; existing ledger/roadmap/receipt/docs carry the flow-back.
+  All 1,733 live items remain assigned; 1,673 done/161 refused, zero untriaged. UX remains 281 complete,
+  264 live/24 retired; four milestones active/five blocked, no whole capability complete, qualified
+  semantic subject or official pack. Source execution, useful selection, bot calibration, Campaign
+  curriculum/rewards and release proof remain open. No unaccepted amendment implemented, push,
+  current-revision GitHub/release-image qualification, goal pause or completion.
+- Closeout governance refuses the two newly cited active RFCs until their exact live-register
+  anchors are supplied. Bind those existing register rows and the closed D3818 source row;
+  ordinary make roadmap-receipt verify-governance then exits zero. This is closeout bookkeeping,
+  not a product/source/test change or a weakened gate.

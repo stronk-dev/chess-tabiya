@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7dd3056913b3148ad009aaa4a6c1affb7a82d94df378793e929b11a8e36a59fe",
+    "roadmap": "sha256:84ec225dbd7dd7925c3dc6cbf2c5ffb18b3fbc81aefbf437cf8e7ebb34dec622",
     "workItems": "sha256:448b9783d376582c3765171656de35da790a9e854337d6a2d781ab3997c02a5a",
-    "workState": "sha256:d861f4681b86f72104bb684d3a20414e46d62ab5254717d2196d8ca46e532da3",
+    "workState": "sha256:7d3de044a10d2bfd13833f7bd0ea87058372abd506dbd48696a37b79ce1bbff6",
     "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
     "uxIndex": "sha256:8d1e718ab156df60877f1002fb9484fa4dc55ce6a72259183f18f8c9a3c73a62",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 630,
       "doing": 17,
       "blocked": 1086,
-      "done": 1672,
+      "done": 1673,
       "refused": 161
     },
     "workItems": {
@@ -1569,9 +1569,16 @@
       "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-10-14",
-        "summary": "D3809 completes CMP-a13 under campaign-core §§3.3/7.1: one boss/encounter rule renderer names the exact restriction before entry and on the map, independently of source/honesty withholding. In-play rules remain visible through pending/failed help; saved seals name the ended restriction without promising available guidance. Four predecessor-red controls, 374 focused software cases/types and seventeen actual native Campaign cases pass. The browser fixture now suppresses an actually earned/equipped tool, then proves its admission in the next encounter after held/failed help, retry, seal and map/reload. Kit and recorded chess stay intact; board rectangles remain exact. Screenshot review adds grouped explanations and scroll-edge spacing, retaining full-visibility assertions and unchanged deadlines. Final full normal gates are recorded in the append-only log before commit. UX is 281 complete/264 live/24 retired. D3806–D3808 finish/leave and terminal recovery, D3784/D3785 saved-source recovery and prior Profile checkpoints stand. D3810 separately records published 78fd302f's matrix failure; no remote closure. Useful selection, qualified sources, skill credit, calibrated bots, Campaign curriculum/rewards, official content and release recovery remain open. No new API, schema, command, source, economy or default; no whole capability/milestone, remote CI, image or release promotion.",
+        "summary": "D3818 closes the accepted Review result-attribution correction: the imported PGN result belongs only to its mainline; a legal retry stays unfinished or uses its own on-path terminal outcome. Four predecessor failures prove borrowed results and rejected opposite-result checkmates. Six runtime cases retain real original-mainline contradiction refusal; both-color authenticated HTTP/SQLite/Story/public-share/privacy controls and four served desktop/phone retry/reload/terminal/share/original journeys pass. Review header now consumes the same subject as Story; source metadata and original play remain unchanged. Initial test expectations for 403 and a private subject in the public receipt are corrected to existing 404/privacy contracts, not production waivers. Final frozen normal gates pass 5,677 software/391 files, seven performance/four files, 257 content/26 files, clean governance/build and all four browser tiers, including all 59 matrix cases/112 unretried composition cells and packaged-production proof. A post-run test listing overwrites transient JSON; normal matrix execution regenerates all 59/112 results without source changes or hand-edited evidence. All 343 canonical semantic cases pass; zero subjects fully qualified. Prior Campaign/Profile checkpoints stand. Source delivery, useful selection, skills, calibrated bots, official curriculum/content and release recovery remain open. No new grade, selection, source, schema, permission or default; no unaccepted amendment, whole capability/milestone, remote CI or release promotion.",
         "impact": "advanced",
         "evidence": [
+          "rfc/review-evidence-compiler.md",
+          "rfc/review-map.md",
+          "packages/runtime/src/review-evidence.ts",
+          "packages/runtime/src/review-evidence.test.ts",
+          "apps/server/src/review-map.test.ts",
+          "tests/browser/review-result-attribution.spec.ts",
+          "docs/review-evidence.md",
           "apps/web/src/lib/CampaignScreen.svelte",
           "tests/browser/fixtures/campaign.browser.json",
           "apps/web/src/lib/campaign-api.ts",
@@ -1635,6 +1642,21 @@
           "tests/browser/import-workflow.spec.ts"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "review-evidence-compiler.md",
+            "digest": "sha256:5efaf3f84ef03c1b984dae8c564227bf0f3ae7e0f3b855e135d47efad48cbe3d"
+          },
+          {
+            "kind": "rfc",
+            "id": "review-map.md",
+            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3818",
+            "digest": "sha256:c9c4c69d74733cbc92bf50bac0df99bd19a9a812afd167be38e1961f7473780c"
+          },
           {
             "kind": "work_state",
             "id": "D3809",
@@ -2429,7 +2451,7 @@
         ],
         "experience": [
           "partial",
-          "The mounted Review Map has a move timeline, grounded grades, moments, eval graph, Analyze, retry and compare doors. Recorded events retain their complete typed board/move components through authenticated Review; caption/chip focus paints only the selected move and navigation clears it without changing saved play. Ordinary run responses exclude saved provider captures and eval move answers; explicit Analyze reconstructs after restart. Whole-game cross-source explanation and every origin's complete review-and-return journey remain."
+          "The mounted Review Map has a move timeline, grounded grades, moments, eval graph, Analyze, retry and compare doors. Recorded events retain their complete typed board/move components through authenticated Review; caption/chip focus paints only the selected move and navigation clears it without changing saved play. Ordinary run responses exclude saved provider captures and eval move answers; explicit Analyze reconstructs after restart. Whole-game cross-source explanation and every origin's complete review-and-return journey remain. D3818 binds imported results only to the original mainline; private/public Review and Story retain an unfinished retry or its own actual terminal result through both-color desktop/phone reload and original-line return."
         ],
         "defaults": [
           "blocked",

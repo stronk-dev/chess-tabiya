@@ -1220,15 +1220,14 @@ export class RunService {
     const projection = reviewStoryMoments(packet);
     const progress = packet.completion.progress;
     const pass = Object.freeze(progress.kind === "settled" ? { ready: true, pending: 0 } : { ready: false, pending: progress.pendingNodeCount + progress.notYetScheduledNodeCount });
-    const terminal = branchOutcome !== undefined;
+    const outcome = packet.subject.outcome;
     return {
       run, role, branchId, record, pass, projection, packet,
       source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
-      outcome: Object.freeze(terminal
-        ? { kind: "board_terminal" as const, result: branchOutcome.data.outcome }
-        : record?.result === "*" || record===undefined
-          ? { kind: "unfinished" as const }
-          : { kind: "recorded_result" as const, result: record.result }),
+      // The same branch-bound authority supplies Story and the visible Review result. The
+      // archive's original result tag remains source metadata, not an alternate retry's result.
+      outcome: Object.freeze(outcome.kind === "unfinished" ? { kind: "unfinished" as const }
+        : { kind: outcome.kind, result: outcome.result }),
     };
   }
 

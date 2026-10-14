@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3817]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3818]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,19 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3818]] repairs imported-result attribution through the accepted Review prefix and retry
+contracts. Four predecessor failures reproduce borrowed results and rejected opposite-result
+checkmates. The imported result now belongs only to its mainline; an alternate line is unfinished
+or has its own actual terminal result. The visible Review header consumes the same subject as
+Story, retaining source metadata and genuine mainline-contradiction refusal. All 157 focused
+cases/types and four actual desktop/phone both-color journeys pass, including public sharing.
+Final frozen normal verification/build/all four browser tiers exit zero: 5,677 software,
+seven performance, 257 content, 59 matrix and packaged-production learner proof. All 112
+composition cells pass without retries. A post-run list command replaces the transient JSON
+report; the ordinary matrix rerun regenerates it with all 59 cases/112 cells passing, without
+source changes or hand-editing reports. Saved play remains intact; the unaccepted Inspector
+and local-source amendments, semantic qualification and whole capability gates remain unchanged.
 
 [[D3816]] removes a real repeated computation from the accepted exact-move primitive, rather
 than changing evidence: selected destination lookup uses one position/legality check and no
@@ -170,13 +183,18 @@ graduated representative content and Campaign progression; current CI and native
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
 
-Current finish and inventory, 2026-10-14: D3816's accepted destination primitive correction is
+Previous finish and inventory, 2026-10-14 (D3816 checkpoint): the accepted destination primitive correction is
 verified and closed locally, with the full normal gate results above. D3813–D3815 were research
 prerequisites, not newly shipped Inspector delivery. All 1,733 live ledger items have an owner
 and state; 1,672 are done and 161 refused. UX remains 281 complete / 264 live / 24 retired.
 The four active/five blocked milestones, zero complete whole capabilities, zero fully qualified
 semantic subjects and zero official graduates remain unchanged. No new feature wave, push,
 remote qualification or goal pause/completion is part of this finish-and-overview checkpoint.
+
+Subsequent accepted Review correction [[D3818]] is closed with full local proof, not a new
+whole capability: the ledger now has 3,567 rows, 1,733 live assigned, 1,673 done and 161 refused.
+UX, RFC lifecycle, all whole-product/content/semantic qualification and release gates remain
+unchanged. The fix does not implement the held source/Sight/Nudge/Inspector amendments.
 
 October-14 inventory closeout: D3795 now inventories all 75 accepted Inspector refs; 40 real
 local/recorded measurements leave 35 provider/dependency refs explicitly unmeasured. Six types

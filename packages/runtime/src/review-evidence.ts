@@ -7,6 +7,7 @@
 // and not prose; it selects nothing and grades nothing.
 
 import { branchPath } from "./branch-path.js";
+import { importedMainlineBranchId } from "./branch-scale.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
@@ -173,12 +174,16 @@ export function createReviewPrefixAuthority(storage: ReviewStorageAuthority): (i
     if (record !== undefined && run.sessionKind !== "imported") refuse("REVIEW_PREFIX_REFUSED", "an import record is present for a non-imported run");
     if (record === undefined && run.sessionKind === "imported") refuse("REVIEW_PREFIX_REFUSED", "an imported run has no import record");
     const terminal = [...events].reverse().find((event) => event.type === "outcome.reached" && pathIds.has(event.data.nodeId));
+    // A PGN result describes its imported mainline, never a learner's later rehearsal branch.
+    // Keep validating the stored import record above, but do not borrow its result or compare
+    // an alternate line's actual terminal outcome against a different game's ending.
+    const resultRecord = input.branchId === importedMainlineBranchId(run) ? record : undefined;
     let outcome: ReviewOutcomeReceipt;
     if (terminal?.type === "outcome.reached") {
-      if (record !== undefined && record.result !== "*" && learnerResult(record.result, run.start.side) !== terminal.data.outcome) refuse("REVIEW_PREFIX_REFUSED", "the import record result disagrees with the on-path terminal");
+      if (resultRecord !== undefined && resultRecord.result !== "*" && learnerResult(resultRecord.result, run.start.side) !== terminal.data.outcome) refuse("REVIEW_PREFIX_REFUSED", "the import record result disagrees with the on-path terminal");
       outcome = { kind: "board_terminal", eventSeq: terminal.seq, nodeId: terminal.data.nodeId, result: terminal.data.outcome };
-    } else if (record !== undefined && record.result !== "*") {
-      outcome = { kind: "recorded_result", sourceDigest: presentationDigest("review.import-record@1", { runId: record.runId, result: record.result, movetextDigest: record.movetextDigest }), result: record.result };
+    } else if (resultRecord !== undefined && resultRecord.result !== "*") {
+      outcome = { kind: "recorded_result", sourceDigest: presentationDigest("review.import-record@1", { runId: resultRecord.runId, result: resultRecord.result, movetextDigest: resultRecord.movetextDigest }), result: resultRecord.result };
     } else {
       outcome = { kind: "unfinished" };
     }

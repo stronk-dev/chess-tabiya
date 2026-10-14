@@ -13,6 +13,12 @@ and deleted-recording behavior. This navigation does not supply missing evidence
 
 ## One engine source, five Review projections
 
+The recorded PGN result belongs only to the imported mainline. A rehearsal branch remains
+unfinished until its own on-path terminal outcome; it cannot borrow the original game's result
+or be refused because its ending differs. Both the visible Review header and Story use the same
+recorded-prefix outcome. The original import result remains intact as source metadata. A real
+disagreement between that result and the original mainline's terminal outcome still refuses.
+
 The only engine source is the shared node-free `live.stockfish.position_eval@1` delivery from the
 provider exchange: a White-perspective `centipawns | mate` score plus the same line's raw
 side-to-move WDL, exact canonical request FEN, engine identity and one bound. It carries no node,
