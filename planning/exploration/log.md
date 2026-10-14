@@ -28624,3 +28624,41 @@ Campaign was the one capability with no API, route or content. Now:
   composition cells and all 150 input cells. Production, software and content bytes are unchanged
   from fdc22e77's full proof. Only the browser setup and its closeout change; no fresh whole
   software run, remote pass, source retirement exception or release completion is claimed.
+
+### 2026-10-14 — D3746 full populated image recovery; D3747/D3811 closeout
+
+- Finish the existing in-flight recovery slice before the owner's total 1.0 inventory. Docker's
+  API responds and the native image builds with usable non-root storage and empty-volume boot.
+  No daemon restart or operator-data pruning occurs. October-12/13 failures remain historical.
+- First storage-drill exits 2: restored community boss bytes are retained but their checkout-only
+  accepted browser ruling is absent from packaged facts. Exact Campaign comparison catches
+  pack_unavailable/title/phase/objective changes. D3811 records the finding before repair.
+- Permanent actual-packaged-facts regression reproduces GRADUATION_RULING_UNCITED. A first
+  attempted blocking mechanical copy correctly fails community registration with
+  GRADUATION_BLOCKERS_OUTSTANDING; neither refusal is loosened. Final temporary community copies
+  assert no graduation clearance, explicitly abstain from corpus judgement and derive requirements,
+  like the existing recovery-community-pack. Guard against stripping any real content debt.
+  Original source fixtures, rulings, production validator, bundle exclusions and all saved-move
+  operands remain. Native restored startup now uses packaged facts with no source fixture selectors.
+- Normal storage-recovery-check/typecheck passes 33 Make controls, 42 SQLite/replacement checks,
+  eight native/regression cases and zero type/Svelte errors. After adding the conservative
+  source-fixture guard, normal storage-drill exits zero on unchanged linux/arm64 image
+  sha256:61dd097981a4e29702f2d35e3a127f8be0ee95890a8664db9f80c6e963aee80b.
+  All seven actual Make operations, independent exact rows, original authorization/private export,
+  authoring/classroom, bot replay/continued play and Campaign replay/progression pass. Snapshot
+  replacement revokes later sessions; rollback retains exact bytes. Owned labelled cleanup passes.
+- D3746 local full-population proof, D3747 current environment hold and D3811 fixture dependency
+  close; actual differing-UID Linux host, prior-release rollback, both release architectures,
+  rights/security and final clean-host journeys remain. No official pack, source qualification,
+  whole capability/milestone, production change, push or current-revision remote pass follows.
+- Fresh GitHub read still shows published 78fd302f: verify 38560140789 success and browser
+  38560140733 failure. The local D3810 matrix repair is not relabelled as published CI success.
+  Final affected normal gates and tracker checks follow below before the scoped commit.
+- Final frozen-input make roadmap-receipt storage-recovery-check release-policy-check typecheck
+  verify-governance exits zero: 33 wrapper controls, 42 SQLite/replacement checks, eight native/
+  regression cases, all release-policy controls, clean types and all governance checks. Counts
+  are now 3,560 ledger rows, 1,732 assigned live, 1,667 done, zero untriaged; 281 completed/
+  264 live/24 retired UX items. All fourteen whole capabilities remain incomplete, four milestones
+  active/five blocked, 42 implementing/ten awaiting/24 draft product RFCs and zero official
+  graduates. Historical prose-only closures remain 462. Refresh the existing top-level inventory
+  and receipt before commit; no new competing work document or full-suite/browser rerun claim.

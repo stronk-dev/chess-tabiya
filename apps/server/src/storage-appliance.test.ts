@@ -17,6 +17,9 @@ import { catalogEntryFor, createRun, runEventHeadDigest, type DrillRun } from "@
 import { RATED_OPPONENT_CALIBRATION } from "@chess-tabiya/runtime/rating";
 
 import { ACCOUNT_DATA_INVENTORY } from "./account-data.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
+import { validatePackDocument } from "./pack-validation.js";
+import { resetRuntimeContentFactsForTest } from "./runtime-content-facts.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -76,6 +79,33 @@ async function appliance(): Promise<Appliance> {
   writeFileSync(join(directory, "static", "index.html"), "<!doctype html><title>Tabiya</title>");
   const port = await freePort();
   return { directory, database: join(directory, "data", "chess-tabiya.sqlite"), backups: join(directory, "backups"), port, origin: `http://127.0.0.1:${port}` };
+}
+
+function compiledRuntimeFacts(directory: string): string {
+  const result = spawnSync(process.execPath, ["--input-type=module", "-e",
+    "import {planRuntimeContent} from './tools/release/lib/runtime-content.mjs'; process.stdout.write(JSON.stringify(planRuntimeContent().facts));"],
+  { cwd: ROOT, encoding: "utf8" });
+  expect(result.status, result.stderr).toBe(0);
+  const path = join(directory, "runtime-content-facts.json");
+  writeFileSync(path, result.stdout, { flag: "wx", mode: 0o600 });
+  return path;
+}
+
+function recoveryPack(path: string) {
+  const document = JSON.parse(readFileSync(path, "utf8"));
+  // Never silently strip a real content obligation if these mechanical source fixtures change.
+  for (const entry of document.provenance.graduationBlockers ?? []) {
+    expect(entry).toMatchObject({ id: "test-only-fixture", state: "accepted", accepted: { kind: "out_of_scope" } });
+  }
+  document.provenance = { ...document.provenance, reviewStatus: "draft",
+    sources: [`Mechanical recovery fixture copied from ${path.slice(ROOT.length + 1)}; not chess review`],
+    corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "Mechanical recovery fixture; no corpus judgement or official content endorsement." },
+    // This temporary community fixture, like recovery-community-pack below, asserts no
+    // graduation clearance. Do not copy a checkout-only acceptance, invent a resolved debt,
+    // or change the source fixture/ruling. Publication is community, not official review.
+    graduationBlockers: [],
+  };
+  return withDerivedRequires(document);
 }
 
 function serverEnv(state: Appliance, extra: Record<string, string | undefined> = {}): NodeJS.ProcessEnv {
@@ -253,6 +283,37 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     await stop(second);
   });
 
+  it("D3811: retains packaged ruling refusal while recovery copies remain portable and unreviewed", async () => {
+    const state = await appliance();
+    const path = join(ROOT, "schemas/fixtures/drill-pack/campaign-boss.browser.json");
+    const originalFacts = process.env.TABIYA_RUNTIME_CONTENT_FACTS;
+    try {
+      process.env.TABIYA_RUNTIME_CONTENT_FACTS = compiledRuntimeFacts(state.directory);
+      resetRuntimeContentFactsForTest();
+      const originalDocument = JSON.parse(readFileSync(path, "utf8"));
+      const refused = validatePackDocument(originalDocument);
+      expect(refused.valid).toBe(false);
+      expect(refused.issues).toContainEqual(expect.objectContaining({
+        code: "GRADUATION_RULING_UNCITED",
+        path: "/provenance/graduationBlockers/0/accepted/rulingRef",
+      }));
+      const portable = recoveryPack(path);
+      const admitted = validatePackDocument(portable);
+      expect(admitted.issues.filter((issue) => issue.severity === "error")).toEqual([]);
+      expect(admitted.valid).toBe(true);
+      expect(portable.provenance.reviewStatus).toBe("draft");
+      expect(portable.provenance.graduationBlockers).toEqual([]);
+      expect(portable.provenance.corpusEvidence.state).toBe("abstained");
+      expect(portable.start).toEqual(originalDocument.start);
+      expect(portable.spine).toEqual(originalDocument.spine);
+      expect(portable.objective).toEqual(originalDocument.objective);
+    } finally {
+      if (originalFacts === undefined) delete process.env.TABIYA_RUNTIME_CONTENT_FACTS;
+      else process.env.TABIYA_RUNTIME_CONTENT_FACTS = originalFacts;
+      resetRuntimeContentFactsForTest();
+    }
+  });
+
   it("D608: restores nonempty application classes to a new data directory and continues real workflows", async () => {
     const state = await appliance();
     const fixtureEnv = {
@@ -301,10 +362,7 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     // Persist the fixture's referenced packs through the real authoring/publication routes.
     // Recovery must not depend on uninstalled source-tree fixture files in the server image.
     for (const path of fixtureEnv.DRAFT_PACK_FILES.split(",")) {
-      const fixtureDocument = JSON.parse(readFileSync(path, "utf8"));
-      fixtureDocument.provenance = { ...fixtureDocument.provenance, reviewStatus: "draft",
-        sources: [`Mechanical recovery fixture copied from ${path.slice(ROOT.length + 1)}; not chess review`],
-        corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "Mechanical recovery fixture; no corpus judgement or official content endorsement." } };
+      const fixtureDocument = recoveryPack(path);
       const savedDraft = (await owner("POST", "/packs/drafts", { document: fixtureDocument }, 201)).draft;
       expect(savedDraft.validation.valid).toBe(true);
       await owner("POST", `/packs/drafts/${savedDraft.id}/register`, {}, 201);
@@ -419,7 +477,10 @@ describe("appliance process boundary", { timeout: 240_000 }, () => {
     expect(restored.status, restored.stdout).toBe(0);
     expect(restored.receipt).toMatchObject({ operation: "restore", result: "succeeded", migration: "not_required", preRestoreBackupId: null });
     expect(storedRows(destination.database)).toEqual(before);
-    const second = startServer(destination, fixtureEnv);
+    const second = startServer(destination, {
+      NODE_ENV: "development",
+      TABIYA_RUNTIME_CONTENT_FACTS: compiledRuntimeFacts(destination.directory),
+    });
     await ready(destination, second);
     // Original credentials and session authority survive; no recreated accounts or ids.
     expect((await call(destination, keeper.cookie, "GET", "/auth/session")).learner.id).toBe(keeper.learner.id);

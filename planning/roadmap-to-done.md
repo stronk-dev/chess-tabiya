@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3810]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3811]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,16 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+Current image recovery: [[D3746]]/[[D3747]]/[[D3811]] close the local full-population image slice.
+The original restore refused the boss fixture's checkout-only ruling, correctly retaining its
+bytes. A permanent packaged-facts regression retains that refusal; temporary community copies
+assert no graduation clearance and explicitly abstain. Native restart no longer depends on source
+fixture selectors. Normal make storage-drill then passes all seven Make operations, exact restored
+rows, original identities/authorization and resumed authoring/classroom/private-history/bot/Campaign
+workflows on the unchanged linux/arm64 development image. Only owned resources are cleaned.
+Actual differing-UID host, prior-release rollback, both release architectures and final release
+proof remain open. No whole capability or milestone is promoted.
 
 Published CI checkpoint: [[D3810]] owns `78fd302f`'s empty-Theory state-09 interaction failure.
 Verify 38560140789 succeeds; browser 38560140733 passes smoke/content but fails one matrix case
@@ -85,8 +95,8 @@ docs and live registers; it is not a fresh independent audit of every historical
 | Human/social play | Imports, live sessions, native two-seat friend matches, friend links and consented pause/rehearsal/mainline return | Matchmaking, clocks, two-player ratings, resignation/draw handling, variants and complete invitation/result/review lifecycle |
 | Coach/streamer | Classroom assignments, submission inspection, reasoning and revocation | Guided setup, complete Academy/Stream compositions, audience/role/delay/reconnect workflows |
 | Accessible client | Shared board controller, responsive stable-board shell, typed presentation and themes | Every-route device/focus/zoom/screen-reader proof, PWA install/update/offline and owner-device discharge |
-| Accounts/data | Authentication, private permissions, portable export/import/delete and restored branched play | Guest/claim, all object classes and integrated backup/recovery/upgrade journeys |
-| Operations | Normal Make gates, software/content separation, pinned packaging, deployment profiles and recovery tooling | Paired current-revision remote CI, complete image/clean-host and both-architecture proof, remaining security and rights obligations |
+| Accounts/data | Authentication, private permissions, portable export/import/delete and populated local image recovery with resumed workflows | Guest/claim, complete object lifecycle and prior-release/clean-host journeys |
+| Operations | Normal Make gates, software/content separation, pinned packaging, deployment profiles and all seven populated image recovery operations | Paired current-revision remote CI, clean-host and both actual release architecture proof, remaining security and rights obligations |
 | Delivery tracking | Durable ledger/UX/RFC states, ownership and checked roadmap | Stronger evidence for historical prose-only closures and conversion of active slices into complete journeys |
 
 The original evidence-versus-guidance separation now has real runtime and web implementation,
@@ -98,8 +108,15 @@ do not establish convincing personalities or calibrated ratings.
 The checked inventory is 281 completed / 264 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,734 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
+
+Owner-requested finish and overview: D3746/D3747/D3811 close the in-flight local recovery batch.
+The final affected normal recovery, release-policy, type and governance command exits zero,
+including 33 Make controls, 42 SQLite/replacement cases and eight native/regression cases.
+The last full production/browser checkpoint remains fdc22e77; this test-only repair does not
+relabel it as a fresh whole-suite run. Latest published 78fd302f still has verify success/browser
+failure; the local matrix repair awaits remote requalification. No push or 1.0 promotion.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
 selected-Sight, Nudge and Review contracts; complete learner journeys and bot calibration;

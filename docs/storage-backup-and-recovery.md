@@ -402,3 +402,29 @@ Fresh normal `make verify-awake build` exits zero: 5,212 software checks, seven 
 performance checks, 255 content checks, types, governance, packaging, 133 release-policy checks
 and build. This does not turn the capacity-refused image run into a pass. No browser or remote
 GitHub run accompanies this operator/test-only change; the known bundle warning remains.
+
+### Full-population image journey passes locally — 2026-10-14
+
+Docker responds and the unchanged non-root image passes fresh-volume capacity and cold boot.
+The first populated restore fails its exact Campaign comparison: the copied mechanical boss
+fixture's accepted browser ruling is not in the packaged runtime facts. Its stored bytes remain;
+the validator correctly refuses `GRADUATION_RULING_UNCITED`. D3811 adds a permanent control over
+the actual compiled facts, retaining this refusal. Temporary recovery copies, like the existing
+mechanical community pack, now assert no graduation clearance and explicitly abstain from corpus
+judgement. A guard refuses stripping a real blocking obligation. Original source fixtures,
+rulings, production validators and bundle exclusions are unchanged. Native restored startup
+also uses packaged facts without source-fixture selectors.
+
+Normal `make storage-drill` then exits zero on linux/arm64 development image
+`sha256:61dd097981a4e29702f2d35e3a127f8be0ee95890a8664db9f80c6e963aee80b`.
+All seven actual Make maintenance operations pass. Independent exact-row comparisons retain
+the populated accounts, branches/imports, authoring/publications, classroom/submissions,
+private observations/history, bot and Campaign state. Original authorization, export/privacy,
+idempotent replay and actual bot/Campaign continuation work through the image. Snapshot
+replacement revokes later sessions; rollback restores exact database bytes. Only run-owned
+labelled resources are removed, with no daemon restart or operator-data pruning.
+
+This closes D3746's local populated-image slice and D3747's current environment hold, not the
+historical hang's cause. Mock providers, a development image and Docker Desktop do not establish
+an actual differing-UID Linux host, prior-release rollback, both release architectures or final
+clean-host release journeys. Those obligations remain open.
