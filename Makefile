@@ -544,6 +544,13 @@ inspector-recorded-context-research:
 	./node_modules/.bin/esbuild tools/d3792-inspector-demand/recorded-context.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/recorded-context.mjs --log-level=warning
 	$(CI_NODE) .cache/d3792-inspector-demand/recorded-context.mjs
 
+# Disposable exact recorded-Review source model; no production protocol or permission.
+.PHONY: inspector-review-boundary-research
+inspector-review-boundary-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	./node_modules/.bin/esbuild tools/d3792-inspector-demand/review-boundary.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/review-boundary.mjs --log-level=warning
+	$(CI_NODE) .cache/d3792-inspector-demand/review-boundary.mjs
+
 # Disposable observation of the actual private source during authenticated Review reads.
 .PHONY: inspector-review-scope-research
 inspector-review-scope-research:

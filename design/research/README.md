@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Earlier recorded-Review source boundary, 2026-10-15 ([[D3824]]): **bounded prerequisite
+answered; unaccepted and not delivered**. Actual SQLite native/imported/retry paths pass 292
+controls over 48 prefixes, acquiring 172 position and 124 edge items from their sole factories.
+Original graph, import-result scope, copied-request and current-head/record refusal controls
+retain existing whole-tip behavior. Current permission, other scoped sources, complete moment
+assembly, native delivery and independent acceptance remain D3792 work. See
+`module-evidence-assembly.md` §Exact earlier recorded-Review source boundary; no raw recordings
+or ordinary CI/progress dependency.
+
 Inspector recorded-window source scopes, 2026-10-14 ([[D3814]]/[[D3815]]): **bounded algorithm
 prerequisite answered; unaccepted and not delivered**. Four real candidate-query branch controls
 repair its wrong resolver discriminant. A source-owner prefix variant passes 452 legal scopes/

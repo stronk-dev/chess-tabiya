@@ -29106,3 +29106,39 @@ Campaign was the one capability with no API, route or content. Now:
 - No independent reviewer permission arrived, so no subagent was spawned and no held amendment
   self-accepted. Continue lawful work from the existing frontier; full 1.0 remains active.
   No push, deployment, publication or goal pause/completion is part of this closeout.
+
+### 2026-10-15 — D3824 in-flight research closeout and full-1.0 inventory
+
+- Complete the earlier recorded-Review storage/source question with the opt-in normal
+  make inspector-review-boundary-research target. Final strict types and 292 controls pass
+  over eight actual stored native/imported games with real retries, both learner colors and
+  legal mate/nonterminal paths. Forty-eight prefixes acquire 172 position/124 edge items from
+  actual sole factories. Eight inherited-prefix edge controls retain shared nodes. Imports use
+  actual RunService.importGame; backend corruption controls are labelled in-memory overrides.
+- Original complete graph validation precedes narrowing; caller outcomes, copied/cross-issuer
+  boundaries, later malformed material and stale current-head/import records refuse before
+  source work. A copied request cannot widen after issuance. Original imported results belong
+  only to their immutable mainline tip; retries/earlier prefixes retain own-path outcomes.
+  Existing whole-tip calls/receipts and saved bytes remain unchanged. Preserve the initial
+  strict-type and event-head namespace failures rather than claiming the model was always green.
+- Close only D3824 with its actual tool path. The existing dossier, coverage matrix and
+  unaccepted module-registration section 4.11a now name the proposed private source boundary.
+  Current-access composition, other scoped sources, complete moments, production identity/
+  bindings/cancellation/HTTP/native delivery and independent acceptance remain D3792 work.
+  No production code, permission, source qualification, pack/default or release promotion.
+- Refresh the existing roadmap/checkpoint and receipt, not a new work document. Normal
+  make roadmap-receipt verify-governance exits zero. All 1,732 live ledger rows and 263 live
+  UX items are assigned: 282 UX complete/24 retired; ledger 1,680 done/161 refused, with 462
+  historical prose-only closures. Four milestones remain active/five blocked; none of the
+  fourteen complete capability journeys is finished. Product RFCs remain 42 implementing,
+  ten awaiting and 24 draft; 75 archived implementation records are subsystem history.
+- Read GitHub again for the requested inventory: published 78fd302f still has verify success
+  and browser failure (38560140789/38560140733). The local D3810 repair and aee0c3be production
+  result stand: 5,731 software, seven performance, 257 content and all four browser tiers,
+  59 matrix cases and 112 unretried composition cells plus packaged-production proof.
+  This research closeout does not claim a fresh full production run or remote qualification.
+- Main remaining delivery path is scoped/useful evidence into Support/Review, semantic
+  qualification and stable pack joins, complete bot/learner/Campaign journeys, official content
+  and clean-host/release proof. Zero official graduates and zero fully qualified semantic
+  subjects remain. Full 1.0 stays active; the requested inventory does not pause or complete it.
+  No push, deployment, broad data capture or extra tracker; preexisting untracked paths remain.

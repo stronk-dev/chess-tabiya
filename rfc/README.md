@@ -23,6 +23,10 @@ eighteen typed member alternatives, not accepted or production. No permanent-una
 retirement, scope/exactness promotion or parent-state authorization. Independent review next
 after those obligations are authored; no shared resource claim or lifecycle change.
 
+D3824's October-15 exact recorded-Review model adds 292 storage/source controls, not permission
+or complete source delivery. The same unaccepted §4.11a names the proposed private boundary;
+other scoped source owners, exact bindings, access composition and native delivery still remain.
+
 **Orientation draft root-vocabulary repair, 2026-10-13:** `semantic-validation-authority.md`
 §4.1a now covers the seven exact root spellings measured under D3781, with coexisting aliases
 and total leaf coverage. All 343 registered cases execute; the disposable matrix has 106 checks.

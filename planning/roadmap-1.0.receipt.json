@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:91ed90be83fe0366ffdfd317a4e5ebc0adf0d85e95947ab961a9700756641934",
+    "roadmap": "sha256:98cbf1ab4ad9e14bd5ed8bad4e99d2262350bb8e792ebd05c28fd2357fc80dff",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:e8d3a7a11f08b551705c575978881efbc5e4916b3e8ba6d249c576f66414f413",
-    "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
+    "workState": "sha256:703a82e362ecdf7ecea64cf903a0c1e00dab8dcdd80b7d3f7046be4b141540a2",
+    "rfcRegister": "sha256:c669a1fd1605b23f8bea81acd524c5ab52f3557249f16d9e50d4dbe0752a33e3",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 17,
       "blocked": 1086,
-      "done": 1679,
+      "done": 1680,
       "refused": 161
     },
     "workItems": {
@@ -465,8 +465,8 @@
       ],
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
-        "at": "2026-10-14",
-        "summary": "D3820 finishes the bounded comparison-source prerequisite. The unchanged constructor fails the requested endpoint. A guarded constructor prototype passes 116 controls over 62 prefix pairs/four legal both-color fixtures, including actual mate outcomes, fork-only/unequal prefixes, column order, late graph refusals and unchanged saved bytes/full-tip comparison. The unchanged structural factory still returns 32 later items. A separate source-owner variant narrows both paths before cross-column intersection and passes 246 controls with 1,020 complete ordered items/no later observations. Its scope expectation uses current structural readings, not independent chess validation; synthetic provider/checkpoint/objective fixtures are explicit. The draft requires all record-fact/engine/structural/route owners to consume granted paths, not crop display columns or filter already-selected output. Exact private callables/factory bindings/types/identities/versions, access/receivers/live providers and independent acceptance remain unaccepted D3792 work. D3819's actual Review/source/effect/query distinctions and earlier prefix/context controls stand. No production, qualification, default, pack, whole capability/milestone, remote CI or release promotion. Research remains opt-in with bounded stdout, no raw-data/progress dependency.",
+        "at": "2026-10-15",
+        "summary": "D3824 completes the bounded earlier recorded-Review source question: 292 controls over actual SQLite native/imported/retry games and 48 prefixes retain 172 position/124 edge items, original-graph-first narrowing, own-path outcomes and current-head/import-record revalidation. Existing whole-tip calls and saved bytes remain. Module-registration section 4.11a names a proposed private source callable, not production permission or complete Review assembly. Other scoped source owners, exact bindings/identity, access composition/cancellation/HTTP/native delivery and independent acceptance remain unaccepted D3792 work. D3819 source/effect/query distinctions and D3820 source-before-intersection controls stand. No production, qualification, pack/default, capability/milestone or remote/release promotion. Research remains opt-in with bounded stdout, no raw-data/progress dependency.",
         "impact": "held",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -484,6 +484,7 @@
           "tools/d3792-inspector-demand/comparison-source.ts",
           "tools/d3792-inspector-demand/review-observer.ts",
           "tools/d3792-inspector-demand/review-scope.ts",
+          "tools/d3792-inspector-demand/review-boundary.ts",
           "tools/d3792-inspector-demand/build-prefix.mjs",
           "tools/d3792-inspector-demand/prefix-source.ts",
           "tools/d3792-inspector-demand/window-source.ts",
@@ -628,6 +629,11 @@
             "kind": "work_state",
             "id": "D3820",
             "digest": "sha256:da0de6edc2ce72b7ccafbbda154d26a6abcb9056f8c03ca0e2957f64453fc24c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3824",
+            "digest": "sha256:5988617503d7156a4586606e0ec0146f3002c454ed1afc16c26b57b1c88f1447"
           },
           {
             "kind": "work_state",

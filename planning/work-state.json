@@ -31825,6 +31825,15 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3824",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5988617503d7156a4586606e0ec0146f3002c454ed1afc16c26b57b1c88f1447",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/review-boundary.ts",
+      "evidenceKind": "path"
     }
   ]
 }

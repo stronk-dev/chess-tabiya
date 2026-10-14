@@ -797,3 +797,42 @@ callers and all 75 Inspector source obligations stand. D3820 closes this bounded
 only; D3792 remains open/unaccepted. No production, qualification, defaults, packs or release
 gate changes. Reports are bounded stdout aggregates; bundles are ignored, and ordinary CI/progress
 does not execute this research target.
+
+### Exact earlier recorded-Review source boundary — 2026-10-15, D3824
+
+The disposable `make inspector-review-boundary-research` model passes 292 controls over eight
+actual SQLite-backed native/imported games: both learner colors, legal mate/nonterminal paths
+and real alternate branches. Imports use actual `RunService.importGame`, not invented PGN
+metadata. Forty-eight prefix reads acquire 172 actual position items and 124 actual edge items
+through the existing sole factories, with exact bounded node, parent, FEN and move operands.
+Eight additional inherited-prefix edge controls retain shared nodes on retry branches. `[V]`
+(`tools/d3792-inspector-demand/review-boundary.ts`; `apps/server/src/service.ts` importGame;
+`packages/runtime/src/review-evidence.ts`; actual run.record position/edge value routes).
+
+Original full-branch duplicate/cycle/missing-parent material refuses before narrowing, including
+damage after the selected endpoint. Unknown/off-path requests, caller outcomes, event-sequence
+gaps and missing/foreign import records refuse before source preparation. A real sibling commit
+invalidates the old boundary even when its selected path remains unchanged; a backend record
+change also invalidates an unfinished early prefix. Spread/JSON/cross-issuer and old whole-tip
+receipts do not become owned boundaries. Mutating the original request cannot widen its captured
+path. Backend corruption controls are labelled in-memory overrides, not writes to storage. `[V]`
+(same model and its refusal/preparation-counter controls).
+
+Early prefixes and retries remain unfinished unless their own admitted path contains an actual
+terminal event. A recorded PGN result belongs only to the original imported mainline's full tip;
+terminal results retain learner-relative meaning for either color. This uses the existing
+imported-mainline extension refusal, not a guess that arbitrary branch tips are immutable.
+Existing whole-tip input arity, event-head identity, receipt validity and saved source bytes are
+retained. The first model run fails an event-head namespace mismatch; using the existing event
+prefix digest repairs it without reinterpreting the old receipt. Strict typing also catches the
+initial narrowing/session shape mistakes before the completed measurements. `[V]` (same tool;
+`apps/server/src/service.ts` #refuseImportedMainlineExtension).
+
+Author synthesis `[M]`: a new private source-owner boundary must compose with, never replace,
+current read and Inspector access. The same draft §4.11a now specifies that callable and its
+storage/revalidation/outcome obligations. This model is **not** a permission instrument, current
+v1 receipt, scoped Review packet or complete Inspector delivery. Semantic/pivotal/shape/objective/
+consequence/engine/Story source computation, exact factory bindings and production identity,
+cancellation, HTTP/client/native proof and independent acceptance remain D3792 work. D3824 closes
+only its bounded question. No production, source qualification, pack/default or release change;
+ignored bundles and bounded stdout stay outside ordinary CI/progress dependencies.

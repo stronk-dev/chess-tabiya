@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3823]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3824]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,13 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3824]] finishes the in-flight earlier recorded-Review research slice: 292 storage/source
+controls over actual native/imported/retry games preserve original graph validation, exact
+prefixes, own-path results and current-head/record revalidation. Forty-eight prefixes acquire
+172 position and 124 edge items through existing factories. The same unaccepted Inspector draft
+names the proposed private boundary; permission, remaining scoped sources, complete moment
+assembly and HTTP/native delivery remain D3792 work. No production or whole-1.0 promotion.
 
 [[D3822]]/[[D3823]] complete the accepted calibration-card repair, not calibration itself.
 The compiler and complete capability decoder preserve three independent verdicts, finite ordered
@@ -174,7 +181,7 @@ and phone; screenshots and width controls pass with 368 focused software cases a
 The final repaired-code full verification is recorded in the exploration log; no whole Campaign,
 milestone, content, source qualification or release gate is promoted.
 
-### Whole-product inventory — refreshed 2026-10-14
+### Whole-product inventory — refreshed 2026-10-15
 
 Tabiya is an integration-stage product, not a 1.0 release candidate. The rehearsal runtime and
 many real application journeys work; none of the fourteen complete capability journeys meets
@@ -222,6 +229,8 @@ Current local checkpoint: D3822/D3823's accepted calibration evidence-to-card re
 and closed; D3821 disclosure, D3818 result attribution and D3819/D3820 source research stand.
 The current local result is 5,731 software, seven performance and 257 content tests, all browser
 tiers including 59 matrix cases/112 unretried composition cells and packaged-production proof.
+The in-flight D3824 research is now closed with 292 strict storage/source controls and normal
+governance passing; it does not relabel the preceding production proof as a new product test run.
 A fresh GitHub read confirms the published revision is still 78fd302f:
 [verify succeeded](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140789),
 [browser failed](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140733); its

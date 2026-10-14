@@ -1939,6 +1939,39 @@ the whole recorded branch tip, not `throughNodeId`. Exact earlier-boundary sourc
 Inspector access composition, revalidation/cancellation and native receiver proofs remain
 unaccepted D3792 obligations. The disposable observer is not that supplier or a new endpoint.
 
+**D3824 exact recorded-Review boundary (2026-10-15) — still draft:** the opt-in
+`make inspector-review-boundary-research` model reads actual SQLite native games and actual
+`RunService.importGame` imports, for both learner colors, with legal mate/nonterminal paths and
+retries. It validates the original complete branch before extracting the requested prefix,
+captures request fields and checks the current full event head plus relevant import record.
+Later graph corruption refuses even for an earlier requested endpoint. Earlier prefixes and
+retries cannot borrow the original PGN result; only the original imported mainline's immutable
+full tip may carry it. Actual terminal events on the granted path retain learner-relative results.
+The immutability condition comes from current `#refuseImportedMainlineExtension`; it is not a
+general rule that any branch tip establishes an import result boundary.
+
+The proposed **server-private** source callable is
+`createRecordedReviewBoundaryAuthority(storage)({runId, branchId, throughNodeId})`, with storage
+owned by RunService and parser-admitted full run/import records. Its privately issued result
+retains the unchanged full source image, exact bounded path, learner side and scoped outcome;
+it is not Inspector access authority. The service must first obtain the separate current read/
+Inspector grant above, then bind this exact source boundary to that grant. Before source work
+and after any asynchronous work, re-read current storage and revalidate both authorities.
+Copied/serialized/cross-issuer results, caller outcomes, off-path endpoints and changed records
+refuse before source preparation. Missing/inconsistent stored import context is refusal, not
+successful absence. A successful valid prefix with no moments may still be empty.
+
+Use a distinct private source operation/identity, not the current whole-tip
+`review-recorded-prefix@1` receipt. Preserve that constructor's exact input and existing callers.
+The disposable `research-recorded-review-boundary@1` is **not** a production protocol/version
+allocation. The model acquires actual sole-factory `run.record.position@1` and
+`run.record.edge@1` items only on the granted path, retaining exact node/parent/FEN/move operands.
+It does not acquire scoped semantic, pivotal, shape, objective, consequence, engine or Story-rank
+sources. Those owners still owe their exact supported bindings and complete moment computation
+at this boundary, not trimming whole-tip arrays. Their input/result types, private identity,
+composition with current access, cancellation and HTTP/native receivers must be authored and
+independently accepted before production. No new permission or complete-source claim follows.
+
 **Supplier boundary established by D3805:** the actual SQLite-backed three-branch probe shows
 that `moduleComparisonForSubject` chooses the newest sibling, `compareBranches` uses both full
 tips, `recordedSemanticPath`/pivotal/Review use the full recorded branch, and the sole Review
@@ -2039,7 +2072,8 @@ contiguous prefix ending at selection, and branch its explicit through-node pref
 selection. Comparison grants ordered primary/peer prefixes after both reach their recorded forks;
 the exact fork node is valid, a node before it is not an attempt. Source owners still validate
 their complete legal witness ranges and versions. This does not create a new completed-Review
-authority: that arm remains owned by the existing Review source contract and is unmodelled here.
+authority: D3824 models only its source boundary; current-access composition and complete Review
+source assembly remain unmodelled here and owned by the Review and Inspector contracts.
 
 The proposed request owner calls
 `RunService.revalidateInspectorRecordedContext(context, {principal, requested, selection, signal})`
@@ -2821,6 +2855,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-15 — D3824's actual-storage exact recorded-Review model establishes earlier-prefix
+  outcome and source boundaries. §4.11a names the proposed private callable while preserving
+  whole-tip contracts. Other source owners, complete assembly, current-access composition,
+  production identity/bindings/cancellation/native proof and independent acceptance remain.
+  This is draft authoring, not permission or production delivery.
 
 - 2026-10-14 — D3805's actual SQLite/runtime probe establishes whole-branch supplier boundaries,
   newest-sibling mismatch, current disclosure versus chronological replay and storage-advance
