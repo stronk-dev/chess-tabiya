@@ -28791,3 +28791,39 @@ Campaign was the one capability with no API, route or content. Now:
   and all whole capabilities, content/qualification/release gates remain unchanged. Production
   and its preceding full local proof are unchanged; no new full-suite/browser/remote result,
   published source, official pack, push or goal pause/completion is claimed.
+
+### 2026-10-14 — D3816 selected-destination work, final gates and owner-requested inventory
+
+- Finish the accepted exact-legal-mobility/longitudinal correction before another wave: selected
+  destination lookup now uses one parsed position, one normalized legality check and the existing
+  castling landing arithmetic, not a complete alternative enumeration. Public contracts, complete
+  populations, promotion/alias/refusal semantics and revisions remain. Thirty-seven permanent
+  controls include three predecessor-red work cases, 22 all-destination fixtures and twelve refusals.
+- Normal collector-index-check passes 181 cases; actual projector/store/worker checks pass 66 and
+  workspace types pass. The initial sandbox EPERM binds are not semantic failures; the identical
+  ordinary Make target passes with local-port permission. Eight serial counterbalanced fresh-process
+  pairs retain all events/receipts/profile rows over 2,199 legal edges and 196,589 events. Five faster,
+  three slower and 0.75% lower aggregate cold time are not a substantial or portable speedup.
+- First full software attempt exposes its stale parser implementation stamp; the next exposes the
+  corresponding computed factory pins. Explicit ordinary maintenance targets refresh eighteen
+  parser controls and twenty of 278 profile fingerprints. Every profile route/outcome/count/reason
+  remains unchanged; all 67 mint/falsifier checks pass and frozen migration fixtures are untouched.
+  Semantic generation retains 343 passing canonical cases/81 subjects, zero fully qualified.
+- Optional provider-source-history-check stops on the original seven-successor census, before
+  parser metadata, although later accepted declarations remain unchanged by this implementation.
+  D3817 is assigned to release engineering for historical/current scope separation, outside ordinary
+  CI. No declaration removal or metadata-mode waiver is used. The full gate also catches D3817's
+  missing durable queue citation; roadmap-to-done now carries its actual repair lane.
+- Final frozen software contracts pass 5,669 tests/391 files and seven performance tests. Following
+  that planning-only route correction, normal make roadmap-receipt verify-governance verify-content
+  build test-browser-ci-awake exits zero: 257 content tests/26 files, all governance/build checks,
+  304 main browser passes with one optional Maia skip, five content-browser, 59 matrix and one
+  packaged-production pass (369 total), zero retries and 112/112 successful composition cells.
+  No production source or fixture changes occur between the successful software and remaining gates.
+- D3816 closes with its production path; D3300 cold cost and D3817 remain open. Refresh the existing
+  whole-product inventory rather than create another tracker: 3,566 ledger rows, 1,733 live assigned,
+  1,672 done/161 refused; 462 historical prose-only closures remain explicit. UX stays 281 complete,
+  264 live, 24 retired; four milestones active/five blocked, no whole 1.0 capability complete and no
+  official pack graduated. D3813–D3815 remain bounded research, not production Inspector delivery.
+  No new feature wave, raw recording, push, current-revision GitHub/release-image qualification,
+  goal pause or completion. The owner-requested total overview follows this committed closeout.

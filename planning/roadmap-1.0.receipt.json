@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:44c4916d07674693a629ab98a95e2e90b3d69b028383e531cb408cbde696c93d",
+    "roadmap": "sha256:7dd3056913b3148ad009aaa4a6c1affb7a82d94df378793e929b11a8e36a59fe",
     "workItems": "sha256:448b9783d376582c3765171656de35da790a9e854337d6a2d781ab3997c02a5a",
-    "workState": "sha256:63e7d63175438fa3617b60edd72337d45c5b766cc9610283f36c81bf24ce24c4",
+    "workState": "sha256:d861f4681b86f72104bb684d3a20414e46d62ab5254717d2196d8ca46e532da3",
     "rfcRegister": "sha256:e364d38329ea0fa672556b820ab8537cb3f0b99ceb391881eb8511b270b206a0",
     "uxIndex": "sha256:8d1e718ab156df60877f1002fb9484fa4dc55ce6a72259183f18f8c9a3c73a62",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 630,
       "doing": 17,
       "blocked": 1086,
-      "done": 1671,
+      "done": 1672,
       "refused": 161
     },
     "workItems": {
@@ -1350,8 +1350,8 @@
       ],
       "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
       "latestCheckpoint": {
-        "at": "2026-10-12",
-        "summary": "D3731 eliminates unrelated legal-destination enumeration from exact-target captures under the accepted complete-population/rebuild contract. Nineteen new permanent controls include two predecessor failures and independent all-64-square capture comparisons across both-colour special moves, checks, pins and origin restrictions. All 120 collector and 65 real-worker/projector/store checks plus types pass. Eight serial alternating-order fresh-process pairs preserve every event, factory/input receipt, projected row and forty checkpoints per side over 2,199 legal edges / 196,589 events. Summed cold time is 4.58% lower locally, seven faster / one slower, not a portable promise. No cache, convention, primitive, population, source admission or derivation revision changes. All 343 canonical cases pass, zero subjects fully qualified. Full ordinary serial verification/build/browser exits zero: 5,066 software/378 files, seven unchanged-budget performance/four files, 255 content/26 files, clean types/governance/packaging/build and 304 browser passes, one existing optional skip, zero retries, all 150 input/112 composition cells. D3300 residual cold cost, source/consumer discharges, catalogue progression, intermittent causes and complete image recovery remain open; no whole capability/milestone, remote-CI or release-image promotion.",
+        "at": "2026-10-14",
+        "summary": "D3816 closes the accepted selected-destination correction: one parsed position and normalized legality check feed the unchanged semantic landing convention, without full legal-population enumeration. Thirty-seven permanent controls include three predecessor failures, all-destination parity over 22 special/check/pin/terminal positions and twelve refusals. All 181 collector/move and 66 real-worker/projector cases plus types pass. Eight fresh-process pairs retain every event, value/input receipt and projected row over 2,199 legal edges/196,589 events and forty checkpoints per player. Mixed timings (five faster, three slower; 0.75% lower sum) do not establish substantial whole-game improvement. Explicit generated parser/factory refresh changes twenty implementation-bound pins with every profile outcome retained and frozen migration fixtures untouched. Final normal software contracts pass 5,669 cases/391 files and seven performance cases; the new D3817 queue omission is corrected in planning, then remaining governance/content/build/all four browser tiers pass 257 content and 369 browser cases, one optional Maia skip, zero retries and 112/112 composition cells. Source/fixtures stay frozen across those successful gates. All 343 canonical semantic cases pass; zero subjects fully qualified. D3817 remains the separate optional historical-tool repair. D3731's prior work stands; D3300 cold cost and complete source/consumer, catalogue/lifecycle/image/release discharges remain open. No chess data/convention/schema/revision change, whole capability/milestone, remote-CI or release-image promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
@@ -1376,6 +1376,8 @@
           "packages/runtime/src/square-control.ts",
           "packages/runtime/src/structure.ts",
           "packages/runtime/src/collector-index-reuse.test.ts",
+          "packages/runtime/src/legal-moves.ts",
+          "packages/runtime/src/legal-moves.test.ts",
           "packages/runtime/src/exchange.ts",
           "packages/runtime/src/exchange.test.ts",
           "packages/runtime/src/mobility.test.ts",

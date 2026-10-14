@@ -31751,6 +31751,23 @@
       "uxItems": [],
       "evidence": "design/research/module-evidence-assembly.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3816",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:94febd1df71faf4be17d9aa08194b58a4dc5c6fa223ba1c9c14c71df53a52626",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/legal-moves.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3817",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7ddd52bf90a7218290d684a2deafd1203b28ac0c3fbe36e2b8f1778bf195ec53",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

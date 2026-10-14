@@ -2,11 +2,13 @@ import { describe, expect, it, vi } from "vitest";
 import { Chess, normalizeMove } from "chessops/chess";
 import { makeUci } from "chessops/util";
 import { positionFromFen } from "./chess.js";
+import * as chess from "./chess.js";
 
 import {
   exactLegalMoveMap,
   exactLegalMoves,
   exactMoveDestination,
+  exactMoveIdentity,
   MOVE_DESTINATION_CONVENTION,
   MOVE_IDENTITY_CONVENTION,
   normalizeInboundMove,
@@ -16,6 +18,73 @@ import {
 const INITIAL = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 describe("exact legal move authority", () => {
+  it.each([
+    [INITIAL, "E2E4", "e4"],
+    ["r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "e1g1", "g1"],
+    ["1r4kr/8/8/8/8/8/8/1R4KR b HBhb - 0 1", "g8h8", "g8"],
+  ])("D3816 resolves one legal destination without enumerating other moves: %s / %s", (fen, uci, destination) => {
+    const parse = vi.spyOn(chess, "positionFromFen");
+    const population = vi.spyOn(Chess.prototype, "allDests");
+    const legal = vi.spyOn(Chess.prototype, "isLegal");
+    try {
+      expect(exactMoveDestination(fen, uci)).toBe(destination);
+      expect(parse).toHaveBeenCalledTimes(1);
+      expect(population).not.toHaveBeenCalled();
+      expect(legal).toHaveBeenCalledTimes(1);
+    } finally { parse.mockRestore(); population.mockRestore(); legal.mockRestore(); }
+  });
+
+  it.each([
+    INITIAL,
+    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+    "4k3/4n3/8/8/8/8/8/4R1K1 b - - 0 1",
+    "4k3/8/8/8/8/8/4R3/6K1 b - - 0 1",
+    "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+    "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+    "1r4kr/8/8/8/8/8/8/1R4KR w HBhb - 0 1",
+    "1r4kr/8/8/8/8/8/8/1R4KR b HBhb - 0 1",
+    "4k3/8/8/8/8/8/8/4KN1R w K - 0 1",
+    "4kn1r/8/8/8/8/8/8/4K3 b k - 0 1",
+    "4k3/8/8/8/8/8/8/4KRN1 w F - 0 1",
+    "4krn1/8/8/8/8/8/8/4K3 b f - 0 1",
+    "4k3/8/8/8/8/8/8/5KR1 w G - 0 1",
+    "5kr1/8/8/8/8/8/8/4K3 b g - 0 1",
+    "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+    "4k3/8/8/r4pPK/8/8/8/8 w - f6 0 1",
+    "4k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+    "4k3/8/8/8/8/8/p7/4K3 b - - 0 1",
+    "1r2k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+    "4k3/8/8/8/8/8/p7/1R2K3 b - - 0 1",
+    "7k/6Q1/6K1/8/8/8/8/8 b - - 0 1",
+    "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1",
+  ])("D3816 preserves every destination from the complete legal population: %s", fen => {
+    const before = exactLegalMoves(fen);
+    for (const move of before) {
+      expect(exactMoveDestination(fen, move.uci)).toBe(move.to);
+      expect(exactMoveDestination(fen, move.uci.toUpperCase())).toBe(move.to);
+      expect(exactMoveIdentity(fen, move.uci)).toBe(move.uci);
+    }
+    expect(exactLegalMoves(fen)).toEqual(before);
+  });
+
+  it.each([
+    [INITIAL, "not-a-move", "Invalid move UCI: not-a-move"],
+    [INITIAL, "N@e4", "Invalid move UCI: N@e4"],
+    [INITIAL, "e2e5", "Illegal move UCI: e2e5"],
+    [INITIAL, "e7e5", "Illegal move UCI: e7e5"],
+    [INITIAL, "g1f3q", "Illegal move UCI: g1f3q"],
+    [INITIAL, "e1g1", "Illegal move UCI: e1g1"],
+    ["4k3/4n3/8/8/8/8/8/4R1K1 b - - 0 1", "e7c6", "Illegal move UCI: e7c6"],
+    ["4k3/8/8/r4pPK/8/8/8/8 w - f6 0 1", "g5f6", "Illegal move UCI: g5f6"],
+    ["4k3/P7/8/8/8/8/8/4K3 w - - 0 1", "a7a8", "Illegal move UCI: a7a8"],
+    ["4k3/8/8/8/8/8/p7/4K3 b - - 0 1", "a2a1", "Illegal move UCI: a2a1"],
+    ["7k/6Q1/6K1/8/8/8/8/8 b - - 0 1", "h8g8", "Illegal move UCI: h8g8"],
+    ["not a fen", "not-a-move", "Invalid chess FEN: not a fen"],
+  ])("D3816 retains refusal order and text: %s / %s", (fen, uci, message) => {
+    expect(() => exactMoveDestination(fen, uci)).toThrowError(message);
+    expect(() => exactMoveIdentity(fen, uci)).toThrowError(message);
+  });
+
   it("D3754 uses one same-position context for every destination and legality check", () => {
     const legal = vi.spyOn(Chess.prototype, "isLegal");
     const destinations = vi.spyOn(Chess.prototype, "allDests");

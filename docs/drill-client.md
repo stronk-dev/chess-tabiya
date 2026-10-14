@@ -465,7 +465,10 @@ tests.
 shared by evidence, board input and server successor sourcing. Castling move identity uses
 Chess960-safe king-to-rook UCI, its semantic destination is the king's landing square, and display
 uses SAN `O-O`; promotion retains q/r/b/n as four moves even when a square overlay deduplicates
-their destination. The pack's `start.side`
+their destination. Resolving one already-selected move's semantic destination uses one parsed
+position and one normalized legality check; it does not enumerate the other legal moves.
+The complete legal map remains the authority for board input and candidate membership.
+The pack's `start.side`
 sets orientation and restricts input to the learner's turns; the component
 passes the current check and last move into Chessground's normal highlights.
 

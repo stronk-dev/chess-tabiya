@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3812]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3817]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,23 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3816]] removes a real repeated computation from the accepted exact-move primitive, rather
+than changing evidence: selected destination lookup uses one position/legality check and no
+full alternative enumeration. Thirty-seven new controls preserve special moves and refusals;
+181 collector/move and 66 real-worker/projector cases plus types pass. Eight fresh-process
+comparisons retain complete event/receipt/profile bytes. Mixed timings (five faster/three slower,
+0.75% lower sum) do not establish a substantial whole-game speedup. D3300 remains open. Full
+normal local gates pass: 5,669 software, seven performance, 257 content, governance/build and
+369 browser passes across all four tiers, one optional Maia skip, zero retries and 112/112
+composition cells. Generated implementation/factory records are refreshed with unchanged
+profile outcomes; frozen migration fixtures remain untouched. No source data, convention,
+content or whole capability changes; no remote or release qualification is claimed.
+
+[[D3817]] remains assigned to release engineering: separate the optional provider-source-history
+tool's original landing census from current registry preservation. Later accepted declarations
+must not be deleted to satisfy its historical seven-successor assumption. This instrument repair
+is outside ordinary CI and does not block D3816's accepted primitive correction.
 
 [[D3814]] repairs a demonstrated inherited-node branch-selection fault in the disposable query,
 not production. [[D3815]] then establishes original-run prefix and requested-family/end-node source
@@ -136,10 +153,10 @@ do not establish convincing personalities or calibrated ratings.
 The checked inventory is 281 completed / 264 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Owner-requested finish and overview, reconciled through 4fda413e: the in-flight batch is
+Earlier owner-requested finish and overview, reconciled through 4fda413e (historical): the in-flight batch is
 committed, with no tracked edits awaiting completion. D3746/D3747/D3811 close the local recovery
 batch; D3812 subsequently passes full normal verification/build/all four browser tiers, followed
 by the stronger eight-case delivery rerun described above. The earlier fdc22e77 result is history,
@@ -152,6 +169,14 @@ selected-Sight, Nudge and Review contracts; complete learner journeys and bot ca
 graduated representative content and Campaign progression; current CI and native release proof.
 CI/release diagnosis remains an active lane alongside those product slices. Publication requires
 separate owner authorization. Current test results are in the dated log, not a release claim.
+
+Current finish and inventory, 2026-10-14: D3816's accepted destination primitive correction is
+verified and closed locally, with the full normal gate results above. D3813–D3815 were research
+prerequisites, not newly shipped Inspector delivery. All 1,733 live ledger items have an owner
+and state; 1,672 are done and 161 refused. UX remains 281 complete / 264 live / 24 retired.
+The four active/five blocked milestones, zero complete whole capabilities, zero fully qualified
+semantic subjects and zero official graduates remain unchanged. No new feature wave, push,
+remote qualification or goal pause/completion is part of this finish-and-overview checkpoint.
 
 October-14 inventory closeout: D3795 now inventories all 75 accepted Inspector refs; 40 real
 local/recorded measurements leave 35 provider/dependency refs explicitly unmeasured. Six types

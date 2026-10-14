@@ -90,13 +90,16 @@ export function exactLegalMoves(fen: string): readonly ExactLegalMove[] {
  * Legality is checked after normalization because chessops deliberately
  * accepts both castling spellings.
  */
-export function exactMoveIdentity(fen: string, uci: string): string {
-  const position = positionFromFen(fen);
+function normalizedLegalMove(position: Chess, uci: string): Move {
   const parsed = parseUci(uci.toLowerCase());
   if (parsed === undefined || !("from" in parsed)) throw new TypeError(`Invalid move UCI: ${uci}`);
   const normalized = normalizeMove(position, parsed);
   if (!position.isLegal(normalized)) throw new TypeError(`Illegal move UCI: ${uci}`);
-  return makeUci(normalized);
+  return normalized;
+}
+
+export function exactMoveIdentity(fen: string, uci: string): string {
+  return makeUci(normalizedLegalMove(positionFromFen(fen), uci));
 }
 
 export function normalizeInboundMove(fen: string, uci: string, source: InboundMoveSource): InboundMoveConversion {
@@ -118,10 +121,10 @@ export function normalizeInboundMove(fen: string, uci: string, source: InboundMo
 
 /** Resolve a move identity to the square occupied by the moving piece. */
 export function exactMoveDestination(fen: string, uci: string): SquareName {
-  const identity = exactMoveIdentity(fen, uci);
-  const move = exactLegalMoves(fen).find((candidate) => candidate.uci === identity);
-  if (move === undefined) throw new TypeError(`Legal move identity is absent from ${MOVE_IDENTITY_CONVENTION}: ${identity}`);
-  return move.to;
+  const position = positionFromFen(fen);
+  // The selected move is already normalised and legal in this exact position. Computing its
+  // landing needs the existing castling convention, not every other piece's legal population.
+  return makeSquare(semanticDestination(position, normalizedLegalMove(position, uci)).to);
 }
 
 export function exactLegalMoveMap(fen: string): ExactLegalMoveMap {

@@ -147,6 +147,15 @@ full-destination reference checks all 64 targets with unrestricted, own, enemy a
 empty origin queries. `make collector-index-check` includes exchange and mobility
 regressions alongside the existing work-reuse checks. D3300 residual cold cost stays open.
 
+The shared exact destination resolver also avoids rebuilding the entire legal population for
+one selected move. It uses one parsed position and the existing normalization, legality and
+castling landing rules; the complete move enumerator remains unchanged. Thirty-seven permanent
+destination controls include three predecessor-failing work counts, all legal destinations in
+22 both-color/check/pin/promotion/en-passant/castling/terminal positions and twelve refusal cases.
+Eight fresh-process comparisons preserve every event, value/input receipt and projected row.
+Five pairs are faster and three slower; summed cold time is only 0.75% lower locally, not a
+substantial or portable whole-game speedup. This adds no cache, narrowed evidence or revision.
+
 ## Reading
 
 `application.longitudinal.read(actorLearnerId, parseLongitudinalReadQuery(...))` (and

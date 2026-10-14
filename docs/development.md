@@ -217,6 +217,13 @@ without moving files into `content/packs/`.
 a newline-delimited FEN file, can enumerate learner decisions, and writes only its report
 when `OUT` is supplied. It never promotes or rewrites content.
 
+After changing a local dependency of `provider-parsers.ts`, refresh its generated implementation
+record with `make provider-parser-update`. Provider-backed computed factory fingerprints include
+that record: run `make evidence-value-profile-update evidence-value-authority`, inspect the exact
+changed profiles, then `make semantic-validation-update`. These explicit maintenance commands
+do not update frozen migration fixtures or waive changes to chess data, availability, cardinality
+or source admission. Run the normal full verification afterward; verification itself stays read-only.
+
 `make tablebase-census FILE=<pack>` is the bounded evidence writer for tablebase census
 claims. For every authored start/spine position in Syzygy range that has a legal move, it
 records every distinct exact legal successor, including all four promotion roles. It reuses
