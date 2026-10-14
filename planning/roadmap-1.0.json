@@ -692,9 +692,13 @@
         "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
         "latestCheckpoint": {
           "at": "2026-10-14",
-          "summary": "D3810 joins published 78fd302f's failed 360x680 Theory layout to actual event-head changes: Theory returns at head 5, then two engine-evidence attachments advance heads 6/7 and the old result retires. The stable-layout case now opens feedback before awaiting actual played-move attachments and browser consumption, then requests Theory. Five focused empty-Support cases pass across all seven original projections. Full visibility, exact board rectangles, deadlines and the four independent D3764 held-attachment/late-response controls remain. Matrix/governance results are recorded before commit. D3809's preceding complete normal local gates pass 5,632 software/seven performance/256 content and all four browser tiers, with all 150 input/112 composition cells, one optional Maia skip and zero retries. D3786 diagnostics and prior recovery/isolation checkpoints stand. Published verify 38560140789 succeeds; browser 38560140733 fails its matrix. D3810 remains open for remote requalification, and D3600's original timing cause remains separate. No source-retirement weakening, deployment/chess/durability change, raw recording, push, whole capability/milestone or release promotion.",
+          "summary": "D3817 closes the optional provider-source-history instrument boundary: fixed c0114e28-to-039b7a44 landing snapshots retain 859 declarations plus seven exact v7 successors, 275 factory profiles, 104 authored packs, 68 ledgers, 192 other sources and evaluator/validation outcomes. This is snapshot-invariant proof, not replay of the old runtime. Current preservation separately retains all 984 declarations/278 factory profiles and actual canonical requirements/ledger checks with zero metadata edits. Eight able-to-fail controls and normal provider/application/bot/module/execution plus value-authority targets pass. The first provider run retains its localhost EPERM failure; the same ordinary Make target passes with permission. Other dated migration modes stay separately scoped. Production is unchanged from D3818's full local verification/build/all browser proof. D3810's local Theory race repair stands; last checked published 78fd302f still has successful verify and failed browser, with no current-revision remote requalification. D3600's timing cause, clean-host/architecture/rollback and complete release obligations remain. No declaration deletion, metadata application, research capture, unaccepted source implementation, whole capability/milestone, remote or release promotion.",
           "impact": "advanced",
           "evidence": [
+            "tools/d3367-provider-source-history/proof.ts",
+            "tools/d3367-provider-source-history/history.mjs",
+            "tools/d3367-provider-source-history/history.test.mjs",
+            "planning/provider-exchange-and-execution/source-history-2026-10-04.md",
             "tests/browser/arrival-requests.ts",
             "tools/d3600-arrival-profile/request-contract.test.mjs",
             "tools/d3600-arrival-profile/server-diagnostics.test.mjs",
@@ -794,6 +798,11 @@
           "apps/server/src/capabilities.test.ts"
           ],
           "anchors": [
+            {
+              "kind": "work_state",
+              "id": "D3817",
+              "digest": "sha256:b4e11e9a0f1acc2cc9b74c579fc2d6ddad56e626b2e15658dd853d2e4454af69"
+            },
             {
               "kind": "work_state",
               "id": "D3810",

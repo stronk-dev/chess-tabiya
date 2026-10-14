@@ -66,3 +66,27 @@ governance, final staged-process checks and normal hooks run before the commit. 
 RFC/register, queue and anchored roadmap flow back with the append-only exploration log.
 Only D3367 closes; the provider RFC, capability and milestone remain incomplete. The full
 1.0 goal remains active. No pushed/GitHub-run verification is claimed.
+
+## Instrument scope repair — 2026-10-14, D3817
+
+The dated figures above are preserved. They are not an assertion that later accepted work
+must fit the original seven-successor census. The default check now separates two comparisons:
+
+1. Fixed Git snapshots `c0114e28` → `039b7a44`: exact original successor versions, retained
+   declarations/factory outcomes/validation observations, authored pack and ledger evidence,
+   evaluator bytes and other source files. This verifies recorded landing invariants, not a
+   rerun of the old runtime or qualification of today's code. All 866 landed declarations
+   must still exist unchanged in the current registry.
+2. Current working files → HEAD: every committed declaration, factory profile, validation
+   observation, evaluator and authored/source field remains. Actual current requirement
+   derivation and associated ledger checks still execute. A metadata-only command cannot
+   introduce new declaration versions; accepted declaration changes must be committed separately.
+
+`make provider-source-history-check` first runs eight able-to-fail instrument controls.
+The historical comparison retains 859+7 declarations, 275 profiles, 104 authored packs,
+68 associated ledgers and 192 other sources. The present comparison retains all 984 declarations
+and 278 profiles with zero required metadata changes. No metadata updater was invoked.
+Other explicitly selected historical migration modes are unchanged, not certified by this repair.
+The target needs the named Git history; it neither extracts another checkout nor restores raw
+research recordings, and remains outside ordinary CI/progress. Production source and qualification
+are unchanged. Normal provider/application/bot/module/execution and value-authority controls pass.

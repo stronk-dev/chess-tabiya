@@ -53,10 +53,13 @@ composition cells. Generated implementation/factory records are refreshed with u
 profile outcomes; frozen migration fixtures remain untouched. No source data, convention,
 content or whole capability changes; no remote or release qualification is claimed.
 
-[[D3817]] remains assigned to release engineering: separate the optional provider-source-history
-tool's original landing census from current registry preservation. Later accepted declarations
-must not be deleted to satisfy its historical seven-successor assumption. This instrument repair
-is outside ordinary CI and does not block D3816's accepted primitive correction.
+[[D3817]] closes the optional source-history instrument repair. The fixed original landing
+retains 859 declarations plus seven v7 successors and 275 factory outcomes. Current preservation
+separately retains all 984 declarations/278 factory profiles and all authored/evidence fields;
+no requirement or ledger changes are needed. Eight instrument controls and actual provider,
+bot/module/execution/value-authority targets pass. No historical snapshot is rewritten, metadata
+applied, declaration deleted or production/RFC/qualification/release gate promoted. Other dated
+migration modes retain their separate scopes; this opt-in instrument stays outside ordinary CI.
 
 [[D3814]] repairs a demonstrated inherited-node branch-selection fault in the disposable query,
 not production. [[D3815]] then establishes original-run prefix and requested-family/end-node source
@@ -175,7 +178,7 @@ do not establish convincing personalities or calibrated ratings.
 The checked inventory is 281 completed / 264 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 Owner-requested finish and overview: D3818's production result-attribution repair is committed

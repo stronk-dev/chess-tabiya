@@ -43,6 +43,14 @@ are documented in `docs/branch-runtime.md`. The normative run shape remains
 
 ## Commands
 
+`make provider-source-history-check` is an opt-in maintenance check, not an ordinary CI or
+product-completion gate. It verifies the fixed original provider-source landing separately
+from current preservation: newer accepted declarations are retained, not forced into the old
+successor census. It needs Git history for `c0114e28` and `039b7a44`, reads those objects without
+another checkout, and executes current requirement/ledger checks without writing metadata.
+Other named historical migration modes keep their own dated scopes. No raw research archive
+is needed. The separate metadata updater is explicit; the default check never invokes it.
+
 ### Raw research recordings
 
 Large measurement recordings are not source files. `planning/research-artifacts.json`

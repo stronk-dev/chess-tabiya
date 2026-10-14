@@ -31763,11 +31763,12 @@
     },
     {
       "id": "D3817",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7ddd52bf90a7218290d684a2deafd1203b28ac0c3fbe36e2b8f1778bf195ec53",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b4e11e9a0f1acc2cc9b74c579fc2d6ddad56e626b2e15658dd853d2e4454af69",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "tools/d3367-provider-source-history/history.test.mjs",
+      "evidenceKind": "path"
     },
     {
       "id": "D3818",

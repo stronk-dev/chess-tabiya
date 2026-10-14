@@ -28917,3 +28917,38 @@ Campaign was the one capability with no API, route or content. Now:
   register/status/work-state/UX/roadmap/intent/test-tier/docs and staged-process controls. The
   production/software/browser source is unchanged from 4bb7c067's full proof; do not describe
   this bounded research/governance rerun as a new full production or remote CI result.
+
+### 2026-10-14 — D3817 separate original source-history landing from present preservation
+
+- Previous goal turn is progress: D3819 completed measured research/draft repair and tracking
+  at2c20ed3b. Revalidate the unchanged worktree before choosing D3817, an assigned instrument
+  defect that blocks truthful optional source-maintenance verification. Do not self-accept held
+  Support/Review amendments or claim this instrument is their implementation.
+- Ordinary make provider-source-history-check first reproduces the obsolete seven-successor
+  assertion: newer accepted subjects and versions are falsely rejected. Preserve all of them.
+  The fixed original c0114e28→039b7a44 comparison checks exact declarations, factory outcomes,
+  validation observations, evaluator bytes and authored/source/ledger snapshot invariants.
+  The current comparison uses HEAD preservation plus actual current requirement derivation.
+  It does not pretend to rerun the old runtime, extract another checkout or bless later code.
+- An initial instrument classification requires spine and misses outcome packs, so its source
+  check wrongly treats their ledger restamps as authored evidence changes. Replace that assumption
+  with the declared pack/source locations and add permanent all-form/path controls. All eight
+  tests pass, including missing/extra/duplicate/wrong-version/deleted/rewritten declarations,
+  changed factory outcomes, validation observations and authored/ledger mutation controls.
+- Final normal instrument passes: original859+7 declarations,275 profiles,104 packs,68 ledgers,
+  192 other sources; current984 declarations/278 profiles,104 packs/192 other sources and zero
+  requirement or ledger changes. No metadata updater, declaration deletion or source rewrite.
+  Other explicitly selected dated migration modes remain unchanged and are not certified here.
+- Initial provider verification passes ordinary pure controls but actual localhost listen is
+  refused with EPERM. Request permission and rerun the same Make command, not environment or
+  deadline tricks: make provider-exchange-check evidence-value-authority exits zero, including
+  actual application/degradation, bot/module/execution targets,269 provider-suite and67
+  value-authority cases. These overlap; no distinct aggregate total is claimed. Production and
+  the D3818 full software/browser source remain unchanged; no new full or remote CI claim.
+- Update the original receipt, developer docs, ledger/state and existing anchored roadmap;
+  D3817 closes with path evidence. Current1,732 live rows remain assigned, zero untriaged;
+  UX281complete/264live/24retired, four milestones active/five blocked, zero official graduates
+  or fully qualified semantic subjects. No raw research output, new competing tracker, push,
+  unaccepted implementation, goal pause/completion or 1.0 promotion.
+- Final normal make roadmap-receipt verify-governance exits zero. Current preservation and the
+  historical snapshot checks remain opt-in; ordinary CI/progress gains no raw-data dependency.

@@ -1965,6 +1965,7 @@ tablebase-cancellation-check:
 .PHONY: tablebase-selection-metadata-check tablebase-selection-metadata-edits tablebase-selection-metadata-update
 .PHONY: provider-source-history-check provider-source-history-metadata-update
 provider-source-history-check:
+	$(CI_NODE) --test tools/d3367-provider-source-history/history.test.mjs
 	./node_modules/.bin/esbuild tools/d3367-provider-source-history/proof.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/provider-source-history.js --log-level=warning
 	$(CI_NODE) apps/server/dist/provider-source-history.js
 provider-source-history-metadata-update:

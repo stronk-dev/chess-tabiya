@@ -13,6 +13,7 @@ import { walkPopulation } from "../../apps/server/src/capability/migration.js";
 import { ShapeRegistry } from "../../apps/server/src/shape-registry.js";
 import { PrincipleRegistry } from "../../apps/server/src/principle-registry.js";
 import { assertAuthoredContentUnchanged, assertLedgerMetadataUnchanged } from "../explorer-summary-migration-proof/proof.js";
+import { checkSourceHistory } from "./history.mjs";
 
 // Reuse the same preservation checks for D3369; each mode names its committed predecessor.
 const BINDING_ABSENCE = process.argv.includes("--binding-absence");
@@ -32,6 +33,10 @@ const OPPONENT_TABLEBASE = process.argv.includes("--opponent-tablebase-consumer"
 const GUIDED_HINT = process.argv.includes("--guided-hint-consumer");
 const HUMAN_MODEL_ATTRIBUTION = process.argv.includes("--human-model-attribution");
 const ASSISTANCE_CODEC = process.argv.includes("--assistance-codec");
+const CURRENT_HISTORY = ![BINDING_ABSENCE, REVIEW_TRANSITIONS, BRANCH_DECIDEDNESS, QUEUED_TABLEBASE,
+  HEALTH_TABLEBASE, REPERTOIRE_FRONTIER, RETURN_FREQUENCY, INSPECTOR_POPULATION,
+  OPPONENT_CANCELLATION, THEORY_BINDINGS, CONFIDENCE_DOMAIN, CONSUMER_VERSIONS,
+  EXPLORER_CONSUMERS, OPPONENT_TABLEBASE, GUIDED_HINT, HUMAN_MODEL_ATTRIBUTION, ASSISTANCE_CODEC].some(Boolean);
 const REVIEW_SUCCESSORS = ["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"];
 const BASELINE = ASSISTANCE_CODEC ? "34d96c4d" : HUMAN_MODEL_ATTRIBUTION ? "2d665ecc" : GUIDED_HINT ? "5f6bfdd6" : OPPONENT_TABLEBASE ? "9287ff1f" : EXPLORER_CONSUMERS ? "363be01a" : CONSUMER_VERSIONS ? "f3ee48c5" : CONFIDENCE_DOMAIN ? "e9b5ab19" : THEORY_BINDINGS ? "7fa7c926" : OPPONENT_CANCELLATION ? "2e02329a" : INSPECTOR_POPULATION ? "c7b03e02" : RETURN_FREQUENCY ? "58fd826c" : REPERTOIRE_FRONTIER ? "dd5b5194" : HEALTH_TABLEBASE ? "53e449e7" : QUEUED_TABLEBASE ? "ca2770f5" : BRANCH_DECIDEDNESS ? "e20c4898" : REVIEW_TRANSITIONS ? "f55c1fe3" : BINDING_ABSENCE ? "efe67940" : "c0114e28";
 const SUCCESSORS = HEALTH_TABLEBASE || OPPONENT_CANCELLATION ? ["opponent.practical_slice", "opponent.selection"] : [
@@ -45,12 +50,13 @@ const SUCCESSORS = HEALTH_TABLEBASE || OPPONENT_CANCELLATION ? ["opponent.practi
   ...(INSPECTOR_POPULATION ? ["derived.explorer.inspector_population"] : []),
 ].sort();
 const read = (path: string) => readFileSync(resolve(path), "utf8");
-const old = (path: string) => execFileSync("git", ["show", `${BASELINE}:${path}`], { encoding: "utf8", maxBuffer: 16_000_000 });
+const old = (path: string) => execFileSync("git", ["show", `${CURRENT_HISTORY ? "HEAD" : BASELINE}:${path}`], { encoding: "utf8", maxBuffer: 16_000_000 });
 const rows = (text: string) => JSON.parse(text.slice(text.indexOf("String.raw`[") + "String.raw`".length, text.lastIndexOf("]`)") + 1)) as typeof GENERATED_CAPABILITY_DECLARATIONS;
 const digest = (document: unknown) => `sha256:${createHash("sha256").update(canonicalizeJson(document as never)).digest("hex")}`;
 
 async function proof(editsOnly: boolean) {
   const root = process.cwd();
+  const historicalCheckpoint = CURRENT_HISTORY ? checkSourceHistory(root, read("packages/runtime/src/capability/declarations.generated.ts")) : undefined;
   // Explicit historical registration preserves identity; default acquisition stays v2.
   assert.equal(compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "live.syzygy.position_result", version: 1 }).own.providerOperation, "syzygy.position@1");
   assert.throws(() => compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "live.stockfish.eval", version: 1 }), /EXECUTION_SOURCE_UNREGISTERED/u);
@@ -60,7 +66,8 @@ async function proof(editsOnly: boolean) {
   for (const row of previous) assert.equal(canonicalJson(current.get(capabilityKey(row.id))), canonicalJson(row), `Historical declaration changed: ${capabilityKey(row.id)}`);
   const oldKeys = new Set(previous.map(row => capabilityKey(row.id)));
   const appended = GENERATED_CAPABILITY_DECLARATIONS.filter(row => !oldKeys.has(capabilityKey(row.id)));
-  assert.deepEqual(appended.map(row => row.subjectId).sort(), SUCCESSORS);
+  assert.deepEqual(appended.map(row => row.subjectId).sort(), CURRENT_HISTORY ? [] : SUCCESSORS,
+    CURRENT_HISTORY ? "Commit accepted declaration changes separately before metadata-only preservation" : "Checkpoint successor image changed");
   for (const row of appended) {
     assert.equal(row.id.version.kind, "integer");
     const precedingVersions = previous.filter(oldRow => oldRow.subjectId === row.subjectId).map(oldRow => Number(oldRow.id.version.value));
@@ -178,7 +185,8 @@ async function proof(editsOnly: boolean) {
   for (const path of unchangedSources) assert.equal(read(path), old(path), `Source content changed: ${path}`);
   const changedLedgers = [...ledgerDigests].filter(([path, expected]) => JSON.parse(old(path)).packDigest !== expected).length;
   return editsOnly ? edits : {
-    baseline: BASELINE, retainedDeclarations: previous.length, candidateDeclarations: current.size,
+    baseline: CURRENT_HISTORY ? "HEAD" : BASELINE, ...(historicalCheckpoint === undefined ? {} : { historicalCheckpoint }),
+    retainedDeclarations: previous.length, candidateDeclarations: current.size,
     successors: appended.map(row => ({ subject: row.subjectId, version: row.id.version.value })),
     unchangedAuthoredDocuments: paths.length, requirementStampChanges: changedPacks,
     ledgerDigestChanges: changedLedgers, unchangedOtherSourceDocuments: unchangedSources.length,
