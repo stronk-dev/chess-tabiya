@@ -1,5 +1,15 @@
 # Testing and CI
 
+`make bot-card-disclosure-check` verifies all twelve compiled fixed-profile statements and their
+grounding through the actual web roster parser, the complete card/compiler/catalog tests and
+mounted selection/refresh/absence controls, then workspace types. The browser counterpart checks
+all twelve served cards on desktop and phone, same-frame label containment, real Tab/End overflow
+scrolling, and start/play/reload/return with preserved moves. Rectangles are sampled together:
+native scrolling cannot make two different viewport frames appear to be a content overflow.
+The narrowly documented Svelte tabindex exception enables keyboard access to the actual labelled
+scroll region; native tests require a nonempty scrolling population, not only a tabindex attribute.
+This is disclosure/interaction proof, not bot strength or human-likeness calibration.
+
 Tabiya separates tests by the contract they prove. A failure should identify the owning layer; a
 real drill pack's mutable wording is not a product-browser contract, and a direct REST-handler test
 is not proof that the production application routes an endpoint.

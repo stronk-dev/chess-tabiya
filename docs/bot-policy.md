@@ -41,6 +41,14 @@ list.
 - **No decorative identity yet.** Final names/avatars are owner-authored (D1610). Every profile's
   presentation slot is `null`; titles are the family label and band.
 
+The selected pre-start choice displays the compiler's fixed-profile/no-personal-adaptation
+statement once, with `catalog.profile` and `absence.memory` grounding. It is described to the
+radio rather than repeated in its accessible name or buried in technical details. All other
+statements stay in the labelled keyboard-scrollable detail region; changing profiles resets only
+that region, while refreshing the same profile preserves it and selection focus stays on the
+radio. Missing statement data does not manufacture a browser promise. This changes no bot
+settings, sampling, provider requests, calibration, owner-authored identity or first-use default.
+
 ## The compiler
 
 `apps/server/src/bot-policy-compiler.ts` is the one execution path.

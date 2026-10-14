@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3820]] · **Machine map:**
+2026-10-14 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3822]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,16 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3821]] completes OPP-a14's accepted fixed-profile disclosure through the compiled card,
+capabilities/client parser and visible pre-start picker. All twelve cards carry one source-backed
+statement; profile switching, keyboard scrolling and actual desktop/phone start/play/reload/return
+preserve focus, saved moves and profile identity. Full frozen normal verification/build/all four
+browser tiers pass: 5,691 software, seven performance, 257 content, 59 matrix cases and 112/112
+unretried composition cells. This does not calibrate profiles, add personalities or choose the
+pending first-use default. D3821 and OPP-a14 are closed; the full Bots capability remains partial.
+[[D3822]] separately owns the latent calibration-container label: a receipt with unresolved or
+invalid strength must not be advertised as calibrated. Current receipts remain empty.
 
 [[D3820]] closes the bounded comparison-source prerequisite. The unchanged constructor fails
 the exact endpoint. A guarded constructor prototype passes 116 controls on 62 prefix pairs,
@@ -185,18 +195,27 @@ but registered facts do not automatically become useful assistance. The full con
 searched-line hints do not establish that general capability. Likewise, playable bot profiles
 do not establish convincing personalities or calibrated ratings.
 
-The checked inventory is 281 completed / 264 live / 24 retired UX items, four active / five
+The foundation's compiled catalogue contains 47 producers, 285 projections, 42 versioned
+consumers and 556 bindings. These are registrations, not 285 independently qualified chess
+detectors or proof of complete delivery. All 343 registered cases pass over 81 semantic subjects;
+zero subjects are fully qualified. Review still does not acquire its 32 eligible one-edge local
+projections; Inspector's ten recorded successors likewise need source and useful detail delivery.
+The eleven named modules and help styles are real implementation, but unchanged-state Nudge
+noise, selected-Sight coverage and missing Review sources remain substantive product work.
+
+The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Owner-requested finish and overview: D3818's production result-attribution repair is committed
-at 4bb7c067 with full normal local verification/build/all four browser tiers green. D3819 finishes
-the subsequent bounded source research and draft correction; it changes no production bytes.
-The current local result is 5,677 software, seven performance and 257 content tests, all browser
+Owner-requested finish and overview: D3821's in-flight production disclosure is verified and
+closed; D3818's result-attribution repair and D3819/D3820's bounded source research remain intact.
+The current local result is 5,691 software, seven performance and 257 content tests, all browser
 tiers including 59 matrix cases/112 unretried composition cells and packaged-production proof.
-The last checked published revision is still 78fd302f: verify succeeded, browser failed; its
+A fresh GitHub read confirms the published revision is still 78fd302f:
+[verify succeeded](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140789),
+[browser failed](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140733); its
 D3810 matrix repair is verified locally but not remotely. Local commits are unpushed and no
 current-revision remote or release qualification is claimed. No 1.0 promotion.
 

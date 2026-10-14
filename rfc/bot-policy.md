@@ -1,5 +1,16 @@
 # RFC: Bot policy
 
+- **Fixed-profile disclosure checkpoint 2026-10-14:** D3821 implements OPP-a14 under existing
+  O8.3/§7/§8/A9/A13, not a new policy layer. The compiler's single no-memory statement also
+  cites the exact fixed catalogue profile; Play renders it at the selected choice, with concise
+  radio naming and declared descriptions, not inside the technical overflow. All other facts
+  remain. Keyed details reset only on profile change, preserve same-profile refresh and retain
+  radio focus; missing data cannot invent a promise. Focused compiler/parser/mounted/types and
+  actual desktop/phone all-card/start/play/reload/return proof is recorded in the ledger/log.
+  Full normal verification/build/all four browser tiers pass: 5,691 software, seven performance,
+  257 content, 59 matrix cases and 112/112 unretried composition cells. No profile settings, source/selection,
+  calibration, names/art, first-use default or whole-Bot discharge is introduced.
+
 - **Source admission checkpoint 2026-10-04:** D3368 asserts shared operation-specific delivery seals before adaptation and private immutable source-view registration before compilation/replay. Forgeries yield typed Maia no-move or whole-guard abstention; legitimate retained and reconstructed sources preserve decisions. No sampling/profile/layer change; latency, calibration and full completion remain open. Receipt: `planning/provider-exchange-and-execution/bot-source-authority-2026-10-04.md`.
 
 - **Status:** **implementing — second owner-directed landing 2026-09-24: a learner can choose and play

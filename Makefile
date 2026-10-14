@@ -3935,6 +3935,15 @@ bot-label-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/opponent-copy.test.ts apps/web/src/lib/outcome-presentation.test.ts apps/web/src/lib/rating-surfaces.test.ts apps/web/src/lib/screens.test.ts -t "opponent learner copy|outcome presentation honesty|learner rating surfaces|D3664|starts Just Play|offers the bot roster"
 	$(MAKE) typecheck
 
+.PHONY: bot-card-disclosure-check bot-card-disclosure-browser-check
+bot-card-disclosure-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts -t "D3821"
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/bot-card.test.ts apps/server/src/bot-policy-compiler.test.ts apps/server/src/bot-profile-catalog.test.ts
+	$(MAKE) typecheck
+
+bot-card-disclosure-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3821"
+
 bot-label-browser-check:
 	./node_modules/.bin/playwright test --grep "Just Play states its selected human-model|branch intent names the saved line|a learner chooses a registered bot|Rating opens directly"
 

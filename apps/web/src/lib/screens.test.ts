@@ -4021,6 +4021,55 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("D3821 shows the declared personal-adaptation limit once at the selected opponent", async () => {
+    const onStart = vi.fn();
+    const roster = botRosterFixture().map(row => ({ ...row, card: { ...row.card, statements: [
+      ...row.card.statements,
+      { id: "card.no_memory" as const, text: `Declared policy limit for ${row.reference.id}.`, sources: ["catalog.profile", "absence.memory"] as const },
+    ] } }));
+    const component = mount(JustPlayStarter, { target: target(), props: { onStart, roster } });
+    for (const row of roster) {
+      const input = document.querySelector<HTMLInputElement>(`[data-bot-profile="${row.reference.id}"] input`)!;
+      input.focus(); input.click(); await tick();
+      const promise = document.querySelector<HTMLElement>(`[data-bot-profile="${row.reference.id}"] .bot-promise`);
+      expect(promise).not.toBeNull();
+      expect(promise!.textContent).toBe(`Declared policy limit for ${row.reference.id}.`);
+      expect(input.getAttribute("aria-describedby")!.split(" ")).toContain(promise!.id);
+      expect(document.getElementById(input.getAttribute("aria-labelledby")!)!.textContent).toBe(row.card.title);
+      expect(document.querySelectorAll('[data-card-statement="card.no_memory"]')).toHaveLength(1);
+      expect(document.querySelector(".bot-card")!.textContent).toContain(row.card.title);
+      expect(document.querySelector(".bot-card")!.textContent).not.toContain(promise!.textContent);
+      expect(document.activeElement).toBe(input);
+    }
+    expect(onStart).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
+  it("D3821 resets detail scrolling only when the selected profile changes and never invents an absent statement", async () => {
+    const roster = botRosterFixture(), onStart = vi.fn();
+    const component = createClassComponent({ component: JustPlayStarter, target: target(), props: { onStart, roster } });
+    const select = async (id: string) => {
+      const input = document.querySelector<HTMLInputElement>(`[data-bot-profile="${id}"] input`)!;
+      input.focus(); input.click(); await tick(); return input;
+    };
+    await select("human-baseline.1400@1");
+    const original = document.querySelector<HTMLElement>(".bot-card")!;
+    original.scrollTop = 140;
+    component.$set({ roster: [...roster] }); await tick();
+    expect(document.querySelector(".bot-card")).toBe(original);
+    expect(original.scrollTop).toBe(140);
+    const input = await select("pawn-forward.1400@1");
+    const changed = document.querySelector<HTMLElement>(".bot-card")!;
+    expect(changed).not.toBe(original);
+    expect(original.isConnected).toBe(false);
+    expect(changed.scrollTop).toBe(0);
+    expect(changed.getAttribute("tabindex")).toBe("0");
+    expect(document.activeElement).toBe(input);
+    expect(document.querySelector(".bot-promise")).toBeNull();
+    expect(changed.querySelectorAll("[data-card-statement]")).toHaveLength(1);
+    component.$destroy();
+  });
+
   it("D3673 refuses a disappeared or newly unavailable bot without substituting a raw model", async () => {
     const onStart = vi.fn();
     const roster = botRosterFixture();

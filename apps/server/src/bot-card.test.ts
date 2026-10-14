@@ -31,6 +31,18 @@ function receipt(entry: BotProfileCatalogEntry, overrides: Partial<BotCalibratio
 }
 
 describe("grounded bot cards (bot-policy §7 / A9; bot-roster §7 / criterion 4)", () => {
+  it.each(BOT_PROFILE_CATALOG)("D3821 $reference.id discloses fixed settings without personal adaptation", entry => {
+    const card = compileBotCard(entry);
+    const statements = card.statements.filter(value => value.id === "card.no_memory");
+    expect(statements).toHaveLength(1);
+    expect(statements[0]!.text).toBe("This bot does not adjust its settings to your rating or past results. It has no memory between games.");
+    expect(statements[0]!.sources).toEqual(["catalog.profile", "absence.memory"]);
+    expect(entry.behavior.memory).toBeNull();
+    expect(card.strength).toEqual({ kind: "uncalibrated" });
+    const served = projectBotRoster().profiles;
+    expect(served.find(row => row.reference.id === entry.reference.id)!.card).toEqual(card);
+    expect(() => validateRoster(JSON.parse(JSON.stringify(served)))).not.toThrow();
+  });
   it("compiles one card per catalog member from registered sources only", () => {
     for (const entry of BOT_PROFILE_CATALOG) {
       const card = compileBotCard(entry);

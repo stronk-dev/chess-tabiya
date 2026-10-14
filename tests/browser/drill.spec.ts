@@ -5674,6 +5674,81 @@ test("branch intent names the saved line and Compare replays the same decision a
   await expect(page.locator("[data-status-announcement]")).toContainText("Full game · until a rules-terminal result");
 });
 
+for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: "phone", width: 390, height: 844 }]) {
+  test(`D3821 bot policy limits stay at the selected choice through scrolling and actual play on ${viewport.name}${viewport.name === "phone" ? " @mobile" : ""}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await register(page);
+    await page.goto("/play");
+    const response = await page.request.get("/capabilities");
+    expect(response.ok()).toBe(true);
+    const capabilities = await response.json();
+    const roster = capabilities.policyProfiles.human_common.profiles as { reference: { id: string }; card: { statements: { id: string; text: string; sources: string[] }[]; strength: { kind: string } } }[];
+    expect(roster).toHaveLength(12);
+    let scrolledRegions = 0;
+    for (const row of roster) {
+      const declared = row.card.statements.filter(statement => statement.id === "card.no_memory");
+      expect(declared).toHaveLength(1);
+      expect(declared[0]!.sources).toEqual(["catalog.profile", "absence.memory"]);
+      expect(declared[0]!.text).toBe("This bot does not adjust its settings to your rating or past results. It has no memory between games.");
+      expect(row.card.strength.kind).toBe("uncalibrated");
+      const choice = page.locator(`[data-bot-profile="${row.reference.id}"]`);
+      const input = choice.locator("input");
+      await expect(input).toBeEnabled();
+      await input.focus();
+      await page.keyboard.press("Space");
+      await expect(input).toBeChecked();
+      await expect(input).toBeFocused();
+      const promise = choice.locator(".bot-promise");
+      await expect(promise).toHaveText(declared[0]!.text);
+      await expect(page.locator('[data-card-statement="card.no_memory"]')).toHaveCount(1);
+      // Sample both rectangles in one layout frame; native scrolling must not turn
+      // separately sampled viewport coordinates into a false content overflow.
+      const geometry = await promise.evaluate(element => {
+        const bounds = element.getBoundingClientRect(), outer = element.closest("[data-bot-profile]")!.getBoundingClientRect();
+        return { left: bounds.left >= outer.left, right: bounds.right <= outer.right,
+          top: bounds.top >= outer.top, bottom: bounds.bottom <= outer.bottom };
+      });
+      expect(geometry).toEqual({ left: true, right: true, top: true, bottom: true });
+      const details = page.locator(".bot-card");
+      expect(await details.evaluate(element => element.scrollTop)).toBe(0);
+      await page.keyboard.press("Tab");
+      await expect(details).toBeFocused();
+      await page.keyboard.press("End");
+      await expect(details).toBeFocused();
+      if (await details.evaluate(element => element.scrollHeight > element.clientHeight)) {
+        await expect.poll(() => details.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+        scrolledRegions++;
+      }
+      // Native scrolling must not manufacture another policy notice.
+      await expect(page.locator('[data-card-statement="card.no_memory"]')).toHaveCount(1);
+    }
+    expect(scrolledRegions).toBeGreaterThan(0);
+    const selected = page.locator('[data-bot-profile="human-baseline.1400@1"]');
+    if (viewport.name === "phone") await selected.tap();
+    else await chooseBot(page, "human-baseline.1400@1");
+    await expect(selected.locator("input")).toBeChecked();
+    await expect(selected.locator(".bot-promise")).toContainText("your rating or past results");
+    const start = page.getByRole("button", { name: "Start and keep the game" });
+    if (viewport.name === "phone") await start.tap();
+    else await start.click();
+    await expect(page).toHaveURL(/\/play\/run\//u);
+    await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1400");
+    await move(page, "e2", "e4", "white");
+    await expect(page.locator(".timeline")).toContainText("Active line 2 turns");
+    const runUrl = page.url();
+    const before = (await (await page.request.get(`${new URL(runUrl).pathname.replace("/play/run/", "/runs/")}/graph`)).json()).graph;
+    await page.reload();
+    await expect(page.locator("[data-status-announcement]")).toContainText("Bot · Human baseline · model band 1400");
+    const after = (await (await page.request.get(`${new URL(runUrl).pathname.replace("/play/run/", "/runs/")}/graph`)).json()).graph;
+    assertRecordedNodesPreserved(before.nodes, after.nodes);
+    expect(after.activeCursor).toEqual(before.activeCursor);
+    await page.goto("/play");
+    await chooseBot(page, "human-baseline.1400@1");
+    await expect(page.locator('[data-bot-profile="human-baseline.1400@1"] .bot-promise')).toContainText("your rating or past results");
+    await expect(page.locator('[data-card-statement="card.no_memory"]')).toHaveCount(1);
+  });
+}
+
 // rfc/bot-policy.md §4.1 A13 / rfc/bot-roster.md criterion 10: choose → play → resume → rematch.
 test("a learner chooses a registered bot, plays it, reloads, and the same bot continues", async ({ page }) => {
   await page.goto("/play");

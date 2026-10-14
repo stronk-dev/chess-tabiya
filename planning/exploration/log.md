@@ -28986,3 +28986,63 @@ Campaign was the one capability with no API, route or content. Now:
   full production software/browser proof. No push, remote/release qualification or goal pause/close.
 - Final normal make roadmap-receipt verify-governance exits zero; no production source changes
   occur and no full software/browser rerun or current-revision remote result is claimed.
+
+### 2026-10-14 — D3821 fixed-profile disclosure through actual bot selection and play
+
+- Previous goal turn is progress: D3820's measured comparison-source prerequisite is committed
+  at 7e11e038. Revalidate the tree and take an accepted learner-facing slice while new source
+  migrations await independent acceptance. Register/assign D3821 for OPP-a14 under bot-policy
+  O8.3/§7/§8/A9/A13 and bot-roster §7; this is disclosure, not a new policy/default/personality.
+- Fourteen permanent predecessor failures cover twelve compiled cards plus mounted missing-
+  promise and retained-scroll cases. The compiler now cites catalog.profile plus absence.memory
+  for the single fixed-settings/past-results statement. Play displays it at the selected choice,
+  not the technical card overflow; explicit radio naming/description prevents duplicated spoken
+  notice. Every other statement remains. Keyed labelled overflow resets only on profile change,
+  same-profile refresh preserves scroll, radio focus stays put and missing data adds no promise.
+- Initial test assumptions target entry.memory instead of behavior.memory and pass a single row
+  to the deliberately whole-roster web parser. Correct both without changing the catalogue,
+  parser or policy. The labelled native overflow uses the same narrowly explained tabindex
+  exception as the existing board companion; actual Tab/End scrolling and a nonempty scrolling
+  population prove keyboard access, while workspace types report zero errors/warnings.
+- The normal focused target hits pnpm lockfile-write EPERM under the sandbox. Request permission
+  and rerun that same Make command, no environment/deadline workaround. All sixty complete card/
+  compiler/catalog tests, two mounted tests and workspace types pass. No model settings, sampling,
+  selection/provenance, schemas, source identities, calibration or decorative names change.
+- First native desktop geometry probe incorrectly combines rectangles from two scrolling frames;
+  the failure's actual screenshot has contained text. Sample both bounds atomically and retain
+  all four precise inequalities with no tolerance/CSS workaround. Both desktop/phone cases then
+  pass all twelve served cards, one declared notice, real Tab/End scrolling, start/play/reload/
+  return and original nodes/cursor/profile. Strengthen final phone choice/start with real taps.
+- Record D3822's separate latent supported-variant label defect: calibrated container kind can
+  carry unresolved/invalid strength, while the tile prints Calibrated. No production calibration
+  receipt exists, so do not claim a currently calibrated bot or silently close that question.
+- Update existing docs/RFC/receipt/roadmap before the full frozen ordinary gates. D3821 remains
+  doing and OPP-a14 open until final verification; no whole-Bot, capability, milestone, qualified
+  semantic subject, content, remote CI or release promotion. No push or goal pause/completion.
+
+### 2026-10-14 — D3821 final verification and owner-requested whole-product inventory
+
+- Recover the existing full Make process after context compaction; it is still running. Recover
+  its confirmed session and resume it rather than restarting a duplicate verifier. Production
+  source, fixtures and consumed documentation stay frozen through terminal exit zero.
+- Normal make roadmap-receipt verify-awake build test-browser-ci-awake passes: 5,691 software
+  cases/391 files, seven performance/four files, 257 real-content/26 files, workspace types with
+  zero Svelte warnings, schema/packaging/governance/build and all four browser tiers. All 59
+  matrix cases and 112/112 unretried composition cells pass, as does the packaged-production
+  journey. Both D3821 cases pass in the full suite; phone selection/start use actual taps.
+  No thresholds, deadlines, retries, source predicates or qualification requirements change.
+- Close only D3821 and OPP-a14 through the normal state tools and actual test paths. D3822 stays
+  todo; no calibration receipt is installed. Update the existing current roadmap inventory,
+  Bot experience and checkpoint, not another queue. UX282 complete/263 live/24 retired; all
+  1,733 live ledger items remain assigned, with 1,677 done and 161 refused. The 462 historical
+  prose-only closures remain weaker evidence, not freshly certified completion.
+- Fresh read-only GitHub access succeeds and confirms published 78fd302f: verify38560140789
+  success/browser38560140733 failure. D3810 is repaired locally, not remotely requalified;
+  nothing is pushed. Retain original intermittent causes and actual clean-host/architecture/
+  rollback/rights obligations. Local matrix/image proof cannot replace those discharges.
+- The whole inventory remains integration-stage: four active/five blocked milestones, fourteen
+  incomplete whole capabilities, zero fully qualified semantic subjects and zero official pack
+  graduates. The 47/285/42/556 catalogue and 343 passing cases are registration/case proof, not
+  complete useful Support/Review delivery, calibrated personalities or general why-move search.
+  Finish this batch and give the requested overview before another implementation wave. The
+  full 1.0 goal is neither paused nor marked complete by this inventory.

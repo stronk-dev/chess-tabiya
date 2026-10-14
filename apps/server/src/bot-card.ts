@@ -130,7 +130,7 @@ function pawnStatements(): BotCardStatement[] {
 function absenceStatements(): BotCardStatement[] {
   return [
     statement("card.no_book", "No opening book is used.", ["absence.repertoire"]),
-    statement("card.no_memory", "Nothing is remembered between games.", ["absence.memory"]),
+    statement("card.no_memory", "This bot does not adjust its settings to your rating or past results. It has no memory between games.", ["catalog.profile", "absence.memory"]),
     statement("card.no_timing", "Replies are not delayed to imitate thinking time, and no clock or time control shapes the choice.", ["absence.timing"]),
     statement("card.endgame_scope", "Middlegame and endgame behaviour is not separately measured: every measured position comes from the first 20 plies of a game.", ["scope.endgame"]),
   ];

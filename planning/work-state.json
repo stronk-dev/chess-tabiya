@@ -31796,6 +31796,25 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/comparison-source.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3821",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1064d572a131e5c933c270a7f10157a7a1c878b0f961f32a955480f82723a921",
+      "uxItems": [
+        "OPP-a14"
+      ],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3822",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f39491812e1ebbfd49ccf82b4e00d6b37fe8afe417fbec2d468785b438b6a8ca",
+      "uxItems": [],
+      "owner": "bot-play"
     }
   ]
 }

@@ -80,11 +80,14 @@
             {#each family.rows as row (row.reference.id)}
               {@const startable = botIsStartable(row)}
               {@const note = botAvailabilityNote(row)}
+              {@const promise = opponent === `bot:${row.reference.id}` ? row.card.statements.find(statement => statement.id === "card.no_memory") : undefined}
+              {@const description = [`bot-summary-${row.reference.id}`, `bot-strength-${row.reference.id}`, note === undefined ? undefined : `bot-note-${row.reference.family}-${row.reference.band}`, promise === undefined ? undefined : `bot-promise-${row.reference.id}`].filter(value => value !== undefined).join(" ")}
               <label class:checked={opponent === `bot:${row.reference.id}`} class:unavailable={!startable} data-bot-profile={row.reference.id}>
-                <input type="radio" name="opponent" value={`bot:${row.reference.id}`} bind:group={opponent} disabled={!startable} aria-describedby={note === undefined ? undefined : `bot-note-${row.reference.family}-${row.reference.band}`} />
-                <span><strong>{row.card.title}</strong><small>{botCardSummary(row)}</small></span>
-                <em>{row.card.strength.kind === "uncalibrated" ? "Uncalibrated" : "Calibrated"}</em>
+                <input type="radio" name="opponent" value={`bot:${row.reference.id}`} bind:group={opponent} disabled={!startable} aria-labelledby={`bot-title-${row.reference.id}`} aria-describedby={description} />
+                <span><strong id={`bot-title-${row.reference.id}`}>{row.card.title}</strong><small id={`bot-summary-${row.reference.id}`}>{botCardSummary(row)}</small></span>
+                <em id={`bot-strength-${row.reference.id}`}>{row.card.strength.kind === "uncalibrated" ? "Uncalibrated" : "Calibrated"}</em>
                 {#if note !== undefined}<small class="availability" id={`bot-note-${row.reference.family}-${row.reference.band}`}>{note}</small>{/if}
+                {#if promise !== undefined}<span class="bot-promise" id={`bot-promise-${row.reference.id}`} data-card-statement={promise.id}>{promise.text}</span>{/if}
               </label>
             {/each}
           </div>
@@ -92,14 +95,17 @@
       {/each}
       <p class="honest" id="bot-roster-honesty">Every bot draws its moves from the Maia human-move model at one model band. Bands are model settings, not FIDE, Lichess or Chess.com ratings, and no bot shows a strength number until games measure that exact bot.</p>
       {#if selectedBot !== undefined}
-        <section class="bot-card" aria-labelledby="bot-card-title" aria-live="polite">
+        {#key selectedBot.reference.id}
+        <!-- svelte-ignore a11y_no_noninteractive_tabindex (keyboard access to a labelled native overflow region, not a fabricated widget) -->
+        <div class="bot-card" role="region" aria-labelledby="bot-card-title" aria-live="polite" tabindex="0">
           <h3 id="bot-card-title">{selectedBot.card.title}</h3>
           <ul>
-            {#each selectedBot.card.statements as statement (statement.id)}
+            {#each selectedBot.card.statements.filter(statement => statement.id !== "card.no_memory") as statement (statement.id)}
               <li data-card-statement={statement.id}>{statement.text}</li>
             {/each}
           </ul>
-        </section>
+        </div>
+        {/key}
       {/if}
       <details class="advanced" bind:open={advancedOpen}>
         <summary>Advanced: raw model bands and the engine test</summary>
@@ -166,9 +172,11 @@
   .bot-grid small, .opponent-grid small, .engine-choice small { color: var(--muted); line-height: 1.3; }
   .bot-grid em { align-self: start; color: var(--muted); font: 600 .65rem ui-monospace, monospace; font-style: normal; text-transform: uppercase; }
   .bot-grid .availability { grid-column: 1 / -1; }
+  .bot-promise { grid-column: 1 / -1; margin: .25rem 0 0; color: var(--ink); font-size: .85rem; line-height: 1.45; }
   .opponent-grid b, .engine-choice b { align-self: end; color: var(--accent); font: 700 1rem ui-monospace, monospace; }
   .bot-card { max-height: 16rem; overflow: auto; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, var(--panel) 92%, var(--paper)); }
   .bot-card h3 { margin: 0 0 .4rem; font: 600 1rem var(--display-font); }
+  .bot-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .bot-card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; color: var(--muted); font-size: .85rem; line-height: 1.4; }
   .advanced { padding: .6rem .8rem; border: 1px solid var(--line); border-radius: .9rem; }
   .advanced summary { cursor: pointer; font-weight: 600; }

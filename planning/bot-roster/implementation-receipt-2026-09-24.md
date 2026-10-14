@@ -48,3 +48,28 @@ nothing, lists the roster first and moves raw rungs under Advanced. Criterion 14
 the bounded picker, card, status identity, retry and rematch (see `rfc/opponent-experience.md`
 changelog). Criteria 5, 11 and 12 are unchanged. Details and tests:
 `planning/bot-policy/implementation-receipt-2026-09-24-playable.md`.
+
+## Fixed-profile disclosure — 2026-10-14, D3821
+
+The existing O8.3/§8 personal-input wall and null memory slot now appear as one compiled
+`card.no_memory` statement grounded in `catalog.profile` plus `absence.memory`. The selected
+radio card exposes it immediately and describes it without duplicating the radio's accessible
+name. All other statements remain in labelled keyboard-scrollable details. Profile changes
+reset only the details; same-profile refresh preserves scrolling and the radio retains focus.
+Missing statement data is not replaced with a browser-authored promise.
+
+Fourteen predecessor failures cover all twelve compiled cards and two mounted disclosure/
+scroll cases. Focused tests subsequently pass all sixty card/compiler/catalog cases, both
+mounted cases and workspace types with zero Svelte warnings. The documented scroll-region
+tabindex exception is exercised by actual Tab/End scrolling, not a synthetic widget role.
+Native desktop/phone checks read all twelve real capabilities cards, preserve single disclosure
+and precise containment, then start/play/reload/return with unchanged saved moves and profile.
+An initial geometry probe sampled rectangles in different scrolling frames; same-frame reads
+retain every containment assertion without a tolerance or CSS workaround. The final phone journey
+uses real taps to select and start. Frozen normal verification/build/all four browser tiers exit
+zero: 5,691 software/391 files, seven performance/four files, 257 content/26 files, all 59 matrix
+cases and 112/112 unretried composition cells plus packaged-production proof. D3821 and OPP-a14
+close with these actual paths; the append-only exploration log retains the initial failures.
+No actual calibration or complete
+bot/personality/roster milestone is implied. D3822 separately owns the latent failed-calibration
+container label; production calibration receipts remain empty.

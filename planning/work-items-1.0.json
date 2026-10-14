@@ -7075,17 +7075,21 @@
     {
       "id": "OPP-a14",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "bots",
       "owner": "bot-play",
-      "assignment": "capability:bots",
+      "assignment": "closed",
       "sourceDocument": "ux-opponents.md",
       "sourceSection": "§7 rec-4",
       "sourceHeading": "The opponent — `ux-opponents.md`",
       "summary": "State the no-adaptation promise on the card once — a refusal that reads as a feature",
-      "legacyRoute": "none",
-      "note": "O8.3 already rules it",
-      "sourceDigest": "sha256:822d4949a33cc0c57f8dd1a69314ce917525abb73f8e00119af58cf4b442c359"
+      "legacyRoute": "ledger",
+      "note": "Completed locally 2026-10-14 under [[D3821]] and O8.3: one compiled statement at the selected choice, keyboard scrolling and profile switching, actual desktop/phone start/play/reload/return. `tests/browser/drill.spec.ts`; full normal gates pass; behavior/calibration unchanged",
+      "sourceDigest": "sha256:983f8585d6739ac9181aee33c0777788a4e23e72cf5edcb9cfdc31e34825bcb5",
+      "completion": {
+        "completedOn": "2026-10-14",
+        "evidence": "tests/browser/drill.spec.ts"
+      }
     },
     {
       "id": "OPP-a15",
