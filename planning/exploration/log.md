@@ -29799,3 +29799,52 @@ Campaign was the one capability with no API, route or content. Now:
   five blocked milestones and zero fully qualified semantic subjects/official graduates remain.
   Keep checkpoints concise with the full scoped evidence in their linked reports. Stage only
   the sixteen owned files, inspect the exact index and retain normal commit hooks; no push.
+
+## 2026-10-15 — Inspector return: original FEN admission and held-source wire
+
+- Previous goal turn is concrete progress at13781fb7: verified accepted population repair,
+  independent Inspector return and full closeout. Recheck HEAD/status; only three pre-existing
+  untracked entries remain. Take existing D3842/D3843 author corrections; do not implement the
+  unaccepted Inspector operation or narrow its75-source obligations.
+- Extend the existing comparison instrument with real event replay and later invalid FENs in
+  either column. The first negative reproduces missing constructor refusal; after its guard,
+  the independent structural source still hides invalidity. An intermediate guard incorrectly
+  widens its legacy no-endpoint control, and terminal replay already refuses four corruptions;
+  correct both instrument assumptions without changing production/parser behavior.
+- Count source access before the outer memo, not just detector-cache misses. The per-column
+  model now fails at one read before the later invalid column; validating both original graph/
+  FEN populations before either prefix/read passes316/470 controls over62 original pairs.
+  Twelve replay-admitted invalid images and four terminal replay refusals are distinct. Complete
+  1020 structural/fourteen delta items, saved bytes and ten old-arm scope collisions remain.
+  Author the exact ordering/immutable-source/mutation-isolation contract, record bounded evidence
+  in the existing dossier/review, and request independent re-review before closing D3842.
+- The independent reviewer clears only the bounded D3842 author correction after reading the
+  actual guards/criteria and rerunning both cached bundles (316/470 controls). It explicitly
+  retains nominal source/mutation/seal/access/API/native implementation and overall acceptance
+  holds. This closes the author defect, not the Inspector operation.
+- D3843's new missing-dependency type sentinel first fails as an unused expected error: the
+  current type admits the lossy outcome. Separate held/dependency-free alternatives, exact pending
+  source-owner validation and a sourceOutcome field in the existing disclosure now pass18
+  bounded actual-opening/JSON/binding controls.96/491 request grammar,318 dependent-source/218
+  requests and37 source-contract checks remain green under normal existing Make targets.
+  Full response/source/current access/API/native admission is not established by those controls.
+- The separate reviewer independently clears D3843's bounded contract/grammar/receipt repair
+  after reading the actual owner/acquisition rules and rerunning the cached pinned-Node wire
+  bundle. Close D3842/D3843 only as author defects; D3792 remains returned/unaccepted on D3841
+  and the known supplier matrix. No API/client implementation or whole-capability promotion.
+- Re-run the existing execution census and its eight negative controls without rewriting its
+  saved report:262/285 projections,495/556 isolated bindings,21/42 complete consumers and fourteen
+  refused provider declarations remain. All75 Inspector bindings are retained; its complete
+  compilation still fails at unregistered Stockfish execution. The wire fix cannot turn that
+  contract failure into ordinary source absence. Keep D3841 open and first in the source queue.
+- Final normal `make roadmap-receipt verify-governance` passes, including current register,
+  routing/state/roadmap, append-only process controls and research size guards. Current execution
+  register has3592 rows:1698 done,162 refused,1732 live assigned and zero untriaged; UX remains
+  282 complete/263 live/24 retired, with four active/five blocked milestones. No production files
+  changed, so this checkpoint retains13781fb7's existing full application proof rather than
+  claiming a new software/browser run. Stage only this correction's fourteen owned files,
+  inspect the index and use normal commit hooks; preserve the three pre-existing untracked entries.
+- The normal hooks pass. Final prose inspection catches older unlabelled current-count sentences
+  in the same human roadmap: distinguish the D3809 historical snapshot and reconcile the current
+  ledger totals/independent-review outcome with the checked registers. Fold only those prose
+  corrections into this unpublished owned checkpoint, retaining normal hooks and all histories.

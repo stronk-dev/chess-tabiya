@@ -31991,19 +31991,21 @@
     },
     {
       "id": "D3842",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:60974b8eccf74d46a422328812d8a0bc983a2adedc77034842b9053e595f439a",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b782ff00ff9b4cef6e11b7da8cbcafcf89cc8b8c18f478ffe7130725f1b3339d",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "tools/d3792-inspector-demand/comparison-source.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3843",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:afb15a02834e1a04c40413606aad27da01e96ff76ec7d4128aeed16da9a96af4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bc5ee02f43ae67af1a99c83c1f0a1ccbe6c2d6981678004d6e077dcd49220c1c",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "tools/d3792-inspector-demand/draft-wire.ts",
+      "evidenceKind": "path"
     }
   ]
 }

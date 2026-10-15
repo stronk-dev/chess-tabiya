@@ -1,7 +1,7 @@
 // DISPOSABLE D3820 source-boundary experiment, not a scoped factory, access grant or HTTP/UI.
 import assert from "node:assert/strict";
 import { createRun, canonicalRunStart, commitMove, rewind, fork, revealFeedback, branchPath,
-  compareBranches, attachEvidence, reachCheckpoint, transitionObjective, structuralReading,
+  compareBranches, attachEvidence, reachCheckpoint, transitionObjective, structuralReading, readBackReplay,
   observationIdentity, type BranchComparison, type DrillRun, type StructuralObservation,
 } from "../../packages/runtime/src/index.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
@@ -13,7 +13,7 @@ type ResearchCompare = (run: DrillRun, branches: readonly string[], options: { r
 // The extra argument exists only in the guarded transpiled candidate; this is not production typing.
 const scoped = compareBranches as ResearchCompare;
 let checks = 0, requests = 0, legacyLaterItems = 0, boundedStructuralItems = 0;
-let boundedEvalDeltaItems = 0, oldArmScopeCollisions = 0;
+let boundedEvalDeltaItems = 0, oldArmScopeCollisions = 0, invalidOriginalFens = 0, terminalReplayRefusals = 0;
 const structuralExperiment = process.argv[2] === "structural";
 function check(callback: () => void) { callback(); checks++; }
 // Scope oracle only, not a validation oracle for the underlying chess predicates:
@@ -143,6 +143,38 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
   });
   const swapped = scoped(run, [peer, main], { researchThroughNodeIds: [peerSelected, selected] });
   check(() => assert.deepEqual(swapped.columns.map(column => column.branchId), [peer, main]));
+  // D3842: a parser-admitted stored replay is not proof that every original FEN is valid.
+  // The corrupt node is later than the requested endpoint, in either original column.
+  for (const path of [mainPath, peerPath]) for (const fen of ["not-a-fen", "8/8/8/8/8/8/8/8 w - - 0 1"]) {
+    const later = path.at(-1)!.id;
+    const events = run.events.map(event => event.type === "move.committed" && event.data.node.id === later
+      ? { ...event, data: { ...event.data, node: { ...event.data.node, fen } } } : event);
+    // Terminal-event replay already checks its referenced final FEN; do not claim those
+    // refused images were admitted source inputs. Non-terminal and peer images still exercise it.
+    if (run.events.some(event => event.type === "outcome.reached" && event.data.nodeId === later)) {
+      check(() => assert.throws(() => readBackReplay(events)));
+      terminalReplayRefusals++;
+      continue;
+    }
+    const damaged = readBackReplay(events).run;
+    const damagedBytes = JSON.stringify(damaged);
+    for (const branch of [main, peer]) check(() => assert(branchPath(damaged, branch).length > 1));
+    const legacy = compareBranches(damaged, [main, peer]);
+    check(() => assert.throws(() => invokeEvidenceValueRoute("derived.compare.structure_delta@1",
+      { run: damaged, comparison: legacy, branchId: main }), "the original whole-path source must actually refuse"));
+    Reflect.set(globalThis, "__d3842StructuralReads", 0);
+    check(() => assert.throws(() => scoped(damaged, [main, peer], { researchThroughNodeIds: [selected, peerSelected] }),
+      "D3842 original-path FEN must refuse before comparison narrowing"));
+    check(() => assert.equal(Reflect.get(globalThis, "__d3842StructuralReads"), 0));
+    if (structuralExperiment) {
+      Reflect.set(globalThis, "__d3842StructuralReads", 0);
+      check(() => assert.throws(() => invokeEvidenceValueRoute("derived.compare.structure_delta@1",
+        { run: damaged, comparison: first, branchId: main }), "D3842 the structural owner must preserve original FEN refusal"));
+      check(() => assert.equal(Reflect.get(globalThis, "__d3842StructuralReads"), 0));
+    }
+    check(() => assert.equal(JSON.stringify(damaged), damagedBytes));
+    invalidOriginalFens++;
+  }
   for (const action of [() => scoped(run, [main, peer], { researchThroughNodeIds: [selected] }),
     () => scoped(run, [main, peer], { researchThroughNodeIds: [peerSelected, selected] }),
     () => scoped(run, [main, peer], { researchThroughNodeIds: [selected, run.nodes[0]!.id] }),
@@ -166,9 +198,12 @@ if (structuralExperiment) assert(boundedStructuralItems > 0, "source-side narrow
 else assert(legacyLaterItems > 0);
 assert(boundedEvalDeltaItems > 0, "eval scope cannot pass using only empty populations");
 assert(oldArmScopeCollisions > 0, "old full-tip input arms must not be mistaken for endpoint-bound source identity");
+assert.equal(invalidOriginalFens, 12);
+assert.equal(terminalReplayRefusals, 4);
 console.log(JSON.stringify({ scope: "D3820 disposable source-owner prefix algorithm; NOT scoped factories, authorization, production types or HTTP/native proof",
   legalFixtures: 4, prefixPairs: requests, checks, actualMateOutcomesBounded: true, retainedOriginalGraph: true,
   recordedProviderFixtures: "synthetic eval/checkpoint controls, not live providers or qualification", legacyLaterItems,
   legacyFactoriesInProductionStillUnscoped: true, sourceOwnerStructuralExperiment: structuralExperiment,
   boundedStructuralItems, boundedEvalDeltaItems, oldArmScopeCollisions,
+  invalidOriginalFens, terminalReplayRefusals, originalFenRefusalBeforeDetectors: true,
   oldArmIdentityIsNotScopedAuthority: true, savedBytesUnchanged: true }));

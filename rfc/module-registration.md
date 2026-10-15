@@ -2220,9 +2220,18 @@ The complete operand domain, invoker and declaration census must include this ex
 arm before it can execute. A cast, spread, JSON copy or genuine source from another run/scope
 cannot substitute for the requested source at the query receiver.
 
-Constructor order is: admit the closed argument and original run, reject equal/unknown branch
-ids, validate **both complete original branch paths**, then locate each endpoint and extract
-the two exact prefixes. Each prefix must contain that branch's actual recorded fork. Compute
+Constructor order is: admit the closed argument and original run, independently snapshot its
+complete unchanged data and captured column tuple, reject equal/unknown branch ids, validate
+**both complete original branch graphs and every original path FEN**, then locate either
+endpoint and extract the two exact prefixes. Use the same legal-position admission as the
+existing structural source (`positionFromFen`), not only FEN syntax or `branchPath` traversal.
+A valid graph or event replay is not proof that every original position is valid; terminal
+event replay validates some FENs but ordinary committed nodes can still carry invalid ones.
+Validate both columns as a set before any structural source access, including cache hits,
+engine lookup or evidence mint; a malformed later FEN on either column cannot be hidden by an
+earlier endpoint. No structural facts are computed during this validation. Deep-freeze only
+the independent source-owned snapshot, never caller objects; later caller mutations cannot
+change captured nodes, events, scopes or receipts. Each prefix must contain that branch's actual recorded fork. Compute
 the common fork from the two ordered prefixes, not from caller metadata, current cursor,
 node.branchId, newest sibling or full-tip comparison. Inherited nodes are valid; an endpoint
 before its attempt's fork is not. A valid pair ending exactly at the common fork remains valid
@@ -2283,8 +2292,13 @@ not permission to publish an obsolete response.
 
 Acceptance adds the actual typed constructor/new-arm/invoker controls to the D3820 prefix
 population: both complete-tip arms retain old payloads; fork-only/unequal-length/reversed and
-inherited prefixes retain exact complete output; original late-graph corruption refuses before
-read counters advance; no source from another endpoint/order/run, copied handle or substituted
+inherited prefixes retain exact complete output; original late-graph corruption and malformed
+or syntactically valid-but-illegal later FENs on either original column refuse before any read
+counters advance, including warmed memo accesses. Controls replay actual committed events and
+distinguish parser-rejected terminal images from replay-admitted ordinary images; neither a
+parser exception nor a warmed detector cache can falsely satisfy the source-boundary negative.
+After construction, mutating each caller-owned node/event/column input leaves the independent
+source and output unchanged without freezing the caller. No source from another endpoint/order/run, copied handle or substituted
 branch is accepted. Equal displayed payloads at different endpoint tuples must still retain
 distinct declared input scopes. Later structural observations, eval attachments and terminal
 results cannot enter an earlier grant. Preserve complete source operands, original saved bytes,
@@ -2595,8 +2609,20 @@ Source outcome is closed:
 
 - `missing_context` has only `reason`, exactly `no_incoming_edge | no_recorded_window |
   no_second_attempt | no_recorded_review`.
-- `unavailable` has only `reason`, exactly `source_absent | provider_unavailable |
-  authored_source_absent | source_version_held | invalid_turn_clone | no_legal_recapture`.
+- `unavailable` has two closed alternatives. For `source_version_held`, it has exactly
+  `kind`, `reason` and required `dependency`: the exact registered pending source owner's RFC
+  slug from that requested factory's `EvidenceValueFactoryMeta.dependency` (without `.md`).
+  It cannot be `none`, empty, caller supplied, an error string or another source's owner.
+  Source-owner acquisition must establish the actual version hold; pending metadata alone
+  cannot turn a working computed source or qualification limit into unavailability. A returned
+  factory availability's dependency must agree with that exact owner. An unresolved nested
+  dependency without an authored source-specific mapping is `failed/source_contract_invalid`,
+  not permission to guess or erase the blocker. Existing opening `artifact_missing` with
+  `runtime-opening-identity` maps to this held outcome while that authority remains unlanded;
+  source-owner migration, not this wire declaration, changes the underlying availability.
+  All other unavailable alternatives have exactly `kind` and `reason`, with no dependency
+  field: `source_absent | provider_unavailable | authored_source_absent | invalid_turn_clone |
+  no_legal_recapture`.
   `no_legal_recapture` is admitted only for the strict overload projection above; neither
   invalid request horizons nor `budget_exhausted` are source-unavailability alternatives.
   Each requires actual
@@ -2631,7 +2657,11 @@ their cancellation remain source-owner implementation obligations, not establish
 **Disclosure binding:** `inspector.disclosure_receipt@1` is exactly `protocol`, `runId`, `branchId`,
 `nodeId`, `decisionDigest`, `requestedConfigDigest`, `effectiveConfigDigest`, `view`, `range`,
 `collectionKey`, ordered `sourceKeys`, ordered `sourceOrdinals`, `detailProjection`, ordered
-`componentDigests`, and `digest`. Use the existing canonical presentation-digest construction
+`componentDigests`, `sourceOutcome`, and `digest`. `sourceOutcome` is null for inventory/detail/
+limited-detail bodies. For source bodies it is the exact closed nonavailable outcome, including
+the held dependency; an available outcome instead contributes exactly `{kind:"available"}`
+because its page/collection/source/component identities are already bound by the fields above.
+Use the existing canonical presentation-digest construction
 over this namespace/body without digest. Bind the actual returned range/source occurrences as
 well as the exact request view/context; a request cursor alone does not bind the returned page.
 Inventory has null collection/detail, empty source/ordinal/component lists; absent/failed source
@@ -2639,6 +2669,9 @@ outcomes have null range/collection/detail and empty lists. Detail binds its one
 selected original ordinals and sole view ref. Limited detail binds its original source/ordinal
 and has no component. Client verifies all response/request/receipt equalities and parses each
 registered presentation receipt; server constructs them only through admitted source/renderers.
+The client requires the body-derived outcome summary to equal this receipt field and validates
+the held owner's exact source join; changing status, reason or dependency changes the existing
+receipt digest. A validly shaped dependency does not establish source acquisition or permission.
 No caller receipt or digest can supply access, facts or rendering authority.
 
 Every final response rechecks access, effective configuration, decision and source context after
@@ -3254,6 +3287,21 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — The authorized independent reviewer clears only the bounded D3842 and D3843
+  author corrections after inspecting their contract/controls and independently rerunning the
+  comparison and wire bundles. D3841's complete successor execution/legacy-source treatment
+  and the known supplier matrix remain open; the joint D3792 amendment is still returned and
+  unaccepted. These corrections neither implement production nor permit unavailable stubs.
+- 2026-10-15 — D3843 author repair separates the closed held-source outcome with its required
+  exact pending owner from dependency-free absence. The existing disclosure binds the returned
+  outcome summary, including its blocker; missing/foreign/extra dependencies and outcome swaps
+  refuse. A predecessor type sentinel fails before correction; actual opening unavailability
+  and bounded grammar controls pass after. This is not full response admission or acceptance.
+- 2026-10-15 — D3842 author repair makes complete original comparison graph/FEN admission
+  precede either prefix and every source access, including memo hits; the new source owns an
+  independent immutable snapshot without freezing callers. Disposable replay controls separate
+  terminal refusal from admitted ordinary-node corruption. The joint amendment stays unaccepted;
+  actual nominal constructors, seals, current receivers and native delivery are not implemented.
 - 2026-10-15 — Independent Inspector review returns D3792 on D3841, D3842 and D3843, separately from
   its explicitly outstanding supplier authoring. Record the exact findings in the review above;
   the amendment remains unaccepted, with no production, source or parent-status change.

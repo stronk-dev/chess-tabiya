@@ -1143,3 +1143,70 @@ Remaining obligations are independent acceptance, exact runtime supplier/context
 response/current-request/horizon/cancellation binding, source/version/qualification holds and
 actual authenticated/native delivery. This advances five prerequisite contracts, **not**
 Inspector, Review, Support or 1.0 completion. `[V]` research compilation and §4.11a.
+
+## Comparison original-position refusal — 2026-10-15, D3842
+
+The independent return is reproduced in the existing disposable comparison experiment:
+an original later ordinary-node FEN can survive event replay and graph traversal but fail
+the whole structural source. Narrowing to an earlier endpoint must not hide that invalidity.
+The initial new negative fails with a missing expected source-construction exception. After
+constructor validation, the separate structural-owner negative still fails; after per-column
+validation, counting accesses before the outer factory memo exposes one earlier read before
+the second invalid column is checked. A detector-cache-miss counter alone falsely reports
+zero. `[V]` `tools/d3792-inspector-demand/comparison-source.ts`, `build-comparison.mjs`,
+`packages/runtime/src/events.ts` and the successive `make inspector-comparison-source-research`
+results. These are corrections to this disposable model, not a claim of a live Inspector route.
+
+The final candidate validates both complete original graph/FEN populations before either prefix
+or source read. The existing structural owner prototype likewise validates both originals as
+a set before any access, including memo hits. The ordinary no-endpoint Compare control remains
+unchanged. An intermediate instrumentation revision incorrectly applied the new validation to
+that legacy control; another overbroad fixture assumed terminal replay admitted invalid FENs.
+Both assumptions are corrected: terminal outcome replay already validates its referenced FEN.
+No parser or production source is weakened. `[V]` the guarded builder, `events.ts`'s
+`outcome.reached` handling and the retained negative runs.
+
+Final output: **316 source-construction and470 structural-owner controls**, each over the same
+four both-color fixtures/62 prefix pairs. Twelve later-invalid original images are genuinely
+replay-admitted; four terminal images are refused by replay instead and are not counted as
+source-admitted negatives. Both malformed syntax and parseable kingless positions are covered
+on either original column. Every source-refusal control asserts zero outer-memo source reads.
+Existing complete populations remain1,020 structural items/fourteen eval deltas, with ten old-arm
+scope collisions explicitly retained as evidence of why new typed scope authority is needed.
+Saved bytes remain unchanged. Repetitions across builder variants do not add chess positions.
+`[V]` the target's bounded stdout and pinned population assertions; no raw capture is retained.
+
+The unaccepted comparison source contract now requires all-original-FEN admission and an
+independently retained immutable source snapshot without freezing callers. The prototype proves
+the ordering/refusal rule only, not nominal source constructors, mutation isolation, factory
+seals, access, current receivers or API/native delivery. Those still require real implementation
+after independent acceptance. D3841/D3843 and the explicit supplier authoring remain separate
+Inspector work. `[V]` `rfc/module-registration.md` §4.11a and the independent review record.
+
+## Held-source outcome identity — 2026-10-15, D3843
+
+The old proposed type accepts `unavailable/source_version_held` without its dependency. A
+compile-time negative marked `@ts-expect-error` therefore fails before repair as an unused
+expected error. The corrected closed alternative requires the exact registered pending source
+owner; ordinary absence alternatives forbid that field. This is inline draft-wire authoring,
+not a new production schema or a permit to convert compilation failures into absence. `[V]`
+`tools/d3792-inspector-demand/draft-wire.ts`, the predecessor
+`make inspector-source-contract-research` failure and `rfc/module-registration.md` §4.11a.
+
+The actual opening catalogue-membership factory returns `unavailable/artifact_missing` with
+dependency `runtime-opening-identity`; its declared hold remains unchanged. Eighteen bounded
+controls retain that exact dependency through JSON and the existing disclosure construction,
+refuse missing/empty/none/foreign/extra dependencies, dependency-bearing ordinary absence,
+unregistered or owner-free sources and source-outcome substitution. Changing returned status
+or dependency changes the existing disclosure digest. These controls exercise only the
+unavailable branch and receipt metadata, not full response parsing, current access, source
+delivery or receipt authority. `[V]` that probe, `evidence-factories.ts`'s opening factories,
+`presentationDigest` and the passing existing `make inspector-incoming-dependent-research`.
+
+The unchanged request grammar remains96 positive/491 refusals over75 sources. All318 dependent
+incoming-edge controls/218 requests and37 source-contract cases pass. The draft now requires
+actual source-owner hold evidence, exact response/receipt outcome equality and distinct missing,
+failed and successful-empty results; arbitrary pending metadata is not a universal unavailable
+stub. Missing supplier-specific mappings and the complete successor consumer remain D3792/D3841
+work. Independent review and actual API/client/native admission still precede delivery. `[V]`
+the same targets, `inspector-source-contract-research` and unaccepted RFC clauses.

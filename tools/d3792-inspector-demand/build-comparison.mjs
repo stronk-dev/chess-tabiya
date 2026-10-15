@@ -13,6 +13,14 @@ for (const variant of ["comparison_baseline", "comparison_candidate", "compariso
     outfile: resolve(directory, `${variant}.mjs`), bundle: true, platform: "node", format: "esm",
     nodePaths: [resolve("packages/runtime/node_modules")],
     plugins: variant === "comparison_baseline" ? [] : [{ name: "d3820-prefix-source", setup(builder) {
+      builder.onLoad({ filter: /\/packages\/runtime\/src\/evidence-factories\.ts$/ }, args => {
+        const source = readFileSync(args.path, "utf8");
+        // Count source reads before the factory's outer memo, not only detector cache misses.
+        const anchor = "function cachedStructuralReading(fen: string): StructuralReading {";
+        assert.equal(source.split(anchor).length, 2, "D3842 structural reader counter anchor changed");
+        return { contents: source.replace(anchor, `${anchor}\n  Reflect.set(globalThis, "__d3842StructuralReads", (Reflect.get(globalThis, "__d3842StructuralReads") ?? 0) + 1);`),
+          loader: "ts", resolveDir: resolve(args.path, "..") };
+      });
       builder.onLoad({ filter: /\/packages\/runtime\/src\/compare\.ts$/ }, args => {
         let source = readFileSync(args.path, "utf8");
         const replace = (before, after) => { assert.equal(source.split(before).length, 2, "D3820 original source anchor changed"); source = source.replace(before, after); };
@@ -21,6 +29,7 @@ for (const variant of ["comparison_baseline", "comparison_candidate", "compariso
         replace('  const paths = branchIds.map((id) => branchPath(run, id));', `
   const originalPaths = branchIds.map((id) => branchPath(run, id));
   const endpoints = options.researchThroughNodeIds;
+  if (endpoints !== undefined) for (const path of originalPaths) for (const node of path) researchPositionFromFen(node.fen);
   if (endpoints !== undefined && endpoints.length !== branchIds.length) throw new TypeError("D3820 endpoint arity");
   const paths = originalPaths.map((path, index) => {
     if (endpoints === undefined) return path;
@@ -31,6 +40,7 @@ for (const variant of ["comparison_baseline", "comparison_candidate", "compariso
     return permitted;
   });`);
         sites++;
+        source = 'import { positionFromFen as researchPositionFromFen } from "./position-cache.js";\n' + source;
         return { contents: source, loader: "ts", resolveDir: resolve(args.path, "..") };
       });
       if (variant === "comparison_structural") builder.onLoad({ filter: /\/packages\/runtime\/src\/compare-strip-values\.ts$/ }, args => {
@@ -41,9 +51,12 @@ for (const variant of ["comparison_baseline", "comparison_candidate", "compariso
           source = source.replace(before, `researchComparisonPrefix(run, comparison, ${branch})`);
         }
         source += `
-// D3820 experiment only: original graph validation precedes source-side narrowing.
+// D3842 experiment only: original graph AND every original FEN precede source-side narrowing.
 function researchComparisonPrefix(run: DrillRun, comparison: BranchComparison, branchId: string) {
-  const original = branchPath(run, branchId);
+  const originals = comparison.columns.map(column => ({ branchId: column.branchId, path: branchPath(run, column.branchId) }));
+  for (const value of originals) for (const node of value.path) researchPositionFromFen(node.fen);
+  const original = originals.find(value => value.branchId === branchId)?.path;
+  if (original === undefined) throw new TypeError("D3842 structural branch not in comparison");
   const endpoint = comparison.columns.find(column => column.branchId === branchId)?.leafNodeId;
   const index = original.findIndex(node => node.id === endpoint);
   if (index < 0) throw new TypeError("D3820 structural endpoint not on original branch");
@@ -51,6 +64,7 @@ function researchComparisonPrefix(run: DrillRun, comparison: BranchComparison, b
 }
 `;
         structuralSites++;
+        source = 'import { positionFromFen as researchPositionFromFen } from "./position-cache.js";\n' + source;
         return { contents: source, loader: "ts", resolveDir: resolve(args.path, "..") };
       });
     } }],

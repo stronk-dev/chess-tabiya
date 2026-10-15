@@ -5,13 +5,15 @@ import { compileAssistanceRequest, parseRequestedAssistanceV1, type RequestedAss
 import { evidenceValueRouteRegistry } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { routeReads } from "../../packages/runtime/src/module-query-sources.js";
 import type { ModuleDecisionStamp } from "../../packages/runtime/src/module-query.js";
-import type { PresentationReceipt } from "../../packages/runtime/src/presentation-contract.js";
+import { presentationDigest, type PresentationReceipt } from "../../packages/runtime/src/presentation-contract.js";
+import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import type { InspectorFamilyId } from "../../packages/runtime/src/module-contract.js";
 
 const key = (ref: { id: string; version: number }) => `${ref.id}@${ref.version}`;
 const sources = new Set(MODULE_CONSUMER_ACCEPTS.full_inspector.map(key));
 const windows = new Set(RECORDED_PATH_SUCCESSOR_REFS.map(key));
 const arms = new Map(evidenceValueRouteRegistry().map(row => [row.route, row.arms]));
+const factoryMetadata = new Map(evidenceValueRouteRegistry().map(row => [row.route, row]));
 const edgeDependencies = new Set(["derived.tactic.discovered_executed@1", "derived.tactic.fork_survives_reply@1",
   "derived.tactic.overloaded_defender_response_conflict@1", "rules.tactic.consequence.forced_mate_after_move@1",
   "rules.tactic.consequence.forced_mate_after_move@2"]);
@@ -46,15 +48,22 @@ export interface DraftRequest {
 }
 export interface DraftRange { start: number; count: number; total: number; next: number | null }
 export type DraftContextFailure = "no_incoming_edge" | "no_recorded_window" | "no_second_attempt" | "no_recorded_review";
+export type DraftUnavailableOutcome =
+  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "invalid_turn_clone" | "no_legal_recapture" }
+  | { kind: "unavailable"; reason: "source_version_held"; dependency: string };
 export type DraftSourceOutcome =
   | { kind: "missing_context"; reason: DraftContextFailure }
-  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "source_version_held" | "invalid_turn_clone" | "no_legal_recapture" }
+  | DraftUnavailableOutcome
   | { kind: "failed"; reason: "source_contract_invalid" | "provider_failed" | "source_lookup_failed" }
   | { kind: "no_witness" }
   | { kind: "available"; collectionKey: string; range: DraftRange; collected: number; displayed: number; deferred: number;
       facts: readonly { sourceKey: string; disposition: "presented" | "deferred";
         exceeded: readonly ("facts" | "words" | "marks" | "arrows")[]; detail: DraftDetailRef | null }[];
       presentation: PresentationReceipt };
+// @ts-expect-error D3843: a held source must retain its declared upstream dependency.
+const missingHeldDependency: DraftSourceOutcome = { kind: "unavailable", reason: "source_version_held" };
+void missingHeldDependency;
+export type DraftDisclosureOutcome = Exclude<DraftSourceOutcome, { kind: "available" }> | { kind: "available" };
 export interface DraftDisclosure {
   protocol: "inspector.disclosure_receipt@1";
   runId: string; branchId: string; nodeId: string; decisionDigest: string;
@@ -62,6 +71,7 @@ export interface DraftDisclosure {
   view: DraftView; range: DraftRange | null; collectionKey: string | null;
   sourceKeys: readonly string[]; sourceOrdinals: readonly number[];
   detailProjection: DraftDetailRef | null; componentDigests: readonly string[]; digest: string;
+  sourceOutcome: DraftDisclosureOutcome | null;
 }
 export type DraftResponse =
   | { protocol: "inspector.query_page@1"; kind: "refused";
@@ -86,6 +96,27 @@ function exact(value: unknown, keys: readonly string[]): Record<string, unknown>
 }
 function text(value: unknown): asserts value is string { assert(typeof value === "string" && value.trim() !== ""); }
 function ordinal(value: unknown): asserts value is number { assert(Number.isSafeInteger(value) && (value as number) >= 0); }
+// Only the returned unavailable branch, NOT full response/source/access admission.
+export function parseDraftUnavailableOutcome(projection: string, value: unknown): DraftUnavailableOutcome {
+  assert(sources.has(projection));
+  const row = record(value);
+  assert.equal(row.kind, "unavailable");
+  if (row.reason === "source_version_held") {
+    exact(row, ["kind", "reason", "dependency"]); text(row.dependency);
+    const meta = factoryMetadata.get(projection)!;
+    assert.notEqual(meta.dependency, "none");
+    assert.equal(row.dependency, meta.dependency, "held dependency must be the exact registered source owner");
+    assert(meta.pending !== undefined && meta.pending.trim() !== "", "registration alone is not an unresolved source hold");
+  } else {
+    exact(row, ["kind", "reason"]);
+    assert(["source_absent", "provider_unavailable", "authored_source_absent", "invalid_turn_clone", "no_legal_recapture"].includes(row.reason as string));
+    if (row.reason === "no_legal_recapture") assert.equal(projection, "derived.tactic.overloaded_defender_response_conflict@1");
+  }
+  return Object.freeze(structuredClone(row)) as DraftUnavailableOutcome;
+}
+export function assertDraftUnavailableBinding(projection: string, outcome: unknown, disclosureOutcome: unknown): void {
+  assert.deepEqual(parseDraftUnavailableOutcome(projection, outcome), parseDraftUnavailableOutcome(projection, disclosureOutcome));
+}
 function context(value: unknown): DraftSourceContext {
   const row = record(value);
   switch (row.kind) {
@@ -246,3 +277,39 @@ for (const range of [{ start: 0, count: 0, total: 1, next: null }, { start: 0, c
   assert.throws(() => assertDraftRange(range)); refusals++;
 }
 console.log(JSON.stringify({ scope: "D3801 disposable request/context and page-range grammar only; NOT response admission, source execution, access or production", sources: sources.size, positives, refusals }));
+
+// D3843: exact unavailable outcome and disclosure binding, not an invented provider response.
+const opening = "theory.opening.catalogue_membership@1";
+const actualOpening = invokeEvidenceValueRoute(opening, { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" });
+assert.equal(actualOpening.kind, "unavailable");
+assert("dependency" in actualOpening && actualOpening.dependency === "runtime-opening-identity");
+const held: DraftUnavailableOutcome = { kind: "unavailable", reason: "source_version_held", dependency: actualOpening.dependency };
+const admittedHeld = parseDraftUnavailableOutcome(opening, JSON.parse(JSON.stringify(held)));
+assertDraftUnavailableBinding(opening, held, admittedHeld);
+let absenceChecks = 3;
+const rejectAbsence = (projection: string, value: unknown) => {
+  assert.throws(() => parseDraftUnavailableOutcome(projection, value)); absenceChecks++;
+};
+for (const value of [missingHeldDependency, { ...held, dependency: "provider-exchange-and-execution" },
+  { ...held, dependency: "none" }, { ...held, dependency: "" }, { ...held, dependency: null },
+  { ...held, diagnostic: "private provider error" }, { kind: "unavailable", reason: "provider_unavailable", dependency: held.dependency }]) rejectAbsence(opening, value);
+rejectAbsence("rules.mobility.reading.legal_moves@1", held);
+rejectAbsence("not_registered@1", held);
+rejectAbsence(opening, { kind: "unavailable", reason: "no_legal_recapture" });
+assert.throws(() => assertDraftUnavailableBinding(opening, held, { kind: "unavailable", reason: "provider_unavailable" })); absenceChecks++;
+const disclosureBody: Omit<DraftDisclosure, "digest"> = {
+  protocol: "inspector.disclosure_receipt@1", runId: "run", branchId: "main", nodeId: "n2",
+  decisionDigest: `sha256:${"a".repeat(64)}`, requestedConfigDigest: `sha256:${"b".repeat(64)}`,
+  effectiveConfigDigest: `sha256:${"c".repeat(64)}`,
+  view: { kind: "source", projection: opening, context: { kind: "position" }, start: 0, collectionKey: null },
+  range: null, collectionKey: null, sourceKeys: [], sourceOrdinals: [], detailProjection: null,
+  componentDigests: [], sourceOutcome: admittedHeld,
+};
+const bound = presentationDigest("inspector.disclosure_receipt@1", disclosureBody);
+assert.equal(presentationDigest("inspector.disclosure_receipt@1", JSON.parse(JSON.stringify(disclosureBody))), bound); absenceChecks++;
+for (const sourceOutcome of [null, { kind: "unavailable", reason: "provider_unavailable" },
+  { ...held, dependency: "provider-exchange-and-execution" }]) {
+  assert.notEqual(presentationDigest("inspector.disclosure_receipt@1", { ...disclosureBody, sourceOutcome }), bound); absenceChecks++;
+}
+console.log(JSON.stringify({ scope: "D3843 disposable unavailable-branch/receipt metadata controls only; NOT full response, source authority or API",
+  absenceChecks, actualOpeningDependencyRetained: true, nonHeldHasNoDependencyField: true }));

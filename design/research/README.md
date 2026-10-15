@@ -75,6 +75,20 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Held-source outcome identity, 2026-10-15 ([[D3843]]): a predecessor type negative proves
+dependency loss; the corrected inline draft retains the actual opening source owner through
+JSON and the existing disclosure.18 bounded absence/binding controls and unchanged96/491
+request grammar,318 dependent-source controls and37 source-contract cases pass. No full
+response admission or production follows. `[V]` `module-evidence-assembly.md` §Held-source
+outcome identity and the existing Inspector research Make targets.
+
+Comparison original-position refusal, 2026-10-15 ([[D3842]]): the existing guarded experiment
+reproduces constructor/owner refusal loss and a memo-masked ordering error. Both-color controls
+now validate both original graph/FEN populations before either prefix/source read:316/470 checks,
+62 pairs, twelve replay-admitted invalid images and four distinct terminal replay refusals.
+No production constructor or source qualification follows. `[V]` `module-evidence-assembly.md`
+§Comparison original-position refusal and `make inspector-comparison-source-research`.
+
 Dependent incoming-edge sources, 2026-10-15 ([[D3836]]): five exact existing factories execute
 from actual recorded edges with 318 controls/218 requests, both colors, four mate horizons and
 two SQLite imports. This supplies bounded source/parameter contract input, not Inspector

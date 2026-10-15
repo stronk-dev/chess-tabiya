@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:495d94bdee15f8a9d6af86693cbb10eaf86e9a7d3b9fd8a94c618e220092faf9",
+    "roadmap": "sha256:37831ab33e40d2b43f40a3eed4c1f203bcf14a746fa42e83356463a42905e2c1",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:c595f94a8924f1d5e9cf56137b1dcb6368578525b053b267e97a9dba31d88ea4",
+    "workState": "sha256:5bb486aa3b51356a9b7eae16b03fefda2bb13c62adf13b702c3411e15ca96017",
     "rfcRegister": "sha256:deed655632924fa30ec63c61eedcf6d73b064ecc95a8da4a020ce6484b45832e",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 630,
+      "todo": 628,
       "doing": 18,
       "blocked": 1086,
-      "done": 1696,
+      "done": 1698,
       "refused": 162
     },
     "workItems": {
@@ -466,7 +466,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "The authorized independent review returns unaccepted D3792 on D3841 (complete successor execution/legacy holds), D3842 (original comparison-path FEN refusal before narrowing) and D3843 (held-dependency wire identity). Read-only source checks and two in-memory controls expose the missing execution image and hidden later-FEN invalidity; 75 declared refs are not complete source acquisition. Corrections have explicit owners and a compact review. D3836's source research stands; unfinished suppliers, independent re-review/acceptance, typed constructors, current access and real API/client/native delivery remain. D3840's separate accepted production repair passes every normal local tier: 5,875 software, seven performance, 257 content, 397 browser passes, one configured optional Maia skip and 112 unretried composition cells. It does not implement Inspector. No source retirement, default change, qualification, content or whole-capability/release promotion.",
+        "summary": "Independent re-review clears only D3842 original comparison graph/FEN refusal and D3843 exact held-dependency wire/disclosure author corrections. Existing scoped targets pass316/470 comparison controls,18 absence/receipt controls,96/491 request grammar,318 dependent-source controls/218 requests and37 source-contract cases; eight existing execution-census controls also pass. D3841 complete successor execution/legacy holds and known supplier authoring still return D3792: all75 source obligations remain, and current complete Inspector compilation refuses rather than becoming ordinary absence. Independent acceptance, typed constructors, current access and real API/client/native delivery remain. Production is unchanged from13781fb7's full normal local proof (5875 software,seven performance,257 content,397 browser passes/one configured optional Maia skip,112 unretried composition cells), not freshly rerun by this draft-only correction. No source retirement, default, qualification, content or whole-capability/release promotion.",
         "impact": "held",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",

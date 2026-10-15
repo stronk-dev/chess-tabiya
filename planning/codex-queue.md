@@ -1,10 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
 2026-10-15 — Marco authorizes independent Inspector review; it returns D3792 on
-[[D3841]], [[D3842]] and [[D3843]]: complete successor execution/held-source representation, original-path
-FEN refusal before comparison narrowing, and held-dependency wire identity. Exact review:
+[[D3841]], [[D3842]] and [[D3843]]. D3842 original-path FEN refusal and D3843 held-dependency
+wire identity now have bounded author corrections independently cleared, not production delivery.
+The existing targets pass316/470 comparison controls,18 unavailable/receipt controls,96/491
+request grammar,318 dependent-source controls/218 requests and37 source-contract cases. D3841's
+complete successor execution/held-source representation and known supplier matrix remain open.
+The normal execution census still refuses the complete75-binding Inspector; do not suppress that
+failure or retire sources. Exact review:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`. Finish those
-author corrections and the explicitly outstanding supplier matrix, then independent re-review;
+remaining author correction and the explicitly outstanding supplier matrix, then independent re-review;
 no self-acceptance or speculative API/client implementation. D3358 is reconciled as already
 superseded by D3528; do not build new source-hash compatibility machinery. D3839's position
 cache experiment is rejected. D3840's separate accepted-contract edge reuse is complete locally:
