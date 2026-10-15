@@ -544,6 +544,16 @@ inspector-recorded-context-research:
 	./node_modules/.bin/esbuild tools/d3792-inspector-demand/recorded-context.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/recorded-context.mjs --log-level=warning
 	$(CI_NODE) .cache/d3792-inspector-demand/recorded-context.mjs
 
+# Permanent comparison-source grounding through factories and native saved Review.
+.PHONY: test-comparison-grounding
+.PHONY: comparison-grounding-browser-check
+comparison-grounding-browser-check:
+	./node_modules/.bin/playwright test tests/browser/comparison-castling-routes.spec.ts
+
+test-comparison-grounding:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/compare.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/tactics.test.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts
+	$(MAKE) typecheck
+
 # Permanent complete pivotal-source grounding and unchanged downstream values.
 .PHONY: test-pivotal-grounding
 test-pivotal-grounding:

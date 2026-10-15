@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:111d30807fb2f95f6b3b813f2330b165a5f8c3bbf4f5ea51c02ae963d8f0482b",
+    "roadmap": "sha256:6d39b6fdcc180ee249b44b5c4712b4c2cdec05f8cc32be10923849015741d19b",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:b5e13a1a246fd2f3b97b17dde5e9cf44c7372b3d632fcd5c998b7a88cdaa5bae",
+    "workState": "sha256:5262c9a2aae2417c1a3e7432517164c98923d65abdd31500a89125c32fa66869",
     "rfcRegister": "sha256:25fe2fb61a4108b91f295f756be869a3b88fda5eae266f7cf6fa0dec280e6804",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 17,
       "blocked": 1086,
-      "done": 1683,
+      "done": 1684,
       "refused": 161
     },
     "workItems": {
@@ -466,7 +466,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3825 closes the bounded pivotal witness question: 465 controls over 207 stored legal prefixes exclude four anchors lacking their later witness. D3826/D3827 close accepted evidence-value-authority section 3.4 grounding defects: each human marker retains its own recorded engine/candidate image through the existing page arm, phase change retains two definite readings/positions, and sustained collapse retains all three same-side readings/positions. Three predecessor failures and actual Review packet controls pass. Full frozen software 5,734/seven performance pass; governance catches a duplicate roadmap path. Only that duplicate is corrected, then normal remaining governance/content/build/all four browser tiers exit zero: 257 content, 377 browser passes, one optional Maia skip, no retries, 59 matrix and 112 unretried composition cells plus packaged-production proof. All 343 semantic outcomes remain with only 62 implementation stamp changes. Payload meanings, full-tip populations, public input arms/versions, eligibility and authored content remain. Module-registration section 4.11a still owes independently accepted scoped identity/factory/access/response/native contracts; no scoped operation, qualification, whole capability/milestone or remote/release promotion.",
+        "summary": "D3828 closes the accepted comparison-route correction: simultaneous legal relocations retain original rook identity through stationary/crossing/non-corner Chess960 castling and later moves, with no stationary no-op segment. Ninety predecessor geometry failures reproduce the defect. All 112 supplied-FEN cases, the 292-case focused suite/types and sixteen native both-color desktop/phone import/retry/Compare/Review-reload controls pass. Complete frozen normal verification/build/all four browser tiers exit zero: 5,846 software/391 files, seven performance/four files, 257 content/26 files and 393 browser passes, one optional Maia skip, zero retries, 59 matrix and 112 unretried composition cells. The two browser harness faults are corrected and retained in the log. All 343 semantic case outcomes remain, with only implementation/predicate stamps refreshed. D3825 bounded pivotal research and D3826/D3827 grounding repairs stand. Meanings, full-tip populations, public input arms/versions, eligibility and authored content remain. Module-registration section 4.11a still owes independent scoped-source acceptance and actual delivery; no qualification, whole capability/milestone or remote/release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -489,6 +489,9 @@
           "tools/d3792-inspector-demand/build-pivotal.mjs",
           "packages/runtime/src/pivotal.ts",
           "packages/runtime/src/pivotal-evidence.test.ts",
+          "packages/runtime/src/compare-strip-values.ts",
+          "packages/runtime/src/compare.test.ts",
+          "tests/browser/comparison-castling-routes.spec.ts",
           "rfc/evidence-value-authority.md",
           "tools/d3792-inspector-demand/build-prefix.mjs",
           "tools/d3792-inspector-demand/prefix-source.ts",
@@ -654,6 +657,11 @@
             "kind": "work_state",
             "id": "D3827",
             "digest": "sha256:cc812fff7b46f95de44404bf39ad144bdbce4e1ec18c13c6de586f88835b785a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3828",
+            "digest": "sha256:5f9d3279a530f47bcd8809f0544ffa32d6d4a1e7ec3f8ce28ed334012279f7bd"
           },
           {
             "kind": "rfc",

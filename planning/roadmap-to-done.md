@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3827]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3828]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,15 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+The completed D3828 correction restores physical rook identity in comparison routes for
+stationary, crossing and non-corner Chess960 castling. Ninety of 112 supplied-FEN geometry
+controls fail before the repair; all 112 now pass through the existing source/factory/Compare
+path. All sixteen native saved-Review desktop/phone cases and the complete frozen normal gates
+pass: 5,846 software, seven performance, 257 content and 393 browser passes across all four
+tiers, with one optional Maia skip, 59 matrix cases and 112 unretried composition cells.
+This is an accepted-contract repair, not the still-unaccepted scoped Inspector operation or a
+new whole-product capability. The earlier harness import/navigation failures remain logged.
 
 [[D3825]] answers pivotal prefix witness scope over 207 actual stored legal prefixes; a marker
 anchor alone cannot supply its later witness. The probe also exposes [[D3826]]/[[D3827]]'s
@@ -236,10 +245,12 @@ ten awaiting discharge and 24 draft documents; its 75 archived implementation re
 history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3826/D3827's accepted pivotal grounding repairs and D3825's bounded
-scope research are closed. Full local results on the repaired production bytes are 5,734 software,
-seven performance, 257 content and all four browser tiers, with 112 unretried composition cells.
-The original duplicate-checkpoint refusal and corrected remaining-gates run remain recorded.
+Current local checkpoint: D3828's accepted comparison-route correction is finished with complete
+normal verification/build/all four browser tiers exiting zero: 5,846 software, seven performance,
+257 content and 393 browser passes, one optional Maia skip, zero retries and 112 composition cells.
+D3826/D3827's accepted pivotal grounding repairs and D3825's bounded scope research remain closed
+at their preceding checkpoint. Their original duplicate-checkpoint refusal and corrected
+remaining-gates run remain recorded.
 D3822/D3823's accepted calibration evidence-to-card repair is verified
 and closed; D3821 disclosure, D3818 result attribution and D3819/D3820 source research stand.
 That preceding calibration checkpoint passed 5,731 software, seven performance and 257 content tests, all browser

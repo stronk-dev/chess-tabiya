@@ -32,6 +32,12 @@ arm (D3826), never the newest sibling's selection at the shared node. Copied ren
 have no producer-owned source operand. Existing whole-tip populations remain unchanged;
 this does not introduce the still-draft scoped Inspector source operation.
 
+Recorded comparison routes use the legal move's simultaneous physical relocations, including
+Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
+are captured before either origin is cleared; a stationary actor adds no route segment. Later
+rook moves retain the original rook label through the existing factory and Compare renderer.
+The route payload/version and full-tip scope do not change.
+
 The public binding summary resolves fallback policy by the complete consumer id/version tuple.
 Coexisting predecessors and successors keep their own policy even when declaration order changes;
 a missing exact consumer refuses rather than borrowing another version. This compatibility summary

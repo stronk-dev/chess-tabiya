@@ -1,5 +1,8 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
+import { recordedPieceRoutes } from "./compare-strip-values.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "./semantic-validation.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 import {
   BranchQueryError,
@@ -97,6 +100,46 @@ function branchedRun(): DrillRun {
 }
 
 describe("branch comparison", () => {
+  for (let kingFile = 0; kingFile < 8; kingFile++) for (let rookFile = 0; rookFile < 8; rookFile++) {
+    if (kingFile === rookFile) continue;
+    for (const black of [false, true]) {
+      const king = String.fromCharCode(97 + kingFile), rook = String.fromCharCode(97 + rookFile);
+      const rank = Array<string>(8).fill("."); rank[kingFile] = "K"; rank[rookFile] = "R";
+      const home = rank.join("").replace(/\.+/gu, empty => String(empty.length));
+      const whiteFen = `${rookFile === 0 ? "7k" : "k7"}/8/8/8/8/8/8/${home} w ${rook.toUpperCase()} - 0 1`;
+      const fen = black ? mirrorSemanticFen(whiteFen, "color_and_vertical") : whiteFen;
+      const transform = (uci: string) => black ? mirrorSemanticUci(uci, "color_and_vertical") : uci;
+      const square = (value: string) => black ? `${value[0]}8` : value;
+      const rookTarget = rookFile < kingFile ? "d1" : "f1";
+      const kingTarget = rookFile < kingFile ? "c1" : "g1";
+      it(`tracks exact simultaneous castling and later rook movement: ${black ? "black" : "white"} king ${king} rook ${rook}`, () => {
+        let run = createRun({ id: `route-${king}-${rook}-${black}`, startFen: fen, packId: "fixture",
+          packDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+        const root = run.activeCursor.nodeId;
+        const castle = transform(`${king}1${rook}1`);
+        run = commitMove(run, castle, { at }).run;
+        const original = run.activeCursor.branchId;
+        const castleRoutes = recordedPieceRoutes(branchPath(run, original));
+        const color = black ? "Black" : "White";
+        const rookLabel = `${color} rook from ${square(`${rook}1`)}`, kingLabel = `${color} king from ${square(`${king}1`)}`;
+        expect(castleRoutes.find(route => route.pieceId === rookLabel)?.squares).toEqual(rookTarget === `${rook}1` ? undefined : [square(`${rook}1`), square(rookTarget)]);
+        expect(castleRoutes.find(route => route.pieceId === kingLabel)?.squares).toEqual(kingTarget === `${king}1` ? undefined : [square(`${king}1`), square(kingTarget)]);
+        for (const move of [rookFile === 0 ? "h8g8" : "a8b8", `${rookTarget}${rookTarget[0]}2`]) run = commitMove(run, transform(move), { at }).run;
+        const path = branchPath(run, original), saved = JSON.stringify(run);
+        const expected = [square(`${rook}1`), ...(rookTarget === `${rook}1` ? [] : [square(rookTarget)]), black ? `${rookTarget[0]}7` : `${rookTarget[0]}2`];
+        expect(recordedPieceRoutes(path).find(route => route.pieceId === rookLabel)?.squares).toEqual(expected);
+        expect(JSON.stringify(run)).toBe(saved);
+        run = fork(rewind(run, root, at).run, root, { at }).run;
+        run = commitMove(run, transform(`${rook}1${rook}2`), { at }).run;
+        const comparison = compareBranches(run, [original, run.activeCursor.branchId]);
+        const values = invokeEvidenceValueRoute("derived.compare.piece_route@1", { run, comparison, branchId: original });
+        expect(values.find(value => value.payload.pieceId === rookLabel)?.payload.squares).toEqual(expected);
+        const strips = comparisonStrips(run, comparison);
+        expect(strips[original]!.routes.find(route => route.pieceId === rookLabel)?.squares).toEqual(expected);
+      });
+    }
+  }
+
   it("renders retained structural operands instead of raw detector ids", () => {
     expect(renderStructuralObservationChange({ kind: "isolated_pawn", color: "white", file: "d", squares: [] })).toBe("White isolated pawn appeared on the d-file.");
     expect(renderStructuralObservationChange({ kind: "piece_reach_count", color: "black", role: "knight", squares: ["f6"], count: 5 })).toBe("Black knight piece reach count appeared on f6; count 5.");

@@ -109,7 +109,7 @@ function retainedTarget(after: ReturnType<typeof positionFromFen>, duty: Defende
 }
 
 /** Physical piece relocations for an already normalized legal move, not its UCI encoding. */
-function pieceRelocations(position: Chess, move: NormalMove): readonly Pick<NormalMove, "from" | "to">[] {
+export function pieceRelocations(position: Chess, move: NormalMove): readonly Pick<NormalMove, "from" | "to">[] {
   const castle = castlingSide(position, move);
   return castle === undefined ? [move] : [
     { from: move.from, to: kingCastlesTo(position.turn, castle) },

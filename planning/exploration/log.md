@@ -29211,3 +29211,58 @@ Campaign was the one capability with no API, route or content. Now:
   work. Full Review local acquisition, useful Sight/Nudge, calibration, Campaign/content and
   whole release obligations remain open. No owner-use discharge or goal pause/completion.
   Current-revision remote CI is not established; nothing is pushed, published or deployed.
+
+### 2026-10-15 — D3828 comparison physical-route repair, verification pending
+
+- Finish the in-flight accepted-contract repair before the owner's full 1.0 inventory.
+  The old route tracker assumes two-square king movement and corner rooks. Ninety of 112
+  legal supplied-FEN geometry controls fail: stationary, crossing and non-corner Chess960
+  castling loses or misattributes rook identity or records a stationary no-op segment.
+- Reuse the existing module-internal legal physical-relocation helper. Capture both origin
+  identities before clearing either, then install both actors simultaneously; stationary
+  actors add no route segment. Existing normal capture/en-passant, original-piece labels,
+  factory payload/version and full-tip scope remain. No new package barrel export or scoped
+  Inspector operation. All 292 focused cases/types pass, including the complete 112-case
+  matrix through actual runtime branches, the sole factory and Compare presentation.
+- Native import/retry/Compare controls initially stop on a test-helper package import.
+  After correcting that harness-only import, four desktop cases fail on the second visit:
+  Compare navigates to Play, so reload correctly returns Play rather than Review. Stop the
+  remaining duplicate failures (four failed, one interrupted, eleven unrun), then explicitly
+  reopen the saved Review URL and reload before the second comparison. All sixteen fixed
+  desktop/touch, both-color cases pass, including actual HTTP-owned moves, original node/
+  cursor/branch/event preservation, complete visible physical routes and no horizontal overflow.
+- Refresh existing implementation-bound semantic records, then freeze source, fixtures and
+  consumed documents for normal make roadmap-receipt verify-awake build test-browser-ci-awake.
+  D3828 stays doing until those gates finish. Scoped-source acceptance, full semantic
+  qualification, official content, whole capabilities and current remote/release proof remain.
+
+### 2026-10-15 — D3828 finished; owner-requested full 1.0 inventory
+
+- The complete frozen normal make roadmap-receipt verify-awake build test-browser-ci-awake
+  chain exits zero: software 5,846/391 files, performance seven/four, content 257/26, clean
+  types/governance/packaging/build and all four browser tiers. Browser smoke328, content5,
+  matrix59 and packaged-production1 total393 passes, one existing optional live-Maia skip,
+  zero retries. Matrix JSON is expected59/skipped0/unexpected0/flaky0; all112 composition
+  cells pass. Do not run a list command over the successful report. Source/fixtures and
+  consumed documents remain unchanged throughout the complete chain.
+- Close D3828 through its actual permanent source/factory/Compare regression path. The
+  subsequent tracker command rejects my unnecessary live owner/since fields for a done row
+  before writing; the normal transition without those fields succeeds. No product/test change.
+  Refresh the same ledger/state/roadmap/checkpoint/receipt and append this closeout before commit.
+- The current consolidated inventory remains planning/roadmap-to-done.md's fourteen-area
+  table, not another report or queue. UX282 complete/263 live/24 retired; ledger3577 total,
+  1732 live assigned (629todo/17doing/1086blocked), 1684done/161refused; zero untriaged.
+  Four active/five blocked milestones, all fourteen whole capabilities incomplete, 462 older
+  prose-only closures, 42implementing/10awaiting/24draft product RFCs and 75 implemented
+  archives/one superseded. The catalogue remains47/285/42/556; all343 canonical case outcomes
+  pass over81 subjects but zero subjects are fully qualified. Fifty installed draft pack
+  documents and zero official graduates remain separate from candidate/fixture populations.
+- The next delivery frontier is existing source-to-Sight/Nudge/Inspector/Review contracts and
+  useful complete journeys, then calibrated bots/learner skills/Campaign curriculum and rewards,
+  representative official content and native release/lifecycle proof. The scoped Inspector
+  operation and semantic-consequence-search remain unaccepted; this repair accepts neither.
+  Registration, a passing fixture, a named module or a playable bot card does not close those.
+- A fresh read of GitHub main still shows 78fd302f verify38560140789 successful and browser
+  38560140733 failed. Its Theory race correction is local, not current-revision remote
+  qualification. Nothing is pushed/published/deployed, no owner-use discharge is invented,
+  and the full 1.0 goal is neither paused nor completed by this finish-and-overview checkpoint.
