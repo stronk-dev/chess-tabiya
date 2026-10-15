@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Opening history and sparse Explorer authoring, 2026-10-15 ([[D3857]]/[[D3858]]): installed-opening
+§3a/F2 §2.3k propose history@2 with complete positions/matched and negative lookup authority,
+authentic empty results and the fourth exact reduction binding; old@1 stays. Inspector source
+outcomes retain actual installed artifact reasons and Explorer-only below_floor/total/population.
+40 opening/30 sparse shape/receipt controls and31/44 map/34 negatives pass in normal research
+targets. Independent bounded reviews find no wording blocker, not implementation/source/joint
+acceptance. D3859 and exact scoped Review adapter image remain. `[V]` `module-evidence-assembly.md`
+§Opening history and sparse Explorer contract correction; dated independent review.
+
 Complete Inspector review returns, 2026-10-15 ([[D3841]]/[[D3857]]–[[D3859]]): deepest-opening history
 requires a full prefix, not its declared singleton pair;28 new real-catalogue/recorded-position
 controls preserve seven visits across nine nodes, repeated keys, branch/prefix isolation and

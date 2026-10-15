@@ -788,3 +788,36 @@ No further concrete normative gap is found in the inspected packet, material, de
 detail and shape contracts beyond these returns, D3857/D3858 and the separate D3851 scope
 choice. Missing future issuers, bindings and qualification remain implementation obligations.
 Reviewer runs no tests, edits nothing and grants no component or joint acceptance.
+
+### D3857 complete opening-history correction — bounded independent check
+
+Main authors installed-opening §3a/F2 §2.3k's additive history@2 with a genuine complete
+root-inclusive recorded prefix, actual point lookup/invocation/result authority, all matched
+and negative rows, exact original occurrences, authentic empty result and acyclic receipts.
+Provider §1a adds only this fourth exact operation/source binding. Old history@1 stays; the
+source-owning service retains actual installed missing/invalid/digest outcomes instead of
+collapsing them through the old factory. Inspector explicitly replaces its inventory slot and
+binds the retained retrospective renderer to the exact new source. Review Map's complete
+coordinated successor image remains D3859's prerequisite, not supplied by this bounded change.
+
+Independent read-only review finds no concrete normative blocker in this correction. Every
+positive has actual cited endpoint/position inputs; empty output mints no theory/fact value.
+Complete negative source authority and output receipt ordering are coherent, not presumed
+present in old code. No tests, edits or acceptance. Main's normal prefix/incoming research
+separately passes40 opening outcome/receipt controls and31/44 map/34 negatives; those are not
+new factory/issuer/array authority, actual response admission or the reviewer's verification.
+
+### D3858 sparse Explorer correction — bounded independent check
+
+Module-registration now specifies the exact below_floor source outcome from a genuine admitted
+whole page/narrow value, with total0–99, source occurrence and canonical population/window.
+Full preflight/request/current-authority checks precede it. Only the >=100 fact renderer is
+bypassed; the source remains admitted. At100 use the old available path. The complete outcome
+is disclosure-bound with no paging/continuation, facts, LLM input or extra source diagnostics.
+Presentation renders fixed typed operational status and retains attribution/window labels.
+
+Independent read-only review finds no bounded wording inconsistency. It specifically checks
+source/request joins, null paging/receipt correlation, no fact-renderer call below floor and
+preservation of old corpus APIs/floors. No tests/edits/source acceptance. Main separately passes
+30 disposable shape/population/digest controls, not actual source issuance/response/client/native
+proof. D3859, exact scoped Review adapters, D3851 and joint acceptance remain open.

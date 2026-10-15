@@ -258,9 +258,9 @@ The existing producer availability and latency fields now mean only the producer
 own a synchronous local output and a provider-bearing derived sibling without either declaration
 lying.
 
-### 1a. Draft D3845/D3847 collection templates — three explicit bindings, unaccepted
+### 1a. Draft D3845/D3847/D3857 collection templates — four explicit bindings, unaccepted
 
-Value-authority §§2.3g–i own the third derivation arm, exact story.rank@1/story.last_level@1/compare.structure_delta@1
+Value-authority §§2.3g–i/2.3k own the third derivation arm, exact story.rank@1/story.last_level@1/compare.structure_delta@1/opening.deepest_reached@1
 bindings, their separate answer rules and reduction receipts. This section owns execution integration; it creates no
 second source vocabulary or acquisition callback registry. The eligible refs come from that
 one compiled reduction declaration. Missing exact upstream refs/operations or cycles refuse
@@ -282,7 +282,7 @@ type CompiledEvidenceExecutionPlan =
   | { readonly kind: "reduction"; readonly projection: VersionedEvidenceId;
       readonly own: CompiledProjectionExecution["own"];
       readonly operation: VersionedEvidenceId;
-      readonly sourceOwner: "RecordedReviewMomentSource" | "RecordedLastLevelPopulation" | "RecordedComparisonStructuralPopulation";
+      readonly sourceOwner: "RecordedReviewMomentSource" | "RecordedLastLevelPopulation" | "RecordedComparisonStructuralPopulation" | "RecordedOpeningHistorySource";
       readonly sourceUse: "captured_only";
       readonly elements: readonly { readonly projection: VersionedEvidenceId;
         readonly execution: CompiledEvidenceExecutionPlan }[];
@@ -295,12 +295,19 @@ member number and ordered/multiple input children. For a reduction, retain its e
 operation/source owner and one ordered template per eligible ref, recursively compiled. It is a
 finite template graph, not one tuple containing every family or a list of every possible subset.
 Own producer and all leaf availability/latency/providerOperation identities still use the shared
-protocol validator; sourceUse is allowed only on those three exact registered operations, never a
+protocol validator; sourceUse is allowed only on those four exact registered operations, never a
 caller-selected provider bypass. WorstCaseLatency exposes the full potential ancestry using the
 existing ordering; it is not proof that a particular provider ran or an actual request budget.
 The operation/source-owner pairing is exact: story.rank@1 uses RecordedReviewMomentSource and
 story.last_level@1 uses RecordedLastLevelPopulation, and compare.structure_delta@1 uses
-RecordedComparisonStructuralPopulation. Crossed pairs are invalid plans, not aliases.
+RecordedComparisonStructuralPopulation; opening.deepest_reached@1 uses RecordedOpeningHistorySource.
+Crossed pairs are invalid plans, not aliases. The opening operation's two eligible templates
+are position@1 and current_endpoint@1, in exactly F2 §2.3k's order. Concrete groups are original
+prefix rows, not Story moments or comparison-family groups. It reads already captured installed-
+catalogue lookups/recorded positions only; it never queries a provider or reloads an artifact.
+Its complete original graph/installed source and successful negative invocation authority are
+required even when zero endpoint facts occur. F2 §2.3k and installed-opening §3a own that source
+image and authentic empty result. This explicit fourth binding does not admit arbitrary reducers.
 
 Add compileEvidenceConsumerExecutionV2 for exact new consumer images that accept reduction
 graphs. It retains complete accepted/bound set equality, every adapter identity, binding latency
@@ -2332,6 +2339,10 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3857 adds only opening.deepest_reached@1/RecordedOpeningHistorySource
+  to the proposed V2 reduction bindings, with exact two-template/group mapping and genuine
+  captured installed lookup/negative-result authority. Old fixed execution remains unchanged;
+  this is not a generic reducer exemption, source issuer or joint acceptance.
 - 2026-10-15: unaccepted D3847 adds only story.last_level@1/RecordedLastLevelPopulation to
   §1a's exact captured-source binding switch, with distinct role addresses and authenticated0/1
   result/convention retention. Its result proof contributes actual executed context, not a fake

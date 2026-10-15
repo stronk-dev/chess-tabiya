@@ -4,7 +4,7 @@
 - **Author:** codex
 - **Created:** 2026-10-08
 - **Design refs:** `design/03-product-breadth.md` (shared evidence and theory/Review journeys); `design/05-in-run-experience.md` (grounded, permission-bounded assistance); ADR-0005
-- **Exploration gate:** completed `runtime-opening-identity.md` source/lookup investigation, its D1 handoff, and the located D3376 source/consumer gaps in `planning/rfc-drafting-queue.md`. This is an installed-source adapter, not a new opening classifier or feasibility claim.
+- **Exploration gate:** completed `runtime-opening-identity.md` source/lookup investigation, its D1 handoff, and the located D3376 source/consumer gaps in `planning/rfc-drafting-queue.md`; D3857's real-catalogue/recorded-prefix controls in `tools/d3792-inspector-demand/opening-source.ts` and `design/research/module-evidence-assembly.md`. This is an installed-source adapter, not a new opening classifier or feasibility claim.
 - **Depends on:** `runtime-opening-identity.md`; `evidence-value-authority.md`; `module-registration.md`; `review-evidence-compiler.md`
 - **Parent / amends:** runtime-opening-identity's private-artifact boundary and D1; the three opening factories and their existing module/Review source calls
 - **Supersedes / superseded by:** —
@@ -22,8 +22,9 @@ must confirm that introduction before implementation. No migration, pack or run 
 
 ## Summary
 
-Make the installed opening catalogue the real source of the existing three opening evidence
-factories. Share one validated immutable catalogue authority across the application, derive facts
+Make the installed opening catalogue the real source of the two point factories and an additive
+complete-history successor. Preserve the old history declaration/factory/receipts. Share one
+validated immutable catalogue authority across the application, derive facts
 at exact recorded positions, and connect the already-declared Theory Breadcrumb, Full Inspector
 and Review Map bindings. Keep current endpoint, unnamed path membership and deepest recorded
 endpoint separate. No new recommendation, sticky name, book policy or theory prose is introduced.
@@ -106,33 +107,76 @@ remain build-only. Existing release inventory obligations remain, not automatica
 
 ### 3. The sole factories
 
-All production callers continue through the internal evidence-value dispatcher. These are the
-existing projection ids and symbols, not new aliases or new generic minting authority.
+All production callers continue through the internal evidence-value dispatcher. Point refs stay
+at @1. D3857 replaces this draft's impossible same-version history proposal with the additive
+derived.opening.deepest_reached@2/createDerivedOpeningDeepestReachedV2Evidence contract below
+and F2 §2.3k; old history@1 and its honest unavailable result remain unchanged.
 
 | Factory (three total) | Authority input | Successful output |
 |---|---|---|
 | `createTheoryOpeningCurrentEndpointV1Evidence` | admitted source + sealed `run.record.position@1` | zero or one exact matched endpoint |
 | `createTheoryOpeningCatalogueMembershipV1Evidence` | same source + same sealed position | zero or one exact member/count, with no ECO/name |
-| `createDerivedOpeningDeepestReachedV1Evidence` | admitted source + run, branch id and exact through-node id | zero or one greatest-ply matched endpoint with all matched visits |
+| `createDerivedOpeningDeepestReachedV2Evidence` | genuine `RecordedOpeningHistorySource` | zero or one greatest-ply matched endpoint with all matched visits and complete retained lookup population |
 
 Point factory input is `{ source, position }`; the position supplies FEN and observed ply. There is
 no caller-selected observed ply, endpoint or row. Both factories share the existing paired lookup
 for the same source/position within execution; do not normalize one FEN twice to obtain one pair.
 
-Each returns `EvidenceAvailability<readonly DeclaredEvidence<...>[]>`. Successful non-match is
+Each point factory returns `EvidenceAvailability<readonly DeclaredEvidence<...>[]>`. Successful non-match is
 `available([])`, not a provider failure and never an undefined-name fact. Unavailable source returns
 its exact reason. A forged handle or mismatched declared-position authority is a TypeError before
 minting, not an honest absence. Matched payloads preserve the existing `kind`, `projectionId`, source
 and literal operands; the source receipt retains the exact installed document identity and row
 location. Factory metadata and valid/falsifier profiles must change with the actual typed inputs.
 
-The history factory derives the actual branch path through the named recorded node. It refuses an
-unknown/off-path through-node, derives sealed recorded positions and exact endpoint facts itself,
-and retains those as its declared derivation inputs. It accepts no caller-provided visits, deepest
-endpoint or history array. Observed ply is the run's ply; source ply remains the catalogue row's ply.
-It retains all matched visits, including exit/re-entry, and applies the existing greatest-ply then
-lowest-node-id convention. No match yields an empty available population. Unavailable input yields
-the existing `input_abstained`; it never borrows a match from a sibling branch or a later node.
+#### 3a. D3857 complete history source — unaccepted amendment
+
+The sole constructor is collectRecordedOpeningHistory({source,run,branchId,throughNodeId});
+source is the genuine admitted installed-catalogue handle, not a lookup callback. It validates
+the entire original run/selected branch graph, canonical FENs and recorded edges before
+narrowing or reusing any lookup. Resolve the exact through-node on that branch, then detach one
+immutable root-inclusive prefix through it. An unknown/off-path endpoint, corrupt original
+graph, copied source or invalid recorded position refuses before collection, including after
+the requested endpoint. A valid source is privately recognized by the runtime, not by a caller
+digest, structural type, nominal property or copied receipt. It is not an access grant.
+
+The private source reader retains exactly: original run/event-head identity; selected branch
+and through-node; complete ordered prefix node/edge image; exact admitted catalogue identity;
+and one row per prefix node. Each row has its original path index, actual node/ply/full FEN,
+the genuine run.record.position@1 value and authentic paired-lookup invocation/result from
+the same admitted catalogue and position. A matched row retains the exact genuine current-
+endpoint@1 value, whose source receipt binds that same position and catalogue row. An absent
+row retains the actual no_named_endpoint lookup and its invocation, never a fabricated endpoint.
+Retain all rows, including root, repeated position keys and negative lookups. Equal FEN/key
+lookups may share calculation, but each recorded occurrence keeps its original sealed position
+and exact endpoint input join; do not reuse a foreign occurrence's evidence value.
+
+Add private construction-time authentication of the point factories' fresh result arrays and
+paired invocation, including available([]). Existing empty-array equality or a catalogue digest
+does not supply it. The source constructor obtains the real dispatcher results, verifies their
+actual source/position/invocation, and retains their complete identities before flattening.
+Only package-owned lookup construction may issue that invocation authority. Copied/filtered/
+foreign arrays and unexecuted or failed lookups refuse; they are not negative source rows.
+This is new implementation required by the amendment, not authority present in today's loader.
+
+The history factory's sole arm is {history:RecordedOpeningHistorySource}, returning the fresh
+authenticated readonly items array specified in F2 §2.3k; source unavailability is resolved
+before invoking it. It reads the genuine
+source once and runs F2 §2.3k's opening.deepest_reached@1 reduction over all its rows. It accepts
+no caller visits, deepest endpoint, position list, array of lookups or source reader callback.
+Observed ply is the recorded position's actual ply, not path index or catalogue sourcePly.
+Retain every matched visit, including exit/re-entry; apply the existing greatest-observed-ply,
+then lowest-node-id rule. A matched payload has the old successful fields, with only its own
+projectionId updated to derived.opening.deepest_reached@2; nested endpoints stay @1. No match
+returns an authentic empty result, not an absence fact, invented endpoint or unavailable source.
+F2 owns its exact child occurrences/result receipt, including empty-result proof.
+
+Missing/invalid/digest-mismatched installations never construct this source. The owning service
+retains that actual installed availability and forwards its exact reason to the consumer;
+do not call the old history@1 factory to collapse it into input_abstained. A missing issued
+source without such a genuine source state is a contract failure, not artifact_missing. A
+genuine held upstream authority may use the separately authored version hold before migration;
+pending metadata alone cannot keep the installed implementation permanently unavailable.
 
 The server authorizes run/branch access before any invocation. Review invokes against its existing
 storage-authorized prefix snapshot, never the active Play cursor. Source and recorded-position
@@ -145,9 +189,9 @@ No preset, assistance ceiling, source ranking or module acceptance list is widen
 | Consumer operation (four total) | Required real connection |
 |---|---|
 | Theory Breadcrumb | acquire the exact recorded position, membership proof and endpoint from the shared source; satisfy the existing catalogue-applicability join; render matched endpoint through `play.opening@1` |
-| Full Inspector | explicit source branches request membership and deepest history at the inspected node; retain their existing registered presenters rather than falling through `not_requested` |
+| Full Inspector | explicit source branches request membership@1 and deepest history@2 at the inspected node; bind the new exact history pair to the retained registered presenter, not generic fallthrough |
 | Review compiler | pass the admitted source in `ReviewSourceContext`; replace `provider_off` with exact per-node source calls; parse actual discriminated payloads rather than stripping fields to fit the placeholder |
-| Review Map | request/render the existing deepest-reached binding for the selected authorized prefix, separately labelled retrospective; do not pretend current endpoint is admitted directly to this module |
+| Review Map | request/render deepest-reached@2 for the selected authorized prefix, separately labelled retrospective, through the complete coordinated successor image required by D3859; current endpoint is not directly admitted to this module |
 
 The Review node adapter accepts only matched current-endpoint payloads. Successful absence folds to
 `honest_empty/no_observation`, not `provider_off`. Missing/invalid/digest-mismatched installed sources
@@ -158,9 +202,20 @@ artifact is unavailable; an invalid artifact or digest mismatch is failed. Each 
 learner label and exhaustive parser/fold/presenter controls, rather than a `provider_off` fallback.
 This is a bounded reason-vocabulary extension, not a new provider protocol or acquisition attempt.
 
+Inspector's exact post-install mapping is: artifact_missing → unavailable/artifact_missing;
+artifact_invalid → failed/artifact_invalid; digest_mismatch → failed/digest_mismatch. These
+three reasons are admitted only for current_endpoint@1, catalogue_membership@1 and the new
+deepest_reached@2 topic. The module-registration closed wire and presentation source-status
+vocabularies carry those exact reasons, null recordedCoverage and no facts/source diagnostics.
+Bind the complete outcome to the existing disclosure receipt; client body/receipt correlation
+and fixed operational labels must reject substitutions. A successful empty point/history is
+no_witness, never one of these reasons. Recheck the actual retained installation identity/state
+and authorized prefix at delivery. A corrupt history/invocation/receipt is source_contract_invalid,
+not an invalid artifact unless the loader actually established artifact_invalid.
+
 The packet must retain enough exact source identity to distinguish a successful empty lookup from an
 unavailable catalogue. Its items remain ordinary sealed evidence; the private source handle and full
-catalogue are not serialized. Add an adapter for the existing deepest projection where needed, with
+catalogue are not serialized. Add an exact @2 adapter for the deepest successor where needed, with
 the same authorized prefix/through-node join. A retrospective fact is not a current-position label,
 does not become a pivotal moment merely because it exists and must not repeat as a nudge at every ply.
 
@@ -172,9 +227,14 @@ descendant name, arbitrary pack recommendation, move prior or persistent theory-
 ### 5. Compatibility, cost and unavailable behavior
 
 Existing `/opening-identity` response bytes/absence meanings and the source catalogue pin remain.
-No saved run, pack, database table, historical event or opponent request is rewritten. Old factory
-valid/falsifier fixtures are migrated to real authorities; they are not kept as a permanent
-unavailable compatibility branch. Current recorded endpoint and membership payloads remain `@1`.
+No saved run, pack, database table, historical event or opponent request is rewritten. Point
+factory valid/falsifier fixtures migrate to real authorities. Old deepest@1 declaration, factory,
+callers and receipts remain unchanged; it does not gain a fabricated available compatibility arm.
+New @2 has its own real available/empty/refused controls. Current endpoint and membership
+payloads stay @1. No consumer silently accepts @2 under an old pair: Inspector's proposed
+75-topic map replaces the history slot explicitly, and Review Map's complete successor image
+must do likewise under D3859 before joint acceptance. The current fork-only proposal alone
+does not provide that full image or permission to count this source as delivered.
 
 Keep the existing 250 ms load budget and 50 µs paired-lookup CPU p95 budget. Track load count and
 one-pair normalization with structural controls in addition to timing. History walks one authorized
@@ -192,13 +252,18 @@ game phase or overrides independent structural/endgame sources.
 2. One genuine installed catalogue passes; altered name/count/source bytes with a recomputed outer
    digest fail registration. Substituted expected registrations are not constructor inputs. A source
    handle copy, JSON round-trip, fake method object or double cast fails every relevant factory.
-3. Each of the three sole factories has real available and non-match/unavailable controls. Routes,
+3. Both point factories and the new history factory have real positive/empty controls, with
+   unavailable cases proved at the actual owning source boundary. Routes,
    metadata and value-level profile fixtures are set-equal; no test discharges an available path by
    expecting its predecessor's unconditional refusal.
 4. `1.e4` yields exact B00 King's Pawn Game and independently 2,023 path descendants. The unnamed
    `1.d4 Nf6 2.c4 e6` witness yields 304 descendants, no endpoint name and no name-valued module item.
 5. Named→unnamed→named exit/re-entry retains correct node/observed ply/source ply and full matched
    history. A sibling branch and a later recorded node cannot leak into an earlier Review prefix.
+   Successful root-only/multiple-row negatives have authentic complete result authority; removed,
+   duplicated, reordered, copied, same-key foreign-occurrence or never-executed lookups refuse.
+   Corrupt original suffixes fail before narrowing. Permanent tests exercise the real constructor,
+   sole dispatcher, reduction receipt/plan/closure and empty-array reader, not the research helper.
 6. Theory Breadcrumb's actual application module query obtains the genuine installed source,
    position and membership proof and returns a sealed rendered name. Crossed position, copied source
    and missing membership fail. No arbitrary callback/endpoint object can make this test pass.
@@ -238,5 +303,9 @@ registry. New catalogue sources, book policies and authored theory remain outsid
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3857 amendment replaces the one-pair history proposal with an additive
+  @2 complete-prefix source/reduction/result contract; exact original validation, successful
+  negative lookup authority, both consumer migrations and installed-source outcome mapping.
+  Point refs/source pin and old history@1 remain. Independent source/joint review still required.
 - 2026-10-08: drafted from D3376 and the actual sole-factory/module-query/Review composition gaps;
   D3576/D3590 loader repairs remain independent. Not accepted or implemented.

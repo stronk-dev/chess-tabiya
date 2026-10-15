@@ -19,18 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The independent complete-source review returns Inspector on D3857–D3859: opening history needs
-complete retained positions/visits/negative lookups rather than its declared one-pair tuple,
-and valid sparse Explorer data needs its promised below-floor status in the closed wire.
-Fork-only Nudge/Review successors also retain refs that fail required complete preflight;
-four actual strict compiler refusals confirm that contradiction. D3841's exact scoped Review
-adapter/source/state image is still unpublished. No further concrete contract gap is found
-in the rest of the inspected packet/material/dependent-edge/detail/shape paths, not acceptance.
-28 new real-catalogue/recorded-position controls pass through the normal prefix research target;
-seven visits across nine nodes and two negative histories expose the exact history mismatch.
-The owning source/execution/status contracts still need authoring and independent joint review.
-No new source/API/UI implementation or milestone completion follows; current unavailable history
-and existing sparse corpus behavior are not falsely described as broken. D3851 is separate.
+D3857 complete opening history and D3858 sparse Explorer status now have authored corrections
+with independent bounded wording checks. History@2 retains complete positions/matched and
+negative lookups, authentic empty results and one exact fourth reduction binding; old@1 stays.
+Inspector carries actual installed-source reasons and source-bound below-floor population status
+without fake facts, renderer-floor relaxation or provider fallback. Normal prefix/incoming
+research passes40 opening/30 sparse controls plus31/44 map/34 negatives, not source/API/UI proof.
+Next D3859's complete coordinated module preflight and D3841's exact scoped Review adapter/
+source/state image, then joint acceptance before implementation. The old eleven-adapter census
+cannot supply it. No whole milestone moves; D3851 remains separately unanswered and old history,
+all75+6 obligations and full platform breadth remain. Production is unchanged this checkpoint.
 
 D3841's two ledger source contracts are now authored, not implemented. Separate registry-owned
 measurement admission, original sidecar read states, full-FEN ordered populations and closed

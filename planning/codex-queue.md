@@ -1,23 +1,21 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-15 — Complete Inspector review returns three remaining source-delivery gaps: D3857's
-deepest-opening all-visit history cannot fit the current single endpoint/position tuple, and
-D3858's successful Explorer below-floor/total has no carrier in the closed wire; D3859's
-fork-only Nudge/Review successors cannot satisfy complete strict preflight with retained
-unregistered source refs. Four actual retained-ref compiler refusals confirm the last gap.
-Review §4.5 also still owes its exact scoped adapter/callable/parser/slot/source/state image
-under D3841, not the old eleven-adapter baseline.28 disposable
-real-catalogue/recorded-position controls pass in the normal prefix target: seven visits across
-nine nodes, repeated keys, branch/prefix exclusion and distinct negative populations despite
-equal absence output. The current unavailable history factory and sparse corpus API are honest;
-these are upstream authoring gaps, not new production fixes or source acceptance.
-Next reconcile installed-opening/F2/provider history construction, complete operands/execution
-and exact installed-source reasons; separately author narrow Explorer status/receipt/client
-mapping without relaxing floors or manufacturing facts; reconcile coordinated complete module
-preflight and publish the exact scoped Review adapter image. The remaining read-only source
-pass finds no additional concrete packet/material/dependent-edge/detail/shape contract gap,
-not implementation proof or acceptance. Obtain joint acceptance before new API/UI work. D3851 remains separate;
-preserve current narrative coexistence,75+6 source obligations and all old APIs/receipts.
+2026-10-15 — D3857/D3858 corrections are authored and independently bounded-reviewed, not
+implemented/accepted. Installed-opening §3a/F2 §2.3k add history@2 over complete recorded positions
+and actual matched/negative lookups, one fourth exact reduction binding and authentic empty
+result; old history@1 stays. Inspector has exact opening-only installed-source outcomes and
+Explorer-only below_floor/total/canonical-population status, retaining real source admission,
+receipt correlation, fixed UI/floors and old APIs. Normal prefix/incoming research passes40
+opening/30 sparse controls and31 replacements/44 conditional unchanged map/34 negatives;75+6
+remain requirements, not executable/adopted bindings. Source/sidecar/factory/API/native proof
+and complete module image remain future work. No new provider, fact fallback or LLM chess truth.
+Next D3859: reconcile complete Nudge/Review successor preflight with retained unregistered
+source refs, without filtering alternatives or inventing held-binding exceptions. Publish
+D3841/Review §4.5's exact scoped adapter IDs/versions/callables/parsers/slots/source/state image;
+the old eleven census is baseline only. Then independent joint review before implementation.
+The remaining packet/material/dependent-edge/detail/shape wording has no additional concrete
+return in the inspected pass, not acceptance/qualification. D3851 remains separately unanswered;
+preserve both narrative/recorded pipelines, detector families and all old API/history receipts.
 
 2026-10-15 — D3841's two ledger suppliers are now authored in module-registration §4.11a,
 not implemented: registry-owned artifact admission independent of grading, retained original

@@ -10,9 +10,9 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855, §§2.3a–2.3j:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855/D3857, §§2.3a–2.3k:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
-  from the parent's awaiting state. D3845's reduction grammar and its three exact operation bindings are proposed, not accepted;
+  from the parent's awaiting state. D3845's reduction grammar and its four exact operation bindings are proposed, not accepted;
   its upstream source contracts and complete execution/admission implementation remain held.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
   `design/04-content-architecture.md` grounded predicates; `design/05-in-run-experience.md` §3
@@ -1426,6 +1426,102 @@ old@1/@2 authority and explicitly retained @3 direct/child convention closure. E
 new factories, source issuance, qualification, current HTTP access, native delivery or acceptance.
 Independent source/joint review and the other Inspector source prerequisites remain required.
 
+#### 2.3k Draft D3857 complete recorded opening-history reduction — unaccepted
+
+This adds exactly one package-owned binding to the proposed reduction arm, not a variable
+input exception for the old fixed history@1 declaration. Operation opening.deepest_reached@1;
+projection derived.opening.deepest_reached@2; factory createDerivedOpeningDeepestReachedV2Evidence;
+source RecordedOpeningHistorySource; constructor collectRecordedOpeningHistory and private
+reader readRecordedOpeningHistory under installed-opening §3a; private computation
+deepestRecordedOpeningVisits; direct existing convention opening-deepest-reached@1. No new
+convention definition, lookup algorithm, provider operation or shared-schema version is created
+by this reduction. The installed-source document still owns its separate schema bootstrap.
+
+The sole factory arm is {history:RecordedOpeningHistorySource}, shape derived, result items.
+Authenticate/read that exact source and every actual lookup invocation before any
+selection or successful empty return. Callers cannot supply rows, a preselected endpoint, a
+catalogue callback, source digest or a replacement reduction operation. This source contract
+owns one selected recorded prefix, not a transitive history from every branch or a hypothetical
+line. It is storage-authorized by its service caller, not by the private runtime source seal.
+
+**Exact eligible vocabulary and occurrences.** The reduction elements, in order, are
+run.record.position@1 and theory.opening.current_endpoint@1. Both templates must compile under
+the normal V2 execution rules; no optional endpoint template, all-family union or empty fixed
+member is allowed. For original row i, group i contains item0=that row's genuine position
+(element0), then item1=its genuine exact matched endpoint (element1) iff the actual lookup
+matched. The endpoint's own source receipt must bind the identical position and admitted
+catalogue/row, not just an equal normalized key. Negative rows have their real position item
+and no endpoint item. Root, later equal-key visits and original row addresses remain distinct;
+there is always at least one actual position in a genuine recorded prefix.
+
+sourceImageDigest binds the installed-opening §3a reader's complete original head/branch/endpoint/
+catalogue/path image, every ordered row/position and authentic actual paired-lookup result,
+including exact successful no_named_endpoint results. Encode genuine values by complete value
+identity/receipts and lookup invocations by their owned complete source/position/result identity,
+not by a handle serialized as {}, a Boolean "checked", match count or selected payload digest.
+Invocation issuance and original membership are checked privately as well as their encoded
+identity. Missing/failed/unexecuted/crossed/copied results refuse; they cannot stand in for an
+empty lookup. Changed negative rows change input authority even when visits/deepest stay equal.
+
+**Computation and output.** Fold every matched row into {nodeId,ply,endpoint}, sorted by actual
+observed ply then the existing node-id comparator. Retain every visit, including exit/re-entry;
+choose greatest observed ply, lowest node id on a tie. Never infer historical move order from
+transposeKey or use sourcePly/pathIndex as observed ply. All nested endpoints share this exact
+installed catalogue. A positive value has the old successful DeepestOpeningReached fields
+{kind:"matched",projectionId:"derived.opening.deepest_reached@2",deepest,visits,catalogue};
+the nested endpoints remain current_endpoint@1. This is exact catalogue matching/recorded
+selection under opening-deepest-reached@1, not strategic theory, book quality or a move prior.
+With no matched rows the result is an authentic empty items array; do not mint the old absent
+helper payload or a fact claiming that an unavailable catalogue found no opening.
+
+The new projection retains plane derived, role reading, grounding declared_convention,
+exactness exact, confidence exact, operands [deepest,visits,catalogue], answerContent [fact,theory],
+forms [sentence,list,panel]. Its limitations explicitly state source-bounded retrospective
+matching, not current-position identity/inferred move order or a theory recommendation. Its
+source-absence vocabulary is artifact_missing/artifact_invalid/digest_mismatch, emitted only
+by the source-owning acquisition boundary before factory invocation. A genuine factory input
+returns items; unavailable acquisition never fabricates one. Malformed authority throws before
+minting, not an input_abstained fallback. Every emitted value has at least one actual
+exact cited endpoint and recorded position, so no theory capability is inherited from merely
+eligible templates. Empty results mint no value/answer authority. Retain actual child grounding,
+exactness and confidence; an installed naming source is not promoted to universal chess truth.
+No per-instance answer widening or generic reduction shortcut is introduced.
+
+**Authenticate the complete result.** Reuse §2.3h's fresh frozen items-array/private
+{reduction,convention} result protocol. Authenticate the genuine
+array before iterating or flattening, including empty output. Its exact operation/
+projection/plan/source and complete occurrence witness tree use §2.3g's closed receipt fields;
+outputDigest binds exactly the ordered {producer,projection,payloadDigest} entries, or [] for
+no match; it excludes the outputs' own input/convention/reduction receipts so it is acyclic.
+There is at most one value. Construct child/invocation authority, computed output image and
+acyclic reduction/result proof, then mint/register the value/array; no output receipt is its
+own input. A copy, foreign result, subset or attached public receipt
+does not supply array issuance. Provider §1a owns its fourth exact plan/source binding.
+
+Direct closure is opening-deepest-reached@1, named literally in the new catalogue semantics,
+plus every actually used child and authenticated lookup invocation's applied closure, including
+successful negatives. No unexecuted eligible convention contributes. The reduction convention
+arm binds these source-owned invocation proofs and ordered occurrences; old source/fixed arms
+and @1 declaration/factory/convention receipts remain unchanged. The existing point factories
+still project cited installed content; their construction-time invocation proof is not a new
+public evidence leaf. New current-source results never borrow old@1 unavailable receipts.
+
+**Adoption and falsifiers.** Installed-opening §4 and module-registration's exact Inspector
+map replace the history slot with @2 and preserve the old pair. The new pair uses the existing
+inspector.opening_reached@1 registered operand schema/renderer with exact new-source admission:
+eco/name are copied only from the selected genuine deepest endpoint. No generic payload alias,
+new prose, changed preset or automatic nudge. Review Map needs D3859's complete coordinated
+successor image and its own exact pair before acceptance; a fork-only image is insufficient.
+Require real source/point-result issuers, dispatcher/metadata/profile and V2 plan/result/consumer
+tests; real root-only/multiple negative prefixes, named/unnamed/re-entry, repeated keys, changed
+source/head/branch/through-node, copied sources/results/positions, unexecuted lookup and corrupt
+original suffixes. Reject each group/item/element/witness/plan/source/output mutation before
+empty shortcuts. Verify exact old successful-helper content apart from the new projectionId,
+unchanged @1 outputs/receipts and retained convention closure; actual installed missing/corrupt/
+digest states must remain distinct through receipt/client/native delivery. The 28 disposable
+controls establish the source mismatch/lookup behavior only, not this new authority. Independent
+source and joint acceptance still gate implementation; no parent status implies approval.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -1882,6 +1978,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3857 §2.3k specifies additive deepest-opening@2, one exact fourth
+  reduction binding, complete recorded positions/matched and negative lookup authority,
+  authentic empty result and old@1 compatibility. Installed-opening owns the source issuer
+  and post-install delivery reasons; joint/source review and implementation remain required.
 - 2026-10-15: unaccepted D3847 §2.3j authors ten source-only recorded sequence@3 successors,
   23 literal fixed/anyOf members, complete capture populations and indexed auxiliary joins.
   Retain old APIs/receipts, physical recorded payloads and direct conventions explicitly; no

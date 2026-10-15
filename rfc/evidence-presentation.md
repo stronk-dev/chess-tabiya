@@ -2075,6 +2075,39 @@ and facts together at every supported viewport, without overlap, board shrinkage
 Budget deferral remains distinct from a refused source record. No unbounded diagnostic list or
 extra source-detail door is introduced here; the complete private source keeps its ordinals.
 
+**D3857 installed-opening status and successor pair — unaccepted companion.** Register the
+new derived.opening.deepest_reached@2 pair only to the exact proposed Inspector successor,
+using the existing inspector.opening_reached@1 closed eco/name operand schema and renderer.
+Copy those fields from the genuine selected deepest endpoint, retaining its catalogue/convention
+attribution and the source-bounded retrospective label; never claim current-position identity,
+book quality, strategy or a suggested move. Authenticate the complete @2 result before adapting,
+including empty output. Old @1 pairs/receipts remain unchanged. Review Map's new exact pair
+must wait for D3859's complete successor image, not accept a new ref under an old consumer.
+
+The fixed source-status UI labels are: artifact_missing, "Opening catalogue is not installed";
+artifact_invalid, "Installed opening catalogue is invalid"; digest_mismatch, "Installed opening
+catalogue does not match this build". Module-registration restricts these reasons to the three
+opening topics and binds the exact failed/unavailable outcome to disclosure. Parse/fold/render
+them exhaustively in the existing source-reason vocabulary; an invalid artifact is failed,
+not provider_off, successful absence or a live request. No raw diagnostic detail is displayed
+or sent to voice/LLM. Native desktop/phone tests must distinguish all three and successful
+no_witness, preserve the playable board and discard stale status after source/context change.
+
+**D3858 sparse Explorer status — unaccepted companion.** module-registration's exact
+derived.explorer.inspector_population@1 below_floor outcome is source-status chrome, not a
+PresentedEvidenceItem or a way to call consumer.explorer_population@1 below its100-game floor.
+Parse its exact sourceKey, total0–99 and canonical request population; bind the entire outcome
+to disclosure/current node/config before paint. Render the fixed minimum100/actual total and
+Lichess attribution with rating buckets, speeds and bounded/all-date window labels from those
+typed fields. Null dates mean the request's unbounded endpoint, not an invented current date.
+No move list, recommendation, quality claim, raw JSON or arbitrary status prose is emitted.
+The panel is settled, has no continuation or automatic retry, and is distinct from provider
+unavailability, source failure, no_witness and budget deferral. The underlying source owns
+admission, floors and real request equality; a UI status object alone proves none of those.
+Keep old corpus API/components and available>=100 fact presentation unchanged. Actual response/
+client and desktop/touch tests cover0/99/100, wrong source/node/population/window/receipt and
+stale completion, with no board reflow/overflow; this authoring does not implement them.
+
 Every new projection below is version 1. Register it only to `module.full_inspector@2`, together
 with the original source image owned by §4.11a. Factories consume exactly one **admitted complete
 source** plus closed scope/start; they compute the members themselves and retain that literal
@@ -2289,6 +2322,11 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3858 companion specifies sparse Explorer as fixed typed source
+  status with exact body/disclosure correlation, not a below-floor fact-renderer bypass.
+- 2026-10-15 — Unaccepted D3857 companion binds deepest-opening@2 to its retained closed
+  retrospective renderer and exact opening-only installed-source status labels. No old pair
+  migration, new theory prose, source acceptance or implementation is implied.
 - 2026-10-15 — Unaccepted D3841 companion defines compact fixed operational recordedCoverage
   status beside admitted recorded facts, including refused/abstained zero-fact outcomes. No raw
   ledger prose, fake evidence leaf, LLM input or deferred-source alias. Exact source/receipt

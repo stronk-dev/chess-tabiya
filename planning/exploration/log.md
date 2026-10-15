@@ -30789,3 +30789,44 @@ Campaign was the one capability with no API, route or content. Now:
   zero untriaged; all three new rows have durable evidence-foundation assignments. Stage only
   the12 explicit research/review/tracking files and inspect cached names/diff. Normal hooks
   follow; no push, production change, raw recording, new worktree or goal pause.
+
+### 2026-10-15 — D3857 complete opening history and D3858 sparse Explorer status authoring
+
+- Continue the full1.0 goal from41ce98e5's concrete source-review returns. Source research is
+  already landed; author the correction rather than manufacture a permissive runtime bypass.
+  Installed-opening §3a/F2 §2.3k now specify additive deepest_reached@2, a genuine complete
+  root-inclusive recorded prefix and all real matched/negative point-lookup invocations.
+  Every occurrence retains exact position/catalogue joins; original graph validation precedes
+  narrowing. New private result/invocation issuance is explicitly required, not presumed
+  supplied by old arrays/digests. Old history@1 declaration/factory/receipts remain unchanged.
+- Provider §1a gains exactly this fourth operation/source binding under the already proposed
+  reduction mechanism, not a generic reducer. F2 specifies actual child occurrences, positive
+  output and authentic empty results with acyclic reduction/result/convention proof. No new
+  chess detector, provider, convention definition, persisted record or theory prose is added.
+  Inspector explicitly replaces its history slot; the proposed map is31 replacements/44
+  conditional unchanged and still75+6 requirements, not executable bindings.
+- Installed-source missing/invalid/digest outcomes remain exact opening-only typed states,
+  distinct from corrupt history authority and successful empty lookup. Source-owning service
+  availability precedes the new items factory. No permanent old-factory unavailable stub after
+  migration. New exact source admission uses the existing retrospective renderer; coordinated
+  Review Map adoption still requires D3859's complete image.
+- D3858 adds only the Explorer below_floor outcome to the same draft wire: genuine whole-page/
+  narrow admission, source occurrence, total0–99 and canonical population/window; at100 retain
+  the existing available fact path. No below-floor fact renderer call, provider-failure/no_witness
+  relabel, legacy fallback, paging, fake leaf, LLM input or change to old APIs/sample floors.
+  The full status is bound to disclosure and fixed UI with exact current-context correlation.
+- Authorized independent read-only checks find no concrete normative blocker in either bounded
+  correction, not source/component/joint acceptance. Real issuers/sidecars/factories/V2 proof/
+  adapters/API/native tests remain future work. D3859 and exact scoped Review adapter/source/
+  state image are next; D3851 stays separately unanswered with both sequence pipelines retained.
+- Normal make inspector-recorded-prefix-research and make inspector-incoming-dependent-research
+  exit zero, retaining existing28 real-catalogue,41 ledger/17 coverage and all sequence/source
+  controls. New closed wire checks cover40 opening-reason/receipt and30 sparse population/receipt
+  cases;31/44 map has34 negatives. A disposable parser's initial TypeScript cast is replaced
+  with explicit typed construction, not filed as a production defect. No production change or
+  fresh full software/content/browser/remote-CI claim. Sync state/receipt/governance and commit
+  this reviewed authoring checkpoint through normal hooks; the goal remains active.
+- Final make work-state-sync roadmap-receipt verify-governance exits zero, with3608 rows/
+ 1743 live and zero untriaged; D3857/D3858 remain doing, not completed by their proposals.
+  Stage the17 explicit owned contract/research/tracking files and inspect the cached names/
+  diff before normal commit hooks. No push, source qualification or whole milestone promotion.

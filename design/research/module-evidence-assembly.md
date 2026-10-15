@@ -2174,3 +2174,42 @@ material, dependent-edge, detail and shape paths; this bounded negative finding 
 acceptance or a claim that their future implementations/tests exist. `[V]`
 `rfc/review-evidence-compiler.md` §4.5; `packages/runtime/src/review-evidence.ts` pivotal adapters
 and sealSourceResult; dated independent review, remaining source pass.
+
+### Opening history and sparse Explorer contract correction
+
+Installed-opening §3a/F2 §2.3k now propose the additive deepest_reached@2 over one genuine
+complete root-inclusive recorded prefix and admitted installed source. Every position and
+actual matched/negative paired lookup is retained before selection, including repeated keys
+and exit/re-entry. New private point-invocation/result membership is explicitly required;
+today's empty arrays/digests are not misrepresented as issuance. The reduction has exactly two
+eligible templates, exact original occurrence addresses, direct opening-deepest-reached@1
+closure and authentic empty result with no invented fact. Output digest excludes its own final
+input/convention/reduction receipt. Old history@1 remains unchanged. `[V]` cited draft sections;
+`rfc/provider-exchange-and-execution.md` §1a fourth exact binding; [[D3857]].
+
+The exact Inspector map now replaces31/conditionally retains44 topics, still75+6 requirements,
+not executable bindings. Actual missing/invalid/digest-mismatched installed source reasons are
+restricted to the three opening topics; corrupt history authority is not an artifact failure.
+40 disposable reason/receipt controls exercise exact topic/kind/
+extra-field refusal and status-sensitive digests. Existing28 real-catalogue/history controls
+remain. These do not construct the new source/factory/receipt or prove real current-source
+revalidation/client delivery. `[V]` `draft-wire.ts`; `recorded-origin.ts`; normal prefix/incoming
+research targets; module-registration exact map/outcomes; installed-opening §4.
+
+D3858's same closed source wire gains exactly one Explorer-only below_floor outcome carrying
+the same admitted source occurrence, total0–99 and canonical population/window. It bypasses
+only the >=100 fact renderer, never whole-page/narrow source admission. At100 the existing
+fact path remains. Full sourceOutcome correlation binds all fields; no paging/continuation,
+fake evidence leaf, provider fallback, LLM input or changes to old corpus API/floors.30 disposable
+shape/population/receipt controls include zero/99/100 boundaries, wrong source/topic, duplicate/
+unordered population, wrong/reversed dates, extra fields and digest substitutions. The first
+TypeScript result cast is corrected to explicit typed construction, not a production bug. `[V]`
+`draft-wire.ts`; module-registration sparse Explorer clause; evidence-presentation companion.
+
+The authorized reviewer independently checks each bounded correction against the named source
+contracts and finds no normative wording inconsistency. It performs no tests/edits and grants
+no source/component/joint acceptance. Real source/invocation/result issuers, V2 realization,
+adapters and authenticated/native client proof remain future implementation. D3859's complete
+coordinated module image and D3841's exact scoped Review adapter/source/state table remain next;
+neither the old eleven baseline nor these proposals supplies them. D3851 is separately unanswered.
+`[V]` dated Inspector independent review, D3857/D3858 correction sections.

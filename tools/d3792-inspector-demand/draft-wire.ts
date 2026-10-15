@@ -8,6 +8,7 @@ import type { ModuleDecisionStamp } from "../../packages/runtime/src/module-quer
 import { presentationDigest, type PresentationReceipt } from "../../packages/runtime/src/presentation-contract.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import type { InspectorFamilyId } from "../../packages/runtime/src/module-contract.js";
+import { EXPLORER_RATING_BUCKETS, EXPLORER_SPEEDS } from "../../packages/runtime/src/provider-types.js";
 
 const key = (ref: { id: string; version: number }) => `${ref.id}@${ref.version}`;
 const sources = new Set(MODULE_CONSUMER_ACCEPTS.full_inspector.map(key));
@@ -49,12 +50,18 @@ export interface DraftRequest {
 export interface DraftRange { start: number; count: number; total: number; next: number | null }
 export type DraftContextFailure = "no_incoming_edge" | "no_recorded_window" | "no_second_attempt" | "no_recorded_review";
 export type DraftUnavailableOutcome =
-  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "invalid_turn_clone" | "no_legal_recapture" | "recorded_measurement_unavailable" }
+  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "invalid_turn_clone" | "no_legal_recapture" | "recorded_measurement_unavailable" | "artifact_missing" }
   | { kind: "unavailable"; reason: "source_version_held"; dependency: string };
+type DraftFailureOutcome = { kind: "failed"; reason: "source_contract_invalid" | "provider_failed" | "source_lookup_failed" | "artifact_invalid" | "digest_mismatch" };
+interface DraftBelowFloorOutcome {
+  kind: "below_floor"; sourceKey: string; total: number;
+  population: { ratingBuckets: readonly number[]; speeds: readonly string[]; since: string | null; until: string | null };
+}
 export type DraftSourceOutcome =
   | { kind: "missing_context"; reason: DraftContextFailure }
   | DraftUnavailableOutcome
-  | { kind: "failed"; reason: "source_contract_invalid" | "provider_failed" | "source_lookup_failed" }
+  | DraftFailureOutcome
+  | DraftBelowFloorOutcome
   | { kind: "no_witness" }
   | { kind: "available"; collectionKey: string; range: DraftRange; collected: number; displayed: number; deferred: number;
       facts: readonly { sourceKey: string; disposition: "presented" | "deferred";
@@ -99,23 +106,53 @@ function exact(value: unknown, keys: readonly string[]): Record<string, unknown>
 function text(value: unknown): asserts value is string { assert(typeof value === "string" && value.trim() !== ""); }
 function ordinal(value: unknown): asserts value is number { assert(Number.isSafeInteger(value) && (value as number) >= 0); }
 // Only the returned unavailable branch, NOT full response/source/access admission.
+const installedOpeningTopics = new Set(["theory.opening.current_endpoint@1", "theory.opening.catalogue_membership@1", "derived.opening.deepest_reached@2"]);
 export function parseDraftUnavailableOutcome(projection: string, value: unknown): DraftUnavailableOutcome {
-  assert(sources.has(projection));
+  assert(sources.has(projection) || installedOpeningTopics.has(projection));
   const row = record(value);
   assert.equal(row.kind, "unavailable");
   if (row.reason === "source_version_held") {
     exact(row, ["kind", "reason", "dependency"]); text(row.dependency);
     const meta = factoryMetadata.get(projection)!;
+    assert(meta, "a proposed successor has no current registered held-source metadata");
     assert.notEqual(meta.dependency, "none");
     assert.equal(row.dependency, meta.dependency, "held dependency must be the exact registered source owner");
     assert(meta.pending !== undefined && meta.pending.trim() !== "", "registration alone is not an unresolved source hold");
   } else {
     exact(row, ["kind", "reason"]);
-    assert(["source_absent", "provider_unavailable", "authored_source_absent", "invalid_turn_clone", "no_legal_recapture", "recorded_measurement_unavailable"].includes(row.reason as string));
+    assert(["source_absent", "provider_unavailable", "authored_source_absent", "invalid_turn_clone", "no_legal_recapture", "recorded_measurement_unavailable", "artifact_missing"].includes(row.reason as string));
     if (row.reason === "no_legal_recapture") assert.equal(projection, "derived.tactic.overloaded_defender_response_conflict@1");
     if (row.reason === "recorded_measurement_unavailable") assert(projection === "recorded.engine.eval@1" || projection === "recorded.tablebase.result@1");
+    if (row.reason === "artifact_missing") assert(installedOpeningTopics.has(projection));
   }
   return Object.freeze(structuredClone(row)) as DraftUnavailableOutcome;
+}
+// D3857 closed failed branch only; this grammar check is not an installed-source issuer.
+export function parseDraftFailureOutcome(projection: string, value: unknown): DraftFailureOutcome {
+  assert(sources.has(projection) || installedOpeningTopics.has(projection));
+  const row = exact(value, ["kind", "reason"]);
+  assert.equal(row.kind, "failed");
+  assert(["source_contract_invalid", "provider_failed", "source_lookup_failed", "artifact_invalid", "digest_mismatch"].includes(row.reason as string));
+  if (row.reason === "artifact_invalid" || row.reason === "digest_mismatch") assert(installedOpeningTopics.has(projection));
+  return Object.freeze(structuredClone(row)) as DraftFailureOutcome;
+}
+// D3858 only: strict shape/request correlation, not genuine page/source occurrence admission.
+export function parseDraftBelowFloorOutcome(projection: string, value: unknown, expectedPopulation: DraftBelowFloorOutcome["population"]): DraftBelowFloorOutcome {
+  assert.equal(projection, "derived.explorer.inspector_population@1");
+  const row = exact(value, ["kind", "sourceKey", "total", "population"]);
+  assert.equal(row.kind, "below_floor"); text(row.sourceKey); ordinal(row.total); assert(row.total < 100);
+  const population = exact(row.population, ["ratingBuckets", "speeds", "since", "until"]);
+  const buckets: readonly unknown[] = EXPLORER_RATING_BUCKETS;
+  const speeds: readonly unknown[] = EXPLORER_SPEEDS;
+  assert(Array.isArray(population.ratingBuckets) && population.ratingBuckets.length > 0);
+  assert(population.ratingBuckets.every((value, index, values) => buckets.includes(value) && (index === 0 || value > values[index - 1])));
+  assert(Array.isArray(population.speeds) && population.speeds.length > 0);
+  assert(population.speeds.every((value, index, values) => speeds.includes(value) && (index === 0 || speeds.indexOf(value) > speeds.indexOf(values[index - 1]))));
+  for (const date of [population.since, population.until]) assert(date === null || typeof date === "string" && /^\d{4}-(0[1-9]|1[0-2])$/u.test(date));
+  if (typeof population.since === "string" && typeof population.until === "string") assert(population.since <= population.until);
+  assert.deepEqual(population, expectedPopulation);
+  return Object.freeze({ kind: "below_floor", sourceKey: row.sourceKey, total: row.total,
+    population: structuredClone(expectedPopulation) });
 }
 export function assertDraftUnavailableBinding(projection: string, outcome: unknown, disclosureOutcome: unknown): void {
   assert.deepEqual(parseDraftUnavailableOutcome(projection, outcome), parseDraftUnavailableOutcome(projection, disclosureOutcome));
@@ -322,3 +359,62 @@ for (const projection of ["recorded.engine.eval@1", "recorded.tablebase.result@1
     { kind: "unavailable", reason: "recorded_measurement_unavailable" });
 }
 assert.throws(() => parseDraftUnavailableOutcome("rules.phase.reading@2", { kind: "unavailable", reason: "recorded_measurement_unavailable" }));
+
+let openingOutcomeControls = 0;
+for (const projection of installedOpeningTopics) {
+  const missing = { kind: "unavailable", reason: "artifact_missing" };
+  assert.deepEqual(parseDraftUnavailableOutcome(projection, missing), missing); openingOutcomeControls++;
+  assert.throws(() => parseDraftUnavailableOutcome(projection, { ...missing, dependency: "runtime-opening-identity" })); openingOutcomeControls++;
+  for (const reason of ["artifact_invalid", "digest_mismatch"] as const) {
+    const failure = { kind: "failed", reason };
+    assert.deepEqual(parseDraftFailureOutcome(projection, failure), failure); openingOutcomeControls++;
+    const source = { ...disclosureBody, view: { kind: "source", projection, context: projection.startsWith("derived.opening")
+      ? { kind: "branch", throughNodeId: "through" } : { kind: "position" }, start: 0, collectionKey: null }, sourceOutcome: failure };
+    const digest = presentationDigest("inspector.disclosure_receipt@1", source);
+    for (const sourceOutcome of [missing, { kind: "failed", reason: "source_lookup_failed" }, { kind: "no_witness" }]) {
+      assert.notEqual(presentationDigest("inspector.disclosure_receipt@1", { ...source, sourceOutcome }), digest); openingOutcomeControls++;
+    }
+  }
+}
+for (const projection of ["rules.phase.reading@2", "recorded.engine.eval@1", "derived.opening.deepest_reached@1"]) {
+  assert.throws(() => parseDraftUnavailableOutcome(projection, { kind: "unavailable", reason: "artifact_missing" })); openingOutcomeControls++;
+  for (const reason of ["artifact_invalid", "digest_mismatch"]) {
+    assert.throws(() => parseDraftFailureOutcome(projection, { kind: "failed", reason })); openingOutcomeControls++;
+  }
+}
+assert.throws(() => parseDraftFailureOutcome("theory.opening.current_endpoint@1", { kind: "failed", reason: "artifact_invalid", detail: "private path" })); openingOutcomeControls++;
+console.log(JSON.stringify({ scope: "D3857 proposed installed-opening outcome/receipt grammar only, NOT source/response/adoption proof",
+  openingOutcomeControls, installedOpeningTopics: [...installedOpeningTopics], oldHistoryRetained: true, productionChanges: 0 }));
+
+let sparseControls = 0;
+const population = { ratingBuckets: [1600], speeds: ["blitz", "rapid", "classical"], since: "2026-01", until: "2026-09" };
+const sparse = { kind: "below_floor", sourceKey: "synthetic-key-not-source-issuance", total: 99, population };
+for (const total of [0, 1, 99]) {
+  assert.deepEqual(parseDraftBelowFloorOutcome("derived.explorer.inspector_population@1", { ...sparse, total }, population), { ...sparse, total }); sparseControls++;
+}
+const unbounded = { ...population, since: null, until: null };
+assert.deepEqual(parseDraftBelowFloorOutcome("derived.explorer.inspector_population@1", { ...sparse, population: unbounded }, unbounded).population, unbounded); sparseControls++;
+for (const total of [-1, 0.5, 100, Number.MAX_SAFE_INTEGER + 1, "99", null]) {
+  assert.throws(() => parseDraftBelowFloorOutcome("derived.explorer.inspector_population@1", { ...sparse, total }, population)); sparseControls++;
+}
+for (const projection of ["recorded.engine.eval@1", "human.explorer.population@1", "theory.opening.current_endpoint@1"]) {
+  assert.throws(() => parseDraftBelowFloorOutcome(projection, sparse, population)); sparseControls++;
+}
+for (const changed of [{ ...sparse, sourceKey: "" }, { ...sparse, facts: [] }, { ...sparse, reason: "no_data_at_band" },
+  { ...sparse, population: { ...population, ratingBuckets: [1600, 1600] } },
+  { ...sparse, population: { ...population, speeds: ["rapid", "blitz"] } },
+  { ...sparse, population: { ...population, since: "2027-01" } },
+  { ...sparse, population: { ...population, until: "2026-13" } },
+  { ...sparse, population: { ...population, since: undefined } },
+  { ...sparse, population: { ...population, rawPage: {} } },
+  { ...sparse, population: { ...population, ratingBuckets: [1400] } },
+  { ...sparse, population: { ...population, until: "2026-08" } }]) {
+  assert.throws(() => parseDraftBelowFloorOutcome("derived.explorer.inspector_population@1", changed, population)); sparseControls++;
+}
+const sparseDisclosure = { ...disclosureBody, view: { kind: "source", projection: "derived.explorer.inspector_population@1", context: { kind: "position" }, start: 0, collectionKey: null }, sourceOutcome: sparse };
+const sparseDigest = presentationDigest("inspector.disclosure_receipt@1", sparseDisclosure);
+for (const sourceOutcome of [null, { kind: "no_witness" }, { ...sparse, total: 0 }, { ...sparse, sourceKey: "foreign" },
+  { ...sparse, population: { ...population, ratingBuckets: [1400] } }, { ...sparse, population: { ...population, until: "2026-08" } }]) {
+  assert.notEqual(presentationDigest("inspector.disclosure_receipt@1", { ...sparseDisclosure, sourceOutcome }), sparseDigest); sparseControls++;
+}
+console.log(JSON.stringify({ scope: "D3858 sparse Explorer shape/population/receipt controls, NOT page admission/API/native proof", sparseControls, productionChanges: 0 }));

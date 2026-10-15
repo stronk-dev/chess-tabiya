@@ -1901,10 +1901,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other45 refs/order and all old contracts.
+refs in its predecessor inventory slot, preserving all other44 refs/order and all old contracts.
 This is an obligation-preserving proposed map, not complete literal factory-input closure.
 D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
-retaining those45 topics is conditional on source-contract reconciliation and independent review.
+retaining those44 topics is conditional on source-contract reconciliation and independent review.
 Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
 D3847's independent continuation also finds that scope-only reuse of existing recorded-window
 @2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
@@ -1922,8 +1922,10 @@ change. All arithmetic is reconstructed from the admitted legal edge. The D3768 
 and D3847 structural reduction add their separately proposed bindings, not acceptance or factories.
 D3847 §2.3j additionally replaces the ten recorded@2 sequence topics with exact source-owned@3
 fixed/anyOf successors. These ten repairs do not resolve the independent narrative@1 pipeline
-choice or its source obligations. Proposed source factories are owned by value-authority
-§§2.3a–2.3j, not implemented by this
+choice or its source obligations. D3857 additionally replaces deepest-opening@1 with @2's complete
+recorded-history source/reduction, including negative lookup authority; no singleton tuple or
+permanent version hold may stand in for that source. Proposed source factories are owned by value-authority
+§§2.3a–2.3k, not implemented by this
 table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
 remain separate; a ledger record cannot substitute for a run attachment.
 
@@ -1959,8 +1961,9 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.tactic.overload_exploitation_observed@2` | `derived.tactic.overload_exploitation_observed@3` | derived | F2 §2.3j three edges, initial duty, complete three captures and final exchange |
 | `derived.tactic.deflection_observed@2` | `derived.tactic.deflection_observed@3` | derived | F2 §2.3j three edges, initial duty, complete ordered captures, final exchange and actual edge0 check-induced arm |
 | `derived.tactic.attraction_observed@2` | `derived.tactic.attraction_observed@3` | derived | F2 §2.3j exact three/five-edge arm and complete ordered captures; edge2 check only for actual check consequence |
+| `derived.opening.deepest_reached@1` | `derived.opening.deepest_reached@2` | derived | D3857/F2 §2.3k opening.deepest_reached@1 reduction over installed-opening §3a's genuine complete prefix/lookup source, including negative/repeated visits; unaccepted |
 
-This establishes a **requirements image**, not executable bindings:30 replacements and45
+This establishes a **requirements image**, not executable bindings:31 replacements and44
 conditionally unchanged topics preserve75 topic obligations;
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
 when a pair has several declared forms. Complete compilation/closure and independent upstream
@@ -2377,7 +2380,8 @@ later witness span; no later witness beyond the grant is borrowed.
 | Local position / incoming edge | Actual selected FEN or parent/legal commit/after-node from the validated graph; root has no incoming edge; no inferred ancestor/sibling operand |
 | Recorded windows / v1 sequences | Source-owner operation over validated actual granted edges, ending at the selected node. Retain exact versioned factories/anchors and complete contiguous witness spans; never fabricate a partial DrillRun |
 | Authored shapes | Actual registered compiled entries and permitted recorded path; preserve provenance/trigger inputs, no caller-authored shape or guessed entry |
-| Pivotal / deepest opening | Endpoint-aware source-owner path operation. Preserve full witness context, source/declaration limits and original versions; opening still requires its missing runtime identity source |
+| Pivotal | Endpoint-aware source-owner path operation. Preserve full witness context and exact proposed refs/source limits above |
+| Deepest opening | collectRecordedOpeningHistory({source,run,branchId,throughNodeId}) then createDerivedOpeningDeepestReachedV2Evidence({history}), under installed-opening §3a/F2 §2.3k. Retain complete root-inclusive rows, genuine matched/negative point invocations and authentic empty result; no whole-tip filtering or old unavailable factory alias |
 | Comparison | Source-owner computation over the two exact permitted attempts/endpoints, common recorded fork and original orientation. Every timeline, outcome, evaluation and line overlay obeys its own permitted path, not just the displayed columns |
 | Recorded Review / Story | Storage-authorised source-owner subject at the exact admitted recorded boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
 | Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
@@ -3071,22 +3075,74 @@ Source outcome is closed:
   source-owner migration, not this wire declaration, changes the underlying availability.
   All other unavailable alternatives have exactly `kind` and `reason`, with no dependency
   field: `source_absent | provider_unavailable | authored_source_absent | invalid_turn_clone |
-  no_legal_recapture | recorded_measurement_unavailable`.
+  no_legal_recapture | recorded_measurement_unavailable | artifact_missing`.
   `no_legal_recapture` is admitted only for the strict overload projection above; neither
   invalid request horizons nor `budget_exhausted` are source-unavailability alternatives.
   `recorded_measurement_unavailable` is admitted only for the two ledger topics with the
   completed refused/abstention-only coverage below, never a missing or invalid artifact.
+  artifact_missing is admitted only for theory.opening.current_endpoint@1,
+  theory.opening.catalogue_membership@1 and derived.opening.deepest_reached@2 after the installed
+  source owner actually establishes that state. Before source migration the existing old factory
+  hold above remains honest; it is not the permanent result after successful installation.
   Each requires actual
   source-owner absence/refusal evidence; no universal stub satisfies acquisition obligations.
 - `failed` has only `reason`, exactly `source_contract_invalid | provider_failed |
-  source_lookup_failed`. Broken bindings are failures, not chess absence.
+  source_lookup_failed | artifact_invalid | digest_mismatch`. The last two are admitted only
+  for those same three opening topics, from actual installed-source admission. A bad history
+  grant/invocation/value is source_contract_invalid, not an invented artifact failure. Broken
+  bindings are failures, not chess absence. All three installed-source statuses have null
+  recordedCoverage and no facts; the exact outcome is retained in sourceOutcome and verified
+  body/receipt equality before fixed operational status rendering. No raw loader errors,
+  private paths, catalogue rows, source handle or new provider attempt crosses this wire.
 - `no_witness` has no additional fields and requires successful complete source execution.
+- `below_floor` is a successful source-local status admitted only for
+  derived.explorer.inspector_population@1. It has exactly kind, sourceKey, total and population.
+  total is a safe integer in [0,99]. population has exactly ratingBuckets, speeds, since, until,
+  copied from the actual admitted narrow value's canonical ExplorerPositionPageRequest; use
+  that request's existing allowed bucket/speed/order/date/null rules, not a looser UI parser.
+  The fixed minimum is100, not a caller threshold. This state contains no facts, presentation,
+  recommendation, per-move counts, budget-deferred fields or source diagnostics.
 - `available` has exactly `collectionKey`, `range`, `collected`, `displayed`, `deferred`,
   `facts` and `presentation`. Facts are bounded ordered occurrence summaries, each exactly
   `{sourceKey,disposition,exceeded,detail}`. Disposition is `presented | deferred`; exceeded
   dimensions are unique members of `facts | words | marks | arrows`. Detail is null or the
   exact one of six new view refs belonging to this source. No source payload/raw JSON travels
   in this summary. Presentation is the existing strictly parsed `PresentationReceipt`.
+
+**D3858 sparse Explorer status — same unimplemented source operation.** Before any below_floor
+status, perform the same complete consumer preflight, granted-node/source preparation, actual
+whole-page delivery and narrow-factory admission as the >=100 arm. Check the complete normalized
+request against that node's captured Explorer position/population/window and current authority;
+Explorer's existing counter-neutral position normalization remains unchanged. A clock-equivalent
+page may match, a sibling node/population/date window may not. Use no legacy stats fallback,
+HTTP presentation receipt reconstruction or bare response object to establish this status.
+
+The source-owning operation derives sourceKey through the same actual source-occurrence key
+constructor as a normal Explorer fact: granted run/branch/node/context plus the genuine whole
+page/narrow item and complete delivery identity. Equal page bytes at a foreign occurrence do
+not authorize disclosure. It derives total and population from that same admitted narrow
+value, not another page or request parameter copy. Below100 bypass only the >=100 fact adapter,
+not source admission; invoking that adapter and swallowing its expected refusal is not this arm.
+Totals0 and99 are settled sparse successes; at100 use the existing available fact path. The
+population and100-per-move floors, canonical order/unlisted mass/attribution/recency behavior
+on available pages and old inspector.corpus@1/@2 APIs remain unchanged.
+
+recordedCoverage is null. range/collectionKey/detailProjection in disclosure are null and
+sourceKeys/sourceOrdinals/componentDigests are empty; the full below_floor outcome, including
+its sourceKey, total and population, is retained in sourceOutcome. This source identity is
+not a presented fact or budget-deferred item and has no collection continuation. Initial
+start0/null-collection is required; a nonzero continuation cannot produce this status.
+The client requires exact body/disclosure equality and exact request/decision/context correlation
+before paint. Source/config/access/selection changes retire stale completions under the normal
+rules. A matching digest alone supplies neither source issuance nor permission.
+
+The fixed status component states "Not enough games in this Lichess explorer population to
+show a distribution (N; minimum 100)" and the actual rating buckets/speeds/date window. Do not
+claim no human played it, no good move, missing provider or statistical suitability for other
+consumers. No raw JSON, arbitrary prose, new evidence leaf, fact receipt, voice/LLM input or
+countermeasure query is introduced. Keep the source panel settled without board shrinkage,
+overflow or repeat fetching merely because the population is sparse. Presentation's companion
+owns the fixed component; actual issuer/response/parser/native tests and joint acceptance remain.
 
 **D3841 recorded-source coverage — same unimplemented wire, not a new evidence leaf.** Every
 source body has the required recordedCoverage field, null except for the two exact ledger topics
@@ -3180,7 +3236,8 @@ admission still need independent acceptance; the disposable request/range checks
 
 **Truthful states:** retain `not_requested`, `unavailable`, `failed` and `no_witness` as distinct
 source outcomes. `no_witness` requires successful complete source execution with no admitted
-witness; it cannot mean “fitter dropped it.” Available output distinguishes collected, displayed
+witness; it cannot mean “fitter dropped it.” Explorer's exact below_floor status is a successful
+source with a refused display population, not any of those failure/absence states. Available output distinguishes collected, displayed
 and deferred fact counts. An actual budget-limited result carries the existing exceeded dimensions
 and the specific source fact's detail door; it never says that source found nothing. An invalid
 binding/factory contract is a typed operation failure, not chess absence. Focused legal-control
@@ -3784,6 +3841,15 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3858 authors an exact Explorer-only below_floor outcome from
+  genuine admitted whole-page/narrow evidence, retaining total/population/source occurrence
+  and full disclosure/client correlation. Zero/sparse is success, not provider failure or
+  no_witness; existing floors/available renderer/APIs remain. No new fact, fallback or issuer.
+- 2026-10-15 — Unaccepted D3857 adds the explicit deepest-opening@2 history source/reduction
+  slot (31 replacements/44 conditional unchanged, still75+6), preserving old@1. Closed opening-
+  only installed artifact missing/invalid/digest outcomes retain exact source state and receipt
+  binding; no permanent hold after successful source migration. D3859 coordinated Review Map
+  image and full joint/source/adapter/runtime qualification remain required.
 - 2026-10-15 — Unaccepted D3841 authors both retained ledger suppliers: registry-owned
   grading-independent artifact admission, original sidecar load states, exact full-FEN complete
   populations and ordered same-record lineage with no live suppression. Closed recordedCoverage

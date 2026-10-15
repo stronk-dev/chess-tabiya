@@ -438,14 +438,15 @@ const localSourceRebases = [
   ["derived.tactic.overloaded_defender_response_conflict@1", "rules.tactic.predicate.overload_conflict@1"],
   ["derived.tactic.fork_survives_reply@1", "derived.tactic.nonterminal_fork_survival@1"],
   ["derived.compare.structure_delta@1", "derived.compare.structure_delta@2"],
+  ["derived.opening.deepest_reached@1", "derived.opening.deepest_reached@2"],
 ] as const;
 function checkMap(text: string) {
   const section = text.split("**D3841 exact affected-source map — unaccepted author image:**")[1]!
     .split("**D3841 exact-version closure")[0]!;
   const rows = [...section.matchAll(/^\| `([^`]+@\d+)` \| `([^`]+@\d+)` \|/gmu)].map(match => [match[1]!, match[2]!] as const);
-  assert.equal(rows.length, 30);
-  assert.equal(new Set(rows.map(row => row[0])).size, 30);
-  assert.equal(new Set(rows.map(row => row[1])).size, 30);
+  assert.equal(rows.length, 31);
+  assert.equal(new Set(rows.map(row => row[0])).size, 31);
+  assert.equal(new Set(rows.map(row => row[1])).size, 31);
   const tupleRepairs = pivotalSuccessors.map(row => `${row.id}@1`);
   assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs, ...localSourceRebases.map(row => row[0]), ...SEQUENCE_SOURCE_REBASES.map(row => row[0])].sort());
   for (const [old, successor] of [...localSourceRebases, ...SEQUENCE_SOURCE_REBASES]) assert(rows.some(row => row[0] === old && row[1] === successor));
@@ -471,6 +472,8 @@ for (const [old, successor] of SEQUENCE_SOURCE_REBASES) {
 }
 assert.throws(() => checkMap(specification.replace("| `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` |",
   "| `derived.tactic.promotion_pressure@1` | `derived.tactic.promotion_pressure@1` |")));
+assert.throws(() => checkMap(specification.replace("| `derived.opening.deepest_reached@1` | `derived.opening.deepest_reached@2` |",
+  "| `derived.opening.deepest_reached@1` | `derived.opening.deepest_reached@1` |")));
 const presentationDraft = readFileSync("rfc/evidence-presentation.md", "utf8");
 const detailTable = presentationDraft.split("| Projection suffix after `derived.inspector.detail.` | Sole source | Proposed factory | Registered renderer |")[1]!.split("\n\n")[0]!;
 const detailRefs = [...detailTable.matchAll(/^\| `([^`]+)` \|/gmu)].map(match => `derived.inspector.detail.${match[1]}@1`);
@@ -481,7 +484,7 @@ console.log(JSON.stringify({ scope: "D3841 draft inventory requirements only, NO
   additionalFixedTupleRepairs: pivotalSuccessors.length, unchangedTopics: originalRefs.length - mapped.rows.length,
   proposedTopics: mapped.topics.length, proposedAcceptedRefs: mapped.topics.length + detailRefs.length,
   localSourceRepairs: localSourceRebases.length, recordedSequenceRepairs: SEQUENCE_SOURCE_REBASES.length,
-  negativeMapControls: 32, rankInputContract: "held_D3845", productionRegistration: false }));
+  negativeMapControls: 34, rankInputContract: "held_D3845", productionRegistration: false }));
 
 // D3847/D3850 disposable input reconstruction. No new factory, seal or runtime declaration.
 const materialRoles = ["pawn", "knight", "bishop", "rook", "queen"] as const;
