@@ -15,6 +15,8 @@
 // derived convention (§5); no component colours or ranks a move by quality.
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { presentationDigest, withoutUndefined } from "./presentation-digest.js";
+export { presentationDigest } from "./presentation-digest.js";
 import type { Color, Role, SquareName } from "chessops/types";
 
 import { renderEndgameClassification, type EndgameClassification } from "./endgame.js";
@@ -790,11 +792,6 @@ function componentSentence(component: ComponentValue): string {
 // Canonical digests: the shared fail-closed RFC-8785 bytes with a literal domain prefix
 // ---------------------------------------------------------------------------------------------
 
-/** `sha256:<hex>` over `<domain>\n<canonical JSON>`; non-finite numbers and lone surrogates refuse. */
-export function presentationDigest(domain: string, value: unknown): string {
-  return `sha256:${evidenceDigest(`${domain}\n${canonicalizeJson(withoutUndefined(value))}`)}`;
-}
-
 const isRecord = (value: unknown): value is Readonly<Record<string, unknown>> => typeof value === "object" && value !== null && !Array.isArray(value);
 function exact(value: unknown, keys: readonly string[], optional: readonly string[] = [], label = "value"): Readonly<Record<string, unknown>> {
   if (!isRecord(value)) throw new PresentationError("PRESENTATION_INVALID", `${label} must be an object`);
@@ -814,17 +811,6 @@ function deepFreeze<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
     for (const child of Object.values(value as Record<string, unknown>)) deepFreeze(child);
     Object.freeze(value);
-  }
-  return value;
-}
-
-/** Omits absent optional properties (`undefined`) so they have no wire image; everything else is kept. */
-function withoutUndefined(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(withoutUndefined);
-  if (value !== null && typeof value === "object") {
-    const result: Record<string, unknown> = {};
-    for (const [key, entry] of Object.entries(value as Record<string, unknown>)) if (entry !== undefined) result[key] = withoutUndefined(entry);
-    return result;
   }
   return value;
 }

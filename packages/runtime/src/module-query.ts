@@ -49,6 +49,8 @@ import { hasKingZoneWitness, postcommitEdgeEvidence } from "./postcommit-nudge.j
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, Node } from "./types.js";
 import { transposeKey } from "./chess.js";
+import { moduleDecisionStamp, type ModuleDecisionStamp } from "./module-decision.js";
+export { moduleDecisionStamp, type ModuleDecisionStamp } from "./module-decision.js";
 import type { ExplorerPopulationSummary } from "./explorer-summary.js";
 
 export const MODULE_QUERY_PROTOCOL = "module.query_page@1" as const;
@@ -125,25 +127,6 @@ export function parseModuleQueryRequest(value: unknown): ModuleQueryRequest {
 // ---------------------------------------------------------------------------------------------
 // The decision stamp (§2.5.2 / evidence-presentation §3.11) — derived, never an invented revision
 // ---------------------------------------------------------------------------------------------
-
-export interface ModuleDecisionStamp {
-  readonly eventHeadSeq: number;
-  readonly cursor: { readonly branchId: string; readonly nodeId: string };
-  readonly disclosureBoundarySeq: number | null;
-  readonly digest: string;
-}
-
-/** The last open feedback-disclosure boundary event, or null when delivery is closed. */
-function disclosureBoundary(run: DrillRun): number | null {
-  if (!feedbackDeliveryOpen(run)) return null;
-  const boundary = [...run.events].reverse().find((event) => event.type === "feedback.revealed" || event.type === "outcome.reached" || event.type === "checkpoint.reached" || event.type === "segment.completed");
-  return boundary?.seq ?? run.events.at(-1)?.seq ?? 0;
-}
-
-export function moduleDecisionStamp(run: DrillRun): ModuleDecisionStamp {
-  const body = { eventHeadSeq: run.events.at(-1)?.seq ?? 0, cursor: { branchId: run.activeCursor.branchId, nodeId: run.activeCursor.nodeId }, disclosureBoundarySeq: disclosureBoundary(run) };
-  return Object.freeze({ ...body, cursor: Object.freeze(body.cursor), digest: presentationDigest("module.decision_stamp@1", body) });
-}
 
 // ---------------------------------------------------------------------------------------------
 // Source acquisition — the exact value routes over the timing subject (§2.5 timing frames)

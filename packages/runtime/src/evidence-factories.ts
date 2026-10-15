@@ -160,6 +160,7 @@ import {
 import { transitionReading, transitionSemanticFacts } from "./transition.js";
 import { branchPath } from "./branch-path.js";
 import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-values.js";
+import { isRecordedComparisonSource, recordedComparisonData, recordedComparisonPathValue, assertRecordedComparisonPath, type RecordedComparisonSource, type RecordedComparisonPath } from "./recorded-comparison.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
@@ -361,6 +362,7 @@ function projectionFor(route: string): ProjectionDeclaration {
 function authorityShape(candidate: unknown): unknown {
   if (candidate === null || typeof candidate !== "object") return candidate;
   if (Array.isArray(candidate)) return candidate.map(authorityShape);
+  if (isRecordedComparisonSource(candidate)) return recordedComparisonData(candidate).authority;
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
   if (candidate instanceof Map) return { map: [...candidate].map(([key, entry]) => [key, authorityShape(entry)]) };
   // A sealed value hashes as its receipt digest; anything else is an ordinary authority record.
@@ -1304,6 +1306,22 @@ export const createDerivedComparePieceRouteV1Evidence = (() => {
     const path = branchPath(run, branchId).filter((node) => node.ply >= fork.ply);
     return Object.freeze(recordedPieceRoutes(path).map((routeValue) => mint(route, symbol, routeValue, { run, branchId })));
   });
+})();
+
+export const createRunRecordComparisonPathV1Evidence = (() => {
+  const route = "run.record.comparison_path@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ comparison: value("an owned recorded comparison", isRecordedComparisonSource), branchId: value("a granted branch id", isText) }], result: "single" },
+    ({ comparison, branchId }: { readonly comparison: RecordedComparisonSource; readonly branchId: string }) =>
+      mint(route, symbol, recordedComparisonPathValue(comparison, branchId), { comparison, branchId }));
+})();
+
+export const createDerivedComparePieceRouteV2Evidence = (() => {
+  const route = "derived.compare.piece_route@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ comparison: value("an owned recorded comparison", isRecordedComparisonSource), branchId: value("a granted branch id", isText), path: sealed("run.record.comparison_path@1") }], result: "population" },
+    ({ comparison, branchId, path }: { readonly comparison: RecordedComparisonSource; readonly branchId: string; readonly path: DeclaredEvidence<RecordedComparisonPath> }) => {
+      assertRecordedComparisonPath(comparison, branchId, path);
+      return Object.freeze(recordedPieceRoutes(path.payload.nodes.map(entry => entry.node)).map(payload => mint(route, symbol, payload, { comparison, branchId, path }, [path])));
+    });
 })();
 
 const isLearnerSide = (candidate: unknown): boolean => candidate === "white" || candidate === "black";

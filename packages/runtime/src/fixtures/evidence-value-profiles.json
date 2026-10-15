@@ -85,6 +85,16 @@
       "fed34cc93d8b111d40d1ac5e830d1e12f5877b6983366ff722c3009be8b655d0"
     ]
   },
+  "derived.compare.piece_route@2": {
+    "availability": "available",
+    "cardinality": 4,
+    "payloadDigests": [
+      "94c1331c88fd60a504209ce0c48e9639f13a57f65ba1ed7a432b97f1a488e6f9",
+      "6cbd80f5dde74372b5dde97b78d36d5ba7f6f90e7aca317564c144d5c7fdbcc7",
+      "b5722a1cc90b0461977c42c7461b556606bfb30a06cd8787404a1590cfbf3371",
+      "a0187f216d9c5d8ffc5510dbc953e8b8c88d24cc00468163e647d784f6f8c71f"
+    ]
+  },
   "derived.compare.structure_delta@1": {
     "availability": "available",
     "cardinality": 72,
@@ -2183,6 +2193,13 @@
     "cardinality": 1,
     "payloadDigests": [
       "9ac78eabbf176345caeca4e6b91eb6c8fa03fb6a93444a580d6d98b30f3fe366"
+    ]
+  },
+  "run.record.comparison_path@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "0e7971f903d18bcff500e04535a7034db857b54da32621d58db472221ff464a4"
     ]
   },
   "run.record.consequence@1": {

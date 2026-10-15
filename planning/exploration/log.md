@@ -31558,3 +31558,59 @@ Campaign was the one capability with no API, route or content. Now:
   Continue the actual nominal recorded/Compare/pivotal/sequence owners, typed reductions/grades
   and complete current receivers/API/native migration, retiring obsolete paths under D3851.
   The full1.0 goal remains active.
+
+### 2026-10-16 — accepted D3864 recorded comparison/path/piece-route implementation
+
+- Implement the genuine nominal comparison source and two internal/unbound routes: complete
+  original event-image parsing/replay, both graph/FEN/legal-edge/unique birth-event joins before
+  either endpoint narrowing, owned immutable snapshot, ordered grants/current decision and full
+  actual event-head digest. The path retains full nodes/creation events/original zero-based
+  ordinals, not a fake singleton move or a digest substituted for the actual variable path.
+  piece_route@2 consumes exactly that sealed source and never reopens whole branches.
+- 30 permanent tests/298 extended focused cases retain60 both-color endpoint/column combinations,
+  fork/root zero-edge, inherited origins, annotations distinct from birth images, immutable
+  caller isolation, genuine foreign/copied/wrong-scope paths, complete capture/EP/promotion/
+  repeated-move and orthodox/stationary/overlapping960 physical piece identities. Register both
+  sole factories/invokers, exact literal input and closed operands; no current consumer changes.
+- The first focused run catches two invalid castling fixtures (294 pass/two fail), not product
+  faults: normalize the fixture start through the existing canonical owner and move the opposing
+  king off the rook's initial file. No assertion or source validation is weakened. To avoid a
+  query→factory import cycle, extract the existing decision stamp and pure presentation digest
+  unchanged into lower-level modules; all existing public exports and bytes remain.
+- Independent bounded review finds D3872 full-head aliasing and D3873 root-only canonicality.
+  Ledger both before repair. Add genuine same-seq changed noncreation report and alternate-root
+  canonicality controls; an explicit temporary predecessor mutation fails exactly those two
+  cases (296 pass/two fail). Restore both fixes;298 focused cases/ten files pass. Independent
+  read-only re-review clears both repairs, no additional blocker; no per-handle registry needed
+  for independently genuine identical logical scope. Final full verification is pending.
+- Canonical generators add exactly two profiles/capability declarations (1000 total), prior998
+  and actual module/packet/pack requirements unchanged; F1 remains49 producers/42 consumers/
+  556 bindings with301 projections, sole active factory routes294. Semantic343/343 cases,
+  81 subjects/zero qualified,53 population/eight external receipts remain unchanged outcomes.
+- D3870 follow-up review confirms a narrow schema follow-up is required. It must explicitly
+  settle REST's independent empty-candidate write policy, existing version/migration claims and
+  stamp-only storage transition. No accepted schema edit or lane rebase is invented. The exact
+  genuine empty-event→subject→source/persistence/export/reload positive remains undischarged.
+- D3864/D3841 and actual public consumer/receiver/API/native migration remain doing. No qualified
+  source, official graduation, full capability/milestone, browser/remote-CI/push/release claim,
+  new compatibility pipeline, raw research dump, pack restamp or protected-intent change.
+
+### 2026-10-16 — D3864 source checkpoint verification and D3872/D3873 closeout
+
+- Full normal `make verify build` exits zero:6122 software tests/398 files, seven isolated
+  performance tests/four files,257 real-content tests/26 files and every type/schema/F1/F2/
+  source/semantic/packet/capability/release/governance/build/final-corpus gate. Software takes
+  513.14s in this local run, performance62.10s/content56.62s; none is replaced by a focused run,
+  shortened population, retry, sleep, raised deadline or an assumed remote-CI result.
+- The final corpus clearance retains92 documents/354 blockers/34 resolved/48 accepted/errors[];
+  all104 capability documents retain exact derived requirements. No pack edits/restamps or
+  official graduation. Two new canonical declarations/profiles retain prior998 unchanged.
+- Close only D3872/D3873 with actual source/test path evidence and independent read-only repair
+  confirmation; retain the two predecessor-red cases and earlier fixture/import-cycle failures
+  above. D3864/D3841 and actual current receivers/API/native migration remain doing. D3870's
+  narrow schema follow-up remains open, including REST policy and negotiated resource/stamp
+  transition. No guessed schema version or premature empty-selection/pivotal proof.
+- Refresh existing strategic/machine checkpoint, ledger/state/anchors and queue at zero
+  untriaged. No whole milestone, capability, tactical qualification, browser/native-provider,
+  push or release claim. No new worktree or compatibility pipeline. The full1.0 goal stays active;
+  continue scoped pivotal/sequence/reduction/grade owners and source-complete current adoption.

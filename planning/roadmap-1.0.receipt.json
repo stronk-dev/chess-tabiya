@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2ce02088751c97142c5af25c4b6f6ee21b1f295ab246f1ef8cc70455ec94ec16",
+    "roadmap": "sha256:d5c9d478a473567c22c3b280d1e646d13727bb6e1a9da0a92ae56f967c447ce8",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:1ca58af52b9e43e7628584d5d61fbca59e31cd76ea9e46828daca6cacd2d3445",
+    "workState": "sha256:1a1c499f493b22274127c1d9af41befdf28077cf895bb6ef0aae865a85de1c9f",
     "rfcRegister": "sha256:5b8f04a615e9fc3fbe27cb34d6470de4aaf21f25bda207402410549840b35775",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 38,
       "blocked": 1084,
-      "done": 1709,
+      "done": 1711,
       "refused": 162
     },
     "workItems": {
@@ -476,10 +476,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "The complete current-source/module contract is independently accepted. Genuine internal landing captures, exposure, promotion/overload/fork, material and seven historical report sources are implemented. Continue nominal recorded/Compare/pivotal/sequence source owners, declared reductions and source-owned grades, then source-complete282-pair current module/Hint/packet image and exact receivers/API/native proof. D3870 holds the accepted empty selection arm: reconcile canonical schema owner/resource/migration via independent review before a genuine empty-array positive and complete selection/pivotal/current adoption. No schema bypass, guessed version, fake candidate or missing-to-empty substitution. Preserve availability, conservative whole-selection refusal, every detector family, granted origins, root-inclusive Compare, D1422 unified ladder and budgets. Exposure remains Threat-only. Retire obsolete paths after actual callers migrate; no compatibility pipeline, filtered bindings, qualification or whole milestone/release claim.",
+      "nextAction": "Continue accepted nominal pivotal/sequence sources, source-owned reductions/grades and complete current Compare/Inspector/Hint/packet receivers. Recorded comparison/path/piece_route@2 now exists internally with reviewed corrections and focused proof; full normal verification/build is green with6122 software/seven performance/257 content and all remaining gates. D3870 needs a narrow schema follow-up settling human_common empty telemetry, REST write policy, claimed run-schema/migration order and stamp-only transition before canonical empty-array/persistence/export/reload success. Do not guess a version or rebase claims unilaterally. Preserve every detector family, full source/grant/head identity, availability, conservative whole-selection refusal, root-inclusive Compare, D1422 unified ladder and original budgets. Source-complete282-pair current cutover precedes actual obsolete-path retirement. No compatibility pipeline, filtered bindings or qualification/milestone/release promotion.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Seven internal historical report routes now retain exact stored packet/selection/field authority, not modern provider truth.31 new permanent source cases/268 extended focused passes and workspace types cover complete envelopes, exact run/head/node/item/event identity, duplicates, inherited packets, origin branch, stored requested band and missing/uninterpretable/null/signed fields. Independent read-only review finds no additional implementation blocker. D3870 is a real upstream contract gap: run0.18 candidates.minItems=1 refuses the accepted successful-empty arm before genuine subject issuance. This requirement remains open for reviewed schema-owner/resource/migration reconciliation; no bypass, version guess or candidate fabrication. Seven canonical profiles/declarations added (998 total), old991 and current packet/module bindings/pack requirements unchanged. Semantic343/343 cases/81 subjects/zero qualified remain. The first full run catches one missed producer-list update after6091 passes. D3871 closes the exact-list repair and enrollment of the existing catalogue/manifest tests in the normal fast F2 gate. The full normal rerun make verify build passes6092 software tests/397 files, seven performance,257 content and all type/contract/governance/corpus/build checks. No assertion, coverage or deadline reduction; first failure retained in the append-only log. Nominal source/reduction/grade, complete282-pair current consumers, strict receivers/API/native proof and obsolete-path retirement remain; no complete selection, qualification, browser, remote CI, whole milestone or release claim.",
+        "summary": "Accepted D3864 nominal recorded comparison owner and complete original path/piece_route@2 are implemented internally.30 permanent cases/298 focused passes retain60 both-color ordered-column/endpoint combinations, full birth-event ordinals, annotations, zero-edge roots, caller isolation, exact logical authority and physical capture/EP/promotion/960 routes. Independent review finds D3872 same-seq head aliasing and D3873 root-only canonicality; explicit predecessor mutation fails exactly two controls, fixes restore green and independent re-review clears both. Existing full event-head digest now participates in source authority; no per-allocation registry. Two canonical profiles/declarations added (1000 total), prior998/current packet/module/pack requirements unchanged. Semantic343/343 cases/81 subjects/zero qualified remain. Final normal make verify build passes6122 software/398 files, seven isolated performance,257 content and every remaining type/contract/governance/corpus/build gate. D3872/D3873 close with actual source/test evidence; zero untriaged. D3870 needs a narrow schema follow-up, explicit REST write policy, claimed version/migration negotiation and stamp-only transition before genuine canonical empty-array/persistence/export/reload proof. Actual current282-pair consumers, pivotal/sequence/reduction/grade owners and receivers/API/native proof remain; obsolete paths retire after real callers migrate. No complete capability, qualification, browser/remote CI or release claim.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -608,6 +608,11 @@
           "Makefile",
           "packages/runtime/src/recorded-inspector.ts",
           "packages/runtime/src/testing/recorded-inspector-fixture.ts",
+          "packages/runtime/src/recorded-comparison.ts",
+          "packages/runtime/src/recorded-comparison.test.ts",
+          "packages/runtime/src/testing/recorded-comparison-fixture.ts",
+          "packages/runtime/src/module-decision.ts",
+          "packages/runtime/src/presentation-digest.ts",
           "packages/runtime/src/internal/material-sources.ts",
           "packages/runtime/src/internal/candidate-child-reading-routes.ts",
           "packages/runtime/src/tactics.ts",
@@ -633,13 +638,28 @@
         "anchors": [
           {
             "kind": "work_state",
+            "id": "D3872",
+            "digest": "sha256:4d6ae45b4f673d99738cd745777e45d4d933ccb84aa44a4ee39badd04bf15a58"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3873",
+            "digest": "sha256:e31e9ae646c6a41acd256e4dda73c2a9ac2f25dbdb8507a2aa2c10cc9114c89e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3864",
+            "digest": "sha256:beaf0db574cf23ab3921e8bade22f0e6adf94c14569e36b874ff63dd53afc529"
+          },
+          {
+            "kind": "work_state",
             "id": "D3871",
             "digest": "sha256:9c21d569bff8894a80a75f9e02128d73c7fc8289c5b324e28d6b87a8847901a6"
           },
           {
             "kind": "work_state",
             "id": "D3870",
-            "digest": "sha256:ff2c08c9b5da48646f70f11c362a3edd92b2f4d8795d26e047ed887269787ece"
+            "digest": "sha256:d8a130d97d9c1a3bd95843c3c796a33045d427963a2edb35b08ea36af500fc09"
           },
           {
             "kind": "work_state",

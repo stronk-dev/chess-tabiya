@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:69c9ebd0b36c80222c8bd1bce461c1f1e61600899f302c37fae3faf2ae4b71f0",
+      "sourceDigest": "sha256:b2f2e215a4aa97d39b09308252bb1e55c74b21bb335872bdfda5e802e20b491e",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32192,7 +32192,7 @@
       "id": "D3864",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:94e4d24674d13fffad892f44c4962d5053de28557d5424445e057b602488c9ad",
+      "sourceDigest": "sha256:beaf0db574cf23ab3921e8bade22f0e6adf94c14569e36b874ff63dd53afc529",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32246,7 +32246,7 @@
       "id": "D3870",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ff2c08c9b5da48646f70f11c362a3edd92b2f4d8795d26e047ed887269787ece",
+      "sourceDigest": "sha256:d8a130d97d9c1a3bd95843c3c796a33045d427963a2edb35b08ea36af500fc09",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-16"
@@ -32258,6 +32258,24 @@
       "sourceDigest": "sha256:9c21d569bff8894a80a75f9e02128d73c7fc8289c5b324e28d6b87a8847901a6",
       "uxItems": [],
       "evidence": "Makefile",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3872",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4d6ae45b4f673d99738cd745777e45d4d933ccb84aa44a4ee39badd04bf15a58",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-comparison.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3873",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e31e9ae646c6a41acd256e4dda73c2a9ac2f25dbdb8507a2aa2c10cc9114c89e",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-comparison.test.ts",
       "evidenceKind": "path"
     }
   ]

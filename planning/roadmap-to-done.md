@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3871]] · **Machine map:**
+2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3873]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -72,6 +72,21 @@ one stale producer-list expectation after6091 passes; D3871 closes the exact-lis
 and enrolls both existing catalogue/manifest files in the normal fast F2 gate, without reducing
 any assertion, deadline or coverage. Remaining nominal sources/reductions/grades and complete current
 consumer/receiver/API/native delivery still gate the capability.
+
+The nominal Compare source and complete path/piece-route@2 pair are now internal prerequisites.
+30 permanent tests/298 extended focused passes retain60 both-color ordered-column/endpoint
+combinations, exact original events/ordinals, later annotations, zero-edge roots, caller snapshot
+isolation and physical capture/EP/promotion/960 routes. Independent review catches D3872's
+same-sequence head alias and D3873's root-only canonicality omission; explicit predecessor
+mutation fails exactly those two controls, the fixes restore green and read-only re-review
+clears both. Final normal make verify build passes6122 software/398 files, seven isolated
+performance,257 content and all type/contract/governance/corpus/build gates. D3872/D3873
+close with source/test evidence; the broader migration does not. Two profiles/declarations are added
+(1000 total), old998 and actual module/packet/pack requirements unchanged. D3864 remains doing
+until real Compare/nonmodule consumers, the full current image and API/native journeys migrate.
+D3870 also still requires a narrow schema follow-up with explicit REST write policy and
+stamp-only storage transition, not merely a parser edit or guessed version. No public cutover,
+qualified semantic source, completed capability or release claim follows from this checkpoint.
 
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now
 refuse stale generated contracts before both full test pools. Four scheduling regressions

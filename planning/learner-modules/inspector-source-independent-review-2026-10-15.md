@@ -1142,3 +1142,35 @@ nonempty/internal work may continue, but complete selection/pivotal/current-cons
 is held until a genuine successful-empty positive crosses the actual canonical boundary.
 Missing-array source_absent remains a different state. No complete source/consumer acceptance
 or qualification follows from the bounded internal implementation review.
+
+### D3870 bounded schema-owner follow-up — 2026-10-16
+
+The authorized reviewer finds no existing accepted authority for widening the implemented
+canonical event schema. RFC-0000 requires a narrow follow-up, scoped to human_common recorded
+empty telemetry without weakening move/engine/per-entry or provider/bot proofs. Its contract
+must explicitly settle `apps/server/src/rest.ts:parseOpponentSelection`'s independent empty-array
+refusal, negotiate the existing run-schema/migration claims, and specify a stamp-only migration
+because storage reads filter the exact current schema version. Preserve event bytes/absent fields;
+require canonical empty-event→subject→source success plus persistence/export/reload controls.
+No version/rebase, migration, parser change or schema follow-up is accepted by this read-only
+report. D3870 remains open while other accepted internal source work continues.
+
+### Internal recorded comparison/path/piece-route review — 2026-10-16
+
+The authorized reviewer inspects the accepted D3864 implementation and returns two real gaps:
+the validated event-head digest was discarded from source authority (D3872), and parse-only
+FEN validation relied on nonroot edges for canonical equality (D3873). The former aliases
+same-length heads with different noncreation reports; the latter admits a noncanonical zero-edge
+root. Both are ledgered before repair. No new per-allocation receipt registry is required:
+independently genuine handles for identical owner/run/head/ordered grants denote the same logical
+authority. Copied/foreign handles and genuinely changed scopes still refuse.
+
+Main adds genuine same-sequence attachment-image contrast and a replay-admitted alternate-root
+notation. An explicit temporary predecessor mutation makes the normal fast gate fail exactly
+those two controls (296 pass/two fail); restoring the fixes yields298 passes/ten files. The actual
+full event-head digest now participates in input authority, and every original path node must
+be canonical before narrowing. Independent read-only re-review clears both corrections, with
+no further blocker in birth/annotation separation, immutable snapshots, literal path inputs,
+physical capture/EP/promotion/960 routes or unchanged pure decision/digest extraction.
+The reviewer does not rerun tests. Current public consumers/receivers/API/native migration,
+semantic qualification and D3870 remain open; this is bounded component review only.

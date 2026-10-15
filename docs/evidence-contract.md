@@ -172,6 +172,24 @@ Missing candidates are source_absent, not a fabricated empty window. A reviewed 
 resource/migration amendment and a genuine canonical empty-array positive are still required;
 no local subject/parser bypass or complete selection/pivotal delivery is claimed.
 
+`createRecordedComparisonSource({run,columns})` now owns an independent immutable snapshot
+and two exact branch/endpoints. It parses the complete event image, checks actual replay and
+both original graph/FEN/legal-edge/creation-event paths before narrowing either column. It
+does not compute structural facts, acquire providers, authenticate storage or grant current
+access. The server must still resolve and recheck permission around work and publication.
+Changing caller-owned nodes, events or columns cannot change the source or freeze the caller.
+
+Internal `run.record.comparison_path@1` retains every original node from the real common fork
+through the selected endpoint, with its full original creation event and zero-based ordinal.
+Later node annotations remain distinct from birth images. A zero-edge path retains the actual
+fork singleton. The full actual event-head digest and both ordered grants/current decision stay in its input authority even if one
+column's displayed path is unchanged. `derived.compare.piece_route@2` consumes exactly that
+genuine sealed path, not a whole branch reopened later or an arbitrary single move. Physical
+piece identity survives captures, en passant, promotion, repeated moves and simultaneous
+Chess960 castling; stationary castling pieces have no invented movement. These two routes are
+internal/unbound prerequisites, not a partial Compare/Inspector consumer cutover. Current
+consumers must migrate source-completely before obsolete APIs retire under D3851.
+
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
 and can carry evaluation only. Its derivation is an explicit same-lane alternative: two recorded

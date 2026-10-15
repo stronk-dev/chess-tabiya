@@ -28,6 +28,16 @@ the specified successful empty selection cannot receive a genuine resolved subje
 that requirement as undischarged pending a reviewed schema-owner/resource/migration amendment;
 neither this checkpoint nor the existing no-schema claim authorizes changing or bypassing it.
 
+**Recorded comparison checkpoint, 2026-10-16:** D3864 now has its nominal source owner,
+complete original graph/FEN/legal-edge/event validation before narrowing, exact sealed
+fork-to-granted-tip path and piece_route@2 consuming that one genuine path.30 permanent tests
+retain both colors,60 endpoint/column combinations, full creation ordinals, later annotations,
+zero-edge roots, independent caller snapshots, crossed/copied scopes and actual capture/EP/
+promotion/960 identities. Independent review's D3872/D3873 full-head/root corrections clear
+re-review and actual predecessor-red controls. Normal focused gate298 cases/ten files and full
+make verify build6122 software/398 files, seven performance/257 content plus all remaining gates pass.
+These two internal/unbound routes do not complete actual Compare/Inspector/API/native migration.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

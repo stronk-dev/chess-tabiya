@@ -76,6 +76,25 @@ Those reruns now pass in full; D3871 closes locally with the first failure retai
 Next reconcile D3870's schema-owner/resource/migration amendment through independent review,
 without blocking lawful internal nominal-source work or exposing the incomplete selection arm.
 
+The accepted D3864 source pair is now implemented internally: nominal comparison constructor,
+complete original event/replay/graph/FEN/legal-edge/birth joins before narrowing, sealed actual
+fork-to-endpoint path and piece_route@2 using that exact path.30 permanent tests/298 extended
+focused passes cover60 both-color ordered-column/endpoint combinations, zero-edge roots,
+original event ordinals/later annotations, caller isolation and physical capture/EP/promotion/
+960 routes. Independent review finds two real gaps, recorded as D3872/D3873: same-length heads
+need the actual full event digest, and root-only paths need explicit canonical equality. Both
+regressions fail under an explicit predecessor mutation; the corrections restore green.
+Final normal make verify build passes6122 software/398 files, seven isolated performance,
+257 content and every remaining type/contract/governance/corpus/build gate. Independent
+read-only re-review clears both repairs; D3872/D3873 close with actual source/test evidence.
+Two canonical profiles/capability declarations are added (1000 total), prior998 and current
+module/packet bindings remain unchanged. No current Compare/Inspector adoption is claimed.
+
+D3870 follow-up review finds no existing accepted schema-widening authority. The narrow follow-up
+must explicitly settle REST's separate empty-candidates write refusal and a stamp-only migration,
+as well as canonical human_common empty telemetry and resource ordering. No unilateral version/
+lane rebase or empty-to-missing substitution is authorized by this implementation checkpoint.
+
 Next implement the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,
