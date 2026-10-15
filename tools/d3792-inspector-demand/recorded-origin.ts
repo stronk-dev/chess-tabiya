@@ -2,7 +2,7 @@
 // Existing sealed history is the authority; fixture labels never establish a provider exchange.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { createRun, canonicalRunStart, appendOpponentPly, attachEvidence, rewind, fork, branchPath,
+import { createRun, canonicalRunStart, appendOpponentPly, attachEvidence, rewind, fork, branchPath, commitMove,
   type DrillRun, type EvidenceAttachedEvent, type EvidenceKind, type OpponentMoveSelectedEvent,
 } from "../../packages/runtime/src/index.js";
 import { resolveRunSubject, resolveRunEvidenceItem, assertResolvedRunSubject,
@@ -13,6 +13,8 @@ import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/ev
 import { evidenceValueReceipt, compileEvidenceManifest, type DeclaredEvidence, type ProjectionDeclaration,
   type ProducerDeclaration } from "../../packages/runtime/src/evidence-contract.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
+import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src/story.js";
+import { reviewPacketForRun, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
 
 const at = "2026-10-15T00:00:00.000Z";
 let checks = 0;
@@ -176,6 +178,140 @@ console.log(JSON.stringify({ scope: "D3845 current empty-rank diagnostic, not F2
   declaredInputs: rankDeclaration.derivation!.inputs!.length, actualSourceDigests: evidenceValueReceipt(emptyRank).sourceDigests.length,
   successfulEmptyRank: true, literalMemberMatchesActualEmptyInputs: false }));
 
+// Measure real Story collections as legal path length grows. No invented moments, provider
+// deliveries or evidence wrappers: use the unchanged packet/Story compiler and its actual receipts.
+const rankCases: { learnerSide: string; plies: number; moments: number; inputCount: number;
+  refs: readonly string[]; repeatedRefs: boolean; fixedDeclarationMatches: boolean }[] = [];
+const emptyStateCases: { learnerSide: string; states: number; distinctPackets: number;
+  distinctRankInputs: number; pendingRemainsVisible: boolean; degradationRemainsVisible: boolean }[] = [];
+for (const learnerSide of ["white", "black"] as const) {
+  let run = createRun({ id: `d3845-story-${learnerSide}`, session: { kind: "position",
+    start: canonicalRunStart({ fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: learnerSide }),
+    opponentPolicy: { mode: "human_common" }, feedbackPolicy: "attempt_end" },
+    sessionDigest: `sha256:${"b".repeat(64)}`, seed: 1, createdAt: at,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+  const moves = ["e2e4", "e7e5", "g1f3", "b8c6", "d2d4", "e5d4", "f3d4", "g8f6"];
+  for (let plies = 0; plies <= moves.length; plies++) {
+    if (plies > 0) run = commitMove(run, moves[plies - 1]!, { at }).run;
+    const packet = reviewPacketForRun(run, run.activeCursor.branchId);
+    const story = reviewStoryMoments(packet);
+    const rank = story.evidence.find(value => value.projection.id === "derived.story.rank" && value.projection.version === 2)!;
+    assert(rank, "actual Story must retain its rank evidence even with no moments");
+    const inputs = story.moments.flatMap(moment => moment.evidence);
+    const refs = inputs.map(value => `${value.projection.id}@${value.projection.version}`);
+    assert.deepEqual(evidenceValueReceipt(rank).sourceDigests, inputs.map(value => evidenceValueReceipt(value).payloadDigest),
+      "all actual moment evidence inputs, including repeated refs, survive in receipt order");
+    assert.deepEqual((rank.payload as { rank: readonly string[] }).rank, story.rank);
+    assert.deepEqual(story.rank, rankStoryMoments(story.moments));
+    assert(evidenceValueReceipt(rank).convention!.refs.some(ref => ref.id === "story-rank" && ref.version === 1),
+      "empty and nonempty rank values already retain the genuine registered presentation convention");
+    rankCases.push({ learnerSide, plies, moments: story.moments.length, inputCount: refs.length, refs,
+      repeatedRefs: new Set(refs).size < refs.length,
+      fixedDeclarationMatches: JSON.stringify(refs) === JSON.stringify(rankDeclaration.derivation!.inputs!.map(ref => `${ref.id}@${ref.version}`)) });
+    if (plies === 0) {
+      // Explicit source-state fixtures, NOT actual queued jobs or provider failures. Equal empty
+      // lists need not mean equal coverage, so inspect the original packet separately from rank.
+      const fixtureStates: readonly ReviewProviderNodeState[] = [
+        { kind: "not_requested" }, { kind: "pending", jobCount: 1, retrying: 0 },
+        { kind: "unavailable", reason: "provider_off" },
+      ];
+      const images = fixtureStates.map(state => {
+        const packet = reviewPacketForRun(run, run.activeCursor.branchId,
+          { engine: new Map(run.nodes.map(node => [node.id, state])) });
+        const story = reviewStoryMoments(packet);
+        assert.deepEqual(story.rank, []);
+        const rank = story.evidence.find(item => item.projection.id === "derived.story.rank")!;
+        assert.deepEqual(evidenceValueReceipt(rank).sourceDigests, []);
+        return { packet, rankInput: evidenceValueReceipt(rank).inputDigest };
+      });
+      assert.equal(new Set(images.map(image => image.packet.packetDigest)).size, 3);
+      assert.equal(new Set(images.map(image => image.rankInput)).size, 1,
+        "old pure rank has no source-state authority; never reuse it as a scoped source grant");
+      assert.equal(images[1]!.packet.completion.progress.kind, "progressive");
+      assert.equal(images[2]!.packet.completion.degradation.kind, "degraded");
+      emptyStateCases.push({ learnerSide, states: images.length, distinctPackets: 3, distinctRankInputs: 1,
+        pendingRemainsVisible: true, degradationRemainsVisible: true });
+    }
+  }
+}
+assert.equal(rankCases.length, 18);
+assert(rankCases.some(row => row.inputCount === 0), "retain a real successful empty Story");
+assert(rankCases.some(row => row.inputCount === 1), "measure a real singleton input");
+assert(rankCases.some(row => row.repeatedRefs), "measure genuine repeated projection occurrences");
+console.log(JSON.stringify({ scope: "D3845 actual whole-tip Story cardinality diagnostic; no replacement contract, provider or HTTP proof",
+  cases: rankCases.length, successfulEmpty: rankCases.filter(row => row.inputCount === 0).length,
+  singleton: rankCases.filter(row => row.inputCount === 1).length,
+  repeatedProjectionCases: rankCases.filter(row => row.repeatedRefs).length,
+  inputCounts: [...new Set(rankCases.map(row => row.inputCount))],
+  observedRefs: [...new Set(rankCases.flatMap(row => row.refs))],
+  exactFixedDeclarationMatches: rankCases.filter(row => row.fixedDeclarationMatches).length,
+  allActualSourcesRetainedInOrder: true, unchangedOrdering: true,
+  registeredRankingConventionRetained: true, emptyStateCases,
+  sourceStateFixtureScope: "not real provider/job proof; original packets distinguish the three states" }));
+
+// D3846: exact tuple dependencies must be checked before a collection extension can use them.
+// These are the existing permanent legal positive fixtures, not disconnected synthetic FENs.
+const pivotalTupleCases: { kind: string; learnerSide: string; declared: readonly string[];
+  actual: readonly string[]; values: number; directInspectorTopic: boolean }[] = [];
+for (const learnerSide of ["white", "black"] as const) for (const fixture of [
+  { kind: "phase_change" as const, fen: "r2qk2r/8/8/8/8/8/8/R2QK2R w - - 0 1", moves: ["d1d8", "e8d8"],
+    actualRefs: ["rules.phase.reading@2", "run.record.position@1", "rules.phase.reading@2", "run.record.position@1"] },
+  { kind: "option_collapse" as const, fen: "8/3r3k/p3qr1p/1p5Q/8/P6R/1PP1p3/1K5R w - - 0 37", moves: ["h1e1", "d7d1", "e1d1", "e2d1q"],
+    actualRefs: ["rules.mobility.reading.legal_moves@1", "run.record.position@1", "rules.mobility.reading.legal_moves@1", "run.record.position@1", "rules.mobility.reading.legal_moves@1", "run.record.position@1"] },
+]) {
+  let run = createRun({ id: `d3846-${fixture.kind}-${learnerSide}`, session: { kind: "position",
+    start: canonicalRunStart({ fen: fixture.fen, side: learnerSide }),
+    opponentPolicy: { mode: "human_common" }, feedbackPolicy: "attempt_end" },
+    sessionDigest: `sha256:${"c".repeat(64)}`, seed: 1, createdAt: at,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+  for (const move of fixture.moves) run = commitMove(run, move, { at }).run;
+  const route = `derived.pivotal.${fixture.kind}@1` as const;
+  const values = invokeEvidenceValueRoute(route, { run, branchId: run.activeCursor.branchId });
+  assert(values.length > 0, `${route} positive must actually emit`);
+  const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === `derived.pivotal.${fixture.kind}` && row.version === 1)!;
+  const declared = declaration.derivation!.inputs!.map(ref => `${ref.id}@${ref.version}`);
+  assert.equal(declared.length, 2);
+  for (const value of values) {
+    const actual = value.inputs.map(input => `${input.projection.id}@${input.projection.version}`);
+    assert.deepEqual(actual, fixture.actualRefs);
+    assert.deepEqual(evidenceValueReceipt(value.evidence).sourceDigests, value.inputs.map(input => evidenceValueReceipt(input).payloadDigest));
+    assert.notDeepEqual(actual, declared, "current exact tuple mismatch must remain visible");
+  }
+  pivotalTupleCases.push({ kind: fixture.kind, learnerSide, declared, actual: fixture.actualRefs, values: values.length,
+    directInspectorTopic: PRIMARY_EVIDENCE_MANIFEST.consumers.find(row => row.id === "module.full_inspector" && row.version === 1)!
+      .accepts.some(ref => `${ref.id}@${ref.version}` === route) });
+}
+console.log(JSON.stringify({ scope: "D3846 current fixed pivotal tuple diagnostics; not versioned source adoption or HTTP proof",
+  legalFixtureCases: pivotalTupleCases.length, cases: pivotalTupleCases,
+  inputOrderAndMultiplicityRetained: true, oldFactoryOrManifestChanged: false }));
+
+const pivotalSuccessors = ["phase_change", "option_collapse"].map(kind => {
+  const old = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === `derived.pivotal.${kind}` && row.version === 1)!;
+  const actual = pivotalTupleCases.find(row => row.kind === kind)!.actual;
+  const draft = readFileSync("rfc/evidence-value-authority.md", "utf8").split("#### 2.3b Draft D3846")[1]!.split("#### 2.4")[0]!;
+  const row = draft.split("\n").find(line => line.startsWith(`| \`${old.id}@2\` |`));
+  assert(row, "the explicit upstream tuple declaration must exist");
+  const draftInputs = [...row.split(" | ")[2]!.matchAll(/`([^`]+@\d+)`/gu)].map(match => match[1]!);
+  assert.deepEqual(draftInputs, actual, "upstream draft must retain every actual ordered input occurrence");
+  return { ...old, version: 2,
+    derivation: { inputs: actual.map(key => { const [id, version] = key.split("@"); return { id: id!, version: Number(version) }; }) },
+    disposition: { kind: "inspector_only" as const, reason: "D3846 isolated prospective tuple, not registered source adoption" } };
+});
+const pivotalCompiled = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.pivotal"
+    ? { ...producer, outputs: [...producer.outputs, ...pivotalSuccessors] } : producer) });
+for (const declaration of pivotalSuccessors) {
+  const path = compileProjectionExecution(pivotalCompiled, { id: declaration.id, version: 2 });
+  assert.equal(path.paths.length, 1);
+  const expected = declaration.id.endsWith("phase_change") ? [1, 3] : [1, 3, 5];
+  assert.deepEqual(path.paths[0]!.sourceRequirements.map(source => source.occurrence), expected.map(index => [index]));
+  assert(path.paths[0]!.sourceRequirements.every(source => source.projection.id === "run.record.position"
+    && source.projection.version === 1 && source.availability === "recorded" && source.providerOperation === null));
+}
+console.log(JSON.stringify({ scope: "D3846 prospective fixed tuples compile in unchanged F1; not factories or consumer adoption",
+  successorDeclarations: 2, phaseRecordedOccurrences: [[1], [3]], collapseRecordedOccurrences: [[1], [3], [5]],
+  providerOperations: 0, oldDeclarationsChanged: false }));
+
 // Hypothetical declaration ONLY, compiled by the real unchanged F1 guard; never source adoption.
 const positionDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "run.record.position")!;
 const oldMarker = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.pivotal.human_divergence")!;
@@ -207,6 +343,23 @@ assert.deepEqual(path.paths[0]!.sourceRequirements.map(source => ({ projection: 
 console.log(JSON.stringify({ scope: "D3841 hypothetical marker declaration, not production registration or minted source",
   wrongGroundingRefused: true, correctedGroundingCompiles: true, recordedLeafRequirements: 2, providerOperations: 0 }));
 
+// Existing alternatives do not describe a collection. Test the tempting repairs against F1,
+// rather than weakening its empty/answer guards or calling a union a fixed occurrence tuple.
+function rankCandidate(derivation: NonNullable<ProjectionDeclaration["derivation"]>, answers = rankDeclaration.answerContent) {
+  const successor: ProjectionDeclaration = { ...rankDeclaration, version: 3, derivation, answerContent: answers,
+    disposition: { kind: "inspector_only", reason: "D3845 isolated representation experiment, not a successor registration" } };
+  return compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+    producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.story"
+      ? { ...producer, outputs: [...producer.outputs, successor] } : producer) });
+}
+assert.throws(() => rankCandidate({ anyOf: [[]] }), /EVIDENCE_PROJECTION_INCOMPLETE/u);
+assert.throws(() => rankCandidate({ anyOf: [[{ id: "derived.pivotal.irreversibility", version: 1 }]] }),
+  /EVIDENCE_DERIVATION_WIDENS/u, "a fixed singleton cannot support the aggregate's full declared answer union");
+rankCandidate({ anyOf: [[{ id: "derived.pivotal.irreversibility", version: 1 }]] }, ["fact"]);
+console.log(JSON.stringify({ scope: "D3845 existing alternative-declaration controls, not a collection implementation",
+  emptyMemberRefused: true, singletonFullAnswerUnionRefused: true,
+  factOnlySingletonCompiles: true, emptyAndVariableCollectionStillUnrepresented: true }));
+
 // Check the author's table against the CURRENT refused source set; never rewrite the catalogue.
 const specification = readFileSync("rfc/module-registration.md", "utf8");
 const key = (ref: { id: string; version: number }) => `${ref.id}@${ref.version}`;
@@ -220,10 +373,14 @@ function checkMap(text: string) {
   const section = text.split("**D3841 exact affected-source map — unaccepted author image:**")[1]!
     .split("**D3841 exact-version closure")[0]!;
   const rows = [...section.matchAll(/^\| `([^`]+@\d+)` \| `([^`]+@\d+)` \|/gmu)].map(match => [match[1]!, match[2]!] as const);
-  assert.equal(rows.length, 12);
-  assert.equal(new Set(rows.map(row => row[0])).size, 12);
-  assert.equal(new Set(rows.map(row => row[1])).size, 12);
-  assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs].sort());
+  assert.equal(rows.length, 14);
+  assert.equal(new Set(rows.map(row => row[0])).size, 14);
+  assert.equal(new Set(rows.map(row => row[1])).size, 14);
+  const tupleRepairs = pivotalSuccessors.map(row => `${row.id}@1`);
+  assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs].sort());
+  for (const successor of pivotalSuccessors) assert(rows.some(row => row[0] === `${successor.id}@1` && row[1] === `${successor.id}@2`),
+    "a tuple repair cannot retain the false @1 declaration");
+  for (const old of rows.map(row => row[0])) assert(originalRefs.includes(old), "no new source obligation may silently replace an unknown old topic");
   const replacements = new Map(rows);
   const topics = originalRefs.map(id => replacements.get(id) ?? id);
   assert.equal(new Set(topics).size, 75);
@@ -233,12 +390,16 @@ const mapped = checkMap(specification);
 assert.throws(() => checkMap(specification.replace(/^\| `live.stockfish.eval@1` \|.*\n/mu, "")));
 assert.throws(() => checkMap(specification.replace("| `live.stockfish.eval@1` |", "| `unknown.source@1` |")));
 assert.throws(() => checkMap(specification.replace("| `recorded.inspector.wdl_packet@1` |", "| `recorded.inspector.eval_packet@1` |")));
+assert.throws(() => checkMap(specification.replace(/^\| `derived.pivotal.phase_change@1` \|.*\n/mu, "")));
+assert.throws(() => checkMap(specification.replace("| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@2` |",
+  "| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@1` |")));
 const presentationDraft = readFileSync("rfc/evidence-presentation.md", "utf8");
 const detailTable = presentationDraft.split("| Projection suffix after `derived.inspector.detail.` | Sole source | Proposed factory | Registered renderer |")[1]!.split("\n\n")[0]!;
 const detailRefs = [...detailTable.matchAll(/^\| `([^`]+)` \|/gmu)].map(match => `derived.inspector.detail.${match[1]}@1`);
 assert.equal(detailRefs.length, 6);
 assert.equal(new Set([...mapped.topics, ...detailRefs]).size, 81);
 console.log(JSON.stringify({ scope: "D3841 draft inventory requirements only, NOT compiled successor bindings",
-  currentTopics: originalRefs.length, exactAffectedMappings: mapped.rows.length, unchangedTopics: originalRefs.length - mapped.rows.length,
+  currentTopics: originalRefs.length, exactAffectedMappings: mapped.rows.length, originalExecutionFailures: failedRefs.length,
+  additionalFixedTupleRepairs: pivotalSuccessors.length, unchangedTopics: originalRefs.length - mapped.rows.length,
   proposedTopics: mapped.topics.length, proposedAcceptedRefs: mapped.topics.length + detailRefs.length,
-  negativeMapControls: 3, rankInputContract: "held_D3845", productionRegistration: false }));
+  negativeMapControls: 5, rankInputContract: "held_D3845", productionRegistration: false }));

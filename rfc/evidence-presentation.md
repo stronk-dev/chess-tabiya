@@ -1993,7 +1993,8 @@ This detail section remains unaccepted; no production or existing source meaning
 The D3841 follow-up also refutes simply retaining75 unchanged legacy refs plus these six views:
 §4.11a still owes an obligation-preserving modern-source rebase and exact-version registry/
 admission/presentation closure. One existing module policy is shared, not duplicated or weakened;
-old @1 payloads and adapters stay intact. The subsequent exact twelve-row source map proposes
+old @1 payloads and adapters stay intact. The subsequent exact fourteen-row source map
+(twelve execution failures plus D3846's two fixed-tuple repairs) proposes
 75 topic refs plus six detail refs (81 distinct accepted refs), not a compiled successor binding
 count: its rank@3 remains held on D3845 and adapters can have multiple forms.
 The subsequent D3841 author clauses specify the exact-version consumer-image join, required

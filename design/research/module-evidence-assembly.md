@@ -1288,6 +1288,10 @@ not completed production migration, independently cleared clauses or a whole Ins
 
 ## Recorded Inspector source-image experiment — 2026-10-15, D3841/D3845
 
+This section records the initial twelve-row checkpoint. The later D3846 section below extends
+the current requirements image to14 affected/61 unchanged topics, still75+6 refs; old observations
+and their bounded scope remain evidence, not a claim that the first map was a complete tuple audit.
+
 Extend the existing opt-in recorded-prefix instrument, not normal CI/progress, with
 `tools/d3792-inspector-demand/recorded-origin.ts`. It calls the actual sealed run-head, attachment
 digest/resolution and recorded-position authorities over explicit legacy test reports for both
@@ -1342,3 +1346,78 @@ held on D3845. The final bounded independent wording recheck clears only the sou
 including preserving old human@1 bytes separately from new human@2's extended recorded lineage;
 full source/callable/supplier contracts and upstream/joint acceptance remain outstanding. `[V]`
 same normal target, actual compiler/census and dated independent review.
+
+## Story collection input shapes — 2026-10-15, D3845
+
+The empty-input finding belongs to an already recorded unfinished contract class, not a newly
+discovered exploit. The convention implementation's dated receipt and RFC changelog explicitly
+defer declared-member validation because Story and other factories use subsets of a static
+union. This pass measures the current rank@2 instance only; it does not reopen or claim to fix
+all those other routes. `[V]` `rfc/semantic-convention-provenance.md` changelog 2026-09-24(e),
+`planning/semantic-convention-provenance/implementation-2026-09-24.md` §Measured, not faked.
+
+Extend the same opt-in `recorded-origin.ts` instrument with18 actual packet/Story compilations:
+both learner colours over every0–8-ply prefix of one legal opening line. Ten ranks are empty,
+two have one actual evidence input and six have repeated projection occurrences; observed input
+counts are0/1/2 and the only emitting family in this bounded line is irreversibility. None equals
+the static11-ref member. Every actual moment input survives in receipt order, including repeated
+refs, and output order equals the unchanged `rankStoryMoments` operation. This is not coverage of
+all eleven families or real provider behavior. `[V]` `make inspector-recorded-prefix-research`,
+`tools/d3792-inspector-demand/recorded-origin.ts`, actual `reviewPacketForRun/reviewStoryMoments`.
+
+Existing alternatives do not solve that representation. Actual unchanged F1 refuses an empty
+`anyOf` member. A singleton irreversibility input retaining rank's full fact/pattern/evaluation
+answer union also refuses widening; reducing the answer image to fact admits that singleton
+metadata but loses the aggregate contract. A few measured tuple alternatives cannot establish
+a general variable collection. Keep fixed-tuple/alternative guards rather than calling the
+union of possible families a literal tuple of actual observations. `[V]` same target's three
+prospective declaration controls, `compileEvidenceManifest` and F2 §2.2.
+
+All18 actual values already retain registered `story-rank@1` convention closure, including empty
+values. A further six explicitly synthetic provider-state controls (not_requested, pending,
+provider_off, both colours) produce the same empty rank while their actual packets retain three
+different source-state images; pending and degradation remain visible there. The old pure empty
+rank has one input digest across those states, correctly reflecting its identical empty moment
+input, not a source-scope/access receipt. A new scoped collection owner must retain the genuine
+packet/boundary and source states separately; rank[] alone cannot attest that analysis completed
+or no chess opportunity existed. No actual queued job, provider failure or HTTP grant is claimed.
+`[V]` same target and existing `ReviewEvidencePacket` state fold/receipt.
+
+These observations settle the research prerequisite, not a replacement derivation grammar.
+Explicit collection cardinality, policy authority, actual-instance answer/grounding inheritance,
+empty-result semantics and execution planning still require one coherent author contract and
+independent review. No new policy-evidence leaf, collector, production projection, registry member,
+default, UI or source qualification is introduced by the experiment. `[V]` scoped diff and D3845.
+
+## Pivotal tuple prerequisites — 2026-10-15, D3846
+
+Phase-change@1's fixed declaration names one phase/position pair, while its actual factory retains
+before and after pairs. Option-collapse@1 declares one legal-reading/position pair but retains
+prior, first-low and confirming-next pairs. Four actual legal fixture cases (both learner colours)
+emit one value each with4/6 ordered inputs and matching source-digest multiplicity, versus2 declared
+inputs. Both are direct existing Inspector topics and compile through current source execution;
+this is different from the twelve upstream execution refusals. `[V]` current `pivotalFactory`,
+`evidence-catalog.ts`, existing permanent `pivotal-evidence.test.ts` legal fixtures and the added
+`recorded-origin.ts` diagnostic in `make inspector-recorded-prefix-research`.
+
+The unaccepted D3831 proposal cannot preserve those @1 input declarations and simultaneously
+promise exact witness closure. Reconcile this through explicit ordered-tuple successors and the
+scoped source/consumer/rank image before adoption; do not truncate actual witnesses or give
+fixed tuples the rank collection exemption. The complete proposed rebase therefore also needs
+these two direct topics, beyond the earlier twelve failure rows. No old payload, calculation,
+factory, manifest or current receipt changes in this research. `[V]` D3831 draft table and the
+measured source-input arrays above; D3846 records this prerequisite before authoring.
+
+The prospective @2 declarations compile in unchanged F1 with recorded leaf addresses[1]/[3]
+for phase and[1]/[3]/[5] for collapse, all operation:null. The probe checks the draft's literal
+tuples against the actual factory arrays. The extended source map replaces14 topics (initial12
+execution failures plus these2), retains61 others and still proposes75+6 refs; five missing/
+unknown/duplicate/wrong-version map controls refuse. An initial draft-row parser selected the
+trailing empty cell rather than inputs; correcting that disposable index restores the target
+without changing source/compiler behavior. `[V]` final normal prefix research target and probe.
+
+Independent bounded review confirms the correction but finds one dispatch hazard: the old
+PIVOTAL_MARKER_ROUTES values all point at @1. The corrected draft reuses only family keys/kind
+validation, leaves old map/callers intact and checks exact new scoped route/kind before work.
+Final read-only recheck clears that wording, not factories, new bindings, collection grammar
+or upstream/joint acceptance. `[V]` existing dated independent review; §2.3b and scoped table.

@@ -965,6 +965,36 @@ may erase this obligation. Successful empty rank remains required; existing @2/p
 share callers are unchanged. This source boundary's scope/access/immutability requirements
 remain; source existence is not permission or completed analysis.
 
+The bounded D3845 research now measures18 real whole-tip compilations: ten empty, two singleton
+and six repeated-ref cases; no actual occurrence list matches the old11-ref tuple. This is the
+known deferred union/subset class recorded in the convention implementation, not a new exploit.
+Independent assessment recommends a distinct closed collection-reduction declaration tied to the
+existing `story-rank@1` convention and registered computation, not a redundant policy-evidence
+leaf. This is an author direction, **not a specified/accepted grammar or runtime exception**.
+Before acceptance the author must settle all of:
+
+- explicit zero/repeated exact-version element cardinality, separate from unchanged fixed
+  `inputs`/`anyOf` guards; no finite enumeration of observed tuples as a general solution;
+- genuine empty reduction to singleton `{rank:[]}`, with a reduction receipt rather than silently
+  taking today's no-input source-receipt branch, and no fabricated chess ancestry;
+- actual-instance answer and grounding/exactness/confidence ceilings: eligible family unions
+  cannot confer absent evaluation/pattern authority on a fact-only or empty realization;
+- separate finite static acquisition templates and concrete ordered source occurrences after
+  source-owned collection; missing, failed or not_requested sources never become proved no-witness;
+- ordered moment groups (node/ply/kinds/typed evaluation and each exact evidence membership),
+  source/boundary/adapter-state identity and literal multiplicity. Preserve historical convention
+  receipts' order-free multiset semantics separately rather than pretending that proves grouping;
+- the actual existing nine-band computation: outcome, mate transition, cp pivot, last level,
+  phase change, endgame entry, shape, other, irreversibility; cp magnitude only for cp-typed
+  endpoints, then ply/node id. Old stale catalogue prose must not choose a different algorithm.
+
+Six labelled source-state fixture controls retain unequal packet states with equal empty ranks.
+The source therefore retains actual coverage/progress/degradation; rank[] is not finished analysis
+or a negative chess diagnosis. No public raw packet or new permission follows. Separately, D3846
+requires phase_change@2 and option_collapse@2's exact four/six-input tuples from value-authority
+§2.3b in the successor adapter/eligible-element image. Those fixed-tuple defects are not solved
+by the collection mechanism, and their old @1 callers/declarations/receipts remain unchanged.
+
 **Baseline dependency census and successor obligation.** The current eleven-adapter census
 is derived from the existing manifest's `derived.story.rank@2` graph: stop at a matching existing Review
 adapter; otherwise follow that projection's conjunctive declared inputs. Missing/ambiguous/
@@ -981,7 +1011,7 @@ a subset, provide moment arrays or request unrelated families through this opera
 
 | Source group | Scoped execution |
 |---|---|
-| Four pivotal adapters | Use module-registration's proposed `RecordedPivotalSource` arms with this exact original run, branch, endpoint and family. Retain full witnesses/actual selection events; no whole-tip collection then anchor filtering. |
+| Four pivotal adapters | Use module-registration's proposed `RecordedPivotalSource` arms with this exact original run, branch, endpoint and family: irreversibility@1, phase_change@2, human_divergence@2, option_collapse@2. Retain full ordered witnesses/actual selection events; no whole-tip collection then anchor filtering. |
 | Endgame | Run the existing exact classification at granted nodes; preserve the first-observed-entry convention and root's lack of a decision edge. |
 | Shapes | Use the existing sole firing factory over actual registered entries and this ordered prefix. Derive spans/open-endedness there, not from cropped whole-game firings. Retain exact entry/trigger inputs and existing authored-authority limitations. |
 | Eval point/delta/mate | Read coordinator/durable provider states only for granted nodes and actual incoming-edge endpoints. Reuse exact evaluation/position factories, comparability and typed score domains. Retain both endpoints; no mate sentinel, legacy-image promotion or out-of-prefix value. This operation enqueues no engine job and calls no provider. |
@@ -1420,6 +1450,10 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-15 — D3845 research/independent assessment records the six still-required collection
+  contract decisions without adopting a grammar or redundant policy-evidence leaf. D3846 adds
+  phase/collapse@2's exact ordered witness tuples to the proposed scoped adapter image; no old
+  meaning, computation or independent acceptance changes.
 - 2026-10-15 — D3841/D3845 reserve scoped rank@3 without changing frozen rank@2. The actual
   successful empty rank has zero literal input receipts despite eleven declared refs. Preserve
   that legal case; author and independently review a representable collection/absence contract

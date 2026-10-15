@@ -30002,3 +30002,63 @@ Campaign was the one capability with no API, route or content. Now:
   Stage only the19 owned research/author/tracking files, inspect the exact index and use normal
   commit hooks. Preserve the three pre-existing untracked entries; no push, production/API,
   official content, semantic qualification, milestone promotion or goal pause/completion.
+
+## 2026-10-15 — Story collection cardinality and source-state research
+
+- Previous goal turn progressed at e756d856: the exact historical/live source map and bounded
+  independent corrections landed, not new Inspector/API delivery. Current tracked tree is clean
+  with the same three pre-existing untracked entries. Continue D3845 before inventing rank@3's
+  input image; keep the goal active and all old identities unchanged.
+- Extend only the existing opt-in recorded-origin experiment.18 actual whole-tip packet/Story
+  compilations on both-colour legal0–8-ply prefixes measure ten empty/two singleton/six repeated-ref
+  cases, input counts0/1/2 and zero fixed11-ref matches. Every real input/receipt order and rank
+  calculation is retained. This line only emits irreversibility; no eleven-family or provider
+  coverage is implied. Actual F1 rejects empty alternatives and the unchanged answer union over
+  a singleton; fact-only singleton metadata compiles but does not solve the collection.
+- Check the prior owner receipt rather than calling this a novel exploit: the2026-09-24 convention
+  changelog/implementation explicitly defer declared-member validation for legitimate union
+  subsets. D3845 is the current Inspector prerequisite within that known class, not a claim that
+  all other routes are fixed. All18 rank values already retain story-rank@1's genuine convention.
+- Six explicitly synthetic source-state fixtures (not_requested/pending/provider_off, both
+  colours) preserve three distinct real packet images while rank[] stays equal. Original packet
+  progress/degradation remains; a pure rank input digest is not source/access or completion proof.
+  No job/provider/HTTP execution is claimed. One research helper's optional derivation parameter
+  initially fails exactOptionalPropertyTypes; narrow it to NonNullable, without changing production
+  types, compiler guards or app tests. Final normal prefix research exits zero, retaining its
+  preceding136 historical controls and map/grounding controls. Research is recorded before any
+  replacement contract; ask the same authorized reviewer for a bounded read-only design assessment.
+- Independent read-only assessment confirms that no existing accepted grammar settles D3845.
+  Prefer explicit closed collection reduction tied to the existing ranking convention over a
+  redundant policy-evidence leaf; six unfilled author requirements are recorded in Review §4.5,
+  expressly not a completed syntax/runtime policy or acceptance. No raw data/collector/projection
+  implementation is introduced. Empty rank must retain genuine reduction semantics and scope/
+  source states, rather than being deleted or certified from absent inputs.
+- Record D3846 before its experiment: phase/collapse fixed tuples omit actual witness pairs.
+  Four existing legal both-colour fixtures confirm4/6 ordered actual inputs against2 declared,
+  all source digests retained. These two Inspector topics compile; they are not additional
+  provider execution failures. Prospective @2 tuples compile in unchanged F1 with2/3 distinct
+  recorded-position addresses and no providers. Research lands before draft F2 §2.3b, then the
+  scoped map/table/Review image adopts the proposed refs while preserving every old @1 caller,
+  payload and receipt. The current rebase has14 replacements/61 unchanged topics,75+6 requirements.
+- The same independent reviewer confirms tuple/witness correction but returns old route-map reuse:
+  all old map values are @1. Main corrects reuse to family keys/kind validation only, preserves
+  old route values/callers, and requires the exact versioned scoped table before preparation.
+  Final read-only recheck clears that bounded wording. It does not accept actual nominal sources,
+  factories, new adapters/native receivers, upstream contracts, rank grammar or the joint amendment.
+- The extended draft-table check initially reads a trailing empty cell and fails before F1;
+  correct only that disposable column index. Final normal prefix target passes18 actual rank
+  cases/six labelled state controls/four actual tuple cases/two prospective tuple declarations/
+  five map negatives, retaining136 historical controls and the original prefix/window populations.
+  No application code, timeout, retry, schema, registry member, content or qualification changes.
+- Tracker transition initially refuses the unsynced new row; normal sync exposes one untriaged
+  item against its zero ceiling. Assign D3846 explicitly and regenerate the existing roadmap
+  receipt. Current3595 rows include1734 live assigned/zero untriaged; no row is prematurely closed.
+  All282 complete/263 live/24 retired UX items, four active/five blocked milestones and zero
+  graduated official packs stay unchanged. Prior ae0c9d55 full application proof remains prior
+  proof, not a new application run for this docs/research pass. Final governance follows.
+- Final `make verify-governance` exits zero: current register/lifecycle,3595-row work index/state,
+  569 UX assignments, roadmap R1–R10/current receipt, intent parity, test tiers and process contracts.
+  Normal source-contract target passes37 cases/clean research types and all nine unchanged census
+  controls pass without rewriting the complete saved report. `git diff --check` is clean. Stage
+  only the15 owned research/author/tracking files, inspect the exact index and use normal commit
+  hooks. No push, production/API change, acceptance, content/source qualification or goal pause.

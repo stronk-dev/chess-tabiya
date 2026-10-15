@@ -75,10 +75,24 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
-Recorded Inspector source image, 2026-10-15 ([[D3841]]/[[D3845]]): the existing opt-in prefix
+Pivotal fixed-input prerequisites, 2026-10-15 ([[D3846]]): four genuine legal fixture cases retain
+4/6 phase/collapse witness inputs against2 declared, with all actual receipt order/multiplicity
+intact. These two direct Inspector topics compile but need explicit tuple/source migration;
+the earlier twelve execution failures were not a complete literal-input audit. `[V]`
+`module-evidence-assembly.md` §Pivotal tuple prerequisites and existing prefix research target.
+
+Story input collections, 2026-10-15 ([[D3845]]):18 actual whole-tip compilations measure ten empty,
+two singleton and six repeated-ref cases, retaining all source order and the registered ranking
+convention. Six labelled source-state fixtures distinguish equal empty ranks from unequal
+analysis coverage; current fixed alternatives cannot describe the full collection. This is the
+known deferred declared-member class, not a new exploit or production repair. `[V]`
+`module-evidence-assembly.md` §Story collection input shapes and existing prefix research target.
+
+Recorded Inspector source image, earlier 2026-10-15 checkpoint ([[D3841]]/[[D3845]]): the existing opt-in prefix
 instrument now checks actual sealed historical packet/selection occurrences, origin versus
 requested branch, same-position foreign runs and prospective grounding through the unchanged
-compiler. The explicit twelve-row draft rebase retains all other63 topic refs; it is not a compiled
+compiler. That initial twelve-row draft rebase retains63 other topic refs; D3846 above extends
+the current rebase to14/61 without changing the75+6 obligations. Neither is a compiled
 consumer or source adoption. The actual empty rank exposes an unrepresented variable/empty
 literal-input contract, held rather than papered over. `[V]` `module-evidence-assembly.md`
 §Recorded Inspector source-image experiment and `make inspector-recorded-prefix-research`.

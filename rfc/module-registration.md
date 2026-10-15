@@ -1901,9 +1901,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other63 refs/order and all @1 contracts.
-The nine narrow provider-labelled leaves and their three dependent topics are all accounted for.
-Proposed recorded/source factories are owned by value-authority §2.3a, not implemented by this
+refs in its predecessor inventory slot, preserving all other61 refs/order and all @1 contracts.
+The initial twelve rows account for nine narrow provider-labelled leaves and three dependent
+topics. D3846 adds two currently compilable but false fixed-tuple topics; they are not new provider
+failures. Proposed recorded/source factories are owned by value-authority §§2.3a–2.3b, not implemented by this
 table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
 remain separate; a ledger record cannot substitute for a run attachment.
 
@@ -1921,6 +1922,8 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.pivotal.human_divergence@1` | `derived.pivotal.human_divergence@2` | derived | Historical selection occurrence on the granted branch; value-authority §2.3a and scoped pivotal owner |
 | `derived.compare.eval_delta@1` | `derived.compare.eval_delta@2` | derived | Two exact recorded reports under RecordedComparisonSource; value-authority §2.3a |
 | `derived.story.rank@2` | `derived.story.rank@3` | derived | Proposed identity only; Review §4.5 must resolve D3845's variable/empty literal-input contract before declaring this source/factory |
+| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@2` | derived | D3846 exact ordered before/after phase+position pairs; value-authority §2.3b |
+| `derived.pivotal.option_collapse@1` | `derived.pivotal.option_collapse@2` | derived | D3846 exact prior/first-low/confirming legal-reading+position pairs; value-authority §2.3b |
 
 This establishes a **requirements image**, not executable bindings:75 retained topic obligations
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
@@ -1948,7 +1951,7 @@ or manufacture a move recommendation. Full Inspector must reuse the existing adm
 and narrow factory, not reverse-engineer evidence from its HTTP presentation receipt. Public
 node/SAN identity is resolved on this granted path, not the active sibling's cursor.
 
-Value-authority §2.3a, Maia task §4 and Review §4.5/D3845 are upstream acceptance dependencies,
+Value-authority §§2.3a–2.3b, Maia task §4 and Review §4.5/D3845 are upstream acceptance dependencies,
 not permissions inherited from their parent's implementing status. Current declarations and
 public meanings remain untouched until those exact new contracts and the joint Inspector
 amendment survive independent review. No reserved provider alias, unavailable stub, hidden
@@ -2202,7 +2205,8 @@ admission and current boundary before reading its owned unrendered moments; it d
 the source's visible fields, copied values, a bare boundary or caller-provided moment arrays.
 The existing @2 `{moments}` arm remains forbidden as the new Inspector supplier. Reuse
 `rankStoryMoments`'s ordering, but bind source-kind checks to the exact new source image, including
-human-divergence@2; an @1 marker is not its witness. Constructing
+human-divergence@2 plus phase_change@2/option_collapse@2; their old @1 markers are not new-source
+witnesses. Constructing
 the full Story/title then filtering is not this operation and must advance no such call counter.
 
 The new canonical input image is `recorded-review-moment-source@1` plus the source's actual
@@ -2567,8 +2571,11 @@ implementation shared with whole-tip callers, not four duplicate detectors or a 
 `evidence-factories.ts` and the typed invoker/operand census gain the exact arms below together;
 an existing symbol anchor is not proof that those callers consume the scoped source.
 
-Reuse the existing `PivotalKind` and `PIVOTAL_MARKER_ROUTES` correspondence, not another
-registry of the four families. The constructor captures its closed fields, validates the
+Reuse `PivotalKind` and only the family keys/kind validation of `PIVOTAL_MARKER_ROUTES`, not its
+legacy exact route values. Keep that old map and whole-tip callers unchanged. Scoped dispatch
+derives its exact versioned route from the table below: irreversibility@1 and the three @2
+successors. Check exact route/kind equality before preparation; no @1 fallback or duplicate
+detector registry. The constructor captures its closed fields, validates the
 unchanged parser-admitted full run's original branch graph and **every original path FEN before
 narrowing**, then resolves the requested endpoint and owns its exact prefix. Inherited endpoints
 are valid, including one before that branch's own fork; comparison's distinct two-attempt rule
@@ -2585,24 +2592,27 @@ owned by the four factories; server callers cannot provide replacement paths, ma
 pages or witness arrays. The server resolver grants this exact branch/prefix/family before
 construction and the receiver compares those fields and current decision again before delivery.
 
-The three retained @1 factories below gain only their named new closed scoped arm, rejecting
-a genuine source of another kind. D3841 replaces the earlier proposed human-divergence@1 scoped
-arm with the explicit @2 successor; its old @1 whole-tip arm remains unchanged:
+Only irreversibility@1 gains its named new closed scoped arm, rejecting a genuine source of
+another kind. D3841 replaces the earlier human-divergence@1 scoped arm with its explicit @2;
+D3846 also requires phase_change@2 and option_collapse@2's ordered witness tuples. All old @1
+whole-tip arms, declarations and receipt identities remain unchanged:
 
-| Exact factory | Additional arm | Preparation and complete retained inputs |
+| Exact factory | Scoped input arm (sole arm for new @2) | Preparation and complete retained inputs |
 |---|---|---|
 | `derived.pivotal.irreversibility@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `irreversibility`. Prepare only this family on granted incoming edges. Retain actual parent/child identities and FENs, committed move, the exact existing transition reading and recorded anchor position. A root cannot invent an edge. |
-| `derived.pivotal.phase_change@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `phase_change`. Walk only the granted prefix, including intervening unclear bands. Retain both actual definite readings and their recorded positions; the previous definite witness need not be the immediate parent. Never borrow a later phase or infer a transition from the displayed labels alone. |
+| `derived.pivotal.phase_change@2` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `phase_change`; value-authority §2.3b's literal four operands. Walk only the granted prefix, including intervening unclear bands. Retain both actual definite readings and their recorded positions; the previous definite witness need not be the immediate parent. Never borrow a later phase or infer a transition from the displayed labels alone. |
 | `derived.pivotal.human_divergence@2` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `human_divergence`; use value-authority §2.3a. Preserve all actual selection observations anchored on the requested prefix, independently resolve each event's actual origin-branch run_node subject and seq, then mint its explicit recorded-selection and source-owned position inputs. Retain origin and requested branch/endpoint separately, plus stored requested target band. Never accept caller positions or a legacy provider policy-page input. |
-| `derived.pivotal.option_collapse@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `option_collapse`. Prepare only this family's same-side legal-count sequence within the grant. Retain prior, first-low and next same-side positions plus all three complete legal-mobility readings. The anchor stays the first-low node. A prefix missing the later witness produces no marker, even if that later node exists in the stored run. |
+| `derived.pivotal.option_collapse@2` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `option_collapse`; value-authority §2.3b's literal six operands. Prepare only this family's same-side legal-count sequence within the grant. Retain prior, first-low and next same-side positions plus all three complete legal-mobility readings. The anchor stays the first-low node. A prefix missing the later witness produces no marker, even if that later node exists in the stored run. |
 
 The existing @1 `{run, branchId}` arms and their whole-tip output, inputs and receipt identities
 remain unchanged. Scoped factories do not call those arms, compute the combined population and
 filter it, or manufacture a shorter DrillRun. They use their source's granted path before their
 own preparation, then existing exact reading/position factories against the unchanged original
-run. For the three retained @1 factories, keep current marker order, payloads, thresholds,
-conventions, grounding and dependencies; a complete-tip source retains byte-equal payload
-populations to its legacy arm. Human-divergence@2 preserves the ordered marker population and
+run. For irreversibility@1, keep current marker order, payloads, thresholds, conventions, grounding
+and dependencies; a complete-tip source retains byte-equal payload populations to its legacy arm.
+Phase_change@2 and option_collapse@2 preserve ordered marker payload populations, thresholds,
+conventions and grounding, but publish the explicit four/six-input declarations from §2.3b;
+their new scoped receipts do not rewrite old @1 receipts. Human-divergence@2 preserves the ordered marker population and
 old marker-field image, thresholds and conventions, while explicitly adding the recorded
 selection/position lineage and recorded_run grounding specified in value-authority §2.3a.
 Its old @1 arm remains byte-identical. New source input identities never rewrite old receipts.
@@ -2645,7 +2655,8 @@ uses the resolver's existing post-await storage/access/assistance checks; the cl
 retires obsolete request owners and paint. No source handle authorizes an old response.
 
 Acceptance requires actual typed constructor/new-arm/invoker controls, not the disposable helper:
-the three retained @1 full-tip payload populations retain legacy bytes; human@2 retains the
+irreversibility@1 and phase_change@2/option_collapse@2 full-tip marker payload populations retain
+legacy bytes, with the new @2 four/six-input declarations and exact occurrence receipts; human@2 retains the
 ordered old marker-field population plus its explicitly added recorded lineage, while old
 human@1 stays byte-identical; all207 stored prefixes retain complete
 family witnesses; later graph **and FEN** corruption refuse before detector counters advance;
@@ -3493,6 +3504,10 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3846 extends the proposed rebase from twelve execution-failing topics to fourteen
+  affected topics: phase_change@2/option_collapse@2 use their actual fixed4/6-input tuples.
+  Only irreversibility retains a new @1 scoped arm; all old @1 meanings/receipts remain unchanged.
+  D3845's measured collection/empty/coverage constraints remain a distinct unaccepted contract.
 - 2026-10-15 — D3841 authors the exact twelve-row historical/live successor map and upstream
   recorded packet/selection, Maia WDL and derived source contracts. Independent review corrects
   grounding, source-owned requested band/position and origin-versus-requested branch scope;

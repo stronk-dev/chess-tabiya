@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3845]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3846]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -32,13 +32,20 @@ module policy, required per-demand absence without abusing total aggregation, an
 paging. Independent review catches and clears an atomic multi-component bundle-fitting correction:
 one occurrence/member is either fully shown or fully deferred. Source tracing also distinguishes
 recorded packets/selections from new provider queries; refreshing historical observations or
-fabricating old exchange receipts would be a regression. The exact twelve-row successor map and
+fabricating old exchange receipts would be a regression. The original twelve-row successor map and
 upstream recorded-source/Maia-WDL contracts are now authored.136 historical feasibility controls,
 actual F1 wrong-grounding refusal/corrected declaration and three inventory negatives pass;
 independent review corrects source-owned band/position, origin/requested scope and preservation.
 The proposed81-ref requirements image is not executable adapters. D3845 holds rank@3: actual
 successful empty ranking has zero input receipts against eleven declared refs. Its representable
 collection/absence contract, source/callable suppliers and upstream/joint acceptance stay open.
+The next research checkpoint measures18 actual rank collections (ten empty/two singleton/six
+repeated-ref) and separates six labelled source-state cases from equal empty ranks. Independent
+assessment recommends a convention-bound collection reduction but does not supply or accept its
+grammar. D3846 separately confirms false phase/collapse tuples on four legal cases, authors exact
+@2 four/six-input successors and clears a bounded old-route dispatch correction. The map now
+replaces14 topics/retains61;75+6 requirements and all old meanings stay. Actual constructors,
+factories, adapters/receivers and upstream/joint acceptance remain unimplemented/open.
 No production changes or joint Inspector acceptance follow; ae0c9d55 retains the full local proof.
 
 D3840 closes a bounded accepted foundation correction: direct events and their derivations
@@ -359,7 +366,7 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records and one
-superseded record are subsystem history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
+superseded record are subsystem history, not 75 completed product journeys. All 1,734 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 Previous local checkpoint: D3840's bounded population reuse passes all normal serial local
@@ -379,12 +386,13 @@ Maia skip and112 unretried composition cells. Generated semantic implementation 
 only because their compiler dependency changed; all343 cases,81 verdicts and zero qualified subjects
 remain identical. The first stale-receipt refusal and later duplicate-roadmap-reference refusal
 remain logged; only bookkeeping changed between the final software proof and remaining gates.
-Current ledger:3,594 rows,1,699 done,162 refused and1,733 live assigned, zero untriaged.
+Current ledger:3,595 rows,1,699 done,162 refused and1,734 live assigned, zero untriaged.
 D3841 remains doing: the three cross-cutting clauses are authored, with independent review's
 atomic-bundle correction closed. Exact recorded/live source and dependent-version mapping is
-authored with136 historical feasibility controls; its81 proposed refs are not compiled bindings.
+authored with136 historical feasibility controls; D3846 expands it to14 affected topics with
+four legal fixed-tuple cases/two prospective declarations. Its81 refs are not compiled bindings.
 Independent review's grounding, band, scope and preservation corrections are closed only within
-that bounded authoring. D3845's actual empty-rank literal-input gap holds rank@3. Its collection
+that bounded authoring. D3845's18 measured empty/variable rank cases hold rank@3. Its collection
 contract, source/callable operand suppliers and upstream acceptance precede joint acceptance
 or Inspector API implementation. This author pass changes no production and adds no application-run claim.
 UX remains282 complete/263 live/24 retired; four active/five blocked milestones remain.

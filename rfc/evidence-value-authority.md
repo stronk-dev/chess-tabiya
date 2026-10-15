@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3841, §2.3a:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3841/D3846, §§2.3a–2.3b:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -316,6 +316,56 @@ components and authenticated/native delivery. `recorded-origin.ts`'s pure histor
 controls are feasibility evidence only: they establish none of those new F2 mints or access joins.
 Story rank's dependent successor is separately held on D3845's variable/empty input contract;
 do not hide that hole behind a computed local leaf or fabricate absent source witnesses.
+
+#### 2.3b Draft D3846 pivotal fixed-tuple successors — unaccepted
+
+The scoped Inspector source audit measures a separate pre-existing fixed-tuple mismatch:
+phase_change@1's factory retains four operands and option_collapse@1 retains six, whereas each
+declares two. These sources need explicit successors; a collection grammar for rank cannot
+silently make their existing fixed declarations optional or erase witness multiplicity.
+
+| Projection | Sole proposed factory | Literal ordered inputs |
+|---|---|---|
+| `derived.pivotal.phase_change@2` | `createDerivedPivotalPhaseChangeV2Evidence` | [`rules.phase.reading@2`, `run.record.position@1`, `rules.phase.reading@2`, `run.record.position@1`] |
+| `derived.pivotal.option_collapse@2` | `createDerivedPivotalOptionCollapseV2Evidence` | [`rules.mobility.reading.legal_moves@1`, `run.record.position@1`, `rules.mobility.reading.legal_moves@1`, `run.record.position@1`, `rules.mobility.reading.legal_moves@1`, `run.record.position@1`] |
+
+Each has only `{recordedPivotal:RecordedPivotalSource}` under module-registration's proposed
+owner and requires its exact current kind. The source owns the original full run, current head
+and granted prefix, after full original graph/FEN validation. Invoke the existing pure family
+operation only on that granted prefix, then internally invoke the exact reading/position
+factories on the original witnessed nodes. No caller run, array, marker, reading, position or
+changed header is an additional arm. Runtime source identity/current-boundary checks precede
+preparation. The pure source is not a substitute for current server permission or disclosure.
+
+Phase input order is previous definite phase reading/its position, then new definite reading/its
+position. The prior definite witness can precede intervening unclear nodes. Both positions and
+their actual readings must agree with the unchanged marker's from/to/anchor; no anchor-only join.
+Collapse order is prior same-side legal reading/position, first-low reading/position, confirming
+next same-side reading/position. All three complete readings must agree with old counts and the
+actual ordered same-side nodes; the marker stays at first-low. A prefix without the next witness
+has no marker even if a later confirming node exists elsewhere in the unchanged stored graph.
+
+Preserve old ordered marker payloads, thresholds, convention receipts/meaning, role reading,
+plane derived, grounding declared_convention, exactness convention, confidence not_applicable,
+fact-only answer image and existing timeline_marker/sentence/panel forms. Successful no_witness
+means no complete qualifying witness in this permitted prefix; invalid/crossed source fails and
+withheld source remains withheld. Never claim full-branch absence or chess significance.
+
+The new receipt binds actual source kind/issuer, original run/current head, requested branch/
+endpoint, ordered witness nodes/readings and every literal input occurrence. Equal position
+payloads do not erase source/head identity. Preserve old @1 declarations, whole-tip factories,
+outputs and receipts byte-for-byte; new @2 scoped references are an explicit caller migration,
+not an additional @1 arm or retrospective receipt correction. Module-registration's successor
+Inspector and Review moment source must use @2; all old callers remain on their exact versions
+until separately migrated. No pack truth or ordinary module gets this new binding implicitly.
+
+Acceptance requires actual nominal source/factory/invoker and registered consumer/presentation
+pairs, ordered4/6-input receipts, before/anchor/confirming substitutions and missing/repeated/
+reordered witness refusals, intervening-unclear phase and missing-later-collapse controls, full-tip
+payload equivalence, source mutation isolation, current access/cancellation/receiver/native proof.
+The disposable probe measures old factory operands and prospective declaration feasibility only.
+This subsection changes neither current production nor the parent's awaiting status; it requires
+independent upstream and joint Inspector acceptance. D3845's collection contract remains separate.
 
 #### 2.4 Authored authority
 
@@ -773,6 +823,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: D3846 authors explicit phase-change@2 and option-collapse@2 scoped successors
+  retaining their actual ordered four/six witness operands. Old versions remain untouched;
+  existing fixed-tuple compiler guards suffice, but source/factory/caller migration and
+  independent acceptance remain required. This is separate from D3845's collection reduction.
 - 2026-10-15: draft D3841 source authoring separates historical packet/selection observations
   from live exchanges, with exact occurrence-bound sole factories, fixed tablebase views and
   explicit historical marker/Compare successors. No current declarations or source meanings

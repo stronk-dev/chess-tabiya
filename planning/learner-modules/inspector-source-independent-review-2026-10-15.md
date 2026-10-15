@@ -256,3 +256,36 @@ supplier acquisition/absence/receiver contracts and upstream/joint acceptance re
 
 Final read-only wording recheck confirms the residual preservation conflict closed. No tests or
 joint-amendment acceptance; D3841 and D3845 remain doing with the outstanding obligations above.
+
+## D3845 collection representation — independent assessment, 2026-10-15
+
+Read-only tracing confirms no accepted grammar represents the actual empty/variable collection.
+The2026-09-24 convention receipt already records the broader deferred union/subset class. Main's
+current normal probe measures18 actual whole-tip Stories (ten empty/two singleton/six repeated),
+retains every real source/order and tests existing F1 empty-member/widening refusals. Six labelled
+source-state controls show equal empty ranks cannot establish equal coverage. No provider/job or
+HTTP execution is claimed. The reviewer does not rerun tests.
+
+The recommended minimal author direction is an explicit closed reduction tied to the existing
+story-rank convention/computation, not new policy evidence solely to satisfy tuple arity. Review
+§4.5 records six requirements: separate zero/repeated collection grammar; genuine empty reduction
+receipt; actual-instance authority/answer ceilings; static templates versus concrete occurrences;
+ordered moment grouping/source-state identity separate from order-free convention ancestry; and
+the actual preserved ordering, with irreversibility last and cp-only magnitude. These are still
+unfilled author obligations, not adopted metadata syntax, implemented code or independent acceptance.
+
+## D3846 fixed-tuple source correction — independent review, 2026-10-15
+
+The reviewer independently confirms phase_change@1's four actual inputs against two declared and
+option_collapse@1's six against two; no already accepted @2 contract settles this. Four legal
+both-colour probe fixtures retain all witness receipts. These fixed populations need explicit
+successors, not rank's collection exemption. F2 §2.3b now specifies the exact four/six tuples,
+source-owned scoped arms, preserved marker meaning and frozen @1 callers/receipts. The source map
+and Review adoption now use both @2 refs. Prospective declarations compile in unchanged F1 with
+two/three distinct recorded-position addresses and zero providers; no factory is minted/adopted.
+
+The bounded review returns one real dispatch hole: PIVOTAL_MARKER_ROUTES contains only old @1
+routes. Main corrects the draft to reuse only its family keys/kind validation, preserve old route
+values/callers, and dispatch exact scoped successors from the existing table before preparation.
+Final read-only recheck clears that wording and sole-arm heading. This does not accept D3845's
+grammar, actual nominal implementation, upstream contracts or the joint Inspector amendment.

@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3845's real empty/variable rank research is measured, not solved by tuple
+alternatives:18 actual Stories,10 empty/2 singleton/6 repeated-ref; six labelled state controls
+retain coverage separately. Independent assessment records six unfilled collection-contract
+requirements in Review §4.5; next author the distinct convention-bound reduction and actual
+instance authority/execution image before rank@3 adoption. Reuse the existing ranking convention,
+not a redundant policy-evidence leaf or a generic local aggregate.
+
+D3846 separately measures phase/collapse4/6 actual inputs versus2 declared on four legal cases.
+F2 §2.3b and scoped tables now specify exact @2 successors; unchanged F1 preserves2/3 recorded
+position occurrence addresses. Bounded independent review corrects dispatch to retain the old
+route map/callers and use exact new routes before work. Actual constructors, factories, adapters,
+receiver/native proof and upstream/joint acceptance remain. The proposed map now replaces14
+topics (initial12 execution failures plus these2), retaining61 others and75+6 requirements;
+five map negatives pass. This does not repair current production or accept Inspector.
+
 2026-10-15 — [[D3844]] is complete locally; do not recommission it. Accepted complete-consumer
 preflight now requires exact accepted/bound projection coverage before path work. Permanent
 missing/extra/duplicate/version controls retain legitimate multiple adapters, real semantic-manifest

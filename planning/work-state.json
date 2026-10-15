@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3b4889c8596869ab909616e731166135a0e8eae0df3778df8865667283fa4e94",
+      "sourceDigest": "sha256:e45d59dc971f0524a074a0579c3e99efbe738d9207a125b8e55ae1ecdaad92ab",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32021,7 +32021,16 @@
       "id": "D3845",
       "state": "doing",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:022bb05aeef0dc695357cc1e33de8ce99aeca7fc6373d60b9ca23a0e14ed0f36",
+      "sourceDigest": "sha256:dc04ca60cb71e1031858d7d77b790525fa4365a901981db27956ea9593ee0709",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3846",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:06ac2cd8ae302f80ac2fca1dfde0400bf5fffd27e715a4fe52e67eaadd4c87d9",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
