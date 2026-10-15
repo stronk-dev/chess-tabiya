@@ -30672,3 +30672,26 @@ Campaign was the one capability with no API, route or content. Now:
 - Final make roadmap-receipt verify-governance exits zero, including R1–R10, status/resource
   parity, all source assignments, compact receipt, unchanged semantic history and test tiers.
   Stage only the15 explicit owned files and inspect cached names/diff before normal commit hooks.
+
+### 2026-10-15 — Independent complete Inspector source review returns the two ledger suppliers
+
+- Commit5f7af1dd lands the bounded recorded-sequence proposal through normal hooks (48 seconds),
+  with no tracked residue. Continue the user's authorized independent review at the complete
+  consumer boundary; main does not self-accept or ask the reviewer to implement its own review.
+- The independent reader returns D3841's two retained recorded engine/tablebase sourcing-ledger
+  topics. Existing position lookup is transposition-keyed/live-suppressing and its empty index
+  conflates invalid/unverified ledgers. Existing authenticated phase composition has full-FEN
+  tablebase presence/absence/unavailability but no engine arm. The factory's distinct refused
+  ledger-record outcome also needs a closed Inspector mapping. These are exact source-contract
+  omissions, not an invented new provider requirement or a defect in every existing caller.
+- The next lawful author action is the two-topic owner/callable/pack-ledger-position contract,
+  complete ordered population, FEN/coexistence and explicit outcome mappings. Existing APIs stay
+  frozen; no pending-metadata universal hold or hidden attachment suppression. D3851's narrative
+  scope remains a separate owner question. New issuers/sidecars/adapters/API/native qualification
+  are future implementation obligations, not allegedly already shipped or newly broken.
+- Record the return in the existing review/ledger/queue/roadmap, keeping the active1.0 goal and
+  open work states. The reviewer performs no tests, edits or acceptance. No production changes
+  are made in this review closeout; normal tracker/receipt/governance and commit hooks follow.
+- make work-state-sync roadmap-receipt verify-governance exits zero; live assignment counts
+  remain unchanged with zero untriaged. Inspect/stage only the eight owned tracking files and
+  commit this independent return through the normal hooks. No push or goal pause.

@@ -690,3 +690,26 @@ The first draft control incorrectly expected convention loss from merely copying
 fails, is corrected and is not filed as a production defect.30/45 map requirements and32 negative
 controls retain75+6 obligations, not compiled successor suppliers. These reported test results
 are not the reviewer's tests and do not exercise the proposed owned-window issuer or factories.
+
+### Complete Inspector source-boundary continuation — returned on sourcing-ledger delivery
+
+The independent reviewer returns one concrete remaining mechanical prerequisite under D3841:
+recorded.engine.eval@1 and recorded.tablebase.result@1 are retained topics, but their supplier
+remains a group placeholder. Source tracing finds materially different existing contracts:
+apps/server/src/position-evidence.ts#recordedReadingsAt uses transposition keys, suppresses a
+recorded kind beside a same-node live attachment and adds halfmove equality only for tablebase.
+Its buildPositionEvidenceIndex turns both unverified and invalid ledgers into empty maps, not
+proof of source absence. apps/server/src/phase-source-composition.ts#compileRecordedEvidenceSnapshot
+and #resolveRecordedTablebase instead provide authenticated full-FEN tablebase presence/absence
+and explicit source-unavailable state without live suppression; they provide no engine arm.
+The existing factory also returns ledger_record_not_admitted, needing an explicit wire mapping.
+
+Required author action: exact owner/callable and retained pack/ledger/position authority for both
+topics; source-specific FEN matching, complete ordered population, independent coexistence with
+saved attachments and closed absent/invalid/unavailable/refused-record outcomes. Reuse existing
+authenticated tablebase machinery where applicable; do not change frozen APIs or invent a hold
+from pending metadata. This is not the separate D3851 narrative scope choice. The recorded-window
+wording is clear in this pass; source issuers, sidecars, exact adapters, HTTP/client/native delivery
+and qualification remain future implementation obligations, not newly alleged production bugs.
+Read-only source inspection only, no tests/edits/acceptance. Inspector remains returned, not
+accepted by main. Preserve the complete75+6 obligations while the two-topic source gap is authored.

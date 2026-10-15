@@ -19,6 +19,13 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+The complete independent Inspector source review returns a concrete remaining D3841 gap: its two
+retained sourcing-ledger topics have no exact per-topic acquisition/absence contract. Existing
+position lookup suppresses recorded readings beside live attachments and cannot establish absence
+from an empty invalid/unverified index; authenticated phase composition covers full-FEN tablebase,
+not engine readings. Author their explicit source joins/coexistence/outcomes next. This is separate
+from the unanswered D3851 narrative scope choice. Inspector API/UI implementation is not accepted.
+
 D3847 now proposes the ten exact recorded sequence@3 contracts in F2 §2.3j, preserving old
 APIs/history and D3851's unanswered narrative scope choice.23 fixed/anyOf members compile under
 unchanged F1 and match76 actual nontrade outputs; source-only windows require complete captures

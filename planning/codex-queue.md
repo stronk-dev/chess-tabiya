@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — The independently authorized complete Inspector review returns D3841's two retained
+sourcing-ledger topics after the recorded-sequence contract checkpoint5f7af1dd. Next author their
+exact owner/callable, pack/ledger/position joins, complete ordered source population, FEN matching
+and explicit absence/invalid/unavailable/refused-record mappings. Do not reuse recordedReadingsAt's
+live-attachment suppression or empty unverified index as Inspector semantics. Existing authenticated
+phase composition supplies full-FEN tablebase state, not an engine arm; reuse rather than fork it
+where appropriate. D3851 narrative scope is a separate owner hold. No source/joint acceptance or
+API/UI implementation authority; detailed evidence is in the existing independent review record.
+
 2026-10-15 — D3847's recorded sequence contracts are now proposed in F2 §2.3j, not implemented:
 ten source-owned@3 factories,23 fixed/anyOf members, complete ordered capture populations and
 indexed auxiliary joins. The scoped supplier explicitly dispatches these new refs; old full-tip/
