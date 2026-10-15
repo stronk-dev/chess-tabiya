@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded Inspector source image, 2026-10-15 ([[D3841]]/[[D3845]]): the existing opt-in prefix
+instrument now checks actual sealed historical packet/selection occurrences, origin versus
+requested branch, same-position foreign runs and prospective grounding through the unchanged
+compiler. The explicit twelve-row draft rebase retains all other63 topic refs; it is not a compiled
+consumer or source adoption. The actual empty rank exposes an unrepresented variable/empty
+literal-input contract, held rather than papered over. `[V]` `module-evidence-assembly.md`
+§Recorded Inspector source-image experiment and `make inspector-recorded-prefix-research`.
+
 Inspector successor origins, 2026-10-15 ([[D3841]]): actual source tracing distinguishes six
 recorded packet topics and historical marker/Compare inputs from requested-node live Maia/Explorer
 pages. Historical observations must not be refreshed or misrepresented as whole provider deliveries.

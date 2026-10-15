@@ -1285,3 +1285,60 @@ reorder or truncate the very collection the detail contract must retain. `[V]`
 `module-packets.ts:compileModulePacket`, `module-reducers.ts:admitModuleFacts/orderAdmittedFacts`,
 `presentation-consumer-adapters.ts:PRESENTATION_CONSUMER_CLASSES`. These are authoring prerequisites,
 not completed production migration, independently cleared clauses or a whole Inspector delivery.
+
+## Recorded Inspector source-image experiment — 2026-10-15, D3841/D3845
+
+Extend the existing opt-in recorded-prefix instrument, not normal CI/progress, with
+`tools/d3792-inspector-demand/recorded-origin.ts`. It calls the actual sealed run-head, attachment
+digest/resolution and recorded-position authorities over explicit legacy test reports for both
+learner colours. Four packet kinds cover six topic obligations. It preserves immutable envelopes,
+all original occurrences and identical-payload distinct seqs; wrong head/node/kind/model-source,
+changed envelopes and copied subject seals refuse. Equal-FEN distinct branch nodes do not alias;
+the same inherited node legitimately retains its packet. These are historical observation
+feasibility checks, not real provider samples, new F2 factories, access grants or UI delivery. `[V]`
+`make inspector-recorded-prefix-research`, the named probe and existing `run-subject.ts`.
+
+Historical model source assembly must keep requested scope separate from each event's origin
+branch. Both eligible shared-prefix requests preserve both stored observations, while a factory
+fed the wrong origin refuses. Store the selected head's requested target band separately from
+applied engine claims. The source-owned position is constructed internally, not admitted by
+comparing a supplied position payload: a distinct valid run can retain identical node/FEN/ply
+payloads. Foreign run/head attachment digests still refuse. `[V]` the same probe;
+`module-registration.md` D3831 scope contract; `evidence-factories.ts:createRunRecordPositionV1Evidence`.
+
+The independent reviewer finds three defects in the first draft: mixed-up grounding, missing
+requested-band operands and missing origin/requested-scope assembly. The real unchanged F1
+compiler refuses declared_convention over two recorded_run inputs. Corrected hypothetical
+metadata retains recorded_run plus the separate split convention; it must still retain both
+recorded leaf requirements, not just the selection. Initial positive experiment failures expose
+an undeclared orphan disposition and an incorrect one-leaf expectation; add the explicit isolated
+Inspector-only disposition and correct the expected two source requirements without weakening
+either compiler guard. This is prospective declaration feasibility, not a registered successor
+consumer or real source mint. `[V]` probe, `evidence-contract.ts` grounding/orphan checks,
+`evidence-execution.ts` and the dated independent review.
+
+The draft's twelve-row affected-source map replaces each refused topic in its original slot:
+six historical packet topics, live node Maia distribution/WDL, accepted Explorer population,
+historical divergence, recorded numerical Compare delta and held Story rank. Retain all63 other
+refs. New source families/grounding/factories are explicitly proposed upstream; no old source is
+rewritten, retired, or upgraded. The map is requirements-only until each source and the complete
+consumer actually compile and its API/client adopts them. `[V]` `module-registration.md` exact
+affected-source table, `evidence-value-authority.md` draft §2.3a, `maia-task-source.md` draft §4.1.
+
+D3845 is independently observable at the current sole rank factory: `{moments:[]}` successfully
+returns `{rank:[]}`, whose value receipt has zero source digests, while its static literal member
+declares eleven refs. The successful empty product behavior must survive. A new rank version or
+source handle alone cannot supply its missing variable/empty collection lineage; do not invent
+eleven absent witnesses, insert an empty derived member, or hide the graph behind a local leaf.
+Research only identifies the representability gap; no replacement contract or production fix
+is claimed. `[V]` the same probe's separate D3845 diagnostic,
+`createDerivedStoryRankV2Evidence`, its actual declaration and F2 §2.2.
+
+Final recorded-origin experiment passes136 historical controls. The requirements inventory is
+checked against the actual twelve failing current topics:75 original refs,63 unchanged,75 proposed
+topic refs plus six detail refs,81 distinct proposed accepted refs. Deleted-map-row, unknown-old-ref
+and duplicate-successor controls refuse. This is not an81-binding executable image: rank@3 stays
+held on D3845. The final bounded independent wording recheck clears only the source-map corrections,
+including preserving old human@1 bytes separately from new human@2's extended recorded lineage;
+full source/callable/supplier contracts and upstream/joint acceptance remain outstanding. `[V]`
+same normal target, actual compiler/census and dated independent review.

@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8dd36bd618f2371627d83a4cdcabef19537331e449783d753b0aacc0fb6e098d",
+      "sourceDigest": "sha256:3b4889c8596869ab909616e731166135a0e8eae0df3778df8865667283fa4e94",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32016,6 +32016,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/evidence-binding-execution.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3845",
+      "state": "doing",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:022bb05aeef0dc695357cc1e33de8ce99aeca7fc6373d60b9ca23a0e14ed0f36",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     }
   ]
 }

@@ -950,15 +950,33 @@ refuses. Preserve the three distinct outcome arms, including successful unfinish
 Position scope is not chronological replay: current reveal/grants and saved alternatives are
 not deleted to create a prefix. Source existence/outcome is not current permission.
 
-**Collect precisely the rank dependency closure.** Derive required adapter demand from the
-existing manifest's `derived.story.rank@2` dependency graph: stop at a matching existing Review
+**D3841/D3845 identity/cardinality hold — still unaccepted:** this proposed scoped Inspector
+supplier must not add its source arm to frozen `derived.story.rank@2`. Module-registration's
+affected-source map proposes rank@3 so historical human-divergence uses its explicit recorded
+selection source/marker@2 rather than an unregistered provider leaf. Value-authority §2.3a owns
+that successor and both actual recorded inputs. The older rank@2 graph below is the **current
+baseline demand census**, not the successor's final declared input schema. Its11 refs do not
+describe the legal empty case, whose actual current factory receipt has zero input source digests;
+nonempty collections can also have repeated/missing families. D3845 requires a representable
+literal collection/state contract, complete retained lineage and able-to-fail empty/repeated/
+missing-family controls before the rank@3 declaration, factory or callable can be accepted.
+No new aggregate/local leaf, invented witness, generic derived source or empty literal member
+may erase this obligation. Successful empty rank remains required; existing @2/private/title/
+share callers are unchanged. This source boundary's scope/access/immutability requirements
+remain; source existence is not permission or completed analysis.
+
+**Baseline dependency census and successor obligation.** The current eleven-adapter census
+is derived from the existing manifest's `derived.story.rank@2` graph: stop at a matching existing Review
 adapter; otherwise follow that projection's conjunctive declared inputs. Missing/ambiguous/
 cyclic definitions refuse, not fallback or omission. At this contract the resulting set is
 exactly eleven existing adapters: four `review.source.pivotal.<kind>@1`, `endgame@1`,
 `shapes@1`, `consequence@1`, `imported_result@1`, `eval_point@1`, `eval_delta@2` and
 `mate_transition@2` (all with the `review.source.` prefix). The last-level derivation reaches
 eval-point/import-result through the same graph. Assert set equality; future graph changes
-require explicit contract review, not silent acquisition widening. The caller cannot choose
+require explicit contract review, not silent acquisition widening. Before acceptance, publish
+the successor's exact adapter and literal-source/state image, including the historical
+human-divergence@2 path, and replace this baseline-only census with that reviewed authority.
+Neither eleven unchanged adapters nor matching names establish successor completeness. The caller cannot choose
 a subset, provide moment arrays or request unrelated families through this operation.
 
 | Source group | Scoped execution |
@@ -1402,6 +1420,10 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-15 — D3841/D3845 reserve scoped rank@3 without changing frozen rank@2. The actual
+  successful empty rank has zero literal input receipts despite eleven declared refs. Preserve
+  that legal case; author and independently review a representable collection/absence contract
+  before successor adoption. No invented witnesses, generic local leaf or acceptance follows.
 - 2026-10-15 — D3832 authors draft §4.5 with one storage-owned boundary and unrendered moment
   source, existing-manifest demand (eleven adapters) and exact scoped recorded-fact arms.
   Actual imported records plus labelled stored engine fixtures retain four outcome-dependent

@@ -10,6 +10,9 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
+- **Draft amendment 2026-10-15 — D3841, §2.3a:** explicit recorded Inspector source and
+  dependent projection successors. This is unaccepted authoring, not implementation authority
+  from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
   `design/04-content-architecture.md` grounded predicates; `design/05-in-run-experience.md` §3
   evidence ceilings and §3-forms
@@ -176,6 +179,143 @@ retrieval time, candidate list, tablebase category or evaluation cannot earn a s
 Recorded evidence uses the durable recorded receipt; live evidence uses the live exchange receipt.
 Projecting a recorded payload through a live receipt, or reusing one receipt for a different FEN,
 request, model digest or response, fails before minting.
+
+#### 2.3a Draft D3841 recorded Inspector source successors — unaccepted
+
+This subsection is proposed source authoring for module-registration §4.11a, not authority from
+this parent's awaiting status. Current provider projections/factories and recorded ledger
+readings remain unchanged. These new sources report actual historical records; they do not
+retroactively prove a provider exchange, engine bound, model options, chess correctness or
+tablebase exactness. No ordinary hint, grade, bot evaluation, skill credit or pack predicate
+receives these new recorded-report projections through this amendment.
+
+Register a separate `recorded.inspector@1` producer with `availability:recorded`, `latency:sync`.
+Its four packet sources below have `plane:record`, `role:source_record`, `grounding:recorded_run`,
+`exactness:measured`, `confidence:reported`, operands `subject,itemDigest,event,authority`, and the
+existing source-specific answer image. Packet kind and source label are preserved literally;
+the event's label alone cannot promote authority to bounded search or exact tablebase truth.
+The canonical event/head/node proves an occurrence, not stronger scientific provenance.
+
+| Exact source projection | Sole proposed factory | Required packet kind | Answer content |
+|---|---|---|---|
+| `recorded.inspector.eval_packet@1` | `createRecordedInspectorEvalPacketV1Evidence` | `eval` | evaluation |
+| `recorded.inspector.wdl_packet@1` | `createRecordedInspectorWdlPacketV1Evidence` | `wdl` | evaluation |
+| `recorded.inspector.pv_packet@1` | `createRecordedInspectorPvPacketV1Evidence` | `bestline` | move, principal_variation |
+| `recorded.inspector.tablebase_packet@1` | `createRecordedInspectorTablebasePacketV1Evidence` | `tablebase` | fact, evaluation |
+
+Each factory takes exactly `{resolved:ResolvedRunSubject,itemDigest:RunEvidenceItemDigest}`.
+Require the existing runtime seal and `run_node` subject. Use `resolveRunEvidenceItem` to resolve
+the complete attachment at that exact head, then require `event.data.nodeId === subject.nodeId`,
+the fixed factory kind, and a source other than `human_model_predicted`, matching the predecessor's
+packet admission without claiming its label is independently verified. The payload is exactly
+`{subject,itemDigest,event,authority:"recorded_report_only"}`; event is the complete frozen stored
+attachment, including seq/time/node/refs/payload. The receipt binds this actual event and subject
+through the existing run subject/item digest domains. Bare packets, copied subjects, another head,
+same-FEN different nodes, omitted/altered envelopes and crossed kinds refuse before minting.
+An inherited identical node may legitimately expose its same attachment on another granted path.
+Enumerate all matching occurrences in event order; duplicate payload bytes at different seqs are
+different observations and must not collapse. The query service owns current access/disclosure
+and rechecks around work; the pure resolved-subject seal is not an access token.
+
+No matching event is `unavailable/source_absent`, not a newly scheduled analysis or a successful
+zero eval. An existing malformed/crossed event is `failed/source_contract_invalid`. A successful
+packet may contain missing/uninterpretable optional fields: retain the packet and use the fixed
+registered field renderer's explicit missing/uninterpretable state; never fabricate zero, frame,
+engine/model identity, bound, category or distance. Current-source origin is not inferred from
+the selected board's material or a present-day engine. Historical raw values/receipts remain
+server-internal; only exact typed renderer operands cross the presentation wire.
+
+Add two fixed derived views, not a caller-selected JSON path:
+
+| Projection | Sole factory | Literal inputs | Retained reported fields |
+|---|---|---|---|
+| `derived.inspector.tablebase_category@1` | `createDerivedInspectorTablebaseCategoryV1Evidence` | [`recorded.inspector.tablebase_packet@1`] | complete record plus category |
+| `derived.inspector.tablebase_distance@1` | `createDerivedInspectorTablebaseDistanceV1Evidence` | [`recorded.inspector.tablebase_packet@1`] | complete record plus category, dtz, preciseDtz and dtm where recorded |
+
+Their sole input arm is `{record:<exact sealed packet source>}`. Each output field is the closed
+`{kind:"reported",value:T} | {kind:"not_recorded"} | {kind:"uninterpretable"}`: category's T is
+the existing closed Syzygy category vocabulary, distance T is a signed safe integer or null.
+An unknown category is uninterpretable, not a substituted draw. Null and absent remain distinct;
+do not take absolute values or infer optimality. Retain the full sealed record as a literal input;
+grounding remains recorded_run/measured/reported. These states describe fields of a successfully
+recorded packet, not failed acquisition or chess absence. Add fixed registered renderers and exact
+consumer pairs before delivery; no raw JSON or provider-brand/accuracy claim enters learner text.
+
+The historical selection source is separately `recorded.inspector.maia_selection@1`, sole factory
+`createRecordedInspectorMaiaSelectionV1Evidence`, same recorded producer/latency/grounding/status,
+answer image candidate_moves. Its exact arm is `{resolved:ResolvedRunSubject,eventSeq:number}`.
+Require a positive safe-integer seq within the sealed head, the actual `opponent.move_selected`
+event, exact selected parent node **and branch**, `policyModeApplied:human_common`, and an actual
+recorded candidate array. Return exactly
+`{subject,event,requestedTargetElo,authority:"recorded_report_only"}`, where requestedTargetElo
+is the selected sealed head's stored `run.opponentPolicy.targetElo` or null, preserving the old
+marker's requested-context operand. It is not the applied band, a player rating or proof of what
+an older task honored. Retain that exact stored context in the input receipt. Also
+retain the full frozen selection event, not marker masses or the latest sibling selection.
+Bind its event seq/image in the existing factory input receipt plus exact subject; do not invent
+a new persisted digest domain. Missing candidate array is source absence; an existing empty array
+is successfully recorded empty data. Optional mass/cp/WDL/offWindow fields stay optional and
+unaltered. The terminal selected move is not evidence that every candidate was played, and this
+record proves neither honored requested band nor calibrated playing strength.
+
+The source is internal to the historical pivotal derivation, not an extra live distribution
+topic. `derived.pivotal.human_divergence@2`, sole proposed
+`createDerivedPivotalHumanDivergenceV2Evidence`, has literal inputs
+[`recorded.inspector.maia_selection@1`,`run.record.position@1`] per emitted marker. Its sole exact
+arm is `{recordedPivotal:RecordedPivotalSource}` under module-registration's scoped source owner,
+requiring the genuine current `human_divergence` kind. Caller positions, selection arrays, raw
+runs, event objects or extra source operands are refused; `RecordedPosition` payload alone has
+no run/head identity and cannot establish this join. The source owner retains the original full
+run/current head and separate requested branch/endpoint grant. Enumerate **every** qualifying
+selection anchored on the granted prefix, including observations whose event origin is a sibling
+branch. For each event, resolve a sealed run_node subject on its actual origin branch and parent
+at that same current head, then invoke the new recorded-selection factory with its actual seq.
+Validate origin membership separately; never pretend the origin branch is the requested grant.
+Create the position through its existing sole factory using only that source-owned original run
+and actual parent node, not a caller-supplied sealed position. Retain both actual sealed inputs,
+event/origin identity and the requested branch/endpoint in the canonical factory input receipt.
+An endpoint/head/run/issuer substitution refuses before preparation; same node/FEN labels from
+a foreign run cannot supply this operation. No source is acquired outside the granted anchor
+prefix, but it is a position bound rather than an invented chronological event cut.
+Use the existing split convention unchanged: omit offWindow rows; all
+remaining masses must exist with positive total; normalize over that reported window, then
+require maximum at most0.5 and at least three entries at least0.15. No match returns zero items,
+missing source remains unavailable, and an invalid/crossed record refuses. Output retains the
+old marker's fields plus its full `selection` and `position` inputs. Both inputs are recorded_run,
+so grounding must remain recorded_run (the unchanged split convention is retained separately in
+the existing convention receipt), exactness measured/confidence reported. A declared_convention
+output over these same-grounding operands would fail the existing widening guard; do not weaken it.
+State recorded model-choice spread, not quality, intent,
+player rating or strategic significance. The old @1 marker and source remain untouched.
+
+`derived.compare.eval_delta@2`, sole proposed `createDerivedCompareEvalDeltaV2Evidence`, consumes
+the ordered repeated inputs [`recorded.inspector.eval_packet@1`,`recorded.inspector.eval_packet@1`].
+Its exact arm is `{before,after,comparison:RecordedComparisonSource,branchId:string}`. Assert the
+same issuer/current source boundary and both complete original paths, then both exact event/head/
+node memberships on that granted path. Reconstruct the predecessor's engine_validated-labelled
+trail, stable by ply then original event order, before selecting consecutive report pairs; no
+same-FEN merge, later observation, guessed peer or caller trail. Require literal safe-integer cp
+values at both ends and the unchanged `STORY_PIVOT_CP` threshold. Mate/uninterpretable entries
+cannot become cp. Emit `{before,after,delta,plyOffset,frame:"recorded_cp_numbers",
+comparability:"provider_not_established"}`; retain both occurrences in that order. No qualifying
+pair is successful no_witness, while missing/crossed source is not. It reports the difference of
+stored numbers under the existing comparison convention, not a validated same-engine/bound
+evaluation change or move grade. Grounding recorded_run, exactness measured/confidence reported,
+answer evaluation. The new renderer must say recorded numerical difference and disclose unverified
+provider comparability. The old @1 computation/meaning and existing Compare doors remain.
+
+Source job provenance and historical observations are separate named paths. A required modern
+delivery that is corrupt/missing must refuse under its owner contract, not fall back to these
+weaker recorded views. Conversely an explicitly requested recorded view reports its history
+without acquiring a new provider or reconstructing a transcript. The durable Stockfish draft owns
+modern job retention and joins; it does not authorize promoting old packets through this section.
+
+Acceptance requires actual typed factory/receipt cases, malformed and substituted inputs,
+repeated-identical payload occurrences, empty/missing/uninterpretable fields, exact registered
+components and authenticated/native delivery. `recorded-origin.ts`'s pure historical membership
+controls are feasibility evidence only: they establish none of those new F2 mints or access joins.
+Story rank's dependent successor is separately held on D3845's variable/empty input contract;
+do not hide that hole behind a computed local leaf or fabricate absent source witnesses.
 
 #### 2.4 Authored authority
 
@@ -633,6 +773,11 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: draft D3841 source authoring separates historical packet/selection observations
+  from live exchanges, with exact occurrence-bound sole factories, fixed tablebase views and
+  explicit historical marker/Compare successors. No current declarations or source meanings
+  change. D3845 holds rank's variable/empty lineage contract; joint/upstream independent review
+  still precedes new factories, callable/API/UI or source retirement.
 - 2026-10-15 — D3829 applies §3.4's separate families to source preparation, not only output
   filtering. Each exact factory calls a module-internal requested-family producer; original
   graph/FEN validation, combined whole-tip rendering, retained witnesses, public arms and all

@@ -217,3 +217,42 @@ nothing if any combined dimension fails. A combined-cost negative is explicitly 
 Independent read-only recheck confirms that identified correction closed. No tests, edits or joint
 acceptance occur. The exact source map, source/callable operand contracts, upstream acceptance and
 remaining suppliers stay open. These bounded clauses are not implemented and do not close D3841.
+
+## D3841 exact source map — independent return and corrections, 2026-10-15
+
+The twelve affected rows now distinguish recorded packet/selection observations from actual
+requested-node Maia/Explorer tasks, retain63 unchanged topic refs and propose six detail refs.
+This is an81-ref requirements image, not compiled production bindings or accepted source versions.
+The separate reviewer returns three substantive contract issues:
+
+1. Human marker declared_convention over two recorded_run inputs violates the actual F1
+   weakest-grounding rule. Keep recorded_run and retain the separate split convention receipt.
+2. The historical marker needs the sealed head's requested target band. A position payload alone
+   cannot establish same-run/head membership; the source must construct position internally.
+3. Current pivotal population includes sibling-origin observations anchored on the requested
+   prefix. Origin branch and requested branch/endpoint are separate operands and receipt fields.
+
+Main rechecks the symbols and corrects all three upstream contracts. Human@2 has only the genuine
+RecordedPivotalSource arm: it owns the current original run/requested grant, enumerates every
+eligible anchored observation and internally constructs selection/position on the actual origin.
+It accepts no caller run/position/selection arrays. The source retains requestedTargetElo from
+stored policy, explicitly not an applied band or calibrated strength. The research target passes
+136 historical controls, including shared-prefix population, both colours, equal-image distinct
+occurrences, foreign-head/run distinctions and wrong-kind/origin negatives. Wrong prospective
+grounding actually refuses in unchanged F1; the corrected isolated declaration has two recorded
+leaves and zero provider operations. This does not mint genuine scoped production sources.
+
+Independent recheck confirms those three corrections and correctly reconciled rank@3 hold;
+it finds a residual old-byte preservation clause applying to the intentionally extended human@2.
+Main narrows full payload/grounding/dependency equivalence to the three retained @1 factories;
+human@2 preserves ordered old marker fields plus explicit recorded lineage, while old human@1
+stays byte-identical. A final bounded wording recheck is requested. No joint acceptance follows.
+
+D3845 is a verified separate representability question: actual successful rank@2 empty input has
+zero receipt sources while its static declaration lists eleven. Nonempty/repeated cardinalities
+are not yet measured. Preserve legal empty ranking and hold rank@3; do not hide the gap with
+invented witnesses, a generic local leaf or deleting the case. Full source/callable schemas,
+supplier acquisition/absence/receiver contracts and upstream/joint acceptance remain outstanding.
+
+Final read-only wording recheck confirms the residual preservation conflict closed. No tests or
+joint-amendment acceptance; D3841 and D3845 remain doing with the outstanding obligations above.

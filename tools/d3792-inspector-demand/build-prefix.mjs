@@ -62,3 +62,6 @@ assert.equal(baseline.status, 1, "unchanged whole-branch operation unexpectedly 
 assert.match(baseline.stderr, /whole-tip source is not prefix acquisition/u,
   "baseline must fail on the specific bounded-work assertion, not an unrelated startup failure");
 console.log("D3815: unchanged baseline fails the exact zero-edge prefix control as expected");
+await build({ entryPoints: [resolve("tools/d3792-inspector-demand/recorded-origin.ts")],
+  outfile: resolve(destination, "recorded-origin.mjs"), bundle: true, platform: "node", format: "esm",
+  nodePaths: [resolve("packages/runtime/node_modules")] });

@@ -240,6 +240,45 @@ keys or terminal sampled move merely because the registered distribution has sou
 The displayed window remains reported bounded model choice, not human frequency, complete
 legal coverage, move quality, a predicted observed move or a calibrated player rating.
 
+#### 4.1 D3841 candidate WDL companion — still draft
+
+The policy-only `maia.policy_page@1` cannot satisfy this obligation: its frozen candidates contain
+only move and probability. Add the separate `derived.maia.node_candidate_wdl@1`, sole proposed
+`createDerivedMaiaNodeCandidateWdlV1Evidence`, with literal ordered inputs
+[`human.maia.inference_task@1`,`run.record.position@1`] and the same sealed run-node/history
+admission as node_distribution. Its exact arm is `{task,position,resolved}`; neither a bare page,
+observed move, source lookup key nor arbitrary candidate list is accepted. The whole task's
+machine-only answer image retains evaluation as well as candidate/selected-move operands; the
+node distribution remains candidate_moves-only, and this new projection is evaluation-only.
+Mixed model/recorded-position grounding is declared_convention, measured/reported; there is no
+grade, forecasted observed move or calibrated strength meaning.
+
+The output is exactly `{task,position,nodeId,engine,requestedBand,appliedBand,candidates}`, where
+task/position are the complete sealed inputs retained internally. Engine and applied band derive
+only from that actual final source; requested band remains separately labelled, never a player
+rating. Candidates preserve final-task order and contain exactly moveUci, reported rank and the
+same row's reported win/draw/loss. Omit rows whose WDL is null; do not fill missing values, merge
+tasks/windows, renormalize, rank by WDL or add the sampled off-window move. An empty WDL result
+returns the existing typed `unavailable("empty_population")`; Full Inspector maps that one
+source-local result to source_absent with its fixed missing-reported-WDL disclosure, not provider
+failure/no_witness/zero probabilities. Malformed/crossed task data remains failure.
+
+Full Inspector obtains this source from the same internal `selectWithMaiaEvidence` final-task
+flight/cache and exact requested-node authority as the distribution. It never resamples only to
+find more favorable WDL; a retained task remains that observation. If two independently acquired
+pages do not have the same task identity, their values cannot be labelled one shared observation.
+These node topics are not the old branch's recorded selection distribution; old events cannot
+reconstruct a missing task. The new derived projections bind only to their separately accepted
+exact Inspector consumers, not ordinary voice/hints, grading, player classification or pack truth.
+
+Before delivery, register an exact @2 Full Inspector pair and a closed evaluation-valued renderer
+over canonical legal moves/reported rank/WDL, model identity and honest requested/applied band
+wording. Retain the human-model/non-rating guard. Neither serialized task/transcript/source keys
+nor terminal sampled move is a public operand. Actual task/history/node substitutions, missing/
+partial WDL, no-row/zero-value distinctions, final-window identity, cancellation/access changes
+and authenticated desktop/phone delivery are acceptance obligations, not proved by this paragraph.
+The existing v1 page, old candidate-WDL factory and standalone Inspector paths remain unchanged.
+
 ### 5. Adoption, absence and retirement
 
 Implementation proof crosses application composition, each opponent mode, authenticated
@@ -314,6 +353,10 @@ sampling policy, learner entry requirement or LLM-authored chess judgement.
 
 ## Changelog
 
+- 2026-10-15: D3841 authors the separate evaluation-valued node candidate-WDL companion over
+  the genuine final task and recorded position. Missing WDL remains typed absence, not model
+  failure, zero probabilities or a sampled-move inference. Independent review and actual
+  task/source/consumer adoption still precede implementation; all page predecessors remain.
 - 2026-10-09: authored against current production/task/parser/Inspector boundaries and four
   permanent compatibility controls. Resource claim and durable work ownership recorded together;
   independent review/acceptance precedes production source or consumer changes.

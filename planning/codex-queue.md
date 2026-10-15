@@ -15,8 +15,15 @@ or refreshing history. The three cross-cutting contracts are now authored in §4
 bounded review's atomic bundle-fitting correction is closed, not joint acceptance: exact-version
 closure under one policy, required per-demand absence
 without partial total aggregation, and source-order whole-component paging without old reducers.
-Next finish the exact twelve-row source/derived/factory/grounding map, including separate Maia
-WDL and upstream ownership/acceptance, then remaining supplier contracts. Preserve all obligations
+The exact twelve-row source/derived/factory/grounding map is now authored, including recorded
+packets/selections, separate Maia WDL and upstream ownership. Its requirements image has75 topic
+refs plus six detail refs, not81 implemented adapters. Historical feasibility passes136 controls;
+the unchanged F1 rejects wrong grounding and admits the corrected isolated recorded declaration.
+Independent review repairs requested-band ownership, origin/requested branch scope and old/new
+preservation. Next resolve D3845: legal empty Story rank has zero actual input receipts against
+eleven declared refs; rank@3 stays held until a representable literal collection/absence contract
+is authored and independently reviewed. Then finish callable operand/supplier contracts and
+upstream/joint acceptance, not speculative API implementation. Preserve all obligations
 and @1 meanings; no held compiler exemptions, fake undemanded absence, twelfth module or source
 retirement. The existing dated review owns the findings; D3841 stays doing and D3792 unaccepted.
 

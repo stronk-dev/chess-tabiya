@@ -1993,10 +1993,12 @@ This detail section remains unaccepted; no production or existing source meaning
 The D3841 follow-up also refutes simply retaining75 unchanged legacy refs plus these six views:
 §4.11a still owes an obligation-preserving modern-source rebase and exact-version registry/
 admission/presentation closure. One existing module policy is shared, not duplicated or weakened;
-old @1 payloads and adapters stay intact. No total successor binding count is established yet.
+old @1 payloads and adapters stay intact. The subsequent exact twelve-row source map proposes
+75 topic refs plus six detail refs (81 distinct accepted refs), not a compiled successor binding
+count: its rank@3 remains held on D3845 and adapters can have multiple forms.
 The subsequent D3841 author clauses specify the exact-version consumer-image join, required
 per-demand source policies and source-order whole-component fitting, still pending independent
-review and the complete source map. Presentation must classify both Inspector versions and bind
+review and actual source/callable/supplier closure. Presentation must classify both Inspector versions and bind
 adapters to the exact tuple. Source/detail components consume the admitted @2 collection without
 the old packet ordering/reduction backstop; all current role/answer limits and whole-component
 budgets remain. Fit all components/equivalent sentences/captions/marks/arrows owned by one
@@ -2219,6 +2221,10 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-10-15 — D3841 companion distinguishes the authored 81-ref requirements image from
+  unimplemented successor bindings. Historical recorded packets/selection lineage and separate
+  modern Maia WDL require exact admitted renderers, closed field states and unchanged ceilings;
+  a source-map row is not factory adoption or joint acceptance. Rank@3 remains held on D3845.
 - 2026-10-15 — D3841 companion names exact @1/@2 classification/pair closure, shared existing
   ceilings and source-order whole-component fitting. Historical observations remain distinct
   from actual provider deliveries. This is unaccepted authoring; the full source map and

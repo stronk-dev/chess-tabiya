@@ -29948,3 +29948,57 @@ Campaign was the one capability with no API, route or content. Now:
  569-item UX ownership, roadmap R1–R10/receipt, intent parity, test tiers and process contracts.
   All1732 live rows remain assigned. Stage only the twelve owned author/research/tracking files,
   inspect the exact index and commit through normal hooks; no push or whole-capability promotion.
+
+## 2026-10-15 — Inspector source-image authoring and historical occurrence feasibility
+
+- Previous goal turn progressed at b91ee18a: three bounded cross-cutting clauses authored and
+  independently reviewed, without pretending to implement Inspector. Current tracked tree is
+  clean; the same three pre-existing untracked entries remain. Continue the still-doing D3841
+  exact source/factory/grounding map before API/UI work or joint acceptance.
+- Current catalogue recheck retains75 accepted topics,63 individually compilable bindings and
+  twelve refused bindings through nine narrow provider-labelled leaves. The exact twelve and
+  their original order come from the actual catalogue/census, not a hand-recalled feature list.
+  Research extends only the existing opt-in recorded-prefix target with a local occurrence probe:
+  actual sealed historical heads and attachment digests, exact selected nodes, same inherited
+  node versus equal-FEN distinct nodes, and distinct branch-specific recorded selections. The
+  first104 controls pass for both colours; source labels explicitly remain recorded reports,
+  not modern provider receipts. Add independent model-packet and repeated-identical-payload
+  occurrence controls before recording the final result. No new production factory, endpoint,
+  permission, provider protocol, source version, raw dump or normal-CI/progress dependency.
+- Add D3845 before proceeding: actual legal empty rank@2 has zero source digests against eleven
+  statically declared refs. The normal work-state sync first correctly refuses the new untriaged
+  row against its zero ceiling; explicit evidence-foundation assignment restores zero without
+  weakening the ratchet. This is a bounded contract representability gap, not a demonstrated
+  HTTP exploit. Keep valid empty behavior and hold proposed rank@3 for real collection/absence
+  lineage authoring and independent review; nonempty cardinalities are not measured here.
+- Author the exact twelve-row source/derived/factory/grounding map and upstream recorded packet,
+  historical selection, tablebase and separate Maia node-WDL contracts. Retain63 other topics;
+ 75 topic requirements plus six detail refs is81 distinct proposed refs, not implemented adapters.
+  The existing probe checks this map against actual failures and rejects missing/foreign/duplicate
+  mappings. No changed packet meaning, provider refresh, new default or production source adoption.
+- Independent review returns three real draft problems: marker grounding must remain recorded_run
+  over recorded inputs; requested band must come from the owned current original run and position
+  must be internally constructed; sibling-origin observations anchored on a shared prefix remain
+  in population with origin and requested scope separately retained. Main checks symbols and
+  corrects the sole factory arm/receipt. A residual byte-preservation clause is narrowed to the
+  retained three @1 factories; human@2 preserves old ordered marker fields plus added recorded
+  lineage, while old human@1 remains byte-identical. Final bounded read-only recheck clears these
+  corrections, not unfinished contracts or joint amendment acceptance.
+- Research's positive hypothetical declaration initially fails for an undeclared orphan disposition,
+  then twice for an incorrect one-leaf expectation; fix the instrument to declare isolated
+  inspector-only disposition and retain both genuine recorded leaves. The unchanged compiler's
+  wrong-grounding negative refuses as intended. Final `make inspector-recorded-prefix-research`
+  exits zero: clean research types, unchanged104-run/452-prefix/90-event population, window controls,
+ 136 historical occurrence controls, real negative/positive F1 experiment with two recorded leaves
+  and zero provider operations, and three map negatives. No raw report or new gate is added.
+  Source/callable schemas, supplier acquisition/absence/receivers and upstream/joint acceptance
+  still precede API/client/native implementation. The prior ae0c9d55 full application proof is
+  unchanged historical proof, not rerun or claimed anew for this docs/research-only pass.
+- Final normal source-contract research passes37 cases and clean types; nine unchanged execution
+  census controls pass without rewriting the saved full report. `make verify-governance` passes
+  register/lifecycle,3594-row work index/state with1733 live assigned/zero untriaged,569-item UX
+  ownership, roadmap R1–R10/receipt, intent parity, test tiers and process checks. Final normal
+  recorded-prefix target repeats the136 controls and inventory results above on the final draft.
+  Stage only the19 owned research/author/tracking files, inspect the exact index and use normal
+  commit hooks. Preserve the three pre-existing untracked entries; no push, production/API,
+  official content, semantic qualification, milestone promotion or goal pause/completion.

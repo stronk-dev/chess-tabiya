@@ -1892,12 +1892,67 @@ An authentic recorded-source successor may instead retain a historical attachmen
 it must establish the exact stored occurrence and disclose that it does not prove a missing
 provider exchange. Six current packet topics, the historical divergence marker and recorded
 Compare deltas have that origin. Fresh Maia/Explorer requests remain actual provider operations.
-The exact source/derived successor map, payloads, grounding/receipt contracts and upstream
-acceptance **remain unfilled authoring requirements**. The three cross-cutting clauses below
+The following matrix and upstream draft clauses now propose the exact source/derived successors,
+payloads and grounding/receipt contracts; they remain unaccepted. D3845 still holds rank's variable/
+empty-input representation, and full callable/supplier authoring remains required. The three cross-cutting clauses below
 specify versioned closure, demanded-topic absence and source-order delivery, pending independent
 review; they do not supply that map. Six detail refs do not establish a total of81 executable
 bindings. No held-binding compiler exception or source retirement is authorized. See the dated
 D3841 independent follow-up and its recorded-versus-live refinement.
+
+**D3841 exact affected-source map — unaccepted author image:** replace each of the following
+refs in its predecessor inventory slot, preserving all other63 refs/order and all @1 contracts.
+The nine narrow provider-labelled leaves and their three dependent topics are all accounted for.
+Proposed recorded/source factories are owned by value-authority §2.3a, not implemented by this
+table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
+remain separate; a ledger record cannot substitute for a run attachment.
+
+| Original exact ref | Proposed successor ref | Inventory family | Source/owner and scope |
+|---|---|---|---|
+| `live.stockfish.eval@1` | `recorded.inspector.eval_packet@1` | stockfish | Exact selected-node attachment; value-authority §2.3a |
+| `live.stockfish.wdl@1` | `recorded.inspector.wdl_packet@1` | stockfish | Exact selected-node attachment; value-authority §2.3a |
+| `live.stockfish.pv@1` | `recorded.inspector.pv_packet@1` | stockfish | Exact selected-node attachment; value-authority §2.3a |
+| `human.maia.policy@1` | `derived.maia.node_distribution@1` | maia | Actual requested-node history-conditioned final task; maia-task-source §4 |
+| `human.maia.candidate_wdl@1` | `derived.maia.node_candidate_wdl@1` | maia | Separately evaluation-valued view of that actual final task; maia-task-source §4 |
+| `human.explorer.population@1` | `derived.explorer.inspector_population@1` | explorer | Existing accepted whole-page/narrow Inspector source; provider exchange §8 |
+| `live.syzygy.result@1` | `recorded.inspector.tablebase_packet@1` | syzygy | Exact selected-node attachment; value-authority §2.3a |
+| `live.syzygy.category@1` | `derived.inspector.tablebase_category@1` | syzygy | Fixed view of the complete recorded tablebase packet; value-authority §2.3a |
+| `live.syzygy.distance@1` | `derived.inspector.tablebase_distance@1` | syzygy | Fixed view of the complete recorded tablebase packet; value-authority §2.3a |
+| `derived.pivotal.human_divergence@1` | `derived.pivotal.human_divergence@2` | derived | Historical selection occurrence on the granted branch; value-authority §2.3a and scoped pivotal owner |
+| `derived.compare.eval_delta@1` | `derived.compare.eval_delta@2` | derived | Two exact recorded reports under RecordedComparisonSource; value-authority §2.3a |
+| `derived.story.rank@2` | `derived.story.rank@3` | derived | Proposed identity only; Review §4.5 must resolve D3845's variable/empty literal-input contract before declaring this source/factory |
+
+This establishes a **requirements image**, not executable bindings:75 retained topic obligations
+plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
+when a pair has several declared forms. Complete compilation/closure and independent upstream
+acceptance remain required; the candidate count is not runtime source availability or delivery.
+The Story row is explicitly held, not implemented by aliasing @2. `InspectorSourceRef` is the
+exact75-topic successor image only; six detail refs are not acquisition topics. Register the
+explicit family assignments above rather than letting new prefixes silently fall into `derived`.
+Family names group the UI; they do not attest Stockfish/Syzygy execution for a historical packet.
+
+All @2 bindings use the literal per-demand policy below and unchanged review timing/roles/
+sessions/answer ceilings/4000ms interactive binding limit. Local recorded paths use no provider
+operation and cannot acquire one. Live Maia/Explorer paths retain their registered source
+operations. Exact current source-owner availability applies: missing saved packet/selection is
+source_absent; copied/crossed/corrupt records fail; no matching historical divergence/delta is
+successful no_witness. Missing context stays separate. These rules do not supply a generic
+fallback when the requested source owner fails.
+
+Maia WDL absence after a successful task is `unavailable/source_absent`, with the fixed
+projection-specific disclosure “This model window has no reported candidate win/draw/loss data.”
+It is neither model failure nor an all-zero WDL fact. Its factory's `empty_population` result
+maps only here. Explorer below-floor/empty population keeps the existing source-owned population
+and per-move floors, typed status, attribution and recency; never call zero games provider failure
+or manufacture a move recommendation. Full Inspector must reuse the existing admitted whole page
+and narrow factory, not reverse-engineer evidence from its HTTP presentation receipt. Public
+node/SAN identity is resolved on this granted path, not the active sibling's cursor.
+
+Value-authority §2.3a, Maia task §4 and Review §4.5/D3845 are upstream acceptance dependencies,
+not permissions inherited from their parent's implementing status. Current declarations and
+public meanings remain untouched until those exact new contracts and the joint Inspector
+amendment survive independent review. No reserved provider alias, unavailable stub, hidden
+required modern-to-legacy fallback, arbitrary copied packet or implicit opening authority.
 
 **D3841 exact-version closure — unaccepted author contract:** preserve the eleven logical
 `MODULE_IDS`, one `MODULE_POLICIES` entry per id, every preset/context reference and the existing
@@ -2136,12 +2191,18 @@ and `RecordedReviewMomentSource` (issued by `authority.compileMoments`), includi
 recorded-fact arms. The D3824 paragraph above describes its precursor model, not a second
 constructor or permission mechanism. Keep source assembly and current Inspector access separate.
 
-Add exactly one new `derived.story.rank@2` F2 arm:
-`{recordedReview: RecordedReviewMomentSource}`. The factory asserts that source's runtime
+The earlier D3832 author image proposed a new rank@2 arm. D3841 supersedes that identity choice:
+keep the existing rank@2 `{moments}` contract and callers unchanged. The proposed rank@3 source
+arm is `{recordedReview: RecordedReviewMomentSource}`, **held on D3845** before its declaration,
+factory or adapter may be implemented. Its variable/empty actual evidence collection needs a
+representable literal input/absence contract; a new version number alone does not supply one.
+An opaque source handle cannot conceal undeclared lineage, and an empty local leaf/member or
+fabricated eleven witnesses cannot make this requirement pass. The eventual factory asserts that source's runtime
 admission and current boundary before reading its owned unrendered moments; it does not accept
 the source's visible fields, copied values, a bare boundary or caller-provided moment arrays.
-The existing `{moments}` arm remains unchanged for existing whole-game callers and is forbidden
-as the new Inspector supplier. Reuse `rankStoryMoments` and its exact source checks; constructing
+The existing @2 `{moments}` arm remains forbidden as the new Inspector supplier. Reuse
+`rankStoryMoments`'s ordering, but bind source-kind checks to the exact new source image, including
+human-divergence@2; an @1 marker is not its witness. Constructing
 the full Story/title then filtering is not this operation and must advance no such call counter.
 
 The new canonical input image is `recorded-review-moment-source@1` plus the source's actual
@@ -2149,12 +2210,14 @@ original run/current head, branch/endpoint, learner side, boundary outcome/impor
 ordered granted node/edge operands, exact adapter plan/states and complete used moment/evidence/
 typed-evaluation operands. It is not the opaque handle's serialization or only the displayed
 rank. Equal ranks or moment images at different endpoints remain distinct scoped inputs; actual
-full-tip payloads must remain byte-equal to the legacy arm. Keep the current v2 convention,
-grounding, dependency limits and existing title/private/share callers. This is no new prominence,
-educational-value or positive-move selection policy. If v2's declared meaning cannot support the
-new arm, return for an explicit successor rather than silently reinterpret or retire it.
+full-tip rank values for equal valid source observations must retain legacy ordering. Keep the
+current ordering convention and existing title/private/share callers; use new literal source
+dependencies with weakest-input grounding, never mutate rank@2's meaning. This is no new
+prominence, educational-value or positive-move selection policy. Exact lineage/cardinality and
+source-state handling remain D3845 acceptance prerequisites, not implementation choices.
 
-A successfully empty moment source still mints the existing singleton `{rank:[]}` ordering;
+A successfully empty moment source must still produce a singleton `{rank:[]}` ordering once
+the source/input contract is representable;
 do not confuse zero ranked moments with a missing source or `no_recorded_review`. Present the
 new Inspector topic explicitly as the recorded order of **currently admitted moments**, not
 finished analysis or a complete diagnosis. Typed adapter absence/progress is retained in the
@@ -2522,22 +2585,27 @@ owned by the four factories; server callers cannot provide replacement paths, ma
 pages or witness arrays. The server resolver grants this exact branch/prefix/family before
 construction and the receiver compares those fields and current decision again before delivery.
 
-Add only these four new closed F2 arms; each rejects a genuine source of another kind:
+The three retained @1 factories below gain only their named new closed scoped arm, rejecting
+a genuine source of another kind. D3841 replaces the earlier proposed human-divergence@1 scoped
+arm with the explicit @2 successor; its old @1 whole-tip arm remains unchanged:
 
 | Exact factory | Additional arm | Preparation and complete retained inputs |
 |---|---|---|
 | `derived.pivotal.irreversibility@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `irreversibility`. Prepare only this family on granted incoming edges. Retain actual parent/child identities and FENs, committed move, the exact existing transition reading and recorded anchor position. A root cannot invent an edge. |
 | `derived.pivotal.phase_change@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `phase_change`. Walk only the granted prefix, including intervening unclear bands. Retain both actual definite readings and their recorded positions; the previous definite witness need not be the immediate parent. Never borrow a later phase or infer a transition from the displayed labels alone. |
-| `derived.pivotal.human_divergence@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `human_divergence`. Prepare only actual `human_common` selection observations anchored on the granted prefix. Resolve each marker's retained occurrence to exactly one original `opponent.move_selected` event; retain the full original selection, run/event/branch/node/move tuple, its original engine/candidates and the existing policy-page/position inputs. No latest-at-node lookup or reconstruction from normalized marker masses. |
+| `derived.pivotal.human_divergence@2` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `human_divergence`; use value-authority §2.3a. Preserve all actual selection observations anchored on the requested prefix, independently resolve each event's actual origin-branch run_node subject and seq, then mint its explicit recorded-selection and source-owned position inputs. Retain origin and requested branch/endpoint separately, plus stored requested target band. Never accept caller positions or a legacy provider policy-page input. |
 | `derived.pivotal.option_collapse@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `option_collapse`. Prepare only this family's same-side legal-count sequence within the grant. Retain prior, first-low and next same-side positions plus all three complete legal-mobility readings. The anchor stays the first-low node. A prefix missing the later witness produces no marker, even if that later node exists in the stored run. |
 
-The existing `{run, branchId}` arms and their whole-tip output, inputs and receipt identities
+The existing @1 `{run, branchId}` arms and their whole-tip output, inputs and receipt identities
 remain unchanged. Scoped factories do not call those arms, compute the combined population and
 filter it, or manufacture a shorter DrillRun. They use their source's granted path before their
 own preparation, then existing exact reading/position factories against the unchanged original
-run. Keep current marker order, payloads, thresholds, conventions, grounding and dependencies.
-A complete-tip source must retain byte-equal payload populations to its legacy arm; source input
-identities are intentionally new, not retrospective edits to old receipts.
+run. For the three retained @1 factories, keep current marker order, payloads, thresholds,
+conventions, grounding and dependencies; a complete-tip source retains byte-equal payload
+populations to its legacy arm. Human-divergence@2 preserves the ordered marker population and
+old marker-field image, thresholds and conventions, while explicitly adding the recorded
+selection/position lineage and recorded_run grounding specified in value-authority §2.3a.
+Its old @1 arm remains byte-identical. New source input identities never rewrite old receipts.
 If independent review finds a v1 meaning requires complete tips, return for explicit successor
 projections/bindings before acceptance rather than silently widening that meaning.
 
@@ -2550,11 +2618,13 @@ bounds position witnesses, not a historical event-time cut: observations come fr
 current full event head. A different chronological-cut feature requires its own contract.
 Current read/disclosure permission remains separate and is never inferred from that anchor.
 
-The legacy human page's target band still comes from `run.opponentPolicy.targetElo` (or null),
+The historical human source's requested target band still comes from the sealed head's stored
+`run.opponentPolicy.targetElo` (or null),
 not an invented historical sample field. Retain that exact operand and limitation. Recorded
 engine/candidate bytes and an event reference do not establish a modern Maia task receipt,
-calibrated rating or best-move judgement. Its current provider dependency stays pending until
-the source-owning successor is actually admitted; no scoped factory discharges it by relabelling.
+calibrated rating or best-move judgement. Its @1 provider dependency remains unchanged. The @2
+recorded source requires independent acceptance and actual new source/factory adoption, not
+relabelling. It does not discharge modern task availability or make that old dependency vanish.
 
 Canonical factory inputs include `recorded-pivotal-source@1`, the exact requested route/kind,
 original run/current decision, branch/endpoint, ordered granted node/edge operands and actual
@@ -2575,7 +2645,9 @@ uses the resolver's existing post-await storage/access/assistance checks; the cl
 retires obsolete request owners and paint. No source handle authorizes an old response.
 
 Acceptance requires actual typed constructor/new-arm/invoker controls, not the disposable helper:
-all four full-tip payload populations retain legacy bytes; all207 stored prefixes retain complete
+the three retained @1 full-tip payload populations retain legacy bytes; human@2 retains the
+ordered old marker-field population plus its explicitly added recorded lineage, while old
+human@1 stays byte-identical; all207 stored prefixes retain complete
 family witnesses; later graph **and FEN** corruption refuse before detector counters advance;
 copied/wrong-kind/wrong-scope sources and duplicate/missing/substituted human occurrences refuse;
 mutating caller argument/node/event records after construction cannot alter the admitted image.
@@ -3421,6 +3493,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3841 authors the exact twelve-row historical/live successor map and upstream
+  recorded packet/selection, Maia WDL and derived source contracts. Independent review corrects
+  grounding, source-owned requested band/position and origin-versus-requested branch scope;
+  preservation applies byte-for-byte to retained @1 arms, not the intentionally extended human@2.
+  D3845 holds rank@3 on the real eleven-declared/zero-actual empty-input contract gap. The map is
+  a requirements image, not complete bindings, supplier implementation or joint acceptance.
 - 2026-10-15 — D3841 author clauses specify exact-version consumer closure under one existing
   module policy, literal required per-demand absence without abusing total-consumer aggregation,
   and source-order admission/whole-component paging without the old ranking backstop. Independent
