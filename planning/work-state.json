@@ -32114,6 +32114,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
+    },
+    {
+      "id": "D3856",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f8d3b56da7a6c83740a7fdaf505915553247e42e40020d5c37f280e45ce9203a",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/endgame-method-authority.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

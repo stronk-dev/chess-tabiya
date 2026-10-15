@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3856 directly proves F2's existing D5 method-path obligation with13 permanent
+actual-factory cases (all three techniques/both colors, full stage-prefix/convention authority,
+mixed/order/gap/duplicate/forgery and pre-shortcut/late-domain refusals). The normal108-case target,
+74-case value-authority gate and workspace types pass. D5 discharges only path authority;
+D3847's variable method declaration/consumer qualification remains separate. Of the original
+three opaque routes only comparison delta is in Inspector's graph, with §2.3a's still-unaccepted
+recorded successor. Do not invent an engine provider for the method-definition digest or block
+Inspector on the unrelated trajectory/method consumers. Keep their actual platform migration work.
+Next source-reachable sequence contracts and complete scoped source/adapter closure, preserving
+D3851's unanswered coexistence choice and all APIs/history. Independent tracing also confirms the
+candidate vector is outside Inspector: reconcile its full contract at opponent.selection, not as
+a blanket Inspector gate. D3853 legacy compatibility still gates shared packet/helper changes.
+This narrows only this consumer's prerequisite graph, not full platform/F2/provider completion.
+No new Inspector implementation authority.
+
 2026-10-15 — D3847 structural reduction is now proposed in F2 §2.3i/provider §1a: complete
 position+17-family roles, both grants/selected branch, genuine empty invocation/result authority,
 relative offsets and explicit catalogue identity. The independent reviewer catches/clears an old

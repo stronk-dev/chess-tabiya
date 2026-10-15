@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3855]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3856]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,15 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3856 proves and discharges F2's existing D5 method-path obligation through the actual factory:
+all three methods/both colors, exact stage-prefix/convention receipts and corrupt/forged-path
+refusals, including before shortcuts.13 new permanent cases run in normal software CI; the
+108-case focused target,74-case value-authority gate and workspace types pass. The three opaque
+audit routes are separated: only comparison delta reaches the current Inspector graph, with
+its recorded successor still proposed. Method variable declarations/eligibility and the legacy
+Compare trajectory stay open platform work. No new source/consumer implementation or whole
+milestone completion follows from this narrow discharge.
 
 D3847's structural comparison reduction/source/result contract is now authored in F2 §2.3i,
 not implemented. Position plus17 family roles retain both grants/selected branch, authentic empty

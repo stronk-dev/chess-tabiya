@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9d9198b145fcac6412162feda88886cfa8a8516cc0ed2c75350cb7b24872a779",
+    "roadmap": "sha256:80f5a37cb3e271c873635350252e10e58ef255fc7454cc4bea4ec77c92e11d9a",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:be2d5a3387219f64930ecc1ea0f3ee53fb6867479ec17446ccb54b93fdb81413",
+    "workState": "sha256:be870229889d9f2867de908438074ba81e271ea1df50f68d6b4ba4cf021ae585",
     "rfcRegister": "sha256:b514ed548ebdb05a57da890c3247fd37378225944ee809c1b603326e4ab7ae52",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 26,
       "blocked": 1086,
-      "done": 1702,
+      "done": 1703,
       "refused": 162
     },
     "workItems": {
@@ -347,7 +347,7 @@
       "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3847/D3850 adds unaccepted F2 section2.3c's literal material/promotion source contracts; one promotion algorithm convention is now claimed, not registered. Independent bounded review finds no normative blocker, not upstream/joint acceptance. No runtime factory, convention registry or qualification changes. D3781's preceding343-case retained-input inventory remains56/81 subjects,495 targets and5443 FEN/UCI leaves;106 disposable orientation controls pass. Nested/continuation, recorded/bounded scopes and25 unobserved subjects remain required. Production grammar, cases, profiles and qualification are unchanged. D3768's terminal-policy repair and historical compatibility remain held for independent acceptance. Earlier implementation checkpoints stand. No content, milestone, remote-CI or release promotion.",
+        "summary": "D3856 proves F2 D5's existing method-path obligation with13 permanent actual-factory cases across all three techniques/both colors, exact stage-prefix/convention receipts and corrupt-path/forgery/pre-shortcut refusals. Full local verify-software passes5908 tests/393 files, seven isolated performance tests, types/build and normal software guards. D5 discharges only path authority; variable method declarations, eligibility and D2-D4 remain open. Independent Inspector scope review confirms trajectory/method/vector are outside its graph, not D5 or joint acceptance; D3853 shared-helper compatibility still applies. Existing source/orientation/fork proposals stay held. No production behavior, qualification, content/browser rerun, whole milestone or remote/release promotion.",
         "impact": "advanced",
         "evidence": [
           "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
@@ -357,6 +357,9 @@
           "design/research/wave-a-contract-closure.md",
           "planning/tactical-collectors/plan.md",
           "rfc/evidence-value-authority.md",
+          "packages/runtime/src/endgame-method-authority.test.ts",
+          "packages/runtime/src/endgame-method.ts",
+          "docs/evidence-contract.md",
           "packages/runtime/src/legal-moves.ts",
           "packages/runtime/src/legal-moves.test.ts",
           "apps/web/src/lib/opponent-selection-response.test.ts",
@@ -403,6 +406,11 @@
             "kind": "work_state",
             "id": "D3755",
             "digest": "sha256:2c982b7aae432616865f2d71ffaf0417fa8aec2910b5268b3fb0daba46163b8c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3856",
+            "digest": "sha256:f8d3b56da7a6c83740a7fdaf505915553247e42e40020d5c37f280e45ce9203a"
           },
           {
             "kind": "rfc",
@@ -463,7 +471,7 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish D3847's exact sequence/opaque/vector input contracts and the complete source/adapter image before joint acceptance of D3845's grammar/V2 execution and D3792's Inspector amendment. Structural section2.3i and last-level section2.3h are now proposed, not implemented; the old11-adapter baseline omits new direct-position requirements. D3855 separately owns false-safe/undefined captions on four old comparison consumers and needs explicit versioned repair/adoption, not silent closure through new Inspector. D3851 still controls narrative/recorded coexistence; preserve both until ruled, all detector families and old APIs/history. After acceptance implement actual source/factory/input-witness/planner/admission paths, exact consumers and authenticated/native UX. Parallel D3758,D3309/D3654,D3578, wider provider sources, persistence/D1867 and full Support/Review/bot/learner joins remain tracked.",
+      "nextAction": "Finish D3847's source-reachable sequence contracts and complete scoped source/adapter image before joint acceptance of D3845 grammar/V2 execution and D3792 Inspector. Independent tracing puts candidate vector outside Inspector; full vector reconciliation remains mandatory at opponent.selection and D3853 compatibility still precedes shared packet/helper changes. Keep other out-of-graph trajectory/method migrations at their actual consumers, not as extra Inspector topics. D3856 discharges only existing method-path authority; structural/last-level remain proposed and old11-adapter baseline omits new position requirements. D3855 still needs versioned repair of four old bad-caption consumers. D3851 controls coexistence; preserve both pipelines until ruled, all families and APIs/history. After acceptance implement source/witness/planner/admission/consumer/API/native paths. Whole platform/F2/provider completion still requires all owned migrations and full Support/Review/bot/learner joins.",
       "latestCheckpoint": {
         "at": "2026-10-15",
         "summary": "D3847 proposes structural comparison section2.3i with position+17-family roles, both grants/selected branch, authenticated empty invocations/results, relative offsets and explicit catalogue identity. Provider section1a has exactly three captured-source bindings. Independent review catches/clears an old-projection convention-witness preservation defect, not source/joint acceptance. D3855 reproduces false-safe and undefined captions across four old consumer/render pairs; their production repair stays open. Normal comparison/prefix/types and20-replacement/55-retained map controls pass, not new sidecars/planners/admission/API/native qualification. Exact sequence/opaque/vector, complete source/adapter closure, D3851 and actual implementation remain. Production is unchanged from5542cc2d; no semantic/content/whole milestone/remote/release promotion.",

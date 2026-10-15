@@ -2224,6 +2224,10 @@ provider-traversal-check:
 evidence-value-authority:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts
 
+.PHONY: endgame-method-authority-check
+endgame-method-authority-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/endgame-method-authority.test.ts packages/runtime/src/recorded-semantic-path.test.ts
+
 # Explicit opt-in refresh of permanent computed factory profiles, not the frozen migration receipt.
 .PHONY: evidence-value-profile-update
 evidence-value-profile-update:

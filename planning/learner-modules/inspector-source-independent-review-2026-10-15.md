@@ -648,3 +648,21 @@ sentence; a genuine isolated-pawn catalogue match renders undefined. The initial
 exception was wrong and the control is corrected to actual output. The new scoped renderer is
 proposed, not implemented; all old consumer repairs stay open. The independent reviewer does not
 claim those separately reported test runs as its own verification.
+
+### D3847 opaque-source Inspector scope — independent read-only check
+
+The authorized reviewer traces the actual current catalogue and successor table, finding no
+false scope claim: Inspector reaches compare.eval_delta@1 but not engine_trajectory@1 or
+method_stage@1. Method-stage has no consumer binding; trajectory retains its separate Compare
+consumers. The proposed eval successor does not retire or repair those other platform routes.
+The revised §2.3d hold now acknowledges authored structural §2.3i while retaining acceptance/
+implementation prerequisites. This is scope/wording review only, with no tests, D5 discharge
+review/ruling, source qualification or joint acceptance. Main's separate permanent method tests
+and narrow D5 closeout are not represented as independent reviewer acceptance.
+
+The final read-only scope check likewise finds candidate_feature_vector@1 outside Inspector's
+accepts and dependency graph; its actual binding is opponent.selection@1. Shared collectors are
+ancestors, not a dependency on their other consumer. The reviewer recommends correcting the
+blanket vector-before-Inspector queue gate while retaining full vector reconciliation at the
+opponent consumer and D3853 compatibility before shared packet/helper changes. No tests, edits
+or acceptance; full platform/source obligations remain.

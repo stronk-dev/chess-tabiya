@@ -30586,3 +30586,49 @@ Campaign was the one capability with no API, route or content. Now:
 - Final make roadmap-receipt verify-governance and git diff --check pass. Source/resource/lifecycle,
   work assignment/roadmap/intent, tiers/docs and staged-process controls are green. Commit only
   the17 explicit owned author/research/tracking files through normal hooks; no push or goal pause.
+
+### 2026-10-15 — D3856 direct method-factory path proof; opaque sources separated by consumer
+
+- Previous turn is progress:50cbb22a authored the scoped structural contract. Recheck the current
+  tree before continuation; only the same three pre-existing untracked entries remain. The next
+  source audit reads the actual three opaque mint routes, not a guessed common collector gap.
+  Only compare.eval_delta reaches the current Inspector graph and already has §2.3a's proposed
+  recorded successor. Engine trajectory remains separate full-tip Compare work. Method-stage's
+  raw digest is its registered method definition alongside actual setup and stage-prefix edges;
+  variable declaration reconciliation/eligibility remain open, not a fake provider leaf.
+- Record D3856 before verification. Add13 permanent tests in normal software discovery, through
+  the actual method factory and sole invoker. All three methods and both colors retain exact
+  original stage locations, ordered start-to-trigger sources and selected setup/method closure;
+  replaying each prefix reproduces its stage. Genuine same-FEN static setup reuse succeeds.
+  Mixed-run/reordered/gapped/repeated/forged edges or setup refuse. Invalid paths fail before
+  the unregistered-convention shortcut and before material-domain exit can hide a later edge.
+- Normal make endgame-method-authority-check passes108 tests (the13 new plus existing recorded
+  path suite); make evidence-value-authority typecheck passes74 tests and all workspace types.
+  F2 D5's existing exact recorded-path obligation is discharged, not the whole RFC, variable
+  cardinality, a new source/consumer schema, usefulness, qualification or native delivery.
+  D2–D4 and D3847 remain. Add the focused Make target, canonical behavior note and same-commit
+  ledger/work-state/dossier/coverage/queue/roadmap flow-back. No production behavior changes.
+- Correct §2.3d's stale text saying the structural exact contract is missing: §2.3i now authors
+  it, still conditional on acceptance/implementation. The authorized independent Inspector
+  reviewer checks catalogue/map scope and this hold; it finds no false claim. It performs no
+  tests and explicitly gives no D5 review/ruling or source/joint acceptance. Keep that separation.
+- Initial normal sync correctly refuses the new unassigned row; the normal evidence-backed
+  done transition leaves3605 ledger rows,1740 live and zero untriaged.569 UX assignments are
+  unchanged. No product milestone/capability, official content or release is promoted. Full
+  make verify-software is live at this point; its result is recorded below before commit.
+  Read-only process diagnostics confirm active fresh Vitest workers; no restart, timeout change
+  or alternative test invocation is made merely because ordinary output is buffered.
+- The final Inspector scope check also finds the candidate vector outside this consumer's
+  graph, with actual opponent.selection ownership. Correct the blanket queue prerequisite to
+  source-reachable sequences; full vector reconciliation remains platform work and D3853 still
+  precedes shared packet/helper changes. Shared collector ancestry is not dependence on another
+  consumer's vector. This does not narrow whole F2/provider/1.0 completion.
+- Full normal make verify-software exits zero:5908 software tests/393 files, seven isolated
+  performance tests/four files, workspace types, build, schema/packaging, source/semantic,
+  capability/migration and other normal software guards. The13 new cases are discovered in
+  ordinary software CI. No provider/API/presentation/schema behavior changes; content/browser
+  are not rerun for these test/doc/Make changes and no fresh remote-CI/release claim is made.
+- Final make roadmap-receipt verify-governance and git diff --check pass; status-parity reports
+  322 open discharges after the narrow D5 closeout. Stage only the14 explicit owned test/Make/
+  documentation/tracking files, inspect the index and commit through normal hooks. The same
+  three pre-existing untracked entries remain untouched; no push, acceptance or goal pause.

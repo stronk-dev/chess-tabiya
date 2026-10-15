@@ -1,6 +1,6 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D5 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance) — the value
+- **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft
   semantic-convention-provenance (D1), provider-exchange-and-execution (D2) and registered
@@ -687,13 +687,12 @@ the selected point. It adds no longitudinal rebuild, profile judgement or new en
 **Reduction and successor hold.** The two domain schemas above are proposed source-owner data
 contracts, not a generic CollectionEvidence primitive, new mint, permission or completed derivation.
 §2.3h now proposes last-level@2's exact factory/reduction/result authority, still unaccepted.
-Structural selection still needs its exact successor/factory/reduction, empty-result identity,
-execution templates/occurrences, source joins, convention/grounding/answer limits and compatibility.
-D3845's proposed
-rank reduction is not automatic authority for these different computations. No new factory name
-or generic computed/derived leaf is inferred by this hold; no empty tuple, invented absence value,
-unused evidence or runtime held-binding exception is permitted. Structural@1 remains conditional
-in D3841's requirements map until this contract is resolved; last-level is a transitive Story
+§2.3i separately proposes structural selection's exact successor/factory/reduction, empty-result
+identity, execution roles, source joins and explicit catalogue identity; it too remains unaccepted.
+D3845's proposed rank reduction is not automatic authority for these different computations.
+No generic computed/derived leaf is inferred by this hold; no empty tuple, invented absence value,
+unused evidence or runtime held-binding exception is permitted. The proposed structural@2 map
+entry is conditional until joint acceptance and implementation; last-level is a transitive Story
 dependency, not an extra Inspector topic. Piece routes separately require complete initial
 occupancy plus ordered replay under D3847, but are not added to Inspector's 75 topics.
 
@@ -711,6 +710,26 @@ typed mate/root behavior and recorded-result-only applicability. The later conve
 reduction must preserve those populations and zero-item outcomes without weakening existing
 fixed inputs/anyOf guards or borrowing absent families' answer authority. Source/API/native
 suppliers and the complete consumer image remain independently gated.
+
+**Opaque-input scope disposition (D3847/D3856).** The original audit's three opaque routes do
+not share one missing source. derived.compare.eval_delta@1 is the only one reached by the old
+Inspector union; §2.3a already specifies its separately named recorded-report successor, still
+unaccepted/unimplemented. derived.compare.engine_trajectory@1 is an old full-tip Compare source,
+not an Inspector topic: its attachment-derived entry digest is not modern provider authority.
+Keep its old API/receipts and separately migrate the actual Compare consumer; do not insert it
+into Inspector or pretend that eval_delta@2 repairs it. theory.endgame.method_stage@1 has zero
+consumer bindings and is outside that union. Its string source is the digest of the actual
+registered method definition, while genuine setup and every edge through the emitted stage
+are retained separately. That definition belongs to convention authority, not a fabricated
+provider/position evidence item. D3856's direct factory controls discharge only D5's existing
+ordered-path obligation. D3847 still owns its variable-edge declaration reconciliation and any
+future independently accepted method-source/consumer successor. No collection exemption,
+retroactive receipt edit, source retirement or Inspector gate over unrelated consumers follows.
+Likewise candidate_feature_vector@1 is outside this exact Inspector graph: full vector
+reconciliation remains mandatory at opponent.selection@1, not as an extra acquisition topic or
+blanket prerequisite for this scoped Inspector amendment. D3853's old vector vocabulary/helper
+compatibility is still a real prerequisite before shared packet changes. Neither distinction
+shrinks whole F2/provider/platform completion or removes any bot/learner-model obligation.
 
 #### 2.3e Draft D3847/D3852 computed strict-overload source — unaccepted
 
@@ -1749,7 +1768,7 @@ planes, optional LLM renderer and assistance ceilings.
 | D2 | Provider/source receipt contract accepted and exact nine direct plus two chained recorded-reading source shapes consumable | provider-exchange-and-execution | accepted dependency plus exact source/derived receipt contract fixture | |
 | D3 | Semantic event authority profiles accepted for reuse without duplicating cases | semantic-validation-authority | accepted dependency plus set-equal authority-profile receipt | |
 | D4 | Fresh independent buildability review after D1–D3 and the literal 192-route author table | codex | fresh review record with every blocking finding closed or routed | |
-| D5 | Exact ordered path authority for retrospective method-stage derivation | recorded-semantic-path | accepted `run.record.edge@1` plus mixed/reordered/non-contiguous path refusals | |
+| D5 | Exact ordered path authority for retrospective method-stage derivation | recorded-semantic-path | accepted `run.record.edge@1` plus mixed/reordered/non-contiguous path refusals | **2026-10-15 — D3856:** existing owner-directed recorded edge implementation plus `packages/runtime/src/endgame-method-authority.test.ts` directly exercise the actual method factory for all three techniques/both colors, exact stage-prefix/selected-convention receipts and mixed-run/reordered/gapped/duplicated/forged refusals, including pre-shortcut and post-domain-exit corruption. This discharges path authority only; D3847's declaration reconciliation, ordinary consumer eligibility, source qualification and D2–D4 remain open |
 
 ## Open questions
 
@@ -1758,6 +1777,14 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: D3856 discharges only D5's existing ordered method-path authority after direct
+  permanent method-factory controls. The three opaque audit routes now have explicit separate
+  dispositions; only eval_delta is in the old Inspector graph, with its §2.3a proposal unchanged.
+  No variable-input reconciliation, learner binding, new convention or source qualification.
+- 2026-10-15: D3847 §2.3i proposes scoped structural comparison@2 with complete position/family
+  occurrence and empty-result authority, selected-branch/relative locations and explicit catalogue
+  identity. Independent review corrects an old-projection authority-witness closure hazard;
+  D3855 separately retains old bad-caption repairs. No joint acceptance or runtime change.
 - 2026-10-15: unaccepted D3847 §2.3h authors last-level@2's exact source-only0/1 reduction,
   explicit eligible result/position/point roles, measured/reported singleton, authenticated empty
   array receipt pair and acyclic location-bound output authority. §2.3d gains the actual endpoint

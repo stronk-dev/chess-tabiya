@@ -249,6 +249,17 @@ exact `run.record.edge@1` windows; no consumer binding), the four `derived.pivot
 `derived.structural.predicate_result@1` (derived from the sealed authored condition). The v1
 projections are retired with zero consumer bindings.
 
+The method-stage factory validates every supplied exact edge before checking convention
+availability or replaying until material-domain exit. Mixed runs, order/gap/repetition errors and
+forged values refuse. Each emitted stage retains the setup, its complete start-to-trigger edge
+prefix and the selected registered method definition's digest; its applied conventions contain
+the actual setup/method pair, not all available techniques. Setup evidence is static and node-free:
+another genuine computation at the same canonical FEN may be reused. These are recorded method
+observations, not advice or proof of result preservation. `make endgame-method-authority-check`
+exercises this actual factory boundary for all three methods and both colors, alongside the
+recorded-path controls. Variable-input declaration reconciliation and learner eligibility remain
+separate open work; these source checks alone do not establish either.
+
 Tests build renderer fixtures through `testing/evidence-fixture.test-support.ts` (a test-only
 authority that production code may not import). `make evidence-value-authority` is the permanent
 gate: an AST census of `declareEvidence` callers and factory/invoker importers, registry set

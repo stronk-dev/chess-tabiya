@@ -1970,3 +1970,53 @@ nominal sources, sidecars, convention registration, execution, API/native or joi
 No provider work, raw dump, production change, semantic qualification, content graduation or
 release promotion follows. Existing old Compare/voice/strip repair stays open separately. `[V]`
 named normal targets and committed assertions; independent re-review status is recorded separately.
+
+## Opaque-source classification and existing method-path discharge — 2026-10-15, D3847/D3856
+
+The existing source observer's exact opaque route set is engine_trajectory@1, compare.eval_delta@1
+and theory.endgame.method_stage@1. Only compare.eval_delta belongs to its current Inspector union;
+F2 §2.3a already proposes the separate recorded-report delta, not yet implemented. Trajectory is
+an old Compare path whose attachment-derived digest establishes neither a modern engine delivery
+nor its request. It remains real platform migration work, but is not an Inspector topic. `[V]`
+`source-observer.ts` and its ignored compact diagnostic; `evidence-factories.ts:verifiedTrail` and
+`createDerivedCompareEngineTrajectoryV1Evidence`; current module manifest and F2 §2.3a.
+
+Method-stage's opaque operand differs: it is exactly evidenceDigest(endgameMethodConvention(ref)),
+following the genuine setup and every exact edge in that emitted stage's start-to-trigger prefix.
+The factory separately records the selected method convention and inherits the actual setup
+convention. This is registered algorithm authority, not a missing provider collector or permission
+to create a fake evidence leaf. Its variable-edge declaration still needs D3847 reconciliation;
+it currently has no consumer bindings. No whole-source/consumer completion is inferred. `[V]`
+`evidence-factories.ts:createTheoryEndgameMethodStageV1Evidence`; `endgame-method-authority.test.ts`;
+`evidence-catalog.ts:theory.endgame.method_stage`; existing source observer.
+
+Thirteen new permanent tests call the actual factory, not a duplicate replay oracle: all three
+methods in original/color-mirrored positions retain complete stage payload locations, original
+ordered prefix receipts and exactly the actual setup/method convention pair. Replaying each
+stage prefix reproduces that stage. Another genuine static setup computation at the same FEN
+is deliberately accepted: setup is node-free, so a fabricated foreign-run restriction would be
+wrong. Actual mixed-run edges, order/gaps/repetition and forged setup/edge values refuse. Corrupt
+paths fail before unregistered-convention return and before material-domain exit could hide a
+later foreign edge. The complete 108-case normal target includes the existing recorded-path
+suite; the existing74-case value-authority gate and workspace types also pass. `[V]`
+`make endgame-method-authority-check`; `make evidence-value-authority typecheck`.
+
+This proves F2 D5's existing exact recorded-path obligation and discharges that narrow row;
+it does not accept a new source schema, repair variable cardinality, change receipts, qualify a
+detector, add advice/eligibility, or supply a native learner journey. D2–D4 and the unaccepted
+Inspector/source amendments remain open. The source-scope disposition and structural hold wording
+are explicit in F2 §2.3d; independent Inspector-scope review is recorded separately. `[V]` cited
+RFC/discharge and canonical `docs/evidence-contract.md` method-path paragraph.
+
+The authorized independent Inspector reviewer directly traces the catalogue and successor map,
+confirms these scope distinctions and the corrected structural hold, and finds no false claim.
+It performs no tests and explicitly does not review/rule on D5's separate closeout. `[V]` dated
+Inspector independent review, Opaque-source Inspector scope section.
+
+The same direct tracing confirms candidate_feature_vector@1 is not an Inspector input or
+dependency; its actual binding is opponent.selection@1. Shared collector ancestors do not make
+Inspector depend on the vector. Correct the blanket queue prerequisite to reachable sequence
+contracts and complete source/adapter closure. Full vector reconciliation stays mandatory at its
+actual consumer, and D3853 compatibility still precedes shared packet/helper changes; whole
+F2/provider/platform completion is not narrowed. `[V]` independent read-only vector-scope check;
+`evidence-catalog.ts` Inspector accepts/opponent binding and existing observer's inInspectorClosure.

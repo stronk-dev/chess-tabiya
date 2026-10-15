@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Opaque sources and existing method-path proof, 2026-10-15 ([[D3847]]/[[D3856]]): the three raw
+digest routes have distinct authority; only comparison delta reaches current Inspector.13 new
+permanent actual method-factory tests cover all three methods/both colors, exact stage-prefix/
+convention receipts and crossed-path/forgery/pre-shortcut refusals.108 focused tests,74 existing
+value-authority tests and workspace types pass. F2 D5's path-only obligation discharges; variable
+declarations, consumer eligibility, new sources and joint acceptance do not. `[V]`
+`module-evidence-assembly.md` §Opaque-source classification and existing method-path discharge;
+`packages/runtime/src/endgame-method-authority.test.ts`; F2 D5.
+
 Structural comparison authoring and caption regression, 2026-10-15 ([[D3847]]/[[D3855]]): F2
 §2.3i proposes the exact eighteen-role reduction/selected-branch and authentic variable/empty
 result contract, with explicit catalogue identity and full pawn reach in the new scoped renderer.
