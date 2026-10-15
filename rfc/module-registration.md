@@ -1937,7 +1937,7 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `live.syzygy.distance@1` | `derived.inspector.tablebase_distance@1` | syzygy | Fixed view of the complete recorded tablebase packet; value-authority §2.3a |
 | `derived.pivotal.human_divergence@1` | `derived.pivotal.human_divergence@2` | derived | Historical selection occurrence on the granted branch; value-authority §2.3a and scoped pivotal owner |
 | `derived.compare.eval_delta@1` | `derived.compare.eval_delta@2` | derived | Two exact recorded reports under RecordedComparisonSource; value-authority §2.3a |
-| `derived.story.rank@2` | `derived.story.rank@3` | derived | Proposed identity only; Review §4.5 must resolve D3845's variable/empty literal-input contract before declaring this source/factory |
+| `derived.story.rank@2` | `derived.story.rank@3` | derived | F2 §2.3g proposes the fact-only story.rank@1 reduction over the complete recorded moment source; provider §1a owns finite templates versus captured occurrences. Exact upstream source successors and joint acceptance remain held |
 | `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@2` | derived | D3846 exact ordered before/after phase+position pairs; value-authority §2.3b |
 | `derived.pivotal.option_collapse@1` | `derived.pivotal.option_collapse@2` | derived | D3846 exact prior/first-low/confirming legal-reading+position pairs; value-authority §2.3b |
 | `derived.material.reading.role_signature@1` | `derived.material.reading.role_signature@2` | derived | D3847 complete ten-count same-FEN derivation; value-authority §2.3c |
@@ -2275,8 +2275,10 @@ constructor or permission mechanism. Keep source assembly and current Inspector 
 The earlier D3832 author image proposed a new rank@2 arm. D3841 supersedes that identity choice:
 keep the existing rank@2 `{moments}` contract and callers unchanged. The proposed rank@3 source
 arm is `{recordedReview: RecordedReviewMomentSource}`, **held on D3845** before its declaration,
-factory or adapter may be implemented. Its variable/empty actual evidence collection needs a
-representable literal input/absence contract; a new version number alone does not supply one.
+factory or adapter may be implemented. F2 §2.3g now proposes a closed fact-only collection
+reduction, with provider §1a's finite templates/captured-occurrence execution contract. Neither
+is accepted or executable. Its last-level@2 prerequisite, other exact suppliers, source reader,
+actual receipts/admission/availability and joint review remain required; a version alone supplies none.
 An opaque source handle cannot conceal undeclared lineage, and an empty local leaf/member or
 fabricated eleven witnesses cannot make this requirement pass. The eventual factory asserts that source's runtime
 admission and current boundary before reading its owned unrendered moments; it does not accept
@@ -2293,8 +2295,10 @@ ordered granted node/edge operands, exact adapter plan/states and complete used 
 typed-evaluation operands. It is not the opaque handle's serialization or only the displayed
 rank. Equal ranks or moment images at different endpoints remain distinct scoped inputs; actual
 full-tip rank values for equal valid source observations must retain legacy ordering. Keep the
-current ordering convention and existing title/private/share callers; use new literal source
-dependencies with weakest-input grounding, never mutate rank@2's meaning. This is no new
+current ordering convention and existing title/private/share callers; use F2 §2.3g's rank-only
+convention-grounded ordering-fact rule and retain every child's unchanged authority/receipt.
+Do not infer a homogeneous child's grounding or an absent family's answers onto that operation,
+or mutate rank@2's meaning. This is no new
 prominence, educational-value or positive-move selection policy. Exact lineage/cardinality and
 source-state handling remain D3845 acceptance prerequisites, not implementation choices.
 
@@ -3595,6 +3599,9 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted rank@3 binding now points to F2 §2.3g's fact-only reduction and
+  provider §1a's finite execution templates. Source prerequisites, actual suppliers/receipts,
+  consumer availability/native delivery and joint acceptance remain held; old Story/title stay.
 - 2026-10-15 — Unaccepted D3847 comparison supplier now points to F2 §2.3d's literal17-family
   complete population schema. Successor identity/factory/reduction remain held; no new @1 arm,
   actual supplier, source qualification or joint Inspector acceptance follows.

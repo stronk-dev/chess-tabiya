@@ -30460,3 +30460,45 @@ Campaign was the one capability with no API, route or content. Now:
   successor contracts; D3851, sequence/coexistence, opaque/vector inputs and actual source/API/UI
   delivery remain open. No protected intent, whole capability, milestone, source qualification,
   official content, release, push or goal pause. Preserve the three pre-existing untracked entries.
+
+## 2026-10-15 — D3845 rank-only reduction contract and actual witness prerequisites
+
+- Previous goal turn made progress:f37f705b committed complete selection-domain schemas and
+  D3854's bounded disclosure correction. Revalidate main/status and continue the active full1.0
+  goal; do not reclassify that authoring as shipped Inspector/Review UI.
+- Authorized independent source review confirms rank's actual payload/use is only ordering/count:
+  existing Story is selection-only, Inspector renders no child evaluation/pattern explanation.
+  F2 §2.3g authors an explicit third reduction arm bound only to story.rank@1, rank@3, the reviewed
+  source and existing ranking computation/convention. Fact-only operation authority permits genuine
+  empty/eval-only input without borrowing absent-family answers; child evidence retains its own
+  authority and separate admission. Old fixed arms/rank/title/Story/share semantics stay unchanged.
+- Provider §1a supplies additive V2 finite plan trees and captured-only source realization. Full
+  potential source/provider ancestry remains visible; reading recorded coverage enqueues no new
+  provider request. A valid context with missing measurements can produce empty rank; a held
+  source owner cannot. Last-level@2 is an explicit prerequisite identity with its own factory/
+  reduction contract still to author, not a source already supplied by this proposal.
+- First bounded review returns a residual generic weakest-grounding sentence and an unsupported
+  claim that child derivation choices already have proofs. Correct both: the rank-only rule is
+  explicit; new private construction-time ordered-input/source sidecars, compiler-issued plan
+  authority and exact group/item/element/witness joins are required. Current value receipts and
+  order-free convention strings are not retroactive ordered-choice proof. Actual member/leaf/
+  nested-reduction witnesses bind source proofs and complete child identities; receipt digest
+  construction is explicitly acyclic. Empty new ranks take a distinguished reduction convention
+  receipt, never the cached source branch. No generic plugin/mint or dynamic answer framework.
+- Final authorized read-only recheck clears those two issues and finds no further blocker in the
+  bounded revised wording. Reviewer performs no edits/tests and grants no grammar/source/joint
+  acceptance or implementation qualification. Actual constructors, sidecars, planners, receipts,
+  admission, source/consumer and authenticated/native paths remain unimplemented under this draft.
+- Normal make inspector-recorded-prefix-research exits zero with strict tool types and existing
+  prefix/window/recorded-source/coverage controls. Those are not tests of the new grammar or V2
+  implementation. No new source counters, raw recordings or normal application CI dependency.
+  Full production software/build/browser proof remains prior5542cc2d, not rerun for doc-only edits.
+- Update the existing dossier/coverage, independent review, queue, D3845/work-state and roadmap;
+  replace the spine's accumulated nextAction prose with the concrete prerequisite/implementation
+  order while retaining wider row owners/holds in the roadmap and ledger. All3603 rows retain zero
+  untriaged/1739 live;569 UX item states unchanged. No row, milestone, semantic qualification,
+  official content, release or remote CI is promoted. Protected intent and goal status unchanged.
+- Final make roadmap-receipt verify-governance and diff checks pass, with lifecycle/resource,
+  work/roadmap, intent, tier, docs and staged-process guards green. Stage only the14 explicit
+  owned draft/research/tracking files and commit through normal hooks. Preserve the three
+  pre-existing untracked entries; no push, production-code change or automatic acceptance.

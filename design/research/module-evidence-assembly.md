@@ -1851,3 +1851,38 @@ Actual factory/receipt/closure, mutation and pre-work refusals, promoted-recaptu
 precedence, full consumer/rendering and authenticated/native proof remain. The new map18/57
 retains75 topics plus six detail refs as requirements only; no topic is added or retired. `[V]`
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md` computed overload.
+
+## Rank-only reduction contract — 2026-10-15, D3845
+
+Current rank contains only ordered node IDs. The actual Story consumer marks rank selection-only;
+the Inspector renderer emits only the number of ordered moments. It does not render child scores
+or pattern explanations through the rank value. That supports a fact-only successor rather than
+giving every realization the full eligible-family answer union. `[V]` evidence-factories.ts:
+createDerivedStoryRankV2Evidence; evidence-catalog.ts:SELECTION_ONLY_BINDINGS;
+presentation-inspector-adapters.ts:storyRank and inspector.story_rank@1; independent read-only review.
+
+F2 §2.3g/provider §1a now propose the narrow rank-only third derivation arm, existing story-rank@1
+ordering authority, complete domain/reduction/convention receipts and finite template/concrete
+occurrence split. The constant convention/reported labels describe the ordering computation;
+actual children retain their complete weak authority and separate admission. Empty emits one
+rank[] value without becoming a source receipt or a complete-analysis diagnosis. These are author
+contracts, not production declarations or an independently accepted grammar. `[V]` cited draft
+sections and Review §4.5/module-registration's exact proposed rank binding.
+
+The independent review returns two contradictions. The module binding still said weakest-input
+grounding despite the explicit ordering-fact rule. More importantly, the first concrete-occurrence
+paragraph assumed child input-choice proofs already existed. Current EvidenceValueReceipt has no
+such tree; convention members deduplicate/sort refs and their inputs are order-free. The correction
+authors new private construction-time input/source sidecars, genuine plan issuance and exact
+group/item/element/witness joins, including original leaf authority and nested reductions. Old
+receipts are not retrostamped. The final read-only recheck clears those bounded inconsistencies
+and the captured-context/provider-health distinction, not source or joint acceptance. `[V]`
+evidence-contract.ts:EvidenceValueReceipt; evidence-factories.ts:mintConventionReceipt;
+provider §1a revised witness tree; dated Inspector independent review, rank-only continuation.
+
+The normal prefix research target and strict types still pass on unchanged production. They test
+the existing scopes/tuples/coverage and old grammar negatives, not the proposed third arm, V2
+planners, sidecars or authenticated/native delivery. No extra truth inferred from unchanged counts.
+Last-level@2 is a named prerequisite whose exact factory/reduction remains to be authored, not a
+new existing source; structural/last-level/vector reductions receive no rank exemption. `[V]`
+`make inspector-recorded-prefix-research`; F2 §2.3g acceptance hold and provider §1a.

@@ -569,3 +569,28 @@ the original full FEN and exact source receipt order; the first run failed becau
 used positionKey (a transposition key), then the source-path correction passes. Two both-color
 synthetic rejected-delivery contrasts preserve equal folded states/selection and distinct inputs.
 No provider query, new runtime factory or ordinary CI dependency is added.
+
+### D3845 rank-only reduction and execution authoring
+
+The authorized reviewer confirms fact-only rank@3 is the smaller supported rule: its payload is
+node ordering, Story uses rank selection-only, and Inspector emits a moment count. Children keep
+their own separately admitted scores/patterns; old rank/title/Story bindings remain. The operation
+still requires its own explicit registered ordering-fact authority for empty or eval-only inputs,
+not a disguised fixed-member inheritance exception.
+
+Main authors F2 §2.3g's closed third arm, exact source/computation binding and reduction receipt,
+plus provider §1a's additive V2 finite plan tree/captured-only realization. The first wording
+review returns two blockers: the module source paragraph still requires generic weakest-input
+grounding, and the concrete realization assumes child derivation choices that existing value/
+convention receipts do not establish. Main corrects the first to the explicit rank-only rule plus
+unchanged child authority. For the second, the proposal now requires new private construction-time
+ordered-input/source sidecars, genuine compiler-issued plans, exact group/item/element witnesses,
+member/path/source-proof joins and distinguished reduction receipts. These are new implementation
+obligations, not retroactive proof on old stored values. Explicit child identities/digest ordering
+avoid self-reference; source failure remains distinct from valid missing-measurement coverage.
+
+The final read-only recheck clears both issues and finds no further blocker in that bounded
+revised wording. It does not rerun tests or grant grammar/source/joint acceptance or implementation
+qualification. Last-level@2's exact factory/reduction contract and other source successors remain
+prerequisites. Main reports the normal prefix target/types passing; that target exercises existing
+research, not the new V2 planners, receipts, sidecars, admission or native delivery.

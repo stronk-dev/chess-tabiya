@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Rank-only reduction authoring, 2026-10-15 ([[D3845]]): actual rank payload/use supports fact-only
+ordering, not child evaluation/pattern authority. F2 §2.3g/provider §1a propose the explicit
+reduction and finite plan/concrete witness contract. Independent review returns and clears
+residual grounding wording and an assumption that child-choice proofs already exist; new private
+sidecars are required, not shipped. Existing prefix/types pass, not new-grammar qualification.
+Last-level/source prerequisites and joint acceptance remain. `[V]` `module-evidence-assembly.md`
+§Rank-only reduction contract; dated independent Inspector review.
+
 Selection population schemas, 2026-10-15 ([[D3847]]/[[D3845]]/[[D3854]]): F2 §2.3d now authors
 structural/last-level domain images and Review §4.5 the rank group image; reduction grammar is
 still held. Independent review catches a lost rejected-delivery input and clears the corrected

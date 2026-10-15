@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3845 now has an unaccepted rank-only collection contract in F2 §2.3g and provider
+§1a, joined to Review/module registration. Fact-only ordering preserves child authority; explicit
+reduction/convention receipts, finite V2 plans and concrete witnesses replace no-input fallback.
+Independent review returns and clears residual grounding wording and nonexistent child-choice
+proof assumptions; construction-time sidecars remain new implementation work. Normal prefix/types
+pass, not new-grammar qualification. Next author last-level@2's exact source/factory/reduction
+contract from §2.3d, then structural/sequence/opaque/vector prerequisites and the complete joint
+source image. D3851 remains unanswered; keep all current coexistence/history obligations. No
+implementation of the unaccepted Inspector amendment, source qualification or product gate change.
+
 2026-10-15 — D3847's complete selection domain schemas are now authored in F2 §2.3d and Review
 §4.5: ordered structural columns/all17 family results, full last-level point/state/provider input
 rows, and ordered rank moment groups. Independent review catches and clears a rejected-delivery

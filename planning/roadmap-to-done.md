@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3845's rank-only collection contract is now authored in F2 §2.3g/provider §1a, not accepted or
+implemented. Actual rank use supports fact-only ordering; child evaluation/pattern permission
+does not transfer. Independent review returns and clears generic grounding wording and an
+assumption that child-choice proof already existed. The corrected proposal requires new private
+construction-time input/source witnesses and exact V2 plan/occurrence joins. Existing prefix
+research/types pass, not those new implementations. Last-level@2's exact factory/reduction and
+other source prerequisites remain the next authoring dependency before joint acceptance. No
+production code, semantic qualification, official content or whole milestone changes.
+
 D3847 now has proposed complete selection-domain schemas: F2 §2.3d's ordered structural
 columns/all17 family results and last-level point/state/provider inputs, plus Review §4.5's
 ordered rank groups. Independent review catches a rejected-delivery input missing from the

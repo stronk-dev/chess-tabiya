@@ -10,9 +10,10 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3768/D3841/D3846/D3847/D3850, §§2.3a–2.3f:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850, §§2.3a–2.3g:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
-  from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
+  from the parent's awaiting state. D3845's rank-only reduction contract is proposed, not accepted;
+  its upstream source contracts and complete execution/admission implementation remain held.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
   `design/04-content-architecture.md` grounded predicates; `design/05-in-run-experience.md` §3
   evidence ceilings and §3-forms
@@ -896,6 +897,144 @@ sites; full new vector/longitudinal capability remains separate. Disposable25-te
 not those new production boundaries. Independent source and joint consumer acceptance still gate
 implementation; the parent's awaiting state, a registry claim or a green research probe does not.
 
+#### 2.3g Draft D3845 rank-only collection reduction — unaccepted
+
+This is a third, mutually exclusive EvidenceDerivation arm, not a relaxation of `inputs` or
+`anyOf`. Their nonempty members, ordered multiplicity, widening checks and historical receipts
+remain unchanged. The new arm is exactly `{reduction:{operation,elements}}`: operation is the
+literal ref story.rank@1, and elements is the following nonempty ordered vocabulary of eligible
+exact refs. Elements describes possible inputs, **not** one realized tuple or a union of answer
+permissions. Duplicate/missing/unknown refs, extra keys and mixed arms refuse. Dependency/cycle
+checks traverse every eligible ref; semantic events cannot use this arm without a separate spec.
+
+| Eligible rank element | Version |
+|---|---|
+| derived.review.eval_delta | 2 |
+| derived.review.mate_transition | 2 |
+| derived.story.last_level | 2 |
+| run.record.consequence | 1 |
+| run.record.imported_result | 1 |
+| derived.pivotal.irreversibility | 1 |
+| derived.pivotal.phase_change | 2 |
+| derived.pivotal.human_divergence | 2 |
+| derived.pivotal.option_collapse | 2 |
+| rules.endgame.classification | 1 |
+| theory.shapes.firing | 1 |
+
+Last-level@2 is an explicit **prerequisite identity**, not a supplied implementation contract:
+§2.3d must finish its own exact factory/reduction/receipt contract before this element graph can
+be accepted. Neither old last-level@1 nor a fabricated empty value fills the hole. Structural
+comparison/last-level and the variable candidate vector receive no authority from this rank rule.
+
+**One closed computation binding.** The runtime's reduction binding is exact and package-owned:
+operation story.rank@1; projection derived.story.rank@3; factory createDerivedStoryRankV3Evidence;
+source RecordedReviewMomentSource from Review §4.5; computation rankStoryMoments; direct convention
+story-rank@1. The compiled binding checks actual function identities and exact symbols, source
+reader and element vocabulary. It is not a plugin/mint registry or caller-provided callback.
+An absent binding fails manifest/execution compilation. The sole factory arm stays exactly
+`{recordedReview:RecordedReviewMomentSource}`, result single; no caller moments/payload/metadata
+arm. Future reduction operations need separate explicit contracts and normal review.
+
+The source owner privately reads the complete boundary/adapter-state/group image specified in
+Review §4.5, including every actual admitted evidence occurrence, ordinal and typed evaluation
+pair. Validate issuer/current storage/head/import/path/occurrence authority before reading it.
+Only the registered reader supplies the immutable complete image; a structurally equal object,
+nominal symbol, copied receipt, subset, altered grouping or genuine foreign source refuses.
+The factory computes the current nine-band ordering over that owned population. It always emits
+one `{rank:readonly nodeId[]}` value, including `{rank:[]}` for a genuine empty population.
+Missing/unrequested/pending/failed adapter states remain recorded states, never negative chess
+evidence or a claim of complete analysis. Actual source-contract failure is not empty success.
+
+**Fact-only authority, not the eligible-family union.** The new projection has plane derived,
+role reading, grounding declared_convention, exactness convention, confidence reported,
+answerContent:[fact], forms:[list,panel,machine_condition], operands:[rank], and abstention
+possible with input_abstained. Its semantics explicitly names story-rank@1 and states presentation
+order only, not chess significance, move quality or complete-game diagnosis. The computation
+binding supplies the narrow authority to state this ordering fact even with zero inputs or only
+evaluation-valued children; it supplies no child pattern/evaluation/move permission. This is not
+the fixed-member union inheritance rule with empty operands accepted by accident.
+
+Those constant labels describe the declared presentation operation, not strengthened child facts:
+retain every actual child's complete authority/receipt and applied conventions in the reduction
+image; never remint an authored/measured child as convention/exact or mark a reported evaluation
+exact. Fact-only, mixed and empty realizations all stay fact-only and convention-grounded; reported
+confidence is conservative even when no provider participated, not evidence of a provider report.
+The registered renderer may state only the number of ordered recorded moments. Neither raw
+child scores nor patterns, best moves, a title or a new chess narrative can be obtained through
+this rank value. Child content requires its own separately admitted exact evidence and renderer.
+No generic per-instance answer-distance framework is added for this fact-only operation.
+
+**Explicit reduction authority at the sole mint.** Add a private immutable reduction receipt to
+the new value's EvidenceValueReceipt, containing exactly operation, projection, planDigest,
+sourceImageDigest, occurrences and outputDigest. PlanDigest identifies the genuine V2 plan under
+provider §1a, including its exact declaration/computation binding. Each occurrence is exactly
+`{group,item,element,witness}`: group/item are original zero-based group/evidence ordinals;
+element is the zero-based eligible-template index; witness is the authenticated concrete child
+execution described there. Its root encodes the genuine input's producer/projection and full
+value receipt (factory,inputDigest,payloadDigest,ordered sourceDigests,convention digest).
+Repeated refs/values retain distinct occurrences. Empty is occurrences:[], not an invented witness.
+OutputDigest binds the new rank payload. The receipt is created atomically with the value and
+authenticated by the existing private mint authority; no setter or public receipt constructor.
+Its digest is over those complete fields; the enclosing value's inputDigest binds operation,
+planDigest, sourceImageDigest and occurrences, not its own output or final convention receipt.
+The convention reduction arm then binds this reduction digest. Only already constructed child
+receipt/convention digests enter occurrences; cycles/self-inputs refuse. This order is acyclic.
+
+SourceImageDigest uses an explicit encoder owned by the reviewed source reader: complete original
+boundary/run-head/grants/import/outcome image, original ordered node/edge operands, full actual
+adapter slots, captured provider inputs (including failed joins), actual states/reasons/counters,
+and complete ordered groups/kinds/typed evaluations/input occurrences. Encode a sealed value by
+its exact projection/producer plus complete value receipt, not payloadDigest alone. Do not pass
+the opaque source to authorityShape, reduce a run to id/counts, serialize a WeakMap handle as {},
+or use only a final selected rank/group digest. The reader binds private original membership as
+well as the image: equal bytes/digests are not source issuance or current permission. This receipt
+is runtime-internal; no new raw recording, persisted schema or public response field is introduced.
+
+assertDeclaredEvidence and evidenceForConsumer must verify the new arm's authentic reduction
+receipt, exact binding/projection/computation/plan identity, complete owned source image, occurrence
+membership/order, concrete child input choices/source proofs and output join before admission.
+An old value receipt does not prove those child choices. Missing, copied, crossed or inconsistent
+reduction authority refuses even when the ordinary payload seal is genuine. Old values use their
+unchanged validation. Module admission and presentation retain exact static fact-only checks;
+no unused evaluation/pattern authority is read from elements or the whole module union.
+
+**Convention receipts distinguish the reduction.** Extend ConventionDerivationReceipt with a
+closed reduction arm containing operation, reduction authority digest and the actual input
+multiset. Its convention refs are exactly story-rank@1 plus the closures of the actual input
+occurrences, never absent eligible families. Both empty and nonempty new values take this arm;
+the cached source branch in mintConventionReceipt must never serve rank@3. The new arm's digest
+binds the ordered reduction receipt above; the input multiset remains canonical/order-free for
+convention disclosure, not a replacement for ordered group identity. Old source/derived arms,
+member strings, canonical multisets, digests and stored fixtures remain byte-identical.
+
+**Finite execution template versus actual occurrences.** Provider exchange §1a owns the matching
+compiled execution image. The third arm retains one finite template per eligible exact ref and
+the exact source-owner/computation binding, with full transitive provider/recorded/build-time
+requirements and strict failure on a held or unregistered leaf. It is not an all-family tuple,
+an exponential subset enumeration, an empty local execution path or a fabricated provider.path.v1.
+Only the admitted source collection supplies concrete group/item occurrences and source states.
+An empty realization retains a complete source/state image and reduction receipt while realizing
+zero group items. No acquisition is authorized by absent eligible elements. compileMoments and
+this reduction do not enqueue, refresh or query providers; they use the actual captured context.
+Potential provider ancestry is still visible to preflight/availability, not relabelled local.
+
+**Compatibility and exact consumers.** Old rank@2/{moments}, title@2, review.story and share/title
+callers remain unchanged. New Inspector@2 uses rank@3 through its exact successor map and the
+existing fact-statement form, with declared-convention/story-rank@1 attribution, not a recorded-run
+claim about chess significance. Do not automatically route old Story/title through rank@3 or
+claim their literal inputs fixed by this proposal. Review's future migration needs its own exact
+consumer/title contract. The75-topic Inspector obligation count is unchanged.
+
+**Acceptance is still held.** Author and independently review the prerequisite last-level@2 and
+all other exact source successors, source reader, complete adapter templates and production
+execution/receipt/admission changes together. Permanent controls must show real source-owned
+empty, singleton, repeated and mixed families; the six coverage distinctions; unknown/old refs;
+every grouping/order/node/source/state/provider mutation; same-payload foreign input authority;
+missing/copied/crossed receipts and empty source-branch refusal; fact-only child-content leakage;
+provider-off without new provider work; complete consumer preflight with no deleted binding;
+old rank/title/share byte preservation; and actual authenticated Inspector/native delivery.
+The existing18 old-rank fixtures are research, not tests of this proposed new authority.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -1352,6 +1491,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3845 §2.3g authors a rank-only fact-valued collection arm, exact
+  computation/source binding, explicit ordered reduction authority and distinguished convention
+  receipt; provider §1a owns finite templates/captured realization. Last-level@2 and other
+  source prerequisites, implementation and joint acceptance remain held. Old fixed arms unchanged.
 - 2026-10-15: unaccepted D3847 §2.3d supplies exact domain population schemas for structural
   comparison and recorded last-level selection, preserving empty/state/occurrence authority
   and old algorithms. D3845's closed reduction grammar, successor factories and joint acceptance

@@ -176,6 +176,10 @@ make `/capabilities` report wrapper availability instead of executable evidence 
 
 ### 1. F1 compiles execution paths
 
+**Unaccepted D3845 companion:** §1a below and value-authority §2.3g propose an explicit rank-only
+collection template. The landed fixed-path interfaces/identities in this section remain unchanged.
+No parent lifecycle state accepts that amendment or licenses a collection fallback.
+
 `packages/runtime/src/evidence-contract.ts` gains the following dependency-free image:
 
 ```ts
@@ -252,6 +256,138 @@ The existing producer availability and latency fields now mean only the producer
 `providerOperation` makes that operation literal only for provider sources. A producer may therefore
 own a synchronous local output and a provider-bearing derived sibling without either declaration
 lying.
+
+### 1a. Draft D3845 collection templates — rank-only, unaccepted
+
+Value-authority §2.3g owns the third derivation arm, its exact story.rank@1 binding, fact-only
+authority and reduction receipts. This section owns its execution integration; it creates no
+second source vocabulary or acquisition callback registry. The eligible refs come from that
+one compiled reduction declaration. Missing exact upstream refs/operations or cycles refuse
+before collection; no missing binding, held provider leaf or unsupported arm is filtered away.
+
+Keep compileProjectionExecution and its CompiledProjectionExecution/provider.path.v1 images
+unchanged for graphs with only the old fixed arms. It must explicitly refuse a third-arm graph,
+not fall through to anyOf, report an empty local path or hash a template as an old concrete path.
+The additive compileProjectionExecutionV2 has this closed result tree:
+
+```ts
+type CompiledEvidenceExecutionPlan =
+  | { readonly kind: "fixed"; readonly execution: CompiledProjectionExecution }
+  | { readonly kind: "composition"; readonly projection: VersionedEvidenceId;
+      readonly own: CompiledProjectionExecution["own"];
+      readonly members: readonly { readonly member: number;
+        readonly inputs: readonly CompiledEvidenceExecutionPlan[] }[];
+      readonly worstCaseLatency: LatencyMode }
+  | { readonly kind: "reduction"; readonly projection: VersionedEvidenceId;
+      readonly own: CompiledProjectionExecution["own"];
+      readonly operation: VersionedEvidenceId;
+      readonly sourceOwner: "RecordedReviewMomentSource";
+      readonly sourceUse: "captured_only";
+      readonly elements: readonly { readonly projection: VersionedEvidenceId;
+        readonly execution: CompiledEvidenceExecutionPlan }[];
+      readonly worstCaseLatency: LatencyMode };
+```
+
+For a fixed-only subtree, wrap the actual unchanged old compiler output, not a new path builder.
+For a literal parent containing any reduction descendant, composition retains each original
+member number and ordered/multiple input children. For a reduction, retain its exact registered
+operation/source owner and one ordered template per eligible ref, recursively compiled. It is a
+finite template graph, not one tuple containing every family or a list of every possible subset.
+Own producer and all leaf availability/latency/providerOperation identities still use the shared
+protocol validator; sourceUse is allowed only on the exact registered rank operation, never a
+caller-selected provider bypass. WorstCaseLatency exposes the full potential ancestry using the
+existing ordering; it is not proof that a particular provider ran or an actual request budget.
+
+Add compileEvidenceConsumerExecutionV2 for exact new consumer images that accept reduction
+graphs. It retains complete accepted/bound set equality, every adapter identity, binding latency
+and literal source-absence policy. Each compiled binding carries its complete plan, not paths
+pretending to be realized occurrences. All eligible templates must compile; an admissible
+alternative may be selected under existing budgets, but an eligible family cannot be deleted
+to make a reduction compile. Unsupported consumers/adapters refuse the new plan. Old consumer
+operations and their byte-identical fixed images remain; a manifest-wide current execution
+report uses the V2 compiler for every projection rather than silently excluding reductions.
+
+**Captured source versus new acquisition.** The rank operation's owning recorded source prepares
+the complete plan and actual slot/state data under its current boundary. Captured_only directs
+the realization to that immutable context; it never calls a provider or refreshes history. A
+provider-origin leaf keeps provider identity and its genuine original delivery/parser proof when
+present. A missing/pending/failed source remains the actual coverage state, not a fake delivery,
+successful empty witness or a fresh provider request. A valid complete captured context can
+therefore produce rank[] while every engine measurement is missing. Engine health still reports
+that absence; rank availability does not imply engine availability or complete analysis.
+
+The provider ancestry in element templates remains visible for source/version/latency checks,
+but live provider health is not a prerequisite for reading an already captured context. Resolution
+must distinguish the registered captured-source operation from a binding that actually requests
+an engine. If the recorded source owner/boundary is unavailable, the new Inspector binding's
+required operation_unavailable policy applies and carries its exact held dependency; it is not
+rank[]. If the owner succeeds with unavailable measurement rows, preserve that complete coverage
+image and compute only the ordering of actual admitted groups. No generic optional-leaf waiver.
+
+**Plan and realization authority.** The V2 compiler privately authenticates its immutable plan;
+planDigest covers the complete canonical tree, exact reachable projection declarations and the
+registered reduction/computation/source binding. It excludes current health or fabricated future
+requests. A copied plan or matching digest cannot replace compiler issuance. Old fixed-path
+identities remain unchanged inside the fixed wrapper.
+
+F2's reduction receipt records planDigest plus each concrete `{group,item,element,witness}`.
+Element indexes that plan's ordered eligible list; group/item index the exact source-owned moment
+and its evidence. The witness root must be the identical admitted value at that position, with
+its complete receipt identity, not only equal payload bytes. The following concrete witness
+tree is private runtime authority, **new implementation required**, not data already proved by
+old EvidenceValueReceipt or order-free convention member strings:
+
+```ts
+type ConcreteEvidenceExecutionWitness =
+  | { readonly kind: "leaf"; readonly value: EvidenceValueIdentity;
+      readonly source: { readonly availability: AvailabilityMode;
+        readonly providerOperation: ProviderOperationId | null;
+        readonly authorityDigest: string } }
+  | { readonly kind: "member"; readonly value: EvidenceValueIdentity;
+      readonly member: number; readonly inputs: readonly ConcreteEvidenceExecutionWitness[] }
+  | { readonly kind: "reduction"; readonly value: EvidenceValueIdentity;
+      readonly operation: VersionedEvidenceId; readonly reductionDigest: string };
+```
+
+EvidenceValueIdentity is exactly `{producer,projection,factory,inputDigest,payloadDigest,
+sourceDigests,conventionDigest,reductionDigest}` for that child value; the final two fields are
+its genuine receipt digests or null when absent. A child reduction digest binds its complete
+existing receipt recursively. The enclosing new rank value never occurs among its own inputs.
+Every witness also has
+package-private membership tied to the actual sealed value and construction inputs. The sole
+mint must retain an immutable sidecar of actual ordered sealed inputs and its validated
+operation-specific source authority at construction; a public tree/digest is not its issuer.
+For member nodes, select exactly the declaration's matching ordered fixed member (inputs uses
+member0); recursively match each genuine retained input without deduplication. An unmatched
+literal tuple is an upstream D3847 source defect/hold, not a choice guessed from a family union.
+For a leaf, join its actual availability/operation to the exact shared protocol/factory and the
+genuine original local-input, recorded-occurrence, build-time/document or provider-delivery proof.
+AuthorityDigest binds that source owner's explicit complete input image; it does not mint or
+replace the original proof. A nested reduction joins its genuine complete reduction receipt and
+plan recursively; cycles and self-reference refuse.
+
+Admission traverses the witness and corresponding template together. A fixed wrapper's concrete
+member choices and leaf addresses must match one actual old compiled path; composition preserves
+the selected member and each ordered child; a reduction uses its exact binding and recorded
+realization. Reject crossed plan/declaration/source identities, unsupported alternatives, missing
+or reordered/repeated-away inputs, changed element/group/item addresses and unproved leaves.
+The full address begins with [group,item], followed by the child's original numeric input
+addresses; context/coverage rows remain separately bound, not invented leaf occurrences. Empty
+groups realize no element occurrences but still bind the full plan and source/state image.
+
+Historical receipts cannot be stamped with this sidecar after the fact. Reconstruct actual source
+values through reviewed original source operations/recorded parsers without a provider refresh;
+otherwise report the exact held source. Old APIs/receipts remain unchanged and lack no newly
+claimed historical proof. These occurrence addresses are not old provider.path.v1 paths, and
+matching plan/template metadata alone never establishes acquisition or concrete input choices.
+
+The implementation must audit every old two-arm reader, including derivationMembers, manifest
+dependency/cycle/event checks, convention-member helpers, effectiveEvidenceExecution, source-label
+traversal, binding compilation and availability resolution. Each either implements the new closed
+arm or explicitly refuses it. dependsOn stays semantic/migration information, not an invented
+execution conjunction. These author rules are not executable V2 planners, source qualification
+or joint acceptance. Actual compiler/consumer/availability regressions and the authenticated
+provider-off/held-source/native journeys are required before adoption.
 
 ### 2. Confidence inheritance and binding consequences
 
@@ -2162,6 +2298,10 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3845 §1a specifies additive V2 finite collection/composition plans
+  and exact consumer integration, separately retaining captured source states/actual occurrences
+  without new provider acquisition. Old fixed path/compiler bytes remain; this is not acceptance
+  or an executable collection/availability implementation.
 - 2026-10-15: D3844 repairs the accepted complete-consumer execution boundary: the exact
   declaration's accepted projections must be set-equal to bound projections before path work.
   Missing/extra projections and duplicate declarations refuse; multiple legitimate adapters

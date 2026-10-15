@@ -998,6 +998,17 @@ factory is authored by this data schema. Empty groups are valid and eventually r
 receipt must preserve group membership/ordinal and complete source/state authority even then;
 it cannot fall back to the old no-input source-receipt branch or borrow absent family ceilings.
 
+**D3845 proposed reduction integration — still unaccepted:** value-authority §2.3g now authors
+the rank-only third derivation arm and sole rank@3 factory over this complete moment source;
+provider exchange §1a authors its finite template/captured-occurrence execution shape. Rank@3
+has only fact answer content: it orders node IDs and permits the existing moment-count statement,
+not child evaluation/pattern prose. The source's child evidence remains separately admitted.
+Empty success takes an explicit reduction receipt; source/state/group/occurrence identity and
+actual convention closure survive it. No generic policy-evidence leaf, fixed-input relaxation or
+automatic structural/last-level authority. Last-level@2's exact factory/reduction is an explicit
+prerequisite, not an old-source fallback. Upstream completeness and implementation/admission/
+availability/native proof plus independent joint acceptance remain held.
+
 **D3841/D3845 identity/cardinality hold — still unaccepted:** this proposed scoped Inspector
 supplier must not add its source arm to frozen `derived.story.rank@2`. Module-registration's
 affected-source map proposes rank@3 so historical human-divergence uses its explicit recorded
@@ -1503,6 +1514,10 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-15: D3845's unaccepted rank-source integration now references the proposed fact-only
+  reduction and finite captured-source template contracts; no eligible-family answer union,
+  empty source-receipt fallback or automatic old Story/title migration. Exact upstream
+  last-level/supplier contracts, implementation and independent joint acceptance remain held.
 - 2026-10-15: D3847/D3845's unaccepted domain contracts now pin the complete last-level
   point/state population and rank moment groups, separate from the still-held reduction
   declaration/receipt/execution grammar. No generic source leaf, old @2 arm or implementation
