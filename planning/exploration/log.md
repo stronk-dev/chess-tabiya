@@ -29142,3 +29142,72 @@ Campaign was the one capability with no API, route or content. Now:
   and clean-host/release proof. Zero official graduates and zero fully qualified semantic
   subjects remain. Full 1.0 stays active; the requested inventory does not pause or complete it.
   No push, deployment, broad data capture or extra tracker; preexisting untracked paths remain.
+
+### 2026-10-15 — D3825 source scope exposes D3826/D3827 production grounding defects
+
+- Previous turn is progress: a5544798 closes the exact Review source question and inventory.
+  Continue the evidence-delivery frontier, not another roadmap. Register D3825 before research.
+  The unchanged pivotal payload operation fails exact root-prefix acquisition; a guarded bundle
+  narrows only after original graph validation. Initial fixture-location failure is corrected
+  only in the bundle; the committed CC0 fixture is neither copied nor replaced.
+- The final model passes 465 controls over 207 prefixes of seven actual stored legal runs and
+  all four pivotal families. Two real CC0 paths provide rare collapse witnesses. Four prefixes
+  contain an anchor but lack its later witness. Full-tip payloads/saved bytes, inherited prefix
+  and malformed-later-graph refusals remain. Synthetic distribution metadata is recorded through
+  actual runtime moves, not called live Maia or semantic qualification. D3825 closes only this
+  bounded question; private scoped factory/identity/access/native and acceptance remain D3792.
+- Actual rewind/fork sole-factory calls then prove D3826: two declared inputs disagree with their
+  marker engine. A permanent regression fails before repair. Accepted value-authority §3.4 allows
+  the existing closed page arm: retain the source engine/candidate image on each producer-created
+  marker and pass that actual record, never a reconstructed distribution or newest sibling page.
+  Frozen copied records preserve current whole-tip population; copied rendering models have no
+  producer-owned source. No new factory arm, schema/version, public API or permission is introduced.
+- D3827 is also an accepted implementation defect, not a new RFC: phase change retains one
+  reading instead of two and sustained collapse one instead of three. Both permanent predecessor
+  controls fail. Repair exact previous-definite/current phases and prior/first/later same-side
+  mobility, retaining each recorded occurrence and checking original detail. Complete source
+  receipts reach the actual Review packet. Payload meanings, labels and eligibility remain.
+- Final focused normal make test-pivotal-grounding evidence-value-authority
+  inspector-pivotal-source-research semantic-validation-update exits zero: 101 focused cases,
+  67 authority cases, clean workspace types and all 465 stored/model controls with zero crossed
+  human inputs. Sandbox-only pnpm external-cache lockfile refusals remain recorded separately;
+  use the same normal Make target with filesystem permission, not environment/command hacks.
+  Generated implementation records refresh: all 343 case outcomes remain passing, 81 subjects
+  and zero fully qualified unchanged. No frozen migration fixture or authored content changes.
+- D3826/D3827 remain doing until full frozen normal verification/build/browser finishes; 1,734
+  live ledger items remain assigned, 282 UX complete/263 live/24 retired. Milestones/capabilities,
+  official graduates, scoped-source acceptance and remote/release qualification do not change.
+  Run the complete normal gates next and preserve any failure rather than closing on focused proof.
+
+- Full frozen normal run passes all 5,734 software cases/391 files, seven performance/four files,
+  types, scaffold/packaging, release policy, manifest/value/semantic checks and source/code outputs.
+  Governance then rejects my duplicated docs/evidence-contract.md checkpoint path. Remove only
+  that duplicate; no production, fixture, source-record or consumed software-test input changes.
+  The aggregate exits2 and content/browser have not run. Continue the remaining normal gates
+  explicitly; do not call the interrupted aggregate a full pass or rerun tested product bytes
+  merely to hide the bookkeeping failure.
+
+### 2026-10-15 — D3826/D3827 final production-grounding proof and closeout
+
+- After the recorded duplicate-path correction only, normal make roadmap-receipt
+  verify-governance verify-content build test-browser-ci-awake exits zero. Combine it with the
+  unchanged frozen product's observed 5,734 software/391 files and seven performance/four files
+  result; never call the original exit2 aggregate green. Final content is 257/26, browser smoke
+  312 plus one existing optional Maia skip, content five, matrix 59 and packaged-production one.
+  All 112 composition cells pass without retries. Matrix JSON confirms expected59/skipped0/
+  unexpected0/flaky0; no list command overwrites it. Source/fixtures stay frozen throughout.
+- Close D3826/D3827 under accepted value-authority §3.4 through the permanent regression path.
+  Preserve three predecessor failures, actual stored branch/source controls, source ownership
+  and complete Review packet input receipts. Retained distributions are copies of actual
+  source records, not reconstructed guesses; current whole-tip populations/marker payloads stay.
+  No new public factory arm, package export, projection version, permission or slot budget.
+- Refresh the same ledger/state/checkpoint/roadmap and docs. All 1,732 live ledger items remain
+  assigned: 1,683 done/161 refused; UX282 complete/263 live/24 retired. Catalogue stays
+  47/285/42/556. The semantic report changes only 62 implementation/predicate stamps; all343
+  outcomes, 81 subjects and zero fully qualified remain. Authored packs, frozen migration
+  evidence, profile outcomes and official graduates stay unchanged.
+- D3825 answers only its bounded research question. The scoped Inspector operation, source
+  occurrence/factory/access/response/native contracts and independent acceptance remain D3792
+  work. Full Review local acquisition, useful Sight/Nudge, calibration, Campaign/content and
+  whole release obligations remain open. No owner-use discharge or goal pause/completion.
+  Current-revision remote CI is not established; nothing is pushed, published or deployed.

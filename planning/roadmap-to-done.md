@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3824]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3827]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,17 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+[[D3825]] answers pivotal prefix witness scope over 207 actual stored legal prefixes; a marker
+anchor alone cannot supply its later witness. The probe also exposes [[D3826]]/[[D3827]]'s
+accepted-contract implementation gaps. Repairs now retain the actual human selection per marker,
+both definite phase readings/positions and all three same-side mobility readings/positions.
+Three permanent predecessor failures, 101 focused cases, 67 authority cases, types and actual
+Review packet/stored-source controls pass. Full local verification completes: 5,734 software,
+seven performance, 257 content and all four browser tiers/112 unretried composition cells pass.
+The duplicate roadmap-path refusal is retained; only that bookkeeping path changes between the
+software result and the successful remaining-gates run. Both production defects are closed.
+The unaccepted Inspector source operation and whole qualification/content/release gates stand.
 
 [[D3824]] finishes the in-flight earlier recorded-Review research slice: 292 storage/source
 controls over actual native/imported/retry games preserve original graph validation, exact
@@ -225,9 +236,13 @@ ten awaiting discharge and 24 draft documents; its 75 archived implementation re
 history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3822/D3823's accepted calibration evidence-to-card repair is verified
+Current local checkpoint: D3826/D3827's accepted pivotal grounding repairs and D3825's bounded
+scope research are closed. Full local results on the repaired production bytes are 5,734 software,
+seven performance, 257 content and all four browser tiers, with 112 unretried composition cells.
+The original duplicate-checkpoint refusal and corrected remaining-gates run remain recorded.
+D3822/D3823's accepted calibration evidence-to-card repair is verified
 and closed; D3821 disclosure, D3818 result attribution and D3819/D3820 source research stand.
-The current local result is 5,731 software, seven performance and 257 content tests, all browser
+That preceding calibration checkpoint passed 5,731 software, seven performance and 257 content tests, all browser
 tiers including 59 matrix cases/112 unretried composition cells and packaged-production proof.
 The in-flight D3824 research is now closed with 292 strict storage/source controls and normal
 governance passing; it does not relabel the preceding production proof as a new product test run.

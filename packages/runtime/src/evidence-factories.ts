@@ -48,7 +48,7 @@ import { gradeReadingFromPayload } from "./grade-reading.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReading, pawnContactTimingSequence, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { developmentReading, phaseBandReading } from "./phase.js";
-import { pivotalMarkerPayloads, type PivotalKind, type PivotalMarker } from "./pivotal.js";
+import { pivotalMarkerPayloads, pivotalMarkerRecordedSelection, type PivotalKind, type PivotalMarker } from "./pivotal.js";
 import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 import {
@@ -1331,11 +1331,34 @@ function pivotalFactory(kind: PivotalKind): EvidenceValueFactory<{ readonly run:
         if (readings.length !== 1) throw new TypeError("Irreversibility marker lost its exact transition reading");
         inputs = [readings[0]!, position];
       } else if (kind === "phase_change") {
-        inputs = [createRulesPhaseReadingV2Evidence({ fen: located.node.fen }), position];
+        // §3.4: the previous definite phase may precede an intervening unclear band.
+        // Retain both actual readings and their recorded occurrences, not just the label shown.
+        const prior = path.slice(0, located.index).reverse().find((node) => phaseBandReading(node.fen).phase !== "unclear");
+        if (prior === undefined) throw new TypeError("Phase-change marker lost its prior definite phase witness");
+        const before = createRulesPhaseReadingV2Evidence({ fen: prior.fen });
+        const after = createRulesPhaseReadingV2Evidence({ fen: located.node.fen });
+        const detail = marker.detail as { readonly from: string; readonly to: string };
+        if (before.payload.phase !== detail.from || after.payload.phase !== detail.to) throw new TypeError("Phase-change marker disagrees with its exact phase witnesses");
+        inputs = [before, createRunRecordPositionV1Evidence({ run, nodeId: prior.id }), after, position];
       } else if (kind === "human_divergence") {
-        inputs = [createHumanMaiaPolicyV1Evidence({ run, nodeId: marker.nodeId }), position];
+        const selection = pivotalMarkerRecordedSelection(marker);
+        if (selection?.candidates === undefined) throw new TypeError("Human-divergence marker lost its own recorded selection");
+        // Use the existing closed page arm over the actual retained source record, never
+        // rebuild a distribution from marker masses or borrow the latest sibling selection.
+        const page = Object.freeze({ nodeId: marker.nodeId, engine: selection.engine,
+          targetElo: run.opponentPolicy.targetElo ?? null, candidates: selection.candidates });
+        inputs = [createHumanMaiaPolicyV1Evidence({ page }), position];
       } else {
-        inputs = [createRulesMobilityReadingLegalMovesV1Evidence({ fen: located.node.fen }), position];
+        const detail = marker.detail as { readonly color: "white" | "black"; readonly priorCount: number; readonly count: number; readonly nextCount: number };
+        const sameSide = path.filter((node) => positionFromFen(node.fen).turn === detail.color);
+        const index = sameSide.findIndex((node) => node.id === marker.nodeId);
+        const prior = sameSide[index - 1], next = sameSide[index + 1];
+        if (prior === undefined || next === undefined) throw new TypeError("Sustained-collapse marker lost its complete same-side witness span");
+        const nodes = [prior, located.node, next];
+        const readings = nodes.map((node) => createRulesMobilityReadingLegalMovesV1Evidence({ fen: node.fen }));
+        const counts = readings.map((reading) => reading.payload.pieces.reduce((count, piece) => count + piece.moves.length, 0));
+        if (counts[0] !== detail.priorCount || counts[1] !== detail.count || counts[2] !== detail.nextCount) throw new TypeError("Sustained-collapse marker disagrees with its exact mobility witnesses");
+        inputs = nodes.flatMap((node, index) => [readings[index]!, createRunRecordPositionV1Evidence({ run, nodeId: node.id })]);
       }
       return Object.freeze({ evidence: mint(route, symbol, marker, { run, branchId, nodeId: marker.nodeId }, inputs), inputs: Object.freeze(inputs) });
     }));

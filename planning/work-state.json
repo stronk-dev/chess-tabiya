@@ -31834,6 +31834,33 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/review-boundary.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3825",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:05f41f8c8db4c073ca19a889a0d294a90f1acd5d90b76bdaa4bd80398589e439",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/pivotal-source.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3826",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:61e4aecc246d8c134ecc7b9006c4c00de1834f2295439ef501138437a3bfad4a",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/pivotal-evidence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3827",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cc812fff7b46f95de44404bf39ad144bdbce4e1ec18c13c6de586f88835b785a",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/pivotal-evidence.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

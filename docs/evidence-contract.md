@@ -22,6 +22,16 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
+Pivotal grounding retains complete recorded witnesses: a phase-change item carries both
+definite phase readings and their two positions, even across an intervening unclear phase.
+A sustained-option-collapse item carries all three same-side legal-move readings and positions,
+including the later witness beyond its display anchor. These repair accepted §3.4's missing
+inputs (D3827); marker labels, meanings and consumer eligibility do not change. Human-divergence
+markers retain their own complete recorded distribution image through the existing source-page
+arm (D3826), never the newest sibling's selection at the shared node. Copied rendering models
+have no producer-owned source operand. Existing whole-tip populations remain unchanged;
+this does not introduce the still-draft scoped Inspector source operation.
+
 The public binding summary resolves fallback policy by the complete consumer id/version tuple.
 Coexisting predecessors and successors keep their own policy even when declaration order changes;
 a missing exact consumer refuses rather than borrowing another version. This compatibility summary

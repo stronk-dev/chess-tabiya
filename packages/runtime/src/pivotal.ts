@@ -20,6 +20,14 @@ export interface PivotalMarker { readonly nodeId: string; readonly kind: Pivotal
 
 const PROVENANCE = "Tabiya's pivotal-marker convention";
 const DEFINITE = new Set<DetectedPhase>(["opening", "middlegame", "endgame"]);
+// Producer-owned input retention: two histories may select at the same recorded node.
+// Marker fields alone cannot locate which complete distribution produced that marker.
+type RecordedMarkerSelection = Readonly<{ engine: OpponentSelection["engine"]; candidates: NonNullable<OpponentSelection["candidates"]> }>;
+const RECORDED_SELECTIONS = new WeakMap<PivotalMarker, RecordedMarkerSelection>();
+/** Internal source operand, not evidence or permission; copied/rendered markers have none. */
+export function pivotalMarkerRecordedSelection(marker: PivotalMarker): RecordedMarkerSelection | undefined {
+  return RECORDED_SELECTIONS.get(marker);
+}
 
 function legalCount(fen: string): number {
   return exactLegalMoves(fen).length;
@@ -29,12 +37,20 @@ function legalCount(fen: string): number {
 function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly PivotalMarker[] {
   return run.events.flatMap((event) => {
     if (event.type !== "opponent.move_selected" || !pathIds.has(event.data.nodeId) || event.data.selection.policyModeApplied !== "human_common") return [];
-    const candidates = event.data.selection.candidates?.filter((item) => item.offWindow !== true);
+    const selection = event.data.selection;
+    const recordedCandidates = selection.candidates;
+    const source = recordedCandidates === undefined ? undefined : Object.freeze({
+      engine: Object.freeze({ ...selection.engine }),
+      candidates: Object.freeze(recordedCandidates.map(candidate => Object.freeze({ ...candidate }))),
+    });
+    const candidates = source?.candidates.filter((item) => item.offWindow !== true);
     if (candidates === undefined || candidates.length === 0 || candidates.some((item) => item.mass === undefined)) return [];
     const total = candidates.reduce((sum, item) => sum + item.mass!, 0); if (!(total > 0)) return [];
     const masses = candidates.map((item) => item.mass! / total).sort((a, b) => b - a);
     if (Math.max(...masses) > 0.5 || masses.filter((mass) => mass >= 0.15).length < 3) return [];
-    return [Object.freeze({ nodeId: event.data.nodeId, kind: "human_divergence" as const, detail: Object.freeze({ engine: event.data.selection.engine, ...(run.opponentPolicy.targetElo === undefined ? {} : { targetElo: run.opponentPolicy.targetElo }), masses: Object.freeze(masses) }), provenanceNote: "Recorded human-model distribution under Tabiya's split convention." })];
+    const marker = Object.freeze({ nodeId: event.data.nodeId, kind: "human_divergence" as const, detail: Object.freeze({ engine: source!.engine, ...(run.opponentPolicy.targetElo === undefined ? {} : { targetElo: run.opponentPolicy.targetElo }), masses: Object.freeze(masses) }), provenanceNote: "Recorded human-model distribution under Tabiya's split convention." });
+    RECORDED_SELECTIONS.set(marker, source!);
+    return [marker];
   });
 }
 

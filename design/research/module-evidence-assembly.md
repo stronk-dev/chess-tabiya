@@ -836,3 +836,65 @@ consequence/engine/Story source computation, exact factory bindings and producti
 cancellation, HTTP/client/native proof and independent acceptance remain D3792 work. D3824 closes
 only its bounded question. No production, source qualification, pack/default or release change;
 ignored bundles and bounded stdout stay outside ordinary CI/progress dependencies.
+
+### Pivotal witness scope and shared-node source mismatch — 2026-10-15, D3825/D3826
+
+The opt-in guarded payload-owner model passes 465 controls over 207 prefixes of seven actual
+SQLite-backed legal runs. Four current families emit 45 whole-tip markers. Two actual legal
+collapse paths come from the first five examined paths in the existing CC0 R2 fixture; no new
+corpus download or raw dump is added. An unchanged-source baseline fails the exact root-prefix
+assertion. Original graph validation precedes source-side narrowing; duplicate/cyclic/missing
+later material refuses even when the requested endpoint is the root. Inherited-prefix, foreign-
+endpoint, original full-tip and unchanged saved-byte controls pass. `[V]`
+(`tools/d3792-inspector-demand/pivotal-source.ts`, `build-pivotal.mjs`; actual runtime pivotal,
+branch-path and SQLite operations; `tools/r2-selection-harness/imported-sample.pgn`).
+
+Four prefix reads contain the displayed collapse anchor but not its later same-side witness.
+They must exclude that marker. Filtering only marker nodeIds from a whole-tip list would retain
+all four. Scope expectations use current pivotal payloads plus independently expressed witness
+membership, not an independent chess-semantic oracle. Synthetic human/strong distribution
+controls are written through actual opponent commits; they are not live provider measurements.
+All four payload families are covered, but no new scoped mint or source identity is proved. `[V]`
+(same tool; `packages/runtime/src/pivotal.ts` pivotalMarkerPayloads/divergence).
+
+The pre-repair actual shared-node retry also proves D3826: both requested branches emit two human-divergence
+items, and one item per branch carries an engine identity different from its declared sealed
+human-policy input. Payload acquisition scans all selections on path nodes, while the current
+factory chooses the latest at that node. Selection metadata is synthetic, but the legal
+rewind/fork/commit, storage read and exact sole-factory calls are production operations. Saved
+recording bytes remain unchanged. This is a current input-coherence defect, not a population
+frequency, live-model finding or a merely proposed future scope risk. `[V]`
+(`packages/runtime/src/evidence-factories.ts` pivotalFactory/createHumanMaiaPolicyV1Evidence;
+same tool's two actual factory controls).
+
+Author synthesis `[M]`: the same unaccepted Inspector draft now names the private pivotal
+source operation and complete-witness obligations. Source/factory occurrence binding and
+identity, current permission, real response/native delivery and independent acceptance remain.
+D3825 answers its bounded source-scope question; D3826's production repair is now locally
+verified. Its permanent predecessor regression fails. The repair uses each
+producer-owned marker's retained engine/complete candidate image through the existing closed
+human-policy page arm, never a distribution reconstructed from marker values. Actual stored
+controls now retain both current node-level populations with zero mismatched declared inputs.
+This does not author or accept the separate scoped occurrence authority. `[V]`
+(`packages/runtime/src/pivotal.ts`, `evidence-factories.ts`, `pivotal-evidence.test.ts`; same tool).
+
+The first runnable bundle mislocated the existing fixture relative to ignored output; a guarded
+source locator fixes only the research bundle. No production supplier/signature, semantic
+eligibility, pack, budget/default or release promotion follows from these measurements.
+
+The same audit finds D3827's implementation contradicting accepted value-authority §3.4 and
+the manifest: one phase reading instead of two and one legal-move reading instead of three.
+Two permanent legal-path regressions fail on the predecessor. The repair retains both definite
+phase occurrences across unclear nodes and prior/first/later same-side mobility occurrences,
+checking source values against the existing marker detail. The real Review packet retains the
+same complete source receipts, while marker payloads/eligibility remain unchanged. `[V]`
+(`packages/runtime/src/pivotal-evidence.test.ts`, `evidence-factories.ts`; accepted
+`rfc/evidence-value-authority.md` §3.4).
+
+Final local verification: 5,734 software/seven performance cases pass on frozen production bytes.
+Governance rejects a duplicate roadmap evidence path; only that duplicate is removed, then normal
+governance/content/build/all four browser tiers exit zero: 257 content, 312 smoke/five content/
+59 matrix/one packaged-production browser cases, one existing optional Maia skip and zero retries,
+with all 112 composition cells. No product source is changed between those results. D3826/D3827
+close their accepted grounding defects, not the unaccepted scoped operation, qualifications,
+official content or release. `[V]` normal Make outputs and `planning/exploration/log.md`.

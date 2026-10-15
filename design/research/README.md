@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Pivotal recorded-prefix witnesses, 2026-10-15 ([[D3825]]/[[D3826]]): **bounded scope question
+answered; accepted grounding repairs verified locally**. The guarded payload owner passes 465 controls/
+207 actual stored legal prefixes across all four families, including four anchor-before-later-
+witness exclusions. Actual shared-node retry factory calls reproduce two source-attribution
+mismatches using labelled synthetic distributions; the production input-retention repair now
+retains both populations with zero crossed inputs. Exact scoped occurrence/factory binding, scoped
+identity, current access and independent acceptance remain D3792 work. See
+`module-evidence-assembly.md` §Pivotal witness scope and shared-node source mismatch.
+
 Earlier recorded-Review source boundary, 2026-10-15 ([[D3824]]): **bounded prerequisite
 answered; unaccepted and not delivered**. Actual SQLite native/imported/retry paths pass 292
 controls over 48 prefixes, acquiring 172 position and 124 edge items from their sole factories.

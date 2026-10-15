@@ -3,13 +3,94 @@ import { describe, expect, it } from "vitest";
 import { evidenceForConsumer, evidenceValueReceipt, identitySealedEvidenceWithoutValueReceipt } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
-import { consumePivotalMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkers } from "./pivotal.js";
-import { commitMove, createRun } from "./runtime.js";
+import { consumePivotalMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkerRecordedSelection, pivotalMarkers } from "./pivotal.js";
+import { appendOpponentPly, commitMove, createRun, fork, rewind } from "./runtime.js";
+import { branchPath } from "./branch-path.js";
+import { assertReviewEvidencePacket, compileReviewPacketForSubject, createReviewPrefixAuthority } from "./review-evidence.js";
 
 const at = "2026-09-24T00:00:00.000Z";
 const created = (id: string, fen: string) => createRun({ id, packId: "p", packDigest: `sha256:${"a".repeat(64)}`, startFen: fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+const reviewItems = (run: ReturnType<typeof created>) => {
+  const authorize = createReviewPrefixAuthority({ loadRun: id => id === run.id ? run : undefined, loadImportRecord: () => undefined });
+  const packet = compileReviewPacketForSubject(authorize({ runId: run.id, branchId: run.activeCursor.branchId }), { engine: new Map(), shapes: [] });
+  assertReviewEvidencePacket(packet);
+  return packet.nodes.flatMap(node => node.items);
+};
 
 describe("pivotal marker consumer boundary", () => {
+  it("grounds each shared-node human marker in its own exact recorded selection", () => {
+    let run = commitMove(created("human-inputs", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), "e2e4", { at }).run;
+    const shared = run.activeCursor.nodeId;
+    const selected = (id: string, moveUci: string, masses: readonly number[]) => ({ moveUci, policyModeApplied: "human_common" as const,
+      candidates: ["e7e5", "c7c5", "e7e6", "c7c6", "d7d5"].map((moveUci, index) => ({ moveUci, rank: index + 1, mass: masses[index]! })),
+      engine: { id, name: id, version: "synthetic-test", seedHonored: false } });
+    run = appendOpponentPly(run, selected("first-source", "e7e5", [.31, .24, .19, .16, .1]), { at }).run;
+    const original = run.activeCursor.branchId;
+    run = fork(rewind(run, shared, at).run, shared, { at }).run;
+    run = appendOpponentPly(run, selected("second-source", "c7c5", [.4, .25, .2, .1, .05]), { at }).run;
+    for (const branchId of [original, run.activeCursor.branchId]) {
+      const values = invokeEvidenceValueRoute("derived.pivotal.human_divergence@1", { run, branchId });
+      expect(values).toHaveLength(2); // Preserve current whole-tip node-level population semantics.
+      for (const item of values) {
+        const source = item.inputs.find(value => value.projection.id === "human.maia.policy")!.payload as { engine: { id: string }; candidates: readonly { mass: number }[] };
+        const detail = item.evidence.payload.detail as { engine: { id: string }; masses: readonly number[] };
+        expect(detail.engine).toEqual(source.engine);
+        const total = source.candidates.reduce((sum, candidate) => sum + candidate.mass, 0);
+        expect(detail.masses).toEqual(source.candidates.map(candidate => candidate.mass / total).sort((a, b) => b - a));
+        expect(evidenceValueReceipt(item.evidence).sourceDigests).toEqual(item.inputs.map(value => evidenceValueReceipt(value).payloadDigest));
+      }
+    }
+    const marker = pivotalMarkers(run, original).find(item => item.kind === "human_divergence")!;
+    const retained = pivotalMarkerRecordedSelection(marker)!;
+    expect(Object.isFrozen(retained)).toBe(true);
+    expect(Object.isFrozen(retained.engine)).toBe(true);
+    expect(Object.isFrozen(retained.candidates)).toBe(true);
+    expect(pivotalMarkerRecordedSelection({ ...marker })).toBeUndefined();
+    const delivered = reviewItems(run).filter(item => item.projection.id === "derived.pivotal.human_divergence");
+    expect(delivered.map(item => ((item.payload as { detail: { engine: { id: string } } }).detail.engine.id)).sort()).toEqual(["first-source", "second-source"]);
+  });
+
+  it("retains both exact definite phase witnesses and their recorded nodes", () => {
+    let run = created("phase-inputs", "r2qk2r/8/8/8/8/8/8/R2QK2R w - - 0 1");
+    for (const move of ["d1d8", "e8d8"]) run = commitMove(run, move, { at }).run;
+    const branchId = run.activeCursor.branchId;
+    const values = invokeEvidenceValueRoute("derived.pivotal.phase_change@1", { run, branchId });
+    const delivered = reviewItems(run).filter(item => item.projection.id === "derived.pivotal.phase_change");
+    expect(values.length).toBeGreaterThan(0);
+    expect(delivered.map(item => evidenceValueReceipt(item).sourceDigests)).toEqual(values.map(item => evidenceValueReceipt(item.evidence).sourceDigests));
+    for (const item of values) {
+      const readings = item.inputs.filter(value => value.projection.id === "rules.phase.reading");
+      const positions = item.inputs.filter(value => value.projection.id === "run.record.position");
+      expect(readings).toHaveLength(2);
+      expect(positions).toHaveLength(2);
+      expect(new Set(positions.map(value => (value.payload as { nodeId: string }).nodeId)).size).toBe(2);
+      expect(readings.map(value => (value.payload as { fen: string }).fen)).toEqual(positions.map(value => (value.payload as { fen: string }).fen));
+      expect(readings.map(value => (value.payload as { phase: string }).phase)).toEqual([(item.evidence.payload.detail as { from: string }).from, (item.evidence.payload.detail as { to: string }).to]);
+      expect(evidenceValueReceipt(item.evidence).sourceDigests).toEqual(item.inputs.map(value => evidenceValueReceipt(value).payloadDigest));
+    }
+  });
+
+  it("retains all three exact same-side mobility witnesses, including the later continuation", () => {
+    // Legal four-ply CC0 fixture from the existing R2 population; no corpus read in software CI.
+    let run = created("collapse-inputs", "8/3r3k/p3qr1p/1p5Q/8/P6R/1PP1p3/1K5R w - - 0 37");
+    for (const move of ["h1e1", "d7d1", "e1d1", "e2d1q"]) run = commitMove(run, move, { at }).run;
+    const branchId = run.activeCursor.branchId, path = branchPath(run, branchId);
+    const values = invokeEvidenceValueRoute("derived.pivotal.option_collapse@1", { run, branchId });
+    expect(values).toHaveLength(1);
+    const item = values[0]!;
+    expect(item.evidence.payload.nodeId).toBe(path[2]!.id);
+    const readings = item.inputs.filter(value => value.projection.id === "rules.mobility.reading.legal_moves");
+    const positions = item.inputs.filter(value => value.projection.id === "run.record.position");
+    expect(readings).toHaveLength(3);
+    expect(readings.map(value => (value.payload as { fen: string }).fen)).toEqual([path[0]!.fen, path[2]!.fen, path[4]!.fen]);
+    expect(positions.map(value => (value.payload as { nodeId: string }).nodeId)).toEqual([path[0]!.id, path[2]!.id, path[4]!.id]);
+    expect(evidenceValueReceipt(item.evidence).sourceDigests).toEqual(item.inputs.map(value => evidenceValueReceipt(value).payloadDigest));
+    expect(pivotalMarkers(run, branchId)).toEqual(pivotalMarkerEvidenceItems(run, branchId).map(value => value.payload));
+    const delivered = reviewItems(run).filter(value => value.projection.id === "derived.pivotal.option_collapse");
+    expect(delivered).toHaveLength(1);
+    expect(evidenceValueReceipt(delivered[0]!).sourceDigests).toEqual(evidenceValueReceipt(item.evidence).sourceDigests);
+  });
+
   it("mints each pivotal kind under its own exact derived projection and authority inputs", () => {
     const queen = commitMove(created("queen", "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1"), "e2e7", { at }).run;
     const branchId = queen.activeCursor.branchId;

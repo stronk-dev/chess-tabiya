@@ -544,6 +544,19 @@ inspector-recorded-context-research:
 	./node_modules/.bin/esbuild tools/d3792-inspector-demand/recorded-context.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/recorded-context.mjs --log-level=warning
 	$(CI_NODE) .cache/d3792-inspector-demand/recorded-context.mjs
 
+# Permanent complete pivotal-source grounding and unchanged downstream values.
+.PHONY: test-pivotal-grounding
+test-pivotal-grounding:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/pivotal-evidence.test.ts packages/runtime/src/adaptive-guidance.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/review-evidence.test.ts packages/runtime/src/story.test.ts
+	$(MAKE) typecheck
+
+# Disposable source-owner model; no production scope operation or permission.
+.PHONY: inspector-pivotal-source-research
+inspector-pivotal-source-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	$(CI_NODE) tools/d3792-inspector-demand/build-pivotal.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/pivotal-candidate.mjs candidate
+
 # Disposable exact recorded-Review source model; no production protocol or permission.
 .PHONY: inspector-review-boundary-research
 inspector-review-boundary-research:

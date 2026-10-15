@@ -2040,6 +2040,39 @@ a full-tip receipt or silently replace any of Inspector's 75 source obligations.
 
 Each supplier row still owes its exact callable/input/absence/receiver/cancellation and boundary
 fixtures; the operation names in this paragraph are requirements, not claims of landed code.
+
+**D3825 pivotal source-owner boundary (2026-10-15), still draft:** the proposed private
+`pivotalPayloadsForRecordedContext(context, {projection})` consumes only the resolver's owned
+original-run/granted-path context and one of the four literal pivotal refs. It validates current
+context before work, computes on the granted path before selection, and returns privately owned
+payload/witness records, not public v1 evidence or an access token. Irreversibility needs the
+actual parent/commit; phase change needs the previous definite phase (possibly across unclear
+nodes) and current node; sustained option collapse needs prior/first/later same-side positions.
+Its display anchor is the first low-count node, not its witness endpoint. A prefix containing
+that anchor but not the later witness cannot receive the marker. Do not filter a whole-tip
+marker array by nodeId. Existing whole-tip calls stay unchanged.
+
+Opt-in payload-owner research passes 465 controls across 207 prefixes of seven actual stored
+legal runs. Two collapse paths come from the existing CC0 fixture; distribution controls are
+synthetic metadata committed through the real runtime, not live Maia measurements. Four
+later-witness exclusions, original late-graph refusals, shared-prefix/foreign-endpoint controls
+and full-tip/saved-byte retention pass. This is payload/scope research, not scoped factory,
+permission, semantic qualification or native delivery proof.
+
+**D3826 exposes a source-binding defect:** an actual rewind/fork with two
+labelled distribution controls emits both selections at a shared node on either branch. The
+current pivotal factory binds the latest node-level human-policy source to both; one marker
+per branch therefore disagrees with its declared engine source. The accepted-contract repair
+retains each marker's actual recorded engine/candidate image and uses the existing closed
+human-policy page arm, preserving current whole-tip populations and public input signatures.
+Its permanent regression first fails; repaired actual stored controls have zero crossed inputs.
+That repair is not a scoped source authority. An exact recorded-selection occurrence must bind
+the proposed scoped marker and source together; a latest-at-node lookup cannot do it.
+Before acceptance, specify the closed source/factory occurrence input, original branch/edge
+membership, exact event sequence, scoped receipt identity and legacy compatibility. Require
+both-source/both-branch refusals and inherited-prefix controls, not a new page manufactured
+from marker fields. The 75-ref source obligations and independent review remain; a scoped
+payload list alone neither resolves this binding nor becomes a current v1 receipt.
 New source-owner signatures/receipts or projection meanings require explicit accepted contracts
 and version declarations; this amendment does not silently reinterpret v1 whole-branch suppliers
 or retire any of the 75 source obligations. Existing full-tip calls remain supported.

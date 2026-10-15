@@ -633,6 +633,15 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15 — D3826/D3827 repair the accepted §3.4 implementation: retain each human marker's
+  own recorded engine/candidate image through the already-declared page arm, two definite phase
+  readings/occurrences and three same-side mobility readings/occurrences. Marker meanings,
+  whole-tip populations, public factory input arms, versions and eligibility remain unchanged.
+  Permanent predecessor failures and actual Review packet/source controls retain the failures;
+  full local software/performance/content/governance/build/all browser tiers pass after the
+  recorded duplicate-checkpoint correction. Both grounding defects close; scoped Inspector
+  operations remain a separate draft. No qualification or whole-RFC completion is implied.
+
 - 2026-09-24 (D1): discharged by `semantic-convention-provenance.md`'s landing. The `pending`
   convention notes are gone from the six exact-under-convention rows, `rules.phase.reading@2`,
   `named_structure@2`, `rules.endgame.classification@1`, forced mate, the eleven recorded `@2`

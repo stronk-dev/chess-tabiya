@@ -27,6 +27,12 @@ D3824's October-15 exact recorded-Review model adds 292 storage/source controls,
 or complete source delivery. The same unaccepted §4.11a names the proposed private boundary;
 other scoped source owners, exact bindings, access composition and native delivery still remain.
 
+D3825's pivotal payload model retains complete witness scope over 207 legal stored prefixes.
+D3826/D3827 repair existing accepted value-authority grounding, not scoped Inspector delivery:
+own recorded distribution per human marker, two phase and three mobility source occurrences.
+Full local software/performance/content/build/browser verification passes; both defects are
+closed. The initial duplicate roadmap-path refusal is retained; §4.11a stays unaccepted.
+
 **Orientation draft root-vocabulary repair, 2026-10-13:** `semantic-validation-authority.md`
 §4.1a now covers the seven exact root spellings measured under D3781, with coexisting aliases
 and total leaf coverage. All 343 registered cases execute; the disposable matrix has 106 checks.
