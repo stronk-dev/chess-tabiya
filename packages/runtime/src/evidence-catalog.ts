@@ -598,6 +598,17 @@ const derivedTacticOutputs = [
     abstention: { possible: true, reasons: ["invalid_turn_clone"] }, dependsOn: [ref("rules.square.event.control"), ref("rules.exchange.predicate.legal_exchange")], derivation: { inputs: [ref("rules.square.event.control"), ref("rules.exchange.predicate.legal_exchange")] },
     limitations: ["The exact edge/capture join does not name removal, deflection, overload, force, success, safety, or move quality."],
   }),
+  projection("derived.tactic", "derived.tactic.defender_exposure", "derived", {
+    version: 2, role: "event", payloadType: "AvailableDefenderExposureOperands",
+    semantics: "An exact lost enemy pseudo-control edge joined to the complete positive capture population on its retained target under the mover-turn/en-passant-cleared pass clone.",
+    operands: ["beforeFen", "moveUci", "afterFen", "kind", "passConvention", "defender", "target", "captures", "controllerEvent"],
+    signs: ["gained", "state"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact"],
+    forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"], abstention: { possible: true, reasons: ["invalid_turn_clone"] },
+    dependsOn: [ref("rules.square.event.control"), ref("rules.exchange.reading.landing_captures")],
+    derivation: { inputs: [ref("rules.square.event.control"), ref("rules.exchange.reading.landing_captures")] },
+    disposition: { kind: "experimental", reason: "Internal source component; coordinated Threat/packet/current-module cutover is not yet delivered." },
+    limitations: ["The exact edge/capture join does not name removal, deflection, overload, force, success, safety, or move quality."],
+  }),
   projection("derived.tactic", "derived.tactic.sequence.defender_consequence", "derived", {
     role: "event", payloadType: "DefenderConsequenceOperands", semantics: "Three consecutive recorded edges retaining the exact defender/target identity through edge loss or defender relocation and a positive third-edge target capture.",
     operands: ["kind", "anchors", "nodes", "defender", "target", "firstMoveCapturedDefender", "finalCapture"], signs: ["state"], grounding: "recorded_run", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],

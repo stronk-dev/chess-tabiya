@@ -127,9 +127,15 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 47 producers, 286 projections, 42 versioned consumers and 556 bindings,
+The current compiled closure is 47 producers, 287 projections, 42 versioned consumers and 556 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
+
+The internal `derived.tactic.defender_exposure@2` factory joins an exact lost-control event to
+`rules.exchange.reading.landing_captures@1`. It retains every positive capture with exactly two
+sealed inputs and returns `invalid_turn_clone` as typed unavailability, never an empty event
+population. The full-FEN/target joins reject crossed or copied inputs before no-witness handling.
+It is not yet bound to a learner module; the coordinated Threat/packet migration remains open.
 
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,

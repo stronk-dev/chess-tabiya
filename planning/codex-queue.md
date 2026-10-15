@@ -15,8 +15,19 @@ It has no direct learner binding, new packet output or exposure migration yet. E
 is independently checked; existing legal-exchange arithmetic is reused, not independently
 qualified. No finished Support/Review capability follows from this prerequisite.
 
-Next implement exposure@2's real two-input factory/availability and permanent edge/absence
-tests; then the accepted source/reduction/packet/current-binding migrations, strict receivers,
+Internal exposure@2 now consumes the two real sources, retains every positive capture and
+returns invalid_turn_clone before either source is acquired.17 permanent cases become green
+after12 predecessor-red failures;116 focused cases and workspace types pass. Copied/serialized/
+truncated/reordered sources and genuine crossed full-FEN/turn/EP/counter/target inputs refuse.
+Independent read-only review finds no blocker. No actual public cutover is claimed.
+
+Final normal make verify build passes5974 software/394 files, seven isolated performance cases,
+257 content cases and all type/contract/governance/corpus/build checks. The first full command
+refuses the generator ambiguity before either full pool; the corrected command passes in full.
+One declaration/profile is added, old985 declarations and all pack requirements remain unchanged.
+No browser rerun or source qualification is inferred from this internal component.
+
+Next implement the accepted source/reduction/packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,
 D1422's unified ladder and original budgets. Exposure is currently Threat-only, not an invented
 Inspector/Nudge/Review slot. D3792 now waits on D3841's implementation, not another contract
@@ -26,7 +37,7 @@ pipeline or owner question is required; no whole milestone, qualification or rel
 Verification sequencing [[D3869]] is closed: the same28 normal Make gates now fail fast before
 both complete pools, with actual-plan/failure-order regressions and full verification green.
 No new wrapper, hook policy, skipped case or deadline change. The next live item remains
-exposure/source integration, not another CI-command redesign or authoring round.
+collector/current-source integration, not another CI-command redesign or authoring round.
 
 **Current owner ruling, 2026-10-15 — D3851:** “zero legacy required. we are pre launch. make it
 all right.” This supersedes the compatibility/pipeline-preservation instructions below. Build

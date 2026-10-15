@@ -36,18 +36,21 @@ const isProviderProjection = (manifest: CompiledEvidenceManifest, id: string): b
 export function deriveCandidatePacketProjectionGroups(manifest: CompiledEvidenceManifest = PRIMARY_EVIDENCE_MANIFEST): { readonly groups: ProjectionGroups; readonly abstentions: ProjectionGroups } {
   // `@2` multi-edge successors read the exact recorded edge (`run.record.edge`), which exists only on
   // a recorded path (rfc/recorded-semantic-path.md); a candidate child is never a recorded edge.
-  const resolve = (id: string): string => {
+  const resolve = (id: string, event = false): string => {
     const matches = manifest.projections.filter((candidate) => candidate.id === id
-      && !candidate.dependsOn.some((dependency) => dependency.id === "run.record.edge"));
+      && !candidate.dependsOn.some((dependency) => dependency.id === "run.record.edge")
+      // An internal successor is not a collector output until its exact semantic-event
+      // declaration lands with the actual collector cutover. Never guess from a base id.
+      && (!event || manifest.semanticEvents.some(value => value.projection.id === candidate.id && value.projection.version === candidate.version)));
     if (matches.length !== 1) throw new TypeError(`candidate projection ${id} does not resolve to exactly one compiled manifest projection`);
     return `${matches[0]!.id}@${matches[0]!.version}`;
   };
-  const events = (ids: readonly string[]) => ids.filter((id) => !isSequenceProjection(id)).map(resolve);
+  const events = (ids: readonly string[]) => ids.filter((id) => !isSequenceProjection(id)).map(id => resolve(id, true));
   const childReadingExclusions = new Set(["rules.exchange.predicate.legal_exchange", "derived.tactic.fork_survives_reply"]);
   const childReadings = [...new Set([...TACTICAL_COLLECTOR_PROJECTION_IDS, ...BREADTH_COLLECTOR_PROJECTION_IDS])]
     .filter((id) => !childReadingExclusions.has(id) && !isProviderProjection(manifest, id))
     .filter((id) => manifest.projections.find((candidate) => candidate.id === id)?.role === "reading")
-    .map(resolve)
+    .map(id => resolve(id))
     .sort();
   const groups: ProjectionGroups = {
     "event.structural": events(STRUCTURAL_EVENT_PROJECTION_IDS),

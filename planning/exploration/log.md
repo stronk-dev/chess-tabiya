@@ -31307,3 +31307,57 @@ Campaign was the one capability with no API, route or content. Now:
   new wrapper, hook policy, service requirement or whole-milestone/remote-green inference.
   Update the existing queue/roadmap checkpoint and remove the now-closed CI step from the source
   nextAction. Return to exposure/source integration under the accepted contract; goal stays active.
+
+### 2026-10-15 — D3867/D3868 internal two-source exposure implementation
+
+- Continue the owner's D3851 ruling: no executable legacy compatibility framework. Keep the
+  actual current@1 caller dependency only until the coordinated accepted current image migrates;
+  do not hide a partial consumer cutover or remove detector families to manufacture progress.
+- Thirteen permanent tests precede implementation;12 fail on the absent@2 route/declaration.
+  Implement the bounded-accepted internal factory/route and experimental, unbound declaration.
+  Validate the exact legal edge and pass clone before acquiring sources. An invalid clone returns
+  typed invalid_turn_clone; a legal no-witness result returns available with an empty array.
+- Consume genuine square-control events and complete landing-capture readings, joining the full
+  edge, canonical pass-FEN and exact retained target before empty decisions. Select positive
+  captures directly from the admitted complete population; preserve all trees, deterministic
+  order, promotion choices and identities with exactly two original inputs/ordered receipts.
+  A small private pure join cannot mint values or grant caller-authored payloads authority.
+- Add four permanent falsifier cases for copied/serialized/truncated/reordered inputs, genuine
+  wrong full-FEN counters/turn/en-passant/landing square/edge and genuine wrong projection refs.
+  Both colours retain0/1/2/5-capture behavior.116 focused cases pass. Initial normal sandboxed
+  typecheck fails inside pnpm package-manager lockfile access before checking; repeat the same
+  make typecheck with actual permission and no command/env/deadline modification: clean across
+  all workspace packages, including zero Svelte errors/warnings.
+- Authorized independent read-only diff review finds no correctness blocker and runs no tests.
+  Reviewer confirms actual source consumption, availability ordering, exact joins, complete
+  captures and no partial public cutover. The actual closure/packet/Threat/current-image work
+  remains open under D3867/D3868; this is not tactical qualification or end-user delivery.
+- Canonical generators add exactly one capability declaration (986 total; prior985 unchanged)
+  and one seven-line value profile. Applicability stays472; semantic validation stays81subjects/
+  zero qualified,343/343 cases,53 population receipts/eight external receipts. F1 becomes47/
+  287/42/556 while semantic78/78/16/1 is unchanged. The disposable source recipe now reads the
+  real installed declarations, not a duplicate hypothetical@2;31 controls pass. The separate
+  eighteen-control diagnostic still reproduces the unmigrated actual public absence loss.
+- Full normal make verify build stops early at the candidate projection generator, before
+  either full pool: base-id resolution ambiguously sees the new internal source beside the
+  actual collector. Fix the generator to resolve event versions through exact semantic-event
+  declarations, not all base-id matches. No literal packet bytes change. Add a permanent
+  regression refusing missing/ambiguous active event identities rather than choosing newest/
+  first or treating an internal source as public adoption. This seam belongs to D3866's exact
+  collector/packet migration, not a compatibility shim. Full unchanged command is rerun.
+- The authorized reviewer also finds no blocker in the generator fix; the missing and ambiguous
+  registrations are genuine negative fixtures, and explicit map callbacks avoid index-as-flag
+  mistakes. No tests rerun by the reviewer. Full unchanged make verify build then exits zero:
+  5974 software/394 files, seven isolated performance/four files,257 content/26 files, all
+  type/schema/F1/F2/semantic/candidate/capability/release/governance/corpus/build checks. Corpus
+  clearance reports92 documents/354 blockers/34 resolved/48 accepted/zero errors; capability
+  verification checks104 documents with zero pack edits/restamps. No browser rerun or remote
+  CI, tactical qualification, graduated content, whole milestone or release completion claim.
+- Current progress output exposes two stale compatibility instructions in the foundation
+  checkpoint and D3847 source row. Reconcile both with the actual D3851 ruling and independent
+  source acceptance, not an invented decision. The work-state/roadmap guards catch the changed
+  D3847 source anchor; refresh it from the canonical parser and regenerate the compact receipt.
+  Preserve every doing state and zero-untriaged headline. Next is accepted actual source/
+  reduction/collector/packet/current-module migration and eventual obsolete-path retirement;
+  D3867/D3868 remain doing, full1.0 goal remains active. No protected intent sentence is changed
+  or newly falsified by this internal, unbound source component.

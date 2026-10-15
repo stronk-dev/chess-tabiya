@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3868]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3869]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -28,13 +28,16 @@ Acceptance is not runtime qualification or completed learner delivery.
 Implementation starts with the genuine internal complete landing-capture source: sole computed
 factory/route, full capture trees/promotions/nonpositive outcomes and25 permanent cases,
 initially20red then99 focused passes. It has no direct learner binding and does not yet repair
-exposure's unavailable-to-empty loss. Next are its truthful two-input exposure/availability
-factory, complete source/reduction/packet/current-consumer migrations and real receiver/API/
+exposure's unavailable-to-empty loss in actual consumers. Its internal two-input exposure@2
+factory now consumes the real sources and retains typed unavailability, full positive trees/
+promotions/order and exact joins.17 permanent tests/116 focused passes and clean workspace
+types support it; independent read-only review finds no blocker. Next are the complete
+source/reduction/packet/current-consumer migrations and real receiver/API/
 native proof. D3792 waits on implementation, not another author review; all affected rows stay
-live. Fresh normal make verify build passes5956 software/393 files, seven isolated performance
+live. Fresh normal make verify build passes5974 software/394 files, seven isolated performance
 cases,257 content cases and all type/contract/governance/packaging/build checks. Packaged
-rehearsal smoke passes separately; no new full-browser sweep or tactical qualification is
-claimed. The previous full sweep remains396 browser cases/one configured optional skip and
+rehearsal smoke passed at the preceding landing-source checkpoint; no browser rerun or tactical
+qualification is claimed for this internal exposure slice. The previous full sweep remains396 browser cases/one configured optional skip and
 112 unretried composition cells. No remote CI, whole-milestone or release claim.
 
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now

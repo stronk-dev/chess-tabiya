@@ -1077,3 +1077,20 @@ A separate narrow production diff read finds no correctness blocker in the new i
 landing-capture declaration/type/factory/route/permanent tests. The tests independently check
 capture enumeration but reuse existing exchange arithmetic; they are not independent arithmetic
 or tactical qualification. Reviewer runs no tests. Main's local gate results belong to the log.
+
+### Internal exposure@2 implementation — independent bounded diff review
+
+The authorized reviewer finds no correctness blocker in the genuine internal source component:
+factory ordering validates the full edge and clone before acquisition; exact-version source
+admission and full edge/FEN/landing joins precede empty decisions; output consumes the complete
+reading directly and preserves all positive captures/promotions/order with exactly two inputs.
+Permanent tests cover both colours,0/1/2/5 captures, absence-before-acquisition, copied/serialized/
+truncated/reordered sources and genuine crossed contexts. Retaining@1 for actual unmigrated
+callers is staged implementation, not a compatibility framework. Read-only inspection; reviewer
+runs no tests. Actual collector/packet/Threat/current-image delivery remains outside this slice.
+
+The same reviewer separately checks the integration fix caught by full verification: candidate
+event resolution intersects exact registered semantic-event identities and retains recorded-edge
+exclusion. Missing/two active identities refuse; internal@2 is not selected automatically. The
+new regression exercises both failures, and the current generated file has no diff. No blocker
+found; read-only review, no tests rerun. This is event-identity derivation, not public adoption.

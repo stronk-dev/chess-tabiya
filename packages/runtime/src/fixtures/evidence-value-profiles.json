@@ -815,6 +815,13 @@
       "7e2d8f678d2953f4253c7bcc6ca0f14d38be32f2a6dc9b7c420113a0f2995d4f"
     ]
   },
+  "derived.tactic.defender_exposure@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "7e2d8f678d2953f4253c7bcc6ca0f14d38be32f2a6dc9b7c420113a0f2995d4f"
+    ]
+  },
   "derived.tactic.deflection_observed@1": {
     "availability": "available",
     "cardinality": 1,

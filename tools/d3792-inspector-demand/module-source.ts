@@ -162,23 +162,19 @@ function runLandingCaptureSourceRecipe() {
   check(() => assert.deepEqual(reading("4k3/8/8/8/8/8/8/4K3 w - - 0 1", "a4").captures, []));
   const computed = declarations.get("rules.exchange.reading.landing_captures@1")!;
   assert(computed, "bounded-accepted internal complete reading is now installed");
-  const exposure = declarations.get("derived.tactic.defender_exposure@1")!;
+  const successor = declarations.get("derived.tactic.defender_exposure@2")!;
   const inputs = [parse("rules.square.event.control@1"), { id: computed.id, version: 1 }];
-  const successor: ProjectionDeclaration = { ...exposure, version: 2, dependsOn: inputs, derivation: { inputs },
-    disposition: { kind: "inspector_only", reason: "Disposable fixed-input metadata, not an exposure factory" } };
-  const manifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
-    producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
-        ? { ...producer, outputs: [...producer.outputs, successor] } : producer) });
-  const execution = compileProjectionExecution(manifest, successor);
+  assert(successor, "bounded-accepted internal exposure factory is now installed");
+  const execution = compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, successor);
   check(() => assert.equal(execution.paths.length, 1));
   check(() => assert.deepEqual(execution.paths[0]!.derivationChoices.find(choice => choice.projection.id === successor.id)!.inputs, inputs));
   check(() => assert.deepEqual(execution.paths[0]!.sourceRequirements, []));
   check(() => assert.deepEqual([computed.grounding, computed.exactness, computed.confidence], ["declared_convention", "convention", "not_applicable"]));
-  check(() => assert(!declarations.has("derived.tactic.defender_exposure@2")));
-  console.log(JSON.stringify({ scope: "DISPOSABLE D3867 landing-capture recipe and isolated F1 metadata, NOT source/derivation/adoption proof",
+  check(() => assert(declarations.has("derived.tactic.defender_exposure@2")));
+  console.log(JSON.stringify({ scope: "DISPOSABLE D3867 calculation recipe and real internal source declarations, NOT public adoption or qualification proof",
     controls, sourcePairs: 4, positiveCaptureCounts: [2, 2, 5, 5], retainsNegative: true, enPassantPhysicalCapture: true,
     completeOldPositivePayloadParity: true, literalInputRefs: inputs.map(key), installedInternalReading: true,
-    newExposureIssuers: 0, instrumentProductionChanges: 0 }));
+    installedInternalExposure: true, publicExposureCutover: false, instrumentProductionChanges: 0 }));
 }
 
 // DISPOSABLE D3868 actual absence path; no corrected source, packet or learner operation.

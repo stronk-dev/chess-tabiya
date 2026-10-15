@@ -83,6 +83,7 @@ import {
 } from "./semantic-evidence.js";
 import { shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
 import { squareControlEvents, squareControlReading } from "./square-control.js";
+import { defenderExposurePassFen, defenderExposureTarget, defenderExposureValue, type AvailableDefenderExposureOperands } from "./internal/defender-exposure.js";
 import { STORY_PIVOT_CP, rankStoryMoments, suggestTitle, type StoryMoment, type StoryTitleInput } from "./story.js";
 import {
   learnerCentipawns,
@@ -863,6 +864,32 @@ export const createDerivedTacticDefenderExposureV1Evidence = edgeDerived("derive
     return [{ payload, inputs: [control, ...exchanges] }];
   });
 });
+
+export const createDerivedTacticDefenderExposureV2Evidence = (() => {
+  const route = "derived.tactic.defender_exposure@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN }], result: "availability" },
+    (input: EvidenceEdge): EvidenceAvailability<readonly DerivedEvidence<AvailableDefenderExposureOperands>[]> => {
+      const edge = validEdge(input), passFen = defenderExposurePassFen(edge);
+      if (passFen === undefined) return unavailable("invalid_turn_clone");
+      const controls = createRulesSquareEventControlV1Evidence(edge);
+      const readings = new Map<SquareName, DeclaredEvidence<LandingCaptureReading>>();
+      const result: DerivedEvidence<AvailableDefenderExposureOperands>[] = [];
+      for (const control of controls) {
+        const target = defenderExposureTarget(edge, control);
+        if (target === undefined) continue;
+        let reading = readings.get(target.square);
+        if (reading === undefined) {
+          reading = createRulesExchangeReadingLandingCapturesV1Evidence({ fen: passFen, landingSquare: target.square });
+          readings.set(target.square, reading);
+        }
+        const payload = defenderExposureValue(edge, control, reading);
+        if (payload === undefined) continue;
+        const inputs = Object.freeze([control, reading]);
+        result.push(Object.freeze({ evidence: mint(route, symbol, payload, { edge, inputs }, inputs), inputs }));
+      }
+      return available(Object.freeze(result));
+    });
+})();
 
 export const createDerivedMaterialEventRoleAsymmetryV1Evidence = edgeDerived("derived.material.event.role_asymmetry@1", (edge) => {
   const material = materialRoleAsymmetryEvent(edge.beforeFen, edge.moveUci, edge.afterFen);

@@ -266,6 +266,23 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     expect(closure.has("rules.transition.event.checkmate@1")).toBe(true);
   });
 
+  it("criterion 9: a new internal source cannot silently become a current collector output", () => {
+    const id = "derived.tactic.defender_exposure", manifest = PRIMARY_EVIDENCE_MANIFEST;
+    expect(manifest.projections.filter(value => value.id === id).map(value => value.version)).toEqual([1, 2]);
+    const { groups } = deriveCandidatePacketProjectionGroups(manifest);
+    expect(groups["event.breadth"]).toContain(`${id}@1`);
+    expect(groups["event.breadth"]).not.toContain(`${id}@2`);
+    const current = manifest.semanticEvents.find(value => value.projection.id === id)!;
+    // Removing the actual collector identity must refuse, not fall back to the internal source.
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest,
+      semanticEvents: manifest.semanticEvents.filter(value => value !== current),
+    })).toThrow(/does not resolve to exactly one/u);
+    // Two active one-edge identities are ambiguous, never "pick latest" or "pick first".
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest,
+      semanticEvents: [...manifest.semanticEvents, { ...current, projection: { id, version: 2 } }],
+    })).toThrow(/does not resolve to exactly one/u);
+  });
+
   it("criterion 9: projection-identity multisets are unchanged by the migration on ordinary, capture, double-attack and abstention fixtures", () => {
     for (const [fen, move] of [[INITIAL_FEN, "g1f3"], [CAPTURE, "e4d5"], [FORK, "b5c7"], [CHECK_EVASION, "e1e2"]] as const) {
       const receipt = compiled(fen, CANDIDATE_WIDE_SCOPE);

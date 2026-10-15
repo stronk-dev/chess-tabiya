@@ -229,7 +229,7 @@ rejected position-cache experiment are recorded in the existing D3300 projector 
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 47 producers, 286 projections, 42 consumers and 556 bindings, plus
+The primary manifest contains 47 producers, 287 projections, 42 consumers and 556 bindings, plus
 78 semantic events, 78 eligibility rows, 16 reasons and one selection policy. These are registered
 declarations, not proof of complete production consumption or a useful learner workflow. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
