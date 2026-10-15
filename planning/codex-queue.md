@@ -1,5 +1,15 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847's complete selection domain schemas are now authored in F2 §2.3d and Review
+§4.5: ordered structural columns/all17 family results, full last-level point/state/provider input
+rows, and ordered rank moment groups. Independent review catches and clears a rejected-delivery
+input omission; D3854 closes only promotion's draft disclosure correction. Existing comparison/
+prefix targets/types pass after fixing the probe's transposition-key/full-FEN error, including two
+synthetic rejected-delivery contrasts. Next author the smallest explicit convention-bound reduction
+contract, its complete input image/empty semantics/actual-instance ceilings and exact successors;
+joint acceptance is still required before factories, bindings, API or native UX implementation.
+D3851 remains unanswered, old APIs/history and all detector families remain. No product gate moves.
+
 2026-10-15 — D3768/D3847 coordinated authoring now spans F2 §2.3f, tactical §3.7a, packet
 §3.1a, Hint §3a and module-registration's exact successor image. New nonterminal source,
 compiler2, fork-only six Hint@2 refs, exact wire2 and terminal-aware rendering are specified,

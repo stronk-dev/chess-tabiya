@@ -1653,9 +1653,39 @@ Do not add it to the 75-topic migration. Its source closure remains open under D
 Compare consumers. The reviewer finds no blocker in the bounded controls, does not rerun tests
 and does not accept successor lineage, runtime implementation or the joint amendment. The stale
 scoped table's extra eval_delta@1 arm must instead dispatch F2's exact eval_delta@2 contract;
-structural and last-level literal schemas remain authoring holds, not compiler exceptions. `[V]`
+structural and last-level literal schemas were still authoring holds at that checkpoint, not
+compiler exceptions. `[V]`
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md` continuation;
 `compare-strip-values.ts:recordedPieceRoutes`, F2 §2.3a, current Inspector accepts.
+
+### Population schemas and rejected-delivery review
+
+F2 §2.3d now authors the complete structural and recorded last-level domain images, while
+Review §4.5 authors the rank moment-group image. They are proposed source contracts, not new
+evidence leaves or permission to bypass the remaining reduction grammar. The structural image
+retains both ordered columns, all17 exact family results including successful empties, original
+position occurrences and the closed named_structure@2 conversion. A draft-table consistency
+control matches the current manifest and refuses a missing family or old named-structure version.
+Existing126 reconstructions/392 successful empty rows and597+316 controls still pass. `[V]`
+`make inspector-comparison-source-research`; F2 §2.3d; module-registration structural source table.
+
+The independent review returns an incomplete last-level row shape: output state and points
+cannot retain a delivered input whose position join fails. The corrected exact row includes
+the full plan slot and captured provider state (null for an absent context entry), as well as
+position, index, state and points. Both-color probes supply two different genuine synthetic
+wrong-FEN deliveries: both fold to unavailable/input_abstained and leave the same last-level
+selection, despite different captured delivery inputs. These are two contrasts, not live provider
+failures. Every actual packet point is additionally checked against its original full recorded
+FEN, exact factory and ordered input receipts. The first probe run incorrectly used positionKey
+(the transposition key without clocks) as full FEN and failed; correcting the instrument to read
+the original source path makes the normal target pass. `[V]` recorded-origin.ts:packetPoints and
+final Story controls; `make inspector-recorded-prefix-research`; review-evidence.ts:pointOf.
+
+The authorized reviewer's final read-only recheck finds that schema inconsistency closed and
+the promotion convention's reviewed_text correction sufficient. It does not accept the domain
+schemas, remaining reduction grammar or joint Inspector amendment and reruns no tests. Complete
+constructors, successor factories, consumer/API/native delivery and source qualification remain
+open. `[V]` dated Inspector independent review, population-schema continuation; F2 §§2.3c–d.
 
 ## Sequence literal-source replay and coexistence — 2026-10-15, D3847/D3851
 

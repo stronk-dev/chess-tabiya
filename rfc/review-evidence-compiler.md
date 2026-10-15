@@ -950,6 +950,54 @@ refuses. Preserve the three distinct outcome arms, including successful unfinish
 Position scope is not chronological replay: current reveal/grants and saved alternatives are
 not deleted to create a prefix. Source existence/outcome is not current permission.
 
+**D3847 owned point/state population — unaccepted:** F2 §2.3d now supplies the exact domain
+schema prepared from this authority's boundary plus captured ReviewSourceContext, before moment
+assembly. Proposed collectRecordedLastLevelPopulation is runtime-internal; it accepts neither
+an existing full-tip packet nor a caller point array. Every prefix node has its exact original
+position, complete review.source.eval_point@1 plan slot, captured provider input and closed
+ReviewAdapterState, with one genuine point iff available. A missing context entry is retained as
+null, distinct from explicit not_requested input. Delivered inputs survive a failed point join
+even when output folds to unavailable/input_abstained. Available/missing/pending/degraded rows
+stay distinct, with original reasons/counters and source authority. Source-owned one-slot-per-node semantics rejects duplicates rather
+than importing old arbitrary-array tie behavior. No caller result, FEN or point override.
+
+compileMoments consumes that population for last-level selection while retaining the complete
+boundary/state authority in the moment source; it does not make a point list complete by saying
+so. Eligible recorded-result loss, White-to-learner cp >= -100, typed-mate exclusion and root-
+moment exclusion stay separate exact stages. Missing/pending future data is not proof that a
+selected point is the game's last qualifying position. The future reduction must retain these
+complete inputs even when selected output is unchanged. Schema/data preparation is not a new
+F1 projection, mint, source-receipt fallback, completed analysis or independent acceptance.
+
+**D3845 rank group data — unaccepted domain contract:** the existing RecordedReviewMomentSource
+owns the complete boundary, exact adapter outcomes/state and moment assembly, not only a
+caller-supplied positive list. Its rank reader exposes ordered groups, each exactly
+`{ordinal,nodeId,decisionNodeId,evidenceNodeId,stopNodeId,ply,kinds,evaluation,evidence}`. Ordinal is
+the zero-based original assembly order, not rank. Preserve actual recorded edge/stop identities;
+nodeId is the evidenceNodeId alias, decisionNodeId its actual recorded parent, and stopNodeId
+the current bounded evidence endpoint. A root creates no group. Each evidence node has exactly
+one group as in the current node-keyed accumulator; repeated evidence refs within/across groups
+retain occurrence/order and are never collapsed to a set.
+
+Kinds retain the assembler's ordered finite StoryMomentKind list. Evidence is every actual
+admitted sealed item in its original group order. Each kind has the exact declared matching
+evidence, including the two permitted outcome sources; use the source-owner successor image,
+not an ID-prefix match. Evaluation is null or the exact typed before/after ReviewScoreReceipt
+pair from that group's actual registered cp/mate transition, as in the existing assembler;
+no mate-to-cp conversion, arbitrary cp summary or evaluation from an unrelated group. Retain
+equal cp endpoints and all nonranking evidence rather than serializing only a rank key.
+No renderer components/prose, copied Story or caller priority/kind/evaluation override enters
+this rank-input schema. The underlying actual adapter states remain separately source-bound;
+do not infer complete analysis from a complete moment assembly.
+
+The nine-band ordering remains the current rankStoryMoments computation, with cp magnitude
+only when both compared groups have cp-typed endpoint pairs, then ply and node id. The eligible
+source/adapter image must first resolve its prerequisite exact successor refs. No new rank@3
+factory is authored by this data schema. Empty groups are valid and eventually reduce to one
+`{rank:[]}` value, unlike zero result items for structural difference/last-level. The new reduction
+receipt must preserve group membership/ordinal and complete source/state authority even then;
+it cannot fall back to the old no-input source-receipt branch or borrow absent family ceilings.
+
 **D3841/D3845 identity/cardinality hold — still unaccepted:** this proposed scoped Inspector
 supplier must not add its source arm to frozen `derived.story.rank@2`. Module-registration's
 affected-source map proposes rank@3 so historical human-divergence uses its explicit recorded
@@ -1455,6 +1503,10 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-15: D3847/D3845's unaccepted domain contracts now pin the complete last-level
+  point/state population and rank moment groups, separate from the still-held reduction
+  declaration/receipt/execution grammar. No generic source leaf, old @2 arm or implementation
+  acceptance follows; full boundary/state authority and historical callers remain.
 - 2026-10-15: D3847's actual packet controls make the last-level gate explicitly recorded_result
   plus learner loss, preserving the absence of board-terminal last-level moments. Complete
   recorded-available point/state lineage remains an authoring hold distinct from D3845 rank

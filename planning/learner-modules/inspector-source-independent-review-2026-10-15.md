@@ -538,3 +538,34 @@ not a disposition waiver. Exact source/horizon tuples, actual-input convention c
 same-base inherited-old-convention negative pass; current declarations remain unchanged. The
 19/56 map/eleven negatives remains requirements only. Actual factories/owner enforcement/receipt
 parsers/source/presentation/API/native boundaries and source/joint acceptance remain required.
+
+### D3847/D3845 population schemas and D3854 disclosure
+
+The authorized independent reviewer recommends complete domain input schemas before the
+smallest convention-bound reduction grammar. Structural selection needs both ordered columns,
+all17 family results including successful empties, original occurrences and closed conversion;
+last-level needs the complete available point population, actual coverage states and eligible
+recorded result; rank needs complete ordered moment groups, including its legitimate singleton
+empty-rank output. No collection exemption, local source leaf or old-receipt fallback follows.
+
+Main authors those domain shapes in F2 §2.3d/Review §4.5, leaving the reduction and exact successor
+factory/receipt contracts held. The first read-only wording review returns last-level: the closed
+row omits the provider input that the prose promises to retain. Current pointOf can fold a genuine
+delivery's failed position join to unavailable/input_abstained, losing it from points. Main replaces
+that row with {pathIndex,position,slot,provider,state,points}: complete existing plan slot, exact
+captured closed provider state or null for absent map entry, including rejected delivered values.
+The final read-only recheck finds the inconsistency closed, unrelated context excluded, and no
+further blocker in that bounded wording. It grants no schema/reduction/joint acceptance and runs
+no tests. Constructor, immutable complete-image enforcement and actual delivery remain unproved.
+
+D3854 records promotion's separate use of initial-migration-only disclosure. Main supplies exact
+reviewed_text in F2 §2.3c without changing primary grounding, algorithm, historical witness or claim.
+The independent reviewer confirms that bounded author correction closes the issue, not convention
+registration, source qualification or a production defect.
+
+Main reports both normal comparison/prefix research targets and strict types passing. Structural
+metadata consistency refuses missing/old-version family tables. Actual packet-point checks use
+the original full FEN and exact source receipt order; the first run failed because the instrument
+used positionKey (a transposition key), then the source-path correction passes. Two both-color
+synthetic rejected-delivery contrasts preserve equal folded states/selection and distinct inputs.
+No provider query, new runtime factory or ordinary CI dependency is added.

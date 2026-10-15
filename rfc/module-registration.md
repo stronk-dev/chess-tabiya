@@ -2538,7 +2538,7 @@ held before acceptance:
 
 | Source requirement | Arm status | Source-side execution and literal inputs |
 |---|---|---|
-| Structural difference, predecessor `derived.compare.structure_delta@1`; successor held D3847 | Not yet specified; source-owned comparison grant required, not a new @1 arm | Require branchId equal one granted column. Reconstruct complete observations on both granted prefixes before intersection, retaining per-node occurrence/FEN, family results including successful empties, and immediate requested-path predecessor tests. A peer observation later than the displayed node may suppress it. Preserve reappearance and node/feature order; specify closed named-structure@2 conversion. Positive observations alone do not establish negative selection. No whole-branch helper runs after the grant; F2 §2.3d owns the unresolved literal schema. |
+| Structural difference, predecessor `derived.compare.structure_delta@1`; successor/reduction held D3847/D3845 | F2 §2.3d's proposed collectComparisonStructuralPopulation({comparison}) source-owned data schema, not a new @1 factory arm or mint | Require branchId equal one granted column. Every fork-inclusive path occurrence on both prefixes owns its actual position and17 ordered exact-family result rows, including successful empties, genuine source values and closed named-structure@2 conversion. Preserve complete peer unions, predecessor absence/reappearance and order; no positive-only or whole-tip substitute. The nominal complete data image is not itself an F1 derivation or permission. The exact successor/factory/reduction remains held until grammar and source/joint acceptance; current topic retention is conditional. |
 | `derived.compare.eval_delta@2` | `{before,after,comparison: RecordedComparisonSource,branchId:string}` exactly, per F2 §2.3a | Source owner reconstructs the complete recorded trail on the granted column and selects consecutive report pairs in stable ply/event order. Both exact sealed recorded.inspector.eval_packet@1 inputs, event/head/node membership and the comparison source must validate; arbitrary supplied pairs are not a trail. Preserve safe-integer cp parsing and STORY_PIVOT_CP, with no mate conversion. Emit the new recorded_cp_numbers/provider_not_established frame and disclose unverified comparability; do not label this a modern validated engine delta. |
 
 The old `{run, comparison, branchId}` arms remain unchanged for their existing callers.
@@ -3595,6 +3595,9 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3847 comparison supplier now points to F2 §2.3d's literal17-family
+  complete population schema. Successor identity/factory/reduction remain held; no new @1 arm,
+  actual supplier, source qualification or joint Inspector acceptance follows.
 - 2026-10-15 — Unaccepted D3768/D3847 replaces the fork topic/supplier with the exact nonterminal
   source and coordinates Nudge/Review/Hint successor consumers through the same single-policy
   exact-version image as Inspector. The requirements map replaces19/retains56 topics, still75+6

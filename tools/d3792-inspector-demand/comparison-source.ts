@@ -1,5 +1,6 @@
 // DISPOSABLE D3820 source-boundary experiment, not a scoped factory, access grant or HTTP/UI.
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { createRun, canonicalRunStart, commitMove, rewind, fork, revealFeedback, branchPath,
   compareBranches, attachEvidence, reachCheckpoint, transitionObjective, structuralReading, readBackReplay,
   observationIdentity, STRUCTURAL_FEATURE_KINDS, type BranchComparison, type DrillRun, type StructuralObservation,
@@ -38,6 +39,17 @@ function expectedStructure(paths: readonly (readonly DrillRun["nodes"][number][]
 // D3847: reconstruct the entire observation population from actual named factories. Empty
 // family results remain explicit rows in this experiment, NOT fabricated sealed absence facts.
 const structuralRefs = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.compare.structure_delta")!.derivation!.inputs!;
+// Domain-table consistency only; this is NOT a collection/reduction implementation.
+const sourceDraft = readFileSync("rfc/evidence-value-authority.md", "utf8");
+function checkStructuralFamilyTable(text: string) {
+  const table = text.split("| rules.structural.reading suffix | Exact version |")[1]!.split("\n\n")[0]!;
+  const refs = [...table.matchAll(/^\| ([a-z_]+) \| ([1-9][0-9]*) \|$/gmu)]
+    .map(row => ({ id: `rules.structural.reading.${row[1]!}`, version: Number(row[2]) }));
+  assert.deepEqual(refs, structuralRefs, "the draft must keep the actual ordered exact17-family vocabulary");
+}
+checkStructuralFamilyTable(sourceDraft);
+assert.throws(() => checkStructuralFamilyTable(sourceDraft.replace("| named_structure | 2 |", "| named_structure | 1 |")));
+assert.throws(() => checkStructuralFamilyTable(sourceDraft.replace("| outpost | 1 |\n", "")));
 const sourcePopulations = new Map<string, { features: readonly StructuralObservation[]; sizes: readonly number[] }>();
 function sourceFeatures(fen: string): readonly StructuralObservation[] {
   const known = sourcePopulations.get(fen);
@@ -302,6 +314,7 @@ if (structuralExperiment) {
   assert.deepEqual([...structuralInputCounts], [0]);
   assert([...sourcePopulations.values()].some(row => row.sizes.some(size => size === 0)));
   console.log(JSON.stringify({ scope: "D3847 complete structural source reconstruction/negative selection; not successor receipts or qualification",
+    draftExactFamilyTableChecked: true, missingOrOldNamedVersionTableRefused: true,
     familyRefs: structuralRefs.length, distinctFenPopulations: sourcePopulations.size, sourceReconstructionCases,
     additionalStrictPeerPairs: 2, distinctNodeAbsentBetweenWitness: true,
     peerExtensionSuppressions, laterPeerSuppressions, repeatedAppearanceItems, namedStructurePositiveCases: 2,

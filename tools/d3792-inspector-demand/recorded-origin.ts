@@ -23,7 +23,7 @@ import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, compileEv
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
 import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src/story.js";
-import { reviewPacketForRun, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
+import { reviewPacketForRun, reviewSubjectPath, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
 import { importedRun, importRecord, evaluationDelivery, attachDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points.js";
 
@@ -699,10 +699,31 @@ console.log(JSON.stringify({ scope: "D3847 actual promotion source and prospecti
 // D3847: "last" is selection over the entire recorded available point population. All engine
 // deliveries below are explicitly synthetic parser/seal fixtures, not a live provider experiment.
 let lastLevelCases = 0, sameSelectedDifferentPopulation = 0, laterPointChangesSelection = 0;
-let lastLevelEmptyCases = 0, terminalGateCases = 0, sameSelectionDistinctCoverage = 0;
+let lastLevelEmptyCases = 0, terminalGateCases = 0, sameSelectionDistinctCoverage = 0, rejectedDeliveryContrasts = 0;
 const lastLevelDeclared = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.story.last_level")!.derivation!.inputs!;
 function packetPoints(packet: ReturnType<typeof reviewPacketForRun>): readonly DeclaredEvidence<ReviewEnginePoint>[] {
-  return packet.nodes.flatMap(node => node.items.filter(value => value.projection.id === "derived.review.eval_point") as readonly DeclaredEvidence<ReviewEnginePoint>[]);
+  // Reinspect actual old packet slots; this is not the proposed boundary/population constructor.
+  assert.deepEqual(packet.nodes.map(node => node.nodeId), packet.subject.pathNodeIds);
+  const originalPath = reviewSubjectPath(packet.subject).path;
+  return packet.nodes.flatMap((node, index) => {
+    const original = originalPath[index]!;
+    assert.equal(original.id, node.nodeId);
+    const slots = node.families.engine_eval.sources.filter(slot => slot.adapterId === "review.source.eval_point@1");
+    assert.equal(slots.length, 1, "one source-owned point slot per path occurrence");
+    const slot = slots[0]!;
+    const points = node.items.filter(value => value.projection.id === "derived.review.eval_point") as readonly DeclaredEvidence<ReviewEnginePoint>[];
+    assert.equal(points.length, slot.state.kind === "available" ? 1 : 0);
+    if (slot.state.kind === "available") assert.equal(slot.state.itemCount, 1);
+    for (const point of points) {
+      assertDeclaredEvidence(point);
+      assert.deepEqual(point.projection, { id: "derived.review.eval_point", version: 1 });
+      assert.equal(evidenceValueReceipt(point).factory, "createDerivedReviewEvalPointV1Evidence");
+      assert.deepEqual(point.payload.position.payload, { nodeId: original.id, ply: original.ply, fen: original.fen });
+      assert.deepEqual(evidenceValueReceipt(point).sourceDigests,
+        [point.payload.evaluation, point.payload.position].map(value => evidenceValueReceipt(value).payloadDigest));
+    }
+    return points;
+  });
 }
 function lastLevel(packet: ReturnType<typeof reviewPacketForRun>, points = packetPoints(packet)) {
   assert.equal(packet.subject.outcome.kind, "recorded_result");
@@ -753,6 +774,26 @@ for (const side of ["white", "black"] as const) {
   assert.equal(coverage[1]!.packet.completion.progress.kind, "progressive");
   assert.equal(coverage[2]!.packet.completion.degradation.kind, "degraded");
   sameSelectionDistinctCoverage += coverage.length;
+  // Genuine synthetic deliveries for the wrong original FEN: conversion folds both to the same
+  // unavailable state. A prospective population must retain the captured input, not that fold alone.
+  const rejected = ["cp 11", "cp 22"].map(score => {
+    const delivery = invokeEvidenceValueRoute("live.stockfish.position_eval@1", {
+      delivery: evaluationDelivery(path[0]!.fen, score),
+    });
+    const engine = new Map<string, ReviewProviderNodeState>(path.map((node, index) => [node.id,
+      { kind: "delivered", delivery: index === path.length - 1 ? delivery
+        : invokeEvidenceValueRoute("live.stockfish.position_eval@1", { delivery: deliveries[index]! }) }]));
+    const packet = reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, result), engine });
+    const finalNode = packet.nodes.at(-1)!;
+    const slot = finalNode.families.engine_eval.sources.find(value => value.adapterId === "review.source.eval_point@1")!;
+    assert.deepEqual(slot.state, { kind: "unavailable", reason: "input_abstained" });
+    assert(!packetPoints(packet).some(value => value.payload.position.payload.nodeId === final.id));
+    assert.equal(lastLevel(packet)[0]!.nodeId, path[2]!.id);
+    return { state: slot.state, input: evidenceValueReceipt(delivery).inputDigest };
+  });
+  assert.deepEqual(rejected[0]!.state, rejected[1]!.state);
+  assert.notEqual(rejected[0]!.input, rejected[1]!.input);
+  rejectedDeliveryContrasts++;
   const noPoints = reviewPacketForRun(base, base.activeCursor.branchId, { importRecord: importRecord(base, result) });
   assert.deepEqual(lastLevel(noPoints), []); lastLevelEmptyCases++;
   let mateOnly = base;
@@ -774,7 +815,9 @@ for (const side of ["white", "black"] as const) {
   terminalGateCases++; lastLevelCases++;
 }
 console.log(JSON.stringify({ scope: "D3847 actual Story selection and recorded coverage; synthetic deliveries, no successor or provider proof",
+  oneActualPointSlotPerPathNodeChecked: true, exactActualPointSourceOrderChecked: true,
   sides: lastLevelCases, declaredFixedInputs: lastLevelDeclared.length, actualSelectedInputCount: 1,
   sameSelectedDifferentPopulation, laterPointChangesSelection, sameSelectionDistinctCoverage,
+  rejectedDeliveryContrasts,
   successfulEmptyCases: lastLevelEmptyCases, terminalGateCases, oldInputAuthorityBindsPopulation: true,
   sourceCoverageNotInSelectedLineage: true, liveProviderCalls: 0, productionChanges: 0 }));

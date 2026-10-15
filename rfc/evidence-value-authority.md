@@ -453,7 +453,18 @@ still exists and has a legal promotion on its next turn. No replies gives false.
 as a legal pawn move to the final rank, not a chosen promotion piece or a tablebase outcome.
 Its limitations forbid outcome, arbitrary-future inevitability, safety, importance, intent,
 recommendation or move-quality claims. Bind this direct convention to the new projection with
-definition-and-limitations disclosure. The existing operation at5542cc2d is the landed-code
+source-reviewed reviewed_text disclosure, not the initial-migration-only definition_and_limitations
+arm (D3854). Its exact fields are:
+
+```json
+{
+  "kind": "reviewed_text",
+  "summary": "Passed-pawn geometry and legal promotion availability, including the declared pass-clone and immediate-reply tests.",
+  "detail": "Select passed pawns belonging to the side opposite the current side to move; report the forward path through the promotion square, its occupied blockers and both colors' pseudo-attackers of that square. For pass availability, set that pawn's color to move and clear en passant; return invalid_turn_clone when chessops refuses the clone, otherwise whether that pawn has a legal promotion now. For reply persistence, require at least one current legal reply and, after every such reply, the same source-square pawn/color still exists and has a legal promotion on its next turn. No replies gives false. Promotion means a legal pawn move to the final rank, not a chosen promotion piece or a tablebase outcome. No outcome, arbitrary-future inevitability, safety, importance, intent, recommendation or move-quality claim follows."
+}
+```
+
+No new teaching interpretation is authorized. The existing operation at5542cc2d is the landed-code
 authority witness; do not label the proposed projection itself landed. Preserve primary
 position_rules/exact/not_applicable and fact-only old forms; convention identity is an additional
 axis, not a fabricated ancestry from the old three predicate declarations.
@@ -471,7 +482,7 @@ The disposable recipe and metadata compilation establish none of these new runti
 Independent upstream and joint review remain mandatory; D3847's other classes and D3845 grammar
 are not discharged by these three proposals.
 
-#### 2.3d D3847 selection-source obligations — unresolved, not an implementation contract
+#### 2.3d Draft D3847 selection populations — domain schemas authored, reduction held
 
 The measured structural/Story selections need complete population authority, not merely positive
 witnesses. The existing comparison instrument reconstructs 17 actual family populations at 44
@@ -482,6 +493,89 @@ each requested predecessor and original occurrence/order, including successful e
 A displayed observation, one reading at each endpoint, a list of only changed nodes or an opaque
 source handle does not establish those negative tests. Record raw named-structure inputs as well
 as the exact legacy observation projection; do not silently interchange their payload shapes.
+
+**Structural population schema — unaccepted.** The source owner first constructs the genuine
+RecordedComparisonSource under module-registration §4.11a, with its already specified complete
+original-path/FEN validation, independent snapshot and exact primary/peer grants. Proposed
+collectComparisonStructuralPopulation takes exactly `{comparison:RecordedComparisonSource}`;
+it is runtime-internal, not a client/source-data API or a new evidence projection. Its result is
+nominal and runtime-owned, with an independent immutable data reader accessible only to the
+comparison/reduction owners. A symbol property alone does not authenticate it. Copies, arbitrary
+caller row arrays and a genuine population from another comparison cannot substitute. The
+subsequent source factory must bind the **complete data image** below, not merely this brand.
+
+The closed data image has only comparison and columns. Comparison is the actual admitted
+source, not a copied BranchComparison summary. Columns is an ordered two-tuple, primary then
+peer, each exactly `{branchId,throughNodeId,nodes}` matching the captured grant. Nodes contains
+every original path occurrence from the common fork **inclusive** through that column's exact
+endpoint, in path order. Earlier nodes remain in the original validation/scope image but need
+no unused structural witness. Each node row is exactly `{pathIndex,position,families}`:
+
+- pathIndex is its original zero-based index in that granted root-to-endpoint path, not a
+  filtered observation index. The row's position is the original sealed run.record.position@1
+  made by its sole factory from that source-owned run/node. Original creating branch and the
+  requested column remain distinct in the source. Equal FENs at distinct nodes/occurrences
+  are not interchangeable; a shared fork may legitimately occur in both column rows.
+- families has exactly the following17 rows, in this order, never a current/latest wildcard.
+  Each is exactly `{projection,items}` with its literal ref and the complete ordered result
+  from that family's sole `{fen}` factory at the position's full canonical FEN. The source
+  collector itself invokes it and retains the genuine return; it does not accept caller lists.
+
+| rules.structural.reading suffix | Exact version |
+|---|---|
+| pawn_safe_square | 1 |
+| outpost | 1 |
+| backward_pawn | 1 |
+| isolated_pawn | 1 |
+| doubled_pawn | 1 |
+| passed_pawn | 1 |
+| open_file | 1 |
+| half_open_file | 1 |
+| line_blockers | 1 |
+| direct_attack_count | 1 |
+| piece_reach_count | 1 |
+| named_structure | 2 |
+| bishop_on_shade | 1 |
+| king_opposition | 1 |
+| piece_count | 1 |
+| king_zone | 1 |
+| piece_distance | 1 |
+
+items is the original sealed population, including a successful empty array. An absent family,
+thrown/failed operation or unexecuted family is not an empty row and fails collection. These
+explicit empty result rows are **not sealed absence facts**. Every item must have the exact
+ref/factory and private canonical `{fen}` authority of its row. Validate complete row order,
+scope/FEN joins and array identity against the source-owned invocations before admitting the
+population; validating each positive item alone cannot prove completeness. Do not insert an
+extra pawn_count row, drop an empty family, deduplicate equal source payloads or infer completeness
+from an emitted count. Local reuse at equal FEN may share immutable factory values, but every
+column/node/family occurrence and within-family ordinal remains in the population identity.
+No provider is called and no whole-tip structural read is hidden behind the bounded source.
+
+Compute the legacy observation view only through this closed conversion: every family except
+named_structure uses the actual StructuralObservation payload unchanged; named_structure@2
+maps to exactly `{kind:"named_structure",squares,provenanceNote}` while retaining its full raw
+id/name source alongside that view. Sort by the existing STRUCTURAL_FEATURE_KINDS order excluding
+pawn_count, then the existing JSON observation key. Comparison identity is the existing
+observationIdentity, including pawn_safe_square's intentional kind/color/squares-only identity;
+it is not a new full-payload equality rule or teaching interpretation.
+
+The selection first unions all post-fork observations in **each complete granted column**,
+then intersects those unions. For the requested branch, walk fork-to-endpoint, comparing each
+node's complete view with its immediate predecessor and excluding the common identities.
+The fork supplies predecessor context but emits no entry. Retain every newly appearing
+observation in existing node/observation order, including reappearance after a genuine gap.
+An observation on the peer after the displayed node but inside its grant can suppress an entry;
+there is no earliest-positive-only or matched-node crop. Output payload remains the old complete
+StructuralObservationChange for each selected occurrence. No new before-value, importance,
+significance, named plan or grade is invented. Successful zero differences yields zero items,
+not a fabricated negative observation or an unavailable source.
+
+The future reduction receipt must retain the comparison scope, every ordered column/node/family
+result row (including successful empties), original sealed items and the closed conversion/selection
+identity. Replacing that with only selected positives or a set of source refs is refused. How F1
+represents these repeated/empty groups is still the D3845 grammar obligation below; this schema
+does not authorize empty fixed members, a generic aggregate leaf or a source-receipt fallback.
 
 Last-level differs from rank and structural difference. Its successor must consume the complete
 source-owned **recorded available** point population and actual coverage states, learner side,
@@ -494,8 +588,87 @@ recorded_result-only loss gate; board-terminal loss does not invoke this Story f
 successful empty/mate-only results and specify equal-index/duplicate handling against the actual
 source owner's point population rather than inventing a new ordering.
 
-Before acceptance, author each exact successor's literal population/state schema, sole factory
-and callable, empty-result identity, execution templates versus actual occurrences, source joins,
+**Last-level population schema — unaccepted.** Review §4.5's genuine RecordedReviewBoundary
+and independently captured server-owned ReviewSourceContext supply proposed runtime-internal
+collectRecordedLastLevelPopulation's sole arm `{boundary,context}`. The boundary's owning
+authority validates its current issuer/storage/head/path/import context first; the collection
+cannot take an HTTP packet, caller run/result, arbitrary point list or cropped full-tip Story.
+Share the existing internal point/adapter preparation without casting a boundary into the old
+prefix receipt. It runs no new engine request, promotion search or provider refresh: it projects
+only this boundary's actual admitted source context and registered adapter execution.
+
+The immutable nominal population's closed data image is exactly
+`{boundary,learnerSide,outcome,rows}`. Retain the complete boundary operand image, not only a
+brand, so scope/state changes cannot alias the same selected point. learnerSide and outcome
+are derived from that boundary without caller overrides. Outcome retains the existing distinct
+unfinished/board_terminal/recorded_result union and its complete recorded fields. In particular,
+an imported result is eligible only at its original full endpoint, never by cropping a completed
+whole-game source. Current access/disclosure and post-work revalidation stay separate obligations.
+
+Rows has exactly one ordered row for **every** granted root-to-endpoint path node, including
+nodes with no point. Each is exactly `{pathIndex,position,slot,provider,state,points}`.
+pathIndex is consecutive from zero and position is the actual original run.record.position@1
+from this boundary's internal source preparation. Slot is the complete existing ReviewSourcePlanSlot
+image `{invocationId,adapterId,family,grain,nodeId,fromNodeId,window}` from the actual boundary
+invocation plan: adapterId review.source.eval_point@1, family engine_eval, grain node, the same
+original nodeId, fromNodeId:null and the original invocationId/window. It is not a fabricated
+reference or selected output ordinal. Provider is the exact captured closed ReviewProviderNodeState
+for that node, or null for an actually absent engine-context map entry. Null and an explicit
+not_requested entry remain different captured inputs although both fold to not_requested output.
+In particular a delivered arm retains its genuine original delivery even if point conversion
+fails and state becomes unavailable/input_abstained with points:[]. Do not reconstruct provider
+from the folded state or omit rejected deliveries: distinct captured inputs must not alias merely
+because both conversions fail. The immutable complete image binds these inputs as well as results.
+Every row must occur once in original node order; unknown, duplicated, omitted or reordered
+nodes/slots refuse. Context entries outside the granted path do not enter this population.
+
+State uses the existing **closed ReviewAdapterState** without lossy regrouping. Available means
+itemCount:1 and points contains exactly that adapter's one genuine derived.review.eval_point@1.
+Every other state has points:[] and preserves its actual reason/counters: honest_empty,
+not_requested, not_yet_scheduled, pending or unavailable remain distinct. An available state
+with zero/two points, a nonavailable state with a point, a changed pending count or a substituted
+unavailability reason refuses. These are source result/state rows, not sealed chess absence
+facts. Missing context-map entries use only the existing source owner's not_requested rule;
+an available value removed by a caller is not missing context or honest_empty.
+
+The source-owned adapter prepares each point from its actual same-snapshot position and genuine
+node-free delivery, retaining both sealed inputs. Verify exact ref/factory, private source joins,
+canonical FEN, node id/ply, original run/head and boundary occurrence. Equal labels/FENs or a
+genuine point from another run/head do not establish this membership. Preserve typed mate and
+centipawn scores, engine/bound/frame/availability and original source order without conversion,
+clamping or an engine-comparability claim. The source collector owns the complete adapter result;
+item seals alone do not prove that a supplied subset is complete. Source/caller mutation after
+construction cannot alter state, ordering, points or the underlying scope. Current coordinator
+state changes after capture require a new/revalidated source, not mutation of the admitted one.
+
+This owned slot contract has at most one point per unique path index. Do not choose first/last
+among duplicated new-source rows: duplicates are a source-contract error. Distinct nodes with
+equal FENs remain distinct valid occurrences. The old factory's arbitrary-array arm and its
+first-qualifying-point behavior for equal-index inputs remain unchanged for old callers; that
+permissiveness is not imported into the new owned population.
+
+Validate the genuine complete population before any eligibility shortcut. For a recorded_result
+learner loss only, scan all available points in path order, skip mate points, convert White cp
+to the learner's perspective and select the greatest pathIndex with learnerCp >= -100. This is
+the existing one-pawn lower threshold, not absolute distance from zero. Preserve the full selected
+point's old recordedResult/evaluation payload and recorded node/ply occurrence. Unfinished,
+board-terminal, nonloss, all-mate and no-qualifying-point inputs yield zero result items, not a
+fake last-level fact or source-unavailable result. A qualifying root point may still be the
+primitive's selected point; the existing Story assembler separately excludes root moments because
+there is no recorded decision edge. Do not silently merge those two stages.
+
+Every available point and every missing/pending/unavailable/empty slot belongs in the reduction's
+ordered population authority, even when its selected output is unchanged. This means complete
+collection of the recorded available data, **not** complete analysis of the game. A later pending
+or unrequested point must remain visible in the containing Review's progress/degradation; a
+last-level result never establishes no later qualifying position. The future reduction receipt
+must bind these states and original scope alongside the exact literal item occurrences, not only
+the selected point. It adds no longitudinal rebuild, profile judgement or new engine acquisition.
+
+**Reduction and successor hold.** The two domain schemas above are proposed source-owner data
+contracts, not a generic CollectionEvidence primitive, new mint, permission or completed derivation.
+Before acceptance, author each exact successor's sole factory and callable, empty-result identity,
+execution templates versus actual occurrences, source joins,
 convention/grounding/answer limits and compatibility with frozen predecessors. D3845's proposed
 rank reduction is not automatic authority for these different computations. No new factory name
 or generic computed/derived leaf is inferred by this hold; no empty tuple, invented absence value,
@@ -508,6 +681,16 @@ Evidence: `design/research/module-evidence-assembly.md` §Compare and Story nega
 authority; existing comparison/prefix targets and independent read-only review. These are bounded
 reconstruction/selection controls, not new source completeness receipts, independent chess
 correctness, runtime qualification or upstream/joint acceptance.
+
+Joint acceptance requires actual source-owned construction/receipt and mutation tests, not these
+shapes alone: structural omission of any empty/positive row, reordered families/nodes, foreign
+equal-FEN inputs, both-column original-FEN failures before cache/work, named conversion loss and
+the later-peer/reappearance fixtures; Last-level every source-state arm, missing/duplicate point
+slots, foreign equal-node/FEN sources, changed reason/counters, both sides, exact -100 boundary,
+typed mate/root behavior and recorded-result-only applicability. The later convention-bound
+reduction must preserve those populations and zero-item outcomes without weakening existing
+fixed inputs/anyOf guards or borrowing absent families' answer authority. Source/API/native
+suppliers and the complete consumer image remain independently gated.
 
 #### 2.3e Draft D3847/D3852 computed strict-overload source — unaccepted
 
@@ -1169,6 +1352,13 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3847 §2.3d supplies exact domain population schemas for structural
+  comparison and recorded last-level selection, preserving empty/state/occurrence authority
+  and old algorithms. D3845's closed reduction grammar, successor factories and joint acceptance
+  remain held; no generic aggregate/absence leaf or current runtime adoption is authorized.
+- 2026-10-15: D3854 corrects the unaccepted promotion convention's later-source disclosure to
+  exact reviewed_text under the existing upstream restriction, preserving its code witness,
+  primary grounding, algorithm and claimed identity. No production or acceptance change.
 - 2026-10-15: unaccepted D3768/D3847 §2.3f specifies a fresh nonterminal fork source, exact two
   input authorities and claimed convention successor, coordinated packet/Hint/direct-consumer
   migration and terminal-aware rendering. Old meaning/history and the explicitly legacy vector

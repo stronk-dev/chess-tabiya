@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Selection population schemas, 2026-10-15 ([[D3847]]/[[D3845]]/[[D3854]]): F2 §2.3d now authors
+structural/last-level domain images and Review §4.5 the rank group image; reduction grammar is
+still held. Independent review catches a lost rejected-delivery input and clears the corrected
+slot/provider fields. Two both-color synthetic contrasts and actual point-slot/source-order
+checks pass under the existing research targets, after correcting the probe's transposition-key/
+full-FEN confusion. Promotion's reviewed_text correction is bounded authoring only. No production
+source, joint acceptance, API/native proof or gate promotion. `[V]` `module-evidence-assembly.md`
+§Population schemas and rejected-delivery review; dated Inspector independent review.
+
 Fork-terminal coordinated author image, 2026-10-15 ([[D3768]]/[[D3847]]/[[D3853]]): the existing
 terminal target passes26 tests, including isolated unchanged-F1 fork/Hint exact tuples and
 convention closure, not new factory/consumer adoption. D3853 finds the legacy vector borrowing

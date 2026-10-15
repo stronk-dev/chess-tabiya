@@ -32039,7 +32039,7 @@
       "id": "D3847",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:3bbfc3f82763103fdb5c2467e0b044d42e51673b751ac4ea63bb99ab593a2072",
+      "sourceDigest": "sha256:737fd4ae182298ce87583971b384835ec6c6b990ae35fd4ec977a146902d4a81",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32096,6 +32096,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
+    },
+    {
+      "id": "D3854",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:39a483d35141a52cf3428ac9d26487e25b75c78744dd513f67fe4fb595b11625",
+      "uxItems": [],
+      "evidence": "rfc/evidence-value-authority.md",
+      "evidenceKind": "path"
     }
   ]
 }

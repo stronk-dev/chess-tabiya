@@ -30421,3 +30421,42 @@ Campaign was the one capability with no API, route or content. Now:
   zero untriaged, and569 UX items retain their prior states. Stage only the19 explicit owned
   authoring/research/tracking files and commit through normal hooks; keep the three pre-existing
   untracked entries. No production application, factory, schema or ordinary test gate changed.
+
+## 2026-10-15 — D3847 selection-domain schemas and D3854 disclosure correction
+
+- Continue the active1.0 goal after087b34fc with complete domain schemas before reduction
+  grammar, as the authorized independent Inspector reviewer recommends. F2 §2.3d authors both
+  ordered structural columns/all17 exact family results including empties, original occurrences,
+  closed named-structure conversion and complete negative-selection inputs. It separately authors
+  the full recorded last-level boundary, result/side, point population and coverage-state image.
+  Review §4.5 supplies ordered rank moment groups. These remain unaccepted domain contracts.
+- Independent review returns a concrete image inconsistency: a delivered input whose point join
+  fails disappears from the initially closed state/points row. Retain the complete actual plan
+  slot and captured provider input, including rejected deliveries and null versus explicit
+  not_requested. The final read-only recheck closes that inconsistency and finds no further
+  blocker in those paragraphs, not schema/reduction/joint acceptance or implementation proof.
+- Ledger D3854 before correcting the second initial-migration-only disclosure instance. Promotion
+  now has exact reviewed_text summary/detail under the unchanged convention rule; no algorithm,
+  primary grounding, historical witness, runtime registration or claim changes. Independent review
+  clears this bounded author correction. This is the only row closed by the checkpoint.
+- Existing comparison/prefix research and strict types pass. Structural table checks reject a
+  missing family and old named_structure version. Actual old packet points retain exact factory,
+  original full FEN and ordered source receipts. The first run fails because the probe used
+  positionKey (a transposition key without clocks) as full FEN. Fix the instrument to read the
+  original admitted source path; do not change production or relax equality. Two both-color
+  synthetic wrong-FEN delivery contrasts then show equal folded unavailable/input_abstained
+  state and last-level selection despite different captured inputs. No live provider proof.
+- Work-state sync initially refuses the new unassigned row as designed. The first done transition
+  also refuses an inapplicable owner field; repeat the normal target without that field.3603 rows
+  now retain zero untriaged,1739 live and1702 done.569 UX items retain282 complete/263 live/24
+  retired. These are tracker states, not an implementation-completion percentage.
+- Normal make roadmap-receipt verify-governance passes, including size/artifact, RFC/resource,
+  work/roadmap, intent, tier, documentation and staged-process checks. No raw research recordings
+  become progress inputs. Full software/build/browser proof remains prior5542cc2d (5895 software,
+  seven performance,257 content,397 browser/one configured optional skip and112 unretried cells),
+  not a new full run for these research/draft-only edits. No remote CI success is claimed.
+- Update existing dossier/coverage, review receipt, queue, ledger/work-state and roadmap in the
+  same owned-file commit. Next author the smallest explicit convention-bound reduction and exact
+  successor contracts; D3851, sequence/coexistence, opaque/vector inputs and actual source/API/UI
+  delivery remain open. No protected intent, whole capability, milestone, source qualification,
+  official content, release, push or goal pause. Preserve the three pre-existing untracked entries.

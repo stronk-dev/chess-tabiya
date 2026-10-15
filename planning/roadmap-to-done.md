@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3853]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3854]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,17 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3847 now has proposed complete selection-domain schemas: F2 §2.3d's ordered structural
+columns/all17 family results and last-level point/state/provider inputs, plus Review §4.5's
+ordered rank groups. Independent review catches a rejected-delivery input missing from the
+closed image; the final read-only recheck clears the explicit slot/provider correction, not
+schema/reduction/joint acceptance. Both existing research targets/types pass, including two
+synthetic both-color rejected-input contrasts; the first probe's transposition-key/full-FEN
+assertion error is retained in the log. D3854 closes only promotion's draft disclosure wording.
+Next author the convention-bound reduction and exact successor contracts before actual source/
+consumer/API/native implementation. D3851 remains unanswered; all previous coexistence and
+history obligations remain. Production is unchanged from5542cc2d; no whole-product gate moves.
 
 D3768/D3847's coordinated repair is now authored, not implemented: F2 §2.3f/tactical §3.7a
 specify a fresh nonterminal fork source, exact two-input edge authority and claimed convention;
