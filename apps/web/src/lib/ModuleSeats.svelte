@@ -42,6 +42,39 @@
   const railSeats = $derived(occupiedRailSeats(seats, packets, pending, failed));
   const headSeat = $derived(seats.find((seat) => seat.headSlot));
 
+  let frame: HTMLDivElement;
+  const expandedPacket = $derived(expanded === undefined ? undefined : packets.get(expanded));
+  const expandedPending = $derived(expanded !== undefined && pending.has(expanded));
+  const expandedFailed = $derived(expanded !== undefined && failed.has(expanded));
+  const expandedRecovery = $derived(expanded === "compare_coach" ? missingAttemptRecovery : undefined);
+  $effect(() => {
+    const module = expanded, tablet = band;
+    // Observe only this seat's current delivery, never other packets or the user's scroll.
+    void expandedPacket; void expandedPending; void expandedFailed; void expandedRecovery;
+    if (module === undefined) return;
+    let current = true;
+    void tick().then(() => {
+      if (!current || !frame?.isConnected) return;
+      const seat = frame.querySelector<HTMLElement>(`[data-module="${module}"]`);
+      const card = seat?.querySelector<HTMLElement>(".seat-card");
+      if (!seat || !card || card.hidden || seat.getClientRects().length === 0) return;
+      const region = tablet ? card : frame.closest<HTMLElement>(".companion-section");
+      if (!region || region.clientHeight === 0 || getComputedStyle(region).overflowY !== "auto") return;
+      const bounds = region.getBoundingClientRect();
+      const actions = card.querySelector("[data-keep-playing]")?.closest<HTMLElement>(".seat-actions");
+      if (actions) {
+        const box = actions.getBoundingClientRect();
+        // Leave a small inset: fractional layout and integer scrollTop rounding must not
+        // leave even the last border pixel of a recovery control behind the clipping edge.
+        const top = bounds.top + region.clientTop + 4, bottom = bounds.top + region.clientTop + region.clientHeight - 4;
+        if (box.bottom > bottom) region.scrollTop += box.bottom - bottom;
+        else if (box.top < top) region.scrollTop += box.top - top;
+      } else if (!tablet) region.scrollTop += seat.getBoundingClientRect().top - bounds.top - region.clientTop;
+      // Only the bounded region scrolls. No focus change, page scroll, request or remount.
+    });
+    return () => { current = false; };
+  });
+
   let recoveryFocus: { readonly module: PlaySeatModule; readonly button: HTMLButtonElement } | undefined;
   $effect.pre(() => {
     const failures = failed, requests = pending;
@@ -65,7 +98,7 @@
   }
 </script>
 
-<div class="module-seats" class:band data-seat-count={railSeats.length + (staged === undefined || headSeat === undefined ? 0 : 1)}>
+<div bind:this={frame} class="module-seats" class:band data-seat-count={railSeats.length + (staged === undefined || headSeat === undefined ? 0 : 1)}>
   {#if headSeat !== undefined && staged !== undefined}
     <CompanionSeat id="blunder_prevention" module="blunder_prevention" label={headSeat.label} headSlot {band} state={staged.state}>
       {#if staged.state === "checking"}

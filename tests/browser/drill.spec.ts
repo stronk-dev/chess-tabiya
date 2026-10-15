@@ -165,6 +165,21 @@ async function assertTabletQueueHead(page: Page, id: string): Promise<void> {
   expect(await page.getByLabel("Support", { exact: true }).last().evaluate((element) => element.scrollHeight <= element.clientHeight)).toBe(true);
 }
 
+/** A visible DOM node can still be clipped or covered; never scroll it as part of this check. */
+async function assertControlUnclipped(control: Locator): Promise<void> {
+  await expect.poll(() => control.evaluate(element => {
+    const box = element.getBoundingClientRect();
+    let inside = box.width > 0 && box.height > 0 && box.left >= 0 && box.top >= 0
+      && box.right <= innerWidth && box.bottom <= innerHeight;
+    for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+      const style = getComputedStyle(parent), bounds = parent.getBoundingClientRect();
+      if (/(auto|scroll|hidden|clip)/u.test(style.overflowY)) inside &&= box.top >= bounds.top - .5 && box.bottom <= bounds.bottom + .5;
+      if (/(auto|scroll|hidden|clip)/u.test(style.overflowX)) inside &&= box.left >= bounds.left - .5 && box.right <= bounds.right + .5;
+    }
+    return { inside, hit: element.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)) };
+  })).toEqual({ inside: true, hit: true });
+}
+
 async function assertTopbarSeparation(page: Page, width: number): Promise<void> {
   const brand = (await page.locator(".topbar .wordmark").boundingBox())!;
   const context = (await page.locator(".topbar .status").boundingBox())!;
@@ -5011,11 +5026,14 @@ test(`D3837 missing comparison becomes a preserved second attempt (${side}, ${vi
     if (await reveal.isVisible()) await reveal.click();
     const seat = page.locator('[data-module="compare_coach"]');
     await seat.locator(".seat-row").click();
+    await expect(seat.locator(".seat-row")).toBeFocused();
     const pending = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().postDataJSON()?.query?.requested?.includes("compare_coach"));
     await seat.getByRole("button", { name: "Show", exact: true }).click();
     const pageResult = ((await (await pending).json()) as { page: ModuleQueryPage }).page;
     return { seat, pageResult };
   };
+  const restingBoard = await page.getByLabel("Chessboard", { exact: true }).boundingBox();
+  const pageScroll = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
   const { seat, pageResult } = await openCompare();
   expect(pageResult.suppressions).toContainEqual({ module: "compare_coach", reason: "no_second_attempt" });
   expect(pageResult.packets.some(packet => packet.module === "compare_coach")).toBe(false);
@@ -5024,6 +5042,14 @@ test(`D3837 missing comparison becomes a preserved second attempt (${side}, ${vi
   await expect(seat.getByRole("button", { name: "Keep playing", exact: true })).toBeVisible();
   const recovery = seat.getByRole("button", { name: "Rewind to a decision", exact: true });
   await expect(recovery).toBeVisible();
+  // D3838: neither DOM visibility nor Playwright's auto-scrolling click proves discoverability.
+  // Inspect the actual clipped rectangle and native hit target before any recovery action click.
+  for (const control of [seat.getByRole("button", { name: "Keep playing", exact: true }), recovery]) {
+    await assertControlUnclipped(control);
+  }
+  expect(await page.getByLabel("Chessboard", { exact: true }).boundingBox()).toEqual(restingBoard);
+  expect(await page.evaluate(() => ({ x: scrollX, y: scrollY }))).toEqual(pageScroll);
+  await expect(seat.locator(".seat-title")).toHaveCount(0);
   await testInfo.attach("missing-attempt-recovery", { body: await page.screenshot({ path: testInfo.outputPath("missing-attempt-recovery.png") }), contentType: "image/png" });
   const before = await graph(), root = before.nodes.find(node => node.parentId === null)!;
   const board = await page.getByLabel("Chessboard", { exact: true }).boundingBox();
@@ -5119,7 +5145,8 @@ test(`D3744 Support opens the exact recognized Library pattern and preserves the
   const theory = page.locator('[data-module="theory_breadcrumb"]');
   const question = "Has anyone written about this position, and where?";
   await theory.getByRole("button", { name: question, exact: true }).click();
-  await expect(theory.locator(".seat-title")).toHaveText(question);
+  await expect(theory.locator(".seat-label")).toHaveText(question);
+  await expect(theory.locator(".seat-title")).toHaveCount(0);
   const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().method() === "POST" && res.request().postDataJSON().query?.requested?.includes("theory_breadcrumb"));
   await theory.getByRole("button", { name: "Show", exact: true }).click();
   const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(item => item.module === "theory_breadcrumb");
@@ -5278,7 +5305,11 @@ test("@matrix maximum-load modules use real requests and evidence at every viewp
     for (const module of ["postcommit_nudge", "structure_nudge", "theory_breadcrumb", "compare_coach", "threat_radar", "sight_on_request"]) {
       await seat(module).locator(".seat-row").click();
       await expect(seat(module)).toHaveAttribute("data-seat-state", "expanded");
-      await expect(seat(module).locator(".seat-title")).toHaveText(questions[module]!);
+      if (viewport.width === 768) await expect(seat(module).locator(".seat-title")).toHaveText(questions[module]!);
+      else {
+        await expect(seat(module).locator(".seat-label")).toHaveText(questions[module]!);
+        await expect(seat(module).locator(".seat-title")).toHaveCount(0);
+      }
       await expect(page.locator('[data-seat-state="expanded"]')).toHaveCount(1);
       await expect(seat("guided_hint").locator(".hint-card")).toBeHidden();
       if (viewport.width === 768) await assertTabletQueueHead(page, module);
@@ -5436,6 +5467,8 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     }
     await expect(keepPlaying).toBeInViewport({ ratio: 1 });
     await expect(rewind).toBeInViewport({ ratio: 1 });
+    await assertControlUnclipped(keepPlaying);
+    await assertControlUnclipped(rewind);
     expect(await theory.evaluate(element => {
       const keep = element.querySelector("[data-keep-playing]")!, rewind = element.querySelector("[data-empty-rewind]")!;
       return keep.parentElement === rewind.parentElement && [...element.querySelectorAll(".unavailable")]

@@ -20,7 +20,7 @@ it("the tools selector shares expansion without becoming an evidence module", ()
   expect(PLAY_SEAT_MODULES).not.toContain("support_tools");
 });
 
-it.each([false, true])("D3744 exposes the complete question in an expanded card, band=%s", async band => {
+it.each([false, true])("D3838 exposes the complete question once without losing the mounted card, band=%s", async band => {
   const label = "What can the opponent's pieces do to me from this position?";
   const toggle = vi.fn();
   const flags = new SvelteMap([["open", false]]);
@@ -35,7 +35,9 @@ it.each([false, true])("D3744 exposes the complete question in an expanded card,
   expect(control.getAttribute("aria-controls")).toBe("threat_radar-card");
   expect(control.querySelector(".seat-label")?.textContent).toBe(band ? "Threats" : label);
   flags.set("open", true); await tick();
-  expect(document.querySelector(".seat-title")?.textContent).toBe(label);
+  expect(document.querySelectorAll(".seat-title")).toHaveLength(band ? 1 : 0);
+  if (band) expect(document.querySelector(".seat-title")?.textContent).toBe(label);
+  expect([...document.querySelectorAll(".seat-label, .seat-title")].filter(node => node.textContent === label)).toHaveLength(1);
   const input = document.querySelector<HTMLInputElement>("input")!;
   input.value = "kept";
   flags.set("open", false); await tick();
@@ -44,6 +46,19 @@ it.each([false, true])("D3744 exposes the complete question in an expanded card,
   expect(document.querySelector("input")).toBe(input);
   expect(input.value).toBe("kept");
   expect(toggle).not.toHaveBeenCalled();
+});
+
+it("D3838 keeps a visible question when there is no ordinary selector", async () => {
+  mounted.push(mount(CompanionSeat, { target: document.body, props: {
+    id: "plain", label: "Plain question", children: body(),
+  } }));
+  mounted.push(mount(CompanionSeat, { target: document.body, props: {
+    id: "support_tools", label: "Support tools", tools: true, children: body(),
+  } }));
+  await tick();
+  expect(document.querySelectorAll("h2")).toHaveLength(1);
+  expect(document.querySelector("h2")?.textContent).toBe("Plain question");
+  expect([...document.querySelectorAll(".seat-title")].map(node => node.textContent)).toEqual(["Support tools"]);
 });
 
 it.each([undefined, null, 0, 2])("the collapsed selector renders only its supplied count %s and never creates a head", async badge => {

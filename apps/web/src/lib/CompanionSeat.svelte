@@ -45,7 +45,7 @@
   <!-- Hidden preserves a mounted Hint's request/rung and existing Support control state. -->
   <div id={`${id}-card`} class="seat-card" class:tools-card={tools} hidden={!shown}
     data-queue-head={band && shown ? id : undefined}>
-    {#if shown && !headSlot}<strong class="seat-title">{label}</strong>{/if}
+    {#if shown && !headSlot && (band || tools)}<strong class="seat-title">{label}</strong>{/if}
     {@render children()}
   </div>
 </section>

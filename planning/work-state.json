@@ -31954,11 +31954,12 @@
     },
     {
       "id": "D3838",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f8d39fe56fdf5e02987147cf8f564b422b1e02ac0734a0dc96b071d4e841bb22",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c304e087ac807fb491d45e958745be3cc7dc443c066d93e27c7d70bb1e28e18c",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

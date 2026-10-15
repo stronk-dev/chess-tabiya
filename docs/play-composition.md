@@ -49,9 +49,14 @@ same expansion authority: opening it collapses the other module card and vice ve
 hint keeps its exact decision and rung while hiding both its card and board marks. Reopening it
 does not request another hint; only **Hint** or **A little more** advances the disclosure.
 
-Ordinary module rows and expanded cards use the registered learner question (`MODULE_POLICIES.intent`),
-not the internal module name. Desktop/phone rows reserve a fixed height for wrapped questions;
-tablet selectors retain compact labels with the complete accessible question and expanded heading.
+Ordinary module seats use the registered learner question (`MODULE_POLICIES.intent`), not the
+internal module name. Desktop/phone rows reserve a fixed height for wrapped questions and do not
+repeat the question in the card. Tablet selectors retain compact labels with the complete
+accessible question and expanded heading. Controls without an ordinary selector retain their title.
+Opening a module-query card reveals it within Support; a current empty answer reveals its Keep
+playing/rewind row in that same bounded scroller (inside the card on tablet). This does not move
+the page/board or keyboard focus, remount content, or request evidence. Other seats' answers,
+collapsed/hidden cards and late retired deliveries cannot take over the selected seat's reveal.
 Guided Hint keeps its existing Hint/A little more actions. This changes presentation only: no new
 answer, evidence, permission, disclosure rung or request is created by opening or relabelling a card.
 

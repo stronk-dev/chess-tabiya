@@ -92,7 +92,8 @@ describe("GuidedHintSeat", () => {
     await settle();
     const question = "I am stuck — reveal the least that will unstick me.";
     expect(document.querySelector('[data-module="guided_hint"]')?.getAttribute("aria-label")).toBe(question);
-    expect(document.querySelector(".seat-title")?.textContent).toBe(question);
+    expect(document.querySelector("h2")?.textContent).toBe(question);
+    expect(document.querySelector(".seat-title")).toBeNull();
     expect(document.querySelector<HTMLButtonElement>(".hint-actions button")?.textContent?.trim()).toBe("Hint");
     expect(client.bodies).toEqual([]);
     await unmount(component);

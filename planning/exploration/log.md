@@ -29668,3 +29668,44 @@ Campaign was the one capability with no API, route or content. Now:
   zero skipped/unexpected/flaky,zero retried results and no report errors; the earlier smoke
   optional skip remains separately scoped. Inspect the explicit owned staged list and retain
   normal hooks. No new product wave, push, publication or deployment is included in this closeout.
+
+## 2026-10-15 — D3838 bounded Support presentation
+
+- Resume the accepted presentation repair after the requested whole-product inventory. The
+  predecessor has no tracked edits or live verification process; D3838 remains separately open.
+- Keep the complete learner question once in ordinary expanded seats and retain the tablet
+  head question. Prove recovery actions are actually inside the bounded companion and hit-testable
+  before any action click can auto-scroll them; preserve mounted state, focus and board geometry.
+- Two predecessor component failures and four native journey failures reproduce the duplicate
+  heading and the phone's clipped/unhittable controls. Keep tablet headings, ordinary full-question
+  rows and selector-free titles without duplicating them. The first reveal prototype passes the
+  four journeys but the existing seven-viewport matrix rejects its shortest-phone heading-only
+  alignment. Replace that prototype with selected-seat/current-delivery reveal, preferring the
+  actual empty-action row. Strengthen the matrix with independent clipping and center-hit checks;
+  do not loosen its full visibility requirement. The focused 290 component cases pass.
+- The shortest phone then exposes fractional clipping (viewport ratio0.998828), not a missing
+  action: leave a four-pixel internal inset instead of weakening the exact viewport requirement.
+  Both normal focused browser gates now pass: nine recovery/state cases and three Library/full-load
+  cases, including both colors/mobile and all seven existing composition projections. Production,
+  permanent tests and canonical docs are frozen for the full normal serial verification below.
+- Full normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero
+  with those production/test/doc bytes unchanged: clean workspace types,5871 software/392 files,
+  unchanged-budget performance,257 content/26 files, all downstream governance/corpus/contracts/build,
+  332 smoke passes and the one configured optional uncached Maia skip,five content-browser,
+  59 matrix and one packaged-production case. Warm arrival p95 is106.6 ms under the unchanged
+  250 ms limit; this does not diagnose the historical remote timing failure or prove a speedup.
+- Read the actual final matrix report:59 expected,zero skipped/unexpected/flaky,zero retries and
+  no errors. All112 composition cells pass; the existing input matrix stands. Inspect actual
+  desktop and mobile recovery screenshots plus the shortest-phone empty-answer result. Both
+  actions are physically visible/hittable, the ordinary full question is not repeated, and
+  board geometry, exact retry and preserved attempts remain. No raw captures enter Git.
+- Close only D3838, with its native test path; update the existing roadmap/queue/receipt, not a
+  new tracker. Counts:3587 ledger rows,1694 done,161 refused,1732 live assigned,zero untriaged.
+  UX stays282 complete/263 live/24 retired; four active/five blocked milestones, zero full
+  capabilities/qualified semantic subjects/official graduates remain. Source/selection, owner
+  use and remote/release holds stand. No new feature wave, push, deployment or goal pause/completion.
+- Final closeout checks pass (`make roadmap-receipt docs-check work-state` and
+  `make roadmap-progress status-parity register-check`). Clarify the canonical reveal sentence
+  to name module-query cards, not Guided Hint's independent protocol; this is documentation-only,
+  after the frozen full run. Production and tests remain unchanged. Recheck docs, inspect only
+  the thirteen owned staged files, and retain normal commit hooks.
