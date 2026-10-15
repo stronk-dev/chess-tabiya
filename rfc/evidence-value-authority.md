@@ -1534,6 +1534,57 @@ digest states must remain distinct through receipt/client/native delivery. The 2
 controls establish the source mismatch/lookup behavior only, not this new authority. Independent
 source and joint acceptance still gate implementation; no parent status implies approval.
 
+#### 2.3l Draft D3859/D3861 source-owned move grade — unaccepted
+
+Move-quality-grades §2a owns the complete proposed current grade source/payload/selection/
+instrument/accuracy contract. Register only derived.grade.move_quality@2 through sole
+createDerivedGradeMoveQualityV2Evidence with `{recordedGrade: RecordedGradeSource}`. Its source
+constructor/private reader must establish that exact owner-issued authority before reading
+private inputs, source selection, empty shortcuts or mints. No plain object/digest/copied capsule,
+caller before/after/mover/context or generic trusted callback can construct it.
+
+The two exact literal members are `[derived.review.eval_point@1,derived.review.eval_point@1,
+run.record.edge@1]` and `[recorded.engine.eval@1,recorded.engine.eval@1,run.record.edge@1]`.
+Retain before/after order and all three actual sealed occurrences. The parameter/value authority
+also binds the immutable original source image: original granted run/head/branch/edge, exact
+attachment or pinned artifact/manifest/ledger ordinals, fixed per-node endpoint states, pair state/candidate dispositions and
+owner-derived context/instrument. The bare sourceKey string is not that authority. The one route
+arm is `{recordedGrade: {kind:"value",label:"RecordedGradeSource",accepts:isRecordedGradeSource}}`
+using the owner's package-private nominal predicate, not a caller-supplied validator. Current
+EvidenceInputSpec has this value arm, not a pre-existing grade-source kind or issuer. Add an
+explicit nominal branch to authorityShape that reads the validated retained immutable source
+image before ordinary-record handling. Expand that image into plain canonical fields: exact
+original head/branch/edge and full-FEN positions, endpoint origin/status/selected occurrences,
+attachment or manifest/ledger ordinals and retained instrument/context/candidate dispositions,
+plus exact input projection identities and their existing value receipts. Do not pass the raw
+DrillRun (current shaping reduces it to id/counts), opaque capsule or sealed pair alone (payload
+digests omit occurrence joins). This uses existing EvidenceValueReceipt.inputDigest, not a new
+receipt format, source issuer or repository freshness check. The sole factory calls the same private reader before
+absence/empty decisions. No fabricated sealed prerequisite, opaque digest standing in for
+unvalidated operands or generic collection/reduction exception. A copied brand/sourceKey,
+ordinary object or unknown capsule refuses before private reads; source identity/late access
+revalidation must not depend on whether a grade happens to emit.
+
+Grounding is declared_convention, exactness convention, confidence reported; evaluation-only
+sentence/panel forms. Semantics literally retains grade-convention@1 and real child convention
+closure. The new declaration cannot claim bounded_search merely because the grade has engine
+scores: its actual inputs include recorded positions/edge and conventional eval-point joins.
+The provider branch uses actual already-registered whole deliveries/reload, not Inspector's
+report-only packet projections. The ledger branch uses exact original engine SourceEntry profile/
+budget as well as same-record readings; no modern transcript/generation is invented.
+
+Both branches use the unchanged grade arithmetic. All modern depth/time/nodes and actual offline
+depth/time bounds have closed instrument representations; requested limit is never reached depth.
+No source-path deletion to make preflight green. Current Nudge/Review bindings/renderer/parser and
+accuracy/graph routes migrate together; old scalar grade APIs are not retained for compatibility
+under D3851. Modern capture corruption/foreign occurrence fails, genuine absence remains local,
+and a valid empty grade does not erase the pair needed by full-coverage accuracy. Individual
+points survive pair absence; source lookup never picks different reports for the shared node of
+two edges. Arithmetic-unavailable pairs do not count toward accuracy even if source-comparable;
+available below-threshold pairs do, using existing typed-mate/cp conversion. Real private
+source/HTTP/client/LLM-off proof and independent source/joint review remain implementation gates;
+the disposable71 controls/two execution paths are feasibility, not source qualification.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -1990,6 +2041,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3859/D3861 §2.3l binds grade@2 to its exact two three-occurrence
+  members, private original source/ordinal/context authority and actual requested-budget metadata;
+  ordinary scalar reports do not attest modern inputs. Move-quality-grades §2a owns the complete
+  source/grade/accuracy contract. No new persisted schema, provider operation or generic mint path.
 - 2026-10-15 — D3851 owner rules no pre-launch legacy compatibility. Supersede dual narrative/
   recorded delivery and frozen-vector preservation obligations; D3853 owns concrete retirement/
   caller migration. Keep every detector family, truthful source meanings and actual current

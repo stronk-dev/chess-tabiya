@@ -2081,6 +2081,31 @@ exact consumer version; a predecessor adapter/operation is not successor adoptio
 records remain, and a missing @2 receiver/renderer remains explicitly unimplemented, not covered
 by a declaration-only census. No source/data/version is added to a saved run or drill pack.
 
+**D3859/D3861 current grade/Review source amendment — unaccepted:** the D3851 retirement
+inventory above is the sequence-only baseline. Current Nudge replaces derived.grade.move_quality@1
+with the exact derived.grade.move_quality@2 owned by move-quality-grades §2a/F2 §2.3l; same
+position in its accepted-ref list. Current Review makes the same grade replacement and retires
+the two duplicate scalar bindings live.stockfish.eval@1 and live.stockfish.wdl@1. It already
+accepts derived.review.eval_point@1 and derived.review.wdl_point@1; retain those real modern
+sources and the independent admitted ledger readings rather than substitute Inspector's weaker
+report-only packet projections into current Review grades/figures. This gives conditional
+Nudge52/Review72/Inspector65+6 refs, not runtime bindings or a new logical module. No engine/WDL
+feature is dropped: typed point sources own evaluation/graph/WDL presentation; grade/accuracy
+share exact validated pairs. Missing WDL or ungradeable pairs remain honest source-local states.
+This supersedes the fork-only acceptance-list instructions below for Nudge/Review: publish one
+complete current list, not a union with the old scalar/narrative bindings or a compatibility image.
+
+The new grade is evaluation-only and keeps current timing/roles/sessions/budgets. Register its
+exact pair-keyed grade.move_quality@2 renderer/parser and current voice accepts to Nudge/Review
+only. Source-owning service resolution uses the actual authorized operation context, not Full
+Inspector permission. Complete whole-consumer preflight remains required before lazy work; both
+grade literal alternatives must compile and their required source absence must remain local.
+F2 §2.3l/move-quality-grades §2a own issuer/private-reader/original occurrence/origin selection/
+instrument/context and accuracy/graph adoption. Their source reads never initiate analysis or
+upgrade a scalar packet. Retire obsolete current grade/scalar adapters/callers after real current
+consumers migrate; no duplicate legacy module image under D3851. All remaining source/scoped
+Review adapter contracts and independent joint acceptance remain required.
+
 **D3768 coordinated direct and Hint consumer images — unaccepted:** extend the same index, not
 a second registry, with these exact rows. For each direct module the ordered successor accepts
 list is its frozen@1 image with the old fork ref replaced in place by
@@ -3875,6 +3900,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3859/D3861 replaces current Nudge/Review grades with source-owned
+  grade@2 and retires Review's duplicate scalar eval/WDL bindings in favor of its already accepted
+  real typed points. Conditional current inventory is52/72/65+6, with17 family/source retention
+  controls; not compiled bindings. Preserve all detector/evaluation/WDL features, source-local
+  absence and current policy ceilings. Source/adapter/full image acceptance and implementation remain.
 - 2026-10-15 — D3851 owner removes pre-launch compatibility requirements. Annotate the old75+6
   baseline and specify the family-preserving conditional Nudge52/Review74/Inspector65+6 inventory,
   including trade@2 and source-owned Nudge windows still owed. Do not maintain duplicate narrative

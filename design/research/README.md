@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D3859/D3861 current grade-source feasibility, 2026-10-15:71 controls over actual stored-delivery
+reload/factories and explicitly synthetic scores, parsed offline instruments, fixed endpoint
+selection and existing arithmetic. Two node-budget old-grade abstentions are reproduced; two
+literal candidate paths compile. Independent return corrects shared-node selection/endpoint
+retention and arithmetic-abstention accuracy; bounded re-review finds no additional blocker,
+not source/joint acceptance.17 conditional retirement controls preserve families at52/72/65
+plus six Inspector detail refs. No new issuer, production adoption or engine-quality claim. `[V]`
+module-evidence-assembly.md §Source-owned current grades and independent selection/accuracy return;
+grade-source.ts; module-source.ts; dated independent review.
+
 D3860 accepted pairing repair, 2026-10-15:26 predecessor-red permanent controls become part of
 176 passing focused tests. The manifest declares both ordered inputs and the actual sealed
 factory refuses mixed refs before normalization/empty output. Both valid sources/grade arithmetic

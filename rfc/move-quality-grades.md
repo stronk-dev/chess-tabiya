@@ -175,6 +175,210 @@ un-computable is *abstention*. Declared reasons:
 | `unequal_instrument` | lane, `engineId`, or search limit differ between the pair |
 | `mate_score_inconsistent` | a transition the instrument cannot legally report (§3, last row) |
 
+### §2a — Draft D3859/D3861 current source-owned grade — unaccepted
+
+This is the current-source replacement required by module-registration's coordinated image,
+not implementation permission inherited from this RFC's implementing status. D3860 repairs the
+accepted predecessor's pair check; it does not supply this stronger source/occurrence contract.
+D3851's pre-launch ruling removes compatibility-only predecessor APIs and dual pipelines once
+actual callers migrate. No database erasure, manufactured provider history or weakened access.
+
+**One current projection.** Proposed `derived.grade.move_quality@2`, sole factory
+`createDerivedGradeMoveQualityV2Evidence`, producer derived.grade. It has exactly these ordered
+literal members, not their union or a caller-selected mix:
+
+| Source origin | Literal inputs, in receipt order |
+|---|---|
+| stored provider delivery | derived.review.eval_point@1, derived.review.eval_point@1, run.record.edge@1 |
+| pinned pack engine ledger | recorded.engine.eval@1, recorded.engine.eval@1, run.record.edge@1 |
+
+The actual arguments are `{recordedGrade: RecordedGradeSource}`. This is a source-owner-issued,
+privately nominal, independently immutable source, not a new evidence projection or persisted
+record. Proposed service operation `RunService.resolveGradeMoveSource(context,{nodeId,signal})`
+constructs it; proposed private reader `readRecordedGradeSource` is shared by the sole factory
+and Review's accuracy/graph calculation. It retains the authorized edge and both endpoint states,
+not only a successful comparable pair. A caller cannot supply before/after readings, FEN, mover,
+context, origin, attachment ordinal, a source-valid Boolean or a function that produces them.
+Both literal members and all real source occurrences are retained exactly; no unused witness.
+
+**Occurrence and workflow authority.** The context is issued by the actual current Nudge or
+Review operation after complete consumer preflight and current read/role/session/answer-ceiling
+admission. It retains the authorized original run/event head, granted branch, actual parent/
+child edge, selected source occurrences and actual workflow context. Validate the original
+graph and granted source path before narrowing; obtain the genuine run.record.edge@1 and actual
+positions, including canonical full FENs, through their existing owners. The source validates
+both point/readings against those exact positions and original occurrence identities, not just
+equal FENs. Derive mover from the parent FEN. Nudge retains its actual learner-committed-edge
+eligibility and practice/drill context; Review supplies imported_analysis for the original
+imported workflow, otherwise review. Client preferences cannot choose a stricter ladder.
+Recheck current access/head/selected edge/disclosure/cancellation before publication. A copied,
+crossed, stale or forged source fails; it is not missing_eval or a successful empty result.
+
+**Provider origin already exists.** Reuse Review's actual private attached
+values.providerDelivery via serialize/parsePersistedProviderDelivery and the registered
+live.stockfish.position_eval@1 → derived.review.eval_point@1 factories. Persisted delivery
+must re-derive, match the actual node's full FEN and retain the selected attachment's original
+seq/ordinal and event-head identity. Source-owning lookup selects the latest valid modern
+occurrence at each endpoint in original event order; a later legacy-only row does not replace
+it. A corrupt or crossed modern occurrence is a source-contract failure, never a fallback to
+an earlier valid delivery or scalar report. The current reviewDurableEngineStates map alone
+cannot prove the selected ordinal or this stronger corruption rule; implement the exact owner
+resolver rather than claim the map already satisfies it.
+
+The separate queued Stockfish resolver is used only for an actual attached modern job reference
+owned by that job store. Its consumed whole delivery and exact attachment/request joins must
+validate under durable-stockfish-source §4; arbitrary job lookup is forbidden. A genuine private
+Review attachment does not require that queued migration. Never query an engine in this grade
+read, backfill missing transcripts or treat ordinary scalar packet fields as provider evidence.
+Already retained valid sources work with the provider offline; declared provider execution paths
+remain real source requirements, satisfied by the genuine retained delivery, not operation aliases.
+
+**Ledger origin has its own authority.** Reuse the proposed registry-owned measurement source
+in module-registration §4.11a, including actual pinned pack/digest, original sidecar read states,
+whole manifest/ledger validation, exact record/source linkage and immutable original ordinals.
+Require engine-origin SourceEntry for each selected engine_eval, with exact sourceId/retrievedAt,
+full FEN, engine id/version, available engine name, profile and budget; a generic HTTP/local-file source cannot
+attest an engine instrument. Mint the existing same-record ledger→reading chain for both
+positions, retaining original source entries privately. The normalized reading's reached depth
+does not replace the manifest's requested budget. Missing budget/profile/identity is unavailable
+input_abstained, not an invented default. Conflicting artifacts fail source_contract_invalid.
+
+At each actual node select the first individually admitted engine reading in original record
+ordinal order, before inspecting its neighbor or testing pair comparability. Keep that selection
+and the complete candidate/disposition image in the private source. Do not search a later record
+to rescue a pair. An individually admitted reading has the required identity/profile/budget and
+exact position/source joins; a malformed artifact fails before selection, not by being skipped.
+Offline pairs require identical engine identity/version, Threads/Hash/MultiPV=1 and identical
+requested depth or movetime budget. This is a fixed per-node source lookup rule, not
+usefulness ranking; Inspector still retains all measurements. No live/ledger mixing and no
+claim of provider generation/command/transcript proof for an offline report. Its comparability
+is the reported instrument/profile/budget, not proof of every runtime option or search tree.
+
+**Origin selection and absence are explicit.** For ordinary current reads, a recorded modern
+attachment/reference or already-owned pending modern request at a node selects the provider
+origin for that node. Otherwise the node may select its pinned pack's independent ledger origin;
+non-pack runs cannot borrow a pack with the same position. Apply this once per node within the
+authorized immutable source snapshot, independent of incoming/outgoing edge or neighbor data.
+Require both selected endpoints from the same origin for a pair. Partial/missing/failed modern
+input does not switch to ledger; mixed selected origins abstain unequal_instrument. Corrupt modern
+data never selects a weaker report. This introduces
+no learner-facing source setting or change to module activation/defaults. Preserve exact pending,
+missing, invalid and instrument-mismatch states; no ungradeable move becomes “good”. Missing
+grade input is local to that binding, not a whole Nudge/Review hold, and useful other facts remain.
+The private resolver returns the owned RecordedGradeSource for a valid authorized edge even
+when measurements are absent or incomparable. Its private reader returns before/after endpoint
+states and a separate pair state, plus derived mover/context. Each endpoint is available with
+its exact selected point/reading and occurrence, or unavailable with source_pending, missing_eval
+or input_abstained. The pair is available with the ordered admitted operands, genuine edge and
+instrument, or unavailable with source_pending, missing_eval, input_abstained or unequal_instrument.
+Pair absence precedence is pending, missing, input-abstained, then instrument mismatch; retain
+both individual endpoint states rather than losing the other point. Access/subject/stale and
+storage/source-contract failures retain their existing typed refusal/failure channels; they are
+not caught into these absence states. Pending comes from an actual owned pending request, not
+the mere absence of a score. The source supplier maps the pair reason to the exact grade@2
+ModuleSourceResult.unavailable row with fixed readable captions and no synthetic fact.
+The sole factory retains EvidenceAvailability<readonly DeclaredEvidence<MoveQualityGradeV2>[]>
+and its declared arithmetic abstentions; a valid below-threshold pair is available with [].
+The grade-source captions are fixed registered operational text, not LLM output or facts:
+
+| Exact grade-source reason | Caption |
+|---|---|
+| source_pending | Engine comparison is still being prepared. |
+| missing_eval | No paired engine readings are recorded for this move. |
+| input_abstained | The recorded engine readings cannot be used for this comparison. |
+| unequal_instrument | These readings used different engine settings or search budgets. |
+| mate_score_inconsistent | These mate readings do not form a consistent comparison. |
+
+Render this only as the grade binding's state; it cannot replace useful structural/theory facts,
+claim a successful engine comparison or dump the reason identifier into learner text. Existing
+access/storage failures use their existing truthful refusal/error captions, not this table.
+
+**Comparison and all supported budgets.** Provider points must pass existing
+reviewPointComparability: actual engine id/version, generation, position-free command image and
+typed requested bound. Do not compare reached depth under timed/node searches. Extend the pure
+grade input/output search-limit representation to an explicit requestedNodes arm; never encode
+nodes as depth or milliseconds. A normalized operand carries exactly one requested bound.
+Depth, movetime and node-count pairs all run the same existing score/threshold/mate arithmetic.
+Offline origin has only the two actual SourceManifest budget arms; do not invent offline nodes.
+
+**Payload and authority.** `MoveQualityGradeV2` retains the existing class/arm, both learner-POV
+typed scores, unrounded drop, threshold and grade-convention@1/context, engine id and recorded
+lane, plus the exact normalized requested bound and an instrument arm identifying provider
+delivery versus offline engine report. Provider metadata retains actual version/generation;
+offline metadata retains actual version/profile. Keep source occurrence/complete delivery/
+original ledger entries in the owned source/input receipts, not raw public/LLM data. Provider
+scores are already White POV; offline readings require explicit White POV. Normalize to the
+derived mover exactly once. Typed mate never becomes centipawns, a prediction or an outcome claim.
+Keep existing unavailable/below-threshold/no-praise distinctions and all constants unchanged.
+
+The closed payload addition is:
+
+```ts
+type GradeRequestedBound =
+  | { readonly kind: "depth"; readonly requestedDepth: number }
+  | { readonly kind: "movetime"; readonly requestedMs: number }
+  | { readonly kind: "nodes"; readonly requestedNodes: number };
+type GradeInstrumentV2 =
+  | { readonly origin: "provider_delivery"; readonly engineVersion: string; readonly generation: number }
+  | { readonly origin: "offline_engine"; readonly engineVersion: string;
+      readonly profile: { readonly threads: number; readonly hashMb: number; readonly multiPv: 1 } };
+type MoveQualityGradeV2 = Omit<MoveQualityGrade, "depth" | "requestedMovetimeMs" | "requestedNodes"> & {
+  readonly bound: GradeRequestedBound;
+  readonly instrument: GradeInstrumentV2;
+};
+```
+
+Bound values/profile use their existing validated positive-integer domains; provider generation
+uses the existing acquisition domain. Exactly one bound arm, no extra scalar depth/time/node
+fields. The pure grading input/output gains requestedNodes without a new numerical conversion;
+the new factory removes those optional scalar limit fields in favor of the closed bound above.
+Existing provider/ledger score domains remain: do not invent a zero-distance mate reading that
+the provider parser refuses, or coerce it into a different mate. A terminal rules/result fact
+does not require a fabricated engine grade.
+
+The new projection is declared_convention/convention/reported: its real position/edge and
+eval-point inputs do not inherit the predecessor's bounded_search primary grounding. Its
+answerContent is evaluation only; forms sentence/panel. Semantics names grade-convention@1
+literally and retains its actual direct/child closure without relying on a retired@1 declaration.
+No new convention definition or provider operation. The registered renderer
+`grade.move_quality@2` is pair-keyed to current Nudge/Review consumers only and co-renders the
+class, operands/drop/threshold, actual instrument/budget/origin and cited convention. It cannot
+say a historical reading is live analysis or expose a best move, PV, WDL or private source.
+
+**One source for Review grades, accuracy and graph.** Remove current scalar-only grade/accuracy/
+evaluation-sentence/graph reads from the new Review path. Shared readRecordedGradeSource returns
+the fixed endpoint states and pair state described above. Grade and accuracy use the same admitted
+pair and existing pure grading result. A comparable source pair whose arithmetic is unavailable
+(including mate_score_inconsistent) remains unevaluated. An available below-threshold result []
+does count. Only after arithmetic admission compute the nonnegative drop via moverWinPercent:
+its existing cp logistic and typed-mate 0/100 behavior remain, not logistic application to mate
+operands. Do not reconstruct operands from grade text. All actual mover decisions remain in the
+accuracy denominator; only source-and-arithmetic-admitted pairs contribute nonnegative drops.
+The existing full-coverage gate and rounding/formula remain. Evaluation graph/sentences consume
+the fixed individually available endpoints, including when their pair is unavailable; graph
+points never require a successful grade source pair. One shared node has the same selected origin,
+record/delivery and score on both adjacent edges in the same snapshot. Draw no connecting
+comparison segment across an unavailable pair; do not choose a second report to fill the gap.
+For A=X-only, B=Y ordinal0/X ordinal1, C=Y-only, select B/Y once: A→B is incomparable,
+B→C may compare, and the graph shows B/Y only. Such individual coverage never counts as evaluated
+accuracy. Keep those coverage units explicit rather than reusing a scalar-read count. Apply the same module evaluation ceiling
+to figures, graph and captions; no accuracy/graph bypass when grade evidence is withheld.
+
+**Adoption and able-to-fail proof.** Coordinate F2 §2.3l and module-registration's one current
+Nudge/Review image, pair-keyed renderer/voice and actual API/client admission. Source resolution
+and both literal members must compile before lazy acquisition. Retire the old grade wrapper/
+scalar readers/current@1 consumer bindings after real callers migrate; do not retain a parallel
+compatibility implementation under D3851. No whole-image acceptance from this isolated proposal.
+Permanent tests must exercise actual private source issuance/revalidation, both origins/colors/
+three contexts, all three modern/two offline budgets, typed mates/thresholds and empty results;
+wrong edge/head/ordinal/pack/source/clock/perspective/engine/version/generation/options/bound,
+mixed origins, later legacy and corrupt modern, pending/missing sources and node budgets.
+Include the shared-middle-node X/Y fixture, valid endpoint beside incomparable/missing endpoint,
+and comparable mate_score_inconsistent versus available below-threshold accuracy controls.
+Run actual authenticated Nudge/Review/accuracy/graph/LLM-off renderer journeys, not only factory
+fixtures. Prove unchanged valid arithmetic and source-local absence beside useful other facts,
+with no new provider request, stored write, copied seal, dropped family or authority upgrade.
+
 ### §3 — The mate arm: mate is not a centipawn
 
 `story.ts:33/:104` maps every `mateIn` to ±`STORY_MATE_CP` (1000) and clips — which
@@ -603,6 +807,12 @@ to the ledger by this review:**
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3859/D3861 §2a authors the source-owned grade@2 replacement:
+  exact provider-point/ledger-reading pairs plus actual edge, private occurrence/context authority,
+  explicit origin/selection/absence, all three modern/two offline bounds, truthful convention
+  grounding and shared Review accuracy/graph adoption. D3851 removes predecessor compatibility
+  obligations.71 disposable source controls/two execution paths establish feasibility only;
+  real source/factory/API/client implementation and independent source/joint review remain.
 - 2026-09-24: D1 discharged by `63902370` (module-registration implementation): the `experimental` disposition is deleted and the grade binds to exactly its two module consumers.
 
 - 2026-08-22: created. All cited symbols verified at drafting HEAD (`906498a`):

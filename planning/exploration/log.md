@@ -30944,3 +30944,46 @@ Campaign was the one capability with no API, route or content. Now:
  1742 live/zero untriaged and all live rows routed; D3860 has permanent path evidence.
   Stage the21 explicit owned code/test/metadata/docs/tracking files and inspect the cached
   names/diff before normal hooks. The1.0 goal remains active; remaining source work is not closed.
+
+### 2026-10-15 — D3859/D3861 current grade-source authoring and independent return
+
+- Continue after9f661692; D3851 no-pre-launch-legacy ruling remains binding. Existing Review
+  stores real provider deliveries independently of pending queued Stockfish settlement; original
+  offline SourceManifest retains requested budget/profile. No new collector or provider alias
+  is needed to invent these operands. Current scalar grade representation cannot retain nodes;
+  record D3861 and assign doing/evidence-foundation before proceeding.
+- Extend the existing disposable prefix target with grade-source.ts. Six real reload/factory
+  pairs over explicitly synthetic UCI scores cover both movers and depth/time/nodes. Two old
+  node-budget grade abstentions,18 version/generation/bound comparability mismatches and two
+  isolated proposed literal execution paths reproduce the precise source gap. No real engine
+  measurements, private issuer, production grade@2 or consumer adoption is established.
+- Author unaccepted grade §2a/F2 §2.3l and current module migration clause: one private owner-
+  issued edge/source, actual mover/context, two same-origin point/readings plus genuine edge,
+  modern versus offline instruments, typed supported budgets and exact current Review grade/
+  accuracy/graph migration. All constants/typed mates remain. D3851 permits retiring obsolete
+  current APIs/representations after real callers migrate, not detector-family loss/data deletion.
+- Independent authorized read-only review returns pair-dependent shared-node graph selection
+  and arithmetic-unavailable accuracy. Correct lookup to fixed per-node source before neighbors,
+  retain individual endpoints despite pair absence and forbid alternate-record rescue. Accuracy
+  requires source and pure arithmetic admission; available below-threshold silence counts,
+  mate_score_inconsistent does not. Preserve existing moverWinPercent typed-mate behavior.
+-11 additional disposable selection/pure arithmetic controls expose the review cases. Their
+  first run has an incorrect fixture expecting kind:abstained instead of abstained:true; correct
+  that test-only assumption, not runtime. Normal make inspector-recorded-prefix-research then
+  exits zero:71 grade-source controls,17 conditional retirement controls and all previous controls.
+  Nudge52/Review72/Inspector65 plus six details preserve families while Review removes duplicate
+  scalar eval/WDL bindings. Conditional inventory is not complete executable current bindings.
+- Bounded independent re-review finds the two corrections consistent and no additional blocker,
+  not source/joint acceptance. Carry its encoder constraint into F2: existing value input uses
+  private nominal owner predicate/reader, and authority shaping expands exact retained original
+  source fields rather than raw run counts, opaque capsule or sealed-payload digests alone.
+  No new receipt format or repository hash/freshness/progress dependency. Reviewer runs no tests.
+- Update existing research coverage, review record, queue and roadmap. D3859/D3861 stay doing;
+  D3860 remains closed on production proof. Exact scoped Review adapters/Nudge granted windows,
+  full source/joint acceptance and real issuer/API/native proof remain next. Last full production
+  verification is9f661692's5934 software/seven performance/257 content cases/build; this draft
+  makes no fresh full/browser/GitHub/release claim. Run compact receipt/governance before commit.
+- Final make roadmap-receipt verify-governance exits zero:3610 ledger rows,1743 live/all routed,
+  zero untriaged; all569 UX items assigned. The roadmap/register/intent/test-tier/append-only
+  checks pass. Commit only the15 explicit owned research/RFC/review/tracking files after cached
+  diff inspection and normal hooks. No production code change, push or goal pause.

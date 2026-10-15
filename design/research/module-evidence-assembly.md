@@ -2352,3 +2352,47 @@ search grade declaration. Current Review grades still read scalars, so modern st
 not grade adoption. The queued-job resolver remains a distinct source origin where actually
 needed. No tests, edits or new source acceptance by the reviewer. `[V]` dated independent review;
 cited current runtime functions; grade-reading.ts; review-map.ts.
+
+### Source-owned current grades and independent selection/accuracy return — 2026-10-15
+
+The existing modern Review delivery path replays six parent/child pairs across both movers and
+depth/time/nodes, using explicitly synthetic UCI scores. Actual serialization/reload and registered
+position/eval-point factories admit them. Eighteen engine-version/generation/bound changes refuse
+comparability; later scalar reports do not replace the current delivered point. Both node-bound
+pairs abstain in the old grade because its scalar instrument cannot represent nodes: D3861.
+Original parsed engine manifests already retain profile and requested depth/time budget, so the
+offline branch need not invent another collector or use reached depth as its request. `[V]`
+tools/d3792-inspector-demand/grade-source.ts; review-evidence.ts; review-points.ts; sourcing/types.ts;
+ledger-validation.ts; grade-reading.ts.
+
+Proposed grade §2a/F2 §2.3l now bind two actual same-origin points/readings and their recorded edge
+through an owner-issued private source, derived mover/workflow context and exact source selection.
+Modern delivery and offline reports retain their distinct instrument authority. Depth/time/nodes
+remain typed, constants unchanged; current Review grade/accuracy/graph migrate together. Two
+literal alternatives compile in an isolated candidate declaration under unchanged F1, not through
+a production grade@2 factory or source issuer.17 conditional retirement controls now measure
+Nudge52/Review72/Inspector65 plus six Inspector details: Review drops duplicate scalar eval/WDL
+refs while retaining real eval/WDL points and all sequence families. `[V]` cited draft sections;
+grade-source.ts; module-source.ts; [[D3851]]/[[D3859]].
+
+Independent read-only review returns two concrete authoring defects. Selecting an eligible pair
+per edge can give shared node B two reports (A=X-only, B=Y then X, C=Y-only); pair-only source
+results also lose valid individual graph points. The correction fixes source choice per node,
+retains both endpoint states independently and never searches another reading to rescue a pair.
+Second, source-comparable mate readings may still abstain mate_score_inconsistent; accuracy must
+require arithmetic admission, while available below-threshold silence counts. Existing typed-mate
+moverWinPercent conversion remains.11 additional controls cover this model and actual pure grade
+behavior. The first run had a fixture asserting kind:abstained instead of the actual abstained:true;
+correcting that expectation leaves runtime untouched. Final normal prefix target passes71 grade-
+source controls,17 retirement controls and all previous controls. Zero real engine measurements,
+new issuers, production changes or source qualifications. `[V]` cited disposable target; grade.ts;
+grade-reading.ts; review-map.ts; dated independent review record.
+
+Bounded re-review finds both corrections consistent and no additional blocker, not joint acceptance.
+The existing value input arm can use the private nominal owner predicate/reader, but mint authority
+must explicitly expand the actual retained source image: current authorityShape collapses raw runs
+to counts and sealed inputs to payload digests. The draft pins exact head/branch/edge/position,
+endpoint selection/states/ordinals/instrument/context and input identities in the existing receipt;
+no new repository hash/freshness system. Full current module bindings, scoped Review adapters,
+Nudge windows and actual issuer/API/native proof remain open. `[V]` evidence-factories.ts authorityShape;
+F2 §2.3l; dated independent review; [[D3841]]/[[D3859]].

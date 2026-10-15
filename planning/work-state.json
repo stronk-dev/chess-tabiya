@@ -32147,7 +32147,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75612c334b64dd613047fd58b496073fc2ce2b28cee7ff56d6d9e51760ab617e",
+      "sourceDigest": "sha256:9d2dd10db6f5b905145b9e349beeef135a8bfacbfc09706a66b6c38601802e21",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32160,6 +32160,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/grade.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3861",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0b12bebd07701043bca4d46da7a4af642ef0f1f77f741017481100e4321b7dfe",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     }
   ]
 }

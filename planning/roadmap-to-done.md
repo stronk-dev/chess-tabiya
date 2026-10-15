@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3860]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3861]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,19 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3859/D3861 now have a source-owned current grade proposal, not source delivery.71 disposable
+controls replay actual modern delivery/reload factories with synthetic scores and preserve real
+offline profile/requested-budget fields; two node-budget old-grade abstentions are reproduced.
+Independent return corrects pair-dependent shared-node graph readings and arithmetic-unavailable
+accuracy; bounded re-review finds no additional blocker, not full source/joint acceptance.
+Fixed individual endpoints survive unavailable pairs, typed mate and all constants remain.
+17 conditional retirement controls now preserve families at Nudge52/Review72/Inspector65 plus
+six details, superseding52/74/65 by retiring Review's duplicate scalar eval/WDL refs. Complete
+current bindings/scoped Review adapters/Nudge windows, real issuers/API/native proof and joint
+acceptance remain. No whole milestone, new qualification or release/browser/remote-CI claim.
+The paragraphs below retain earlier checkpoints; their pending-D3851/compatibility instructions
+are superseded by the owner's no-legacy ruling, not outstanding choices.
 
 D3860's accepted grade pairing repair is implemented: two ordered declared occurrences and
 same-source validation before normalization/empty output.26 predecessor-red controls,176 focused

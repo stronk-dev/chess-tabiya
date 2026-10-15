@@ -895,3 +895,33 @@ over later legacy/unrecoverable data, not simply latest. Eval points carry decla
 measured/reported and cannot fill the old bounded-search grade declaration silently. Current
 scalar grade reads have not adopted these modern sources merely because they were stored.
 The queued resolver is a separate real origin. No tests, edits, version choice or acceptance.
+
+### D3859/D3861 source-owned grade amendment — return and bounded re-review
+
+The independent reviewer inspects proposed grade §2a/F2 §2.3l read-only, not its own authored
+changes. The two returned gaps are specific: choosing eligible pairs per edge selects B/X for
+A→B and B/Y for B→C in A=X-only, B=Y then X, C=Y-only; a pair-only source also loses a valid
+graph point when its neighbor cannot compare. Separately, comparable source readings can return
+mate_score_inconsistent from the pure arithmetic, so comparison alone cannot count accuracy.
+
+Author correction fixes lookup once per node within the authorized snapshot, selects its actual
+modern origin or first individually admitted offline ordinal before considering a neighbor,
+retains endpoint states separately from pair availability, and forbids alternate-report rescue.
+Graph uses the fixed point with no comparison segment across an unavailable pair. Accuracy
+requires both source and arithmetic admission; available below-threshold [] still counts, typed
+mate uses existing moverWinPercent rather than a cp logistic over mate values.
+
+Bounded re-review finds both corrections consistent and no additional blocker. The proposed
+value input arm/private owner predicate and reader are feasible without a new generic input
+kind. One encoder constraint is carried into the draft: authorityShape currently reduces runs
+to id/counts and sealed values to payload digests, so explicitly expand the validated immutable
+source image into actual head/branch/edge/full-FEN/endpoint/ordinal/instrument/context/input-
+identity fields in existing EvidenceValueReceipt.inputDigest. Do not hash an opaque capsule,
+raw run or sealed pair and call that occurrence authority. No new repository freshness system.
+
+The reviewer runs no tests and grants no source/joint acceptance. Main's normal prefix target
+passes71 grade-source feasibility controls and17 conditional retirement controls plus previous
+controls; synthetic UCI reports are not measured engine quality or implemented issuance. Source
+construction/revalidation, complete current module/scoped Review adapters/Nudge windows and
+real authenticated API/native journeys still require their authored contract and independent
+joint acceptance. D3859/D3861 remain doing, not closed.

@@ -12,6 +12,20 @@ owns retirement/caller migration rather than compatibility freeze. Update comple
 module-image counts from the deduplicated target, not the old75+6 baseline; obtain independent
 review before implementing unaccepted source contracts. D3851 is answered, not an owner blocker.
 
+2026-10-15 — Current D3859/D3861 source proposal is authored in grade §2a/F2 §2.3l,
+not implemented or accepted.71 disposable controls replay six genuine modern delivery/reload
+pairs over synthetic scores, expose two node-budget old-grade abstentions, preserve offline
+profile/requested budgets and compile two isolated literal alternatives. Independent return
+corrects pair-dependent shared-node graph selection and arithmetic-abstention accuracy; bounded
+re-review finds no further blocker, not joint acceptance. Fixed per-node selected endpoints
+survive unavailable pairs; existing typed-mate conversion and all constants remain.17 conditional
+retirement controls preserve families at Nudge52/Review72/Inspector65 plus six details: Review
+retires two duplicate scalar refs while retaining genuine eval/WDL points. These supersede the
+earlier52/74/65 sequence-only inventory, not source delivery. Next finish the exact scoped Review
+adapter/parser/slot/state image and Nudge granted windows, then independent full source/joint
+review before production migration. Do not mistake the parent's implementing status for approval
+of this amendment or preserve obsolete compatibility paths under the owner's no-legacy ruling.
+
 2026-10-15 — D3860's immediate pairing defect is covered by accepted grade §2/D2473, not a
 new architecture decision. The implemented repair declares two ordered operands in each
 same-source alternative and rejects mixed exact refs before normalization/empty output.26 new

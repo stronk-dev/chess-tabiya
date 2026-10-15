@@ -12,6 +12,7 @@ import { importedRun, play } from "../../packages/runtime/src/testing/review-evi
 import { moveQualityGrade, type MoveQualityGrade } from "../../packages/runtime/src/grade.js";
 import { gradeReadingFromPayload } from "../../packages/runtime/src/grade-reading.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
+import { runGradeSourceResearch } from "./grade-source.js";
 
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map(row => [key(row), row]));
@@ -104,6 +105,7 @@ export function runModuleSourceResearch() {
     controls, rows, counterfactualDroppingLiveGradeCompiles: true, oldDeclarationsChanged: false, providerCalls: 0, productionChanges: 0 }));
   runGradeOperandResearch();
   runPrelaunchRetirementResearch(replacements);
+  runGradeSourceResearch();
 }
 
 function runPrelaunchRetirementResearch(inspectorReplacements: ReadonlyMap<string, string>) {
@@ -116,19 +118,28 @@ function runPrelaunchRetirementResearch(inspectorReplacements: ReadonlyMap<strin
   const rows = (["postcommit_nudge", "review_map", "full_inspector"] as const).map(module => {
     const current = MODULE_CONSUMER_ACCEPTS[module].map(key);
     const currentFamilies = new Set(current.filter(ref => families.has(ref.split("@")[0]!)).map(ref => ref.split("@")[0]!));
-    const mapped = current.map(ref => families.get(ref.split("@")[0]!) ?? inspectorReplacements.get(ref) ?? ref);
+    const retiredScalarRefs = module === "review_map" ? ["live.stockfish.eval@1", "live.stockfish.wdl@1"] : [];
+    const retained = current.filter(ref => !retiredScalarRefs.includes(ref));
+    const replace = (ref: string) => ref === "derived.grade.move_quality@1" ? "derived.grade.move_quality@2"
+      : families.get(ref.split("@")[0]!) ?? inspectorReplacements.get(ref) ?? ref;
+    const mapped = retained.map(replace);
     const target = [...new Set(mapped)];
     const retiredNarrativeRefs = current.filter(ref => ref.endsWith("@1") && families.has(ref.split("@")[0]!));
     assert.equal(target.some(ref => ref.endsWith("@1") && families.has(ref.split("@")[0]!)), false); controls++;
     assert.deepEqual(new Set(target.filter(ref => families.has(ref.split("@")[0]!)).map(ref => ref.split("@")[0]!)), currentFamilies); controls++;
     assert.equal(target.filter(ref => families.has(ref.split("@")[0]!)).length, currentFamilies.size); controls++;
     assert.deepEqual(target.filter(ref => !families.has(ref.split("@")[0]!)),
-      [...new Set(current.filter(ref => !families.has(ref.split("@")[0]!)).map(ref => inspectorReplacements.get(ref) ?? ref))]); controls++;
+      [...new Set(retained.filter(ref => !families.has(ref.split("@")[0]!)).map(replace))]); controls++;
+    if (module === "review_map") {
+      assert(current.includes("derived.review.eval_point@1") && current.includes("derived.review.wdl_point@1")); controls++;
+      assert(target.includes("derived.review.eval_point@1") && target.includes("derived.review.wdl_point@1")); controls++;
+      assert(retiredScalarRefs.every(ref => current.includes(ref) && !target.includes(ref))); controls++;
+    }
     return { module, baseline: current.length, conditionalTarget: target.length, retainedSequenceFamilies: currentFamilies.size,
-      retiredNarrativeRefs, duplicateRepresentationsRemoved: mapped.length - target.length,
-      gradeStillUnresolved: target.includes("derived.grade.move_quality@1") };
+      retiredNarrativeRefs, retiredScalarRefs, duplicateRepresentationsRemoved: mapped.length - target.length,
+      gradeStillUnresolved: target.includes("derived.grade.move_quality@2") };
   });
-  assert.deepEqual(rows.map(row => row.conditionalTarget), [52, 74, 65]); controls++;
+  assert.deepEqual(rows.map(row => row.conditionalTarget), [52, 72, 65]); controls++;
   console.log(JSON.stringify({ scope: "D3851 pre-launch family-preserving retirement inventory; NOT complete consumer bindings, source acceptance or production deletion",
     controls, rows, sourceIssuersImplemented: false, compatibilityRequired: false, productionChanges: 0 }));
 }
