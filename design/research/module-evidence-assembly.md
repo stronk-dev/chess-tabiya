@@ -2396,3 +2396,60 @@ endpoint selection/states/ordinals/instrument/context and input identities in th
 no new repository hash/freshness system. Full current module bindings, scoped Review adapters,
 Nudge windows and actual issuer/API/native proof remain open. `[V]` evidence-factories.ts authorityShape;
 F2 §2.3l; dated independent review; [[D3841]]/[[D3859]].
+
+### Actual Nudge actors and exact scoped Review source plan — 2026-10-15
+
+The earlier legal arithmetic fixtures use commitMove for every ply, which labels all their
+nodes user. They do not by themselves prove Post-commit Nudge's actor eligibility. An additional
+disposable probe builds36 real user/opponent-labelled paths over the nine currently accepted
+sequence families and both learner colours, using genuine appendOpponentPly events with labelled
+synthetic choices.64 actual learner endpoints produce18 witness items covering all nine families
+for both learner colours.46 earlier endpoints exclude later completed witnesses. The actual
+current one-edge helper emits zero sequence items at these endpoints. This is source feasibility,
+not a provider result, automatic-opponent integration or module/UI adoption. `[V]` window-source.ts;
+runtime.ts appendOpponentPly; module-query.ts subjectFor; postcommit-nudge.ts; normal prefix target.
+
+The proposed §4.5b keeps the actual user commit before automatic reply and grants only recorded
+past windows ending there. It does not reassign a motif completed by the opponent to an earlier
+learner move. It specifies exact nine-family horizons, ancestor-specific sources, no caller
+narrative/window override, source-state mappings and unchanged presentation/budgets. Independent
+read-only review finds those horizons/actor-boundary statements match actual code, not issuance
+or acceptance. `[V]` module-registration.md §§2.5.2/4.5b; dated independent review; [[D3859]].
+
+Review §4.5's scoped Story source now has an explicit twelve-row plan:10 node-grain and two
+incoming-edge adapters, including the previously omitted position population and all three
+pivotal successor refs. It uses existing adapter authority, exact operation/parser/slot/state
+joins, the compiler's windowNodes:1 image and private boundary authority distinct from slot IDs.
+45 metadata/model controls compare the six root/interior/full plans against existing actual
+slot metadata and reject missing position, old pivotal refs, extra WDL, grain changes and missing/
+duplicate slots. No new scoped source is acquired by this model. An initial missing test-only
+play import fails typecheck and is corrected without a runtime change. `[V]` recorded-origin.ts;
+review-evidence.ts reviewPacketSourcePlan; review-evidence-compiler.md §4.5; normal prefix target.
+
+Independent review returns one closed-state omission: a recorded human selection missing its
+candidate array cannot become honest-empty merely because no marker emits. The draft now maps
+that source to unavailable/input_abstained, distinguishes actual empty arrays/nonmatches, retains
+each original selection disposition and refuses corruption. Mixed present/missing at one node
+keeps that slot unavailable without erasing other nodes/adapters. Bounded re-review finds no
+remaining blocker, not source/joint acceptance. Full current module bindings and real source/
+factory/HTTP/native proof remain. `[V]` F2 §2.3a; ReviewAdapterState; dated independent review.
+
+### Retire the unused raw-string Nudge pipeline — D3862
+
+No in-repo production client calls ApiClient.nudge. Actual web seats use modules/query and its
+registered presentation; the old GET nudge route/service/runtime packet maintains a second raw
+projection-ID sentence renderer and decoder. Under D3851 and the accepted single-query contract,
+remove that precursor chain and client parser, retaining postcommitEdgeEvidence/hasKingZoneWitness
+and the canonical query/subject/role/disclosure/budget/ancestor behavior. Useful regression
+coverage moves to actual typed HTTP receipts, no raw-ID captions, auth/foreign/root/opponent/
+unknown subjects, read-only/rating-inert reads and removed-route404. No stored data or detector
+family is removed. `[V]` ApiClient; DrillScreen.svelte module-query flow; rest.ts; service.ts;
+module-query.ts; postcommit-nudge.ts; apps/server/src/review-map.test.ts; [[D3862]].
+
+Independent read-only diff review finds only that intended obsolete chain removed and no
+remaining executable references; it runs no tests. The initial normal focused target has98
+runtime passes but all77 HTTP cases hit localhost listen EPERM. Initial normal typecheck is
+also blocked by package-manager lockfile write permission. These are retained environment
+failures, not product/CI passes. Full normal make verify build is then requested with actual
+listener/cache/engine permission; terminal result is recorded in the exploration log. `[V]`
+current task command results; dated independent review. New source amendments remain unaccepted.

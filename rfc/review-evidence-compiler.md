@@ -1108,6 +1108,107 @@ distinct and cannot be converted into imaginary facts. Legacy source/version dep
 still prevent execution where required. The other Review families, unaccepted tablebase/local
 expansions and v2 semantic events do not become new Story kinds through this amendment.
 
+**D3841/D3859 complete scoped source image — unaccepted:** replace the baseline-only eleven
+adapter obligation above with this exact twelve-row image for the boundary-owned moment source.
+It is a source subset, not the full Review Map module's72-ref image or a new public packet.
+The added position row supplies last-level's explicit complete position population; rank/last-
+level reductions are invoked after these slots and are not pretend source adapters themselves.
+
+| Exact adapter | Output projection | Family | Grain |
+|---|---|---|---|
+| review.source.position@1 | run.record.position@1 | recorded | node |
+| review.source.consequence@1 | run.record.consequence@1 | recorded | node |
+| review.source.imported_result@1 | run.record.imported_result@1 | recorded | node |
+| review.source.eval_point@1 | derived.review.eval_point@1 | engine_eval | node |
+| review.source.eval_delta@2 | derived.review.eval_delta@2 | engine_eval | incoming_edge |
+| review.source.mate_transition@2 | derived.review.mate_transition@2 | engine_eval | incoming_edge |
+| review.source.pivotal.irreversibility@1 | derived.pivotal.irreversibility@1 | semantic | node |
+| review.source.pivotal.phase_change@2 | derived.pivotal.phase_change@2 | semantic | node |
+| review.source.pivotal.human_divergence@2 | derived.pivotal.human_divergence@2 | semantic | node |
+| review.source.pivotal.option_collapse@2 | derived.pivotal.option_collapse@2 | semantic | node |
+| review.source.endgame@1 | rules.endgame.classification@1 | semantic | node |
+| review.source.shapes@1 | theory.shapes.firing@1 | authored | node |
+
+Use the existing literal REVIEW_PACKET_SOURCE_ADAPTERS as the single adapter authority. The
+scoped image is an ordered list of exact IDs referencing those actual records, not a second map
+of parsers/operations or a caller-selected source set. Add the three literal pivotal successors;
+retire obsolete predecessor operations after actual current callers migrate under D3851. The
+unchanged IDs retain their payload meaning, not a compatibility-only whole-tip collection path.
+Their operation receives the admitted original boundary/execution, never an old receipt relabelled
+as scoped. Other live packet families retain their own explicit request plans and source contracts.
+No node/edge/local/tablebase/WDL/opening/human sequence family becomes a Story kind implicitly.
+
+Proposed private reviewRecordedSourcePlan(boundary) sorts these exact IDs as the current planner
+does, then original path nodes in order. Node grain includes the root; incoming_edge excludes it
+and retains its actual preceding node. A slot is exactly the existing closed fields
+invocationId/adapterId/family/nodeId/grain/fromNodeId/window, bound privately to this genuine boundary.
+Use the current packet compiler's windowNodes:1 image, so window is the original prefix node index,
+not a new grant or client window length. InvocationId retains the existing adapterId#nodeId or
+adapterId#fromNodeId>nodeId formula; the independently retained boundary/source authority, not
+that string alone, binds the original head/grant/occurrences. No caller IDs or conflation with
+old packet invocation authority. Source execution is captured_only:
+no provider/enqueue/retry job is initiated here. Root/empty/unavailable slots still remain.
+
+Each registered operation calls proposed private executeRecordedReviewSlot(slot,execution).
+Its closed adapter dispatch uses the exact source group operations specified above: source-owned
+pivotal families once per kind/prefix then exact anchored items per slot; original per-node
+position/endgame; prefix-scoped registered shapes; exact captured provider eval points and
+comparable real incoming endpoint transitions; boundary-owned consequence/import-result arms.
+No arbitrary callback registry, base-id matching or whole-tip-then-filter source call. Memoization
+shares only the same validated original boundary/context and exact node/edge/family source.
+
+Each row's parser is an actual executable function, not its symbol string. The unchanged payload
+parsers retain their literal required/optional keys and nested value admission. Phase/collapse
+successors retain the old nodeId/kind/detail/provenanceNote payload fields; human-divergence@2
+also requires its exact selection and position fields under F2 §2.3a. The new private
+parseRecordedReviewSourceEvidence(adapterId,item,boundary) first authenticates the genuine sealed
+item/registered factory, exact projection/version and full declared payload parser, then verifies
+its actual source occurrence and slot joins. Position/eval point joins full FEN and original node;
+transition joins both actual edge endpoints; pivotal joins its complete owned witnesses and
+requested prefix; shape spans/actual entries cannot extend past that prefix. It is not a new
+factory or a payload re-sealing escape hatch. Unknown versions, extra keys, wrong factory/source/
+node/window or foreign boundary refuse; structurally equal values from another source do not pass.
+
+Retain one independently sealed internal result for every exact slot. State is the existing
+ReviewAdapterState, not a new public wire union. Available requires at least one admitted item;
+zero completed matches is honest_empty/no_observation. No terminal/import result at a slot is
+that honest-empty state, not a fabricated draw or a provider error. Captured engine not_requested,
+not_yet_scheduled, pending and typed unavailable states retain their actual reasons/counters;
+delivered-but-invalid join is unavailable/input_abstained. Pair comparability failure is unavailable/
+input_abstained; cp delta with mate_operand and mate transition with no_mate_operand or
+no_mate_transition are honest_empty/no_observation as in current adapters. A missing captured
+entry remains private null plus its folded existing state, not proof a job was requested.
+For historical human divergence, zero human_common selections anchored at that node or valid
+recorded arrays producing no marker is honest_empty/no_observation. A matching selection whose
+candidate array is absent is unavailable/input_abstained, not filtered out of the source. An
+explicit recorded empty array is present data and follows the unchanged split predicate's
+nonmatch rule. Retain every original per-selection source disposition privately. If one node's
+slot has both complete observations and missing candidate arrays, that slot remains unavailable
+with zero published items, rather than claiming a complete available/empty population; retain
+the complete observations privately and do not suppress other nodes or adapters. This does not
+turn an empty/missing source into model-choice spread. Corrupt/crossed records fail before folding.
+Source-contract corruption, invalid original boundary or crossed seals fail the operation;
+actual source-owner lookup failure remains typed failure, never no_observation or a guessed hold.
+Exact held dependencies retain module-registration's declared dependency mapping. One adapter's
+unavailable state does not erase another's valid facts or the complete retained source state.
+
+The moment builder consumes only these exact sealed results, with complete set equality to the
+derived plan and per-result occurrence/order. Position is retained even where no engine point
+exists; last-level's context/result population is built once from those exact slots before its
+reduction. Rank's evidence groups keep their actual registered input items, not the position row
+invented as a Story moment. Empty rank still retains all slot states and last-level result proof.
+No compiler1 compatibility image or dual parser pipeline is required under D3851; actual current
+Story/title/share callers and raw stored records must be migrated explicitly, not silently dropped.
+Review Map's educational selection (§2a), grade/accuracy (§2a of move-quality-grades), complete
+module bindings and all unrelated providers remain separate real obligations.
+
+Permanent acceptance requires exact twelve-row/plan/parser/operation closure, literal pivotal
+successor tuples, actual original-boundary issuance, zero-work foreign/stale/corrupt refusals,
+root and absent/empty/mixed/pending states and unavailable pairs beside individual points.
+Delete the position row, restore any old pivotal ref, add an unrelated adapter or remove one
+slot and the control must fail. Source-level metadata agreement alone cannot discharge actual
+factories, context/reduction receipts, authenticated Inspector delivery or native rendering.
+
 **Assemble before ranking, without prose.** Share one private unrendered-moment builder with
 `reviewStoryMoments`: same current kinds, thresholds, merging at exact nodes, recorded decision/
 evidence/entry/stop identities, phase/endgame data and typed evaluation endpoints. Root creates
@@ -1530,6 +1631,13 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-10-15 — Unaccepted D3841/D3859 §4.5 pins the exact twelve scoped source adapters,
+  real parser/operation/slot/state contracts and complete position/point/result preparation.
+ 45 metadata controls cover six plan images and mutation negatives, not source acquisition.
+  Independent return/re-review closes historical human-selection missing-array versus empty
+  mapping without a new state enum. Actual issuance/factories/consumers/API/native proof and
+  full source/joint acceptance remain; the parent's awaiting status does not accept this amendment.
 
 - 2026-10-15: unaccepted D3847 integrates F2 §2.3h's authenticated0/1 last-level result proof
   below moment assembly, retaining empty/root-excluded results and actual executed conventions

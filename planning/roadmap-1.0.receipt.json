@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f163bb781ebc818e2ddf4e79ca4d37bbe2d3393dd5d12b66a11c0f2f43ca00f5",
+    "roadmap": "sha256:9cd04826eaa7f2ce8b9ff0c7a795da5e446e50728f56c70f8374c8a571dc57cd",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:6a5684597fcee6bfbacc6dbaa4c4ab2ecd856747cf5595f92215f497b91e0866",
+    "workState": "sha256:a70f99c67d800af38373b345bab84b3e116ddc27a9baf5ab30d2c5a1108b92b4",
     "rfcRegister": "sha256:9bb8e0274c94f4399cb6a6c6bd4c5d93d2b98a75726a56dd54774b9f2870ef96",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
-    "rest": "sha256:c52d7266bfe5d6c35f232651cff87e3bbe41ee745a9b5a174ea31702dbfd5c91"
+    "rest": "sha256:2a907f62552bba5e72d5d6f63962a53f596afcc01f0719dabec0e7d8589ad35a"
   },
   "summary": {
     "capabilities": 14,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 627,
+      "todo": 628,
       "doing": 30,
-      "blocked": 1086,
-      "done": 1705,
+      "blocked": 1085,
+      "done": 1706,
       "refused": 162
     },
     "workItems": {
@@ -471,10 +471,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D3860's accepted pairing bug is closed locally. D3859/D3861 grade section2a/F2 section2.3l now propose genuine paired modern/ledger source, actual edge/mover/context and consistent Review accuracy/graph. Bounded independent corrections fix shared-node selection/retained endpoints and arithmetic-abstention accuracy, not joint acceptance. Finish exact scoped Review adapter/parser/slot/state and granted Nudge-window contracts, then independent full source/joint review before D3845/D3792 production migration. Keep genuine stored Review deliveries independent of queued settlement migration, exact source occurrences, fixed per-node selection, typed depth/time/nodes, truthful inherited authority and source-local absence. Under D3851 retire obsolete narrative/vector/API/adapter chains after real callers migrate; no pre-launch compatibility scaffolding. Conditional52/72/65 plus six Inspector details preserve families but are not compiled bindings. Real issuers/sidecars/consumers/API/native proof, D3855 captions and full platform joins remain. Keep detector breadth/sample floors/truthful versions; no inferred data deletion.",
+      "nextAction": "D3862 unused raw-string Nudge retirement is closed on actual typed HTTP and normal local gates; do not implement another compatibility packet. D3859 now authors nine-family learner past windows and exact12-row scoped Story adapter/parser/slot/state image alongside source-owned grades. Publish the complete exact current module binding image, reconcile already-ruled D1422 grade-convention@2 before final grade adoption, then independent full source/joint buildability review before D3845/D3792 production migration. Keep actual Review deliveries independent of queued settlement, fixed per-node selection, typed supported budgets, local absence and real context/occurrence authority. Under D3851 retire obsolete paths after real caller migration, not detector families/shared readings/data. Conditional52/72/65 plus six details are not compiled bindings. Real issuers/sidecars/factories/API/native proof, D3855 captions and full platform joins remain; no source/joint acceptance from bounded metadata reviews.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3859/D3861 current source-owned grade proposal authored, not implemented/accepted. Normal prefix research passes71 source controls: six actual delivery/reload/factory pairs over synthetic scores, two current node-budget abstentions,18 comparability mismatches and two isolated literal paths. Independent return corrects shared-node pair-dependent graph selection and arithmetic-unavailable accuracy; bounded re-review finds no additional blocker, not joint acceptance.17 retirement controls preserve families at52/72/65 plus six details, removing Review duplicate scalar eval/WDL refs. Exact current scoped adapters/Nudge windows and real source/API/native proof remain. Last production repair remains9f661692 with full normal5934 software/seven performance/257 content tests and build; this draft adds no new full/browser/remote/release proof. No capability or whole milestone promotion.",
+        "summary": "D3862 obsolete raw-string Nudge route/service/runtime packet/client decoder is removed; shared sources and canonical query/presentation stay. Actual migrated HTTP tests cover budgets, subject/auth/foreign/read-only/rating and removed-route404. Local gates pass fresh types/5930 software cases392files/seven isolated performance cases, then corrected governance/257 content cases/corpus checks/build; the initial full command retained a duplicate-tracker-path failure before the remaining targets passed. Independent read-only cleanup review finds no concern. D3859 nine-family Nudge windows and twelve-row scoped Story image are authored with36 actor runs/64 endpoints/18 family-by-learner witnesses/46 future exclusions and45 slot-model controls. Bounded review clears missing-array state mapping, not source/joint acceptance. D1422 is queued authoring, not an unanswered owner question. No new source issuer/factory/sequence delivery, whole milestone or browser/remote/release proof.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -523,6 +523,8 @@
           "tools/d3792-inspector-demand/recorded-origin.ts",
           "tools/d3792-inspector-demand/module-source.ts",
           "tools/d3792-inspector-demand/grade-source.ts",
+          "packages/runtime/src/postcommit-nudge.ts",
+          "packages/runtime/src/postcommit-nudge.test.ts",
           "tools/d3792-inspector-demand/ledger-source.ts",
           "tools/d3792-inspector-demand/opening-source.ts",
           "tools/d3792-inspector-demand/prefix-source.ts",

@@ -1678,6 +1678,88 @@ claim UI recovery. Independent review must check observation equality, both oper
 the positive controls and the Inspector/pack preservation boundary before this becomes work
 the implementer may take.
 
+#### 4.5b Draft D3859 — recorded windows for the actual committed learner subject
+
+Unaccepted amendment. The nine sequence families in the current Nudge acceptance image need
+actual recorded windows, not narrative move arrays or the one-edge supplier. This explicitly
+amends §2.5.2's post-commit collection boundary to include **past** granted moves ending at the
+same committed learner node. It does not move the subject to the automatic opponent reply,
+widen post-commit timing, predict a future reply or introduce another Nudge mode.
+
+The service derives one private source context after current module preflight/assistance/access
+admission. Its subject is the actual mutation result's user node and incoming edge. Use the
+already granted selected path (including inherited nodes), not automatically the node's creating
+branch or today's active tip. Validate the complete original graph/path/FENs before narrowing.
+Keep original run/head, granted branch, subject node and actual commit event independently;
+current role/session/disclosure and cancellation remain revalidated before publication.
+No client FEN, branch/window length, narrative moves, partial synthetic DrillRun or Inspector
+permission can supply this context. An opponent/system/root node is not this learner subject.
+
+The exact sequence source image is:
+
+| Current projection | Complete trailing horizons (plies) |
+|---|---|
+| derived.exchange.trade_completed@2 | 2 |
+| derived.pawn.sequence.harassment_pressure@3 | 2 |
+| derived.tactic.deflection_observed@3 | 3 |
+| derived.tactic.attraction_observed@3 | 3, 5 |
+| derived.tactic.line_blocker_clearance_observed@3 | 3 |
+| derived.tactic.square_clearance_observed@3 | 3 |
+| derived.tactic.interference_observed@3 | 3 |
+| derived.tactic.check_zwischenzug_observed@3 | 4 |
+| derived.tactic.overload_exploitation_observed@3 | 3 |
+
+This table is set-equal to the current Nudge image's recorded sequence pairs, not every family
+the generic evaluator knows. Contact timing and defender consequence remain available at their
+other real consumers; this amendment adds neither to Nudge. Invoke the §4.11a proposed exact
+recordedSemanticWindowSource against the retained original source, requested exact ref and
+throughNodeId equal to the learner subject. Generalize its admitted server context to the actual
+Nudge operation without borrowing Inspector's permission. F2 §2.3j's genuine owned @3 windows
+and unchanged trade@2 inputs remain required; an old@2 result is only prototype evidence.
+
+Evaluate only complete rows ending at that subject. The earlier opponent moves inside a window
+are actual recorded play, not a candidate variation. Prepare the union of required trailing
+edges at most once for each canonical source/edge; no per-family whole-prefix recomputation.
+Each endpoint needs at most five prepared edges, though full original validation is not limited
+to five. Never collect later stored moves then filter output. A future completed motif cannot
+be shown as an already observed consequence at an earlier commit. A completed motif whose last
+move belongs to the opponent is not retargeted to the preceding learner move. Review/Inspector
+can expose it under their own scope/timing; changing automatic Nudge timing requires separate
+intent/contract work, not a source-layer loophole.
+
+Merge genuine sequence events with current admitted one-edge events and source-owned grade@2
+before existing witness/admission/reducers/budget fitting. Retain each sequence's exact start/end
+anchors, all operands and convention. No projection-id sentence fallback. Use registered exact
+presentation pairs for module.postcommit_nudge@2. Source eligibility is not usefulness: the
+two-fact/50-word ceiling, current ordering, no-praise rule and D3715's separately unaccepted
+change-selection proposal remain distinct. A withheld/absent grade cannot hide structural facts.
+
+Novelty retains the existing last-three-earlier-user-decision bound, not three arbitrary plies.
+Resolve each ancestor's own past prefix/edge/windows under that same grant and actual ancestor
+commit; never reuse today's subject or tip for every ancestor. Use admission-only ancestor facts,
+the same exact source image and existing D1164 identity semantics. Share actual overlapping
+preparation, not admitted facts from a different endpoint. No new novelty ranking or workaround
+for its current truthful abstention. Retire the obsolete duplicate narrative/API pipeline after
+its actual consumers migrate under D3851; keep one canonical module query and presentation path.
+
+Map window_missing to the sequence binding's unavailable/no_recorded_window state; a completed
+nonmatching row is no_witness, not insufficient context. Retain available rows alongside a
+missing longer horizon. Source-contract/lookup failures and genuine version holds keep §4.11a's
+typed failure/held-dependency channels, never silent chess absence. Missing sequence rows do not
+manufacture a proactive card, all-clear or higher-priority fact; unrelated available facts remain
+eligible. Request/currentness failures refuse before detector work. The client retires replies
+when the exact subject/head/configuration/disclosure owner changes, without erasing saved play.
+
+Acceptance needs genuine actor-labelled user/opponent paths for both learner colours, every
+family/horizon, insufficient versus completed-empty windows, inherited and off-path subjects,
+later automatic replies, stale/revoked/cancelled requests, original invalid graphs/FENs and
+zero-work refusals. Actual module/HTTP/registered-component desktop/phone tests must show complete
+observed sequence operands and preserve board geometry, existing presets and retained alternatives.
+The disposable window target measures36 actor-labelled runs,64 learner queries/18 witnesses,
+all nine families for both learner colours and46 future-witness exclusions. The actual current
+one-edge source supplies none of those sequence items. This is source feasibility, not new source
+issuance, automatic-opponent integration, @3 mints or delivered Nudge coverage.
+
 #### 4.6 `structure_nudge` — **precursor is split; two halves become the module, one is corrected**
 
 - Shape-entry chips on the timeline (`Timeline.svelte:51,78`) and `ShapePanel.svelte` **become the
@@ -3900,6 +3982,14 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3862 implements D3851's no-legacy ruling for the unused raw-string Nudge API:
+  retire route/service/runtime packet/client decoder; keep actual shared evidence/witness helpers
+  and canonical module query/presentation. Its useful HTTP/role/subject/budget/read-only/rating
+  controls migrate to the actual typed path. This does not implement the source amendments.
+- 2026-10-15 — Unaccepted D3859 §4.5b pins the nine exact Nudge recorded families/horizons,
+  genuine committed learner prefix, ancestor-specific windows and no future-opponent borrowing.
+ 36 actor-labelled research runs/64 endpoints retain18 family×learner positives and46 future
+  exclusions; no new source issuer, factory or delivered sequence coverage is established.
 - 2026-10-15 — Unaccepted D3859/D3861 replaces current Nudge/Review grades with source-owned
   grade@2 and retires Review's duplicate scalar eval/WDL bindings in favor of its already accepted
   real typed points. Conditional current inventory is52/72/65+6, with17 family/source retention

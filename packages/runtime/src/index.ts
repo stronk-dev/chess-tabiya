@@ -142,7 +142,6 @@ export {
   type ModuleQueryErrorCode, type ModuleQueryInput, type ModuleQueryPacket, type ModuleQueryPage, type ModuleQueryRequest, type ModuleSourceContext,
   type ModuleSourceResult, type ModuleSuppressionReason,
 } from "./module-query.js";
-export { POSTCOMMIT_NUDGE_TEMPLATES, postcommitNudgePacket, type PostcommitNudgeFact, type PostcommitNudgeInput, type PostcommitNudgePacket } from "./postcommit-nudge.js";
 export {
   ArrayReductionQualityRecorder,
   FACT_EQUIVALENCE_CLASSES,

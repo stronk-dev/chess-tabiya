@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D3859 exact Nudge/Review scope, 2026-10-15:36 actor-labelled runs/64 learner endpoints cover
+all nine sequence families for both colours and exclude46 future witnesses; current one-edge
+Nudge emits zero sequence items there.45 scoped Review adapter/slot metadata controls retain
+12rows including position, not source issuance. Independent return/re-review fixes historical
+human-selection absence mapping; no remaining bounded blocker, not joint acceptance. D3862
+separately removes the unused raw-string Nudge API under the no-legacy ruling, preserving shared
+sources and moving coverage to typed module-query HTTP. `[V]` module-evidence-assembly.md
+§Actual Nudge actors and exact scoped Review source plan / §Retire the unused raw-string Nudge
+pipeline; cited code/targets; dated independent review. Full gate result belongs to the log.
+
 D3859/D3861 current grade-source feasibility, 2026-10-15:71 controls over actual stored-delivery
 reload/factories and explicitly synthetic scores, parsed offline instruments, fixed endpoint
 selection and existing arithmetic. Two node-budget old-grade abstentions are reproduced; two

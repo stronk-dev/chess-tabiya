@@ -30987,3 +30987,76 @@ Campaign was the one capability with no API, route or content. Now:
   zero untriaged; all569 UX items assigned. The roadmap/register/intent/test-tier/append-only
   checks pass. Commit only the15 explicit owned research/RFC/review/tracking files after cached
   diff inspection and normal hooks. No production code change, push or goal pause.
+
+### 2026-10-15 — D3859 actor/window and scoped Review image; D3862 remove dead raw Nudge API
+
+- Previous goal turn is progress (d6320af3). Revalidate current worktree/queue and continue the
+  existing upstream source authoring, not a new worktree or competing work document. D3851's
+  no-pre-launch-legacy ruling remains binding. No new owner question is needed for these sources.
+- Confirm the canonical post-commit subject is the actual learner commit before automatic reply.
+  Earlier arithmetic fixtures commit every ply user; they cannot alone prove actor eligibility.
+  Extend the existing disposable window probe with36 actual user/opponent-labelled runs, using
+  genuine opponent-selection events with labelled synthetic choices.64 learner queries retain18
+  family×learner witness items across all nine families and exclude46 later completed witnesses.
+  The actual current one-edge helper emits zero sequence items there. No real provider output,
+  automatic-opponent test, proposed issuer/@3 factory or module delivery is implied.
+- Author module §4.5b's exact nine-family/horizon source image, original retained grant, past-only
+  learner endpoint, ancestor-specific windows, current budgets and distinct absence/failure.
+  Do not retarget a sequence completed by an opponent to an earlier learner move or borrow a
+  later reply from stored history. Review/Inspector retain their own admitted scope/timing.
+- Author Review compiler §4.5's explicit12-row scoped Story source image (10node/two incoming-
+  edge), including complete position population and three pivotal successors; actual parser/
+  operation/slot/state and private boundary joins are obligations, not metadata symbols alone.
+ 45 literal image/slot-model controls over six root/interior/full images pass normal prefix
+  research. The first research typecheck catches a missing test-only play import; fix it, leaving
+  runtime unchanged. These controls model plans, not actual scoped source acquisition.
+- Authorized independent read-only review returns one missing state mapping: a matching recorded
+  human selection without candidates cannot be filtered into honest-empty. Pin missing to
+  unavailable/input_abstained, explicit empty arrays/nonmatches to honest-empty, and corruption
+  to failure; retain per-selection dispositions, isolating an incomplete node/adapter. Bounded
+  re-review finds no remaining blocker, not source/joint acceptance or production proof.
+- Record/assign D3862 for a separately executable accepted-contract cleanup: no production client
+  calls ApiClient.nudge; current web seats use modules/query and sealed presentation. Remove
+  GET nudge's route/capability row/service/runtime packet, public exports, ApiClient method/
+  interface and obsolete raw-string parser/tests. Keep shared one-edge evidence/king-witness
+  helpers and canonical query/access/role/subject/ancestor/disclosure/budget logic unchanged.
+  Preserve useful regression coverage at actual typed HTTP/presentation, invalid root/opponent/
+  unknown subjects, auth/foreign readers, rating-inert/read-only behavior and removed-route404.
+  No stored data, collector family or new-source acceptance is removed/claimed.
+- Independent read-only diff review finds only the intended obsolete chain removed and no
+  remaining executable references. The initial normal focused target has98 runtime passes and
+ 77 HTTP failures on listen EPERM; initial normal typecheck cannot write a tool-managed lockfile.
+  Preserve these environment refusals and request actual listener/cache/engine permission for
+  the unchanged make verify build command. No engine opt-out or changed test parameters.
+- Permissioned full typecheck catches one leftover optional ApiClient interface member naming
+  deleted PostcommitNudge. Remove it; a fresh unchanged full make verify build passes workspace
+  types with zero Svelte errors/warnings and starts the normal software suite. Terminal result
+  and closeout follow below; do not claim a green full/browser/remote/release run in advance.
+- That same normal run passes5930 software cases/392 files and all seven isolated performance
+  cases/four files. Scaffold/packaging, release-policy, component coverage, value authority,
+  semantic validation343cases/81subjects/zero fully qualified and production builds also pass.
+  Governance then catches two duplicate checkpoint evidence paths added by this update. Remove
+  the duplicated entries (the actual paths remain once), refresh the compact receipt and run
+  the unchanged remaining make verify-governance verify-content build targets with permission.
+  No runtime changes after the successful software/performance run; no need to repeat them for
+  a tracking-only correction. Full terminal result follows, not a fabricated single-command pass.
+- Reconcile the queue's next grade adoption with existing D1422: the owner already ruled a
+  single2.5/10/15 grade-convention@2 ladder. September's implementation record explicitly says
+  that amendment has not landed; current source feasibility preserves shipped@1 arithmetic, not
+  an authority to freeze its context disagreement into1.0 or ask the owner again. Keep this
+  existing-row convention amendment separate from the source contract and current cleanup.
+- Move already-ruled D1422 from the generic Review-RFC blocker into todo/review-and-return and
+  retain its exact queue/ruling references. It is authoring work with a known owner answer, not
+  a fresh owner question or permission to change runtime thresholds in this cleanup.
+- Remaining normal make verify-governance verify-content build exits zero: all257 real-content
+  cases/26files, graduation corpus92documents/354blocking/34resolved/48accepted/zeroerrors,
+  all104 capability corpus documents and production builds pass. Together with the unchanged
+  production code's5930 software/seven performance cases/fresh workspace types, all normal
+  local components are verified. Do not rewrite the earlier full-command tracking failure into
+  one green single-command run or imply fresh browser/GitHub/native-release qualification.
+- Normal prefix research is repeated after code cleanup and passes all actor/slot/grade/retirement
+  and preceding controls. Close only D3862 with permanent apps/server/src/review-map.test.ts path
+  evidence. D3859/D3861/source amendments remain doing/unaccepted. Work-state has3611 rows,
+ 1743live/zero untriaged; D1422 is todo/review-and-return. Update the compact roadmap receipt,
+  stage only the25 explicit owned code/test/RFC/research/review/tracking files, inspect cached
+  names/diff and run normal hooks. No push, new worktree, saved-data deletion or goal pause.

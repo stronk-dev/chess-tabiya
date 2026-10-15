@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parsePgn, makePgn } from "chessops/pgn";
-import { branchPath, recordedSemanticPathExecution, assertDeclaredEvidence, type DrillRun, type VersionedEvidenceId } from "../../packages/runtime/src/index.js";
+import { branchPath, recordedSemanticPathExecution, assertDeclaredEvidence, createRun, canonicalRunStart, commitMove, appendOpponentPly, type DrillRun, type VersionedEvidenceId } from "../../packages/runtime/src/index.js";
 import { recordedPathEvaluatorRows, type RecordedSemanticPathExecution, type RecordedPathWindowReceipt } from "../../packages/runtime/src/recorded-semantic-path.js";
 import { mirrorSemanticFen, mirrorSemanticUci } from "../../packages/runtime/src/semantic-validation.js";
 import type { SemanticEvidenceEvent } from "../../packages/runtime/src/semantic-evidence.js";
@@ -18,9 +18,10 @@ import { RunService } from "../../apps/server/src/service.js";
 import { loadConceptRegistry } from "../../apps/server/src/concept-registry-loader.js";
 import { SEQUENCE_SUCCESSOR_MEMBERS, SEQUENCE_SUCCESSOR_DECLARATIONS, SEQUENCE_SUCCESSOR_MANIFEST } from "./recorded-sequence-contract.js";
 import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
-import { PRIMARY_EVIDENCE_MANIFEST, EVIDENCE_CONTRACT_DECLARATIONS } from "../../packages/runtime/src/evidence-catalog.js";
+import { PRIMARY_EVIDENCE_MANIFEST, EVIDENCE_CONTRACT_DECLARATIONS, MODULE_CONSUMER_ACCEPTS } from "../../packages/runtime/src/evidence-catalog.js";
 import { compileEvidenceManifest } from "../../packages/runtime/src/evidence-contract.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
+import { postcommitEdgeEvidence } from "../../packages/runtime/src/postcommit-nudge.js";
 
 type WindowExecution = Omit<RecordedSemanticPathExecution, "result"> & { result:
   | (Extract<RecordedSemanticPathExecution["result"], { kind: "available" }> & { researchScope: {
@@ -282,6 +283,62 @@ for (const [fixtureIndex, fixture] of RECORDED_SOURCE_CASES.entries()) {
   }
 }
 assert.equal(reached.size, 11);
+
+// D3859: genuine learner/opponent actor paths, unlike the earlier arithmetic-only fixtures
+// which label every committed ply user. This is the disposable window source, not Nudge adoption.
+const nudgeFamilies = new Set(MODULE_CONSUMER_ACCEPTS.postcommit_nudge.map(ref => ref.id));
+const nudgePositives = RECORDED_SOURCE_CASES.slice(0, 11).filter(fixture => nudgeFamilies.has(fixture.projection));
+assert.equal(nudgePositives.length, 9);
+let actorRuns = 0, learnerQueries = 0, learnerWitnesses = 0, futureWitnessExclusions = 0;
+let oldOneEdgeSequenceOutputs = 0;
+const actorReach = new Set<string>();
+for (const [fixtureIndex, fixture] of nudgePositives.entries()) for (const mirrored of [false, true]) {
+  const fen = mirrored ? mirrorSemanticFen(fixture.fen, "color_and_vertical") : fixture.fen;
+  const moves = mirrored ? fixture.moves.map(move => mirrorSemanticUci(move, "color_and_vertical")) : fixture.moves;
+  for (const learner of ["white", "black"] as const) {
+    const at = "2026-10-15T00:00:00.000Z";
+    let run = createRun({ id: `d3859-nudge-actors-${fixtureIndex}-${mirrored}-${learner}`,
+      session: { kind: "position", start: canonicalRunStart({ fen, side: learner }), feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"a".repeat(64)}`, seed: 1, createdAt: at,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    for (const move of moves) {
+      const before = run.nodes.find(node => node.id === run.activeCursor.nodeId)!;
+      const turn = before.fen.split(" ")[1] === "b" ? "black" : "white";
+      run = turn === learner ? commitMove(run, move, { at }).run : appendOpponentPly(run, {
+        moveUci: move, policyModeApplied: "human_common", engine: { id: "synthetic-actor-fixture",
+          name: "Synthetic actor fixture", version: "fixture", seedHonored: false },
+      }, { at }).run;
+    }
+    const branch = run.activeCursor.branchId, path = branchPath(run, branch), saved = JSON.stringify(run);
+    const full = recordedSemanticPathExecution(run, branch).result;
+    assert.equal(full.kind, "available"); if (full.kind !== "available") assert.fail("actor fixture source refused");
+    const familyEvents = full.events.filter(event => event.projection.id === fixture.projection);
+    assert(familyEvents.some(event => event.anchor.nodeId === path.at(-1)!.id));
+    for (let end = 1; end < path.length; end++) {
+      const node = path[end]!, parent = path[end - 1]!;
+      assert.equal(node.actor, (parent.fen.split(" ")[1] === "b" ? "black" : "white") === learner ? "user" : "opponent");
+      if (node.actor !== "user") continue;
+      const result = requested(run, branch, node.id, { id: fixture.projection, version: 2 });
+      assert.equal(result.result.kind, "available"); if (result.result.kind !== "available") assert.fail("learner endpoint refused");
+      const expected = familyEvents.filter(event => event.anchor.nodeId === node.id);
+      assert.deepEqual(result.result.events, expected);
+      assert(result.result.events.every(event => event.anchor.nodeId === node.id));
+      assert(result.work.preparedEdges <= 5);
+      if (familyEvents.some(event => path.findIndex(point => point.id === event.anchor.nodeId) > end)) futureWitnessExclusions++;
+      if (expected.length > 0) { learnerWitnesses += expected.length; actorReach.add(`${fixture.projection}:${learner}`); }
+      const old = postcommitEdgeEvidence(run, parent, node).filter(value => value.projection.id === fixture.projection);
+      assert.deepEqual(old, []); oldOneEdgeSequenceOutputs += old.length;
+      learnerQueries++;
+    }
+    assert.equal(JSON.stringify(run), saved); actorRuns++;
+  }
+}
+assert.equal(actorReach.size, 18, "each of the nine Nudge families needs a genuine learner-endpoint positive for both learner colours");
+assert(futureWitnessExclusions > 0);
+console.log(JSON.stringify({ scope: "D3859 Nudge actor/window feasibility, NOT current source issuance, module/presentation/API adoption or automatic-opponent testing",
+  actorRuns, learnerQueries, learnerWitnesses, familyByLearnerReach: actorReach.size, futureWitnessExclusions,
+  oldOneEdgeSequenceOutputs, supportedFamilies: nudgePositives.map(fixture => fixture.projection),
+  actualOpponentEvents: true, syntheticOpponentChoices: true, providerCalls: 0, productionChanges: 0 }));
 // The shared52-fixture source population omits check-induced deflection; require that arm too.
 for (const mirrored of [false, true]) {
   const fixture = RECORDED_DEFLECTION_CHECK;

@@ -15,7 +15,7 @@ answer capabilities and budgets. It selects no chess fact by itself and authors 
 | `packages/runtime/src/module-registry.ts` | `MODULE_DECLARATIONS`, `MODULE_REGISTRY` (compiled at import), `assertModuleRegistry`, the per-pair execution table |
 | `packages/runtime/src/module-packets.ts` | `compileModulePacket` — the single operation every `module.*` consumer names |
 | `packages/runtime/src/module-reducers.ts` | admission, ordering, identity, subsumption, bounded novelty and the fact backstop |
-| `packages/runtime/src/postcommit-nudge.ts` | Post-commit Nudge, its one-edge source closure (also served by the legacy `GET /runs/:id/nudge`) |
+| `packages/runtime/src/postcommit-nudge.ts` | Shared one-edge Nudge source/witness helpers; delivered only through the canonical module query and registered presentation |
 | `packages/runtime/src/module-query.ts` | `queryModules` — the one module query operation (sources, admission, presentation, budget fit, disclosure receipt) |
 | `packages/runtime/src/module-query-sources.ts` | the literal per-module source image `MODULE_PAIR_EXECUTION` is derived from |
 

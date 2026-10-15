@@ -23,8 +23,8 @@ import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, compileEv
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
 import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src/story.js";
-import { reviewPacketForRun, reviewSubjectPath, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
-import { importedRun, importRecord, evaluationDelivery, attachDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
+import { reviewPacketForRun, reviewSubjectPath, reviewPacketSourcePlan, REVIEW_PACKET_SOURCE_ADAPTERS, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
+import { importedRun, importRecord, evaluationDelivery, attachDelivery, play } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
 import { runLedgerSourceResearch } from "./ledger-source.js";
@@ -885,3 +885,70 @@ console.log(JSON.stringify({ scope: "D3859 retained direct-module refs only, NOT
   retainedUnregisteredExecutionRefs: retainedModuleRefs, controls: retainedModuleRefs.length, productionChanges: 0 }));
 
 runModuleSourceResearch();
+
+// D3841/D3859 literal scoped Story source/slot model, NOT a new source issuer, parser,
+// callable or actual scoped acquisition. Current full-tip sources remain current full-tip.
+{
+  let controls = 0, slotModels = 0;
+  const check = (test: () => void) => { test(); controls++; };
+  const specification = readFileSync("rfc/review-evidence-compiler.md", "utf8");
+  const table = specification.split("**D3841/D3859 complete scoped source image — unaccepted:**")[1]!.split("Use the existing literal REVIEW_PACKET_SOURCE_ADAPTERS")[0]!;
+  type Row = { adapter: string; projection: string; family: string; grain: string };
+  const rows: Row[] = [...table.matchAll(/^\| (review\.source\.[^ ]+) \| ([^ ]+) \| ([^ ]+) \| ([^ ]+) \|$/gmu)]
+    .map(match => ({ adapter: match[1]!, projection: match[2]!, family: match[3]!, grain: match[4]! }));
+  const baselineIds = ["position@1", "consequence@1", "imported_result@1", "eval_point@1", "eval_delta@2", "mate_transition@2",
+    "pivotal.irreversibility@1", "pivotal.phase_change@1", "pivotal.human_divergence@1", "pivotal.option_collapse@1", "endgame@1", "shapes@1"]
+    .map(suffix => `review.source.${suffix}`);
+  const oldRows = baselineIds.map(id => REVIEW_PACKET_SOURCE_ADAPTERS.find(row => row.id === id)!);
+  assert(oldRows.every(Boolean));
+  const replacements = new Map(["phase_change", "human_divergence", "option_collapse"].map(kind =>
+    [`review.source.pivotal.${kind}@1`, `review.source.pivotal.${kind}@2`]));
+  const expected = oldRows.map(row => ({ adapter: replacements.get(row.id) ?? row.id,
+    projection: `${row.projection.id}@${replacements.has(row.id) ? 2 : row.projection.version}`, family: row.family, grain: row.grain }));
+  const canonical = (image: readonly Row[]) => [...image].sort((a, b) => a.adapter.localeCompare(b.adapter));
+  function admit(image: readonly Row[]) {
+    assert.equal(new Set(image.map(row => row.adapter)).size, 12);
+    assert.equal(new Set(image.map(row => row.projection)).size, 12);
+    assert.deepEqual(canonical(image), canonical(expected));
+  }
+  check(() => admit(rows));
+  check(() => assert.equal(rows.filter(row => row.grain === "node").length, 10));
+  check(() => assert.equal(rows.filter(row => row.grain === "incoming_edge").length, 2));
+  check(() => assert.throws(() => admit(rows.filter(row => row.adapter !== "review.source.position@1"))));
+  for (const kind of ["phase_change", "human_divergence", "option_collapse"]) {
+    check(() => assert.throws(() => admit(rows.map(row => row.adapter === `review.source.pivotal.${kind}@2`
+      ? { ...row, adapter: row.adapter.replace("@2", "@1"), projection: row.projection.replace("@2", "@1") } : row))));
+  }
+  check(() => assert.throws(() => admit([...rows, { adapter: "review.source.wdl_point@1", projection: "derived.review.wdl_point@1", family: "engine_wdl", grain: "node" }])));
+  check(() => assert.throws(() => admit(rows.map(row => row.adapter === "review.source.eval_delta@2" ? { ...row, grain: "node" } : row))));
+  for (const side of ["white", "black"] as const) {
+    const run = play(importedRun(`d3859-review-image-${side}`, side), ["e2e4", "e7e5", "g1f3", "b8c6"]);
+    const packet = reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, "*") });
+    const current = reviewPacketSourcePlan(packet.subject, { windowNodes: 1 }).filter(slot => baselineIds.includes(slot.adapterId));
+    for (const count of [1, 3, 5]) {
+      const prefixIds = packet.subject.pathNodeIds.slice(0, count);
+      // Only modeling the plan metadata here. Filtering a full-source result is NOT allowed
+      // production source acquisition; no item or source receipt from this model is published.
+      const model = canonical(rows).flatMap(row => prefixIds.flatMap((nodeId, index) => row.grain === "incoming_edge" && index === 0 ? [] : [{
+        adapterId: row.adapter, family: row.family, grain: row.grain, nodeId,
+        fromNodeId: row.grain === "incoming_edge" ? prefixIds[index - 1]! : null,
+        invocationId: `${row.adapter}#${row.grain === "node" ? nodeId : `${prefixIds[index - 1]!}>${nodeId}`}`, window: index,
+      }]));
+      const originalMetadata = current.filter(slot => prefixIds.includes(slot.nodeId)).map(slot => {
+        const adapterId = replacements.get(slot.adapterId) ?? slot.adapterId;
+        return { ...slot, adapterId, invocationId: slot.invocationId.replace(slot.adapterId, adapterId) };
+      }).sort((a, b) => a.adapterId.localeCompare(b.adapterId) || prefixIds.indexOf(a.nodeId) - prefixIds.indexOf(b.nodeId));
+      check(() => assert.deepEqual(model, originalMetadata));
+      check(() => assert.equal(model.length, 12 * count - 2));
+      check(() => assert.equal(new Set(model.map(slot => slot.invocationId)).size, model.length));
+      check(() => assert.equal(model.some(slot => slot.grain === "incoming_edge" && slot.nodeId === prefixIds[0]), false));
+      const complete = (slots: typeof model) => assert.deepEqual(slots, model);
+      check(() => assert.throws(() => complete(model.slice(1))));
+      check(() => assert.throws(() => complete([...model, model[0]!])));
+      slotModels++;
+    }
+  }
+  console.log(JSON.stringify({ scope: "D3841/D3859 scoped Review literal image/slot metadata only; NOT new source, parser, acquisition or consumer adoption",
+    controls, adapterRows: rows.length, nodeRows: 10, edgeRows: 2, slotModels,
+    prototypeIssuers: 0, productionChanges: 0, providerCalls: 0 }));
+}

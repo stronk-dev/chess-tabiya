@@ -42,7 +42,6 @@ import {
   reviewAnalysis,
   reviewMapProjection,
   moduleEvidenceRole,
-  postcommitNudgePacket,
   queryModules,
   assertProviderDelivery,
   compileEvidenceConsumerExecution,
@@ -2926,24 +2925,6 @@ export class RunService {
   /** rfc/module-registration.md §1.2: the viewer a learner module admits against (role, workflow context). */
   #moduleViewer(runId: string, principal: Principal, run: DrillRun, role: RunRole) {
     return Object.freeze({ role: moduleEvidenceRole(role), session: this.#assistanceContext(runId, principal, run, role).workflowContext });
-  }
-
-  /**
-   * rfc/module-registration.md §4.5: Post-commit Nudge for one committed learner move. Read-only
-   * (recomputed, never persisted). Post-commit output is bound to the durable feedback-delivery
-   * boundary (A16): it is withheld until `feedbackDeliveryOpen` holds for the run.
-   */
-  postcommitNudge(runId: string, principal: Principal, nodeId: string) {
-    this.#refuseRatedAssistance(runId);
-    const { stored, role } = requireRead(this.#storage, runId, principal);
-    const run = stored.run;
-    if (!run.nodes.some((node) => node.id === nodeId)) throw new ServerError("INVALID_REQUEST", `Unknown nudge node: ${nodeId}`);
-    if (!feedbackDeliveryOpen(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Post-commit guidance is withheld until this run opens feedback");
-    const packet = postcommitNudgePacket({ run, nodeId, ...this.#moduleViewer(runId, principal, run, role) });
-    if (packet.kind === "refused" && packet.reason !== "not_a_learner_move") {
-      throw new ServerError("ASSISTANCE_WITHHELD", `Post-commit Nudge is withheld here (${packet.reason})`);
-    }
-    return Object.freeze({ runId, ...packet });
   }
 
   /**

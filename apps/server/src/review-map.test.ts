@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
-import { MODULE_CONSUMER_ACCEPTS, compileModulePacket, parsePresentationReceipt, presentedSentence, recordedSemanticPath, renderMoveQualityGrade, type DrillRun, type MoveQualityGrade, type PresentationReceipt } from "@chess-tabiya/runtime";
+import { MODULE_CONSUMER_ACCEPTS, compileAssistanceRequest, compileModulePacket, parsePresentationReceipt, presentedSentence, recordedSemanticPath, renderMoveQualityGrade, type DrillRun, type MoveQualityGrade, type PresentationReceipt, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import { RATED_OPPONENT_CALIBRATION } from "@chess-tabiya/runtime/rating";
 import { postcommitEdgeEvidence } from "../../../packages/runtime/src/postcommit-nudge.js";
 import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
@@ -39,6 +39,16 @@ const GLYPHED_PGN = `[Event "Broadcast"]
 1. e4 e5 2. Nf3?! Nc6 3. Bb5 a6?? 4. Ba4 Nf6! 5. O-O Be7 $2 6. Re1 b5 {[%eval 5.2] Stockfish says this loses} 7. Bb3 d6? 8. c3 O-O 9. h3 Nb8!? 10. d4 Nbd7 11. Nbd2 Bb7 12. Bc2 Re8 13. Nf1 Bf8 14. Ng3 g6 15. a4 c5 16. d5 c4 17. Bg5 h6 18. Be3 Nc5 19. Qd2 h5 20. Bg5 Be7 1-0`;
 const PLIES = 40;
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
+
+/** The actual web Nudge path; no separate raw-string endpoint or parser. */
+function queryNudge(origin: string, cookie: string | undefined, runId: string, nodeId: string) {
+  return fetch(`${origin}/runs/${runId}/modules/query`, { method: "POST",
+    headers: { "content-type": "application/json", ...(cookie === undefined ? {} : { cookie }) },
+    body: JSON.stringify({ assistance: compileAssistanceRequest({ contextHint: "imported", preference: {
+      kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] },
+    } }), query: { timing: "post_commit", subjectNodeId: nodeId, requested: [] } }),
+  });
+}
 
 const recordedSequenceIds = new Set<string>(RECORDED_SEQUENCE_POSITIVES.map(value => value.projection));
 const admittedSequence = new Set(MODULE_CONSUMER_ACCEPTS.review_map.filter(ref => ref.version === 2 && recordedSequenceIds.has(ref.id)).map(ref => ref.id));
@@ -637,23 +647,31 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(readSnapshot()).toBe(stored);
   });
 
-  it("[module-registration §4.5] serves Post-commit Nudge through module.postcommit_nudge@1 without writing", async () => {
+  it("D3862: serves Nudge only through typed module-query presentation without writing", async () => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "nudge_owner");
     const runId = await importReviewedGame(origin, cookie, "writer-nudge");
     const review = await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as ReviewPayload;
-    const nudge = (nodeId: string) => fetch(`${origin}/runs/${runId}/nudge?nodeId=${encodeURIComponent(nodeId)}`, { headers: { cookie } });
+    const nudge = (nodeId: string) => queryNudge(origin, cookie, runId, nodeId);
     const before = tableSnapshot(databasePath);
     const white = review.rows[4]!;
     const response = await nudge(white.nodeId);
     expect(response.status, await response.clone().text()).toBe(200);
-    const packet = await response.json() as { kind: string; nodeId: string; facts: { projection: string; sentence: string }[]; receipt: { admitted: number } };
-    expect(packet).toMatchObject({ kind: "packet", nodeId: white.nodeId });
-    expect(packet.facts.length).toBeLessThanOrEqual(2);
-    expect(packet.facts.every((fact) => /@\d+$/u.test(fact.projection))).toBe(true);
-    // The opponent's move is not the learner's commit: a typed refusal, not a packet.
-    expect(await (await nudge(review.rows[5]!.nodeId)).json()).toMatchObject({ kind: "refused", reason: "not_a_learner_move" });
+    const page = (await response.json() as { page: ModuleQueryPage }).page;
+    const packet = page.packets.find(packet => packet.module === "postcommit_nudge")!;
+    expect(packet).toBeDefined();
+    expect(packet.disclosure.subject.nodeId).toBe(white.nodeId);
+    expect(packet.budget.after.facts).toBeLessThanOrEqual(2);
+    expect(packet.budget.after.words).toBeLessThanOrEqual(50);
+    const items = parsePresentationReceipt(packet.receipt);
+    expect(items.length).toBeGreaterThan(0);
+    expect(items.every(item => item.adapter.consumer.id === "module.postcommit_nudge")).toBe(true);
+    expect(items.map(presentedSentence).join(" ")).not.toMatch(/Recorded from this move:|rules\.|derived\./u);
+    // The root/opponent are not learner commits; canonical request refusal stays explicit.
+    expect((await nudge(review.rows[5]!.nodeId)).status).toBe(400);
+    expect((await nudge(storedRun(databasePath, runId).nodes.find(node => node.parentId === null)!.id)).status).toBe(400);
     expect((await nudge("missing-node")).status).toBe(400);
+    expect((await fetch(`${origin}/runs/${runId}/nudge?nodeId=${encodeURIComponent(white.nodeId)}`, { headers: { cookie } })).status).toBe(404);
     expect(tableSnapshot(databasePath)).toEqual(before);
   });
 
@@ -685,8 +703,12 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       return response.text();
     };
     const reviewPath = `/runs/${runId}/review`;
-    const nudgePath = `/runs/${runId}/nudge?nodeId=${encodeURIComponent(nodeId)}`;
-    const reviewBytes = await read(reviewPath), nudgeBytes = await read(nudgePath);
+    const nudgeRead = async () => {
+      const response = await queryNudge(origin, cookie, runId, nodeId);
+      expect(response.status, await response.clone().text()).toBe(200);
+      return response.text();
+    };
+    const reviewBytes = await read(reviewPath), nudgeBytes = await nudgeRead();
     const review = JSON.parse(reviewBytes) as ReviewPayload;
     expect(review.rows).toHaveLength(1);
     const sentence = review.rows[0]!.grade!.sentence;
@@ -694,8 +716,8 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     for (const part of ["+1.00 (59.1%)", "−1.00 (40.9%)", "18.2 win-points", "threshold of 15", "grade-convention@1/imported_analysis"]) expect(sentence).toContain(part);
     // The Review row's grade is a separately admitted full sentence, not part of its
     // compiler-family packet. Do not mistake that established wire shape for missing adoption.
-    const nudge = JSON.parse(nudgeBytes) as { kind: string; facts: { projection: string; sentence: string }[] };
-    expect(nudge.kind).toBe("packet");
+    const nudge = (JSON.parse(nudgeBytes) as { page: ModuleQueryPage }).page.packets.find(packet => packet.module === "postcommit_nudge")!;
+    expect(nudge).toBeDefined();
     const node = saved.nodes.find(item => item.id === nodeId)!;
     const parent = saved.nodes.find(item => item.id === node.parentId)!;
     const admitted = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: "learner", session: "imported", mode: "admit", evidence: postcommitEdgeEvidence(saved, parent, node) });
@@ -709,8 +731,8 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(gradeSentence).toContain("grade-convention@1/drill");
     // D3767: admission is real, but current state-fact selection consumes the two slots.
     // This is a recorded product gap, not permission to raise the budget or force a grade.
-    expect(nudge.facts).toHaveLength(2);
-    expect(nudge.facts.some(fact => fact.projection === "derived.grade.move_quality@1")).toBe(false);
+    expect(nudge.budget.after.facts).toBe(2);
+    expect(parsePresentationReceipt(nudge.receipt).some(item => item.adapter.projection.id === "derived.grade.move_quality")).toBe(false);
 
     // Vary an actual populated, authenticated rating record, not an ignored extra function arg.
     const database = new DatabaseSync(databasePath);
@@ -723,22 +745,22 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       const lowRating = await read("/rating");
       const lowTables = tableSnapshot(databasePath);
       expect(await read(reviewPath)).toBe(reviewBytes);
-      expect(await read(nudgePath)).toBe(nudgeBytes);
+      expect(await nudgeRead()).toBe(nudgeBytes);
       expect(tableSnapshot(databasePath)).toEqual(lowTables);
       database.prepare("UPDATE learner_ratings SET rating=1900 WHERE learner_id=?").run(learner.id);
       expect(await read("/rating")).not.toBe(lowRating);
       const highTables = tableSnapshot(databasePath);
       expect(await read(reviewPath)).toBe(reviewBytes);
-      expect(await read(nudgePath)).toBe(nudgeBytes);
+      expect(await nudgeRead()).toBe(nudgeBytes);
       expect(tableSnapshot(databasePath)).toEqual(highTables);
       expect(storedRun(databasePath, runId)).toEqual(saved);
       expect(JSON.stringify(saved)).not.toMatch(/grade-convention|derived\.grade|"klass"/u);
       // Unauthorized readers cannot use the grade endpoints as a game-existence oracle.
       const stranger = await register(origin, `grade_stranger_${side}`);
-      for (const path of [reviewPath, nudgePath]) {
-        expect((await fetch(`${origin}${path}`)).status).toBe(401);
-        expect((await fetch(`${origin}${path}`, { headers: { cookie: stranger } })).status).toBe(404);
-      }
+      expect((await fetch(`${origin}${reviewPath}`)).status).toBe(401);
+      expect((await fetch(`${origin}${reviewPath}`, { headers: { cookie: stranger } })).status).toBe(404);
+      expect((await queryNudge(origin, undefined, runId, nodeId)).status).toBe(401);
+      expect((await queryNudge(origin, stranger, runId, nodeId)).status).toBe(404);
     } finally { database.close(); }
   });
 

@@ -925,3 +925,34 @@ controls; synthetic UCI reports are not measured engine quality or implemented i
 construction/revalidation, complete current module/scoped Review adapters/Nudge windows and
 real authenticated API/native journeys still require their authored contract and independent
 joint acceptance. D3859/D3861 remain doing, not closed.
+
+### D3859 Nudge windows and twelve-row scoped Story source — bounded review
+
+The independent reviewer confirms module-registration §4.5b's nine exact sequence families/
+horizons match current evaluators, with an explicit actual user commit/past-only boundary,
+inherited path and ancestor-specific source windows. Current timing/ceilings/budgets remain.
+The actor-labelled probe uses actual opponent events with synthetic choices; its36runs/64
+learner endpoints/18 family×learner witnesses/46 future exclusions do not issue proposed sources.
+
+Review compiler §4.5's explicit scoped source plan has12rows:10node/two incoming-edge, including
+position for complete last-level input and the three pivotal successor refs. Slot fields/root/
+windowNodes:1 match current planning.45 source-image/slot metadata controls are not parser/
+factory/scoped-acquisition proof. The first test-only typecheck omitted play's import; corrected.
+
+The one returned gap is historical human-selection absence: current ReviewAdapterState has
+no source_absent member. Author correction pins zero valid eligible observations/nonmatches
+to honest_empty/no_observation, matching selection with absent candidate array to unavailable/
+input_abstained, explicit empty arrays to recorded nonmatch, and corrupt/crossed records to
+failure. Mixed present/missing observations retain private dispositions and make only that
+node/adapter unavailable with no published items; other slots survive. Bounded re-review finds
+no remaining blocker, not source/joint acceptance. Reviewer runs no tests.
+
+### D3862 obsolete Nudge precursor — separate production cleanup review
+
+Read-only diff review finds only the unused raw-string route/service/runtime packet/client
+decoder chain removed. Shared evidence/king-witness helpers and canonical query, authorization/
+rated guards, subject checks and ancestor admission remain unchanged. Search finds no remaining
+executable removed-symbol references. Useful HTTP tests now use typed modules/query receipts,
+budgets, read-only/rating controls, invalid subjects, auth/foreign readers and removed-route404.
+No test pass is claimed by the reviewer. This accepted-contract/no-legacy cleanup is independent
+of the still-unaccepted source amendments and does not claim Nudge sequence or grade@2 delivery.

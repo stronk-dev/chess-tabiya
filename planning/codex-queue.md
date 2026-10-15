@@ -12,6 +12,24 @@ owns retirement/caller migration rather than compatibility freeze. Update comple
 module-image counts from the deduplicated target, not the old75+6 baseline; obtain independent
 review before implementing unaccepted source contracts. D3851 is answered, not an owner blocker.
 
+2026-10-15 — D3859's missing scoped source contracts are now authored, not implemented:
+module §4.5b pins actual committed-learner/past-only windows for nine Nudge families and
+ancestor-specific novelty inputs.36 real actor-labelled fixture runs/64 learner endpoints retain
+18 family×learner positives and46 future-witness exclusions; current one-edge Nudge emits zero
+sequence items there. Review compiler §4.5 specifies12 exact Story source adapters (10node/two
+edge, including position), actual parser/operation/slot/state joins and45 metadata controls.
+Independent return/re-review closes human-selection missing-versus-empty mapping, not source/
+joint acceptance. Next publish the complete exact current module binding image, then full
+independent source/joint buildability review before new source/factory/API/native migration.
+[[D3862]] separately retires the unused raw-string Nudge API/client packet under accepted one-query
+semantics and the no-legacy ruling, with canonical HTTP regression coverage; final verification
+is recorded in the log. Do not conflate that cleanup with new Nudge sequence/grade delivery.
+Before final grade@2 adoption, reconcile the already ruled [[D1422]] single2.5/10/15 ladder
+through the explicit grade-convention@2 amendment. The source feasibility probe deliberately
+retains shipped@1 arithmetic; it is not permission to freeze the old context disagreement into
+1.0 or reopen an answered owner question. The September Review implementation record already
+names this unlanded amendment. Source ownership and the convention change are distinct contracts.
+
 2026-10-15 — Current D3859/D3861 source proposal is authored in grade §2a/F2 §2.3l,
 not implemented or accepted.71 disposable controls replay six genuine modern delivery/reload
 pairs over synthetic scores, expose two node-budget old-grade abstentions, preserve offline

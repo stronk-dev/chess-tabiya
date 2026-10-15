@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3861]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3862]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,20 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3862 removes the unused raw-string Nudge API/client/runtime packet while preserving the actual
+canonical module query, shared evidence and presentation path. Its useful tests migrate to real
+typed HTTP receipts, budgets, subjects, auth/read-only/rating behavior and removed-route404.
+Local types/5930 software/seven isolated performance cases pass, followed by corrected governance,
+257 content cases/corpus checks/build. The first full command's duplicate tracker-path failure
+is retained in the log; runtime did not change between these successful component gates. This
+cleanup does not deliver new sequence/grade sources. D3859's nine-family Nudge past-window and12-row scoped Story source contracts are now
+authored with36 actor-labelled runs/64 endpoints/18 family×learner witnesses/46 future exclusions
+and45 plan-model controls. Independent return/re-review closes historical human-source absence
+mapping, not source/joint acceptance. Complete current bindings and actual issuer/factory/source/
+API/native migration remain. No whole milestone/capability or release qualification is promoted.
+Already-ruled D1422's single-ladder convention amendment is now explicit todo before final grade
+adoption, not an unanswered owner question or permission to preserve the old split into1.0.
 
 D3859/D3861 now have a source-owned current grade proposal, not source delivery.71 disposable
 controls replay actual modern delivery/reload factories with synthetic scores and preserve real

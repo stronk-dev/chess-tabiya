@@ -10787,12 +10787,11 @@
     },
     {
       "id": "D1422",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "⚖️",
       "sourceDigest": "sha256:fa90261f40755a55c735f58c85f5b857eb6378052801d4914ef35723d0f19c93",
       "uxItems": [],
-      "owner": "review-and-return",
-      "blocker": "rfc:review-map.md"
+      "owner": "review-and-return"
     },
     {
       "id": "D1423",
@@ -32147,7 +32146,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9d2dd10db6f5b905145b9e349beeef135a8bfacbfc09706a66b6c38601802e21",
+      "sourceDigest": "sha256:3ea71e37d5a085ee171fdca6bbbfe0f3fc4e9be08c2f950b9e75edfa7968a1c9",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32169,6 +32168,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
+    },
+    {
+      "id": "D3862",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0d3d90138cb87c405e257578e3bd265f2ba3ad326e253dd097760b80d0d3422d",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -113,7 +113,6 @@ export const RUN_ROUTE_OPERATIONS: readonly CapabilityRouteBranch[] = Object.fre
   run("GET", "story", session("run.story", "review.story_evidence")),
   run("GET", "review", none("run.review")),
   run("GET", "review-analysis", none("run.review_analysis")),
-  run("GET", "nudge", none("run.nudge")),
   run("POST", "modules/query", none("run.modules.query")),
   run("POST", "hints", session("run.hint.request", "module.guided_hint")),
   run("GET", "share", none("run.share.list")),

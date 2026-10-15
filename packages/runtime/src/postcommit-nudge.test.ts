@@ -4,11 +4,10 @@ import { describe, expect, it } from "vitest";
 
 import { branchPath } from "./branch-path.js";
 import type { DeclaredEvidence } from "./evidence-contract.js";
-import { renderMoveQualityGrade, type MoveQualityGrade } from "./grade.js";
+import type { MoveQualityGrade } from "./grade.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { compileModulePacket } from "./module-packets.js";
-import { ArrayReductionQualityRecorder } from "./module-reducers.js";
-import { POSTCOMMIT_NUDGE_TEMPLATES, postcommitNudgePacket } from "./postcommit-nudge.js";
+import { postcommitEdgeEvidence } from "./postcommit-nudge.js";
 import { commitMove, createRun } from "./runtime.js";
 import { localSemanticEventClosure } from "./semantic-evidence.js";
 import { reviewMapProjection } from "./review-map.js";
@@ -68,46 +67,32 @@ describe("the grade reaches exactly its two module consumers", () => {
   });
 });
 
-describe("Post-commit Nudge — the post_commit production operation", () => {
+describe("Post-commit Nudge — shared evidence for the canonical module query", () => {
   const run = reviewFixtureRun({ id: "nudge", kind: "position", plies: 12 });
   const path = branchPath(run, run.activeCursor.branchId);
 
-  it("does not turn unchanged king locations into a nudge in the legacy operation either", () => {
+  it("does not turn unchanged king locations into a nudge", () => {
     const initial = createRun({ id: "quiet-king-edge", session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-10-07T00:00:00Z" });
     const moved = commitMove(initial, "e2e4", { at: "2026-10-07T00:00:00Z" }).run;
     const node = moved.nodes.find((item) => item.id === moved.activeCursor.nodeId)!;
     // Retain the raw facts for research/inspection; only the learner nudge excludes the no-change.
     const raw = localSemanticEventClosure(initial.nodes[0]!.fen, "e2e4", node.fen).events;
     expect(raw.filter((event) => event.projection.id === "rules.structural.event.king_zone")).toHaveLength(2);
-    const packet = postcommitNudgePacket({ run: moved, nodeId: node.id, ...LEARNER });
-    expect(packet.kind).toBe("packet");
-    if (packet.kind !== "packet") throw new Error("expected a learner packet");
-    expect(packet.facts.every((fact) => fact.projection !== "rules.structural.event.king_zone@1")).toBe(true);
+    const evidence = postcommitEdgeEvidence(moved, initial.nodes[0]!, node);
+    expect(evidence.every((fact) => fact.projection.id !== "rules.structural.event.king_zone")).toBe(true);
   });
 
-  it("packets one committed learner move: at most two admitted facts, each a grounded sentence", () => {
-    const recorder = new ArrayReductionQualityRecorder();
-    const packet = postcommitNudgePacket({ run, nodeId: path[3]!.id, ...LEARNER, recorder });
+  it("keeps at most two admitted sealed facts for one committed learner move", () => {
+    const packet = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", ...LEARNER,
+      evidence: postcommitEdgeEvidence(run, path[2]!, path[3]!) });
     expect(packet.kind).toBe("packet");
     if (packet.kind !== "packet") return;
     expect(packet.facts.length).toBeGreaterThan(0);
     expect(packet.facts.length).toBeLessThanOrEqual(2);
-    expect(packet.receipt.admitted).toBeGreaterThanOrEqual(packet.facts.length);
-    expect([packet.headline, packet.closing]).toEqual([POSTCOMMIT_NUDGE_TEMPLATES.headline, POSTCOMMIT_NUDGE_TEMPLATES.closing]);
-    const gradeSentence = renderMoveQualityGrade(gradeAt(run, 3).payload);
-    for (const fact of packet.facts) {
-      if (fact.projection === "derived.grade.move_quality@1") expect(fact.sentence).toBe(gradeSentence);
-      else expect(fact.sentence).toMatch(/^Recorded from this move: [a-z ]+ \([a-z_.]+@1; [A-Za-z -]+\)\.$/u);
-    }
-    // Overflow is loud: the fact backstop emits exactly one reduction_quality@1 observation.
-    if (packet.receipt.afterReducers > 2) {
-      expect(recorder.observations).toHaveLength(1);
-      expect(recorder.observations[0]).toMatchObject({ moduleId: "postcommit_nudge", backstop: 2, dropped: packet.receipt.afterReducers - 2 });
-    } else {
-      expect(recorder.observations).toEqual([]);
-    }
+    expect(packet.admitted).toBeGreaterThanOrEqual(packet.facts.length);
+    expect(packet.facts.every(fact => fact.evidence.projection.version >= 1)).toBe(true);
     // Novelty honestly abstains until the D1164 identity closure lands, rather than faking cross-node matches.
-    expect(packet.receipt.noveltyAbstained).toBe(true);
+    expect(packet.noveltyAbstained).toBe(true);
   });
 
   it("admits the grade as a module fact on a move that crosses a report threshold", () => {
@@ -115,20 +100,13 @@ describe("Post-commit Nudge — the post_commit production operation", () => {
     expect(packet.kind === "packet" && packet.admitted).toBe(1);
   });
 
-  it("is silent on an unknown or non-learner node and refuses outside its ceilings", () => {
-    expect(postcommitNudgePacket({ run, nodeId: path[2]!.id, ...LEARNER })).toMatchObject({ kind: "refused", reason: "not_a_learner_move" });
-    expect(postcommitNudgePacket({ run, nodeId: path[0]!.id, ...LEARNER })).toMatchObject({ kind: "refused", reason: "not_a_learner_move" });
-    expect(postcommitNudgePacket({ run, nodeId: "missing", ...LEARNER })).toMatchObject({ kind: "refused", reason: "unknown_node" });
-    expect(postcommitNudgePacket({ run, nodeId: path[3]!.id, role: "participant", session: "position" })).toMatchObject({ kind: "refused", reason: "role_outside_ceiling" });
-    expect(postcommitNudgePacket({ run, nodeId: path[3]!.id, role: "learner", session: "match" })).toMatchObject({ kind: "refused", reason: "session_outside_ceiling" });
-  });
-
   it("offers no grade without both recorded evaluations, and never an all-clear", () => {
     const bare = reviewFixtureRun({ id: "nudge-bare", kind: "position", plies: 6, evaluated: () => false });
     const barePath = branchPath(bare, bare.activeCursor.branchId);
-    const packet = postcommitNudgePacket({ run: bare, nodeId: barePath[1]!.id, ...LEARNER });
-    expect(packet.kind === "packet" && packet.facts.every((fact) => fact.projection !== "derived.grade.move_quality@1")).toBe(true);
-    if (packet.kind === "packet" && packet.facts.length === 0) expect([packet.headline, packet.closing]).toEqual([null, null]);
+    const evidence = postcommitEdgeEvidence(bare, barePath[0]!, barePath[1]!);
+    expect(evidence.every(fact => fact.projection.id !== "derived.grade.move_quality")).toBe(true);
+    // Shared source evidence carries no raw sentence/frame; the registered presentation owns text.
+    expect(evidence.every(fact => !("sentence" in fact))).toBe(true);
   });
 });
 
