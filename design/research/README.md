@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D3860 accepted pairing repair, 2026-10-15:26 predecessor-red permanent controls become part of
+176 passing focused tests. The manifest declares both ordered inputs and the actual sealed
+factory refuses mixed refs before normalization/empty output. Both valid sources/grade arithmetic
+remain. Independent read-only review finds no narrow concern, not source/joint acceptance.
+The updated disposable probe has12 same-source outputs/12 mixed refusals; no modern delivery,
+actual source-edge join or complete module execution is claimed. `[V]` module-evidence-assembly.md
+§Accepted grade pairing repair, not complete modern-source delivery; grade.test.ts; dated review.
+
 D3851 owner ruling, 2026-10-15: no pre-launch legacy compatibility required.14 additional
 disposable controls preserve every current sequence family while conditionally mapping
 Nudge52→52, Review85→74 and Inspector75→65 source refs. Trade retains recorded@2; ten other

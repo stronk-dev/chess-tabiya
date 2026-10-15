@@ -92,13 +92,14 @@ export function runModuleSourceResearch() {
   // it edits the old grade contract instead of giving the promised consumer a complete source.
   const grade = declarations.get("derived.grade.move_quality@1")!;
   const members = grade.derivation?.anyOf!;
-  check(() => assert.deepEqual(members.map(member => member.map(key)), [["recorded.engine.eval@1"], ["live.stockfish.eval@1"]]));
+  const pairedMembers = [["recorded.engine.eval@1", "recorded.engine.eval@1"], ["live.stockfish.eval@1", "live.stockfish.eval@1"]];
+  check(() => assert.deepEqual(members.map(member => member.map(key)), pairedMembers));
   check(() => assert.throws(() => compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, grade), /EXECUTION_SOURCE_UNREGISTERED/u));
   const counterfactual = { ...PRIMARY_EVIDENCE_MANIFEST,
     projections: PRIMARY_EVIDENCE_MANIFEST.projections.map(row => row === grade ? { ...row, derivation: { inputs: members[0]! } } : row) };
   const recordedOnly = compileProjectionExecution(counterfactual, grade);
   check(() => assert.equal(recordedOnly.paths.length, 1));
-  check(() => assert.deepEqual(grade.derivation?.anyOf?.map(member => member.map(key)), [["recorded.engine.eval@1"], ["live.stockfish.eval@1"]]));
+  check(() => assert.deepEqual(grade.derivation?.anyOf?.map(member => member.map(key)), pairedMembers));
   console.log(JSON.stringify({ scope: "D3859 current complete module/ref/source census; conditional Inspector mapping is NOT new module authority/adoption",
     controls, rows, counterfactualDroppingLiveGradeCompiles: true, oldDeclarationsChanged: false, providerCalls: 0, productionChanges: 0 }));
   runGradeOperandResearch();
@@ -133,11 +134,11 @@ function runPrelaunchRetirementResearch(inspectorReplacements: ReadonlyMap<strin
 }
 
 function runGradeOperandResearch() {
-  let pairedOutputs = 0, mixedSourceOutputs = 0;
+  let pairedOutputs = 0, mixedSourceRefusals = 0;
   const sourceCombinations = new Set<string>(), declaredInputCounts = new Set<number>();
   const grade = declarations.get("derived.grade.move_quality@1")!;
   grade.derivation!.anyOf!.forEach(member => declaredInputCounts.add(member.length));
-  assert.deepEqual([...declaredInputCounts], [1]);
+  assert.deepEqual([...declaredInputCounts], [2]);
   for (const mover of ["white", "black"] as const) {
     const run = play(importedRun(`d3859-grade-${mover}`, mover,
       `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${mover === "white" ? "w" : "b"} KQkq - 0 1`),
@@ -161,6 +162,12 @@ function runGradeOperandResearch() {
     for (const context of ["drill", "review", "imported_analysis"] as const) {
       for (const before of beforeInputs) for (const after of afterInputs) {
         const output = invokeEvidenceValueRoute("derived.grade.move_quality@1", { before, after, mover, context });
+        sourceCombinations.add(`${key(before.projection)},${key(after.projection)}`);
+        if (key(before.projection) !== key(after.projection)) {
+          assert.deepEqual(output, { kind: "unavailable", reason: "unequal_instrument" });
+          mixedSourceRefusals++;
+          continue;
+        }
         assert.equal(output.kind, "available"); assert.equal(output.value.length, 1);
         const value = output.value[0] as DeclaredEvidence<MoveQualityGrade>;
         assert.deepEqual(value.payload, moveQualityGrade(gradeReadingFromPayload(before.payload, mover),
@@ -168,15 +175,13 @@ function runGradeOperandResearch() {
         assert.equal(value.payload.lane, "recorded", "the old live-labelled wrapper does not establish live search origin");
         assert.deepEqual(evidenceValueReceipt(value).sourceDigests,
           [evidenceValueReceipt(before).payloadDigest, evidenceValueReceipt(after).payloadDigest]);
-        sourceCombinations.add(`${key(before.projection)},${key(after.projection)}`);
-        if (key(before.projection) !== key(after.projection)) mixedSourceOutputs++;
         pairedOutputs++;
       }
     }
   }
-  assert.equal(sourceCombinations.size, 4); assert.equal(pairedOutputs, 24); assert.equal(mixedSourceOutputs, 12);
-  console.log(JSON.stringify({ scope: "D3859 actual old grade factory pairs over synthetic reports, NOT a new paired source/edge join or measured move quality",
-    movers: 2, contexts: 3, pairedOutputs, mixedSourceOutputs, declaredInputCounts: [...declaredInputCounts], actualSealedInputCount: 2,
+  assert.equal(sourceCombinations.size, 4); assert.equal(pairedOutputs, 12); assert.equal(mixedSourceRefusals, 12);
+  console.log(JSON.stringify({ scope: "D3860 repaired accepted grade pairing over synthetic reports, NOT a new source/edge join or measured move quality",
+    movers: 2, contexts: 3, pairedOutputs, mixedSourceRefusals, declaredInputCounts: [...declaredInputCounts], actualSealedInputCount: 2,
     sourceCombinations: [...sourceCombinations], allActualPayloadLanesRecorded: true,
     samePureGradingAlgorithm: true, newSourceAuthority: false, providerCalls: 0, productionChanges: 0 }));
 }

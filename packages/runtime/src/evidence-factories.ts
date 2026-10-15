@@ -1752,6 +1752,10 @@ export const createDerivedGradeMoveQualityV1Evidence = (() => {
   const route = "derived.grade.move_quality@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), after: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), mover: value("the moving side", isGradeSide), context: value("a grade context", (candidate) => GRADE_CONTEXTS.has(candidate)) }], result: "availability", dependency: "provider-exchange-and-execution", pending: "Paired-instrument identity (engine id, lane, requested search limit) is checked value-for-value from the two sealed readings; the provider exchange receipt that would attest each request lands with provider-exchange-and-execution." }, ({ before, after, mover, context }: { readonly before: DeclaredEvidence<unknown>; readonly after: DeclaredEvidence<unknown>; readonly mover: GradeSide; readonly context: GradeContext }): EvidenceAvailability<readonly DeclaredEvidence<MoveQualityGrade>[]> => {
+    // The payload reader normalizes both packet and ledger readings to recorded White POV.
+    // Check their admitted projection origins before that normalization loses the distinction,
+    // including before a below-threshold empty result. Accepted grade §2 never permits mixing.
+    if (sealedRoute(before) !== sealedRoute(after)) return unavailable("unequal_instrument");
     const result = moveQualityGrade(gradeReadingFromPayload(before.payload, mover), gradeReadingFromPayload(after.payload, mover === "white" ? "black" : "white"), context, mover);
     if (result === undefined) return available(Object.freeze([]));
     if ("abstained" in result) return unavailable(result.reason);

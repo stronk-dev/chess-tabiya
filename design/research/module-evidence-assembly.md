@@ -2304,3 +2304,51 @@ meaning changes. Final normal prefix research passes all14 inventory controls an
 127 cases across five files and all workspace types, including zero Svelte errors/warnings.
 This is focused verification, not full software/content/browser/remote-CI release proof. `[V]`
 cited Make targets and current task outputs.
+
+### Accepted grade pairing repair, not complete modern-source delivery
+
+D3860's immediate discrepancy is already prohibited by accepted move-quality-grades §2 and
+D2473, so it is implemented as a bug fix rather than delayed behind a new source contract.
+Both manifest alternatives now contain the two actual ordered inputs. The sole factory compares
+admitted exact projection identities before the shared reader normalizes payload origins or
+arithmetic returns below-threshold silence. Mixed pairs abstain unequal_instrument; both valid
+same-origin paths, arithmetic, thresholds and typed mate handling remain. `[V]` evidence-catalog.ts;
+evidence-factories.ts grade factory; rfc/move-quality-grades.md §§2/5; [[D3860]].
+
+All26 new permanent controls fail on predecessor7cb81f15, with127 existing focused cases passing.
+After repair176 cases across six files pass, including the catalogue and both current consumers.
+The focused target now includes the catalogue explicitly. Workspace typecheck then locates a
+test-only array/tuple inference error; the literal tuple is corrected without weakening checks.
+Final type/full verification is recorded in the exploration log. Disposable source replay now
+retains12 valid outputs and refuses12 mixed pairs across both movers/three contexts, with two
+declared and actual inputs. Existing module/source and14 retirement controls still pass. `[V]`
+grade.test.ts; evidence-catalog.test.ts; make move-grade-consumer-check;
+make inspector-recorded-prefix-research; module-source.ts.
+
+Independent read-only diff review finds no narrow concern and runs no tests. This fix does not
+make live-labelled historical packets modern provider deliveries, add actual edge/context/grant
+authority, register the failed provider leaf or make complete Nudge/Review execution compile.
+D3859 and the full current source/adapter image remain open. Canonical semantic receipt refresh
+retains343 passing cases/81 subjects/zero fully qualified; metadata changes are not new detector
+qualification or public capability versions. `[V]` dated independent review; normal semantic
+validation update; source/compiler boundaries cited above.
+
+### Review already has a genuine modern delivery origin
+
+D3859's future grade source need not wait for every queued Stockfish migration. The existing
+reviewDeliveryEvidencePayload persists the actual stockfish.position_evaluation@1 delivery;
+reviewDurableEngineStates reconstructs it with parsePersistedProviderDelivery, exact node FEN
+and the registered whole-source factory. pointOf constructs genuine eval-point evidence from
+that source and recorded position. This is already implemented independently of the pending
+queued-job resolver, not permission to promote an old scalar packet. `[V]` review-evidence.ts
+pointOf/durable engine states/payload builder; evidence-factories.ts eval_point; [[D3859]].
+
+Independent read-only tracing confirms this and narrows its earlier queued-source recommendation.
+The existing map does not retain the attachment ordinal, and its selection prefers delivered
+evidence over later legacy/unrecoverable rows, not simply the latest attachment. Exact granted
+parent/child occurrence/head/source-selection joins still need a contract. Eval points have
+declared_convention/measured/reported authority; they cannot silently satisfy the old bounded-
+search grade declaration. Current Review grades still read scalars, so modern storage alone is
+not grade adoption. The queued-job resolver remains a distinct source origin where actually
+needed. No tests, edits or new source acceptance by the reviewer. `[V]` dated independent review;
+cited current runtime functions; grade-reading.ts; review-map.ts.

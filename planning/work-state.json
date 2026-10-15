@@ -32154,12 +32154,12 @@
     },
     {
       "id": "D3860",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec5ff56aa2bc520e1a071d4c7d92c62a4e3d7bf086b0e0f1ef7ddcdc788c10fd",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:401c6b5b265cdd11cad3f26d5d00a44bec8f5f14fe79b9a01e76868ea4d25435",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-10-15"
+      "evidence": "packages/runtime/src/grade.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

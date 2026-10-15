@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3860's accepted grade pairing repair is implemented: two ordered declared occurrences and
+same-source validation before normalization/empty output.26 predecessor-red controls,176 focused
+passes and clean workspace types support this narrow fix; independent read-only review finds
+no concern. Full normal make verify build passes5934 software, seven performance and257 content
+cases plus governance/packaging/capability checks/build. Actual modern source/
+edge/context/accuracy and complete current consumer migration remain D3859, not supplied by
+this bug fix. No grade threshold change, new provider authority or whole capability completion.
+Review already has a genuine stored provider-delivery origin; only the separate queued source
+needs its pending settlement resolver. The future grade contract must retain exact occurrence/
+source-selection/comparability authority rather than impose that resolver as a blanket dependency.
+
 D3851 is now ruled: no pre-launch legacy compatibility. Retire obsolete narrative/vector/API
 paths instead of maintaining dual pipelines or frozen helper vocabularies; retain every detector
 family and migrate real consumers to correct sources.14 inventory controls preserve sequence

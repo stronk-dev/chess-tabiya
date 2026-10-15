@@ -128,6 +128,11 @@ same-instrument engine readings under the cited `grade-convention@1`, retains ty
 and can carry evaluation only. Its derivation is an explicit same-lane alternative: two recorded
 readings or two live readings, never one of each. It is bound to exactly `module.postcommit_nudge@1` and
 `module.review_map@1` (rfc/module-registration.md); every other module refuses it at admission.
+Each alternative declares both ordered before/after occurrences. The sole factory compares the
+admitted projection identities before the payload reader normalizes them: mixed ledger/packet
+inputs return `unequal_instrument`, even when their scores would otherwise produce no grade.
+This guard does not turn the legacy live-labelled packet into a verified modern provider delivery;
+the complete source/edge/context migration remains separate work.
 
 `rules.mobility.reading.legal_moves@1` is bound only to requested Sight and Full Inspector. It is the complete
 position-rules-exact legal move map for the FEN's actual side to move: every side-to-move piece has

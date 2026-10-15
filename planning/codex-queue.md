@@ -12,6 +12,23 @@ owns retirement/caller migration rather than compatibility freeze. Update comple
 module-image counts from the deduplicated target, not the old75+6 baseline; obtain independent
 review before implementing unaccepted source contracts. D3851 is answered, not an owner blocker.
 
+2026-10-15 — D3860's immediate pairing defect is covered by accepted grade §2/D2473, not a
+new architecture decision. The implemented repair declares two ordered operands in each
+same-source alternative and rejects mixed exact refs before normalization/empty output.26 new
+permanent controls fail on predecessor;176 focused cases and clean workspace types pass after
+repair. Independent read-only diff review finds no narrow concern. Full normal make verify build
+passes5934 software/seven performance/257 content cases, types/governance/packaging/build. This
+does not register the old provider leaf, add exact edge/context
+authority or finish D3859. Next author that genuine source/paired occurrence/accuracy contract
+and the one complete current module/adapter/window image under the no-legacy ruling; do not
+mistake this repaired declaration for complete execution or preserve old compatibility APIs.
+Source clarification: Review already persists/reconstructs genuine provider deliveries through
+reviewDeliveryEvidencePayload/reviewDurableEngineStates and constructs real eval points. Its
+future grade is not blanket-blocked on the queued Stockfish v2 settlement migration. Keep the
+two actual origins distinct. Exact attachment ordinal/event-head/edge/grant selection, delivered-
+over-later-legacy precedence, comparability and inherited declared_convention authority still
+need authoring; the current scalar grade reader is not admitted just because a delivery exists.
+
 2026-10-15 — D3859 now has a complete current-source census, not a successor implementation:
 28 controls measure Nudge51/52, Review81/85 and Hint35/35 individually executable; only Hint's
 whole consumer compiles. Applying Inspector's proposed source map conditionally still leaves

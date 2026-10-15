@@ -867,3 +867,31 @@ The unused vector wrapper→operation→factory→collector chain can be retired
 Keep the rest of opponent.selection and the shared candidateChildReadings used by current
 candidate packets. Actual bot/Hint/pack consumers, source quality/access and recorded data remain.
 No edits, tests or acceptance by the reviewer; no data/archive deletion or completed cleanup claim.
+
+## D3860 accepted pairing bug fix — independent bounded code review
+
+Read-only diff inspection finds no concrete concern with implementing the already accepted
+grade §2/D2473 obligation. Both alternatives declare two ordered same-source occurrences. The
+factory compares genuine admitted exact refs before normalization/arithmetic, including before
+below-threshold empty success. Both permitted sources remain; no alias, new provider authority,
+threshold or arithmetic change is introduced. The26 permanent controls cover both movers,
+three contexts, four origin combinations, declaration conformance and mixed silent outcomes.
+
+The reviewer does not rerun tests or grant source/joint acceptance. Historical packet wrappers
+remain historical reports, not modern deliveries. Exact edge/occurrence/context acquisition and
+complete current consumer compilation remain D3859 work; its provider leaf is still unregistered.
+
+### D3859 source clarification — existing Review delivery is not pending queued storage
+
+Read-only follow-up confirms Review already has a valid modern operand origin. Its payload
+builder persists the genuine position-evaluation delivery; durable engine states re-derive it
+through parsePersistedProviderDelivery, verify exact node FEN and invoke the registered factory;
+pointOf joins it with real recorded-position evidence. This narrows the earlier queued-source
+recommendation: do not gate every Review grade on the pending queued-job settlement resolver.
+
+Still required: exact authorized parent/child, attachment ordinal/event-head/source-selection
+joins, truthful precedence and instrument/authority inheritance. The current map prefers delivered
+over later legacy/unrecoverable data, not simply latest. Eval points carry declared_convention/
+measured/reported and cannot fill the old bounded-search grade declaration silently. Current
+scalar grade reads have not adopted these modern sources merely because they were stored.
+The queued resolver is a separate real origin. No tests, edits, version choice or acceptance.

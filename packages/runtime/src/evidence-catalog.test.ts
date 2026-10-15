@@ -146,8 +146,8 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.projection.id === "derived.grade.move_quality").map((binding) => binding.consumer.id).sort())
       .toEqual(["module.postcommit_nudge", "module.review_map"]);
     expect(grade?.derivation).toEqual({ anyOf: [
-      [{ id: "recorded.engine.eval", version: 1 }],
-      [{ id: "live.stockfish.eval", version: 1 }],
+      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }],
+      [{ id: "live.stockfish.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }],
     ] });
     expect(grade?.derivation).not.toHaveProperty("inputs");
     expect(grade?.answerContent).not.toContain("move");
@@ -185,8 +185,8 @@ describe("primary evidence catalogue", () => {
   it("keeps move-quality lanes alternative rather than requiring or mixing them", () => {
     const grade = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.grade")?.outputs[0];
     expect(grade?.derivation).toEqual({ anyOf: [
-      [{ id: "recorded.engine.eval", version: 1 }],
-      [{ id: "live.stockfish.eval", version: 1 }],
+      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }],
+      [{ id: "live.stockfish.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }],
     ] });
     expect(grade?.derivation).not.toEqual({ inputs: [
       { id: "recorded.engine.eval", version: 1 },

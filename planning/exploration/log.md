@@ -30893,3 +30893,54 @@ Campaign was the one capability with no API, route or content. Now:
   all routed; D3851's decision closes with path evidence while D3841/D3853/D3859/D3860 remain
   assigned doing. No whole milestone or capability is promoted. Inspect/stage the16 explicit
   research/contract/review/tracking files; leave the three pre-existing untracked paths alone.
+
+### 2026-10-15 — D3860 implement the already accepted grade pairing contract
+
+- Revalidate7cb81f15 and the active queue; previous goal turn is progress. The immediate pairing
+  bug is prohibited by accepted move-quality-grades §2/D2473, so implement it now instead of
+  waiting for D3859's larger modern source contract. No new RFC, source authority, threshold,
+  grading formula, compatibility pipeline or persisted version is introduced.
+-26 new permanent tests first fail on the unchanged predecessor;127 existing focused cases
+  pass. The factory currently emits mixed-source grades/silent empty results; positive outputs
+  retain two source digests against the catalogue's one-per-member declaration. Both movers,
+  all three contexts, four ref combinations and below-threshold mixed input are covered.
+- Repair the catalogue to recorded/recorded OR packet/packet ordered pairs. The sole factory
+  compares admitted exact projection refs before common payload normalization or empty-output
+  arithmetic; mixed pairs abstain unequal_instrument. Keep both permitted sources, complete
+  typed payloads and the existing arithmetic. The disposable audit now expects12 valid same-
+  origin outputs/12 mixed refusals, not the predecessor's24 successes. No modern provider proof
+  or actual source-owned edge/context/grant follows from a valid old packet wrapper.
+- Normal move-grade-consumer-check now includes catalogue tests:176 cases/six files pass.
+  Workspace typecheck then catches a newly written test's inferred array elements as optional;
+  a literal tuple correction fixes the test, and fresh normal make typecheck exits zero with
+  zero Svelte errors/warnings. No runtime assertion, threshold or deadline is weakened.
+- Authorized independent read-only diff review finds no narrow concern and runs no tests or
+  acceptance. D3859 still owns exact modern source/edge/context/accuracy and complete consumer
+  compilation; this repair leaves its provider leaf unregistered. D3851's no-legacy scope holds.
+- Normal prefix research passes all current source/retirement controls. Canonical semantic
+  receipt refresh retains343 passing cases/81 subjects/zero fully qualified; existing metadata
+  updates do not claim new detector qualification or public capability revisions. Correct the
+  active grade RFC/shorten its stale register row and document the actual factory rule.
+- Start the unchanged normal make verify build with local listener/engine permission before
+  commit. Record its actual terminal result below; do not report focused checks as full CI.
+- While that same full verification handle remains live, trace D3859's existing Review delivery
+  origin read-only. Independent tracing confirms the current persisted whole delivery/reload/
+  eval-point path already exists; do not block every future Review grade on the separate queued
+  Stockfish migration. The reviewer explicitly narrows its earlier recommendation. Attachment
+  ordinal/head/edge/grant selection and delivered-over-later-legacy precedence, comparability,
+  inherited declared_convention authority and scalar-reader migration still need authoring.
+  Record the narrower dependency in the existing D3859 queue/research/review record, not a new
+  provider wrapper or extra implementation. No tests/acceptance by the reviewer.
+- The original full make verify build handle exits zero:5934 software cases/393 files, seven
+  isolated performance cases/four files,257 content cases/26 files, clean types, normal software
+  contracts, governance, scaffold/packaging, capability/public-version and production builds.
+  Graduation corpus has92 documents/354 blocking/34 resolved/48 accepted/zero errors;
+  capability corpus validates all104 documents. This does not graduate official content or
+  establish a new release/native-image/browser/remote-CI proof. No engine-test opt-out.
+- Close only D3860 with permanent grade.test.ts evidence; keep D3859 and the full current source/
+  adapter/window image open. Refresh ledger state/compact roadmap receipt and final governance
+  before explicit-file staging/normal hooks. No push, worktree, provider alias or goal pause.
+- Final compact receipt/governance checks also exit zero after closeout:3609 ledger rows,
+ 1742 live/zero untriaged and all live rows routed; D3860 has permanent path evidence.
+  Stage the21 explicit owned code/test/metadata/docs/tracking files and inspect the cached
+  names/diff before normal hooks. The1.0 goal remains active; remaining source work is not closed.

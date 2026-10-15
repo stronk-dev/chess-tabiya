@@ -1,6 +1,6 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
-- **Status:** implementing — 2026-09-01 same-lane derivation repair landed: the manifest now declares recorded-pair OR live-pair, matching the already-enforced runtime instrument guard. The cited convention, pure grade/mate arithmetic, renderer, and experimental projection remain implemented and verified. D1 discharged at `63902370` (2026-09-24): the production module registry compiles and both consumers — Review Map and Post-commit Nudge — admit the grade through `compileModulePacket`; archival is the coordinator's closeout. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
+- **Status:** implementing — D3860's 2026-10-15 repair enforces §2 at the sealed factory before payload normalization and declares the two actual ordered occurrences in each same-source alternative. The earlier 2026-09-01 claim of paired declaration/source enforcement was too strong: the declaration still had one occurrence per member and the wrapper admitted mixed origins. Pure grading constants/arithmetic are unchanged. D1 discharged at `63902370` (2026-09-24): both current module consumers admit the grade. This scoped repair does not supply D3859's modern source/edge/context and complete-consumer migration. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3 (grounding ladder, §3-forms honesty split), `design/research/assistance-surface-taxonomy.md` §2b (pinned Lichess constants), §2d-1 (two-ladder precedent), §4a (the explicit verdict); `design/research/classifier-coverage-and-noise.md` §4a layer 2 (as quoted by both)
@@ -276,7 +276,8 @@ implementation `packages/runtime/src/grade.ts`), one projection:
 ```
 id: derived.grade.move_quality@1
 payloadType: MoveQualityGrade
-derivation.inputs: [ recorded.engine.eval@1, live.stockfish.eval@1 ]
+derivation.anyOf: [ [recorded.engine.eval@1, recorded.engine.eval@1],
+                    [live.stockfish.eval@1, live.stockfish.eval@1] ]
 grounding: bounded_search        — inherited; both inputs share it, and the F1 compiler
                                    (evidence-contract.ts:465-467) refuses anything else
                                    for unmixed inputs. The grade IS an engine reading;
@@ -640,3 +641,8 @@ to the ledger by this review:**
   generator consumes the alternative declaration and retains two ordered before/after
   occurrences per selected lane. D1 remains open: this repair supplies the prerequisite but
   does not invent either learner consumer.
+- 2026-10-15 ([[D3860]]): enforce the accepted same-source rule at the sealed factory before
+  the common payload reader erases origin, including before successful below-threshold silence.
+  Correct both manifest alternatives to two ordered actual occurrences and §5's stale conjunction.
+  The26 new permanent controls fail on the predecessor. No new thresholds, grade words, provider
+  attestation, source-owned occurrence authority or complete-module migration is implied.

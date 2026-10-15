@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { importedRun, play } from "./testing/review-evidence-fixture.js";
 
 import type { GradeContext, GradeEvaluation, GradeSide, MoveQualityGrade } from "./grade.js";
 import {
@@ -25,6 +29,73 @@ const live = (score: GradeEvaluation["score"], sideToMove: GradeSide, extras: Gr
   lane: "live", engineId: "stockfish-17", score, sideToMove, perspective: "side_to_move", depth: 18, ...extras,
 });
 const classify = (before: number, after: number, context: GradeContext) => moveQualityGrade(recorded({ kind: "cp", value: before }), recorded({ kind: "cp", value: after }), context, "white");
+
+describe("D3860 sealed grade source pairing", () => {
+  function pair(mover: GradeSide, beforeCp: number, afterCp: number) {
+    const run = play(importedRun(`grade-pair-${mover}`, mover,
+      `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${mover === "white" ? "w" : "b"} KQkq - 0 1`),
+    [mover === "white" ? "e2e4" : "e7e5"]);
+    const parent = run.nodes.find(node => node.parentId === null)!, child = run.nodes.find(node => node.parentId === parent.id)!;
+    const source = (fen: string, centipawns: number) => {
+      // Synthetic recorded reports, not engine performance or modern provider authority.
+      const values = { fen, centipawns, perspective: "white", engineId: "synthetic", engineName: "Synthetic test",
+        engineVersion: "fixture", depth: 12, requestedDepth: 12, multiPv: 1 };
+      const ledger = invokeEvidenceValueRoute("sourcing.ledger.engine_eval@1", { record: {
+        kind: "engine_eval", sourceId: "synthetic-report", retrievedAt: "2026-10-15T00:00:00.000Z",
+        grounds: "machine_validation", anchor: { fen }, supports: [], values } });
+      const reading = invokeEvidenceValueRoute("recorded.engine.eval@1", { ledger });
+      if (reading.kind !== "available") throw new Error("valid synthetic ledger fixture refused");
+      return [reading.value, invokeEvidenceValueRoute("live.stockfish.eval@1", {
+        packet: { kind: "eval", source: "engine_validated", values } })] as const;
+    };
+    return { before: source(parent.fen, beforeCp), after: source(child.fen, afterCp) };
+  }
+
+  it("declares the two actual ordered occurrences for each permitted same-source alternative", () => {
+    const grade = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.grade.move_quality")!;
+    expect(grade.derivation).toEqual({ anyOf: [
+      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }],
+      [{ id: "live.stockfish.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }],
+    ] });
+  });
+
+  const cases = (["white", "black"] as const).flatMap(mover =>
+    (["drill", "review", "imported_analysis"] as const).flatMap(context =>
+      ([0, 1] as const).flatMap(beforeIndex => ([0, 1] as const).map(afterIndex => ({ mover, context, beforeIndex, afterIndex })))));
+  it.each(cases)("pairs exact sources for $mover/$context/$beforeIndex→$afterIndex", ({ mover, context, beforeIndex, afterIndex }) => {
+    const sign = mover === "white" ? 1 : -1;
+    const inputs = pair(mover, sign * 200, -sign * 200);
+    const before = inputs.before[beforeIndex], after = inputs.after[afterIndex];
+    const result = invokeEvidenceValueRoute("derived.grade.move_quality@1", { before, after, mover, context });
+    if (beforeIndex !== afterIndex) {
+      expect(result).toEqual({ kind: "unavailable", reason: "unequal_instrument" });
+      return;
+    }
+    expect(result.kind).toBe("available");
+    if (result.kind !== "available") throw new Error("same-source grade unavailable");
+    expect(result.value).toHaveLength(1);
+    const value = result.value[0] as DeclaredEvidence<MoveQualityGrade>;
+    expect(value.payload).toMatchObject({ klass: "blunder", convention: { context }, engineId: "synthetic" });
+    expect(evidenceValueReceipt(value).sourceDigests).toEqual([
+      evidenceValueReceipt(before).payloadDigest, evidenceValueReceipt(after).payloadDigest,
+    ]);
+    const members = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.grade.move_quality")!.derivation!.anyOf!;
+    expect(members.some(member => member.length === 2 && member.every(ref => ref.id === before.projection.id && ref.version === before.projection.version))).toBe(true);
+  });
+
+  it("rejects mixed source origins even when arithmetic would return below-threshold silence", () => {
+    const inputs = pair("white", 0, 0);
+    for (const [before, after] of [[inputs.before[0], inputs.after[1]], [inputs.before[1], inputs.after[0]]] as const) {
+      expect(invokeEvidenceValueRoute("derived.grade.move_quality@1", { before, after, mover: "white", context: "review" }))
+        .toEqual({ kind: "unavailable", reason: "unequal_instrument" });
+    }
+    for (const index of [0, 1] as const) {
+      expect(invokeEvidenceValueRoute("derived.grade.move_quality@1", {
+        before: inputs.before[index], after: inputs.after[index], mover: "white", context: "review",
+      })).toEqual({ kind: "available", value: [] });
+    }
+  });
+});
 
 describe("move-quality grades", () => {
   it("pins all twelve convention constants to a source and date", () => {

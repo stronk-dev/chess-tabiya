@@ -4151,7 +4151,7 @@ structural-reading-work-check:
 
 .PHONY: move-grade-consumer-check
 move-grade-consumer-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/grade.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/review-map.test.ts packages/runtime/src/voice.test.ts apps/server/src/review-map.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/grade.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/review-map.test.ts packages/runtime/src/voice.test.ts apps/server/src/review-map.test.ts
 	$(MAKE) typecheck
 
 .PHONY: nudge-grade-presentation-check
