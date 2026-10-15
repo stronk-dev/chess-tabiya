@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3832]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3833]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,12 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3833 adds the remaining authored-shape interval binding to the unaccepted Inspector draft.
+Actual registry/stored-prefix checks demonstrate why both interval ends and closure must be
+recomputed within the grant. 124 shape controls pass; production remains unchanged. Independent
+acceptance, authored-source authority and actual API/native delivery still block D3792.
+No milestone, whole capability, content or release gate is promoted.
 
 D3832 finishes the bounded recorded-Review/Story source authoring slice: the joint unaccepted
 Review compiler §4.5 and Inspector binding require a storage-owned source, eleven actual

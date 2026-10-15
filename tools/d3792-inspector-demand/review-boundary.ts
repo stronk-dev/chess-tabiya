@@ -21,6 +21,8 @@ import { SQLiteRunStorage, type ImportedGameRecord } from "../../apps/server/src
 import { loadConceptRegistry } from "../../apps/server/src/concept-registry-loader.js";
 import { IdentityService } from "../../apps/server/src/identity.js";
 import { RunService } from "../../apps/server/src/service.js";
+import { ShapeRegistry } from "../../apps/server/src/shape-registry.js";
+import { shapeFirings, type ShapeTriggerSource } from "../../packages/runtime/src/shape-firing.js";
 
 type Request = Readonly<{ runId: string; branchId: string; throughNodeId: string }>;
 type Boundary = Readonly<{
@@ -115,6 +117,14 @@ function boundaryModel(storage: Storage) {
         return item;
       });
     },
+    shapes(boundary: Boundary, entries: readonly ShapeTriggerSource[]) {
+      const snapshot = assertCurrent(boundary);
+      prepared++;
+      // Real legacy factory over an actually bounded path, not a cropped whole-path result.
+      // Registered-authored provenance remains the factory's existing pending dependency.
+      return invokeEvidenceValueRoute("theory.shapes.firing@1", { entries,
+        path: snapshot.path.map(node => ({ id: node.id, fen: node.fen })) });
+    },
     prepared: () => prepared,
   };
 }
@@ -125,6 +135,7 @@ const directory = mkdtempSync(join(tmpdir(), "tabiya-d3824-review-boundary-"));
 const storage = new SQLiteRunStorage(join(directory, "fixture.sqlite"), { concepts: { registry: loadConceptRegistry(resolve("content/concepts")) } });
 let checks = 0, prefixes = 0, actualItems = 0, actualEdges = 0;
 let rankChecks = 0, croppedLastLevelItems = 0, oldRankScopeCollisions = 0;
+let shapeChecks = 0, shapePrefixes = 0, shapeItems = 0, croppedFutureShapeEnds = 0, croppedFalseClosures = 0;
 const checked = (callback: () => void) => { callback(); checks++; };
 const writer = "d3824-storage-fixture";
 try {
@@ -324,9 +335,63 @@ try {
   const emptyStory = reviewStoryMoments(emptyPacket);
   rankChecked(() => assert.deepEqual(emptyStory.moments, []));
   rankChecked(() => assert.deepEqual(invokeEvidenceValueRoute("derived.story.rank@2", { moments: emptyStory.moments }).payload.rank, []));
-  console.log(JSON.stringify({ scope: "D3824/D3832 storage/source and rank-boundary model; NOT permission, scoped Review packet, complete source delivery or production",
+  // D3833: real registered triggers, legal repeated firing, and actual imported storage.
+  // These are trigger/interval facts only; no plan prose or chess usefulness is established.
+  const registry = await ShapeRegistry.loadDefault(resolve("content/shapes"));
+  const entries = registry.list().map(summary => {
+    const entry = registry.required(summary.id).document;
+    return { id: entry.id, trigger: entry.trigger };
+  });
+  const shapeChecked = (callback: () => void) => { callback(); shapeChecks++; };
+  for (const side of ["white", "black"] as const) {
+    const id = `d3833-shapes-${side}`;
+    const run = (await service.importGame({ id, side, opponentPolicy: { mode: "human_common" },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1, createdAt: at, source: { kind: "pgn", pgn: '[Result "*"]\n\n1. e4 g6 2. d4 Bg7 3. Nf3 Bf8 4. Nc3 Bg7 5. Be2 Bh6 *' } }, lease)).run;
+    const branchId = run.branches[0]!.id, path = branchPath(run, branchId);
+    const saved = JSON.stringify(storage.read(id)!.run);
+    const whole = shapeFirings(entries, path);
+    shapeChecked(() => assert.equal(whole.filter(item => item.entryId === "fianchetto-g7").length, 2));
+    for (let index = 0; index < path.length; index++) {
+      shapePrefixes++;
+      const boundary = model.issue({ runId: id, branchId, throughNodeId: path[index]!.id });
+      const prefix = path.slice(0, index + 1), ids = new Set(prefix.map(node => node.id));
+      const declared = model.shapes(boundary, entries);
+      const payloads = declared.map(item => item.payload);
+      shapeItems += declared.length;
+      shapeChecked(() => assert.deepEqual(payloads, shapeFirings(entries, prefix)));
+      shapeChecked(() => declared.forEach(item => {
+        assertDeclaredEvidence(item);
+        assert(ids.has(item.payload.firstNodeId) && ids.has(item.payload.lastNodeId));
+        assert.equal(item.payload.openEnded, item.payload.lastNodeId === path[index]!.id);
+      }));
+      shapeChecked(() => assert.deepEqual(model.shapes(boundary, []), []));
+      // The tempting filter leaks future endpoints and future knowledge of closure.
+      for (const item of whole.filter(value => ids.has(value.firstNodeId))) {
+        if (!ids.has(item.lastNodeId)) croppedFutureShapeEnds++;
+        const same = declared.find(value => value.payload.entryId === item.entryId && value.payload.firstNodeId === item.firstNodeId);
+        if (same?.payload.openEnded === true && item.openEnded === false) croppedFalseClosures++;
+      }
+      if (index === path.length - 1) shapeChecked(() => assert.deepEqual(payloads, whole));
+      const before = model.prepared();
+      shapeChecked(() => assert.throws(() => model.shapes({ ...boundary }, entries), /foreign_boundary/u));
+      shapeChecked(() => assert.equal(model.prepared(), before));
+    }
+    const early = model.issue({ runId: id, branchId, throughNodeId: path[0]!.id });
+    const before = model.prepared();
+    overrideRun = { ...run, nodes: run.nodes.map(node => node.id === path.at(-1)!.id ? { ...node, fen: "invalid later original FEN" } : node) };
+    shapeChecked(() => assert.throws(() => model.shapes(early, entries), /invalid_original_fen/u));
+    shapeChecked(() => assert.equal(model.prepared(), before));
+    overrideRun = undefined;
+    shapeChecked(() => assert.throws(() => boundaryModel(source).shapes(early, entries), /foreign_boundary/u));
+    shapeChecked(() => assert.equal(JSON.stringify(storage.read(id)!.run), saved));
+  }
+  shapeChecked(() => assert(croppedFutureShapeEnds > 0));
+  shapeChecked(() => assert(croppedFalseClosures > 0));
+  console.log(JSON.stringify({ scope: "D3824/D3832/D3833 storage, rank and shape boundary model; NOT permission, scoped Review packet, complete source delivery or production",
     checks, prefixes, actualPositionItems: actualItems, actualEdgeItems: actualEdges, rankChecks, croppedLastLevelItems,
-    oldRankScopeCollisions, requiredStoryAdapters: [...requiredAdapters].sort() }));
+    oldRankScopeCollisions, requiredStoryAdapters: [...requiredAdapters].sort(), registeredShapes: entries.length,
+    shapeChecks, shapePrefixes, shapeItems, croppedFutureShapeEnds, croppedFalseClosures }));
 } finally {
   storage.close(); rmSync(directory, { recursive: true, force: true }); // only this owned fixture
 }

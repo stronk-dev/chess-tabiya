@@ -29448,3 +29448,36 @@ Campaign was the one capability with no API, route or content. Now:
   1834494b's5851 software/seven performance/257 content/393 browser checks, one optional skip.
   No runtime re-run or new UI delivery is claimed for these research/draft-only bytes. Final
   explicit staging/current-body hooks precede the owned-file commit; no push or deployment.
+
+## 2026-10-15 — D3833 authored shape endpoint semantics
+
+- Previous goal turn is progress: 20e8fef6 commits the joint recorded-Review/Story source
+  specification and actual storage counterexamples, without promoting unaccepted implementation.
+- Revalidate HEAD/tree and current roadmap/RFC authorities. The three pre-existing untracked
+  entries remain untouched. No actual human authorization for delegated review/conditional
+  acceptance has arrived; do not mistake an async question's accepted flag for consent.
+- Inspect the existing frontend-delivery debt: prior client-entry/route splits already ship.
+  Do not remove the remaining required semantic validation merely to reduce bundle size.
+- Register D3833 before extending the existing disposable source model. Actual ShapeRegistry
+  loadDefault reads 25 installed entries; two actual SQLite imports include a legal fianchetto
+  disappearing and returning. 22 prefixes retain 20 declared trigger items. 124 controls pass;
+  naive whole-path filtering exposes four later endpoints and eight future closure flags.
+  Full-tip parity, empty values, copied/cross-issuer refusal, original later-FEN refusal before
+  preparation and unchanged saved imports remain. Existing 300 boundary/25 rank checks pass.
+- First instrument runs fail ENOENT on the registry directory and then its schema because
+  esbuild relocated import.meta.url. The normal research Make target now uses a conventional
+  build configuration with the production server asset base. No production loader/validator,
+  authored source, source-relative path, software/browser gate or deadline is changed.
+- Add only the bounded binding to the existing unaccepted Inspector amendment: actual registry
+  records/triggers, exact point/branch source, interval recomputation, retained authored-provenance
+  hold and current receiver checks. A trigger match never validates strategic plan prose.
+  No new F2 arm/version/source registry or runtime receipt is invented; D3792 still owns actual
+  source authority, independent acceptance and full API/client/native delivery.
+- Update existing research coverage, ledger/state and roadmap checkpoint. No whole capability,
+  milestone, semantic qualification, official content or release promotion; last full production
+  proof remains 1834494b. Final normal docs/governance and explicit owned-file staging follow.
+  No raw research capture, push, publication or deployment.
+- Final normal docs/governance exits zero: register C1–C8, status P1–P7, work-state and
+  roadmap R1–R10 pass. All 1,732 live ledger rows are assigned; whole capability/milestone
+  states are unchanged. Research types and all 124/300/25 controls pass, not a new full runtime
+  or remote-CI result. Inspect the explicit staged list and normal hooks before committing.

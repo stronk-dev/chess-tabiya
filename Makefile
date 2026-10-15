@@ -575,7 +575,7 @@ inspector-pivotal-source-research:
 .PHONY: inspector-review-boundary-research
 inspector-review-boundary-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
-	./node_modules/.bin/esbuild tools/d3792-inspector-demand/review-boundary.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/review-boundary.mjs --log-level=warning
+	$(CI_NODE) tools/d3792-inspector-demand/build-boundary.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/review-boundary.mjs
 
 # Disposable observation of the actual private source during authenticated Review reads.

@@ -2060,6 +2060,39 @@ later witness span; no later witness beyond the grant is borrowed.
 | Recorded Review / Story | Storage-authorised source-owner subject at the exact admitted recorded boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
 | Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
 
+**D3833 authored-shape interval binding (2026-10-15), still unaccepted:** resolve entries
+through RunService's actual `ShapeRegistry`, not caller triggers, names, rendered plans or
+an independently copied catalogue. Capture the selected registry records, their document
+identity/digest and exact triggers independently of mutable caller arrays. Revalidate current
+access/source ownership before preparation and publication; a replaced registry source retires
+the result even when its display name is unchanged. The existing registered-authored-provenance
+hold remains: a loaded JSON file or a successful legacy factory call cannot discharge it.
+
+For position context, evaluate the sole selected `{id,fen}` node. For branch context, run
+the existing `shapeFirings` algorithm over the complete granted root-to-endpoint path only,
+after original graph/FEN validation. Use the existing `theory.shapes.firing@1` factory's
+`{entries,path}` arm over that exact source, retaining its actual entry/trigger source digest
+and complete bounded path input. The current resolved-context/response envelope retains
+requested branch/endpoint authority separately; the legacy value receipt alone is not that
+grant, a registry-provenance receipt or a new scope protocol. No new F2 arm or version is
+implicitly allocated by this paragraph.
+
+Preserve entry ordering, separate repeated intervals and inclusive first/last node semantics.
+`openEnded` means the trigger still matches **at this granted path's endpoint**, not that the
+pattern persists into later play. Do not crop whole-path intervals, clamp a later end id or keep
+the whole-path closure flag. A singleton position does not assert the pattern began there in
+the game; a successful empty trigger population does not prove no useful plan exists. Return
+actual source/contract holds as unavailable, not a manufactured empty population. This binding
+renders trigger matches only; it never validates the entry's strategic prose or significance.
+
+The disposable actual-registry/SQLite control uses all 25 installed entries and legal fianchetto
+disappearance/return for both learner colors. 22 prefixes retain 20 declared items; naive cropping
+has four future endpoints and eight future closure claims. Full-tip parity, empty values,
+copied/cross-issuer refusal, original later-FEN refusal before preparation and unchanged saved
+imports are required controls, not production proof. Review compiler §4.5's shape adapter reuses
+these same interval semantics. Actual registered provenance, current API/client admission and
+native delivery remain open with D3792; this subsection is not independent acceptance.
+
 **D3820 comparison source-owner boundary (2026-10-14):** opt-in
 `make inspector-comparison-source-research` first proves the unchanged constructor fails the
 exact requested endpoint. Its guarded constructor prototype passes 116 controls over 62
@@ -3142,6 +3175,10 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-15 — D3833 measures actual registered shape intervals over stored legal prefixes and
+  specifies endpoint recomputation/position distinction in the unaccepted §4.11a supplier draft.
+  Existing factory/value semantics and registered-provenance holds remain; no production landing.
 
 - 2026-10-15 — D3832 binds the proposed recorded-Review moment source to one new rank arm;
   Review compiler §4.5 owns its exact source/adapter/recorded-fact contract. Whole-game filtering

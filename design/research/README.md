@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Authored shape interval scope, 2026-10-15 ([[D3833]]): actual 25 registered entries over 22
+stored legal prefixes retain 20 declared items; 124 controls pass alongside 300 boundary/25 rank
+checks. Whole-path cropping retains four future endpoints and eight future closure claims.
+This specifies bounded interval semantics, not new production delivery or grounded plan prose.
+`[V]` `module-evidence-assembly.md` §Authored shape interval scope and
+`make inspector-review-boundary-research`; D3792 acceptance/provenance/API/native holds remain.
+
 Recorded Review/Story source, 2026-10-15 ([[D3832]]): **bounded research and joint draft
 authoring, not production**. Actual imported records with labelled stored engine fixtures show
 four early last-level facts surviving unsafe whole-moment cropping and two distinct endpoints

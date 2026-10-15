@@ -1056,3 +1056,37 @@ scoped source inputs and current access/receiver checks. An early selected move 
 an explicitly granted whole-game boundary. New typed construction, scope-bound receipts,
 permission/cancellation and real HTTP/native delivery remain unimplemented, not established by
 these models. `[V]` those draft sections; `apps/server/src/service.ts` current read boundaries.
+
+## Authored shape interval scope — 2026-10-15, D3833
+
+The existing opt-in `make inspector-review-boundary-research` now loads the actual 25 entries
+through `ShapeRegistry.loadDefault` and evaluates their triggers on two actual SQLite imports,
+one per learner color. The legal line `1.e4 g6 2.d4 Bg7 3.Nf3 Bf8 4.Nc3 Bg7 5.Be2 Bh6`
+gives two separate `fianchetto-g7` intervals. Across 22 prefixes the existing sole factory
+retains 20 declared items. 124 new controls preserve full-tip parity, empty trigger populations,
+bounded endpoints/closure flags, copied/cross-issuer rejection, later-original-FEN refusal before
+preparation and unchanged saved imports. The earlier 300 source/25 rank checks remain passing.
+`[V]` `tools/d3792-inspector-demand/review-boundary.ts`, `shape-firing.ts`, `evidence-factories.ts`,
+`content/shapes/fianchetto-g7.json`, and the command's bounded terminal report.
+
+Filtering complete-game firings by first-node membership retains four future last-node ids.
+It also retains eight closed flags where the actual prefix is still open-ended. Clamping the
+last id alone would not remove this future knowledge. These counts are deliberately repeated
+scope observations, not distinct mistakes, a corpus frequency or a production bug in the current
+whole-path helper. The correct bounded value is recomputed over the granted path; a singleton
+position match does not assert when the pattern began in the game. `[V]` same controls and
+`shapeFirings`' inclusive interval/endpoint rule.
+
+The first two harness runs fail because the new registry loader and schema validator resolve
+source-relative assets from the bundled cache location. A conventional esbuild configuration,
+called by the unchanged Make target, now uses the production server asset base; no production
+source, schema path or validator is rewritten. This is an instrument correction, not a server
+defect. No capture file is retained. `[V]` `build-boundary.mjs`, Makefile target and the two
+ENOENT results followed by the passing run.
+
+The unaccepted module-registration §4.11a now specifies actual registry records/triggers,
+point versus branch scope, recomputation, pending authored-provenance authority and receiver
+obligations. Matching a trigger does not establish the entry's strategic prose, a best move or
+usefulness. No new scope permission, factory arm/version or production operation follows.
+Independent acceptance, registered provenance and actual API/client/native delivery remain
+D3792 work. `[V]` that draft and the legacy factory's `registered-authored-provenance` hold.
