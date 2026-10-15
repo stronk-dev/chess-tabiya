@@ -33,6 +33,11 @@ versions from Shape Studio. Channel is derived from the resolving source and is 
 author-writable field. The server projects an allow-list and exposes provenance, licence,
 attribution, channel, and community publisher beside the authored claims.
 
+Registration captures its own document before awaiting the digest and uses that snapshot's id
+for both record and index. Every nested stored expression, plan signature and provenance value is
+frozen. Callers keep mutable ownership of their original input, and HTTP projections are separate
+copies, so neither can change registered trigger behavior or bytes under the retained digest.
+
 Library cards and entries label this as **Official source**, **Community draft** or
 **Community publication**, not a chess review result. Every Library entry and the search
 page explains that source labels identify who supplied material, while licences describe

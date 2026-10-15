@@ -29481,3 +29481,56 @@ Campaign was the one capability with no API, route or content. Now:
   roadmap R1–R10 pass. All 1,732 live ledger rows are assigned; whole capability/milestone
   states are unchanged. Research types and all 124/300/25 controls pass, not a new full runtime
   or remote-CI result. Inspect the explicit staged list and normal hooks before committing.
+
+## 2026-10-15 — D3834 frozen registered shape sources
+
+- Previous goal turn is progress: 1bfda768 commits measured authored-shape interval semantics
+  and its bounded unaccepted binding. Revalidate the clean tracked tree and current source holds;
+  no independent review/acceptance authorization has arrived and no draft is self-accepted.
+- D3834 is registered before implementation. Under accepted shape-library §§2b/3a, records
+  must be frozen and digest-addressed bytes stable. The current registry freezes outer objects
+  while nested triggers/signatures remain mutable. Three initial permanent controls fail;
+  the refined four-case predecessor additionally changes caller id/trigger during the real
+  asynchronous digest. Both trigger/signature evaluations change while stored identity stands.
+- Capture one independent document before awaiting hashing; compute/store/index from that
+  snapshot, recursively freeze nested values, and preserve caller ownership and separate HTTP
+  projections. No new source authority, registry, schema, migration, version or policy is added.
+  The pending registered-authored-provenance/Inspector contracts remain pending.
+- The normal shape-registry target covers registry, validation, Studio/hydration and actual
+  authenticated create/lint/update/register/read/export. Four predecessor regressions become
+  45 passing focused cases; actual-source observation and mutable wire JSON retain unchanged
+  subsequent HTTP/source/digest and export bytes. Workspace types pass with zero Svelte warnings.
+- The first sandboxed typecheck stops before workspace checking on ERR_PNPM_LOCKFILE_WRITE_FILE.
+  Its process is confirmed terminal; rerun the unchanged normal Make command with pnpm-cache
+  permission, not environment prefixes, altered flags, deadlines or replacement checks.
+- Freeze the production/test/doc source set and run normal serial roadmap receipt, full verify,
+  build and all four browser tiers. Leave D3834 doing until that proof completes; update the
+  same ledger/state/checkpoint and log before explicit owned-file commit. No push/deploy.
+- A read-only same-class audit finds PrincipleRegistry's hash-before-copy sequence and split
+  citation reads. Record D3835 as source-inspected, assign it todo and route it in the existing
+  queue; no second registry code/test change enters D3834's running verification. Only bookkeeping
+  changes for this intake, with the ordinary receipt refreshed before the current-body governance.
+- The normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  5855 software cases/391 files, seven unchanged-budget performance cases/four files, 257 content
+  cases/26 files, workspace types, all governance/packaging/build contracts and all four browser
+  tiers. Browser totals: 328 smoke/one configured optional Maia skip, five content, 59 matrix and
+  one packaged-production case = 393 passes. No production/test/canonical-doc changes during that run;
+  D3835 intake changes only tracking as recorded above. No retries or raised thresholds.
+- Current matrix JSON independently reports expected 59, skipped/unexpected/flaky zero and all
+  59 results passed at retry zero. The composition receipt contains 112 required/proven cells.
+  Local warm p95 is 106.6 ms against the unchanged 250 ms gate, not a measured speedup or remote
+  diagnosis. All 343 semantic cases/81 subjects remain current with zero fully qualified subjects;
+  no generated semantic metadata or authored content is rewritten.
+- Final inspection strengthens only the existing authenticated export test: both export reads
+  must succeed and the first must carry the actual updated document, format and matching digest.
+  This prevents a repeated error body from satisfying export equality. All 45 focused cases and
+  clean workspace types pass again with production unchanged from the complete full run.
+- Close D3834 with path evidence, leave D3835 todo/unverified, refresh the existing roadmap
+  receipt and run current-body docs/governance plus ordinary staged hooks before committing.
+  No protected intent sentence is falsified: this repairs the already-required immutable record
+  contract, not a new product policy. No source authority/qualification, Inspector delivery,
+  schema, migration, official content, whole milestone/capability or remote/release promotion.
+- Final current-body docs/governance exits zero: register C1–C8, status P1–P7, roadmap R1–R10,
+  test-tier separation and all 1,733 live ledger/263 live UX assignments pass. Inspect the
+  explicit twelve-file staged list before the normal commit hooks; leave existing untracked
+  material untouched. The full goal remains active, not complete or paused.

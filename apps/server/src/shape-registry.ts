@@ -28,7 +28,14 @@ export interface ShapeRecord {
   readonly publisherHandle?: string;
 }
 
-function freeze<T>(value: T): T { return Object.freeze(value); }
+function freeze<T>(value: T): T {
+  // JSON documents may already have a frozen parent around mutable nested expressions.
+  // Visit descendants even in that case; readonly types alone cannot protect the digest.
+  if (value !== null && typeof value === "object") {
+    for (const child of Object.values(value)) freeze(child);
+  }
+  return Object.freeze(value);
+}
 
 function projectDocument(document: ShapeEntryDefinition): ShapeEntryDefinition {
   return freeze({
@@ -66,14 +73,16 @@ export class ShapeRegistry {
   byDigest(digest: string): ShapeRecord | undefined { return this.#digests.get(digest); }
 
   async add(document: ShapeEntryDefinition, channel: ShapeChannel, publisherHandle?: string, suppliedDigest?: string): Promise<ShapeRecord> {
-    const digest = suppliedDigest ?? await digestShapeEntry(document);
-    const frozen = projectDocument(structuredClone(document));
+    // Capture once before the asynchronous digest; the caller still owns its input.
+    const snapshot = structuredClone(document);
+    const digest = suppliedDigest ?? await digestShapeEntry(snapshot);
+    const frozen = projectDocument(snapshot);
     const record: ShapeRecord = freeze({
       document: frozen, digest, channel,
       summary: freeze({ id: frozen.id, version: frozen.version, digest, name: frozen.name, phases: frozen.phases, licence: frozen.provenance.licence, channel, ...(publisherHandle === undefined ? {} : { publisherHandle }) }),
       ...(publisherHandle === undefined ? {} : { publisherHandle }),
     });
-    if (channel === "official" || this.#records.get(document.id)?.channel !== "official") this.#records.set(document.id, record);
+    if (channel === "official" || this.#records.get(frozen.id)?.channel !== "official") this.#records.set(frozen.id, record);
     this.#digests.set(digest, record);
     return record;
   }

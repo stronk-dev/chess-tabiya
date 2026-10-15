@@ -10,6 +10,7 @@ import { applicationFixture } from "./application-fixture.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { validateClaimBindings } from "./sourcing/claim-binding.js";
 import type { EvidenceLedger, SourcingIssue } from "./sourcing/types.js";
+import { ShapeRegistry, type ShapeRecord } from "./shape-registry.js";
 
 const FEN = "4k3/8/8/8/8/8/8/4K3 w - - 0 1";
 const SHAPE: ShapeEntryDefinition = {
@@ -158,6 +159,36 @@ describe("authenticated authoring refusal and retry", () => {
     expect(changed.status).toBe(200);
     const published = await request(`/shapes/drafts/${draft.id}/register`, {});
     expect(published.status).toBe(201);
+    // Observe the real record used by the production HTTP projection. No replacement
+    // registry, document or validator is substituted at this boundary.
+    const required = ShapeRegistry.prototype.required;
+    let record: ShapeRecord | undefined;
+    vi.spyOn(ShapeRegistry.prototype, "required").mockImplementation(function (this: ShapeRegistry, id) {
+      const actual = required.call(this, id);
+      if (id === SHAPE.id) record = actual;
+      return actual;
+    });
+    const first = await request(`/shapes/${SHAPE.id}`);
+    expect(first.status).toBe(200);
+    const firstBody = await first.json(), savedBody = structuredClone(firstBody);
+    const firstExport = await request(`/shapes/${SHAPE.id}/export`);
+    expect(firstExport.status).toBe(200);
+    const exportedBefore = await firstExport.json();
+    expect(exportedBefore).toMatchObject({ format: "chess-tabiya-shape", version: 1,
+      digest: first.headers.get("x-shape-digest"), document: { ...SHAPE, name: "Updated execution fixture" } });
+    expect(record).toBeDefined();
+    const trigger = record!.document.trigger;
+    if (trigger.kind !== "feature") throw new Error("Authoring fixture changed");
+    expect(Reflect.set(trigger.feature, "file", "b")).toBe(false);
+    // Ordinary HTTP JSON belongs to the client and may still be edited there.
+    firstBody.trigger.feature.file = "b";
+    const second = await request(`/shapes/${SHAPE.id}`);
+    expect(second.status).toBe(200);
+    expect(second.headers.get("x-shape-digest")).toBe(first.headers.get("x-shape-digest"));
+    expect(await second.json()).toEqual(savedBody);
+    const secondExport = await request(`/shapes/${SHAPE.id}/export`);
+    expect(secondExport.status).toBe(200);
+    expect(await secondExport.json()).toEqual(exportedBefore);
     const { drafts } = await (await request("/shapes/drafts")).json() as { drafts: { id: string; state: string }[] };
     expect(drafts).toHaveLength(1);
     expect(drafts[0]).toMatchObject({ id: draft.id, state: "registered" });

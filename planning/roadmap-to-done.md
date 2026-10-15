@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3833]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3835]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,13 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3834 repairs an accepted shape-library source-integrity defect: registered triggers/signatures
+cannot change under fixed digests, and hashing/indexing use one owned input snapshot. Four
+predecessor regressions become 45 focused passes/types, including actual authenticated source
+read/export. Full normal verification/build/all browser tiers pass: 5855 software, seven
+performance, 257 content, 393 browser checks and 112 unretried composition cells. D3835 is the
+separately queued principle-registry check; no whole capability or release gate is promoted.
 
 D3833 adds the remaining authored-shape interval binding to the unaccepted Inspector draft.
 Actual registry/stored-prefix checks demonstrate why both interval ends and closure must be
@@ -50,7 +57,7 @@ adds828 family and94 actual stored-occurrence checks while retaining465 original
 unchanged. Full frozen normal verification/build/all browser tiers pass5851 software/seven
 performance/257 content/393 browser checks, one configured optional Maia skip,59 matrix and112
 unretried composition cells. No whole capability or scoped Inspector delivery is promoted.
-The next task is the overall 1.0 inventory, not another implementation wave.
+This is a completed production checkpoint, not a whole-product completion claim.
 
 D3829 is complete under accepted value-authority §3.4: exact pivotal factories now prepare
 only their own family rather than compute all four before filtering. Four original regressions
@@ -291,27 +298,25 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
-ten awaiting discharge and 24 draft documents; its 75 archived implementation records are subsystem
-history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+ten awaiting discharge and 24 draft documents; its 75 archived implementation records and one
+superseded record are subsystem history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3829's accepted pivotal preparation repair is finished with complete
-normal verification/build/all four browser tiers exiting zero: 5,850 software, seven performance,
-257 content and 393 browser passes, one optional Maia skip, zero retries and 112 composition cells.
-D3828's comparison repair, D3826/D3827's pivotal grounding and D3825's bounded scope research remain closed
-at their preceding checkpoint. Their original duplicate-checkpoint refusal and corrected
-remaining-gates run remain recorded.
-D3822/D3823's accepted calibration evidence-to-card repair is verified
-and closed; D3821 disclosure, D3818 result attribution and D3819/D3820 source research stand.
-That preceding calibration checkpoint passed 5,731 software, seven performance and 257 content tests, all browser
-tiers including 59 matrix cases/112 unretried composition cells and packaged-production proof.
-The in-flight D3824 research is now closed with 292 strict storage/source controls and normal
-governance passing; it does not relabel the preceding production proof as a new product test run.
-A fresh GitHub read confirms the published revision is still 78fd302f:
+Current local checkpoint: D3834's accepted immutable-shape repair is finished with complete
+normal verification/build/all four browser tiers exiting zero: 5,855 software, seven performance,
+257 content and 393 browser passes, one configured optional Maia skip, zero retries and 112
+composition cells. Strengthened authenticated source-export assertions subsequently pass all 45
+focused cases and workspace types, with production unchanged from that full run. D3835 is a
+separate source-inspected principle-registry risk awaiting reproduction, not a verified defect.
+D3830's exact recorded selection and the preceding accepted repairs remain closed. D3831–D3833
+are bounded source research/draft authoring; they do not deliver scoped Inspector or close the
+independent acceptance and production API/client/native obligations. All historical failures and
+preceding proof retain their own dates and scopes in the log.
+The last recorded GitHub read concerns published revision 78fd302f:
 [verify succeeded](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140789),
 [browser failed](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140733); its
 D3810 matrix repair is verified locally but not remotely. Local commits are unpushed and no
-current-revision remote or release qualification is claimed. No 1.0 promotion.
+new GitHub query, current-revision remote or release qualification is claimed here. No 1.0 promotion.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
 selected-Sight, Nudge and Review contracts; complete learner journeys and bot calibration;

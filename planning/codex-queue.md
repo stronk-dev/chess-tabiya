@@ -1,5 +1,11 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — [[D3835]] is the next same-class source-integrity check after [[D3834]]'s
+in-flight shape repair. Reproduce `PrincipleRegistry.add` caller mutation across its digest
+await, including original document/id and citation-array consistency. This is a source-inspected
+risk, not a reproduced failure; keep it separate from the frozen shape verification. Use the
+existing principle/source contract, preserve citation validation and prove behavior before repair.
+
 2026-10-14 — D3805 takes D3792's actual permitted-prefix supplier prerequisite. Exercise genuine
 runtime branches, explicit two-attempt endpoints, current disclosure and historical event replay;
 do not pass a masked/shallow-cloned DrillRun to whole-branch factories. Land evidence and the

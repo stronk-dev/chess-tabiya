@@ -31915,6 +31915,23 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/review-boundary.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3834",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:55697291c06c54b9cfd6b3b4c1aa440d642bea94467014a7e82c98bcac4d7525",
+      "uxItems": [],
+      "evidence": "apps/server/src/shape-registry.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3835",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4f3df19d51f0e189c25f197a874ed1e1dd0c41fa5603e880b740372475330426",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

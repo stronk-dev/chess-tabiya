@@ -3505,6 +3505,12 @@ rating-pool-research:
 build:
 	pnpm build
 
+.PHONY: shape-registry-check
+# Frozen registered documents, authoring/hydration and exact trigger/signature validation.
+# Permanent tests also run in the ordinary software tier; no corpus coverage gate is added.
+shape-registry-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/shape-registry.test.ts apps/server/src/shape-studio.test.ts apps/server/src/shape-validation.test.ts apps/server/src/authoring-execution.test.ts
+
 .PHONY: web-bundle-report
 # D3722 disposable measurement: real Vite configuration, no asset/source-map writes.
 web-bundle-report:
